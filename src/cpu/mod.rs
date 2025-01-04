@@ -1,5 +1,6 @@
-use crate::cpu::sse1::SSE1;
 use log::{error, info};
+
+use crate::cpu::sse1::SSE1;
 
 mod sse1;
 mod sse4_1;
@@ -36,22 +37,14 @@ pub fn test_all_extensions() -> Result<(), String> {
 
 fn check_array_equality(a: &[f32], b: &[f32]) -> Result<(), String> {
     if a.len() != b.len() {
-        return Err(format!(
-            "Arrays have different lengths: {} and {}",
-            a.len(),
-            b.len()
-        ));
+        return Err(format!("Arrays have different lengths: {} and {}", a.len(), b.len()));
     }
 
     for i in 0..a.len() {
         if a[i].is_infinite() && !b[i].is_infinite() {
-            return Err(format!(
-                "Expected {a:?}, got {b:?} (One is infinite, other is not)"
-            ));
+            return Err(format!("Expected {a:?}, got {b:?} (One is infinite, other is not)"));
         } else if a[i].is_nan() && !b[i].is_nan() {
-            return Err(format!(
-                "Expected {a:?}, got {b:?} (One is NaN, other is not)"
-            ));
+            return Err(format!("Expected {a:?}, got {b:?} (One is NaN, other is not)"));
         } else if (a[i] - b[i]).abs() > 0.001 {
             return Err(format!("Expected {a:?}, got {b:?} (Difference is too big)"));
         }

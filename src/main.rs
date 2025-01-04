@@ -1,6 +1,7 @@
-use crate::cpu::test_all_extensions;
 use once_cell::sync::OnceCell;
 use rand::random;
+
+use crate::cpu::test_all_extensions;
 
 mod cpu;
 
