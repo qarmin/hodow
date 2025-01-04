@@ -19,6 +19,14 @@ pub fn get_random_float() -> f32 {
         _ => random::<f32>() * 100000.0,
     }
 }
+pub fn get_four_random_floats() -> [f32; 4] {
+    [
+        get_random_float(),
+        get_random_float(),
+        get_random_float(),
+        get_random_float(),
+    ]
+}
 
 fn main() {
     FUZZING.set(true).unwrap();
