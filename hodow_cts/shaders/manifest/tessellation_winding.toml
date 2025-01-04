@@ -1,0 +1,95 @@
+# Shader manifest for dEQP-VK.tessellation.winding.*
+#
+# `WindingTest::initPrograms`, GLSL branch: an empty vertex shader, a one-vertex control shader with every level at 5 and
+# an evaluation shader of the case's primitive type and winding, and the HLSL branch (stages compiled through glslang's HLSL front end).
+
+upstream_source = "external/vulkancts/modules/vulkan/tessellation/vktTessellationWindingTests.cpp"
+rust_module = "tessellation/winding_tests"
+
+[[case]]
+name = "triangles_cw"
+rust_const = "WINDING_TRIANGLES_CW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/winding.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/winding.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/winding_triangles_cw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/winding.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_ccw"
+rust_const = "WINDING_TRIANGLES_CCW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/winding.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/winding.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/winding_triangles_ccw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/winding.frag", stage = "frag" },
+]
+
+[[case]]
+name = "quads_cw"
+rust_const = "WINDING_QUADS_CW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/winding.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/winding.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/winding_quads_cw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/winding.frag", stage = "frag" },
+]
+
+[[case]]
+name = "quads_ccw"
+rust_const = "WINDING_QUADS_CCW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/winding.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/winding.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/winding_quads_ccw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/winding.frag", stage = "frag" },
+]
+
+[[case]]
+name = "hlsl_triangles_cw"
+rust_const = "WINDING_HLSL_TRIANGLES_CW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/winding_hlsl.vert", stage = "hlsl_vert" },
+    { name = "tesc", template = "tessellation/winding_hlsl_triangles_cw.tesc", stage = "hlsl_tesc" },
+    { name = "tese", template = "tessellation/winding_hlsl_triangles.tese", stage = "hlsl_tese" },
+    { name = "frag", template = "tessellation/winding_hlsl.frag", stage = "hlsl_frag" },
+]
+
+[[case]]
+name = "hlsl_triangles_ccw"
+rust_const = "WINDING_HLSL_TRIANGLES_CCW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/winding_hlsl.vert", stage = "hlsl_vert" },
+    { name = "tesc", template = "tessellation/winding_hlsl_triangles_ccw.tesc", stage = "hlsl_tesc" },
+    { name = "tese", template = "tessellation/winding_hlsl_triangles.tese", stage = "hlsl_tese" },
+    { name = "frag", template = "tessellation/winding_hlsl.frag", stage = "hlsl_frag" },
+]
+
+[[case]]
+name = "hlsl_quads_cw"
+rust_const = "WINDING_HLSL_QUADS_CW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/winding_hlsl.vert", stage = "hlsl_vert" },
+    { name = "tesc", template = "tessellation/winding_hlsl_quads_cw.tesc", stage = "hlsl_tesc" },
+    { name = "tese", template = "tessellation/winding_hlsl_quads.tese", stage = "hlsl_tese" },
+    { name = "frag", template = "tessellation/winding_hlsl.frag", stage = "hlsl_frag" },
+]
+
+[[case]]
+name = "hlsl_quads_ccw"
+rust_const = "WINDING_HLSL_QUADS_CCW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/winding_hlsl.vert", stage = "hlsl_vert" },
+    { name = "tesc", template = "tessellation/winding_hlsl_quads_ccw.tesc", stage = "hlsl_tesc" },
+    { name = "tese", template = "tessellation/winding_hlsl_quads.tese", stage = "hlsl_tese" },
+    { name = "frag", template = "tessellation/winding_hlsl.frag", stage = "hlsl_frag" },
+]

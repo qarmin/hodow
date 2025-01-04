@@ -1,0 +1,346 @@
+# Shader manifest for dEQP-VK.image.qualifiers.{coherent,volatile}.*
+#
+# `initPrograms` writes one shader per (qualifier, image type, format) from the image's shader grid; the local work group
+# is `min(8x8x2, grid)` per axis, which for the fixed sizes of `createImageQualifiersTests` is 8 in x, 1 (1D, buffer) or 8
+# in y and 2 (2D array, 3D, cube, cube array) or 1 in z. The template does that arithmetic and the type naming from
+# `kind` (the image type name), `fmt` (f, u or i: R32 float, uint, int) and `qualifier`. The `restrict` group is not
+# ported: it is built by `createImageQualifierRestrictCase` in vktImageLoadStoreTests.cpp.
+
+upstream_source = "external/vulkancts/modules/vulkan/image/vktImageQualifiersTests.cpp"
+rust_module = "image/qualifiers_tests"
+
+[[case]]
+name = "coherent_1d_f"
+rust_const = "QUAL_COHERENT_1D_F"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "coherent" }, kind = { type = "str", value = "1d" }, fmt = { type = "str", value = "f" } }
+
+[[case]]
+name = "coherent_1d_u"
+rust_const = "QUAL_COHERENT_1D_U"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "coherent" }, kind = { type = "str", value = "1d" }, fmt = { type = "str", value = "u" } }
+
+[[case]]
+name = "coherent_1d_i"
+rust_const = "QUAL_COHERENT_1D_I"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "coherent" }, kind = { type = "str", value = "1d" }, fmt = { type = "str", value = "i" } }
+
+[[case]]
+name = "coherent_1d_array_f"
+rust_const = "QUAL_COHERENT_1D_ARRAY_F"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "coherent" }, kind = { type = "str", value = "1d_array" }, fmt = { type = "str", value = "f" } }
+
+[[case]]
+name = "coherent_1d_array_u"
+rust_const = "QUAL_COHERENT_1D_ARRAY_U"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "coherent" }, kind = { type = "str", value = "1d_array" }, fmt = { type = "str", value = "u" } }
+
+[[case]]
+name = "coherent_1d_array_i"
+rust_const = "QUAL_COHERENT_1D_ARRAY_I"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "coherent" }, kind = { type = "str", value = "1d_array" }, fmt = { type = "str", value = "i" } }
+
+[[case]]
+name = "coherent_2d_f"
+rust_const = "QUAL_COHERENT_2D_F"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "coherent" }, kind = { type = "str", value = "2d" }, fmt = { type = "str", value = "f" } }
+
+[[case]]
+name = "coherent_2d_u"
+rust_const = "QUAL_COHERENT_2D_U"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "coherent" }, kind = { type = "str", value = "2d" }, fmt = { type = "str", value = "u" } }
+
+[[case]]
+name = "coherent_2d_i"
+rust_const = "QUAL_COHERENT_2D_I"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "coherent" }, kind = { type = "str", value = "2d" }, fmt = { type = "str", value = "i" } }
+
+[[case]]
+name = "coherent_2d_array_f"
+rust_const = "QUAL_COHERENT_2D_ARRAY_F"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "coherent" }, kind = { type = "str", value = "2d_array" }, fmt = { type = "str", value = "f" } }
+
+[[case]]
+name = "coherent_2d_array_u"
+rust_const = "QUAL_COHERENT_2D_ARRAY_U"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "coherent" }, kind = { type = "str", value = "2d_array" }, fmt = { type = "str", value = "u" } }
+
+[[case]]
+name = "coherent_2d_array_i"
+rust_const = "QUAL_COHERENT_2D_ARRAY_I"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "coherent" }, kind = { type = "str", value = "2d_array" }, fmt = { type = "str", value = "i" } }
+
+[[case]]
+name = "coherent_3d_f"
+rust_const = "QUAL_COHERENT_3D_F"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "coherent" }, kind = { type = "str", value = "3d" }, fmt = { type = "str", value = "f" } }
+
+[[case]]
+name = "coherent_3d_u"
+rust_const = "QUAL_COHERENT_3D_U"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "coherent" }, kind = { type = "str", value = "3d" }, fmt = { type = "str", value = "u" } }
+
+[[case]]
+name = "coherent_3d_i"
+rust_const = "QUAL_COHERENT_3D_I"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "coherent" }, kind = { type = "str", value = "3d" }, fmt = { type = "str", value = "i" } }
+
+[[case]]
+name = "coherent_cube_f"
+rust_const = "QUAL_COHERENT_CUBE_F"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "coherent" }, kind = { type = "str", value = "cube" }, fmt = { type = "str", value = "f" } }
+
+[[case]]
+name = "coherent_cube_u"
+rust_const = "QUAL_COHERENT_CUBE_U"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "coherent" }, kind = { type = "str", value = "cube" }, fmt = { type = "str", value = "u" } }
+
+[[case]]
+name = "coherent_cube_i"
+rust_const = "QUAL_COHERENT_CUBE_I"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "coherent" }, kind = { type = "str", value = "cube" }, fmt = { type = "str", value = "i" } }
+
+[[case]]
+name = "coherent_cube_array_f"
+rust_const = "QUAL_COHERENT_CUBE_ARRAY_F"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "coherent" }, kind = { type = "str", value = "cube_array" }, fmt = { type = "str", value = "f" } }
+
+[[case]]
+name = "coherent_cube_array_u"
+rust_const = "QUAL_COHERENT_CUBE_ARRAY_U"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "coherent" }, kind = { type = "str", value = "cube_array" }, fmt = { type = "str", value = "u" } }
+
+[[case]]
+name = "coherent_cube_array_i"
+rust_const = "QUAL_COHERENT_CUBE_ARRAY_I"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "coherent" }, kind = { type = "str", value = "cube_array" }, fmt = { type = "str", value = "i" } }
+
+[[case]]
+name = "coherent_buffer_f"
+rust_const = "QUAL_COHERENT_BUFFER_F"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "coherent" }, kind = { type = "str", value = "buffer" }, fmt = { type = "str", value = "f" } }
+
+[[case]]
+name = "coherent_buffer_u"
+rust_const = "QUAL_COHERENT_BUFFER_U"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "coherent" }, kind = { type = "str", value = "buffer" }, fmt = { type = "str", value = "u" } }
+
+[[case]]
+name = "coherent_buffer_i"
+rust_const = "QUAL_COHERENT_BUFFER_I"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "coherent" }, kind = { type = "str", value = "buffer" }, fmt = { type = "str", value = "i" } }
+
+[[case]]
+name = "volatile_1d_f"
+rust_const = "QUAL_VOLATILE_1D_F"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "volatile" }, kind = { type = "str", value = "1d" }, fmt = { type = "str", value = "f" } }
+
+[[case]]
+name = "volatile_1d_u"
+rust_const = "QUAL_VOLATILE_1D_U"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "volatile" }, kind = { type = "str", value = "1d" }, fmt = { type = "str", value = "u" } }
+
+[[case]]
+name = "volatile_1d_i"
+rust_const = "QUAL_VOLATILE_1D_I"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "volatile" }, kind = { type = "str", value = "1d" }, fmt = { type = "str", value = "i" } }
+
+[[case]]
+name = "volatile_1d_array_f"
+rust_const = "QUAL_VOLATILE_1D_ARRAY_F"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "volatile" }, kind = { type = "str", value = "1d_array" }, fmt = { type = "str", value = "f" } }
+
+[[case]]
+name = "volatile_1d_array_u"
+rust_const = "QUAL_VOLATILE_1D_ARRAY_U"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "volatile" }, kind = { type = "str", value = "1d_array" }, fmt = { type = "str", value = "u" } }
+
+[[case]]
+name = "volatile_1d_array_i"
+rust_const = "QUAL_VOLATILE_1D_ARRAY_I"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "volatile" }, kind = { type = "str", value = "1d_array" }, fmt = { type = "str", value = "i" } }
+
+[[case]]
+name = "volatile_2d_f"
+rust_const = "QUAL_VOLATILE_2D_F"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "volatile" }, kind = { type = "str", value = "2d" }, fmt = { type = "str", value = "f" } }
+
+[[case]]
+name = "volatile_2d_u"
+rust_const = "QUAL_VOLATILE_2D_U"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "volatile" }, kind = { type = "str", value = "2d" }, fmt = { type = "str", value = "u" } }
+
+[[case]]
+name = "volatile_2d_i"
+rust_const = "QUAL_VOLATILE_2D_I"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "volatile" }, kind = { type = "str", value = "2d" }, fmt = { type = "str", value = "i" } }
+
+[[case]]
+name = "volatile_2d_array_f"
+rust_const = "QUAL_VOLATILE_2D_ARRAY_F"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "volatile" }, kind = { type = "str", value = "2d_array" }, fmt = { type = "str", value = "f" } }
+
+[[case]]
+name = "volatile_2d_array_u"
+rust_const = "QUAL_VOLATILE_2D_ARRAY_U"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "volatile" }, kind = { type = "str", value = "2d_array" }, fmt = { type = "str", value = "u" } }
+
+[[case]]
+name = "volatile_2d_array_i"
+rust_const = "QUAL_VOLATILE_2D_ARRAY_I"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "volatile" }, kind = { type = "str", value = "2d_array" }, fmt = { type = "str", value = "i" } }
+
+[[case]]
+name = "volatile_3d_f"
+rust_const = "QUAL_VOLATILE_3D_F"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "volatile" }, kind = { type = "str", value = "3d" }, fmt = { type = "str", value = "f" } }
+
+[[case]]
+name = "volatile_3d_u"
+rust_const = "QUAL_VOLATILE_3D_U"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "volatile" }, kind = { type = "str", value = "3d" }, fmt = { type = "str", value = "u" } }
+
+[[case]]
+name = "volatile_3d_i"
+rust_const = "QUAL_VOLATILE_3D_I"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "volatile" }, kind = { type = "str", value = "3d" }, fmt = { type = "str", value = "i" } }
+
+[[case]]
+name = "volatile_cube_f"
+rust_const = "QUAL_VOLATILE_CUBE_F"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "volatile" }, kind = { type = "str", value = "cube" }, fmt = { type = "str", value = "f" } }
+
+[[case]]
+name = "volatile_cube_u"
+rust_const = "QUAL_VOLATILE_CUBE_U"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "volatile" }, kind = { type = "str", value = "cube" }, fmt = { type = "str", value = "u" } }
+
+[[case]]
+name = "volatile_cube_i"
+rust_const = "QUAL_VOLATILE_CUBE_I"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "volatile" }, kind = { type = "str", value = "cube" }, fmt = { type = "str", value = "i" } }
+
+[[case]]
+name = "volatile_cube_array_f"
+rust_const = "QUAL_VOLATILE_CUBE_ARRAY_F"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "volatile" }, kind = { type = "str", value = "cube_array" }, fmt = { type = "str", value = "f" } }
+
+[[case]]
+name = "volatile_cube_array_u"
+rust_const = "QUAL_VOLATILE_CUBE_ARRAY_U"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "volatile" }, kind = { type = "str", value = "cube_array" }, fmt = { type = "str", value = "u" } }
+
+[[case]]
+name = "volatile_cube_array_i"
+rust_const = "QUAL_VOLATILE_CUBE_ARRAY_I"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "volatile" }, kind = { type = "str", value = "cube_array" }, fmt = { type = "str", value = "i" } }
+
+[[case]]
+name = "volatile_buffer_f"
+rust_const = "QUAL_VOLATILE_BUFFER_F"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "volatile" }, kind = { type = "str", value = "buffer" }, fmt = { type = "str", value = "f" } }
+
+[[case]]
+name = "volatile_buffer_u"
+rust_const = "QUAL_VOLATILE_BUFFER_U"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "volatile" }, kind = { type = "str", value = "buffer" }, fmt = { type = "str", value = "u" } }
+
+[[case]]
+name = "volatile_buffer_i"
+rust_const = "QUAL_VOLATILE_BUFFER_I"
+rust_type = "QualifierPrograms"
+programs = [{ name = "comp", template = "image/qualifiers.comp", stage = "comp" }]
+params = { qualifier = { type = "str", value = "volatile" }, kind = { type = "str", value = "buffer" }, fmt = { type = "str", value = "i" } }

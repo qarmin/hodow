@@ -1,0 +1,23 @@
+#version 460
+#extension GL_EXT_mesh_shader : enable
+
+layout (local_size_x=1) in;
+layout (triangles) out;
+layout (max_vertices=3, max_primitives=1) out;
+
+perprimitiveEXT out gl_MeshPerPrimitiveEXT {
+   int gl_PrimitiveID;
+} gl_MeshPrimitivesEXT[];
+
+void main ()
+{
+    SetMeshOutputsEXT(3u, 1u);
+
+    gl_PrimitiveTriangleIndicesEXT[0] = uvec3(0u, 1u, 2u);
+
+    gl_MeshVerticesEXT[0].gl_Position = vec4(-1.0, -1.0, 0.0, 1.0);
+    gl_MeshVerticesEXT[1].gl_Position = vec4(-1.0,  3.0, 0.0, 1.0);
+    gl_MeshVerticesEXT[2].gl_Position = vec4( 3.0, -1.0, 0.0, 1.0);
+
+    gl_MeshPrimitivesEXT[0].gl_PrimitiveID = 1629198956;
+}

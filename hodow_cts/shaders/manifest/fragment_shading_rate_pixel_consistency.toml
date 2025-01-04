@@ -1,0 +1,48 @@
+# Shader manifest for dEQP-VK.fragment_shading_rate.renderpass2.monolithic.pixel_consistency.*
+#
+# `FSRPixelConsistencyTestCase::initPrograms`: the vertex shader (optionally forwarding the position to gl_Position.zw), the
+# subpass 0 fragment shader (writes the index of the fragment inside its shading rate block, from gl_FragCoord.xy or .zw) and
+# the subpass 1 fragment shader that reads it back through a subpass input (multisampled or not).
+
+upstream_source = "external/vulkancts/modules/vulkan/fragment_shading_rate/vktFragmentShadingRatePixelConsistency.cpp"
+rust_module = "fragment_shading_rate/pixel_consistency_tests"
+
+[[case]]
+name = "single"
+rust_const = "PC_SINGLE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "fragment_shading_rate/pixel_consistency/position.vert", stage = "vert" },
+    { name = "frag_pass0", template = "fragment_shading_rate/pixel_consistency/pass0.frag", stage = "frag" },
+    { name = "frag_pass1", template = "fragment_shading_rate/pixel_consistency/pass1.frag", stage = "frag" },
+]
+
+[[case]]
+name = "ms"
+rust_const = "PC_MS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "fragment_shading_rate/pixel_consistency/position.vert", stage = "vert" },
+    { name = "frag_pass0", template = "fragment_shading_rate/pixel_consistency/pass0.frag", stage = "frag" },
+    { name = "frag_pass1", template = "fragment_shading_rate/pixel_consistency/pass1_ms.frag", stage = "frag" },
+]
+
+[[case]]
+name = "zw_single"
+rust_const = "PC_ZW_SINGLE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "fragment_shading_rate/pixel_consistency/position_zw.vert", stage = "vert" },
+    { name = "frag_pass0", template = "fragment_shading_rate/pixel_consistency/pass0_zw.frag", stage = "frag" },
+    { name = "frag_pass1", template = "fragment_shading_rate/pixel_consistency/pass1.frag", stage = "frag" },
+]
+
+[[case]]
+name = "zw_ms"
+rust_const = "PC_ZW_MS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "fragment_shading_rate/pixel_consistency/position_zw.vert", stage = "vert" },
+    { name = "frag_pass0", template = "fragment_shading_rate/pixel_consistency/pass0_zw.frag", stage = "frag" },
+    { name = "frag_pass1", template = "fragment_shading_rate/pixel_consistency/pass1_ms.frag", stage = "frag" },
+]

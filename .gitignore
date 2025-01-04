@@ -1,0 +1,21 @@
+/target
+/tmp/
+.idea/
+*.bak
+__pycache__/
+winit
+glutin
+___*
+core.*
+*.core
+miri_errors.txt
+
+# Scratch scripts and CTS run logs.
+tmp/
+
+# Self-contained reproducers for what the fuzzer found, one project per finding.
+# Per-machine and per-driver, like quarantine.toml - not committed.
+findings/
+TestResults.qpa
+.worktrees/
+/binaries/

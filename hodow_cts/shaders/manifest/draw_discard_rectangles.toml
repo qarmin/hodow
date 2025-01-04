@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.draw.*.discard_rectangles.*
+#
+# `DiscardRectanglesTestCase::initPrograms`: a pass-through vertex shader that outputs green and a fragment shader that writes it.
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawDiscardRectanglesTests.cpp"
+rust_module = "draw/discard_rectangles_tests"
+
+[[case]]
+name = "discard_rectangles"
+rust_const = "DISCARD_RECTANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/discard_rectangles.vert", stage = "vert" },
+    { name = "frag", template = "draw/discard_rectangles.frag", stage = "frag" },
+]

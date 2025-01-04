@@ -1,0 +1,30 @@
+#version 460
+#extension GL_EXT_mesh_shader : require
+
+layout(local_size_x=64, local_size_y=1, local_size_z=1) in;
+
+struct GlobalIndices {
+    uint values[256];
+};
+taskPayloadSharedEXT GlobalIndices globalIndices;
+layout (push_constant, std430) uniform PushConstantBlock {
+    vec4 colorMultiplier;   // vec4(1.0, 1.0, 1.0, 1.0)
+    uint wgIndexMultiplier; // 1
+} pc;
+
+void main() {
+    const uint totalTaskWGs = 256u; // Must match the vkCmdDrawMeshTasksEXT() call
+    const uint childMeshWGs = 256u; // Per task WG
+    const uint globalIndex = gl_WorkGroupID.x;
+    const uint wgLoad = totalTaskWGs - globalIndex; // More load the lower the WG index
+    const uint indicesPerInv = childMeshWGs / gl_WorkGroupSize.x;
+    for (uint i = 0u; i < indicesPerInv; ++i) {
+        const uint idx = gl_LocalInvocationIndex * indicesPerInv + i;
+        uint globalIndex = gl_WorkGroupID.x * childMeshWGs + idx;
+        for (uint i = 0u; i < wgLoad; ++i) {
+            globalIndex = globalIndex * pc.wgIndexMultiplier;
+        }
+        globalIndices.values[idx] = globalIndex;
+    }
+    EmitMeshTasksEXT(childMeshWGs, 1, 1);
+}

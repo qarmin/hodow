@@ -1,0 +1,16 @@
+# Shader manifest for dEQP-VK.draw.*.inverted_depth_ranges.*
+#
+# `InvertedDepthRangesTest::initPrograms`: a pass-through vertex shader and a fragment shader that writes the fragment
+# depth into the red channel, with the other channels fixed at kVertexColor (0.0, 0.5, 0.5, 1.0).
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawInvertedDepthRangesTests.cpp"
+rust_module = "draw/inverted_depth_ranges_tests"
+
+[[case]]
+name = "inverted_depth_ranges"
+rust_const = "INVERTED_DEPTH_RANGES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/inverted_depth_ranges.vert", stage = "vert" },
+    { name = "frag", template = "draw/inverted_depth_ranges.frag", stage = "frag" },
+]

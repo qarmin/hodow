@@ -1,0 +1,19 @@
+# Shader manifest for dEQP-VK.pipeline.*.extended_dynamic_state.mesh_shader.<ordering>.*
+#
+# `ExtendedDynamicStateTest::initPrograms` with mesh shaders: the mesh shader reads the triangle strip from a storage buffer, one work group per triangle, and writes the viewport index
+# of the primitive for the multi viewport cases. The fragment shaders are those of the classic cases.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineExtendedDynamicStateTests.cpp"
+rust_module = "pipeline/extended_dynamic_state_basic_tests"
+spirv_version = "spirv1.4"
+
+[[case]]
+name = "extended_dynamic_state_basic_mesh"
+rust_const = "EXTENDED_DYNAMIC_STATE_BASIC_MESH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "pipeline/extended_dynamic_state_basic/basic.mesh", stage = "mesh" },
+    { name = "meshViewport", template = "pipeline/extended_dynamic_state_basic/basic_viewport.mesh", stage = "mesh" },
+    { name = "frag", template = "pipeline/extended_dynamic_state_basic/basic.frag", stage = "frag" },
+    { name = "fragUint", template = "pipeline/extended_dynamic_state_basic/basic_uint.frag", stage = "frag" },
+]

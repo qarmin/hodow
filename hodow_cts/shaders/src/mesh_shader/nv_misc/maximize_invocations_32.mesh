@@ -1,0 +1,25 @@
+#version 450
+#extension GL_NV_mesh_shader : enable
+
+layout(local_size_x=32) in;
+layout(points) out;
+layout(max_vertices=16, max_primitives=16) out;
+
+layout (location=0) out perprimitiveNV vec4 pointColor[];
+
+void main ()
+{
+    gl_PrimitiveCountNV = 16;
+    const uint pixelId = gl_LocalInvocationIndex / 2u;
+    if (gl_LocalInvocationIndex % 2u == 0u)
+    {
+        const float xCoord = (float(pixelId) + 0.5) / float(16) * 2.0 - 1.0;
+        gl_MeshVerticesNV[pixelId].gl_Position = vec4(xCoord, 0.0, 0.0f, 1.0f);
+        gl_MeshVerticesNV[pixelId].gl_PointSize = 1.0f;
+    }
+    else
+    {
+        gl_PrimitiveIndicesNV[pixelId] = pixelId;
+        pointColor[pixelId] = vec4(0.0, 0.0, 1.0, 1.0);
+    }
+}

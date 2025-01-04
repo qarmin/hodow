@@ -1,0 +1,23 @@
+#version 310 es
+layout(location = 0) in vec4 position;
+layout(location = 1) in vec4 color;
+layout(location = 0) out highp vec4 vtxColor;
+void main (void)
+{
+    gl_Position = position;
+    vtxColor = color;
+}
+#version 310 es
+layout(location = 0) in highp vec4 vtxColor;
+layout(location = 0) out highp vec4 fragColor;
+void main (void)
+{
+    fragColor = vtxColor;
+}
+#version 310 es
+layout(location = 0) in vec4 position;
+layout(location = 1) in vec4 color;
+void main (void)
+{
+    gl_Position = position;
+}

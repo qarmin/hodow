@@ -1,0 +1,19 @@
+# Shader manifest for dEQP-VK.renderpass*.suballocation.load_store_op_none.*
+#
+# `LoadStoreOpNoneTest::initPrograms`: the position/colour vertex shader and the four fragment shaders a subpass picks from
+# (plain, unsigned integer output, half alpha for blending and the input attachment one). Every case shares them.
+
+upstream_source = "external/vulkancts/modules/vulkan/renderpass/vktRenderPassLoadStoreOpNoneTests.cpp"
+rust_module = "renderpass/load_store_op_none_tests"
+
+[[case]]
+name = "load_store_op_none"
+rust_const = "LOAD_STORE_OP_NONE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "renderpass/load_store_op_none/color.vert", stage = "vert" },
+    { name = "color_frag", template = "renderpass/load_store_op_none/color.frag", stage = "frag" },
+    { name = "color_frag_uint", template = "renderpass/load_store_op_none/color_uint.frag", stage = "frag" },
+    { name = "color_frag_blend", template = "renderpass/load_store_op_none/color_blend.frag", stage = "frag" },
+    { name = "color_frag_input", template = "renderpass/load_store_op_none/color_input.frag", stage = "frag" },
+]

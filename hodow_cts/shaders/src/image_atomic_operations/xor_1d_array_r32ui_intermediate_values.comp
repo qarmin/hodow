@@ -1,0 +1,21 @@
+#version 450
+#extension GL_EXT_shader_atomic_float : enable
+#extension GL_EXT_shader_atomic_float2 : enable
+#extension GL_KHR_memory_scope_semantics : enable
+#extension GL_EXT_shader_explicit_arithmetic_types_float16 : enable
+#extension GL_NV_shader_atomic_fp16_vector : enable
+
+precision highp uimage1DArray; 
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout (r32ui, binding=0) coherent uniform uimage1DArray u_resultImage;
+layout (r32ui, binding=1) writeonly uniform uimage1DArray u_intermValuesImage;
+
+#define TOVEC4(x) uvec4(x)
+
+void main (void)
+{
+    int gx = int(gl_GlobalInvocationID.x);
+    int gy = int(gl_GlobalInvocationID.y);
+    int gz = int(gl_GlobalInvocationID.z);
+    imageStore(u_intermValuesImage, ivec2(gx,gy), TOVEC4(imageAtomicXor(u_resultImage, ivec2(gx % 64,gy), uint(gx*gx + gy*gy + gz*gz))));
+}

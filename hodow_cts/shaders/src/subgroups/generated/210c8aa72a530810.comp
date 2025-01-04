@@ -1,0 +1,64 @@
+#version 450
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  uvec4 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint sgSize = gl_SubgroupSize;
+  uint sgInvocation = gl_SubgroupInvocationID;
+  tempRes = 0x3;
+  uvec4 ops[32];
+  uvec4 d = data[sgInvocation];
+  ops[0] = subgroupBroadcast(d, 0u);
+  ops[1] = subgroupBroadcast(d, 1u);
+  ops[2] = subgroupBroadcast(d, 2u);
+  ops[3] = subgroupBroadcast(d, 3u);
+  ops[4] = subgroupBroadcast(d, 4u);
+  ops[5] = subgroupBroadcast(d, 5u);
+  ops[6] = subgroupBroadcast(d, 6u);
+  ops[7] = subgroupBroadcast(d, 7u);
+  ops[8] = subgroupBroadcast(d, 8u);
+  ops[9] = subgroupBroadcast(d, 9u);
+  ops[10] = subgroupBroadcast(d, 10u);
+  ops[11] = subgroupBroadcast(d, 11u);
+  ops[12] = subgroupBroadcast(d, 12u);
+  ops[13] = subgroupBroadcast(d, 13u);
+  ops[14] = subgroupBroadcast(d, 14u);
+  ops[15] = subgroupBroadcast(d, 15u);
+  ops[16] = subgroupBroadcast(d, 16u);
+  ops[17] = subgroupBroadcast(d, 17u);
+  ops[18] = subgroupBroadcast(d, 18u);
+  ops[19] = subgroupBroadcast(d, 19u);
+  ops[20] = subgroupBroadcast(d, 20u);
+  ops[21] = subgroupBroadcast(d, 21u);
+  ops[22] = subgroupBroadcast(d, 22u);
+  ops[23] = subgroupBroadcast(d, 23u);
+  ops[24] = subgroupBroadcast(d, 24u);
+  ops[25] = subgroupBroadcast(d, 25u);
+  ops[26] = subgroupBroadcast(d, 26u);
+  ops[27] = subgroupBroadcast(d, 27u);
+  ops[28] = subgroupBroadcast(d, 28u);
+  ops[29] = subgroupBroadcast(d, 29u);
+  ops[30] = subgroupBroadcast(d, 30u);
+  ops[31] = subgroupBroadcast(d, 31u);
+  for(int id = 0; id < sgSize; id++)
+  {
+    if (subgroupBallotBitExtract(mask, id) && ops[id] != data[id])
+    {
+      tempRes = 0;
+    }
+  };
+  result[offset] = tempRes;
+}

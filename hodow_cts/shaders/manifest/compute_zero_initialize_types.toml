@@ -1,0 +1,1505 @@
+# Shader manifest for the types / composites / shared_memory_blocks subgroups of
+# dEQP-VK.compute.pipeline.zero_initialize_workgroup_memory.*
+#
+# Upstream: external/vulkancts/modules/vulkan/compute/vktComputeZeroInitializeWorkgroupMemoryTests.cpp
+# (AddTypeTests, AddCompositeTests, AddSharedMemoryTests). The other subgroups of the
+# same upstream file live in compute_zero_initialize.toml; these three are separate
+# because every one of their cases needs its own SPIR-V, so there is no shared shader
+# to hang them off.
+#
+# Two things about the templates are worth knowing before reading them:
+#
+#  * `types` declares `numVariables` shared variables and writes one result per
+#    variable, so its templates carry the upstream initPrograms loop as the
+#    substitution expression. The manifest holds only the TypeCaseDef row it runs
+#    over (typeName / typeSize / numElements / numRows / numVariables).
+#  * compile_shaders.py matches `${...}` with `[^}]+`, so a substitution expression
+#    cannot contain a literal `}`. The GL_EXT_null_initializer `= {}` in the types
+#    templates is therefore written `{\x7d`.
+#
+# numVariables comes from `deRandom_getUint32(&rnd) % 16 + 1` with the generator
+# seeded 0 and drawn once per case in table order, which is what upstream does; the
+# draws are transcribed here so the same shader is built without a host-side RNG.
+
+upstream_source = "external/vulkancts/modules/vulkan/compute/vktComputeZeroInitializeWorkgroupMemoryTests.cpp"
+rust_module = "compute/zero_initialize_types_tests"
+
+# --- TypeTest (AddTypeTests) ------------------------------------------------------
+# 75 cases, one per TypeCaseDef row; the case name is the type name, which is what
+# TypeTest::checkSupport matches against to decide which of shaderFloat16 /
+# shaderFloat64 / shaderInt8 / shaderInt16 / shaderInt64 it needs.
+
+[[case]]
+name = "bool"
+rust_const = "TYPES_BOOL"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_scalar.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 1 }
+num_elements = { type = "u32", value = 1 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 11 }
+[case.derived]
+type_name = "'bool'"
+
+[[case]]
+name = "bvec2"
+rust_const = "TYPES_BVEC2"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 1 }
+num_elements = { type = "u32", value = 2 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 15 }
+[case.derived]
+type_name = "'bvec2'"
+
+[[case]]
+name = "bvec3"
+rust_const = "TYPES_BVEC3"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 1 }
+num_elements = { type = "u32", value = 3 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 13 }
+[case.derived]
+type_name = "'bvec3'"
+
+[[case]]
+name = "bvec4"
+rust_const = "TYPES_BVEC4"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 1 }
+num_elements = { type = "u32", value = 4 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 9 }
+[case.derived]
+type_name = "'bvec4'"
+
+[[case]]
+name = "uint32_t"
+rust_const = "TYPES_UINT32_T"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_scalar.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 4 }
+num_elements = { type = "u32", value = 1 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 9 }
+[case.derived]
+type_name = "'uint32_t'"
+
+[[case]]
+name = "uvec2"
+rust_const = "TYPES_UVEC2"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 4 }
+num_elements = { type = "u32", value = 2 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 15 }
+[case.derived]
+type_name = "'uvec2'"
+
+[[case]]
+name = "uvec3"
+rust_const = "TYPES_UVEC3"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 4 }
+num_elements = { type = "u32", value = 3 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 16 }
+[case.derived]
+type_name = "'uvec3'"
+
+[[case]]
+name = "uvec4"
+rust_const = "TYPES_UVEC4"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 4 }
+num_elements = { type = "u32", value = 4 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 7 }
+[case.derived]
+type_name = "'uvec4'"
+
+[[case]]
+name = "int32_t"
+rust_const = "TYPES_INT32_T"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_scalar.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 4 }
+num_elements = { type = "u32", value = 1 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 15 }
+[case.derived]
+type_name = "'int32_t'"
+
+[[case]]
+name = "ivec2"
+rust_const = "TYPES_IVEC2"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 4 }
+num_elements = { type = "u32", value = 2 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 16 }
+[case.derived]
+type_name = "'ivec2'"
+
+[[case]]
+name = "ivec3"
+rust_const = "TYPES_IVEC3"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 4 }
+num_elements = { type = "u32", value = 3 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 3 }
+[case.derived]
+type_name = "'ivec3'"
+
+[[case]]
+name = "ivec4"
+rust_const = "TYPES_IVEC4"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 4 }
+num_elements = { type = "u32", value = 4 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 14 }
+[case.derived]
+type_name = "'ivec4'"
+
+[[case]]
+name = "uint8_t"
+rust_const = "TYPES_UINT8_T"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_scalar.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 1 }
+num_elements = { type = "u32", value = 1 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 5 }
+[case.derived]
+type_name = "'uint8_t'"
+
+[[case]]
+name = "u8vec2"
+rust_const = "TYPES_U8VEC2"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 1 }
+num_elements = { type = "u32", value = 2 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 15 }
+[case.derived]
+type_name = "'u8vec2'"
+
+[[case]]
+name = "u8vec3"
+rust_const = "TYPES_U8VEC3"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 1 }
+num_elements = { type = "u32", value = 3 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 3 }
+[case.derived]
+type_name = "'u8vec3'"
+
+[[case]]
+name = "u8vec4"
+rust_const = "TYPES_U8VEC4"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 1 }
+num_elements = { type = "u32", value = 4 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 1 }
+[case.derived]
+type_name = "'u8vec4'"
+
+[[case]]
+name = "int8_t"
+rust_const = "TYPES_INT8_T"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_scalar.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 1 }
+num_elements = { type = "u32", value = 1 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 8 }
+[case.derived]
+type_name = "'int8_t'"
+
+[[case]]
+name = "i8vec2"
+rust_const = "TYPES_I8VEC2"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 1 }
+num_elements = { type = "u32", value = 2 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 16 }
+[case.derived]
+type_name = "'i8vec2'"
+
+[[case]]
+name = "i8vec3"
+rust_const = "TYPES_I8VEC3"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 1 }
+num_elements = { type = "u32", value = 3 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 8 }
+[case.derived]
+type_name = "'i8vec3'"
+
+[[case]]
+name = "i8vec4"
+rust_const = "TYPES_I8VEC4"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 1 }
+num_elements = { type = "u32", value = 4 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 11 }
+[case.derived]
+type_name = "'i8vec4'"
+
+[[case]]
+name = "uint16_t"
+rust_const = "TYPES_UINT16_T"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_scalar.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 2 }
+num_elements = { type = "u32", value = 1 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 13 }
+[case.derived]
+type_name = "'uint16_t'"
+
+[[case]]
+name = "u16vec2"
+rust_const = "TYPES_U16VEC2"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 2 }
+num_elements = { type = "u32", value = 2 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 1 }
+[case.derived]
+type_name = "'u16vec2'"
+
+[[case]]
+name = "u16vec3"
+rust_const = "TYPES_U16VEC3"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 2 }
+num_elements = { type = "u32", value = 3 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 8 }
+[case.derived]
+type_name = "'u16vec3'"
+
+[[case]]
+name = "u16vec4"
+rust_const = "TYPES_U16VEC4"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 2 }
+num_elements = { type = "u32", value = 4 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 9 }
+[case.derived]
+type_name = "'u16vec4'"
+
+[[case]]
+name = "int16_t"
+rust_const = "TYPES_INT16_T"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_scalar.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 2 }
+num_elements = { type = "u32", value = 1 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 9 }
+[case.derived]
+type_name = "'int16_t'"
+
+[[case]]
+name = "i16vec2"
+rust_const = "TYPES_I16VEC2"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 2 }
+num_elements = { type = "u32", value = 2 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 8 }
+[case.derived]
+type_name = "'i16vec2'"
+
+[[case]]
+name = "i16vec3"
+rust_const = "TYPES_I16VEC3"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 2 }
+num_elements = { type = "u32", value = 3 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 16 }
+[case.derived]
+type_name = "'i16vec3'"
+
+[[case]]
+name = "i16vec4"
+rust_const = "TYPES_I16VEC4"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 2 }
+num_elements = { type = "u32", value = 4 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 5 }
+[case.derived]
+type_name = "'i16vec4'"
+
+[[case]]
+name = "uint64_t"
+rust_const = "TYPES_UINT64_T"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_scalar.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 8 }
+num_elements = { type = "u32", value = 1 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 10 }
+[case.derived]
+type_name = "'uint64_t'"
+
+[[case]]
+name = "u64vec2"
+rust_const = "TYPES_U64VEC2"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 8 }
+num_elements = { type = "u32", value = 2 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 15 }
+[case.derived]
+type_name = "'u64vec2'"
+
+[[case]]
+name = "u64vec3"
+rust_const = "TYPES_U64VEC3"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 8 }
+num_elements = { type = "u32", value = 3 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 1 }
+[case.derived]
+type_name = "'u64vec3'"
+
+[[case]]
+name = "u64vec4"
+rust_const = "TYPES_U64VEC4"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 8 }
+num_elements = { type = "u32", value = 4 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 10 }
+[case.derived]
+type_name = "'u64vec4'"
+
+[[case]]
+name = "int64_t"
+rust_const = "TYPES_INT64_T"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_scalar.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 8 }
+num_elements = { type = "u32", value = 1 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 6 }
+[case.derived]
+type_name = "'int64_t'"
+
+[[case]]
+name = "i64vec2"
+rust_const = "TYPES_I64VEC2"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 8 }
+num_elements = { type = "u32", value = 2 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 3 }
+[case.derived]
+type_name = "'i64vec2'"
+
+[[case]]
+name = "i64vec3"
+rust_const = "TYPES_I64VEC3"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 8 }
+num_elements = { type = "u32", value = 3 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 5 }
+[case.derived]
+type_name = "'i64vec3'"
+
+[[case]]
+name = "i64vec4"
+rust_const = "TYPES_I64VEC4"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 8 }
+num_elements = { type = "u32", value = 4 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 2 }
+[case.derived]
+type_name = "'i64vec4'"
+
+[[case]]
+name = "float32_t"
+rust_const = "TYPES_FLOAT32_T"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_scalar.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 4 }
+num_elements = { type = "u32", value = 1 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 11 }
+[case.derived]
+type_name = "'float32_t'"
+
+[[case]]
+name = "f32vec2"
+rust_const = "TYPES_F32VEC2"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 4 }
+num_elements = { type = "u32", value = 2 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 16 }
+[case.derived]
+type_name = "'f32vec2'"
+
+[[case]]
+name = "f32vec3"
+rust_const = "TYPES_F32VEC3"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 4 }
+num_elements = { type = "u32", value = 3 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 7 }
+[case.derived]
+type_name = "'f32vec3'"
+
+[[case]]
+name = "f32vec4"
+rust_const = "TYPES_F32VEC4"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 4 }
+num_elements = { type = "u32", value = 4 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 7 }
+[case.derived]
+type_name = "'f32vec4'"
+
+[[case]]
+name = "f32mat2x2"
+rust_const = "TYPES_F32MAT2X2"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 4 }
+num_elements = { type = "u32", value = 2 }
+num_rows = { type = "u32", value = 2 }
+num_variables = { type = "u32", value = 13 }
+[case.derived]
+type_name = "'f32mat2x2'"
+
+[[case]]
+name = "f32mat2x3"
+rust_const = "TYPES_F32MAT2X3"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 4 }
+num_elements = { type = "u32", value = 3 }
+num_rows = { type = "u32", value = 2 }
+num_variables = { type = "u32", value = 16 }
+[case.derived]
+type_name = "'f32mat2x3'"
+
+[[case]]
+name = "f32mat2x4"
+rust_const = "TYPES_F32MAT2X4"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 4 }
+num_elements = { type = "u32", value = 4 }
+num_rows = { type = "u32", value = 2 }
+num_variables = { type = "u32", value = 7 }
+[case.derived]
+type_name = "'f32mat2x4'"
+
+[[case]]
+name = "f32mat3x2"
+rust_const = "TYPES_F32MAT3X2"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 4 }
+num_elements = { type = "u32", value = 2 }
+num_rows = { type = "u32", value = 3 }
+num_variables = { type = "u32", value = 10 }
+[case.derived]
+type_name = "'f32mat3x2'"
+
+[[case]]
+name = "f32mat3x3"
+rust_const = "TYPES_F32MAT3X3"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 4 }
+num_elements = { type = "u32", value = 3 }
+num_rows = { type = "u32", value = 3 }
+num_variables = { type = "u32", value = 11 }
+[case.derived]
+type_name = "'f32mat3x3'"
+
+[[case]]
+name = "f32mat3x4"
+rust_const = "TYPES_F32MAT3X4"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 4 }
+num_elements = { type = "u32", value = 4 }
+num_rows = { type = "u32", value = 3 }
+num_variables = { type = "u32", value = 12 }
+[case.derived]
+type_name = "'f32mat3x4'"
+
+[[case]]
+name = "f32mat4x2"
+rust_const = "TYPES_F32MAT4X2"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 4 }
+num_elements = { type = "u32", value = 2 }
+num_rows = { type = "u32", value = 4 }
+num_variables = { type = "u32", value = 16 }
+[case.derived]
+type_name = "'f32mat4x2'"
+
+[[case]]
+name = "f32mat4x3"
+rust_const = "TYPES_F32MAT4X3"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 4 }
+num_elements = { type = "u32", value = 3 }
+num_rows = { type = "u32", value = 4 }
+num_variables = { type = "u32", value = 2 }
+[case.derived]
+type_name = "'f32mat4x3'"
+
+[[case]]
+name = "f32mat4x4"
+rust_const = "TYPES_F32MAT4X4"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 4 }
+num_elements = { type = "u32", value = 4 }
+num_rows = { type = "u32", value = 4 }
+num_variables = { type = "u32", value = 11 }
+[case.derived]
+type_name = "'f32mat4x4'"
+
+[[case]]
+name = "float16_t"
+rust_const = "TYPES_FLOAT16_T"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_scalar.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 2 }
+num_elements = { type = "u32", value = 1 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 3 }
+[case.derived]
+type_name = "'float16_t'"
+
+[[case]]
+name = "f16vec2"
+rust_const = "TYPES_F16VEC2"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 2 }
+num_elements = { type = "u32", value = 2 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 7 }
+[case.derived]
+type_name = "'f16vec2'"
+
+[[case]]
+name = "f16vec3"
+rust_const = "TYPES_F16VEC3"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 2 }
+num_elements = { type = "u32", value = 3 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 9 }
+[case.derived]
+type_name = "'f16vec3'"
+
+[[case]]
+name = "f16vec4"
+rust_const = "TYPES_F16VEC4"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 2 }
+num_elements = { type = "u32", value = 4 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 8 }
+[case.derived]
+type_name = "'f16vec4'"
+
+[[case]]
+name = "f16mat2x2"
+rust_const = "TYPES_F16MAT2X2"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 2 }
+num_elements = { type = "u32", value = 2 }
+num_rows = { type = "u32", value = 2 }
+num_variables = { type = "u32", value = 12 }
+[case.derived]
+type_name = "'f16mat2x2'"
+
+[[case]]
+name = "f16mat2x3"
+rust_const = "TYPES_F16MAT2X3"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 2 }
+num_elements = { type = "u32", value = 3 }
+num_rows = { type = "u32", value = 2 }
+num_variables = { type = "u32", value = 8 }
+[case.derived]
+type_name = "'f16mat2x3'"
+
+[[case]]
+name = "f16mat2x4"
+rust_const = "TYPES_F16MAT2X4"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 2 }
+num_elements = { type = "u32", value = 4 }
+num_rows = { type = "u32", value = 2 }
+num_variables = { type = "u32", value = 3 }
+[case.derived]
+type_name = "'f16mat2x4'"
+
+[[case]]
+name = "f16mat3x2"
+rust_const = "TYPES_F16MAT3X2"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 2 }
+num_elements = { type = "u32", value = 2 }
+num_rows = { type = "u32", value = 3 }
+num_variables = { type = "u32", value = 15 }
+[case.derived]
+type_name = "'f16mat3x2'"
+
+[[case]]
+name = "f16mat3x3"
+rust_const = "TYPES_F16MAT3X3"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 2 }
+num_elements = { type = "u32", value = 3 }
+num_rows = { type = "u32", value = 3 }
+num_variables = { type = "u32", value = 5 }
+[case.derived]
+type_name = "'f16mat3x3'"
+
+[[case]]
+name = "f16mat3x4"
+rust_const = "TYPES_F16MAT3X4"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 2 }
+num_elements = { type = "u32", value = 4 }
+num_rows = { type = "u32", value = 3 }
+num_variables = { type = "u32", value = 10 }
+[case.derived]
+type_name = "'f16mat3x4'"
+
+[[case]]
+name = "f16mat4x2"
+rust_const = "TYPES_F16MAT4X2"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 2 }
+num_elements = { type = "u32", value = 2 }
+num_rows = { type = "u32", value = 4 }
+num_variables = { type = "u32", value = 16 }
+[case.derived]
+type_name = "'f16mat4x2'"
+
+[[case]]
+name = "f16mat4x3"
+rust_const = "TYPES_F16MAT4X3"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 2 }
+num_elements = { type = "u32", value = 3 }
+num_rows = { type = "u32", value = 4 }
+num_variables = { type = "u32", value = 11 }
+[case.derived]
+type_name = "'f16mat4x3'"
+
+[[case]]
+name = "f16mat4x4"
+rust_const = "TYPES_F16MAT4X4"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 2 }
+num_elements = { type = "u32", value = 4 }
+num_rows = { type = "u32", value = 4 }
+num_variables = { type = "u32", value = 8 }
+[case.derived]
+type_name = "'f16mat4x4'"
+
+[[case]]
+name = "float64_t"
+rust_const = "TYPES_FLOAT64_T"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_scalar.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 8 }
+num_elements = { type = "u32", value = 1 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 7 }
+[case.derived]
+type_name = "'float64_t'"
+
+[[case]]
+name = "f64vec2"
+rust_const = "TYPES_F64VEC2"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 8 }
+num_elements = { type = "u32", value = 2 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 8 }
+[case.derived]
+type_name = "'f64vec2'"
+
+[[case]]
+name = "f64vec3"
+rust_const = "TYPES_F64VEC3"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 8 }
+num_elements = { type = "u32", value = 3 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 15 }
+[case.derived]
+type_name = "'f64vec3'"
+
+[[case]]
+name = "f64vec4"
+rust_const = "TYPES_F64VEC4"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_vector.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 8 }
+num_elements = { type = "u32", value = 4 }
+num_rows = { type = "u32", value = 1 }
+num_variables = { type = "u32", value = 12 }
+[case.derived]
+type_name = "'f64vec4'"
+
+[[case]]
+name = "f64mat2x2"
+rust_const = "TYPES_F64MAT2X2"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 8 }
+num_elements = { type = "u32", value = 2 }
+num_rows = { type = "u32", value = 2 }
+num_variables = { type = "u32", value = 16 }
+[case.derived]
+type_name = "'f64mat2x2'"
+
+[[case]]
+name = "f64mat2x3"
+rust_const = "TYPES_F64MAT2X3"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 8 }
+num_elements = { type = "u32", value = 3 }
+num_rows = { type = "u32", value = 2 }
+num_variables = { type = "u32", value = 11 }
+[case.derived]
+type_name = "'f64mat2x3'"
+
+[[case]]
+name = "f64mat2x4"
+rust_const = "TYPES_F64MAT2X4"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 8 }
+num_elements = { type = "u32", value = 4 }
+num_rows = { type = "u32", value = 2 }
+num_variables = { type = "u32", value = 13 }
+[case.derived]
+type_name = "'f64mat2x4'"
+
+[[case]]
+name = "f64mat3x2"
+rust_const = "TYPES_F64MAT3X2"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 8 }
+num_elements = { type = "u32", value = 2 }
+num_rows = { type = "u32", value = 3 }
+num_variables = { type = "u32", value = 1 }
+[case.derived]
+type_name = "'f64mat3x2'"
+
+[[case]]
+name = "f64mat3x3"
+rust_const = "TYPES_F64MAT3X3"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 8 }
+num_elements = { type = "u32", value = 3 }
+num_rows = { type = "u32", value = 3 }
+num_variables = { type = "u32", value = 15 }
+[case.derived]
+type_name = "'f64mat3x3'"
+
+[[case]]
+name = "f64mat3x4"
+rust_const = "TYPES_F64MAT3X4"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 8 }
+num_elements = { type = "u32", value = 4 }
+num_rows = { type = "u32", value = 3 }
+num_variables = { type = "u32", value = 9 }
+[case.derived]
+type_name = "'f64mat3x4'"
+
+[[case]]
+name = "f64mat4x2"
+rust_const = "TYPES_F64MAT4X2"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 8 }
+num_elements = { type = "u32", value = 2 }
+num_rows = { type = "u32", value = 4 }
+num_variables = { type = "u32", value = 9 }
+[case.derived]
+type_name = "'f64mat4x2'"
+
+[[case]]
+name = "f64mat4x3"
+rust_const = "TYPES_F64MAT4X3"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 8 }
+num_elements = { type = "u32", value = 3 }
+num_rows = { type = "u32", value = 4 }
+num_variables = { type = "u32", value = 4 }
+[case.derived]
+type_name = "'f64mat4x3'"
+
+[[case]]
+name = "f64mat4x4"
+rust_const = "TYPES_F64MAT4X4"
+rust_type = "TypeCase"
+programs = [{ name = "comp", template = "compute/zi_types_matrix.comp", stage = "comp" }]
+[case.params]
+type_size = { type = "u32", value = 8 }
+num_elements = { type = "u32", value = 4 }
+num_rows = { type = "u32", value = 4 }
+num_variables = { type = "u32", value = 10 }
+[case.derived]
+type_name = "'f64mat4x4'"
+
+# --- CompositeTest (AddCompositeTests) --------------------------------------------
+# The case name is the table index, as upstream's `de::toString(i)` produces. `index`
+# is the feature-requirement bitmask CompositeTest::checkSupport reads (0x1 float16,
+# 0x2 float64, 0x4 int8, 0x8 int16, 0x10 int64), not the position in the table - the
+# two coincide only by accident for the first entry.
+#
+# `specValues` is a variable-length vector upstream. The generator has no list-of-u32
+# parameter type, so it is carried as a count plus five slots; the test passes
+# `spec_values[..num_spec_values]` to runCompute and the shader declares exactly
+# num_spec_values spec constants.
+
+[[case]]
+name = "0"
+rust_const = "COMPOSITES_0"
+rust_type = "CompositeCase"
+programs = [{ name = "comp", template = "compute/zi_types_composite.comp", stage = "comp" }]
+[case.params]
+index = { type = "u32", value = 0 }
+elements = { type = "u32", value = 16 }
+num_spec_values = { type = "u32", value = 1 }
+spec_value0 = { type = "u32", value = 16 }
+spec_value1 = { type = "u32", value = 0 }
+spec_value2 = { type = "u32", value = 0 }
+spec_value3 = { type = "u32", value = 0 }
+spec_value4 = { type = "u32", value = 0 }
+[case.derived]
+type_definition = '''(
+"shared uint wg_mem[specId0] = {};\n"
+)'''
+assignment = '''(
+"for (uint i = 0; i < specId0; ++i) {\n"
+"  a.a[i] = wg_mem[i];\n"
+"}\n"
+)'''
+
+[[case]]
+name = "1"
+rust_const = "COMPOSITES_1"
+rust_type = "CompositeCase"
+programs = [{ name = "comp", template = "compute/zi_types_composite.comp", stage = "comp" }]
+[case.params]
+index = { type = "u32", value = 0 }
+elements = { type = "u32", value = 32 }
+num_spec_values = { type = "u32", value = 2 }
+spec_value0 = { type = "u32", value = 4 }
+spec_value1 = { type = "u32", value = 8 }
+spec_value2 = { type = "u32", value = 0 }
+spec_value3 = { type = "u32", value = 0 }
+spec_value4 = { type = "u32", value = 0 }
+[case.derived]
+type_definition = '''(
+"shared float wg_mem[specId0][specId1] = {};\n"
+)'''
+assignment = '''(
+"for (uint i = 0; i < specId0; ++i) {\n"
+"  for (uint j = 0; j < specId1; ++j) {\n"
+"    uint idx = i * specId1 + j;\n"
+"    a.a[idx] = wg_mem[i][j] == 0.0f ? 0 : 1;\n"
+"  }\n"
+"}\n"
+)'''
+
+[[case]]
+name = "2"
+rust_const = "COMPOSITES_2"
+rust_type = "CompositeCase"
+programs = [{ name = "comp", template = "compute/zi_types_composite.comp", stage = "comp" }]
+[case.params]
+index = { type = "u32", value = 0 }
+elements = { type = "u32", value = 30 }
+num_spec_values = { type = "u32", value = 0 }
+spec_value0 = { type = "u32", value = 0 }
+spec_value1 = { type = "u32", value = 0 }
+spec_value2 = { type = "u32", value = 0 }
+spec_value3 = { type = "u32", value = 0 }
+spec_value4 = { type = "u32", value = 0 }
+[case.derived]
+type_definition = '''(
+"struct Sa {\n"
+"  uint a;\n"
+"  uvec2 b;\n"
+"  uvec3 c;\n"
+"  uvec4 d;\n"
+"  float e;\n"
+"  vec2 f;\n"
+"  vec3 g;\n"
+"  vec4 h;\n"
+"  bool i;\n"
+"  bvec2 j;\n"
+"  bvec3 k;\n"
+"  bvec4 l;\n"
+"};\n"
+"shared Sa wg_mem = {};\n"
+)'''
+assignment = '''(
+"uint i = 0;\n"
+"a.a[i++] = wg_mem.a;\n"
+"a.a[i++] = wg_mem.b.x;\n"
+"a.a[i++] = wg_mem.b.y;\n"
+"a.a[i++] = wg_mem.c.x;\n"
+"a.a[i++] = wg_mem.c.y;\n"
+"a.a[i++] = wg_mem.c.z;\n"
+"a.a[i++] = wg_mem.d.x;\n"
+"a.a[i++] = wg_mem.d.y;\n"
+"a.a[i++] = wg_mem.d.z;\n"
+"a.a[i++] = wg_mem.d.w;\n"
+"a.a[i++] = wg_mem.e == 0.0f ? 0 : 1;\n"
+"a.a[i++] = wg_mem.f.x == 0.0f ? 0 : 1;\n"
+"a.a[i++] = wg_mem.f.y == 0.0f ? 0 : 1;\n"
+"a.a[i++] = wg_mem.g.x == 0.0f ? 0 : 1;\n"
+"a.a[i++] = wg_mem.g.y == 0.0f ? 0 : 1;\n"
+"a.a[i++] = wg_mem.g.z == 0.0f ? 0 : 1;\n"
+"a.a[i++] = wg_mem.h.x == 0.0f ? 0 : 1;\n"
+"a.a[i++] = wg_mem.h.y == 0.0f ? 0 : 1;\n"
+"a.a[i++] = wg_mem.h.z == 0.0f ? 0 : 1;\n"
+"a.a[i++] = wg_mem.h.w == 0.0f ? 0 : 1;\n"
+"a.a[i++] = wg_mem.i ? 1 : 0;\n"
+"a.a[i++] = wg_mem.j.x ? 1 : 0;\n"
+"a.a[i++] = wg_mem.j.y ? 1 : 0;\n"
+"a.a[i++] = wg_mem.k.x ? 1 : 0;\n"
+"a.a[i++] = wg_mem.k.y ? 1 : 0;\n"
+"a.a[i++] = wg_mem.k.z ? 1 : 0;\n"
+"a.a[i++] = wg_mem.l.x ? 1 : 0;\n"
+"a.a[i++] = wg_mem.l.y ? 1 : 0;\n"
+"a.a[i++] = wg_mem.l.z ? 1 : 0;\n"
+"a.a[i++] = wg_mem.l.w ? 1 : 0;\n"
+)'''
+
+[[case]]
+name = "3"
+rust_const = "COMPOSITES_3"
+rust_type = "CompositeCase"
+programs = [{ name = "comp", template = "compute/zi_types_composite.comp", stage = "comp" }]
+[case.params]
+index = { type = "u32", value = 0 }
+elements = { type = "u32", value = 32 }
+num_spec_values = { type = "u32", value = 3 }
+spec_value0 = { type = "u32", value = 2 }
+spec_value1 = { type = "u32", value = 3 }
+spec_value2 = { type = "u32", value = 4 }
+spec_value3 = { type = "u32", value = 0 }
+spec_value4 = { type = "u32", value = 0 }
+[case.derived]
+type_definition = '''(
+"struct Sa {\n"
+"  uint a;\n"
+"};\n"
+"struct Sb {\n"
+"  uvec2 a;\n"
+"};\n"
+"struct Sc {\n"
+"  Sa a[specId0];\n"
+"  Sb b[specId1];\n"
+"};\n"
+"shared Sc wg_mem[specId2] = {};\n"
+)'''
+assignment = '''(
+"uint idx = 0;\n"
+"for (uint i = 0; i < specId2; ++i) {\n"
+"  for (uint j = 0; j < specId0; ++j) {\n"
+"    a.a[idx++] = wg_mem[i].a[j].a;\n"
+"  }\n"
+"  for (uint j = 0; j < specId1; ++j) {\n"
+"    a.a[idx++] = wg_mem[i].b[j].a.x;\n"
+"    a.a[idx++] = wg_mem[i].b[j].a.y;\n"
+"  }\n"
+"}\n"
+)'''
+
+[[case]]
+name = "4"
+rust_const = "COMPOSITES_4"
+rust_type = "CompositeCase"
+programs = [{ name = "comp", template = "compute/zi_types_composite.comp", stage = "comp" }]
+[case.params]
+index = { type = "u32", value = 1 }
+elements = { type = "u32", value = 18 }
+num_spec_values = { type = "u32", value = 1 }
+spec_value0 = { type = "u32", value = 16 }
+spec_value1 = { type = "u32", value = 0 }
+spec_value2 = { type = "u32", value = 0 }
+spec_value3 = { type = "u32", value = 0 }
+spec_value4 = { type = "u32", value = 0 }
+[case.derived]
+type_definition = '''(
+"struct Sa {\n"
+"  f16vec2 a;\n"
+"  float16_t b[specId0];\n"
+"};\n"
+"shared Sa wg_mem = {};\n"
+)'''
+assignment = '''(
+"uint idx = 0;\n"
+"a.a[idx++] = floatBitsToUint(wg_mem.a.x) == 0 ? 0 : 1;\n"
+"a.a[idx++] = floatBitsToUint(wg_mem.a.y) == 0 ? 0 : 1;\n"
+"for (uint i = 0; i < specId0; ++i) {\n"
+"  a.a[idx++] = floatBitsToUint(wg_mem.b[i]) == 0 ? 0 : 1;\n"
+"}\n"
+)'''
+
+[[case]]
+name = "5"
+rust_const = "COMPOSITES_5"
+rust_type = "CompositeCase"
+programs = [{ name = "comp", template = "compute/zi_types_composite.comp", stage = "comp" }]
+[case.params]
+index = { type = "u32", value = 2 }
+elements = { type = "u32", value = 7 }
+num_spec_values = { type = "u32", value = 1 }
+spec_value0 = { type = "u32", value = 5 }
+spec_value1 = { type = "u32", value = 0 }
+spec_value2 = { type = "u32", value = 0 }
+spec_value3 = { type = "u32", value = 0 }
+spec_value4 = { type = "u32", value = 0 }
+[case.derived]
+type_definition = '''(
+"struct Sa {\n"
+"  f64vec2 a;\n"
+"  float64_t b[specId0];\n"
+"};\n"
+"shared Sa wg_mem = {};\n"
+)'''
+assignment = '''(
+"uint idx = 0;\n"
+"a.a[idx++] = wg_mem.a.x == 0.0 ? 0 : 1;\n"
+"a.a[idx++] = wg_mem.a.y == 0.0 ? 0 : 1;\n"
+"for (uint i = 0; i < specId0; ++i) {\n"
+"  a.a[idx++] = wg_mem.b[i] == 0.0 ? 0 : 1;\n"
+"}\n"
+)'''
+
+[[case]]
+name = "6"
+rust_const = "COMPOSITES_6"
+rust_type = "CompositeCase"
+programs = [{ name = "comp", template = "compute/zi_types_composite.comp", stage = "comp" }]
+[case.params]
+index = { type = "u32", value = 4 }
+elements = { type = "u32", value = 34 }
+num_spec_values = { type = "u32", value = 1 }
+spec_value0 = { type = "u32", value = 32 }
+spec_value1 = { type = "u32", value = 0 }
+spec_value2 = { type = "u32", value = 0 }
+spec_value3 = { type = "u32", value = 0 }
+spec_value4 = { type = "u32", value = 0 }
+[case.derived]
+type_definition = '''(
+"struct Sa {\n"
+"  i8vec2 a;\n"
+"  int8_t b[specId0];\n"
+"};\n"
+"shared Sa wg_mem = {};\n"
+)'''
+assignment = '''(
+"uint idx = 0;\n"
+"a.a[idx++] = wg_mem.a.x == 0 ? 0 : 1;\n"
+"a.a[idx++] = wg_mem.a.y == 0 ? 0 : 1;\n"
+"for (uint i = 0; i < specId0; ++i) {\n"
+"  a.a[idx++] = wg_mem.b[i] == 0 ? 0 : 1;\n"
+"}\n"
+)'''
+
+[[case]]
+name = "7"
+rust_const = "COMPOSITES_7"
+rust_type = "CompositeCase"
+programs = [{ name = "comp", template = "compute/zi_types_composite.comp", stage = "comp" }]
+[case.params]
+index = { type = "u32", value = 8 }
+elements = { type = "u32", value = 122 }
+num_spec_values = { type = "u32", value = 1 }
+spec_value0 = { type = "u32", value = 120 }
+spec_value1 = { type = "u32", value = 0 }
+spec_value2 = { type = "u32", value = 0 }
+spec_value3 = { type = "u32", value = 0 }
+spec_value4 = { type = "u32", value = 0 }
+[case.derived]
+type_definition = '''(
+"struct Sa {\n"
+"  i16vec2 a;\n"
+"  int16_t b[specId0];\n"
+"};\n"
+"shared Sa wg_mem = {};\n"
+)'''
+assignment = '''(
+"uint idx = 0;\n"
+"a.a[idx++] = wg_mem.a.x == 0 ? 0 : 1;\n"
+"a.a[idx++] = wg_mem.a.y == 0 ? 0 : 1;\n"
+"for (uint i = 0; i < specId0; ++i) {\n"
+"  a.a[idx++] = wg_mem.b[i] == 0 ? 0 : 1;\n"
+"}\n"
+)'''
+
+[[case]]
+name = "8"
+rust_const = "COMPOSITES_8"
+rust_type = "CompositeCase"
+programs = [{ name = "comp", template = "compute/zi_types_composite.comp", stage = "comp" }]
+[case.params]
+index = { type = "u32", value = 16 }
+elements = { type = "u32", value = 63 }
+num_spec_values = { type = "u32", value = 1 }
+spec_value0 = { type = "u32", value = 61 }
+spec_value1 = { type = "u32", value = 0 }
+spec_value2 = { type = "u32", value = 0 }
+spec_value3 = { type = "u32", value = 0 }
+spec_value4 = { type = "u32", value = 0 }
+[case.derived]
+type_definition = '''(
+"struct Sa {\n"
+"  i64vec2 a;\n"
+"  int64_t b[specId0];\n"
+"};\n"
+"shared Sa wg_mem = {};\n"
+)'''
+assignment = '''(
+"uint idx = 0;\n"
+"a.a[idx++] = wg_mem.a.x == 0 ? 0 : 1;\n"
+"a.a[idx++] = wg_mem.a.y == 0 ? 0 : 1;\n"
+"for (uint i = 0; i < specId0; ++i) {\n"
+"  a.a[idx++] = wg_mem.b[i] == 0 ? 0 : 1;\n"
+"}\n"
+)'''
+
+[[case]]
+name = "9"
+rust_const = "COMPOSITES_9"
+rust_type = "CompositeCase"
+programs = [{ name = "comp", template = "compute/zi_types_composite.comp", stage = "comp" }]
+[case.params]
+index = { type = "u32", value = 31 }
+elements = { type = "u32", value = 7 }
+num_spec_values = { type = "u32", value = 0 }
+spec_value0 = { type = "u32", value = 0 }
+spec_value1 = { type = "u32", value = 0 }
+spec_value2 = { type = "u32", value = 0 }
+spec_value3 = { type = "u32", value = 0 }
+spec_value4 = { type = "u32", value = 0 }
+[case.derived]
+type_definition = '''(
+"struct Sa {\n"
+"  float16_t a;\n"
+"  float b;\n"
+"  int8_t c;\n"
+"  int16_t d;\n"
+"  int e;\n"
+"  int64_t f;\n"
+"  float64_t g;\n"
+"};\n"
+"shared Sa wg_mem = {};\n"
+)'''
+assignment = '''(
+"uint idx = 0;\n"
+"a.a[idx++] = floatBitsToUint(wg_mem.a) == 0 ? 0 : 1;\n"
+"a.a[idx++] = floatBitsToUint(wg_mem.b) == 0 ? 0 : 1;\n"
+"a.a[idx++] = uint(wg_mem.c);\n"
+"a.a[idx++] = uint(wg_mem.d);\n"
+"a.a[idx++] = uint(wg_mem.e);\n"
+"a.a[idx++] = uint(wg_mem.f);\n"
+"a.a[idx++] = wg_mem.g == 0.0 ? 0 : 1;\n"
+)'''
+
+[[case]]
+name = "10"
+rust_const = "COMPOSITES_10"
+rust_type = "CompositeCase"
+programs = [{ name = "comp", template = "compute/zi_types_composite.comp", stage = "comp" }]
+[case.params]
+index = { type = "u32", value = 0 }
+elements = { type = "u32", value = 872 }
+num_spec_values = { type = "u32", value = 5 }
+spec_value0 = { type = "u32", value = 6 }
+spec_value1 = { type = "u32", value = 5 }
+spec_value2 = { type = "u32", value = 4 }
+spec_value3 = { type = "u32", value = 3 }
+spec_value4 = { type = "u32", value = 2 }
+[case.derived]
+type_definition = '''(
+"struct Sa {\n"
+"  uint a;\n"
+"};\n"
+"struct Sb {\n"
+"  Sa a[specId0];\n"
+"  uint b;\n"
+"};\n"
+"struct Sc {\n"
+"  Sb b[specId1];\n"
+"  uint c;\n"
+"};\n"
+"struct Sd {\n"
+"  Sc c[specId2];\n"
+"  uint d;\n"
+"};\n"
+"struct Se {\n"
+"  Sd d[specId3];\n"
+"  uint e;\n"
+"};\n"
+"shared Se wg_mem[specId4] = {};\n"
+)'''
+assignment = '''(
+"uint idx = 0;\n"
+"for (uint i1 = 0; i1 < specId4; ++i1) {\n"
+"  a.a[idx++] = wg_mem[i1].e;\n"
+"  for (uint i2 = 0; i2 < specId3; ++i2) {\n"
+"    a.a[idx++] = wg_mem[i1].d[i2].d;\n"
+"    for (uint i3 = 0; i3 < specId2; ++i3) {\n"
+"      a.a[idx++] = wg_mem[i1].d[i2].c[i3].c;\n"
+"      for (uint i4 = 0; i4 < specId1; ++i4) {\n"
+"        a.a[idx++] = wg_mem[i1].d[i2].c[i3].b[i4].b;\n"
+"        for (uint i5 = 0; i5 < specId0; ++i5) {\n"
+"          a.a[idx++] = wg_mem[i1].d[i2].c[i3].b[i4].a[i5].a;\n"
+"        }\n"
+"      }\n"
+"    }\n"
+"  }\n"
+"}\n"
+)'''
+
+# --- AddSharedMemoryTests ---------------------------------------------------------
+# Upstream runs these through Amber. There is no Amber here, so the .amber scripts are
+# transcribed directly: the shader is the script's GLSL, and the buffer sizes and the
+# fill/reference values are the script's BUFFER declarations.
+
+[[case]]
+name = "workgroup_size_128"
+rust_const = "SHARED_MEMORY_BLOCKS_WORKGROUP_SIZE_128"
+rust_type = "SharedMemoryBlockCase"
+programs = [{ name = "comp", template = "compute/zi_types_shared_block_1d.comp", stage = "comp" }]
+[case.params]
+local_size = { type = "UVec3", value = [128, 1, 1] }
+buffer_elements = { type = "u32", value = 128 }
+fill_value = { type = "u32", value = 99 }
+reference_value = { type = "u32", value = 1 }
+
+[[case]]
+name = "workgroup_size_8x8x2"
+rust_const = "SHARED_MEMORY_BLOCKS_WORKGROUP_SIZE_8X8X2"
+rust_type = "SharedMemoryBlockCase"
+programs = [{ name = "comp", template = "compute/zi_types_shared_block.comp", stage = "comp" }]
+[case.params]
+local_size = { type = "UVec3", value = [8, 8, 2] }
+buffer_elements = { type = "u32", value = 128 }
+fill_value = { type = "u32", value = 99 }
+reference_value = { type = "u32", value = 1 }
+
+[[case]]
+name = "workgroup_size_8x2x8"
+rust_const = "SHARED_MEMORY_BLOCKS_WORKGROUP_SIZE_8X2X8"
+rust_type = "SharedMemoryBlockCase"
+programs = [{ name = "comp", template = "compute/zi_types_shared_block.comp", stage = "comp" }]
+[case.params]
+local_size = { type = "UVec3", value = [8, 2, 8] }
+buffer_elements = { type = "u32", value = 128 }
+fill_value = { type = "u32", value = 99 }
+reference_value = { type = "u32", value = 1 }
+
+[[case]]
+name = "workgroup_size_2x8x8"
+rust_const = "SHARED_MEMORY_BLOCKS_WORKGROUP_SIZE_2X8X8"
+rust_type = "SharedMemoryBlockCase"
+programs = [{ name = "comp", template = "compute/zi_types_shared_block.comp", stage = "comp" }]
+[case.params]
+local_size = { type = "UVec3", value = [2, 8, 8] }
+buffer_elements = { type = "u32", value = 128 }
+fill_value = { type = "u32", value = 99 }
+reference_value = { type = "u32", value = 1 }
+
+[[case]]
+name = "workgroup_size_8x4x4"
+rust_const = "SHARED_MEMORY_BLOCKS_WORKGROUP_SIZE_8X4X4"
+rust_type = "SharedMemoryBlockCase"
+programs = [{ name = "comp", template = "compute/zi_types_shared_block.comp", stage = "comp" }]
+[case.params]
+local_size = { type = "UVec3", value = [8, 4, 4] }
+buffer_elements = { type = "u32", value = 128 }
+fill_value = { type = "u32", value = 99 }
+reference_value = { type = "u32", value = 1 }
+
+[[case]]
+name = "workgroup_size_4x8x4"
+rust_const = "SHARED_MEMORY_BLOCKS_WORKGROUP_SIZE_4X8X4"
+rust_type = "SharedMemoryBlockCase"
+programs = [{ name = "comp", template = "compute/zi_types_shared_block.comp", stage = "comp" }]
+[case.params]
+local_size = { type = "UVec3", value = [4, 8, 4] }
+buffer_elements = { type = "u32", value = 128 }
+fill_value = { type = "u32", value = 99 }
+reference_value = { type = "u32", value = 1 }
+
+[[case]]
+name = "workgroup_size_4x4x8"
+rust_const = "SHARED_MEMORY_BLOCKS_WORKGROUP_SIZE_4X4X8"
+rust_type = "SharedMemoryBlockCase"
+programs = [{ name = "comp", template = "compute/zi_types_shared_block.comp", stage = "comp" }]
+[case.params]
+local_size = { type = "UVec3", value = [4, 4, 8] }
+buffer_elements = { type = "u32", value = 128 }
+fill_value = { type = "u32", value = 99 }
+reference_value = { type = "u32", value = 1 }

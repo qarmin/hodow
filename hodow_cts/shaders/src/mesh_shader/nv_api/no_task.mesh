@@ -1,0 +1,69 @@
+#version 460
+#extension GL_NV_mesh_shader : enable
+
+layout (local_size_x=32) in;
+layout (triangles) out;
+layout (max_vertices=96, max_primitives=32) out;
+
+layout (push_constant, std430) uniform MeshPushConstantBlock {
+    uint width;
+    uint height;
+    uint firstTask;
+} pc;
+
+layout (location=0) perprimitiveNV out vec4 primitiveColor[];
+
+
+layout (set=0, binding=0, std430) readonly buffer BlockSizes {
+    uint blockSize[];
+} bsz;
+
+uint startOfBlock (uint blockNumber)
+{
+    uint start = 0;
+    for (uint i = 0; i < blockNumber; i++)
+        start += bsz.blockSize[i];
+    return start;
+}
+
+void main ()
+{
+    const uint blockNumber = uint(gl_DrawID);
+    const uint blockRow = (gl_WorkGroupID.x - pc.firstTask);
+
+    // Each workgroup will fill one row, and each invocation will generate a
+    // triangle around the pixel center in each column.
+    const uint row = startOfBlock(blockNumber) + blockRow;
+    const uint col = gl_LocalInvocationID.x;
+
+    const float fHeight = float(pc.height);
+    const float fWidth = float(pc.width);
+
+    // Pixel coordinates, normalized.
+    const float rowNorm = (float(row) + 0.5) / fHeight;
+    const float colNorm = (float(col) + 0.5) / fWidth;
+
+    // Framebuffer coordinates.
+    const float coordX = (colNorm * 2.0) - 1.0;
+    const float coordY = (rowNorm * 2.0) - 1.0;
+
+    const float pixelWidth = 2.0 / fWidth;
+    const float pixelHeight = 2.0 / fHeight;
+
+    const float offsetX = pixelWidth / 2.0;
+    const float offsetY = pixelHeight / 2.0;
+
+    const uint baseIndex = col*3;
+    const uvec3 indices = uvec3(baseIndex, baseIndex + 1, baseIndex + 2);
+
+    gl_PrimitiveCountNV = 32u;
+    primitiveColor[col] = vec4(rowNorm, colNorm, 0.0, 1.0);
+
+    gl_PrimitiveIndicesNV[indices.x] = indices.x;
+    gl_PrimitiveIndicesNV[indices.y] = indices.y;
+    gl_PrimitiveIndicesNV[indices.z] = indices.z;
+
+    gl_MeshVerticesNV[indices.x].gl_Position = vec4(coordX - offsetX, coordY + offsetY, 0.0, 1.0);
+    gl_MeshVerticesNV[indices.y].gl_Position = vec4(coordX + offsetX, coordY + offsetY, 0.0, 1.0);
+    gl_MeshVerticesNV[indices.z].gl_Position = vec4(coordX, coordY - offsetY, 0.0, 1.0);
+}

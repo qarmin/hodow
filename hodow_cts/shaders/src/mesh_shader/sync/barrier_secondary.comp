@@ -1,0 +1,12 @@
+#version 450
+layout(local_size_x=128) in;
+layout (set=0, binding=0, std430) buffer OutputBlock {
+    uint values[];
+} outBuffer;
+layout (set=0, binding=1, std430) buffer VerificationBlock {
+    uint values[];
+} verificationBuffer;
+void main ()
+{
+    outBuffer.values[gl_GlobalInvocationID.x] = gl_GlobalInvocationID.x;
+}

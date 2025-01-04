@@ -1,0 +1,17 @@
+# Shader manifest for dEQP-VK.api.get_memory_commitment.memory_commitment
+#
+# MemoryCommitmentTestCase::initPrograms adds one vertex and one fragment shader under
+# "vert" and "frag"; neither takes a parameter. The other case in the group,
+# memory_commitment_allocate_only, uses no shader.
+
+upstream_source = "external/vulkancts/modules/vulkan/api/vktApiGetMemoryCommitment.cpp"
+rust_module = "api/memory_commitment_tests"
+
+[[case]]
+name = "programs"
+rust_const = "MEMORY_COMMITMENT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "api/memory_commitment.vert", stage = "vert" },
+    { name = "frag", template = "api/memory_commitment.frag", stage = "frag" },
+]

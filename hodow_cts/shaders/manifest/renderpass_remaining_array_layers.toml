@@ -1,0 +1,26 @@
+# Shader manifest for dEQP-VK.renderpasses.*.remaining_array_layers.*
+#
+# The vertex and fragment shaders are the same for every case; the geometry shader is added
+# only when the layer is written through gl_Layer. `view_transition` uses no shaders.
+
+upstream_source = "external/vulkancts/modules/vulkan/renderpass/vktRenderPassRemainingArrayLayersTests.cpp"
+rust_module = "renderpass/remaining_array_layers_tests"
+
+[[case]]
+name = "no_geom"
+rust_const = "REMAINING_ARRAY_LAYERS_NO_GEOM"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/remaining_array_layers.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/remaining_array_layers.frag", stage = "frag" },
+]
+
+[[case]]
+name = "geom"
+rust_const = "REMAINING_ARRAY_LAYERS_GEOM"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/remaining_array_layers.vert", stage = "vert" },
+    { name = "geom", template = "renderpass/remaining_array_layers.geom", stage = "geom" },
+    { name = "frag", template = "renderpass/remaining_array_layers.frag", stage = "frag" },
+]

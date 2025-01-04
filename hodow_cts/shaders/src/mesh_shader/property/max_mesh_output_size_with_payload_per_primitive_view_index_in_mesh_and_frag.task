@@ -1,0 +1,17 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+layout (local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout (constant_id=0) const uint payloadElements = 1u;
+layout (constant_id=1) const uint locationCount = 1u;
+struct TaskData {
+    uint elements[payloadElements];
+};
+taskPayloadSharedEXT TaskData td;
+
+void main (void) {
+    for (uint i = 0; i < payloadElements; ++i) {
+        td.elements[i] = 1000000u + i;
+    }
+    EmitMeshTasksEXT(1u, 1u, 1u);
+}

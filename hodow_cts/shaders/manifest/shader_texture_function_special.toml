@@ -1,0 +1,22 @@
+# Shader manifest for dEQP-VK.glsl.texture_functions.truncation and .loop_unroll_hoisting (vktShaderRenderTextureFunctionTests.cpp: initSamplerTruncationPrograms, initLoopUnrollHoistingPrograms)
+
+upstream_source = "external/vulkancts/modules/vulkan/shaderrender/vktShaderRenderTextureFunctionTests.cpp"
+rust_module = "glsl/texture_function_special_tests"
+
+[[case]]
+name = "truncation"
+rust_const = "TRUNCATION"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "texture_function_special/truncation.vert", stage = "vert" },
+    { name = "frag", template = "texture_function_special/truncation.frag", stage = "frag" },
+]
+
+[[case]]
+name = "loop_unroll_hoisting"
+rust_const = "LOOP_UNROLL_HOISTING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "texture_function_special/loop_unroll_hoisting.vert", stage = "vert" },
+    { name = "frag", template = "texture_function_special/loop_unroll_hoisting.frag", stage = "frag" },
+]

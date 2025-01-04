@@ -1,0 +1,1113 @@
+# Shader manifest for dEQP-VK.tessellation.invariance.*
+#
+# `addDefaultPrograms` (primitive_set, outer_edge_division, outer_edge_symmetry, outer_edge_index_independence,
+# triangle_set, inner_triangle_set, outer_triangle_set) and `TessCoordComponent::initPrograms` (tess_coord_component_range,
+# one_minus_tess_coord_component), expanded per program set.
+#
+# Case kinds (the Rust test looks a case up by name):
+#   division_<prim>_<spacing>       winding and point mode both vary (outer_edge_division)
+#   vary_<prim>_<spacing>           winding varies, no point mode (triangle_set, inner_triangle_set, outer_triangle_set)
+#   single_<prim>_<spacing>_<wind>[_point_mode]   one winding, one point mode (primitive_set, outer_edge_index_independence)
+#   mirror_<...>                    as single, with the evaluation shader mirroring half of every outer edge (outer_edge_symmetry)
+#   range_<...> / oneminus_<...>    SSBO writing evaluation shaders of tess_coord_component_range / one_minus_tess_coord_component
+#
+# Program names: tese_<wind>[_point_mode], geom[_point_mode][_write_point_size]. Upstream names the evaluation shaders by
+# getProgramName(winding, usePointMode) which converts the winding to a bool; the names here say what they are.
+# The `derived` values: prim_id 0/1/2 = triangles/quads/isolines (selects the mirroring code), gs_in/gs_out/nv the geometry
+# shader's input and output primitive and vertex count when point mode is off.
+
+upstream_source = "external/vulkancts/modules/vulkan/tessellation/vktTessellationInvarianceTests.cpp"
+rust_module = "tessellation/invariance_tests"
+
+[[case]]
+name = "division_triangles_equal_spacing"
+rust_const = "INV_DIVISION_TRIANGLES_EQUAL_SPACING"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "tese_ccw_point_mode", template = "tessellation/invariance/inv_ccw_point_mode.tese", stage = "tese" }, { name = "tese_cw_point_mode", template = "tessellation/invariance/inv_cw_point_mode.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'equal_spacing'", prim_id = "0", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "vary_triangles_equal_spacing"
+rust_const = "INV_VARY_TRIANGLES_EQUAL_SPACING"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'equal_spacing'", prim_id = "0", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "division_triangles_fractional_odd_spacing"
+rust_const = "INV_DIVISION_TRIANGLES_FRACTIONAL_ODD_SPACING"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "tese_ccw_point_mode", template = "tessellation/invariance/inv_ccw_point_mode.tese", stage = "tese" }, { name = "tese_cw_point_mode", template = "tessellation/invariance/inv_cw_point_mode.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'fractional_odd_spacing'", prim_id = "0", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "vary_triangles_fractional_odd_spacing"
+rust_const = "INV_VARY_TRIANGLES_FRACTIONAL_ODD_SPACING"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'fractional_odd_spacing'", prim_id = "0", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "division_triangles_fractional_even_spacing"
+rust_const = "INV_DIVISION_TRIANGLES_FRACTIONAL_EVEN_SPACING"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "tese_ccw_point_mode", template = "tessellation/invariance/inv_ccw_point_mode.tese", stage = "tese" }, { name = "tese_cw_point_mode", template = "tessellation/invariance/inv_cw_point_mode.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'fractional_even_spacing'", prim_id = "0", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "vary_triangles_fractional_even_spacing"
+rust_const = "INV_VARY_TRIANGLES_FRACTIONAL_EVEN_SPACING"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'fractional_even_spacing'", prim_id = "0", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "division_quads_equal_spacing"
+rust_const = "INV_DIVISION_QUADS_EQUAL_SPACING"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "tese_ccw_point_mode", template = "tessellation/invariance/inv_ccw_point_mode.tese", stage = "tese" }, { name = "tese_cw_point_mode", template = "tessellation/invariance/inv_cw_point_mode.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'equal_spacing'", prim_id = "1", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "vary_quads_equal_spacing"
+rust_const = "INV_VARY_QUADS_EQUAL_SPACING"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'equal_spacing'", prim_id = "1", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "division_quads_fractional_odd_spacing"
+rust_const = "INV_DIVISION_QUADS_FRACTIONAL_ODD_SPACING"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "tese_ccw_point_mode", template = "tessellation/invariance/inv_ccw_point_mode.tese", stage = "tese" }, { name = "tese_cw_point_mode", template = "tessellation/invariance/inv_cw_point_mode.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'fractional_odd_spacing'", prim_id = "1", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "vary_quads_fractional_odd_spacing"
+rust_const = "INV_VARY_QUADS_FRACTIONAL_ODD_SPACING"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'fractional_odd_spacing'", prim_id = "1", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "division_quads_fractional_even_spacing"
+rust_const = "INV_DIVISION_QUADS_FRACTIONAL_EVEN_SPACING"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "tese_ccw_point_mode", template = "tessellation/invariance/inv_ccw_point_mode.tese", stage = "tese" }, { name = "tese_cw_point_mode", template = "tessellation/invariance/inv_cw_point_mode.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'fractional_even_spacing'", prim_id = "1", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "vary_quads_fractional_even_spacing"
+rust_const = "INV_VARY_QUADS_FRACTIONAL_EVEN_SPACING"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'fractional_even_spacing'", prim_id = "1", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_triangles_equal_spacing_ccw"
+rust_const = "INV_SINGLE_TRIANGLES_EQUAL_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'equal_spacing'", prim_id = "0", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_triangles_equal_spacing_ccw_point_mode"
+rust_const = "INV_SINGLE_TRIANGLES_EQUAL_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw_point_mode", template = "tessellation/invariance/inv_ccw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'equal_spacing'", prim_id = "0", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_triangles_equal_spacing_cw"
+rust_const = "INV_SINGLE_TRIANGLES_EQUAL_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'equal_spacing'", prim_id = "0", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_triangles_equal_spacing_cw_point_mode"
+rust_const = "INV_SINGLE_TRIANGLES_EQUAL_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw_point_mode", template = "tessellation/invariance/inv_cw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'equal_spacing'", prim_id = "0", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_triangles_fractional_odd_spacing_ccw"
+rust_const = "INV_SINGLE_TRIANGLES_FRACTIONAL_ODD_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'fractional_odd_spacing'", prim_id = "0", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_triangles_fractional_odd_spacing_ccw_point_mode"
+rust_const = "INV_SINGLE_TRIANGLES_FRACTIONAL_ODD_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw_point_mode", template = "tessellation/invariance/inv_ccw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'fractional_odd_spacing'", prim_id = "0", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_triangles_fractional_odd_spacing_cw"
+rust_const = "INV_SINGLE_TRIANGLES_FRACTIONAL_ODD_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'fractional_odd_spacing'", prim_id = "0", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_triangles_fractional_odd_spacing_cw_point_mode"
+rust_const = "INV_SINGLE_TRIANGLES_FRACTIONAL_ODD_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw_point_mode", template = "tessellation/invariance/inv_cw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'fractional_odd_spacing'", prim_id = "0", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_triangles_fractional_even_spacing_ccw"
+rust_const = "INV_SINGLE_TRIANGLES_FRACTIONAL_EVEN_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'fractional_even_spacing'", prim_id = "0", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_triangles_fractional_even_spacing_ccw_point_mode"
+rust_const = "INV_SINGLE_TRIANGLES_FRACTIONAL_EVEN_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw_point_mode", template = "tessellation/invariance/inv_ccw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'fractional_even_spacing'", prim_id = "0", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_triangles_fractional_even_spacing_cw"
+rust_const = "INV_SINGLE_TRIANGLES_FRACTIONAL_EVEN_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'fractional_even_spacing'", prim_id = "0", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_triangles_fractional_even_spacing_cw_point_mode"
+rust_const = "INV_SINGLE_TRIANGLES_FRACTIONAL_EVEN_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw_point_mode", template = "tessellation/invariance/inv_cw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'fractional_even_spacing'", prim_id = "0", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_quads_equal_spacing_ccw"
+rust_const = "INV_SINGLE_QUADS_EQUAL_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'equal_spacing'", prim_id = "1", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_quads_equal_spacing_ccw_point_mode"
+rust_const = "INV_SINGLE_QUADS_EQUAL_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw_point_mode", template = "tessellation/invariance/inv_ccw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'equal_spacing'", prim_id = "1", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_quads_equal_spacing_cw"
+rust_const = "INV_SINGLE_QUADS_EQUAL_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'equal_spacing'", prim_id = "1", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_quads_equal_spacing_cw_point_mode"
+rust_const = "INV_SINGLE_QUADS_EQUAL_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw_point_mode", template = "tessellation/invariance/inv_cw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'equal_spacing'", prim_id = "1", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_quads_fractional_odd_spacing_ccw"
+rust_const = "INV_SINGLE_QUADS_FRACTIONAL_ODD_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'fractional_odd_spacing'", prim_id = "1", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_quads_fractional_odd_spacing_ccw_point_mode"
+rust_const = "INV_SINGLE_QUADS_FRACTIONAL_ODD_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw_point_mode", template = "tessellation/invariance/inv_ccw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'fractional_odd_spacing'", prim_id = "1", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_quads_fractional_odd_spacing_cw"
+rust_const = "INV_SINGLE_QUADS_FRACTIONAL_ODD_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'fractional_odd_spacing'", prim_id = "1", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_quads_fractional_odd_spacing_cw_point_mode"
+rust_const = "INV_SINGLE_QUADS_FRACTIONAL_ODD_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw_point_mode", template = "tessellation/invariance/inv_cw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'fractional_odd_spacing'", prim_id = "1", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_quads_fractional_even_spacing_ccw"
+rust_const = "INV_SINGLE_QUADS_FRACTIONAL_EVEN_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'fractional_even_spacing'", prim_id = "1", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_quads_fractional_even_spacing_ccw_point_mode"
+rust_const = "INV_SINGLE_QUADS_FRACTIONAL_EVEN_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw_point_mode", template = "tessellation/invariance/inv_ccw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'fractional_even_spacing'", prim_id = "1", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_quads_fractional_even_spacing_cw"
+rust_const = "INV_SINGLE_QUADS_FRACTIONAL_EVEN_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'fractional_even_spacing'", prim_id = "1", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_quads_fractional_even_spacing_cw_point_mode"
+rust_const = "INV_SINGLE_QUADS_FRACTIONAL_EVEN_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw_point_mode", template = "tessellation/invariance/inv_cw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'fractional_even_spacing'", prim_id = "1", mirror = "0", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "single_isolines_equal_spacing_ccw"
+rust_const = "INV_SINGLE_ISOLINES_EQUAL_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'isolines'", spacing = "'equal_spacing'", prim_id = "2", mirror = "0", gs_in = "'lines'", gs_out = "'line_strip'", nv = "2" }
+
+[[case]]
+name = "single_isolines_equal_spacing_ccw_point_mode"
+rust_const = "INV_SINGLE_ISOLINES_EQUAL_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw_point_mode", template = "tessellation/invariance/inv_ccw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'isolines'", spacing = "'equal_spacing'", prim_id = "2", mirror = "0", gs_in = "'lines'", gs_out = "'line_strip'", nv = "2" }
+
+[[case]]
+name = "single_isolines_equal_spacing_cw"
+rust_const = "INV_SINGLE_ISOLINES_EQUAL_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'isolines'", spacing = "'equal_spacing'", prim_id = "2", mirror = "0", gs_in = "'lines'", gs_out = "'line_strip'", nv = "2" }
+
+[[case]]
+name = "single_isolines_equal_spacing_cw_point_mode"
+rust_const = "INV_SINGLE_ISOLINES_EQUAL_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw_point_mode", template = "tessellation/invariance/inv_cw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'isolines'", spacing = "'equal_spacing'", prim_id = "2", mirror = "0", gs_in = "'lines'", gs_out = "'line_strip'", nv = "2" }
+
+[[case]]
+name = "single_isolines_fractional_odd_spacing_ccw"
+rust_const = "INV_SINGLE_ISOLINES_FRACTIONAL_ODD_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'isolines'", spacing = "'fractional_odd_spacing'", prim_id = "2", mirror = "0", gs_in = "'lines'", gs_out = "'line_strip'", nv = "2" }
+
+[[case]]
+name = "single_isolines_fractional_odd_spacing_ccw_point_mode"
+rust_const = "INV_SINGLE_ISOLINES_FRACTIONAL_ODD_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw_point_mode", template = "tessellation/invariance/inv_ccw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'isolines'", spacing = "'fractional_odd_spacing'", prim_id = "2", mirror = "0", gs_in = "'lines'", gs_out = "'line_strip'", nv = "2" }
+
+[[case]]
+name = "single_isolines_fractional_odd_spacing_cw"
+rust_const = "INV_SINGLE_ISOLINES_FRACTIONAL_ODD_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'isolines'", spacing = "'fractional_odd_spacing'", prim_id = "2", mirror = "0", gs_in = "'lines'", gs_out = "'line_strip'", nv = "2" }
+
+[[case]]
+name = "single_isolines_fractional_odd_spacing_cw_point_mode"
+rust_const = "INV_SINGLE_ISOLINES_FRACTIONAL_ODD_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw_point_mode", template = "tessellation/invariance/inv_cw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'isolines'", spacing = "'fractional_odd_spacing'", prim_id = "2", mirror = "0", gs_in = "'lines'", gs_out = "'line_strip'", nv = "2" }
+
+[[case]]
+name = "single_isolines_fractional_even_spacing_ccw"
+rust_const = "INV_SINGLE_ISOLINES_FRACTIONAL_EVEN_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'isolines'", spacing = "'fractional_even_spacing'", prim_id = "2", mirror = "0", gs_in = "'lines'", gs_out = "'line_strip'", nv = "2" }
+
+[[case]]
+name = "single_isolines_fractional_even_spacing_ccw_point_mode"
+rust_const = "INV_SINGLE_ISOLINES_FRACTIONAL_EVEN_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw_point_mode", template = "tessellation/invariance/inv_ccw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'isolines'", spacing = "'fractional_even_spacing'", prim_id = "2", mirror = "0", gs_in = "'lines'", gs_out = "'line_strip'", nv = "2" }
+
+[[case]]
+name = "single_isolines_fractional_even_spacing_cw"
+rust_const = "INV_SINGLE_ISOLINES_FRACTIONAL_EVEN_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'isolines'", spacing = "'fractional_even_spacing'", prim_id = "2", mirror = "0", gs_in = "'lines'", gs_out = "'line_strip'", nv = "2" }
+
+[[case]]
+name = "single_isolines_fractional_even_spacing_cw_point_mode"
+rust_const = "INV_SINGLE_ISOLINES_FRACTIONAL_EVEN_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw_point_mode", template = "tessellation/invariance/inv_cw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'isolines'", spacing = "'fractional_even_spacing'", prim_id = "2", mirror = "0", gs_in = "'lines'", gs_out = "'line_strip'", nv = "2" }
+
+[[case]]
+name = "mirror_triangles_equal_spacing_ccw"
+rust_const = "INV_MIRROR_TRIANGLES_EQUAL_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'equal_spacing'", prim_id = "0", mirror = "1", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "mirror_triangles_equal_spacing_ccw_point_mode"
+rust_const = "INV_MIRROR_TRIANGLES_EQUAL_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw_point_mode", template = "tessellation/invariance/inv_ccw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'equal_spacing'", prim_id = "0", mirror = "1", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "mirror_triangles_equal_spacing_cw"
+rust_const = "INV_MIRROR_TRIANGLES_EQUAL_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'equal_spacing'", prim_id = "0", mirror = "1", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "mirror_triangles_equal_spacing_cw_point_mode"
+rust_const = "INV_MIRROR_TRIANGLES_EQUAL_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw_point_mode", template = "tessellation/invariance/inv_cw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'equal_spacing'", prim_id = "0", mirror = "1", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "mirror_triangles_fractional_odd_spacing_ccw"
+rust_const = "INV_MIRROR_TRIANGLES_FRACTIONAL_ODD_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'fractional_odd_spacing'", prim_id = "0", mirror = "1", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "mirror_triangles_fractional_odd_spacing_ccw_point_mode"
+rust_const = "INV_MIRROR_TRIANGLES_FRACTIONAL_ODD_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw_point_mode", template = "tessellation/invariance/inv_ccw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'fractional_odd_spacing'", prim_id = "0", mirror = "1", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "mirror_triangles_fractional_odd_spacing_cw"
+rust_const = "INV_MIRROR_TRIANGLES_FRACTIONAL_ODD_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'fractional_odd_spacing'", prim_id = "0", mirror = "1", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "mirror_triangles_fractional_odd_spacing_cw_point_mode"
+rust_const = "INV_MIRROR_TRIANGLES_FRACTIONAL_ODD_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw_point_mode", template = "tessellation/invariance/inv_cw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'fractional_odd_spacing'", prim_id = "0", mirror = "1", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "mirror_triangles_fractional_even_spacing_ccw"
+rust_const = "INV_MIRROR_TRIANGLES_FRACTIONAL_EVEN_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'fractional_even_spacing'", prim_id = "0", mirror = "1", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "mirror_triangles_fractional_even_spacing_ccw_point_mode"
+rust_const = "INV_MIRROR_TRIANGLES_FRACTIONAL_EVEN_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw_point_mode", template = "tessellation/invariance/inv_ccw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'fractional_even_spacing'", prim_id = "0", mirror = "1", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "mirror_triangles_fractional_even_spacing_cw"
+rust_const = "INV_MIRROR_TRIANGLES_FRACTIONAL_EVEN_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'fractional_even_spacing'", prim_id = "0", mirror = "1", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "mirror_triangles_fractional_even_spacing_cw_point_mode"
+rust_const = "INV_MIRROR_TRIANGLES_FRACTIONAL_EVEN_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw_point_mode", template = "tessellation/invariance/inv_cw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'triangles'", spacing = "'fractional_even_spacing'", prim_id = "0", mirror = "1", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "mirror_quads_equal_spacing_ccw"
+rust_const = "INV_MIRROR_QUADS_EQUAL_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'equal_spacing'", prim_id = "1", mirror = "1", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "mirror_quads_equal_spacing_ccw_point_mode"
+rust_const = "INV_MIRROR_QUADS_EQUAL_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw_point_mode", template = "tessellation/invariance/inv_ccw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'equal_spacing'", prim_id = "1", mirror = "1", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "mirror_quads_equal_spacing_cw"
+rust_const = "INV_MIRROR_QUADS_EQUAL_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'equal_spacing'", prim_id = "1", mirror = "1", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "mirror_quads_equal_spacing_cw_point_mode"
+rust_const = "INV_MIRROR_QUADS_EQUAL_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw_point_mode", template = "tessellation/invariance/inv_cw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'equal_spacing'", prim_id = "1", mirror = "1", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "mirror_quads_fractional_odd_spacing_ccw"
+rust_const = "INV_MIRROR_QUADS_FRACTIONAL_ODD_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'fractional_odd_spacing'", prim_id = "1", mirror = "1", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "mirror_quads_fractional_odd_spacing_ccw_point_mode"
+rust_const = "INV_MIRROR_QUADS_FRACTIONAL_ODD_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw_point_mode", template = "tessellation/invariance/inv_ccw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'fractional_odd_spacing'", prim_id = "1", mirror = "1", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "mirror_quads_fractional_odd_spacing_cw"
+rust_const = "INV_MIRROR_QUADS_FRACTIONAL_ODD_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'fractional_odd_spacing'", prim_id = "1", mirror = "1", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "mirror_quads_fractional_odd_spacing_cw_point_mode"
+rust_const = "INV_MIRROR_QUADS_FRACTIONAL_ODD_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw_point_mode", template = "tessellation/invariance/inv_cw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'fractional_odd_spacing'", prim_id = "1", mirror = "1", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "mirror_quads_fractional_even_spacing_ccw"
+rust_const = "INV_MIRROR_QUADS_FRACTIONAL_EVEN_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'fractional_even_spacing'", prim_id = "1", mirror = "1", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "mirror_quads_fractional_even_spacing_ccw_point_mode"
+rust_const = "INV_MIRROR_QUADS_FRACTIONAL_EVEN_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw_point_mode", template = "tessellation/invariance/inv_ccw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'fractional_even_spacing'", prim_id = "1", mirror = "1", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "mirror_quads_fractional_even_spacing_cw"
+rust_const = "INV_MIRROR_QUADS_FRACTIONAL_EVEN_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'fractional_even_spacing'", prim_id = "1", mirror = "1", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "mirror_quads_fractional_even_spacing_cw_point_mode"
+rust_const = "INV_MIRROR_QUADS_FRACTIONAL_EVEN_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw_point_mode", template = "tessellation/invariance/inv_cw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'quads'", spacing = "'fractional_even_spacing'", prim_id = "1", mirror = "1", gs_in = "'triangles'", gs_out = "'triangle_strip'", nv = "3" }
+
+[[case]]
+name = "mirror_isolines_equal_spacing_ccw"
+rust_const = "INV_MIRROR_ISOLINES_EQUAL_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'isolines'", spacing = "'equal_spacing'", prim_id = "2", mirror = "1", gs_in = "'lines'", gs_out = "'line_strip'", nv = "2" }
+
+[[case]]
+name = "mirror_isolines_equal_spacing_ccw_point_mode"
+rust_const = "INV_MIRROR_ISOLINES_EQUAL_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw_point_mode", template = "tessellation/invariance/inv_ccw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'isolines'", spacing = "'equal_spacing'", prim_id = "2", mirror = "1", gs_in = "'lines'", gs_out = "'line_strip'", nv = "2" }
+
+[[case]]
+name = "mirror_isolines_equal_spacing_cw"
+rust_const = "INV_MIRROR_ISOLINES_EQUAL_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'isolines'", spacing = "'equal_spacing'", prim_id = "2", mirror = "1", gs_in = "'lines'", gs_out = "'line_strip'", nv = "2" }
+
+[[case]]
+name = "mirror_isolines_equal_spacing_cw_point_mode"
+rust_const = "INV_MIRROR_ISOLINES_EQUAL_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw_point_mode", template = "tessellation/invariance/inv_cw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'isolines'", spacing = "'equal_spacing'", prim_id = "2", mirror = "1", gs_in = "'lines'", gs_out = "'line_strip'", nv = "2" }
+
+[[case]]
+name = "mirror_isolines_fractional_odd_spacing_ccw"
+rust_const = "INV_MIRROR_ISOLINES_FRACTIONAL_ODD_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'isolines'", spacing = "'fractional_odd_spacing'", prim_id = "2", mirror = "1", gs_in = "'lines'", gs_out = "'line_strip'", nv = "2" }
+
+[[case]]
+name = "mirror_isolines_fractional_odd_spacing_ccw_point_mode"
+rust_const = "INV_MIRROR_ISOLINES_FRACTIONAL_ODD_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw_point_mode", template = "tessellation/invariance/inv_ccw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'isolines'", spacing = "'fractional_odd_spacing'", prim_id = "2", mirror = "1", gs_in = "'lines'", gs_out = "'line_strip'", nv = "2" }
+
+[[case]]
+name = "mirror_isolines_fractional_odd_spacing_cw"
+rust_const = "INV_MIRROR_ISOLINES_FRACTIONAL_ODD_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'isolines'", spacing = "'fractional_odd_spacing'", prim_id = "2", mirror = "1", gs_in = "'lines'", gs_out = "'line_strip'", nv = "2" }
+
+[[case]]
+name = "mirror_isolines_fractional_odd_spacing_cw_point_mode"
+rust_const = "INV_MIRROR_ISOLINES_FRACTIONAL_ODD_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw_point_mode", template = "tessellation/invariance/inv_cw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'isolines'", spacing = "'fractional_odd_spacing'", prim_id = "2", mirror = "1", gs_in = "'lines'", gs_out = "'line_strip'", nv = "2" }
+
+[[case]]
+name = "mirror_isolines_fractional_even_spacing_ccw"
+rust_const = "INV_MIRROR_ISOLINES_FRACTIONAL_EVEN_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw", template = "tessellation/invariance/inv_ccw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'isolines'", spacing = "'fractional_even_spacing'", prim_id = "2", mirror = "1", gs_in = "'lines'", gs_out = "'line_strip'", nv = "2" }
+
+[[case]]
+name = "mirror_isolines_fractional_even_spacing_ccw_point_mode"
+rust_const = "INV_MIRROR_ISOLINES_FRACTIONAL_EVEN_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_ccw_point_mode", template = "tessellation/invariance/inv_ccw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'isolines'", spacing = "'fractional_even_spacing'", prim_id = "2", mirror = "1", gs_in = "'lines'", gs_out = "'line_strip'", nv = "2" }
+
+[[case]]
+name = "mirror_isolines_fractional_even_spacing_cw"
+rust_const = "INV_MIRROR_ISOLINES_FRACTIONAL_EVEN_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw", template = "tessellation/invariance/inv_cw.tese", stage = "tese" }, { name = "geom", template = "tessellation/invariance/inv.geom", stage = "geom" }, { name = "geom_write_point_size", template = "tessellation/invariance/inv_point_size.geom", stage = "geom" } ]
+derived = { prim = "'isolines'", spacing = "'fractional_even_spacing'", prim_id = "2", mirror = "1", gs_in = "'lines'", gs_out = "'line_strip'", nv = "2" }
+
+[[case]]
+name = "mirror_isolines_fractional_even_spacing_cw_point_mode"
+rust_const = "INV_MIRROR_ISOLINES_FRACTIONAL_EVEN_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese_cw_point_mode", template = "tessellation/invariance/inv_cw_point_mode.tese", stage = "tese" }, { name = "geom_point_mode", template = "tessellation/invariance/inv_point_mode.geom", stage = "geom" }, { name = "geom_point_mode_write_point_size", template = "tessellation/invariance/inv_point_mode_point_size.geom", stage = "geom" } ]
+derived = { prim = "'isolines'", spacing = "'fractional_even_spacing'", prim_id = "2", mirror = "1", gs_in = "'lines'", gs_out = "'line_strip'", nv = "2" }
+
+[[case]]
+name = "range_triangles_equal_spacing_ccw"
+rust_const = "INV_RANGE_TRIANGLES_EQUAL_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'triangles, equal_spacing, ccw'", one_minus = "0", num_components = "3" }
+
+[[case]]
+name = "range_triangles_equal_spacing_ccw_point_mode"
+rust_const = "INV_RANGE_TRIANGLES_EQUAL_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'triangles, equal_spacing, ccw, point_mode'", one_minus = "0", num_components = "3" }
+
+[[case]]
+name = "range_triangles_equal_spacing_cw"
+rust_const = "INV_RANGE_TRIANGLES_EQUAL_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'triangles, equal_spacing, cw'", one_minus = "0", num_components = "3" }
+
+[[case]]
+name = "range_triangles_equal_spacing_cw_point_mode"
+rust_const = "INV_RANGE_TRIANGLES_EQUAL_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'triangles, equal_spacing, cw, point_mode'", one_minus = "0", num_components = "3" }
+
+[[case]]
+name = "range_triangles_fractional_odd_spacing_ccw"
+rust_const = "INV_RANGE_TRIANGLES_FRACTIONAL_ODD_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'triangles, fractional_odd_spacing, ccw'", one_minus = "0", num_components = "3" }
+
+[[case]]
+name = "range_triangles_fractional_odd_spacing_ccw_point_mode"
+rust_const = "INV_RANGE_TRIANGLES_FRACTIONAL_ODD_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'triangles, fractional_odd_spacing, ccw, point_mode'", one_minus = "0", num_components = "3" }
+
+[[case]]
+name = "range_triangles_fractional_odd_spacing_cw"
+rust_const = "INV_RANGE_TRIANGLES_FRACTIONAL_ODD_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'triangles, fractional_odd_spacing, cw'", one_minus = "0", num_components = "3" }
+
+[[case]]
+name = "range_triangles_fractional_odd_spacing_cw_point_mode"
+rust_const = "INV_RANGE_TRIANGLES_FRACTIONAL_ODD_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'triangles, fractional_odd_spacing, cw, point_mode'", one_minus = "0", num_components = "3" }
+
+[[case]]
+name = "range_triangles_fractional_even_spacing_ccw"
+rust_const = "INV_RANGE_TRIANGLES_FRACTIONAL_EVEN_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'triangles, fractional_even_spacing, ccw'", one_minus = "0", num_components = "3" }
+
+[[case]]
+name = "range_triangles_fractional_even_spacing_ccw_point_mode"
+rust_const = "INV_RANGE_TRIANGLES_FRACTIONAL_EVEN_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'triangles, fractional_even_spacing, ccw, point_mode'", one_minus = "0", num_components = "3" }
+
+[[case]]
+name = "range_triangles_fractional_even_spacing_cw"
+rust_const = "INV_RANGE_TRIANGLES_FRACTIONAL_EVEN_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'triangles, fractional_even_spacing, cw'", one_minus = "0", num_components = "3" }
+
+[[case]]
+name = "range_triangles_fractional_even_spacing_cw_point_mode"
+rust_const = "INV_RANGE_TRIANGLES_FRACTIONAL_EVEN_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'triangles, fractional_even_spacing, cw, point_mode'", one_minus = "0", num_components = "3" }
+
+[[case]]
+name = "range_quads_equal_spacing_ccw"
+rust_const = "INV_RANGE_QUADS_EQUAL_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'quads, equal_spacing, ccw'", one_minus = "0", num_components = "2" }
+
+[[case]]
+name = "range_quads_equal_spacing_ccw_point_mode"
+rust_const = "INV_RANGE_QUADS_EQUAL_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'quads, equal_spacing, ccw, point_mode'", one_minus = "0", num_components = "2" }
+
+[[case]]
+name = "range_quads_equal_spacing_cw"
+rust_const = "INV_RANGE_QUADS_EQUAL_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'quads, equal_spacing, cw'", one_minus = "0", num_components = "2" }
+
+[[case]]
+name = "range_quads_equal_spacing_cw_point_mode"
+rust_const = "INV_RANGE_QUADS_EQUAL_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'quads, equal_spacing, cw, point_mode'", one_minus = "0", num_components = "2" }
+
+[[case]]
+name = "range_quads_fractional_odd_spacing_ccw"
+rust_const = "INV_RANGE_QUADS_FRACTIONAL_ODD_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'quads, fractional_odd_spacing, ccw'", one_minus = "0", num_components = "2" }
+
+[[case]]
+name = "range_quads_fractional_odd_spacing_ccw_point_mode"
+rust_const = "INV_RANGE_QUADS_FRACTIONAL_ODD_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'quads, fractional_odd_spacing, ccw, point_mode'", one_minus = "0", num_components = "2" }
+
+[[case]]
+name = "range_quads_fractional_odd_spacing_cw"
+rust_const = "INV_RANGE_QUADS_FRACTIONAL_ODD_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'quads, fractional_odd_spacing, cw'", one_minus = "0", num_components = "2" }
+
+[[case]]
+name = "range_quads_fractional_odd_spacing_cw_point_mode"
+rust_const = "INV_RANGE_QUADS_FRACTIONAL_ODD_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'quads, fractional_odd_spacing, cw, point_mode'", one_minus = "0", num_components = "2" }
+
+[[case]]
+name = "range_quads_fractional_even_spacing_ccw"
+rust_const = "INV_RANGE_QUADS_FRACTIONAL_EVEN_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'quads, fractional_even_spacing, ccw'", one_minus = "0", num_components = "2" }
+
+[[case]]
+name = "range_quads_fractional_even_spacing_ccw_point_mode"
+rust_const = "INV_RANGE_QUADS_FRACTIONAL_EVEN_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'quads, fractional_even_spacing, ccw, point_mode'", one_minus = "0", num_components = "2" }
+
+[[case]]
+name = "range_quads_fractional_even_spacing_cw"
+rust_const = "INV_RANGE_QUADS_FRACTIONAL_EVEN_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'quads, fractional_even_spacing, cw'", one_minus = "0", num_components = "2" }
+
+[[case]]
+name = "range_quads_fractional_even_spacing_cw_point_mode"
+rust_const = "INV_RANGE_QUADS_FRACTIONAL_EVEN_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'quads, fractional_even_spacing, cw, point_mode'", one_minus = "0", num_components = "2" }
+
+[[case]]
+name = "range_isolines_equal_spacing_ccw"
+rust_const = "INV_RANGE_ISOLINES_EQUAL_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'isolines, equal_spacing, ccw'", one_minus = "0", num_components = "2" }
+
+[[case]]
+name = "range_isolines_equal_spacing_ccw_point_mode"
+rust_const = "INV_RANGE_ISOLINES_EQUAL_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'isolines, equal_spacing, ccw, point_mode'", one_minus = "0", num_components = "2" }
+
+[[case]]
+name = "range_isolines_equal_spacing_cw"
+rust_const = "INV_RANGE_ISOLINES_EQUAL_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'isolines, equal_spacing, cw'", one_minus = "0", num_components = "2" }
+
+[[case]]
+name = "range_isolines_equal_spacing_cw_point_mode"
+rust_const = "INV_RANGE_ISOLINES_EQUAL_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'isolines, equal_spacing, cw, point_mode'", one_minus = "0", num_components = "2" }
+
+[[case]]
+name = "range_isolines_fractional_odd_spacing_ccw"
+rust_const = "INV_RANGE_ISOLINES_FRACTIONAL_ODD_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'isolines, fractional_odd_spacing, ccw'", one_minus = "0", num_components = "2" }
+
+[[case]]
+name = "range_isolines_fractional_odd_spacing_ccw_point_mode"
+rust_const = "INV_RANGE_ISOLINES_FRACTIONAL_ODD_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'isolines, fractional_odd_spacing, ccw, point_mode'", one_minus = "0", num_components = "2" }
+
+[[case]]
+name = "range_isolines_fractional_odd_spacing_cw"
+rust_const = "INV_RANGE_ISOLINES_FRACTIONAL_ODD_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'isolines, fractional_odd_spacing, cw'", one_minus = "0", num_components = "2" }
+
+[[case]]
+name = "range_isolines_fractional_odd_spacing_cw_point_mode"
+rust_const = "INV_RANGE_ISOLINES_FRACTIONAL_ODD_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'isolines, fractional_odd_spacing, cw, point_mode'", one_minus = "0", num_components = "2" }
+
+[[case]]
+name = "range_isolines_fractional_even_spacing_ccw"
+rust_const = "INV_RANGE_ISOLINES_FRACTIONAL_EVEN_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'isolines, fractional_even_spacing, ccw'", one_minus = "0", num_components = "2" }
+
+[[case]]
+name = "range_isolines_fractional_even_spacing_ccw_point_mode"
+rust_const = "INV_RANGE_ISOLINES_FRACTIONAL_EVEN_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'isolines, fractional_even_spacing, ccw, point_mode'", one_minus = "0", num_components = "2" }
+
+[[case]]
+name = "range_isolines_fractional_even_spacing_cw"
+rust_const = "INV_RANGE_ISOLINES_FRACTIONAL_EVEN_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'isolines, fractional_even_spacing, cw'", one_minus = "0", num_components = "2" }
+
+[[case]]
+name = "range_isolines_fractional_even_spacing_cw_point_mode"
+rust_const = "INV_RANGE_ISOLINES_FRACTIONAL_EVEN_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'isolines, fractional_even_spacing, cw, point_mode'", one_minus = "0", num_components = "2" }
+
+[[case]]
+name = "oneminus_triangles_equal_spacing_ccw"
+rust_const = "INV_ONEMINUS_TRIANGLES_EQUAL_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'triangles, equal_spacing, ccw'", one_minus = "1", num_components = "3" }
+
+[[case]]
+name = "oneminus_triangles_equal_spacing_ccw_point_mode"
+rust_const = "INV_ONEMINUS_TRIANGLES_EQUAL_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'triangles, equal_spacing, ccw, point_mode'", one_minus = "1", num_components = "3" }
+
+[[case]]
+name = "oneminus_triangles_equal_spacing_cw"
+rust_const = "INV_ONEMINUS_TRIANGLES_EQUAL_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'triangles, equal_spacing, cw'", one_minus = "1", num_components = "3" }
+
+[[case]]
+name = "oneminus_triangles_equal_spacing_cw_point_mode"
+rust_const = "INV_ONEMINUS_TRIANGLES_EQUAL_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'triangles, equal_spacing, cw, point_mode'", one_minus = "1", num_components = "3" }
+
+[[case]]
+name = "oneminus_triangles_fractional_odd_spacing_ccw"
+rust_const = "INV_ONEMINUS_TRIANGLES_FRACTIONAL_ODD_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'triangles, fractional_odd_spacing, ccw'", one_minus = "1", num_components = "3" }
+
+[[case]]
+name = "oneminus_triangles_fractional_odd_spacing_ccw_point_mode"
+rust_const = "INV_ONEMINUS_TRIANGLES_FRACTIONAL_ODD_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'triangles, fractional_odd_spacing, ccw, point_mode'", one_minus = "1", num_components = "3" }
+
+[[case]]
+name = "oneminus_triangles_fractional_odd_spacing_cw"
+rust_const = "INV_ONEMINUS_TRIANGLES_FRACTIONAL_ODD_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'triangles, fractional_odd_spacing, cw'", one_minus = "1", num_components = "3" }
+
+[[case]]
+name = "oneminus_triangles_fractional_odd_spacing_cw_point_mode"
+rust_const = "INV_ONEMINUS_TRIANGLES_FRACTIONAL_ODD_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'triangles, fractional_odd_spacing, cw, point_mode'", one_minus = "1", num_components = "3" }
+
+[[case]]
+name = "oneminus_triangles_fractional_even_spacing_ccw"
+rust_const = "INV_ONEMINUS_TRIANGLES_FRACTIONAL_EVEN_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'triangles, fractional_even_spacing, ccw'", one_minus = "1", num_components = "3" }
+
+[[case]]
+name = "oneminus_triangles_fractional_even_spacing_ccw_point_mode"
+rust_const = "INV_ONEMINUS_TRIANGLES_FRACTIONAL_EVEN_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'triangles, fractional_even_spacing, ccw, point_mode'", one_minus = "1", num_components = "3" }
+
+[[case]]
+name = "oneminus_triangles_fractional_even_spacing_cw"
+rust_const = "INV_ONEMINUS_TRIANGLES_FRACTIONAL_EVEN_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'triangles, fractional_even_spacing, cw'", one_minus = "1", num_components = "3" }
+
+[[case]]
+name = "oneminus_triangles_fractional_even_spacing_cw_point_mode"
+rust_const = "INV_ONEMINUS_TRIANGLES_FRACTIONAL_EVEN_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'triangles, fractional_even_spacing, cw, point_mode'", one_minus = "1", num_components = "3" }
+
+[[case]]
+name = "oneminus_quads_equal_spacing_ccw"
+rust_const = "INV_ONEMINUS_QUADS_EQUAL_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'quads, equal_spacing, ccw'", one_minus = "1", num_components = "2" }
+
+[[case]]
+name = "oneminus_quads_equal_spacing_ccw_point_mode"
+rust_const = "INV_ONEMINUS_QUADS_EQUAL_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'quads, equal_spacing, ccw, point_mode'", one_minus = "1", num_components = "2" }
+
+[[case]]
+name = "oneminus_quads_equal_spacing_cw"
+rust_const = "INV_ONEMINUS_QUADS_EQUAL_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'quads, equal_spacing, cw'", one_minus = "1", num_components = "2" }
+
+[[case]]
+name = "oneminus_quads_equal_spacing_cw_point_mode"
+rust_const = "INV_ONEMINUS_QUADS_EQUAL_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'quads, equal_spacing, cw, point_mode'", one_minus = "1", num_components = "2" }
+
+[[case]]
+name = "oneminus_quads_fractional_odd_spacing_ccw"
+rust_const = "INV_ONEMINUS_QUADS_FRACTIONAL_ODD_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'quads, fractional_odd_spacing, ccw'", one_minus = "1", num_components = "2" }
+
+[[case]]
+name = "oneminus_quads_fractional_odd_spacing_ccw_point_mode"
+rust_const = "INV_ONEMINUS_QUADS_FRACTIONAL_ODD_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'quads, fractional_odd_spacing, ccw, point_mode'", one_minus = "1", num_components = "2" }
+
+[[case]]
+name = "oneminus_quads_fractional_odd_spacing_cw"
+rust_const = "INV_ONEMINUS_QUADS_FRACTIONAL_ODD_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'quads, fractional_odd_spacing, cw'", one_minus = "1", num_components = "2" }
+
+[[case]]
+name = "oneminus_quads_fractional_odd_spacing_cw_point_mode"
+rust_const = "INV_ONEMINUS_QUADS_FRACTIONAL_ODD_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'quads, fractional_odd_spacing, cw, point_mode'", one_minus = "1", num_components = "2" }
+
+[[case]]
+name = "oneminus_quads_fractional_even_spacing_ccw"
+rust_const = "INV_ONEMINUS_QUADS_FRACTIONAL_EVEN_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'quads, fractional_even_spacing, ccw'", one_minus = "1", num_components = "2" }
+
+[[case]]
+name = "oneminus_quads_fractional_even_spacing_ccw_point_mode"
+rust_const = "INV_ONEMINUS_QUADS_FRACTIONAL_EVEN_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'quads, fractional_even_spacing, ccw, point_mode'", one_minus = "1", num_components = "2" }
+
+[[case]]
+name = "oneminus_quads_fractional_even_spacing_cw"
+rust_const = "INV_ONEMINUS_QUADS_FRACTIONAL_EVEN_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'quads, fractional_even_spacing, cw'", one_minus = "1", num_components = "2" }
+
+[[case]]
+name = "oneminus_quads_fractional_even_spacing_cw_point_mode"
+rust_const = "INV_ONEMINUS_QUADS_FRACTIONAL_EVEN_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'quads, fractional_even_spacing, cw, point_mode'", one_minus = "1", num_components = "2" }
+
+[[case]]
+name = "oneminus_isolines_equal_spacing_ccw"
+rust_const = "INV_ONEMINUS_ISOLINES_EQUAL_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'isolines, equal_spacing, ccw'", one_minus = "1", num_components = "2" }
+
+[[case]]
+name = "oneminus_isolines_equal_spacing_ccw_point_mode"
+rust_const = "INV_ONEMINUS_ISOLINES_EQUAL_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'isolines, equal_spacing, ccw, point_mode'", one_minus = "1", num_components = "2" }
+
+[[case]]
+name = "oneminus_isolines_equal_spacing_cw"
+rust_const = "INV_ONEMINUS_ISOLINES_EQUAL_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'isolines, equal_spacing, cw'", one_minus = "1", num_components = "2" }
+
+[[case]]
+name = "oneminus_isolines_equal_spacing_cw_point_mode"
+rust_const = "INV_ONEMINUS_ISOLINES_EQUAL_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'isolines, equal_spacing, cw, point_mode'", one_minus = "1", num_components = "2" }
+
+[[case]]
+name = "oneminus_isolines_fractional_odd_spacing_ccw"
+rust_const = "INV_ONEMINUS_ISOLINES_FRACTIONAL_ODD_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'isolines, fractional_odd_spacing, ccw'", one_minus = "1", num_components = "2" }
+
+[[case]]
+name = "oneminus_isolines_fractional_odd_spacing_ccw_point_mode"
+rust_const = "INV_ONEMINUS_ISOLINES_FRACTIONAL_ODD_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'isolines, fractional_odd_spacing, ccw, point_mode'", one_minus = "1", num_components = "2" }
+
+[[case]]
+name = "oneminus_isolines_fractional_odd_spacing_cw"
+rust_const = "INV_ONEMINUS_ISOLINES_FRACTIONAL_ODD_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'isolines, fractional_odd_spacing, cw'", one_minus = "1", num_components = "2" }
+
+[[case]]
+name = "oneminus_isolines_fractional_odd_spacing_cw_point_mode"
+rust_const = "INV_ONEMINUS_ISOLINES_FRACTIONAL_ODD_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'isolines, fractional_odd_spacing, cw, point_mode'", one_minus = "1", num_components = "2" }
+
+[[case]]
+name = "oneminus_isolines_fractional_even_spacing_ccw"
+rust_const = "INV_ONEMINUS_ISOLINES_FRACTIONAL_EVEN_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'isolines, fractional_even_spacing, ccw'", one_minus = "1", num_components = "2" }
+
+[[case]]
+name = "oneminus_isolines_fractional_even_spacing_ccw_point_mode"
+rust_const = "INV_ONEMINUS_ISOLINES_FRACTIONAL_EVEN_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'isolines, fractional_even_spacing, ccw, point_mode'", one_minus = "1", num_components = "2" }
+
+[[case]]
+name = "oneminus_isolines_fractional_even_spacing_cw"
+rust_const = "INV_ONEMINUS_ISOLINES_FRACTIONAL_EVEN_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'isolines, fractional_even_spacing, cw'", one_minus = "1", num_components = "2" }
+
+[[case]]
+name = "oneminus_isolines_fractional_even_spacing_cw_point_mode"
+rust_const = "INV_ONEMINUS_ISOLINES_FRACTIONAL_EVEN_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "tessellation/invariance/inv.vert", stage = "vert" }, { name = "tesc", template = "tessellation/invariance/inv.tesc", stage = "tesc" }, { name = "tese", template = "tessellation/invariance/coord.tese", stage = "tese" }, { name = "tese_write_point_size", template = "tessellation/invariance/coord_point_size.tese", stage = "tese" } ]
+derived = { layout_qualifiers = "'isolines, fractional_even_spacing, cw, point_mode'", one_minus = "1", num_components = "2" }
+

@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.memory.dma_heap_memory.shader_access*
+#
+# `initProgramsDmaHeapMemoryShaderAccess` ignores its parameters, so both cases share one pair of copy shaders.
+
+upstream_source = "external/vulkancts/modules/vulkan/memory/vktMemoryExternalDmaHeapTests.cpp"
+rust_module = "memory/dma_heap_tests"
+
+[[case]]
+name = "dma_heap_memory_shader_access"
+rust_const = "DMA_HEAP_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "dma_heap_memory_write", template = "memory/dma_heap_memory_write.comp", stage = "comp" },
+    { name = "dma_heap_memory_read", template = "memory/dma_heap_memory_read.comp", stage = "comp" },
+]

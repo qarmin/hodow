@@ -1,0 +1,84 @@
+# Shader manifest for dEQP-VK.draw.*.indirect_draw.*
+#
+# The Draw framework's VertexFetch pair (or, for the first_instance groups, the vertex shader that compares
+# gl_InstanceIndex with the per-vertex reference), and for the `data_from_compute` variants the compute shader that
+# restores the bitwise-negated indirect and count buffers (data/vulkan/draw/NegateData.comp).
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawIndirectTest.cpp"
+rust_module = "draw/indirect_tests"
+
+[[case]]
+name = "indirect_draw"
+rust_const = "INDIRECT_DRAW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/vertex_fetch.vert", stage = "vert" },
+    { name = "frag", template = "draw/vertex_fetch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "indirect_draw_compute"
+rust_const = "INDIRECT_DRAW_COMPUTE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/vertex_fetch.vert", stage = "vert" },
+    { name = "frag", template = "draw/vertex_fetch.frag", stage = "frag" },
+    { name = "comp", template = "draw/negate_data.comp", stage = "comp" },
+]
+
+[[case]]
+name = "indirect_draw_first_instance"
+rust_const = "INDIRECT_DRAW_FIRST_INSTANCE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/vertex_fetch_instance_index.vert", stage = "vert" },
+    { name = "frag", template = "draw/vertex_fetch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "indirect_draw_first_instance_compute"
+rust_const = "INDIRECT_DRAW_FIRST_INSTANCE_COMPUTE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/vertex_fetch_instance_index.vert", stage = "vert" },
+    { name = "frag", template = "draw/vertex_fetch.frag", stage = "frag" },
+    { name = "comp", template = "draw/negate_data.comp", stage = "comp" },
+]
+
+[[case]]
+name = "indirect_draw_instanced"
+rust_const = "INDIRECT_DRAW_INSTANCED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/vertex_fetch_instanced.vert", stage = "vert" },
+    { name = "frag", template = "draw/vertex_fetch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "indirect_draw_instanced_compute"
+rust_const = "INDIRECT_DRAW_INSTANCED_COMPUTE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/vertex_fetch_instanced.vert", stage = "vert" },
+    { name = "frag", template = "draw/vertex_fetch.frag", stage = "frag" },
+    { name = "comp", template = "draw/negate_data.comp", stage = "comp" },
+]
+
+[[case]]
+name = "indirect_draw_instanced_first_instance"
+rust_const = "INDIRECT_DRAW_INSTANCED_FIRST_INSTANCE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/vertex_fetch_instanced_first_instance.vert", stage = "vert" },
+    { name = "frag", template = "draw/vertex_fetch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "indirect_draw_instanced_first_instance_compute"
+rust_const = "INDIRECT_DRAW_INSTANCED_FIRST_INSTANCE_COMPUTE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/vertex_fetch_instanced_first_instance.vert", stage = "vert" },
+    { name = "frag", template = "draw/vertex_fetch.frag", stage = "frag" },
+    { name = "comp", template = "draw/negate_data.comp", stage = "comp" },
+]

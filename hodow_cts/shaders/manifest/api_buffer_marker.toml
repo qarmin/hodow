@@ -1,0 +1,24 @@
+# Shader manifest for dEQP-VK.api.buffer_marker.*.memory_dep.*
+#
+# `initMemoryDepPrograms`: a point drawn by a vertex shader and a fragment shader that stores a value at an index from a push
+# constant, or a compute shader that does the same.
+
+upstream_source = "external/vulkancts/modules/vulkan/api/vktApiBufferMarkerTests.cpp"
+rust_module = "api/buffer_marker_tests"
+
+[[case]]
+name = "memory_dep_draw"
+rust_const = "MEMORY_DEP_DRAW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "api/buffer_marker/memory_dep.vert", stage = "vert" },
+    { name = "frag", template = "api/buffer_marker/memory_dep.frag", stage = "frag" },
+]
+
+[[case]]
+name = "memory_dep_dispatch"
+rust_const = "MEMORY_DEP_DISPATCH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "api/buffer_marker/memory_dep.comp", stage = "comp" },
+]

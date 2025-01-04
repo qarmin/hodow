@@ -1,0 +1,30 @@
+#version 460
+#extension GL_EXT_mesh_shader : enable
+layout (triangles) out;
+layout (max_vertices=192, max_primitives=64) out;
+layout (local_size_x=64, local_size_y=1, local_size_z=1) in;
+layout (set=0, binding=0, std430) readonly buffer PositionsArray { vec4 position[]; } vtxData;
+void main (void) {
+    const uint primitiveVertices = 3;
+    const uint row = gl_WorkGroupID.x;
+    const uint col = gl_LocalInvocationIndex;
+    const uint pixelIdx = row * 64 + col;
+    const uint baseInVertex = pixelIdx * primitiveVertices;
+    const uint baseOutVertex = col * primitiveVertices;
+    SetMeshOutputsEXT(192, 64);
+    for (uint i = 0u; i < primitiveVertices; ++i) {
+        const uint inIndex = baseInVertex + i;
+        const uint outIndex = baseOutVertex + i;
+        vec4 outPos;
+        outPos.x = vtxData.position[inIndex].x - 1000.0;
+        outPos.y = vtxData.position[inIndex].y - 2000.0;
+        outPos.z = vtxData.position[inIndex].z;
+        outPos.w = 1.0;
+        gl_MeshVerticesEXT[outIndex].gl_Position.x = outPos.x;
+        gl_MeshVerticesEXT[outIndex].gl_Position.y = outPos.y;
+        gl_MeshVerticesEXT[outIndex].gl_Position.z = outPos.z;
+        gl_MeshVerticesEXT[outIndex].gl_Position.w = outPos.w;
+        gl_MeshVerticesEXT[outIndex].gl_PointSize = 1.0;
+    }
+    gl_PrimitiveTriangleIndicesEXT[col] = uvec3(baseOutVertex, baseOutVertex + 1u, baseOutVertex + 2u);
+}

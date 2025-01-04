@@ -1,0 +1,162 @@
+#version 450
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout(points) in;
+layout(points, max_vertices = 1) out;
+layout(set = 0, binding = 3, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 4, std430) readonly buffer Buffer2
+{
+  vec4 data[];
+};
+
+void main (void)
+{
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint sgSize = gl_SubgroupSize;
+  uint sgInvocation = gl_SubgroupInvocationID;
+  tempRes = 0x3;
+  vec4 ops[128];
+  vec4 d = data[sgInvocation];
+  ops[0] = subgroupBroadcast(d, 0u);
+  ops[1] = subgroupBroadcast(d, 1u);
+  ops[2] = subgroupBroadcast(d, 2u);
+  ops[3] = subgroupBroadcast(d, 3u);
+  ops[4] = subgroupBroadcast(d, 4u);
+  ops[5] = subgroupBroadcast(d, 5u);
+  ops[6] = subgroupBroadcast(d, 6u);
+  ops[7] = subgroupBroadcast(d, 7u);
+  ops[8] = subgroupBroadcast(d, 8u);
+  ops[9] = subgroupBroadcast(d, 9u);
+  ops[10] = subgroupBroadcast(d, 10u);
+  ops[11] = subgroupBroadcast(d, 11u);
+  ops[12] = subgroupBroadcast(d, 12u);
+  ops[13] = subgroupBroadcast(d, 13u);
+  ops[14] = subgroupBroadcast(d, 14u);
+  ops[15] = subgroupBroadcast(d, 15u);
+  ops[16] = subgroupBroadcast(d, 16u);
+  ops[17] = subgroupBroadcast(d, 17u);
+  ops[18] = subgroupBroadcast(d, 18u);
+  ops[19] = subgroupBroadcast(d, 19u);
+  ops[20] = subgroupBroadcast(d, 20u);
+  ops[21] = subgroupBroadcast(d, 21u);
+  ops[22] = subgroupBroadcast(d, 22u);
+  ops[23] = subgroupBroadcast(d, 23u);
+  ops[24] = subgroupBroadcast(d, 24u);
+  ops[25] = subgroupBroadcast(d, 25u);
+  ops[26] = subgroupBroadcast(d, 26u);
+  ops[27] = subgroupBroadcast(d, 27u);
+  ops[28] = subgroupBroadcast(d, 28u);
+  ops[29] = subgroupBroadcast(d, 29u);
+  ops[30] = subgroupBroadcast(d, 30u);
+  ops[31] = subgroupBroadcast(d, 31u);
+  ops[32] = subgroupBroadcast(d, 32u);
+  ops[33] = subgroupBroadcast(d, 33u);
+  ops[34] = subgroupBroadcast(d, 34u);
+  ops[35] = subgroupBroadcast(d, 35u);
+  ops[36] = subgroupBroadcast(d, 36u);
+  ops[37] = subgroupBroadcast(d, 37u);
+  ops[38] = subgroupBroadcast(d, 38u);
+  ops[39] = subgroupBroadcast(d, 39u);
+  ops[40] = subgroupBroadcast(d, 40u);
+  ops[41] = subgroupBroadcast(d, 41u);
+  ops[42] = subgroupBroadcast(d, 42u);
+  ops[43] = subgroupBroadcast(d, 43u);
+  ops[44] = subgroupBroadcast(d, 44u);
+  ops[45] = subgroupBroadcast(d, 45u);
+  ops[46] = subgroupBroadcast(d, 46u);
+  ops[47] = subgroupBroadcast(d, 47u);
+  ops[48] = subgroupBroadcast(d, 48u);
+  ops[49] = subgroupBroadcast(d, 49u);
+  ops[50] = subgroupBroadcast(d, 50u);
+  ops[51] = subgroupBroadcast(d, 51u);
+  ops[52] = subgroupBroadcast(d, 52u);
+  ops[53] = subgroupBroadcast(d, 53u);
+  ops[54] = subgroupBroadcast(d, 54u);
+  ops[55] = subgroupBroadcast(d, 55u);
+  ops[56] = subgroupBroadcast(d, 56u);
+  ops[57] = subgroupBroadcast(d, 57u);
+  ops[58] = subgroupBroadcast(d, 58u);
+  ops[59] = subgroupBroadcast(d, 59u);
+  ops[60] = subgroupBroadcast(d, 60u);
+  ops[61] = subgroupBroadcast(d, 61u);
+  ops[62] = subgroupBroadcast(d, 62u);
+  ops[63] = subgroupBroadcast(d, 63u);
+  ops[64] = subgroupBroadcast(d, 64u);
+  ops[65] = subgroupBroadcast(d, 65u);
+  ops[66] = subgroupBroadcast(d, 66u);
+  ops[67] = subgroupBroadcast(d, 67u);
+  ops[68] = subgroupBroadcast(d, 68u);
+  ops[69] = subgroupBroadcast(d, 69u);
+  ops[70] = subgroupBroadcast(d, 70u);
+  ops[71] = subgroupBroadcast(d, 71u);
+  ops[72] = subgroupBroadcast(d, 72u);
+  ops[73] = subgroupBroadcast(d, 73u);
+  ops[74] = subgroupBroadcast(d, 74u);
+  ops[75] = subgroupBroadcast(d, 75u);
+  ops[76] = subgroupBroadcast(d, 76u);
+  ops[77] = subgroupBroadcast(d, 77u);
+  ops[78] = subgroupBroadcast(d, 78u);
+  ops[79] = subgroupBroadcast(d, 79u);
+  ops[80] = subgroupBroadcast(d, 80u);
+  ops[81] = subgroupBroadcast(d, 81u);
+  ops[82] = subgroupBroadcast(d, 82u);
+  ops[83] = subgroupBroadcast(d, 83u);
+  ops[84] = subgroupBroadcast(d, 84u);
+  ops[85] = subgroupBroadcast(d, 85u);
+  ops[86] = subgroupBroadcast(d, 86u);
+  ops[87] = subgroupBroadcast(d, 87u);
+  ops[88] = subgroupBroadcast(d, 88u);
+  ops[89] = subgroupBroadcast(d, 89u);
+  ops[90] = subgroupBroadcast(d, 90u);
+  ops[91] = subgroupBroadcast(d, 91u);
+  ops[92] = subgroupBroadcast(d, 92u);
+  ops[93] = subgroupBroadcast(d, 93u);
+  ops[94] = subgroupBroadcast(d, 94u);
+  ops[95] = subgroupBroadcast(d, 95u);
+  ops[96] = subgroupBroadcast(d, 96u);
+  ops[97] = subgroupBroadcast(d, 97u);
+  ops[98] = subgroupBroadcast(d, 98u);
+  ops[99] = subgroupBroadcast(d, 99u);
+  ops[100] = subgroupBroadcast(d, 100u);
+  ops[101] = subgroupBroadcast(d, 101u);
+  ops[102] = subgroupBroadcast(d, 102u);
+  ops[103] = subgroupBroadcast(d, 103u);
+  ops[104] = subgroupBroadcast(d, 104u);
+  ops[105] = subgroupBroadcast(d, 105u);
+  ops[106] = subgroupBroadcast(d, 106u);
+  ops[107] = subgroupBroadcast(d, 107u);
+  ops[108] = subgroupBroadcast(d, 108u);
+  ops[109] = subgroupBroadcast(d, 109u);
+  ops[110] = subgroupBroadcast(d, 110u);
+  ops[111] = subgroupBroadcast(d, 111u);
+  ops[112] = subgroupBroadcast(d, 112u);
+  ops[113] = subgroupBroadcast(d, 113u);
+  ops[114] = subgroupBroadcast(d, 114u);
+  ops[115] = subgroupBroadcast(d, 115u);
+  ops[116] = subgroupBroadcast(d, 116u);
+  ops[117] = subgroupBroadcast(d, 117u);
+  ops[118] = subgroupBroadcast(d, 118u);
+  ops[119] = subgroupBroadcast(d, 119u);
+  ops[120] = subgroupBroadcast(d, 120u);
+  ops[121] = subgroupBroadcast(d, 121u);
+  ops[122] = subgroupBroadcast(d, 122u);
+  ops[123] = subgroupBroadcast(d, 123u);
+  ops[124] = subgroupBroadcast(d, 124u);
+  ops[125] = subgroupBroadcast(d, 125u);
+  ops[126] = subgroupBroadcast(d, 126u);
+  ops[127] = subgroupBroadcast(d, 127u);
+  for(int id = 0; id < sgSize; id++)
+  {
+    if (subgroupBallotBitExtract(mask, id) && ops[id] != data[id])
+    {
+      tempRes = 0;
+    }
+  };
+  result[gl_PrimitiveIDIn] = tempRes;
+  gl_Position = gl_in[0].gl_Position;
+  EmitVertex();
+  EndPrimitive();
+}

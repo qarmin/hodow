@@ -1,0 +1,28 @@
+# Shader manifest for dEQP-VK.api.smoke.{create_shader,compute}
+#
+# `create_shader` registers one vertex shader under "test". `compute` is
+# initNonGraphicsSmokeShaders: one compute shader whose local size is
+# NON_GRAPHICS_SMOKE_LOCAL_SIZE, which the host divides the value count by to size the
+# dispatch - so it is a manifest parameter and the Rust constant carries it.
+# The triangle cases of the same file (asm and GLSL) are not ported.
+
+upstream_source = "external/vulkancts/modules/vulkan/api/vktApiSmokeTests.cpp"
+rust_module = "api/smoke_tests"
+
+[[case]]
+name = "create_shader"
+rust_const = "SMOKE_CREATE_SHADER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "api/smoke_create_shader.vert", stage = "vert" },
+]
+
+[[case]]
+name = "compute"
+rust_const = "SMOKE_COMPUTE"
+rust_type = "SmokeComputeProgram"
+programs = [
+    { name = "comp", template = "api/smoke_non_graphics.comp", stage = "comp" },
+]
+[case.params]
+local_size = { type = "u32", value = 64 }

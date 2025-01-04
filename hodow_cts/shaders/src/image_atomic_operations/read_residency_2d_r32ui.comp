@@ -1,0 +1,25 @@
+#version 450
+#extension GL_ARB_sparse_texture2 : require
+#extension GL_EXT_shader_explicit_arithmetic_types_float16 : enable
+precision highp uimage2D;
+
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout (r32ui, binding=0) coherent uniform uimage2D u_resultImage;
+
+layout(std430, binding = 1) buffer outputBuffer
+{
+    uint data[];
+} outBuffer;
+
+void main(void)
+{
+    int gx = int(gl_GlobalInvocationID.x);
+    int gy = int(gl_GlobalInvocationID.y);
+    int gz = int(gl_GlobalInvocationID.z);
+    uint index = gx + (gy * gl_NumWorkGroups.x) + (gz *gl_NumWorkGroups.x * gl_NumWorkGroups.y);
+    outBuffer.data[index] = uint(imageLoad(u_resultImage, ivec2(gx,gy)).x);
+    uvec4 sparseValue;
+    sparseImageLoadARB(u_resultImage, ivec2(gx,gy), sparseValue);
+    if (outBuffer.data[index] != uint(sparseValue))
+        outBuffer.data[index] = uint(1234);
+}

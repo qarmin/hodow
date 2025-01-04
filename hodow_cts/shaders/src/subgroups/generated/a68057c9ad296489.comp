@@ -1,0 +1,96 @@
+#version 450
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  bvec3 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint sgSize = gl_SubgroupSize;
+  uint sgInvocation = gl_SubgroupInvocationID;
+  tempRes = 0x3;
+  bvec3 ops[64];
+  bvec3 d = data[sgInvocation];
+  ops[0] = subgroupBroadcast(d, 0u);
+  ops[1] = subgroupBroadcast(d, 1u);
+  ops[2] = subgroupBroadcast(d, 2u);
+  ops[3] = subgroupBroadcast(d, 3u);
+  ops[4] = subgroupBroadcast(d, 4u);
+  ops[5] = subgroupBroadcast(d, 5u);
+  ops[6] = subgroupBroadcast(d, 6u);
+  ops[7] = subgroupBroadcast(d, 7u);
+  ops[8] = subgroupBroadcast(d, 8u);
+  ops[9] = subgroupBroadcast(d, 9u);
+  ops[10] = subgroupBroadcast(d, 10u);
+  ops[11] = subgroupBroadcast(d, 11u);
+  ops[12] = subgroupBroadcast(d, 12u);
+  ops[13] = subgroupBroadcast(d, 13u);
+  ops[14] = subgroupBroadcast(d, 14u);
+  ops[15] = subgroupBroadcast(d, 15u);
+  ops[16] = subgroupBroadcast(d, 16u);
+  ops[17] = subgroupBroadcast(d, 17u);
+  ops[18] = subgroupBroadcast(d, 18u);
+  ops[19] = subgroupBroadcast(d, 19u);
+  ops[20] = subgroupBroadcast(d, 20u);
+  ops[21] = subgroupBroadcast(d, 21u);
+  ops[22] = subgroupBroadcast(d, 22u);
+  ops[23] = subgroupBroadcast(d, 23u);
+  ops[24] = subgroupBroadcast(d, 24u);
+  ops[25] = subgroupBroadcast(d, 25u);
+  ops[26] = subgroupBroadcast(d, 26u);
+  ops[27] = subgroupBroadcast(d, 27u);
+  ops[28] = subgroupBroadcast(d, 28u);
+  ops[29] = subgroupBroadcast(d, 29u);
+  ops[30] = subgroupBroadcast(d, 30u);
+  ops[31] = subgroupBroadcast(d, 31u);
+  ops[32] = subgroupBroadcast(d, 32u);
+  ops[33] = subgroupBroadcast(d, 33u);
+  ops[34] = subgroupBroadcast(d, 34u);
+  ops[35] = subgroupBroadcast(d, 35u);
+  ops[36] = subgroupBroadcast(d, 36u);
+  ops[37] = subgroupBroadcast(d, 37u);
+  ops[38] = subgroupBroadcast(d, 38u);
+  ops[39] = subgroupBroadcast(d, 39u);
+  ops[40] = subgroupBroadcast(d, 40u);
+  ops[41] = subgroupBroadcast(d, 41u);
+  ops[42] = subgroupBroadcast(d, 42u);
+  ops[43] = subgroupBroadcast(d, 43u);
+  ops[44] = subgroupBroadcast(d, 44u);
+  ops[45] = subgroupBroadcast(d, 45u);
+  ops[46] = subgroupBroadcast(d, 46u);
+  ops[47] = subgroupBroadcast(d, 47u);
+  ops[48] = subgroupBroadcast(d, 48u);
+  ops[49] = subgroupBroadcast(d, 49u);
+  ops[50] = subgroupBroadcast(d, 50u);
+  ops[51] = subgroupBroadcast(d, 51u);
+  ops[52] = subgroupBroadcast(d, 52u);
+  ops[53] = subgroupBroadcast(d, 53u);
+  ops[54] = subgroupBroadcast(d, 54u);
+  ops[55] = subgroupBroadcast(d, 55u);
+  ops[56] = subgroupBroadcast(d, 56u);
+  ops[57] = subgroupBroadcast(d, 57u);
+  ops[58] = subgroupBroadcast(d, 58u);
+  ops[59] = subgroupBroadcast(d, 59u);
+  ops[60] = subgroupBroadcast(d, 60u);
+  ops[61] = subgroupBroadcast(d, 61u);
+  ops[62] = subgroupBroadcast(d, 62u);
+  ops[63] = subgroupBroadcast(d, 63u);
+  for(int id = 0; id < sgSize; id++)
+  {
+    if (subgroupBallotBitExtract(mask, id) && ops[id] != data[id])
+    {
+      tempRes = 0;
+    }
+  };
+  result[offset] = tempRes;
+}

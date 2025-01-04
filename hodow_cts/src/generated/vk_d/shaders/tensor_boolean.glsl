@@ -1,0 +1,749 @@
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 1> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 1> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint tensor_element_count = size_d0;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1) % size_d0;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0), tens_val);
+	bool res = tens_val && false;
+	tensorWriteARM(tens_out, uint[](coord_0), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 1> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 1> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint tensor_element_count = size_d0;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1) % size_d0;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0), tens_val);
+	bool res = tens_val && true;
+	tensorWriteARM(tens_out, uint[](coord_0), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 1> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 1> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint tensor_element_count = size_d0;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1) % size_d0;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0), tens_val);
+	bool res = tens_val || false;
+	tensorWriteARM(tens_out, uint[](coord_0), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 1> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 1> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint tensor_element_count = size_d0;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1) % size_d0;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0), tens_val);
+	bool res = tens_val || true;
+	tensorWriteARM(tens_out, uint[](coord_0), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 1> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 1> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint tensor_element_count = size_d0;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1) % size_d0;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0), tens_val);
+	bool res = !tens_val;
+	tensorWriteARM(tens_out, uint[](coord_0), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 1> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 1> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint tensor_element_count = size_d0;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1) % size_d0;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0), tens_val);
+	bool res = tens_val ^^ false;
+	tensorWriteARM(tens_out, uint[](coord_0), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 1> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 1> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint tensor_element_count = size_d0;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1) % size_d0;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0), tens_val);
+	bool res = tens_val ^^ true;
+	tensorWriteARM(tens_out, uint[](coord_0), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 2> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 2> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint tensor_element_count = size_d0 * size_d1;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1) % size_d1;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1), tens_val);
+	bool res = tens_val && false;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 2> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 2> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint tensor_element_count = size_d0 * size_d1;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1) % size_d1;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1), tens_val);
+	bool res = tens_val && true;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 2> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 2> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint tensor_element_count = size_d0 * size_d1;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1) % size_d1;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1), tens_val);
+	bool res = tens_val || false;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 2> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 2> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint tensor_element_count = size_d0 * size_d1;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1) % size_d1;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1), tens_val);
+	bool res = tens_val || true;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 2> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 2> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint tensor_element_count = size_d0 * size_d1;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1) % size_d1;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1), tens_val);
+	bool res = !tens_val;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 2> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 2> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint tensor_element_count = size_d0 * size_d1;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1) % size_d1;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1), tens_val);
+	bool res = tens_val ^^ false;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 2> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 2> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint tensor_element_count = size_d0 * size_d1;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1) % size_d1;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1), tens_val);
+	bool res = tens_val ^^ true;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 3> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 3> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint size_d2 = tensorSizeARM(tens, 2);
+	const uint tensor_element_count = size_d0 * size_d1 * size_d2;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1 * size_d2) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1 * size_d2) % size_d1;
+	const uint coord_2 = gl_GlobalInvocationID.x / (1) % size_d2;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1, coord_2), tens_val);
+	bool res = tens_val && false;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1, coord_2), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 3> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 3> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint size_d2 = tensorSizeARM(tens, 2);
+	const uint tensor_element_count = size_d0 * size_d1 * size_d2;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1 * size_d2) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1 * size_d2) % size_d1;
+	const uint coord_2 = gl_GlobalInvocationID.x / (1) % size_d2;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1, coord_2), tens_val);
+	bool res = tens_val && true;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1, coord_2), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 3> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 3> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint size_d2 = tensorSizeARM(tens, 2);
+	const uint tensor_element_count = size_d0 * size_d1 * size_d2;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1 * size_d2) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1 * size_d2) % size_d1;
+	const uint coord_2 = gl_GlobalInvocationID.x / (1) % size_d2;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1, coord_2), tens_val);
+	bool res = tens_val || false;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1, coord_2), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 3> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 3> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint size_d2 = tensorSizeARM(tens, 2);
+	const uint tensor_element_count = size_d0 * size_d1 * size_d2;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1 * size_d2) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1 * size_d2) % size_d1;
+	const uint coord_2 = gl_GlobalInvocationID.x / (1) % size_d2;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1, coord_2), tens_val);
+	bool res = tens_val || true;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1, coord_2), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 3> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 3> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint size_d2 = tensorSizeARM(tens, 2);
+	const uint tensor_element_count = size_d0 * size_d1 * size_d2;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1 * size_d2) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1 * size_d2) % size_d1;
+	const uint coord_2 = gl_GlobalInvocationID.x / (1) % size_d2;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1, coord_2), tens_val);
+	bool res = !tens_val;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1, coord_2), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 3> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 3> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint size_d2 = tensorSizeARM(tens, 2);
+	const uint tensor_element_count = size_d0 * size_d1 * size_d2;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1 * size_d2) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1 * size_d2) % size_d1;
+	const uint coord_2 = gl_GlobalInvocationID.x / (1) % size_d2;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1, coord_2), tens_val);
+	bool res = tens_val ^^ false;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1, coord_2), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 3> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 3> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint size_d2 = tensorSizeARM(tens, 2);
+	const uint tensor_element_count = size_d0 * size_d1 * size_d2;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1 * size_d2) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1 * size_d2) % size_d1;
+	const uint coord_2 = gl_GlobalInvocationID.x / (1) % size_d2;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1, coord_2), tens_val);
+	bool res = tens_val ^^ true;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1, coord_2), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 4> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 4> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint size_d2 = tensorSizeARM(tens, 2);
+	const uint size_d3 = tensorSizeARM(tens, 3);
+	const uint tensor_element_count = size_d0 * size_d1 * size_d2 * size_d3;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1 * size_d2 * size_d3) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1 * size_d2 * size_d3) % size_d1;
+	const uint coord_2 = gl_GlobalInvocationID.x / (1 * size_d3) % size_d2;
+	const uint coord_3 = gl_GlobalInvocationID.x / (1) % size_d3;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1, coord_2, coord_3), tens_val);
+	bool res = tens_val && false;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1, coord_2, coord_3), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 4> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 4> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint size_d2 = tensorSizeARM(tens, 2);
+	const uint size_d3 = tensorSizeARM(tens, 3);
+	const uint tensor_element_count = size_d0 * size_d1 * size_d2 * size_d3;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1 * size_d2 * size_d3) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1 * size_d2 * size_d3) % size_d1;
+	const uint coord_2 = gl_GlobalInvocationID.x / (1 * size_d3) % size_d2;
+	const uint coord_3 = gl_GlobalInvocationID.x / (1) % size_d3;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1, coord_2, coord_3), tens_val);
+	bool res = tens_val && true;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1, coord_2, coord_3), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 4> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 4> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint size_d2 = tensorSizeARM(tens, 2);
+	const uint size_d3 = tensorSizeARM(tens, 3);
+	const uint tensor_element_count = size_d0 * size_d1 * size_d2 * size_d3;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1 * size_d2 * size_d3) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1 * size_d2 * size_d3) % size_d1;
+	const uint coord_2 = gl_GlobalInvocationID.x / (1 * size_d3) % size_d2;
+	const uint coord_3 = gl_GlobalInvocationID.x / (1) % size_d3;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1, coord_2, coord_3), tens_val);
+	bool res = tens_val || false;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1, coord_2, coord_3), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 4> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 4> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint size_d2 = tensorSizeARM(tens, 2);
+	const uint size_d3 = tensorSizeARM(tens, 3);
+	const uint tensor_element_count = size_d0 * size_d1 * size_d2 * size_d3;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1 * size_d2 * size_d3) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1 * size_d2 * size_d3) % size_d1;
+	const uint coord_2 = gl_GlobalInvocationID.x / (1 * size_d3) % size_d2;
+	const uint coord_3 = gl_GlobalInvocationID.x / (1) % size_d3;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1, coord_2, coord_3), tens_val);
+	bool res = tens_val || true;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1, coord_2, coord_3), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 4> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 4> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint size_d2 = tensorSizeARM(tens, 2);
+	const uint size_d3 = tensorSizeARM(tens, 3);
+	const uint tensor_element_count = size_d0 * size_d1 * size_d2 * size_d3;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1 * size_d2 * size_d3) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1 * size_d2 * size_d3) % size_d1;
+	const uint coord_2 = gl_GlobalInvocationID.x / (1 * size_d3) % size_d2;
+	const uint coord_3 = gl_GlobalInvocationID.x / (1) % size_d3;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1, coord_2, coord_3), tens_val);
+	bool res = !tens_val;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1, coord_2, coord_3), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 4> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 4> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint size_d2 = tensorSizeARM(tens, 2);
+	const uint size_d3 = tensorSizeARM(tens, 3);
+	const uint tensor_element_count = size_d0 * size_d1 * size_d2 * size_d3;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1 * size_d2 * size_d3) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1 * size_d2 * size_d3) % size_d1;
+	const uint coord_2 = gl_GlobalInvocationID.x / (1 * size_d3) % size_d2;
+	const uint coord_3 = gl_GlobalInvocationID.x / (1) % size_d3;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1, coord_2, coord_3), tens_val);
+	bool res = tens_val ^^ false;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1, coord_2, coord_3), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 4> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 4> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint size_d2 = tensorSizeARM(tens, 2);
+	const uint size_d3 = tensorSizeARM(tens, 3);
+	const uint tensor_element_count = size_d0 * size_d1 * size_d2 * size_d3;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1 * size_d2 * size_d3) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1 * size_d2 * size_d3) % size_d1;
+	const uint coord_2 = gl_GlobalInvocationID.x / (1 * size_d3) % size_d2;
+	const uint coord_3 = gl_GlobalInvocationID.x / (1) % size_d3;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1, coord_2, coord_3), tens_val);
+	bool res = tens_val ^^ true;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1, coord_2, coord_3), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 6> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 6> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint size_d2 = tensorSizeARM(tens, 2);
+	const uint size_d3 = tensorSizeARM(tens, 3);
+	const uint size_d4 = tensorSizeARM(tens, 4);
+	const uint size_d5 = tensorSizeARM(tens, 5);
+	const uint tensor_element_count = size_d0 * size_d1 * size_d2 * size_d3 * size_d4 * size_d5;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1 * size_d2 * size_d3 * size_d4 * size_d5) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1 * size_d2 * size_d3 * size_d4 * size_d5) % size_d1;
+	const uint coord_2 = gl_GlobalInvocationID.x / (1 * size_d3 * size_d4 * size_d5) % size_d2;
+	const uint coord_3 = gl_GlobalInvocationID.x / (1 * size_d4 * size_d5) % size_d3;
+	const uint coord_4 = gl_GlobalInvocationID.x / (1 * size_d5) % size_d4;
+	const uint coord_5 = gl_GlobalInvocationID.x / (1) % size_d5;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1, coord_2, coord_3, coord_4, coord_5), tens_val);
+	bool res = tens_val && false;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1, coord_2, coord_3, coord_4, coord_5), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 6> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 6> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint size_d2 = tensorSizeARM(tens, 2);
+	const uint size_d3 = tensorSizeARM(tens, 3);
+	const uint size_d4 = tensorSizeARM(tens, 4);
+	const uint size_d5 = tensorSizeARM(tens, 5);
+	const uint tensor_element_count = size_d0 * size_d1 * size_d2 * size_d3 * size_d4 * size_d5;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1 * size_d2 * size_d3 * size_d4 * size_d5) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1 * size_d2 * size_d3 * size_d4 * size_d5) % size_d1;
+	const uint coord_2 = gl_GlobalInvocationID.x / (1 * size_d3 * size_d4 * size_d5) % size_d2;
+	const uint coord_3 = gl_GlobalInvocationID.x / (1 * size_d4 * size_d5) % size_d3;
+	const uint coord_4 = gl_GlobalInvocationID.x / (1 * size_d5) % size_d4;
+	const uint coord_5 = gl_GlobalInvocationID.x / (1) % size_d5;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1, coord_2, coord_3, coord_4, coord_5), tens_val);
+	bool res = tens_val && true;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1, coord_2, coord_3, coord_4, coord_5), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 6> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 6> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint size_d2 = tensorSizeARM(tens, 2);
+	const uint size_d3 = tensorSizeARM(tens, 3);
+	const uint size_d4 = tensorSizeARM(tens, 4);
+	const uint size_d5 = tensorSizeARM(tens, 5);
+	const uint tensor_element_count = size_d0 * size_d1 * size_d2 * size_d3 * size_d4 * size_d5;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1 * size_d2 * size_d3 * size_d4 * size_d5) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1 * size_d2 * size_d3 * size_d4 * size_d5) % size_d1;
+	const uint coord_2 = gl_GlobalInvocationID.x / (1 * size_d3 * size_d4 * size_d5) % size_d2;
+	const uint coord_3 = gl_GlobalInvocationID.x / (1 * size_d4 * size_d5) % size_d3;
+	const uint coord_4 = gl_GlobalInvocationID.x / (1 * size_d5) % size_d4;
+	const uint coord_5 = gl_GlobalInvocationID.x / (1) % size_d5;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1, coord_2, coord_3, coord_4, coord_5), tens_val);
+	bool res = tens_val || false;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1, coord_2, coord_3, coord_4, coord_5), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 6> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 6> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint size_d2 = tensorSizeARM(tens, 2);
+	const uint size_d3 = tensorSizeARM(tens, 3);
+	const uint size_d4 = tensorSizeARM(tens, 4);
+	const uint size_d5 = tensorSizeARM(tens, 5);
+	const uint tensor_element_count = size_d0 * size_d1 * size_d2 * size_d3 * size_d4 * size_d5;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1 * size_d2 * size_d3 * size_d4 * size_d5) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1 * size_d2 * size_d3 * size_d4 * size_d5) % size_d1;
+	const uint coord_2 = gl_GlobalInvocationID.x / (1 * size_d3 * size_d4 * size_d5) % size_d2;
+	const uint coord_3 = gl_GlobalInvocationID.x / (1 * size_d4 * size_d5) % size_d3;
+	const uint coord_4 = gl_GlobalInvocationID.x / (1 * size_d5) % size_d4;
+	const uint coord_5 = gl_GlobalInvocationID.x / (1) % size_d5;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1, coord_2, coord_3, coord_4, coord_5), tens_val);
+	bool res = tens_val || true;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1, coord_2, coord_3, coord_4, coord_5), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 6> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 6> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint size_d2 = tensorSizeARM(tens, 2);
+	const uint size_d3 = tensorSizeARM(tens, 3);
+	const uint size_d4 = tensorSizeARM(tens, 4);
+	const uint size_d5 = tensorSizeARM(tens, 5);
+	const uint tensor_element_count = size_d0 * size_d1 * size_d2 * size_d3 * size_d4 * size_d5;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1 * size_d2 * size_d3 * size_d4 * size_d5) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1 * size_d2 * size_d3 * size_d4 * size_d5) % size_d1;
+	const uint coord_2 = gl_GlobalInvocationID.x / (1 * size_d3 * size_d4 * size_d5) % size_d2;
+	const uint coord_3 = gl_GlobalInvocationID.x / (1 * size_d4 * size_d5) % size_d3;
+	const uint coord_4 = gl_GlobalInvocationID.x / (1 * size_d5) % size_d4;
+	const uint coord_5 = gl_GlobalInvocationID.x / (1) % size_d5;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1, coord_2, coord_3, coord_4, coord_5), tens_val);
+	bool res = !tens_val;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1, coord_2, coord_3, coord_4, coord_5), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 6> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 6> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint size_d2 = tensorSizeARM(tens, 2);
+	const uint size_d3 = tensorSizeARM(tens, 3);
+	const uint size_d4 = tensorSizeARM(tens, 4);
+	const uint size_d5 = tensorSizeARM(tens, 5);
+	const uint tensor_element_count = size_d0 * size_d1 * size_d2 * size_d3 * size_d4 * size_d5;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1 * size_d2 * size_d3 * size_d4 * size_d5) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1 * size_d2 * size_d3 * size_d4 * size_d5) % size_d1;
+	const uint coord_2 = gl_GlobalInvocationID.x / (1 * size_d3 * size_d4 * size_d5) % size_d2;
+	const uint coord_3 = gl_GlobalInvocationID.x / (1 * size_d4 * size_d5) % size_d3;
+	const uint coord_4 = gl_GlobalInvocationID.x / (1 * size_d5) % size_d4;
+	const uint coord_5 = gl_GlobalInvocationID.x / (1) % size_d5;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1, coord_2, coord_3, coord_4, coord_5), tens_val);
+	bool res = tens_val ^^ false;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1, coord_2, coord_3, coord_4, coord_5), res);
+}
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<bool, 6> tens;
+layout(set=0, binding = 1) uniform tensorARM<bool, 6> tens_out;
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint size_d1 = tensorSizeARM(tens, 1);
+	const uint size_d2 = tensorSizeARM(tens, 2);
+	const uint size_d3 = tensorSizeARM(tens, 3);
+	const uint size_d4 = tensorSizeARM(tens, 4);
+	const uint size_d5 = tensorSizeARM(tens, 5);
+	const uint tensor_element_count = size_d0 * size_d1 * size_d2 * size_d3 * size_d4 * size_d5;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1 * size_d1 * size_d2 * size_d3 * size_d4 * size_d5) % size_d0;
+	const uint coord_1 = gl_GlobalInvocationID.x / (1 * size_d2 * size_d3 * size_d4 * size_d5) % size_d1;
+	const uint coord_2 = gl_GlobalInvocationID.x / (1 * size_d3 * size_d4 * size_d5) % size_d2;
+	const uint coord_3 = gl_GlobalInvocationID.x / (1 * size_d4 * size_d5) % size_d3;
+	const uint coord_4 = gl_GlobalInvocationID.x / (1 * size_d5) % size_d4;
+	const uint coord_5 = gl_GlobalInvocationID.x / (1) % size_d5;
+	bool tens_val;
+	tensorReadARM(tens, uint[](coord_0, coord_1, coord_2, coord_3, coord_4, coord_5), tens_val);
+	bool res = tens_val ^^ true;
+	tensorWriteARM(tens_out, uint[](coord_0, coord_1, coord_2, coord_3, coord_4, coord_5), res);
+}

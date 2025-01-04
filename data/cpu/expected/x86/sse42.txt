@@ -1,0 +1,216 @@
+# Expected values captured from real hardware for this extension's generated tests.
+# Format: test_name - rust_expr
+#
+# One file per (architecture, extension) - written by scripts/cpu/capture_expected.py and
+# capture_expected_cross.py, read by generate_tests.py. Do not hand-edit: recapture instead.
+# A qemu-derived value is not a real-silicon one; see CLAUDE.md's "Non-x86 architectures".
+
+test_x86_sse42_mm_cmpestra - 0
+test_x86_sse42_mm_cmpestra_asym_max_min - 0
+test_x86_sse42_mm_cmpestra_asym_min_max - 0
+test_x86_sse42_mm_cmpestra_boundary_allones - 0
+test_x86_sse42_mm_cmpestra_boundary_max - 0
+test_x86_sse42_mm_cmpestra_boundary_min - 0
+test_x86_sse42_mm_cmpestra_boundary_mixed - 0
+test_x86_sse42_mm_cmpestra_boundary_zero - 0
+test_x86_sse42_mm_cmpestra_imm_1 - 0
+test_x86_sse42_mm_cmpestra_imm_255 - 0
+test_x86_sse42_mm_cmpestra_imm_31 - 0
+test_x86_sse42_mm_cmpestra_imm_32 - 0
+test_x86_sse42_mm_cmpestra_normal2 - 0
+test_x86_sse42_mm_cmpestra_normal3 - 0
+test_x86_sse42_mm_cmpestrc - 1
+test_x86_sse42_mm_cmpestrc_asym_max_min - 0
+test_x86_sse42_mm_cmpestrc_asym_min_max - 0
+test_x86_sse42_mm_cmpestrc_boundary_allones - 1
+test_x86_sse42_mm_cmpestrc_boundary_max - 1
+test_x86_sse42_mm_cmpestrc_boundary_min - 1
+test_x86_sse42_mm_cmpestrc_boundary_mixed - 1
+test_x86_sse42_mm_cmpestrc_boundary_zero - 1
+test_x86_sse42_mm_cmpestrc_imm_1 - 1
+test_x86_sse42_mm_cmpestrc_imm_255 - 1
+test_x86_sse42_mm_cmpestrc_imm_31 - 1
+test_x86_sse42_mm_cmpestrc_imm_32 - 1
+test_x86_sse42_mm_cmpestrc_normal2 - 1
+test_x86_sse42_mm_cmpestrc_normal3 - 0
+test_x86_sse42_mm_cmpestri - 1
+test_x86_sse42_mm_cmpestri_asym_max_min - 16
+test_x86_sse42_mm_cmpestri_asym_min_max - 16
+test_x86_sse42_mm_cmpestri_boundary_allones - 0
+test_x86_sse42_mm_cmpestri_boundary_max - 0
+test_x86_sse42_mm_cmpestri_boundary_min - 0
+test_x86_sse42_mm_cmpestri_boundary_mixed - 0
+test_x86_sse42_mm_cmpestri_boundary_zero - 0
+test_x86_sse42_mm_cmpestri_imm_1 - 1
+test_x86_sse42_mm_cmpestri_imm_255 - 7
+test_x86_sse42_mm_cmpestri_imm_31 - 0
+test_x86_sse42_mm_cmpestri_imm_32 - 1
+test_x86_sse42_mm_cmpestri_normal2 - 1
+test_x86_sse42_mm_cmpestri_normal3 - 16
+test_x86_sse42_mm_cmpestrm - [750, 0, 0, 0]
+test_x86_sse42_mm_cmpestrm_asym_max_min - [0, 0, 0, 0]
+test_x86_sse42_mm_cmpestrm_asym_min_max - [0, 0, 0, 0]
+test_x86_sse42_mm_cmpestrm_boundary_allones - [3, 0, 0, 0]
+test_x86_sse42_mm_cmpestrm_boundary_max - [3, 0, 0, 0]
+test_x86_sse42_mm_cmpestrm_boundary_min - [3, 0, 0, 0]
+test_x86_sse42_mm_cmpestrm_boundary_mixed - [3, 0, 0, 0]
+test_x86_sse42_mm_cmpestrm_boundary_zero - [3, 0, 0, 0]
+test_x86_sse42_mm_cmpestrm_imm_1 - [170, 0, 0, 0]
+test_x86_sse42_mm_cmpestrm_imm_255 - [-1, -1, -1, -1]
+test_x86_sse42_mm_cmpestrm_imm_31 - [255, 0, 0, 0]
+test_x86_sse42_mm_cmpestrm_imm_32 - [750, 0, 0, 0]
+test_x86_sse42_mm_cmpestrm_normal2 - [2, 0, 0, 0]
+test_x86_sse42_mm_cmpestrm_normal3 - [0, 0, 0, 0]
+test_x86_sse42_mm_cmpestro - 0
+test_x86_sse42_mm_cmpestro_asym_max_min - 0
+test_x86_sse42_mm_cmpestro_asym_min_max - 0
+test_x86_sse42_mm_cmpestro_boundary_allones - 1
+test_x86_sse42_mm_cmpestro_boundary_max - 1
+test_x86_sse42_mm_cmpestro_boundary_min - 1
+test_x86_sse42_mm_cmpestro_boundary_mixed - 1
+test_x86_sse42_mm_cmpestro_boundary_zero - 1
+test_x86_sse42_mm_cmpestro_imm_1 - 0
+test_x86_sse42_mm_cmpestro_imm_255 - 1
+test_x86_sse42_mm_cmpestro_imm_31 - 1
+test_x86_sse42_mm_cmpestro_imm_32 - 0
+test_x86_sse42_mm_cmpestro_normal2 - 0
+test_x86_sse42_mm_cmpestro_normal3 - 0
+test_x86_sse42_mm_cmpestrs - 1
+test_x86_sse42_mm_cmpestrs_asym_max_min - 1
+test_x86_sse42_mm_cmpestrs_asym_min_max - 1
+test_x86_sse42_mm_cmpestrs_boundary_allones - 1
+test_x86_sse42_mm_cmpestrs_boundary_max - 1
+test_x86_sse42_mm_cmpestrs_boundary_min - 1
+test_x86_sse42_mm_cmpestrs_boundary_mixed - 1
+test_x86_sse42_mm_cmpestrs_boundary_zero - 1
+test_x86_sse42_mm_cmpestrs_imm_1 - 1
+test_x86_sse42_mm_cmpestrs_imm_255 - 1
+test_x86_sse42_mm_cmpestrs_imm_31 - 1
+test_x86_sse42_mm_cmpestrs_imm_32 - 1
+test_x86_sse42_mm_cmpestrs_normal2 - 1
+test_x86_sse42_mm_cmpestrs_normal3 - 1
+test_x86_sse42_mm_cmpestrz - 1
+test_x86_sse42_mm_cmpestrz_asym_max_min - 1
+test_x86_sse42_mm_cmpestrz_asym_min_max - 1
+test_x86_sse42_mm_cmpestrz_boundary_allones - 1
+test_x86_sse42_mm_cmpestrz_boundary_max - 1
+test_x86_sse42_mm_cmpestrz_boundary_min - 1
+test_x86_sse42_mm_cmpestrz_boundary_mixed - 1
+test_x86_sse42_mm_cmpestrz_boundary_zero - 1
+test_x86_sse42_mm_cmpestrz_imm_1 - 0
+test_x86_sse42_mm_cmpestrz_imm_255 - 0
+test_x86_sse42_mm_cmpestrz_imm_31 - 0
+test_x86_sse42_mm_cmpestrz_imm_32 - 1
+test_x86_sse42_mm_cmpestrz_normal2 - 1
+test_x86_sse42_mm_cmpestrz_normal3 - 1
+test_x86_sse42_mm_cmpgt_epi64 - [0, 0]
+test_x86_sse42_mm_cmpgt_epi64_asym_max_min - [-1, -1]
+test_x86_sse42_mm_cmpgt_epi64_asym_min_max - [0, 0]
+test_x86_sse42_mm_cmpgt_epi64_boundary_allones - [0, 0]
+test_x86_sse42_mm_cmpgt_epi64_boundary_max - [0, 0]
+test_x86_sse42_mm_cmpgt_epi64_boundary_min - [0, 0]
+test_x86_sse42_mm_cmpgt_epi64_boundary_mixed - [0, 0]
+test_x86_sse42_mm_cmpgt_epi64_boundary_zero - [0, 0]
+test_x86_sse42_mm_cmpgt_epi64_normal2 - [0, 0]
+test_x86_sse42_mm_cmpgt_epi64_normal3 - [0, 0]
+test_x86_sse42_mm_cmpistra - 0
+test_x86_sse42_mm_cmpistra_asym_max_min - 0
+test_x86_sse42_mm_cmpistra_asym_min_max - 1
+test_x86_sse42_mm_cmpistra_boundary_allones - 0
+test_x86_sse42_mm_cmpistra_boundary_max - 0
+test_x86_sse42_mm_cmpistra_boundary_min - 0
+test_x86_sse42_mm_cmpistra_boundary_mixed - 0
+test_x86_sse42_mm_cmpistra_boundary_zero - 0
+test_x86_sse42_mm_cmpistra_imm_1 - 0
+test_x86_sse42_mm_cmpistra_imm_255 - 0
+test_x86_sse42_mm_cmpistra_imm_31 - 0
+test_x86_sse42_mm_cmpistra_imm_32 - 0
+test_x86_sse42_mm_cmpistra_normal2 - 0
+test_x86_sse42_mm_cmpistra_normal3 - 0
+test_x86_sse42_mm_cmpistrc - 0
+test_x86_sse42_mm_cmpistrc_asym_max_min - 0
+test_x86_sse42_mm_cmpistrc_asym_min_max - 0
+test_x86_sse42_mm_cmpistrc_boundary_allones - 1
+test_x86_sse42_mm_cmpistrc_boundary_max - 1
+test_x86_sse42_mm_cmpistrc_boundary_min - 0
+test_x86_sse42_mm_cmpistrc_boundary_mixed - 0
+test_x86_sse42_mm_cmpistrc_boundary_zero - 0
+test_x86_sse42_mm_cmpistrc_imm_1 - 0
+test_x86_sse42_mm_cmpistrc_imm_255 - 1
+test_x86_sse42_mm_cmpistrc_imm_31 - 1
+test_x86_sse42_mm_cmpistrc_imm_32 - 0
+test_x86_sse42_mm_cmpistrc_normal2 - 0
+test_x86_sse42_mm_cmpistrc_normal3 - 0
+test_x86_sse42_mm_cmpistri - 16
+test_x86_sse42_mm_cmpistri_asym_max_min - 16
+test_x86_sse42_mm_cmpistri_asym_min_max - 16
+test_x86_sse42_mm_cmpistri_boundary_allones - 0
+test_x86_sse42_mm_cmpistri_boundary_max - 0
+test_x86_sse42_mm_cmpistri_boundary_min - 16
+test_x86_sse42_mm_cmpistri_boundary_mixed - 16
+test_x86_sse42_mm_cmpistri_boundary_zero - 16
+test_x86_sse42_mm_cmpistri_imm_1 - 8
+test_x86_sse42_mm_cmpistri_imm_255 - 0
+test_x86_sse42_mm_cmpistri_imm_31 - 0
+test_x86_sse42_mm_cmpistri_imm_32 - 16
+test_x86_sse42_mm_cmpistri_normal2 - 16
+test_x86_sse42_mm_cmpistri_normal3 - 16
+test_x86_sse42_mm_cmpistrm - [0, 0, 0, 0]
+test_x86_sse42_mm_cmpistrm_asym_max_min - [0, 0, 0, 0]
+test_x86_sse42_mm_cmpistrm_asym_min_max - [0, 0, 0, 0]
+test_x86_sse42_mm_cmpistrm_boundary_allones - [65535, 0, 0, 0]
+test_x86_sse42_mm_cmpistrm_boundary_max - [65535, 0, 0, 0]
+test_x86_sse42_mm_cmpistrm_boundary_min - [0, 0, 0, 0]
+test_x86_sse42_mm_cmpistrm_boundary_mixed - [0, 0, 0, 0]
+test_x86_sse42_mm_cmpistrm_boundary_zero - [0, 0, 0, 0]
+test_x86_sse42_mm_cmpistrm_imm_1 - [0, 0, 0, 0]
+test_x86_sse42_mm_cmpistrm_imm_255 - [65535, 0, 0, 0]
+test_x86_sse42_mm_cmpistrm_imm_31 - [255, 0, 0, 0]
+test_x86_sse42_mm_cmpistrm_imm_32 - [0, 0, 0, 0]
+test_x86_sse42_mm_cmpistrm_normal2 - [0, 0, 0, 0]
+test_x86_sse42_mm_cmpistrm_normal3 - [0, 0, 0, 0]
+test_x86_sse42_mm_cmpistro - 0
+test_x86_sse42_mm_cmpistro_asym_max_min - 0
+test_x86_sse42_mm_cmpistro_asym_min_max - 0
+test_x86_sse42_mm_cmpistro_boundary_allones - 1
+test_x86_sse42_mm_cmpistro_boundary_max - 1
+test_x86_sse42_mm_cmpistro_boundary_min - 0
+test_x86_sse42_mm_cmpistro_boundary_mixed - 0
+test_x86_sse42_mm_cmpistro_boundary_zero - 0
+test_x86_sse42_mm_cmpistro_imm_1 - 0
+test_x86_sse42_mm_cmpistro_imm_255 - 1
+test_x86_sse42_mm_cmpistro_imm_31 - 1
+test_x86_sse42_mm_cmpistro_imm_32 - 0
+test_x86_sse42_mm_cmpistro_normal2 - 0
+test_x86_sse42_mm_cmpistro_normal3 - 0
+test_x86_sse42_mm_cmpistrs - 1
+test_x86_sse42_mm_cmpistrs_asym_max_min - 0
+test_x86_sse42_mm_cmpistrs_asym_min_max - 1
+test_x86_sse42_mm_cmpistrs_boundary_allones - 0
+test_x86_sse42_mm_cmpistrs_boundary_max - 0
+test_x86_sse42_mm_cmpistrs_boundary_min - 1
+test_x86_sse42_mm_cmpistrs_boundary_mixed - 1
+test_x86_sse42_mm_cmpistrs_boundary_zero - 1
+test_x86_sse42_mm_cmpistrs_imm_1 - 1
+test_x86_sse42_mm_cmpistrs_imm_255 - 1
+test_x86_sse42_mm_cmpistrs_imm_31 - 1
+test_x86_sse42_mm_cmpistrs_imm_32 - 1
+test_x86_sse42_mm_cmpistrs_normal2 - 1
+test_x86_sse42_mm_cmpistrs_normal3 - 1
+test_x86_sse42_mm_cmpistrz - 1
+test_x86_sse42_mm_cmpistrz_asym_max_min - 1
+test_x86_sse42_mm_cmpistrz_asym_min_max - 0
+test_x86_sse42_mm_cmpistrz_boundary_allones - 0
+test_x86_sse42_mm_cmpistrz_boundary_max - 0
+test_x86_sse42_mm_cmpistrz_boundary_min - 1
+test_x86_sse42_mm_cmpistrz_boundary_mixed - 1
+test_x86_sse42_mm_cmpistrz_boundary_zero - 1
+test_x86_sse42_mm_cmpistrz_imm_1 - 1
+test_x86_sse42_mm_cmpistrz_imm_255 - 1
+test_x86_sse42_mm_cmpistrz_imm_31 - 1
+test_x86_sse42_mm_cmpistrz_imm_32 - 1
+test_x86_sse42_mm_cmpistrz_normal2 - 1
+test_x86_sse42_mm_cmpistrz_normal3 - 1
+test_x86_sse42_mm_crc32_u16 - 887597209
+test_x86_sse42_mm_crc32_u32 - 1646430521
+test_x86_sse42_mm_crc32_u8 - 324072436

@@ -1,0 +1,36 @@
+#version 450
+layout(local_size_x = 1) in;
+
+struct Inputs
+{
+	highp int input1;
+};
+struct Outputs
+{
+	highp uint outVal;
+};
+
+layout(set = 0, binding = 0, std430) buffer InBuffer
+{
+    Inputs inputs[];
+};
+layout(set = 0, binding = 1, std430) buffer OutBuffer
+{
+    Outputs outputs[];
+};
+
+void main (void)
+{
+    uint invocationNdx = gl_NumWorkGroups.x*gl_NumWorkGroups.y*gl_WorkGroupID.z
+                       + gl_NumWorkGroups.x*gl_WorkGroupID.y + gl_WorkGroupID.x;
+	int input1 = int(inputs[invocationNdx].input1);
+	uint outVal;
+
+	// a.y evaluates to (2u | 1u) = 3u. On a buggy driver, the compiler
+	// misoptimizes the negation and modulo operations
+	uvec2 a = uvec2(input1, 2u) | 1u;
+	uint b = ~a.y;
+	outVal = b % 2u;
+
+	outputs[invocationNdx].outVal = outVal;
+}

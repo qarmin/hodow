@@ -1,0 +1,11 @@
+#version 450
+layout(location = 0) flat in highp uvec2 vtx_out_sum;
+layout(location = 1) flat in lowp uvec2 vtx_out_carry;
+layout(location = 0) out highp uvec2 o_sum;
+layout(location = 1) out lowp uvec2 o_carry;
+
+void main (void)
+{
+	o_sum = vtx_out_sum;
+	o_carry = vtx_out_carry;
+}

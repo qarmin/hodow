@@ -1,0 +1,18 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.multisample.sample_rate_a2c.*
+#
+# `SampleRateAlphaToCoverageCase::initPrograms` for the fixed 3x16 framebuffer with 4 samples: a full-screen triangle, a
+# fragment shader that outputs the alpha of its own sample from a buffer, and a compute shader that expands the multisample
+# image into a single sample one with a 2x2 block per pixel.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineMultisampleTests.cpp"
+rust_module = "pipeline/sample_rate_a2c_tests"
+
+[[case]]
+name = "sample_rate_a2c"
+rust_const = "SAMPLE_RATE_A2C"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/sample_rate_a2c/sample_rate.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sample_rate_a2c/sample_rate.frag", stage = "frag" },
+    { name = "comp", template = "pipeline/sample_rate_a2c/sample_rate.comp", stage = "comp" },
+]

@@ -1,0 +1,86 @@
+# Which crate each Vulkan test group (src/vkt/tests/<group>) is compiled in.
+#
+# The Vulkan half is ~590k lines of tests, and rustc needs about a gigabyte of memory per 50k of them to type-check, so in one
+# crate it does not fit on a 16 GB machine. The groups are split over several crates that share this source tree (each crate's
+# root file is src/vk_<name>.rs and finds the groups with #[path]; no file moved):
+#
+#   main      the groups that depend on each other in a cycle (api, draw, pipeline, ...) and what they depend on. One crate,
+#             because a crate cannot depend on a crate that depends on it.
+#   a .. d    the rest, packed to about the same size. A group in one of these may use `main`, never another of these.
+#
+# `python3 hodow_cts/scripts/vk_crates.py` writes the root files, the module lists and the manifests from this file;
+# `--check` (part of `just cts-verify`) fails when they or the groups on disk disagree with it. A group moves by editing it here.
+
+[crates.main]
+groups = [
+    "api",
+    "conditional_rendering",
+    "draw",
+    "fragment_ops",
+    "mesh_shader",
+    "pipeline",
+    "shader_object",
+    "shaderexecutor",
+    "synchronization",
+    "util",
+    "wsi",
+    "ycbcr",
+]
+
+[crates.a]
+groups = [
+    "compute",
+    "dgc",
+    "descriptor_indexing",
+    "fragment_shader_interlock",
+    "fragment_shading_barycentric",
+    "geometry",
+    "glsl",
+    "graphicsfuzz",
+    "memory_model",
+    "robustness",
+    "spirv_assembly",
+]
+
+[crates.b]
+groups = [
+    "dynamic_state",
+    "fragment_shading_rate",
+    "multiview",
+    "query_pool",
+    "reconvergence",
+    "renderpass",
+]
+
+[crates.c]
+groups = [
+    "clipping",
+    "depth",
+    "drm_format_modifiers",
+    "image",
+    "memory",
+    "postmortem",
+    "rasterization",
+    "sparse_resources",
+    "subgroups",
+    "texture",
+]
+
+[crates.d]
+groups = [
+    "binding_model",
+    "cooperative_vector",
+    "data_graph",
+    "image_processing",
+    "imageless_framebuffer",
+    "info",
+    "protected_memory",
+    "ray_query",
+    "ray_tracing_pipeline",
+    "ssbo",
+    "tensor",
+    "tessellation",
+    "transform_feedback",
+    "ubo",
+    "video",
+]

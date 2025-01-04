@@ -1,0 +1,34 @@
+#version 450
+#extension GL_EXT_bfloat16: require
+layout(binding=0) buffer InBufferX { bf16vec4 x[]; };
+layout(binding=1) buffer InBufferY { bf16vec4 y[]; };
+layout(binding=2) buffer OutBuffer { bf16vec4 z[]; };
+layout(local_size_x_id = 0, local_size_y_id = 2, local_size_z_id = 4) in;
+// local_size_x_id
+layout(constant_id = 1)  const bfloat16_t c1 = bfloat16_t(0.0);
+// local_size_y_id
+layout(constant_id = 3)  const bfloat16_t c3 = bfloat16_t(0.0);
+// local_size_z_id
+layout(constant_id = 5)  const bfloat16_t c5 = bfloat16_t(0.0);
+layout(constant_id = 6)  const bfloat16_t c6 = bfloat16_t(0.0);
+layout(constant_id = 7)  const float c7 = 0.0;
+layout(constant_id = 8)  const bfloat16_t c8 = bfloat16_t(0.0);
+layout(constant_id = 9)  const bfloat16_t c9 = bfloat16_t(0.0);
+layout(constant_id = 10) const bfloat16_t c10 = bfloat16_t(0.0);
+layout(constant_id = 11) const float c11 = 0.0;
+const bfloat16_t c12 = bfloat16_t(c11);
+const float c13 = float(c12);
+void main() {
+    z[0].x = bfloat16_t(float(gl_WorkGroupSize.x));
+    z[0].y = bfloat16_t(c1);
+    z[0].z = bfloat16_t(float(gl_WorkGroupSize.y));
+    z[0].w = bfloat16_t(c3);
+    z[1].x = bfloat16_t(float(gl_WorkGroupSize.z));
+    z[1].y = bfloat16_t(c5);
+    z[1].z = bfloat16_t(c6);
+    z[1].w = bfloat16_t(c7);
+    z[2].x = bfloat16_t(c8);
+    z[2].y = bfloat16_t(c9);
+    z[2].z = bfloat16_t(c10);
+    z[2].w = bfloat16_t(c13);
+}

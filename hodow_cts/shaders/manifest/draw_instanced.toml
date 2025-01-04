@@ -1,0 +1,16 @@
+# Shader manifest for dEQP-VK.draw.*.instanced.*
+#
+# `InstancedDrawCase`'s constructor writes both sources inline; the vertex shader offsets each instance
+# by firstInstance-relative index and adds the per-instance colour from binding 1.
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawInstancedTests.cpp"
+rust_module = "draw/instanced_tests"
+
+[[case]]
+name = "instanced"
+rust_const = "INSTANCED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "InstancedDrawVert", template = "draw/instanced.vert", stage = "vert" },
+    { name = "InstancedDrawFrag", template = "draw/instanced.frag", stage = "frag" },
+]

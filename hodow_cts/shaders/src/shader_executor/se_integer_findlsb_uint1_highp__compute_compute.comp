@@ -1,0 +1,32 @@
+#version 450
+layout(local_size_x = 1) in;
+
+struct Inputs
+{
+	highp uint value;
+};
+struct Outputs
+{
+	lowp int lsb;
+};
+
+layout(set = 0, binding = 0, std430) buffer InBuffer
+{
+    Inputs inputs[];
+};
+layout(set = 0, binding = 1, std430) buffer OutBuffer
+{
+    Outputs outputs[];
+};
+
+void main (void)
+{
+    uint invocationNdx = gl_NumWorkGroups.x*gl_NumWorkGroups.y*gl_WorkGroupID.z
+                       + gl_NumWorkGroups.x*gl_WorkGroupID.y + gl_WorkGroupID.x;
+	uint value = uint(inputs[invocationNdx].value);
+	int lsb;
+
+	lsb = findLSB(value);
+
+	outputs[invocationNdx].lsb = lsb;
+}

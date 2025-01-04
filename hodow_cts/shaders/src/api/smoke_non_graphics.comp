@@ -1,0 +1,7 @@
+#version 450
+layout(local_size_x = ${local_size}) in;
+layout(set = 0, binding = 0, std430) writeonly buffer Out { uint v[]; } outBuffer;
+void main (void)
+{
+    outBuffer.v[gl_GlobalInvocationID.x] = gl_GlobalInvocationID.x + 1u;
+}

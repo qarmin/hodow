@@ -1,0 +1,22 @@
+#version 450
+
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+
+void main()
+{
+    vec2 v2val = vec2(0.1, 0.2);
+    vec4 v4val = vec4(0.1, 0.2, 0.3, 0.4);
+    uint uival1 = packUnorm2x16(v2val);
+    uint uival2 = packSnorm2x16(v2val);
+    uint uival3 = packUnorm4x8(v4val);
+    uint uival4 = packSnorm4x8(v4val);
+    v2val = unpackUnorm2x16(uival1);
+    v2val = unpackSnorm2x16(uival2);
+    v4val = unpackUnorm4x8(uival3);
+    v4val = unpackSnorm4x8(uival4);
+    uvec2 uv2val = uvec2(10, 20);
+    double dval = packDouble2x32(uv2val);
+    uv2val = unpackDouble2x32(dval);
+    uint uival5 = packHalf2x16(v2val);
+    v2val = unpackHalf2x16(uival5);
+}

@@ -1,0 +1,16 @@
+# Shader manifest for dEQP-VK.renderpass.dynamic_rendering.*.basic.*
+#
+# `BaseTestCase::initPrograms` of vktDynamicRenderingTests.cpp: a vertex shader that colours by depth and a fragment shader
+# writing four colour attachments whose blue channel is 0.15 times the attachment index.
+
+upstream_source = "external/vulkancts/modules/vulkan/renderpass/vktDynamicRenderingTests.cpp"
+rust_module = "renderpass/dynamic_rendering_tests"
+
+[[case]]
+name = "basic"
+rust_const = "DYNAMIC_RENDERING_BASIC"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/dynamic_rendering_basic.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/dynamic_rendering_basic.frag", stage = "frag" },
+]

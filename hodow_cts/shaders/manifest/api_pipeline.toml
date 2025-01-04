@@ -1,0 +1,48 @@
+# Shader manifest for dEQP-VK.api.pipeline.*
+#
+# Four shader sets from vktApiPipelineTests.cpp, each shared by the cases that name it upstream:
+#   draw_triangle          createDrawTriangleSource ("vertex", "fragment"): destroy_pipeline_renderpass and
+#                          pipeline_layout.lifetime.destroy_after_graphics_pipeline_construction
+#   layout_lifetime        createPipelineLayoutLifetimeGraphicsSource + ...ComputeSource ("vertex", "fragment", "compute")
+#   destroy_early          destroyEarlyComputeSource ("comp"): destroy_after_end and destroy_after_compute_pipeline_construction
+#   invalid_pointers       the unused-structs graphics and compute sources ("vertex", "fragment", "compute")
+# The graphics and compute halves of the last two live in one collection because no case uses both and the
+# names do not collide.
+
+upstream_source = "external/vulkancts/modules/vulkan/api/vktApiPipelineTests.cpp"
+rust_module = "api/pipeline_tests"
+
+[[case]]
+name = "draw_triangle"
+rust_const = "DRAW_TRIANGLE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "api/pipeline_draw_triangle.vert", stage = "vert" },
+    { name = "fragment", template = "api/pipeline_draw_triangle.frag", stage = "frag" },
+]
+
+[[case]]
+name = "layout_lifetime"
+rust_const = "LAYOUT_LIFETIME"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "api/pipeline_layout_lifetime.vert", stage = "vert" },
+    { name = "fragment", template = "api/pipeline_layout_lifetime.frag", stage = "frag" },
+    { name = "compute", template = "api/pipeline_layout_lifetime.comp", stage = "comp" },
+]
+
+[[case]]
+name = "destroy_early"
+rust_const = "DESTROY_EARLY"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "api/pipeline_destroy_early.comp", stage = "comp" }]
+
+[[case]]
+name = "invalid_pointers"
+rust_const = "INVALID_POINTERS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "api/pipeline_invalid_pointers.vert", stage = "vert" },
+    { name = "fragment", template = "api/pipeline_invalid_pointers.frag", stage = "frag" },
+    { name = "compute", template = "api/pipeline_invalid_pointers.comp", stage = "comp" },
+]

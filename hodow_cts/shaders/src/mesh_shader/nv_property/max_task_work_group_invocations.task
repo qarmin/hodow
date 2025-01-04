@@ -1,0 +1,13 @@
+#version 460
+#extension GL_NV_mesh_shader : enable
+
+layout (local_size_x=32) in;
+
+layout (set=0, binding=0) buffer OutputBlock { uint values[]; } ov;
+
+
+void main ()
+{
+    gl_TaskCountNV = 0;
+    ov.values[gl_LocalInvocationID.x] = gl_LocalInvocationID.x;
+}

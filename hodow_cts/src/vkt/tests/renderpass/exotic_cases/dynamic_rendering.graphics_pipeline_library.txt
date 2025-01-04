@@ -1,0 +1,2 @@
+performance_counters_by_region.r8g8b8a8_unorm.layers_1
+performance_counters_by_region.r8g8b8a8_unorm.layers_2

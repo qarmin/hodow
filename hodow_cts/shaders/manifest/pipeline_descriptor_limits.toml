@@ -1,0 +1,4184 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.descriptor_limits.*
+#
+# `DescriptorLimitTest::initPrograms`: a position pass-through vertex shader and a fragment (or compute) shader that
+# reads the last of `descCount` descriptors of the tested type, which is the binding `${binding}` of the template. For
+# storage buffers tested from a compute shader the result buffer takes one of the descriptors, so the binding is one lower.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineDescriptorLimitsTests.cpp"
+rust_module = "pipeline/descriptor_limits_tests"
+
+[[case]]
+name = "comp_samplers_3"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "2"
+
+[[case]]
+name = "comp_uniform_buffers_3"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "2"
+
+[[case]]
+name = "comp_storage_buffers_3"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "1"
+
+[[case]]
+name = "comp_sampled_images_3"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "2"
+
+[[case]]
+name = "comp_storage_images_3"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "2"
+
+[[case]]
+name = "comp_samplers_4"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "3"
+
+[[case]]
+name = "comp_uniform_buffers_4"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "3"
+
+[[case]]
+name = "comp_storage_buffers_4"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "2"
+
+[[case]]
+name = "comp_sampled_images_4"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "3"
+
+[[case]]
+name = "comp_storage_images_4"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "3"
+
+[[case]]
+name = "comp_samplers_5"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_5"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "4"
+
+[[case]]
+name = "comp_uniform_buffers_5"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_5"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "4"
+
+[[case]]
+name = "comp_storage_buffers_5"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_5"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "3"
+
+[[case]]
+name = "comp_sampled_images_5"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_5"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "4"
+
+[[case]]
+name = "comp_storage_images_5"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_5"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "4"
+
+[[case]]
+name = "comp_samplers_6"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_6"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "5"
+
+[[case]]
+name = "comp_uniform_buffers_6"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_6"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "5"
+
+[[case]]
+name = "comp_storage_buffers_6"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_6"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "4"
+
+[[case]]
+name = "comp_sampled_images_6"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_6"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "5"
+
+[[case]]
+name = "comp_storage_images_6"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_6"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "5"
+
+[[case]]
+name = "comp_samplers_7"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_7"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "6"
+
+[[case]]
+name = "comp_uniform_buffers_7"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_7"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "6"
+
+[[case]]
+name = "comp_storage_buffers_7"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_7"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "5"
+
+[[case]]
+name = "comp_sampled_images_7"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_7"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "6"
+
+[[case]]
+name = "comp_storage_images_7"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_7"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "6"
+
+[[case]]
+name = "comp_samplers_8"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_8"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "7"
+
+[[case]]
+name = "comp_uniform_buffers_8"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_8"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "7"
+
+[[case]]
+name = "comp_storage_buffers_8"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_8"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "6"
+
+[[case]]
+name = "comp_sampled_images_8"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_8"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "7"
+
+[[case]]
+name = "comp_storage_images_8"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_8"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "7"
+
+[[case]]
+name = "comp_samplers_9"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_9"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "8"
+
+[[case]]
+name = "comp_uniform_buffers_9"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_9"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "8"
+
+[[case]]
+name = "comp_storage_buffers_9"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_9"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "7"
+
+[[case]]
+name = "comp_sampled_images_9"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_9"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "8"
+
+[[case]]
+name = "comp_storage_images_9"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_9"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "8"
+
+[[case]]
+name = "comp_samplers_10"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_10"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "9"
+
+[[case]]
+name = "comp_uniform_buffers_10"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_10"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "9"
+
+[[case]]
+name = "comp_storage_buffers_10"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_10"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "8"
+
+[[case]]
+name = "comp_sampled_images_10"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_10"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "9"
+
+[[case]]
+name = "comp_storage_images_10"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_10"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "9"
+
+[[case]]
+name = "comp_samplers_11"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_11"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "10"
+
+[[case]]
+name = "comp_uniform_buffers_11"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_11"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "10"
+
+[[case]]
+name = "comp_storage_buffers_11"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_11"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "9"
+
+[[case]]
+name = "comp_sampled_images_11"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_11"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "10"
+
+[[case]]
+name = "comp_storage_images_11"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_11"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "10"
+
+[[case]]
+name = "comp_samplers_12"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_12"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "11"
+
+[[case]]
+name = "comp_uniform_buffers_12"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_12"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "11"
+
+[[case]]
+name = "comp_storage_buffers_12"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_12"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "10"
+
+[[case]]
+name = "comp_sampled_images_12"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_12"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "11"
+
+[[case]]
+name = "comp_storage_images_12"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_12"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "11"
+
+[[case]]
+name = "comp_samplers_13"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_13"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "12"
+
+[[case]]
+name = "comp_uniform_buffers_13"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_13"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "12"
+
+[[case]]
+name = "comp_storage_buffers_13"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_13"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "11"
+
+[[case]]
+name = "comp_sampled_images_13"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_13"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "12"
+
+[[case]]
+name = "comp_storage_images_13"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_13"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "12"
+
+[[case]]
+name = "comp_samplers_14"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_14"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "13"
+
+[[case]]
+name = "comp_uniform_buffers_14"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_14"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "13"
+
+[[case]]
+name = "comp_storage_buffers_14"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_14"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "12"
+
+[[case]]
+name = "comp_sampled_images_14"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_14"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "13"
+
+[[case]]
+name = "comp_storage_images_14"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_14"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "13"
+
+[[case]]
+name = "comp_samplers_15"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_15"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "14"
+
+[[case]]
+name = "comp_uniform_buffers_15"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_15"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "14"
+
+[[case]]
+name = "comp_storage_buffers_15"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_15"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "13"
+
+[[case]]
+name = "comp_sampled_images_15"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_15"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "14"
+
+[[case]]
+name = "comp_storage_images_15"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_15"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "14"
+
+[[case]]
+name = "comp_samplers_16"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_16"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "15"
+
+[[case]]
+name = "comp_uniform_buffers_16"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_16"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "15"
+
+[[case]]
+name = "comp_storage_buffers_16"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_16"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "14"
+
+[[case]]
+name = "comp_sampled_images_16"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_16"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "15"
+
+[[case]]
+name = "comp_storage_images_16"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_16"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "15"
+
+[[case]]
+name = "comp_samplers_17"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_17"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "16"
+
+[[case]]
+name = "comp_uniform_buffers_17"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_17"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "16"
+
+[[case]]
+name = "comp_storage_buffers_17"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_17"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "15"
+
+[[case]]
+name = "comp_sampled_images_17"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_17"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "16"
+
+[[case]]
+name = "comp_storage_images_17"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_17"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "16"
+
+[[case]]
+name = "comp_samplers_18"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_18"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "17"
+
+[[case]]
+name = "comp_uniform_buffers_18"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_18"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "17"
+
+[[case]]
+name = "comp_storage_buffers_18"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_18"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "16"
+
+[[case]]
+name = "comp_sampled_images_18"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_18"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "17"
+
+[[case]]
+name = "comp_storage_images_18"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_18"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "17"
+
+[[case]]
+name = "comp_samplers_19"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_19"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "18"
+
+[[case]]
+name = "comp_uniform_buffers_19"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_19"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "18"
+
+[[case]]
+name = "comp_storage_buffers_19"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_19"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "17"
+
+[[case]]
+name = "comp_sampled_images_19"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_19"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "18"
+
+[[case]]
+name = "comp_storage_images_19"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_19"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "18"
+
+[[case]]
+name = "comp_samplers_20"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_20"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "19"
+
+[[case]]
+name = "comp_uniform_buffers_20"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_20"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "19"
+
+[[case]]
+name = "comp_storage_buffers_20"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_20"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "18"
+
+[[case]]
+name = "comp_sampled_images_20"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_20"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "19"
+
+[[case]]
+name = "comp_storage_images_20"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_20"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "19"
+
+[[case]]
+name = "comp_samplers_31"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_31"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "30"
+
+[[case]]
+name = "comp_uniform_buffers_31"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_31"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "30"
+
+[[case]]
+name = "comp_storage_buffers_31"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_31"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "29"
+
+[[case]]
+name = "comp_sampled_images_31"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_31"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "30"
+
+[[case]]
+name = "comp_storage_images_31"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_31"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "30"
+
+[[case]]
+name = "comp_samplers_32"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_32"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "31"
+
+[[case]]
+name = "comp_uniform_buffers_32"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_32"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "31"
+
+[[case]]
+name = "comp_storage_buffers_32"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_32"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "30"
+
+[[case]]
+name = "comp_sampled_images_32"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_32"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "31"
+
+[[case]]
+name = "comp_storage_images_32"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_32"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "31"
+
+[[case]]
+name = "comp_samplers_63"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_63"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "62"
+
+[[case]]
+name = "comp_uniform_buffers_63"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_63"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "62"
+
+[[case]]
+name = "comp_storage_buffers_63"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_63"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "61"
+
+[[case]]
+name = "comp_sampled_images_63"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_63"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "62"
+
+[[case]]
+name = "comp_storage_images_63"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_63"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "62"
+
+[[case]]
+name = "comp_samplers_64"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_64"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "63"
+
+[[case]]
+name = "comp_uniform_buffers_64"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_64"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "63"
+
+[[case]]
+name = "comp_storage_buffers_64"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_64"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "62"
+
+[[case]]
+name = "comp_sampled_images_64"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_64"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "63"
+
+[[case]]
+name = "comp_storage_images_64"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_64"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "63"
+
+[[case]]
+name = "comp_samplers_100"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_100"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "99"
+
+[[case]]
+name = "comp_uniform_buffers_100"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_100"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "99"
+
+[[case]]
+name = "comp_storage_buffers_100"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_100"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "98"
+
+[[case]]
+name = "comp_sampled_images_100"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_100"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "99"
+
+[[case]]
+name = "comp_storage_images_100"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_100"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "99"
+
+[[case]]
+name = "comp_samplers_127"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_127"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "126"
+
+[[case]]
+name = "comp_uniform_buffers_127"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_127"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "126"
+
+[[case]]
+name = "comp_storage_buffers_127"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_127"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "125"
+
+[[case]]
+name = "comp_sampled_images_127"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_127"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "126"
+
+[[case]]
+name = "comp_storage_images_127"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_127"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "126"
+
+[[case]]
+name = "comp_samplers_128"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_128"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "127"
+
+[[case]]
+name = "comp_uniform_buffers_128"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_128"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "127"
+
+[[case]]
+name = "comp_storage_buffers_128"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_128"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "126"
+
+[[case]]
+name = "comp_sampled_images_128"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_128"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "127"
+
+[[case]]
+name = "comp_storage_images_128"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_128"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "127"
+
+[[case]]
+name = "comp_samplers_199"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_199"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "198"
+
+[[case]]
+name = "comp_uniform_buffers_199"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_199"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "198"
+
+[[case]]
+name = "comp_storage_buffers_199"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_199"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "197"
+
+[[case]]
+name = "comp_sampled_images_199"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_199"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "198"
+
+[[case]]
+name = "comp_storage_images_199"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_199"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "198"
+
+[[case]]
+name = "comp_samplers_200"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_200"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "199"
+
+[[case]]
+name = "comp_uniform_buffers_200"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_200"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "199"
+
+[[case]]
+name = "comp_storage_buffers_200"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_200"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "198"
+
+[[case]]
+name = "comp_sampled_images_200"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_200"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "199"
+
+[[case]]
+name = "comp_storage_images_200"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_200"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "199"
+
+[[case]]
+name = "comp_samplers_256"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_256"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "255"
+
+[[case]]
+name = "comp_uniform_buffers_256"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_256"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "255"
+
+[[case]]
+name = "comp_storage_buffers_256"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_256"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "254"
+
+[[case]]
+name = "comp_sampled_images_256"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_256"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "255"
+
+[[case]]
+name = "comp_storage_images_256"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_256"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "255"
+
+[[case]]
+name = "comp_samplers_512"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_512"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "511"
+
+[[case]]
+name = "comp_uniform_buffers_512"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_512"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "511"
+
+[[case]]
+name = "comp_storage_buffers_512"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_512"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "510"
+
+[[case]]
+name = "comp_sampled_images_512"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_512"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "511"
+
+[[case]]
+name = "comp_storage_images_512"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_512"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "511"
+
+[[case]]
+name = "comp_samplers_1024"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_1024"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "1023"
+
+[[case]]
+name = "comp_uniform_buffers_1024"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_1024"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "1023"
+
+[[case]]
+name = "comp_storage_buffers_1024"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_1024"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "1022"
+
+[[case]]
+name = "comp_sampled_images_1024"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_1024"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "1023"
+
+[[case]]
+name = "comp_storage_images_1024"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_1024"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "1023"
+
+[[case]]
+name = "comp_samplers_2048"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_2048"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "2047"
+
+[[case]]
+name = "comp_uniform_buffers_2048"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_2048"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "2047"
+
+[[case]]
+name = "comp_storage_buffers_2048"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_2048"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "2046"
+
+[[case]]
+name = "comp_sampled_images_2048"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_2048"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "2047"
+
+[[case]]
+name = "comp_storage_images_2048"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_2048"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "2047"
+
+[[case]]
+name = "comp_samplers_4096"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_4096"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "4095"
+
+[[case]]
+name = "comp_uniform_buffers_4096"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_4096"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "4095"
+
+[[case]]
+name = "comp_storage_buffers_4096"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_4096"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "4094"
+
+[[case]]
+name = "comp_sampled_images_4096"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_4096"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "4095"
+
+[[case]]
+name = "comp_storage_images_4096"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_4096"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "4095"
+
+[[case]]
+name = "comp_samplers_8192"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_8192"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "8191"
+
+[[case]]
+name = "comp_uniform_buffers_8192"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_8192"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "8191"
+
+[[case]]
+name = "comp_storage_buffers_8192"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_8192"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "8190"
+
+[[case]]
+name = "comp_sampled_images_8192"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_8192"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "8191"
+
+[[case]]
+name = "comp_storage_images_8192"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_8192"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "8191"
+
+[[case]]
+name = "comp_samplers_16384"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_16384"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "16383"
+
+[[case]]
+name = "comp_uniform_buffers_16384"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_16384"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "16383"
+
+[[case]]
+name = "comp_storage_buffers_16384"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_16384"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "16382"
+
+[[case]]
+name = "comp_sampled_images_16384"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_16384"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "16383"
+
+[[case]]
+name = "comp_storage_images_16384"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_16384"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "16383"
+
+[[case]]
+name = "comp_samplers_32768"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_32768"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "32767"
+
+[[case]]
+name = "comp_uniform_buffers_32768"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_32768"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "32767"
+
+[[case]]
+name = "comp_storage_buffers_32768"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_32768"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "32766"
+
+[[case]]
+name = "comp_sampled_images_32768"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_32768"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "32767"
+
+[[case]]
+name = "comp_storage_images_32768"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_32768"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "32767"
+
+[[case]]
+name = "comp_samplers_65535"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLERS_65535"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_samplers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "65534"
+
+[[case]]
+name = "comp_uniform_buffers_65535"
+rust_const = "DESCRIPTOR_LIMITS_COMP_UNIFORM_BUFFERS_65535"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_uniform_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "65534"
+
+[[case]]
+name = "comp_storage_buffers_65535"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_BUFFERS_65535"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_buffers.comp", stage = "comp" },
+]
+[case.derived]
+binding = "65533"
+
+[[case]]
+name = "comp_sampled_images_65535"
+rust_const = "DESCRIPTOR_LIMITS_COMP_SAMPLED_IMAGES_65535"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_sampled_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "65534"
+
+[[case]]
+name = "comp_storage_images_65535"
+rust_const = "DESCRIPTOR_LIMITS_COMP_STORAGE_IMAGES_65535"
+rust_type = "SharedProgram"
+programs = [
+    { name = "test", template = "pipeline/descriptor_limits/comp_storage_images.comp", stage = "comp" },
+]
+[case.derived]
+binding = "65534"
+
+[[case]]
+name = "frag_samplers_3"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "2"
+
+[[case]]
+name = "frag_uniform_buffers_3"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "2"
+
+[[case]]
+name = "frag_storage_buffers_3"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "2"
+
+[[case]]
+name = "frag_sampled_images_3"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "2"
+
+[[case]]
+name = "frag_storage_images_3"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "2"
+
+[[case]]
+name = "frag_input_attachments_3"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "2"
+
+[[case]]
+name = "frag_samplers_4"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "3"
+
+[[case]]
+name = "frag_uniform_buffers_4"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "3"
+
+[[case]]
+name = "frag_storage_buffers_4"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "3"
+
+[[case]]
+name = "frag_sampled_images_4"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "3"
+
+[[case]]
+name = "frag_storage_images_4"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "3"
+
+[[case]]
+name = "frag_input_attachments_4"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "3"
+
+[[case]]
+name = "frag_samplers_5"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_5"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "4"
+
+[[case]]
+name = "frag_uniform_buffers_5"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_5"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "4"
+
+[[case]]
+name = "frag_storage_buffers_5"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_5"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "4"
+
+[[case]]
+name = "frag_sampled_images_5"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_5"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "4"
+
+[[case]]
+name = "frag_storage_images_5"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_5"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "4"
+
+[[case]]
+name = "frag_input_attachments_5"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_5"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "4"
+
+[[case]]
+name = "frag_samplers_6"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_6"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "5"
+
+[[case]]
+name = "frag_uniform_buffers_6"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_6"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "5"
+
+[[case]]
+name = "frag_storage_buffers_6"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_6"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "5"
+
+[[case]]
+name = "frag_sampled_images_6"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_6"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "5"
+
+[[case]]
+name = "frag_storage_images_6"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_6"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "5"
+
+[[case]]
+name = "frag_input_attachments_6"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_6"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "5"
+
+[[case]]
+name = "frag_samplers_7"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_7"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "6"
+
+[[case]]
+name = "frag_uniform_buffers_7"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_7"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "6"
+
+[[case]]
+name = "frag_storage_buffers_7"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_7"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "6"
+
+[[case]]
+name = "frag_sampled_images_7"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_7"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "6"
+
+[[case]]
+name = "frag_storage_images_7"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_7"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "6"
+
+[[case]]
+name = "frag_input_attachments_7"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_7"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "6"
+
+[[case]]
+name = "frag_samplers_8"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_8"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "7"
+
+[[case]]
+name = "frag_uniform_buffers_8"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_8"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "7"
+
+[[case]]
+name = "frag_storage_buffers_8"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_8"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "7"
+
+[[case]]
+name = "frag_sampled_images_8"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_8"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "7"
+
+[[case]]
+name = "frag_storage_images_8"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_8"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "7"
+
+[[case]]
+name = "frag_input_attachments_8"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_8"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "7"
+
+[[case]]
+name = "frag_samplers_9"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_9"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "8"
+
+[[case]]
+name = "frag_uniform_buffers_9"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_9"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "8"
+
+[[case]]
+name = "frag_storage_buffers_9"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_9"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "8"
+
+[[case]]
+name = "frag_sampled_images_9"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_9"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "8"
+
+[[case]]
+name = "frag_storage_images_9"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_9"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "8"
+
+[[case]]
+name = "frag_input_attachments_9"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_9"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "8"
+
+[[case]]
+name = "frag_samplers_10"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_10"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "9"
+
+[[case]]
+name = "frag_uniform_buffers_10"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_10"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "9"
+
+[[case]]
+name = "frag_storage_buffers_10"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_10"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "9"
+
+[[case]]
+name = "frag_sampled_images_10"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_10"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "9"
+
+[[case]]
+name = "frag_storage_images_10"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_10"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "9"
+
+[[case]]
+name = "frag_input_attachments_10"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_10"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "9"
+
+[[case]]
+name = "frag_samplers_11"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_11"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "10"
+
+[[case]]
+name = "frag_uniform_buffers_11"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_11"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "10"
+
+[[case]]
+name = "frag_storage_buffers_11"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_11"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "10"
+
+[[case]]
+name = "frag_sampled_images_11"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_11"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "10"
+
+[[case]]
+name = "frag_storage_images_11"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_11"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "10"
+
+[[case]]
+name = "frag_input_attachments_11"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_11"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "10"
+
+[[case]]
+name = "frag_samplers_12"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_12"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "11"
+
+[[case]]
+name = "frag_uniform_buffers_12"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_12"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "11"
+
+[[case]]
+name = "frag_storage_buffers_12"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_12"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "11"
+
+[[case]]
+name = "frag_sampled_images_12"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_12"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "11"
+
+[[case]]
+name = "frag_storage_images_12"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_12"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "11"
+
+[[case]]
+name = "frag_input_attachments_12"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_12"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "11"
+
+[[case]]
+name = "frag_samplers_13"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_13"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "12"
+
+[[case]]
+name = "frag_uniform_buffers_13"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_13"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "12"
+
+[[case]]
+name = "frag_storage_buffers_13"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_13"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "12"
+
+[[case]]
+name = "frag_sampled_images_13"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_13"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "12"
+
+[[case]]
+name = "frag_storage_images_13"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_13"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "12"
+
+[[case]]
+name = "frag_input_attachments_13"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_13"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "12"
+
+[[case]]
+name = "frag_samplers_14"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_14"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "13"
+
+[[case]]
+name = "frag_uniform_buffers_14"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_14"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "13"
+
+[[case]]
+name = "frag_storage_buffers_14"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_14"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "13"
+
+[[case]]
+name = "frag_sampled_images_14"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_14"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "13"
+
+[[case]]
+name = "frag_storage_images_14"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_14"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "13"
+
+[[case]]
+name = "frag_input_attachments_14"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_14"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "13"
+
+[[case]]
+name = "frag_samplers_15"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_15"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "14"
+
+[[case]]
+name = "frag_uniform_buffers_15"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_15"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "14"
+
+[[case]]
+name = "frag_storage_buffers_15"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_15"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "14"
+
+[[case]]
+name = "frag_sampled_images_15"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_15"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "14"
+
+[[case]]
+name = "frag_storage_images_15"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_15"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "14"
+
+[[case]]
+name = "frag_input_attachments_15"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_15"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "14"
+
+[[case]]
+name = "frag_samplers_16"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_16"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "15"
+
+[[case]]
+name = "frag_uniform_buffers_16"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_16"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "15"
+
+[[case]]
+name = "frag_storage_buffers_16"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_16"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "15"
+
+[[case]]
+name = "frag_sampled_images_16"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_16"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "15"
+
+[[case]]
+name = "frag_storage_images_16"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_16"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "15"
+
+[[case]]
+name = "frag_input_attachments_16"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_16"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "15"
+
+[[case]]
+name = "frag_samplers_17"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_17"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "16"
+
+[[case]]
+name = "frag_uniform_buffers_17"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_17"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "16"
+
+[[case]]
+name = "frag_storage_buffers_17"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_17"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "16"
+
+[[case]]
+name = "frag_sampled_images_17"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_17"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "16"
+
+[[case]]
+name = "frag_storage_images_17"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_17"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "16"
+
+[[case]]
+name = "frag_input_attachments_17"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_17"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "16"
+
+[[case]]
+name = "frag_samplers_18"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_18"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "17"
+
+[[case]]
+name = "frag_uniform_buffers_18"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_18"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "17"
+
+[[case]]
+name = "frag_storage_buffers_18"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_18"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "17"
+
+[[case]]
+name = "frag_sampled_images_18"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_18"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "17"
+
+[[case]]
+name = "frag_storage_images_18"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_18"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "17"
+
+[[case]]
+name = "frag_input_attachments_18"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_18"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "17"
+
+[[case]]
+name = "frag_samplers_19"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_19"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "18"
+
+[[case]]
+name = "frag_uniform_buffers_19"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_19"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "18"
+
+[[case]]
+name = "frag_storage_buffers_19"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_19"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "18"
+
+[[case]]
+name = "frag_sampled_images_19"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_19"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "18"
+
+[[case]]
+name = "frag_storage_images_19"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_19"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "18"
+
+[[case]]
+name = "frag_input_attachments_19"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_19"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "18"
+
+[[case]]
+name = "frag_samplers_20"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_20"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "19"
+
+[[case]]
+name = "frag_uniform_buffers_20"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_20"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "19"
+
+[[case]]
+name = "frag_storage_buffers_20"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_20"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "19"
+
+[[case]]
+name = "frag_sampled_images_20"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_20"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "19"
+
+[[case]]
+name = "frag_storage_images_20"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_20"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "19"
+
+[[case]]
+name = "frag_input_attachments_20"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_20"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "19"
+
+[[case]]
+name = "frag_samplers_31"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_31"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "30"
+
+[[case]]
+name = "frag_uniform_buffers_31"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_31"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "30"
+
+[[case]]
+name = "frag_storage_buffers_31"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_31"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "30"
+
+[[case]]
+name = "frag_sampled_images_31"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_31"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "30"
+
+[[case]]
+name = "frag_storage_images_31"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_31"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "30"
+
+[[case]]
+name = "frag_input_attachments_31"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_31"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "30"
+
+[[case]]
+name = "frag_samplers_32"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_32"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "31"
+
+[[case]]
+name = "frag_uniform_buffers_32"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_32"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "31"
+
+[[case]]
+name = "frag_storage_buffers_32"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_32"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "31"
+
+[[case]]
+name = "frag_sampled_images_32"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_32"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "31"
+
+[[case]]
+name = "frag_storage_images_32"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_32"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "31"
+
+[[case]]
+name = "frag_input_attachments_32"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_32"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "31"
+
+[[case]]
+name = "frag_samplers_63"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_63"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "62"
+
+[[case]]
+name = "frag_uniform_buffers_63"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_63"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "62"
+
+[[case]]
+name = "frag_storage_buffers_63"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_63"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "62"
+
+[[case]]
+name = "frag_sampled_images_63"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_63"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "62"
+
+[[case]]
+name = "frag_storage_images_63"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_63"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "62"
+
+[[case]]
+name = "frag_input_attachments_63"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_63"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "62"
+
+[[case]]
+name = "frag_samplers_64"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_64"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "63"
+
+[[case]]
+name = "frag_uniform_buffers_64"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_64"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "63"
+
+[[case]]
+name = "frag_storage_buffers_64"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_64"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "63"
+
+[[case]]
+name = "frag_sampled_images_64"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_64"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "63"
+
+[[case]]
+name = "frag_storage_images_64"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_64"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "63"
+
+[[case]]
+name = "frag_input_attachments_64"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_64"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "63"
+
+[[case]]
+name = "frag_samplers_100"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_100"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "99"
+
+[[case]]
+name = "frag_uniform_buffers_100"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_100"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "99"
+
+[[case]]
+name = "frag_storage_buffers_100"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_100"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "99"
+
+[[case]]
+name = "frag_sampled_images_100"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_100"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "99"
+
+[[case]]
+name = "frag_storage_images_100"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_100"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "99"
+
+[[case]]
+name = "frag_input_attachments_100"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_100"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "99"
+
+[[case]]
+name = "frag_samplers_127"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_127"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "126"
+
+[[case]]
+name = "frag_uniform_buffers_127"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_127"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "126"
+
+[[case]]
+name = "frag_storage_buffers_127"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_127"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "126"
+
+[[case]]
+name = "frag_sampled_images_127"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_127"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "126"
+
+[[case]]
+name = "frag_storage_images_127"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_127"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "126"
+
+[[case]]
+name = "frag_input_attachments_127"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_127"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "126"
+
+[[case]]
+name = "frag_samplers_128"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_128"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "127"
+
+[[case]]
+name = "frag_uniform_buffers_128"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_128"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "127"
+
+[[case]]
+name = "frag_storage_buffers_128"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_128"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "127"
+
+[[case]]
+name = "frag_sampled_images_128"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_128"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "127"
+
+[[case]]
+name = "frag_storage_images_128"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_128"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "127"
+
+[[case]]
+name = "frag_input_attachments_128"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_128"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "127"
+
+[[case]]
+name = "frag_samplers_199"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_199"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "198"
+
+[[case]]
+name = "frag_uniform_buffers_199"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_199"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "198"
+
+[[case]]
+name = "frag_storage_buffers_199"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_199"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "198"
+
+[[case]]
+name = "frag_sampled_images_199"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_199"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "198"
+
+[[case]]
+name = "frag_storage_images_199"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_199"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "198"
+
+[[case]]
+name = "frag_input_attachments_199"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_199"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "198"
+
+[[case]]
+name = "frag_samplers_200"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_200"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "199"
+
+[[case]]
+name = "frag_uniform_buffers_200"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_200"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "199"
+
+[[case]]
+name = "frag_storage_buffers_200"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_200"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "199"
+
+[[case]]
+name = "frag_sampled_images_200"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_200"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "199"
+
+[[case]]
+name = "frag_storage_images_200"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_200"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "199"
+
+[[case]]
+name = "frag_input_attachments_200"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_200"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "199"
+
+[[case]]
+name = "frag_samplers_256"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_256"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "255"
+
+[[case]]
+name = "frag_uniform_buffers_256"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_256"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "255"
+
+[[case]]
+name = "frag_storage_buffers_256"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_256"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "255"
+
+[[case]]
+name = "frag_sampled_images_256"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_256"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "255"
+
+[[case]]
+name = "frag_storage_images_256"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_256"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "255"
+
+[[case]]
+name = "frag_input_attachments_256"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_256"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "255"
+
+[[case]]
+name = "frag_samplers_512"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_512"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "511"
+
+[[case]]
+name = "frag_uniform_buffers_512"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_512"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "511"
+
+[[case]]
+name = "frag_storage_buffers_512"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_512"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "511"
+
+[[case]]
+name = "frag_sampled_images_512"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_512"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "511"
+
+[[case]]
+name = "frag_storage_images_512"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_512"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "511"
+
+[[case]]
+name = "frag_input_attachments_512"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_512"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "511"
+
+[[case]]
+name = "frag_samplers_1024"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_1024"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "1023"
+
+[[case]]
+name = "frag_uniform_buffers_1024"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_1024"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "1023"
+
+[[case]]
+name = "frag_storage_buffers_1024"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_1024"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "1023"
+
+[[case]]
+name = "frag_sampled_images_1024"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_1024"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "1023"
+
+[[case]]
+name = "frag_storage_images_1024"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_1024"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "1023"
+
+[[case]]
+name = "frag_input_attachments_1024"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_1024"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "1023"
+
+[[case]]
+name = "frag_samplers_2048"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_2048"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "2047"
+
+[[case]]
+name = "frag_uniform_buffers_2048"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_2048"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "2047"
+
+[[case]]
+name = "frag_storage_buffers_2048"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_2048"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "2047"
+
+[[case]]
+name = "frag_sampled_images_2048"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_2048"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "2047"
+
+[[case]]
+name = "frag_storage_images_2048"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_2048"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "2047"
+
+[[case]]
+name = "frag_input_attachments_2048"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_2048"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "2047"
+
+[[case]]
+name = "frag_samplers_4096"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_4096"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "4095"
+
+[[case]]
+name = "frag_uniform_buffers_4096"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_4096"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "4095"
+
+[[case]]
+name = "frag_storage_buffers_4096"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_4096"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "4095"
+
+[[case]]
+name = "frag_sampled_images_4096"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_4096"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "4095"
+
+[[case]]
+name = "frag_storage_images_4096"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_4096"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "4095"
+
+[[case]]
+name = "frag_input_attachments_4096"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_4096"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "4095"
+
+[[case]]
+name = "frag_samplers_8192"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_8192"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "8191"
+
+[[case]]
+name = "frag_uniform_buffers_8192"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_8192"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "8191"
+
+[[case]]
+name = "frag_storage_buffers_8192"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_8192"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "8191"
+
+[[case]]
+name = "frag_sampled_images_8192"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_8192"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "8191"
+
+[[case]]
+name = "frag_storage_images_8192"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_8192"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "8191"
+
+[[case]]
+name = "frag_input_attachments_8192"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_8192"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "8191"
+
+[[case]]
+name = "frag_samplers_16384"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_16384"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "16383"
+
+[[case]]
+name = "frag_uniform_buffers_16384"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_16384"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "16383"
+
+[[case]]
+name = "frag_storage_buffers_16384"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_16384"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "16383"
+
+[[case]]
+name = "frag_sampled_images_16384"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_16384"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "16383"
+
+[[case]]
+name = "frag_storage_images_16384"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_16384"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "16383"
+
+[[case]]
+name = "frag_input_attachments_16384"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_16384"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "16383"
+
+[[case]]
+name = "frag_samplers_32768"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_32768"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "32767"
+
+[[case]]
+name = "frag_uniform_buffers_32768"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_32768"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "32767"
+
+[[case]]
+name = "frag_storage_buffers_32768"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_32768"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "32767"
+
+[[case]]
+name = "frag_sampled_images_32768"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_32768"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "32767"
+
+[[case]]
+name = "frag_storage_images_32768"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_32768"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "32767"
+
+[[case]]
+name = "frag_input_attachments_32768"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_32768"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "32767"
+
+[[case]]
+name = "frag_samplers_65535"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLERS_65535"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_samplers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "65534"
+
+[[case]]
+name = "frag_uniform_buffers_65535"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_UNIFORM_BUFFERS_65535"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_uniform_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "65534"
+
+[[case]]
+name = "frag_storage_buffers_65535"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_BUFFERS_65535"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_buffers.frag", stage = "frag" },
+]
+[case.derived]
+binding = "65534"
+
+[[case]]
+name = "frag_sampled_images_65535"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_SAMPLED_IMAGES_65535"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_sampled_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "65534"
+
+[[case]]
+name = "frag_storage_images_65535"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_STORAGE_IMAGES_65535"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_storage_images.frag", stage = "frag" },
+]
+[case.derived]
+binding = "65534"
+
+[[case]]
+name = "frag_input_attachments_65535"
+rust_const = "DESCRIPTOR_LIMITS_FRAG_INPUT_ATTACHMENTS_65535"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/descriptor_limits/vert.vert", stage = "vert" },
+    { name = "test", template = "pipeline/descriptor_limits/frag_input_attachments.frag", stage = "frag" },
+]
+[case.derived]
+binding = "65534"

@@ -1,0 +1,38 @@
+# Shader manifest for dEQP-VK.image.astc_decode_mode.*
+#
+# `initPrograms` emits one compute shader whose text depends on three things only: 2D or 3D, and whether the format is
+# unorm / sfloat with the e5b9g9r9 decode mode (which clamps the reference) or neither. The sampler type is the float
+# one for every ASTC format and the result image is always rgba8.
+
+upstream_source = "external/vulkancts/modules/vulkan/image/vktImageAstcDecodeModeTests.cpp"
+rust_module = "image/astc_decode_mode_tests"
+
+[[case]]
+name = "2d_plain"
+rust_const = "ASTC_2D_PLAIN"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "image/astc_decode_mode_2d_plain.comp", stage = "comp" }]
+
+[[case]]
+name = "2d_unorm_e5"
+rust_const = "ASTC_2D_UNORM_E5"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "image/astc_decode_mode_2d_unorm_e5.comp", stage = "comp" }]
+
+[[case]]
+name = "3d_plain"
+rust_const = "ASTC_3D_PLAIN"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "image/astc_decode_mode_3d_plain.comp", stage = "comp" }]
+
+[[case]]
+name = "3d_unorm_e5"
+rust_const = "ASTC_3D_UNORM_E5"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "image/astc_decode_mode_3d_unorm_e5.comp", stage = "comp" }]
+
+[[case]]
+name = "3d_sfloat_e5"
+rust_const = "ASTC_3D_SFLOAT_E5"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "image/astc_decode_mode_3d_sfloat_e5.comp", stage = "comp" }]

@@ -1,0 +1,42 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+layout(local_size_x=2, local_size_y=2, local_size_z=4) in;
+layout(triangles) out;
+layout(max_vertices=256, max_primitives=254) out;
+
+layout (location=0) out perprimitiveEXT vec4 triangleColor[];
+
+const float PI_2 = 1.57079632679489661923;
+const float RADIUS = 4.5;
+
+void main ()
+{
+    const uint trianglesPerInvocation = 16u;
+    const uint numVertices = 256u;
+    const uint numTriangles = 254u;
+    const float fNumTriangles = float(numTriangles);
+    SetMeshOutputsEXT(numVertices, numTriangles);
+    uint firstTriangle = trianglesPerInvocation * gl_LocalInvocationIndex;
+    for (uint i = 0u; i < trianglesPerInvocation; i++) {
+        uint triangleId = firstTriangle + i;
+        if (triangleId < numTriangles) {
+            uint vertexId = triangleId + 2u;
+            float angleProportion = float(vertexId - 1u) / fNumTriangles;
+            float angle = PI_2 * angleProportion;
+            float xCoord = cos(angle) * RADIUS - 1.0;
+            float yCoord = sin(angle) * RADIUS - 1.0;
+            gl_MeshVerticesEXT[vertexId].gl_Position = vec4(xCoord, yCoord, 0.0, 1.0);
+            gl_PrimitiveTriangleIndicesEXT[triangleId] = uvec3(0u, triangleId + 1u, triangleId + 2u);
+            triangleColor[triangleId] = vec4(0.0f, 0.0f, 1.0f, 1.0f);
+        } else {
+            // The last iterations of the last invocation emit the first two vertices
+            uint vertexId = triangleId - numTriangles;
+            if (vertexId == 0u) {
+                gl_MeshVerticesEXT[0u].gl_Position = vec4(-1.0, -1.0, 0.0, 1.0);
+            } else {
+                gl_MeshVerticesEXT[1u].gl_Position = vec4(RADIUS, -1.0, 0.0, 1.0);
+            }
+        }
+    }
+}

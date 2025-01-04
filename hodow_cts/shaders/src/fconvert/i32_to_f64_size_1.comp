@@ -1,0 +1,9 @@
+#version 450 core
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(set = 0, binding = 0, std140) buffer issbodef { int val[288]; } issbo;
+layout(set = 0, binding = 1, std140) buffer ossbodef { double val[288]; } ossbo;
+void main()
+{
+    int f = issbo.val[gl_WorkGroupID.x];
+    ossbo.val[gl_WorkGroupID.x] = double(f);
+}

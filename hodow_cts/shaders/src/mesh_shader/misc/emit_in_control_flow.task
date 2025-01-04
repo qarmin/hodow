@@ -1,0 +1,13 @@
+#version 460
+#extension GL_EXT_mesh_shader : enable
+
+layout (local_size_x=1) in;
+
+void main ()
+{
+    if (gl_WorkGroupID.x != 0 || gl_WorkGroupID.y != 0 || gl_WorkGroupID.z != 0) {
+        EmitMeshTasksEXT(2u, 1u, 1u);
+    } else {
+        EmitMeshTasksEXT(1u, 1u, 1u);
+    }
+}

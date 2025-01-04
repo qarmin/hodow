@@ -1,0 +1,265 @@
+
+               OpCapability Shader
+               OpCapability Int64
+               OpCapability VariablePointers
+               OpCapability VariablePointersStorageBuffer
+               OpCapability PhysicalStorageBufferAddresses
+               OpExtension "SPV_KHR_variable_pointers"
+               OpExtension "SPV_EXT_physical_storage_buffer"
+               ; OpExtension "SPV_EXT_scalar_block_layout"
+          %1 = OpExtInstImport "GLSL.std.450"
+               ; OpMemoryModel Logical GLSL450
+               OpMemoryModel PhysicalStorageBuffer64 GLSL450
+               OpEntryPoint GLCompute %main "main" %_ %__0 %__1
+               OpExecutionMode %main LocalSize 1 1 1
+
+               ; Annotations
+               OpDecorate %PC Block
+               OpMemberDecorate %PC 0 Offset 0
+               OpMemberDecorate %PC 1 Offset 4
+               OpMemberDecorate %PC 2 Offset 8
+               OpMemberDecorate %PC 3 Offset 12
+               OpDecorate %_runtimearr_v3uint ArrayStride 12
+               OpDecorate %_runtimearr_v4uint ArrayStride 16
+               OpDecorate %FooBuffer Block
+               OpDecorate %BarBuffer Block
+               OpDecorate %FooStruct Block
+               OpDecorate %BarStruct Block
+               OpMemberDecorate %FooBuffer 0 Offset 0  ; uint64_t
+               OpMemberDecorate %FooBuffer 1 Offset 16 ; uivec4
+               OpMemberDecorate %BarBuffer 0 Offset 0  ; uint64_t
+               OpMemberDecorate %BarBuffer 1 Offset 16 ; uivec3
+               OpMemberDecorate %FooStruct 0 Offset 0  ; uint64_t
+               OpMemberDecorate %FooStruct 1 Offset 16 ; uivec4
+               OpMemberDecorate %BarStruct 0 Offset 0  ; uint64_t
+               OpMemberDecorate %BarStruct 1 Offset 16 ; uivec3
+               OpDecorate %__0 Binding 0
+               OpDecorate %__0 DescriptorSet 0
+               OpDecorate %__1 Binding 1
+               OpDecorate %__1 DescriptorSet 0
+               OpDecorate %gl_WorkGroupSize BuiltIn WorkgroupSize
+
+               ; Types, variables and constants
+       %bool = OpTypeBool
+       %void = OpTypeVoid
+          %3 = OpTypeFunction %void
+        %int = OpTypeInt 32 1
+       %uint = OpTypeInt 32 0
+      %ulong = OpTypeInt 64 0
+     %v3uint = OpTypeVector %uint 3
+     %v4uint = OpTypeVector %uint 4
+         %PC = OpTypeStruct %uint %uint %uint %uint     ; Block
+%_ptr_PushConstant_PC = OpTypePointer PushConstant %PC
+          %_ = OpVariable %_ptr_PushConstant_PC PushConstant
+      %int_0 = OpConstant %int 0
+      %int_1 = OpConstant %int 1
+      %int_2 = OpConstant %int 2
+      %int_3 = OpConstant %int 3
+%_ptr_PushConstant_uint = OpTypePointer PushConstant %uint
+     %uint_0 = OpConstant %uint 0
+     %uint_1 = OpConstant %uint 1
+%_runtimearr_v3uint = OpTypeRuntimeArray %v3uint   ; ArrayStride 12
+%_runtimearr_v4uint = OpTypeRuntimeArray %v4uint   ; ArrayStride 16
+%_ptr_address = OpTypePointer StorageBuffer %ulong
+
+%_ptr_runtimearr_v3uint = OpTypePointer StorageBuffer %_runtimearr_v3uint
+%_ptr_runtimearr_v4uint = OpTypePointer StorageBuffer %_runtimearr_v4uint
+  %FooBuffer = OpTypeStruct %ulong %_runtimearr_v4uint    ; Block
+  %BarBuffer = OpTypeStruct %ulong %_runtimearr_v3uint    ; Block
+%_ptr_StorageBuffer_FooBuffer = OpTypePointer StorageBuffer %FooBuffer
+%_ptr_StorageBuffer_BarBuffer = OpTypePointer StorageBuffer %BarBuffer
+        %__0 = OpVariable %_ptr_StorageBuffer_FooBuffer StorageBuffer   ; Binding 0, DescriptorSet 0
+        %__1 = OpVariable %_ptr_StorageBuffer_BarBuffer StorageBuffer   ; Binding 1, DescriptorSet 0
+%_ptr_StorageBuffer_v3uint = OpTypePointer StorageBuffer %v3uint
+%_ptr_StorageBuffer_v4uint = OpTypePointer StorageBuffer %v4uint
+
+%_ptr_v3uint = OpTypePointer PhysicalStorageBuffer %v3uint
+%_ptr_v4uint = OpTypePointer PhysicalStorageBuffer %v4uint
+%_ptr_unsizedarr_v3uint = OpTypePointer PhysicalStorageBuffer %_runtimearr_v3uint
+%_ptr_unsizedarr_v4uint = OpTypePointer PhysicalStorageBuffer %_runtimearr_v4uint
+  %FooStruct = OpTypeStruct %ulong %_runtimearr_v4uint
+  %BarStruct = OpTypeStruct %ulong %_runtimearr_v3uint
+%_ptr_PhysicalBuffer_FooBuffer = OpTypePointer PhysicalStorageBuffer %FooStruct
+%_ptr_PhysicalBuffer_BarBuffer = OpTypePointer PhysicalStorageBuffer %BarStruct
+
+%gl_WorkGroupSize = OpConstantComposite %v3uint %uint_1 %uint_1 %uint_1     ; BuiltIn WorkgroupSize
+
+               ; Function main
+       %main = OpFunction %void None %3
+          %5 = OpLabel
+         %13 = OpAccessChain %_ptr_PushConstant_uint %_ %int_3
+         %14 = OpLoad %uint %13
+         %15 = OpAccessChain %_ptr_PushConstant_uint %_ %int_2
+         %16 = OpLoad %uint %15
+         %17 = OpAccessChain %_ptr_PushConstant_uint %_ %int_1
+         %18 = OpLoad %uint %17
+         %19 = OpAccessChain %_ptr_PushConstant_uint %_ %int_0
+         %20 = OpLoad %uint %19
+         %21 = OpIAdd %uint %20 %18
+         %22 = OpIAdd %uint %21 %16
+         ; %23 holds value to store which is the sum of x,y,z,w from push constant struct
+         %23 = OpIAdd %uint %22 %14
+         ; make condition
+         %200 = OpIEqual %bool %20 %uint_0
+
+         ; If above condition is satisfied then
+         ; an even Result <id> indicates struct with vec4,
+         ; and an odd indicates struct with vec3.
+
+         %300 = OpAccessChain %_ptr_address %__0 %int_0
+         %301 = OpAccessChain %_ptr_address %__1 %int_0
+         %302 = OpSelect %_ptr_address %200 %300 %301
+         %303 = OpSelect %_ptr_address %200 %301 %300
+         %304 = OpLoad %ulong %302
+         %305 = OpLoad %ulong %303
+         %306 = OpConvertUToPtr %_ptr_PhysicalBuffer_FooBuffer %304
+         %307 = OpConvertUToPtr %_ptr_PhysicalBuffer_BarBuffer %305
+         %308 = OpAccessChain %_ptr_unsizedarr_v4uint %306 %int_1
+         %309 = OpAccessChain %_ptr_unsizedarr_v3uint %307 %int_1
+
+         ; make access to vec4
+         %310 = OpAccessChain %_ptr_v4uint %308 %18
+         ; make access to vec3
+         %311 = OpAccessChain %_ptr_v3uint %309 %18
+         ; compose vec4 to store
+         %312 = OpCompositeConstruct %v4uint %23 %18 %16 %14
+         ; compose vec3 to store
+         %313 = OpCompositeConstruct %v3uint %23 %18 %16
+         ; final storing
+         OpStore %310 %312 Aligned 16
+         OpStore %311 %313 Aligned 4
+               OpReturn
+               OpFunctionEnd
+    
+               OpCapability Shader
+               OpCapability Int64
+               OpCapability VariablePointers
+               OpCapability VariablePointersStorageBuffer
+               OpCapability PhysicalStorageBufferAddresses
+               OpExtension "SPV_KHR_variable_pointers"
+               OpExtension "SPV_KHR_physical_storage_buffer"
+               ; OpExtension "SPV_EXT_scalar_block_layout"
+          %1 = OpExtInstImport "GLSL.std.450"
+               ; OpMemoryModel Logical GLSL450
+               OpMemoryModel PhysicalStorageBuffer64 GLSL450
+               OpEntryPoint GLCompute %main "main" %_ %__0 %__1
+               OpExecutionMode %main LocalSize 1 1 1
+
+               ; Annotations
+               OpDecorate %PC Block
+               OpMemberDecorate %PC 0 Offset 0
+               OpMemberDecorate %PC 1 Offset 4
+               OpMemberDecorate %PC 2 Offset 8
+               OpMemberDecorate %PC 3 Offset 12
+               OpDecorate %_runtimearr_v3uint ArrayStride 12
+               OpDecorate %_runtimearr_v4uint ArrayStride 16
+               OpDecorate %FooBuffer Block
+               OpDecorate %BarBuffer Block
+               OpDecorate %FooStruct Block
+               OpDecorate %BarStruct Block
+               OpMemberDecorate %FooBuffer 0 Offset 0  ; uint64_t
+               OpMemberDecorate %FooBuffer 1 Offset 16 ; uivec4
+               OpMemberDecorate %BarBuffer 0 Offset 0  ; uint64_t
+               OpMemberDecorate %BarBuffer 1 Offset 16 ; uivec3
+               OpMemberDecorate %FooStruct 0 Offset 0  ; uint64_t
+               OpMemberDecorate %FooStruct 1 Offset 16 ; uivec4
+               OpMemberDecorate %BarStruct 0 Offset 0  ; uint64_t
+               OpMemberDecorate %BarStruct 1 Offset 16 ; uivec3
+               OpDecorate %__0 Binding 0
+               OpDecorate %__0 DescriptorSet 0
+               OpDecorate %__1 Binding 1
+               OpDecorate %__1 DescriptorSet 0
+               OpDecorate %gl_WorkGroupSize BuiltIn WorkgroupSize
+
+               ; Types, variables and constants
+       %bool = OpTypeBool
+       %void = OpTypeVoid
+          %3 = OpTypeFunction %void
+        %int = OpTypeInt 32 1
+       %uint = OpTypeInt 32 0
+      %ulong = OpTypeInt 64 0
+     %v3uint = OpTypeVector %uint 3
+     %v4uint = OpTypeVector %uint 4
+         %PC = OpTypeStruct %uint %uint %uint %uint     ; Block
+%_ptr_PushConstant_PC = OpTypePointer PushConstant %PC
+          %_ = OpVariable %_ptr_PushConstant_PC PushConstant
+      %int_0 = OpConstant %int 0
+      %int_1 = OpConstant %int 1
+      %int_2 = OpConstant %int 2
+      %int_3 = OpConstant %int 3
+%_ptr_PushConstant_uint = OpTypePointer PushConstant %uint
+     %uint_0 = OpConstant %uint 0
+     %uint_1 = OpConstant %uint 1
+%_runtimearr_v3uint = OpTypeRuntimeArray %v3uint   ; ArrayStride 12
+%_runtimearr_v4uint = OpTypeRuntimeArray %v4uint   ; ArrayStride 16
+%_ptr_address = OpTypePointer StorageBuffer %ulong
+
+%_ptr_runtimearr_v3uint = OpTypePointer StorageBuffer %_runtimearr_v3uint
+%_ptr_runtimearr_v4uint = OpTypePointer StorageBuffer %_runtimearr_v4uint
+  %FooBuffer = OpTypeStruct %ulong %_runtimearr_v4uint    ; Block
+  %BarBuffer = OpTypeStruct %ulong %_runtimearr_v3uint    ; Block
+%_ptr_StorageBuffer_FooBuffer = OpTypePointer StorageBuffer %FooBuffer
+%_ptr_StorageBuffer_BarBuffer = OpTypePointer StorageBuffer %BarBuffer
+        %__0 = OpVariable %_ptr_StorageBuffer_FooBuffer StorageBuffer   ; Binding 0, DescriptorSet 0
+        %__1 = OpVariable %_ptr_StorageBuffer_BarBuffer StorageBuffer   ; Binding 1, DescriptorSet 0
+%_ptr_StorageBuffer_v3uint = OpTypePointer StorageBuffer %v3uint
+%_ptr_StorageBuffer_v4uint = OpTypePointer StorageBuffer %v4uint
+
+%_ptr_v3uint = OpTypePointer PhysicalStorageBuffer %v3uint
+%_ptr_v4uint = OpTypePointer PhysicalStorageBuffer %v4uint
+%_ptr_unsizedarr_v3uint = OpTypePointer PhysicalStorageBuffer %_runtimearr_v3uint
+%_ptr_unsizedarr_v4uint = OpTypePointer PhysicalStorageBuffer %_runtimearr_v4uint
+  %FooStruct = OpTypeStruct %ulong %_runtimearr_v4uint
+  %BarStruct = OpTypeStruct %ulong %_runtimearr_v3uint
+%_ptr_PhysicalBuffer_FooBuffer = OpTypePointer PhysicalStorageBuffer %FooStruct
+%_ptr_PhysicalBuffer_BarBuffer = OpTypePointer PhysicalStorageBuffer %BarStruct
+
+%gl_WorkGroupSize = OpConstantComposite %v3uint %uint_1 %uint_1 %uint_1     ; BuiltIn WorkgroupSize
+
+               ; Function main
+       %main = OpFunction %void None %3
+          %5 = OpLabel
+         %13 = OpAccessChain %_ptr_PushConstant_uint %_ %int_3
+         %14 = OpLoad %uint %13
+         %15 = OpAccessChain %_ptr_PushConstant_uint %_ %int_2
+         %16 = OpLoad %uint %15
+         %17 = OpAccessChain %_ptr_PushConstant_uint %_ %int_1
+         %18 = OpLoad %uint %17
+         %19 = OpAccessChain %_ptr_PushConstant_uint %_ %int_0
+         %20 = OpLoad %uint %19
+         %21 = OpIAdd %uint %20 %18
+         %22 = OpIAdd %uint %21 %16
+         ; %23 holds value to store which is the sum of x,y,z,w from push constant struct
+         %23 = OpIAdd %uint %22 %14
+         ; make condition
+         %200 = OpIEqual %bool %20 %uint_0
+
+         ; If above condition is satisfied then
+         ; an even Result <id> indicates struct with vec4,
+         ; and an odd indicates struct with vec3.
+
+         %300 = OpAccessChain %_ptr_address %__0 %int_0
+         %301 = OpAccessChain %_ptr_address %__1 %int_0
+         %302 = OpSelect %_ptr_address %200 %300 %301
+         %303 = OpSelect %_ptr_address %200 %301 %300
+         %304 = OpLoad %ulong %302
+         %305 = OpLoad %ulong %303
+         %306 = OpConvertUToPtr %_ptr_PhysicalBuffer_FooBuffer %304
+         %307 = OpConvertUToPtr %_ptr_PhysicalBuffer_BarBuffer %305
+         %308 = OpAccessChain %_ptr_unsizedarr_v4uint %306 %int_1
+         %309 = OpAccessChain %_ptr_unsizedarr_v3uint %307 %int_1
+
+         ; make access to vec4
+         %310 = OpAccessChain %_ptr_v4uint %308 %18
+         ; make access to vec3
+         %311 = OpAccessChain %_ptr_v3uint %309 %18
+         ; compose vec4 to store
+         %312 = OpCompositeConstruct %v4uint %23 %18 %16 %14
+         ; compose vec3 to store
+         %313 = OpCompositeConstruct %v3uint %23 %18 %16
+         ; final storing
+         OpStore %310 %312 Aligned 16
+         OpStore %311 %313 Aligned 4
+               OpReturn
+               OpFunctionEnd
+    

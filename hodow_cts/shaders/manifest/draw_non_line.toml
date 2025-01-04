@@ -1,0 +1,24 @@
+# Shader manifest for dEQP-VK.draw.renderpass.non_line_with_params.*
+#
+# `NonLineDrawCase::initPrograms`: a pass-through vertex and fragment shader, and for the cases with a geometry shader
+# one that turns each input primitive into a triangle strip or points. The geometry shader depends only on the input
+# topology and the output kind, so there are six, named `geom_<input>_<output>`; the line-producing combinations
+# upstream skips need none.
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawNonLineTests.cpp"
+rust_module = "draw/non_line_tests"
+
+[[case]]
+name = "non_line"
+rust_const = "NON_LINE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/non_line.vert", stage = "vert" },
+    { name = "frag", template = "draw/non_line.frag", stage = "frag" },
+    { name = "geom_triangles_triangles", template = "draw/non_line_geom_triangles_triangles.geom", stage = "geom" },
+    { name = "geom_triangles_points", template = "draw/non_line_geom_triangles_points.geom", stage = "geom" },
+    { name = "geom_lines_triangles", template = "draw/non_line_geom_lines_triangles.geom", stage = "geom" },
+    { name = "geom_lines_points", template = "draw/non_line_geom_lines_points.geom", stage = "geom" },
+    { name = "geom_points_triangles", template = "draw/non_line_geom_points_triangles.geom", stage = "geom" },
+    { name = "geom_points_points", template = "draw/non_line_geom_points_points.geom", stage = "geom" },
+]

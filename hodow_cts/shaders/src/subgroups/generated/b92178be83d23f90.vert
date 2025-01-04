@@ -1,0 +1,23 @@
+#version 450
+#extension GL_ARB_shader_ballot: enable
+#extension GL_ARB_gpu_shader_int64: enable
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+
+void main (void)
+{
+  uint tempRes;
+  uint64_t value = gl_SubGroupEqMaskARB;
+  bool temp = true;
+  uint64_t mask = uint64_t(1) << gl_SubGroupInvocationARB;
+  temp = (value & mask) != 0;
+  uint tempResult = temp ? 0xf : 0x2;
+  tempRes = tempResult;
+  result[gl_VertexIndex] = tempRes;
+  float pixelSize = 2.0f/1024.0f;
+  float pixelPosition = pixelSize/2.0f - 1.0f;
+  gl_Position = vec4(float(gl_VertexIndex) * pixelSize + pixelPosition, 0.0f, 0.0f, 1.0f);
+  gl_PointSize = 1.0f;
+}

@@ -1,0 +1,25 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.multisample.a2c_with_a2one.*
+#
+# `A2CplusA2OnePrograms`: a full-screen triangle and a fragment shader that outputs a push constant colour (alpha 0.0), writing
+# the push constant depth as gl_FragDepth when `exportFragDepth` is set.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineMultisampleTests.cpp"
+rust_module = "pipeline/a2c_with_a2one_tests"
+
+[[case]]
+name = "plain"
+rust_const = "A2C_A2ONE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/a2c_with_a2one/a2c.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/a2c_with_a2one/a2c.frag", stage = "frag" },
+]
+
+[[case]]
+name = "export_frag_depth"
+rust_const = "A2C_A2ONE_DEPTH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/a2c_with_a2one/a2c.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/a2c_with_a2one/a2c_depth.frag", stage = "frag" },
+]

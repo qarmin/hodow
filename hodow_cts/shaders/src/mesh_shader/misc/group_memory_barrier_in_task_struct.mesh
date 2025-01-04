@@ -1,0 +1,23 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+layout (local_size_x=1) in;
+layout (points) out;
+layout (max_vertices=1, max_primitives=1) out;
+
+layout (location=0) out perprimitiveEXT vec4 primitiveColor[];
+
+struct TaskData { float blue; }; taskPayloadSharedEXT TaskData td;
+
+void main ()
+{
+    uvec2 vertPrim = uvec2(0u, 0u);
+vertPrim = uvec2(1u, 1u);
+    SetMeshOutputsEXT(vertPrim.x, vertPrim.y);
+    if (gl_LocalInvocationIndex == 0u && vertPrim.x > 0u) {
+        gl_MeshVerticesEXT[0].gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
+        gl_MeshVerticesEXT[0].gl_PointSize = 1.0;
+        primitiveColor[0] = vec4(0.0, 0.0, td.blue, 1.0);
+        gl_PrimitivePointIndicesEXT[0] = 0;
+    }
+}

@@ -1,0 +1,92 @@
+#version 450 core
+#pragma use_vulkan_memory_model
+#extension GL_KHR_shader_subgroup_basic : enable
+#extension GL_KHR_memory_scope_semantics : enable
+#extension GL_KHR_cooperative_matrix : enable
+#extension GL_EXT_split_barrier : enable
+#extension GL_NV_cooperative_matrix2 : enable
+#extension GL_EXT_bfloat16 : enable
+#extension GL_EXT_float_e5m2 : enable
+#extension GL_EXT_float_e4m3 : enable
+#extension GL_EXT_shader_explicit_arithmetic_types : enable
+#extension GL_EXT_buffer_reference : enable
+#extension GL_EXT_bfloat16 : enable
+// strides overriden by spec constants
+layout(constant_id = 2) const int AStride = 1;
+layout(constant_id = 3) const int BStride = 1;
+layout(constant_id = 4) const int CStride = 1;
+layout(constant_id = 5) const int OStride = 1;
+layout(constant_id = 6) const int M = 1;
+layout(constant_id = 7) const int N = 1;
+layout(constant_id = 8) const int K = 1;
+layout(local_size_x_id = 0, local_size_y_id = 1, local_size_z = 1) in;
+#pragma use_variable_pointers
+const int workgroupsX = 4;
+layout(set=0, binding=0) coherent buffer InputA { int32_t x[]; } inputA;
+layout(set=0, binding=1) coherent buffer InputB { int32_t x[]; } inputB;
+layout(set=0, binding=2) coherent buffer InputC { int32_t x[]; } inputC;
+layout(set=0, binding=3) coherent buffer Output { int32_t x[]; } outputO;
+shared int32_t sharedA[M * K * 1];
+shared int32_t sharedB[K * N * 1];
+shared int32_t sharedC[M * N * 1];
+shared int32_t sharedO[M * N * 1];
+#define ARows M
+#define ACols K
+#define ORows M
+#define OCols N
+coopmat<int32_t, gl_ScopeWorkgroup, ARows, ACols, gl_MatrixUseA> matA;
+coopmat<int32_t, gl_ScopeWorkgroup, K, N, gl_MatrixUseB> matB;
+coopmat<int32_t, gl_ScopeWorkgroup, M, N, gl_MatrixUseAccumulator> matC;
+coopmat<int32_t, gl_ScopeWorkgroup, ORows, OCols, gl_MatrixUseAccumulator> matO;
+void main()
+{
+   uvec2 matrixID = uvec2(gl_WorkGroupID.xy);
+   uint element0 = (M * 4 * K * matrixID.y + M * matrixID.x);
+   uint element1 = (K * 4 * N * matrixID.y + K * matrixID.x);
+   uint element2 = (M * 4 * N * matrixID.y + M * matrixID.x);
+   uint element3 = (M * 4 * N * matrixID.y + M * matrixID.x);
+   uint elementS0, elementS1, elementS2, elementS3;
+       elementS0 = 0;
+       elementS1 = 0;
+       elementS2 = 0;
+       elementS3 = 0;
+   if (subgroupElect()) {
+       for (int i = 0; i < M; ++i) {
+       for (int j = 0; j < K; ++j) {
+           int localElementInput = (M * 4 * j + i);
+           int localElementShared = (M * 4 / workgroupsX * j + i);
+           sharedA[elementS0 + localElementShared] = inputA.x[element0 + localElementInput];
+       }
+       }
+       for (int i = 0; i < K; ++i) {
+       for (int j = 0; j < N; ++j) {
+           int localElementInput = (K * 4 * j + i);
+           int localElementShared = (K * 4 / workgroupsX * j + i);
+           sharedB[elementS1 + localElementShared] = inputB.x[element1 + localElementInput];
+       }
+       }
+       for (int i = 0; i < M; ++i) {
+       for (int j = 0; j < N; ++j) {
+           int localElementInput = (M * 4 * j + i);
+           int localElementShared = (M * 4 / workgroupsX * j + i);
+           sharedC[elementS2 + localElementShared] = inputC.x[element2 + localElementInput];
+       }
+       }
+   }
+   controlBarrier(gl_ScopeWorkgroup, gl_ScopeWorkgroup, gl_StorageSemanticsShared, gl_SemanticsAcquireRelease);
+   coopMatLoad(matA, sharedA, elementS0, M * 4 / workgroupsX, gl_CooperativeMatrixLayoutColumnMajor);
+   coopMatLoad(matB, sharedB, elementS1, K * 4 / workgroupsX, gl_CooperativeMatrixLayoutColumnMajor);
+   coopMatLoad(matC, sharedC, elementS2, M * 4 / workgroupsX, gl_CooperativeMatrixLayoutColumnMajor);
+   matO = coopMatMulAdd(matA, matB, matC);
+   coopMatStore(matO, sharedO, elementS3, M * 4 / workgroupsX, gl_CooperativeMatrixLayoutColumnMajor);
+   controlBarrier(gl_ScopeWorkgroup, gl_ScopeWorkgroup, gl_StorageSemanticsShared, gl_SemanticsAcquireRelease);
+   if (subgroupElect()) {
+       for (int i = 0; i < M; ++i) {
+       for (int j = 0; j < N; ++j) {
+           int localElementInput = (M * 4 * j + i);
+           int localElementShared = (M * 4 / workgroupsX * j + i);
+           outputO.x[element3 + localElementInput] = sharedO[elementS3 + localElementShared];
+       }
+       }
+   }
+}

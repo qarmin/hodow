@@ -1,0 +1,22 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.creation_cache_control.*
+#
+# `graphics_tests::initPrograms` and `compute_tests::initPrograms` bake three random floats into each shader at run time; the
+# values here are fixed, since nothing about the test depends on them.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineCreationCacheControlTests.cpp"
+rust_module = "pipeline/creation_cache_control_tests"
+
+[[case]]
+name = "graphics"
+rust_const = "CACHE_CONTROL_GRAPHICS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "pipeline/creation_cache_control/vertex.vert", stage = "vert" },
+    { name = "fragment", template = "pipeline/creation_cache_control/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "compute"
+rust_const = "CACHE_CONTROL_COMPUTE"
+rust_type = "SharedProgram"
+programs = [{ name = "compute", template = "pipeline/creation_cache_control/compute.comp", stage = "comp" }]

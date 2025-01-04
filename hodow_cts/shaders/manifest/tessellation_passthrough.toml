@@ -1,0 +1,75 @@
+# Shader manifest for dEQP-VK.tessellation.geometry_interaction.passthrough.*
+#
+# `IdentityGeometryShaderTestCase::initPrograms` (`geometry_<primitive>`): a tessellation pair that feeds a pass-through
+# geometry shader (`tese_to_geom` + `geom`) or the fragment shader directly (`tese_to_frag`).
+# `IdentityTessellationShaderTestCase::initPrograms` (`tessellation_<primitive>`): a pass-through tessellation pair
+# (`tese`) before a geometry shader that reads from it (`geom_from_tese`), or directly from the vertex shader (`geom_from_vert`).
+# The pre-expanded GLSL is the C++ string generation with the primitive type filled in.
+
+upstream_source = "external/vulkancts/modules/vulkan/tessellation/vktTessellationGeometryPassthroughTests.cpp"
+rust_module = "tessellation/geometry_passthrough_tests"
+
+[[case]]
+name = "geometry_triangles"
+rust_const = "PASSTHROUGH_GEOMETRY_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/passthrough.vert", stage = "vert" },
+    { name = "frag", template = "tessellation/passthrough.frag", stage = "frag" },
+    { name = "tesc", template = "tessellation/passthrough_geometry_triangles.tesc", stage = "tesc" },
+    { name = "tese_to_frag", template = "tessellation/passthrough_geometry_triangles_to_frag.tese", stage = "tese" },
+    { name = "tese_to_geom", template = "tessellation/passthrough_geometry_triangles_to_geom.tese", stage = "tese" },
+    { name = "geom", template = "tessellation/passthrough_geometry_triangles.geom", stage = "geom" },
+]
+
+[[case]]
+name = "geometry_quads"
+rust_const = "PASSTHROUGH_GEOMETRY_QUADS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/passthrough.vert", stage = "vert" },
+    { name = "frag", template = "tessellation/passthrough.frag", stage = "frag" },
+    { name = "tesc", template = "tessellation/passthrough_geometry_quads.tesc", stage = "tesc" },
+    { name = "tese_to_frag", template = "tessellation/passthrough_geometry_quads_to_frag.tese", stage = "tese" },
+    { name = "tese_to_geom", template = "tessellation/passthrough_geometry_quads_to_geom.tese", stage = "tese" },
+    { name = "geom", template = "tessellation/passthrough_geometry_quads.geom", stage = "geom" },
+]
+
+[[case]]
+name = "geometry_isolines"
+rust_const = "PASSTHROUGH_GEOMETRY_ISOLINES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/passthrough.vert", stage = "vert" },
+    { name = "frag", template = "tessellation/passthrough.frag", stage = "frag" },
+    { name = "tesc", template = "tessellation/passthrough_geometry_isolines.tesc", stage = "tesc" },
+    { name = "tese_to_frag", template = "tessellation/passthrough_geometry_isolines_to_frag.tese", stage = "tese" },
+    { name = "tese_to_geom", template = "tessellation/passthrough_geometry_isolines_to_geom.tese", stage = "tese" },
+    { name = "geom", template = "tessellation/passthrough_geometry_isolines.geom", stage = "geom" },
+]
+
+[[case]]
+name = "tessellation_triangles"
+rust_const = "PASSTHROUGH_TESSELLATION_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/passthrough.vert", stage = "vert" },
+    { name = "frag", template = "tessellation/passthrough.frag", stage = "frag" },
+    { name = "tesc", template = "tessellation/passthrough_tessellation_triangles.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/passthrough_tessellation_triangles.tese", stage = "tese" },
+    { name = "geom_from_tese", template = "tessellation/passthrough_tessellation_triangles_from_tese.geom", stage = "geom" },
+    { name = "geom_from_vert", template = "tessellation/passthrough_tessellation_triangles_from_vert.geom", stage = "geom" },
+]
+
+[[case]]
+name = "tessellation_isolines"
+rust_const = "PASSTHROUGH_TESSELLATION_ISOLINES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/passthrough.vert", stage = "vert" },
+    { name = "frag", template = "tessellation/passthrough.frag", stage = "frag" },
+    { name = "tesc", template = "tessellation/passthrough_tessellation_isolines.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/passthrough_tessellation_isolines.tese", stage = "tese" },
+    { name = "geom_from_tese", template = "tessellation/passthrough_tessellation_isolines_from_tese.geom", stage = "geom" },
+    { name = "geom_from_vert", template = "tessellation/passthrough_tessellation_isolines_from_vert.geom", stage = "geom" },
+]

@@ -1,0 +1,62 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.framebuffer_attachment.*
+#
+# The initPrograms functions of vktPipelineFramebufferAttachmentTests.cpp: initColorPrograms, initImagePrograms (single-sampled and
+# multisampled), initDifferentAttachmentSizesPrograms, initMultiAttachmentsNotExportPrograms and
+# initInputResolveSameAttachmentPrograms. None of them depends on the case parameters.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineFramebufferAttachmentTests.cpp"
+rust_module = "pipeline/framebuffer_attachment_tests"
+
+[[case]]
+name = "color"
+rust_const = "FB_COLOR"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/framebuffer_attachment/position.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/framebuffer_attachment/color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "no_attachments"
+rust_const = "FB_NO_ATTACHMENTS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/framebuffer_attachment/point.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/framebuffer_attachment/no_attachments.frag", stage = "frag" },
+]
+
+[[case]]
+name = "no_attachments_ms"
+rust_const = "FB_NO_ATTACHMENTS_MS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/framebuffer_attachment/point.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/framebuffer_attachment/no_attachments_ms.frag", stage = "frag" },
+]
+
+[[case]]
+name = "different_sizes"
+rust_const = "FB_DIFFERENT_SIZES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/framebuffer_attachment/position.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/framebuffer_attachment/different_sizes.frag", stage = "frag" },
+]
+
+[[case]]
+name = "not_exported"
+rust_const = "FB_NOT_EXPORTED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/framebuffer_attachment/position.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/framebuffer_attachment/not_exported.frag", stage = "frag" },
+]
+
+[[case]]
+name = "input_resolve"
+rust_const = "FB_INPUT_RESOLVE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/framebuffer_attachment/position.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/framebuffer_attachment/input_resolve.frag", stage = "frag" },
+]

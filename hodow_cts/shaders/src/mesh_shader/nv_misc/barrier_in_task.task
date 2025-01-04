@@ -1,0 +1,27 @@
+#version 450
+#extension GL_NV_mesh_shader : enable
+
+layout (local_size_x=32) in;
+
+shared uint counter;
+
+void main ()
+{
+counter = 0;
+memoryBarrierShared();
+barrier();
+atomicAdd(counter, 1u);
+memoryBarrierShared();
+barrier();
+if (gl_LocalInvocationID.x == 0u) {
+    if (counter == 32) {
+
+gl_TaskCountNV = 1u;
+
+    } else {
+
+gl_TaskCountNV = 0u;
+
+    }
+}
+}

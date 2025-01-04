@@ -1,0 +1,28 @@
+#version 450
+#extension GL_KHR_shader_subgroup_quad: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 4, std430) readonly buffer Buffer2
+{
+  dvec4 data[];
+};
+
+void main (void)
+{
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  const uint swapTable[4] = {1, 0, 3, 2};
+  tempRes = 1;
+  dvec4 op = subgroupQuadSwapHorizontal(data[gl_SubgroupInvocationID]);
+  uint otherID = (gl_SubgroupInvocationID & ~0x3) + swapTable[gl_SubgroupInvocationID & 0x3];
+  if (subgroupBallotBitExtract(mask, otherID) && op !=data[otherID])
+    tempRes = 0;
+  result[gl_VertexIndex] = tempRes;
+  float pixelSize = 2.0f/1024.0f;
+  float pixelPosition = pixelSize/2.0f - 1.0f;
+  gl_Position = vec4(float(gl_VertexIndex) * pixelSize + pixelPosition, 0.0f, 0.0f, 1.0f);
+  gl_PointSize = 1.0f;
+}

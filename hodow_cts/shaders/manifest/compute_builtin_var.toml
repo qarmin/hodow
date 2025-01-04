@@ -1,0 +1,588 @@
+# Shader/parameter manifest for
+#   dEQP-VK.compute.pipeline.builtin_var.*
+#   dEQP-VK.compute.pipeline.device_group.*
+#   dEQP-VK.compute.pipeline.64b_indexing.*
+#
+# As everywhere else, this file is the single source of truth for every per-case
+# parameter: the GLSL that gets compiled and the Rust constants the test reads are
+# both generated from here, so the shader and the host cannot disagree about a
+# workgroup size.
+#
+# builtin_var is the unusual one. Upstream's ComputeBuiltinVarCase holds a list of
+# SubCases (a local size + a workgroup count), and initPrograms() emits ONE shader per
+# sub-case, named compute_0, compute_1, ... - the local size has to be baked into the
+# shader, so a case with nine sub-cases needs nine shaders. The generator substitutes a
+# single per-case environment into every template of that case, so the per-sub-case
+# local size cannot come from the program entry; instead each sub-case index has its
+# own template file (bvar_subcase_<i>.comp) that reads local_size_<i>. The templates
+# are otherwise character-for-character identical, and all of them are
+# genBuiltinVarSource() verbatim.
+#
+# `var_name`, `var_type_name` and `assignment` restate genBuiltinVarSource()'s
+# conditional; `assignment` is the readByComponent branch, which for a uvec3 writes
+# .z, .y and .x separately (the C++ switch falls through from VEC3 to VEC2).
+#
+# Case order follows upstream's registration order in each of the three group
+# constructors, because that is the order both binaries execute in.
+
+upstream_source = "external/vulkancts/modules/vulkan/compute/vktComputeShaderBuiltinVarTests.cpp"
+rust_module = "compute/shader_builtin_var_tests"
+
+# =================================================================================
+# builtin_var - ComputeShaderBuiltinVarTests::init()
+#
+# The loop registers every vector-valued builtin twice, once read whole and once read
+# by component; local_invocation_index is a scalar and is registered only once.
+# =================================================================================
+
+# --- NumWorkGroupsCase -----------------------------------------------------------
+[[case]]
+name = "num_work_groups"
+rust_const = "NUM_WORK_GROUPS"
+rust_type = "NumWorkGroupsCase"
+programs = [
+    { name = "compute_0", template = "compute/bvar_subcase_0.comp", stage = "comp" },
+    { name = "compute_1", template = "compute/bvar_subcase_1.comp", stage = "comp" },
+    { name = "compute_2", template = "compute/bvar_subcase_2.comp", stage = "comp" },
+    { name = "compute_3", template = "compute/bvar_subcase_3.comp", stage = "comp" },
+    { name = "compute_4", template = "compute/bvar_subcase_4.comp", stage = "comp" },
+    { name = "compute_5", template = "compute/bvar_subcase_5.comp", stage = "comp" },
+]
+[case.params]
+builtin = { type = "enum:BuiltinVar", value = "NumWorkGroups" }
+var_type = { type = "enum:DataType", value = "UintVec3" }
+read_by_component = { type = "bool", value = false }
+local_size_0 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_0 = { type = "UVec3", value = [1, 1, 1] }
+local_size_1 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_1 = { type = "UVec3", value = [52, 1, 1] }
+local_size_2 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_2 = { type = "UVec3", value = [1, 39, 1] }
+local_size_3 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_3 = { type = "UVec3", value = [1, 1, 78] }
+local_size_4 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_4 = { type = "UVec3", value = [4, 7, 11] }
+local_size_5 = { type = "UVec3", value = [2, 3, 4] }
+num_work_groups_5 = { type = "UVec3", value = [4, 7, 11] }
+[case.derived]
+var_name = "'gl_NumWorkGroups'"
+var_type_name = "'uint' if var_type == 'Uint' else 'uvec3'"
+assignment = "('    sb_out.result[offset].z = {v}.z;\\n    sb_out.result[offset].y = {v}.y;\\n    sb_out.result[offset].x = {v}.x;\\n' if read_by_component and var_type != 'Uint' else '    sb_out.result[offset] = {v};\\n').format(v=var_name)"
+
+# --- WorkGroupSizeCase -----------------------------------------------------------
+[[case]]
+name = "work_group_size"
+rust_const = "WORK_GROUP_SIZE"
+rust_type = "WorkGroupSizeCase"
+programs = [
+    { name = "compute_0", template = "compute/bvar_subcase_0.comp", stage = "comp" },
+    { name = "compute_1", template = "compute/bvar_subcase_1.comp", stage = "comp" },
+    { name = "compute_2", template = "compute/bvar_subcase_2.comp", stage = "comp" },
+    { name = "compute_3", template = "compute/bvar_subcase_3.comp", stage = "comp" },
+    { name = "compute_4", template = "compute/bvar_subcase_4.comp", stage = "comp" },
+    { name = "compute_5", template = "compute/bvar_subcase_5.comp", stage = "comp" },
+    { name = "compute_6", template = "compute/bvar_subcase_6.comp", stage = "comp" },
+    { name = "compute_7", template = "compute/bvar_subcase_7.comp", stage = "comp" },
+    { name = "compute_8", template = "compute/bvar_subcase_8.comp", stage = "comp" },
+]
+[case.params]
+builtin = { type = "enum:BuiltinVar", value = "WorkGroupSize" }
+var_type = { type = "enum:DataType", value = "UintVec3" }
+read_by_component = { type = "bool", value = false }
+local_size_0 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_0 = { type = "UVec3", value = [1, 1, 1] }
+local_size_1 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_1 = { type = "UVec3", value = [2, 7, 3] }
+local_size_2 = { type = "UVec3", value = [2, 1, 1] }
+num_work_groups_2 = { type = "UVec3", value = [1, 1, 1] }
+local_size_3 = { type = "UVec3", value = [2, 1, 1] }
+num_work_groups_3 = { type = "UVec3", value = [1, 3, 5] }
+local_size_4 = { type = "UVec3", value = [1, 3, 1] }
+num_work_groups_4 = { type = "UVec3", value = [1, 1, 1] }
+local_size_5 = { type = "UVec3", value = [1, 1, 7] }
+num_work_groups_5 = { type = "UVec3", value = [1, 1, 1] }
+local_size_6 = { type = "UVec3", value = [1, 1, 7] }
+num_work_groups_6 = { type = "UVec3", value = [3, 3, 1] }
+local_size_7 = { type = "UVec3", value = [10, 3, 4] }
+num_work_groups_7 = { type = "UVec3", value = [1, 1, 1] }
+local_size_8 = { type = "UVec3", value = [10, 3, 4] }
+num_work_groups_8 = { type = "UVec3", value = [3, 1, 2] }
+[case.derived]
+var_name = "'gl_WorkGroupSize'"
+var_type_name = "'uint' if var_type == 'Uint' else 'uvec3'"
+assignment = "('    sb_out.result[offset].z = {v}.z;\\n    sb_out.result[offset].y = {v}.y;\\n    sb_out.result[offset].x = {v}.x;\\n' if read_by_component and var_type != 'Uint' else '    sb_out.result[offset] = {v};\\n').format(v=var_name)"
+
+# --- WorkGroupIDCase -------------------------------------------------------------
+[[case]]
+name = "work_group_id"
+rust_const = "WORK_GROUP_ID"
+rust_type = "WorkGroupIdCase"
+programs = [
+    { name = "compute_0", template = "compute/bvar_subcase_0.comp", stage = "comp" },
+    { name = "compute_1", template = "compute/bvar_subcase_1.comp", stage = "comp" },
+    { name = "compute_2", template = "compute/bvar_subcase_2.comp", stage = "comp" },
+    { name = "compute_3", template = "compute/bvar_subcase_3.comp", stage = "comp" },
+    { name = "compute_4", template = "compute/bvar_subcase_4.comp", stage = "comp" },
+    { name = "compute_5", template = "compute/bvar_subcase_5.comp", stage = "comp" },
+]
+[case.params]
+builtin = { type = "enum:BuiltinVar", value = "WorkGroupId" }
+var_type = { type = "enum:DataType", value = "UintVec3" }
+read_by_component = { type = "bool", value = false }
+local_size_0 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_0 = { type = "UVec3", value = [1, 1, 1] }
+local_size_1 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_1 = { type = "UVec3", value = [52, 1, 1] }
+local_size_2 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_2 = { type = "UVec3", value = [1, 39, 1] }
+local_size_3 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_3 = { type = "UVec3", value = [1, 1, 78] }
+local_size_4 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_4 = { type = "UVec3", value = [4, 7, 11] }
+local_size_5 = { type = "UVec3", value = [2, 3, 4] }
+num_work_groups_5 = { type = "UVec3", value = [4, 7, 11] }
+[case.derived]
+var_name = "'gl_WorkGroupID'"
+var_type_name = "'uint' if var_type == 'Uint' else 'uvec3'"
+assignment = "('    sb_out.result[offset].z = {v}.z;\\n    sb_out.result[offset].y = {v}.y;\\n    sb_out.result[offset].x = {v}.x;\\n' if read_by_component and var_type != 'Uint' else '    sb_out.result[offset] = {v};\\n').format(v=var_name)"
+
+# --- LocalInvocationIDCase -------------------------------------------------------
+[[case]]
+name = "local_invocation_id"
+rust_const = "LOCAL_INVOCATION_ID"
+rust_type = "LocalInvocationIdCase"
+programs = [
+    { name = "compute_0", template = "compute/bvar_subcase_0.comp", stage = "comp" },
+    { name = "compute_1", template = "compute/bvar_subcase_1.comp", stage = "comp" },
+    { name = "compute_2", template = "compute/bvar_subcase_2.comp", stage = "comp" },
+    { name = "compute_3", template = "compute/bvar_subcase_3.comp", stage = "comp" },
+    { name = "compute_4", template = "compute/bvar_subcase_4.comp", stage = "comp" },
+    { name = "compute_5", template = "compute/bvar_subcase_5.comp", stage = "comp" },
+    { name = "compute_6", template = "compute/bvar_subcase_6.comp", stage = "comp" },
+    { name = "compute_7", template = "compute/bvar_subcase_7.comp", stage = "comp" },
+    { name = "compute_8", template = "compute/bvar_subcase_8.comp", stage = "comp" },
+]
+[case.params]
+builtin = { type = "enum:BuiltinVar", value = "LocalInvocationId" }
+var_type = { type = "enum:DataType", value = "UintVec3" }
+read_by_component = { type = "bool", value = false }
+local_size_0 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_0 = { type = "UVec3", value = [1, 1, 1] }
+local_size_1 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_1 = { type = "UVec3", value = [2, 7, 3] }
+local_size_2 = { type = "UVec3", value = [2, 1, 1] }
+num_work_groups_2 = { type = "UVec3", value = [1, 1, 1] }
+local_size_3 = { type = "UVec3", value = [2, 1, 1] }
+num_work_groups_3 = { type = "UVec3", value = [1, 3, 5] }
+local_size_4 = { type = "UVec3", value = [1, 3, 1] }
+num_work_groups_4 = { type = "UVec3", value = [1, 1, 1] }
+local_size_5 = { type = "UVec3", value = [1, 1, 7] }
+num_work_groups_5 = { type = "UVec3", value = [1, 1, 1] }
+local_size_6 = { type = "UVec3", value = [1, 1, 7] }
+num_work_groups_6 = { type = "UVec3", value = [3, 3, 1] }
+local_size_7 = { type = "UVec3", value = [10, 3, 4] }
+num_work_groups_7 = { type = "UVec3", value = [1, 1, 1] }
+local_size_8 = { type = "UVec3", value = [10, 3, 4] }
+num_work_groups_8 = { type = "UVec3", value = [3, 1, 2] }
+[case.derived]
+var_name = "'gl_LocalInvocationID'"
+var_type_name = "'uint' if var_type == 'Uint' else 'uvec3'"
+assignment = "('    sb_out.result[offset].z = {v}.z;\\n    sb_out.result[offset].y = {v}.y;\\n    sb_out.result[offset].x = {v}.x;\\n' if read_by_component and var_type != 'Uint' else '    sb_out.result[offset] = {v};\\n').format(v=var_name)"
+
+# --- GlobalInvocationIDCase ------------------------------------------------------
+[[case]]
+name = "global_invocation_id"
+rust_const = "GLOBAL_INVOCATION_ID"
+rust_type = "GlobalInvocationIdCase"
+programs = [
+    { name = "compute_0", template = "compute/bvar_subcase_0.comp", stage = "comp" },
+    { name = "compute_1", template = "compute/bvar_subcase_1.comp", stage = "comp" },
+    { name = "compute_2", template = "compute/bvar_subcase_2.comp", stage = "comp" },
+    { name = "compute_3", template = "compute/bvar_subcase_3.comp", stage = "comp" },
+    { name = "compute_4", template = "compute/bvar_subcase_4.comp", stage = "comp" },
+    { name = "compute_5", template = "compute/bvar_subcase_5.comp", stage = "comp" },
+    { name = "compute_6", template = "compute/bvar_subcase_6.comp", stage = "comp" },
+    { name = "compute_7", template = "compute/bvar_subcase_7.comp", stage = "comp" },
+]
+[case.params]
+builtin = { type = "enum:BuiltinVar", value = "GlobalInvocationId" }
+var_type = { type = "enum:DataType", value = "UintVec3" }
+read_by_component = { type = "bool", value = false }
+local_size_0 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_0 = { type = "UVec3", value = [1, 1, 1] }
+local_size_1 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_1 = { type = "UVec3", value = [52, 1, 1] }
+local_size_2 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_2 = { type = "UVec3", value = [1, 39, 1] }
+local_size_3 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_3 = { type = "UVec3", value = [1, 1, 78] }
+local_size_4 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_4 = { type = "UVec3", value = [4, 7, 11] }
+local_size_5 = { type = "UVec3", value = [2, 3, 4] }
+num_work_groups_5 = { type = "UVec3", value = [4, 7, 11] }
+local_size_6 = { type = "UVec3", value = [10, 3, 4] }
+num_work_groups_6 = { type = "UVec3", value = [1, 1, 1] }
+local_size_7 = { type = "UVec3", value = [10, 3, 4] }
+num_work_groups_7 = { type = "UVec3", value = [3, 1, 2] }
+[case.derived]
+var_name = "'gl_GlobalInvocationID'"
+var_type_name = "'uint' if var_type == 'Uint' else 'uvec3'"
+assignment = "('    sb_out.result[offset].z = {v}.z;\\n    sb_out.result[offset].y = {v}.y;\\n    sb_out.result[offset].x = {v}.x;\\n' if read_by_component and var_type != 'Uint' else '    sb_out.result[offset] = {v};\\n').format(v=var_name)"
+
+# --- The same five cases again, read by component ---------------------------------
+[[case]]
+name = "num_work_groups_component"
+rust_const = "NUM_WORK_GROUPS_COMPONENT"
+rust_type = "NumWorkGroupsCase"
+programs = [
+    { name = "compute_0", template = "compute/bvar_subcase_0.comp", stage = "comp" },
+    { name = "compute_1", template = "compute/bvar_subcase_1.comp", stage = "comp" },
+    { name = "compute_2", template = "compute/bvar_subcase_2.comp", stage = "comp" },
+    { name = "compute_3", template = "compute/bvar_subcase_3.comp", stage = "comp" },
+    { name = "compute_4", template = "compute/bvar_subcase_4.comp", stage = "comp" },
+    { name = "compute_5", template = "compute/bvar_subcase_5.comp", stage = "comp" },
+]
+[case.params]
+builtin = { type = "enum:BuiltinVar", value = "NumWorkGroups" }
+var_type = { type = "enum:DataType", value = "UintVec3" }
+read_by_component = { type = "bool", value = true }
+local_size_0 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_0 = { type = "UVec3", value = [1, 1, 1] }
+local_size_1 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_1 = { type = "UVec3", value = [52, 1, 1] }
+local_size_2 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_2 = { type = "UVec3", value = [1, 39, 1] }
+local_size_3 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_3 = { type = "UVec3", value = [1, 1, 78] }
+local_size_4 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_4 = { type = "UVec3", value = [4, 7, 11] }
+local_size_5 = { type = "UVec3", value = [2, 3, 4] }
+num_work_groups_5 = { type = "UVec3", value = [4, 7, 11] }
+[case.derived]
+var_name = "'gl_NumWorkGroups'"
+var_type_name = "'uint' if var_type == 'Uint' else 'uvec3'"
+assignment = "('    sb_out.result[offset].z = {v}.z;\\n    sb_out.result[offset].y = {v}.y;\\n    sb_out.result[offset].x = {v}.x;\\n' if read_by_component and var_type != 'Uint' else '    sb_out.result[offset] = {v};\\n').format(v=var_name)"
+
+[[case]]
+name = "work_group_size_component"
+rust_const = "WORK_GROUP_SIZE_COMPONENT"
+rust_type = "WorkGroupSizeCase"
+programs = [
+    { name = "compute_0", template = "compute/bvar_subcase_0.comp", stage = "comp" },
+    { name = "compute_1", template = "compute/bvar_subcase_1.comp", stage = "comp" },
+    { name = "compute_2", template = "compute/bvar_subcase_2.comp", stage = "comp" },
+    { name = "compute_3", template = "compute/bvar_subcase_3.comp", stage = "comp" },
+    { name = "compute_4", template = "compute/bvar_subcase_4.comp", stage = "comp" },
+    { name = "compute_5", template = "compute/bvar_subcase_5.comp", stage = "comp" },
+    { name = "compute_6", template = "compute/bvar_subcase_6.comp", stage = "comp" },
+    { name = "compute_7", template = "compute/bvar_subcase_7.comp", stage = "comp" },
+    { name = "compute_8", template = "compute/bvar_subcase_8.comp", stage = "comp" },
+]
+[case.params]
+builtin = { type = "enum:BuiltinVar", value = "WorkGroupSize" }
+var_type = { type = "enum:DataType", value = "UintVec3" }
+read_by_component = { type = "bool", value = true }
+local_size_0 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_0 = { type = "UVec3", value = [1, 1, 1] }
+local_size_1 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_1 = { type = "UVec3", value = [2, 7, 3] }
+local_size_2 = { type = "UVec3", value = [2, 1, 1] }
+num_work_groups_2 = { type = "UVec3", value = [1, 1, 1] }
+local_size_3 = { type = "UVec3", value = [2, 1, 1] }
+num_work_groups_3 = { type = "UVec3", value = [1, 3, 5] }
+local_size_4 = { type = "UVec3", value = [1, 3, 1] }
+num_work_groups_4 = { type = "UVec3", value = [1, 1, 1] }
+local_size_5 = { type = "UVec3", value = [1, 1, 7] }
+num_work_groups_5 = { type = "UVec3", value = [1, 1, 1] }
+local_size_6 = { type = "UVec3", value = [1, 1, 7] }
+num_work_groups_6 = { type = "UVec3", value = [3, 3, 1] }
+local_size_7 = { type = "UVec3", value = [10, 3, 4] }
+num_work_groups_7 = { type = "UVec3", value = [1, 1, 1] }
+local_size_8 = { type = "UVec3", value = [10, 3, 4] }
+num_work_groups_8 = { type = "UVec3", value = [3, 1, 2] }
+[case.derived]
+var_name = "'gl_WorkGroupSize'"
+var_type_name = "'uint' if var_type == 'Uint' else 'uvec3'"
+assignment = "('    sb_out.result[offset].z = {v}.z;\\n    sb_out.result[offset].y = {v}.y;\\n    sb_out.result[offset].x = {v}.x;\\n' if read_by_component and var_type != 'Uint' else '    sb_out.result[offset] = {v};\\n').format(v=var_name)"
+
+[[case]]
+name = "work_group_id_component"
+rust_const = "WORK_GROUP_ID_COMPONENT"
+rust_type = "WorkGroupIdCase"
+programs = [
+    { name = "compute_0", template = "compute/bvar_subcase_0.comp", stage = "comp" },
+    { name = "compute_1", template = "compute/bvar_subcase_1.comp", stage = "comp" },
+    { name = "compute_2", template = "compute/bvar_subcase_2.comp", stage = "comp" },
+    { name = "compute_3", template = "compute/bvar_subcase_3.comp", stage = "comp" },
+    { name = "compute_4", template = "compute/bvar_subcase_4.comp", stage = "comp" },
+    { name = "compute_5", template = "compute/bvar_subcase_5.comp", stage = "comp" },
+]
+[case.params]
+builtin = { type = "enum:BuiltinVar", value = "WorkGroupId" }
+var_type = { type = "enum:DataType", value = "UintVec3" }
+read_by_component = { type = "bool", value = true }
+local_size_0 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_0 = { type = "UVec3", value = [1, 1, 1] }
+local_size_1 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_1 = { type = "UVec3", value = [52, 1, 1] }
+local_size_2 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_2 = { type = "UVec3", value = [1, 39, 1] }
+local_size_3 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_3 = { type = "UVec3", value = [1, 1, 78] }
+local_size_4 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_4 = { type = "UVec3", value = [4, 7, 11] }
+local_size_5 = { type = "UVec3", value = [2, 3, 4] }
+num_work_groups_5 = { type = "UVec3", value = [4, 7, 11] }
+[case.derived]
+var_name = "'gl_WorkGroupID'"
+var_type_name = "'uint' if var_type == 'Uint' else 'uvec3'"
+assignment = "('    sb_out.result[offset].z = {v}.z;\\n    sb_out.result[offset].y = {v}.y;\\n    sb_out.result[offset].x = {v}.x;\\n' if read_by_component and var_type != 'Uint' else '    sb_out.result[offset] = {v};\\n').format(v=var_name)"
+
+[[case]]
+name = "local_invocation_id_component"
+rust_const = "LOCAL_INVOCATION_ID_COMPONENT"
+rust_type = "LocalInvocationIdCase"
+programs = [
+    { name = "compute_0", template = "compute/bvar_subcase_0.comp", stage = "comp" },
+    { name = "compute_1", template = "compute/bvar_subcase_1.comp", stage = "comp" },
+    { name = "compute_2", template = "compute/bvar_subcase_2.comp", stage = "comp" },
+    { name = "compute_3", template = "compute/bvar_subcase_3.comp", stage = "comp" },
+    { name = "compute_4", template = "compute/bvar_subcase_4.comp", stage = "comp" },
+    { name = "compute_5", template = "compute/bvar_subcase_5.comp", stage = "comp" },
+    { name = "compute_6", template = "compute/bvar_subcase_6.comp", stage = "comp" },
+    { name = "compute_7", template = "compute/bvar_subcase_7.comp", stage = "comp" },
+    { name = "compute_8", template = "compute/bvar_subcase_8.comp", stage = "comp" },
+]
+[case.params]
+builtin = { type = "enum:BuiltinVar", value = "LocalInvocationId" }
+var_type = { type = "enum:DataType", value = "UintVec3" }
+read_by_component = { type = "bool", value = true }
+local_size_0 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_0 = { type = "UVec3", value = [1, 1, 1] }
+local_size_1 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_1 = { type = "UVec3", value = [2, 7, 3] }
+local_size_2 = { type = "UVec3", value = [2, 1, 1] }
+num_work_groups_2 = { type = "UVec3", value = [1, 1, 1] }
+local_size_3 = { type = "UVec3", value = [2, 1, 1] }
+num_work_groups_3 = { type = "UVec3", value = [1, 3, 5] }
+local_size_4 = { type = "UVec3", value = [1, 3, 1] }
+num_work_groups_4 = { type = "UVec3", value = [1, 1, 1] }
+local_size_5 = { type = "UVec3", value = [1, 1, 7] }
+num_work_groups_5 = { type = "UVec3", value = [1, 1, 1] }
+local_size_6 = { type = "UVec3", value = [1, 1, 7] }
+num_work_groups_6 = { type = "UVec3", value = [3, 3, 1] }
+local_size_7 = { type = "UVec3", value = [10, 3, 4] }
+num_work_groups_7 = { type = "UVec3", value = [1, 1, 1] }
+local_size_8 = { type = "UVec3", value = [10, 3, 4] }
+num_work_groups_8 = { type = "UVec3", value = [3, 1, 2] }
+[case.derived]
+var_name = "'gl_LocalInvocationID'"
+var_type_name = "'uint' if var_type == 'Uint' else 'uvec3'"
+assignment = "('    sb_out.result[offset].z = {v}.z;\\n    sb_out.result[offset].y = {v}.y;\\n    sb_out.result[offset].x = {v}.x;\\n' if read_by_component and var_type != 'Uint' else '    sb_out.result[offset] = {v};\\n').format(v=var_name)"
+
+[[case]]
+name = "global_invocation_id_component"
+rust_const = "GLOBAL_INVOCATION_ID_COMPONENT"
+rust_type = "GlobalInvocationIdCase"
+programs = [
+    { name = "compute_0", template = "compute/bvar_subcase_0.comp", stage = "comp" },
+    { name = "compute_1", template = "compute/bvar_subcase_1.comp", stage = "comp" },
+    { name = "compute_2", template = "compute/bvar_subcase_2.comp", stage = "comp" },
+    { name = "compute_3", template = "compute/bvar_subcase_3.comp", stage = "comp" },
+    { name = "compute_4", template = "compute/bvar_subcase_4.comp", stage = "comp" },
+    { name = "compute_5", template = "compute/bvar_subcase_5.comp", stage = "comp" },
+    { name = "compute_6", template = "compute/bvar_subcase_6.comp", stage = "comp" },
+    { name = "compute_7", template = "compute/bvar_subcase_7.comp", stage = "comp" },
+]
+[case.params]
+builtin = { type = "enum:BuiltinVar", value = "GlobalInvocationId" }
+var_type = { type = "enum:DataType", value = "UintVec3" }
+read_by_component = { type = "bool", value = true }
+local_size_0 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_0 = { type = "UVec3", value = [1, 1, 1] }
+local_size_1 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_1 = { type = "UVec3", value = [52, 1, 1] }
+local_size_2 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_2 = { type = "UVec3", value = [1, 39, 1] }
+local_size_3 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_3 = { type = "UVec3", value = [1, 1, 78] }
+local_size_4 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_4 = { type = "UVec3", value = [4, 7, 11] }
+local_size_5 = { type = "UVec3", value = [2, 3, 4] }
+num_work_groups_5 = { type = "UVec3", value = [4, 7, 11] }
+local_size_6 = { type = "UVec3", value = [10, 3, 4] }
+num_work_groups_6 = { type = "UVec3", value = [1, 1, 1] }
+local_size_7 = { type = "UVec3", value = [10, 3, 4] }
+num_work_groups_7 = { type = "UVec3", value = [3, 1, 2] }
+[case.derived]
+var_name = "'gl_GlobalInvocationID'"
+var_type_name = "'uint' if var_type == 'Uint' else 'uvec3'"
+assignment = "('    sb_out.result[offset].z = {v}.z;\\n    sb_out.result[offset].y = {v}.y;\\n    sb_out.result[offset].x = {v}.x;\\n' if read_by_component and var_type != 'Uint' else '    sb_out.result[offset] = {v};\\n').format(v=var_name)"
+
+# --- LocalInvocationIndexCase ----------------------------------------------------
+# Registered once only: the value is already a scalar, so there is nothing to read by
+# component. Its var_type is TYPE_UINT, which is what makes the shader declare
+# `uint result[]` and take the non-component branch of the assignment.
+[[case]]
+name = "local_invocation_index"
+rust_const = "LOCAL_INVOCATION_INDEX"
+rust_type = "LocalInvocationIndexCase"
+programs = [
+    { name = "compute_0", template = "compute/bvar_subcase_0.comp", stage = "comp" },
+    { name = "compute_1", template = "compute/bvar_subcase_1.comp", stage = "comp" },
+    { name = "compute_2", template = "compute/bvar_subcase_2.comp", stage = "comp" },
+    { name = "compute_3", template = "compute/bvar_subcase_3.comp", stage = "comp" },
+    { name = "compute_4", template = "compute/bvar_subcase_4.comp", stage = "comp" },
+    { name = "compute_5", template = "compute/bvar_subcase_5.comp", stage = "comp" },
+]
+[case.params]
+builtin = { type = "enum:BuiltinVar", value = "LocalInvocationIndex" }
+var_type = { type = "enum:DataType", value = "Uint" }
+read_by_component = { type = "bool", value = false }
+local_size_0 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_0 = { type = "UVec3", value = [1, 1, 1] }
+local_size_1 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_1 = { type = "UVec3", value = [1, 39, 1] }
+local_size_2 = { type = "UVec3", value = [1, 1, 1] }
+num_work_groups_2 = { type = "UVec3", value = [4, 7, 11] }
+local_size_3 = { type = "UVec3", value = [2, 3, 4] }
+num_work_groups_3 = { type = "UVec3", value = [4, 7, 11] }
+local_size_4 = { type = "UVec3", value = [10, 3, 4] }
+num_work_groups_4 = { type = "UVec3", value = [1, 1, 1] }
+local_size_5 = { type = "UVec3", value = [10, 3, 4] }
+num_work_groups_5 = { type = "UVec3", value = [3, 1, 2] }
+[case.derived]
+var_name = "'gl_LocalInvocationIndex'"
+var_type_name = "'uint' if var_type == 'Uint' else 'uvec3'"
+assignment = "('    sb_out.result[offset].z = {v}.z;\\n    sb_out.result[offset].y = {v}.y;\\n    sb_out.result[offset].x = {v}.x;\\n' if read_by_component and var_type != 'Uint' else '    sb_out.result[offset] = {v};\\n').format(v=var_name)"
+
+# =================================================================================
+# device_group - createBasicDeviceGroupComputeShaderTests()
+# (upstream file: vktComputeBasicComputeShaderTests.cpp)
+# =================================================================================
+
+# --- DispatchBaseTest ------------------------------------------------------------
+# split_size is how the work is handed out: work_size must be a multiple of it in x
+# only, and split_size a multiple of local_size in y and z. The instance asserts all
+# of that, exactly as the upstream constructor does.
+[[case]]
+name = "dispatch_base"
+rust_const = "DISPATCH_BASE"
+rust_type = "DispatchBaseCase"
+programs = [{ name = "comp", template = "compute/bvar_dispatch_base.comp", stage = "comp" }]
+[case.params]
+num_values = { type = "u32", value = 32768 }
+local_size = { type = "IVec3", value = [4, 2, 4] }
+work_size = { type = "IVec3", value = [16, 8, 8] }
+split_size = { type = "IVec3", value = [4, 8, 8] }
+use_maintenance5 = { type = "bool", value = false }
+
+[[case]]
+name = "dispatch_base_maintenance5"
+rust_const = "DISPATCH_BASE_MAINTENANCE5"
+rust_type = "DispatchBaseCase"
+programs = [{ name = "comp", template = "compute/bvar_dispatch_base.comp", stage = "comp" }]
+[case.params]
+num_values = { type = "u32", value = 32768 }
+local_size = { type = "IVec3", value = [4, 2, 4] }
+work_size = { type = "IVec3", value = [16, 8, 8] }
+split_size = { type = "IVec3", value = [4, 8, 8] }
+use_maintenance5 = { type = "bool", value = true }
+
+# --- DeviceIndexTest -------------------------------------------------------------
+# max_device_group_size is VK_MAX_DEVICE_GROUP_SIZE. It sizes both the uniform block
+# in the shader and the uniform buffer the host fills, which is exactly the kind of
+# value that has to be written down once; the instance debug-asserts it still equals
+# the header constant.
+[[case]]
+name = "device_index"
+rust_const = "DEVICE_INDEX"
+rust_type = "DeviceIndexCase"
+programs = [{ name = "comp", template = "compute/bvar_device_index.comp", stage = "comp" }]
+[case.params]
+num_values = { type = "u32", value = 96 }
+local_size = { type = "IVec3", value = [3, 2, 1] }
+work_size = { type = "IVec3", value = [2, 4, 1] }
+max_device_group_size = { type = "u32", value = 32 }
+
+# =================================================================================
+# 64b_indexing - create64bIndexingComputeShaderTests()
+# (upstream file: vktComputeBasicComputeShaderTests.cpp)
+#
+# 512M elements x 16B per std140 uint = an 8 GB buffer, which is what needs 64-bit
+# indexing in the shader. Every case here is BufferToBufferInvertTest::
+# CopyInvertSSBOCase with a different combination of the three trailing flags.
+# =================================================================================
+
+[[case]]
+name = "copy_ssbo_64b"
+rust_const = "COPY_SSBO_64B"
+rust_type = "CopyInvertSsbo64bCase"
+programs = [{ name = "comp", template = "compute/bvar_copy_invert_ssbo_64b.comp", stage = "comp" }]
+[case.params]
+num_values = { type = "u32", value = 536870912 }
+local_size = { type = "IVec3", value = [1024, 1, 1] }
+work_size = { type = "IVec3", value = [1024, 1, 1] }
+do_bounds_check = { type = "bool", value = false }
+device_local = { type = "bool", value = false }
+use_64b_execution_mode = { type = "bool", value = false }
+[case.derived]
+exec_mode_ext = "'#extension GL_EXT_shader_64bit_indexing : enable\\n#pragma shader_64bit_indexing\\n' if use_64b_execution_mode else ''"
+
+[[case]]
+name = "copy_ssbo_64b_bounds"
+rust_const = "COPY_SSBO_64B_BOUNDS"
+rust_type = "CopyInvertSsbo64bCase"
+programs = [{ name = "comp", template = "compute/bvar_copy_invert_ssbo_64b.comp", stage = "comp" }]
+[case.params]
+num_values = { type = "u32", value = 536870912 }
+local_size = { type = "IVec3", value = [1024, 1, 1] }
+work_size = { type = "IVec3", value = [1024, 1, 1] }
+do_bounds_check = { type = "bool", value = true }
+device_local = { type = "bool", value = false }
+use_64b_execution_mode = { type = "bool", value = false }
+[case.derived]
+exec_mode_ext = "'#extension GL_EXT_shader_64bit_indexing : enable\\n#pragma shader_64bit_indexing\\n' if use_64b_execution_mode else ''"
+
+[[case]]
+name = "copy_ssbo_64b_bounds_local"
+rust_const = "COPY_SSBO_64B_BOUNDS_LOCAL"
+rust_type = "CopyInvertSsbo64bCase"
+programs = [{ name = "comp", template = "compute/bvar_copy_invert_ssbo_64b.comp", stage = "comp" }]
+[case.params]
+num_values = { type = "u32", value = 536870912 }
+local_size = { type = "IVec3", value = [1024, 1, 1] }
+work_size = { type = "IVec3", value = [1024, 1, 1] }
+do_bounds_check = { type = "bool", value = true }
+device_local = { type = "bool", value = true }
+use_64b_execution_mode = { type = "bool", value = false }
+[case.derived]
+exec_mode_ext = "'#extension GL_EXT_shader_64bit_indexing : enable\\n#pragma shader_64bit_indexing\\n' if use_64b_execution_mode else ''"
+
+[[case]]
+name = "copy_ssbo_64b_execution_mode"
+rust_const = "COPY_SSBO_64B_EXECUTION_MODE"
+rust_type = "CopyInvertSsbo64bCase"
+programs = [{ name = "comp", template = "compute/bvar_copy_invert_ssbo_64b.comp", stage = "comp" }]
+[case.params]
+num_values = { type = "u32", value = 536870912 }
+local_size = { type = "IVec3", value = [1024, 1, 1] }
+work_size = { type = "IVec3", value = [1024, 1, 1] }
+do_bounds_check = { type = "bool", value = false }
+device_local = { type = "bool", value = false }
+use_64b_execution_mode = { type = "bool", value = true }
+[case.derived]
+exec_mode_ext = "'#extension GL_EXT_shader_64bit_indexing : enable\\n#pragma shader_64bit_indexing\\n' if use_64b_execution_mode else ''"
+
+# --- UntypedPointerTest ----------------------------------------------------------
+# upstream's initPrograms() emits SPIR-V assembly (SPIRV_VERSION_1_5), kept verbatim in
+# compute/untyped_pointers_64b.asm. The case only builds a pipeline with the 64 bit
+# indexing creation flag, so it needs VK_KHR_shader_untyped_pointers and
+# VK_EXT_shader_64bit_indexing.
+[[case]]
+name = "untyped_pointers"
+rust_const = "UNTYPED_POINTERS"
+rust_type = "UntypedPointerCase"
+programs = [
+    { name = "comp", template = "compute/untyped_pointers_64b.asm", stage = "asm", spirv_version = "spirv1.5" },
+]

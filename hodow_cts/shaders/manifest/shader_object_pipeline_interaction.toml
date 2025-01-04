@@ -1,0 +1,42 @@
+# Shader manifest for dEQP-VK.shader_object.pipeline_interaction.*
+#
+# `ShaderObjectPipelineInteractionCase::initPrograms` (three vertex and fragment shaders that draw one quadrant each) and
+# `ShaderObjectStageBindingCase::initPrograms` (the shader object stages write a marker into a storage buffer, the `pipeline_*` ones
+# are the pipeline drawn first).
+
+upstream_source = "external/vulkancts/modules/vulkan/shader_object/vktShaderObjectPipelineInteractionTests.cpp"
+rust_module = "shader_object/pipeline_interaction_tests"
+
+[[case]]
+name = "interaction"
+rust_const = "PIPELINE_INTERACTION"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert1", template = "shader_object/pipeline_interaction/vert1.vert", stage = "vert" },
+    { name = "vert2", template = "shader_object/pipeline_interaction/vert2.vert", stage = "vert" },
+    { name = "vert3", template = "shader_object/pipeline_interaction/vert3.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/basic.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/pipeline_interaction/tese.tese", stage = "tese" },
+    { name = "geom", template = "shader_object/pipeline_interaction/geom.geom", stage = "geom" },
+    { name = "frag1", template = "shader_object/pipeline_interaction/frag1.frag", stage = "frag" },
+    { name = "frag2", template = "shader_object/pipeline_interaction/frag2.frag", stage = "frag" },
+    { name = "frag3", template = "shader_object/pipeline_interaction/frag3.frag", stage = "frag" },
+    { name = "comp", template = "shader_object/basic.comp", stage = "comp" },
+]
+
+[[case]]
+name = "stage_binding"
+rust_const = "PIPELINE_INTERACTION_STAGE_BINDING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/pipeline_interaction/sb_vert.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/pipeline_interaction/sb_tesc.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/basic.tese", stage = "tese" },
+    { name = "geom", template = "shader_object/pipeline_interaction/sb_geom.geom", stage = "geom" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+    { name = "pipeline_vert", template = "shader_object/basic.vert", stage = "vert" },
+    { name = "pipeline_tesc", template = "shader_object/basic.tesc", stage = "tesc" },
+    { name = "pipeline_tese", template = "shader_object/pipeline_interaction/pipeline_tese.tese", stage = "tese" },
+    { name = "pipeline_geom", template = "shader_object/pipeline_interaction/pipeline_geom.geom", stage = "geom" },
+    { name = "pipeline_frag", template = "shader_object/binding/frag_red.frag", stage = "frag" },
+]

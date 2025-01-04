@@ -1,0 +1,35 @@
+#version 310 es
+#extension GL_EXT_texture_buffer : require
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(set = 0, binding = 1) uniform highp textureBuffer u_texelBuffer0A;
+layout(set = 0, binding = 3) uniform highp textureBuffer u_texelBuffer0B;
+layout(set = 1, binding = 0) uniform highp textureBuffer u_texelBuffer1A;
+layout(set = 1, binding = 2) uniform highp textureBuffer u_texelBuffer1B;
+layout(set = 0, binding = 0, std140) writeonly buffer OutBuf
+{
+    highp vec4 read_colors[4];
+} b_out;
+void main (void)
+{
+    highp int quadrant_id = int(gl_WorkGroupID.x);
+    highp vec4 result_color;
+    result_color = vec4(0.0);
+    if (quadrant_id == 0)
+        result_color += texelFetch(u_texelBuffer0A, 6);
+    else if (quadrant_id == 1)
+        result_color += texelFetch(u_texelBuffer0B, 51);
+    else if (quadrant_id == 2)
+        result_color += texelFetch(u_texelBuffer0A, 42);
+    else
+        result_color += texelFetch(u_texelBuffer0B, 25);
+    if (quadrant_id == 0)
+        result_color += texelFetch(u_texelBuffer1A, 6);
+    else if (quadrant_id == 1)
+        result_color += texelFetch(u_texelBuffer1B, 51);
+    else if (quadrant_id == 2)
+        result_color += texelFetch(u_texelBuffer1A, 42);
+    else
+        result_color += texelFetch(u_texelBuffer1B, 25);
+    result_color /= vec4(2.0);
+    b_out.read_colors[gl_WorkGroupID.x] = result_color;
+}

@@ -1,0 +1,49 @@
+# Shader manifest for dEQP-VK.sparse_resources.buffer.ssbo.sparse_binding_aliased.*
+#
+# `BufferSparseMemoryAliasingCase::initPrograms`: one compute shader per buffer size. computeWorkGroupSize gives (128, 1, 1) for every
+# size the group registers (256 to 4194304 invocations), so only the bound `index < size / 4` differs.
+
+upstream_source = "external/vulkancts/modules/vulkan/sparse_resources/vktSparseResourcesBufferMemoryAliasing.cpp"
+rust_module = "sparse_resources/buffer_memory_aliasing_tests"
+
+[[case]]
+name = "buffer_size_2_10"
+rust_const = "SPARSE_ALIASING_2_10"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "sparse_resources/buffer_memory_aliasing.comp", stage = "comp" }]
+derived = { num_uints = "256" }
+
+[[case]]
+name = "buffer_size_2_12"
+rust_const = "SPARSE_ALIASING_2_12"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "sparse_resources/buffer_memory_aliasing.comp", stage = "comp" }]
+derived = { num_uints = "1024" }
+
+[[case]]
+name = "buffer_size_2_16"
+rust_const = "SPARSE_ALIASING_2_16"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "sparse_resources/buffer_memory_aliasing.comp", stage = "comp" }]
+derived = { num_uints = "16384" }
+
+[[case]]
+name = "buffer_size_2_17"
+rust_const = "SPARSE_ALIASING_2_17"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "sparse_resources/buffer_memory_aliasing.comp", stage = "comp" }]
+derived = { num_uints = "32768" }
+
+[[case]]
+name = "buffer_size_2_20"
+rust_const = "SPARSE_ALIASING_2_20"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "sparse_resources/buffer_memory_aliasing.comp", stage = "comp" }]
+derived = { num_uints = "262144" }
+
+[[case]]
+name = "buffer_size_2_24"
+rust_const = "SPARSE_ALIASING_2_24"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "sparse_resources/buffer_memory_aliasing.comp", stage = "comp" }]
+derived = { num_uints = "4194304" }

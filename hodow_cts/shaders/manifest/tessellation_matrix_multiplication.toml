@@ -1,0 +1,30 @@
+# Shader manifest for dEQP-VK.tessellation.matrix_multiplication.*
+#
+# `MatrixMultiplicationTestCase::initPrograms`: a vertex shader emitting the corners of a quad, a one-vertex control
+# shader that multiplies a patch-out matrix by a constant matrix, an evaluation shader passing it on and a fragment shader
+# whose output is white only if the value that arrives is the expected one.
+
+upstream_source = "external/vulkancts/modules/vulkan/tessellation/vktTessellationMatrixMultiplicationTests.cpp"
+rust_module = "tessellation/matrix_multiplication_tests"
+
+[[case]]
+name = "tesc_1"
+rust_const = "MATRIX_MULTIPLICATION_TESC_1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/matrix_multiplication.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/matrix_multiplication_tesc_1.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/matrix_multiplication_tesc_1.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/matrix_multiplication_tesc_1.frag", stage = "frag" },
+]
+
+[[case]]
+name = "tesc_2"
+rust_const = "MATRIX_MULTIPLICATION_TESC_2"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/matrix_multiplication.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/matrix_multiplication_tesc_2.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/matrix_multiplication_tesc_2.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/matrix_multiplication_tesc_2.frag", stage = "frag" },
+]

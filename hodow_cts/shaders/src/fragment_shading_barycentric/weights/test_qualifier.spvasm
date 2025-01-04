@@ -1,0 +1,65 @@
+OpCapability Shader
+OpCapability FragmentBarycentricKHR
+${spirvAdditionalCapabilities}OpExtension "SPV_KHR_fragment_shader_barycentric"
+%1 = OpExtInstImport "GLSL.std.450"
+OpMemoryModel Logical GLSL450
+OpEntryPoint Fragment %4 "main" %var_BaryCoord %15 %20
+OpExecutionMode %4 OriginUpperLeft
+OpDecorate %var_BaryCoord BuiltIn ${spirvBaryCoordVariable}
+OpDecorate %var_BaryCoord ${spirvBaryCoordDecoration}
+OpDecorate %15 Location 0
+OpDecorate %20 Location 0
+OpDecorate %20 PerVertexKHR
+%2 = OpTypeVoid
+%3 = OpTypeFunction %2
+%6 = OpTypeFloat 32
+%7 = OpTypeVector %6 3
+%8 = OpTypePointer Function %7
+%10 = OpTypePointer Input %7
+%var_BaryCoord = OpVariable %10 Input
+%13 = OpTypeVector %6 4
+%14 = OpTypePointer Output %13
+%15 = OpVariable %14 Output
+%16 = OpTypeInt 32 0
+%17 = OpConstant %16 3
+%18 = OpTypeArray %7 %17
+%19 = OpTypePointer Input %18
+%20 = OpVariable %19 Input
+%21 = OpTypeInt 32 1
+%22 = OpConstant %21 0
+%25 = OpConstant %16 0
+%26 = OpTypePointer Function %6
+%30 = OpConstant %21 1
+%33 = OpConstant %16 1
+%38 = OpConstant %21 2
+%41 = OpConstant %16 2
+%46 = OpConstant %6 1
+%4 = OpFunction %2 None %3
+%5 = OpLabel
+%9 = OpVariable %8 Function
+%12 = OpLoad %7 %var_BaryCoord
+OpStore %9 %12
+%23 = OpAccessChain %10 %20 %22
+%24 = OpLoad %7 %23
+%27 = OpAccessChain %26 %9 %25
+%28 = OpLoad %6 %27
+%29 = OpVectorTimesScalar %7 %24 %28
+%31 = OpAccessChain %10 %20 %30
+%32 = OpLoad %7 %31
+%34 = OpAccessChain %26 %9 %33
+%35 = OpLoad %6 %34
+%36 = OpVectorTimesScalar %7 %32 %35
+%37 = OpFAdd %7 %29 %36
+%39 = OpAccessChain %10 %20 %38
+%40 = OpLoad %7 %39
+%42 = OpAccessChain %26 %9 %41
+%43 = OpLoad %6 %42
+%44 = OpVectorTimesScalar %7 %40 %43
+%45 = OpFAdd %7 %37 %44
+%47 = OpCompositeExtract %6 %45 0
+%48 = OpCompositeExtract %6 %45 1
+%49 = OpCompositeExtract %6 %45 2
+%50 = OpCompositeConstruct %13 %47 %48 %49 %46
+OpStore %15 %50
+OpReturn
+OpFunctionEnd

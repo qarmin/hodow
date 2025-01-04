@@ -1,0 +1,37 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.input_assembly.*
+#
+# `InputAssemblyTest::initPrograms`: a pass-through vertex shader (with `gl_PointSize = 3.0` for the point list topology), a
+# colour fragment shader and a tessellation control and evaluation pair upstream always adds but only the patch list
+# topology uses.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineInputAssemblyTests.cpp"
+rust_module = "pipeline/input_assembly_tests"
+
+[[case]]
+name = "default"
+rust_const = "INPUT_ASSEMBLY_DEFAULT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/input_assembly/color.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/input_assembly/color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "point_list"
+rust_const = "INPUT_ASSEMBLY_POINT_LIST"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/input_assembly/color_point.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/input_assembly/color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "patch_list"
+rust_const = "INPUT_ASSEMBLY_PATCH_LIST"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/input_assembly/color.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/input_assembly/color.frag", stage = "frag" },
+    { name = "color_tcs", template = "pipeline/input_assembly/color.tesc", stage = "tesc" },
+    { name = "color_tes", template = "pipeline/input_assembly/color.tese", stage = "tese" },
+]

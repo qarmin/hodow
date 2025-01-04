@@ -1,0 +1,94 @@
+# On every push to master: build the release binaries (`just binaries-full`: Linux and Windows, each in a full, a CTS-only and a
+# CPU-only variant) and replace the assets of the release tagged `nightly`.
+#
+# Secret: NIGHTLY_TOKEN, a personal access token that may write contents of this repository (fine-grained: Contents read and
+# write). Until it exists the job falls back to the workflow's own token, which is enough for the release itself.
+
+name: Nightly
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+# A newer push replaces the build of an older one instead of queueing behind it.
+concurrency:
+  group: nightly
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+env:
+  CARGO_TERM_COLOR: always
+  ZIG_VERSION: "0.16.0"
+
+jobs:
+  nightly:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+
+      # Six release builds with LTO and the 120 MB generated test suite need more disk than a runner starts with.
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          df -h /
+
+      - name: The pinned nightly toolchain
+        id: pin
+        run: |
+          toolchain=$(grep -m1 '^NIGHTLY' justfile | sed 's/.*"\(.*\)".*/\1/')
+          echo "toolchain=$toolchain" >> "$GITHUB_OUTPUT"
+          rustup toolchain install "$toolchain" --profile minimal --no-self-update
+
+      - uses: mlugg/setup-zig@v2
+        with:
+          version: ${{ env.ZIG_VERSION }}
+
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: just,cargo-zigbuild
+
+      - name: The Windows cross-compiler
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends gcc-mingw-w64-x86-64 zip
+
+      # Only the registry: a cached target directory of these builds is far over the size GitHub keeps.
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-targets: false
+
+      - name: Build
+        run: just binaries-full
+
+      # A binary that does not even start is not worth publishing.
+      - name: Smoke test
+        run: |
+          binaries/linux_hodow info --no-gpu > /dev/null
+          binaries/linux_hodow_cpu info --no-gpu > /dev/null
+          binaries/linux_hodow_cpu --no-results --no-log-file test cpu -t test_x86_adx_addcarry_u32 > /dev/null
+          binaries/linux_hodow_cts --list --case 'dEQP-GLES2.info.*' > /dev/null
+          binaries/linux_hodow_cts --list --case 'dEQP-VK.info.*' > /dev/null
+
+      - name: Package
+        run: |
+          mkdir -p dist
+          chmod +x binaries/linux_hodow binaries/linux_hodow_cts binaries/linux_hodow_cpu
+          tar -C binaries -czf dist/hodow-linux-x86_64.tar.gz linux_hodow linux_hodow_cts linux_hodow_cpu
+          # The DLLs are ANGLE's: Windows has no EGL of its own, and hodow and hodow_cts look for them next to the .exe.
+          (cd binaries && zip -q ../dist/hodow-windows-x86_64.zip windows_hodow.exe windows_hodow_cts.exe windows_hodow_cpu.exe \
+            libEGL.dll libGLESv2.dll d3dcompiler_47.dll)
+          (cd dist && sha256sum * > SHA256SUMS)
+          ls -l dist
+
+      - name: Replace the nightly release
+        env:
+          GH_TOKEN: ${{ secrets.NIGHTLY_TOKEN || github.token }}
+        run: |
+          gh release delete nightly --repo "$GITHUB_REPOSITORY" --cleanup-tag --yes || true
+          gh release create nightly --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --prerelease \
+            --title "Nightly $(date -u +%Y-%m-%d)" \
+            --notes "Built from ${GITHUB_SHA} on every push to master, so it can be broken. Vulkan is not included yet.
+          Linux (glibc 2.28 or newer): hodow, hodow_cts (conformance suites only), hodow_cpu (CPU tests only). Windows: the same three, with ANGLE's DLLs beside them." \
+            dist/*

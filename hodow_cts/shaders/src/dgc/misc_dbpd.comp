@@ -1,0 +1,10 @@
+#version 460
+layout (local_size_x=64) in;
+layout (constant_id=0) const uint valueOffset = 0u;
+layout (set=0, binding=0) readonly buffer InBufferBlock { uint values[128]; } ib;
+layout (set=0, binding=1) buffer OutBufferBlock { uint values[128]; } ob;
+layout (push_constant, std430) uniform PCBlock { uint indexOffset; } pc;
+void main (void) {
+    const uint index = gl_LocalInvocationIndex + pc.indexOffset;
+    ob.values[index] = ib.values[index] + valueOffset;
+}

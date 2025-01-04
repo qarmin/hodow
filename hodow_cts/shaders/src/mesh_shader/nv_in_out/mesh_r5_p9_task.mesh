@@ -1,0 +1,133 @@
+#version 450
+#extension GL_NV_mesh_shader : enable
+#extension GL_EXT_shader_explicit_arithmetic_types : enable
+
+layout (local_size_x=1) in;
+layout (max_primitives=2, max_vertices=4) out;
+layout (triangles) out;
+
+layout (location=0) out flat f32vec2 vert_f32d2_flat_1[];
+layout (location=1) out perprimitiveNV flat f16vec4 prim_f16d4_flat_0[];
+layout (location=2) out flat i32vec4 vert_i32d4_flat_0[];
+layout (location=3) out float16_t vert_f16d1_inter_1[];
+layout (location=4) out flat f16vec4 vert_f16d4_flat_0[];
+layout (location=5) out flat float32_t vert_f32d1_flat_0[];
+layout (location=6) out perprimitiveNV flat f32vec3 prim_f32d3_flat_1[];
+layout (location=7) out perprimitiveNV flat i32vec4 prim_i32d4_flat_1[];
+layout (location=8) out flat f32vec4 vert_f32d4_flat_0[];
+layout (location=9) out perprimitiveNV flat i32vec4 prim_i32d4_flat_0[];
+layout (location=10) out perprimitiveNV flat f16vec2 prim_f16d2_flat_0[];
+layout (location=11) out float16_t vert_f16d1_inter_0[];
+layout (location=12) out flat f16vec3 vert_f16d3_flat_1[];
+layout (location=13) out flat i32vec2 vert_i32d2_flat_1[];
+layout (location=14) out perprimitiveNV flat f32vec2 prim_f32d2_flat_0[];
+layout (location=15) out flat f32vec4 vert_f32d4_flat_1[];
+out gl_MeshPerVertexNV {
+   vec4  gl_Position;
+} gl_MeshVerticesNV[];
+out perprimitiveNV gl_MeshPerPrimitiveNV {
+  int gl_PrimitiveID;
+} gl_MeshPrimitivesNV[];
+
+in taskNV TaskData {
+    f32vec2 vert_f32d2_flat_1[4];
+    f16vec4 prim_f16d4_flat_0[2];
+    i32vec4 vert_i32d4_flat_0[4];
+    float16_t vert_f16d1_inter_1[4];
+    f16vec4 vert_f16d4_flat_0[4];
+    float32_t vert_f32d1_flat_0[4];
+    f32vec3 prim_f32d3_flat_1[2];
+    i32vec4 prim_i32d4_flat_1[2];
+    f32vec4 vert_f32d4_flat_0[4];
+    i32vec4 prim_i32d4_flat_0[2];
+    f16vec2 prim_f16d2_flat_0[2];
+    float16_t vert_f16d1_inter_0[4];
+    f16vec3 vert_f16d3_flat_1[4];
+    i32vec2 vert_i32d2_flat_1[4];
+    f32vec2 prim_f32d2_flat_0[2];
+    f32vec4 vert_f32d4_flat_1[4];
+} td;
+vec4 positions[4] = vec4[](
+    vec4(-1.0, -1.0, 0.0, 1.0),
+    vec4( 1.0, -1.0, 0.0, 1.0),
+    vec4(-1.0,  1.0, 0.0, 1.0),
+    vec4( 1.0,  1.0, 0.0, 1.0)
+);
+
+int indices[6] = int[](
+    0, 1, 2, 2, 3, 1
+);
+
+void main ()
+{
+    gl_PrimitiveCountNV = 2;
+
+    gl_MeshVerticesNV[0].gl_Position = positions[0];
+    gl_MeshVerticesNV[1].gl_Position = positions[1];
+    gl_MeshVerticesNV[2].gl_Position = positions[2];
+    gl_MeshVerticesNV[3].gl_Position = positions[3];
+
+    gl_PrimitiveIndicesNV[0] = indices[0];
+    gl_PrimitiveIndicesNV[1] = indices[1];
+    gl_PrimitiveIndicesNV[2] = indices[2];
+    gl_PrimitiveIndicesNV[3] = indices[3];
+    gl_PrimitiveIndicesNV[4] = indices[4];
+    gl_PrimitiveIndicesNV[5] = indices[5];
+
+    gl_MeshPrimitivesNV[0].gl_PrimitiveID = 0;
+    gl_MeshPrimitivesNV[1].gl_PrimitiveID = 1;
+
+    vert_f32d2_flat_1[0] = f32vec2(td.vert_f32d2_flat_1[0]);
+    vert_f32d2_flat_1[1] = f32vec2(td.vert_f32d2_flat_1[1]);
+    vert_f32d2_flat_1[2] = f32vec2(td.vert_f32d2_flat_1[2]);
+    vert_f32d2_flat_1[3] = f32vec2(td.vert_f32d2_flat_1[3]);
+    prim_f16d4_flat_0[0] = f16vec4(td.prim_f16d4_flat_0[0]);
+    prim_f16d4_flat_0[1] = f16vec4(td.prim_f16d4_flat_0[1]);
+    vert_i32d4_flat_0[0] = i32vec4(td.vert_i32d4_flat_0[0]);
+    vert_i32d4_flat_0[1] = i32vec4(td.vert_i32d4_flat_0[1]);
+    vert_i32d4_flat_0[2] = i32vec4(td.vert_i32d4_flat_0[2]);
+    vert_i32d4_flat_0[3] = i32vec4(td.vert_i32d4_flat_0[3]);
+    vert_f16d1_inter_1[0] = float16_t(td.vert_f16d1_inter_1[0]);
+    vert_f16d1_inter_1[1] = float16_t(td.vert_f16d1_inter_1[1]);
+    vert_f16d1_inter_1[2] = float16_t(td.vert_f16d1_inter_1[2]);
+    vert_f16d1_inter_1[3] = float16_t(td.vert_f16d1_inter_1[3]);
+    vert_f16d4_flat_0[0] = f16vec4(td.vert_f16d4_flat_0[0]);
+    vert_f16d4_flat_0[1] = f16vec4(td.vert_f16d4_flat_0[1]);
+    vert_f16d4_flat_0[2] = f16vec4(td.vert_f16d4_flat_0[2]);
+    vert_f16d4_flat_0[3] = f16vec4(td.vert_f16d4_flat_0[3]);
+    vert_f32d1_flat_0[0] = float32_t(td.vert_f32d1_flat_0[0]);
+    vert_f32d1_flat_0[1] = float32_t(td.vert_f32d1_flat_0[1]);
+    vert_f32d1_flat_0[2] = float32_t(td.vert_f32d1_flat_0[2]);
+    vert_f32d1_flat_0[3] = float32_t(td.vert_f32d1_flat_0[3]);
+    prim_f32d3_flat_1[0] = f32vec3(td.prim_f32d3_flat_1[0]);
+    prim_f32d3_flat_1[1] = f32vec3(td.prim_f32d3_flat_1[1]);
+    prim_i32d4_flat_1[0] = i32vec4(td.prim_i32d4_flat_1[0]);
+    prim_i32d4_flat_1[1] = i32vec4(td.prim_i32d4_flat_1[1]);
+    vert_f32d4_flat_0[0] = f32vec4(td.vert_f32d4_flat_0[0]);
+    vert_f32d4_flat_0[1] = f32vec4(td.vert_f32d4_flat_0[1]);
+    vert_f32d4_flat_0[2] = f32vec4(td.vert_f32d4_flat_0[2]);
+    vert_f32d4_flat_0[3] = f32vec4(td.vert_f32d4_flat_0[3]);
+    prim_i32d4_flat_0[0] = i32vec4(td.prim_i32d4_flat_0[0]);
+    prim_i32d4_flat_0[1] = i32vec4(td.prim_i32d4_flat_0[1]);
+    prim_f16d2_flat_0[0] = f16vec2(td.prim_f16d2_flat_0[0]);
+    prim_f16d2_flat_0[1] = f16vec2(td.prim_f16d2_flat_0[1]);
+    vert_f16d1_inter_0[0] = float16_t(td.vert_f16d1_inter_0[0]);
+    vert_f16d1_inter_0[1] = float16_t(td.vert_f16d1_inter_0[1]);
+    vert_f16d1_inter_0[2] = float16_t(td.vert_f16d1_inter_0[2]);
+    vert_f16d1_inter_0[3] = float16_t(td.vert_f16d1_inter_0[3]);
+    vert_f16d3_flat_1[0] = f16vec3(td.vert_f16d3_flat_1[0]);
+    vert_f16d3_flat_1[1] = f16vec3(td.vert_f16d3_flat_1[1]);
+    vert_f16d3_flat_1[2] = f16vec3(td.vert_f16d3_flat_1[2]);
+    vert_f16d3_flat_1[3] = f16vec3(td.vert_f16d3_flat_1[3]);
+    vert_i32d2_flat_1[0] = i32vec2(td.vert_i32d2_flat_1[0]);
+    vert_i32d2_flat_1[1] = i32vec2(td.vert_i32d2_flat_1[1]);
+    vert_i32d2_flat_1[2] = i32vec2(td.vert_i32d2_flat_1[2]);
+    vert_i32d2_flat_1[3] = i32vec2(td.vert_i32d2_flat_1[3]);
+    prim_f32d2_flat_0[0] = f32vec2(td.prim_f32d2_flat_0[0]);
+    prim_f32d2_flat_0[1] = f32vec2(td.prim_f32d2_flat_0[1]);
+    vert_f32d4_flat_1[0] = f32vec4(td.vert_f32d4_flat_1[0]);
+    vert_f32d4_flat_1[1] = f32vec4(td.vert_f32d4_flat_1[1]);
+    vert_f32d4_flat_1[2] = f32vec4(td.vert_f32d4_flat_1[2]);
+    vert_f32d4_flat_1[3] = f32vec4(td.vert_f32d4_flat_1[3]);
+
+}

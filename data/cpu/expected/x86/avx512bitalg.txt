@@ -1,0 +1,223 @@
+# Expected values captured from real hardware for this extension's generated tests.
+# Format: test_name - rust_expr
+#
+# One file per (architecture, extension) - written by scripts/cpu/capture_expected.py and
+# capture_expected_cross.py, read by generate_tests.py. Do not hand-edit: recapture instead.
+# A qemu-derived value is not a real-silicon one; see CLAUDE.md's "Non-x86 architectures".
+
+test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask - 4008636142
+test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_asym_max_min - 4294967295
+test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_asym_min_max - 4294967295
+test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_allones - 4294967295
+test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_max - 0
+test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_min - 0
+test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_mixed - 4026593280
+test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_boundary_zero - 0
+test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_normal2 - 0
+test_x86_avx512bitalg_mm256_bitshuffle_epi64_mask_normal3 - 572522496
+test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask - 1145324612
+test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_asym_max_min - 1431655765
+test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_asym_min_max - 1431655765
+test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_allones - 1431655765
+test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_max - 0
+test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_min - 0
+test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_mixed - 1342197760
+test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_boundary_zero - 0
+test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_normal2 - 0
+test_x86_avx512bitalg_mm256_mask_bitshuffle_epi64_mask_normal3 - 0
+test_x86_avx512bitalg_mm256_mask_popcnt_epi16 - [2, 0, 2, 0, 3, 0, 2, 0, 3, 0, 3, 0, 4, 0, 1, 0]
+test_x86_avx512bitalg_mm256_mask_popcnt_epi16_asym_max_min - [1, 32767, 1, 32767, 1, 32767, 1, 32767, 1, 32767, 1, 32767, 1, 32767, 1, 32767]
+test_x86_avx512bitalg_mm256_mask_popcnt_epi16_asym_min_max - [15, -32768, 15, -32768, 15, -32768, 15, -32768, 15, -32768, 15, -32768, 15, -32768, 15, -32768]
+test_x86_avx512bitalg_mm256_mask_popcnt_epi16_boundary_allones - [16, -1, 16, -1, 16, -1, 16, -1, 16, -1, 16, -1, 16, -1, 16, -1]
+test_x86_avx512bitalg_mm256_mask_popcnt_epi16_boundary_max - [15, 32767, 15, 32767, 15, 32767, 15, 32767, 15, 32767, 15, 32767, 15, 32767, 15, 32767]
+test_x86_avx512bitalg_mm256_mask_popcnt_epi16_boundary_min - [1, -32768, 1, -32768, 1, -32768, 1, -32768, 1, -32768, 1, -32768, 1, -32768, 1, -32768]
+test_x86_avx512bitalg_mm256_mask_popcnt_epi16_boundary_mixed - [1, 32767, 0, -1, 1, 32767, 0, -1, 1, 32767, 0, -1, 1, 32767, 0, -1]
+test_x86_avx512bitalg_mm256_mask_popcnt_epi16_boundary_zero - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+test_x86_avx512bitalg_mm256_mask_popcnt_epi16_normal2 - [2, -1, 2, -3, 3, -5, 1, -7, 2, -1, 2, -3, 3, -5, 1, -7]
+test_x86_avx512bitalg_mm256_mask_popcnt_epi16_normal3 - [5, 200, 5, 400, 8, 600, 5, 800, 6, 1000, 5, 1200, 6, 1400, 7, 1600]
+test_x86_avx512bitalg_mm256_mask_popcnt_epi8 - [2, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 4, 0, 0, 0, 1, 0, 0, 0]
+test_x86_avx512bitalg_mm256_mask_popcnt_epi8_asym_max_min - [1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127]
+test_x86_avx512bitalg_mm256_mask_popcnt_epi8_asym_min_max - [7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128]
+test_x86_avx512bitalg_mm256_mask_popcnt_epi8_boundary_allones - [8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1]
+test_x86_avx512bitalg_mm256_mask_popcnt_epi8_boundary_max - [7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127]
+test_x86_avx512bitalg_mm256_mask_popcnt_epi8_boundary_min - [1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128]
+test_x86_avx512bitalg_mm256_mask_popcnt_epi8_boundary_mixed - [1, 127, 0, -1, 1, 127, 0, -1, 1, 127, 0, -1, 1, 127, 0, -1, 1, 127, 0, -1, 1, 127, 0, -1, 1, 127, 0, -1, 1, 127, 0, -1]
+test_x86_avx512bitalg_mm256_mask_popcnt_epi8_boundary_zero - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+test_x86_avx512bitalg_mm256_mask_popcnt_epi8_normal2 - [2, -1, 2, -3, 3, -5, 1, -7, 2, -1, 2, -3, 3, -5, 1, -7, 2, -1, 2, -3, 3, -5, 1, -7, 2, -1, 2, -3, 3, -5, 1, -7]
+test_x86_avx512bitalg_mm256_mask_popcnt_epi8_normal3 - [5, -56, 4, -112, 7, 88, 4, 32, 4, -24, 4, -80, 4, 120, 5, 64, 5, 8, 5, -48, 5, -104, 2, 96, 5, 40, 4, -16, 5, -72, 3, -128]
+test_x86_avx512bitalg_mm256_maskz_popcnt_epi16 - [1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 2, 0, 3, 0, 1, 0]
+test_x86_avx512bitalg_mm256_maskz_popcnt_epi16_boundary_allones - [16, 0, 16, 0, 16, 0, 16, 0, 16, 0, 16, 0, 16, 0, 16, 0]
+test_x86_avx512bitalg_mm256_maskz_popcnt_epi16_boundary_max - [15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0]
+test_x86_avx512bitalg_mm256_maskz_popcnt_epi16_boundary_min - [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+test_x86_avx512bitalg_mm256_maskz_popcnt_epi16_boundary_mixed - [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0]
+test_x86_avx512bitalg_mm256_maskz_popcnt_epi16_boundary_zero - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+test_x86_avx512bitalg_mm256_maskz_popcnt_epi16_normal2 - [0, 0, 1, 0, 1, 0, 2, 0, 0, 0, 1, 0, 1, 0, 2, 0]
+test_x86_avx512bitalg_mm256_maskz_popcnt_epi16_normal3 - [3, 0, 4, 0, 6, 0, 6, 0, 4, 0, 4, 0, 4, 0, 7, 0]
+test_x86_avx512bitalg_mm256_maskz_popcnt_epi8 - [1, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 1, 0, 0, 0]
+test_x86_avx512bitalg_mm256_maskz_popcnt_epi8_boundary_allones - [8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0]
+test_x86_avx512bitalg_mm256_maskz_popcnt_epi8_boundary_max - [7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0]
+test_x86_avx512bitalg_mm256_maskz_popcnt_epi8_boundary_min - [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+test_x86_avx512bitalg_mm256_maskz_popcnt_epi8_boundary_mixed - [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0]
+test_x86_avx512bitalg_mm256_maskz_popcnt_epi8_boundary_zero - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+test_x86_avx512bitalg_mm256_maskz_popcnt_epi8_normal2 - [0, 0, 1, 0, 1, 0, 2, 0, 0, 0, 1, 0, 1, 0, 2, 0, 0, 0, 1, 0, 1, 0, 2, 0, 0, 0, 1, 0, 1, 0, 2, 0]
+test_x86_avx512bitalg_mm256_maskz_popcnt_epi8_normal3 - [3, 0, 3, 0, 5, 0, 5, 0, 2, 0, 3, 0, 2, 0, 5, 0, 3, 0, 4, 0, 3, 0, 6, 0, 3, 0, 3, 0, 3, 0, 3, 0]
+test_x86_avx512bitalg_mm256_popcnt_epi16 - [1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 2, 0, 3, 0, 1, 0]
+test_x86_avx512bitalg_mm256_popcnt_epi16_boundary_allones - [16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16]
+test_x86_avx512bitalg_mm256_popcnt_epi16_boundary_max - [15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15]
+test_x86_avx512bitalg_mm256_popcnt_epi16_boundary_min - [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+test_x86_avx512bitalg_mm256_popcnt_epi16_boundary_mixed - [1, 15, 0, 16, 1, 15, 0, 16, 1, 15, 0, 16, 1, 15, 0, 16]
+test_x86_avx512bitalg_mm256_popcnt_epi16_boundary_zero - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+test_x86_avx512bitalg_mm256_popcnt_epi16_normal2 - [0, 16, 1, 15, 1, 15, 2, 14, 0, 16, 1, 15, 1, 15, 2, 14]
+test_x86_avx512bitalg_mm256_popcnt_epi16_normal3 - [3, 3, 4, 3, 6, 4, 6, 3, 4, 6, 4, 4, 4, 6, 7, 3]
+test_x86_avx512bitalg_mm256_popcnt_epi8 - [1, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 1, 0, 0, 0]
+test_x86_avx512bitalg_mm256_popcnt_epi8_boundary_allones - [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+test_x86_avx512bitalg_mm256_popcnt_epi8_boundary_max - [7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7]
+test_x86_avx512bitalg_mm256_popcnt_epi8_boundary_min - [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+test_x86_avx512bitalg_mm256_popcnt_epi8_boundary_mixed - [1, 7, 0, 8, 1, 7, 0, 8, 1, 7, 0, 8, 1, 7, 0, 8, 1, 7, 0, 8, 1, 7, 0, 8, 1, 7, 0, 8, 1, 7, 0, 8]
+test_x86_avx512bitalg_mm256_popcnt_epi8_boundary_zero - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+test_x86_avx512bitalg_mm256_popcnt_epi8_normal2 - [0, 8, 1, 7, 1, 7, 2, 6, 0, 8, 1, 7, 1, 7, 2, 6, 0, 8, 1, 7, 1, 7, 2, 6, 0, 8, 1, 7, 1, 7, 2, 6]
+test_x86_avx512bitalg_mm256_popcnt_epi8_normal3 - [3, 3, 3, 2, 5, 3, 5, 1, 2, 4, 3, 3, 2, 4, 5, 1, 3, 1, 4, 3, 3, 3, 6, 2, 3, 2, 3, 4, 3, 4, 3, 1]
+test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask - 17216961135462248174
+test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_asym_max_min - 18446744073709551615
+test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_asym_min_max - 18446744073709551615
+test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_allones - 18446744073709551615
+test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_max - 0
+test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_min - 0
+test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_mixed - 17294086455919964160
+test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_boundary_zero - 0
+test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_normal2 - 0
+test_x86_avx512bitalg_mm512_bitshuffle_epi64_mask_normal3 - 3535325708058361856
+test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask - 4919131752989213764
+test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_asym_max_min - 6148914691236517205
+test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_asym_min_max - 6148914691236517205
+test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_allones - 6148914691236517205
+test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_max - 0
+test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_min - 0
+test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_mixed - 5764695485306654720
+test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_boundary_zero - 0
+test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_normal2 - 0
+test_x86_avx512bitalg_mm512_mask_bitshuffle_epi64_mask_normal3 - 1229482698272145408
+test_x86_avx512bitalg_mm512_mask_popcnt_epi16 - [2, 0, 2, 0, 3, 0, 2, 0, 3, 0, 3, 0, 4, 0, 2, 0, 3, 0, 3, 0, 4, 0, 3, 0, 4, 0, 4, 0, 5, 0, 1, 0]
+test_x86_avx512bitalg_mm512_mask_popcnt_epi16_asym_max_min - [1, 32767, 1, 32767, 1, 32767, 1, 32767, 1, 32767, 1, 32767, 1, 32767, 1, 32767, 1, 32767, 1, 32767, 1, 32767, 1, 32767, 1, 32767, 1, 32767, 1, 32767, 1, 32767]
+test_x86_avx512bitalg_mm512_mask_popcnt_epi16_asym_min_max - [15, -32768, 15, -32768, 15, -32768, 15, -32768, 15, -32768, 15, -32768, 15, -32768, 15, -32768, 15, -32768, 15, -32768, 15, -32768, 15, -32768, 15, -32768, 15, -32768, 15, -32768, 15, -32768]
+test_x86_avx512bitalg_mm512_mask_popcnt_epi16_boundary_allones - [16, -1, 16, -1, 16, -1, 16, -1, 16, -1, 16, -1, 16, -1, 16, -1, 16, -1, 16, -1, 16, -1, 16, -1, 16, -1, 16, -1, 16, -1, 16, -1]
+test_x86_avx512bitalg_mm512_mask_popcnt_epi16_boundary_max - [15, 32767, 15, 32767, 15, 32767, 15, 32767, 15, 32767, 15, 32767, 15, 32767, 15, 32767, 15, 32767, 15, 32767, 15, 32767, 15, 32767, 15, 32767, 15, 32767, 15, 32767, 15, 32767]
+test_x86_avx512bitalg_mm512_mask_popcnt_epi16_boundary_min - [1, -32768, 1, -32768, 1, -32768, 1, -32768, 1, -32768, 1, -32768, 1, -32768, 1, -32768, 1, -32768, 1, -32768, 1, -32768, 1, -32768, 1, -32768, 1, -32768, 1, -32768, 1, -32768]
+test_x86_avx512bitalg_mm512_mask_popcnt_epi16_boundary_mixed - [1, 32767, 0, -1, 1, 32767, 0, -1, 1, 32767, 0, -1, 1, 32767, 0, -1, 1, 32767, 0, -1, 1, 32767, 0, -1, 1, 32767, 0, -1, 1, 32767, 0, -1]
+test_x86_avx512bitalg_mm512_mask_popcnt_epi16_boundary_zero - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+test_x86_avx512bitalg_mm512_mask_popcnt_epi16_normal2 - [2, -1, 2, -3, 3, -5, 1, -7, 2, -1, 2, -3, 3, -5, 1, -7, 2, -1, 2, -3, 3, -5, 1, -7, 2, -1, 2, -3, 3, -5, 1, -7]
+test_x86_avx512bitalg_mm512_mask_popcnt_epi16_normal3 - [5, 200, 5, 400, 8, 600, 5, 800, 6, 1000, 5, 1200, 6, 1400, 7, 1600, 7, 1800, 8, 2000, 6, 2200, 4, 2400, 7, 2600, 6, 2800, 8, 3000, 5, 3200]
+test_x86_avx512bitalg_mm512_mask_popcnt_epi8 - [2, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 4, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 4, 0, 0, 0, 3, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0, 5, 0, 0, 0, 1, 0, 0, 0]
+test_x86_avx512bitalg_mm512_mask_popcnt_epi8_asym_max_min - [1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127]
+test_x86_avx512bitalg_mm512_mask_popcnt_epi8_asym_min_max - [7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128]
+test_x86_avx512bitalg_mm512_mask_popcnt_epi8_boundary_allones - [8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1]
+test_x86_avx512bitalg_mm512_mask_popcnt_epi8_boundary_max - [7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127]
+test_x86_avx512bitalg_mm512_mask_popcnt_epi8_boundary_min - [1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128]
+test_x86_avx512bitalg_mm512_mask_popcnt_epi8_boundary_mixed - [1, 127, 0, -1, 1, 127, 0, -1, 1, 127, 0, -1, 1, 127, 0, -1, 1, 127, 0, -1, 1, 127, 0, -1, 1, 127, 0, -1, 1, 127, 0, -1, 1, 127, 0, -1, 1, 127, 0, -1, 1, 127, 0, -1, 1, 127, 0, -1, 1, 127, 0, -1, 1, 127, 0, -1, 1, 127, 0, -1, 1, 127, 0, -1]
+test_x86_avx512bitalg_mm512_mask_popcnt_epi8_boundary_zero - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+test_x86_avx512bitalg_mm512_mask_popcnt_epi8_normal2 - [2, -1, 2, -3, 3, -5, 1, -7, 2, -1, 2, -3, 3, -5, 1, -7, 2, -1, 2, -3, 3, -5, 1, -7, 2, -1, 2, -3, 3, -5, 1, -7, 2, -1, 2, -3, 3, -5, 1, -7, 2, -1, 2, -3, 3, -5, 1, -7, 2, -1, 2, -3, 3, -5, 1, -7, 2, -1, 2, -3, 3, -5, 1, -7]
+test_x86_avx512bitalg_mm512_mask_popcnt_epi8_normal3 - [5, -56, 4, -112, 7, 88, 4, 32, 4, -24, 4, -80, 4, 120, 5, 64, 5, 8, 5, -48, 5, -104, 2, 96, 5, 40, 4, -16, 5, -72, 3, -128, 6, 72, 5, 16, 6, -40, 3, -96, 3, 104, 5, 48, 5, -8, 4, -64, 4, -120, 6, 80, 6, 24, 3, -32, 4, -88, 3, 112, 6, 56, 4, 0]
+test_x86_avx512bitalg_mm512_maskz_popcnt_epi16 - [1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 2, 0, 3, 0, 1, 0, 2, 0, 2, 0, 3, 0, 2, 0, 3, 0, 3, 0, 4, 0, 1, 0]
+test_x86_avx512bitalg_mm512_maskz_popcnt_epi16_boundary_allones - [16, 0, 16, 0, 16, 0, 16, 0, 16, 0, 16, 0, 16, 0, 16, 0, 16, 0, 16, 0, 16, 0, 16, 0, 16, 0, 16, 0, 16, 0, 16, 0]
+test_x86_avx512bitalg_mm512_maskz_popcnt_epi16_boundary_max - [15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0, 15, 0]
+test_x86_avx512bitalg_mm512_maskz_popcnt_epi16_boundary_min - [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+test_x86_avx512bitalg_mm512_maskz_popcnt_epi16_boundary_mixed - [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0]
+test_x86_avx512bitalg_mm512_maskz_popcnt_epi16_boundary_zero - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+test_x86_avx512bitalg_mm512_maskz_popcnt_epi16_normal2 - [0, 0, 1, 0, 1, 0, 2, 0, 0, 0, 1, 0, 1, 0, 2, 0, 0, 0, 1, 0, 1, 0, 2, 0, 0, 0, 1, 0, 1, 0, 2, 0]
+test_x86_avx512bitalg_mm512_maskz_popcnt_epi16_normal3 - [3, 0, 4, 0, 6, 0, 6, 0, 4, 0, 4, 0, 4, 0, 7, 0, 5, 0, 7, 0, 4, 0, 7, 0, 5, 0, 5, 0, 6, 0, 5, 0]
+test_x86_avx512bitalg_mm512_maskz_popcnt_epi8 - [1, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 4, 0, 0, 0, 1, 0, 0, 0]
+test_x86_avx512bitalg_mm512_maskz_popcnt_epi8_boundary_allones - [8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0]
+test_x86_avx512bitalg_mm512_maskz_popcnt_epi8_boundary_max - [7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0]
+test_x86_avx512bitalg_mm512_maskz_popcnt_epi8_boundary_min - [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+test_x86_avx512bitalg_mm512_maskz_popcnt_epi8_boundary_mixed - [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0]
+test_x86_avx512bitalg_mm512_maskz_popcnt_epi8_boundary_zero - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+test_x86_avx512bitalg_mm512_maskz_popcnt_epi8_normal2 - [0, 0, 1, 0, 1, 0, 2, 0, 0, 0, 1, 0, 1, 0, 2, 0, 0, 0, 1, 0, 1, 0, 2, 0, 0, 0, 1, 0, 1, 0, 2, 0, 0, 0, 1, 0, 1, 0, 2, 0, 0, 0, 1, 0, 1, 0, 2, 0, 0, 0, 1, 0, 1, 0, 2, 0, 0, 0, 1, 0, 1, 0, 2, 0]
+test_x86_avx512bitalg_mm512_maskz_popcnt_epi8_normal3 - [3, 0, 3, 0, 5, 0, 5, 0, 2, 0, 3, 0, 2, 0, 5, 0, 3, 0, 4, 0, 3, 0, 6, 0, 3, 0, 3, 0, 3, 0, 3, 0, 4, 0, 4, 0, 4, 0, 4, 0, 1, 0, 4, 0, 3, 0, 4, 0, 2, 0, 5, 0, 4, 0, 5, 0, 2, 0, 2, 0, 4, 0, 4, 0]
+test_x86_avx512bitalg_mm512_popcnt_epi16 - [1, 0, 1, 0, 2, 0, 1, 0, 2, 0, 2, 0, 3, 0, 1, 0, 2, 0, 2, 0, 3, 0, 2, 0, 3, 0, 3, 0, 4, 0, 1, 0]
+test_x86_avx512bitalg_mm512_popcnt_epi16_boundary_allones - [16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16]
+test_x86_avx512bitalg_mm512_popcnt_epi16_boundary_max - [15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15]
+test_x86_avx512bitalg_mm512_popcnt_epi16_boundary_min - [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+test_x86_avx512bitalg_mm512_popcnt_epi16_boundary_mixed - [1, 15, 0, 16, 1, 15, 0, 16, 1, 15, 0, 16, 1, 15, 0, 16, 1, 15, 0, 16, 1, 15, 0, 16, 1, 15, 0, 16, 1, 15, 0, 16]
+test_x86_avx512bitalg_mm512_popcnt_epi16_boundary_zero - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+test_x86_avx512bitalg_mm512_popcnt_epi16_normal2 - [0, 16, 1, 15, 1, 15, 2, 14, 0, 16, 1, 15, 1, 15, 2, 14, 0, 16, 1, 15, 1, 15, 2, 14, 0, 16, 1, 15, 1, 15, 2, 14]
+test_x86_avx512bitalg_mm512_popcnt_epi16_normal3 - [3, 3, 4, 3, 6, 4, 6, 3, 4, 6, 4, 4, 4, 6, 7, 3, 5, 4, 7, 6, 4, 4, 7, 4, 5, 4, 5, 6, 6, 7, 5, 3]
+test_x86_avx512bitalg_mm512_popcnt_epi8 - [1, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 4, 0, 0, 0, 1, 0, 0, 0]
+test_x86_avx512bitalg_mm512_popcnt_epi8_boundary_allones - [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+test_x86_avx512bitalg_mm512_popcnt_epi8_boundary_max - [7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7]
+test_x86_avx512bitalg_mm512_popcnt_epi8_boundary_min - [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+test_x86_avx512bitalg_mm512_popcnt_epi8_boundary_mixed - [1, 7, 0, 8, 1, 7, 0, 8, 1, 7, 0, 8, 1, 7, 0, 8, 1, 7, 0, 8, 1, 7, 0, 8, 1, 7, 0, 8, 1, 7, 0, 8, 1, 7, 0, 8, 1, 7, 0, 8, 1, 7, 0, 8, 1, 7, 0, 8, 1, 7, 0, 8, 1, 7, 0, 8, 1, 7, 0, 8, 1, 7, 0, 8]
+test_x86_avx512bitalg_mm512_popcnt_epi8_boundary_zero - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+test_x86_avx512bitalg_mm512_popcnt_epi8_normal2 - [0, 8, 1, 7, 1, 7, 2, 6, 0, 8, 1, 7, 1, 7, 2, 6, 0, 8, 1, 7, 1, 7, 2, 6, 0, 8, 1, 7, 1, 7, 2, 6, 0, 8, 1, 7, 1, 7, 2, 6, 0, 8, 1, 7, 1, 7, 2, 6, 0, 8, 1, 7, 1, 7, 2, 6, 0, 8, 1, 7, 1, 7, 2, 6]
+test_x86_avx512bitalg_mm512_popcnt_epi8_normal3 - [3, 3, 3, 2, 5, 3, 5, 1, 2, 4, 3, 3, 2, 4, 5, 1, 3, 1, 4, 3, 3, 3, 6, 2, 3, 2, 3, 4, 3, 4, 3, 1, 4, 2, 4, 1, 4, 4, 4, 2, 1, 3, 4, 2, 3, 5, 4, 2, 2, 2, 5, 2, 4, 2, 5, 3, 2, 3, 2, 3, 4, 3, 4, 0]
+test_x86_avx512bitalg_mm_bitshuffle_epi64_mask - 61166
+test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_asym_max_min - 65535
+test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_asym_min_max - 65535
+test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_allones - 65535
+test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_max - 0
+test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_min - 0
+test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_mixed - 61440
+test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_boundary_zero - 0
+test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_normal2 - 0
+test_x86_avx512bitalg_mm_bitshuffle_epi64_mask_normal3 - 0
+test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask - 17476
+test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_asym_max_min - 21845
+test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_asym_min_max - 21845
+test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_allones - 21845
+test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_max - 0
+test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_min - 0
+test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_mixed - 20480
+test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_boundary_zero - 0
+test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_normal2 - 0
+test_x86_avx512bitalg_mm_mask_bitshuffle_epi64_mask_normal3 - 0
+test_x86_avx512bitalg_mm_mask_popcnt_epi16 - [2, 0, 2, 0, 3, 0, 1, 0]
+test_x86_avx512bitalg_mm_mask_popcnt_epi16_asym_max_min - [1, 32767, 1, 32767, 1, 32767, 1, 32767]
+test_x86_avx512bitalg_mm_mask_popcnt_epi16_asym_min_max - [15, -32768, 15, -32768, 15, -32768, 15, -32768]
+test_x86_avx512bitalg_mm_mask_popcnt_epi16_boundary_allones - [16, -1, 16, -1, 16, -1, 16, -1]
+test_x86_avx512bitalg_mm_mask_popcnt_epi16_boundary_max - [15, 32767, 15, 32767, 15, 32767, 15, 32767]
+test_x86_avx512bitalg_mm_mask_popcnt_epi16_boundary_min - [1, -32768, 1, -32768, 1, -32768, 1, -32768]
+test_x86_avx512bitalg_mm_mask_popcnt_epi16_boundary_mixed - [1, 32767, 0, -1, 1, 32767, 0, -1]
+test_x86_avx512bitalg_mm_mask_popcnt_epi16_boundary_zero - [0, 0, 0, 0, 0, 0, 0, 0]
+test_x86_avx512bitalg_mm_mask_popcnt_epi16_normal2 - [2, -1, 2, -3, 3, -5, 1, -7]
+test_x86_avx512bitalg_mm_mask_popcnt_epi16_normal3 - [5, 200, 5, 400, 8, 600, 5, 800]
+test_x86_avx512bitalg_mm_mask_popcnt_epi8 - [2, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 1, 0, 0, 0]
+test_x86_avx512bitalg_mm_mask_popcnt_epi8_asym_max_min - [1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127, 1, 127]
+test_x86_avx512bitalg_mm_mask_popcnt_epi8_asym_min_max - [7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128, 7, -128]
+test_x86_avx512bitalg_mm_mask_popcnt_epi8_boundary_allones - [8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1, 8, -1]
+test_x86_avx512bitalg_mm_mask_popcnt_epi8_boundary_max - [7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127, 7, 127]
+test_x86_avx512bitalg_mm_mask_popcnt_epi8_boundary_min - [1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128, 1, -128]
+test_x86_avx512bitalg_mm_mask_popcnt_epi8_boundary_mixed - [1, 127, 0, -1, 1, 127, 0, -1, 1, 127, 0, -1, 1, 127, 0, -1]
+test_x86_avx512bitalg_mm_mask_popcnt_epi8_boundary_zero - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+test_x86_avx512bitalg_mm_mask_popcnt_epi8_normal2 - [2, -1, 2, -3, 3, -5, 1, -7, 2, -1, 2, -3, 3, -5, 1, -7]
+test_x86_avx512bitalg_mm_mask_popcnt_epi8_normal3 - [5, -56, 4, -112, 7, 88, 4, 32, 4, -24, 4, -80, 4, 120, 5, 64]
+test_x86_avx512bitalg_mm_maskz_popcnt_epi16 - [1, 0, 1, 0, 2, 0, 1, 0]
+test_x86_avx512bitalg_mm_maskz_popcnt_epi16_boundary_allones - [16, 0, 16, 0, 16, 0, 16, 0]
+test_x86_avx512bitalg_mm_maskz_popcnt_epi16_boundary_max - [15, 0, 15, 0, 15, 0, 15, 0]
+test_x86_avx512bitalg_mm_maskz_popcnt_epi16_boundary_min - [1, 0, 1, 0, 1, 0, 1, 0]
+test_x86_avx512bitalg_mm_maskz_popcnt_epi16_boundary_mixed - [1, 0, 0, 0, 1, 0, 0, 0]
+test_x86_avx512bitalg_mm_maskz_popcnt_epi16_boundary_zero - [0, 0, 0, 0, 0, 0, 0, 0]
+test_x86_avx512bitalg_mm_maskz_popcnt_epi16_normal2 - [0, 0, 1, 0, 1, 0, 2, 0]
+test_x86_avx512bitalg_mm_maskz_popcnt_epi16_normal3 - [3, 0, 4, 0, 6, 0, 6, 0]
+test_x86_avx512bitalg_mm_maskz_popcnt_epi8 - [1, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0]
+test_x86_avx512bitalg_mm_maskz_popcnt_epi8_boundary_allones - [8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0, 8, 0]
+test_x86_avx512bitalg_mm_maskz_popcnt_epi8_boundary_max - [7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0, 7, 0]
+test_x86_avx512bitalg_mm_maskz_popcnt_epi8_boundary_min - [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+test_x86_avx512bitalg_mm_maskz_popcnt_epi8_boundary_mixed - [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0]
+test_x86_avx512bitalg_mm_maskz_popcnt_epi8_boundary_zero - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+test_x86_avx512bitalg_mm_maskz_popcnt_epi8_normal2 - [0, 0, 1, 0, 1, 0, 2, 0, 0, 0, 1, 0, 1, 0, 2, 0]
+test_x86_avx512bitalg_mm_maskz_popcnt_epi8_normal3 - [3, 0, 3, 0, 5, 0, 5, 0, 2, 0, 3, 0, 2, 0, 5, 0]
+test_x86_avx512bitalg_mm_popcnt_epi16 - [1, 0, 1, 0, 2, 0, 1, 0]
+test_x86_avx512bitalg_mm_popcnt_epi16_boundary_allones - [16, 16, 16, 16, 16, 16, 16, 16]
+test_x86_avx512bitalg_mm_popcnt_epi16_boundary_max - [15, 15, 15, 15, 15, 15, 15, 15]
+test_x86_avx512bitalg_mm_popcnt_epi16_boundary_min - [1, 1, 1, 1, 1, 1, 1, 1]
+test_x86_avx512bitalg_mm_popcnt_epi16_boundary_mixed - [1, 15, 0, 16, 1, 15, 0, 16]
+test_x86_avx512bitalg_mm_popcnt_epi16_boundary_zero - [0, 0, 0, 0, 0, 0, 0, 0]
+test_x86_avx512bitalg_mm_popcnt_epi16_normal2 - [0, 16, 1, 15, 1, 15, 2, 14]
+test_x86_avx512bitalg_mm_popcnt_epi16_normal3 - [3, 3, 4, 3, 6, 4, 6, 3]
+test_x86_avx512bitalg_mm_popcnt_epi8 - [1, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0]
+test_x86_avx512bitalg_mm_popcnt_epi8_boundary_allones - [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+test_x86_avx512bitalg_mm_popcnt_epi8_boundary_max - [7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7]
+test_x86_avx512bitalg_mm_popcnt_epi8_boundary_min - [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+test_x86_avx512bitalg_mm_popcnt_epi8_boundary_mixed - [1, 7, 0, 8, 1, 7, 0, 8, 1, 7, 0, 8, 1, 7, 0, 8]
+test_x86_avx512bitalg_mm_popcnt_epi8_boundary_zero - [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+test_x86_avx512bitalg_mm_popcnt_epi8_normal2 - [0, 8, 1, 7, 1, 7, 2, 6, 0, 8, 1, 7, 1, 7, 2, 6]
+test_x86_avx512bitalg_mm_popcnt_epi8_normal3 - [3, 3, 3, 2, 5, 3, 5, 1, 2, 4, 3, 3, 2, 4, 5, 1]

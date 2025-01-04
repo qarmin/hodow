@@ -1,0 +1,48 @@
+# Shader manifest for dEQP-VK.renderpasses.renderpass{1,2}.*.formats.*
+#
+# `createSubpassShaders` builds the fragment shader from the render pass description,
+# so upstream emits one per case. For the `formats` group every case is a single
+# colour attachment in a single subpass with `useFormatCompCount` false, which fixes
+# the component count at four and the boolean ops at their index-0..3 values: the only
+# thing left varying is the GLSL type the attachment's channel class maps to. Three
+# shaders therefore cover the whole group.
+#
+# The grid the fragment shader writes - `boolOpFromIndex(subpassNdx + attachmentIndex
+# + compNdx)` over the parity of gl_FragCoord - is recomputed on the host in
+# `render_reference_values`, so the two have to be read together.
+
+upstream_source = "external/vulkancts/modules/vulkan/renderpass/vktRenderPassTests.cpp"
+rust_module = "renderpass/render_pass_tests"
+
+[[case]]
+name = "grid_float"
+rust_const = "RENDER_PASS_GRID_FLOAT"
+rust_type = "GridProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/render_pass_grid.frag", stage = "frag" },
+]
+[case.params]
+attachment_type = { type = "str", value = "vec4" }
+
+[[case]]
+name = "grid_sint"
+rust_const = "RENDER_PASS_GRID_SINT"
+rust_type = "GridProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/render_pass_grid.frag", stage = "frag" },
+]
+[case.params]
+attachment_type = { type = "str", value = "ivec4" }
+
+[[case]]
+name = "grid_uint"
+rust_const = "RENDER_PASS_GRID_UINT"
+rust_type = "GridProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/render_pass_grid.frag", stage = "frag" },
+]
+[case.params]
+attachment_type = { type = "str", value = "uvec4" }

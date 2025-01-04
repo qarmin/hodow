@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.draw.*.indirect_instanced.*
+#
+# `DrawIndirectInstancedCase::initPrograms` writes both sources inline: a position and a per-instance colour passed through.
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawIndirectInstancedTests.cpp"
+rust_module = "draw/indirect_instanced_tests"
+
+[[case]]
+name = "indirect_instanced"
+rust_const = "INDIRECT_INSTANCED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/indirect_instanced.vert", stage = "vert" },
+    { name = "frag", template = "draw/indirect_instanced.frag", stage = "frag" },
+]

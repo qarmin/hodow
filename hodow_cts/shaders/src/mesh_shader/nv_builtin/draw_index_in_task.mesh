@@ -1,0 +1,32 @@
+#version 460
+#extension GL_NV_mesh_shader : enable
+
+layout (local_size_x=1) in;
+layout (triangles) out;
+layout (max_vertices=3, max_primitives=1) out;
+
+in taskNV TaskData {
+    uint id;
+    uint size;
+} td;
+
+void main ()
+{
+    gl_PrimitiveCountNV = 1u;
+
+    const float imgWidth = float(td.size);
+    const float pixWidth = (2.0 / imgWidth);
+    const float halfPix  = (pixWidth / 2.0);
+    const float xCenter  = (((float(td.id) + 0.5) / imgWidth) * 2.0 - 1.0);
+    const float xLeft    = (xCenter - halfPix);
+    const float xRight   = (xCenter + halfPix);
+    const uvec3 indices  = uvec3(0 + 0, 0 + 1, 0 + 2);
+
+    gl_PrimitiveIndicesNV[indices.x] = indices.x;
+    gl_PrimitiveIndicesNV[indices.y] = indices.y;
+    gl_PrimitiveIndicesNV[indices.z] = indices.z;
+
+    gl_MeshVerticesNV[indices.x].gl_Position = vec4(xLeft,    0.5, 0.0, 1.0);
+    gl_MeshVerticesNV[indices.y].gl_Position = vec4(xRight,   0.5, 0.0, 1.0);
+    gl_MeshVerticesNV[indices.z].gl_Position = vec4(xCenter, -0.5, 0.0, 1.0);
+}

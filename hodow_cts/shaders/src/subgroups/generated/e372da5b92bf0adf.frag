@@ -1,0 +1,32 @@
+#version 450
+#extension GL_KHR_shader_subgroup_shuffle: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int16 : enable
+layout(location = 0) out uint result;
+layout(set = 0, binding = 4, std430) readonly buffer Buffer2
+{
+  u16vec3 data1[];
+};
+layout(set = 0, binding = 5, std430) readonly buffer Buffer3
+{
+  uint data2[];
+};
+void main (void)
+{
+  uint tempRes;
+  uint temp_res;
+  uvec4 mask = subgroupBallot(true);
+  uint id_in = data2[gl_SubgroupInvocationID] & (gl_SubgroupSize - 1);
+  u16vec3 op = subgroupShuffle(data1[gl_SubgroupInvocationID], id_in);
+  uint id = id_in;
+  if ((id < gl_SubgroupSize) && subgroupBallotBitExtract(mask, id))
+  {
+    temp_res = (op == data1[id]) ? 1 : 0;
+  }
+  else
+  {
+    temp_res = 1; // Invocation we read from was inactive, so we can't verify results!
+  }
+  tempRes = temp_res;
+  result = tempRes;
+}

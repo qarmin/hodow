@@ -1,0 +1,36 @@
+[package]
+name = "hodow_gpu"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+log.workspace = true
+
+glutin = { version = "0.32.3", optional = true }
+glutin-winit = { version = "0.5.0", default-features = false, features = ["egl", "x11", "wayland"], optional = true }
+glow = { version = "0.18.0", optional = true }
+gl = { version = "0.14", optional = true }
+winit = { version = "0.30", optional = true }
+raw-window-handle = { version = "0.6.2", optional = true }
+
+# Vulkan compute testing (pure-Rust: ash = libvulkan FFI, naga = WGSL->SPIR-V, no C deps)
+ash = { version = "0.38", optional = true }
+naga = { version = "30", optional = true, features = ["wgsl-in", "spv-out", "glsl-out"] }
+
+# Linux only (context.rs gates its use the same way); wayland-sys does not build for Windows.
+# wayland-client only hands EGL a real `wl_display` on a Wayland-only system, and like x11-dl
+# it dlopens its library at run time.
+[target.'cfg(target_os = "linux")'.dependencies]
+wayland-client = { version = "0.31", optional = true }
+x11-dl = { version = "2.21.0", optional = true }
+
+[features]
+default = []
+# OpenGL tests (and the headless/windowed context they run on)
+gpu = ["glutin", "glutin-winit", "glow", "gl", "raw-window-handle", "winit", "wayland-client", "x11-dl"]
+# Vulkan compute validation (independent of the OpenGL `gpu` feature)
+vulkan = ["dep:ash", "dep:naga"]
+
+[lints]
+workspace = true

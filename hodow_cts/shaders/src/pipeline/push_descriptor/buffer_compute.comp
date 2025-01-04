@@ -1,0 +1,15 @@
+#version 450
+layout(set = 0, binding = ${binding}) ${buffer_type} Block
+{
+    vec4 color;
+} inputData;
+
+layout(set = 0, binding = ${binding_next}) writeonly buffer Output
+{
+    vec4 color;
+} outData;
+
+void main()
+{
+    outData.color = inputData.color;
+}

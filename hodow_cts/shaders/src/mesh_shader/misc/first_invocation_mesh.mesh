@@ -1,0 +1,28 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_basic : enable
+
+layout(local_size_x=128, local_size_y=1, local_size_z=1) in;
+layout(points) out;
+layout(max_primitives=128, max_vertices=128) out;
+
+layout (location=0) out perprimitiveEXT vec4 pointColor[];
+
+void main ()
+{
+    uint total_points = max(120 / 2u, 1u);
+    
+    if (gl_LocalInvocationIndex == 0u) {
+        total_points = 120;
+    } else if (gl_SubgroupID > 0u) {
+        total_points = max(120 / 4u, 1u);
+    }
+    
+    SetMeshOutputsEXT(total_points, total_points);
+    if (gl_LocalInvocationIndex < 120) {
+        gl_MeshVerticesEXT[gl_LocalInvocationIndex].gl_PointSize = 1.0;
+        gl_MeshVerticesEXT[gl_LocalInvocationIndex].gl_Position = vec4(((float(gl_LocalInvocationIndex) + 0.5) / 128) * 2.0 - 1.0, 0.0, 0.0, 1.0);
+        gl_PrimitivePointIndicesEXT[gl_LocalInvocationIndex] = gl_LocalInvocationIndex;
+        pointColor[gl_LocalInvocationIndex] = vec4(0.0, 0.0, 1.0, 1.0);
+    }
+}

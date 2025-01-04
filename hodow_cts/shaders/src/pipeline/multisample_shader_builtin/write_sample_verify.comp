@@ -1,0 +1,25 @@
+#version 450
+
+layout (rgba8, set=0, binding=0) uniform image2DMS writeImg;
+layout (rgba8, set=0, binding=1) uniform image2D   verificationImg;
+
+void main()
+{
+        vec4  wcolor   = vec4(0, 0, 1, 1);
+        vec4  bcolor   = vec4(1, 0, 0, 1);
+        vec4  gcolor   = vec4(0, 1, 0, 1);
+        vec4  ccolor   = vec4(0, 0, 0, 1);
+        uvec2 ucoords  = uvec2(gl_GlobalInvocationID.xy);
+        ivec2 icoords  = ivec2(ucoords);
+        uint writeMask = ((ucoords.x << ${bpc}) | ucoords.y);
+        bool ok = true;
+        for (uint i = 0; i < ${count}; ++i)
+        {
+                bool expectWrite = ((writeMask & (1 << i)) != 0);
+                vec4 sampleColor = imageLoad(writeImg, icoords, int(i));
+                vec4 wantedColor = (expectWrite ? wcolor : ccolor);
+                ok = ok && (sampleColor == wantedColor);
+        }
+        vec4 resultColor = (ok ? gcolor : bcolor);
+        imageStore(verificationImg, icoords, resultColor);
+}

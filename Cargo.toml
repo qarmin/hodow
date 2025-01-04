@@ -1,0 +1,59 @@
+[workspace]
+resolver = "2"
+members = [
+    "hodow_common",
+    "hodow_cpu",
+    "hodow_gpu",
+    "hodow_bench",
+    "hodow",
+    "hodow_cts",
+    "hodow_cts/crates/base",
+    "hodow_cts/crates/vk_main",
+    "hodow_cts/crates/vk_a",
+    "hodow_cts/crates/vk_b",
+    "hodow_cts/crates/vk_c",
+    "hodow_cts/crates/vk_d",
+]
+exclude = ["tmp"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.98"
+license = "Apache-2.0"
+
+[workspace.dependencies]
+log = "0.4.35"
+rand = "0.10.3"
+sysinfo = { version = "0.40", default-features = false, features = ["system"] }
+
+# Small but still quick to build: `just binaries`. Thin LTO and default codegen units on purpose.
+[profile.binaries]
+inherits = "release"
+lto = "thin"
+strip = true
+
+[workspace.lints]
+clippy.upper_case_acronyms = "allow"
+clippy.approx_constant = "allow"
+# `hodow_cts` ports VK-GL-CTS's C++ test sources keeping their original shape (see
+# hodow_cts/CLAUDE.md's "Ported code keeps upstream shape") - a `for (int i = 0; i <
+# n; i++)` loop indexing an array is deliberately left as a C-style index loop rather
+# than rewritten into an iterator, so the port stays easy to diff against upstream on
+# re-sync. That shape is exactly what this lint flags.
+clippy.needless_range_loop = "allow"
+# `chunks_exact(4)` over a readback buffer mirrors the C++ loop over pixels; the lint wants
+# `as_chunks`, whose machine fix does not compile for most of these (slice vs array shapes).
+clippy.chunks_exact_to_as_chunks = "allow"
+# Same reason: ported signatures, enums and Vulkan create-info structs keep the C++ shape
+# (a many-argument helper, `VK_FOO_*` variants sharing a prefix, a struct filled field by
+# field before its `pNext` is chained).
+clippy.too_many_arguments = "allow"
+clippy.type_complexity = "allow"
+clippy.enum_variant_names = "allow"
+clippy.field_reassign_with_default = "allow"
+# The binaries are `hodow`/`hodow_cts`/`hodow_gui` on purpose, matching the crate names.
+# Renaming them to kebab-case would change what `just install` puts on PATH, what every recipe
+# and script invokes, and what `serve`'s `current_exe()` re-executes - all to satisfy a naming
+# preference. Warned once per cargo invocation otherwise, which buries real warnings.
+cargo.non_kebab_case_bins = "allow"

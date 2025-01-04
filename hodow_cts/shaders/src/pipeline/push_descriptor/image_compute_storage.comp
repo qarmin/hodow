@@ -1,0 +1,13 @@
+#version 450
+layout(set = 0, binding = ${binding}, rgba8) uniform readonly image2D storageImage;
+layout(set = 0, binding = ${binding_next}) writeonly buffer Output
+{
+    vec4 innerColor;
+    vec4 outerColor;
+} outData;
+
+void main()
+{
+    outData.innerColor = imageLoad(storageImage, ivec2(0));
+    outData.outerColor = imageLoad(storageImage, ivec2(0));
+}

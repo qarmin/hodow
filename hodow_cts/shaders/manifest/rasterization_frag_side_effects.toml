@@ -1,0 +1,296 @@
+# Shader manifest for dEQP-VK.rasterization.frag_side_effects.*
+#
+# `initPrograms` builds the fragment shader from a header, a statement before and a statement after the
+# SSBO write, and the colour output statement placed at the beginning or at the end of main. The
+# stencil_never and depth_never cases share the plain shader; depth_bounds only differs in the vertex depth.
+
+upstream_source = "external/vulkancts/modules/vulkan/rasterization/vktRasterizationFragShaderSideEffectsTests.cpp"
+rust_module = "rasterization/frag_side_effects_tests"
+
+[[case]]
+name = "kill_color_at_begin"
+rust_const = "FSE_KILL_BEGIN"
+rust_type = "FragSideEffectsProgram"
+programs = [
+    { name = "vert", template = "rasterization/frag_side_effects.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/frag_side_effects.frag", stage = "frag" },
+]
+[case.derived]
+mesh_depth = "'0.0'"
+headers = "''"
+before = "''"
+after = "'discard;'"
+color_begin = "'outColor = vec4(0.0, 0.0, 1.0, 1.0);'"
+color_end = "''"
+
+[[case]]
+name = "demote_color_at_begin"
+rust_const = "FSE_DEMOTE_BEGIN"
+rust_type = "FragSideEffectsProgram"
+programs = [
+    { name = "vert", template = "rasterization/frag_side_effects.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/frag_side_effects.frag", stage = "frag" },
+]
+[case.derived]
+mesh_depth = "'0.0'"
+headers = "'#extension GL_EXT_demote_to_helper_invocation : enable'"
+before = "''"
+after = "'demote;'"
+color_begin = "'outColor = vec4(0.0, 0.0, 1.0, 1.0);'"
+color_end = "''"
+
+[[case]]
+name = "terminate_invocation_color_at_begin"
+rust_const = "FSE_TERMINATE_INVOCATION_BEGIN"
+rust_type = "FragSideEffectsProgram"
+programs = [
+    { name = "vert", template = "rasterization/frag_side_effects.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/frag_side_effects.frag", stage = "frag" },
+]
+[case.derived]
+mesh_depth = "'0.0'"
+headers = "'#extension GL_EXT_terminate_invocation : enable'"
+before = "''"
+after = "'terminateInvocation;'"
+color_begin = "'outColor = vec4(0.0, 0.0, 1.0, 1.0);'"
+color_end = "''"
+
+[[case]]
+name = "sample_mask_before_color_at_begin"
+rust_const = "FSE_SAMPLE_MASK_BEFORE_BEGIN"
+rust_type = "FragSideEffectsProgram"
+programs = [
+    { name = "vert", template = "rasterization/frag_side_effects.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/frag_side_effects.frag", stage = "frag" },
+]
+[case.derived]
+mesh_depth = "'0.0'"
+headers = "''"
+before = "'gl_SampleMask[0] = 0;'"
+after = "''"
+color_begin = "'outColor = vec4(0.0, 0.0, 1.0, 1.0);'"
+color_end = "''"
+
+[[case]]
+name = "sample_mask_after_color_at_begin"
+rust_const = "FSE_SAMPLE_MASK_AFTER_BEGIN"
+rust_type = "FragSideEffectsProgram"
+programs = [
+    { name = "vert", template = "rasterization/frag_side_effects.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/frag_side_effects.frag", stage = "frag" },
+]
+[case.derived]
+mesh_depth = "'0.0'"
+headers = "''"
+before = "''"
+after = "'gl_SampleMask[0] = 0;'"
+color_begin = "'outColor = vec4(0.0, 0.0, 1.0, 1.0);'"
+color_end = "''"
+
+[[case]]
+name = "plain_color_at_begin"
+rust_const = "FSE_PLAIN_BEGIN"
+rust_type = "FragSideEffectsProgram"
+programs = [
+    { name = "vert", template = "rasterization/frag_side_effects.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/frag_side_effects.frag", stage = "frag" },
+]
+[case.derived]
+mesh_depth = "'0.0'"
+headers = "''"
+before = "''"
+after = "''"
+color_begin = "'outColor = vec4(0.0, 0.0, 1.0, 1.0);'"
+color_end = "''"
+
+[[case]]
+name = "alpha_coverage_before_color_at_begin"
+rust_const = "FSE_ALPHA_COVERAGE_BEFORE_BEGIN"
+rust_type = "FragSideEffectsProgram"
+programs = [
+    { name = "vert", template = "rasterization/frag_side_effects.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/frag_side_effects.frag", stage = "frag" },
+]
+[case.derived]
+mesh_depth = "'0.0'"
+headers = "''"
+before = "'outColor.a = float(0.0);'"
+after = "''"
+color_begin = "'outColor.rgb = vec3(0.0, 0.0, 1.0);'"
+color_end = "''"
+
+[[case]]
+name = "alpha_coverage_after_color_at_begin"
+rust_const = "FSE_ALPHA_COVERAGE_AFTER_BEGIN"
+rust_type = "FragSideEffectsProgram"
+programs = [
+    { name = "vert", template = "rasterization/frag_side_effects.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/frag_side_effects.frag", stage = "frag" },
+]
+[case.derived]
+mesh_depth = "'0.0'"
+headers = "''"
+before = "''"
+after = "'outColor.a = float(0.0);'"
+color_begin = "'outColor.rgb = vec3(0.0, 0.0, 1.0);'"
+color_end = "''"
+
+[[case]]
+name = "depth_bounds_color_at_begin"
+rust_const = "FSE_DEPTH_BOUNDS_BEGIN"
+rust_type = "FragSideEffectsProgram"
+programs = [
+    { name = "vert", template = "rasterization/frag_side_effects.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/frag_side_effects.frag", stage = "frag" },
+]
+[case.derived]
+mesh_depth = "'0.75'"
+headers = "''"
+before = "''"
+after = "''"
+color_begin = "'outColor = vec4(0.0, 0.0, 1.0, 1.0);'"
+color_end = "''"
+
+[[case]]
+name = "kill_color_at_end"
+rust_const = "FSE_KILL_END"
+rust_type = "FragSideEffectsProgram"
+programs = [
+    { name = "vert", template = "rasterization/frag_side_effects.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/frag_side_effects.frag", stage = "frag" },
+]
+[case.derived]
+mesh_depth = "'0.0'"
+headers = "''"
+before = "''"
+after = "'discard;'"
+color_begin = "''"
+color_end = "'outColor = vec4(0.0, 0.0, 1.0, 1.0);'"
+
+[[case]]
+name = "demote_color_at_end"
+rust_const = "FSE_DEMOTE_END"
+rust_type = "FragSideEffectsProgram"
+programs = [
+    { name = "vert", template = "rasterization/frag_side_effects.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/frag_side_effects.frag", stage = "frag" },
+]
+[case.derived]
+mesh_depth = "'0.0'"
+headers = "'#extension GL_EXT_demote_to_helper_invocation : enable'"
+before = "''"
+after = "'demote;'"
+color_begin = "''"
+color_end = "'outColor = vec4(0.0, 0.0, 1.0, 1.0);'"
+
+[[case]]
+name = "terminate_invocation_color_at_end"
+rust_const = "FSE_TERMINATE_INVOCATION_END"
+rust_type = "FragSideEffectsProgram"
+programs = [
+    { name = "vert", template = "rasterization/frag_side_effects.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/frag_side_effects.frag", stage = "frag" },
+]
+[case.derived]
+mesh_depth = "'0.0'"
+headers = "'#extension GL_EXT_terminate_invocation : enable'"
+before = "''"
+after = "'terminateInvocation;'"
+color_begin = "''"
+color_end = "'outColor = vec4(0.0, 0.0, 1.0, 1.0);'"
+
+[[case]]
+name = "sample_mask_before_color_at_end"
+rust_const = "FSE_SAMPLE_MASK_BEFORE_END"
+rust_type = "FragSideEffectsProgram"
+programs = [
+    { name = "vert", template = "rasterization/frag_side_effects.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/frag_side_effects.frag", stage = "frag" },
+]
+[case.derived]
+mesh_depth = "'0.0'"
+headers = "''"
+before = "'gl_SampleMask[0] = 0;'"
+after = "''"
+color_begin = "''"
+color_end = "'outColor = vec4(0.0, 0.0, 1.0, 1.0);'"
+
+[[case]]
+name = "sample_mask_after_color_at_end"
+rust_const = "FSE_SAMPLE_MASK_AFTER_END"
+rust_type = "FragSideEffectsProgram"
+programs = [
+    { name = "vert", template = "rasterization/frag_side_effects.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/frag_side_effects.frag", stage = "frag" },
+]
+[case.derived]
+mesh_depth = "'0.0'"
+headers = "''"
+before = "''"
+after = "'gl_SampleMask[0] = 0;'"
+color_begin = "''"
+color_end = "'outColor = vec4(0.0, 0.0, 1.0, 1.0);'"
+
+[[case]]
+name = "plain_color_at_end"
+rust_const = "FSE_PLAIN_END"
+rust_type = "FragSideEffectsProgram"
+programs = [
+    { name = "vert", template = "rasterization/frag_side_effects.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/frag_side_effects.frag", stage = "frag" },
+]
+[case.derived]
+mesh_depth = "'0.0'"
+headers = "''"
+before = "''"
+after = "''"
+color_begin = "''"
+color_end = "'outColor = vec4(0.0, 0.0, 1.0, 1.0);'"
+
+[[case]]
+name = "alpha_coverage_before_color_at_end"
+rust_const = "FSE_ALPHA_COVERAGE_BEFORE_END"
+rust_type = "FragSideEffectsProgram"
+programs = [
+    { name = "vert", template = "rasterization/frag_side_effects.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/frag_side_effects.frag", stage = "frag" },
+]
+[case.derived]
+mesh_depth = "'0.0'"
+headers = "''"
+before = "'outColor.a = float(0.0);'"
+after = "''"
+color_begin = "''"
+color_end = "'outColor.rgb = vec3(0.0, 0.0, 1.0);'"
+
+[[case]]
+name = "alpha_coverage_after_color_at_end"
+rust_const = "FSE_ALPHA_COVERAGE_AFTER_END"
+rust_type = "FragSideEffectsProgram"
+programs = [
+    { name = "vert", template = "rasterization/frag_side_effects.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/frag_side_effects.frag", stage = "frag" },
+]
+[case.derived]
+mesh_depth = "'0.0'"
+headers = "''"
+before = "''"
+after = "'outColor.a = float(0.0);'"
+color_begin = "''"
+color_end = "'outColor.rgb = vec3(0.0, 0.0, 1.0);'"
+
+[[case]]
+name = "depth_bounds_color_at_end"
+rust_const = "FSE_DEPTH_BOUNDS_END"
+rust_type = "FragSideEffectsProgram"
+programs = [
+    { name = "vert", template = "rasterization/frag_side_effects.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/frag_side_effects.frag", stage = "frag" },
+]
+[case.derived]
+mesh_depth = "'0.75'"
+headers = "''"
+before = "''"
+after = "''"
+color_begin = "''"
+color_end = "'outColor = vec4(0.0, 0.0, 1.0, 1.0);'"

@@ -1,0 +1,14 @@
+#version 450
+
+#extension GL_EXT_samplerless_texture_functions : enable
+layout(set = 0, binding = ${binding}, rgba8) uniform image2D imageInput;
+layout(set = 1, binding = 0) buffer ssboOutput
+{
+    vec4 color;
+} outputData;
+
+void main (void)
+{
+    const ivec2 coords = ivec2(0, 0);
+    outputData.color = imageLoad(imageInput, coords);
+}

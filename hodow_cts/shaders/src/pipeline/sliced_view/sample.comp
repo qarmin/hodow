@@ -1,0 +1,14 @@
+#version 460
+layout (local_size_x=${width}, local_size_y=${height}, local_size_z=${sample_depth}) in;
+layout (set=0, binding=0) uniform usampler3D combinedSampler;
+layout (set=0, binding=1, rgba8ui) uniform uimage3D auxiliarImage;
+void main() {
+    const vec3 levelExtent = vec3(${width}, ${height}, ${sample_depth});
+    const vec3 sampleCoords = vec3(
+        (float(gl_LocalInvocationID.x) + 0.5) / levelExtent.x,
+        (float(gl_LocalInvocationID.y) + 0.5) / levelExtent.y,
+        (float(gl_LocalInvocationID.z) + 0.5) / levelExtent.z);
+    const ivec3 storeCoords = ivec3(int(gl_LocalInvocationID.x), int(gl_LocalInvocationID.y), int(gl_LocalInvocationID.z));
+    const uvec4 sampledColor = texture(combinedSampler, sampleCoords);
+    imageStore(auxiliarImage, storeCoords, sampledColor);
+}

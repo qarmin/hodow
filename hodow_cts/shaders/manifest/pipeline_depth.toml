@@ -1,0 +1,24 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.depth.*
+#
+# `DepthTest::initPrograms`: a pass-through vertex shader and, when the case has a colour attachment, a fragment shader that
+# writes the interpolated colour. Without a colour attachment the vertex shader outputs no colour and there is no fragment shader.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineDepthTests.cpp"
+rust_module = "pipeline/depth_tests"
+
+[[case]]
+name = "color"
+rust_const = "DEPTH_COLOR"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/depth/color.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/depth/color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "no_color"
+rust_const = "DEPTH_NO_COLOR"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/depth/no_color.vert", stage = "vert" },
+]

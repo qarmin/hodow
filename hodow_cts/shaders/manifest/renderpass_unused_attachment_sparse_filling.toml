@@ -1,0 +1,135 @@
+# Shader manifest for dEQP-VK.renderpasses.*.suballocation.attachment_sparse_filling.*
+#
+# `InputAttachmentSparseFillingTest::initPrograms`: the fragment shader reads N input attachments whose `input_attachment_index`
+# values come from `generateInputAttachmentParams` (a Fisher-Yates shuffle with seed 31 of 2N slots), which differs between the
+# render pass variants and dynamic rendering, so there is one fragment shader per (rendering kind, N). The files are the
+# upstream generator's output for those parameters, written out by a one-off shell implementation of deRandom.
+
+upstream_source = "external/vulkancts/modules/vulkan/renderpass/vktRenderPassUnusedAttachmentSparseFillingTests.cpp"
+rust_module = "renderpass/unused_attachment_sparse_filling_tests"
+
+[[case]]
+name = "rp_1"
+rust_const = "SPARSE_FILL_RP_1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "renderpass/unused_attachment_sparse_filling/vertex.vert", stage = "vert" },
+    { name = "fragment", template = "renderpass/unused_attachment_sparse_filling/fragment_rp_1.frag", stage = "frag" },
+]
+
+[[case]]
+name = "rp_3"
+rust_const = "SPARSE_FILL_RP_3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "renderpass/unused_attachment_sparse_filling/vertex.vert", stage = "vert" },
+    { name = "fragment", template = "renderpass/unused_attachment_sparse_filling/fragment_rp_3.frag", stage = "frag" },
+]
+
+[[case]]
+name = "rp_7"
+rust_const = "SPARSE_FILL_RP_7"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "renderpass/unused_attachment_sparse_filling/vertex.vert", stage = "vert" },
+    { name = "fragment", template = "renderpass/unused_attachment_sparse_filling/fragment_rp_7.frag", stage = "frag" },
+]
+
+[[case]]
+name = "rp_15"
+rust_const = "SPARSE_FILL_RP_15"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "renderpass/unused_attachment_sparse_filling/vertex.vert", stage = "vert" },
+    { name = "fragment", template = "renderpass/unused_attachment_sparse_filling/fragment_rp_15.frag", stage = "frag" },
+]
+
+[[case]]
+name = "rp_31"
+rust_const = "SPARSE_FILL_RP_31"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "renderpass/unused_attachment_sparse_filling/vertex.vert", stage = "vert" },
+    { name = "fragment", template = "renderpass/unused_attachment_sparse_filling/fragment_rp_31.frag", stage = "frag" },
+]
+
+[[case]]
+name = "rp_63"
+rust_const = "SPARSE_FILL_RP_63"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "renderpass/unused_attachment_sparse_filling/vertex.vert", stage = "vert" },
+    { name = "fragment", template = "renderpass/unused_attachment_sparse_filling/fragment_rp_63.frag", stage = "frag" },
+]
+
+[[case]]
+name = "rp_127"
+rust_const = "SPARSE_FILL_RP_127"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "renderpass/unused_attachment_sparse_filling/vertex.vert", stage = "vert" },
+    { name = "fragment", template = "renderpass/unused_attachment_sparse_filling/fragment_rp_127.frag", stage = "frag" },
+]
+
+[[case]]
+name = "dyn_1"
+rust_const = "SPARSE_FILL_DYN_1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "renderpass/unused_attachment_sparse_filling/vertex.vert", stage = "vert" },
+    { name = "fragment", template = "renderpass/unused_attachment_sparse_filling/fragment_dyn_1.frag", stage = "frag" },
+]
+
+[[case]]
+name = "dyn_3"
+rust_const = "SPARSE_FILL_DYN_3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "renderpass/unused_attachment_sparse_filling/vertex.vert", stage = "vert" },
+    { name = "fragment", template = "renderpass/unused_attachment_sparse_filling/fragment_dyn_3.frag", stage = "frag" },
+]
+
+[[case]]
+name = "dyn_7"
+rust_const = "SPARSE_FILL_DYN_7"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "renderpass/unused_attachment_sparse_filling/vertex.vert", stage = "vert" },
+    { name = "fragment", template = "renderpass/unused_attachment_sparse_filling/fragment_dyn_7.frag", stage = "frag" },
+]
+
+[[case]]
+name = "dyn_15"
+rust_const = "SPARSE_FILL_DYN_15"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "renderpass/unused_attachment_sparse_filling/vertex.vert", stage = "vert" },
+    { name = "fragment", template = "renderpass/unused_attachment_sparse_filling/fragment_dyn_15.frag", stage = "frag" },
+]
+
+[[case]]
+name = "dyn_31"
+rust_const = "SPARSE_FILL_DYN_31"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "renderpass/unused_attachment_sparse_filling/vertex.vert", stage = "vert" },
+    { name = "fragment", template = "renderpass/unused_attachment_sparse_filling/fragment_dyn_31.frag", stage = "frag" },
+]
+
+[[case]]
+name = "dyn_63"
+rust_const = "SPARSE_FILL_DYN_63"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "renderpass/unused_attachment_sparse_filling/vertex.vert", stage = "vert" },
+    { name = "fragment", template = "renderpass/unused_attachment_sparse_filling/fragment_dyn_63.frag", stage = "frag" },
+]
+
+[[case]]
+name = "dyn_127"
+rust_const = "SPARSE_FILL_DYN_127"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "renderpass/unused_attachment_sparse_filling/vertex.vert", stage = "vert" },
+    { name = "fragment", template = "renderpass/unused_attachment_sparse_filling/fragment_dyn_127.frag", stage = "frag" },
+]

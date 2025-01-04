@@ -1,0 +1,38 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+layout (local_size_x=128) in;
+
+struct TaskData {
+    uint verificationCodes[128];
+    vec4 color;
+};
+taskPayloadSharedEXT TaskData td;
+shared uint verificationOK[128];
+
+void main ()
+{
+    td.verificationCodes[gl_LocalInvocationIndex] = (256 - gl_LocalInvocationIndex);
+    memoryBarrierShared();
+    barrier();
+    uint verificationResult = 1u;
+    for (uint i = 0u; i < 128; ++i) {
+        if (td.verificationCodes[i] != (256 - i)) {
+            verificationResult = 0u;
+            break;
+        }
+    }
+    verificationOK[gl_LocalInvocationIndex] = verificationResult;
+    memoryBarrierShared();
+    barrier();
+    if (gl_LocalInvocationIndex == 0u) {
+        vec4 color = vec4(0.0, 0.0, 1.0, 1.0);
+        for (uint i = 0u; i < 128; ++i) {
+            if (verificationOK[i] == 0u) {
+                color = vec4(0.0, 0.0, 0.0, 1.0);
+            }
+        }
+        td.color = color;
+    }
+    EmitMeshTasksEXT(1, 1, 1);
+}

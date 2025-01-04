@@ -1,0 +1,108 @@
+# Shader manifest for dEQP-VK.tessellation.tesscoord.*
+#
+# `TessCoordTest::initPrograms` (GLSL variant): a vertex shader with no inputs, a control shader that reads the tessellation levels from
+# an SSBO and, per primitive type and spacing mode, an evaluation shader in point mode that appends gl_TessCoord to an SSBO -
+# with a second copy (`tese_point_size`) that also writes gl_PointSize. The `_execution_mode_in_tesc` cases of upstream use SPIR-V
+# assembly and are not ported.
+
+upstream_source = "external/vulkancts/modules/vulkan/tessellation/vktTessellationCoordinatesTests.cpp"
+rust_module = "tessellation/coordinates_tests"
+
+[[case]]
+name = "triangles_equal_spacing"
+rust_const = "TESSCOORD_TRIANGLES_EQUAL_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/tesscoord.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/tesscoord.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/tesscoord_triangles_equal_spacing.tese", stage = "tese" },
+    { name = "tese_point_size", template = "tessellation/tesscoord_triangles_equal_spacing_point_size.tese", stage = "tese" },
+]
+
+[[case]]
+name = "triangles_fractional_odd_spacing"
+rust_const = "TESSCOORD_TRIANGLES_FRACTIONAL_ODD_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/tesscoord.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/tesscoord.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/tesscoord_triangles_fractional_odd_spacing.tese", stage = "tese" },
+    { name = "tese_point_size", template = "tessellation/tesscoord_triangles_fractional_odd_spacing_point_size.tese", stage = "tese" },
+]
+
+[[case]]
+name = "triangles_fractional_even_spacing"
+rust_const = "TESSCOORD_TRIANGLES_FRACTIONAL_EVEN_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/tesscoord.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/tesscoord.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/tesscoord_triangles_fractional_even_spacing.tese", stage = "tese" },
+    { name = "tese_point_size", template = "tessellation/tesscoord_triangles_fractional_even_spacing_point_size.tese", stage = "tese" },
+]
+
+[[case]]
+name = "quads_equal_spacing"
+rust_const = "TESSCOORD_QUADS_EQUAL_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/tesscoord.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/tesscoord.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/tesscoord_quads_equal_spacing.tese", stage = "tese" },
+    { name = "tese_point_size", template = "tessellation/tesscoord_quads_equal_spacing_point_size.tese", stage = "tese" },
+]
+
+[[case]]
+name = "quads_fractional_odd_spacing"
+rust_const = "TESSCOORD_QUADS_FRACTIONAL_ODD_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/tesscoord.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/tesscoord.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/tesscoord_quads_fractional_odd_spacing.tese", stage = "tese" },
+    { name = "tese_point_size", template = "tessellation/tesscoord_quads_fractional_odd_spacing_point_size.tese", stage = "tese" },
+]
+
+[[case]]
+name = "quads_fractional_even_spacing"
+rust_const = "TESSCOORD_QUADS_FRACTIONAL_EVEN_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/tesscoord.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/tesscoord.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/tesscoord_quads_fractional_even_spacing.tese", stage = "tese" },
+    { name = "tese_point_size", template = "tessellation/tesscoord_quads_fractional_even_spacing_point_size.tese", stage = "tese" },
+]
+
+[[case]]
+name = "isolines_equal_spacing"
+rust_const = "TESSCOORD_ISOLINES_EQUAL_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/tesscoord.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/tesscoord.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/tesscoord_isolines_equal_spacing.tese", stage = "tese" },
+    { name = "tese_point_size", template = "tessellation/tesscoord_isolines_equal_spacing_point_size.tese", stage = "tese" },
+]
+
+[[case]]
+name = "isolines_fractional_odd_spacing"
+rust_const = "TESSCOORD_ISOLINES_FRACTIONAL_ODD_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/tesscoord.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/tesscoord.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/tesscoord_isolines_fractional_odd_spacing.tese", stage = "tese" },
+    { name = "tese_point_size", template = "tessellation/tesscoord_isolines_fractional_odd_spacing_point_size.tese", stage = "tese" },
+]
+
+[[case]]
+name = "isolines_fractional_even_spacing"
+rust_const = "TESSCOORD_ISOLINES_FRACTIONAL_EVEN_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/tesscoord.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/tesscoord.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/tesscoord_isolines_fractional_even_spacing.tese", stage = "tese" },
+    { name = "tese_point_size", template = "tessellation/tesscoord_isolines_fractional_even_spacing_point_size.tese", stage = "tese" },
+]

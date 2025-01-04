@@ -1,0 +1,86 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.vertex_input.misc.*
+#
+# `StrideChangeCase`, `UnusedBinding`, `UnboundInput` and `NullState` `initPrograms`: the stride change case adds
+# tessellation and geometry stages on request, the others are a position+colour vertex shader with a pass-through
+# fragment shader (the null state one also writes a vertex index to an SSBO).
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineVertexInputTests.cpp"
+rust_module = "pipeline/vertex_input_misc_tests"
+
+[[case]]
+name = "stride_change_vert_frag"
+rust_const = "STRIDE_CHANGE_VERT_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/vertex_input_misc/stride_change.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/vertex_input_misc/stride_change.frag", stage = "frag" },
+]
+
+[[case]]
+name = "stride_change_vert_tess_frag"
+rust_const = "STRIDE_CHANGE_VERT_TESS_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/vertex_input_misc/stride_change.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/vertex_input_misc/stride_change.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/vertex_input_misc/stride_change.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/vertex_input_misc/stride_change.frag", stage = "frag" },
+]
+
+[[case]]
+name = "stride_change_vert_geom_frag"
+rust_const = "STRIDE_CHANGE_VERT_GEOM_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/vertex_input_misc/stride_change.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/vertex_input_misc/stride_change.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/vertex_input_misc/stride_change.frag", stage = "frag" },
+]
+
+[[case]]
+name = "stride_change_vert_tess_geom_frag"
+rust_const = "STRIDE_CHANGE_VERT_TESS_GEOM_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/vertex_input_misc/stride_change.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/vertex_input_misc/stride_change.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/vertex_input_misc/stride_change.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/vertex_input_misc/stride_change.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/vertex_input_misc/stride_change.frag", stage = "frag" },
+]
+
+[[case]]
+name = "unused_binding"
+rust_const = "UNUSED_BINDING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/vertex_input_misc/unused_binding.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/vertex_input_misc/color_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "unbound_input"
+rust_const = "UNBOUND_INPUT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/vertex_input_misc/unbound_input.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/vertex_input_misc/color_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "unbound_input_integer"
+rust_const = "UNBOUND_INPUT_INTEGER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/vertex_input_misc/unbound_input_integer.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/vertex_input_misc/color_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "null_state"
+rust_const = "NULL_STATE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/vertex_input_misc/null_state.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/vertex_input_misc/null_state.frag", stage = "frag" },
+]

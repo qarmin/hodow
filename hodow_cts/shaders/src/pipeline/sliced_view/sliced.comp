@@ -1,0 +1,12 @@
+#version 460
+layout (local_size_x=${width}, local_size_y=${height}, local_size_z=1) in;
+layout (rgba8ui, set=0, binding=0) uniform uimage3D slicedImage;
+layout (rgba8ui, set=0, binding=1) uniform uimage3D auxiliarImage;
+void main (void) {
+    const ivec3 coords = ivec3(ivec2(gl_LocalInvocationID.xy), int(gl_WorkGroupID.x));
+    const ivec3 size = imageSize(slicedImage);
+    const uvec4 badColor = uvec4(0, 0, 0, 0);
+    const uvec4 goodColor = imageLoad(${load_from}, coords);
+    const uvec4 storedColor = ((size.z == ${range}) ? goodColor : badColor);
+    imageStore(${store_to}, coords, storedColor);
+}

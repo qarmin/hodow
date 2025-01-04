@@ -1,0 +1,61 @@
+# Shader manifest for the image-backed cases in
+# dEQP-VK.compute.pipeline.basic.* (copy_image_to_ssbo, copy_ssbo_to_image,
+# image_atomic_op, image_barrier).
+#
+# Kept in its own file rather than folded into compute_basic.toml because these are the
+# cases that need the image side of the vk layer; keeping them separable makes it
+# obvious which cases a change to that layer can affect.
+
+upstream_source = "external/vulkancts/modules/vulkan/compute/vktComputeBasicComputeShaderTests.cpp"
+rust_module = "compute/basic_compute_image_tests"
+
+# --- CopyImageToSSBOTest ----------------------------------------------------------
+[[case]]
+name = "copy_image_to_ssbo_small"
+rust_const = "COPY_IMAGE_TO_SSBO_SMALL"
+rust_type = "CopyImageToSsboCase"
+programs = [{ name = "comp", template = "compute/copy_image_to_ssbo.comp", stage = "comp" }]
+[case.params]
+local_size = { type = "IVec2", value = [1, 1] }
+image_size = { type = "IVec2", value = [64, 64] }
+[case.derived]
+num_values = "image_size[0] * image_size[1]"
+
+[[case]]
+name = "copy_image_to_ssbo_large"
+rust_const = "COPY_IMAGE_TO_SSBO_LARGE"
+rust_type = "CopyImageToSsboCase"
+programs = [{ name = "comp", template = "compute/copy_image_to_ssbo.comp", stage = "comp" }]
+[case.params]
+local_size = { type = "IVec2", value = [2, 4] }
+image_size = { type = "IVec2", value = [512, 512] }
+[case.derived]
+num_values = "image_size[0] * image_size[1]"
+
+# --- CopySSBOToImageTest ----------------------------------------------------------
+[[case]]
+name = "copy_ssbo_to_image_small"
+rust_const = "COPY_SSBO_TO_IMAGE_SMALL"
+rust_type = "CopySsboToImageCase"
+programs = [{ name = "comp", template = "compute/copy_ssbo_to_image.comp", stage = "comp" }]
+[case.params]
+local_size = { type = "IVec2", value = [1, 1] }
+image_size = { type = "IVec2", value = [64, 64] }
+[case.derived]
+num_values = "image_size[0] * image_size[1]"
+
+[[case]]
+name = "copy_ssbo_to_image_large"
+rust_const = "COPY_SSBO_TO_IMAGE_LARGE"
+rust_type = "CopySsboToImageCase"
+programs = [{ name = "comp", template = "compute/copy_ssbo_to_image.comp", stage = "comp" }]
+[case.params]
+local_size = { type = "IVec2", value = [2, 4] }
+image_size = { type = "IVec2", value = [512, 512] }
+[case.derived]
+num_values = "image_size[0] * image_size[1]"
+
+# ImageAtomicOpTest and ImageBarrierTest: shaders written (image_atomic_op.comp,
+# image_barrier_0/1.comp) but their instances are not ported yet, so they are left out
+# here. A manifest entry whose rust_type does not exist is a build failure, and a
+# generated shader nothing references is dead weight.

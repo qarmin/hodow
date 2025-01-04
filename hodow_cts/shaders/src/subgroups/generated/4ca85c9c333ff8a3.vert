@@ -1,0 +1,7 @@
+#version 450
+layout(location = 0) in highp vec4 in_position;
+void main (void)
+{
+  gl_Position = in_position;
+  gl_PointSize = 1.0f;
+}

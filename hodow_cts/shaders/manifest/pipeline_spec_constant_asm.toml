@@ -1,0 +1,19 @@
+# Shader manifest for dEQP-VK.pipeline.*.spec_constant.compute.{unaligned_spec_constant,same_id}
+#
+# The SPIR-V assembly of `unalignedSpecConstantInitPrograms` and `sameIdSpecConstantInitPrograms`, taken verbatim from upstream's source:
+# both need what GLSL cannot say (an `OpUConvert` in place of the constant operation, one SpecId on three constants).
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineSpecConstantTests.cpp"
+rust_module = "pipeline/spec_constant_asm_tests"
+
+[[case]]
+name = "unaligned_spec_constant"
+rust_const = "UNALIGNED_SPEC_CONSTANT"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "pipeline/spec_constant_asm/unaligned.comp.asm", stage = "asm" }]
+
+[[case]]
+name = "same_id"
+rust_const = "SAME_ID"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "pipeline/spec_constant_asm/same_id.comp.asm", stage = "asm" }]

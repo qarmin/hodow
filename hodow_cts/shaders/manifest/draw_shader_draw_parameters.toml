@@ -1,0 +1,43 @@
+# Shader manifest for dEQP-VK.draw.*.shader_draw_parameters.*
+#
+# Four vertex shaders over the same fragment shader: they differ in which of gl_BaseVertex, gl_BaseInstance and
+# gl_DrawID they subtract or compare, which is what each group of cases is about.
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawShaderDrawParametersTests.cpp"
+rust_module = "draw/shader_draw_parameters_tests"
+
+[[case]]
+name = "base"
+rust_const = "SHADER_DRAW_PARAMETERS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/vertex_fetch_shader_draw_parameters.vert", stage = "vert" },
+    { name = "frag", template = "draw/vertex_fetch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "base_vertex_only"
+rust_const = "SHADER_DRAW_PARAMETERS_BASE_VERT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/vertex_fetch_shader_draw_parameters_base_vert.vert", stage = "vert" },
+    { name = "frag", template = "draw/vertex_fetch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "base_instance_only"
+rust_const = "SHADER_DRAW_PARAMETERS_BASE_INST"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/vertex_fetch_shader_draw_parameters_base_inst.vert", stage = "vert" },
+    { name = "frag", template = "draw/vertex_fetch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "draw_index"
+rust_const = "SHADER_DRAW_PARAMETERS_DRAW_INDEX"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/vertex_fetch_shader_draw_parameters_draw_index.vert", stage = "vert" },
+    { name = "frag", template = "draw/vertex_fetch.frag", stage = "frag" },
+]

@@ -1,0 +1,82 @@
+# Shader manifest for dEQP-VK.query_pool.discard.*
+#
+# `QueryPoolDiscardTestCase::initPrograms` varies the fragment shader in two things only:
+# `layout(early_fragment_tests)` and what happens on even columns (discard, zero the sample
+# mask, or write alpha 0 for alpha-to-coverage). `alpha_to_coverage_dynamic` runs the same
+# shader as `alpha_to_coverage`, so three kinds times two early flags give six programs.
+# `kind` is 0 discard, 1 sample_mask, 2 alpha_to_coverage.
+
+upstream_source = "external/vulkancts/modules/vulkan/query_pool/vktQueryPoolDiscardTests.cpp"
+rust_module = "query_pool/discard_tests"
+
+[[case]]
+name = "normal_discard"
+rust_const = "DISCARD_NORMAL_DISCARD"
+rust_type = "DiscardProgram"
+programs = [
+    { name = "vert", template = "query_pool/discard.vert", stage = "vert" },
+    { name = "frag", template = "query_pool/discard.frag", stage = "frag" },
+]
+[case.params]
+early = { type = "bool", value = false }
+kind = { type = "u32", value = 0 }
+
+[[case]]
+name = "normal_sample_mask"
+rust_const = "DISCARD_NORMAL_SAMPLE_MASK"
+rust_type = "DiscardProgram"
+programs = [
+    { name = "vert", template = "query_pool/discard.vert", stage = "vert" },
+    { name = "frag", template = "query_pool/discard.frag", stage = "frag" },
+]
+[case.params]
+early = { type = "bool", value = false }
+kind = { type = "u32", value = 1 }
+
+[[case]]
+name = "normal_alpha_to_coverage"
+rust_const = "DISCARD_NORMAL_ALPHA_TO_COVERAGE"
+rust_type = "DiscardProgram"
+programs = [
+    { name = "vert", template = "query_pool/discard.vert", stage = "vert" },
+    { name = "frag", template = "query_pool/discard.frag", stage = "frag" },
+]
+[case.params]
+early = { type = "bool", value = false }
+kind = { type = "u32", value = 2 }
+
+[[case]]
+name = "early_discard"
+rust_const = "DISCARD_EARLY_DISCARD"
+rust_type = "DiscardProgram"
+programs = [
+    { name = "vert", template = "query_pool/discard.vert", stage = "vert" },
+    { name = "frag", template = "query_pool/discard.frag", stage = "frag" },
+]
+[case.params]
+early = { type = "bool", value = true }
+kind = { type = "u32", value = 0 }
+
+[[case]]
+name = "early_sample_mask"
+rust_const = "DISCARD_EARLY_SAMPLE_MASK"
+rust_type = "DiscardProgram"
+programs = [
+    { name = "vert", template = "query_pool/discard.vert", stage = "vert" },
+    { name = "frag", template = "query_pool/discard.frag", stage = "frag" },
+]
+[case.params]
+early = { type = "bool", value = true }
+kind = { type = "u32", value = 1 }
+
+[[case]]
+name = "early_alpha_to_coverage"
+rust_const = "DISCARD_EARLY_ALPHA_TO_COVERAGE"
+rust_type = "DiscardProgram"
+programs = [
+    { name = "vert", template = "query_pool/discard.vert", stage = "vert" },
+    { name = "frag", template = "query_pool/discard.frag", stage = "frag" },
+]
+[case.params]
+early = { type = "bool", value = true }
+kind = { type = "u32", value = 2 }

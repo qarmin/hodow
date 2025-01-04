@@ -1,0 +1,21 @@
+[package]
+name = "hodow_cpu"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+log.workspace = true
+rand.workspace = true
+
+[features]
+default = ["cpu_suite", "avx512"]
+# The generated CPU instruction tests (`cpu/auto_generated`, ~120 MB of source). Off, the
+# registry is empty and the crate builds in seconds.
+cpu_suite = []
+# The AVX-512 tests: ~80% of the x86 suite, so the biggest single cut in binary size.
+avx512 = []
+miri_build = []
+
+[lints]
+workspace = true

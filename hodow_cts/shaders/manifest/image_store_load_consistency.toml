@@ -1,0 +1,28 @@
+# Shader manifest for dEQP-VK.image.store_load_consistency.*
+#
+# One program per case of createImageStoreLoadConsistencyTests: the image type decides the image variable type and the number of
+# coordinates, the format its layout qualifier (`de::toLower(getSpirvFormat(format))`) and whether the colour is an ivec4 or a vec4.
+
+upstream_source = "external/vulkancts/modules/vulkan/image/vktImageLoadStoreTests.cpp"
+rust_module = "image/store_load_consistency_tests"
+
+[[case]]
+name = "1d"
+rust_const = "SLC_1D"
+rust_type = "StoreLoadConsistencyPrograms"
+programs = [{ name = "comp", template = "image/store_load_consistency.comp", stage = "comp" }]
+params = { image_qualifier = { type = "str", value = "rgba32f" }, image_var_type = { type = "str", value = "image1D" }, image_coord = { type = "str", value = "coord.x" }, color_to_assign = { type = "str", value = "fcolor" } }
+
+[[case]]
+name = "2d"
+rust_const = "SLC_2D"
+rust_type = "StoreLoadConsistencyPrograms"
+programs = [{ name = "comp", template = "image/store_load_consistency.comp", stage = "comp" }]
+params = { image_qualifier = { type = "str", value = "r32i" }, image_var_type = { type = "str", value = "iimage2D" }, image_coord = { type = "str", value = "coord.xy" }, color_to_assign = { type = "str", value = "icolor" } }
+
+[[case]]
+name = "3d"
+rust_const = "SLC_3D"
+rust_type = "StoreLoadConsistencyPrograms"
+programs = [{ name = "comp", template = "image/store_load_consistency.comp", stage = "comp" }]
+params = { image_qualifier = { type = "str", value = "rgba8" }, image_var_type = { type = "str", value = "image3D" }, image_coord = { type = "str", value = "coord.xyz" }, color_to_assign = { type = "str", value = "fcolor" } }

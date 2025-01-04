@@ -1,0 +1,3 @@
+# One-off reformat of the hand-written code at max_width = 120. Use with:
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
+5eda84fced470db65f0425183217818c6186bb52

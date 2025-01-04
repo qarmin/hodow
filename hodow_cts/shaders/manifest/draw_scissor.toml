@@ -1,0 +1,20 @@
+# Shader manifest for dEQP-VK.draw.*.scissor.*
+#
+# `ScissorTestCase::initPrograms`: a pass-through vertex and fragment shader, and a geometry shader that draws every
+# triangle to all viewports. Its invocation count is the number of scissors of the case, and the cases that use more
+# than one scissor use 2, 3 or 16 of them, so the three geometry shaders are `geom_<count>`.
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawScissorTests.cpp"
+rust_module = "draw/scissor_tests"
+
+[[case]]
+name = "scissor"
+rust_const = "SCISSOR"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/scissor.vert", stage = "vert" },
+    { name = "geom_2", template = "draw/scissor_2.geom", stage = "geom" },
+    { name = "geom_3", template = "draw/scissor_3.geom", stage = "geom" },
+    { name = "geom_16", template = "draw/scissor_16.geom", stage = "geom" },
+    { name = "frag", template = "draw/scissor.frag", stage = "frag" },
+]

@@ -1,0 +1,17 @@
+#version 450
+#extension GL_EXT_null_initializer : enable
+
+layout(constant_id = 0) const uint WGX = 1;
+layout(local_size_x_id = 0, local_size_y = 2, local_size_z = 1) in;
+
+layout(set = 0, binding = 0) buffer A { uint a[]; } a;
+layout(set = 0, binding = 1) buffer B { uint b[]; } b;
+
+shared uint wg_mem[WGX][2] = {};
+void main() {
+  if (gl_LocalInvocationID.y == ${odd}) {
+    wg_mem[gl_LocalInvocationID.x][gl_LocalInvocationID.y] = b.b[gl_LocalInvocationID.y * WGX + gl_LocalInvocationID.x];
+  }
+  barrier();
+  a.a[gl_LocalInvocationID.y * WGX + gl_LocalInvocationID.x] = wg_mem[gl_LocalInvocationID.x][gl_LocalInvocationID.y];
+}

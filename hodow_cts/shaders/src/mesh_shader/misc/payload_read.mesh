@@ -1,0 +1,34 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+layout (local_size_x=1) in;
+layout (triangles) out;
+layout (max_vertices=3, max_primitives=1) out;
+
+layout (location=0) out perprimitiveEXT vec4 primitiveColor[];
+struct TaskData {
+    uint verificationCodes[128];
+    vec4 color;
+};
+taskPayloadSharedEXT TaskData td;
+
+void main ()
+{
+    uint verificationResult = 1u;
+    for (uint i = 0u; i < 128; ++i) {
+        if (td.verificationCodes[i] != (256 - i)) {
+            verificationResult = 0u;
+            break;
+        }
+    }
+    const vec4 finalColor = ((verificationResult == 0u) ? vec4(0.0, 0.0, 0.0, 1.0) : td.color);
+
+    SetMeshOutputsEXT(3u, 1u);
+
+    gl_MeshVerticesEXT[0].gl_Position = vec4(-1.0, -1.0, 0.0, 1.0);
+    gl_MeshVerticesEXT[1].gl_Position = vec4( 3.0, -1.0, 0.0, 1.0);
+    gl_MeshVerticesEXT[2].gl_Position = vec4(-1.0,  3.0, 0.0, 1.0);
+
+    gl_PrimitiveTriangleIndicesEXT[0] = uvec3(0, 1, 2);
+    primitiveColor[0] = finalColor;
+}

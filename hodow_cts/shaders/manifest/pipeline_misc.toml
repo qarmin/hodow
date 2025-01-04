@@ -1,0 +1,82 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.misc.*
+#
+# One program set per case of `createMiscTests` that has shaders: the implicit gl_PrimitiveID passthrough (plain and with a
+# tessellation passthrough), the array of structs interface, the descriptor bind tests (without and with holes in the set
+# indices), the identically defined layout, the no rendering pipeline and the empty colour write mask.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineMiscTests.cpp"
+rust_module = "pipeline/misc_tests"
+
+[[case]]
+name = "implicit_primitive_id"
+rust_const = "MISC_IMPLICIT_PRIMITIVE_ID"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/misc/implicit_primitive_id.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/misc/implicit_primitive_id.frag", stage = "frag" },
+]
+
+[[case]]
+name = "implicit_primitive_id_with_tessellation"
+rust_const = "MISC_IMPLICIT_PRIMITIVE_ID_WITH_TESSELLATION"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/misc/implicit_primitive_id.vert", stage = "vert" },
+    { name = "tsc", template = "pipeline/misc/implicit_primitive_id.tesc", stage = "tesc" },
+    { name = "tse", template = "pipeline/misc/implicit_primitive_id.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/misc/implicit_primitive_id.frag", stage = "frag" },
+]
+
+[[case]]
+name = "array_of_structs_interface"
+rust_const = "MISC_ARRAY_OF_STRUCTS_INTERFACE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/misc/array_of_structs.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/misc/array_of_structs.frag", stage = "frag" },
+]
+
+[[case]]
+name = "descriptor_bind"
+rust_const = "MISC_DESCRIPTOR_BIND"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/misc/descriptor_bind.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/misc/descriptor_bind.frag", stage = "frag" },
+]
+
+[[case]]
+name = "descriptor_bind_holes"
+rust_const = "MISC_DESCRIPTOR_BIND_HOLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/misc/descriptor_bind.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/misc/descriptor_bind_holes.frag", stage = "frag" },
+]
+
+[[case]]
+name = "identically_defined_layout"
+rust_const = "MISC_IDENTICALLY_DEFINED_LAYOUT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/misc/identically_defined.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/misc/identically_defined.frag", stage = "frag" },
+]
+
+[[case]]
+name = "no_rendering"
+rust_const = "MISC_NO_RENDERING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/misc/no_rendering.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/misc/no_rendering.frag", stage = "frag" },
+]
+
+[[case]]
+name = "color_write_mask_none"
+rust_const = "MISC_COLOR_WRITE_MASK_NONE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/misc/color_write_mask_none.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/misc/color_write_mask_none.frag", stage = "frag" },
+]

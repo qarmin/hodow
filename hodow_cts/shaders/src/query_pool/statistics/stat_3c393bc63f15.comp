@@ -1,0 +1,13 @@
+#version 450
+layout (local_size_x = 3, local_size_y = 7, local_size_z = 3) in;
+layout(binding = 0) writeonly buffer Output {
+    uint values[];
+} sb_out;
+
+void main (void) {
+    uvec3 indexUvec3 = uvec3 (gl_GlobalInvocationID.x,
+                              gl_GlobalInvocationID.y * gl_NumWorkGroups.x * gl_WorkGroupSize.x,
+                              gl_GlobalInvocationID.z * gl_NumWorkGroups.x * gl_NumWorkGroups.y * gl_WorkGroupSize.x * gl_WorkGroupSize.y);
+    uint index = indexUvec3.x + indexUvec3.y + indexUvec3.z;
+    sb_out.values[index] += index;
+}

@@ -1,0 +1,20 @@
+# Shader manifest for dEQP-VK.draw.*.differing_interpolation.*
+#
+# `DrawTestCase::initPrograms` specialises one vertex and one fragment template with no qualifier, `flat` and
+# `noperspective`; each case runs two of the six so that the interpolation decorations of the two stages disagree.
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawDifferingInterpolationTests.cpp"
+rust_module = "draw/differing_interpolation_tests"
+
+[[case]]
+name = "differing_interpolation"
+rust_const = "DIFFERING_INTERPOLATION"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/differing_interpolation.vert", stage = "vert" },
+    { name = "vertFlatColor", template = "draw/differing_interpolation_flat.vert", stage = "vert" },
+    { name = "vertNoPerspective", template = "draw/differing_interpolation_noperspective.vert", stage = "vert" },
+    { name = "frag", template = "draw/differing_interpolation.frag", stage = "frag" },
+    { name = "fragFlatColor", template = "draw/differing_interpolation_flat.frag", stage = "frag" },
+    { name = "fragNoPerspective", template = "draw/differing_interpolation_noperspective.frag", stage = "frag" },
+]

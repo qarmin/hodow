@@ -1,0 +1,453 @@
+# Shader/parameter manifest for dEQP-VK.compute.pipeline.basic.*
+#
+# This file is the single source of truth for every per-case parameter. The GLSL that
+# gets compiled and the Rust constants the test code reads are BOTH generated from
+# here by scripts/compile_shaders.py, so the shader and the host can never disagree
+# about a workgroup size or an array length.
+#
+# `derived` entries restate the formulas from the upstream initPrograms() verbatim so
+# a reader can check them against the C++ side by side. Available helpers: prod(v)
+# (multiplyComponents), and any parameter or earlier derived value by name.
+#
+# Case order follows the upstream createBasicComputeShaderTests() registration order,
+# because that is the order both binaries execute in and it makes a diff of the two
+# result files readable.
+
+upstream_source = "external/vulkancts/modules/vulkan/compute/vktComputeBasicComputeShaderTests.cpp"
+rust_module = "compute/basic_compute_shader_tests"
+
+# --- EmptyShaderTest -------------------------------------------------------------
+[[case]]
+name = "empty_shader"
+rust_const = "EMPTY_SHADER"
+rust_type = "EmptyShaderCase"
+programs = [{ name = "comp", template = "compute/empty_shader.comp", stage = "comp" }]
+
+# --- EmptyWorkGroupCase ----------------------------------------------------------
+# One dispatch dimension is zero, so the first dispatch must do nothing at all; a
+# second 1x1x1 dispatch then writes the 1 that is checked for.
+[[case]]
+name = "empty_workgroup_x"
+rust_const = "EMPTY_WORKGROUP_X"
+rust_type = "EmptyWorkGroupCase"
+programs = [{ name = "comp", template = "compute/empty_workgroup.comp", stage = "comp" }]
+[case.params]
+dispatch_size = { type = "UVec3", value = [0, 2, 3] }
+
+[[case]]
+name = "empty_workgroup_y"
+rust_const = "EMPTY_WORKGROUP_Y"
+rust_type = "EmptyWorkGroupCase"
+programs = [{ name = "comp", template = "compute/empty_workgroup.comp", stage = "comp" }]
+[case.params]
+dispatch_size = { type = "UVec3", value = [2, 0, 3] }
+
+[[case]]
+name = "empty_workgroup_z"
+rust_const = "EMPTY_WORKGROUP_Z"
+rust_type = "EmptyWorkGroupCase"
+programs = [{ name = "comp", template = "compute/empty_workgroup.comp", stage = "comp" }]
+[case.params]
+dispatch_size = { type = "UVec3", value = [2, 3, 0] }
+
+[[case]]
+name = "empty_workgroup_all"
+rust_const = "EMPTY_WORKGROUP_ALL"
+rust_type = "EmptyWorkGroupCase"
+programs = [{ name = "comp", template = "compute/empty_workgroup.comp", stage = "comp" }]
+[case.params]
+dispatch_size = { type = "UVec3", value = [0, 0, 0] }
+
+# --- MaxWorkGroupSizeTest --------------------------------------------------------
+# The local size comes from the device's maxComputeWorkGroupSize at run time, injected
+# through VkSpecializationInfo. That is upstream's own mechanism, not a workaround for
+# shaders being precompiled here: the shader really does declare spec constants.
+[[case]]
+name = "max_local_size_x"
+rust_const = "MAX_LOCAL_SIZE_X"
+rust_type = "MaxWorkGroupSizeCase"
+programs = [{ name = "comp", template = "compute/max_work_group_size.comp", stage = "comp" }]
+[case.params]
+axis = { type = "enum:Axis", value = "X" }
+
+[[case]]
+name = "max_local_size_y"
+rust_const = "MAX_LOCAL_SIZE_Y"
+rust_type = "MaxWorkGroupSizeCase"
+programs = [{ name = "comp", template = "compute/max_work_group_size.comp", stage = "comp" }]
+[case.params]
+axis = { type = "enum:Axis", value = "Y" }
+
+[[case]]
+name = "max_local_size_z"
+rust_const = "MAX_LOCAL_SIZE_Z"
+rust_type = "MaxWorkGroupSizeCase"
+programs = [{ name = "comp", template = "compute/max_work_group_size.comp", stage = "comp" }]
+[case.params]
+axis = { type = "enum:Axis", value = "Z" }
+
+# --- BufferToBufferInvertTest: UBOToSSBOInvertCase --------------------------------
+[[case]]
+name = "ubo_to_ssbo_single_invocation"
+rust_const = "UBO_TO_SSBO_SINGLE_INVOCATION"
+rust_type = "BufferToBufferInvertCase"
+programs = [{ name = "comp", template = "compute/ubo_to_ssbo_invert.comp", stage = "comp" }]
+[case.params]
+buffer_type = { type = "enum:BufferType", value = "Uniform" }
+num_values = { type = "u32", value = 256 }
+local_size = { type = "IVec3", value = [1, 1, 1] }
+work_size = { type = "IVec3", value = [1, 1, 1] }
+random_seed = { type = "u32", value = 0x111223f }
+
+[[case]]
+name = "ubo_to_ssbo_single_group"
+rust_const = "UBO_TO_SSBO_SINGLE_GROUP"
+rust_type = "BufferToBufferInvertCase"
+programs = [{ name = "comp", template = "compute/ubo_to_ssbo_invert.comp", stage = "comp" }]
+[case.params]
+buffer_type = { type = "enum:BufferType", value = "Uniform" }
+num_values = { type = "u32", value = 1024 }
+local_size = { type = "IVec3", value = [2, 1, 4] }
+work_size = { type = "IVec3", value = [1, 1, 1] }
+random_seed = { type = "u32", value = 0x111223f }
+
+[[case]]
+name = "ubo_to_ssbo_multiple_invocations"
+rust_const = "UBO_TO_SSBO_MULTIPLE_INVOCATIONS"
+rust_type = "BufferToBufferInvertCase"
+programs = [{ name = "comp", template = "compute/ubo_to_ssbo_invert.comp", stage = "comp" }]
+[case.params]
+buffer_type = { type = "enum:BufferType", value = "Uniform" }
+num_values = { type = "u32", value = 1024 }
+local_size = { type = "IVec3", value = [1, 1, 1] }
+work_size = { type = "IVec3", value = [2, 4, 1] }
+random_seed = { type = "u32", value = 0x111223f }
+
+[[case]]
+name = "ubo_to_ssbo_multiple_groups"
+rust_const = "UBO_TO_SSBO_MULTIPLE_GROUPS"
+rust_type = "BufferToBufferInvertCase"
+programs = [{ name = "comp", template = "compute/ubo_to_ssbo_invert.comp", stage = "comp" }]
+[case.params]
+buffer_type = { type = "enum:BufferType", value = "Uniform" }
+num_values = { type = "u32", value = 1024 }
+local_size = { type = "IVec3", value = [1, 4, 2] }
+work_size = { type = "IVec3", value = [2, 2, 4] }
+random_seed = { type = "u32", value = 0x111223f }
+
+# --- BufferToBufferInvertTest: CopyInvertSSBOCase ---------------------------------
+[[case]]
+name = "copy_ssbo_single_invocation"
+rust_const = "COPY_SSBO_SINGLE_INVOCATION"
+rust_type = "BufferToBufferInvertCase"
+programs = [{ name = "comp", template = "compute/copy_invert_ssbo.comp", stage = "comp" }]
+[case.params]
+buffer_type = { type = "enum:BufferType", value = "Ssbo" }
+num_values = { type = "u32", value = 256 }
+local_size = { type = "IVec3", value = [1, 1, 1] }
+work_size = { type = "IVec3", value = [1, 1, 1] }
+random_seed = { type = "u32", value = 0x124fef }
+
+[[case]]
+name = "copy_ssbo_multiple_invocations"
+rust_const = "COPY_SSBO_MULTIPLE_INVOCATIONS"
+rust_type = "BufferToBufferInvertCase"
+programs = [{ name = "comp", template = "compute/copy_invert_ssbo.comp", stage = "comp" }]
+[case.params]
+buffer_type = { type = "enum:BufferType", value = "Ssbo" }
+num_values = { type = "u32", value = 1024 }
+local_size = { type = "IVec3", value = [1, 1, 1] }
+work_size = { type = "IVec3", value = [2, 4, 1] }
+random_seed = { type = "u32", value = 0x124fef }
+
+[[case]]
+name = "copy_ssbo_multiple_groups"
+rust_const = "COPY_SSBO_MULTIPLE_GROUPS"
+rust_type = "BufferToBufferInvertCase"
+programs = [{ name = "comp", template = "compute/copy_invert_ssbo.comp", stage = "comp" }]
+[case.params]
+buffer_type = { type = "enum:BufferType", value = "Ssbo" }
+num_values = { type = "u32", value = 1024 }
+local_size = { type = "IVec3", value = [1, 4, 2] }
+work_size = { type = "IVec3", value = [2, 2, 4] }
+random_seed = { type = "u32", value = 0x124fef }
+
+# --- InvertSSBOInPlaceTest -------------------------------------------------------
+# `sized` picks between a fixed-length and a runtime-length array declaration; the
+# unsized variants are what exercise the driver's `.length()` handling.
+[[case]]
+name = "ssbo_rw_single_invocation"
+rust_const = "SSBO_RW_SINGLE_INVOCATION"
+rust_type = "InvertSsboInPlaceCase"
+programs = [{ name = "comp", template = "compute/invert_ssbo_in_place.comp", stage = "comp" }]
+[case.params]
+num_values = { type = "u32", value = 256 }
+sized = { type = "bool", value = true }
+local_size = { type = "IVec3", value = [1, 1, 1] }
+work_size = { type = "IVec3", value = [1, 1, 1] }
+[case.derived]
+array_len = "num_values if sized else ''"
+
+[[case]]
+name = "ssbo_rw_multiple_groups"
+rust_const = "SSBO_RW_MULTIPLE_GROUPS"
+rust_type = "InvertSsboInPlaceCase"
+programs = [{ name = "comp", template = "compute/invert_ssbo_in_place.comp", stage = "comp" }]
+[case.params]
+num_values = { type = "u32", value = 1024 }
+sized = { type = "bool", value = true }
+local_size = { type = "IVec3", value = [1, 4, 2] }
+work_size = { type = "IVec3", value = [2, 2, 4] }
+[case.derived]
+array_len = "num_values if sized else ''"
+
+[[case]]
+name = "ssbo_unsized_arr_single_invocation"
+rust_const = "SSBO_UNSIZED_ARR_SINGLE_INVOCATION"
+rust_type = "InvertSsboInPlaceCase"
+programs = [{ name = "comp", template = "compute/invert_ssbo_in_place.comp", stage = "comp" }]
+[case.params]
+num_values = { type = "u32", value = 256 }
+sized = { type = "bool", value = false }
+local_size = { type = "IVec3", value = [1, 1, 1] }
+work_size = { type = "IVec3", value = [1, 1, 1] }
+[case.derived]
+array_len = "num_values if sized else ''"
+
+[[case]]
+name = "ssbo_unsized_arr_multiple_groups"
+rust_const = "SSBO_UNSIZED_ARR_MULTIPLE_GROUPS"
+rust_type = "InvertSsboInPlaceCase"
+programs = [{ name = "comp", template = "compute/invert_ssbo_in_place.comp", stage = "comp" }]
+[case.params]
+num_values = { type = "u32", value = 1024 }
+sized = { type = "bool", value = false }
+local_size = { type = "IVec3", value = [1, 4, 2] }
+work_size = { type = "IVec3", value = [2, 2, 4] }
+[case.derived]
+array_len = "num_values if sized else ''"
+
+# --- WriteToMultipleSSBOTest -----------------------------------------------------
+[[case]]
+name = "write_multiple_arr_single_invocation"
+rust_const = "WRITE_MULTIPLE_ARR_SINGLE_INVOCATION"
+rust_type = "WriteToMultipleSsboCase"
+programs = [{ name = "comp", template = "compute/write_multiple_ssbo.comp", stage = "comp" }]
+[case.params]
+num_values = { type = "u32", value = 256 }
+sized = { type = "bool", value = true }
+local_size = { type = "IVec3", value = [1, 1, 1] }
+work_size = { type = "IVec3", value = [1, 1, 1] }
+[case.derived]
+array_len = "num_values if sized else ''"
+
+[[case]]
+name = "write_multiple_arr_multiple_groups"
+rust_const = "WRITE_MULTIPLE_ARR_MULTIPLE_GROUPS"
+rust_type = "WriteToMultipleSsboCase"
+programs = [{ name = "comp", template = "compute/write_multiple_ssbo.comp", stage = "comp" }]
+[case.params]
+num_values = { type = "u32", value = 1024 }
+sized = { type = "bool", value = true }
+local_size = { type = "IVec3", value = [1, 4, 2] }
+work_size = { type = "IVec3", value = [2, 2, 4] }
+[case.derived]
+array_len = "num_values if sized else ''"
+
+[[case]]
+name = "write_multiple_unsized_arr_single_invocation"
+rust_const = "WRITE_MULTIPLE_UNSIZED_ARR_SINGLE_INVOCATION"
+rust_type = "WriteToMultipleSsboCase"
+programs = [{ name = "comp", template = "compute/write_multiple_ssbo.comp", stage = "comp" }]
+[case.params]
+num_values = { type = "u32", value = 256 }
+sized = { type = "bool", value = false }
+local_size = { type = "IVec3", value = [1, 1, 1] }
+work_size = { type = "IVec3", value = [1, 1, 1] }
+[case.derived]
+array_len = "num_values if sized else ''"
+
+[[case]]
+name = "write_multiple_unsized_arr_multiple_groups"
+rust_const = "WRITE_MULTIPLE_UNSIZED_ARR_MULTIPLE_GROUPS"
+rust_type = "WriteToMultipleSsboCase"
+programs = [{ name = "comp", template = "compute/write_multiple_ssbo.comp", stage = "comp" }]
+[case.params]
+num_values = { type = "u32", value = 1024 }
+sized = { type = "bool", value = false }
+local_size = { type = "IVec3", value = [1, 4, 2] }
+work_size = { type = "IVec3", value = [2, 2, 4] }
+[case.derived]
+array_len = "num_values if sized else ''"
+
+# --- SSBOLocalBarrierTest --------------------------------------------------------
+[[case]]
+name = "ssbo_local_barrier_single_invocation"
+rust_const = "SSBO_LOCAL_BARRIER_SINGLE_INVOCATION"
+rust_type = "SsboLocalBarrierCase"
+programs = [{ name = "comp", template = "compute/ssbo_local_barrier.comp", stage = "comp" }]
+[case.params]
+local_size = { type = "IVec3", value = [1, 1, 1] }
+work_size = { type = "IVec3", value = [1, 1, 1] }
+[case.derived]
+work_group_size = "prod(local_size)"
+work_group_count = "prod(work_size)"
+num_values = "work_group_size * work_group_count"
+
+[[case]]
+name = "ssbo_local_barrier_single_group"
+rust_const = "SSBO_LOCAL_BARRIER_SINGLE_GROUP"
+rust_type = "SsboLocalBarrierCase"
+programs = [{ name = "comp", template = "compute/ssbo_local_barrier.comp", stage = "comp" }]
+[case.params]
+local_size = { type = "IVec3", value = [3, 2, 5] }
+work_size = { type = "IVec3", value = [1, 1, 1] }
+[case.derived]
+work_group_size = "prod(local_size)"
+work_group_count = "prod(work_size)"
+num_values = "work_group_size * work_group_count"
+
+[[case]]
+name = "ssbo_local_barrier_multiple_groups"
+rust_const = "SSBO_LOCAL_BARRIER_MULTIPLE_GROUPS"
+rust_type = "SsboLocalBarrierCase"
+programs = [{ name = "comp", template = "compute/ssbo_local_barrier.comp", stage = "comp" }]
+[case.params]
+local_size = { type = "IVec3", value = [3, 4, 1] }
+work_size = { type = "IVec3", value = [2, 7, 3] }
+[case.derived]
+work_group_size = "prod(local_size)"
+work_group_count = "prod(work_size)"
+num_values = "work_group_size * work_group_count"
+
+# --- SSBOBarrierTest -------------------------------------------------------------
+[[case]]
+name = "ssbo_cmd_barrier_single"
+rust_const = "SSBO_CMD_BARRIER_SINGLE"
+rust_type = "SsboBarrierCase"
+programs = [
+    { name = "comp0", template = "compute/ssbo_barrier_0.comp", stage = "comp" },
+    { name = "comp1", template = "compute/ssbo_barrier_1.comp", stage = "comp" },
+]
+[case.params]
+work_size = { type = "IVec3", value = [1, 1, 1] }
+# SSBOBarrierTestInstance::queuePass
+base_value = { type = "u32", value = 127 }
+
+[[case]]
+name = "ssbo_cmd_barrier_multiple"
+rust_const = "SSBO_CMD_BARRIER_MULTIPLE"
+rust_type = "SsboBarrierCase"
+programs = [
+    { name = "comp0", template = "compute/ssbo_barrier_0.comp", stage = "comp" },
+    { name = "comp1", template = "compute/ssbo_barrier_1.comp", stage = "comp" },
+]
+[case.params]
+work_size = { type = "IVec3", value = [11, 5, 7] }
+base_value = { type = "u32", value = 127 }
+
+# --- SharedVarTest ---------------------------------------------------------------
+[[case]]
+name = "shared_var_single_invocation"
+rust_const = "SHARED_VAR_SINGLE_INVOCATION"
+rust_type = "SharedVarCase"
+programs = [{ name = "comp", template = "compute/shared_var.comp", stage = "comp" }]
+[case.params]
+local_size = { type = "IVec3", value = [1, 1, 1] }
+work_size = { type = "IVec3", value = [1, 1, 1] }
+[case.derived]
+work_group_size = "prod(local_size)"
+work_group_count = "prod(work_size)"
+num_values = "work_group_size * work_group_count"
+
+[[case]]
+name = "shared_var_single_group"
+rust_const = "SHARED_VAR_SINGLE_GROUP"
+rust_type = "SharedVarCase"
+programs = [{ name = "comp", template = "compute/shared_var.comp", stage = "comp" }]
+[case.params]
+local_size = { type = "IVec3", value = [3, 2, 5] }
+work_size = { type = "IVec3", value = [1, 1, 1] }
+[case.derived]
+work_group_size = "prod(local_size)"
+work_group_count = "prod(work_size)"
+num_values = "work_group_size * work_group_count"
+
+[[case]]
+name = "shared_var_multiple_invocations"
+rust_const = "SHARED_VAR_MULTIPLE_INVOCATIONS"
+rust_type = "SharedVarCase"
+programs = [{ name = "comp", template = "compute/shared_var.comp", stage = "comp" }]
+[case.params]
+local_size = { type = "IVec3", value = [1, 1, 1] }
+work_size = { type = "IVec3", value = [2, 5, 4] }
+[case.derived]
+work_group_size = "prod(local_size)"
+work_group_count = "prod(work_size)"
+num_values = "work_group_size * work_group_count"
+
+[[case]]
+name = "shared_var_multiple_groups"
+rust_const = "SHARED_VAR_MULTIPLE_GROUPS"
+rust_type = "SharedVarCase"
+programs = [{ name = "comp", template = "compute/shared_var.comp", stage = "comp" }]
+[case.params]
+local_size = { type = "IVec3", value = [3, 4, 1] }
+work_size = { type = "IVec3", value = [2, 7, 3] }
+[case.derived]
+work_group_size = "prod(local_size)"
+work_group_count = "prod(work_size)"
+num_values = "work_group_size * work_group_count"
+
+# --- SharedVarAtomicOpTest -------------------------------------------------------
+[[case]]
+name = "shared_atomic_op_single_invocation"
+rust_const = "SHARED_ATOMIC_OP_SINGLE_INVOCATION"
+rust_type = "SharedVarAtomicOpCase"
+programs = [{ name = "comp", template = "compute/shared_var_atomic.comp", stage = "comp" }]
+[case.params]
+local_size = { type = "IVec3", value = [1, 1, 1] }
+work_size = { type = "IVec3", value = [1, 1, 1] }
+[case.derived]
+work_group_size = "prod(local_size)"
+work_group_count = "prod(work_size)"
+num_values = "work_group_size * work_group_count"
+
+[[case]]
+name = "shared_atomic_op_single_group"
+rust_const = "SHARED_ATOMIC_OP_SINGLE_GROUP"
+rust_type = "SharedVarAtomicOpCase"
+programs = [{ name = "comp", template = "compute/shared_var_atomic.comp", stage = "comp" }]
+[case.params]
+local_size = { type = "IVec3", value = [3, 2, 5] }
+work_size = { type = "IVec3", value = [1, 1, 1] }
+[case.derived]
+work_group_size = "prod(local_size)"
+work_group_count = "prod(work_size)"
+num_values = "work_group_size * work_group_count"
+
+[[case]]
+name = "shared_atomic_op_multiple_invocations"
+rust_const = "SHARED_ATOMIC_OP_MULTIPLE_INVOCATIONS"
+rust_type = "SharedVarAtomicOpCase"
+programs = [{ name = "comp", template = "compute/shared_var_atomic.comp", stage = "comp" }]
+[case.params]
+local_size = { type = "IVec3", value = [1, 1, 1] }
+work_size = { type = "IVec3", value = [2, 5, 4] }
+[case.derived]
+work_group_size = "prod(local_size)"
+work_group_count = "prod(work_size)"
+num_values = "work_group_size * work_group_count"
+
+[[case]]
+name = "shared_atomic_op_multiple_groups"
+rust_const = "SHARED_ATOMIC_OP_MULTIPLE_GROUPS"
+rust_type = "SharedVarAtomicOpCase"
+programs = [{ name = "comp", template = "compute/shared_var_atomic.comp", stage = "comp" }]
+[case.params]
+local_size = { type = "IVec3", value = [3, 4, 1] }
+work_size = { type = "IVec3", value = [2, 7, 3] }
+[case.derived]
+work_group_size = "prod(local_size)"
+work_group_count = "prod(work_size)"
+num_values = "work_group_size * work_group_count"

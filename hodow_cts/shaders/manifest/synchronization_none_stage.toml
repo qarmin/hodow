@@ -1,0 +1,23 @@
+# Shader manifest for dEQP-VK.synchronization2.none_stage.*
+#
+# `initPrograms` adds a subset of these per case depending on the layouts and aspects it tests (none at all for a
+# transfer/general only pair). Every case here shares the full set instead: a program a case does not use is only
+# compiled, never created. The two `frag-depth-or-stencil-to-color` variants (`subpassInput` / `usubpassInput` through
+# the upstream string template) are kept apart by name since one case can no longer carry both.
+
+upstream_source = "external/vulkancts/modules/vulkan/synchronization/vktSynchronizationNoneStageTests.cpp"
+rust_module = "synchronization/none_stage_tests"
+
+[[case]]
+name = "none_stage"
+rust_const = "NONE_STAGE_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [
+  { name = "vert", template = "synchronization/none_stage.vert", stage = "vert" },
+  { name = "frag-color", template = "synchronization/none_stage_color.frag", stage = "frag" },
+  { name = "frag-color-to-depth", template = "synchronization/none_stage_color_to_depth.frag", stage = "frag" },
+  { name = "frag-color-to-stencil", template = "synchronization/none_stage_color_to_stencil.frag", stage = "frag" },
+  { name = "frag-stencil-to-color", template = "synchronization/none_stage_stencil_to_color.frag", stage = "frag" },
+  { name = "frag-depth-input-to-color", template = "synchronization/none_stage_depth_input_to_color.frag", stage = "frag" },
+  { name = "frag-stencil-input-to-color", template = "synchronization/none_stage_stencil_input_to_color.frag", stage = "frag" },
+]

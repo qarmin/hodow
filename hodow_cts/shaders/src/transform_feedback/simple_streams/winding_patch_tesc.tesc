@@ -1,0 +1,9 @@
+#version 450
+layout(vertices = 3) out;
+void main (void)
+{
+    gl_TessLevelInner[0] = 2.0;
+    gl_TessLevelOuter[0] = 1.0;
+    gl_TessLevelOuter[1] = 1.0;
+    gl_TessLevelOuter[2] = 1.0;
+}

@@ -1,0 +1,100 @@
+OpCapability Shader
+OpCapability InputAttachment
+%1 = OpExtInstImport "GLSL.std.450";
+OpMemoryModel Logical GLSL450
+OpEntryPoint Fragment %4 "main" %51
+OpExecutionMode %4 OriginUpperLeft
+OpDecorate %11 DescriptorSet 0
+OpDecorate %11 Binding 0
+OpDecorate %11 InputAttachmentIndex 0
+OpDecorate %21 DescriptorSet 0
+OpDecorate %21 Binding 1
+OpDecorate %21 InputAttachmentIndex 1
+OpDecorate %30 DescriptorSet 0
+OpDecorate %30 Binding 2
+OpDecorate %40 DescriptorSet 0
+OpDecorate %40 Binding 3
+OpDecorate %51 BuiltIn FragCoord
+OpDecorate %57 ArrayStride 4
+OpMemberDecorate %58 0 NonReadable
+OpMemberDecorate %58 0 Offset 0
+OpDecorate %58 BufferBlock
+OpDecorate %60 DescriptorSet 1
+OpDecorate %60 Binding 0
+%2 = OpTypeVoid
+%3 = OpTypeFunction %2
+%6 = OpTypeInt 32 0
+%7 = OpTypePointer Function %6
+%9 = OpTypeImage %6 SubpassData 0 0 0 2 Unknown
+%10 = OpTypePointer UniformConstant %9
+%11 = OpVariable %10 UniformConstant
+%13 = OpTypeInt 32 1
+%14 = OpConstant %13 0
+%15 = OpTypeVector %13 2
+%16 = OpConstantComposite %15 %14 %14
+%17 = OpTypeVector %6 4
+%19 = OpConstant %6 0
+%21 = OpVariable %10 UniformConstant
+%27 = OpTypeFloat 32
+%28 = OpTypeImage %27 SubpassData 0 0 0 2 Unknown
+%29 = OpTypePointer UniformConstant %28
+%30 = OpVariable %29 UniformConstant
+%32 = OpTypeVector %27 4
+%35 = OpConstant %27 1000
+%40 = OpVariable %10 UniformConstant
+%44 = OpConstant %6 100
+%47 = OpTypeVector %6 2
+%48 = OpTypePointer Function %47
+%50 = OpTypePointer Input %32
+%51 = OpVariable %50 Input
+%52 = OpTypeVector %27 2
+%57 = OpTypeRuntimeArray %6
+%58 = OpTypeStruct %57
+%59 = OpTypePointer Uniform %58
+%60 = OpVariable %59 Uniform
+%63 = OpConstant %6 1
+%66 = OpConstant %6 16
+%70 = OpTypePointer Uniform %6
+%4 = OpFunction %2 None %3
+%5 = OpLabel
+%8 = OpVariable %7 Function
+%49 = OpVariable %48 Function
+%12 = OpLoad %9 %11
+%18 = OpImageRead %17 %12 %16
+%20 = OpCompositeExtract %6 %18 0
+%22 = OpLoad %9 %21
+%23 = OpImageRead %17 %22 %16
+%24 = OpCompositeExtract %6 %23 0
+%25 = OpIAdd %6 %20 %24
+OpStore %8 %25
+%26 = OpLoad %6 %8
+%31 = OpLoad %28 %30
+%33 = OpImageRead %32 %31 %16
+%34 = OpCompositeExtract %27 %33 0
+%36 = OpFMul %27 %34 %35
+%37 = OpConvertFToU %6 %36
+%38 = OpIAdd %6 %26 %37
+OpStore %8 %38
+%39 = OpLoad %6 %8
+%41 = OpLoad %9 %40
+%42 = OpImageRead %17 %41 %16
+%43 = OpCompositeExtract %6 %42 0
+%45 = OpIMul %6 %43 %44
+%46 = OpIAdd %6 %39 %45
+OpStore %8 %46
+%53 = OpLoad %32 %51
+%54 = OpVectorShuffle %52 %53 %53 0 1
+%55 = OpExtInst %52 %1 Trunc %54
+%56 = OpConvertFToU %47 %55
+OpStore %49 %56
+%61 = OpAccessChain %7 %49 %19
+%62 = OpLoad %6 %61
+%64 = OpAccessChain %7 %49 %63
+%65 = OpLoad %6 %64
+%67 = OpIMul %6 %65 %66
+%68 = OpIAdd %6 %62 %67
+%69 = OpLoad %6 %8
+%71 = OpAccessChain %70 %60 %14 %68
+OpStore %71 %69
+OpReturn
+OpFunctionEnd

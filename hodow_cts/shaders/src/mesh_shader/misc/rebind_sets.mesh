@@ -1,0 +1,27 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+layout (local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout (triangles) out;
+layout (max_vertices=4, max_primitives=2) out;
+
+layout (set=0, binding=1) uniform sampler2D greenComponent;
+layout (push_constant, std430) uniform PCBlock { float offsetX; float offsetY; float blueComponent; } pc;
+struct TaskData { float redComponent; }; taskPayloadSharedEXT TaskData td;
+layout (location=0) out perprimitiveEXT vec4 primitiveColor[];
+
+void main (void)
+{
+    SetMeshOutputsEXT(4u, 2u);
+
+    gl_MeshVerticesEXT[0].gl_Position = vec4(-1.0 + pc.offsetX, -1.0 + pc.offsetY, 0.0, 1.0);
+    gl_MeshVerticesEXT[1].gl_Position = vec4( 0.0 + pc.offsetX, -1.0 + pc.offsetY, 0.0, 1.0);
+    gl_MeshVerticesEXT[2].gl_Position = vec4(-1.0 + pc.offsetX,  0.0 + pc.offsetY, 0.0, 1.0);
+    gl_MeshVerticesEXT[3].gl_Position = vec4( 0.0 + pc.offsetX,  0.0 + pc.offsetY, 0.0, 1.0);
+
+    gl_PrimitiveTriangleIndicesEXT[0] = uvec3(2u, 1u, 0u);
+    gl_PrimitiveTriangleIndicesEXT[1] = uvec3(2u, 3u, 1u);
+
+    const vec4 primColor = vec4(td.redComponent, texture(greenComponent, vec2(0.5, 0.5)).x, pc.blueComponent, 1.0);
+    primitiveColor[0] = primColor;
+    primitiveColor[1] = primColor;
+}

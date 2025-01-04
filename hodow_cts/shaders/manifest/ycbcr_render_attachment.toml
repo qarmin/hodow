@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.ycbcr.render_attachment.*
+#
+# Both shaders are the same for every format, plane and joint/disjoint combination.
+
+upstream_source = "external/vulkancts/modules/vulkan/ycbcr/vktYCbCrRenderAttachmentTests.cpp"
+rust_module = "ycbcr/render_attachment_tests"
+
+[[case]]
+name = "render_attachment"
+rust_const = "RENDER_ATTACHMENT_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "ycbcr/render_attachment.vert", stage = "vert" },
+    { name = "frag", template = "ycbcr/render_attachment.frag", stage = "frag" },
+]

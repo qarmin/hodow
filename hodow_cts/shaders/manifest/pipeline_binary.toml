@@ -1,0 +1,46 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.pipeline_binary.dedicated.*
+#
+# `BaseTestCase::initPrograms`, grouped by what the test type needs: a compute shader (the basic and internal cache
+# compute cases), a vertex/fragment pair (graphics from internal cache, zero binary count), the same pair with one
+# specialization constant per stage (unique key pairs, valid key) and the five shaders of `unique_blob_keys`.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineBinaryTests.cpp"
+rust_module = "pipeline/binary_tests"
+
+[[case]]
+name = "compute"
+rust_const = "BINARY_COMPUTE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "pipeline/binary/basic_compute.comp", stage = "comp" },
+]
+
+[[case]]
+name = "graphics"
+rust_const = "BINARY_GRAPHICS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/binary/graphics.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/binary/graphics.frag", stage = "frag" },
+]
+
+[[case]]
+name = "spec"
+rust_const = "BINARY_SPEC"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/binary/spec.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/binary/spec.frag", stage = "frag" },
+]
+
+[[case]]
+name = "blob_keys"
+rust_const = "BINARY_BLOB_KEYS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert1", template = "pipeline/binary/blob_vert1.vert", stage = "vert" },
+    { name = "vert2", template = "pipeline/binary/blob_vert2.vert", stage = "vert" },
+    { name = "frag1", template = "pipeline/binary/blob_frag1.frag", stage = "frag" },
+    { name = "frag2", template = "pipeline/binary/blob_frag2.frag", stage = "frag" },
+    { name = "frag3", template = "pipeline/binary/blob_frag3.frag", stage = "frag" },
+]

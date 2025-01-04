@@ -1,0 +1,34 @@
+#version 450
+
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+
+void main()
+{
+    float value;
+    float outval;
+    float fpval = 0.5;
+    float fnval = -0.5;
+    int ival = 0x43800000;
+    uint uival= 0xC3800000;
+    value = abs(fnval) +
+            sign(fpval) +
+            floor(fpval) +
+            trunc(fpval) +
+            round(fpval) +
+            roundEven(fpval) +
+            ceil(fpval) +
+            fract(fpval) +
+            mod(fpval, 2.0) +
+            modf(fpval, outval) +
+            min(fpval, 0.2) +
+            max(fpval, 0.2) +
+            clamp(fpval, 0.8, 2.0) +
+            mix(fnval, fpval, 0.5) +
+            step(1.0, fpval) +
+            smoothstep(0.0, 1.0, fpval) +
+            float( isnan(fpval)) +
+            float( isinf(fpval)) +
+            fma(fpval, 1.0, fnval) +
+            frexp(4.0, ival) +
+            ldexp(4.0, ival);
+}

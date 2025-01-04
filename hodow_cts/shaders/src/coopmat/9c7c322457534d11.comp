@@ -1,0 +1,129 @@
+#version 450 core
+#pragma use_vulkan_memory_model
+#extension GL_KHR_shader_subgroup_basic : enable
+#extension GL_KHR_memory_scope_semantics : enable
+#extension GL_KHR_cooperative_matrix : enable
+#extension GL_EXT_split_barrier : enable
+#extension GL_NV_cooperative_matrix2 : enable
+#extension GL_EXT_bfloat16 : enable
+#extension GL_EXT_float_e5m2 : enable
+#extension GL_EXT_float_e4m3 : enable
+#extension GL_EXT_shader_explicit_arithmetic_types : enable
+#extension GL_EXT_buffer_reference : enable
+#extension GL_EXT_bfloat16 : enable
+// strides overriden by spec constants
+layout(constant_id = 2) const int AStride = 1;
+layout(constant_id = 3) const int BStride = 1;
+layout(constant_id = 4) const int CStride = 1;
+layout(constant_id = 5) const int OStride = 1;
+layout(constant_id = 6) const int M = 1;
+layout(constant_id = 7) const int N = 1;
+layout(constant_id = 8) const int K = 1;
+layout(local_size_x_id = 0, local_size_y_id = 1, local_size_z = 1) in;
+const int workgroupsX = 4;
+layout(set=0, binding=0) coherent buffer InputA { uint32_t x[]; } inputA;
+layout(set=0, binding=1) coherent buffer InputB { uint32_t x[]; } inputB;
+layout(set=0, binding=2) coherent buffer InputC { uint32_t x[]; } inputC;
+layout(set=0, binding=3) coherent buffer Output { uint32_t x[]; } outputO;
+shared uint32_t sharedA[M * K * 1];
+shared uint32_t sharedB[K * N * 1];
+shared uint32_t sharedC[M * N * 1];
+shared uint32_t sharedO[M * N * 1];
+#define ARows M
+#define ACols K
+#define ORows M
+#define OCols N
+coopmat<uint32_t, gl_ScopeWorkgroup, ARows, ACols, gl_MatrixUseA> matA;
+coopmat<uint32_t, gl_ScopeWorkgroup, K, N, gl_MatrixUseB> matB;
+coopmat<uint32_t, gl_ScopeWorkgroup, M, N, gl_MatrixUseAccumulator> matC;
+coopmat<uint32_t, gl_ScopeWorkgroup, ORows, OCols, gl_MatrixUseAccumulator> matO;
+void main()
+{
+   uvec2 matrixID = uvec2(gl_WorkGroupID.xy);
+   int offset00 = int(K * matrixID.y); int offset01 = int(M * matrixID.x);
+   int offset10 = int(N * matrixID.y); int offset11 = int(K * matrixID.x);
+   int offset20 = int(N * matrixID.y); int offset21 = int(M * matrixID.x);
+   int offset30 = int(N * matrixID.y); int offset31 = int(M * matrixID.x);
+   uint span00 = K; uint span01 = M;
+   uint span10 = N; uint span11 = K;
+   uint span20 = N; uint span21 = M;
+   uint span30 = N; uint span31 = M;
+   uint element0 = (M * 4 * K * matrixID.y + M * matrixID.x);
+   uint element1 = (K * 4 * N * matrixID.y + K * matrixID.x);
+   uint element2 = (M * 4 * N * matrixID.y + M * matrixID.x);
+   uint element3 = (M * 4 * N * matrixID.y + M * matrixID.x);
+   uint elementS0, elementS1, elementS2, elementS3;
+       elementS0 = 0;
+       elementS1 = 0;
+       elementS2 = 0;
+       elementS3 = 0;
+   if (subgroupElect()) {
+       for (int i = 0; i < M; ++i) {
+       for (int j = 0; j < K; ++j) {
+           int localElementInput = (M * 4 * j + i);
+           int localElementShared = (M * 4 / workgroupsX * j + i);
+           sharedA[elementS0 + localElementShared] = inputA.x[element0 + localElementInput];
+       }
+       }
+       for (int i = 0; i < K; ++i) {
+       for (int j = 0; j < N; ++j) {
+           int localElementInput = (K * 4 * j + i);
+           int localElementShared = (K * 4 / workgroupsX * j + i);
+           sharedB[elementS1 + localElementShared] = inputB.x[element1 + localElementInput];
+       }
+       }
+       for (int i = 0; i < M; ++i) {
+       for (int j = 0; j < N; ++j) {
+           int localElementInput = (M * 4 * j + i);
+           int localElementShared = (M * 4 / workgroupsX * j + i);
+           sharedC[elementS2 + localElementShared] = inputC.x[element2 + localElementInput];
+       }
+       }
+   }
+   controlBarrier(gl_ScopeWorkgroup, gl_ScopeWorkgroup, gl_StorageSemanticsShared, gl_SemanticsAcquireRelease);
+   tensorLayoutNV<2> tensorLayout0 = createTensorLayoutNV(2);
+   tensorLayoutNV<2> tensorLayout1 = createTensorLayoutNV(2);
+   tensorLayoutNV<2> tensorLayout2 = createTensorLayoutNV(2);
+   tensorLayout0 = setTensorLayoutDimensionNV(tensorLayout0, K * 4, M * 4 / workgroupsX);
+   tensorLayout1 = setTensorLayoutDimensionNV(tensorLayout1, N * 4, K * 4 / workgroupsX);
+   tensorLayout2 = setTensorLayoutDimensionNV(tensorLayout2, N * 4, M * 4 / workgroupsX);
+   tensorViewNV<2, true, 1, 0> colMajorView0 = createTensorViewNV(2, true, 1, 0);
+   tensorViewNV<2, true, 1, 0> colMajorView1 = createTensorViewNV(2, true, 1, 0);
+   tensorViewNV<2, true, 1, 0> colMajorView2 = createTensorViewNV(2, true, 1, 0);
+   colMajorView0 = setTensorViewDimensionsNV(colMajorView0, span00, span01);
+   colMajorView1 = setTensorViewDimensionsNV(colMajorView1, span10, span11);
+   colMajorView2 = setTensorViewDimensionsNV(colMajorView2, span20, span21);
+   elementS0 = elementS1 = elementS2 = 0;
+   tensorLayout0 = sliceTensorLayoutNV(tensorLayout0, 0, span00, 0, span01);
+   tensorLayout1 = sliceTensorLayoutNV(tensorLayout1, 0, span10, 0, span11);
+   tensorLayout2 = sliceTensorLayoutNV(tensorLayout2, 0, span20, 0, span21);
+   coopMatLoadTensorNV(matA, sharedA, elementS0, tensorLayout0, colMajorView0);
+   coopMatLoadTensorNV(matB, sharedB, elementS1, tensorLayout1, colMajorView1);
+   coopMatLoadTensorNV(matC, sharedC, elementS2, tensorLayout2, colMajorView2);
+   coopmat<uint32_t, gl_ScopeWorkgroup, ARows, ACols, gl_MatrixUseA> matAArr[2];
+    matAArr[1] = matA; matAArr[0] = coopmat<uint32_t, gl_ScopeWorkgroup, ARows, ACols, gl_MatrixUseA>(0.0);
+   coopmat<uint32_t, gl_ScopeWorkgroup, K, N, gl_MatrixUseB> matBArr[2];
+    matBArr[1] = matB; matBArr[0] = coopmat<uint32_t, gl_ScopeWorkgroup, K, N, gl_MatrixUseB>(0.0);
+   coopmat<uint32_t, gl_ScopeWorkgroup, M, N, gl_MatrixUseAccumulator> matCArr[2];
+    matCArr[1] = matC; matCArr[0] = coopmat<uint32_t, gl_ScopeWorkgroup, M, N, gl_MatrixUseAccumulator>(0.0);
+   coopmat<uint32_t, gl_ScopeWorkgroup, ORows, OCols, gl_MatrixUseAccumulator> matOArr[2];
+   matOArr[1] = coopMatMulAdd(matAArr[1], matBArr[1], matCArr[1]);
+   matOArr[0] = coopmat<uint32_t, gl_ScopeWorkgroup, ORows, OCols, gl_MatrixUseAccumulator>(0.0);
+   matO = matOArr[1];
+   tensorLayoutNV<2> tensorLayout3 = createTensorLayoutNV(2);
+   tensorLayout3 = setTensorLayoutDimensionNV(tensorLayout3, N * 4, M * 4 / workgroupsX);
+   tensorLayout3 = sliceTensorLayoutNV(tensorLayout3, 0, span30, 0, span31);
+   tensorViewNV<2, false, 1, 0> colMajorView3 = createTensorViewNV(2, false, 1, 0);
+   elementS3 = 0;
+   coopMatStoreTensorNV(matO, sharedO, elementS3, tensorLayout3, colMajorView3);
+   controlBarrier(gl_ScopeWorkgroup, gl_ScopeWorkgroup, gl_StorageSemanticsShared, gl_SemanticsAcquireRelease);
+   if (subgroupElect()) {
+       for (int i = 0; i < M; ++i) {
+       for (int j = 0; j < N; ++j) {
+           int localElementInput = (M * 4 * j + i);
+           int localElementShared = (M * 4 / workgroupsX * j + i);
+           outputO.x[element3 + localElementInput] = sharedO[elementS3 + localElementShared];
+       }
+       }
+   }
+}

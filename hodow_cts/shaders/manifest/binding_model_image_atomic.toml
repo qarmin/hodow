@@ -1,0 +1,14 @@
+# Shader manifest for dEQP-VK.binding_model.image_atomic.descriptor_set.32bit
+#
+# Only the descriptor_set / 32bit leaf is ported: descriptor_buffer and descriptor_heap
+# need VK_EXT_descriptor_buffer / VK_EXT_descriptor_heap entry points and features the
+# shared device does not enable, and 64bit needs shaderImageInt64Atomics enabled.
+
+upstream_source = "external/vulkancts/modules/vulkan/binding_model/vktBindingImageAtomicTests.cpp"
+rust_module = "binding_model/image_atomic_tests"
+
+[[case]]
+name = "32bit"
+rust_const = "IMAGE_ATOMIC_DESCRIPTOR_SET_32BIT"
+rust_type = "ImageAtomicCase"
+programs = [{ name = "compute", template = "binding_model/image_atomic/image_atomic_32bit.comp", stage = "comp" }]

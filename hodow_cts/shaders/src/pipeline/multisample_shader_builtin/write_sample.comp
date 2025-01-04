@@ -1,0 +1,17 @@
+#version 450
+
+layout (rgba8, set=0, binding=0) uniform image2DMS writeImg;
+layout (rgba8, set=0, binding=1) uniform image2D   verificationImg;
+
+void main()
+{
+        vec4  wcolor   = vec4(0, 0, 1, 1);
+        uvec2 ucoords  = uvec2(gl_GlobalInvocationID.xy);
+        ivec2 icoords  = ivec2(ucoords);
+        uint writeMask = ((ucoords.x << ${bpc}) | ucoords.y);
+        for (uint i = 0; i < ${count}; ++i)
+        {
+                if ((writeMask & (1 << i)) != 0)
+                        imageStore(writeImg, icoords, int(i), wcolor);
+        }
+}

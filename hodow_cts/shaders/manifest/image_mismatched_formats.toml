@@ -1,0 +1,830 @@
+# Shader manifest for dEQP-VK.image.mismatched_formats.{image_read,image_write,sparse_image_read}.*
+#
+# `initPrograms` picks one of three sources and specializes `${FORMAT}`, `${IMAGE}`,
+# `${VECT}` and `${VALUE}` from the SPIR-V format named in the case. The last three follow only from the channel class
+# of that format, so each of the six (kind, class) pairs is one template and only the format qualifier is substituted;
+# `glsl_format` is the table's `GLSLFormat`, or the lower-cased SPIR-V name where the table holds none.
+
+upstream_source = "external/vulkancts/modules/vulkan/image/vktImageMismatchedFormatsTests.cpp"
+rust_module = "image/mismatched_formats_tests"
+
+[[case]]
+name = "read_Rgba32f"
+rust_const = "READ_RGBA32F"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rgba32f" }, glsl_format = { type = "str", value = "rgba32f" } }
+
+[[case]]
+name = "read_Rg32f"
+rust_const = "READ_RG32F"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rg32f" }, glsl_format = { type = "str", value = "rg32f" } }
+
+[[case]]
+name = "read_R32f"
+rust_const = "READ_R32F"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "R32f" }, glsl_format = { type = "str", value = "r32f" } }
+
+[[case]]
+name = "read_Rgba16f"
+rust_const = "READ_RGBA16F"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rgba16f" }, glsl_format = { type = "str", value = "rgba16f" } }
+
+[[case]]
+name = "read_Rg16f"
+rust_const = "READ_RG16F"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rg16f" }, glsl_format = { type = "str", value = "rg16f" } }
+
+[[case]]
+name = "read_R16f"
+rust_const = "READ_R16F"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "R16f" }, glsl_format = { type = "str", value = "r16f" } }
+
+[[case]]
+name = "read_Rgba16"
+rust_const = "READ_RGBA16"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rgba16" }, glsl_format = { type = "str", value = "rgba16" } }
+
+[[case]]
+name = "read_Rg16"
+rust_const = "READ_RG16"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rg16" }, glsl_format = { type = "str", value = "rg16" } }
+
+[[case]]
+name = "read_R16"
+rust_const = "READ_R16"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "R16" }, glsl_format = { type = "str", value = "r16" } }
+
+[[case]]
+name = "read_Rgba16Snorm"
+rust_const = "READ_RGBA16SNORM"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rgba16Snorm" }, glsl_format = { type = "str", value = "rgba16_snorm" } }
+
+[[case]]
+name = "read_Rg16Snorm"
+rust_const = "READ_RG16SNORM"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rg16Snorm" }, glsl_format = { type = "str", value = "rg16_snorm" } }
+
+[[case]]
+name = "read_R16Snorm"
+rust_const = "READ_R16SNORM"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "R16Snorm" }, glsl_format = { type = "str", value = "r16_snorm" } }
+
+[[case]]
+name = "read_Rgb10A2"
+rust_const = "READ_RGB10A2"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rgb10A2" }, glsl_format = { type = "str", value = "rgb10_a2" } }
+
+[[case]]
+name = "read_R11fG11fB10f"
+rust_const = "READ_R11FG11FB10F"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "R11fG11fB10f" }, glsl_format = { type = "str", value = "r11f_g11f_b10f" } }
+
+[[case]]
+name = "read_Rgba8"
+rust_const = "READ_RGBA8"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rgba8" }, glsl_format = { type = "str", value = "rgba8" } }
+
+[[case]]
+name = "read_Rg8"
+rust_const = "READ_RG8"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rg8" }, glsl_format = { type = "str", value = "rg8" } }
+
+[[case]]
+name = "read_R8"
+rust_const = "READ_R8"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "R8" }, glsl_format = { type = "str", value = "r8" } }
+
+[[case]]
+name = "read_Rgba8Snorm"
+rust_const = "READ_RGBA8SNORM"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rgba8Snorm" }, glsl_format = { type = "str", value = "rgba8_snorm" } }
+
+[[case]]
+name = "read_Rg8Snorm"
+rust_const = "READ_RG8SNORM"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rg8Snorm" }, glsl_format = { type = "str", value = "rg8_snorm" } }
+
+[[case]]
+name = "read_R8Snorm"
+rust_const = "READ_R8SNORM"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "R8Snorm" }, glsl_format = { type = "str", value = "r8_snorm" } }
+
+[[case]]
+name = "read_Rgba32i"
+rust_const = "READ_RGBA32I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rgba32i" }, glsl_format = { type = "str", value = "rgba32i" } }
+
+[[case]]
+name = "read_Rg32i"
+rust_const = "READ_RG32I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rg32i" }, glsl_format = { type = "str", value = "rg32i" } }
+
+[[case]]
+name = "read_R32i"
+rust_const = "READ_R32I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "R32i" }, glsl_format = { type = "str", value = "r32i" } }
+
+[[case]]
+name = "read_Rgba16i"
+rust_const = "READ_RGBA16I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rgba16i" }, glsl_format = { type = "str", value = "rgba16i" } }
+
+[[case]]
+name = "read_Rg16i"
+rust_const = "READ_RG16I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rg16i" }, glsl_format = { type = "str", value = "rg16i" } }
+
+[[case]]
+name = "read_R16i"
+rust_const = "READ_R16I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "R16i" }, glsl_format = { type = "str", value = "r16i" } }
+
+[[case]]
+name = "read_Rgba8i"
+rust_const = "READ_RGBA8I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rgba8i" }, glsl_format = { type = "str", value = "rgba8i" } }
+
+[[case]]
+name = "read_Rg8i"
+rust_const = "READ_RG8I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rg8i" }, glsl_format = { type = "str", value = "rg8i" } }
+
+[[case]]
+name = "read_R8i"
+rust_const = "READ_R8I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "R8i" }, glsl_format = { type = "str", value = "r8i" } }
+
+[[case]]
+name = "read_Rgba32ui"
+rust_const = "READ_RGBA32UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rgba32ui" }, glsl_format = { type = "str", value = "rgba32ui" } }
+
+[[case]]
+name = "read_Rg32ui"
+rust_const = "READ_RG32UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rg32ui" }, glsl_format = { type = "str", value = "rg32ui" } }
+
+[[case]]
+name = "read_R32ui"
+rust_const = "READ_R32UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "R32ui" }, glsl_format = { type = "str", value = "r32ui" } }
+
+[[case]]
+name = "read_Rgba16ui"
+rust_const = "READ_RGBA16UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rgba16ui" }, glsl_format = { type = "str", value = "rgba16ui" } }
+
+[[case]]
+name = "read_Rg16ui"
+rust_const = "READ_RG16UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rg16ui" }, glsl_format = { type = "str", value = "rg16ui" } }
+
+[[case]]
+name = "read_R16ui"
+rust_const = "READ_R16UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "R16ui" }, glsl_format = { type = "str", value = "r16ui" } }
+
+[[case]]
+name = "read_Rgb10a2ui"
+rust_const = "READ_RGB10A2UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rgb10a2ui" }, glsl_format = { type = "str", value = "rgb10_a2ui" } }
+
+[[case]]
+name = "read_Rgba8ui"
+rust_const = "READ_RGBA8UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rgba8ui" }, glsl_format = { type = "str", value = "rgba8ui" } }
+
+[[case]]
+name = "read_Rg8ui"
+rust_const = "READ_RG8UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "Rg8ui" }, glsl_format = { type = "str", value = "rg8ui" } }
+
+[[case]]
+name = "read_R8ui"
+rust_const = "READ_R8UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_read_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "read" }, spirv_format = { type = "str", value = "R8ui" }, glsl_format = { type = "str", value = "r8ui" } }
+
+[[case]]
+name = "write_Rgba32f"
+rust_const = "WRITE_RGBA32F"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rgba32f" }, glsl_format = { type = "str", value = "rgba32f" } }
+
+[[case]]
+name = "write_Rg32f"
+rust_const = "WRITE_RG32F"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rg32f" }, glsl_format = { type = "str", value = "rg32f" } }
+
+[[case]]
+name = "write_R32f"
+rust_const = "WRITE_R32F"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "R32f" }, glsl_format = { type = "str", value = "r32f" } }
+
+[[case]]
+name = "write_Rgba16f"
+rust_const = "WRITE_RGBA16F"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rgba16f" }, glsl_format = { type = "str", value = "rgba16f" } }
+
+[[case]]
+name = "write_Rg16f"
+rust_const = "WRITE_RG16F"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rg16f" }, glsl_format = { type = "str", value = "rg16f" } }
+
+[[case]]
+name = "write_R16f"
+rust_const = "WRITE_R16F"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "R16f" }, glsl_format = { type = "str", value = "r16f" } }
+
+[[case]]
+name = "write_Rgba16"
+rust_const = "WRITE_RGBA16"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rgba16" }, glsl_format = { type = "str", value = "rgba16" } }
+
+[[case]]
+name = "write_Rg16"
+rust_const = "WRITE_RG16"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rg16" }, glsl_format = { type = "str", value = "rg16" } }
+
+[[case]]
+name = "write_R16"
+rust_const = "WRITE_R16"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "R16" }, glsl_format = { type = "str", value = "r16" } }
+
+[[case]]
+name = "write_Rgba16Snorm"
+rust_const = "WRITE_RGBA16SNORM"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rgba16Snorm" }, glsl_format = { type = "str", value = "rgba16_snorm" } }
+
+[[case]]
+name = "write_Rg16Snorm"
+rust_const = "WRITE_RG16SNORM"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rg16Snorm" }, glsl_format = { type = "str", value = "rg16_snorm" } }
+
+[[case]]
+name = "write_R16Snorm"
+rust_const = "WRITE_R16SNORM"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "R16Snorm" }, glsl_format = { type = "str", value = "r16_snorm" } }
+
+[[case]]
+name = "write_Rgb10A2"
+rust_const = "WRITE_RGB10A2"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rgb10A2" }, glsl_format = { type = "str", value = "rgb10_a2" } }
+
+[[case]]
+name = "write_R11fG11fB10f"
+rust_const = "WRITE_R11FG11FB10F"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "R11fG11fB10f" }, glsl_format = { type = "str", value = "r11f_g11f_b10f" } }
+
+[[case]]
+name = "write_Rgba8"
+rust_const = "WRITE_RGBA8"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rgba8" }, glsl_format = { type = "str", value = "rgba8" } }
+
+[[case]]
+name = "write_Rg8"
+rust_const = "WRITE_RG8"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rg8" }, glsl_format = { type = "str", value = "rg8" } }
+
+[[case]]
+name = "write_R8"
+rust_const = "WRITE_R8"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "R8" }, glsl_format = { type = "str", value = "r8" } }
+
+[[case]]
+name = "write_Rgba8Snorm"
+rust_const = "WRITE_RGBA8SNORM"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rgba8Snorm" }, glsl_format = { type = "str", value = "rgba8_snorm" } }
+
+[[case]]
+name = "write_Rg8Snorm"
+rust_const = "WRITE_RG8SNORM"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rg8Snorm" }, glsl_format = { type = "str", value = "rg8_snorm" } }
+
+[[case]]
+name = "write_R8Snorm"
+rust_const = "WRITE_R8SNORM"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "R8Snorm" }, glsl_format = { type = "str", value = "r8_snorm" } }
+
+[[case]]
+name = "write_Rgba32i"
+rust_const = "WRITE_RGBA32I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rgba32i" }, glsl_format = { type = "str", value = "rgba32i" } }
+
+[[case]]
+name = "write_Rg32i"
+rust_const = "WRITE_RG32I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rg32i" }, glsl_format = { type = "str", value = "rg32i" } }
+
+[[case]]
+name = "write_R32i"
+rust_const = "WRITE_R32I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "R32i" }, glsl_format = { type = "str", value = "r32i" } }
+
+[[case]]
+name = "write_Rgba16i"
+rust_const = "WRITE_RGBA16I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rgba16i" }, glsl_format = { type = "str", value = "rgba16i" } }
+
+[[case]]
+name = "write_Rg16i"
+rust_const = "WRITE_RG16I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rg16i" }, glsl_format = { type = "str", value = "rg16i" } }
+
+[[case]]
+name = "write_R16i"
+rust_const = "WRITE_R16I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "R16i" }, glsl_format = { type = "str", value = "r16i" } }
+
+[[case]]
+name = "write_Rgba8i"
+rust_const = "WRITE_RGBA8I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rgba8i" }, glsl_format = { type = "str", value = "rgba8i" } }
+
+[[case]]
+name = "write_Rg8i"
+rust_const = "WRITE_RG8I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rg8i" }, glsl_format = { type = "str", value = "rg8i" } }
+
+[[case]]
+name = "write_R8i"
+rust_const = "WRITE_R8I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "R8i" }, glsl_format = { type = "str", value = "r8i" } }
+
+[[case]]
+name = "write_Rgba32ui"
+rust_const = "WRITE_RGBA32UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rgba32ui" }, glsl_format = { type = "str", value = "rgba32ui" } }
+
+[[case]]
+name = "write_Rg32ui"
+rust_const = "WRITE_RG32UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rg32ui" }, glsl_format = { type = "str", value = "rg32ui" } }
+
+[[case]]
+name = "write_R32ui"
+rust_const = "WRITE_R32UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "R32ui" }, glsl_format = { type = "str", value = "r32ui" } }
+
+[[case]]
+name = "write_Rgba16ui"
+rust_const = "WRITE_RGBA16UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rgba16ui" }, glsl_format = { type = "str", value = "rgba16ui" } }
+
+[[case]]
+name = "write_Rg16ui"
+rust_const = "WRITE_RG16UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rg16ui" }, glsl_format = { type = "str", value = "rg16ui" } }
+
+[[case]]
+name = "write_R16ui"
+rust_const = "WRITE_R16UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "R16ui" }, glsl_format = { type = "str", value = "r16ui" } }
+
+[[case]]
+name = "write_Rgb10a2ui"
+rust_const = "WRITE_RGB10A2UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rgb10a2ui" }, glsl_format = { type = "str", value = "rgb10_a2ui" } }
+
+[[case]]
+name = "write_Rgba8ui"
+rust_const = "WRITE_RGBA8UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rgba8ui" }, glsl_format = { type = "str", value = "rgba8ui" } }
+
+[[case]]
+name = "write_Rg8ui"
+rust_const = "WRITE_RG8UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "Rg8ui" }, glsl_format = { type = "str", value = "rg8ui" } }
+
+[[case]]
+name = "write_R8ui"
+rust_const = "WRITE_R8UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_write_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "write" }, spirv_format = { type = "str", value = "R8ui" }, glsl_format = { type = "str", value = "r8ui" } }
+
+# sparse_image_read: the same format pairing with sparseImageLoadARB (GL_ARB_sparse_texture2).
+
+[[case]]
+name = "sparse_read_Rgba32f"
+rust_const = "SPARSE_READ_RGBA32F"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rgba32f" }, glsl_format = { type = "str", value = "rgba32f" } }
+
+[[case]]
+name = "sparse_read_Rg32f"
+rust_const = "SPARSE_READ_RG32F"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rg32f" }, glsl_format = { type = "str", value = "rg32f" } }
+
+[[case]]
+name = "sparse_read_R32f"
+rust_const = "SPARSE_READ_R32F"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "R32f" }, glsl_format = { type = "str", value = "r32f" } }
+
+[[case]]
+name = "sparse_read_Rgba16f"
+rust_const = "SPARSE_READ_RGBA16F"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rgba16f" }, glsl_format = { type = "str", value = "rgba16f" } }
+
+[[case]]
+name = "sparse_read_Rg16f"
+rust_const = "SPARSE_READ_RG16F"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rg16f" }, glsl_format = { type = "str", value = "rg16f" } }
+
+[[case]]
+name = "sparse_read_R16f"
+rust_const = "SPARSE_READ_R16F"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "R16f" }, glsl_format = { type = "str", value = "r16f" } }
+
+[[case]]
+name = "sparse_read_Rgba16"
+rust_const = "SPARSE_READ_RGBA16"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rgba16" }, glsl_format = { type = "str", value = "rgba16" } }
+
+[[case]]
+name = "sparse_read_Rg16"
+rust_const = "SPARSE_READ_RG16"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rg16" }, glsl_format = { type = "str", value = "rg16" } }
+
+[[case]]
+name = "sparse_read_R16"
+rust_const = "SPARSE_READ_R16"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "R16" }, glsl_format = { type = "str", value = "r16" } }
+
+[[case]]
+name = "sparse_read_Rgba16Snorm"
+rust_const = "SPARSE_READ_RGBA16SNORM"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rgba16Snorm" }, glsl_format = { type = "str", value = "rgba16_snorm" } }
+
+[[case]]
+name = "sparse_read_Rg16Snorm"
+rust_const = "SPARSE_READ_RG16SNORM"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rg16Snorm" }, glsl_format = { type = "str", value = "rg16_snorm" } }
+
+[[case]]
+name = "sparse_read_R16Snorm"
+rust_const = "SPARSE_READ_R16SNORM"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "R16Snorm" }, glsl_format = { type = "str", value = "r16_snorm" } }
+
+[[case]]
+name = "sparse_read_Rgb10A2"
+rust_const = "SPARSE_READ_RGB10A2"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rgb10A2" }, glsl_format = { type = "str", value = "rgb10_a2" } }
+
+[[case]]
+name = "sparse_read_R11fG11fB10f"
+rust_const = "SPARSE_READ_R11FG11FB10F"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "R11fG11fB10f" }, glsl_format = { type = "str", value = "r11f_g11f_b10f" } }
+
+[[case]]
+name = "sparse_read_Rgba8"
+rust_const = "SPARSE_READ_RGBA8"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rgba8" }, glsl_format = { type = "str", value = "rgba8" } }
+
+[[case]]
+name = "sparse_read_Rg8"
+rust_const = "SPARSE_READ_RG8"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rg8" }, glsl_format = { type = "str", value = "rg8" } }
+
+[[case]]
+name = "sparse_read_R8"
+rust_const = "SPARSE_READ_R8"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "R8" }, glsl_format = { type = "str", value = "r8" } }
+
+[[case]]
+name = "sparse_read_Rgba8Snorm"
+rust_const = "SPARSE_READ_RGBA8SNORM"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rgba8Snorm" }, glsl_format = { type = "str", value = "rgba8_snorm" } }
+
+[[case]]
+name = "sparse_read_Rg8Snorm"
+rust_const = "SPARSE_READ_RG8SNORM"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rg8Snorm" }, glsl_format = { type = "str", value = "rg8_snorm" } }
+
+[[case]]
+name = "sparse_read_R8Snorm"
+rust_const = "SPARSE_READ_R8SNORM"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_float.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "R8Snorm" }, glsl_format = { type = "str", value = "r8_snorm" } }
+
+[[case]]
+name = "sparse_read_Rgba32i"
+rust_const = "SPARSE_READ_RGBA32I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rgba32i" }, glsl_format = { type = "str", value = "rgba32i" } }
+
+[[case]]
+name = "sparse_read_Rg32i"
+rust_const = "SPARSE_READ_RG32I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rg32i" }, glsl_format = { type = "str", value = "rg32i" } }
+
+[[case]]
+name = "sparse_read_R32i"
+rust_const = "SPARSE_READ_R32I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "R32i" }, glsl_format = { type = "str", value = "r32i" } }
+
+[[case]]
+name = "sparse_read_Rgba16i"
+rust_const = "SPARSE_READ_RGBA16I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rgba16i" }, glsl_format = { type = "str", value = "rgba16i" } }
+
+[[case]]
+name = "sparse_read_Rg16i"
+rust_const = "SPARSE_READ_RG16I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rg16i" }, glsl_format = { type = "str", value = "rg16i" } }
+
+[[case]]
+name = "sparse_read_R16i"
+rust_const = "SPARSE_READ_R16I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "R16i" }, glsl_format = { type = "str", value = "r16i" } }
+
+[[case]]
+name = "sparse_read_Rgba8i"
+rust_const = "SPARSE_READ_RGBA8I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rgba8i" }, glsl_format = { type = "str", value = "rgba8i" } }
+
+[[case]]
+name = "sparse_read_Rg8i"
+rust_const = "SPARSE_READ_RG8I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rg8i" }, glsl_format = { type = "str", value = "rg8i" } }
+
+[[case]]
+name = "sparse_read_R8i"
+rust_const = "SPARSE_READ_R8I"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_int.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "R8i" }, glsl_format = { type = "str", value = "r8i" } }
+
+[[case]]
+name = "sparse_read_Rgba32ui"
+rust_const = "SPARSE_READ_RGBA32UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rgba32ui" }, glsl_format = { type = "str", value = "rgba32ui" } }
+
+[[case]]
+name = "sparse_read_Rg32ui"
+rust_const = "SPARSE_READ_RG32UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rg32ui" }, glsl_format = { type = "str", value = "rg32ui" } }
+
+[[case]]
+name = "sparse_read_R32ui"
+rust_const = "SPARSE_READ_R32UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "R32ui" }, glsl_format = { type = "str", value = "r32ui" } }
+
+[[case]]
+name = "sparse_read_Rgba16ui"
+rust_const = "SPARSE_READ_RGBA16UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rgba16ui" }, glsl_format = { type = "str", value = "rgba16ui" } }
+
+[[case]]
+name = "sparse_read_Rg16ui"
+rust_const = "SPARSE_READ_RG16UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rg16ui" }, glsl_format = { type = "str", value = "rg16ui" } }
+
+[[case]]
+name = "sparse_read_R16ui"
+rust_const = "SPARSE_READ_R16UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "R16ui" }, glsl_format = { type = "str", value = "r16ui" } }
+
+[[case]]
+name = "sparse_read_Rgb10a2ui"
+rust_const = "SPARSE_READ_RGB10A2UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rgb10a2ui" }, glsl_format = { type = "str", value = "rgb10_a2ui" } }
+
+[[case]]
+name = "sparse_read_Rgba8ui"
+rust_const = "SPARSE_READ_RGBA8UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rgba8ui" }, glsl_format = { type = "str", value = "rgba8ui" } }
+
+[[case]]
+name = "sparse_read_Rg8ui"
+rust_const = "SPARSE_READ_RG8UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "Rg8ui" }, glsl_format = { type = "str", value = "rg8ui" } }
+
+[[case]]
+name = "sparse_read_R8ui"
+rust_const = "SPARSE_READ_R8UI"
+rust_type = "MismatchedFormatPrograms"
+programs = [{ name = "comp", template = "image/mismatched_formats_sparse_read_uint.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "sparse_read" }, spirv_format = { type = "str", value = "R8ui" }, glsl_format = { type = "str", value = "r8ui" } }

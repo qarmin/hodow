@@ -1,0 +1,111 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_basic: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+
+shared uvec4 superSecretComputeShaderHelper[gl_WorkGroupSize.x * gl_WorkGroupSize.y * gl_WorkGroupSize.z];
+uvec4 sharedMemoryBallot(bool vote)
+{
+  uint groupOffset = gl_SubgroupID;
+  // One invocation in the group 0's the whole group's data
+  if (subgroupElect())
+  {
+    superSecretComputeShaderHelper[groupOffset] = uvec4(0);
+  }
+  subgroupMemoryBarrierShared();
+  if (vote)
+  {
+    const highp uint invocationId = gl_SubgroupInvocationID % 32;
+    const highp uint bitToSet = 1u << invocationId;
+    switch (gl_SubgroupInvocationID / 32)
+    {
+    case 0: atomicOr(superSecretComputeShaderHelper[groupOffset].x, bitToSet); break;
+    case 1: atomicOr(superSecretComputeShaderHelper[groupOffset].y, bitToSet); break;
+    case 2: atomicOr(superSecretComputeShaderHelper[groupOffset].z, bitToSet); break;
+    case 3: atomicOr(superSecretComputeShaderHelper[groupOffset].w, bitToSet); break;
+    }
+  }
+  subgroupMemoryBarrierShared();
+  return superSecretComputeShaderHelper[groupOffset];
+}
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uint value = 13;
+  if (subgroupElect())
+  {
+    value = 42;
+  }
+  uvec4 bits = bitCount(sharedMemoryBallot(value == 42));
+  tempRes = bits.x + bits.y + bits.z + bits.w;
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_basic: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+
+shared uvec4 superSecretComputeShaderHelper[gl_WorkGroupSize.x * gl_WorkGroupSize.y * gl_WorkGroupSize.z];
+uvec4 sharedMemoryBallot(bool vote)
+{
+  uint groupOffset = gl_SubgroupID;
+  // One invocation in the group 0's the whole group's data
+  if (subgroupElect())
+  {
+    superSecretComputeShaderHelper[groupOffset] = uvec4(0);
+  }
+  subgroupMemoryBarrierShared();
+  if (vote)
+  {
+    const highp uint invocationId = gl_SubgroupInvocationID % 32;
+    const highp uint bitToSet = 1u << invocationId;
+    switch (gl_SubgroupInvocationID / 32)
+    {
+    case 0: atomicOr(superSecretComputeShaderHelper[groupOffset].x, bitToSet); break;
+    case 1: atomicOr(superSecretComputeShaderHelper[groupOffset].y, bitToSet); break;
+    case 2: atomicOr(superSecretComputeShaderHelper[groupOffset].z, bitToSet); break;
+    case 3: atomicOr(superSecretComputeShaderHelper[groupOffset].w, bitToSet); break;
+    }
+  }
+  subgroupMemoryBarrierShared();
+  return superSecretComputeShaderHelper[groupOffset];
+}
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uint value = 13;
+  if (subgroupElect())
+  {
+    value = 42;
+  }
+  uvec4 bits = bitCount(sharedMemoryBallot(value == 42));
+  tempRes = bits.x + bits.y + bits.z + bits.w;
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+
+void main (void)
+{
+  SetMeshOutputsEXT(0u, 0u);
+}

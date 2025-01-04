@@ -1,0 +1,4490 @@
+# Shader manifest for dEQP-VK.rasterization.rasterization_order_attachment_access.*
+#
+# One case per (kind, format, attachment count, sample count, overlap) that changes a shader: `d` is overlapping draws
+# only (multi_draw_barriers and multi_draw share it, they differ in the synchronisation), `p` overlapping primitives, `i`
+# overlapping instances and `dpi` all three. The `${...}` names are upstream's `StringTemplate` parameters of
+# `AttachmentAccessOrderTestCase::initPrograms`. The case list and the templates in shaders/src/rasterization/order_attachment_access/
+# were written by a shell loop, not by hand; `rust_const` and the case name encode the same key the test builds.
+
+upstream_source = "external/vulkancts/modules/vulkan/rasterization/vktRasterizationOrderAttachmentAccessTests.cpp"
+rust_module = "rasterization/order_attachment_access_tests"
+
+[[case]]
+name = "color_float_att1_s1_d"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S1_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'subpassInput'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s1_p"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S1_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'subpassInput'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s1_i"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S1_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'subpassInput'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s1_dpi"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S1_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'subpassInput'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s2_d"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S2_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s2_p"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S2_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s2_i"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S2_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s2_dpi"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S2_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s4_d"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S4_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s4_p"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S4_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s4_i"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S4_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s4_dpi"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S4_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s8_d"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S8_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s8_p"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S8_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s8_i"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S8_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s8_dpi"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S8_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s16_d"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S16_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s16_p"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S16_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s16_i"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S16_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s16_dpi"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S16_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s32_d"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S32_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s32_p"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S32_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s32_i"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S32_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s32_dpi"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S32_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s64_d"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S64_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s64_p"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S64_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s64_i"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S64_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att1_s64_dpi"
+rust_const = "OAA_COLOR_FLOAT_ATT1_S64_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s1_d"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S1_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'subpassInput'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s1_p"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S1_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'subpassInput'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s1_i"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S1_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'subpassInput'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s1_dpi"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S1_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'subpassInput'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s2_d"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S2_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s2_p"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S2_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s2_i"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S2_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s2_dpi"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S2_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s4_d"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S4_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s4_p"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S4_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s4_i"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S4_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s4_dpi"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S4_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s8_d"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S8_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s8_p"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S8_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s8_i"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S8_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s8_dpi"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S8_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s16_d"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S16_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s16_p"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S16_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s16_i"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S16_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s16_dpi"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S16_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s32_d"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S32_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s32_p"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S32_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s32_i"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S32_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s32_dpi"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S32_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s64_d"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S64_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s64_p"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S64_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s64_i"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S64_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att4_s64_dpi"
+rust_const = "OAA_COLOR_FLOAT_ATT4_S64_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s1_d"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S1_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'subpassInput'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s1_p"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S1_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'subpassInput'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s1_i"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S1_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'subpassInput'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s1_dpi"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S1_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'subpassInput'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s2_d"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S2_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s2_p"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S2_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s2_i"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S2_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s2_dpi"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S2_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s4_d"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S4_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s4_p"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S4_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s4_i"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S4_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s4_dpi"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S4_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s8_d"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S8_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s8_p"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S8_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s8_i"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S8_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s8_dpi"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S8_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s16_d"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S16_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s16_p"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S16_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s16_i"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S16_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s16_dpi"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S16_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s32_d"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S32_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s32_p"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S32_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s32_i"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S32_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s32_dpi"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S32_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s64_d"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S64_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s64_p"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S64_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s64_i"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S64_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_float_att8_s64_dpi"
+rust_const = "OAA_COLOR_FLOAT_ATT8_S64_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "color_int_att1_s1_d"
+rust_const = "OAA_COLOR_INT_ATT1_S1_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'usubpassInput'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s1_p"
+rust_const = "OAA_COLOR_INT_ATT1_S1_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'usubpassInput'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s1_i"
+rust_const = "OAA_COLOR_INT_ATT1_S1_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'usubpassInput'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s1_dpi"
+rust_const = "OAA_COLOR_INT_ATT1_S1_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'usubpassInput'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s2_d"
+rust_const = "OAA_COLOR_INT_ATT1_S2_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s2_p"
+rust_const = "OAA_COLOR_INT_ATT1_S2_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s2_i"
+rust_const = "OAA_COLOR_INT_ATT1_S2_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s2_dpi"
+rust_const = "OAA_COLOR_INT_ATT1_S2_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s4_d"
+rust_const = "OAA_COLOR_INT_ATT1_S4_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s4_p"
+rust_const = "OAA_COLOR_INT_ATT1_S4_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s4_i"
+rust_const = "OAA_COLOR_INT_ATT1_S4_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s4_dpi"
+rust_const = "OAA_COLOR_INT_ATT1_S4_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s8_d"
+rust_const = "OAA_COLOR_INT_ATT1_S8_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s8_p"
+rust_const = "OAA_COLOR_INT_ATT1_S8_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s8_i"
+rust_const = "OAA_COLOR_INT_ATT1_S8_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s8_dpi"
+rust_const = "OAA_COLOR_INT_ATT1_S8_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s16_d"
+rust_const = "OAA_COLOR_INT_ATT1_S16_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s16_p"
+rust_const = "OAA_COLOR_INT_ATT1_S16_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s16_i"
+rust_const = "OAA_COLOR_INT_ATT1_S16_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s16_dpi"
+rust_const = "OAA_COLOR_INT_ATT1_S16_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s32_d"
+rust_const = "OAA_COLOR_INT_ATT1_S32_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s32_p"
+rust_const = "OAA_COLOR_INT_ATT1_S32_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s32_i"
+rust_const = "OAA_COLOR_INT_ATT1_S32_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s32_dpi"
+rust_const = "OAA_COLOR_INT_ATT1_S32_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s64_d"
+rust_const = "OAA_COLOR_INT_ATT1_S64_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s64_p"
+rust_const = "OAA_COLOR_INT_ATT1_S64_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s64_i"
+rust_const = "OAA_COLOR_INT_ATT1_S64_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att1_s64_dpi"
+rust_const = "OAA_COLOR_INT_ATT1_S64_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_1_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s1_d"
+rust_const = "OAA_COLOR_INT_ATT4_S1_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'usubpassInput'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s1_p"
+rust_const = "OAA_COLOR_INT_ATT4_S1_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'usubpassInput'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s1_i"
+rust_const = "OAA_COLOR_INT_ATT4_S1_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'usubpassInput'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s1_dpi"
+rust_const = "OAA_COLOR_INT_ATT4_S1_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'usubpassInput'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s2_d"
+rust_const = "OAA_COLOR_INT_ATT4_S2_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s2_p"
+rust_const = "OAA_COLOR_INT_ATT4_S2_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s2_i"
+rust_const = "OAA_COLOR_INT_ATT4_S2_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s2_dpi"
+rust_const = "OAA_COLOR_INT_ATT4_S2_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s4_d"
+rust_const = "OAA_COLOR_INT_ATT4_S4_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s4_p"
+rust_const = "OAA_COLOR_INT_ATT4_S4_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s4_i"
+rust_const = "OAA_COLOR_INT_ATT4_S4_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s4_dpi"
+rust_const = "OAA_COLOR_INT_ATT4_S4_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s8_d"
+rust_const = "OAA_COLOR_INT_ATT4_S8_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s8_p"
+rust_const = "OAA_COLOR_INT_ATT4_S8_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s8_i"
+rust_const = "OAA_COLOR_INT_ATT4_S8_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s8_dpi"
+rust_const = "OAA_COLOR_INT_ATT4_S8_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s16_d"
+rust_const = "OAA_COLOR_INT_ATT4_S16_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s16_p"
+rust_const = "OAA_COLOR_INT_ATT4_S16_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s16_i"
+rust_const = "OAA_COLOR_INT_ATT4_S16_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s16_dpi"
+rust_const = "OAA_COLOR_INT_ATT4_S16_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s32_d"
+rust_const = "OAA_COLOR_INT_ATT4_S32_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s32_p"
+rust_const = "OAA_COLOR_INT_ATT4_S32_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s32_i"
+rust_const = "OAA_COLOR_INT_ATT4_S32_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s32_dpi"
+rust_const = "OAA_COLOR_INT_ATT4_S32_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s64_d"
+rust_const = "OAA_COLOR_INT_ATT4_S64_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s64_p"
+rust_const = "OAA_COLOR_INT_ATT4_S64_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s64_i"
+rust_const = "OAA_COLOR_INT_ATT4_S64_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att4_s64_dpi"
+rust_const = "OAA_COLOR_INT_ATT4_S64_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_4_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_4_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'4'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s1_d"
+rust_const = "OAA_COLOR_INT_ATT8_S1_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'usubpassInput'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s1_p"
+rust_const = "OAA_COLOR_INT_ATT8_S1_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'usubpassInput'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s1_i"
+rust_const = "OAA_COLOR_INT_ATT8_S1_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'usubpassInput'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s1_dpi"
+rust_const = "OAA_COLOR_INT_ATT8_S1_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'usubpassInput'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s2_d"
+rust_const = "OAA_COLOR_INT_ATT8_S2_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s2_p"
+rust_const = "OAA_COLOR_INT_ATT8_S2_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s2_i"
+rust_const = "OAA_COLOR_INT_ATT8_S2_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s2_dpi"
+rust_const = "OAA_COLOR_INT_ATT8_S2_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s4_d"
+rust_const = "OAA_COLOR_INT_ATT8_S4_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s4_p"
+rust_const = "OAA_COLOR_INT_ATT8_S4_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s4_i"
+rust_const = "OAA_COLOR_INT_ATT8_S4_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s4_dpi"
+rust_const = "OAA_COLOR_INT_ATT8_S4_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s8_d"
+rust_const = "OAA_COLOR_INT_ATT8_S8_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s8_p"
+rust_const = "OAA_COLOR_INT_ATT8_S8_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s8_i"
+rust_const = "OAA_COLOR_INT_ATT8_S8_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s8_dpi"
+rust_const = "OAA_COLOR_INT_ATT8_S8_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s16_d"
+rust_const = "OAA_COLOR_INT_ATT8_S16_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s16_p"
+rust_const = "OAA_COLOR_INT_ATT8_S16_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s16_i"
+rust_const = "OAA_COLOR_INT_ATT8_S16_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s16_dpi"
+rust_const = "OAA_COLOR_INT_ATT8_S16_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s32_d"
+rust_const = "OAA_COLOR_INT_ATT8_S32_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s32_p"
+rust_const = "OAA_COLOR_INT_ATT8_S32_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s32_i"
+rust_const = "OAA_COLOR_INT_ATT8_S32_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s32_dpi"
+rust_const = "OAA_COLOR_INT_ATT8_S32_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s64_d"
+rust_const = "OAA_COLOR_INT_ATT8_S64_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s64_p"
+rust_const = "OAA_COLOR_INT_ATT8_S64_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s64_i"
+rust_const = "OAA_COLOR_INT_ATT8_S64_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "color_int_att8_s64_dpi"
+rust_const = "OAA_COLOR_INT_ATT8_S64_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/color_frag_8_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_8_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'8'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s1_d"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S1_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'subpassInput'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s1_d"
+rust_const = "OAA_STENCIL_INT_ATT1_S1_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'usubpassInput'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s1_p"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S1_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'subpassInput'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s1_p"
+rust_const = "OAA_STENCIL_INT_ATT1_S1_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'usubpassInput'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s1_i"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S1_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'subpassInput'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s1_i"
+rust_const = "OAA_STENCIL_INT_ATT1_S1_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'usubpassInput'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s1_dpi"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S1_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'subpassInput'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s1_dpi"
+rust_const = "OAA_STENCIL_INT_ATT1_S1_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_0.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_0.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'1'"
+SUBPASS_INPUT = "'usubpassInput'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s2_d"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S2_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s2_d"
+rust_const = "OAA_STENCIL_INT_ATT1_S2_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s2_p"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S2_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s2_p"
+rust_const = "OAA_STENCIL_INT_ATT1_S2_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s2_i"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S2_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s2_i"
+rust_const = "OAA_STENCIL_INT_ATT1_S2_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s2_dpi"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S2_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s2_dpi"
+rust_const = "OAA_STENCIL_INT_ATT1_S2_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'2'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s4_d"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S4_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s4_d"
+rust_const = "OAA_STENCIL_INT_ATT1_S4_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s4_p"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S4_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s4_p"
+rust_const = "OAA_STENCIL_INT_ATT1_S4_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s4_i"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S4_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s4_i"
+rust_const = "OAA_STENCIL_INT_ATT1_S4_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s4_dpi"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S4_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s4_dpi"
+rust_const = "OAA_STENCIL_INT_ATT1_S4_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'4'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s8_d"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S8_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s8_d"
+rust_const = "OAA_STENCIL_INT_ATT1_S8_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s8_p"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S8_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s8_p"
+rust_const = "OAA_STENCIL_INT_ATT1_S8_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s8_i"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S8_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s8_i"
+rust_const = "OAA_STENCIL_INT_ATT1_S8_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s8_dpi"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S8_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s8_dpi"
+rust_const = "OAA_STENCIL_INT_ATT1_S8_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'8'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s16_d"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S16_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s16_d"
+rust_const = "OAA_STENCIL_INT_ATT1_S16_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s16_p"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S16_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s16_p"
+rust_const = "OAA_STENCIL_INT_ATT1_S16_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s16_i"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S16_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s16_i"
+rust_const = "OAA_STENCIL_INT_ATT1_S16_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s16_dpi"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S16_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s16_dpi"
+rust_const = "OAA_STENCIL_INT_ATT1_S16_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'16'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s32_d"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S32_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s32_d"
+rust_const = "OAA_STENCIL_INT_ATT1_S32_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s32_p"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S32_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s32_p"
+rust_const = "OAA_STENCIL_INT_ATT1_S32_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s32_i"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S32_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s32_i"
+rust_const = "OAA_STENCIL_INT_ATT1_S32_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s32_dpi"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S32_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s32_dpi"
+rust_const = "OAA_STENCIL_INT_ATT1_S32_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'32'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s64_d"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S64_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s64_d"
+rust_const = "OAA_STENCIL_INT_ATT1_S64_D"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s64_p"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S64_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s64_p"
+rust_const = "OAA_STENCIL_INT_ATT1_S64_P"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'1'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s64_i"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S64_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s64_i"
+rust_const = "OAA_STENCIL_INT_ATT1_S64_I"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'1'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'1'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"
+
+[[case]]
+name = "depth_float_att1_s64_dpi"
+rust_const = "OAA_DEPTH_FLOAT_ATT1_S64_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/depth_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'subpassInputMS'"
+SCALAR_NAME = "'float'"
+VEC_NAME = "'vec'"
+
+[[case]]
+name = "stencil_int_att1_s64_dpi"
+rust_const = "OAA_STENCIL_INT_ATT1_S64_DPI"
+rust_type = "OrderAccessProgram"
+programs = [
+    { name = "vert1", template = "rasterization/order_attachment_access/ds.vert", stage = "vert" },
+    { name = "vert2", template = "rasterization/order_attachment_access/simple.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/order_attachment_access/stencil_1.frag", stage = "frag" },
+    { name = "frag_resolve", template = "rasterization/order_attachment_access/color_resolve_1_1.frag", stage = "frag" },
+]
+[case.derived]
+PRIMITIVE_NUM = "'6'"
+INSTANCE_NUM = "'6'"
+DRAW_NUM = "'6'"
+ATT_NUM = "'1'"
+SAMPLE_NUM = "'64'"
+SUBPASS_INPUT = "'usubpassInputMS'"
+SCALAR_NAME = "'int'"
+VEC_NAME = "'uvec'"

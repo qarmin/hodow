@@ -1,0 +1,1198 @@
+#version 450 core
+#extension GL_KHR_shader_subgroup_ballot : enable
+#extension GL_KHR_shader_subgroup_vote : enable
+#extension GL_NV_shader_subgroup_partitioned : enable
+#extension GL_EXT_subgroup_uniform_control_flow : enable
+#extension GL_EXT_maximal_reconvergence : require
+layout(local_size_x_id = 0, local_size_y_id = 1, local_size_z = 1) in;
+layout(set=0, binding=2) coherent buffer OutputC { uint loc[]; } outputC;
+layout(set=0, binding=1) coherent buffer OutputB { uvec4 b[]; } outputB;
+layout(set=0, binding=0) coherent buffer InputA  { uint  a[]; } inputA;
+layout(push_constant) uniform PC {
+   // set to the real stride when writing out ballots, or zero when just counting
+   int  invocationStride;
+   // wildcard fields, for an example the dimensions of rendered area in the case of graphics shaders
+   int  width;
+   int  height;
+   uint primitiveStride;
+   uint subgroupStride;
+   uint enableInvocationIndex;
+};
+int outLoc = 0;
+bool testBit(uvec4 mask, uint bit) { return ((mask[bit / 32] >> (bit % 32)) & 1) != 0; }
+uint elect() { return int(subgroupElect()) + 1; }
+layout(constant_id = 10) const uint cmpIndex0 = 0u;
+layout(constant_id = 11) const uint cmpIndex1 = 0u;
+layout(constant_id = 12) const uint cmpIndex2 = 0u;
+layout(constant_id = 13) const uint cmpIndex3 = 0u;
+layout(constant_id = 14) const uint cmpIndex4 = 0u;
+layout(constant_id = 15) const uint cmpIndex5 = 0u;
+layout(constant_id = 16) const uint cmpIndex6 = 0u;
+layout(constant_id = 17) const uint cmpIndex7 = 0u;
+layout(constant_id = 18) const uint cmpIndex8 = 0u;
+layout(constant_id = 19) const uint cmpIndex9 = 0u;
+layout(constant_id = 20) const uint cmpIndex10 = 0u;
+layout(constant_id = 21) const uint cmpIndex11 = 0u;
+layout(constant_id = 22) const uint cmpIndex12 = 0u;
+layout(constant_id = 23) const uint cmpIndex13 = 0u;
+layout(constant_id = 24) const uint cmpIndex14 = 0u;
+layout(constant_id = 25) const uint cmpIndex15 = 0u;
+layout(constant_id = 26) const uint cmpIndex16 = 0u;
+layout(constant_id = 27) const uint cmpIndex17 = 0u;
+layout(constant_id = 28) const uint cmpIndex18 = 0u;
+layout(constant_id = 29) const uint cmpIndex19 = 0u;
+layout(constant_id = 30) const uint cmpIndex20 = 0u;
+layout(constant_id = 31) const uint cmpIndex21 = 0u;
+layout(constant_id = 32) const uint cmpIndex22 = 0u;
+layout(constant_id = 33) const uint cmpIndex23 = 0u;
+layout(constant_id = 34) const uint cmpIndex24 = 0u;
+layout(constant_id = 35) const uint cmpIndex25 = 0u;
+layout(constant_id = 36) const uint cmpIndex26 = 0u;
+layout(constant_id = 37) const uint cmpIndex27 = 0u;
+layout(constant_id = 38) const uint cmpIndex28 = 0u;
+                void func0(int loopIdx0) {
+                    if (gl_SubgroupInvocationID == loopIdx0) {
+                        {
+                            int loopIdx1 = 0;
+                            do {
+                                outputC.loc[gl_LocalInvocationIndex]++;
+                                outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10006;
+                                if (testBit(uvec4(0x1535e074, 0x6941734e, 0x6536638c, 0x64c4f9d8), gl_SubgroupInvocationID)) {
+                                } else {
+                                }
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                {
+                                    int loopIdx2 = 0;
+                                    do {
+                                        loopIdx2++;
+                                        outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                        outputC.loc[gl_LocalInvocationIndex]++;
+                                        outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x1000d;
+                                    } while (loopIdx2 < inputA.a[1]);
+                                }
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                if (subgroupElect()) {
+                                    break;
+                                }
+                                switch (inputA.a[1]) {
+                                    case 2:
+                                    {
+                                        outputC.loc[gl_LocalInvocationIndex]++;
+                                        outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10015;
+                                        break;
+                                    }
+                                    case 1:
+                                    {
+                                        break;
+                                    }
+                                    case 3:
+                                    {
+                                        outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                        break;
+                                    }
+                                }
+                                switch (loopIdx1) {
+                                    case 1: {
+                                        break;
+                                    }
+                                    case 2: {
+                                        outputC.loc[gl_LocalInvocationIndex]++;
+                                        outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10021;
+                                        break;
+                                    }
+                                    default: {
+                                        break;
+                                    }
+                                }
+                                loopIdx1++;
+                            } while (true);
+                        }
+                        if (subgroupElect()) {
+                            if (inputA.a[2] == 2) {
+                            } else {
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                outputC.loc[gl_LocalInvocationIndex]++;
+                                outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x1002b;
+                            }
+                            {
+                                int loopIdx1 = 0;
+                                do {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                    if (subgroupElect()) {
+                                        outputC.loc[gl_LocalInvocationIndex]++;
+                                        outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10030;
+                                        break;
+                                    }
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                    loopIdx1++;
+                                } while (true);
+                            }
+                        }
+                    } else {
+                        outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                        switch (inputA.a[3]) {
+                            case 4:
+                            {
+                                if (testBit(uvec4(0x1535e074, 0x6941734e, 0x6536638c, 0x64c4f9d8), gl_SubgroupInvocationID)) {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                } else {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                    outputC.loc[gl_LocalInvocationIndex]++;
+                                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x1003e;
+                                }
+                                break;
+                            }
+                            case 3:
+                            {
+                                outputC.loc[gl_LocalInvocationIndex]++;
+                                outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10042;
+                                {
+                                    int loopIdx1 = 0;
+                                    do {
+                                        loopIdx1++;
+                                        outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                    } while (loopIdx1 < inputA.a[1]);
+                                }
+                                outputC.loc[gl_LocalInvocationIndex]++;
+                                outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10046;
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                switch (gl_SubgroupInvocationID & 3) {
+                                    case 0:
+                                    {
+                                        break;
+                                    }
+                                    case 1:
+                                    {
+                                        break;
+                                    }
+                                    case 2:
+                                    {
+                                        break;
+                                    }
+                                    case 3:
+                                    {
+                                        break;
+                                    }
+                                }
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                break;
+                            }
+                            case 5:
+                            {
+                                break;
+                            }
+                        }
+                        outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                    }
+                    outputC.loc[gl_LocalInvocationIndex]++;
+                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10059;
+                    if (gl_LocalInvocationIndex >= inputA.a[cmpIndex0]) {
+                        if (testBit(uvec4(0x1535e074, 0x6941734e, 0x6536638c, 0x64c4f9d8), gl_SubgroupInvocationID)) {
+                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            switch (inputA.a[2]) {
+                                case 3:
+                                {
+                                    break;
+                                }
+                                case 2:
+                                {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                    outputC.loc[gl_LocalInvocationIndex]++;
+                                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10062;
+                                    break;
+                                }
+                                case 4:
+                                {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                    break;
+                                }
+                            }
+                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                        }
+                        for (int loopIdx1 = 0;;loopIdx1++,                        outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true)) {
+                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            outputC.loc[gl_LocalInvocationIndex]++;
+                            outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x1006c;
+                            if (gl_SubgroupInvocationID == loopIdx1) {
+                                outputC.loc[gl_LocalInvocationIndex]++;
+                                outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x1006e;
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            } else {
+                            }
+                            if (subgroupElect()) {
+                                outputC.loc[gl_LocalInvocationIndex]++;
+                                outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10073;
+                                break;
+                            }
+                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            for (int loopIdx2 = 0;
+                                     loopIdx2 < inputA.a[3];
+                                     loopIdx2++) {
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            }
+                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            if (gl_SubgroupInvocationID == loopIdx1) {
+                            } else {
+                            }
+                        }
+                        outputC.loc[gl_LocalInvocationIndex]++;
+                        outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x1007f;
+                    } else {
+                        outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                        outputC.loc[gl_LocalInvocationIndex]++;
+                        outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10082;
+                        if (gl_LocalInvocationIndex >= inputA.a[cmpIndex1]) {
+                            if (gl_LocalInvocationIndex >= inputA.a[cmpIndex2]) {
+                            }
+                        } else {
+                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            for (int loopIdx1 = 0;
+                                     loopIdx1 < inputA.a[3];
+                                     loopIdx1++) {
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            }
+                            outputC.loc[gl_LocalInvocationIndex]++;
+                            outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x1008b;
+                        }
+                        outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                        switch (gl_SubgroupInvocationID & 3) {
+                            case 0:
+                            {
+                                outputC.loc[gl_LocalInvocationIndex]++;
+                                outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10090;
+                                if (testBit(uvec4(0x99bcb684, 0x15f196f2, 0xf09e2da9, 0x911c1391), gl_SubgroupInvocationID)) {
+                                    outputC.loc[gl_LocalInvocationIndex]++;
+                                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10092;
+                                } else {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                }
+                                break;
+                            }
+                            case 1:
+                            {
+                                outputC.loc[gl_LocalInvocationIndex]++;
+                                outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10098;
+                                for (int loopIdx1 = 0;
+                                         loopIdx1 < inputA.a[1];
+                                         loopIdx1++) {
+                                }
+                                break;
+                            }
+                            case 2:
+                            {
+                                {
+                                    int loopIdx1 = 0;
+                                    do {
+                                        loopIdx1++;
+                                    } while (loopIdx1 < inputA.a[2]);
+                                }
+                                break;
+                            }
+                            case 3:
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+
+void main()
+[[maximally_reconverges]]
+{
+
+    switch (gl_SubgroupInvocationID & 3) {
+        case 0:
+        {
+            for (int loopIdx0 = 0;;loopIdx0++,            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true)) {
+                func0(loopIdx0);
+                switch (loopIdx0) {
+                    case 1: {
+                        outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                        if (testBit(uvec4(0x99bcb684, 0x15f196f2, 0xf09e2da9, 0x911c1391), gl_SubgroupInvocationID)) {
+                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            if (inputA.a[1] == 1) {
+                                for (int loopIdx1 = 0;;loopIdx1++,                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true)) {
+                                    if (subgroupElect()) {
+                                        outputC.loc[gl_LocalInvocationIndex]++;
+                                        outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x100ad;
+                                        break;
+                                    }
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                }
+                                outputC.loc[gl_LocalInvocationIndex]++;
+                                outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x100b2;
+                            }
+                            if (subgroupElect()) {
+                                if (inputA.a[0] == 0) {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                }
+                                break;
+                            }
+                        }
+                        outputC.loc[gl_LocalInvocationIndex]++;
+                        outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x100bb;
+                        break;
+                    }
+                    case 2: {
+                        outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                        {
+                            int loopIdx1 = 0;
+                            do {
+                                loopIdx1++;
+                                {
+                                    int loopIdx2 = 0;
+                                    do {
+                                        loopIdx2++;
+                                        outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                        if (inputA.a[1] == 1) {
+                                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                            outputC.loc[gl_LocalInvocationIndex]++;
+                                            outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x100c4;
+                                        } else {
+                                            outputC.loc[gl_LocalInvocationIndex]++;
+                                            outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x100c6;
+                                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                        }
+                                        outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                        if (subgroupElect()) {
+                                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                        }
+                                        outputC.loc[gl_LocalInvocationIndex]++;
+                                        outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x100cd;
+                                    } while (loopIdx2 < inputA.a[1]);
+                                }
+                                outputC.loc[gl_LocalInvocationIndex]++;
+                                outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x100cf;
+                                for (int loopIdx2 = 0;
+                                         loopIdx2 < gl_SubgroupInvocationID + 1;
+                                         loopIdx2++) {
+                                    if (subgroupElect()) {
+                                        outputC.loc[gl_LocalInvocationIndex]++;
+                                        outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x100d2;
+                                    }
+                                    break;
+                                }
+                            } while (loopIdx1 < inputA.a[2]);
+                        }
+                        break;
+                    }
+                    default: {
+                        outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                        break;
+                    }
+                }
+                if (subgroupElect()) {
+                    break;
+                }
+                {
+                    int loopIdx1 = 0;
+                    do {
+                        if (gl_LocalInvocationIndex >= inputA.a[cmpIndex3]) {
+                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            if (inputA.a[1] == 1) {
+                                if (testBit(uvec4(0xbd03c1a2, 0x78fb767, 0x28b6d3a5, 0xfe4ae5e3), gl_SubgroupInvocationID)) {
+                                    outputC.loc[gl_LocalInvocationIndex]++;
+                                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x100e4;
+                                }
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            }
+                            outputC.loc[gl_LocalInvocationIndex]++;
+                            outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x100e8;
+                        }
+                        {
+                            int loopIdx2 = 0;
+                            do {
+                                loopIdx2++;
+                                if (gl_SubgroupInvocationID == loopIdx2) {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                    outputC.loc[gl_LocalInvocationIndex]++;
+                                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x100ed;
+                                    if (testBit(uvec4(0xf155b877, 0x52f86d5b, 0xc62ce50e, 0x58993e43), gl_SubgroupInvocationID)) {
+                                    }
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                    if (subgroupElect()) {
+                                        outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                    }
+                                }
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                for (int loopIdx3 = 0;
+                                         loopIdx3 < gl_SubgroupInvocationID + 1;
+                                         loopIdx3++) {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                    outputC.loc[gl_LocalInvocationIndex]++;
+                                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x100f8;
+                                    break;
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                }
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            } while (loopIdx2 < inputA.a[1]);
+                        }
+                        if (subgroupElect()) {
+                            outputC.loc[gl_LocalInvocationIndex]++;
+                            outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x100ff;
+                            break;
+                        }
+                        break;
+                        if (testBit(uvec4(0x4918bb2b, 0xdca86b6e, 0x8a9d6fd4, 0xc759fe3c), gl_SubgroupInvocationID)) {
+                            break;
+                        } else {
+                            break;
+                        }
+                        loopIdx1++;
+                    } while (true);
+                }
+                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+            }
+            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+            break;
+        }
+        case 1:
+        {
+            if (subgroupElect()) {
+                if (testBit(uvec4(0x1535e074, 0x6941734e, 0x6536638c, 0x64c4f9d8), gl_SubgroupInvocationID)) {
+                    {
+                        int loopIdx0 = 0;
+                        do {
+                            if (subgroupElect()) {
+                                outputC.loc[gl_LocalInvocationIndex]++;
+                                outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10112;
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                if (gl_SubgroupInvocationID == loopIdx0) {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                }
+                            }
+                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            if (subgroupElect()) {
+                                break;
+                            }
+                            for (int loopIdx1 = 0;
+                                     loopIdx1 < gl_SubgroupInvocationID + 1;
+                                     loopIdx1++) {
+                                outputC.loc[gl_LocalInvocationIndex]++;
+                                outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x1011d;
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                if (inputA.a[3] == 3) {
+                                } else {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                }
+                            }
+                            if (subgroupElect()) {
+                                if (inputA.a[2] == 2) {
+                                } else {
+                                }
+                            }
+                            outputC.loc[gl_LocalInvocationIndex]++;
+                            outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10129;
+                            loopIdx0++;
+                        } while (true);
+                    }
+                    outputC.loc[gl_LocalInvocationIndex]++;
+                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x1012b;
+                }
+                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                if (gl_LocalInvocationIndex >= inputA.a[cmpIndex4]) {
+                    if (testBit(uvec4(0x4918bb2b, 0xdca86b6e, 0x8a9d6fd4, 0xc759fe3c), gl_SubgroupInvocationID)) {
+                        if (gl_LocalInvocationIndex >= inputA.a[cmpIndex5]) {
+                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            switch (inputA.a[3]) {
+                                case 4:
+                                {
+                                    break;
+                                }
+                                case 3:
+                                {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                    break;
+                                }
+                                case 5:
+                                {
+                                    break;
+                                }
+                            }
+                        } else {
+                            if (testBit(uvec4(0xf155b877, 0x52f86d5b, 0xc62ce50e, 0x58993e43), gl_SubgroupInvocationID)) {
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            }
+                            switch (gl_SubgroupInvocationID & 3) {
+                                case 0:
+                                {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                    break;
+                                }
+                                case 1:
+                                {
+                                    break;
+                                }
+                                case 2:
+                                {
+                                    break;
+                                }
+                                case 3:
+                                {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                    break;
+                                }
+                            }
+                        }
+                        if (gl_LocalInvocationIndex >= inputA.a[cmpIndex6]) {
+                            outputC.loc[gl_LocalInvocationIndex]++;
+                            outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x1014d;
+                            switch (gl_SubgroupInvocationID & 3) {
+                                case 0:
+                                {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                    outputC.loc[gl_LocalInvocationIndex]++;
+                                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10151;
+                                    break;
+                                }
+                                case 1:
+                                {
+                                    break;
+                                }
+                                case 2:
+                                {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                    break;
+                                }
+                                case 3:
+                                {
+                                    outputC.loc[gl_LocalInvocationIndex]++;
+                                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10159;
+                                    break;
+                                }
+                            }
+                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                        }
+                    } else {
+                        outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                        if (gl_LocalInvocationIndex >= inputA.a[cmpIndex7]) {
+                            if (gl_LocalInvocationIndex >= inputA.a[cmpIndex8]) {
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            }
+                            if (subgroupElect()) {
+                                outputC.loc[gl_LocalInvocationIndex]++;
+                                outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10165;
+                            }
+                        }
+                    }
+                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                    for (int loopIdx0 = 0;;loopIdx0++,                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true)) {
+                        outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                        for (int loopIdx1 = 0;
+                                 loopIdx1 < gl_SubgroupInvocationID + 1;
+                                 loopIdx1++) {
+                            if (gl_LocalInvocationIndex >= inputA.a[cmpIndex9]) {
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                outputC.loc[gl_LocalInvocationIndex]++;
+                                outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x1016f;
+                            }
+                            {
+                                int loopIdx2 = 0;
+                                do {
+                                    outputC.loc[gl_LocalInvocationIndex]++;
+                                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10172;
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                    if (subgroupElect()) {
+                                        outputC.loc[gl_LocalInvocationIndex]++;
+                                        outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10175;
+                                        break;
+                                    }
+                                    loopIdx2++;
+                                } while (true);
+                            }
+                        }
+                        outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                        if (subgroupElect()) {
+                            outputC.loc[gl_LocalInvocationIndex]++;
+                            outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x1017c;
+                            break;
+                        }
+                        outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                        outputC.loc[gl_LocalInvocationIndex]++;
+                        outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10180;
+                        if (testBit(uvec4(0xbd03c1a2, 0x78fb767, 0x28b6d3a5, 0xfe4ae5e3), gl_SubgroupInvocationID)) {
+                            for (int loopIdx1 = 0;
+                                     loopIdx1 < gl_SubgroupInvocationID + 1;
+                                     loopIdx1++) {
+                            }
+                            if (testBit(uvec4(0x1535e074, 0x6941734e, 0x6536638c, 0x64c4f9d8), gl_SubgroupInvocationID)) {
+                            } else {
+                            }
+                        } else {
+                            for (int loopIdx1 = 0;
+                                     loopIdx1 < gl_SubgroupInvocationID + 1;
+                                     loopIdx1++) {
+                            }
+                            if (testBit(uvec4(0x1535e074, 0x6941734e, 0x6536638c, 0x64c4f9d8), gl_SubgroupInvocationID)) {
+                            } else {
+                            }
+                        }
+                        outputC.loc[gl_LocalInvocationIndex]++;
+                        outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x1018e;
+                    }
+                }
+            }
+            break;
+        }
+        case 2:
+        {
+            if (inputA.a[0] == 0) {
+                if (inputA.a[1] == 1) {
+                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                    outputC.loc[gl_LocalInvocationIndex]++;
+                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10197;
+                    if (testBit(uvec4(0xbd03c1a2, 0x78fb767, 0x28b6d3a5, 0xfe4ae5e3), gl_SubgroupInvocationID)) {
+                        switch (inputA.a[0]) {
+                            case 1:
+                            {
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                break;
+                            }
+                            case 0:
+                            {
+                                if (gl_LocalInvocationIndex >= inputA.a[cmpIndex10]) {
+                                }
+                                if (gl_LocalInvocationIndex >= inputA.a[cmpIndex11]) {
+                                }
+                                break;
+                            }
+                            case 2:
+                            {
+                                for (int loopIdx0 = 0;
+                                         loopIdx0 < inputA.a[2];
+                                         loopIdx0++) {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                }
+                                break;
+                            }
+                        }
+                        if (inputA.a[3] == 3) {
+                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            if (inputA.a[1] == 1) {
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            }
+                            if (inputA.a[0] == 0) {
+                            } else {
+                            }
+                        }
+                    }
+                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                    if (gl_LocalInvocationIndex >= inputA.a[cmpIndex12]) {
+                        outputC.loc[gl_LocalInvocationIndex]++;
+                        outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x101b5;
+                        if (gl_LocalInvocationIndex >= inputA.a[cmpIndex13]) {
+                            if (testBit(uvec4(0xbd03c1a2, 0x78fb767, 0x28b6d3a5, 0xfe4ae5e3), gl_SubgroupInvocationID)) {
+                            }
+                            outputC.loc[gl_LocalInvocationIndex]++;
+                            outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x101b9;
+                            {
+                                int loopIdx0 = 0;
+                                do {
+                                    loopIdx0++;
+                                    outputC.loc[gl_LocalInvocationIndex]++;
+                                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x101bb;
+                                } while (loopIdx0 < inputA.a[3]);
+                            }
+                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                        }
+                        switch (gl_SubgroupInvocationID & 3) {
+                            case 0:
+                            {
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                break;
+                            }
+                            case 1:
+                            {
+                                if (inputA.a[0] == 0) {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                    outputC.loc[gl_LocalInvocationIndex]++;
+                                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x101c6;
+                                } else {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                }
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                break;
+                            }
+                            case 2:
+                            {
+                                {
+                                    int loopIdx0 = 0;
+                                    do {
+                                        if (subgroupElect()) {
+                                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                            break;
+                                        }
+                                        loopIdx0++;
+                                    } while (true);
+                                }
+                                break;
+                            }
+                            case 3:
+                            {
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                if (testBit(uvec4(0x4918bb2b, 0xdca86b6e, 0x8a9d6fd4, 0xc759fe3c), gl_SubgroupInvocationID)) {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                } else {
+                                    outputC.loc[gl_LocalInvocationIndex]++;
+                                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x101d9;
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                }
+                                break;
+                            }
+                        }
+                    } else {
+                        outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                        outputC.loc[gl_LocalInvocationIndex]++;
+                        outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x101e0;
+                    }
+                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                } else {
+                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                    outputC.loc[gl_LocalInvocationIndex]++;
+                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10197;
+                    if (testBit(uvec4(0xbd03c1a2, 0x78fb767, 0x28b6d3a5, 0xfe4ae5e3), gl_SubgroupInvocationID)) {
+                        switch (inputA.a[0]) {
+                            case 1:
+                            {
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                break;
+                            }
+                            case 0:
+                            {
+                                if (gl_LocalInvocationIndex >= inputA.a[cmpIndex14]) {
+                                }
+                                if (gl_LocalInvocationIndex >= inputA.a[cmpIndex15]) {
+                                }
+                                break;
+                            }
+                            case 2:
+                            {
+                                for (int loopIdx0 = 0;
+                                         loopIdx0 < inputA.a[2];
+                                         loopIdx0++) {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                }
+                                break;
+                            }
+                        }
+                        if (inputA.a[0] == 0) {
+                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            if (inputA.a[3] == 3) {
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            }
+                            if (inputA.a[3] == 3) {
+                            } else {
+                            }
+                        }
+                    }
+                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                    if (gl_LocalInvocationIndex >= inputA.a[cmpIndex16]) {
+                        outputC.loc[gl_LocalInvocationIndex]++;
+                        outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x101b5;
+                        if (gl_LocalInvocationIndex >= inputA.a[cmpIndex17]) {
+                            if (testBit(uvec4(0xbd03c1a2, 0x78fb767, 0x28b6d3a5, 0xfe4ae5e3), gl_SubgroupInvocationID)) {
+                            }
+                            outputC.loc[gl_LocalInvocationIndex]++;
+                            outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x101b9;
+                            {
+                                int loopIdx0 = 0;
+                                do {
+                                    loopIdx0++;
+                                    outputC.loc[gl_LocalInvocationIndex]++;
+                                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x101bb;
+                                } while (loopIdx0 < inputA.a[3]);
+                            }
+                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                        }
+                        switch (gl_SubgroupInvocationID & 3) {
+                            case 0:
+                            {
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                break;
+                            }
+                            case 1:
+                            {
+                                if (inputA.a[1] == 1) {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                    outputC.loc[gl_LocalInvocationIndex]++;
+                                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x101c6;
+                                } else {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                }
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                break;
+                            }
+                            case 2:
+                            {
+                                {
+                                    int loopIdx0 = 0;
+                                    do {
+                                        if (subgroupElect()) {
+                                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                            break;
+                                        }
+                                        loopIdx0++;
+                                    } while (true);
+                                }
+                                break;
+                            }
+                            case 3:
+                            {
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                if (testBit(uvec4(0x4918bb2b, 0xdca86b6e, 0x8a9d6fd4, 0xc759fe3c), gl_SubgroupInvocationID)) {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                } else {
+                                    outputC.loc[gl_LocalInvocationIndex]++;
+                                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x101d9;
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                }
+                                break;
+                            }
+                        }
+                    } else {
+                        outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                        outputC.loc[gl_LocalInvocationIndex]++;
+                        outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x101e0;
+                    }
+                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                }
+            } else {
+                if (inputA.a[3] == 3) {
+                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                    outputC.loc[gl_LocalInvocationIndex]++;
+                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10197;
+                    if (testBit(uvec4(0xbd03c1a2, 0x78fb767, 0x28b6d3a5, 0xfe4ae5e3), gl_SubgroupInvocationID)) {
+                        switch (inputA.a[0]) {
+                            case 1:
+                            {
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                break;
+                            }
+                            case 0:
+                            {
+                                if (gl_LocalInvocationIndex >= inputA.a[cmpIndex18]) {
+                                }
+                                if (gl_LocalInvocationIndex >= inputA.a[cmpIndex19]) {
+                                }
+                                break;
+                            }
+                            case 2:
+                            {
+                                for (int loopIdx0 = 0;
+                                         loopIdx0 < inputA.a[2];
+                                         loopIdx0++) {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                }
+                                break;
+                            }
+                        }
+                        if (inputA.a[1] == 1) {
+                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            if (inputA.a[3] == 3) {
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            }
+                            if (inputA.a[2] == 2) {
+                            } else {
+                            }
+                        }
+                    }
+                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                    if (gl_LocalInvocationIndex >= inputA.a[cmpIndex20]) {
+                        outputC.loc[gl_LocalInvocationIndex]++;
+                        outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x101b5;
+                        if (gl_LocalInvocationIndex >= inputA.a[cmpIndex21]) {
+                            if (testBit(uvec4(0xbd03c1a2, 0x78fb767, 0x28b6d3a5, 0xfe4ae5e3), gl_SubgroupInvocationID)) {
+                            }
+                            outputC.loc[gl_LocalInvocationIndex]++;
+                            outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x101b9;
+                            {
+                                int loopIdx0 = 0;
+                                do {
+                                    loopIdx0++;
+                                    outputC.loc[gl_LocalInvocationIndex]++;
+                                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x101bb;
+                                } while (loopIdx0 < inputA.a[3]);
+                            }
+                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                        }
+                        switch (gl_SubgroupInvocationID & 3) {
+                            case 0:
+                            {
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                break;
+                            }
+                            case 1:
+                            {
+                                if (inputA.a[2] == 2) {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                    outputC.loc[gl_LocalInvocationIndex]++;
+                                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x101c6;
+                                } else {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                }
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                break;
+                            }
+                            case 2:
+                            {
+                                {
+                                    int loopIdx0 = 0;
+                                    do {
+                                        if (subgroupElect()) {
+                                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                            break;
+                                        }
+                                        loopIdx0++;
+                                    } while (true);
+                                }
+                                break;
+                            }
+                            case 3:
+                            {
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                if (testBit(uvec4(0x4918bb2b, 0xdca86b6e, 0x8a9d6fd4, 0xc759fe3c), gl_SubgroupInvocationID)) {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                } else {
+                                    outputC.loc[gl_LocalInvocationIndex]++;
+                                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x101d9;
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                }
+                                break;
+                            }
+                        }
+                    } else {
+                        outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                        outputC.loc[gl_LocalInvocationIndex]++;
+                        outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x101e0;
+                    }
+                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                } else {
+                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                    outputC.loc[gl_LocalInvocationIndex]++;
+                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10197;
+                    if (testBit(uvec4(0xbd03c1a2, 0x78fb767, 0x28b6d3a5, 0xfe4ae5e3), gl_SubgroupInvocationID)) {
+                        switch (inputA.a[0]) {
+                            case 1:
+                            {
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                break;
+                            }
+                            case 0:
+                            {
+                                if (gl_LocalInvocationIndex >= inputA.a[cmpIndex22]) {
+                                }
+                                if (gl_LocalInvocationIndex >= inputA.a[cmpIndex23]) {
+                                }
+                                break;
+                            }
+                            case 2:
+                            {
+                                for (int loopIdx0 = 0;
+                                         loopIdx0 < inputA.a[2];
+                                         loopIdx0++) {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                }
+                                break;
+                            }
+                        }
+                        if (inputA.a[3] == 3) {
+                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            if (inputA.a[3] == 3) {
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            }
+                            if (inputA.a[2] == 2) {
+                            } else {
+                            }
+                        }
+                    }
+                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                    if (gl_LocalInvocationIndex >= inputA.a[cmpIndex24]) {
+                        outputC.loc[gl_LocalInvocationIndex]++;
+                        outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x101b5;
+                        if (gl_LocalInvocationIndex >= inputA.a[cmpIndex25]) {
+                            if (testBit(uvec4(0xbd03c1a2, 0x78fb767, 0x28b6d3a5, 0xfe4ae5e3), gl_SubgroupInvocationID)) {
+                            }
+                            outputC.loc[gl_LocalInvocationIndex]++;
+                            outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x101b9;
+                            {
+                                int loopIdx0 = 0;
+                                do {
+                                    loopIdx0++;
+                                    outputC.loc[gl_LocalInvocationIndex]++;
+                                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x101bb;
+                                } while (loopIdx0 < inputA.a[3]);
+                            }
+                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                        }
+                        switch (gl_SubgroupInvocationID & 3) {
+                            case 0:
+                            {
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                break;
+                            }
+                            case 1:
+                            {
+                                if (inputA.a[0] == 0) {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                    outputC.loc[gl_LocalInvocationIndex]++;
+                                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x101c6;
+                                } else {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                }
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                break;
+                            }
+                            case 2:
+                            {
+                                {
+                                    int loopIdx0 = 0;
+                                    do {
+                                        if (subgroupElect()) {
+                                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                            break;
+                                        }
+                                        loopIdx0++;
+                                    } while (true);
+                                }
+                                break;
+                            }
+                            case 3:
+                            {
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                if (testBit(uvec4(0x4918bb2b, 0xdca86b6e, 0x8a9d6fd4, 0xc759fe3c), gl_SubgroupInvocationID)) {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                } else {
+                                    outputC.loc[gl_LocalInvocationIndex]++;
+                                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x101d9;
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                }
+                                break;
+                            }
+                        }
+                    } else {
+                        outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                        outputC.loc[gl_LocalInvocationIndex]++;
+                        outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x101e0;
+                    }
+                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                }
+            }
+            break;
+        }
+        case 3:
+        {
+            if (subgroupElect()) {
+                if (gl_LocalInvocationIndex >= inputA.a[cmpIndex26]) {
+                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                    if (inputA.a[3] == 3) {
+                        if (gl_LocalInvocationIndex >= inputA.a[cmpIndex27]) {
+                            for (int loopIdx0 = 0;
+                                     loopIdx0 < inputA.a[2];
+                                     loopIdx0++) {
+                            }
+                            outputC.loc[gl_LocalInvocationIndex]++;
+                            outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x102da;
+                        }
+                    }
+                }
+                if (testBit(uvec4(0xf155b877, 0x52f86d5b, 0xc62ce50e, 0x58993e43), gl_SubgroupInvocationID)) {
+                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                    if (testBit(uvec4(0xf155b877, 0x52f86d5b, 0xc62ce50e, 0x58993e43), gl_SubgroupInvocationID)) {
+                        if (gl_LocalInvocationIndex >= inputA.a[cmpIndex28]) {
+                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            if (inputA.a[2] == 2) {
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                outputC.loc[gl_LocalInvocationIndex]++;
+                                outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x102e5;
+                            }
+                        }
+                    }
+                    outputC.loc[gl_LocalInvocationIndex]++;
+                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x102e9;
+                    {
+                        int loopIdx0 = 0;
+                        do {
+                            outputC.loc[gl_LocalInvocationIndex]++;
+                            outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x102eb;
+                            if (inputA.a[1] == 1) {
+                                if (gl_SubgroupInvocationID == loopIdx0) {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                }
+                                outputC.loc[gl_LocalInvocationIndex]++;
+                                outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x102f0;
+                                if (inputA.a[1] == 1) {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                    if (inputA.a[0] == 12345) {
+                                        while (true) {
+                                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                        }
+                                    }
+                                }
+                            } else {
+                                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                outputC.loc[gl_LocalInvocationIndex]++;
+                                outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x102f7;
+                                {
+                                    int loopIdx1 = 0;
+                                    do {
+                                        outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                        if (subgroupElect()) {
+                                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                            if (testBit(uvec4(0x4918bb2b, 0xdca86b6e, 0x8a9d6fd4, 0xc759fe3c), gl_SubgroupInvocationID)) {
+                                                break;
+                                            } else {
+                                                break;
+                                            }
+                                        }
+                                        loopIdx1++;
+                                    } while (true);
+                                }
+                                if (subgroupElect()) {
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                    outputC.loc[gl_LocalInvocationIndex]++;
+                                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10305;
+                                }
+                            }
+                            if (subgroupElect()) {
+                                if (testBit(uvec4(0x4918bb2b, 0xdca86b6e, 0x8a9d6fd4, 0xc759fe3c), gl_SubgroupInvocationID)) {
+                                    break;
+                                } else {
+                                    break;
+                                }
+                            }
+                            break;
+                            switch (loopIdx0) {
+                                case 1: {
+                                    break;
+                                }
+                                case 2: {
+                                    if (subgroupElect()) {
+                                    }
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                    break;
+                                }
+                                default: {
+                                    for (int loopIdx1 = 0;
+                                             loopIdx1 < gl_SubgroupInvocationID + 1;
+                                             loopIdx1++) {
+                                        outputC.loc[gl_LocalInvocationIndex]++;
+                                        outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x1031a;
+                                    }
+                                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                                    break;
+                                }
+                            }
+                            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex] = subgroupBallot(true);
+                            loopIdx0++;
+                        } while (true);
+                    }
+                }
+            }
+            break;
+        }
+    }
+
+
+
+}

@@ -1,0 +1,51 @@
+# Shader manifest for dEQP-VK.descriptor_indexing.misc_*
+#
+# `CommonNonUniformDescriptorIndexTestCase::initPrograms`: one compute shader per (array size, coordinate); the coordinate
+# string is `vec2(c,c)` with `c` taken from the x component for both, as upstream builds it. `MiscVariableCountTestCase`
+# has one vertex and one fragment shader.
+
+upstream_source = "external/vulkancts/modules/vulkan/descriptor_indexing/vktDescriptorIndexingMiscTests.cpp"
+rust_module = "descriptor_indexing/misc_tests"
+
+[[case]]
+name = "nonuniform_8_at_0"
+rust_const = "NON_UNIFORM_8_AT_0"
+rust_type = "NonUniformPrograms"
+programs = [{ name = "comp", template = "descriptor_indexing/nonuniform.comp", stage = "comp" }]
+params = { array_size = { type = "u32", value = 8 }, coord = { type = "str", value = "0.0" } }
+
+[[case]]
+name = "nonuniform_8_at_mid"
+rust_const = "NON_UNIFORM_8_AT_MID"
+rust_type = "NonUniformPrograms"
+programs = [{ name = "comp", template = "descriptor_indexing/nonuniform.comp", stage = "comp" }]
+params = { array_size = { type = "u32", value = 8 }, coord = { type = "str", value = "0.5" } }
+
+[[case]]
+name = "nonuniform_64_at_0"
+rust_const = "NON_UNIFORM_64_AT_0"
+rust_type = "NonUniformPrograms"
+programs = [{ name = "comp", template = "descriptor_indexing/nonuniform.comp", stage = "comp" }]
+params = { array_size = { type = "u32", value = 64 }, coord = { type = "str", value = "0.0" } }
+
+[[case]]
+name = "nonuniform_64_at_mid"
+rust_const = "NON_UNIFORM_64_AT_MID"
+rust_type = "NonUniformPrograms"
+programs = [{ name = "comp", template = "descriptor_indexing/nonuniform.comp", stage = "comp" }]
+params = { array_size = { type = "u32", value = 64 }, coord = { type = "str", value = "0.5" } }
+
+[[case]]
+name = "variable_count"
+rust_const = "VARIABLE_COUNT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "descriptor_indexing/variable_count.vert", stage = "vert" },
+    { name = "frag", template = "descriptor_indexing/variable_count.frag", stage = "frag" },
+]
+
+[[case]]
+name = "non_uniform_atomics"
+rust_const = "NON_UNIFORM_ATOMICS"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "descriptor_indexing/non_uniform_atomics.comp", stage = "comp" }]

@@ -1,0 +1,25 @@
+# Shader manifest for dEQP-VK.pipeline.*.depth.depth_only.*
+#
+# `DepthOnlyCase::initPrograms`: a quad from (0,0) to (1,1) scaled and offset by push constants with its depth overwritten (plus the view
+# index with `add_view_index`), and a blue fragment shader.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineDepthTests.cpp"
+rust_module = "pipeline/depth_only_tests"
+
+[[case]]
+name = "depth_only"
+rust_const = "DEPTH_ONLY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/depth_only/depth_only.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/depth_only/depth_only.frag", stage = "frag" },
+]
+
+[[case]]
+name = "depth_only_view_index"
+rust_const = "DEPTH_ONLY_VIEW_INDEX"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/depth_only/depth_only_view_index.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/depth_only/depth_only.frag", stage = "frag" },
+]

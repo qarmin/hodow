@@ -1,0 +1,69 @@
+#version 460
+#extension GL_EXT_mesh_shader : enable
+layout(local_size_x=2) in;
+layout(points) out;
+layout(max_vertices=2, max_primitives=2) out;
+layout(set=0, binding=0, std430) readonly buffer VertexDataBlock {
+    vec4 positions[];
+} vertices;
+uint getWorkGroupIndex (void) {
+    const uint workGroupIndex = gl_NumWorkGroups.x * gl_NumWorkGroups.y * gl_WorkGroupID.z +
+                                gl_NumWorkGroups.x * gl_WorkGroupID.y +
+                                gl_WorkGroupID.x;
+    return workGroupIndex;
+}
+void main() {
+    SetMeshOutputsEXT(2, 2);
+    const uint vertIndex = getWorkGroupIndex() * 2 + gl_LocalInvocationIndex;
+    gl_MeshVerticesEXT[gl_LocalInvocationIndex].gl_Position = vertices.positions[vertIndex];
+    gl_MeshVerticesEXT[gl_LocalInvocationIndex].gl_PointSize = 1.0;
+    gl_PrimitivePointIndicesEXT[gl_LocalInvocationIndex] = gl_LocalInvocationIndex;
+}
+#version 460
+layout (location=0) out vec4 outColor;
+layout (push_constant, std430) uniform PCBlock { vec4 color; } pc;
+void main (void) {
+    outColor = pc.color;
+}
+#version 460
+#extension GL_EXT_mesh_shader : enable
+layout(local_size_x=1) in;
+uint getWorkGroupIndex (void) {
+    const uint workGroupIndex = gl_NumWorkGroups.x * gl_NumWorkGroups.y * gl_WorkGroupID.z +
+                                gl_NumWorkGroups.x * gl_WorkGroupID.y +
+                                gl_WorkGroupID.x;
+    return workGroupIndex;
+}
+struct TaskData {
+    uint baseVertex;
+};
+taskPayloadSharedEXT TaskData td;
+void main (void) {
+    td.baseVertex = getWorkGroupIndex() * 2;
+    EmitMeshTasksEXT(1, 1, 2);
+}
+#version 460
+#extension GL_EXT_mesh_shader : enable
+layout(local_size_x=1) in;
+layout(points) out;
+layout(max_vertices=1, max_primitives=1) out;
+layout(set=0, binding=0, std430) readonly buffer VertexDataBlock {
+    vec4 positions[];
+} vertices;
+uint getWorkGroupIndex (void) {
+    const uint workGroupIndex = gl_NumWorkGroups.x * gl_NumWorkGroups.y * gl_WorkGroupID.z +
+                                gl_NumWorkGroups.x * gl_WorkGroupID.y +
+                                gl_WorkGroupID.x;
+    return workGroupIndex;
+}
+struct TaskData {
+    uint baseVertex;
+};
+taskPayloadSharedEXT TaskData td;
+void main() {
+    SetMeshOutputsEXT(1, 1);
+    const uint vertIndex = td.baseVertex + getWorkGroupIndex();
+    gl_MeshVerticesEXT[gl_LocalInvocationIndex].gl_Position = vertices.positions[vertIndex];
+    gl_MeshVerticesEXT[gl_LocalInvocationIndex].gl_PointSize = 1.0;
+    gl_PrimitivePointIndicesEXT[gl_LocalInvocationIndex] = gl_LocalInvocationIndex;
+}

@@ -1,0 +1,73 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+struct TaskData {
+    vec4 positions[4];
+    float pointSizes[4];
+    float unused[4];
+    vec4 custom1[4];
+    float custom2[4];
+    int custom3[4];
+    int primitiveIds[2];
+    int viewportIndices[2];
+    uvec4 custom4[2];
+    float custom5[2];
+};
+taskPayloadSharedEXT TaskData td;
+
+layout (set=0, binding=0, std430) buffer PerVertexData {
+    vec4 positions[4];
+    float pointSizes[4];
+    float unused[4];
+    vec4 custom1[4];
+    float custom2[4];
+    int custom3[4];
+} pvd;
+layout (set=0, binding=1) uniform PerPrimitiveData {
+    int primitiveIds[2];
+    int viewportIndices[2];
+    uvec4 custom4[2];
+    float custom5[2];
+} ppd;
+
+void main ()
+{
+    td.positions[0] = pvd.positions[0];
+    td.positions[1] = pvd.positions[1];
+    td.positions[2] = pvd.positions[2];
+    td.positions[3] = pvd.positions[3];
+
+    td.pointSizes[0] = pvd.pointSizes[0];
+    td.pointSizes[1] = pvd.pointSizes[1];
+    td.pointSizes[2] = pvd.pointSizes[2];
+    td.pointSizes[3] = pvd.pointSizes[3];
+
+    td.custom1[0] = pvd.custom1[0];
+    td.custom1[1] = pvd.custom1[1];
+    td.custom1[2] = pvd.custom1[2];
+    td.custom1[3] = pvd.custom1[3];
+
+    td.custom2[0] = pvd.custom2[0];
+    td.custom2[1] = pvd.custom2[1];
+    td.custom2[2] = pvd.custom2[2];
+    td.custom2[3] = pvd.custom2[3];
+
+    td.custom3[0] = pvd.custom3[0];
+    td.custom3[1] = pvd.custom3[1];
+    td.custom3[2] = pvd.custom3[2];
+    td.custom3[3] = pvd.custom3[3];
+
+    td.primitiveIds[0] = ppd.primitiveIds[0];
+    td.primitiveIds[1] = ppd.primitiveIds[1];
+
+    td.viewportIndices[0] = ppd.viewportIndices[0];
+    td.viewportIndices[1] = ppd.viewportIndices[1];
+
+    td.custom4[0] = ppd.custom4[0];
+    td.custom4[1] = ppd.custom4[1];
+
+    td.custom5[0] = ppd.custom5[0];
+    td.custom5[1] = ppd.custom5[1];
+
+    EmitMeshTasksEXT(1, 1, 1);
+}

@@ -1,0 +1,48 @@
+#version 460
+#extension GL_EXT_mesh_shader : enable
+
+layout (local_size_x=1) in;
+layout (triangles) out;
+layout (max_vertices=6, max_primitives=4) out;
+
+out gl_MeshPerVertexEXT {
+    vec4  gl_Position;
+    float gl_CullDistance[2];
+} gl_MeshVerticesEXT[];
+
+layout (location=0) out perprimitiveEXT vec4 triangleColor[];
+
+void main ()
+{
+    SetMeshOutputsEXT(6u, 4u);
+
+    triangleColor[0] = vec4(0.0, 0.0, 1.0, 1.0);
+    triangleColor[1] = vec4(0.0, 0.0, 1.0, 1.0);
+    triangleColor[2] = vec4(0.0, 0.0, 1.0, 1.0);
+    triangleColor[3] = vec4(0.0, 0.0, 1.0, 1.0);
+    gl_PrimitiveTriangleIndicesEXT[0] = uvec3(0u, 1u, 3u);
+    gl_PrimitiveTriangleIndicesEXT[1] = uvec3(1u, 4u, 3u);
+    gl_PrimitiveTriangleIndicesEXT[2] = uvec3(1u, 2u, 4u);
+    gl_PrimitiveTriangleIndicesEXT[3] = uvec3(2u, 5u, 4u);
+
+    gl_MeshVerticesEXT[0].gl_Position = vec4(-1.0, -1.0, 0.0, 1.0);
+    gl_MeshVerticesEXT[1].gl_Position = vec4(-1.0,  0.0, 0.0, 1.0);
+    gl_MeshVerticesEXT[2].gl_Position = vec4(-1.0,  1.0, 0.0, 1.0);
+    gl_MeshVerticesEXT[3].gl_Position = vec4( 1.0, -1.0, 0.0, 1.0);
+    gl_MeshVerticesEXT[4].gl_Position = vec4( 1.0,  0.0, 0.0, 1.0);
+    gl_MeshVerticesEXT[5].gl_Position = vec4( 1.0,  1.0, 0.0, 1.0);
+
+    gl_MeshVerticesEXT[0].gl_CullDistance[0] =  1.0;
+    gl_MeshVerticesEXT[1].gl_CullDistance[0] = -1.0;
+    gl_MeshVerticesEXT[2].gl_CullDistance[0] = -2.0;
+    gl_MeshVerticesEXT[3].gl_CullDistance[0] =  1.0;
+    gl_MeshVerticesEXT[4].gl_CullDistance[0] = -1.0;
+    gl_MeshVerticesEXT[5].gl_CullDistance[0] = -2.0;
+
+    gl_MeshVerticesEXT[0].gl_CullDistance[1] =  1.0;
+    gl_MeshVerticesEXT[1].gl_CullDistance[1] =  1.0;
+    gl_MeshVerticesEXT[2].gl_CullDistance[1] =  1.0;
+    gl_MeshVerticesEXT[3].gl_CullDistance[1] = -1.0;
+    gl_MeshVerticesEXT[4].gl_CullDistance[1] = -1.0;
+    gl_MeshVerticesEXT[5].gl_CullDistance[1] = -1.0;
+}

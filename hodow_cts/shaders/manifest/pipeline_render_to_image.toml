@@ -1,0 +1,52 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.render_to_image.*
+#
+# initPrograms of vktPipelineRenderToImageTests.cpp: one pass-through vertex shader and a fragment shader whose output type follows
+# the colour format (float vec4/vec3, uint, ivec2, uvec4); integer outputs are scaled by REFERENCE_COLOR_VALUE (125).
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineRenderToImageTests.cpp"
+rust_module = "pipeline/render_to_image_tests"
+
+[[case]]
+name = "vec4"
+rust_const = "RTI_VEC4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/render_to_image/passthrough.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/render_to_image/vec4.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vec3"
+rust_const = "RTI_VEC3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/render_to_image/passthrough.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/render_to_image/vec3.frag", stage = "frag" },
+]
+
+[[case]]
+name = "uint"
+rust_const = "RTI_UINT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/render_to_image/passthrough.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/render_to_image/uint.frag", stage = "frag" },
+]
+
+[[case]]
+name = "ivec2"
+rust_const = "RTI_IVEC2"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/render_to_image/passthrough.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/render_to_image/ivec2.frag", stage = "frag" },
+]
+
+[[case]]
+name = "uvec4"
+rust_const = "RTI_UVEC4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/render_to_image/passthrough.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/render_to_image/uvec4.frag", stage = "frag" },
+]

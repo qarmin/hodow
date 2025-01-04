@@ -1,0 +1,19 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+layout(local_size_x=1) in;
+
+struct TaskData { uint value; }; taskPayloadSharedEXT TaskData td;
+
+layout (set=0, binding=0, r32ui) uniform uimage2D si;
+layout (push_constant, std430) uniform PushConstantBlock {
+    uint writeVal;
+    uint readVal;
+} pc;
+
+void main ()
+{
+    td.value = 0u;
+    if (pc.readVal > 0u) { td.value = imageLoad(si, ivec2(0, 0)).x; }
+    EmitMeshTasksEXT(1u, 1u, 1u);
+}

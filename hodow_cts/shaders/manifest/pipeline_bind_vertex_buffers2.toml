@@ -1,0 +1,64 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.bind_buffers_2.*
+#
+# `BindBuffers2Case::initPrograms`: the vertex shader reads the colour and the position from one, two, three or four
+# attribute groups depending on the number of bindings; `BindBuffers2MismatchCase` uses the one-group variant.
+# `BindVertexBuffers2Case::initPrograms` (maintenance5): the vertex shader sums `bufferCount - 1` vec2 positions.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineBindVertexBuffers2Tests.cpp"
+rust_module = "pipeline/bind_vertex_buffers2_tests"
+
+[[case]]
+name = "count_1"
+rust_const = "BIND_BUFFERS2_COUNT_1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/bind_buffers2_count1.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/bind_buffers2.frag", stage = "frag" },
+]
+
+[[case]]
+name = "count_2"
+rust_const = "BIND_BUFFERS2_COUNT_2"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/bind_buffers2_count2.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/bind_buffers2.frag", stage = "frag" },
+]
+
+[[case]]
+name = "count_3"
+rust_const = "BIND_BUFFERS2_COUNT_3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/bind_buffers2_count3.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/bind_buffers2.frag", stage = "frag" },
+]
+
+[[case]]
+name = "count_4"
+rust_const = "BIND_BUFFERS2_COUNT_4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/bind_buffers2_count4.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/bind_buffers2.frag", stage = "frag" },
+]
+
+[[case]]
+name = "maintenance5_buffers5"
+rust_const = "BIND_VERTEX_BUFFERS2_BUFFERS_5"
+rust_type = "BindVertexBuffers2Programs"
+programs = [
+    { name = "vert", template = "pipeline/bind_vertex_buffers2.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/bind_vertex_buffers2.frag", stage = "frag" },
+]
+params = { count = { type = "u32", value = 5 } }
+
+[[case]]
+name = "maintenance5_buffers9"
+rust_const = "BIND_VERTEX_BUFFERS2_BUFFERS_9"
+rust_type = "BindVertexBuffers2Programs"
+programs = [
+    { name = "vert", template = "pipeline/bind_vertex_buffers2.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/bind_vertex_buffers2.frag", stage = "frag" },
+]
+params = { count = { type = "u32", value = 9 } }

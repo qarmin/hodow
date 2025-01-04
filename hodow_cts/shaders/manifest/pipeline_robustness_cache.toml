@@ -1,0 +1,68 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.pipeline_cache.*
+#
+# `PipelineCacheTestCase::initPrograms`: a full-screen strip (vertex shader without inputs) and a fragment shader that reads
+# `values[index]` (or imageLoad) from the tested descriptor, the vertex input variant that reads in_values[index] in the
+# vertex shader, and the compute variants that read the same value and store it into an output image.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineRobustnessCacheTests.cpp"
+rust_module = "pipeline/robustness_cache_tests"
+
+[[case]]
+name = "vertex_input"
+rust_const = "RC_VERTEX_INPUT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/robustness_cache/vertex_input.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/robustness_cache/vertex_input.frag", stage = "frag" },
+]
+
+[[case]]
+name = "storage"
+rust_const = "RC_STORAGE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/robustness_cache/quad.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/robustness_cache/storage.frag", stage = "frag" },
+]
+
+[[case]]
+name = "storage_compute"
+rust_const = "RC_STORAGE_COMPUTE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "pipeline/robustness_cache/storage.comp", stage = "comp" },
+]
+
+[[case]]
+name = "uniform"
+rust_const = "RC_UNIFORM"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/robustness_cache/quad.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/robustness_cache/uniform.frag", stage = "frag" },
+]
+
+[[case]]
+name = "uniform_compute"
+rust_const = "RC_UNIFORM_COMPUTE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "pipeline/robustness_cache/uniform.comp", stage = "comp" },
+]
+
+[[case]]
+name = "image"
+rust_const = "RC_IMAGE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/robustness_cache/quad.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/robustness_cache/image.frag", stage = "frag" },
+]
+
+[[case]]
+name = "image_compute"
+rust_const = "RC_IMAGE_COMPUTE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "pipeline/robustness_cache/image.comp", stage = "comp" },
+]

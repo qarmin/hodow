@@ -1,0 +1,92 @@
+# Shader manifest for dEQP-VK.binding_model.inline_uniform_blocks.*
+#
+# Upstream emits one fragment shader per case from the case's descriptor operation list
+# (which uniform block words were written or copied, and what each must read back).
+# Nine cases, all fixed, so the GLSL is written out under
+# shaders/src/binding_model/inline_uniform/; the host side rebuilds the same operation
+# list in src/vkt/tests/binding_model/inline_uniform_tests.rs and the two have to be
+# changed together. The vertex shader is shared.
+
+upstream_source = "external/vulkancts/modules/vulkan/binding_model/vktBindingDescriptorInlineUniformTests.cpp"
+rust_module = "binding_model/inline_uniform_tests"
+
+[[case]]
+name = "write_size_4"
+rust_const = "IUB_WRITE_SIZE_4"
+rust_type = "InlineUniformCase"
+programs = [
+    { name = "vert", template = "binding_model/inline_uniform/vert.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/inline_uniform/write_size_4.frag", stage = "frag" },
+]
+
+[[case]]
+name = "write_size_8"
+rust_const = "IUB_WRITE_SIZE_8"
+rust_type = "InlineUniformCase"
+programs = [
+    { name = "vert", template = "binding_model/inline_uniform/vert.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/inline_uniform/write_size_8.frag", stage = "frag" },
+]
+
+[[case]]
+name = "write_size_16"
+rust_const = "IUB_WRITE_SIZE_16"
+rust_type = "InlineUniformCase"
+programs = [
+    { name = "vert", template = "binding_model/inline_uniform/vert.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/inline_uniform/write_size_16.frag", stage = "frag" },
+]
+
+[[case]]
+name = "write_offset_nonzero"
+rust_const = "IUB_WRITE_OFFSET_NONZERO"
+rust_type = "InlineUniformCase"
+programs = [
+    { name = "vert", template = "binding_model/inline_uniform/vert.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/inline_uniform/write_offset_nonzero.frag", stage = "frag" },
+]
+
+[[case]]
+name = "copy_size_4"
+rust_const = "IUB_COPY_SIZE_4"
+rust_type = "InlineUniformCase"
+programs = [
+    { name = "vert", template = "binding_model/inline_uniform/vert.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/inline_uniform/copy_size_4.frag", stage = "frag" },
+]
+
+[[case]]
+name = "copy_size_8"
+rust_const = "IUB_COPY_SIZE_8"
+rust_type = "InlineUniformCase"
+programs = [
+    { name = "vert", template = "binding_model/inline_uniform/vert.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/inline_uniform/copy_size_8.frag", stage = "frag" },
+]
+
+[[case]]
+name = "copy_size_16"
+rust_const = "IUB_COPY_SIZE_16"
+rust_type = "InlineUniformCase"
+programs = [
+    { name = "vert", template = "binding_model/inline_uniform/vert.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/inline_uniform/copy_size_16.frag", stage = "frag" },
+]
+
+[[case]]
+name = "copy_at_offset_nonzero"
+rust_const = "IUB_COPY_AT_OFFSET_NONZERO"
+rust_type = "InlineUniformCase"
+programs = [
+    { name = "vert", template = "binding_model/inline_uniform/vert.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/inline_uniform/copy_at_offset_nonzero.frag", stage = "frag" },
+]
+
+[[case]]
+name = "copy_from_offset_nonzero"
+rust_const = "IUB_COPY_FROM_OFFSET_NONZERO"
+rust_type = "InlineUniformCase"
+programs = [
+    { name = "vert", template = "binding_model/inline_uniform/vert.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/inline_uniform/copy_from_offset_nonzero.frag", stage = "frag" },
+]

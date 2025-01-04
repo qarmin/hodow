@@ -1,0 +1,32 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+layout (local_size_x=2) in;
+
+shared uint flags[2];
+
+taskPayloadSharedEXT float blue[4];
+
+void main ()
+{
+    uvec3 workGroupSize = uvec3(0u, 0u, 0u);
+flags[gl_LocalInvocationIndex] = 0u;
+barrier();
+flags[gl_LocalInvocationIndex] = 1u;
+groupMemoryBarrier();
+uint otherInvocation = 1u - gl_LocalInvocationIndex;
+uint iterations = 0u;
+while (flags[otherInvocation] != 1u) {
+    iterations++;
+}
+if (gl_LocalInvocationIndex == 0u) {
+
+blue[0] = 7.0f;
+blue[1] = 7.0f;
+blue[2] = float(iterations % 2u);
+blue[3]=7.0f;
+workGroupSize = uvec3(1u, 1u, 1u);
+
+}
+    EmitMeshTasksEXT(workGroupSize.x, workGroupSize.y, workGroupSize.z);
+}

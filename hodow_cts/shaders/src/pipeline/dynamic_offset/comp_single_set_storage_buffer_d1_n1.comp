@@ -1,0 +1,20 @@
+#version 450
+layout(set = 0, binding = 0) buffer Block0
+{
+    vec4 color;
+} inputData0;
+layout(set = 0, binding = 1) buffer Block1
+{
+    vec4 color;
+} inputData1;
+layout(set = 0, binding = 2) writeonly buffer Output
+{
+    vec4 color;
+} outData;
+
+void main()
+{
+    outData.color = vec4(0, 0, 0, 1);
+    outData.color.rgb += inputData0.color.rgb;
+    outData.color.rgb += inputData1.color.rgb;
+}

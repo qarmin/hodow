@@ -1,0 +1,616 @@
+# Shader manifest for dEQP-VK.renderpasses.dynamic_rendering.*.unused_attachments.*
+#
+# `DynamicUnusedAttachmentsCase::initPrograms`: a vertex shader that writes gl_Layer only when the test renders several layers without
+# multiview (built twice, as SPIR-V 1.0 and 1.5, for Vulkan before and after 1.2), and a fragment shader that declares an output only for
+# the colour attachments whose pipeline format is not VK_FORMAT_UNDEFINED. So a program set is keyed by the fragment output count, the
+# mask of outputs that are written, how the layer is chosen (mv = gl_ViewIndex, layer = gl_Layer, plain = 0) and whether four extra
+# `vec4` outputs follow (`largeRenderAttCount`). The fragment files were written out by a shell loop over the test matrix of
+# `createDynamicRenderingUnusedAttachmentsTests`, so the set is exactly what that matrix needs.
+
+upstream_source = "external/vulkancts/modules/vulkan/renderpass/vktDynamicRenderingUnusedAttachmentsTests.cpp"
+rust_module = "renderpass/unused_attachments_tests"
+
+[[case]]
+name = "f1_u01_plain"
+rust_const = "UNUSED_ATT_F1_U01_PLAIN"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f1_u01_plain.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 1 }, used_mask = { type = "u32", value = 1 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f1_u01_mv"
+rust_const = "UNUSED_ATT_F1_U01_MV"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f1_u01_mv.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 1 }, used_mask = { type = "u32", value = 1 }, mode = { type = "str", value = "mv" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f1_u00_plain"
+rust_const = "UNUSED_ATT_F1_U00_PLAIN"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f1_u00_plain.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 1 }, used_mask = { type = "u32", value = 0 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f1_u00_mv"
+rust_const = "UNUSED_ATT_F1_U00_MV"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f1_u00_mv.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 1 }, used_mask = { type = "u32", value = 0 }, mode = { type = "str", value = "mv" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f1_u01_layer"
+rust_const = "UNUSED_ATT_F1_U01_LAYER"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f1_u01_layer.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 1 }, used_mask = { type = "u32", value = 1 }, mode = { type = "str", value = "layer" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f1_u00_layer"
+rust_const = "UNUSED_ATT_F1_U00_LAYER"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f1_u00_layer.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 1 }, used_mask = { type = "u32", value = 0 }, mode = { type = "str", value = "layer" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f4_u0f_plain"
+rust_const = "UNUSED_ATT_F4_U0F_PLAIN"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f4_u0f_plain.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 4 }, used_mask = { type = "u32", value = 15 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f4_u0f_mv"
+rust_const = "UNUSED_ATT_F4_U0F_MV"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f4_u0f_mv.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 4 }, used_mask = { type = "u32", value = 15 }, mode = { type = "str", value = "mv" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f4_u0e_plain"
+rust_const = "UNUSED_ATT_F4_U0E_PLAIN"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f4_u0e_plain.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 4 }, used_mask = { type = "u32", value = 14 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f4_u0e_mv"
+rust_const = "UNUSED_ATT_F4_U0E_MV"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f4_u0e_mv.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 4 }, used_mask = { type = "u32", value = 14 }, mode = { type = "str", value = "mv" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f4_u0f_layer"
+rust_const = "UNUSED_ATT_F4_U0F_LAYER"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f4_u0f_layer.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 4 }, used_mask = { type = "u32", value = 15 }, mode = { type = "str", value = "layer" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f4_u0e_layer"
+rust_const = "UNUSED_ATT_F4_U0E_LAYER"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f4_u0e_layer.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 4 }, used_mask = { type = "u32", value = 14 }, mode = { type = "str", value = "layer" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f8_uff_plain"
+rust_const = "UNUSED_ATT_F8_UFF_PLAIN"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_uff_plain.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 255 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f8_uff_mv"
+rust_const = "UNUSED_ATT_F8_UFF_MV"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_uff_mv.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 255 }, mode = { type = "str", value = "mv" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f8_ufe_plain"
+rust_const = "UNUSED_ATT_F8_UFE_PLAIN"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_ufe_plain.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 254 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f8_ufe_mv"
+rust_const = "UNUSED_ATT_F8_UFE_MV"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_ufe_mv.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 254 }, mode = { type = "str", value = "mv" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f8_uff_layer"
+rust_const = "UNUSED_ATT_F8_UFF_LAYER"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_uff_layer.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 255 }, mode = { type = "str", value = "layer" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f8_ufe_layer"
+rust_const = "UNUSED_ATT_F8_UFE_LAYER"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_ufe_layer.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 254 }, mode = { type = "str", value = "layer" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f4_u00_plain"
+rust_const = "UNUSED_ATT_F4_U00_PLAIN"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f4_u00_plain.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 4 }, used_mask = { type = "u32", value = 0 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f4_u00_mv"
+rust_const = "UNUSED_ATT_F4_U00_MV"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f4_u00_mv.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 4 }, used_mask = { type = "u32", value = 0 }, mode = { type = "str", value = "mv" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f4_u05_plain"
+rust_const = "UNUSED_ATT_F4_U05_PLAIN"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f4_u05_plain.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 4 }, used_mask = { type = "u32", value = 5 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f4_u05_mv"
+rust_const = "UNUSED_ATT_F4_U05_MV"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f4_u05_mv.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 4 }, used_mask = { type = "u32", value = 5 }, mode = { type = "str", value = "mv" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f4_u0a_plain"
+rust_const = "UNUSED_ATT_F4_U0A_PLAIN"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f4_u0a_plain.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 4 }, used_mask = { type = "u32", value = 10 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f4_u0a_mv"
+rust_const = "UNUSED_ATT_F4_U0A_MV"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f4_u0a_mv.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 4 }, used_mask = { type = "u32", value = 10 }, mode = { type = "str", value = "mv" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f4_u00_layer"
+rust_const = "UNUSED_ATT_F4_U00_LAYER"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f4_u00_layer.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 4 }, used_mask = { type = "u32", value = 0 }, mode = { type = "str", value = "layer" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f4_u05_layer"
+rust_const = "UNUSED_ATT_F4_U05_LAYER"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f4_u05_layer.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 4 }, used_mask = { type = "u32", value = 5 }, mode = { type = "str", value = "layer" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f4_u0a_layer"
+rust_const = "UNUSED_ATT_F4_U0A_LAYER"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f4_u0a_layer.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 4 }, used_mask = { type = "u32", value = 10 }, mode = { type = "str", value = "layer" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f8_uf0_plain"
+rust_const = "UNUSED_ATT_F8_UF0_PLAIN"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_uf0_plain.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 240 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f8_uf0_mv"
+rust_const = "UNUSED_ATT_F8_UF0_MV"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_uf0_mv.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 240 }, mode = { type = "str", value = "mv" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f8_uf5_plain"
+rust_const = "UNUSED_ATT_F8_UF5_PLAIN"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_uf5_plain.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 245 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f8_uf5_mv"
+rust_const = "UNUSED_ATT_F8_UF5_MV"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_uf5_mv.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 245 }, mode = { type = "str", value = "mv" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f8_ufa_plain"
+rust_const = "UNUSED_ATT_F8_UFA_PLAIN"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_ufa_plain.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 250 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f8_ufa_mv"
+rust_const = "UNUSED_ATT_F8_UFA_MV"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_ufa_mv.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 250 }, mode = { type = "str", value = "mv" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f8_uf0_layer"
+rust_const = "UNUSED_ATT_F8_UF0_LAYER"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_uf0_layer.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 240 }, mode = { type = "str", value = "layer" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f8_uf5_layer"
+rust_const = "UNUSED_ATT_F8_UF5_LAYER"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_uf5_layer.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 245 }, mode = { type = "str", value = "layer" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f8_ufa_layer"
+rust_const = "UNUSED_ATT_F8_UFA_LAYER"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_ufa_layer.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 250 }, mode = { type = "str", value = "layer" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f8_u00_plain"
+rust_const = "UNUSED_ATT_F8_U00_PLAIN"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_u00_plain.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 0 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f8_u00_mv"
+rust_const = "UNUSED_ATT_F8_U00_MV"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_u00_mv.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 0 }, mode = { type = "str", value = "mv" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f8_u55_plain"
+rust_const = "UNUSED_ATT_F8_U55_PLAIN"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_u55_plain.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 85 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f8_u55_mv"
+rust_const = "UNUSED_ATT_F8_U55_MV"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_u55_mv.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 85 }, mode = { type = "str", value = "mv" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f8_uaa_plain"
+rust_const = "UNUSED_ATT_F8_UAA_PLAIN"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_uaa_plain.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 170 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f8_uaa_mv"
+rust_const = "UNUSED_ATT_F8_UAA_MV"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_uaa_mv.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 170 }, mode = { type = "str", value = "mv" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f8_u00_layer"
+rust_const = "UNUSED_ATT_F8_U00_LAYER"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_u00_layer.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 0 }, mode = { type = "str", value = "layer" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f8_u55_layer"
+rust_const = "UNUSED_ATT_F8_U55_LAYER"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_u55_layer.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 85 }, mode = { type = "str", value = "layer" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f8_uaa_layer"
+rust_const = "UNUSED_ATT_F8_UAA_LAYER"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_layer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_uaa_layer.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 170 }, mode = { type = "str", value = "layer" }, large_render = { type = "bool", value = false } }
+
+[[case]]
+name = "f1_u01_plain_large"
+rust_const = "UNUSED_ATT_F1_U01_PLAIN_LARGE"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f1_u01_plain_large.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 1 }, used_mask = { type = "u32", value = 1 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = true } }
+
+[[case]]
+name = "f1_u00_plain_large"
+rust_const = "UNUSED_ATT_F1_U00_PLAIN_LARGE"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f1_u00_plain_large.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 1 }, used_mask = { type = "u32", value = 0 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = true } }
+
+[[case]]
+name = "f4_u0f_plain_large"
+rust_const = "UNUSED_ATT_F4_U0F_PLAIN_LARGE"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f4_u0f_plain_large.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 4 }, used_mask = { type = "u32", value = 15 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = true } }
+
+[[case]]
+name = "f4_u00_plain_large"
+rust_const = "UNUSED_ATT_F4_U00_PLAIN_LARGE"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f4_u00_plain_large.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 4 }, used_mask = { type = "u32", value = 0 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = true } }
+
+[[case]]
+name = "f4_u05_plain_large"
+rust_const = "UNUSED_ATT_F4_U05_PLAIN_LARGE"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f4_u05_plain_large.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 4 }, used_mask = { type = "u32", value = 5 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = true } }
+
+[[case]]
+name = "f4_u0a_plain_large"
+rust_const = "UNUSED_ATT_F4_U0A_PLAIN_LARGE"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f4_u0a_plain_large.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 4 }, used_mask = { type = "u32", value = 10 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = true } }
+
+[[case]]
+name = "f8_uff_plain_large"
+rust_const = "UNUSED_ATT_F8_UFF_PLAIN_LARGE"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_uff_plain_large.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 255 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = true } }
+
+[[case]]
+name = "f8_u00_plain_large"
+rust_const = "UNUSED_ATT_F8_U00_PLAIN_LARGE"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_u00_plain_large.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 0 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = true } }
+
+[[case]]
+name = "f8_u55_plain_large"
+rust_const = "UNUSED_ATT_F8_U55_PLAIN_LARGE"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_u55_plain_large.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 85 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = true } }
+
+[[case]]
+name = "f8_uaa_plain_large"
+rust_const = "UNUSED_ATT_F8_UAA_PLAIN_LARGE"
+rust_type = "UnusedAttachmentsPrograms"
+programs = [
+    { name = "vert-spv10", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert" },
+    { name = "vert-spv15", template = "renderpass/unused_attachments/vert_nolayer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "renderpass/unused_attachments/frag_f8_uaa_plain_large.frag", stage = "frag" },
+]
+params = { frag_att = { type = "u32", value = 8 }, used_mask = { type = "u32", value = 170 }, mode = { type = "str", value = "plain" }, large_render = { type = "bool", value = true } }

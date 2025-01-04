@@ -1,0 +1,52 @@
+# Shader manifest for dEQP-VK.tessellation.fractional_spacing.glsl_*
+#
+# `initPrograms` (GLSL variant): a vertex shader with no inputs, a control shader that reads outer level 1 from an SSBO and an
+# isoline evaluation shader in point mode that appends gl_TessCoord.x to an SSBO (and, for `tese_point_size`, writes
+# gl_PointSize). One case per fractional spacing mode. The `hlsl_*` cases use glslang's HLSL front end.
+
+upstream_source = "external/vulkancts/modules/vulkan/tessellation/vktTessellationFractionalSpacingTests.cpp"
+rust_module = "tessellation/fractional_spacing_tests"
+
+[[case]]
+name = "glsl_odd"
+rust_const = "FRACTIONAL_SPACING_ODD"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/fractional_spacing.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/fractional_spacing.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/fractional_spacing_odd.tese", stage = "tese" },
+    { name = "tese_point_size", template = "tessellation/fractional_spacing_odd_point_size.tese", stage = "tese" },
+]
+
+[[case]]
+name = "glsl_even"
+rust_const = "FRACTIONAL_SPACING_EVEN"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/fractional_spacing.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/fractional_spacing.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/fractional_spacing_even.tese", stage = "tese" },
+    { name = "tese_point_size", template = "tessellation/fractional_spacing_even_point_size.tese", stage = "tese" },
+]
+
+[[case]]
+name = "hlsl_odd"
+rust_const = "FRACTIONAL_SPACING_HLSL_ODD"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/fractional_spacing_hlsl.vert", stage = "hlsl_vert" },
+    { name = "tesc", template = "tessellation/fractional_spacing_hlsl_odd.tesc", stage = "hlsl_tesc" },
+    { name = "tese", template = "tessellation/fractional_spacing_hlsl.tese", stage = "hlsl_tese" },
+    { name = "tese_point_size", template = "tessellation/fractional_spacing_hlsl.tese", stage = "hlsl_tese" },
+]
+
+[[case]]
+name = "hlsl_even"
+rust_const = "FRACTIONAL_SPACING_HLSL_EVEN"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/fractional_spacing_hlsl.vert", stage = "hlsl_vert" },
+    { name = "tesc", template = "tessellation/fractional_spacing_hlsl_even.tesc", stage = "hlsl_tesc" },
+    { name = "tese", template = "tessellation/fractional_spacing_hlsl.tese", stage = "hlsl_tese" },
+    { name = "tese_point_size", template = "tessellation/fractional_spacing_hlsl.tese", stage = "hlsl_tese" },
+]

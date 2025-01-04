@@ -1,0 +1,123 @@
+# Shader manifest for dEQP-VK.image.non_uniform_offset_sample.*
+#
+# `NonUniformOffsetCase::initPrograms`, one program set per (stage, sampling function) pair, pre-expanded: the compute stage has no
+# implicit-LOD functions (`texture`, `texture_proj`), and the multi mip variants of a case use the same shaders as the single mip ones.
+# Upstream builds these with SPIRV_VERSION_1_0 and the allow-non-const-offsets validator flag.
+
+upstream_source = "external/vulkancts/modules/vulkan/image/vktImageNonUniformOffsetSampleTests.cpp"
+rust_module = "image/non_uniform_offset_sample_tests"
+spirv_version = "spirv1.0"
+
+[[case]]
+name = "frag_texture"
+rust_const = "NUO_FRAG_TEXTURE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/non_uniform_offset/pass_through.vert", stage = "vert" },
+    { name = "frag", template = "image/non_uniform_offset/frag_texture.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vert_texture"
+rust_const = "NUO_VERT_TEXTURE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/non_uniform_offset/vert_texture.vert", stage = "vert" },
+    { name = "frag", template = "image/non_uniform_offset/color_through.frag", stage = "frag" },
+]
+
+[[case]]
+name = "comp_texel_fetch"
+rust_const = "NUO_COMP_TEXEL_FETCH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "image/non_uniform_offset/comp_texel_fetch.comp", stage = "comp" },
+]
+
+[[case]]
+name = "frag_texel_fetch"
+rust_const = "NUO_FRAG_TEXEL_FETCH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/non_uniform_offset/pass_through.vert", stage = "vert" },
+    { name = "frag", template = "image/non_uniform_offset/frag_texel_fetch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vert_texel_fetch"
+rust_const = "NUO_VERT_TEXEL_FETCH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/non_uniform_offset/vert_texel_fetch.vert", stage = "vert" },
+    { name = "frag", template = "image/non_uniform_offset/color_through.frag", stage = "frag" },
+]
+
+[[case]]
+name = "comp_texture_lod"
+rust_const = "NUO_COMP_TEXTURE_LOD"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "image/non_uniform_offset/comp_texture_lod.comp", stage = "comp" },
+]
+
+[[case]]
+name = "frag_texture_lod"
+rust_const = "NUO_FRAG_TEXTURE_LOD"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/non_uniform_offset/pass_through.vert", stage = "vert" },
+    { name = "frag", template = "image/non_uniform_offset/frag_texture_lod.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vert_texture_lod"
+rust_const = "NUO_VERT_TEXTURE_LOD"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/non_uniform_offset/vert_texture_lod.vert", stage = "vert" },
+    { name = "frag", template = "image/non_uniform_offset/color_through.frag", stage = "frag" },
+]
+
+[[case]]
+name = "frag_texture_proj"
+rust_const = "NUO_FRAG_TEXTURE_PROJ"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/non_uniform_offset/pass_through.vert", stage = "vert" },
+    { name = "frag", template = "image/non_uniform_offset/frag_texture_proj.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vert_texture_proj"
+rust_const = "NUO_VERT_TEXTURE_PROJ"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/non_uniform_offset/vert_texture_proj.vert", stage = "vert" },
+    { name = "frag", template = "image/non_uniform_offset/color_through.frag", stage = "frag" },
+]
+
+[[case]]
+name = "comp_texture_proj_lod"
+rust_const = "NUO_COMP_TEXTURE_PROJ_LOD"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "image/non_uniform_offset/comp_texture_proj_lod.comp", stage = "comp" },
+]
+
+[[case]]
+name = "frag_texture_proj_lod"
+rust_const = "NUO_FRAG_TEXTURE_PROJ_LOD"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/non_uniform_offset/pass_through.vert", stage = "vert" },
+    { name = "frag", template = "image/non_uniform_offset/frag_texture_proj_lod.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vert_texture_proj_lod"
+rust_const = "NUO_VERT_TEXTURE_PROJ_LOD"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/non_uniform_offset/vert_texture_proj_lod.vert", stage = "vert" },
+    { name = "frag", template = "image/non_uniform_offset/color_through.frag", stage = "frag" },
+]

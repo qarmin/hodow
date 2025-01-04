@@ -1,0 +1,35 @@
+# Shader manifest for dEQP-VK.draw.*.implicit_sample_shading.*
+#
+# `SampleShadingSampleAttributeTestCase::initPrograms`: a full-screen triangle and a fragment shader that adds one to
+# an atomic counter per invocation. What makes the fragment shader run per sample differs between the three groups of
+# cases: a `sample` decorated input read dynamically, a declared but unused gl_SampleID, or gl_SamplePosition.
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawSampleAttributeTests.cpp"
+rust_module = "draw/sample_attribute_tests"
+
+[[case]]
+name = "decoration"
+rust_const = "SAMPLE_ATTRIBUTE_DECORATION"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/sample_attribute_decoration.vert", stage = "vert" },
+    { name = "frag", template = "draw/sample_attribute_decoration.frag", stage = "frag" },
+]
+
+[[case]]
+name = "sample_id"
+rust_const = "SAMPLE_ATTRIBUTE_SAMPLE_ID"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/sample_attribute_sample_id.vert", stage = "vert" },
+    { name = "frag", template = "draw/sample_attribute_sample_id.frag", stage = "frag" },
+]
+
+[[case]]
+name = "sample_position"
+rust_const = "SAMPLE_ATTRIBUTE_SAMPLE_POSITION"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/sample_attribute_sample_position.vert", stage = "vert" },
+    { name = "frag", template = "draw/sample_attribute_sample_position.frag", stage = "frag" },
+]

@@ -1,0 +1,19 @@
+#version 450
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout (set = 0, binding = 0, ${qualifier0}) writeonly uniform ${image_type0} image0;
+layout (set = 0, binding = 1, ${qualifier1}) writeonly uniform ${image_type1} image1;
+${color0_declaration}
+${color1_declaration}
+void main (void)
+{
+    ${position_type} pos = ${position};
+
+    if (gl_GlobalInvocationID.y < ${portion1})
+    {
+        imageStore(image0, pos, color0);
+    }
+    else
+    {
+        imageStore(image1, pos, color1);
+    }
+}

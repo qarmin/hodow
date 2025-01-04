@@ -1,0 +1,22 @@
+# Shader manifest for dEQP-VK.rasterization.primitives.stride_zero.* and dEQP-VK.rasterization.culling.primitive_id
+
+upstream_source = "external/vulkancts/modules/vulkan/rasterization/vktRasterizationTests.cpp"
+rust_module = "rasterization/simple_tests"
+
+[[case]]
+name = "stride_zero"
+rust_const = "STRIDE_ZERO"
+rust_type = "SimpleProgram"
+programs = [
+    { name = "vert", template = "rasterization/stride_zero.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/stride_zero.frag", stage = "frag" },
+]
+
+[[case]]
+name = "cull_primitive_id"
+rust_const = "CULL_PRIMITIVE_ID"
+rust_type = "SimpleProgram"
+programs = [
+    { name = "vert", template = "rasterization/cull_primitive_id.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/cull_primitive_id.frag", stage = "frag" },
+]

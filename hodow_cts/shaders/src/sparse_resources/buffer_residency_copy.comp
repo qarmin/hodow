@@ -1,0 +1,22 @@
+#version 440
+layout (local_size_x = 32, local_size_y = 1, local_size_z = 1) in;
+layout(set = 0, binding = 0, std430) readonly buffer Input
+{
+    uint data[];
+} sb_in;
+
+layout(set = 0, binding = 1, std430) writeonly buffer Output
+{
+    uint result[];
+} sb_out;
+
+layout (push_constant, std430) uniform PushConstants
+{
+    uint bufferSize;
+} pc;
+void main (void)
+{
+    uint index = gl_GlobalInvocationID.y * gl_WorkGroupSize.x * 32 + gl_GlobalInvocationID.x;
+    if (index < (pc.bufferSize / 4))
+        sb_out.result[index] = sb_in.data[index];
+}

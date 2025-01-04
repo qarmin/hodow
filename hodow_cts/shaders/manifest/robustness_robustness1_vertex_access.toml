@@ -1,0 +1,17 @@
+# Shader manifest for dEQP-VK.robustness.robustness1_vertex_access.*
+#
+# `Robustness1AccessTest::initPrograms`: the vertex shader checks both colour attributes against the colours a valid read may
+# return (and, for the vertices whose attributes are out of bounds, the ones an out of bounds read may return) and outputs green
+# when they do. The same two programs serve every case.
+
+upstream_source = "external/vulkancts/modules/vulkan/robustness/vktRobustness1VertexAccessTests.cpp"
+rust_module = "robustness/robustness1_vertex_access_tests"
+
+[[case]]
+name = "vertex_test"
+rust_const = "ROBUSTNESS1_VERTEX_TEST"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex-test", template = "robustness/robustness1_vertex_access/vertex_test.vert", stage = "vert" },
+    { name = "fragment-test", template = "robustness/robustness1_vertex_access/fragment_test.frag", stage = "frag" },
+]

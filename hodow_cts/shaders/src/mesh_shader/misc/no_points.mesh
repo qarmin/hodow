@@ -1,0 +1,12 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+layout (local_size_x=128) in;
+layout (points) out;
+layout (max_vertices=256, max_primitives=256) out;
+
+layout (location=0) out perprimitiveEXT vec4 primitiveColor[];
+
+void main () {
+    SetMeshOutputsEXT(0u, 0u);
+}

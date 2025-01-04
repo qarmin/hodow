@@ -1,0 +1,27 @@
+#version 460
+layout (local_size_x=32) in;
+layout (set=0, binding=0, std430) buffer OutputBlock {
+    uint values[];
+} ob;
+
+uint getWorkGroupSize (void) {
+    const uint workGroupSize = gl_WorkGroupSize.x * gl_WorkGroupSize.y * gl_WorkGroupSize.z;
+    return workGroupSize;
+}
+
+uint getWorkGroupIndex (void) {
+    const uint workGroupIndex = gl_NumWorkGroups.x * gl_NumWorkGroups.y * gl_WorkGroupID.z +
+                                gl_NumWorkGroups.x * gl_WorkGroupID.y +
+                                gl_WorkGroupID.x;
+    return workGroupIndex;
+}
+
+uint getGlobalInvocationIndex (void) {
+    const uint globalInvocationIndex = getWorkGroupIndex() * getWorkGroupSize() + gl_LocalInvocationIndex;
+    return globalInvocationIndex;
+}
+
+void main(void) {
+    const uint index = getGlobalInvocationIndex();
+    ob.values[index] = index;
+}

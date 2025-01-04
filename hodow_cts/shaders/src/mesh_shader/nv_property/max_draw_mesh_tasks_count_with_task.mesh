@@ -1,0 +1,13 @@
+#version 460
+#extension GL_NV_mesh_shader : enable
+
+layout (local_size_x=1) in;
+layout (triangles) out;
+layout (max_vertices=3, max_primitives=1) out;
+
+
+
+void main ()
+{
+    gl_PrimitiveCountNV = 0u;
+}

@@ -1,0 +1,16 @@
+#version 440
+
+layout(local_size_x = 1) in;
+
+layout(set = 0, binding = 0) uniform utextureBuffer Input;
+
+layout(set = 0, binding = 1, std140) writeonly buffer Output {
+    uvec4 data[1024];
+} b_out;
+
+void main (void)
+{
+    for (int i = 0; i < 1024; ++i) {
+        b_out.data[i] = texelFetch(Input, i);
+    }
+}

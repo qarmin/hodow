@@ -1,0 +1,81 @@
+# Shader manifest for dEQP-VK.tessellation.geometry_interaction.render.*
+#
+# `GridRenderTestCase::initPrograms`, one program set per case: a vertex shader emitting the origin, a flat colour
+# fragment shader, a one-vertex tessellation control shader setting every level to 5 (64 for the minimum maximum
+# level case), an evaluation shader that fills the viewport (or only a corner of it when the geometry shader scatters
+# the output), and the geometry shader the case's flags select.
+
+upstream_source = "external/vulkancts/modules/vulkan/tessellation/vktTessellationGeometryGridRenderTests.cpp"
+rust_module = "tessellation/geometry_grid_render_tests"
+
+[[case]]
+name = "output_required_max_tessellation"
+rust_const = "GRID_RENDER_MAX_TESSELLATION"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/grid_render.vert", stage = "vert" },
+    { name = "frag", template = "tessellation/grid_render.frag", stage = "frag" },
+    { name = "tesc", template = "tessellation/grid_render_level64.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/grid_render_fill_level64.tese", stage = "tese" },
+    { name = "geom", template = "tessellation/grid_render_max_tessellation.geom", stage = "geom" },
+]
+
+[[case]]
+name = "output_required_max_geometry"
+rust_const = "GRID_RENDER_MAX_GEOMETRY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/grid_render.vert", stage = "vert" },
+    { name = "frag", template = "tessellation/grid_render.frag", stage = "frag" },
+    { name = "tesc", template = "tessellation/grid_render_level5.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/grid_render_fill_level5.tese", stage = "tese" },
+    { name = "geom", template = "tessellation/grid_render_max_geometry.geom", stage = "geom" },
+]
+
+[[case]]
+name = "output_required_max_invocations"
+rust_const = "GRID_RENDER_MAX_INVOCATIONS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/grid_render.vert", stage = "vert" },
+    { name = "frag", template = "tessellation/grid_render.frag", stage = "frag" },
+    { name = "tesc", template = "tessellation/grid_render_level5.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/grid_render_fill_level5.tese", stage = "tese" },
+    { name = "geom", template = "tessellation/grid_render_max_invocations.geom", stage = "geom" },
+]
+
+[[case]]
+name = "geometry_scatter_instances"
+rust_const = "GRID_RENDER_SCATTER_INSTANCES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/grid_render.vert", stage = "vert" },
+    { name = "frag", template = "tessellation/grid_render.frag", stage = "frag" },
+    { name = "tesc", template = "tessellation/grid_render_level5.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/grid_render_corner_level5.tese", stage = "tese" },
+    { name = "geom", template = "tessellation/grid_render_scatter_instances.geom", stage = "geom" },
+]
+
+[[case]]
+name = "geometry_scatter_primitives"
+rust_const = "GRID_RENDER_SCATTER_PRIMITIVES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/grid_render.vert", stage = "vert" },
+    { name = "frag", template = "tessellation/grid_render.frag", stage = "frag" },
+    { name = "tesc", template = "tessellation/grid_render_level5.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/grid_render_corner_level5.tese", stage = "tese" },
+    { name = "geom", template = "tessellation/grid_render_scatter_primitives.geom", stage = "geom" },
+]
+
+[[case]]
+name = "geometry_scatter_layers"
+rust_const = "GRID_RENDER_SCATTER_LAYERS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/grid_render.vert", stage = "vert" },
+    { name = "frag", template = "tessellation/grid_render.frag", stage = "frag" },
+    { name = "tesc", template = "tessellation/grid_render_level5.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/grid_render_corner_level5.tese", stage = "tese" },
+    { name = "geom", template = "tessellation/grid_render_scatter_layers.geom", stage = "geom" },
+]

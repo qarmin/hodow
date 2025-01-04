@@ -1,0 +1,16 @@
+# Shader manifest for dEQP-VK.conditional_rendering.clear_attachments.*
+#
+# The Draw framework's pass-through pair (data/vulkan/dynamic_state/VertexFetch.{vert,frag}): position and colour
+# straight from the vertex buffer.
+
+upstream_source = "external/vulkancts/modules/vulkan/conditional_rendering/vktConditionalClearAttachmentTests.cpp"
+rust_module = "conditional_rendering/clear_attachments_tests"
+
+[[case]]
+name = "clear_attachments"
+rust_const = "CONDITIONAL_CLEAR_ATTACHMENTS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "conditional_rendering/vertex_fetch.vert", stage = "vert" },
+    { name = "frag", template = "conditional_rendering/vertex_fetch.frag", stage = "frag" },
+]

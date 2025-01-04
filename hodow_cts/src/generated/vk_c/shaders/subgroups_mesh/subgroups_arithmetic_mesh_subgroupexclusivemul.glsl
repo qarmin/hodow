@@ -1,0 +1,6153 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int8 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  int8_t data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  int8_t ref = int8_t(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = int8_t(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int8 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  int8_t data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  int8_t ref = int8_t(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = int8_t(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+
+void main (void)
+{
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int8 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  i8vec2 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  i8vec2 ref = i8vec2(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = i8vec2(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int8 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  i8vec2 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  i8vec2 ref = i8vec2(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = i8vec2(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int8 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  i8vec3 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  i8vec3 ref = i8vec3(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = i8vec3(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int8 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  i8vec3 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  i8vec3 ref = i8vec3(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = i8vec3(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int8 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  i8vec4 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  i8vec4 ref = i8vec4(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = i8vec4(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int8 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  i8vec4 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  i8vec4 ref = i8vec4(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = i8vec4(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_long_vector : enable
+#extension GL_EXT_shader_subgroup_extended_types_int8 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vector<int8_t, 8> data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vector<int8_t, 8> ref = vector<int8_t, 8>(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vector<int8_t, 8>(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_long_vector : enable
+#extension GL_EXT_shader_subgroup_extended_types_int8 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vector<int8_t, 8> data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vector<int8_t, 8> ref = vector<int8_t, 8>(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vector<int8_t, 8>(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int8 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  uint8_t data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  uint8_t ref = uint8_t(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = uint8_t(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int8 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  uint8_t data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  uint8_t ref = uint8_t(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = uint8_t(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int8 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  u8vec2 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  u8vec2 ref = u8vec2(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = u8vec2(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int8 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  u8vec2 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  u8vec2 ref = u8vec2(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = u8vec2(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int8 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  u8vec3 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  u8vec3 ref = u8vec3(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = u8vec3(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int8 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  u8vec3 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  u8vec3 ref = u8vec3(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = u8vec3(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int8 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  u8vec4 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  u8vec4 ref = u8vec4(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = u8vec4(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int8 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  u8vec4 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  u8vec4 ref = u8vec4(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = u8vec4(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_long_vector : enable
+#extension GL_EXT_shader_subgroup_extended_types_int8 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vector<uint8_t, 8> data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vector<uint8_t, 8> ref = vector<uint8_t, 8>(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vector<uint8_t, 8>(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_long_vector : enable
+#extension GL_EXT_shader_subgroup_extended_types_int8 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vector<uint8_t, 8> data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vector<uint8_t, 8> ref = vector<uint8_t, 8>(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vector<uint8_t, 8>(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  int16_t data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  int16_t ref = int16_t(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = int16_t(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  int16_t data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  int16_t ref = int16_t(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = int16_t(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  i16vec2 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  i16vec2 ref = i16vec2(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = i16vec2(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  i16vec2 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  i16vec2 ref = i16vec2(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = i16vec2(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  i16vec3 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  i16vec3 ref = i16vec3(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = i16vec3(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  i16vec3 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  i16vec3 ref = i16vec3(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = i16vec3(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  i16vec4 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  i16vec4 ref = i16vec4(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = i16vec4(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  i16vec4 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  i16vec4 ref = i16vec4(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = i16vec4(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_long_vector : enable
+#extension GL_EXT_shader_subgroup_extended_types_int16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vector<int16_t, 8> data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vector<int16_t, 8> ref = vector<int16_t, 8>(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vector<int16_t, 8>(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_long_vector : enable
+#extension GL_EXT_shader_subgroup_extended_types_int16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vector<int16_t, 8> data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vector<int16_t, 8> ref = vector<int16_t, 8>(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vector<int16_t, 8>(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  uint16_t data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  uint16_t ref = uint16_t(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = uint16_t(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  uint16_t data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  uint16_t ref = uint16_t(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = uint16_t(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  u16vec2 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  u16vec2 ref = u16vec2(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = u16vec2(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  u16vec2 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  u16vec2 ref = u16vec2(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = u16vec2(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  u16vec3 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  u16vec3 ref = u16vec3(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = u16vec3(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  u16vec3 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  u16vec3 ref = u16vec3(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = u16vec3(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  u16vec4 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  u16vec4 ref = u16vec4(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = u16vec4(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  u16vec4 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  u16vec4 ref = u16vec4(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = u16vec4(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_long_vector : enable
+#extension GL_EXT_shader_subgroup_extended_types_int16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vector<uint16_t, 8> data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vector<uint16_t, 8> ref = vector<uint16_t, 8>(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vector<uint16_t, 8>(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_long_vector : enable
+#extension GL_EXT_shader_subgroup_extended_types_int16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vector<uint16_t, 8> data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vector<uint16_t, 8> ref = vector<uint16_t, 8>(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vector<uint16_t, 8>(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  int data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  int ref = int(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = int(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  int data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  int ref = int(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = int(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  ivec2 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  ivec2 ref = ivec2(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = ivec2(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  ivec2 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  ivec2 ref = ivec2(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = ivec2(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  ivec3 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  ivec3 ref = ivec3(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = ivec3(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  ivec3 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  ivec3 ref = ivec3(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = ivec3(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  ivec4 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  ivec4 ref = ivec4(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = ivec4(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  ivec4 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  ivec4 ref = ivec4(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = ivec4(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_long_vector : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vector<int, 8> data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vector<int, 8> ref = vector<int, 8>(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vector<int, 8>(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_long_vector : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vector<int, 8> data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vector<int, 8> ref = vector<int, 8>(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vector<int, 8>(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  uint data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  uint ref = uint(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = uint(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  uint data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  uint ref = uint(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = uint(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  uvec2 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  uvec2 ref = uvec2(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = uvec2(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  uvec2 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  uvec2 ref = uvec2(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = uvec2(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  uvec3 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  uvec3 ref = uvec3(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = uvec3(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  uvec3 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  uvec3 ref = uvec3(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = uvec3(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  uvec4 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  uvec4 ref = uvec4(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = uvec4(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  uvec4 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  uvec4 ref = uvec4(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = uvec4(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_long_vector : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vector<uint, 8> data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vector<uint, 8> ref = vector<uint, 8>(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vector<uint, 8>(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_long_vector : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vector<uint, 8> data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vector<uint, 8> ref = vector<uint, 8>(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vector<uint, 8>(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int64 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  int64_t data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  int64_t ref = int64_t(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = int64_t(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int64 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  int64_t data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  int64_t ref = int64_t(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = int64_t(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int64 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  i64vec2 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  i64vec2 ref = i64vec2(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = i64vec2(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int64 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  i64vec2 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  i64vec2 ref = i64vec2(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = i64vec2(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int64 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  i64vec3 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  i64vec3 ref = i64vec3(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = i64vec3(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int64 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  i64vec3 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  i64vec3 ref = i64vec3(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = i64vec3(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int64 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  i64vec4 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  i64vec4 ref = i64vec4(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = i64vec4(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int64 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  i64vec4 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  i64vec4 ref = i64vec4(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = i64vec4(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_long_vector : enable
+#extension GL_EXT_shader_subgroup_extended_types_int64 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vector<int64_t, 8> data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vector<int64_t, 8> ref = vector<int64_t, 8>(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vector<int64_t, 8>(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_long_vector : enable
+#extension GL_EXT_shader_subgroup_extended_types_int64 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vector<int64_t, 8> data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vector<int64_t, 8> ref = vector<int64_t, 8>(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vector<int64_t, 8>(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int64 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  uint64_t data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  uint64_t ref = uint64_t(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = uint64_t(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int64 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  uint64_t data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  uint64_t ref = uint64_t(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = uint64_t(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= (ref == subgroupExclusiveMul(data[gl_SubgroupInvocationID])) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int64 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  u64vec2 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  u64vec2 ref = u64vec2(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = u64vec2(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int64 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  u64vec2 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  u64vec2 ref = u64vec2(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = u64vec2(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int64 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  u64vec3 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  u64vec3 ref = u64vec3(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = u64vec3(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int64 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  u64vec3 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  u64vec3 ref = u64vec3(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = u64vec3(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int64 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  u64vec4 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  u64vec4 ref = u64vec4(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = u64vec4(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int64 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  u64vec4 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  u64vec4 ref = u64vec4(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = u64vec4(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_long_vector : enable
+#extension GL_EXT_shader_subgroup_extended_types_int64 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vector<uint64_t, 8> data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vector<uint64_t, 8> ref = vector<uint64_t, 8>(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vector<uint64_t, 8>(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_long_vector : enable
+#extension GL_EXT_shader_subgroup_extended_types_int64 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vector<uint64_t, 8> data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vector<uint64_t, 8> ref = vector<uint64_t, 8>(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vector<uint64_t, 8>(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(equal(ref, subgroupExclusiveMul(data[gl_SubgroupInvocationID]))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_float16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  float16_t data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  float16_t ref = float16_t(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = (abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])) < float16_t(gl_SubgroupSize==128 ? 0.2: 0.1)) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = float16_t(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= (abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])) < float16_t(gl_SubgroupSize==128 ? 0.2: 0.1)) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_float16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  float16_t data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  float16_t ref = float16_t(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = (abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])) < float16_t(gl_SubgroupSize==128 ? 0.2: 0.1)) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = float16_t(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= (abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])) < float16_t(gl_SubgroupSize==128 ? 0.2: 0.1)) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_float16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  f16vec2 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  f16vec2 ref = f16vec2(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), f16vec2(gl_SubgroupSize==128 ? 0.2: 0.1))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = f16vec2(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), f16vec2(gl_SubgroupSize==128 ? 0.2: 0.1))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_float16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  f16vec2 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  f16vec2 ref = f16vec2(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), f16vec2(gl_SubgroupSize==128 ? 0.2: 0.1))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = f16vec2(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), f16vec2(gl_SubgroupSize==128 ? 0.2: 0.1))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_float16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  f16vec3 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  f16vec3 ref = f16vec3(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), f16vec3(gl_SubgroupSize==128 ? 0.2: 0.1))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = f16vec3(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), f16vec3(gl_SubgroupSize==128 ? 0.2: 0.1))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_float16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  f16vec3 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  f16vec3 ref = f16vec3(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), f16vec3(gl_SubgroupSize==128 ? 0.2: 0.1))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = f16vec3(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), f16vec3(gl_SubgroupSize==128 ? 0.2: 0.1))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_float16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  f16vec4 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  f16vec4 ref = f16vec4(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), f16vec4(gl_SubgroupSize==128 ? 0.2: 0.1))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = f16vec4(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), f16vec4(gl_SubgroupSize==128 ? 0.2: 0.1))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_float16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  f16vec4 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  f16vec4 ref = f16vec4(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), f16vec4(gl_SubgroupSize==128 ? 0.2: 0.1))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = f16vec4(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), f16vec4(gl_SubgroupSize==128 ? 0.2: 0.1))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_long_vector : enable
+#extension GL_EXT_shader_subgroup_extended_types_float16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vector<float16_t, 8> data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vector<float16_t, 8> ref = vector<float16_t, 8>(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), vector<float16_t, 8>(gl_SubgroupSize==128 ? 0.2: 0.1))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vector<float16_t, 8>(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), vector<float16_t, 8>(gl_SubgroupSize==128 ? 0.2: 0.1))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_long_vector : enable
+#extension GL_EXT_shader_subgroup_extended_types_float16 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vector<float16_t, 8> data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vector<float16_t, 8> ref = vector<float16_t, 8>(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), vector<float16_t, 8>(gl_SubgroupSize==128 ? 0.2: 0.1))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vector<float16_t, 8>(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), vector<float16_t, 8>(gl_SubgroupSize==128 ? 0.2: 0.1))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  float data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  float ref = float(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = (abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])) < (gl_SubgroupSize==128 ? 0.000025:0.00001)) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = float(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= (abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])) < (gl_SubgroupSize==128 ? 0.000025:0.00001)) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  float data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  float ref = float(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = (abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])) < (gl_SubgroupSize==128 ? 0.000025:0.00001)) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = float(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= (abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])) < (gl_SubgroupSize==128 ? 0.000025:0.00001)) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vec2 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vec2 ref = vec2(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), vec2(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vec2(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), vec2(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vec2 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vec2 ref = vec2(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), vec2(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vec2(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), vec2(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vec3 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vec3 ref = vec3(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), vec3(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vec3(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), vec3(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vec3 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vec3 ref = vec3(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), vec3(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vec3(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), vec3(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vec4 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vec4 ref = vec4(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), vec4(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vec4(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), vec4(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vec4 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vec4 ref = vec4(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), vec4(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vec4(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), vec4(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_long_vector : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vector<float, 8> data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vector<float, 8> ref = vector<float, 8>(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), vector<float, 8>(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vector<float, 8>(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), vector<float, 8>(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_long_vector : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vector<float, 8> data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vector<float, 8> ref = vector<float, 8>(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), vector<float, 8>(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vector<float, 8>(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), vector<float, 8>(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  double data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  double ref = double(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = (abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])) < (gl_SubgroupSize==128 ? 0.000025:0.00001)) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = double(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= (abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])) < (gl_SubgroupSize==128 ? 0.000025:0.00001)) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  double data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  double ref = double(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = (abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])) < (gl_SubgroupSize==128 ? 0.000025:0.00001)) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = double(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= (abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])) < (gl_SubgroupSize==128 ? 0.000025:0.00001)) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  dvec2 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  dvec2 ref = dvec2(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), dvec2(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = dvec2(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), dvec2(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  dvec2 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  dvec2 ref = dvec2(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), dvec2(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = dvec2(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), dvec2(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  dvec3 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  dvec3 ref = dvec3(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), dvec3(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = dvec3(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), dvec3(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  dvec3 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  dvec3 ref = dvec3(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), dvec3(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = dvec3(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), dvec3(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  dvec4 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  dvec4 ref = dvec4(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), dvec4(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = dvec4(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), dvec4(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  dvec4 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  dvec4 ref = dvec4(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), dvec4(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = dvec4(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), dvec4(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_long_vector : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vector<double, 8> data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vector<double, 8> ref = vector<double, 8>(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), vector<double, 8>(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vector<double, 8>(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), vector<double, 8>(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_arithmetic: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_long_vector : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vector<double, 8> data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint start = 0, end = gl_SubgroupInvocationID;
+  vector<double, 8> ref = vector<double, 8>(1);
+  tempRes = 0;
+  uint identityOnly = 0x3;
+  for (uint index = start; index < end; index++)
+  {
+    if (subgroupBallotBitExtract(mask, index))
+    {
+      ref = ref * data[index];
+      identityOnly &= ~0x1;
+    }
+  }
+  tempRes = all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), vector<double, 8>(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x1 : 0;
+  if (1 == (gl_SubgroupInvocationID % 2))
+  {
+    mask = subgroupBallot(true);
+    ref = vector<double, 8>(1);
+    for (uint index = start; index < end; index++)
+    {
+      if (subgroupBallotBitExtract(mask, index))
+      {
+        ref = ref * data[index];
+        identityOnly &= ~0x2;
+      }
+    }
+    tempRes |= all(lessThan(abs(ref - subgroupExclusiveMul(data[gl_SubgroupInvocationID])), vector<double, 8>(gl_SubgroupSize==128 ? 0.000025: 0.00001))) ? 0x2 : 0;
+  }
+  else
+  {
+    tempRes |= 0x2;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}

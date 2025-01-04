@@ -1,0 +1,17 @@
+# Shader manifest for dEQP-VK.ycbcr.misc.relaxed_precision
+#
+# Upstream's fragment shader is SPIR-V assembly (spirvAsmSources), which this pipeline
+# cannot assemble; the GLSL here is its mediump equivalent. The vertex shader is
+# upstream's verbatim, including the missing newline after the texCoord statement.
+
+upstream_source = "external/vulkancts/modules/vulkan/ycbcr/vktYCbCrMiscTests.cpp"
+rust_module = "ycbcr/misc_tests"
+
+[[case]]
+name = "relaxed_precision"
+rust_const = "RELAXED_PRECISION"
+rust_type = "RelaxedPrecisionCase"
+programs = [
+    { name = "vert", template = "ycbcr/misc_relaxed_precision.vert", stage = "vert" },
+    { name = "frag", template = "ycbcr/misc_relaxed_precision.frag", stage = "frag" },
+]

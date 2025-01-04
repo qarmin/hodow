@@ -1,0 +1,22 @@
+# Shader manifest for dEQP-VK.api.device_address.misc.memory_range_barrier
+
+upstream_source = "external/vulkancts/modules/vulkan/api/vktApiDeviceAddressCommandsTests.cpp"
+rust_module = "api/device_address_misc_tests"
+
+[[case]]
+name = "memory_range_barrier"
+rust_const = "MEMORY_RANGE_BARRIER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp0", template = "api/device_address_misc_comp0.comp", stage = "comp" },
+    { name = "comp1", template = "api/device_address_misc_comp1.comp", stage = "comp" },
+]
+
+[[case]]
+name = "vertex_index_binding"
+rust_const = "VERTEX_INDEX_BINDING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "api/device_address_misc.vert", stage = "vert" },
+    { name = "frag", template = "api/device_address_misc.frag", stage = "frag" },
+]

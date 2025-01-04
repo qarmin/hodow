@@ -1,0 +1,37 @@
+# Expected values captured from real hardware for this extension's generated tests.
+# Format: test_name - rust_expr
+#
+# One file per (architecture, extension) - written by scripts/cpu/capture_expected.py and
+# capture_expected_cross.py, read by generate_tests.py. Do not hand-edit: recapture instead.
+# A qemu-derived value is not a real-silicon one; see CLAUDE.md's "Non-x86 architectures".
+
+test_arm_shared_aes_vaesdq_u8 - [124, 124, 124, 124, 124, 124, 124, 124, 124, 124, 124, 8, 124, 124, 124, 124]
+test_arm_shared_aes_vaeseq_u8 - [202, 202, 202, 4, 202, 202, 202, 202, 202, 202, 202, 202, 202, 202, 202, 202]
+test_arm_shared_aes_vaesimcq_u8 - [43, 60, 33, 50, 103, 80, 125, 70, 35, 52, 41, 58, 255, 136, 197, 174]
+test_arm_shared_aes_vaesmcq_u8 - [3, 4, 9, 10, 15, 8, 21, 30, 11, 12, 1, 2, 23, 16, 45, 54]
+test_arm_shared_aes_vcreate_p64 - [1]
+test_arm_shared_aes_vld1_dup_p64 - [1]
+test_arm_shared_aes_vld1_lane_p64 - [1]
+test_arm_shared_aes_vld1_p64 - [1]
+test_arm_shared_aes_vld1q_dup_p64 - [1, 1]
+test_arm_shared_aes_vld1q_lane_p64 - [1, 3]
+test_arm_shared_aes_vld1q_lane_p64_imm_1 - [2, 1]
+test_arm_shared_aes_vld1q_p64 - [1, 1]
+test_arm_shared_aes_vreinterpretq_p128_p64 - 36893488147419103233
+test_arm_shared_aes_vreinterpretq_p16_p128 - [1, 0, 0, 0, 0, 0, 0, 0]
+test_arm_shared_aes_vreinterpretq_p64_p128 - [1, 0]
+test_arm_shared_aes_vreinterpretq_p8_p128 - [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+test_arm_shared_aes_vreinterpretq_s16_p128 - [1, 0, 0, 0, 0, 0, 0, 0]
+test_arm_shared_aes_vreinterpretq_s32_p128 - [1, 0, 0, 0]
+test_arm_shared_aes_vreinterpretq_s64_p128 - [1, 0]
+test_arm_shared_aes_vreinterpretq_s8_p128 - [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+test_arm_shared_aes_vreinterpretq_u16_p128 - [1, 0, 0, 0, 0, 0, 0, 0]
+test_arm_shared_aes_vreinterpretq_u32_p128 - [1, 0, 0, 0]
+test_arm_shared_aes_vreinterpretq_u64_p128 - [1, 0]
+test_arm_shared_aes_vreinterpretq_u8_p128 - [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+test_arm_shared_aes_vset_lane_p64 - [1]
+test_arm_shared_aes_vsetq_lane_p64 - [1, 3]
+test_arm_shared_aes_vsetq_lane_p64_imm_1 - [2, 1]
+test_arm_shared_aes_vst1_lane_p64 - [2, 1, 1, 1, 1, 1, 1, 1]
+test_arm_shared_aes_vst1q_lane_p64 - [2, 1, 1, 1, 1, 1, 1, 1]
+test_arm_shared_aes_vst1q_lane_p64_imm_1 - [3, 1, 1, 1, 1, 1, 1, 1]

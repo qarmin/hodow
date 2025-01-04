@@ -1,0 +1,92 @@
+
+                        OpCapability Shader
+                        ${OPCAPABILITY}
+                        ${NANCAP}
+                        ${NANEXT}
+                   %1 = OpExtInstImport "GLSL.std.450"
+                        OpMemoryModel Logical GLSL450
+                        OpEntryPoint GLCompute %main "main"
+                        ${NANMODE}
+                        OpExecutionMode %main LocalSize 1 1 1
+                        OpName %main "main"
+                        OpName %i "i"
+                        OpName %Output1 "Output1"
+                        OpMemberName %Output1 0 "values"
+                        OpName %output1 "output1"
+                        OpName %Input1 "Input1"
+                        OpMemberName %Input1 0 "values"
+                        OpName %input1 "input1"
+                        OpName %Input2 "Input2"
+                        OpMemberName %Input2 0 "values"
+                        OpName %input2 "input2"
+                        OpDecorate %_runtimearr_int ArrayStride 4
+                        OpMemberDecorate %Output1 0 Offset 0
+                        OpDecorate %Output1 BufferBlock
+                        OpDecorate %output1 DescriptorSet 0
+                        OpDecorate %output1 Binding 2
+                        OpDecorate %_runtimearr_tinput ArrayStride 8
+                        OpMemberDecorate %Input1 0 Offset 0
+                        OpDecorate %Input1 BufferBlock
+                        OpDecorate %input1 DescriptorSet 0
+                        OpDecorate %input1 Binding 0
+                        OpDecorate %_runtimearr_tinput_0 ArrayStride 8
+                        OpMemberDecorate %Input2 0 Offset 0
+                        OpDecorate %Input2 BufferBlock
+                        OpDecorate %input2 DescriptorSet 0
+                        OpDecorate %input2 Binding 1
+                %void = OpTypeVoid
+                   %3 = OpTypeFunction %void
+                 %int = OpTypeInt 32 1
+   %_ptr_Function_int = OpTypePointer Function %int
+               %int_0 = OpConstant %int 0
+              %niters = OpConstant %int ${ITERS}
+                %bool = OpTypeBool
+     %_runtimearr_int = OpTypeRuntimeArray %int
+             %Output1 = OpTypeStruct %_runtimearr_int
+%_ptr_Uniform_Output1 = OpTypePointer Uniform %Output1
+             %output1 = OpVariable %_ptr_Uniform_Output1 Uniform
+              %tinput = ${OPTYPE}
+  %_runtimearr_tinput = OpTypeRuntimeArray %tinput
+              %Input1 = OpTypeStruct %_runtimearr_tinput
+ %_ptr_Uniform_Input1 = OpTypePointer Uniform %Input1
+              %input1 = OpVariable %_ptr_Uniform_Input1 Uniform
+ %_ptr_Uniform_tinput = OpTypePointer Uniform %tinput
+%_runtimearr_tinput_0 = OpTypeRuntimeArray %tinput
+              %Input2 = OpTypeStruct %_runtimearr_tinput_0
+ %_ptr_Uniform_Input2 = OpTypePointer Uniform %Input2
+              %input2 = OpVariable %_ptr_Uniform_Input2 Uniform
+               %int_1 = OpConstant %int 1
+    %_ptr_Uniform_int = OpTypePointer Uniform %int
+                %main = OpFunction %void None %3
+                   %5 = OpLabel
+                   %i = OpVariable %_ptr_Function_int Function
+                        OpStore %i %int_0
+                        OpBranch %10
+                  %10 = OpLabel
+                        OpLoopMerge %12 %13 None
+                        OpBranch %14
+                  %14 = OpLabel
+                  %15 = OpLoad %int %i
+                  %18 = OpSLessThan %bool %15 %niters
+                        OpBranchConditional %18 %11 %12
+                  %11 = OpLabel
+                  %23 = OpLoad %int %i
+                  %29 = OpLoad %int %i
+                  %31 = OpAccessChain %_ptr_Uniform_tinput %input1 %int_0 %29
+                  %32 = OpLoad %tinput %31
+                  %37 = OpLoad %int %i
+                  %38 = OpAccessChain %_ptr_Uniform_tinput %input2 %int_0 %37
+                  %39 = OpLoad %tinput %38
+                  %40 = ${OPNAME} %bool %32 %39
+                  %42 = OpSelect %int %40 %int_1 %int_0
+                  %44 = OpAccessChain %_ptr_Uniform_int %output1 %int_0 %23
+                        OpStore %44 %42
+                        OpBranch %13
+                  %13 = OpLabel
+                  %45 = OpLoad %int %i
+                  %46 = OpIAdd %int %45 %int_1
+                        OpStore %i %46
+                        OpBranch %10
+                  %12 = OpLabel
+                        OpReturn
+                        OpFunctionEnd

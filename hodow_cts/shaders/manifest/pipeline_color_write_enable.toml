@@ -1,0 +1,44 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.color_write_enable.* and color_write_enable_maxa.*
+#
+# `ColorWriteEnableTest::initPrograms`: a push-constant driven vertex shader and a fragment shader writing the
+# triangle colour scaled by 0.5^i to three attachments. `ColorWriteEnable2Test::initPrograms`: the fragment shader
+# declares one `colors[N]` output per attachment count the group tries (3, 4 and 5).
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineColorWriteEnableTests.cpp"
+rust_module = "pipeline/color_write_enable_tests"
+
+[[case]]
+name = "color_write_enable"
+rust_const = "COLOR_WRITE_ENABLE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/color_write_enable.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/color_write_enable.frag", stage = "frag" },
+]
+
+[[case]]
+name = "maxa_3"
+rust_const = "COLOR_WRITE_ENABLE_MAXA_3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/color_write_enable_maxa.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/color_write_enable_maxa_3.frag", stage = "frag" },
+]
+
+[[case]]
+name = "maxa_4"
+rust_const = "COLOR_WRITE_ENABLE_MAXA_4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/color_write_enable_maxa.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/color_write_enable_maxa_4.frag", stage = "frag" },
+]
+
+[[case]]
+name = "maxa_5"
+rust_const = "COLOR_WRITE_ENABLE_MAXA_5"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/color_write_enable_maxa.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/color_write_enable_maxa_5.frag", stage = "frag" },
+]

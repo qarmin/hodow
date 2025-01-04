@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.matched_attachments.*
+#
+# `initPrograms`: a vertex shader writing a constant position and a fragment shader copying a subpass input.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineMatchedAttachmentsTests.cpp"
+rust_module = "pipeline/matched_attachments_tests"
+
+[[case]]
+name = "matched_attachments"
+rust_const = "MATCHED_ATTACHMENTS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/matched_attachments.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/matched_attachments.frag", stage = "frag" },
+]

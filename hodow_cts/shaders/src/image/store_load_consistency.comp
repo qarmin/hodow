@@ -1,0 +1,13 @@
+#version 450
+layout (local_size_x = 1) in;
+layout (binding = 0, ${image_qualifier}) uniform ${image_var_type} imageSrc;
+layout (binding = 1, ${image_qualifier}) writeonly uniform ${image_var_type} imageDst;
+void main ()
+{
+  ivec3 coord = ivec3(gl_GlobalInvocationID.xyz);
+  int checker = (coord.x / 2 + coord.y / 2 + coord.z / 2) % 2;
+  vec4  fcolor = vec4(float(checker), 0.0, float(checker == 0), 1.0);
+  ivec4 icolor = ivec4(255 * int(checker), 0, 255 * int(checker == 0), 255);
+  imageStore(imageSrc, ${image_coord}, ${color_to_assign});
+  imageStore(imageDst, ${image_coord}, imageLoad(imageSrc, ${image_coord}));
+}

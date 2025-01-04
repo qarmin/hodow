@@ -1,0 +1,14 @@
+#version 460
+layout(local_size_x=8) in;
+layout(set=1, binding=0) uniform IUBBlock1 { uvec4 items[8]; } iub1;
+layout(set=1, binding=1) buffer OutBlock1 { uvec4 items[8]; } ob1;
+uint getWorkGroupSize (void) {
+    const uint workGroupSize = gl_WorkGroupSize.x * gl_WorkGroupSize.y * gl_WorkGroupSize.z;
+    return workGroupSize;
+}
+void main (void) {
+    const uint wgSize = getWorkGroupSize();
+    const uint srcIndex = (wgSize - gl_LocalInvocationIndex - 1u);
+    const uint dstIndex = gl_LocalInvocationIndex;
+    ob1.items[dstIndex] = iub1.items[srcIndex];
+}

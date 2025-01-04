@@ -1,0 +1,17 @@
+# Shader manifest for dEQP-VK.api.copy_and_blit.dynamic_state.*
+#
+# `DynamicStateMetaOpsTestCase::initPrograms`: the pass-through vertex shader, the fragment shader drawing per-sample colours on even (first draw) or odd (second draw) samples, and
+# the verification fragment shader that writes each sample of the multisampled input attachment and the colour it should have to two storage buffers.
+
+upstream_source = "external/vulkancts/modules/vulkan/api/vktApiCopiesAndBlittingDynamicStateMetaOpsTests.cpp"
+rust_module = "api/copy_blit_dynamic_state_tests"
+
+[[case]]
+name = "dynamic_state_meta_ops"
+rust_const = "DYNAMIC_STATE_META_OPS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "api/copy_blit_dynamic_state/draw.vert", stage = "vert" },
+    { name = "frag", template = "api/copy_blit_dynamic_state/draw.frag", stage = "frag" },
+    { name = "fragVerify", template = "api/copy_blit_dynamic_state/verify.frag", stage = "frag" },
+]

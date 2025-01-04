@@ -1,0 +1,18 @@
+# Shader manifest for dEQP-VK.renderpasses.*.unused_attachment.*
+#
+# These three shaders take no parameters at all - the test varies the load and store
+# ops of an attachment no subpass references, which never reaches the GLSL - so this
+# manifest exists only to compile them and hand the SPIR-V to the test.
+
+upstream_source = "external/vulkancts/modules/vulkan/renderpass/vktRenderPassUnusedAttachmentTests.cpp"
+rust_module = "renderpass/unused_attachment_tests"
+
+[[case]]
+name = "unused_attachment"
+rust_const = "UNUSED_ATTACHMENT"
+rust_type = "UnusedAttachmentPrograms"
+programs = [
+    { name = "color_vert", template = "renderpass/unused_attachment_color.vert", stage = "vert" },
+    { name = "color_frag_sb0", template = "renderpass/unused_attachment_color_sb0.frag", stage = "frag" },
+    { name = "color_frag_sb1", template = "renderpass/unused_attachment_color_sb1.frag", stage = "frag" },
+]

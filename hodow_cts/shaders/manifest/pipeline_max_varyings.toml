@@ -1,0 +1,37 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.max_varyings.*
+#
+# `initPrograms` in vktPipelineMaxVaryingsTests.cpp. Upstream assembles SPIR-V by hand and gives the GLSL it was generated from in
+# a comment; this is that GLSL, compiled ahead of time. `arraySize` is specialization constant 0 of every stage that uses it.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineMaxVaryingsTests.cpp"
+rust_module = "pipeline/max_varyings_tests"
+
+[[case]]
+name = "vertex_out"
+rust_const = "MAX_VARYINGS_VERTEX_OUT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/max_varyings/out.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/max_varyings/in.frag", stage = "frag" },
+]
+
+[[case]]
+name = "tess_eval_out"
+rust_const = "MAX_VARYINGS_TESS_EVAL_OUT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/max_varyings/passthrough.vert", stage = "vert" },
+    { name = "tcs", template = "pipeline/max_varyings/passthrough.tesc", stage = "tesc" },
+    { name = "tes", template = "pipeline/max_varyings/out.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/max_varyings/in.frag", stage = "frag" },
+]
+
+[[case]]
+name = "geometry_out"
+rust_const = "MAX_VARYINGS_GEOMETRY_OUT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/max_varyings/passthrough.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/max_varyings/out.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/max_varyings/in.frag", stage = "frag" },
+]

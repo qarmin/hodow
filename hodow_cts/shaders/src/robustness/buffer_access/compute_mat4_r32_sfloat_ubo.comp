@@ -1,0 +1,25 @@
+#version 440
+#extension GL_EXT_texture_buffer : require
+precision highp float;
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(binding = 0, std140) uniform InBuffer
+{
+    mat4 inMatrix[128];
+};
+
+layout(binding = 1, std430) buffer OutBuffer
+{
+    mat4 outMatrix[128];
+};
+
+layout(binding = 2, std140) uniform Indices
+{
+    int inIndex;
+    int outIndex;
+};
+
+void main (void)
+{
+    mat4 tmp = inMatrix[inIndex];
+    outMatrix[outIndex] = tmp;
+}

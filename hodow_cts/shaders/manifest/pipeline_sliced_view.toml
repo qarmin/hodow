@@ -1,0 +1,1739 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.sliced_view_of_3d_image.*
+#
+# `SlicedViewTestCase::initPrograms`, pre-expanded by a shell loop over what the shaders depend on: the test type (load or
+# store), the stage (comp or frag), the actual range of slices `range` (the shader compares the image size against it), the
+# size of the slices `width` x `height` (8 shifted by the mip level) and, when the whole level is also sampled, its depth
+# `sample_depth` (0 otherwise). The pseudorandom cases of the group can land on any range up to 32 slices at the full size.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineImageSlicedViewOf3DTests.cpp"
+rust_module = "pipeline/sliced_view_of_3d_tests"
+
+[[case]]
+name = "load_comp_w8_r1_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R1_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 1 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r2_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R2_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 2 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r3_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R3_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 3 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r4_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R4_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 4 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r5_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R5_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 5 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r6_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R6_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 6 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r7_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R7_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 7 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r8_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R8_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 8 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r9_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R9_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 9 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r10_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R10_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 10 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r11_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R11_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 11 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r12_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R12_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 12 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r13_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R13_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 13 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r14_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R14_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 14 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r15_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R15_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 15 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r16_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R16_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 16 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r17_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R17_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 17 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r18_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R18_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 18 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r19_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R19_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 19 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r20_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R20_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 20 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r21_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R21_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 21 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r22_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R22_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 22 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r23_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R23_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 23 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r24_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R24_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 24 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r25_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R25_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 25 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r26_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R26_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 26 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r27_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R27_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 27 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r28_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R28_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 28 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r29_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R29_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 29 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r30_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R30_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 30 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r31_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R31_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 31 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r32_s0"
+rust_const = "SLICED_LOAD_COMP_W8_R32_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 32 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w4_r1_s0"
+rust_const = "SLICED_LOAD_COMP_W4_R1_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 1 }, width = { type = "u32", value = 4 }, height = { type = "u32", value = 4 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w4_r2_s0"
+rust_const = "SLICED_LOAD_COMP_W4_R2_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 2 }, width = { type = "u32", value = 4 }, height = { type = "u32", value = 4 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w4_r3_s0"
+rust_const = "SLICED_LOAD_COMP_W4_R3_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 3 }, width = { type = "u32", value = 4 }, height = { type = "u32", value = 4 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w4_r4_s0"
+rust_const = "SLICED_LOAD_COMP_W4_R4_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 4 }, width = { type = "u32", value = 4 }, height = { type = "u32", value = 4 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w2_r1_s0"
+rust_const = "SLICED_LOAD_COMP_W2_R1_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 1 }, width = { type = "u32", value = 2 }, height = { type = "u32", value = 2 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w2_r2_s0"
+rust_const = "SLICED_LOAD_COMP_W2_R2_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 2 }, width = { type = "u32", value = 2 }, height = { type = "u32", value = 2 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w1_r1_s0"
+rust_const = "SLICED_LOAD_COMP_W1_R1_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 1 }, width = { type = "u32", value = 1 }, height = { type = "u32", value = 1 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r1_s2"
+rust_const = "SLICED_LOAD_COMP_W8_R1_S2"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+    { name = "compSample", template = "pipeline/sliced_view/sample.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 1 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 2 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_comp_w8_r4_s4"
+rust_const = "SLICED_LOAD_COMP_W8_R4_S4"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+    { name = "compSample", template = "pipeline/sliced_view/sample.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 4 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 4 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r1_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R1_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 1 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r2_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R2_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 2 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r3_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R3_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 3 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r4_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R4_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 4 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r5_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R5_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 5 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r6_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R6_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 6 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r7_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R7_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 7 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r8_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R8_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 8 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r9_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R9_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 9 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r10_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R10_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 10 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r11_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R11_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 11 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r12_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R12_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 12 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r13_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R13_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 13 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r14_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R14_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 14 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r15_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R15_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 15 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r16_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R16_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 16 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r17_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R17_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 17 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r18_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R18_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 18 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r19_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R19_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 19 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r20_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R20_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 20 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r21_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R21_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 21 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r22_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R22_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 22 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r23_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R23_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 23 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r24_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R24_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 24 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r25_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R25_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 25 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r26_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R26_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 26 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r27_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R27_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 27 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r28_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R28_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 28 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r29_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R29_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 29 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r30_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R30_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 30 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r31_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R31_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 31 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r32_s0"
+rust_const = "SLICED_LOAD_FRAG_W8_R32_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 32 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w4_r1_s0"
+rust_const = "SLICED_LOAD_FRAG_W4_R1_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 1 }, width = { type = "u32", value = 4 }, height = { type = "u32", value = 4 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w4_r2_s0"
+rust_const = "SLICED_LOAD_FRAG_W4_R2_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 2 }, width = { type = "u32", value = 4 }, height = { type = "u32", value = 4 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w4_r3_s0"
+rust_const = "SLICED_LOAD_FRAG_W4_R3_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 3 }, width = { type = "u32", value = 4 }, height = { type = "u32", value = 4 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w4_r4_s0"
+rust_const = "SLICED_LOAD_FRAG_W4_R4_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 4 }, width = { type = "u32", value = 4 }, height = { type = "u32", value = 4 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w2_r1_s0"
+rust_const = "SLICED_LOAD_FRAG_W2_R1_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 1 }, width = { type = "u32", value = 2 }, height = { type = "u32", value = 2 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w2_r2_s0"
+rust_const = "SLICED_LOAD_FRAG_W2_R2_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 2 }, width = { type = "u32", value = 2 }, height = { type = "u32", value = 2 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w1_r1_s0"
+rust_const = "SLICED_LOAD_FRAG_W1_R1_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 1 }, width = { type = "u32", value = 1 }, height = { type = "u32", value = 1 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r1_s2"
+rust_const = "SLICED_LOAD_FRAG_W8_R1_S2"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+    { name = "compSample", template = "pipeline/sliced_view/sample.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 1 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 2 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "load_frag_w8_r4_s4"
+rust_const = "SLICED_LOAD_FRAG_W8_R4_S4"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+    { name = "compSample", template = "pipeline/sliced_view/sample.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "load" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 4 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 4 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r1_s0"
+rust_const = "SLICED_STORE_COMP_W8_R1_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 1 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r2_s0"
+rust_const = "SLICED_STORE_COMP_W8_R2_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 2 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r3_s0"
+rust_const = "SLICED_STORE_COMP_W8_R3_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 3 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r4_s0"
+rust_const = "SLICED_STORE_COMP_W8_R4_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 4 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r5_s0"
+rust_const = "SLICED_STORE_COMP_W8_R5_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 5 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r6_s0"
+rust_const = "SLICED_STORE_COMP_W8_R6_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 6 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r7_s0"
+rust_const = "SLICED_STORE_COMP_W8_R7_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 7 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r8_s0"
+rust_const = "SLICED_STORE_COMP_W8_R8_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 8 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r9_s0"
+rust_const = "SLICED_STORE_COMP_W8_R9_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 9 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r10_s0"
+rust_const = "SLICED_STORE_COMP_W8_R10_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 10 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r11_s0"
+rust_const = "SLICED_STORE_COMP_W8_R11_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 11 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r12_s0"
+rust_const = "SLICED_STORE_COMP_W8_R12_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 12 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r13_s0"
+rust_const = "SLICED_STORE_COMP_W8_R13_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 13 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r14_s0"
+rust_const = "SLICED_STORE_COMP_W8_R14_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 14 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r15_s0"
+rust_const = "SLICED_STORE_COMP_W8_R15_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 15 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r16_s0"
+rust_const = "SLICED_STORE_COMP_W8_R16_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 16 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r17_s0"
+rust_const = "SLICED_STORE_COMP_W8_R17_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 17 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r18_s0"
+rust_const = "SLICED_STORE_COMP_W8_R18_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 18 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r19_s0"
+rust_const = "SLICED_STORE_COMP_W8_R19_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 19 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r20_s0"
+rust_const = "SLICED_STORE_COMP_W8_R20_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 20 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r21_s0"
+rust_const = "SLICED_STORE_COMP_W8_R21_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 21 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r22_s0"
+rust_const = "SLICED_STORE_COMP_W8_R22_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 22 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r23_s0"
+rust_const = "SLICED_STORE_COMP_W8_R23_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 23 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r24_s0"
+rust_const = "SLICED_STORE_COMP_W8_R24_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 24 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r25_s0"
+rust_const = "SLICED_STORE_COMP_W8_R25_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 25 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r26_s0"
+rust_const = "SLICED_STORE_COMP_W8_R26_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 26 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r27_s0"
+rust_const = "SLICED_STORE_COMP_W8_R27_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 27 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r28_s0"
+rust_const = "SLICED_STORE_COMP_W8_R28_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 28 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r29_s0"
+rust_const = "SLICED_STORE_COMP_W8_R29_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 29 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r30_s0"
+rust_const = "SLICED_STORE_COMP_W8_R30_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 30 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r31_s0"
+rust_const = "SLICED_STORE_COMP_W8_R31_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 31 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r32_s0"
+rust_const = "SLICED_STORE_COMP_W8_R32_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 32 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w4_r1_s0"
+rust_const = "SLICED_STORE_COMP_W4_R1_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 1 }, width = { type = "u32", value = 4 }, height = { type = "u32", value = 4 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w4_r2_s0"
+rust_const = "SLICED_STORE_COMP_W4_R2_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 2 }, width = { type = "u32", value = 4 }, height = { type = "u32", value = 4 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w4_r3_s0"
+rust_const = "SLICED_STORE_COMP_W4_R3_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 3 }, width = { type = "u32", value = 4 }, height = { type = "u32", value = 4 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w4_r4_s0"
+rust_const = "SLICED_STORE_COMP_W4_R4_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 4 }, width = { type = "u32", value = 4 }, height = { type = "u32", value = 4 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w2_r1_s0"
+rust_const = "SLICED_STORE_COMP_W2_R1_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 1 }, width = { type = "u32", value = 2 }, height = { type = "u32", value = 2 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w2_r2_s0"
+rust_const = "SLICED_STORE_COMP_W2_R2_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 2 }, width = { type = "u32", value = 2 }, height = { type = "u32", value = 2 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w1_r1_s0"
+rust_const = "SLICED_STORE_COMP_W1_R1_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 1 }, width = { type = "u32", value = 1 }, height = { type = "u32", value = 1 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r1_s2"
+rust_const = "SLICED_STORE_COMP_W8_R1_S2"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+    { name = "compSample", template = "pipeline/sliced_view/sample.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 1 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 2 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_comp_w8_r4_s4"
+rust_const = "SLICED_STORE_COMP_W8_R4_S4"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/sliced_view/sliced.comp", stage = "comp" },
+    { name = "compSample", template = "pipeline/sliced_view/sample.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "comp" }, range = { type = "u32", value = 4 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 4 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r1_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R1_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 1 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r2_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R2_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 2 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r3_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R3_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 3 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r4_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R4_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 4 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r5_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R5_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 5 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r6_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R6_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 6 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r7_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R7_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 7 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r8_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R8_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 8 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r9_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R9_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 9 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r10_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R10_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 10 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r11_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R11_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 11 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r12_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R12_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 12 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r13_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R13_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 13 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r14_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R14_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 14 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r15_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R15_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 15 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r16_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R16_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 16 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r17_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R17_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 17 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r18_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R18_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 18 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r19_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R19_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 19 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r20_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R20_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 20 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r21_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R21_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 21 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r22_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R22_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 22 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r23_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R23_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 23 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r24_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R24_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 24 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r25_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R25_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 25 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r26_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R26_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 26 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r27_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R27_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 27 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r28_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R28_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 28 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r29_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R29_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 29 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r30_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R30_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 30 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r31_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R31_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 31 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r32_s0"
+rust_const = "SLICED_STORE_FRAG_W8_R32_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 32 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w4_r1_s0"
+rust_const = "SLICED_STORE_FRAG_W4_R1_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 1 }, width = { type = "u32", value = 4 }, height = { type = "u32", value = 4 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w4_r2_s0"
+rust_const = "SLICED_STORE_FRAG_W4_R2_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 2 }, width = { type = "u32", value = 4 }, height = { type = "u32", value = 4 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w4_r3_s0"
+rust_const = "SLICED_STORE_FRAG_W4_R3_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 3 }, width = { type = "u32", value = 4 }, height = { type = "u32", value = 4 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w4_r4_s0"
+rust_const = "SLICED_STORE_FRAG_W4_R4_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 4 }, width = { type = "u32", value = 4 }, height = { type = "u32", value = 4 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w2_r1_s0"
+rust_const = "SLICED_STORE_FRAG_W2_R1_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 1 }, width = { type = "u32", value = 2 }, height = { type = "u32", value = 2 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w2_r2_s0"
+rust_const = "SLICED_STORE_FRAG_W2_R2_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 2 }, width = { type = "u32", value = 2 }, height = { type = "u32", value = 2 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w1_r1_s0"
+rust_const = "SLICED_STORE_FRAG_W1_R1_S0"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 1 }, width = { type = "u32", value = 1 }, height = { type = "u32", value = 1 }, sample_depth = { type = "u32", value = 0 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r1_s2"
+rust_const = "SLICED_STORE_FRAG_W8_R1_S2"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+    { name = "compSample", template = "pipeline/sliced_view/sample.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 1 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 2 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }
+
+[[case]]
+name = "store_frag_w8_r4_s4"
+rust_const = "SLICED_STORE_FRAG_W8_R4_S4"
+rust_type = "SlicedViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/sliced_view/sliced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/sliced_view/sliced.frag", stage = "frag" },
+    { name = "compSample", template = "pipeline/sliced_view/sample.comp", stage = "comp" },
+]
+params = { test_type = { type = "str", value = "store" }, stage = { type = "str", value = "frag" }, range = { type = "u32", value = 4 }, width = { type = "u32", value = 8 }, height = { type = "u32", value = 8 }, sample_depth = { type = "u32", value = 4 } }
+derived = { load_from = "'slicedImage' if test_type == 'load' else 'auxiliarImage'", store_to = "'auxiliarImage' if test_type == 'load' else 'slicedImage'" }

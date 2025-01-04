@@ -1,0 +1,54 @@
+# Shader manifest for dEQP-VK.dynamic_state.*
+#
+# Upstream loads `vulkan/dynamic_state/VertexFetch.{vert,frag}` and `ViewportArray.geom` from its data directory
+# for nearly every case. `VertexFetch.mesh` is there for the `_mesh` variants of the cases that draw a triangle strip from it;
+# `VertexFetchViewportArray.mesh` is `viewport_array_mesh` for the viewport array case.
+
+upstream_source = "external/vulkancts/modules/vulkan/dynamic_state/vktDynamicStateBaseClass.cpp"
+rust_module = "dynamic_state/base_class"
+
+[[case]]
+name = "vertex_fetch"
+rust_const = "VERTEX_FETCH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "dynamic_state/vertex_fetch.vert", stage = "vert" },
+    { name = "frag", template = "dynamic_state/vertex_fetch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "viewport_array"
+rust_const = "VIEWPORT_ARRAY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "dynamic_state/vertex_fetch.vert", stage = "vert" },
+    { name = "geom", template = "dynamic_state/viewport_array.geom", stage = "geom" },
+    { name = "frag", template = "dynamic_state/vertex_fetch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_fetch_mesh"
+rust_const = "VERTEX_FETCH_MESH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "dynamic_state/vertex_fetch.mesh", stage = "mesh", spirv_version = "spirv1.4" },
+    { name = "frag", template = "dynamic_state/vertex_fetch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "viewport_array_mesh"
+rust_const = "VIEWPORT_ARRAY_MESH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "dynamic_state/viewport_array.mesh", stage = "mesh", spirv_version = "spirv1.4" },
+    { name = "frag", template = "dynamic_state/vertex_fetch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_fetch_lines_mesh"
+rust_const = "VERTEX_FETCH_LINES_MESH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "dynamic_state/vertex_fetch_lines.mesh", stage = "mesh", spirv_version = "spirv1.4" },
+    { name = "frag", template = "dynamic_state/vertex_fetch.frag", stage = "frag" },
+]

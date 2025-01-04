@@ -1,0 +1,62 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.multisample.z_export.*
+#
+# `ZExportInitPrograms`: a full-screen triangle whose depth is the bad value when the fragment shader exports the depth, and a
+# fragment shader with alpha 0.0 on the left half and 1.0 on the right half that exports the depth, the stencil reference and the
+# sample mask as the flags ask.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineMultisampleTests.cpp"
+rust_module = "pipeline/z_export_tests"
+
+[[case]]
+name = "depth"
+rust_const = "Z_EXPORT_DEPTH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/z_export/depth.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/z_export/depth.frag", stage = "frag" },
+]
+
+[[case]]
+name = "stencil"
+rust_const = "Z_EXPORT_STENCIL"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/z_export/stencil.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/z_export/stencil.frag", stage = "frag" },
+]
+
+[[case]]
+name = "sample_mask"
+rust_const = "Z_EXPORT_SAMPLE_MASK"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/z_export/sample_mask.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/z_export/sample_mask.frag", stage = "frag" },
+]
+
+[[case]]
+name = "sample_mask_pipeline"
+rust_const = "Z_EXPORT_SAMPLE_MASK_PIPELINE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/z_export/sample_mask_pipeline.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/z_export/sample_mask_pipeline.frag", stage = "frag" },
+]
+
+[[case]]
+name = "depth_stencil"
+rust_const = "Z_EXPORT_DEPTH_STENCIL"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/z_export/depth_stencil.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/z_export/depth_stencil.frag", stage = "frag" },
+]
+
+[[case]]
+name = "write_all"
+rust_const = "Z_EXPORT_WRITE_ALL"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/z_export/write_all.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/z_export/write_all.frag", stage = "frag" },
+]

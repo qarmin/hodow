@@ -1,0 +1,30 @@
+#version 430
+
+layout(set = 0, binding = 0) readonly uniform block0
+{
+    int data0;
+};
+
+layout(set = 0, binding = 1) readonly uniform block1
+{
+    int data1;
+};
+
+layout(set = 0, binding = 2) readonly uniform block2
+{
+    int data2;
+};
+
+layout(set = 0, binding = 3) buffer result
+{
+    int res0;
+    int res1;
+    int res2;
+};
+
+void main()
+{
+    res0 = data0;
+    res1 = data1;
+    res2 = data2;
+}

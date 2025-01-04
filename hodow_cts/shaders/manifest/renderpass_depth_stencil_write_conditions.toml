@@ -1,0 +1,166 @@
+# Shader manifest for dEQP-VK.renderpasses.depth_stencil_write_conditions.*
+#
+# Upstream assembles the fragment shader as SPIR-V text, with the buffer's built-in output
+# variable either initialised or written (or both). The generator here has no assembler, so
+# the same shader is expressed in GLSL: `init_only` is the INITIALIZE mode (the value is
+# stored once, before the discard), every other mode stores it after. `discard_kind` is 0
+# OpKill, 1 OpTerminateInvocation, 2 OpDemoteToHelperInvocation.
+
+upstream_source = "external/vulkancts/modules/vulkan/renderpass/vktRenderPassDepthStencilWriteConditionsTests.cpp"
+rust_module = "renderpass/depth_stencil_write_conditions_tests"
+
+[[case]]
+name = "kill_depth_write"
+rust_const = "DS_WRITE_KILL_DEPTH_WRITE"
+rust_type = "DepthStencilWriteProgram"
+programs = [
+    { name = "vert", template = "renderpass/depth_stencil_write_conditions.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/depth_stencil_write_conditions.frag", stage = "frag" },
+]
+[case.params]
+discard_kind = { type = "u32", value = 0 }
+stencil = { type = "bool", value = false }
+init_only = { type = "bool", value = false }
+
+[[case]]
+name = "kill_depth_init_only"
+rust_const = "DS_WRITE_KILL_DEPTH_INIT_ONLY"
+rust_type = "DepthStencilWriteProgram"
+programs = [
+    { name = "vert", template = "renderpass/depth_stencil_write_conditions.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/depth_stencil_write_conditions.frag", stage = "frag" },
+]
+[case.params]
+discard_kind = { type = "u32", value = 0 }
+stencil = { type = "bool", value = false }
+init_only = { type = "bool", value = true }
+
+[[case]]
+name = "kill_stencil_write"
+rust_const = "DS_WRITE_KILL_STENCIL_WRITE"
+rust_type = "DepthStencilWriteProgram"
+programs = [
+    { name = "vert", template = "renderpass/depth_stencil_write_conditions.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/depth_stencil_write_conditions.frag", stage = "frag" },
+]
+[case.params]
+discard_kind = { type = "u32", value = 0 }
+stencil = { type = "bool", value = true }
+init_only = { type = "bool", value = false }
+
+[[case]]
+name = "kill_stencil_init_only"
+rust_const = "DS_WRITE_KILL_STENCIL_INIT_ONLY"
+rust_type = "DepthStencilWriteProgram"
+programs = [
+    { name = "vert", template = "renderpass/depth_stencil_write_conditions.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/depth_stencil_write_conditions.frag", stage = "frag" },
+]
+[case.params]
+discard_kind = { type = "u32", value = 0 }
+stencil = { type = "bool", value = true }
+init_only = { type = "bool", value = true }
+
+[[case]]
+name = "terminate_depth_write"
+rust_const = "DS_WRITE_TERMINATE_DEPTH_WRITE"
+rust_type = "DepthStencilWriteProgram"
+programs = [
+    { name = "vert", template = "renderpass/depth_stencil_write_conditions.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/depth_stencil_write_conditions.frag", stage = "frag" },
+]
+[case.params]
+discard_kind = { type = "u32", value = 1 }
+stencil = { type = "bool", value = false }
+init_only = { type = "bool", value = false }
+
+[[case]]
+name = "terminate_depth_init_only"
+rust_const = "DS_WRITE_TERMINATE_DEPTH_INIT_ONLY"
+rust_type = "DepthStencilWriteProgram"
+programs = [
+    { name = "vert", template = "renderpass/depth_stencil_write_conditions.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/depth_stencil_write_conditions.frag", stage = "frag" },
+]
+[case.params]
+discard_kind = { type = "u32", value = 1 }
+stencil = { type = "bool", value = false }
+init_only = { type = "bool", value = true }
+
+[[case]]
+name = "terminate_stencil_write"
+rust_const = "DS_WRITE_TERMINATE_STENCIL_WRITE"
+rust_type = "DepthStencilWriteProgram"
+programs = [
+    { name = "vert", template = "renderpass/depth_stencil_write_conditions.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/depth_stencil_write_conditions.frag", stage = "frag" },
+]
+[case.params]
+discard_kind = { type = "u32", value = 1 }
+stencil = { type = "bool", value = true }
+init_only = { type = "bool", value = false }
+
+[[case]]
+name = "terminate_stencil_init_only"
+rust_const = "DS_WRITE_TERMINATE_STENCIL_INIT_ONLY"
+rust_type = "DepthStencilWriteProgram"
+programs = [
+    { name = "vert", template = "renderpass/depth_stencil_write_conditions.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/depth_stencil_write_conditions.frag", stage = "frag" },
+]
+[case.params]
+discard_kind = { type = "u32", value = 1 }
+stencil = { type = "bool", value = true }
+init_only = { type = "bool", value = true }
+
+[[case]]
+name = "demote_depth_write"
+rust_const = "DS_WRITE_DEMOTE_DEPTH_WRITE"
+rust_type = "DepthStencilWriteProgram"
+programs = [
+    { name = "vert", template = "renderpass/depth_stencil_write_conditions.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/depth_stencil_write_conditions.frag", stage = "frag" },
+]
+[case.params]
+discard_kind = { type = "u32", value = 2 }
+stencil = { type = "bool", value = false }
+init_only = { type = "bool", value = false }
+
+[[case]]
+name = "demote_depth_init_only"
+rust_const = "DS_WRITE_DEMOTE_DEPTH_INIT_ONLY"
+rust_type = "DepthStencilWriteProgram"
+programs = [
+    { name = "vert", template = "renderpass/depth_stencil_write_conditions.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/depth_stencil_write_conditions.frag", stage = "frag" },
+]
+[case.params]
+discard_kind = { type = "u32", value = 2 }
+stencil = { type = "bool", value = false }
+init_only = { type = "bool", value = true }
+
+[[case]]
+name = "demote_stencil_write"
+rust_const = "DS_WRITE_DEMOTE_STENCIL_WRITE"
+rust_type = "DepthStencilWriteProgram"
+programs = [
+    { name = "vert", template = "renderpass/depth_stencil_write_conditions.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/depth_stencil_write_conditions.frag", stage = "frag" },
+]
+[case.params]
+discard_kind = { type = "u32", value = 2 }
+stencil = { type = "bool", value = true }
+init_only = { type = "bool", value = false }
+
+[[case]]
+name = "demote_stencil_init_only"
+rust_const = "DS_WRITE_DEMOTE_STENCIL_INIT_ONLY"
+rust_type = "DepthStencilWriteProgram"
+programs = [
+    { name = "vert", template = "renderpass/depth_stencil_write_conditions.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/depth_stencil_write_conditions.frag", stage = "frag" },
+]
+[case.params]
+discard_kind = { type = "u32", value = 2 }
+stencil = { type = "bool", value = true }
+init_only = { type = "bool", value = true }

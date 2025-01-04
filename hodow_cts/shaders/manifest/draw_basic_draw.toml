@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.draw.*.basic_draw.*
+#
+# `DrawTestCase::initShaderSources`: position and colour straight through, with a point size of one.
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktBasicDrawTests.cpp"
+rust_module = "draw/basic_tests"
+
+[[case]]
+name = "basic_draw"
+rust_const = "BASIC_DRAW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/basic_draw.vert", stage = "vert" },
+    { name = "frag", template = "draw/basic_draw.frag", stage = "frag" },
+]

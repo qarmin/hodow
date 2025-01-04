@@ -1,0 +1,47 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.timestamp.*
+#
+# The initPrograms functions of vktPipelineTimestampTests.cpp: BasicGraphicsTest (color_vert, color_frag), AdvGraphicsTest (those
+# plus unused_geo, basic_tcs and basic_tes), BasicComputeTest (basic_compute) and SequentialTimestampTest (vert, frag and comp).
+# None of them depends on the case parameters.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineTimestampTests.cpp"
+rust_module = "pipeline/timestamp_tests"
+
+[[case]]
+name = "basic_graphics"
+rust_const = "TS_BASIC_GRAPHICS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/timestamp/color.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/timestamp/color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "adv_graphics"
+rust_const = "TS_ADV_GRAPHICS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/timestamp/color.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/timestamp/color.frag", stage = "frag" },
+    { name = "unused_geo", template = "pipeline/timestamp/unused_geo.geom", stage = "geom" },
+    { name = "basic_tcs", template = "pipeline/timestamp/basic_tcs.tesc", stage = "tesc" },
+    { name = "basic_tes", template = "pipeline/timestamp/basic_tes.tese", stage = "tese" },
+]
+
+[[case]]
+name = "basic_compute"
+rust_const = "TS_BASIC_COMPUTE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "basic_compute", template = "pipeline/timestamp/basic_compute.comp", stage = "comp" },
+]
+
+[[case]]
+name = "sequential"
+rust_const = "TS_SEQUENTIAL"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/timestamp/sequential.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/timestamp/sequential.frag", stage = "frag" },
+    { name = "comp", template = "pipeline/timestamp/sequential.comp", stage = "comp" },
+]

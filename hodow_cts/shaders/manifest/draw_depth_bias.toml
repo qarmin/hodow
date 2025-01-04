@@ -1,0 +1,27 @@
+# Shader manifest for dEQP-VK.draw.renderpass.depth_bias.*
+#
+# The shaders of the Amber scripts under data/vulkan/amber/draw/depth_bias: a pass-through vertex shader and a fragment shader,
+# and for the patch list cases a tessellation control and evaluation shader pair that subdivide each triangle.
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawDepthBiasTests.cpp"
+rust_module = "draw/depth_bias_tests"
+
+[[case]]
+name = "plain"
+rust_const = "DEPTH_BIAS_PLAIN"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/depth_bias.vert", stage = "vert" },
+    { name = "frag", template = "draw/depth_bias.frag", stage = "frag" },
+]
+
+[[case]]
+name = "tess"
+rust_const = "DEPTH_BIAS_TESS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/depth_bias.vert", stage = "vert" },
+    { name = "tesc", template = "draw/depth_bias.tesc", stage = "tesc" },
+    { name = "tese", template = "draw/depth_bias.tese", stage = "tese" },
+    { name = "frag", template = "draw/depth_bias.frag", stage = "frag" },
+]

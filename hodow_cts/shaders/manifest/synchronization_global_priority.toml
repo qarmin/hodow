@@ -1,0 +1,34 @@
+# Shader manifest for dEQP-VK.synchronization.global_priority_transition.*
+#
+# `PreemptionCase::initPrograms` adds the graphics pair when a workload needs graphics and the compute shader when one needs compute, so the
+# three combinations a case can need are three program sets; the choice is made in the Rust.
+
+upstream_source = "external/vulkancts/modules/vulkan/synchronization/vktGlobalPriorityQueueTests.cpp"
+rust_module = "synchronization/global_priority_tests"
+
+[[case]]
+name = "preemption_graphics"
+rust_const = "PREEMPTION_GRAPHICS"
+rust_type = "SharedProgram"
+programs = [
+  { name = "vert", template = "synchronization/global_priority/preemption.vert", stage = "vert" },
+  { name = "frag", template = "synchronization/global_priority/preemption.frag", stage = "frag" },
+]
+
+[[case]]
+name = "preemption_compute"
+rust_const = "PREEMPTION_COMPUTE"
+rust_type = "SharedProgram"
+programs = [
+  { name = "comp", template = "synchronization/global_priority/preemption.comp", stage = "comp" },
+]
+
+[[case]]
+name = "preemption_graphics_compute"
+rust_const = "PREEMPTION_GRAPHICS_COMPUTE"
+rust_type = "SharedProgram"
+programs = [
+  { name = "vert", template = "synchronization/global_priority/preemption.vert", stage = "vert" },
+  { name = "frag", template = "synchronization/global_priority/preemption.frag", stage = "frag" },
+  { name = "comp", template = "synchronization/global_priority/preemption.comp", stage = "comp" },
+]

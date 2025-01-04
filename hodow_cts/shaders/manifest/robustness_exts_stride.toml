@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.robustness.{robustness2,pipeline_robustness.robustness2}.misc.out_of_bounds_stride*
+#
+# `OutOfBoundsStrideCase::initPrograms`: a vertex shader passing the position through and a fragment shader writing blue.
+
+upstream_source = "external/vulkancts/modules/vulkan/robustness/vktRobustnessExtsTests.cpp"
+rust_module = "robustness/exts_stride_tests"
+
+[[case]]
+name = "stride"
+rust_const = "RX_OUT_OF_BOUNDS_STRIDE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "robustness/exts/stride.vert", stage = "vert" },
+    { name = "frag", template = "robustness/exts/stride.frag", stage = "frag" },
+]

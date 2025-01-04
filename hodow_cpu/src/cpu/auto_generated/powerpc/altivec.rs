@@ -1,0 +1,315 @@
+mod abs;
+mod abss;
+mod add;
+mod addc;
+mod adde;
+mod adds;
+mod all;
+mod and;
+mod andc;
+mod any;
+mod avg;
+mod ceil;
+mod cmpb;
+mod cmpeq;
+mod cmpge;
+mod cmpgt;
+mod cmple;
+mod cmplt;
+mod cmpne;
+mod cntlz;
+mod ctf;
+mod cts;
+mod ctu;
+mod expte;
+mod extract;
+mod floor;
+mod insert;
+mod ld;
+mod lde;
+mod ldl;
+mod loge;
+mod madd;
+mod madds;
+mod max;
+mod mergeh;
+mod mergel;
+mod mfvscr;
+mod min;
+mod mladd;
+mod mradds;
+mod msum;
+mod msums;
+mod mul;
+mod mule;
+mod mulo;
+mod nand;
+mod neg;
+mod nmsub;
+mod nor;
+mod or;
+mod orc;
+mod pack;
+mod packs;
+mod packsu;
+mod perm;
+mod rl;
+mod round;
+mod sel;
+mod sl;
+mod sld;
+mod sldw;
+mod sll;
+mod slo;
+mod slv;
+mod splat;
+mod splats;
+mod sr;
+mod sra;
+mod srl;
+mod sro;
+mod srv;
+mod st;
+mod ste;
+mod stl;
+mod sub;
+mod subc;
+mod subs;
+mod sum2s;
+mod sum4s;
+mod unpackh;
+mod unpackl;
+mod vmaddfp;
+mod vnmsubfp;
+mod vsel;
+mod xl;
+mod xor;
+mod xst;
+
+use crate::cpu::auto_generated::powerpc::altivec::abs::*;
+use crate::cpu::auto_generated::powerpc::altivec::abss::*;
+use crate::cpu::auto_generated::powerpc::altivec::add::*;
+use crate::cpu::auto_generated::powerpc::altivec::addc::*;
+use crate::cpu::auto_generated::powerpc::altivec::adde::*;
+use crate::cpu::auto_generated::powerpc::altivec::adds::*;
+use crate::cpu::auto_generated::powerpc::altivec::all::*;
+use crate::cpu::auto_generated::powerpc::altivec::and::*;
+use crate::cpu::auto_generated::powerpc::altivec::andc::*;
+use crate::cpu::auto_generated::powerpc::altivec::any::*;
+use crate::cpu::auto_generated::powerpc::altivec::avg::*;
+use crate::cpu::auto_generated::powerpc::altivec::ceil::*;
+use crate::cpu::auto_generated::powerpc::altivec::cmpb::*;
+use crate::cpu::auto_generated::powerpc::altivec::cmpeq::*;
+use crate::cpu::auto_generated::powerpc::altivec::cmpge::*;
+use crate::cpu::auto_generated::powerpc::altivec::cmpgt::*;
+use crate::cpu::auto_generated::powerpc::altivec::cmple::*;
+use crate::cpu::auto_generated::powerpc::altivec::cmplt::*;
+use crate::cpu::auto_generated::powerpc::altivec::cmpne::*;
+use crate::cpu::auto_generated::powerpc::altivec::cntlz::*;
+use crate::cpu::auto_generated::powerpc::altivec::ctf::*;
+use crate::cpu::auto_generated::powerpc::altivec::cts::*;
+use crate::cpu::auto_generated::powerpc::altivec::ctu::*;
+use crate::cpu::auto_generated::powerpc::altivec::expte::*;
+use crate::cpu::auto_generated::powerpc::altivec::extract::*;
+use crate::cpu::auto_generated::powerpc::altivec::floor::*;
+use crate::cpu::auto_generated::powerpc::altivec::insert::*;
+use crate::cpu::auto_generated::powerpc::altivec::ld::*;
+use crate::cpu::auto_generated::powerpc::altivec::lde::*;
+use crate::cpu::auto_generated::powerpc::altivec::ldl::*;
+use crate::cpu::auto_generated::powerpc::altivec::loge::*;
+use crate::cpu::auto_generated::powerpc::altivec::madd::*;
+use crate::cpu::auto_generated::powerpc::altivec::madds::*;
+use crate::cpu::auto_generated::powerpc::altivec::max::*;
+use crate::cpu::auto_generated::powerpc::altivec::mergeh::*;
+use crate::cpu::auto_generated::powerpc::altivec::mergel::*;
+use crate::cpu::auto_generated::powerpc::altivec::mfvscr::*;
+use crate::cpu::auto_generated::powerpc::altivec::min::*;
+use crate::cpu::auto_generated::powerpc::altivec::mladd::*;
+use crate::cpu::auto_generated::powerpc::altivec::mradds::*;
+use crate::cpu::auto_generated::powerpc::altivec::msum::*;
+use crate::cpu::auto_generated::powerpc::altivec::msums::*;
+use crate::cpu::auto_generated::powerpc::altivec::mul::*;
+use crate::cpu::auto_generated::powerpc::altivec::mule::*;
+use crate::cpu::auto_generated::powerpc::altivec::mulo::*;
+use crate::cpu::auto_generated::powerpc::altivec::nand::*;
+use crate::cpu::auto_generated::powerpc::altivec::neg::*;
+use crate::cpu::auto_generated::powerpc::altivec::nmsub::*;
+use crate::cpu::auto_generated::powerpc::altivec::nor::*;
+use crate::cpu::auto_generated::powerpc::altivec::or::*;
+use crate::cpu::auto_generated::powerpc::altivec::orc::*;
+use crate::cpu::auto_generated::powerpc::altivec::pack::*;
+use crate::cpu::auto_generated::powerpc::altivec::packs::*;
+use crate::cpu::auto_generated::powerpc::altivec::packsu::*;
+use crate::cpu::auto_generated::powerpc::altivec::perm::*;
+use crate::cpu::auto_generated::powerpc::altivec::rl::*;
+use crate::cpu::auto_generated::powerpc::altivec::round::*;
+use crate::cpu::auto_generated::powerpc::altivec::sel::*;
+use crate::cpu::auto_generated::powerpc::altivec::sl::*;
+use crate::cpu::auto_generated::powerpc::altivec::sld::*;
+use crate::cpu::auto_generated::powerpc::altivec::sldw::*;
+use crate::cpu::auto_generated::powerpc::altivec::sll::*;
+use crate::cpu::auto_generated::powerpc::altivec::slo::*;
+use crate::cpu::auto_generated::powerpc::altivec::slv::*;
+use crate::cpu::auto_generated::powerpc::altivec::splat::*;
+use crate::cpu::auto_generated::powerpc::altivec::splats::*;
+use crate::cpu::auto_generated::powerpc::altivec::sr::*;
+use crate::cpu::auto_generated::powerpc::altivec::sra::*;
+use crate::cpu::auto_generated::powerpc::altivec::srl::*;
+use crate::cpu::auto_generated::powerpc::altivec::sro::*;
+use crate::cpu::auto_generated::powerpc::altivec::srv::*;
+use crate::cpu::auto_generated::powerpc::altivec::st::*;
+use crate::cpu::auto_generated::powerpc::altivec::ste::*;
+use crate::cpu::auto_generated::powerpc::altivec::stl::*;
+use crate::cpu::auto_generated::powerpc::altivec::sub::*;
+use crate::cpu::auto_generated::powerpc::altivec::subc::*;
+use crate::cpu::auto_generated::powerpc::altivec::subs::*;
+use crate::cpu::auto_generated::powerpc::altivec::sum2s::*;
+use crate::cpu::auto_generated::powerpc::altivec::sum4s::*;
+use crate::cpu::auto_generated::powerpc::altivec::unpackh::*;
+use crate::cpu::auto_generated::powerpc::altivec::unpackl::*;
+use crate::cpu::auto_generated::powerpc::altivec::vmaddfp::*;
+use crate::cpu::auto_generated::powerpc::altivec::vnmsubfp::*;
+use crate::cpu::auto_generated::powerpc::altivec::vsel::*;
+use crate::cpu::auto_generated::powerpc::altivec::xl::*;
+use crate::cpu::auto_generated::powerpc::altivec::xor::*;
+use crate::cpu::auto_generated::powerpc::altivec::xst::*;
+
+use crate::cpu::{ExtensionTest, TestFunction};
+
+#[allow(non_camel_case_types)]
+pub struct ALTIVEC;
+
+impl ExtensionTest for ALTIVEC {
+    fn get_name() -> &'static str {
+        "powerpc::ALTIVEC"
+    }
+
+    fn get_tests() -> &'static [(TestFunction, &'static str)] {
+        &[
+            (test_powerpc_altivec_vec_vnmsubfp, "test_powerpc_altivec_vec_vnmsubfp"),
+            (test_powerpc_altivec_vec_vmaddfp, "test_powerpc_altivec_vec_vmaddfp"),
+            (test_powerpc_altivec_vec_add_bc_sc, "test_powerpc_altivec_vec_add_bc_sc"),
+            (test_powerpc_altivec_vec_add_sc_sc, "test_powerpc_altivec_vec_add_sc_sc"),
+            (test_powerpc_altivec_vec_add_bc_uc, "test_powerpc_altivec_vec_add_bc_uc"),
+            (test_powerpc_altivec_vec_add_uc_uc, "test_powerpc_altivec_vec_add_uc_uc"),
+            (test_powerpc_altivec_vec_add_bs_ss, "test_powerpc_altivec_vec_add_bs_ss"),
+            (test_powerpc_altivec_vec_add_ss_ss, "test_powerpc_altivec_vec_add_ss_ss"),
+            (test_powerpc_altivec_vec_add_bs_us, "test_powerpc_altivec_vec_add_bs_us"),
+            (test_powerpc_altivec_vec_add_us_us, "test_powerpc_altivec_vec_add_us_us"),
+            (test_powerpc_altivec_vec_add_bi_si, "test_powerpc_altivec_vec_add_bi_si"),
+            (test_powerpc_altivec_vec_add_si_si, "test_powerpc_altivec_vec_add_si_si"),
+            (test_powerpc_altivec_vec_add_bi_ui, "test_powerpc_altivec_vec_add_bi_ui"),
+            (test_powerpc_altivec_vec_add_ui_ui, "test_powerpc_altivec_vec_add_ui_ui"),
+            (test_powerpc_altivec_vec_add_float_float, "test_powerpc_altivec_vec_add_float_float"),
+            (test_powerpc_altivec_vec_vsel, "test_powerpc_altivec_vec_vsel"),
+            (test_powerpc_altivec_vec_insert, "test_powerpc_altivec_vec_insert"),
+            (test_powerpc_altivec_vec_extract, "test_powerpc_altivec_vec_extract"),
+            (test_powerpc_altivec_vec_mergel, "test_powerpc_altivec_vec_mergel"),
+            (test_powerpc_altivec_vec_mergeh, "test_powerpc_altivec_vec_mergeh"),
+            (test_powerpc_altivec_vec_pack, "test_powerpc_altivec_vec_pack"),
+            (test_powerpc_altivec_vec_packs, "test_powerpc_altivec_vec_packs"),
+            (test_powerpc_altivec_vec_packsu, "test_powerpc_altivec_vec_packsu"),
+            (test_powerpc_altivec_vec_unpackh, "test_powerpc_altivec_vec_unpackh"),
+            (test_powerpc_altivec_vec_unpackl, "test_powerpc_altivec_vec_unpackl"),
+            (test_powerpc_altivec_vec_sl, "test_powerpc_altivec_vec_sl"),
+            (test_powerpc_altivec_vec_sr, "test_powerpc_altivec_vec_sr"),
+            (test_powerpc_altivec_vec_sra, "test_powerpc_altivec_vec_sra"),
+            (test_powerpc_altivec_vec_sld, "test_powerpc_altivec_vec_sld"),
+            (test_powerpc_altivec_vec_sldw, "test_powerpc_altivec_vec_sldw"),
+            (test_powerpc_altivec_vec_sll, "test_powerpc_altivec_vec_sll"),
+            (test_powerpc_altivec_vec_srl, "test_powerpc_altivec_vec_srl"),
+            (test_powerpc_altivec_vec_slo, "test_powerpc_altivec_vec_slo"),
+            (test_powerpc_altivec_vec_sro, "test_powerpc_altivec_vec_sro"),
+            (test_powerpc_altivec_vec_slv, "test_powerpc_altivec_vec_slv"),
+            (test_powerpc_altivec_vec_srv, "test_powerpc_altivec_vec_srv"),
+            (test_powerpc_altivec_vec_ld, "test_powerpc_altivec_vec_ld"),
+            (test_powerpc_altivec_vec_ldl, "test_powerpc_altivec_vec_ldl"),
+            (test_powerpc_altivec_vec_lde, "test_powerpc_altivec_vec_lde"),
+            (test_powerpc_altivec_vec_st, "test_powerpc_altivec_vec_st"),
+            (test_powerpc_altivec_vec_stl, "test_powerpc_altivec_vec_stl"),
+            (test_powerpc_altivec_vec_ste, "test_powerpc_altivec_vec_ste"),
+            (test_powerpc_altivec_vec_xl, "test_powerpc_altivec_vec_xl"),
+            (test_powerpc_altivec_vec_xst, "test_powerpc_altivec_vec_xst"),
+            (test_powerpc_altivec_vec_loge, "test_powerpc_altivec_vec_loge"),
+            (test_powerpc_altivec_vec_floor, "test_powerpc_altivec_vec_floor"),
+            (test_powerpc_altivec_vec_expte, "test_powerpc_altivec_vec_expte"),
+            (test_powerpc_altivec_vec_cmplt, "test_powerpc_altivec_vec_cmplt"),
+            (test_powerpc_altivec_vec_cmple, "test_powerpc_altivec_vec_cmple"),
+            (test_powerpc_altivec_vec_cmpgt, "test_powerpc_altivec_vec_cmpgt"),
+            (test_powerpc_altivec_vec_cmpge, "test_powerpc_altivec_vec_cmpge"),
+            (test_powerpc_altivec_vec_cmpeq, "test_powerpc_altivec_vec_cmpeq"),
+            (test_powerpc_altivec_vec_cmpne, "test_powerpc_altivec_vec_cmpne"),
+            (test_powerpc_altivec_vec_cmpb, "test_powerpc_altivec_vec_cmpb"),
+            (test_powerpc_altivec_vec_ceil, "test_powerpc_altivec_vec_ceil"),
+            (test_powerpc_altivec_vec_avg, "test_powerpc_altivec_vec_avg"),
+            (test_powerpc_altivec_vec_andc, "test_powerpc_altivec_vec_andc"),
+            (test_powerpc_altivec_vec_orc, "test_powerpc_altivec_vec_orc"),
+            (test_powerpc_altivec_vec_and, "test_powerpc_altivec_vec_and"),
+            (test_powerpc_altivec_vec_or, "test_powerpc_altivec_vec_or"),
+            (test_powerpc_altivec_vec_nand, "test_powerpc_altivec_vec_nand"),
+            (test_powerpc_altivec_vec_nor, "test_powerpc_altivec_vec_nor"),
+            (test_powerpc_altivec_vec_xor, "test_powerpc_altivec_vec_xor"),
+            (test_powerpc_altivec_vec_adds, "test_powerpc_altivec_vec_adds"),
+            (test_powerpc_altivec_vec_addc, "test_powerpc_altivec_vec_addc"),
+            (test_powerpc_altivec_vec_abs, "test_powerpc_altivec_vec_abs"),
+            (test_powerpc_altivec_vec_abss, "test_powerpc_altivec_vec_abss"),
+            (test_powerpc_altivec_vec_rl, "test_powerpc_altivec_vec_rl"),
+            (test_powerpc_altivec_vec_round, "test_powerpc_altivec_vec_round"),
+            (test_powerpc_altivec_vec_splat, "test_powerpc_altivec_vec_splat"),
+            (test_powerpc_altivec_vec_splats, "test_powerpc_altivec_vec_splats"),
+            (test_powerpc_altivec_vec_sub, "test_powerpc_altivec_vec_sub"),
+            (test_powerpc_altivec_vec_subc, "test_powerpc_altivec_vec_subc"),
+            (test_powerpc_altivec_vec_subs, "test_powerpc_altivec_vec_subs"),
+            (test_powerpc_altivec_vec_min, "test_powerpc_altivec_vec_min"),
+            (test_powerpc_altivec_vec_max, "test_powerpc_altivec_vec_max"),
+            (test_powerpc_altivec_vec_mfvscr, "test_powerpc_altivec_vec_mfvscr"),
+            (test_powerpc_altivec_vec_neg, "test_powerpc_altivec_vec_neg"),
+            (test_powerpc_altivec_vec_add, "test_powerpc_altivec_vec_add"),
+            (test_powerpc_altivec_vec_adde, "test_powerpc_altivec_vec_adde"),
+            (test_powerpc_altivec_vec_ctf, "test_powerpc_altivec_vec_ctf"),
+            (test_powerpc_altivec_vec_cts, "test_powerpc_altivec_vec_cts"),
+            (test_powerpc_altivec_vec_ctu, "test_powerpc_altivec_vec_ctu"),
+            (test_powerpc_altivec_vec_perm, "test_powerpc_altivec_vec_perm"),
+            (test_powerpc_altivec_vec_sum2s, "test_powerpc_altivec_vec_sum2s"),
+            (test_powerpc_altivec_vec_mule, "test_powerpc_altivec_vec_mule"),
+            (test_powerpc_altivec_vec_mulo, "test_powerpc_altivec_vec_mulo"),
+            (test_powerpc_altivec_vec_mul, "test_powerpc_altivec_vec_mul"),
+            (test_powerpc_altivec_vec_madds, "test_powerpc_altivec_vec_madds"),
+            (test_powerpc_altivec_vec_mladd, "test_powerpc_altivec_vec_mladd"),
+            (test_powerpc_altivec_vec_mradds, "test_powerpc_altivec_vec_mradds"),
+            (test_powerpc_altivec_vec_msum, "test_powerpc_altivec_vec_msum"),
+            (test_powerpc_altivec_vec_msums, "test_powerpc_altivec_vec_msums"),
+            (test_powerpc_altivec_vec_madd, "test_powerpc_altivec_vec_madd"),
+            (test_powerpc_altivec_vec_nmsub, "test_powerpc_altivec_vec_nmsub"),
+            (test_powerpc_altivec_vec_sel, "test_powerpc_altivec_vec_sel"),
+            (test_powerpc_altivec_vec_sum4s, "test_powerpc_altivec_vec_sum4s"),
+            (test_powerpc_altivec_vec_all_eq, "test_powerpc_altivec_vec_all_eq"),
+            (test_powerpc_altivec_vec_any_eq, "test_powerpc_altivec_vec_any_eq"),
+            (test_powerpc_altivec_vec_all_ge, "test_powerpc_altivec_vec_all_ge"),
+            (test_powerpc_altivec_vec_any_ge, "test_powerpc_altivec_vec_any_ge"),
+            (test_powerpc_altivec_vec_all_gt, "test_powerpc_altivec_vec_all_gt"),
+            (test_powerpc_altivec_vec_any_gt, "test_powerpc_altivec_vec_any_gt"),
+            (test_powerpc_altivec_vec_all_in, "test_powerpc_altivec_vec_all_in"),
+            (test_powerpc_altivec_vec_all_le, "test_powerpc_altivec_vec_all_le"),
+            (test_powerpc_altivec_vec_any_le, "test_powerpc_altivec_vec_any_le"),
+            (test_powerpc_altivec_vec_all_lt, "test_powerpc_altivec_vec_all_lt"),
+            (test_powerpc_altivec_vec_any_lt, "test_powerpc_altivec_vec_any_lt"),
+            (test_powerpc_altivec_vec_all_nan, "test_powerpc_altivec_vec_all_nan"),
+            (test_powerpc_altivec_vec_any_nan, "test_powerpc_altivec_vec_any_nan"),
+            (test_powerpc_altivec_vec_all_ne, "test_powerpc_altivec_vec_all_ne"),
+            (test_powerpc_altivec_vec_any_ne, "test_powerpc_altivec_vec_any_ne"),
+            (test_powerpc_altivec_vec_all_nge, "test_powerpc_altivec_vec_all_nge"),
+            (test_powerpc_altivec_vec_all_ngt, "test_powerpc_altivec_vec_all_ngt"),
+            (test_powerpc_altivec_vec_all_nle, "test_powerpc_altivec_vec_all_nle"),
+            (test_powerpc_altivec_vec_all_nlt, "test_powerpc_altivec_vec_all_nlt"),
+            (test_powerpc_altivec_vec_all_numeric, "test_powerpc_altivec_vec_all_numeric"),
+            (test_powerpc_altivec_vec_any_nge, "test_powerpc_altivec_vec_any_nge"),
+            (test_powerpc_altivec_vec_any_ngt, "test_powerpc_altivec_vec_any_ngt"),
+            (test_powerpc_altivec_vec_any_nle, "test_powerpc_altivec_vec_any_nle"),
+            (test_powerpc_altivec_vec_any_nlt, "test_powerpc_altivec_vec_any_nlt"),
+            (test_powerpc_altivec_vec_any_numeric, "test_powerpc_altivec_vec_any_numeric"),
+            (test_powerpc_altivec_vec_cntlz, "test_powerpc_altivec_vec_cntlz"),
+            (test_powerpc_altivec_vec_any_out, "test_powerpc_altivec_vec_any_out"),
+        ]
+    }
+}

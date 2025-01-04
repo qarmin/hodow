@@ -1,0 +1,146 @@
+OpCapability Shader
+OpCapability Int8
+OpCapability GroupNonUniform
+OpCapability StorageBuffer8BitAccess
+OpCapability VulkanMemoryModel
+OpCapability CooperativeMatrixKHR
+OpExtension "SPV_KHR_8bit_storage"
+OpExtension "SPV_KHR_cooperative_matrix"
+OpExtension "SPV_KHR_vulkan_memory_model"
+%1 = OpExtInstImport "GLSL.std.450"
+OpMemoryModel Logical Vulkan
+OpEntryPoint GLCompute %main "main" %gl_SubgroupId %gl_WorkgroupID
+OpExecutionMode %main LocalSize 1 1 1
+OpDecorate %gl_SubgroupId BuiltIn SubgroupId
+OpDecorate %gl_WorkgroupID BuiltIn WorkgroupId
+OpDecorate %local_size_x SpecId 0
+OpDecorate %local_size_y SpecId 1
+OpDecorate %M            SpecId 6
+OpDecorate %N            SpecId 7
+OpDecorate %K            SpecId 8
+OpDecorate %inputA_x ArrayStride 4
+OpMemberDecorate %inputA_struct 0 Offset 0
+OpDecorate %inputA_struct Block
+OpDecorate %inputA_var DescriptorSet 0
+OpDecorate %inputA_var Binding 0
+OpDecorate %inputB_x ArrayStride 4
+OpMemberDecorate %inputB_struct 0 Offset 0
+OpDecorate %inputB_struct Block
+OpDecorate %inputB_var DescriptorSet 0
+OpDecorate %inputB_var Binding 1
+OpDecorate %inputC_x ArrayStride 4
+OpMemberDecorate %inputC_struct 0 Offset 0
+OpDecorate %inputC_struct Block
+OpDecorate %inputC_var DescriptorSet 0
+OpDecorate %inputC_var Binding 2
+OpDecorate %outputO_x ArrayStride 4
+OpMemberDecorate %outputO_struct 0 Offset 0
+OpDecorate %outputO_struct Block
+OpDecorate %outputO_var DescriptorSet 0
+OpDecorate %outputO_var Binding 3
+OpDecorate %wg_size BuiltIn WorkgroupSize
+%void            = OpTypeVoid
+%voidfunc        = OpTypeFunction %void
+%u8              = OpTypeInt 8 0
+%s8              = OpTypeInt 8 1
+%u32             = OpTypeInt 32 0
+%s32             = OpTypeInt 32 1
+%uvec2           = OpTypeVector %u32 2
+%uvec3           = OpTypeVector %u32 3
+%piu32           = OpTypePointer Input %u32
+%gl_SubgroupId   = OpVariable %piu32 Input
+%c0u             = OpConstant %u32 0
+%c1u             = OpConstant %u32 1
+%c2u             = OpConstant %u32 2
+%c3u             = OpConstant %u32 3
+%c5u             = OpConstant %u32 5
+%c8s             = OpConstant %s32 8
+%c0s             = OpConstant %s32 0
+%layout          = OpConstant %s32 0
+%piuvec3         = OpTypePointer Input %uvec3
+%gl_WorkgroupID  = OpVariable %piuvec3 Input
+%csubgroupsPerWG = OpConstantComposite %uvec2 %c2u %c2u
+%K               = OpSpecConstant %s32 1
+%M               = OpSpecConstant %s32 1
+%N               = OpSpecConstant %s32 1
+%Ku              = OpSpecConstantOp %u32 IAdd %K %c0u
+%Mu              = OpSpecConstantOp %u32 IAdd %M %c0u
+%Nu              = OpSpecConstantOp %u32 IAdd %N %c0u
+%k8              = OpSpecConstantOp %s32 IMul %K %c8s
+%mk8             = OpSpecConstantOp %s32 IMul %k8 %M
+%mk8u            = OpSpecConstantOp %u32 IAdd %mk8 %c0u
+%n8              = OpSpecConstantOp %s32 IMul %N %c8s
+%nk8             = OpSpecConstantOp %s32 IMul %n8 %K
+%nk8u            = OpSpecConstantOp %u32 IAdd %nk8 %c0u
+%nm8             = OpSpecConstantOp %s32 IMul %n8 %M
+%nm8u            = OpSpecConstantOp %u32 IAdd %nm8 %c0u
+%strideAs        = OpSpecConstantOp %s32 IMul %K %c8s
+%strideA         = OpSpecConstantOp %u32 IAdd %strideAs %c0u
+%strideBs        = OpSpecConstantOp %s32 IMul %N %c8s
+%strideB         = OpSpecConstantOp %u32 IAdd %strideBs %c0u
+%strideCs        = OpSpecConstantOp %s32 IMul %N %c8s
+%strideC         = OpSpecConstantOp %u32 IAdd %strideCs %c0u
+%strideRs        = OpSpecConstantOp %s32 IMul %N %c8s
+%strideR         = OpSpecConstantOp %u32 IAdd %strideRs %c0u
+%psbmat_s8       = OpTypePointer StorageBuffer %s8
+%psbmat_s32      = OpTypePointer StorageBuffer %s32
+%psbmat_u8       = OpTypePointer StorageBuffer %u8
+%psbmat_u32      = OpTypePointer StorageBuffer %u32
+%matA            = OpTypeCooperativeMatrixKHR %u32 %c3u %M %K %c0u
+%inputA_x        = OpTypeRuntimeArray %u32
+%inputA_struct   = OpTypeStruct %inputA_x
+%inputA_ptr      = OpTypePointer StorageBuffer %inputA_struct
+%inputA_var      = OpVariable %inputA_ptr StorageBuffer
+%matB            = OpTypeCooperativeMatrixKHR %u32 %c3u %K %N %c1u
+%inputB_x        = OpTypeRuntimeArray %u32
+%inputB_struct   = OpTypeStruct %inputB_x
+%inputB_ptr      = OpTypePointer StorageBuffer %inputB_struct
+%inputB_var      = OpVariable %inputB_ptr StorageBuffer
+%matS            = OpTypeCooperativeMatrixKHR %s32 %c3u %M %N %c2u
+%matU            = OpTypeCooperativeMatrixKHR %u32 %c3u %M %N %c2u
+%inputC_x        = OpTypeRuntimeArray %u32
+%inputC_struct   = OpTypeStruct %inputC_x
+%inputC_ptr      = OpTypePointer StorageBuffer %inputC_struct
+%inputC_var      = OpVariable %inputC_ptr StorageBuffer
+%outputO_x       = OpTypeRuntimeArray %u32
+%outputO_struct  = OpTypeStruct %outputO_x
+%outputO_ptr     = OpTypePointer StorageBuffer %outputO_struct
+%outputO_var     = OpVariable %outputO_ptr StorageBuffer
+%local_size_x           = OpSpecConstant %u32 1
+%local_size_y           = OpSpecConstant %u32 1
+%wg_size                = OpSpecConstantComposite %uvec3 %local_size_x %local_size_y %c1u
+%main                   = OpFunction %void None %voidfunc
+%label                  = OpLabel
+%gl_SubgroupId_         = OpLoad %u32 %gl_SubgroupId
+%subgroupXY_x           = OpUMod %u32 %gl_SubgroupId_ %c2u
+%subgroupXY_y           = OpUDiv %u32 %gl_SubgroupId_ %c2u
+%subgroupXY_uvec2       = OpCompositeConstruct %uvec2 %subgroupXY_x %subgroupXY_y
+%gl_WorkgroupID_uvec3   = OpLoad %uvec3 %gl_WorkgroupID
+%gl_WorkgroupID_uvec2   = OpVectorShuffle %uvec2 %gl_WorkgroupID_uvec3 %gl_WorkgroupID_uvec3 0 1
+%2xgl_WorkgroupID_uvec2 = OpIMul %uvec2 %gl_WorkgroupID_uvec2 %csubgroupsPerWG
+%matrixID               = OpIAdd %uvec2 %2xgl_WorkgroupID_uvec2 %subgroupXY_uvec2
+%matrixID_x             = OpCompositeExtract %u32 %matrixID 0
+%matrixID_y             = OpCompositeExtract %u32 %matrixID 1
+%e0a      = OpIMul %u32 %mk8u %matrixID_y
+%e0b      = OpIMul %u32 %Ku %matrixID_x
+%element0 = OpIAdd %u32 %e0a %e0b
+%e1a      = OpIMul %u32 %nk8u %matrixID_y
+%e1b      = OpIMul %u32 %Nu %matrixID_x
+%element1 = OpIAdd %u32 %e1a %e1b
+%e2a      = OpIMul %u32 %nm8u %matrixID_y
+%e2b      = OpIMul %u32 %Nu %matrixID_x
+%element2 = OpIAdd %u32 %e2a %e2b
+%e3a      = OpIMul %u32 %nm8u %matrixID_y
+%e3b      = OpIMul %u32 %Nu %matrixID_x
+%element3 = OpIAdd %u32 %e3a %e3b
+%Aij      = OpAccessChain %psbmat_u32 %inputA_var %c0s %element0
+%Aij_mat  = OpCooperativeMatrixLoadKHR %matA %Aij %layout %strideA MakePointerVisible|NonPrivatePointer %c5u
+%Bij      = OpAccessChain %psbmat_u32 %inputB_var %c0s %element1
+%Bij_mat  = OpCooperativeMatrixLoadKHR %matB %Bij %layout %strideB MakePointerVisible|NonPrivatePointer %c5u
+%Cij      = OpAccessChain %psbmat_u32 %inputC_var %c0s %element2
+%Cij_mat  = OpCooperativeMatrixLoadKHR %matU %Cij %layout %strideC MakePointerVisible|NonPrivatePointer %c5u
+%matR     = OpCooperativeMatrixMulAddKHR %matS %Aij_mat %Bij_mat %Cij_mat 
+%Rij_mat  = OpAccessChain %psbmat_u32 %outputO_var %c0s %element3
+OpCooperativeMatrixStoreKHR %Rij_mat %matR %layout %strideR MakePointerAvailable|NonPrivatePointer %c5u
+OpReturn
+OpFunctionEnd

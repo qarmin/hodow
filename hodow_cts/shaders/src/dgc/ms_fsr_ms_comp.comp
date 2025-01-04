@@ -1,0 +1,19 @@
+#version 460
+layout (set=0, binding=0) uniform sampler2DMS srcImage;
+layout (set=0, binding=1, rgba8) uniform image2D dstImage;
+layout (local_size_x=4, local_size_y=1, local_size_z=1) in;
+void main (void) {
+    const ivec2 srcCoords = ivec2(gl_WorkGroupID.xy);
+
+    const uint sampleCount = gl_WorkGroupSize.x;
+    const uint srcCol = gl_WorkGroupID.x;
+    const uint srcRow = gl_WorkGroupID.y;
+    const uint sampleIdx = gl_LocalInvocationIndex;
+    const uint dstCol = srcCol * sampleCount + sampleIdx;
+    const uint dstRow = srcRow;
+
+    const ivec2 dstCoords = ivec2(dstCol, dstRow);
+
+    const vec4 srcColor = texelFetch(srcImage, srcCoords, int(sampleIdx));
+    imageStore(dstImage, dstCoords, srcColor);
+}

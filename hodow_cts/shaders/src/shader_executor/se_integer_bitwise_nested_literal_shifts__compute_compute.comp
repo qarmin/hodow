@@ -1,0 +1,117 @@
+#version 450
+layout(local_size_x = 1) in;
+
+struct Inputs
+{
+	highp uint highBitMaskPattern;
+	highp int lowBitsPattern;
+	highp int mixedBitsPattern;
+	highp int negativeValue;
+};
+struct Outputs
+{
+	highp int signExtendEqualShift;
+	highp int signExtendCompoundShift;
+	highp int zeroExtendCompoundShift;
+	highp int signExtendReducedShift;
+	highp int logicalShiftCast;
+	highp int logicalShiftCompound;
+	highp int posIntLeftRightMask;
+	highp int posIntRightLeftMask;
+	highp int shiftLeftClearAll;
+	highp int shiftRightClearAll;
+	highp int negIntSignFlip;
+	highp int negIntSignExtend;
+	highp int maxArithmeticShiftRight;
+	highp int maxShiftLeftOdd;
+	highp int consecutiveRightShiftPos;
+	highp int consecutiveRightShiftNeg;
+	highp int identityRightShift;
+	highp int identityLeftShift;
+};
+
+layout(set = 0, binding = 0, std430) buffer InBuffer
+{
+    Inputs inputs[];
+};
+layout(set = 0, binding = 1, std430) buffer OutBuffer
+{
+    Outputs outputs[];
+};
+
+void main (void)
+{
+    uint invocationNdx = gl_NumWorkGroups.x*gl_NumWorkGroups.y*gl_WorkGroupID.z
+                       + gl_NumWorkGroups.x*gl_WorkGroupID.y + gl_WorkGroupID.x;
+	uint highBitMaskPattern = uint(inputs[invocationNdx].highBitMaskPattern);
+	int lowBitsPattern = int(inputs[invocationNdx].lowBitsPattern);
+	int mixedBitsPattern = int(inputs[invocationNdx].mixedBitsPattern);
+	int negativeValue = int(inputs[invocationNdx].negativeValue);
+	int signExtendEqualShift;
+	int signExtendCompoundShift;
+	int zeroExtendCompoundShift;
+	int signExtendReducedShift;
+	int logicalShiftCast;
+	int logicalShiftCompound;
+	int posIntLeftRightMask;
+	int posIntRightLeftMask;
+	int shiftLeftClearAll;
+	int shiftRightClearAll;
+	int negIntSignFlip;
+	int negIntSignExtend;
+	int maxArithmeticShiftRight;
+	int maxShiftLeftOdd;
+	int consecutiveRightShiftPos;
+	int consecutiveRightShiftNeg;
+	int identityRightShift;
+	int identityLeftShift;
+
+	// Group 1: Unsigned-to-Signed Compound Shifts
+	signExtendEqualShift     = int(highBitMaskPattern << 22u) >> 22;
+	signExtendCompoundShift  = int(highBitMaskPattern << 12u) >> 22;
+	zeroExtendCompoundShift  = int(highBitMaskPattern << 2u) >> 22;
+	signExtendReducedShift   = int(highBitMaskPattern << 22u) >> 10;
+	logicalShiftCast         = int(highBitMaskPattern >> 30u);
+	
+	// Group 2: Arithmetic vs. Logical Right Shift Distinction
+	logicalShiftCompound     = int((highBitMaskPattern << 22u) >> 22u);
+	
+	// Group 3: Positive Integer Bitfield Extraction & Masking
+	posIntLeftRightMask      = (mixedBitsPattern << 24) >> 14;
+	posIntRightLeftMask      = (mixedBitsPattern >> 24) << 14;
+	shiftLeftClearAll        = (lowBitsPattern << 30) >> 10;
+	shiftRightClearAll       = lowBitsPattern >> 10;
+	
+	// Group 4: Negative Integer Compound Shifts & Sign Flipping
+	negIntSignFlip           = (negativeValue << 22) >> 14;
+	negIntSignExtend         = (negativeValue >> 22) << 14;
+	
+	// Group 5: Maximum Legal 32-bit Shift Boundary
+	maxArithmeticShiftRight  = negativeValue >> 31;
+	maxShiftLeftOdd          = mixedBitsPattern << 31;
+	
+	// Group 6: Consecutive Shift Folding & Identity Shifts
+	consecutiveRightShiftPos = (mixedBitsPattern >> 8) >> 8;
+	consecutiveRightShiftNeg = (negativeValue >> 10) >> 10;
+	identityRightShift       = (negativeValue << 10) >> 0;
+	identityLeftShift        = (mixedBitsPattern >> 0) << 14;
+
+	outputs[invocationNdx].signExtendEqualShift = signExtendEqualShift;
+	outputs[invocationNdx].signExtendCompoundShift = signExtendCompoundShift;
+	outputs[invocationNdx].zeroExtendCompoundShift = zeroExtendCompoundShift;
+	outputs[invocationNdx].signExtendReducedShift = signExtendReducedShift;
+	outputs[invocationNdx].logicalShiftCast = logicalShiftCast;
+	outputs[invocationNdx].logicalShiftCompound = logicalShiftCompound;
+	outputs[invocationNdx].posIntLeftRightMask = posIntLeftRightMask;
+	outputs[invocationNdx].posIntRightLeftMask = posIntRightLeftMask;
+	outputs[invocationNdx].shiftLeftClearAll = shiftLeftClearAll;
+	outputs[invocationNdx].shiftRightClearAll = shiftRightClearAll;
+	outputs[invocationNdx].negIntSignFlip = negIntSignFlip;
+	outputs[invocationNdx].negIntSignExtend = negIntSignExtend;
+	outputs[invocationNdx].maxArithmeticShiftRight = maxArithmeticShiftRight;
+	outputs[invocationNdx].maxShiftLeftOdd = maxShiftLeftOdd;
+	outputs[invocationNdx].consecutiveRightShiftPos = consecutiveRightShiftPos;
+	outputs[invocationNdx].consecutiveRightShiftNeg = consecutiveRightShiftNeg;
+	outputs[invocationNdx].identityRightShift = identityRightShift;
+	outputs[invocationNdx].identityLeftShift = identityLeftShift;
+}

@@ -1,0 +1,8 @@
+#version 460 core
+
+layout (${glsl_format}, binding=0) uniform iimage2D inputImage;
+
+void main()
+{
+    imageStore(inputImage, ivec2(gl_GlobalInvocationID.xy), ivec4(-1, 2, -1000, 2000));
+}

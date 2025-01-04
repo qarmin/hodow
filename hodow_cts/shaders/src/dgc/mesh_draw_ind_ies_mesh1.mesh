@@ -1,0 +1,57 @@
+#version 460
+#extension GL_EXT_mesh_shader : enable
+
+struct VertexData {
+    vec4 position;
+    vec4 extraData;
+};
+
+layout(set=0, binding=0, std430) readonly buffer VertexDataBlock {
+    VertexData vertexData[];
+} vtxData;
+layout(set=0, binding=1, std430) readonly buffer DirectDrawBaseRowBlock {
+    uint baseRow[];
+} directDrawData;
+
+layout (push_constant, std430) uniform PushConstantBlock {
+    uint width;
+    uint height;
+    uint baseDrawIndex;
+} pc;
+
+layout(local_size_x=32) in;
+layout(triangles) out;
+layout(max_vertices=96, max_primitives=32) out;
+
+layout (location=0) out perprimitiveEXT float redColor[];
+layout (location=1) out flat float greenColor[];
+
+uint getWorkGroupIndex (void) {
+    const uint workGroupIndex = gl_NumWorkGroups.x * gl_NumWorkGroups.y * gl_WorkGroupID.z +
+                                gl_NumWorkGroups.x * gl_WorkGroupID.y +
+                                gl_WorkGroupID.x;
+    return workGroupIndex;
+}
+
+void main() {
+    const uint triangleVertices = 3;
+    const uint wgIndex = getWorkGroupIndex();
+    const uint rowIndex = directDrawData.baseRow[pc.baseDrawIndex + uint(gl_DrawID)] + wgIndex;
+    const uint srcBasePrim = rowIndex * pc.width;
+    const uint srcPrim = srcBasePrim + gl_LocalInvocationIndex;
+    const uint srcBaseVertex = srcPrim * triangleVertices;
+    const uint dstPrim = gl_LocalInvocationIndex;
+    const uint dstBaseVertex = dstPrim * triangleVertices;
+    SetMeshOutputsEXT(96, 32);
+    for (uint i = 0u; i < triangleVertices; ++i) {
+        const uint dstIdx = dstBaseVertex + i;
+        const uint srcIdx = srcBaseVertex + i;
+        gl_MeshVerticesEXT[dstIdx].gl_Position = vtxData.vertexData[srcIdx].position;
+        gl_MeshVerticesEXT[dstIdx].gl_PointSize = 1.0;
+        gl_MeshVerticesEXT[dstIdx].gl_ClipDistance[0] = vtxData.vertexData[srcIdx].extraData.x;
+        gl_MeshVerticesEXT[dstIdx].gl_CullDistance[0] = vtxData.vertexData[srcIdx].extraData.y;
+        greenColor[dstIdx] = 1;
+    }
+    gl_PrimitiveTriangleIndicesEXT[dstPrim] = uvec3(dstBaseVertex + 0, dstBaseVertex + 1, dstBaseVertex + 2);
+    redColor[dstPrim] = 0.75;
+}

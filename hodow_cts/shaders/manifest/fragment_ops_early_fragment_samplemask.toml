@@ -1,0 +1,48 @@
+# Shader manifest for dEQP-VK.fragment_operations.early_fragment.samplemask_*
+#
+# `EarlyFragmentSampleMaskTest::initPrograms`: the vertex shader and a fragment shader that counts its invocations, writes
+# gl_SampleMask[0] = 0 and discards. Without `EarlyAndLate` it is GLSL, with or without layout(early_fragment_tests); with it,
+# upstream's SPIR-V text, with DepthReplacing and DepthGreater execution modes in the replacing mode.
+
+upstream_source = "external/vulkancts/modules/vulkan/fragment_ops/vktFragmentOperationsEarlyFragmentTests.cpp"
+rust_module = "fragment_ops/early_fragment_samplemask_tests"
+
+[[case]]
+name = "sm_early"
+rust_const = "SM_EARLY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "fragment_ops/early_fragment.vert", stage = "vert" },
+    { name = "frag", template = "fragment_ops/early_fragment_samplemask.frag", stage = "frag" },
+]
+derived = { layout_qualifier = "'layout(early_fragment_tests) in;'" }
+
+[[case]]
+name = "sm_no_early"
+rust_const = "SM_NO_EARLY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "fragment_ops/early_fragment.vert", stage = "vert" },
+    { name = "frag", template = "fragment_ops/early_fragment_samplemask.frag", stage = "frag" },
+]
+derived = { layout_qualifier = "''" }
+
+[[case]]
+name = "sm_early_and_late"
+rust_const = "SM_EARLY_AND_LATE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "fragment_ops/early_fragment.vert", stage = "vert" },
+    { name = "frag", template = "fragment_ops/early_fragment_samplemask_early_and_late.spvasm", stage = "asm", spirv_version = "spirv1.3" },
+]
+derived = { option = "''" }
+
+[[case]]
+name = "sm_early_and_late_replacing"
+rust_const = "SM_EARLY_AND_LATE_REPLACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "fragment_ops/early_fragment.vert", stage = "vert" },
+    { name = "frag", template = "fragment_ops/early_fragment_samplemask_early_and_late.spvasm", stage = "asm", spirv_version = "spirv1.3" },
+]
+derived = { option = "'OpExecutionMode %4 DepthReplacing\\nOpExecutionMode %4 DepthGreater\\n'" }

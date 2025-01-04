@@ -1,0 +1,260 @@
+#version 450
+layout(location = 0) in vec4 inUV;
+layout(binding = 0, rg32ui) uniform uimage2D resultImage;
+layout(binding = 1, input_attachment_index = 46) uniform subpassInput attach1;
+layout(binding = 2, input_attachment_index = 116) uniform subpassInput attach2;
+layout(binding = 3, input_attachment_index = 80) uniform subpassInput attach3;
+layout(binding = 4, input_attachment_index = 15) uniform subpassInput attach4;
+layout(binding = 5, input_attachment_index = 105) uniform subpassInput attach5;
+layout(binding = 6, input_attachment_index = 84) uniform subpassInput attach6;
+layout(binding = 7, input_attachment_index = 110) uniform subpassInput attach7;
+layout(binding = 8, input_attachment_index = 19) uniform subpassInput attach8;
+layout(binding = 9, input_attachment_index = 54) uniform subpassInput attach9;
+layout(binding = 10, input_attachment_index = 113) uniform subpassInput attach10;
+layout(binding = 11, input_attachment_index = 55) uniform subpassInput attach11;
+layout(binding = 12, input_attachment_index = 17) uniform subpassInput attach12;
+layout(binding = 13, input_attachment_index = 75) uniform subpassInput attach13;
+layout(binding = 14, input_attachment_index = 53) uniform subpassInput attach14;
+layout(binding = 15, input_attachment_index = 68) uniform subpassInput attach15;
+layout(binding = 16, input_attachment_index = 94) uniform subpassInput attach16;
+layout(binding = 17, input_attachment_index = 98) uniform subpassInput attach17;
+layout(binding = 18, input_attachment_index = 102) uniform subpassInput attach18;
+layout(binding = 19, input_attachment_index = 14) uniform subpassInput attach19;
+layout(binding = 20, input_attachment_index = 34) uniform subpassInput attach20;
+layout(binding = 21, input_attachment_index = 45) uniform subpassInput attach21;
+layout(binding = 22, input_attachment_index = 57) uniform subpassInput attach22;
+layout(binding = 23, input_attachment_index = 41) uniform subpassInput attach23;
+layout(binding = 24, input_attachment_index = 111) uniform subpassInput attach24;
+layout(binding = 25, input_attachment_index = 120) uniform subpassInput attach25;
+layout(binding = 26, input_attachment_index = 4) uniform subpassInput attach26;
+layout(binding = 27, input_attachment_index = 36) uniform subpassInput attach27;
+layout(binding = 28, input_attachment_index = 71) uniform subpassInput attach28;
+layout(binding = 29, input_attachment_index = 82) uniform subpassInput attach29;
+layout(binding = 30, input_attachment_index = 79) uniform subpassInput attach30;
+layout(binding = 31, input_attachment_index = 95) uniform subpassInput attach31;
+layout(binding = 32, input_attachment_index = 117) uniform subpassInput attach32;
+layout(binding = 33, input_attachment_index = 11) uniform subpassInput attach33;
+layout(binding = 34, input_attachment_index = 16) uniform subpassInput attach34;
+layout(binding = 35, input_attachment_index = 35) uniform subpassInput attach35;
+layout(binding = 36, input_attachment_index = 60) uniform subpassInput attach36;
+layout(binding = 37, input_attachment_index = 18) uniform subpassInput attach37;
+layout(binding = 38, input_attachment_index = 27) uniform subpassInput attach38;
+layout(binding = 39, input_attachment_index = 47) uniform subpassInput attach39;
+layout(binding = 40, input_attachment_index = 20) uniform subpassInput attach40;
+layout(binding = 41, input_attachment_index = 109) uniform subpassInput attach41;
+layout(binding = 42, input_attachment_index = 38) uniform subpassInput attach42;
+layout(binding = 43, input_attachment_index = 86) uniform subpassInput attach43;
+layout(binding = 44, input_attachment_index = 99) uniform subpassInput attach44;
+layout(binding = 45, input_attachment_index = 121) uniform subpassInput attach45;
+layout(binding = 46, input_attachment_index = 118) uniform subpassInput attach46;
+layout(binding = 47, input_attachment_index = 39) uniform subpassInput attach47;
+layout(binding = 48, input_attachment_index = 92) uniform subpassInput attach48;
+layout(binding = 49, input_attachment_index = 62) uniform subpassInput attach49;
+layout(binding = 50, input_attachment_index = 122) uniform subpassInput attach50;
+layout(binding = 51, input_attachment_index = 87) uniform subpassInput attach51;
+layout(binding = 52, input_attachment_index = 124) uniform subpassInput attach52;
+layout(binding = 53, input_attachment_index = 3) uniform subpassInput attach53;
+layout(binding = 54, input_attachment_index = 28) uniform subpassInput attach54;
+layout(binding = 55, input_attachment_index = 31) uniform subpassInput attach55;
+layout(binding = 56, input_attachment_index = 43) uniform subpassInput attach56;
+layout(binding = 57, input_attachment_index = 42) uniform subpassInput attach57;
+layout(binding = 58, input_attachment_index = 49) uniform subpassInput attach58;
+layout(binding = 59, input_attachment_index = 106) uniform subpassInput attach59;
+layout(binding = 60, input_attachment_index = 73) uniform subpassInput attach60;
+layout(binding = 61, input_attachment_index = 7) uniform subpassInput attach61;
+layout(binding = 62, input_attachment_index = 65) uniform subpassInput attach62;
+layout(binding = 63, input_attachment_index = 26) uniform subpassInput attach63;
+void main (void)
+{
+    uvec4 result = uvec4(0);
+    result.x = result.x + 1;
+    if(subpassLoad(attach1).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach2).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach3).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach4).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach5).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach6).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach7).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach8).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach9).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach10).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach11).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach12).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach13).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach14).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach15).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach16).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach17).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach18).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach19).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach20).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach21).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach22).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach23).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach24).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach25).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach26).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach27).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach28).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach29).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach30).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach31).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach32).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach33).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach34).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach35).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach36).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach37).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach38).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach39).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach40).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach41).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach42).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach43).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach44).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach45).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach46).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach47).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach48).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach49).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach50).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach51).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach52).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach53).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach54).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach55).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach56).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach57).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach58).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach59).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach60).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach61).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach62).x > 0.0)
+        result.y = result.y + 1;
+    result.x = result.x + 1;
+    if(subpassLoad(attach63).x > 0.0)
+        result.y = result.y + 1;
+    imageStore(resultImage, ivec2(imageSize(resultImage) * inUV.xy), result);
+}

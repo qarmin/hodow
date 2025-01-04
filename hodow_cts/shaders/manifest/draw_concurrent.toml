@@ -1,0 +1,17 @@
+# Shader manifest for dEQP-VK.draw.*.concurrent.*
+#
+# The Draw framework's VertexFetch pair for the draw half, and data/vulkan/draw/ConcurrentPayload.comp for the
+# compute half that runs on its own queue at the same time.
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawConcurrentTests.cpp"
+rust_module = "draw/concurrent_tests"
+
+[[case]]
+name = "concurrent"
+rust_const = "CONCURRENT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/vertex_fetch.vert", stage = "vert" },
+    { name = "frag", template = "draw/vertex_fetch.frag", stage = "frag" },
+    { name = "comp", template = "draw/concurrent_payload.comp", stage = "comp" },
+]

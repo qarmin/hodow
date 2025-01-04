@@ -1,0 +1,31 @@
+# Shader manifest for dEQP-VK.draw.*.shader_layer.*
+#
+# gl_Layer written from the vertex shader (`vertex_shader_N`) or from the tessellation evaluation shader
+# (`tessellation_shader_N`). Each of those exists twice upstream: as is, and built for SPIR-V 1.5 (`_1_2`), which
+# is what a Vulkan 1.2 device is given because gl_Layer is core there rather than an extension capability.
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawShaderLayerTests.cpp"
+rust_module = "draw/shader_layer_tests"
+
+[[case]]
+name = "vertex_shader"
+rust_const = "SHADER_LAYER_VERTEX"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/shader_layer.vert", stage = "vert" },
+    { name = "vert_1_2", template = "draw/shader_layer.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "draw/shader_layer.frag", stage = "frag" },
+]
+
+[[case]]
+name = "tessellation_shader"
+rust_const = "SHADER_LAYER_TESSELLATION"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/shader_layer_tess.vert", stage = "vert" },
+    { name = "vert_1_2", template = "draw/shader_layer_tess.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "tesc", template = "draw/shader_layer.tesc", stage = "tesc" },
+    { name = "tese", template = "draw/shader_layer.tese", stage = "tese" },
+    { name = "tese_1_2", template = "draw/shader_layer.tese", stage = "tese", spirv_version = "spirv1.5" },
+    { name = "frag", template = "draw/shader_layer.frag", stage = "frag" },
+]

@@ -1,0 +1,10 @@
+#version 450
+layout(push_constant) uniform PushConstant {
+	highp uint sampleMask;
+} pushConstants;
+layout(location = 0) out uvec4 o_color0;
+void main (void)
+{
+	gl_SampleMask[0] = int(pushConstants.sampleMask);
+	o_color0 = uvec4(255);
+}

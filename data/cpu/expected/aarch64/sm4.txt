@@ -1,0 +1,24 @@
+# Expected values captured from real hardware for this extension's generated tests.
+# Format: test_name - rust_expr
+#
+# One file per (architecture, extension) - written by scripts/cpu/capture_expected.py and
+# capture_expected_cross.py, read by generate_tests.py. Do not hand-edit: recapture instead.
+# A qemu-derived value is not a real-silicon one; see CLAUDE.md's "Non-x86 architectures".
+
+test_aarch64_sm4_vsm3partw1q_u32 - [2181497478, 3255272134, 33817351, 2785288206]
+test_aarch64_sm4_vsm3partw2q_u32 - [1156, 1284, 1412, 1111729773]
+test_aarch64_sm4_vsm3ss1q_u32 - [0, 0, 0, 2099712]
+test_aarch64_sm4_vsm3tt1aq_u32 - [2, 1536, 4, 16407]
+test_aarch64_sm4_vsm3tt1aq_u32_imm_1 - [2, 1536, 4, 16408]
+test_aarch64_sm4_vsm3tt1aq_u32_imm_3 - [2, 1536, 4, 16410]
+test_aarch64_sm4_vsm3tt1bq_u32 - [2, 1536, 4, 16404]
+test_aarch64_sm4_vsm3tt1bq_u32_imm_1 - [2, 1536, 4, 16405]
+test_aarch64_sm4_vsm3tt1bq_u32_imm_3 - [2, 1536, 4, 16407]
+test_aarch64_sm4_vsm3tt2aq_u32 - [2, 1572864, 4, 3026455]
+test_aarch64_sm4_vsm3tt2aq_u32_imm_1 - [2, 1572864, 4, 3158040]
+test_aarch64_sm4_vsm3tt2aq_u32_imm_3 - [2, 1572864, 4, 3421210]
+test_aarch64_sm4_vsm3tt2bq_u32 - [2, 1572864, 4, 2631700]
+test_aarch64_sm4_vsm3tt2bq_u32_imm_1 - [2, 1572864, 4, 2763285]
+test_aarch64_sm4_vsm3tt2bq_u32_imm_3 - [2, 1572864, 4, 3026455]
+test_aarch64_sm4_vsm4ekeyq_u32 - [1734829926, 2812782501, 4210752249, 140332224]
+test_aarch64_sm4_vsm4eq_u32 - [1532713818, 757935407, 2627509407, 2690539069]

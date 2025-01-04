@@ -1,0 +1,24 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.stencil.*
+#
+# `StencilTest::initPrograms`: a pass-through vertex shader and, when the case has a colour attachment, a fragment shader that
+# writes the interpolated colour. Without a colour attachment the vertex shader outputs no colour and there is no fragment shader.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineStencilTests.cpp"
+rust_module = "pipeline/stencil_tests"
+
+[[case]]
+name = "color"
+rust_const = "STENCIL_COLOR"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/stencil/color.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/stencil/color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "no_color"
+rust_const = "STENCIL_NO_COLOR"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/stencil/no_color.vert", stage = "vert" },
+]

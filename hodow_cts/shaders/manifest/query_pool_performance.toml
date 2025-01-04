@@ -1,0 +1,23 @@
+# Shader manifest for dEQP-VK.query_pool.performance_query.*
+#
+# QueryPoolPerformanceTest::initPrograms: a red triangle for the graphics cases, a buffer writer for the compute ones.
+
+upstream_source = "external/vulkancts/modules/vulkan/query_pool/vktQueryPoolPerformanceTests.cpp"
+rust_module = "query_pool/performance_tests"
+
+[[case]]
+name = "graphic"
+rust_const = "PERFORMANCE_GRAPHIC"
+rust_type = "SharedProgram"
+programs = [
+    { name = "frag", template = "query_pool/performance/graphic.frag", stage = "frag" },
+    { name = "vert", template = "query_pool/performance/graphic.vert", stage = "vert" },
+]
+
+[[case]]
+name = "compute"
+rust_const = "PERFORMANCE_COMPUTE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "query_pool/performance/compute.comp", stage = "comp" },
+]

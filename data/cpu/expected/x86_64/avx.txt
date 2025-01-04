@@ -1,0 +1,27 @@
+# Expected values captured from real hardware for this extension's generated tests.
+# Format: test_name - rust_expr
+#
+# One file per (architecture, extension) - written by scripts/cpu/capture_expected.py and
+# capture_expected_cross.py, read by generate_tests.py. Do not hand-edit: recapture instead.
+# A qemu-derived value is not a real-silicon one; see CLAUDE.md's "Non-x86 architectures".
+
+test_x86_64_avx_mm256_extract_epi64 - 8589934593
+test_x86_64_avx_mm256_extract_epi64_boundary_allones - -1
+test_x86_64_avx_mm256_extract_epi64_boundary_max - 9223372036854775807
+test_x86_64_avx_mm256_extract_epi64_boundary_min - -9223372036854775808
+test_x86_64_avx_mm256_extract_epi64_boundary_mixed - -9223372036854775808
+test_x86_64_avx_mm256_extract_epi64_boundary_zero - 0
+test_x86_64_avx_mm256_extract_epi64_imm_1 - 17179869187
+test_x86_64_avx_mm256_extract_epi64_imm_3 - 34359738375
+test_x86_64_avx_mm256_extract_epi64_normal2 - 0
+test_x86_64_avx_mm256_extract_epi64_normal3 - 100
+test_x86_64_avx_mm256_insert_epi64 - [9, 17179869187, 25769803781, 34359738375]
+test_x86_64_avx_mm256_insert_epi64_boundary_allones - [1, -1, -1, -1]
+test_x86_64_avx_mm256_insert_epi64_boundary_max - [1, 9223372036854775807, 9223372036854775807, 9223372036854775807]
+test_x86_64_avx_mm256_insert_epi64_boundary_min - [1, -9223372036854775808, -9223372036854775808, -9223372036854775808]
+test_x86_64_avx_mm256_insert_epi64_boundary_mixed - [1, 9223372036854775807, 0, -1]
+test_x86_64_avx_mm256_insert_epi64_boundary_zero - [1, 0, 0, 0]
+test_x86_64_avx_mm256_insert_epi64_imm_1 - [8589934593, 9, 25769803781, 34359738375]
+test_x86_64_avx_mm256_insert_epi64_imm_3 - [8589934593, 17179869187, 25769803781, 9]
+test_x86_64_avx_mm256_insert_epi64_normal2 - [1, -1, 2, -3]
+test_x86_64_avx_mm256_insert_epi64_normal3 - [1, 200, 300, 400]

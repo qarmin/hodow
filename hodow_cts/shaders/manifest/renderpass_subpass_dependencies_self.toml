@@ -1,0 +1,27 @@
+# Shader manifest for dEQP-VK.renderpasses.*.subpass_dependencies.{self_dependency,input_attachment_coherency}.*
+#
+# `SubpassSelfDependencyBackwardsPrograms::init`: a pass-through vertex shader, a geometry shader that turns a point into a quad and rewrites the indirect draw command, and a red fragment shader.
+# `InputAttachmentCoherencyPrograms::init`: a pass-through vertex shader, an opaque pass writing green and yellow, and a resolve pass reading the green through an input attachment.
+
+upstream_source = "external/vulkancts/modules/vulkan/renderpass/vktRenderPassSubpassDependencyTests.cpp"
+rust_module = "renderpass/subpass_dependency_self_tests"
+
+[[case]]
+name = "self_backwards"
+rust_const = "SELF_BACKWARDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/subpass_dependencies/self_backwards.vert", stage = "vert" },
+    { name = "geom", template = "renderpass/subpass_dependencies/self_backwards.geom", stage = "geom" },
+    { name = "frag", template = "renderpass/subpass_dependencies/self_backwards.frag", stage = "frag" },
+]
+
+[[case]]
+name = "input_attachment_coherency"
+rust_const = "INPUT_ATTACHMENT_COHERENCY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/subpass_dependencies/coherency.vert", stage = "vert" },
+    { name = "frag_opaque", template = "renderpass/subpass_dependencies/coherency_opaque.frag", stage = "frag" },
+    { name = "frag_resolve", template = "renderpass/subpass_dependencies/coherency_resolve.frag", stage = "frag" },
+]

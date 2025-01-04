@@ -1,0 +1,116 @@
+# Shader manifest for dEQP-VK.mesh_shader.ext.smoke.monolithic.*
+#
+# The `initPrograms` of `MeshOnlyTriangleCase`, `MeshTaskTriangleCase`, `TaskOnlyTriangleCase`, `initGradientPrograms`,
+# `PartialUsageCase` and `depthOnlyPrograms` in vktMeshShaderSmokeTestsEXT.cpp, with the values upstream formats in written out.
+
+upstream_source = "external/vulkancts/modules/vulkan/mesh_shader/vktMeshShaderSmokeTestsEXT.cpp"
+rust_module = "mesh_shader/smoke_tests"
+spirv_version = "spirv1.4"
+
+[[case]]
+name = "mesh_only"
+rust_const = "SMOKE_MESH_ONLY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/smoke/triangle_mesh_only.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/smoke/mesh_frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mesh_task"
+rust_const = "SMOKE_MESH_TASK"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/smoke/triangle_mesh_task.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/smoke/triangle_mesh_task.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/smoke/mesh_frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "task_only"
+rust_const = "SMOKE_TASK_ONLY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/smoke/task_only.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/smoke/triangle_mesh_only.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/smoke/mesh_frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gradient"
+rust_const = "SMOKE_GRADIENT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "frag", template = "mesh_shader/smoke/gradient.frag", stage = "frag" },
+    { name = "mesh", template = "mesh_shader/smoke/gradient.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "gradient_fs2x2"
+rust_const = "SMOKE_GRADIENT_FS2X2"
+rust_type = "SharedProgram"
+programs = [
+    { name = "frag", template = "mesh_shader/smoke/gradient.frag", stage = "frag" },
+    { name = "mesh", template = "mesh_shader/smoke/gradient_fs2x2.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "gradient_fs2x1"
+rust_const = "SMOKE_GRADIENT_FS2X1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "frag", template = "mesh_shader/smoke/gradient.frag", stage = "frag" },
+    { name = "mesh", template = "mesh_shader/smoke/gradient_fs2x1.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "partial_usage"
+rust_const = "SMOKE_PARTIAL_USAGE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/smoke/partial_usage.task", stage = "task" },
+    { name = "frag", template = "mesh_shader/smoke/partial_usage.frag", stage = "frag" },
+    { name = "mesh", template = "mesh_shader/smoke/partial_usage.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "partial_usage_no_compaction"
+rust_const = "SMOKE_PARTIAL_USAGE_NO_COMPACTION"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/smoke/partial_usage.task", stage = "task" },
+    { name = "frag", template = "mesh_shader/smoke/partial_usage.frag", stage = "frag" },
+    { name = "mesh", template = "mesh_shader/smoke/partial_usage_no_compaction.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "depth_only_points"
+rust_const = "SMOKE_DEPTH_ONLY_POINTS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/smoke/depth_only_points.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "depth_only_points_position_components"
+rust_const = "SMOKE_DEPTH_ONLY_POINTS_POSITION_COMPONENTS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/smoke/depth_only_points_position_components.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "depth_only_triangles"
+rust_const = "SMOKE_DEPTH_ONLY_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/smoke/depth_only_triangles.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "depth_only_triangles_position_components"
+rust_const = "SMOKE_DEPTH_ONLY_TRIANGLES_POSITION_COMPONENTS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/smoke/depth_only_triangles_position_components.mesh", stage = "mesh" },
+]

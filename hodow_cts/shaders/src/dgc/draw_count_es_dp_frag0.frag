@@ -1,0 +1,40 @@
+#version 460
+layout (location=0) in flat int inInstanceIndex;
+layout (location=1) in flat int drawIndex;
+layout (location=2) in flat int baseVertex;
+layout (location=3) in flat int baseInstance;
+layout (location=0) out vec4 outColor;
+
+layout (set=1, binding=0, std430) readonly buffer ExpectedAccum { int values[]; } ea;
+layout (set=1, binding=1, std430) readonly buffer ExpectedDrawParams { ivec4 values[]; } edp;
+layout (push_constant, std430) uniform PushConstantBlock { uvec2 dim; } pc;
+
+layout (location=5) in flat int iovar0;
+layout (location=6) in flat int iovar1;
+layout (location=7) in flat int iovar2;
+layout (location=8) in flat int iovar3;
+layout (location=9) in flat int iovar4;
+layout (location=10) in flat int iovar5;
+layout (location=11) in flat int iovar6;
+layout (location=12) in flat int iovar7;
+
+void main (void) {
+    const uint pixelIdx = uint(gl_FragCoord.y) * pc.dim.x + uint(gl_FragCoord.x);
+    int accum = 0;
+    accum += iovar0;
+    accum += iovar1;
+    accum += iovar2;
+    accum += iovar3;
+    accum += iovar4;
+    accum += iovar5;
+    accum += iovar6;
+    accum += iovar7;
+    const float red   = float(inInstanceIndex) / 255.0;
+    const float green = ((accum == ea.values[pixelIdx]) ? 0.0 : 1.0);
+    bool blueOK = true;
+    blueOK = (blueOK && (drawIndex == edp.values[pixelIdx].x));
+    blueOK = (blueOK && (baseVertex == edp.values[pixelIdx].y));
+    blueOK = (blueOK && (baseInstance == edp.values[pixelIdx].z));
+    const float blue  = (blueOK ? 1.0 : 0.0);
+    outColor = vec4(red, green, blue, 1.0);
+}

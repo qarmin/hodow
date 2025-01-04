@@ -1,0 +1,19 @@
+#version 450
+layout(points) in;
+layout(points, max_vertices = 1) out;
+layout(location = 0) flat in mediump vec4 vtx_out_in0[];
+layout(location = 0) flat out highp uint geom_out_out0;
+
+void main (void)
+{
+    gl_Position = gl_in[0].gl_Position;
+    gl_PointSize = gl_in[0].gl_PointSize;
+
+	mediump vec4 in0 = vtx_out_in0[0];
+	highp uint out0;
+
+	out0 = packSnorm4x8(in0);
+	geom_out_out0 = out0;
+    EmitVertex();
+    EndPrimitive();
+}

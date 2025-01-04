@@ -1,0 +1,46 @@
+#version 450
+layout(set = 1, binding = 0) uniform highp sampler1DArrayShadow texSampler[8];
+
+layout(local_size_x = 1) in;
+
+struct Inputs
+{
+	highp vec3 coords;
+};
+struct Outputs
+{
+	highp float result0;
+	highp float result1;
+	highp float result2;
+	highp float result3;
+};
+
+layout(set = 0, binding = 0, std430) buffer InBuffer
+{
+    Inputs inputs[];
+};
+layout(set = 0, binding = 1, std430) buffer OutBuffer
+{
+    Outputs outputs[];
+};
+
+void main (void)
+{
+    uint invocationNdx = gl_NumWorkGroups.x*gl_NumWorkGroups.y*gl_WorkGroupID.z
+                       + gl_NumWorkGroups.x*gl_WorkGroupID.y + gl_WorkGroupID.x;
+	vec3 coords = vec3(inputs[invocationNdx].coords);
+	float result0;
+	float result1;
+	float result2;
+	float result3;
+
+	result0 = texture(texSampler[7], coords);
+	result1 = texture(texSampler[1], coords);
+	result2 = texture(texSampler[4], coords);
+	result3 = texture(texSampler[3], coords);
+
+	outputs[invocationNdx].result0 = result0;
+	outputs[invocationNdx].result1 = result1;
+	outputs[invocationNdx].result2 = result2;
+	outputs[invocationNdx].result3 = result3;
+}

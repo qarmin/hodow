@@ -1,0 +1,11 @@
+#version 450 core
+#extension GL_EXT_float_e4m3 : enable
+#extension GL_EXT_float_e5m2 : enable
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(set = 0, binding = 0, std140) buffer issbodef { vec3 val[416]; } issbo;
+layout(set = 0, binding = 1, std140) buffer ossbodef { fe4m3vec3 val[416]; } ossbo;
+void main()
+{
+    vec3 f = issbo.val[gl_WorkGroupID.x];
+    saturatedConvertEXT(ossbo.val[gl_WorkGroupID.x], f);
+}

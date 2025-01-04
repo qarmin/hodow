@@ -1,0 +1,47 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+layout(local_size_x=32) in;
+layout(triangles) out;
+layout(max_vertices=256, max_primitives=128) out;
+
+layout (location=0) out perprimitiveEXT vec4 triangleColor[];
+
+const uint pixelsPerInvocation     = 2;
+const uint verticesPerInvocation   = 8;
+const uint primitivesPerInvocation = 4;
+const uint indicesPerInvocation    = primitivesPerInvocation * 3u;
+const uint verticesPerPixel        = 4;
+const uint primitivesPerPixel      = 2;
+const uint indicesPerPixel         = primitivesPerPixel * 3u;
+
+void main ()
+{
+    SetMeshOutputsEXT(256, 128);
+
+    const uint firstPixel    = gl_LocalInvocationIndex * pixelsPerInvocation;
+    const float pixelWidth   = 2.0 / float(64);
+    const float quarterWidth = pixelWidth / 4.0;
+
+    for (uint pixelIdx = 0u; pixelIdx < pixelsPerInvocation; ++pixelIdx)
+    {
+        const uint pixelId      = firstPixel + pixelIdx;
+        const float pixelCenter = (float(pixelId) + 0.5) / float(64) * 2.0 - 1.0;
+        const float left        = pixelCenter - quarterWidth;
+        const float right       = pixelCenter + quarterWidth;
+
+        const uint firstVertex = gl_LocalInvocationIndex * verticesPerInvocation + pixelIdx * verticesPerPixel;
+        gl_MeshVerticesEXT[firstVertex + 0].gl_Position = vec4(left,  -1.0, 0.0f, 1.0f);
+        gl_MeshVerticesEXT[firstVertex + 1].gl_Position = vec4(left,   1.0, 0.0f, 1.0f);
+        gl_MeshVerticesEXT[firstVertex + 2].gl_Position = vec4(right, -1.0, 0.0f, 1.0f);
+        gl_MeshVerticesEXT[firstVertex + 3].gl_Position = vec4(right,  1.0, 0.0f, 1.0f);
+
+        const uint firstPrimitive = gl_LocalInvocationIndex * primitivesPerInvocation + pixelIdx * primitivesPerPixel;
+        triangleColor[firstPrimitive + 0] = vec4(0.0, 0.0, 1.0, 1.0);
+        triangleColor[firstPrimitive + 1] = vec4(0.0, 0.0, 1.0, 1.0);
+
+        const uint firstIndex = gl_LocalInvocationIndex * indicesPerInvocation + pixelIdx * indicesPerPixel;
+        gl_PrimitiveTriangleIndicesEXT[firstPrimitive + 0] = uvec3(firstVertex + 0, firstVertex + 1, firstVertex + 2);
+        gl_PrimitiveTriangleIndicesEXT[firstPrimitive + 1] = uvec3(firstVertex + 1, firstVertex + 3, firstVertex + 2);
+    }
+}

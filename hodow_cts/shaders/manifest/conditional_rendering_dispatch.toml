@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.conditional_rendering.dispatch.*
+#
+# One compute shader shared by every case of vktConditionalDispatchTests.cpp: it adds one
+# to a counter, so the host can tell how many dispatches actually executed.
+
+upstream_source = "external/vulkancts/modules/vulkan/conditional_rendering/vktConditionalDispatchTests.cpp"
+rust_module = "conditional_rendering/dispatch_tests"
+
+[[case]]
+name = "dispatch"
+rust_const = "CONDITIONAL_DISPATCH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "conditional_rendering/dispatch.comp", stage = "comp" },
+]

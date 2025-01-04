@@ -1,0 +1,34 @@
+#version 450
+layout(binding = 0, set = 1) uniform highp sampler2D u_image;
+
+layout(local_size_x = 1) in;
+
+struct Inputs
+{
+	highp int lod;
+};
+struct Outputs
+{
+	highp ivec2 result;
+};
+
+layout(set = 0, binding = 0, std430) buffer InBuffer
+{
+    Inputs inputs[];
+};
+layout(set = 0, binding = 1, std430) buffer OutBuffer
+{
+    Outputs outputs[];
+};
+
+void main (void)
+{
+    uint invocationNdx = gl_NumWorkGroups.x*gl_NumWorkGroups.y*gl_WorkGroupID.z
+                       + gl_NumWorkGroups.x*gl_WorkGroupID.y + gl_WorkGroupID.x;
+	int lod = int(inputs[invocationNdx].lod);
+	ivec2 result;
+
+	result = textureSize(u_image, lod);
+
+	outputs[invocationNdx].result = result;
+}

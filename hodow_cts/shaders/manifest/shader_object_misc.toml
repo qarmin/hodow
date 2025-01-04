@@ -1,0 +1,278 @@
+# Shader manifest for dEQP-VK.shader_object.misc.*
+#
+# `ShaderObjectMiscCase`, `ShaderObjectUnusedBuiltinCase` (`stage` 1 vert, 2 tesc, 3 tese, 4 geom declares an output or a builtin write that
+# nothing consumes, picked by `builtin`), `ShaderObjectTessellationModesCase` (`subdivision` 1 or 2, `spacing` 0 equal, 1 even, 2 odd),
+# `tessPatchNonMatchInitPrograms` and `ShaderObjectPushConstCase` (one fragment shader per case, named after offset, count and whether
+# every byte is in the layout).
+
+upstream_source = "external/vulkancts/modules/vulkan/shader_object/vktShaderObjectMiscTests.cpp"
+rust_module = "shader_object/misc_tests"
+
+[[case]]
+name = "blend"
+rust_const = "MISC_BLEND"
+rust_type = "SharedProgram"
+programs = [
+    { name = "inputVert", template = "shader_object/misc/input.vert", stage = "vert" },
+    { name = "multiFrag", template = "shader_object/misc/multi.frag", stage = "frag" },
+]
+
+[[case]]
+name = "unused_vert_output"
+rust_const = "MISC_UNUSED_VERT_OUTPUT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/misc/unused.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/misc/unused.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/misc/unused.tese", stage = "tese" },
+    { name = "geom", template = "shader_object/misc/unused.geom", stage = "geom" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+]
+derived = { stage = "1", builtin = "0" }
+
+[[case]]
+name = "unused_vert_builtin"
+rust_const = "MISC_UNUSED_VERT_BUILTIN"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/misc/unused.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/misc/unused.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/misc/unused.tese", stage = "tese" },
+    { name = "geom", template = "shader_object/misc/unused.geom", stage = "geom" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+]
+derived = { stage = "1", builtin = "1" }
+
+[[case]]
+name = "unused_tesc_output"
+rust_const = "MISC_UNUSED_TESC_OUTPUT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/misc/unused.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/misc/unused.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/misc/unused.tese", stage = "tese" },
+    { name = "geom", template = "shader_object/misc/unused.geom", stage = "geom" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+]
+derived = { stage = "2", builtin = "0" }
+
+[[case]]
+name = "unused_tesc_builtin"
+rust_const = "MISC_UNUSED_TESC_BUILTIN"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/misc/unused.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/misc/unused.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/misc/unused.tese", stage = "tese" },
+    { name = "geom", template = "shader_object/misc/unused.geom", stage = "geom" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+]
+derived = { stage = "2", builtin = "1" }
+
+[[case]]
+name = "unused_tese_output"
+rust_const = "MISC_UNUSED_TESE_OUTPUT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/misc/unused.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/misc/unused.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/misc/unused.tese", stage = "tese" },
+    { name = "geom", template = "shader_object/misc/unused.geom", stage = "geom" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+]
+derived = { stage = "3", builtin = "0" }
+
+[[case]]
+name = "unused_tese_builtin"
+rust_const = "MISC_UNUSED_TESE_BUILTIN"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/misc/unused.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/misc/unused.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/misc/unused.tese", stage = "tese" },
+    { name = "geom", template = "shader_object/misc/unused.geom", stage = "geom" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+]
+derived = { stage = "3", builtin = "1" }
+
+[[case]]
+name = "unused_geom_output"
+rust_const = "MISC_UNUSED_GEOM_OUTPUT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/misc/unused.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/misc/unused.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/misc/unused.tese", stage = "tese" },
+    { name = "geom", template = "shader_object/misc/unused.geom", stage = "geom" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+]
+derived = { stage = "4", builtin = "0" }
+
+[[case]]
+name = "unused_geom_builtin"
+rust_const = "MISC_UNUSED_GEOM_BUILTIN"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/misc/unused.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/misc/unused.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/misc/unused.tese", stage = "tese" },
+    { name = "geom", template = "shader_object/misc/unused.geom", stage = "geom" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+]
+derived = { stage = "4", builtin = "1" }
+
+[[case]]
+name = "modes_1_equal"
+rust_const = "MISC_MODES_1_EQUAL"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/basic.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/misc/modes.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/misc/modes.tese", stage = "tese" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+]
+derived = { subdivision = "1", spacing = "0" }
+
+[[case]]
+name = "modes_1_even"
+rust_const = "MISC_MODES_1_EVEN"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/basic.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/misc/modes.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/misc/modes.tese", stage = "tese" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+]
+derived = { subdivision = "1", spacing = "1" }
+
+[[case]]
+name = "modes_1_odd"
+rust_const = "MISC_MODES_1_ODD"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/basic.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/misc/modes.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/misc/modes.tese", stage = "tese" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+]
+derived = { subdivision = "1", spacing = "2" }
+
+[[case]]
+name = "modes_2_equal"
+rust_const = "MISC_MODES_2_EQUAL"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/basic.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/misc/modes.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/misc/modes.tese", stage = "tese" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+]
+derived = { subdivision = "2", spacing = "0" }
+
+[[case]]
+name = "modes_2_even"
+rust_const = "MISC_MODES_2_EVEN"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/basic.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/misc/modes.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/misc/modes.tese", stage = "tese" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+]
+derived = { subdivision = "2", spacing = "1" }
+
+[[case]]
+name = "modes_2_odd"
+rust_const = "MISC_MODES_2_ODD"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/basic.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/misc/modes.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/misc/modes.tese", stage = "tese" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+]
+derived = { subdivision = "2", spacing = "2" }
+
+[[case]]
+name = "tess_patch_non_match"
+rust_const = "MISC_TESS_PATCH_NON_MATCH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/misc/patch.vert", stage = "vert" },
+    { name = "frag", template = "shader_object/misc/patch.frag", stage = "frag" },
+    { name = "tesc0", template = "shader_object/misc/patch0.tesc", stage = "tesc" },
+    { name = "tesc1", template = "shader_object/misc/patch1.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/misc/patch.tese", stage = "tese" },
+]
+
+[[case]]
+name = "push_const_57_64_all"
+rust_const = "MISC_PUSH_CONST_57_64_ALL"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/misc/pc.vert", stage = "vert" },
+    { name = "frag", template = "shader_object/misc/pc_57_64_all.frag", stage = "frag" },
+]
+
+[[case]]
+name = "push_const_63_64_all"
+rust_const = "MISC_PUSH_CONST_63_64_ALL"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/misc/pc.vert", stage = "vert" },
+    { name = "frag", template = "shader_object/misc/pc_63_64_all.frag", stage = "frag" },
+]
+
+[[case]]
+name = "push_const_17_64"
+rust_const = "MISC_PUSH_CONST_17_64"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/misc/pc.vert", stage = "vert" },
+    { name = "frag", template = "shader_object/misc/pc_17_64.frag", stage = "frag" },
+]
+
+[[case]]
+name = "push_const_63_64"
+rust_const = "MISC_PUSH_CONST_63_64"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/misc/pc.vert", stage = "vert" },
+    { name = "frag", template = "shader_object/misc/pc_63_64.frag", stage = "frag" },
+]
+
+[[case]]
+name = "push_const_17_37_all"
+rust_const = "MISC_PUSH_CONST_17_37_ALL"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/misc/pc.vert", stage = "vert" },
+    { name = "frag", template = "shader_object/misc/pc_17_37_all.frag", stage = "frag" },
+]
+
+[[case]]
+name = "push_const_36_37_all"
+rust_const = "MISC_PUSH_CONST_36_37_ALL"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/misc/pc.vert", stage = "vert" },
+    { name = "frag", template = "shader_object/misc/pc_36_37_all.frag", stage = "frag" },
+]
+
+[[case]]
+name = "push_const_17_37"
+rust_const = "MISC_PUSH_CONST_17_37"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/misc/pc.vert", stage = "vert" },
+    { name = "frag", template = "shader_object/misc/pc_17_37.frag", stage = "frag" },
+]
+
+[[case]]
+name = "push_const_36_37"
+rust_const = "MISC_PUSH_CONST_36_37"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/misc/pc.vert", stage = "vert" },
+    { name = "frag", template = "shader_object/misc/pc_36_37.frag", stage = "frag" },
+]

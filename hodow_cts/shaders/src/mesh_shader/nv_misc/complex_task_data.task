@@ -1,0 +1,46 @@
+#version 450
+#extension GL_NV_mesh_shader : enable
+
+layout (local_size_x=1) in;
+
+struct RowId {
+    uint id;
+};
+
+struct WorkGroupData {
+    float WorkGroupIdPlusOnex1000Iota[10];
+    RowId rowId;
+    uvec3 WorkGroupIdPlusOnex2000Iota;
+    vec2  WorkGroupIdPlusOnex3000Iota;
+};
+
+struct ExternalData {
+    float OneMillion;
+    uint  TwoMillion;
+    WorkGroupData workGroupData;
+};
+
+out taskNV TaskData {
+    uint yes;
+    ExternalData externalData;
+} td;
+
+void main ()
+{
+    gl_TaskCountNV = 2u;
+    td.yes = 1u;
+    td.externalData.OneMillion = 1000000.0;
+    td.externalData.TwoMillion = 2000000u;
+    for (uint i = 0; i < 10; i++) {
+        td.externalData.workGroupData.WorkGroupIdPlusOnex1000Iota[i] = float((gl_WorkGroupID.x + 1u) * 1000 + i);
+    }
+    {
+        uint baseVal = (gl_WorkGroupID.x + 1u) * 2000;
+        td.externalData.workGroupData.WorkGroupIdPlusOnex2000Iota = uvec3(baseVal, baseVal + 1, baseVal + 2);
+    }
+    {
+        uint baseVal = (gl_WorkGroupID.x + 1u) * 3000;
+        td.externalData.workGroupData.WorkGroupIdPlusOnex3000Iota = vec2(baseVal, baseVal + 1);
+    }
+    td.externalData.workGroupData.rowId.id = gl_WorkGroupID.x;
+}

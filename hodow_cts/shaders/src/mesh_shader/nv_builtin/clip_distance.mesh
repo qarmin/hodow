@@ -1,0 +1,38 @@
+#version 460
+#extension GL_NV_mesh_shader : enable
+
+layout (local_size_x=1) in;
+layout (triangles) out;
+layout (max_vertices=4, max_primitives=2) out;
+
+out gl_MeshPerVertexNV {
+    vec4  gl_Position;
+    float gl_ClipDistance[2];
+} gl_MeshVerticesNV[];
+
+void main ()
+{
+    gl_PrimitiveCountNV = 2u;
+
+    gl_PrimitiveIndicesNV[0] = 0;
+    gl_PrimitiveIndicesNV[1] = 1;
+    gl_PrimitiveIndicesNV[2] = 2;
+    gl_PrimitiveIndicesNV[3] = 1;
+    gl_PrimitiveIndicesNV[4] = 3;
+    gl_PrimitiveIndicesNV[5] = 2;
+
+    gl_MeshVerticesNV[0].gl_Position = vec4(-1.0, -1.0, 0.0, 1.0);
+    gl_MeshVerticesNV[1].gl_Position = vec4(-1.0,  1.0, 0.0, 1.0);
+    gl_MeshVerticesNV[2].gl_Position = vec4( 1.0, -1.0, 0.0, 1.0);
+    gl_MeshVerticesNV[3].gl_Position = vec4( 1.0,  1.0, 0.0, 1.0);
+
+    gl_MeshVerticesNV[0].gl_ClipDistance[0] =  1.0;
+    gl_MeshVerticesNV[1].gl_ClipDistance[0] =  1.0;
+    gl_MeshVerticesNV[2].gl_ClipDistance[0] = -1.0;
+    gl_MeshVerticesNV[3].gl_ClipDistance[0] = -1.0;
+
+    gl_MeshVerticesNV[0].gl_ClipDistance[1] =  1.0;
+    gl_MeshVerticesNV[1].gl_ClipDistance[1] = -1.0;
+    gl_MeshVerticesNV[2].gl_ClipDistance[1] =  1.0;
+    gl_MeshVerticesNV[3].gl_ClipDistance[1] = -1.0;
+}

@@ -1,0 +1,29 @@
+# Shader manifest for dEQP-VK.pipeline.*.logic_op.* and logic_op_na_formats.*
+#
+# `LogicOpTest::initPrograms`: a four-vertex strip generated from gl_VertexIndex and a fragment shader writing the push constant
+# as a uvec4. `LogicOpInapplicableFormatsTest::initPrograms` builds the fragment shader for the format's component count
+# (float, vec2, vec3, vec4), so there is one per count here (`color_frag_<n>`).
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineLogicOpTests.cpp"
+rust_module = "pipeline/logic_op_tests"
+
+[[case]]
+name = "logic_op"
+rust_const = "LOGIC_OP"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/logic_op.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/logic_op.frag", stage = "frag" },
+]
+
+[[case]]
+name = "logic_op_na_formats"
+rust_const = "LOGIC_OP_NA_FORMATS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/logic_op.vert", stage = "vert" },
+    { name = "color_frag_1", template = "pipeline/logic_op_na_1.frag", stage = "frag" },
+    { name = "color_frag_2", template = "pipeline/logic_op_na_2.frag", stage = "frag" },
+    { name = "color_frag_3", template = "pipeline/logic_op_na_3.frag", stage = "frag" },
+    { name = "color_frag_4", template = "pipeline/logic_op_na_4.frag", stage = "frag" },
+]

@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.pipeline.*.input_assembly.primitive_restart.restart_mix.*
+#
+# `PrimitiveRestartMixCase::initPrograms`: a pass-through vertex shader with a color, and a fragment shader writing it.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineInputAssemblyTests.cpp"
+rust_module = "pipeline/primitive_restart_mix_tests"
+
+[[case]]
+name = "restart_mix"
+rust_const = "RESTART_MIX"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/primitive_restart_mix/restart_mix.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/primitive_restart_mix/restart_mix.frag", stage = "frag" },
+]

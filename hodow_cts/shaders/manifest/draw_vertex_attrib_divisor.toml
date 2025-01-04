@@ -1,0 +1,16 @@
+# Shader manifest for dEQP-VK.draw.*.vertex_attribute_divisor.*
+#
+# `VertexAttributeDivisorCase::initPrograms`: the instanced vertex shader (two colour inputs, the second one a per-instance
+# attribute with a divisor, first instance and instance count in push constants) and a pass-through fragment shader.
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawVertexAttribDivisorTests.cpp"
+rust_module = "draw/vertex_attrib_divisor_tests"
+
+[[case]]
+name = "vertex_attrib_divisor"
+rust_const = "VERTEX_ATTRIB_DIVISOR"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/vertex_attrib_divisor.vert", stage = "vert" },
+    { name = "frag", template = "draw/vertex_attrib_divisor.frag", stage = "frag" },
+]

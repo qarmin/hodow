@@ -1,0 +1,199 @@
+#version 460
+layout (location=0) in vec4 inPos;
+void main(void) {
+    gl_Position = inPos;
+    gl_PointSize = 1.0;
+}
+#version 460
+#extension GL_EXT_texture_offset_non_const : enable
+layout (push_constant, std430) uniform PCBlock { vec4 coords; vec2 size; float lod; } pc;
+layout (set=0, binding=0) uniform OffsetDataBlock { ivec4 offsets[9]; } offsetData;
+layout (set=0, binding=1) uniform sampler2D inTex;
+layout (location=0) out vec4 outColor;
+void main(void) {
+    const uint offsetIndex = uint(gl_FragCoord.y) * uint(pc.size.x) + uint(gl_FragCoord.x);
+    const ivec2 offset = offsetData.offsets[offsetIndex].xy;
+    const vec2 texCoords = pc.coords.xy;
+    const vec4 pixel = textureOffset(inTex, texCoords, offset);
+    outColor = pixel;
+}
+#version 460
+#extension GL_EXT_texture_offset_non_const : enable
+layout (push_constant, std430) uniform PCBlock { vec4 coords; vec2 size; float lod; } pc;
+layout (set=0, binding=0) uniform OffsetDataBlock { ivec4 offsets[9]; } offsetData;
+layout (set=0, binding=1) uniform sampler2D inTex;
+layout (location=0) out vec4 outColor;
+layout (location=0) in vec4 inPos;
+void main(void) {
+    const uvec2 pixelId = uvec2((inPos.xy + vec2(1.0, 1.0)) / vec2(2.0, 2.0) * pc.size);    const uint offsetIndex = pixelId.y * uint(pc.size.x) + pixelId.x;
+    const ivec2 offset = offsetData.offsets[offsetIndex].xy;
+    const vec2 texCoords = pc.coords.xy;
+    const vec4 pixel = textureOffset(inTex, texCoords, offset);
+    outColor = pixel;
+    gl_Position = inPos;
+    gl_PointSize = 1.0;
+}
+#version 460
+layout (location=0) out vec4 outColor;
+layout (location=0) in vec4 inColor;
+void main(void) {
+    outColor = inColor;
+}
+#version 460
+#extension GL_EXT_texture_offset_non_const : enable
+layout (push_constant, std430) uniform PCBlock { vec4 coords; vec2 size; float lod; } pc;
+layout (set=0, binding=0) uniform OffsetDataBlock { ivec4 offsets[9]; } offsetData;
+layout (set=0, binding=1) uniform sampler2D inTex;
+layout (rgba8, set=0, binding=2) uniform image2D outColor;
+layout (local_size_x=3, local_size_y=3, local_size_z=1) in;
+void main(void) {
+    const uint offsetIndex = (gl_LocalInvocationID.y * gl_WorkGroupSize.x) + gl_LocalInvocationID.x;
+    const ivec2 offset = offsetData.offsets[offsetIndex].xy;
+    const ivec2 texCoords = ivec2(pc.coords.xy);
+    const vec4 pixel = texelFetchOffset(inTex, texCoords, int(pc.lod), offset);
+    imageStore(outColor, ivec2(gl_LocalInvocationID.xy), pixel);
+}
+#version 460
+#extension GL_EXT_texture_offset_non_const : enable
+layout (push_constant, std430) uniform PCBlock { vec4 coords; vec2 size; float lod; } pc;
+layout (set=0, binding=0) uniform OffsetDataBlock { ivec4 offsets[9]; } offsetData;
+layout (set=0, binding=1) uniform sampler2D inTex;
+layout (location=0) out vec4 outColor;
+void main(void) {
+    const uint offsetIndex = uint(gl_FragCoord.y) * uint(pc.size.x) + uint(gl_FragCoord.x);
+    const ivec2 offset = offsetData.offsets[offsetIndex].xy;
+    const ivec2 texCoords = ivec2(pc.coords.xy);
+    const vec4 pixel = texelFetchOffset(inTex, texCoords, int(pc.lod), offset);
+    outColor = pixel;
+}
+#version 460
+#extension GL_EXT_texture_offset_non_const : enable
+layout (push_constant, std430) uniform PCBlock { vec4 coords; vec2 size; float lod; } pc;
+layout (set=0, binding=0) uniform OffsetDataBlock { ivec4 offsets[9]; } offsetData;
+layout (set=0, binding=1) uniform sampler2D inTex;
+layout (location=0) out vec4 outColor;
+layout (location=0) in vec4 inPos;
+void main(void) {
+    const uvec2 pixelId = uvec2((inPos.xy + vec2(1.0, 1.0)) / vec2(2.0, 2.0) * pc.size);    const uint offsetIndex = pixelId.y * uint(pc.size.x) + pixelId.x;
+    const ivec2 offset = offsetData.offsets[offsetIndex].xy;
+    const ivec2 texCoords = ivec2(pc.coords.xy);
+    const vec4 pixel = texelFetchOffset(inTex, texCoords, int(pc.lod), offset);
+    outColor = pixel;
+    gl_Position = inPos;
+    gl_PointSize = 1.0;
+}
+#version 460
+#extension GL_EXT_texture_offset_non_const : enable
+layout (push_constant, std430) uniform PCBlock { vec4 coords; vec2 size; float lod; } pc;
+layout (set=0, binding=0) uniform OffsetDataBlock { ivec4 offsets[9]; } offsetData;
+layout (set=0, binding=1) uniform sampler2D inTex;
+layout (rgba8, set=0, binding=2) uniform image2D outColor;
+layout (local_size_x=3, local_size_y=3, local_size_z=1) in;
+void main(void) {
+    const uint offsetIndex = (gl_LocalInvocationID.y * gl_WorkGroupSize.x) + gl_LocalInvocationID.x;
+    const ivec2 offset = offsetData.offsets[offsetIndex].xy;
+    const vec2 texCoords = pc.coords.xy;
+    const vec4 pixel = textureLodOffset(inTex, texCoords, pc.lod, offset);
+    imageStore(outColor, ivec2(gl_LocalInvocationID.xy), pixel);
+}
+#version 460
+#extension GL_EXT_texture_offset_non_const : enable
+layout (push_constant, std430) uniform PCBlock { vec4 coords; vec2 size; float lod; } pc;
+layout (set=0, binding=0) uniform OffsetDataBlock { ivec4 offsets[9]; } offsetData;
+layout (set=0, binding=1) uniform sampler2D inTex;
+layout (location=0) out vec4 outColor;
+void main(void) {
+    const uint offsetIndex = uint(gl_FragCoord.y) * uint(pc.size.x) + uint(gl_FragCoord.x);
+    const ivec2 offset = offsetData.offsets[offsetIndex].xy;
+    const vec2 texCoords = pc.coords.xy;
+    const vec4 pixel = textureLodOffset(inTex, texCoords, pc.lod, offset);
+    outColor = pixel;
+}
+#version 460
+#extension GL_EXT_texture_offset_non_const : enable
+layout (push_constant, std430) uniform PCBlock { vec4 coords; vec2 size; float lod; } pc;
+layout (set=0, binding=0) uniform OffsetDataBlock { ivec4 offsets[9]; } offsetData;
+layout (set=0, binding=1) uniform sampler2D inTex;
+layout (location=0) out vec4 outColor;
+layout (location=0) in vec4 inPos;
+void main(void) {
+    const uvec2 pixelId = uvec2((inPos.xy + vec2(1.0, 1.0)) / vec2(2.0, 2.0) * pc.size);    const uint offsetIndex = pixelId.y * uint(pc.size.x) + pixelId.x;
+    const ivec2 offset = offsetData.offsets[offsetIndex].xy;
+    const vec2 texCoords = pc.coords.xy;
+    const vec4 pixel = textureLodOffset(inTex, texCoords, pc.lod, offset);
+    outColor = pixel;
+    gl_Position = inPos;
+    gl_PointSize = 1.0;
+}
+#version 460
+#extension GL_EXT_texture_offset_non_const : enable
+layout (push_constant, std430) uniform PCBlock { vec4 coords; vec2 size; float lod; } pc;
+layout (set=0, binding=0) uniform OffsetDataBlock { ivec4 offsets[9]; } offsetData;
+layout (set=0, binding=1) uniform sampler2D inTex;
+layout (location=0) out vec4 outColor;
+void main(void) {
+    const uint offsetIndex = uint(gl_FragCoord.y) * uint(pc.size.x) + uint(gl_FragCoord.x);
+    const ivec2 offset = offsetData.offsets[offsetIndex].xy;
+    const vec3 texCoords = pc.coords.xyz;
+    const vec4 pixel = textureProjOffset(inTex, texCoords, offset);
+    outColor = pixel;
+}
+#version 460
+#extension GL_EXT_texture_offset_non_const : enable
+layout (push_constant, std430) uniform PCBlock { vec4 coords; vec2 size; float lod; } pc;
+layout (set=0, binding=0) uniform OffsetDataBlock { ivec4 offsets[9]; } offsetData;
+layout (set=0, binding=1) uniform sampler2D inTex;
+layout (location=0) out vec4 outColor;
+layout (location=0) in vec4 inPos;
+void main(void) {
+    const uvec2 pixelId = uvec2((inPos.xy + vec2(1.0, 1.0)) / vec2(2.0, 2.0) * pc.size);    const uint offsetIndex = pixelId.y * uint(pc.size.x) + pixelId.x;
+    const ivec2 offset = offsetData.offsets[offsetIndex].xy;
+    const vec3 texCoords = pc.coords.xyz;
+    const vec4 pixel = textureProjOffset(inTex, texCoords, offset);
+    outColor = pixel;
+    gl_Position = inPos;
+    gl_PointSize = 1.0;
+}
+#version 460
+#extension GL_EXT_texture_offset_non_const : enable
+layout (push_constant, std430) uniform PCBlock { vec4 coords; vec2 size; float lod; } pc;
+layout (set=0, binding=0) uniform OffsetDataBlock { ivec4 offsets[9]; } offsetData;
+layout (set=0, binding=1) uniform sampler2D inTex;
+layout (rgba8, set=0, binding=2) uniform image2D outColor;
+layout (local_size_x=3, local_size_y=3, local_size_z=1) in;
+void main(void) {
+    const uint offsetIndex = (gl_LocalInvocationID.y * gl_WorkGroupSize.x) + gl_LocalInvocationID.x;
+    const ivec2 offset = offsetData.offsets[offsetIndex].xy;
+    const vec3 texCoords = pc.coords.xyz;
+    const vec4 pixel = textureProjLodOffset(inTex, texCoords, pc.lod, offset);
+    imageStore(outColor, ivec2(gl_LocalInvocationID.xy), pixel);
+}
+#version 460
+#extension GL_EXT_texture_offset_non_const : enable
+layout (push_constant, std430) uniform PCBlock { vec4 coords; vec2 size; float lod; } pc;
+layout (set=0, binding=0) uniform OffsetDataBlock { ivec4 offsets[9]; } offsetData;
+layout (set=0, binding=1) uniform sampler2D inTex;
+layout (location=0) out vec4 outColor;
+void main(void) {
+    const uint offsetIndex = uint(gl_FragCoord.y) * uint(pc.size.x) + uint(gl_FragCoord.x);
+    const ivec2 offset = offsetData.offsets[offsetIndex].xy;
+    const vec3 texCoords = pc.coords.xyz;
+    const vec4 pixel = textureProjLodOffset(inTex, texCoords, pc.lod, offset);
+    outColor = pixel;
+}
+#version 460
+#extension GL_EXT_texture_offset_non_const : enable
+layout (push_constant, std430) uniform PCBlock { vec4 coords; vec2 size; float lod; } pc;
+layout (set=0, binding=0) uniform OffsetDataBlock { ivec4 offsets[9]; } offsetData;
+layout (set=0, binding=1) uniform sampler2D inTex;
+layout (location=0) out vec4 outColor;
+layout (location=0) in vec4 inPos;
+void main(void) {
+    const uvec2 pixelId = uvec2((inPos.xy + vec2(1.0, 1.0)) / vec2(2.0, 2.0) * pc.size);    const uint offsetIndex = pixelId.y * uint(pc.size.x) + pixelId.x;
+    const ivec2 offset = offsetData.offsets[offsetIndex].xy;
+    const vec3 texCoords = pc.coords.xyz;
+    const vec4 pixel = textureProjLodOffset(inTex, texCoords, pc.lod, offset);
+    outColor = pixel;
+    gl_Position = inPos;
+    gl_PointSize = 1.0;
+}

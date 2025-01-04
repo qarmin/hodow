@@ -1,0 +1,50 @@
+#version 460
+#extension GL_NV_mesh_shader : enable
+
+layout (local_size_x=1) in;
+layout (triangles) out;
+layout (max_vertices=6, max_primitives=4) out;
+
+out gl_MeshPerVertexNV {
+    vec4  gl_Position;
+    float gl_CullDistance[2];
+} gl_MeshVerticesNV[];
+
+void main ()
+{
+    gl_PrimitiveCountNV = 4u;
+
+    gl_PrimitiveIndicesNV[0]  = 0;
+    gl_PrimitiveIndicesNV[1]  = 1;
+    gl_PrimitiveIndicesNV[2]  = 3;
+    gl_PrimitiveIndicesNV[3]  = 1;
+    gl_PrimitiveIndicesNV[4]  = 4;
+    gl_PrimitiveIndicesNV[5]  = 3;
+    gl_PrimitiveIndicesNV[6]  = 1;
+    gl_PrimitiveIndicesNV[7]  = 2;
+    gl_PrimitiveIndicesNV[8]  = 4;
+    gl_PrimitiveIndicesNV[9]  = 2;
+    gl_PrimitiveIndicesNV[10] = 5;
+    gl_PrimitiveIndicesNV[11] = 4;
+
+    gl_MeshVerticesNV[0].gl_Position = vec4(-1.0, -1.0, 0.0, 1.0);
+    gl_MeshVerticesNV[1].gl_Position = vec4(-1.0,  0.0, 0.0, 1.0);
+    gl_MeshVerticesNV[2].gl_Position = vec4(-1.0,  1.0, 0.0, 1.0);
+    gl_MeshVerticesNV[3].gl_Position = vec4( 1.0, -1.0, 0.0, 1.0);
+    gl_MeshVerticesNV[4].gl_Position = vec4( 1.0,  0.0, 0.0, 1.0);
+    gl_MeshVerticesNV[5].gl_Position = vec4( 1.0,  1.0, 0.0, 1.0);
+
+    gl_MeshVerticesNV[0].gl_CullDistance[0] =  1.0;
+    gl_MeshVerticesNV[1].gl_CullDistance[0] = -1.0;
+    gl_MeshVerticesNV[2].gl_CullDistance[0] = -2.0;
+    gl_MeshVerticesNV[3].gl_CullDistance[0] =  1.0;
+    gl_MeshVerticesNV[4].gl_CullDistance[0] = -1.0;
+    gl_MeshVerticesNV[5].gl_CullDistance[0] = -2.0;
+
+    gl_MeshVerticesNV[0].gl_CullDistance[1] =  1.0;
+    gl_MeshVerticesNV[1].gl_CullDistance[1] =  1.0;
+    gl_MeshVerticesNV[2].gl_CullDistance[1] =  1.0;
+    gl_MeshVerticesNV[3].gl_CullDistance[1] = -1.0;
+    gl_MeshVerticesNV[4].gl_CullDistance[1] = -1.0;
+    gl_MeshVerticesNV[5].gl_CullDistance[1] = -1.0;
+}

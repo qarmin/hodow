@@ -1,0 +1,16 @@
+# Shader manifest for dEQP-VK.query_pool.concurrent_queries.*
+#
+# One vertex/fragment pair for both cases. The fragment shader discards half of the fragments,
+# which leaves a non-zero but not full occlusion count to read back.
+
+upstream_source = "external/vulkancts/modules/vulkan/query_pool/vktQueryPoolConcurrentTests.cpp"
+rust_module = "query_pool/concurrent_tests"
+
+[[case]]
+name = "concurrent"
+rust_const = "QUERY_POOL_CONCURRENT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "query_pool/concurrent.vert", stage = "vert" },
+    { name = "frag", template = "query_pool/concurrent.frag", stage = "frag" },
+]

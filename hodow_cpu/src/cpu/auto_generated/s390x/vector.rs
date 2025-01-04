@@ -1,0 +1,462 @@
+mod abs;
+mod add;
+mod addc;
+mod adde;
+mod addec;
+mod all;
+mod and;
+mod andc;
+mod any;
+mod avg;
+mod bperm;
+mod ceil;
+mod checksum;
+mod cmpeq;
+mod cmpge;
+mod cmpgt;
+mod cmple;
+mod cmplt;
+mod cmpne;
+mod cmpnrg;
+mod cmprg;
+mod cntlz;
+mod cnttz;
+mod convert;
+mod cp;
+mod double;
+mod doublee;
+mod eqv;
+mod extend;
+mod extract;
+mod float;
+mod floate;
+mod floor;
+mod fp;
+mod gather;
+mod genmask;
+mod genmasks;
+mod gfmsum;
+mod insert;
+mod load;
+mod madd;
+mod max;
+mod meadd;
+mod mergeh;
+mod mergel;
+mod mhadd;
+mod min;
+mod mladd;
+mod moadd;
+mod msub;
+mod msum;
+mod mul;
+mod mule;
+mod mulh;
+mod mulo;
+mod nabs;
+mod nand;
+mod neg;
+mod nmadd;
+mod nmsub;
+mod nor;
+mod or;
+mod orc;
+mod pack;
+mod packs;
+mod packsu;
+mod perm;
+mod popcnt;
+mod promote;
+mod revb;
+mod reve;
+mod rint;
+mod rl;
+mod rli;
+mod round;
+mod roundc;
+mod roundm;
+mod roundp;
+mod roundz;
+mod search;
+mod sel;
+mod signed;
+mod sl;
+mod slb;
+mod sld;
+mod sldb;
+mod sldw;
+mod sll;
+mod splat;
+mod splats;
+mod sqrt;
+mod sr;
+mod sra;
+mod srab;
+mod sral;
+mod srb;
+mod srdb;
+mod srl;
+mod store;
+mod sub;
+mod subc;
+mod sube;
+mod subec;
+mod sum;
+mod sum2;
+mod sum4;
+mod test;
+mod trunc;
+mod unpackh;
+mod unpackl;
+mod unsigned;
+mod va;
+mod vcdgb;
+mod vcdlgb;
+mod vcefb;
+mod vcelfb;
+mod vs;
+mod vsegb;
+mod vsegf;
+mod vsegh;
+mod vsumqf;
+mod vsumqg;
+mod xl;
+mod xor;
+mod xst;
+
+use crate::cpu::auto_generated::s390x::vector::abs::*;
+use crate::cpu::auto_generated::s390x::vector::add::*;
+use crate::cpu::auto_generated::s390x::vector::addc::*;
+use crate::cpu::auto_generated::s390x::vector::adde::*;
+use crate::cpu::auto_generated::s390x::vector::addec::*;
+use crate::cpu::auto_generated::s390x::vector::all::*;
+use crate::cpu::auto_generated::s390x::vector::and::*;
+use crate::cpu::auto_generated::s390x::vector::andc::*;
+use crate::cpu::auto_generated::s390x::vector::any::*;
+use crate::cpu::auto_generated::s390x::vector::avg::*;
+use crate::cpu::auto_generated::s390x::vector::bperm::*;
+use crate::cpu::auto_generated::s390x::vector::ceil::*;
+use crate::cpu::auto_generated::s390x::vector::checksum::*;
+use crate::cpu::auto_generated::s390x::vector::cmpeq::*;
+use crate::cpu::auto_generated::s390x::vector::cmpge::*;
+use crate::cpu::auto_generated::s390x::vector::cmpgt::*;
+use crate::cpu::auto_generated::s390x::vector::cmple::*;
+use crate::cpu::auto_generated::s390x::vector::cmplt::*;
+use crate::cpu::auto_generated::s390x::vector::cmpne::*;
+use crate::cpu::auto_generated::s390x::vector::cmpnrg::*;
+use crate::cpu::auto_generated::s390x::vector::cmprg::*;
+use crate::cpu::auto_generated::s390x::vector::cntlz::*;
+use crate::cpu::auto_generated::s390x::vector::cnttz::*;
+use crate::cpu::auto_generated::s390x::vector::convert::*;
+use crate::cpu::auto_generated::s390x::vector::cp::*;
+use crate::cpu::auto_generated::s390x::vector::double::*;
+use crate::cpu::auto_generated::s390x::vector::doublee::*;
+use crate::cpu::auto_generated::s390x::vector::eqv::*;
+use crate::cpu::auto_generated::s390x::vector::extend::*;
+use crate::cpu::auto_generated::s390x::vector::extract::*;
+use crate::cpu::auto_generated::s390x::vector::float::*;
+use crate::cpu::auto_generated::s390x::vector::floate::*;
+use crate::cpu::auto_generated::s390x::vector::floor::*;
+use crate::cpu::auto_generated::s390x::vector::fp::*;
+use crate::cpu::auto_generated::s390x::vector::gather::*;
+use crate::cpu::auto_generated::s390x::vector::genmask::*;
+use crate::cpu::auto_generated::s390x::vector::genmasks::*;
+use crate::cpu::auto_generated::s390x::vector::gfmsum::*;
+use crate::cpu::auto_generated::s390x::vector::insert::*;
+use crate::cpu::auto_generated::s390x::vector::load::*;
+use crate::cpu::auto_generated::s390x::vector::madd::*;
+use crate::cpu::auto_generated::s390x::vector::max::*;
+use crate::cpu::auto_generated::s390x::vector::meadd::*;
+use crate::cpu::auto_generated::s390x::vector::mergeh::*;
+use crate::cpu::auto_generated::s390x::vector::mergel::*;
+use crate::cpu::auto_generated::s390x::vector::mhadd::*;
+use crate::cpu::auto_generated::s390x::vector::min::*;
+use crate::cpu::auto_generated::s390x::vector::mladd::*;
+use crate::cpu::auto_generated::s390x::vector::moadd::*;
+use crate::cpu::auto_generated::s390x::vector::msub::*;
+use crate::cpu::auto_generated::s390x::vector::msum::*;
+use crate::cpu::auto_generated::s390x::vector::mul::*;
+use crate::cpu::auto_generated::s390x::vector::mule::*;
+use crate::cpu::auto_generated::s390x::vector::mulh::*;
+use crate::cpu::auto_generated::s390x::vector::mulo::*;
+use crate::cpu::auto_generated::s390x::vector::nabs::*;
+use crate::cpu::auto_generated::s390x::vector::nand::*;
+use crate::cpu::auto_generated::s390x::vector::neg::*;
+use crate::cpu::auto_generated::s390x::vector::nmadd::*;
+use crate::cpu::auto_generated::s390x::vector::nmsub::*;
+use crate::cpu::auto_generated::s390x::vector::nor::*;
+use crate::cpu::auto_generated::s390x::vector::or::*;
+use crate::cpu::auto_generated::s390x::vector::orc::*;
+use crate::cpu::auto_generated::s390x::vector::pack::*;
+use crate::cpu::auto_generated::s390x::vector::packs::*;
+use crate::cpu::auto_generated::s390x::vector::packsu::*;
+use crate::cpu::auto_generated::s390x::vector::perm::*;
+use crate::cpu::auto_generated::s390x::vector::popcnt::*;
+use crate::cpu::auto_generated::s390x::vector::promote::*;
+use crate::cpu::auto_generated::s390x::vector::revb::*;
+use crate::cpu::auto_generated::s390x::vector::reve::*;
+use crate::cpu::auto_generated::s390x::vector::rint::*;
+use crate::cpu::auto_generated::s390x::vector::rl::*;
+use crate::cpu::auto_generated::s390x::vector::rli::*;
+use crate::cpu::auto_generated::s390x::vector::round::*;
+use crate::cpu::auto_generated::s390x::vector::roundc::*;
+use crate::cpu::auto_generated::s390x::vector::roundm::*;
+use crate::cpu::auto_generated::s390x::vector::roundp::*;
+use crate::cpu::auto_generated::s390x::vector::roundz::*;
+use crate::cpu::auto_generated::s390x::vector::search::*;
+use crate::cpu::auto_generated::s390x::vector::sel::*;
+use crate::cpu::auto_generated::s390x::vector::signed::*;
+use crate::cpu::auto_generated::s390x::vector::sl::*;
+use crate::cpu::auto_generated::s390x::vector::slb::*;
+use crate::cpu::auto_generated::s390x::vector::sld::*;
+use crate::cpu::auto_generated::s390x::vector::sldb::*;
+use crate::cpu::auto_generated::s390x::vector::sldw::*;
+use crate::cpu::auto_generated::s390x::vector::sll::*;
+use crate::cpu::auto_generated::s390x::vector::splat::*;
+use crate::cpu::auto_generated::s390x::vector::splats::*;
+use crate::cpu::auto_generated::s390x::vector::sqrt::*;
+use crate::cpu::auto_generated::s390x::vector::sr::*;
+use crate::cpu::auto_generated::s390x::vector::sra::*;
+use crate::cpu::auto_generated::s390x::vector::srab::*;
+use crate::cpu::auto_generated::s390x::vector::sral::*;
+use crate::cpu::auto_generated::s390x::vector::srb::*;
+use crate::cpu::auto_generated::s390x::vector::srdb::*;
+use crate::cpu::auto_generated::s390x::vector::srl::*;
+use crate::cpu::auto_generated::s390x::vector::store::*;
+use crate::cpu::auto_generated::s390x::vector::sub::*;
+use crate::cpu::auto_generated::s390x::vector::subc::*;
+use crate::cpu::auto_generated::s390x::vector::sube::*;
+use crate::cpu::auto_generated::s390x::vector::subec::*;
+use crate::cpu::auto_generated::s390x::vector::sum::*;
+use crate::cpu::auto_generated::s390x::vector::sum2::*;
+use crate::cpu::auto_generated::s390x::vector::sum4::*;
+use crate::cpu::auto_generated::s390x::vector::test::*;
+use crate::cpu::auto_generated::s390x::vector::trunc::*;
+use crate::cpu::auto_generated::s390x::vector::unpackh::*;
+use crate::cpu::auto_generated::s390x::vector::unpackl::*;
+use crate::cpu::auto_generated::s390x::vector::unsigned::*;
+use crate::cpu::auto_generated::s390x::vector::va::*;
+use crate::cpu::auto_generated::s390x::vector::vcdgb::*;
+use crate::cpu::auto_generated::s390x::vector::vcdlgb::*;
+use crate::cpu::auto_generated::s390x::vector::vcefb::*;
+use crate::cpu::auto_generated::s390x::vector::vcelfb::*;
+use crate::cpu::auto_generated::s390x::vector::vs::*;
+use crate::cpu::auto_generated::s390x::vector::vsegb::*;
+use crate::cpu::auto_generated::s390x::vector::vsegf::*;
+use crate::cpu::auto_generated::s390x::vector::vsegh::*;
+use crate::cpu::auto_generated::s390x::vector::vsumqf::*;
+use crate::cpu::auto_generated::s390x::vector::vsumqg::*;
+use crate::cpu::auto_generated::s390x::vector::xl::*;
+use crate::cpu::auto_generated::s390x::vector::xor::*;
+use crate::cpu::auto_generated::s390x::vector::xst::*;
+
+use crate::cpu::{ExtensionTest, TestFunction};
+
+#[allow(non_camel_case_types)]
+pub struct VECTOR;
+
+impl ExtensionTest for VECTOR {
+    fn get_name() -> &'static str {
+        "s390x::VECTOR"
+    }
+
+    fn get_tests() -> &'static [(TestFunction, &'static str)] {
+        &[
+            (test_s390x_vector_va_float, "test_s390x_vector_va_float"),
+            (test_s390x_vector_vs_float, "test_s390x_vector_vs_float"),
+            (test_s390x_vector_vec_vsumqf, "test_s390x_vector_vec_vsumqf"),
+            (test_s390x_vector_vec_vsumqg, "test_s390x_vector_vec_vsumqg"),
+            (test_s390x_vector_vcdgb, "test_s390x_vector_vcdgb"),
+            (test_s390x_vector_vcdlgb, "test_s390x_vector_vcdlgb"),
+            (test_s390x_vector_vcefb, "test_s390x_vector_vcefb"),
+            (test_s390x_vector_vcelfb, "test_s390x_vector_vcelfb"),
+            (test_s390x_vector_vsegb, "test_s390x_vector_vsegb"),
+            (test_s390x_vector_vsegh, "test_s390x_vector_vsegh"),
+            (test_s390x_vector_vsegf, "test_s390x_vector_vsegf"),
+            (test_s390x_vector_vec_neg, "test_s390x_vector_vec_neg"),
+            (test_s390x_vector_vec_add, "test_s390x_vector_vec_add"),
+            (test_s390x_vector_vec_sub, "test_s390x_vector_vec_sub"),
+            (test_s390x_vector_vec_mul, "test_s390x_vector_vec_mul"),
+            (test_s390x_vector_vec_cntlz, "test_s390x_vector_vec_cntlz"),
+            (test_s390x_vector_vec_cnttz, "test_s390x_vector_vec_cnttz"),
+            (test_s390x_vector_vec_popcnt, "test_s390x_vector_vec_popcnt"),
+            (test_s390x_vector_vec_max, "test_s390x_vector_vec_max"),
+            (test_s390x_vector_vec_min, "test_s390x_vector_vec_min"),
+            (test_s390x_vector_vec_abs, "test_s390x_vector_vec_abs"),
+            (test_s390x_vector_vec_nabs, "test_s390x_vector_vec_nabs"),
+            (test_s390x_vector_vec_nmadd, "test_s390x_vector_vec_nmadd"),
+            (test_s390x_vector_vec_nmsub, "test_s390x_vector_vec_nmsub"),
+            (test_s390x_vector_vec_sqrt, "test_s390x_vector_vec_sqrt"),
+            (test_s390x_vector_vec_splat, "test_s390x_vector_vec_splat"),
+            (test_s390x_vector_vec_splats, "test_s390x_vector_vec_splats"),
+            (test_s390x_vector_vec_and, "test_s390x_vector_vec_and"),
+            (test_s390x_vector_vec_or, "test_s390x_vector_vec_or"),
+            (test_s390x_vector_vec_xor, "test_s390x_vector_vec_xor"),
+            (test_s390x_vector_vec_nor, "test_s390x_vector_vec_nor"),
+            (test_s390x_vector_vec_nand, "test_s390x_vector_vec_nand"),
+            (test_s390x_vector_vec_eqv, "test_s390x_vector_vec_eqv"),
+            (test_s390x_vector_vec_andc, "test_s390x_vector_vec_andc"),
+            (test_s390x_vector_vec_orc, "test_s390x_vector_vec_orc"),
+            (test_s390x_vector_vec_floor, "test_s390x_vector_vec_floor"),
+            (test_s390x_vector_vec_ceil, "test_s390x_vector_vec_ceil"),
+            (test_s390x_vector_vec_trunc, "test_s390x_vector_vec_trunc"),
+            (test_s390x_vector_vec_round, "test_s390x_vector_vec_round"),
+            (test_s390x_vector_vec_roundc, "test_s390x_vector_vec_roundc"),
+            (test_s390x_vector_vec_roundm, "test_s390x_vector_vec_roundm"),
+            (test_s390x_vector_vec_roundp, "test_s390x_vector_vec_roundp"),
+            (test_s390x_vector_vec_roundz, "test_s390x_vector_vec_roundz"),
+            (test_s390x_vector_vec_rint, "test_s390x_vector_vec_rint"),
+            (test_s390x_vector_vec_avg, "test_s390x_vector_vec_avg"),
+            (test_s390x_vector_vec_sl, "test_s390x_vector_vec_sl"),
+            (test_s390x_vector_vec_sr, "test_s390x_vector_vec_sr"),
+            (test_s390x_vector_vec_sra, "test_s390x_vector_vec_sra"),
+            (test_s390x_vector_vec_slb, "test_s390x_vector_vec_slb"),
+            (test_s390x_vector_vec_srb, "test_s390x_vector_vec_srb"),
+            (test_s390x_vector_vec_srab, "test_s390x_vector_vec_srab"),
+            (test_s390x_vector_vec_rl, "test_s390x_vector_vec_rl"),
+            (test_s390x_vector_vec_sll, "test_s390x_vector_vec_sll"),
+            (test_s390x_vector_vec_srl, "test_s390x_vector_vec_srl"),
+            (test_s390x_vector_vec_sral, "test_s390x_vector_vec_sral"),
+            (test_s390x_vector_vec_rli, "test_s390x_vector_vec_rli"),
+            (test_s390x_vector_vec_reve, "test_s390x_vector_vec_reve"),
+            (test_s390x_vector_vec_revb, "test_s390x_vector_vec_revb"),
+            (test_s390x_vector_vec_mergeh, "test_s390x_vector_vec_mergeh"),
+            (test_s390x_vector_vec_mergel, "test_s390x_vector_vec_mergel"),
+            (test_s390x_vector_vec_pack, "test_s390x_vector_vec_pack"),
+            (test_s390x_vector_vec_packs, "test_s390x_vector_vec_packs"),
+            (test_s390x_vector_vec_packs_cc, "test_s390x_vector_vec_packs_cc"),
+            (test_s390x_vector_vec_packsu, "test_s390x_vector_vec_packsu"),
+            (test_s390x_vector_vec_packsu_cc, "test_s390x_vector_vec_packsu_cc"),
+            (test_s390x_vector_vec_unpackh, "test_s390x_vector_vec_unpackh"),
+            (test_s390x_vector_vec_unpackl, "test_s390x_vector_vec_unpackl"),
+            (test_s390x_vector_vec_genmask, "test_s390x_vector_vec_genmask"),
+            (test_s390x_vector_vec_genmasks_8, "test_s390x_vector_vec_genmasks_8"),
+            (test_s390x_vector_vec_genmasks_16, "test_s390x_vector_vec_genmasks_16"),
+            (test_s390x_vector_vec_genmasks_32, "test_s390x_vector_vec_genmasks_32"),
+            (test_s390x_vector_vec_genmasks_64, "test_s390x_vector_vec_genmasks_64"),
+            (test_s390x_vector_vec_perm, "test_s390x_vector_vec_perm"),
+            (test_s390x_vector_vec_sum_u128, "test_s390x_vector_vec_sum_u128"),
+            (test_s390x_vector_vec_sum2, "test_s390x_vector_vec_sum2"),
+            (test_s390x_vector_vec_sum4, "test_s390x_vector_vec_sum4"),
+            (test_s390x_vector_vec_add_u128, "test_s390x_vector_vec_add_u128"),
+            (test_s390x_vector_vec_sub_u128, "test_s390x_vector_vec_sub_u128"),
+            (test_s390x_vector_vec_subc, "test_s390x_vector_vec_subc"),
+            (test_s390x_vector_vec_subc_u128, "test_s390x_vector_vec_subc_u128"),
+            (test_s390x_vector_vec_addc_u128, "test_s390x_vector_vec_addc_u128"),
+            (test_s390x_vector_vec_adde_u128, "test_s390x_vector_vec_adde_u128"),
+            (test_s390x_vector_vec_addec_u128, "test_s390x_vector_vec_addec_u128"),
+            (test_s390x_vector_vec_sube_u128, "test_s390x_vector_vec_sube_u128"),
+            (test_s390x_vector_vec_subec_u128, "test_s390x_vector_vec_subec_u128"),
+            (test_s390x_vector_vec_splat_s8, "test_s390x_vector_vec_splat_s8"),
+            (test_s390x_vector_vec_splat_s16, "test_s390x_vector_vec_splat_s16"),
+            (test_s390x_vector_vec_splat_s32, "test_s390x_vector_vec_splat_s32"),
+            (test_s390x_vector_vec_splat_s64, "test_s390x_vector_vec_splat_s64"),
+            (test_s390x_vector_vec_splat_u8, "test_s390x_vector_vec_splat_u8"),
+            (test_s390x_vector_vec_splat_u16, "test_s390x_vector_vec_splat_u16"),
+            (test_s390x_vector_vec_splat_u32, "test_s390x_vector_vec_splat_u32"),
+            (test_s390x_vector_vec_splat_u64, "test_s390x_vector_vec_splat_u64"),
+            (test_s390x_vector_vec_xl, "test_s390x_vector_vec_xl"),
+            (test_s390x_vector_vec_load_pair, "test_s390x_vector_vec_load_pair"),
+            (test_s390x_vector_vec_load_bndry, "test_s390x_vector_vec_load_bndry"),
+            (test_s390x_vector_vec_xst, "test_s390x_vector_vec_xst"),
+            (test_s390x_vector_vec_load_len, "test_s390x_vector_vec_load_len"),
+            (test_s390x_vector_vec_store_len, "test_s390x_vector_vec_store_len"),
+            (test_s390x_vector_vec_load_len_r, "test_s390x_vector_vec_load_len_r"),
+            (test_s390x_vector_vec_store_len_r, "test_s390x_vector_vec_store_len_r"),
+            (test_s390x_vector_vec_madd, "test_s390x_vector_vec_madd"),
+            (test_s390x_vector_vec_msub, "test_s390x_vector_vec_msub"),
+            (test_s390x_vector_vec_meadd, "test_s390x_vector_vec_meadd"),
+            (test_s390x_vector_vec_moadd, "test_s390x_vector_vec_moadd"),
+            (test_s390x_vector_vec_mhadd, "test_s390x_vector_vec_mhadd"),
+            (test_s390x_vector_vec_mladd, "test_s390x_vector_vec_mladd"),
+            (test_s390x_vector_vec_checksum, "test_s390x_vector_vec_checksum"),
+            (test_s390x_vector_vec_mule, "test_s390x_vector_vec_mule"),
+            (test_s390x_vector_vec_mulo, "test_s390x_vector_vec_mulo"),
+            (test_s390x_vector_vec_mulh, "test_s390x_vector_vec_mulh"),
+            (test_s390x_vector_vec_gfmsum, "test_s390x_vector_vec_gfmsum"),
+            (test_s390x_vector_vec_gfmsum_accum, "test_s390x_vector_vec_gfmsum_accum"),
+            (test_s390x_vector_vec_gfmsum_128, "test_s390x_vector_vec_gfmsum_128"),
+            (test_s390x_vector_vec_gfmsum_accum_128, "test_s390x_vector_vec_gfmsum_accum_128"),
+            (test_s390x_vector_vec_bperm_u128, "test_s390x_vector_vec_bperm_u128"),
+            (test_s390x_vector_vec_gather_element, "test_s390x_vector_vec_gather_element"),
+            (test_s390x_vector_vec_sel, "test_s390x_vector_vec_sel"),
+            (test_s390x_vector_vec_fp_test_data_class, "test_s390x_vector_vec_fp_test_data_class"),
+            (test_s390x_vector_vec_all_nan, "test_s390x_vector_vec_all_nan"),
+            (test_s390x_vector_vec_all_numeric, "test_s390x_vector_vec_all_numeric"),
+            (test_s390x_vector_vec_any_nan, "test_s390x_vector_vec_any_nan"),
+            (test_s390x_vector_vec_any_numeric, "test_s390x_vector_vec_any_numeric"),
+            (test_s390x_vector_vec_test_mask, "test_s390x_vector_vec_test_mask"),
+            (test_s390x_vector_vec_search_string_cc, "test_s390x_vector_vec_search_string_cc"),
+            (test_s390x_vector_vec_search_string_until_zero_cc, "test_s390x_vector_vec_search_string_until_zero_cc"),
+            (test_s390x_vector_vec_doublee, "test_s390x_vector_vec_doublee"),
+            (test_s390x_vector_vec_floate, "test_s390x_vector_vec_floate"),
+            (test_s390x_vector_vec_float, "test_s390x_vector_vec_float"),
+            (test_s390x_vector_vec_double, "test_s390x_vector_vec_double"),
+            (test_s390x_vector_vec_extend_s64, "test_s390x_vector_vec_extend_s64"),
+            (test_s390x_vector_vec_signed, "test_s390x_vector_vec_signed"),
+            (test_s390x_vector_vec_unsigned, "test_s390x_vector_vec_unsigned"),
+            (test_s390x_vector_vec_cp_until_zero, "test_s390x_vector_vec_cp_until_zero"),
+            (test_s390x_vector_vec_cp_until_zero_cc, "test_s390x_vector_vec_cp_until_zero_cc"),
+            (test_s390x_vector_vec_msum_u128, "test_s390x_vector_vec_msum_u128"),
+            (test_s390x_vector_vec_sld, "test_s390x_vector_vec_sld"),
+            (test_s390x_vector_vec_sldw, "test_s390x_vector_vec_sldw"),
+            (test_s390x_vector_vec_sldb, "test_s390x_vector_vec_sldb"),
+            (test_s390x_vector_vec_srdb, "test_s390x_vector_vec_srdb"),
+            (test_s390x_vector_vec_cmprg, "test_s390x_vector_vec_cmprg"),
+            (test_s390x_vector_vec_cmpnrg, "test_s390x_vector_vec_cmpnrg"),
+            (test_s390x_vector_vec_cmprg_idx, "test_s390x_vector_vec_cmprg_idx"),
+            (test_s390x_vector_vec_cmpnrg_idx, "test_s390x_vector_vec_cmpnrg_idx"),
+            (test_s390x_vector_vec_cmprg_cc, "test_s390x_vector_vec_cmprg_cc"),
+            (test_s390x_vector_vec_cmpnrg_cc, "test_s390x_vector_vec_cmpnrg_cc"),
+            (test_s390x_vector_vec_cmprg_idx_cc, "test_s390x_vector_vec_cmprg_idx_cc"),
+            (test_s390x_vector_vec_cmpnrg_idx_cc, "test_s390x_vector_vec_cmpnrg_idx_cc"),
+            (test_s390x_vector_vec_cmprg_or_0_idx, "test_s390x_vector_vec_cmprg_or_0_idx"),
+            (test_s390x_vector_vec_cmpnrg_or_0_idx, "test_s390x_vector_vec_cmpnrg_or_0_idx"),
+            (test_s390x_vector_vec_cmprg_or_0_idx_cc, "test_s390x_vector_vec_cmprg_or_0_idx_cc"),
+            (test_s390x_vector_vec_cmpnrg_or_0_idx_cc, "test_s390x_vector_vec_cmpnrg_or_0_idx_cc"),
+            (test_s390x_vector_vec_cmpeq, "test_s390x_vector_vec_cmpeq"),
+            (test_s390x_vector_vec_cmpne, "test_s390x_vector_vec_cmpne"),
+            (test_s390x_vector_vec_cmpgt, "test_s390x_vector_vec_cmpgt"),
+            (test_s390x_vector_vec_cmpge, "test_s390x_vector_vec_cmpge"),
+            (test_s390x_vector_vec_cmplt, "test_s390x_vector_vec_cmplt"),
+            (test_s390x_vector_vec_cmple, "test_s390x_vector_vec_cmple"),
+            (test_s390x_vector_vec_cmpeq_idx, "test_s390x_vector_vec_cmpeq_idx"),
+            (test_s390x_vector_vec_cmpne_idx, "test_s390x_vector_vec_cmpne_idx"),
+            (test_s390x_vector_vec_cmpeq_idx_cc, "test_s390x_vector_vec_cmpeq_idx_cc"),
+            (test_s390x_vector_vec_cmpne_idx_cc, "test_s390x_vector_vec_cmpne_idx_cc"),
+            (test_s390x_vector_vec_cmpeq_or_0_idx, "test_s390x_vector_vec_cmpeq_or_0_idx"),
+            (test_s390x_vector_vec_cmpne_or_0_idx, "test_s390x_vector_vec_cmpne_or_0_idx"),
+            (test_s390x_vector_vec_cmpeq_or_0_idx_cc, "test_s390x_vector_vec_cmpeq_or_0_idx_cc"),
+            (test_s390x_vector_vec_cmpne_or_0_idx_cc, "test_s390x_vector_vec_cmpne_or_0_idx_cc"),
+            (test_s390x_vector_vec_all_eq, "test_s390x_vector_vec_all_eq"),
+            (test_s390x_vector_vec_all_ne, "test_s390x_vector_vec_all_ne"),
+            (test_s390x_vector_vec_any_eq, "test_s390x_vector_vec_any_eq"),
+            (test_s390x_vector_vec_any_ne, "test_s390x_vector_vec_any_ne"),
+            (test_s390x_vector_vec_all_lt, "test_s390x_vector_vec_all_lt"),
+            (test_s390x_vector_vec_all_le, "test_s390x_vector_vec_all_le"),
+            (test_s390x_vector_vec_all_gt, "test_s390x_vector_vec_all_gt"),
+            (test_s390x_vector_vec_all_ge, "test_s390x_vector_vec_all_ge"),
+            (test_s390x_vector_vec_all_nlt, "test_s390x_vector_vec_all_nlt"),
+            (test_s390x_vector_vec_all_nle, "test_s390x_vector_vec_all_nle"),
+            (test_s390x_vector_vec_all_ngt, "test_s390x_vector_vec_all_ngt"),
+            (test_s390x_vector_vec_all_nge, "test_s390x_vector_vec_all_nge"),
+            (test_s390x_vector_vec_any_lt, "test_s390x_vector_vec_any_lt"),
+            (test_s390x_vector_vec_any_le, "test_s390x_vector_vec_any_le"),
+            (test_s390x_vector_vec_any_gt, "test_s390x_vector_vec_any_gt"),
+            (test_s390x_vector_vec_any_ge, "test_s390x_vector_vec_any_ge"),
+            (test_s390x_vector_vec_any_nlt, "test_s390x_vector_vec_any_nlt"),
+            (test_s390x_vector_vec_any_nle, "test_s390x_vector_vec_any_nle"),
+            (test_s390x_vector_vec_any_ngt, "test_s390x_vector_vec_any_ngt"),
+            (test_s390x_vector_vec_any_nge, "test_s390x_vector_vec_any_nge"),
+            (test_s390x_vector_vec_extract, "test_s390x_vector_vec_extract"),
+            (test_s390x_vector_vec_insert, "test_s390x_vector_vec_insert"),
+            (test_s390x_vector_vec_insert_and_zero, "test_s390x_vector_vec_insert_and_zero"),
+            (test_s390x_vector_vec_promote, "test_s390x_vector_vec_promote"),
+            (test_s390x_vector_vec_extend_to_fp32_hi, "test_s390x_vector_vec_extend_to_fp32_hi"),
+            (test_s390x_vector_vec_extend_to_fp32_lo, "test_s390x_vector_vec_extend_to_fp32_lo"),
+            (test_s390x_vector_vec_convert_to_fp16, "test_s390x_vector_vec_convert_to_fp16"),
+            (test_s390x_vector_vec_convert_from_fp16, "test_s390x_vector_vec_convert_from_fp16"),
+            (test_s390x_vector_vec_round_from_fp32, "test_s390x_vector_vec_round_from_fp32"),
+        ]
+    }
+}

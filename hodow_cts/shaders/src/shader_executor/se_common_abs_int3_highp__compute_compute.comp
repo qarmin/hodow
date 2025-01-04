@@ -1,0 +1,32 @@
+#version 450
+layout(local_size_x = 1) in;
+
+struct Inputs
+{
+	highp ivec3 in0;
+};
+struct Outputs
+{
+	highp ivec3 out0;
+};
+
+layout(set = 0, binding = 0, std430) buffer InBuffer
+{
+    Inputs inputs[];
+};
+layout(set = 0, binding = 1, std430) buffer OutBuffer
+{
+    Outputs outputs[];
+};
+
+void main (void)
+{
+    uint invocationNdx = gl_NumWorkGroups.x*gl_NumWorkGroups.y*gl_WorkGroupID.z
+                       + gl_NumWorkGroups.x*gl_WorkGroupID.y + gl_WorkGroupID.x;
+	ivec3 in0 = ivec3(inputs[invocationNdx].in0);
+	ivec3 out0;
+
+	out0 = abs(in0);
+
+	outputs[invocationNdx].out0 = out0;
+}

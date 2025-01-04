@@ -1,0 +1,216 @@
+# Shader manifest for dEQP-VK.compute.pipeline.indirect_dispatch.*
+#
+# The dispatch command list lives here rather than in the Rust because it is needed in
+# two places at once: the `gen_in_compute` shader writes those commands, and the host
+# checks the results against them. Keeping one copy is the point of the manifest.
+#
+# `group_check` reproduces the conditional upstream emits only for non-null dispatches;
+# `write_cmds` reproduces the writeCmd() lines its generate shader emits. Offsets are
+# byte offsets, divided by 4 for the uint-indexed shader, exactly as upstream does.
+
+upstream_source = "external/vulkancts/modules/vulkan/compute/vktComputeIndirectComputeDispatchTests.cpp"
+rust_module = "compute/indirect_compute_dispatch_tests"
+
+[[case]]
+name = "single_invocation"
+rust_const = "SINGLE_INVOCATION"
+rust_type = "IndirectDispatchCase"
+programs = [
+    { name = "comp", template = "compute/indirect_dispatch_verify.comp", stage = "comp" },
+    { name = "generate", template = "compute/indirect_dispatch_generate.comp", stage = "comp" },
+]
+[case.params]
+buffer_size = { type = "u32", value = 12 }
+local_size = { type = "IVec3", value = [1, 1, 1] }
+null_dispatch = { type = "bool", value = false }
+dispatch_commands = { type = "DispatchCommands", value = [[0, 1, 1, 1]] }
+[case.derived]
+group_check = "'' if null_dispatch else '    if (all(equal(result.expectedGroupCount, gl_NumWorkGroups)))\\n'"
+write_cmds = "''.join('\\twriteCmd({}u, uvec3({}u, {}u, {}u));\\n'.format(c[0]//4, c[1], c[2], c[3]) for c in dispatch_commands)"
+
+[[case]]
+name = "multiple_groups"
+rust_const = "MULTIPLE_GROUPS"
+rust_type = "IndirectDispatchCase"
+programs = [
+    { name = "comp", template = "compute/indirect_dispatch_verify.comp", stage = "comp" },
+    { name = "generate", template = "compute/indirect_dispatch_generate.comp", stage = "comp" },
+]
+[case.params]
+buffer_size = { type = "u32", value = 12 }
+local_size = { type = "IVec3", value = [1, 1, 1] }
+null_dispatch = { type = "bool", value = false }
+dispatch_commands = { type = "DispatchCommands", value = [[0, 2, 3, 5]] }
+[case.derived]
+group_check = "'' if null_dispatch else '    if (all(equal(result.expectedGroupCount, gl_NumWorkGroups)))\\n'"
+write_cmds = "''.join('\\twriteCmd({}u, uvec3({}u, {}u, {}u));\\n'.format(c[0]//4, c[1], c[2], c[3]) for c in dispatch_commands)"
+
+[[case]]
+name = "multiple_groups_multiple_invocations"
+rust_const = "MULTIPLE_GROUPS_MULTIPLE_INVOCATIONS"
+rust_type = "IndirectDispatchCase"
+programs = [
+    { name = "comp", template = "compute/indirect_dispatch_verify.comp", stage = "comp" },
+    { name = "generate", template = "compute/indirect_dispatch_generate.comp", stage = "comp" },
+]
+[case.params]
+buffer_size = { type = "u32", value = 12 }
+local_size = { type = "IVec3", value = [2, 3, 1] }
+null_dispatch = { type = "bool", value = false }
+dispatch_commands = { type = "DispatchCommands", value = [[0, 1, 2, 3]] }
+[case.derived]
+group_check = "'' if null_dispatch else '    if (all(equal(result.expectedGroupCount, gl_NumWorkGroups)))\\n'"
+write_cmds = "''.join('\\twriteCmd({}u, uvec3({}u, {}u, {}u));\\n'.format(c[0]//4, c[1], c[2], c[3]) for c in dispatch_commands)"
+
+[[case]]
+name = "small_offset"
+rust_const = "SMALL_OFFSET"
+rust_type = "IndirectDispatchCase"
+programs = [
+    { name = "comp", template = "compute/indirect_dispatch_verify.comp", stage = "comp" },
+    { name = "generate", template = "compute/indirect_dispatch_generate.comp", stage = "comp" },
+]
+[case.params]
+buffer_size = { type = "u32", value = 28 }
+local_size = { type = "IVec3", value = [1, 1, 1] }
+null_dispatch = { type = "bool", value = false }
+dispatch_commands = { type = "DispatchCommands", value = [[16, 1, 1, 1]] }
+[case.derived]
+group_check = "'' if null_dispatch else '    if (all(equal(result.expectedGroupCount, gl_NumWorkGroups)))\\n'"
+write_cmds = "''.join('\\twriteCmd({}u, uvec3({}u, {}u, {}u));\\n'.format(c[0]//4, c[1], c[2], c[3]) for c in dispatch_commands)"
+
+[[case]]
+name = "large_offset"
+rust_const = "LARGE_OFFSET"
+rust_type = "IndirectDispatchCase"
+programs = [
+    { name = "comp", template = "compute/indirect_dispatch_verify.comp", stage = "comp" },
+    { name = "generate", template = "compute/indirect_dispatch_generate.comp", stage = "comp" },
+]
+[case.params]
+buffer_size = { type = "u32", value = 2097152 }
+local_size = { type = "IVec3", value = [1, 1, 1] }
+null_dispatch = { type = "bool", value = false }
+dispatch_commands = { type = "DispatchCommands", value = [[1048588, 1, 1, 1]] }
+[case.derived]
+group_check = "'' if null_dispatch else '    if (all(equal(result.expectedGroupCount, gl_NumWorkGroups)))\\n'"
+write_cmds = "''.join('\\twriteCmd({}u, uvec3({}u, {}u, {}u));\\n'.format(c[0]//4, c[1], c[2], c[3]) for c in dispatch_commands)"
+
+[[case]]
+name = "large_offset_multiple_invocations"
+rust_const = "LARGE_OFFSET_MULTIPLE_INVOCATIONS"
+rust_type = "IndirectDispatchCase"
+programs = [
+    { name = "comp", template = "compute/indirect_dispatch_verify.comp", stage = "comp" },
+    { name = "generate", template = "compute/indirect_dispatch_generate.comp", stage = "comp" },
+]
+[case.params]
+buffer_size = { type = "u32", value = 2097152 }
+local_size = { type = "IVec3", value = [2, 3, 1] }
+null_dispatch = { type = "bool", value = false }
+dispatch_commands = { type = "DispatchCommands", value = [[1048588, 1, 2, 3]] }
+[case.derived]
+group_check = "'' if null_dispatch else '    if (all(equal(result.expectedGroupCount, gl_NumWorkGroups)))\\n'"
+write_cmds = "''.join('\\twriteCmd({}u, uvec3({}u, {}u, {}u));\\n'.format(c[0]//4, c[1], c[2], c[3]) for c in dispatch_commands)"
+
+[[case]]
+name = "empty_command"
+rust_const = "EMPTY_COMMAND"
+rust_type = "IndirectDispatchCase"
+programs = [
+    { name = "comp", template = "compute/indirect_dispatch_verify.comp", stage = "comp" },
+    { name = "generate", template = "compute/indirect_dispatch_generate.comp", stage = "comp" },
+]
+[case.params]
+buffer_size = { type = "u32", value = 12 }
+local_size = { type = "IVec3", value = [1, 1, 1] }
+null_dispatch = { type = "bool", value = true }
+dispatch_commands = { type = "DispatchCommands", value = [[0, 0, 0, 0]] }
+[case.derived]
+group_check = "'' if null_dispatch else '    if (all(equal(result.expectedGroupCount, gl_NumWorkGroups)))\\n'"
+write_cmds = "''.join('\\twriteCmd({}u, uvec3({}u, {}u, {}u));\\n'.format(c[0]//4, c[1], c[2], c[3]) for c in dispatch_commands)"
+
+[[case]]
+name = "empty_command_x"
+rust_const = "EMPTY_COMMAND_X"
+rust_type = "IndirectDispatchCase"
+programs = [
+    { name = "comp", template = "compute/indirect_dispatch_verify.comp", stage = "comp" },
+    { name = "generate", template = "compute/indirect_dispatch_generate.comp", stage = "comp" },
+]
+[case.params]
+buffer_size = { type = "u32", value = 12 }
+local_size = { type = "IVec3", value = [1, 1, 1] }
+null_dispatch = { type = "bool", value = true }
+dispatch_commands = { type = "DispatchCommands", value = [[0, 0, 1, 1]] }
+[case.derived]
+group_check = "'' if null_dispatch else '    if (all(equal(result.expectedGroupCount, gl_NumWorkGroups)))\\n'"
+write_cmds = "''.join('\\twriteCmd({}u, uvec3({}u, {}u, {}u));\\n'.format(c[0]//4, c[1], c[2], c[3]) for c in dispatch_commands)"
+
+[[case]]
+name = "empty_command_y"
+rust_const = "EMPTY_COMMAND_Y"
+rust_type = "IndirectDispatchCase"
+programs = [
+    { name = "comp", template = "compute/indirect_dispatch_verify.comp", stage = "comp" },
+    { name = "generate", template = "compute/indirect_dispatch_generate.comp", stage = "comp" },
+]
+[case.params]
+buffer_size = { type = "u32", value = 12 }
+local_size = { type = "IVec3", value = [1, 1, 1] }
+null_dispatch = { type = "bool", value = true }
+dispatch_commands = { type = "DispatchCommands", value = [[0, 1, 0, 1]] }
+[case.derived]
+group_check = "'' if null_dispatch else '    if (all(equal(result.expectedGroupCount, gl_NumWorkGroups)))\\n'"
+write_cmds = "''.join('\\twriteCmd({}u, uvec3({}u, {}u, {}u));\\n'.format(c[0]//4, c[1], c[2], c[3]) for c in dispatch_commands)"
+
+[[case]]
+name = "empty_command_z"
+rust_const = "EMPTY_COMMAND_Z"
+rust_type = "IndirectDispatchCase"
+programs = [
+    { name = "comp", template = "compute/indirect_dispatch_verify.comp", stage = "comp" },
+    { name = "generate", template = "compute/indirect_dispatch_generate.comp", stage = "comp" },
+]
+[case.params]
+buffer_size = { type = "u32", value = 12 }
+local_size = { type = "IVec3", value = [1, 1, 1] }
+null_dispatch = { type = "bool", value = true }
+dispatch_commands = { type = "DispatchCommands", value = [[0, 1, 1, 0]] }
+[case.derived]
+group_check = "'' if null_dispatch else '    if (all(equal(result.expectedGroupCount, gl_NumWorkGroups)))\\n'"
+write_cmds = "''.join('\\twriteCmd({}u, uvec3({}u, {}u, {}u));\\n'.format(c[0]//4, c[1], c[2], c[3]) for c in dispatch_commands)"
+
+[[case]]
+name = "multi_dispatch"
+rust_const = "MULTI_DISPATCH"
+rust_type = "IndirectDispatchCase"
+programs = [
+    { name = "comp", template = "compute/indirect_dispatch_verify.comp", stage = "comp" },
+    { name = "generate", template = "compute/indirect_dispatch_generate.comp", stage = "comp" },
+]
+[case.params]
+buffer_size = { type = "u32", value = 1024 }
+local_size = { type = "IVec3", value = [3, 1, 2] }
+null_dispatch = { type = "bool", value = false }
+dispatch_commands = { type = "DispatchCommands", value = [[0, 1, 1, 1], [12, 2, 1, 1], [104, 1, 3, 1], [40, 1, 1, 7], [52, 1, 1, 4]] }
+[case.derived]
+group_check = "'' if null_dispatch else '    if (all(equal(result.expectedGroupCount, gl_NumWorkGroups)))\\n'"
+write_cmds = "''.join('\\twriteCmd({}u, uvec3({}u, {}u, {}u));\\n'.format(c[0]//4, c[1], c[2], c[3]) for c in dispatch_commands)"
+
+[[case]]
+name = "multi_dispatch_reuse_command"
+rust_const = "MULTI_DISPATCH_REUSE_COMMAND"
+rust_type = "IndirectDispatchCase"
+programs = [
+    { name = "comp", template = "compute/indirect_dispatch_verify.comp", stage = "comp" },
+    { name = "generate", template = "compute/indirect_dispatch_generate.comp", stage = "comp" },
+]
+[case.params]
+buffer_size = { type = "u32", value = 1024 }
+local_size = { type = "IVec3", value = [3, 1, 2] }
+null_dispatch = { type = "bool", value = false }
+dispatch_commands = { type = "DispatchCommands", value = [[0, 1, 1, 1], [0, 1, 1, 1], [0, 1, 1, 1], [104, 1, 3, 1], [104, 1, 3, 1], [52, 1, 1, 4], [52, 1, 1, 4]] }
+[case.derived]
+group_check = "'' if null_dispatch else '    if (all(equal(result.expectedGroupCount, gl_NumWorkGroups)))\\n'"
+write_cmds = "''.join('\\twriteCmd({}u, uvec3({}u, {}u, {}u));\\n'.format(c[0]//4, c[1], c[2], c[3]) for c in dispatch_commands)"

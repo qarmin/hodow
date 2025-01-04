@@ -1,0 +1,17 @@
+#version 450
+
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+
+void main()
+{
+    float tmp0;
+    float tmp1;
+    float value;
+    value = pow(tmp1, tmp0) +
+            exp(tmp0) +
+            log(tmp1) +
+            exp2(tmp0) +
+            log2(tmp1) +
+            sqrt(tmp1) +
+            inversesqrt(tmp1);
+}

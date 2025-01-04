@@ -1,0 +1,29 @@
+#version 450
+#extension GL_EXT_buffer_reference2 : require
+#extension GL_EXT_buffer_reference_uvec2 : require
+#extension GL_EXT_scalar_block_layout : require
+layout (local_size_x=1, local_size_y=1, local_size_z=1) in;
+
+layout (buffer_reference) buffer srcBuffer;
+layout (buffer_reference, buffer_reference_align=4, std430) readonly buffer srcBuffer
+{
+    uint values[];
+};
+
+layout (buffer_reference) buffer dstBuffer;
+layout (buffer_reference, buffer_reference_align=4, std430) writeonly buffer dstBuffer
+{
+    uint values[];
+};
+
+layout(push_constant, std430) uniform push_cb
+{
+    uvec2 srcBufferAddress;
+    uvec2 dstBufferAddress;
+} pc;
+
+void main()
+{
+    const uint idx = gl_WorkGroupID.x;
+    dstBuffer(pc.dstBufferAddress).values[idx] = srcBuffer(pc.srcBufferAddress).values[idx];
+}

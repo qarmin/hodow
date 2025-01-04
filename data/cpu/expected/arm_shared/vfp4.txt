@@ -1,0 +1,15 @@
+# Expected values captured from real hardware for this extension's generated tests.
+# Format: test_name - rust_expr
+#
+# One file per (architecture, extension) - written by scripts/cpu/capture_expected.py and
+# capture_expected_cross.py, read by generate_tests.py. Do not hand-edit: recapture instead.
+# A qemu-derived value is not a real-silicon one; see CLAUDE.md's "Non-x86 architectures".
+
+test_arm_shared_vfp4_vfma_f32 - [16.0, 26.0]
+test_arm_shared_vfp4_vfma_n_f32 - [16.0, 22.0]
+test_arm_shared_vfp4_vfmaq_f32 - [46.0, 62.0, 80.0, 100.0]
+test_arm_shared_vfp4_vfmaq_n_f32 - [46.0, 56.0, 66.0, 76.0]
+test_arm_shared_vfp4_vfms_f32 - [-14.0, -22.0]
+test_arm_shared_vfp4_vfms_n_f32 - [-14.0, -18.0]
+test_arm_shared_vfp4_vfmsq_f32 - [-44.0, -58.0, -74.0, -92.0]
+test_arm_shared_vfp4_vfmsq_n_f32 - [-44.0, -52.0, -60.0, -68.0]

@@ -1,0 +1,16 @@
+# Shader manifest for dEQP-VK.conditional_rendering.draw.*
+#
+# The Draw framework's pass-through pair (data/vulkan/dynamic_state/VertexFetch.{vert,frag}): position and colour
+# straight from the vertex buffer.
+
+upstream_source = "external/vulkancts/modules/vulkan/conditional_rendering/vktConditionalDrawTests.cpp"
+rust_module = "conditional_rendering/draw_tests"
+
+[[case]]
+name = "draw"
+rust_const = "CONDITIONAL_DRAW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "conditional_rendering/vertex_fetch.vert", stage = "vert" },
+    { name = "frag", template = "conditional_rendering/vertex_fetch.frag", stage = "frag" },
+]

@@ -1,0 +1,29 @@
+#version 450
+#extension GL_NV_mesh_shader : enable
+
+layout (local_size_x=32) in;
+layout (points) out;
+layout (max_vertices=32, max_primitives=32) out;
+
+in taskNV TaskData {
+    uint parentTask[32];
+} td;
+
+layout (location=0) out perprimitiveNV vec4 pointColor[];
+
+void main () {
+    uint parentTask = td.parentTask[0];
+    if (td.parentTask[gl_LocalInvocationID.x] != parentTask) {
+        return;
+    }
+    gl_PrimitiveCountNV = 32;
+    uint jobId = ((parentTask * 1) + gl_WorkGroupID.x) * 32 + gl_LocalInvocationID.x;
+    uint row = jobId / 1360;
+    uint col = jobId % 1360;
+    float yCoord = (float(row + 0.5) / 1542.0) * 2.0 - 1.0;
+    float xCoord = (float(col + 0.5) / 1360.0) * 2.0 - 1.0;
+    gl_MeshVerticesNV[gl_LocalInvocationID.x].gl_Position = vec4(xCoord, yCoord, 0.0, 1.0);
+    gl_MeshVerticesNV[gl_LocalInvocationID.x].gl_PointSize = 1.0;
+    gl_PrimitiveIndicesNV[gl_LocalInvocationID.x] = gl_LocalInvocationID.x;
+    pointColor[gl_LocalInvocationID.x] = vec4(0.0, 0.0, 1.0, 1.0);
+}

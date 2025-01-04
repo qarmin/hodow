@@ -1,0 +1,74 @@
+# Expected values captured from real hardware for this extension's generated tests.
+# Format: test_name - rust_expr
+#
+# One file per (architecture, extension) - written by scripts/cpu/capture_expected.py and
+# capture_expected_cross.py, read by generate_tests.py. Do not hand-edit: recapture instead.
+# A qemu-derived value is not a real-silicon one; see CLAUDE.md's "Non-x86 architectures".
+
+test_x86_64_sse2_mm_cvtsd_si64 - 1
+test_x86_64_sse2_mm_cvtsd_si64_boundary_allones - -9223372036854775808
+test_x86_64_sse2_mm_cvtsd_si64_boundary_max - -9223372036854775808
+test_x86_64_sse2_mm_cvtsd_si64_boundary_min - -9223372036854775808
+test_x86_64_sse2_mm_cvtsd_si64_boundary_mixed - -9223372036854775808
+test_x86_64_sse2_mm_cvtsd_si64_boundary_zero - 0
+test_x86_64_sse2_mm_cvtsd_si64_normal2 - 0
+test_x86_64_sse2_mm_cvtsd_si64_normal3 - 100
+test_x86_64_sse2_mm_cvtsd_si64x - 1
+test_x86_64_sse2_mm_cvtsd_si64x_boundary_allones - -9223372036854775808
+test_x86_64_sse2_mm_cvtsd_si64x_boundary_max - -9223372036854775808
+test_x86_64_sse2_mm_cvtsd_si64x_boundary_min - -9223372036854775808
+test_x86_64_sse2_mm_cvtsd_si64x_boundary_mixed - -9223372036854775808
+test_x86_64_sse2_mm_cvtsd_si64x_boundary_zero - 0
+test_x86_64_sse2_mm_cvtsd_si64x_normal2 - 0
+test_x86_64_sse2_mm_cvtsd_si64x_normal3 - 100
+test_x86_64_sse2_mm_cvtsi128_si64 - 8589934593
+test_x86_64_sse2_mm_cvtsi128_si64_boundary_allones - -1
+test_x86_64_sse2_mm_cvtsi128_si64_boundary_max - 9223372034707292159
+test_x86_64_sse2_mm_cvtsi128_si64_boundary_min - -9223372034707292160
+test_x86_64_sse2_mm_cvtsi128_si64_boundary_mixed - 9223372034707292160
+test_x86_64_sse2_mm_cvtsi128_si64_boundary_zero - 0
+test_x86_64_sse2_mm_cvtsi128_si64_normal2 - -4294967296
+test_x86_64_sse2_mm_cvtsi128_si64_normal3 - 858993459300
+test_x86_64_sse2_mm_cvtsi128_si64x - 8589934593
+test_x86_64_sse2_mm_cvtsi128_si64x_boundary_allones - -1
+test_x86_64_sse2_mm_cvtsi128_si64x_boundary_max - 9223372034707292159
+test_x86_64_sse2_mm_cvtsi128_si64x_boundary_min - -9223372034707292160
+test_x86_64_sse2_mm_cvtsi128_si64x_boundary_mixed - 9223372034707292160
+test_x86_64_sse2_mm_cvtsi128_si64x_boundary_zero - 0
+test_x86_64_sse2_mm_cvtsi128_si64x_normal2 - -4294967296
+test_x86_64_sse2_mm_cvtsi128_si64x_normal3 - 858993459300
+test_x86_64_sse2_mm_cvtsi64_sd - [3.0, 2.0]
+test_x86_64_sse2_mm_cvtsi64_sd_boundary_allones - [1.0, f32::NAN]
+test_x86_64_sse2_mm_cvtsi64_sd_boundary_max - [1.0, 1.7976931348623157e308]
+test_x86_64_sse2_mm_cvtsi64_sd_boundary_min - [1.0, -1.7976931348623157e308]
+test_x86_64_sse2_mm_cvtsi64_sd_boundary_mixed - [1.0, -f32::INFINITY]
+test_x86_64_sse2_mm_cvtsi64_sd_boundary_zero - [1.0, 0.0]
+test_x86_64_sse2_mm_cvtsi64_sd_normal2 - [1.0, -1.0]
+test_x86_64_sse2_mm_cvtsi64_sd_normal3 - [1.0, 200.0]
+test_x86_64_sse2_mm_cvtsi64_si128 - [1, 0, 0, 0]
+test_x86_64_sse2_mm_cvtsi64x_sd - [3.0, 2.0]
+test_x86_64_sse2_mm_cvtsi64x_sd_boundary_allones - [1.0, f32::NAN]
+test_x86_64_sse2_mm_cvtsi64x_sd_boundary_max - [1.0, 1.7976931348623157e308]
+test_x86_64_sse2_mm_cvtsi64x_sd_boundary_min - [1.0, -1.7976931348623157e308]
+test_x86_64_sse2_mm_cvtsi64x_sd_boundary_mixed - [1.0, -f32::INFINITY]
+test_x86_64_sse2_mm_cvtsi64x_sd_boundary_zero - [1.0, 0.0]
+test_x86_64_sse2_mm_cvtsi64x_sd_normal2 - [1.0, -1.0]
+test_x86_64_sse2_mm_cvtsi64x_sd_normal3 - [1.0, 200.0]
+test_x86_64_sse2_mm_cvtsi64x_si128 - [1, 0, 0, 0]
+test_x86_64_sse2_mm_cvttsd_si64 - 1
+test_x86_64_sse2_mm_cvttsd_si64_boundary_allones - -9223372036854775808
+test_x86_64_sse2_mm_cvttsd_si64_boundary_max - -9223372036854775808
+test_x86_64_sse2_mm_cvttsd_si64_boundary_min - -9223372036854775808
+test_x86_64_sse2_mm_cvttsd_si64_boundary_mixed - -9223372036854775808
+test_x86_64_sse2_mm_cvttsd_si64_boundary_zero - 0
+test_x86_64_sse2_mm_cvttsd_si64_normal2 - 0
+test_x86_64_sse2_mm_cvttsd_si64_normal3 - 100
+test_x86_64_sse2_mm_cvttsd_si64x - 1
+test_x86_64_sse2_mm_cvttsd_si64x_boundary_allones - -9223372036854775808
+test_x86_64_sse2_mm_cvttsd_si64x_boundary_max - -9223372036854775808
+test_x86_64_sse2_mm_cvttsd_si64x_boundary_min - -9223372036854775808
+test_x86_64_sse2_mm_cvttsd_si64x_boundary_mixed - -9223372036854775808
+test_x86_64_sse2_mm_cvttsd_si64x_boundary_zero - 0
+test_x86_64_sse2_mm_cvttsd_si64x_normal2 - 0
+test_x86_64_sse2_mm_cvttsd_si64x_normal3 - 100
+test_x86_64_sse2_mm_stream_si64 - [2, 1, 1, 1, 1, 1, 1, 1]

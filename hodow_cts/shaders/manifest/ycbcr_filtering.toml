@@ -1,0 +1,17 @@
+# Shader manifest for dEQP-VK.ycbcr.filtering.*
+#
+# Upstream's vertex shader reads the quad from a vertex buffer (a_position); here the four corners of the triangle strip come from gl_VertexIndex,
+# the output (v_texCoord = a_position.xy * 0.5 + 0.5, gl_Position = a_position) is the same.
+
+upstream_source = "external/vulkancts/modules/vulkan/ycbcr/vktYCbCrFilteringTests.cpp"
+rust_module = "ycbcr/filtering_tests"
+
+[[case]]
+name = "filtering"
+rust_const = "FILTERING_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "ycbcr/filtering/vert.vert", stage = "vert" },
+    { name = "frag", template = "ycbcr/filtering/frag.frag", stage = "frag" },
+    { name = "comp", template = "ycbcr/filtering/comp.comp", stage = "comp" },
+]

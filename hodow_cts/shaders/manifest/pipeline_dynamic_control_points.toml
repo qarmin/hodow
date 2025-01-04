@@ -1,0 +1,47 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.dynamic_control_points.*
+#
+# `DynamicControlPointsTestCase::initPrograms`: a fixed full-screen vertex shader and flat fragment shader, a
+# three-vertex tessellation control shader and evaluation shader for the first pipeline, and for the second
+# one the evaluation shader of the other winding and, when the output changes, a four-vertex control shader
+# whose evaluation shader reads the fourth vertex.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineDynamicControlPoints.cpp"
+rust_module = "pipeline/dynamic_control_points_tests"
+
+[[case]]
+name = "change_output"
+rust_const = "DYNAMIC_CONTROL_POINTS_CHANGE_OUTPUT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_control_points.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_control_points.frag", stage = "frag" },
+    { name = "tesc", template = "pipeline/dynamic_control_points.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/dynamic_control_points_ccw.tese", stage = "tese" },
+    { name = "tesc2", template = "pipeline/dynamic_control_points_tesc2.tesc", stage = "tesc" },
+    { name = "tese2", template = "pipeline/dynamic_control_points_tese2_output.tese", stage = "tese" },
+]
+
+[[case]]
+name = "change_winding"
+rust_const = "DYNAMIC_CONTROL_POINTS_CHANGE_WINDING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_control_points.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_control_points.frag", stage = "frag" },
+    { name = "tesc", template = "pipeline/dynamic_control_points.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/dynamic_control_points_cw.tese", stage = "tese" },
+    { name = "tese2", template = "pipeline/dynamic_control_points_tese2_plain.tese", stage = "tese" },
+]
+
+[[case]]
+name = "change_output_winding"
+rust_const = "DYNAMIC_CONTROL_POINTS_CHANGE_OUTPUT_WINDING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_control_points.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_control_points.frag", stage = "frag" },
+    { name = "tesc", template = "pipeline/dynamic_control_points.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/dynamic_control_points_cw.tese", stage = "tese" },
+    { name = "tesc2", template = "pipeline/dynamic_control_points_tesc2.tesc", stage = "tesc" },
+    { name = "tese2", template = "pipeline/dynamic_control_points_tese2_output.tese", stage = "tese" },
+]

@@ -1,0 +1,35 @@
+# Shader manifest for dEQP-VK.draw.renderpass.shader_invocation.*
+#
+# The fragment shaders of the Amber scripts under data/vulkan/amber/draw/shader_invocation: quad broadcasts of a value that
+# depends on helperInvocationEXT() (SPIR-V 1.3), gl_HelperInvocation (SPIR-V 1.6) and the same with the Vulkan memory model.
+# The vertex shader is a full-screen strip standing in for the script's PASSTHROUGH shader.
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawShaderInvocationTests.cpp"
+rust_module = "draw/shader_invocation_tests"
+
+[[case]]
+name = "helper_invocation"
+rust_const = "HELPER_INVOCATION"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/shader_invocation/fullscreen.vert", stage = "vert" },
+    { name = "frag", template = "draw/shader_invocation/helper_invocation.frag", stage = "frag", spirv_version = "spirv1.3" },
+]
+
+[[case]]
+name = "helper_invocation_volatile"
+rust_const = "HELPER_INVOCATION_VOLATILE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/shader_invocation/fullscreen.vert", stage = "vert" },
+    { name = "frag", template = "draw/shader_invocation/helper_invocation_volatile.frag", stage = "frag", spirv_version = "spirv1.6" },
+]
+
+[[case]]
+name = "helper_invocation_volatile_mem_model"
+rust_const = "HELPER_INVOCATION_VOLATILE_MEM_MODEL"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/shader_invocation/fullscreen.vert", stage = "vert" },
+    { name = "frag", template = "draw/shader_invocation/helper_invocation_volatile_mem_model.frag", stage = "frag", spirv_version = "spirv1.6" },
+]

@@ -1,0 +1,25 @@
+#version 460
+#extension GL_NV_mesh_shader : enable
+
+layout (local_size_x=1) in;
+layout (triangles) out;
+layout (max_vertices=3, max_primitives=1) out;
+
+perprimitiveNV out gl_MeshPerPrimitiveNV {
+   int gl_PrimitiveID;
+} gl_MeshPrimitivesNV[];
+
+void main ()
+{
+    gl_PrimitiveCountNV = 1u;
+
+    gl_PrimitiveIndicesNV[0] = 0;
+    gl_PrimitiveIndicesNV[1] = 1;
+    gl_PrimitiveIndicesNV[2] = 2;
+
+    gl_MeshVerticesNV[0].gl_Position = vec4(-1.0, -1.0, 0.0, 1.0);
+    gl_MeshVerticesNV[1].gl_Position = vec4(-1.0,  3.0, 0.0, 1.0);
+    gl_MeshVerticesNV[2].gl_Position = vec4( 3.0, -1.0, 0.0, 1.0);
+
+    gl_MeshPrimitivesNV[0].gl_PrimitiveID = 1629198956;
+}

@@ -1,0 +1,29 @@
+# Shader manifest for dEQP-VK.fragment_operations.scissor.*
+#
+# `initPrograms` differs only in whether the vertex shader writes gl_PointSize, which the point
+# cases need. The fragment shader passes the colour through.
+
+upstream_source = "external/vulkancts/modules/vulkan/fragment_ops/vktFragmentOperationsScissorTests.cpp"
+rust_module = "fragment_ops/scissor_tests"
+
+[[case]]
+name = "point_size"
+rust_const = "SCISSOR_POINT_SIZE"
+rust_type = "ScissorProgram"
+programs = [
+    { name = "vert", template = "fragment_ops/scissor.vert", stage = "vert" },
+    { name = "frag", template = "fragment_ops/scissor.frag", stage = "frag" },
+]
+[case.params]
+point_size = { type = "bool", value = true }
+
+[[case]]
+name = "no_point_size"
+rust_const = "SCISSOR_NO_POINT_SIZE"
+rust_type = "ScissorProgram"
+programs = [
+    { name = "vert", template = "fragment_ops/scissor.vert", stage = "vert" },
+    { name = "frag", template = "fragment_ops/scissor.frag", stage = "frag" },
+]
+[case.params]
+point_size = { type = "bool", value = false }

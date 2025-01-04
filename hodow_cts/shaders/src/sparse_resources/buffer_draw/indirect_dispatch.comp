@@ -1,0 +1,8 @@
+#version 450
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(binding = 0, std430) writeonly buffer Output
+{  uint r[]; };
+void main(void)
+{
+    r[gl_GlobalInvocationID.y] = 135 + gl_GlobalInvocationID.y;
+}

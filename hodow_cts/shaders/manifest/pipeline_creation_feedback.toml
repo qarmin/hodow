@@ -1,0 +1,50 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.creation_feedback.*
+#
+# `GraphicsTestCase::initPrograms`: two vertex shaders (the second, used by the derivative pipeline, offsets the colour and
+# writes gl_PointSize), a fragment shader, and a pass-through geometry shader or a tessellation control/evaluation pair
+# depending on the stage set. `ComputeTestCase::initPrograms` adds two compute shaders, again one per derivative.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineCreationFeedbackTests.cpp"
+rust_module = "pipeline/creation_feedback_tests"
+
+[[case]]
+name = "vert_frag"
+rust_const = "CF_VERT_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert_1", template = "pipeline/creation_feedback/color_1.vert", stage = "vert" },
+    { name = "color_vert_2", template = "pipeline/creation_feedback/color_2.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/creation_feedback/color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vert_geom_frag"
+rust_const = "CF_VERT_GEOM_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert_1", template = "pipeline/creation_feedback/color_1.vert", stage = "vert" },
+    { name = "color_vert_2", template = "pipeline/creation_feedback/color_2.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/creation_feedback/color.frag", stage = "frag" },
+    { name = "unused_geo", template = "pipeline/creation_feedback/unused_geo.geom", stage = "geom" },
+]
+
+[[case]]
+name = "vert_tess_frag"
+rust_const = "CF_VERT_TESS_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert_1", template = "pipeline/creation_feedback/color_1.vert", stage = "vert" },
+    { name = "color_vert_2", template = "pipeline/creation_feedback/color_2.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/creation_feedback/color.frag", stage = "frag" },
+    { name = "basic_tcs", template = "pipeline/creation_feedback/basic_tcs.tesc", stage = "tesc" },
+    { name = "basic_tes", template = "pipeline/creation_feedback/basic_tes.tese", stage = "tese" },
+]
+
+[[case]]
+name = "compute"
+rust_const = "CF_COMPUTE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "basic_compute_1", template = "pipeline/creation_feedback/basic_compute_1.comp", stage = "comp" },
+    { name = "basic_compute_2", template = "pipeline/creation_feedback/basic_compute_2.comp", stage = "comp" },
+]

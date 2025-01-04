@@ -1,0 +1,24 @@
+#version 450
+
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+
+void main()
+{
+    float tmp0 = 0.5;
+    float value;
+    value = radians(tmp0) +
+            degrees(tmp0) +
+            sin(tmp0) +
+            cos(tmp0) +
+            tan(tmp0) +
+            asin(tmp0) +
+            acos(tmp0) +
+            atan(tmp0) +
+            atan(tmp0) +
+            sinh(tmp0) +
+            cosh(tmp0) +
+            tanh(tmp0) +
+            asinh(tmp0) +
+            acosh(tmp0) +
+            atanh(tmp0);
+}

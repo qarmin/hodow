@@ -1,0 +1,15 @@
+#version 460
+layout (local_size_x=${wg_size}, local_size_y=1, local_size_z=1) in;
+layout (set=0, binding=0${format_qualifier}) uniform ${desc_type_prefix}${desc_type}${desc_dim}${desc_type_suffix} img;
+layout (set=0, binding=1) buffer BufferBlock { ${desc_type_prefix}vec4 values[]; } ssbo;
+void main (void) {
+${image_size_expr}    const bool sizeOK = (imageSize == uvec3(${mip_w}, ${mip_h}, ${mip_d}));
+    const uint pixelCount = imageSize.x * imageSize.y;
+    const uint globalInvocationIndex = gl_WorkGroupID.x * gl_WorkGroupSize.x + gl_LocalInvocationIndex;
+    if (sizeOK && globalInvocationIndex < pixelCount) {
+        const uint invRow = globalInvocationIndex / imageSize.x;
+        const uint invCol = globalInvocationIndex % imageSize.x;
+        const ${coords_type} coords = ${coords};
+        const ${norm_coords_type} normCoords = ${norm_coords};
+${work}    }
+}

@@ -1,0 +1,25 @@
+# Shader manifest for dEQP-VK.draw.*.{negative_viewport_height,zero_viewport_height,offscreen_viewport}.*
+#
+# `NegativeViewportHeightTest::initPrograms` writes a pass-through vertex shader and a fragment shader that shades
+# front and back faces differently; `OffScreenViewportCase::initPrograms` a four-vertex strip and a blue fragment.
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawNegativeViewportHeightTests.cpp"
+rust_module = "draw/negative_viewport_height_tests"
+
+[[case]]
+name = "negative_viewport_height"
+rust_const = "NEGATIVE_VIEWPORT_HEIGHT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/negative_viewport_height.vert", stage = "vert" },
+    { name = "frag", template = "draw/negative_viewport_height.frag", stage = "frag" },
+]
+
+[[case]]
+name = "offscreen_viewport"
+rust_const = "OFFSCREEN_VIEWPORT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/offscreen_viewport.vert", stage = "vert" },
+    { name = "frag", template = "draw/offscreen_viewport.frag", stage = "frag" },
+]

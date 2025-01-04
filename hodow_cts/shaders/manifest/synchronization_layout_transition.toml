@@ -1,0 +1,47 @@
+# Shader/parameter manifest for dEQP-VK.synchronization2.layout_transition.*
+#
+# `no_op` draws a full-screen quad, so it has the two trivial stages. The two compute
+# cases differ only in whether the multisampled image is read through a storage image
+# or a combined image sampler, which changes one declaration and one load in the shader.
+# `ComputeLayoutTransitionParams::getImageExtent/getImageSampleCount` are fixed upstream
+# (8x8, 4 samples), so they are written here once and restated in each case.
+
+upstream_source = "external/vulkancts/modules/vulkan/synchronization/vktSynchronizationImageLayoutTransitionTests.cpp"
+rust_module = "synchronization/image_layout_transition_tests"
+
+[[case]]
+name = "no_op"
+rust_const = "NO_OP"
+rust_type = "NoOpCase"
+programs = [
+  { name = "vert1", template = "synchronization/layout_transition_no_op.vert", stage = "vert" },
+  { name = "frag1", template = "synchronization/layout_transition_no_op.frag", stage = "frag" },
+]
+
+[[case]]
+name = "compute_transition"
+rust_const = "COMPUTE_TRANSITION"
+rust_type = "ComputeTransitionCase"
+programs = [{ name = "comp", template = "synchronization/layout_transition_compute.comp", stage = "comp" }]
+[case.params]
+storage_usage = { type = "bool", value = false }
+local_size_x = { type = "u32", value = 8 }
+local_size_y = { type = "u32", value = 8 }
+sample_count = { type = "u32", value = 4 }
+[case.derived]
+image_decl = "'layout (set=0, binding=0, rgba8) uniform image2DMS inImage;' if storage_usage else 'layout (set=0, binding=0) uniform sampler2DMS inImage;'"
+load_expr = "'const vec4 color = imageLoad(inImage, ivec2(x, y), int(s));' if storage_usage else 'const vec4 color = texelFetch(inImage, ivec2(x, y), int(s));'"
+
+[[case]]
+name = "compute_transition_storage"
+rust_const = "COMPUTE_TRANSITION_STORAGE"
+rust_type = "ComputeTransitionCase"
+programs = [{ name = "comp", template = "synchronization/layout_transition_compute.comp", stage = "comp" }]
+[case.params]
+storage_usage = { type = "bool", value = true }
+local_size_x = { type = "u32", value = 8 }
+local_size_y = { type = "u32", value = 8 }
+sample_count = { type = "u32", value = 4 }
+[case.derived]
+image_decl = "'layout (set=0, binding=0, rgba8) uniform image2DMS inImage;' if storage_usage else 'layout (set=0, binding=0) uniform sampler2DMS inImage;'"
+load_expr = "'const vec4 color = imageLoad(inImage, ivec2(x, y), int(s));' if storage_usage else 'const vec4 color = texelFetch(inImage, ivec2(x, y), int(s));'"

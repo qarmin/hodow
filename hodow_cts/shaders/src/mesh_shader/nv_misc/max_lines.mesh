@@ -1,0 +1,29 @@
+#version 450
+#extension GL_NV_mesh_shader : enable
+
+layout(local_size_x=32) in;
+layout(lines) out;
+layout(max_vertices=256, max_primitives=255) out;
+
+layout (location=0) out perprimitiveNV vec4 lineColor[];
+
+void main ()
+{
+    gl_PrimitiveCountNV = 255u;
+    uint firstLine = 8u * gl_LocalInvocationID.x;
+    for (uint i = 0u; i < 8u; i++) {
+        uint lineId = firstLine + i;
+        uint topPixel = 4u * lineId;
+        uint bottomPixel = 3u + topPixel;
+        if (bottomPixel < 1020u) {
+            float bottomCoord = ((float(bottomPixel) + 1.0f) / 1020.0) * 2.0 - 1.0;
+            gl_MeshVerticesNV[lineId + 1u].gl_Position = vec4(0.0, bottomCoord, 0.0f, 1.0f);
+            gl_PrimitiveIndicesNV[lineId * 2u] = lineId;
+            gl_PrimitiveIndicesNV[lineId * 2u + 1u] = lineId + 1u;
+            lineColor[lineId] = vec4(0.0f, 1.0f, float(lineId) / 255.0f, 1.0f);
+        } else {
+            // The last iteration of the last invocation emits the first point
+            gl_MeshVerticesNV[0].gl_Position = vec4(0.0, -1.0, 0.0f, 1.0f);
+        }
+    }
+}

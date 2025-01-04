@@ -1,0 +1,102 @@
+
+; The SPIR-V shader below is based on the following GLSL shader, but OpAtomicIAdd has been
+; replaced with a template parameter and the last argument for it has been made optional.
+;
+; #version 440
+; precision highp iimageCube;
+;
+; layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+; layout (r32i, binding=0) coherent uniform iimageCube u_resultImage;
+; layout (r32i, binding=1) writeonly uniform iimageCube u_intermValuesImage;
+;
+; void main (void)
+; {
+;     int gx = int(gl_GlobalInvocationID.x);
+;     int gy = int(gl_GlobalInvocationID.y);
+;     int gz = int(gl_GlobalInvocationID.z);
+;     imageStore(u_intermValuesImage, ivec3(gx,gy,gz), ivec4(imageAtomicAdd(u_resultImage, ivec3(gx % 64,gy,gz), int(gx*gx + gy*gy + gz*gz))));
+; }
+;
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos Glslang Reference Front End; 7
+; Bound: 61
+; Schema: 0
+OpCapability Shader
+%1 = OpExtInstImport "GLSL.std.450"
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %4 "main" %12
+OpExecutionMode %4 LocalSize 1 1 1
+OpDecorate %12 BuiltIn GlobalInvocationId
+OpDecorate %30 DescriptorSet 0
+OpDecorate %30 Binding 1
+OpDecorate %30 NonReadable
+OpDecorate %37 DescriptorSet 0
+OpDecorate %37 Binding 0
+OpDecorate %37 Coherent
+OpDecorate %60 BuiltIn WorkgroupSize
+%2 = OpTypeVoid
+%3 = OpTypeFunction %2
+%6 = OpTypeInt 32 1
+%7 = OpTypePointer Function %6
+%9 = OpTypeInt 32 0
+%10 = OpTypeVector %9 3
+%11 = OpTypePointer Input %10
+%12 = OpVariable %11 Input
+%13 = OpConstant %9 0
+%14 = OpTypePointer Input %9
+%19 = OpConstant %9 1
+%24 = OpConstant %9 2
+%28 = OpTypeImage %6 Cube 0 0 0 2 R32i
+%29 = OpTypePointer UniformConstant %28
+%30 = OpVariable %29 UniformConstant
+%35 = OpTypeVector %6 3
+%37 = OpVariable %29 UniformConstant
+%39 = OpConstant %6 64
+%55 = OpTypePointer Image %6
+%58 = OpTypeVector %6 4
+%60 = OpConstantComposite %10 %19 %19 %19
+%4 = OpFunction %2 None %3
+%5 = OpLabel
+%8 = OpVariable %7 Function
+%18 = OpVariable %7 Function
+%23 = OpVariable %7 Function
+%15 = OpAccessChain %14 %12 %13
+%16 = OpLoad %9 %15
+%17 = OpBitcast %6 %16
+OpStore %8 %17
+%20 = OpAccessChain %14 %12 %19
+%21 = OpLoad %9 %20
+%22 = OpBitcast %6 %21
+OpStore %18 %22
+%25 = OpAccessChain %14 %12 %24
+%26 = OpLoad %9 %25
+%27 = OpBitcast %6 %26
+OpStore %23 %27
+%31 = OpLoad %28 %30
+%32 = OpLoad %6 %8
+%33 = OpLoad %6 %18
+%34 = OpLoad %6 %23
+%36 = OpCompositeConstruct %35 %32 %33 %34
+%38 = OpLoad %6 %8
+%40 = OpSMod %6 %38 %39
+%41 = OpLoad %6 %18
+%42 = OpLoad %6 %23
+%43 = OpCompositeConstruct %35 %40 %41 %42
+%44 = OpLoad %6 %8
+%45 = OpLoad %6 %8
+%46 = OpIMul %6 %44 %45
+%47 = OpLoad %6 %18
+%48 = OpLoad %6 %18
+%49 = OpIMul %6 %47 %48
+%50 = OpIAdd %6 %46 %49
+%51 = OpLoad %6 %23
+%52 = OpLoad %6 %23
+%53 = OpIMul %6 %51 %52
+%54 = OpIAdd %6 %50 %53
+%56 = OpImageTexelPointer %55 %37 %43 %13
+%57 = OpAtomicIIncrement %6 %56 %19 %13 
+%59 = OpCompositeConstruct %58 %57 %57 %57 %57
+OpImageWrite %31 %36 %59
+OpReturn
+OpFunctionEnd

@@ -1,0 +1,9 @@
+wsi.android
+wsi.direct
+wsi.direct_drm
+wsi.headless
+wsi.metal
+wsi.wayland
+wsi.win32
+wsi.xcb
+wsi.xlib

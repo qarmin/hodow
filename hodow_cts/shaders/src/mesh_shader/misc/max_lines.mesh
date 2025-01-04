@@ -1,0 +1,28 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+layout(local_size_x=4, local_size_y=2, local_size_z=8) in;
+layout(lines) out;
+layout(max_vertices=256, max_primitives=255) out;
+
+layout (location=0) out perprimitiveEXT vec4 lineColor[];
+
+void main ()
+{
+    SetMeshOutputsEXT(256u, 255u);
+    uint firstLine = 4u * gl_LocalInvocationIndex;
+    for (uint i = 0u; i < 4u; i++) {
+        uint lineId = firstLine + i;
+        uint topPixel = 4u * lineId;
+        uint bottomPixel = 3u + topPixel;
+        if (bottomPixel < 1020u) {
+            float bottomCoord = ((float(bottomPixel) + 1.0f) / 1020.0) * 2.0 - 1.0;
+            gl_MeshVerticesEXT[lineId + 1u].gl_Position = vec4(0.0, bottomCoord, 0.0f, 1.0f);
+            gl_PrimitiveLineIndicesEXT[lineId] = uvec2(lineId, lineId + 1u);
+            lineColor[lineId] = vec4(0.0f, 1.0f, float(lineId) / 255.0f, 1.0f);
+        } else {
+            // The last iteration of the last invocation emits the first point
+            gl_MeshVerticesEXT[0].gl_Position = vec4(0.0, -1.0, 0.0f, 1.0f);
+        }
+    }
+}

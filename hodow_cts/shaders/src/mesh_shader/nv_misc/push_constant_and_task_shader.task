@@ -1,0 +1,20 @@
+#version 450
+#extension GL_NV_mesh_shader : enable
+
+layout(local_size_x=1) in;
+
+out taskNV TaskData {
+    float values[2];
+} td;
+
+layout (push_constant, std430) uniform PushConstantBlock {
+    layout (offset=8) float values[2];
+} pc;
+
+void main ()
+{
+    gl_TaskCountNV = 1;
+
+    td.values[0] = pc.values[0];
+    td.values[1] = pc.values[1];
+}

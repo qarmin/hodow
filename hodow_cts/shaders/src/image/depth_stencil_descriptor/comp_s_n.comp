@@ -1,0 +1,19 @@
+#version 450
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+
+layout(push_constant, std430) uniform PushConstantBlock {
+    float colorR;
+    float colorG;
+    float colorB;
+    float colorA;
+    float depth;
+} pc;
+
+layout (set=2, binding=0) uniform sampler globalSampler;
+layout (set=2, binding=1) uniform sampler uglobalSampler;
+layout (set=0, binding=0) uniform texture2D sampledImage0;
+layout (r32f, set=1, binding=0) uniform image2D storage0;
+
+void main () {
+    imageStore(storage0, ivec2(gl_GlobalInvocationID.xy), texture(sampler2D(sampledImage0, globalSampler), vec2(gl_GlobalInvocationID.xy) + vec2(0.5)));
+}

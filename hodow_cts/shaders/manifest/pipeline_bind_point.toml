@@ -1,0 +1,18 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.bind_point.*
+#
+# `BindPointTest::initPrograms` for the graphics + compute pair: a full-screen strip whose fragment shader writes
+# 1 into the graphics buffer, and a compute shader writing 2 into the compute buffer. The ray generation shader of
+# the pairs that involve ray tracing is not ported.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineBindPointTests.cpp"
+rust_module = "pipeline/bind_point_tests"
+
+[[case]]
+name = "graphics_compute"
+rust_const = "BIND_POINT_GRAPHICS_COMPUTE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/bind_point.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/bind_point.frag", stage = "frag" },
+    { name = "comp", template = "pipeline/bind_point.comp", stage = "comp" },
+]

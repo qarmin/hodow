@@ -1,0 +1,17 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+layout(local_size_x=1) in;
+layout(lines) out;
+layout(max_vertices=256, max_primitives=256) out;
+
+layout (location=0) out perprimitiveEXT vec4 lineColor[];
+
+void main ()
+{
+    SetMeshOutputsEXT(2u, 1u);
+    lineColor[0] = vec4(0.0f, 1.0f, 1.0f, 1.0f);
+    gl_MeshVerticesEXT[0].gl_Position = vec4(-1.0f, 0.0f, 0.0f, 1.0f);
+    gl_MeshVerticesEXT[1].gl_Position = vec4( 1.0f, 0.0f, 0.0f, 1.0f);
+    gl_PrimitiveLineIndicesEXT[gl_LocalInvocationIndex] = uvec2(0u, 1u);
+}

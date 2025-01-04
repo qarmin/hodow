@@ -1,0 +1,17 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.dynamic_vertex_attribute.*
+#
+# `NonSequentialCase::initPrograms`: two vertex shaders that read the colour from attribute location 1 or 7, and a flat
+# fragment shader.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineDynamicVertexAttributeTests.cpp"
+rust_module = "pipeline/dynamic_vertex_attribute_tests"
+
+[[case]]
+name = "nonsequential"
+rust_const = "DYNAMIC_VERTEX_ATTRIBUTE_NONSEQUENTIAL"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert_0", template = "pipeline/dynamic_vertex_attribute_1.vert", stage = "vert" },
+    { name = "vert_1", template = "pipeline/dynamic_vertex_attribute_7.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_vertex_attribute.frag", stage = "frag" },
+]

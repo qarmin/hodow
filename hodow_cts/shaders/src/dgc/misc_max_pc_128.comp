@@ -1,0 +1,22 @@
+#version 460
+layout (local_size_x=1) in;
+layout (push_constant, std430) uniform PCBlock {
+   uint values[32];
+} pc;
+layout (set=0, binding=0, std430) buffer Output {
+   uint values[32];
+} ob;
+
+uint getWorkGroupIndex (void) {
+    const uint workGroupIndex = gl_NumWorkGroups.x * gl_NumWorkGroups.y * gl_WorkGroupID.z +
+                                gl_NumWorkGroups.x * gl_WorkGroupID.y +
+                                gl_WorkGroupID.x;
+    return workGroupIndex;
+}
+
+void main (void)
+{
+    const uint wgIndex = getWorkGroupIndex();
+    const uint pcValue = pc.values[wgIndex];
+    ob.values[wgIndex] = pcValue;
+}

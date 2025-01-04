@@ -1,0 +1,18 @@
+# Shader manifest for dEQP-VK.mesh_shader.ext.misc.work_group_ordering
+#
+# `workGroupOrderingInitPrograms`: a task shader that hands global indices to its mesh work groups after delaying the earlier work groups, a mesh shader that
+# emits the triangles in reverse invocation order, and a pass-through fragment shader.
+
+upstream_source = "external/vulkancts/modules/vulkan/mesh_shader/vktMeshShaderMiscTestsEXT.cpp"
+rust_module = "mesh_shader/work_group_ordering_tests"
+spirv_version = "spirv1.4"
+
+[[case]]
+name = "work_group_ordering"
+rust_const = "WORK_GROUP_ORDERING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/work_group_ordering/work_group_ordering.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/work_group_ordering/work_group_ordering.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/work_group_ordering/work_group_ordering.frag", stage = "frag" },
+]

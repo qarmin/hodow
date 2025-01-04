@@ -1,0 +1,20 @@
+#version 450
+${extensions}layout(triangles, equal_spacing, ccw) in;
+
+in gl_PerVertex {
+    vec4 gl_Position;
+} gl_in[gl_MaxPatchVertices];
+
+out gl_PerVertex {
+    vec4 gl_Position;
+};
+
+${spec_block}${ssbo_block}${global_block}
+void main (void)
+{
+${main_code}
+    vec3 p0 = gl_TessCoord.x * gl_in[0].gl_Position.xyz;
+    vec3 p1 = gl_TessCoord.y * gl_in[1].gl_Position.xyz;
+    vec3 p2 = gl_TessCoord.z * gl_in[2].gl_Position.xyz;
+    gl_Position = vec4(p0 + p1 + p2, 1.0);
+}

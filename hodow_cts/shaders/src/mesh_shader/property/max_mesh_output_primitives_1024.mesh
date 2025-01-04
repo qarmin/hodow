@@ -1,0 +1,44 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+layout (local_size_x=128, local_size_y=1, local_size_z=1) in;
+layout (points) out;
+layout (max_vertices=1, max_primitives=1024) out;
+
+out gl_MeshPerVertexEXT {
+    vec4  gl_Position;
+    float gl_PointSize;
+} gl_MeshVerticesEXT[];
+
+perprimitiveEXT out gl_MeshPerPrimitiveEXT {
+    int gl_PrimitiveID;
+} gl_MeshPrimitivesEXT[];
+
+void main (void) {
+    const uint localInvs = 128u;
+    const uint maxVertices = 1u;
+    const uint maxPoints = 1024u;
+    const uint verticesPerInvocation = (maxVertices + localInvs - 1u) / localInvs;
+    const uint primitivesPerInvocation = (maxPoints + localInvs - 1u) / localInvs;
+
+    SetMeshOutputsEXT(maxVertices, maxPoints);
+
+    for (uint i = 0u; i < verticesPerInvocation; ++i) {
+        const uint vertexID = gl_LocalInvocationIndex * verticesPerInvocation + i;
+        if (vertexID >= maxVertices) {
+            break;
+        }
+        const float xCoord = 0.0;
+        gl_MeshVerticesEXT[vertexID].gl_Position = vec4(xCoord, 0.0, 0.0, 1.0);
+        gl_MeshVerticesEXT[vertexID].gl_PointSize = 1.0f;
+    }
+
+    for (uint i = 0u; i < primitivesPerInvocation; ++i) {
+        const uint primitiveID = gl_LocalInvocationIndex * primitivesPerInvocation + i;
+        if (primitiveID >= maxPoints) {
+            break;
+        }
+        gl_MeshPrimitivesEXT[primitiveID].gl_PrimitiveID = int(primitiveID);
+        gl_PrimitivePointIndicesEXT[primitiveID] = 0u;
+    }
+}

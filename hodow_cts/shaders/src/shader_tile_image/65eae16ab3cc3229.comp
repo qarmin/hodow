@@ -1,0 +1,15 @@
+#version 450 core
+#extension GL_EXT_samplerless_texture_functions : enable
+precision highp float;
+precision highp int;
+layout(set = 0, binding = 0) uniform texture2DMS colorTex;
+layout(set = 0, binding = 1, std430) buffer Block0 { uvec2 values[]; } colorbuf;
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+void main()
+{
+    for (uint i = 0u; i < 32u; ++i) {
+        uint idx = ((gl_GlobalInvocationID.y * 4u) + gl_GlobalInvocationID.x) * 32u + i;
+        colorbuf.values[idx].y = uint(round(texelFetch(colorTex, ivec2(gl_GlobalInvocationID.xy), int(i)).y * 255));
+        colorbuf.values[idx].x = uint(round(texelFetch(colorTex, ivec2(gl_GlobalInvocationID.xy), int(i)).x));
+    }
+}

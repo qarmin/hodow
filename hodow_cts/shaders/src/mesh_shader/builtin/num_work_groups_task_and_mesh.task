@@ -1,0 +1,21 @@
+#version 460
+#extension GL_EXT_mesh_shader : enable
+
+layout (local_size_x=1) in;
+
+struct TaskData {
+    uvec3 parentId;
+    uvec3 parentSize;
+};
+taskPayloadSharedEXT TaskData td;
+
+void main ()
+{
+    uvec3 meshGroups = uvec3(3, 4, 2);
+    if (gl_NumWorkGroups != uvec3(2, 3, 4)) {
+        meshGroups = uvec3(0, 0, 0);
+    }
+    td.parentSize = gl_NumWorkGroups;
+    td.parentId   = gl_WorkGroupID;
+    EmitMeshTasksEXT(meshGroups.x, meshGroups.y, meshGroups.z);
+}

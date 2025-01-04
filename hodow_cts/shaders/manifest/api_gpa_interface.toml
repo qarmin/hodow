@@ -1,0 +1,54 @@
+# Shader manifest for dEQP-VK.api.gpa_interface.regular_session_*
+
+upstream_source = "external/vulkancts/modules/vulkan/api/vktApiGPAInterfaceTests.cpp"
+rust_module = "api/gpa_interface_tests"
+
+[[case]]
+name = "comp"
+rust_const = "COMP"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "api/gpa_interface.comp", stage = "comp" },
+]
+
+[[case]]
+name = "vert_frag"
+rust_const = "VERT_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "api/gpa_interface.vert", stage = "vert" },
+    { name = "frag", template = "api/gpa_interface.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vert_tess_frag"
+rust_const = "VERT_TESS_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "api/gpa_interface.vert", stage = "vert" },
+    { name = "tesc", template = "api/gpa_interface.tesc", stage = "tesc" },
+    { name = "tese", template = "api/gpa_interface.tese", stage = "tese" },
+    { name = "frag", template = "api/gpa_interface.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vert_geom_frag"
+rust_const = "VERT_GEOM_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "api/gpa_interface.vert", stage = "vert" },
+    { name = "geom", template = "api/gpa_interface.geom", stage = "geom" },
+    { name = "frag", template = "api/gpa_interface.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vert_tess_geom_frag"
+rust_const = "VERT_TESS_GEOM_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "api/gpa_interface.vert", stage = "vert" },
+    { name = "tesc", template = "api/gpa_interface.tesc", stage = "tesc" },
+    { name = "tese", template = "api/gpa_interface.tese", stage = "tese" },
+    { name = "geom", template = "api/gpa_interface.geom", stage = "geom" },
+    { name = "frag", template = "api/gpa_interface.frag", stage = "frag" },
+]

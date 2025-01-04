@@ -1,0 +1,51 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_ARB_shader_ballot: enable
+#extension GL_KHR_shader_subgroup_basic: enable
+#extension GL_ARB_gpu_shader_int64: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  uint data[];
+};
+
+bool subgroupBallotBitExtract(uint64_t value, uint index)
+{
+    if (index > 63)
+        return false;
+    uint64_t mask = 1ul << index;
+    if (bool((value & mask)) == true)
+        return true;
+    return false;
+}
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uint64_t mask;
+mask = ballotARB(true);
+  uint sgSize = gl_SubGroupSizeARB;
+  uint sgInvocation = gl_SubGroupInvocationARB;
+  tempRes= 0x3;
+  for (uint id = 0; id < sgSize; id++)
+  {
+    uint op = readInvocationARB(data[sgInvocation], id);
+    if (subgroupBallotBitExtract(mask, id) && op != data[id])
+        tempRes = 0;
+  }
+  // Test lane id that is only uniform across active lanes
+  if (sgInvocation >= sgSize / 2)
+  {
+    uint id = sgInvocation & ~((sgSize / 2) - 1);
+    uint op = readInvocationARB(data[sgInvocation], id);
+    if (subgroupBallotBitExtract(mask, id) && op != data[id])
+        tempRes = 0;
+  }
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}

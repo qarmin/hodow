@@ -1,0 +1,39 @@
+# Shader manifest for dEQP-VK.rasterization.{primitives,fill_rules,culling}
+#
+# `BaseRenderingTestCase::initPrograms`: `rendering` has the interpolation qualifier empty, `rendering_flat` is the flat shaded
+# variant of the flatshading cases.
+
+upstream_source = "external/vulkancts/modules/vulkan/rasterization/vktRasterizationTests.cpp"
+rust_module = "rasterization/rendering_tests"
+
+[[case]]
+name = "rendering"
+rust_const = "RENDERING_BASE"
+rust_type = "RenderingProgram"
+programs = [
+    { name = "vertext_shader", template = "rasterization/rendering.vert", stage = "vert" },
+    { name = "fragment_shader", template = "rasterization/rendering.frag", stage = "frag" },
+]
+
+[[case]]
+name = "rendering_flat"
+rust_const = "RENDERING_FLAT"
+rust_type = "RenderingProgram"
+programs = [
+    { name = "vertext_shader", template = "rasterization/rendering_flat.vert", stage = "vert" },
+    { name = "fragment_shader", template = "rasterization/rendering_flat.frag", stage = "frag" },
+]
+
+# `PointDefaultSizeTestCase::initPrograms`: the point size is never written, so the default size has to apply
+# whichever of the vertex, tessellation and geometry stages the case uses.
+[[case]]
+name = "point_default_size"
+rust_const = "POINT_DEFAULT_SIZE"
+rust_type = "RenderingProgram"
+programs = [
+    { name = "vertext_shader", template = "rasterization/point_default.vert", stage = "vert" },
+    { name = "tessellation_control_shader", template = "rasterization/point_default.tesc", stage = "tesc" },
+    { name = "tessellation_evaluation_shader", template = "rasterization/point_default.tese", stage = "tese" },
+    { name = "geometry_shader", template = "rasterization/point_default.geom", stage = "geom" },
+    { name = "fragment_shader", template = "rasterization/point_default.frag", stage = "frag" },
+]

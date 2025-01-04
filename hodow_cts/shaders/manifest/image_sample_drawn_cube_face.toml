@@ -1,0 +1,18 @@
+# Shader manifest for dEQP-VK.image.sample_cubemap.write_face_0
+#
+# Pipeline 1 draws a flat colour chosen by a push constant into the cubemap; pipeline 2 samples the four faces around
+# the first face into a plain target image. The version declaration is `glu::getGLSLVersionDeclaration(GLSL_VERSION_450)`.
+
+upstream_source = "external/vulkancts/modules/vulkan/image/vktImageSampleDrawnCubeFaceTests.cpp"
+rust_module = "image/sample_drawn_cube_face_tests"
+
+[[case]]
+name = "sample_cubemap"
+rust_const = "SAMPLE_CUBEMAP_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [
+  { name = "vert1", template = "image/sample_cubemap_pass1.vert", stage = "vert" },
+  { name = "vert2", template = "image/sample_cubemap_pass2.vert", stage = "vert" },
+  { name = "frag1", template = "image/sample_cubemap_pass1.frag", stage = "frag" },
+  { name = "frag2", template = "image/sample_cubemap_pass2.frag", stage = "frag" },
+]

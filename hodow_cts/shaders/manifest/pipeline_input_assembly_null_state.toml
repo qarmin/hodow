@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.pipeline.*.input_assembly.misc.null_state_dynamic_primitive_rast_discard*
+#
+# `NullStateTestCase::initPrograms`: a vertex shader that writes vertex index + 1 to a storage buffer, and a pass-through fragment shader.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineInputAssemblyTests.cpp"
+rust_module = "pipeline/input_assembly_null_state_tests"
+
+[[case]]
+name = "null_state"
+rust_const = "NULL_STATE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/input_assembly_null_state/null_state.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/input_assembly_null_state/null_state.frag", stage = "frag" },
+]

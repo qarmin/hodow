@@ -1,0 +1,42 @@
+# Shader manifest for dEQP-VK.draw.*.linear_interpolation.*
+#
+# `MultisampleLinearInterpolationTestCase::initPrograms`: a reference and a noperspective vertex shader, a reference
+# fragment shader that evaluates the expected gradient from gl_FragCoord and a fragment shader using
+# interpolateAtOffset/interpolateAtSample. The two fragment shaders bake in the case's offset (render size 16, range 1), written
+# with the six significant digits of the C++ stream (0.4375 / 16 is 0.0273438).
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawMultisampleLinearInterpolationTests.cpp"
+rust_module = "draw/linear_interpolation_tests"
+
+[[case]]
+name = "no_offset"
+rust_const = "LINEAR_INTERPOLATION_NO_OFFSET"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertRef", template = "draw/linear_interpolation_ref.vert", stage = "vert" },
+    { name = "vertNoPer", template = "draw/linear_interpolation_noper.vert", stage = "vert" },
+    { name = "fragRef", template = "draw/linear_interpolation_no_offset_ref.frag", stage = "frag" },
+    { name = "fragNoPer", template = "draw/linear_interpolation_no_offset_noper.frag", stage = "frag" },
+]
+
+[[case]]
+name = "offset_min"
+rust_const = "LINEAR_INTERPOLATION_OFFSET_MIN"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertRef", template = "draw/linear_interpolation_ref.vert", stage = "vert" },
+    { name = "vertNoPer", template = "draw/linear_interpolation_noper.vert", stage = "vert" },
+    { name = "fragRef", template = "draw/linear_interpolation_offset_min_ref.frag", stage = "frag" },
+    { name = "fragNoPer", template = "draw/linear_interpolation_offset_min_noper.frag", stage = "frag" },
+]
+
+[[case]]
+name = "offset_max"
+rust_const = "LINEAR_INTERPOLATION_OFFSET_MAX"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertRef", template = "draw/linear_interpolation_ref.vert", stage = "vert" },
+    { name = "vertNoPer", template = "draw/linear_interpolation_noper.vert", stage = "vert" },
+    { name = "fragRef", template = "draw/linear_interpolation_offset_max_ref.frag", stage = "frag" },
+    { name = "fragNoPer", template = "draw/linear_interpolation_offset_max_noper.frag", stage = "frag" },
+]

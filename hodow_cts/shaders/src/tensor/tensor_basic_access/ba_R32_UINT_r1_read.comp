@@ -1,0 +1,15 @@
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<uint32_t, 1> tens;
+layout(set=0, binding = 1, std430) buffer _buff { uint32_t data[]; };
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint tensor_element_count = size_d0;
+	if (gl_GlobalInvocationID.x >= tensor_element_count) return;
+	const uint coord_0 = gl_GlobalInvocationID.x / (1) % size_d0;
+	const uint index = gl_GlobalInvocationID.x;
+	tensorReadARM(tens, uint[](coord_0), data[index]);
+}

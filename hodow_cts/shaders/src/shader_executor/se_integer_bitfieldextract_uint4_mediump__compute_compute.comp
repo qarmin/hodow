@@ -1,0 +1,36 @@
+#version 450
+layout(local_size_x = 1) in;
+
+struct Inputs
+{
+	mediump uvec4 value;
+	mediump int offset;
+	mediump int bits;
+};
+struct Outputs
+{
+	mediump uvec4 extracted;
+};
+
+layout(set = 0, binding = 0, std430) buffer InBuffer
+{
+    Inputs inputs[];
+};
+layout(set = 0, binding = 1, std430) buffer OutBuffer
+{
+    Outputs outputs[];
+};
+
+void main (void)
+{
+    uint invocationNdx = gl_NumWorkGroups.x*gl_NumWorkGroups.y*gl_WorkGroupID.z
+                       + gl_NumWorkGroups.x*gl_WorkGroupID.y + gl_WorkGroupID.x;
+	uvec4 value = uvec4(inputs[invocationNdx].value);
+	int offset = int(inputs[invocationNdx].offset);
+	int bits = int(inputs[invocationNdx].bits);
+	uvec4 extracted;
+
+	extracted = bitfieldExtract(value, offset, bits);
+
+	outputs[invocationNdx].extracted = extracted;
+}

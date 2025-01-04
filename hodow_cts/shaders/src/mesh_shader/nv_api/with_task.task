@@ -1,0 +1,21 @@
+#version 460
+#extension GL_NV_mesh_shader : enable
+
+layout (local_size_x=1) in;
+
+layout (push_constant, std430) uniform TaskPushConstantBlock {
+    layout (offset=12) uint one;
+    layout (offset=16) uint firstTask;
+} pc;
+
+out taskNV TaskData {
+    uint blockNumber;
+    uint blockRow;
+} td;
+
+void main ()
+{
+    gl_TaskCountNV  = pc.one;
+    td.blockNumber  = uint(gl_DrawID);
+    td.blockRow     = gl_WorkGroupID.x - pc.firstTask;
+}

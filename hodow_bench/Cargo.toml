@@ -1,0 +1,27 @@
+[package]
+name = "hodow_bench"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+libc = "0.2"
+hodow_gpu = { path = "../hodow_gpu", default-features = false, optional = true }
+gl = { version = "0.14", optional = true }
+ash = { version = "0.38", optional = true }
+naga = { version = "30", optional = true, features = ["wgsl-in", "spv-out", "glsl-out"] }
+# OpenCL and TensorFlow Lite, dlopened at run time like the GL and Vulkan loaders
+libloading = { version = "0.9", optional = true }
+
+[features]
+default = []
+opencl = ["dep:libloading"]
+tflite = ["dep:libloading"]
+# Vulkan compute in `hodow bench`
+vulkan = ["dep:ash", "dep:naga"]
+# GLES 3.1 compute in `hodow bench`: its kernels are WGSL, compiled to GLSL ES by naga
+bench_gles = ["dep:hodow_gpu", "hodow_gpu/gpu", "dep:gl", "dep:naga"]
+
+[lints]
+workspace = true

@@ -1,0 +1,41 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_shuffle_relative: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int64 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) readonly buffer Buffer2
+{
+  uint64_t data1[];
+};
+layout(set = 0, binding = 2, std430) readonly buffer Buffer3
+{
+  uint data2[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uint temp_res;
+  uvec4 mask = subgroupBallot(true);
+  uint id_in = data2[gl_SubgroupInvocationID] & (gl_SubgroupSize - 1);
+  uint64_t op = subgroupShuffleUp(data1[gl_SubgroupInvocationID], id_in);
+  uint id = gl_SubgroupInvocationID - id_in;
+  if ((id < gl_SubgroupSize) && subgroupBallotBitExtract(mask, id))
+  {
+    temp_res = (op == data1[id]) ? 1 : 0;
+  }
+  else
+  {
+    temp_res = 1; // Invocation we read from was inactive, so we can't verify results!
+  }
+  tempRes = temp_res;
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}

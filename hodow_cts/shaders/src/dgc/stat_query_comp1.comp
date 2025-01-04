@@ -1,0 +1,10 @@
+#version 460
+layout (local_size_x=64) in;
+layout (push_constant, std430) uniform PCBlock { uint wgOffset; } pc;
+layout (set=0, binding=0, std430) buffer BufferBlock {
+    uint values[];
+} ssbo;
+void main(void) {
+    uint global_id = (gl_WorkGroupID.x + pc.wgOffset) * gl_WorkGroupSize.x + gl_LocalInvocationIndex;
+    ssbo.values[global_id] = 2u;
+}

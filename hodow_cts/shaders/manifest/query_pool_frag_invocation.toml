@@ -1,0 +1,44 @@
+# Shader manifest for dEQP-VK.query_pool.frag_invocations.*
+#
+# `initPrograms` varies the shaders in two things: whether a vertex colour is passed through
+# the vertex shader, and whether the fragment shader bumps a storage-buffer counter. The
+# query type and primary/secondary axes do not touch the shaders, so three programs cover all 12 cases.
+
+upstream_source = "external/vulkancts/modules/vulkan/query_pool/vktQueryPoolFragInvocationTests.cpp"
+rust_module = "query_pool/frag_invocation_tests"
+
+[[case]]
+name = "flat"
+rust_const = "FRAG_INVOCATION_FLAT"
+rust_type = "FragInvocationProgram"
+programs = [
+    { name = "vert", template = "query_pool/frag_invocation.vert", stage = "vert" },
+    { name = "frag", template = "query_pool/frag_invocation.frag", stage = "frag" },
+]
+[case.params]
+vertex_color = { type = "bool", value = false }
+atomic = { type = "bool", value = false }
+
+[[case]]
+name = "vertex_color"
+rust_const = "FRAG_INVOCATION_VERTEX_COLOR"
+rust_type = "FragInvocationProgram"
+programs = [
+    { name = "vert", template = "query_pool/frag_invocation.vert", stage = "vert" },
+    { name = "frag", template = "query_pool/frag_invocation.frag", stage = "frag" },
+]
+[case.params]
+vertex_color = { type = "bool", value = true }
+atomic = { type = "bool", value = false }
+
+[[case]]
+name = "atomic_counter"
+rust_const = "FRAG_INVOCATION_ATOMIC_COUNTER"
+rust_type = "FragInvocationProgram"
+programs = [
+    { name = "vert", template = "query_pool/frag_invocation.vert", stage = "vert" },
+    { name = "frag", template = "query_pool/frag_invocation.frag", stage = "frag" },
+]
+[case.params]
+vertex_color = { type = "bool", value = false }
+atomic = { type = "bool", value = true }

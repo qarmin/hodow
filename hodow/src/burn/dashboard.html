@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>hodow burn</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #0f1115; --panel: #171a21; --panel-2: #1c2029; --border: #262b35;
+    --text: #e6e6e6; --muted: #8b93a1; --ok: #3fb950; --warn: #d29922; --err: #f85149;
+    --skip: #6e7681; --run: #4f8cff; --abort: #bc8cff; --radius: 10px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif; margin: 0 auto; max-width: 1500px;
+    padding: 1.5rem clamp(1rem, 3vw, 2.5rem) 3rem; color: var(--text);
+    background: radial-gradient(1200px 600px at 10% -10%, #1a2030 0%, var(--bg) 55%) fixed;
+  }
+  h1 { font-size: 1.35rem; margin: 0 0 .3rem; }
+  h2 { font-size: 1rem; margin: 1.6rem 0 .6rem; color: #d3d7de; }
+  .muted { color: var(--muted); font-size: .8rem; }
+  .banner { display: flex; align-items: center; gap: 1.2rem; margin: 1rem 0; padding: .9rem 1.2rem;
+    border-radius: var(--radius); background: var(--panel); border: 1px solid var(--border); }
+  .verdict { font-size: 1.4rem; font-weight: 700; padding: .3rem .9rem; border-radius: 8px; background: var(--run); }
+  .verdict.PASSED { background: var(--ok); color: #0b1a0e; }
+  .verdict.FAILED { background: var(--err); }
+  .progress { flex: 1; height: 10px; background: var(--panel-2); border-radius: 5px; overflow: hidden; }
+  .progress > div { height: 100%; background: linear-gradient(90deg, var(--run), #6ea1ff); transition: width .5s; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(460px, 1fr)); gap: 1rem; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: .8rem 1rem; }
+  .card h3 { margin: 0 0 .4rem; font-size: .85rem; color: var(--muted); font-weight: 600; }
+  canvas { width: 100%; height: 220px; display: block; }
+  .legend { display: flex; flex-wrap: wrap; gap: .3rem .9rem; font-size: .72rem; color: var(--muted); margin-top: .3rem; }
+  .legend i { display: inline-block; width: 10px; height: 3px; margin-right: 4px; vertical-align: middle; }
+  table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+  td { padding: .4rem .6rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tr.phase td { color: var(--muted); font-weight: 700; font-size: .75rem; letter-spacing: .05em; padding-top: .9rem; }
+  tr.row { cursor: pointer; }
+  tr.row:hover { background: var(--panel-2); }
+  .tag { font-family: ui-monospace, monospace; font-weight: 700; white-space: nowrap; }
+  .OK { color: var(--ok); } .WARN { color: var(--warn); } .ERROR, .CRASH, .HANG { color: var(--err); }
+  .SKIP, .PENDING { color: var(--skip); } .RUNNING { color: var(--run); } .ABORT { color: var(--abort); }
+  .detail { color: var(--muted); font-size: .78rem; }
+  .samples { font-family: ui-monospace, monospace; font-size: .75rem; color: #ffb4ad; white-space: pre-wrap; display: none; padding-top: .3rem; }
+  tr.open .samples { display: block; }
+  .warnings { color: var(--warn); font-size: .75rem; }
+  #kernel { font-family: ui-monospace, monospace; font-size: .72rem; max-height: 340px; overflow: auto; white-space: pre-wrap; color: var(--muted); }
+  #kernel .hot { color: var(--err); font-weight: 600; }
+</style>
+</head>
+<body>
+<h1>hodow burn</h1>
+<div class="muted" id="header"></div>
+<div class="muted" id="where"></div>
+
+<div class="banner">
+  <span class="verdict" id="verdict">RUNNING</span>
+  <div class="progress"><div id="bar" style="width:0"></div></div>
+  <span id="clock" class="muted"></span>
+  <span id="now" class="muted"></span>
+</div>
+
+<div class="grid">
+  <div class="card"><h3>Temperatures (°C) - dashed lines are trip points</h3><canvas id="temps"></canvas><div class="legend" id="temps-legend"></div></div>
+  <div class="card"><h3>CPU clock (MHz, average of all cores)</h3><canvas id="freq"></canvas><div class="legend" id="freq-legend"></div></div>
+  <div class="card"><h3>CPU load (%)</h3><canvas id="load"></canvas><div class="legend" id="load-legend"></div></div>
+  <div class="card"><h3>Memory (MB)</h3><canvas id="mem"></canvas><div class="legend" id="mem-legend"></div></div>
+</div>
+
+<h2>Sub-tests</h2>
+<div class="card"><table id="rows"></table></div>
+
+<h2>Kernel log</h2>
+<div class="card"><div id="kernel">(nothing yet)</div></div>
+
+<script>
+const COLORS = ["#4f8cff", "#f85149", "#3fb950", "#d29922", "#bc8cff", "#39c5cf", "#ff7b72", "#a5d6ff",
+  "#7ee787", "#f2cc60", "#d2a8ff", "#56d4dd", "#ffa198", "#79c0ff", "#aff5b4", "#e3b341"];
+const HOT = /galcore|gpu|axi|mmu|oops|bug|panic|hang|reset|fault|error|segfault|watchdog|thermal|throttl/i;
+let state = null;
+let samples = [];
+const kernel = new Map();
+const open = new Set();
+
+function fmt(secs) {
+  secs = Math.round(secs);
+  if (secs < 60) return secs + "s";
+  if (secs < 3600) return Math.floor(secs / 60) + "m " + String(secs % 60).padStart(2, "0") + "s";
+  return Math.floor(secs / 3600) + "h " + String(Math.floor(secs % 3600 / 60)).padStart(2, "0") + "m";
+}
+
+function esc(s) { return String(s).replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c])); }
+
+function chart(id, series, opts = {}) {
+  const canvas = document.getElementById(id);
+  const dpr = window.devicePixelRatio || 1;
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  canvas.width = w * dpr; canvas.height = h * dpr;
+  const ctx = canvas.getContext("2d");
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, w, h);
+  const pad = { l: 44, r: 8, t: 8, b: 20 };
+  const all = series.flatMap(s => s.points);
+  if (!all.length) return;
+  const t0 = all.reduce((m, p) => Math.min(m, p[0]), Infinity), t1 = all.reduce((m, p) => Math.max(m, p[0]), -Infinity);
+  let lo = opts.min ?? all.reduce((m, p) => Math.min(m, p[1]), Infinity);
+  let hi = opts.max ?? all.reduce((m, p) => Math.max(m, p[1]), -Infinity);
+  for (const l of opts.lines || []) hi = Math.max(hi, l.v);
+  if (hi - lo < 1) hi = lo + 1;
+  const x = t => pad.l + (t - t0) / Math.max(t1 - t0, 1) * (w - pad.l - pad.r);
+  const y = v => h - pad.b - (v - lo) / (hi - lo) * (h - pad.t - pad.b);
+  for (const [i, band] of (opts.bands || []).entries()) {
+    if (band.t1 < t0) continue;
+    ctx.fillStyle = i % 2 ? "rgba(255,255,255,0.025)" : "rgba(79,140,255,0.06)";
+    ctx.fillRect(x(Math.max(band.t0, t0)), pad.t, x(Math.min(band.t1, t1)) - x(Math.max(band.t0, t0)), h - pad.t - pad.b);
+  }
+  ctx.strokeStyle = "#262b35"; ctx.fillStyle = "#8b93a1"; ctx.font = "10px system-ui"; ctx.lineWidth = 1;
+  for (let k = 0; k <= 4; k++) {
+    const v = lo + (hi - lo) * k / 4;
+    ctx.beginPath(); ctx.moveTo(pad.l, y(v)); ctx.lineTo(w - pad.r, y(v)); ctx.stroke();
+    ctx.fillText(v.toFixed(0), 4, y(v) + 3);
+  }
+  ctx.fillText(fmt(t0), pad.l, h - 5);
+  ctx.fillText(fmt(t1), w - pad.r - 30, h - 5);
+  for (const line of opts.lines || []) {
+    ctx.setLineDash([5, 4]); ctx.strokeStyle = line.color;
+    ctx.beginPath(); ctx.moveTo(pad.l, y(line.v)); ctx.lineTo(w - pad.r, y(line.v)); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  ctx.lineWidth = 1.5;
+  for (const s of series) {
+    ctx.strokeStyle = s.color; ctx.beginPath();
+    s.points.forEach((p, i) => i ? ctx.lineTo(x(p[0]), y(p[1])) : ctx.moveTo(x(p[0]), y(p[1])));
+    ctx.stroke();
+  }
+}
+
+function legend(id, series) {
+  document.getElementById(id).innerHTML = series.map(s => {
+    const last = s.points.length ? s.points[s.points.length - 1][1] : null;
+    return `<span><i style="background:${s.color}"></i>${esc(s.name)}${last == null ? "" : " " + last.toFixed(0)}</span>`;
+  }).join("");
+}
+
+function bands() {
+  return state.rows.filter(r => r.started_at != null).map(r => ({
+    t0: r.started_at, t1: r.result ? r.started_at + r.result.secs : samples.length ? samples[samples.length - 1].t : r.started_at,
+  }));
+}
+
+function drawCharts() {
+  const info = state.info;
+  const temps = info.temp_names.map((name, i) => ({ name, color: COLORS[i % COLORS.length],
+    points: samples.filter(s => s.temps[i] != null).map(s => [s.t, s.temps[i]]) })).filter(s => s.points.length);
+  const trips = info.trips.map(t => ({ v: t.celsius, color: t.kind === "critical" ? "#f85149" : t.kind === "hot" ? "#d29922" : "#8b93a1" }));
+  chart("temps", temps, { lines: trips, bands: bands() }); legend("temps-legend", temps);
+  const avg = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0;
+  const freq = [{ name: "average", color: COLORS[0], points: samples.map(s => [s.t, avg(s.freq_mhz.filter(f => f > 0))]) }];
+  chart("freq", freq, { min: 0, bands: bands() }); legend("freq-legend", freq);
+  const load = [{ name: "all cores", color: COLORS[2], points: samples.map(s => [s.t, avg(s.load)]) }];
+  if (samples.some(s => s.gpu_load != null)) load.push({ name: "GPU", color: COLORS[1], points: samples.filter(s => s.gpu_load != null).map(s => [s.t, s.gpu_load]) });
+  chart("load", load, { min: 0, max: 100, bands: bands() }); legend("load-legend", load);
+  const mem = [{ name: "used", color: COLORS[4], points: samples.map(s => [s.t, s.mem_used_mb]) },
+    { name: "available", color: COLORS[5], points: samples.map(s => [s.t, s.mem_available_mb]) }];
+  if (samples.some(s => s.cma_free_mb != null)) mem.push({ name: "CMA free", color: COLORS[3], points: samples.filter(s => s.cma_free_mb != null).map(s => [s.t, s.cma_free_mb]) });
+  chart("mem", mem, { min: 0, bands: bands() }); legend("mem-legend", mem);
+}
+
+function drawRows() {
+  let html = "", phase = null;
+  state.rows.forEach((r, i) => {
+    if (r.phase !== phase) { phase = r.phase; html += `<tr class="phase"><td colspan="4">${esc(phase)}</td></tr>`; }
+    const res = r.result;
+    const status = res ? res.status.toUpperCase() : i === state.current ? "RUNNING" : "PENDING";
+    const time = res ? fmt(res.secs) : i === state.current ? fmt(state.elapsed - r.started_at) + " / " + fmt(r.budget_secs) : fmt(r.budget_secs);
+    let detail = res ? esc(res.detail) + (res.max_temp != null ? `, max ${res.max_temp.toFixed(0)}°C` : "") : "";
+    if (res && res.errors) detail += ` <span class="ERROR">${res.errors} error(s)</span>`;
+    const warn = res && res.warnings.length ? `<div class="warnings">${res.warnings.map(esc).join("<br>")}</div>` : "";
+    const samplesHtml = res && res.samples.length ? `<div class="samples">${res.samples.map(esc).join("\n")}</div>` : "";
+    html += `<tr class="row ${open.has(i) ? "open" : ""}" data-i="${i}"><td class="tag ${status}">[${status}]</td>
+      <td>${esc(r.name)}</td><td class="muted">${time}</td><td><div class="detail">${detail}</div>${warn}${samplesHtml}</td></tr>`;
+  });
+  document.getElementById("rows").innerHTML = html;
+}
+
+function drawKernel() {
+  const lines = [...kernel.entries()].sort((a, b) => a[0] - b[0]).map(e => e[1]);
+  if (!lines.length) return;
+  const box = document.getElementById("kernel");
+  const atBottom = box.scrollTop + box.clientHeight >= box.scrollHeight - 5;
+  box.innerHTML = lines.slice(-500).map(l => HOT.test(l) ? `<span class="hot">${esc(l)}</span>` : esc(l)).join("\n");
+  if (atBottom) box.scrollTop = box.scrollHeight;
+}
+
+function draw() {
+  document.getElementById("header").textContent = state.header;
+  document.getElementById("where").textContent = "results: " + state.out_dir;
+  const v = document.getElementById("verdict");
+  v.textContent = state.verdict || "RUNNING"; v.className = "verdict " + (state.verdict || "");
+  const done = state.rows.reduce((t, r) => t + (r.result ? r.budget_secs : 0), 0);
+  const cur = state.current != null ? Math.min(state.elapsed - state.rows[state.current].started_at, state.rows[state.current].budget_secs) : 0;
+  const pct = state.verdict ? 100 : state.duration_secs > 0 ? (done + cur) / state.duration_secs * 100 : 0;
+  document.getElementById("bar").style.width = pct.toFixed(1) + "%";
+  document.getElementById("clock").textContent = fmt(state.elapsed) + (state.verdict ? "" : " / ~" + fmt(state.duration_secs));
+  const last = samples[samples.length - 1];
+  const hottest = last ? Math.max(...last.temps.filter(t => t != null)) : null;
+  document.getElementById("now").textContent = hottest != null && isFinite(hottest) ? `hottest now ${hottest.toFixed(0)}°C` : "";
+  drawCharts(); drawRows(); drawKernel();
+}
+
+document.getElementById("rows").addEventListener("click", e => {
+  const tr = e.target.closest("tr.row");
+  if (!tr) return;
+  const i = Number(tr.dataset.i);
+  open.has(i) ? open.delete(i) : open.add(i);
+  tr.classList.toggle("open");
+});
+
+function connect() {
+  const ws = new WebSocket((location.protocol === "https:" ? "wss://" : "ws://") + location.host + "/api/ws");
+  ws.onmessage = e => {
+    const tick = JSON.parse(e.data);
+    Object.assign(state, { elapsed: tick.elapsed, rows: tick.rows, current: tick.current, verdict: tick.verdict });
+    if (tick.sample && (!samples.length || tick.sample.t > samples[samples.length - 1].t)) samples.push(tick.sample);
+    for (const k of tick.kernel) kernel.set(k.seq, k.text);
+    draw();
+  };
+  ws.onclose = () => setTimeout(connect, 2000);
+}
+
+fetch("/api/state").then(r => r.json()).then(s => {
+  state = s; samples = s.samples;
+  for (const k of s.kernel) kernel.set(k.seq, k.text);
+  draw(); connect();
+});
+window.addEventListener("resize", () => state && drawCharts());
+</script>
+</body>
+</html>

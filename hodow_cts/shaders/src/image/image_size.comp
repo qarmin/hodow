@@ -1,0 +1,12 @@
+#version 440
+
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout (binding = 0, rgba32f)${access} uniform highp ${glsl_type} u_image;
+layout (binding = 1) writeonly buffer Output {
+    ivec3 size;
+} sb_out;
+
+void main (void)
+{
+${body}
+}

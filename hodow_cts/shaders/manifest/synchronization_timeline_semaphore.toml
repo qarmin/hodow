@@ -1,0 +1,14 @@
+# Shader manifest for dEQP-VK.synchronization.timeline_semaphore.misc.*
+#
+# `ignoreTimelineSemaphoreSubmitInfoPrograms`: one compute shader copying a push constant to a storage buffer.
+
+upstream_source = "external/vulkancts/modules/vulkan/synchronization/vktSynchronizationTimelineSemaphoreTests.cpp"
+rust_module = "synchronization/timeline_semaphore_tests"
+
+[[case]]
+name = "ignore_timeline_semaphore_info"
+rust_const = "IGNORE_TIMELINE_SEMAPHORE_INFO"
+rust_type = "SharedProgram"
+programs = [
+  { name = "comp", template = "synchronization/timeline_ignore_info.comp", stage = "comp" },
+]

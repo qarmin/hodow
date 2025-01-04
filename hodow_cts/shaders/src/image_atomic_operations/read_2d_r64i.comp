@@ -1,0 +1,21 @@
+#version 450
+#extension GL_EXT_shader_explicit_arithmetic_types_int64 : require
+#extension GL_EXT_shader_image_int64 : require
+precision highp i64image2D;
+
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout (r64i, binding=0) coherent uniform i64image2D u_resultImage;
+
+layout(std430, binding = 1) buffer outputBuffer
+{
+    int64_t data[];
+} outBuffer;
+
+void main(void)
+{
+    int gx = int(gl_GlobalInvocationID.x);
+    int gy = int(gl_GlobalInvocationID.y);
+    int gz = int(gl_GlobalInvocationID.z);
+    uint index = gx + (gy * gl_NumWorkGroups.x) + (gz *gl_NumWorkGroups.x * gl_NumWorkGroups.y);
+    outBuffer.data[index] = int64_t(imageLoad(u_resultImage, ivec2(gx,gy)).x);
+}

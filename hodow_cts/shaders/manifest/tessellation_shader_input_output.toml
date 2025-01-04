@@ -1,0 +1,316 @@
+# Shader manifest for dEQP-VK.tessellation.shader_input_output.*
+#
+# The `initPrograms` of the PatchVertexCount, PerPatchData, GLPosition, Barrier and CrossInvocation namespaces, expanded per case.
+# Common shaders: `sio_attr.vert` (a float attribute forwarded to the control shader), `sio_color.frag`, `sio_glposition.frag`
+# and `sio_barrier.frag`.
+
+upstream_source = "external/vulkancts/modules/vulkan/tessellation/vktTessellationShaderInputOutputTests.cpp"
+rust_module = "tessellation/shader_input_output_tests"
+
+[[case]]
+name = "patch_vertices_5_in_10_out"
+rust_const = "SIO_PATCH_VERTICES_5_IN_10_OUT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_patch_vertices_5_in_10_out.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_patch_vertices_5_in_10_out.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "patch_vertices_10_in_5_out"
+rust_const = "SIO_PATCH_VERTICES_10_IN_5_OUT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_patch_vertices_10_in_5_out.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_patch_vertices_10_in_5_out.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "primitive_id_tcs"
+rust_const = "SIO_PER_PATCH_PRIMITIVE_ID_TCS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_pp_primitive_id_tcs.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_pp_primitive_id_tcs.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "primitive_id_tes"
+rust_const = "SIO_PER_PATCH_PRIMITIVE_ID_TES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_pp_primitive_id_tes.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_pp_primitive_id_tes.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "patch_vertices_in_tcs"
+rust_const = "SIO_PER_PATCH_PATCH_VERTICES_IN_TCS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_pp_patch_vertices_in_tcs.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_pp_patch_vertices_in_tcs.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "patch_vertices_in_tes"
+rust_const = "SIO_PER_PATCH_PATCH_VERTICES_IN_TES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_pp_patch_vertices_in_tes.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_pp_patch_vertices_in_tes.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "tess_level_inner_0_tes"
+rust_const = "SIO_PER_PATCH_TESS_LEVEL_INNER_0_TES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_pp_tess_level_inner_0_tes.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_pp_tess_level_inner_0_tes.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "tess_level_inner_1_tes"
+rust_const = "SIO_PER_PATCH_TESS_LEVEL_INNER_1_TES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_pp_tess_level_inner_1_tes.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_pp_tess_level_inner_1_tes.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "tess_level_outer_0_tes"
+rust_const = "SIO_PER_PATCH_TESS_LEVEL_OUTER_0_TES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_pp_tess_level_outer_0_tes.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_pp_tess_level_outer_0_tes.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "tess_level_outer_1_tes"
+rust_const = "SIO_PER_PATCH_TESS_LEVEL_OUTER_1_TES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_pp_tess_level_outer_1_tes.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_pp_tess_level_outer_1_tes.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "tess_level_outer_2_tes"
+rust_const = "SIO_PER_PATCH_TESS_LEVEL_OUTER_2_TES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_pp_tess_level_outer_2_tes.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_pp_tess_level_outer_2_tes.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "tess_level_outer_3_tes"
+rust_const = "SIO_PER_PATCH_TESS_LEVEL_OUTER_3_TES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_pp_tess_level_outer_3_tes.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_pp_tess_level_outer_3_tes.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gl_position_vs_to_tcs"
+rust_const = "SIO_GL_POSITION_VS_TO_TCS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_glposition_vs_to_tcs.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_glposition_vs_to_tcs.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_glposition_vs_to_tcs.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_glposition.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gl_position_tcs_to_tes"
+rust_const = "SIO_GL_POSITION_TCS_TO_TES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_glposition_tcs_to_tes.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_glposition_tcs_to_tes.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_glposition_tcs_to_tes.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_glposition.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gl_position_vs_to_tcs_to_tes"
+rust_const = "SIO_GL_POSITION_VS_TO_TCS_TO_TES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_glposition_vs_to_tcs_to_tes.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_glposition_vs_to_tcs_to_tes.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_glposition_vs_to_tcs_to_tes.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_glposition.frag", stage = "frag" },
+]
+
+[[case]]
+name = "barrier"
+rust_const = "SIO_BARRIER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_barrier.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_barrier.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_barrier.frag", stage = "frag" },
+]
+
+[[case]]
+name = "cross_invocation_per_vertex_int"
+rust_const = "SIO_CROSS_PER_VERTEX_INT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_cross_per_vertex_int.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_cross_per_vertex_int.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "cross_invocation_per_vertex_uint"
+rust_const = "SIO_CROSS_PER_VERTEX_UINT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_cross_per_vertex_uint.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_cross_per_vertex_uint.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "cross_invocation_per_vertex_float"
+rust_const = "SIO_CROSS_PER_VERTEX_FLOAT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_cross_per_vertex_float.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_cross_per_vertex_float.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "cross_invocation_per_vertex_vec3"
+rust_const = "SIO_CROSS_PER_VERTEX_VEC3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_cross_per_vertex_vec3.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_cross_per_vertex_vec3.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "cross_invocation_per_vertex_vec4"
+rust_const = "SIO_CROSS_PER_VERTEX_VEC4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_cross_per_vertex_vec4.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_cross_per_vertex_vec4.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "cross_invocation_per_vertex_mat4x3"
+rust_const = "SIO_CROSS_PER_VERTEX_MAT4X3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_cross_per_vertex_mat4x3.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_cross_per_vertex_mat4x3.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "cross_invocation_per_patch_int"
+rust_const = "SIO_CROSS_PER_PATCH_INT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_cross_per_patch_int.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_cross_per_patch_int.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "cross_invocation_per_patch_uint"
+rust_const = "SIO_CROSS_PER_PATCH_UINT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_cross_per_patch_uint.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_cross_per_patch_uint.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "cross_invocation_per_patch_float"
+rust_const = "SIO_CROSS_PER_PATCH_FLOAT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_cross_per_patch_float.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_cross_per_patch_float.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "cross_invocation_per_patch_vec3"
+rust_const = "SIO_CROSS_PER_PATCH_VEC3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_cross_per_patch_vec3.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_cross_per_patch_vec3.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "cross_invocation_per_patch_vec4"
+rust_const = "SIO_CROSS_PER_PATCH_VEC4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_cross_per_patch_vec4.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_cross_per_patch_vec4.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "cross_invocation_per_patch_mat4x3"
+rust_const = "SIO_CROSS_PER_PATCH_MAT4X3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/sio_cross_per_patch_mat4x3.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/sio_cross_per_patch_mat4x3.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/sio_color.frag", stage = "frag" },
+]

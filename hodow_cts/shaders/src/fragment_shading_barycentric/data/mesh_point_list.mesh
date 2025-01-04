@@ -1,0 +1,30 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+${dataStruct}
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(points) out;
+layout(max_vertices=1, max_primitives = 1) out;
+layout(set = 0, binding = 0) buffer PerVertexData{ 
+    vec4 vertexBuffer[64];
+} pvd;
+layout (location=0) out ${typePrefix} data[]${typeSuffix};
+${meshInterpOut}${meshFlatOut}
+out gl_MeshPerVertexEXT 
+{
+    vec4  gl_Position;
+    float gl_PointSize;
+} gl_MeshVerticesEXT[];
+
+void main()
+{
+    SetMeshOutputsEXT(1u, 1u);
+    const uint vertex = gl_LocalInvocationIndex;
+    const uint workGroupIndex = gl_NumWorkGroups.x * gl_NumWorkGroups.y * gl_WorkGroupID.z + gl_NumWorkGroups.x * gl_WorkGroupID.y + gl_WorkGroupID.x;
+    uint jobId = workGroupIndex + gl_LocalInvocationIndex;
+    gl_MeshVerticesEXT[vertex].gl_Position = pvd.vertexBuffer[jobId];
+    gl_MeshVerticesEXT[vertex].gl_PointSize = 1.0;
+    gl_PrimitivePointIndicesEXT[vertex] = vertex;
+    uint n  = jobId + 1;
+    data[vertex] = ${value};
+${meshInterpAssign}${meshFlatAssign}}

@@ -1,0 +1,35 @@
+[package]
+name = "hodow_cts_base"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "The shared half of hodow_cts: frameworks, the OpenGL ES and desktop OpenGL halves, runner, fuzzer and board driver"
+
+[lib]
+name = "hodow_cts_base"
+path = "../../src/base.rs"
+
+# `gles` also switches on the modules the Vulkan texture tests use (glu::texture_test_util_surface needs sglr); it does not
+# register any case - that is hodow_cts's job, from its own `gles` feature.
+[features]
+default = ["gles"]
+gles = []
+gl = ["gles"]
+# Embed the GLSL of every Vulkan shader next to its SPIR-V (only used to quote the failing shader); ~900 MB.
+shader_sources = []
+
+[dependencies]
+vulkanalia = { version = "0.35", default-features = false, features = ["std", "libloading"] }
+libloading = "0.9"
+clap = { version = "4.6", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+toml = "1"
+log.workspace = true
+sysinfo.workspace = true
+env_logger = "0.11"
+handsome_logger = "0.10.0"
+
+[lints]
+workspace = true

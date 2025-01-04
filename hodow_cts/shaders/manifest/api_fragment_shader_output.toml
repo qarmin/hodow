@@ -1,0 +1,724 @@
+# Shader manifest for dEQP-VK.api.fragment_shader_output.*
+#
+# `initPrograms` writes one output per attachment, whose GLSL type follows the format the
+# shader is meant to target (float for unorm/snorm, uvec4 for uint, ivec4 for sint). The
+# magic location (attachments / 2) is dropped, or moved past the last attachment, by the
+# first two cases. So a program is fixed by the case (`kind`: 0 location_no_attachment,
+# 1 attachment_no_location, 2 different_signedness) and the type letters of the shader
+# formats (`types`: f, u, s), which keeps the table at the distinct combinations only.
+
+upstream_source = "external/vulkancts/modules/vulkan/api/vktApiFragmentShaderOutputTests.cpp"
+rust_module = "api/fragment_shader_output_tests"
+
+[[case]]
+name = "k0_ffsu"
+rust_const = "FSO_K0_FFSU"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 0 }
+types = { type = "str", value = "ffsu" }
+[case.derived]
+attachments = "4"
+magic = "2"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k0_ffus"
+rust_const = "FSO_K0_FFUS"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 0 }
+types = { type = "str", value = "ffus" }
+[case.derived]
+attachments = "4"
+magic = "2"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k0_fsfu"
+rust_const = "FSO_K0_FSFU"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 0 }
+types = { type = "str", value = "fsfu" }
+[case.derived]
+attachments = "4"
+magic = "2"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k0_fsuf"
+rust_const = "FSO_K0_FSUF"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 0 }
+types = { type = "str", value = "fsuf" }
+[case.derived]
+attachments = "4"
+magic = "2"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k0_fufs"
+rust_const = "FSO_K0_FUFS"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 0 }
+types = { type = "str", value = "fufs" }
+[case.derived]
+attachments = "4"
+magic = "2"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k0_fusf"
+rust_const = "FSO_K0_FUSF"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 0 }
+types = { type = "str", value = "fusf" }
+[case.derived]
+attachments = "4"
+magic = "2"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k0_sffu"
+rust_const = "FSO_K0_SFFU"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 0 }
+types = { type = "str", value = "sffu" }
+[case.derived]
+attachments = "4"
+magic = "2"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k0_sfuf"
+rust_const = "FSO_K0_SFUF"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 0 }
+types = { type = "str", value = "sfuf" }
+[case.derived]
+attachments = "4"
+magic = "2"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k0_suff"
+rust_const = "FSO_K0_SUFF"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 0 }
+types = { type = "str", value = "suff" }
+[case.derived]
+attachments = "4"
+magic = "2"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k0_uffs"
+rust_const = "FSO_K0_UFFS"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 0 }
+types = { type = "str", value = "uffs" }
+[case.derived]
+attachments = "4"
+magic = "2"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k0_ufsf"
+rust_const = "FSO_K0_UFSF"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 0 }
+types = { type = "str", value = "ufsf" }
+[case.derived]
+attachments = "4"
+magic = "2"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k0_usff"
+rust_const = "FSO_K0_USFF"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 0 }
+types = { type = "str", value = "usff" }
+[case.derived]
+attachments = "4"
+magic = "2"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k1_ffsu"
+rust_const = "FSO_K1_FFSU"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 1 }
+types = { type = "str", value = "ffsu" }
+[case.derived]
+attachments = "4"
+magic = "2"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k1_ffus"
+rust_const = "FSO_K1_FFUS"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 1 }
+types = { type = "str", value = "ffus" }
+[case.derived]
+attachments = "4"
+magic = "2"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k1_fsfu"
+rust_const = "FSO_K1_FSFU"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 1 }
+types = { type = "str", value = "fsfu" }
+[case.derived]
+attachments = "4"
+magic = "2"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k1_fsuf"
+rust_const = "FSO_K1_FSUF"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 1 }
+types = { type = "str", value = "fsuf" }
+[case.derived]
+attachments = "4"
+magic = "2"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k1_fufs"
+rust_const = "FSO_K1_FUFS"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 1 }
+types = { type = "str", value = "fufs" }
+[case.derived]
+attachments = "4"
+magic = "2"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k1_fusf"
+rust_const = "FSO_K1_FUSF"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 1 }
+types = { type = "str", value = "fusf" }
+[case.derived]
+attachments = "4"
+magic = "2"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k1_sffu"
+rust_const = "FSO_K1_SFFU"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 1 }
+types = { type = "str", value = "sffu" }
+[case.derived]
+attachments = "4"
+magic = "2"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k1_sfuf"
+rust_const = "FSO_K1_SFUF"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 1 }
+types = { type = "str", value = "sfuf" }
+[case.derived]
+attachments = "4"
+magic = "2"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k1_suff"
+rust_const = "FSO_K1_SUFF"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 1 }
+types = { type = "str", value = "suff" }
+[case.derived]
+attachments = "4"
+magic = "2"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k1_uffs"
+rust_const = "FSO_K1_UFFS"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 1 }
+types = { type = "str", value = "uffs" }
+[case.derived]
+attachments = "4"
+magic = "2"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k1_ufsf"
+rust_const = "FSO_K1_UFSF"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 1 }
+types = { type = "str", value = "ufsf" }
+[case.derived]
+attachments = "4"
+magic = "2"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k1_usff"
+rust_const = "FSO_K1_USFF"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 1 }
+types = { type = "str", value = "usff" }
+[case.derived]
+attachments = "4"
+magic = "2"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k2_ff"
+rust_const = "FSO_K2_FF"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 2 }
+types = { type = "str", value = "ff" }
+[case.derived]
+attachments = "2"
+magic = "1"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k2_fs"
+rust_const = "FSO_K2_FS"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 2 }
+types = { type = "str", value = "fs" }
+[case.derived]
+attachments = "2"
+magic = "1"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k2_fu"
+rust_const = "FSO_K2_FU"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 2 }
+types = { type = "str", value = "fu" }
+[case.derived]
+attachments = "2"
+magic = "1"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k2_sf"
+rust_const = "FSO_K2_SF"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 2 }
+types = { type = "str", value = "sf" }
+[case.derived]
+attachments = "2"
+magic = "1"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k2_su"
+rust_const = "FSO_K2_SU"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 2 }
+types = { type = "str", value = "su" }
+[case.derived]
+attachments = "2"
+magic = "1"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k2_uf"
+rust_const = "FSO_K2_UF"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 2 }
+types = { type = "str", value = "uf" }
+[case.derived]
+attachments = "2"
+magic = "1"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"
+
+[[case]]
+name = "k2_us"
+rust_const = "FSO_K2_US"
+rust_type = "FragmentOutputProgram"
+programs = [
+    { name = "vert", template = "api/fragment_shader_output.vert", stage = "vert" },
+    { name = "frag", template = "api/fragment_shader_output.frag", stage = "frag" },
+]
+[case.params]
+kind = { type = "u32", value = 2 }
+types = { type = "str", value = "us" }
+[case.derived]
+attachments = "2"
+magic = "1"
+decl0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'layout(location = %d) out %s color0;' % ((attachments if (magic == 0 and kind == 0) else 0), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]])"
+body0 = "'' if (types[0] if 0 < attachments else '-') == '-' or (magic == 0 and kind == 1) else 'color0 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[0]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[0]])"
+decl1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'layout(location = %d) out %s color1;' % ((attachments if (magic == 1 and kind == 0) else 1), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]])"
+body1 = "'' if (types[1] if 1 < attachments else '-') == '-' or (magic == 1 and kind == 1) else 'color1 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[1]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[1]])"
+decl2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'layout(location = %d) out %s color2;' % ((attachments if (magic == 2 and kind == 0) else 2), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]])"
+body2 = "'' if (types[2] if 2 < attachments else '-') == '-' or (magic == 2 and kind == 1) else 'color2 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[2]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[2]])"
+decl3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'layout(location = %d) out %s color3;' % ((attachments if (magic == 3 and kind == 0) else 3), {'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]])"
+body3 = "'' if (types[3] if 3 < attachments else '-') == '-' or (magic == 3 and kind == 1) else 'color3 = %s%s;' % ({'f':'vec4','u':'uvec4','s':'ivec4'}[types[3]], {'f':'(1.0,1.0,1.0,1.0)','u':'(123,123,123,123)','s':'(111,111,111,111)'}[types[3]])"

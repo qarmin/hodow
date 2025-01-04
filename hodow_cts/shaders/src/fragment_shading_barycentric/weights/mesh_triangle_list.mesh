@@ -1,0 +1,33 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+layout(local_size_x = 8, local_size_y = 4, local_size_z = 1) in;
+layout(triangles) out;
+layout(max_vertices=256, max_primitives=256) out;
+layout(push_constant) uniform PushConstant { mat4 mvp; } pc;
+
+layout(set = 0, binding = 0) buffer PerVertexData{ 
+    vec4 vertexBuffer[12];
+} pvd;
+layout (location=0) out vec3 outColor[];
+
+void main ()
+{
+    uint maxVertex = 6;
+    uint maxPrimitive = 2;
+    SetMeshOutputsEXT(maxVertex, maxPrimitive);
+    const uint vertex = gl_LocalInvocationIndex;
+    const uint primitive = gl_LocalInvocationIndex;
+    const uvec3 indices[2] = uvec3[](
+        uvec3(0, 1, 2),
+        uvec3(3, 4, 5)
+    );
+    if (vertex < maxVertex)
+    {
+        gl_MeshVerticesEXT[vertex].gl_Position = transpose(pc.mvp) * pvd.vertexBuffer[vertex*2];
+        outColor[vertex] = pvd.vertexBuffer[vertex*2+1].xyz;
+    }
+    if(primitive < maxPrimitive){
+        gl_PrimitiveTriangleIndicesEXT[primitive] = indices[primitive];
+    }
+}

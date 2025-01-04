@@ -1,0 +1,14 @@
+# Shader manifest for dEQP-VK.spirv_assembly.instruction.compute.hlsl_cases.cbuffer_packing
+#
+# `Programs::init` of vktSpvAsmFromHlslTests.cpp: an HLSL compute shader (`hlslSources`), compiled by glslang as HLSL.
+
+upstream_source = "external/vulkancts/modules/vulkan/spirv_assembly/vktSpvAsmFromHlslTests.cpp"
+rust_module = "spirv_assembly/hlsl_tests"
+
+[[case]]
+name = "cbuffer_packing"
+rust_const = "HLSL_CBUFFER_PACKING"
+rust_type = "HlslCase"
+programs = [
+    { name = "comp", template = "spirv_assembly_hlsl/cbuffer_packing.hlsl", stage = "hlsl_comp" },
+]

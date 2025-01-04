@@ -1,0 +1,139 @@
+# Shader manifest for dEQP-VK.tessellation.common_edge.*
+#
+# `initPrograms`: one case per (primitive type, spacing, case type). The vertex and fragment shaders are shared; the
+# control shader depends on the primitive type and on whether the case uses `precise`, the evaluation shader on all three.
+
+upstream_source = "external/vulkancts/modules/vulkan/tessellation/vktTessellationCommonEdgeTests.cpp"
+rust_module = "tessellation/common_edge_tests"
+
+[[case]]
+name = "triangles_equal_spacing"
+rust_const = "COMMON_EDGE_TRIANGLES_EQUAL_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/common_edge.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/common_edge_triangles_basic.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/common_edge_triangles_equal_spacing_basic.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/common_edge.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_fractional_odd_spacing"
+rust_const = "COMMON_EDGE_TRIANGLES_FRACTIONAL_ODD_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/common_edge.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/common_edge_triangles_basic.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/common_edge_triangles_fractional_odd_spacing_basic.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/common_edge.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_fractional_even_spacing"
+rust_const = "COMMON_EDGE_TRIANGLES_FRACTIONAL_EVEN_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/common_edge.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/common_edge_triangles_basic.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/common_edge_triangles_fractional_even_spacing_basic.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/common_edge.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_equal_spacing_precise"
+rust_const = "COMMON_EDGE_TRIANGLES_EQUAL_SPACING_PRECISE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/common_edge.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/common_edge_triangles_precise.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/common_edge_triangles_equal_spacing_precise.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/common_edge.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_fractional_odd_spacing_precise"
+rust_const = "COMMON_EDGE_TRIANGLES_FRACTIONAL_ODD_SPACING_PRECISE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/common_edge.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/common_edge_triangles_precise.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/common_edge_triangles_fractional_odd_spacing_precise.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/common_edge.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_fractional_even_spacing_precise"
+rust_const = "COMMON_EDGE_TRIANGLES_FRACTIONAL_EVEN_SPACING_PRECISE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/common_edge.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/common_edge_triangles_precise.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/common_edge_triangles_fractional_even_spacing_precise.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/common_edge.frag", stage = "frag" },
+]
+
+[[case]]
+name = "quads_equal_spacing"
+rust_const = "COMMON_EDGE_QUADS_EQUAL_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/common_edge.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/common_edge_quads_basic.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/common_edge_quads_equal_spacing_basic.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/common_edge.frag", stage = "frag" },
+]
+
+[[case]]
+name = "quads_fractional_odd_spacing"
+rust_const = "COMMON_EDGE_QUADS_FRACTIONAL_ODD_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/common_edge.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/common_edge_quads_basic.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/common_edge_quads_fractional_odd_spacing_basic.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/common_edge.frag", stage = "frag" },
+]
+
+[[case]]
+name = "quads_fractional_even_spacing"
+rust_const = "COMMON_EDGE_QUADS_FRACTIONAL_EVEN_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/common_edge.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/common_edge_quads_basic.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/common_edge_quads_fractional_even_spacing_basic.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/common_edge.frag", stage = "frag" },
+]
+
+[[case]]
+name = "quads_equal_spacing_precise"
+rust_const = "COMMON_EDGE_QUADS_EQUAL_SPACING_PRECISE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/common_edge.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/common_edge_quads_precise.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/common_edge_quads_equal_spacing_precise.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/common_edge.frag", stage = "frag" },
+]
+
+[[case]]
+name = "quads_fractional_odd_spacing_precise"
+rust_const = "COMMON_EDGE_QUADS_FRACTIONAL_ODD_SPACING_PRECISE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/common_edge.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/common_edge_quads_precise.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/common_edge_quads_fractional_odd_spacing_precise.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/common_edge.frag", stage = "frag" },
+]
+
+[[case]]
+name = "quads_fractional_even_spacing_precise"
+rust_const = "COMMON_EDGE_QUADS_FRACTIONAL_EVEN_SPACING_PRECISE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/common_edge.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/common_edge_quads_precise.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/common_edge_quads_fractional_even_spacing_precise.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/common_edge.frag", stage = "frag" },
+]

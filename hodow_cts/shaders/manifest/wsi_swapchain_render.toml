@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.wsi.*.swapchain.render.*
+#
+# `WsiTriangleRenderer::getPrograms` (framework/vulkan/vkWsiUtil.cpp): a triangle rotated by the frame number given as a push constant, drawn in magenta.
+
+upstream_source = "external/vulkancts/framework/vulkan/vkWsiUtil.cpp"
+rust_module = "wsi/swapchain_render_tests"
+
+[[case]]
+name = "swapchain_render"
+rust_const = "SWAPCHAIN_RENDER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "tri-vert", template = "wsi/swapchain_render/tri.vert", stage = "vert" },
+    { name = "tri-frag", template = "wsi/swapchain_render/tri.frag", stage = "frag" },
+]

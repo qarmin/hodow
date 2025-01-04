@@ -1,0 +1,17 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.shader_stencil_export.*
+#
+# `initPrograms` without `early_and_late`: a full screen vertex shader, a fragment shader writing gl_FragStencilRefARB and
+# one writing a constant colour. The `early_and_late` variant is hand written SPIR-V assembly upstream and is not ported.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineStencilExportTests.cpp"
+rust_module = "pipeline/stencil_export_tests"
+
+[[case]]
+name = "stencil_export"
+rust_const = "STENCIL_EXPORT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/stencil_export/vert.vert", stage = "vert" },
+    { name = "frag-stencil0", template = "pipeline/stencil_export/frag_stencil.frag", stage = "frag" },
+    { name = "frag-color", template = "pipeline/stencil_export/frag_color.frag", stage = "frag" },
+]

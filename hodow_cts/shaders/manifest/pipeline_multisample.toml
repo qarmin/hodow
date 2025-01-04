@@ -1,0 +1,57 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.multisample.* (vktPipelineMultisampleTests.cpp)
+#
+# `initMultisamplePrograms`, `initSampleShadingPrograms` and `initAlphaToCoverageColorUnusedAttachmentPrograms`, expanded for what
+# the programs depend on: the point size written by the vertex shader (only for point geometry: none, 1.0 or 3.0), and the
+# extra programs of the test kinds that need them. The programs of one test kind are named like upstream's.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineMultisampleTests.cpp"
+rust_module = "pipeline/multisample_tests"
+
+[[case]]
+name = "color"
+rust_const = "MULTISAMPLE_COLOR"
+rust_type = "SharedProgram"
+programs = [ { name = "color_vert", template = "pipeline/multisample/color.vert", stage = "vert" }, { name = "color_frag", template = "pipeline/multisample/color.frag", stage = "frag" } ]
+
+[[case]]
+name = "color_point1"
+rust_const = "MULTISAMPLE_COLOR_POINT1"
+rust_type = "SharedProgram"
+programs = [ { name = "color_vert", template = "pipeline/multisample/color_point1.vert", stage = "vert" }, { name = "color_frag", template = "pipeline/multisample/color.frag", stage = "frag" } ]
+
+[[case]]
+name = "color_point3"
+rust_const = "MULTISAMPLE_COLOR_POINT3"
+rust_type = "SharedProgram"
+programs = [ { name = "color_vert", template = "pipeline/multisample/color_point3.vert", stage = "vert" }, { name = "color_frag", template = "pipeline/multisample/color.frag", stage = "frag" } ]
+
+# AlphaToCoverageTest::initPrograms with checkDepthBuffer
+[[case]]
+name = "color_check_depth"
+rust_const = "MULTISAMPLE_COLOR_CHECK_DEPTH"
+rust_type = "SharedProgram"
+programs = [ { name = "color_vert", template = "pipeline/multisample/color.vert", stage = "vert" }, { name = "color_frag", template = "pipeline/multisample/color.frag", stage = "frag" }, { name = "checkDepth-vert", template = "pipeline/multisample/check_depth.vert", stage = "vert" } ]
+
+[[case]]
+name = "sample_shading"
+rust_const = "MULTISAMPLE_SAMPLE_SHADING"
+rust_type = "SharedProgram"
+programs = [ { name = "color_vert", template = "pipeline/multisample/sample_shading.vert", stage = "vert" }, { name = "color_frag", template = "pipeline/multisample/sample_shading.frag", stage = "frag" }, { name = "quad_vert", template = "pipeline/multisample/quad.vert", stage = "vert" }, { name = "copy_sample_frag", template = "pipeline/multisample/copy_sample.frag", stage = "frag" } ]
+
+[[case]]
+name = "sample_shading_point1"
+rust_const = "MULTISAMPLE_SAMPLE_SHADING_POINT1"
+rust_type = "SharedProgram"
+programs = [ { name = "color_vert", template = "pipeline/multisample/sample_shading_point1.vert", stage = "vert" }, { name = "color_frag", template = "pipeline/multisample/sample_shading.frag", stage = "frag" }, { name = "quad_vert", template = "pipeline/multisample/quad.vert", stage = "vert" }, { name = "copy_sample_frag", template = "pipeline/multisample/copy_sample.frag", stage = "frag" } ]
+
+[[case]]
+name = "sample_shading_point3"
+rust_const = "MULTISAMPLE_SAMPLE_SHADING_POINT3"
+rust_type = "SharedProgram"
+programs = [ { name = "color_vert", template = "pipeline/multisample/sample_shading_point3.vert", stage = "vert" }, { name = "color_frag", template = "pipeline/multisample/sample_shading.frag", stage = "frag" }, { name = "quad_vert", template = "pipeline/multisample/quad.vert", stage = "vert" }, { name = "copy_sample_frag", template = "pipeline/multisample/copy_sample.frag", stage = "frag" } ]
+
+[[case]]
+name = "unused_attachment"
+rust_const = "MULTISAMPLE_UNUSED_ATTACHMENT"
+rust_type = "SharedProgram"
+programs = [ { name = "color_vert", template = "pipeline/multisample/color.vert", stage = "vert" }, { name = "color_frag", template = "pipeline/multisample/unused_attachment.frag", stage = "frag" } ]

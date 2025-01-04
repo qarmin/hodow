@@ -1,0 +1,26 @@
+# Shader manifest for dEQP-VK.mesh_shader.ext.provoking_vertex.*
+#
+# `ProvokingVertexCase::initPrograms`: a mesh shader emitting one line or one triangle with a distinct flat colour per vertex and the
+# layer from a push constant, and a fragment shader that writes the flat colour. Upstream builds it with SPIR-V 1.4 as the minimum.
+
+upstream_source = "external/vulkancts/modules/vulkan/mesh_shader/vktMeshShaderProvokingVertexTestsEXT.cpp"
+rust_module = "mesh_shader/provoking_vertex_tests"
+spirv_version = "spirv1.4"
+
+[[case]]
+name = "lines"
+rust_const = "PROVOKING_VERTEX_LINES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "frag", template = "mesh_shader/provoking_vertex/provoking_vertex.frag", stage = "frag" },
+    { name = "mesh", template = "mesh_shader/provoking_vertex/lines.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "triangles"
+rust_const = "PROVOKING_VERTEX_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "frag", template = "mesh_shader/provoking_vertex/provoking_vertex.frag", stage = "frag" },
+    { name = "mesh", template = "mesh_shader/provoking_vertex/triangles.mesh", stage = "mesh" },
+]

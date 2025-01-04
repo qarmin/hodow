@@ -1,0 +1,23 @@
+#version 450
+
+layout(set = 0, binding = 1) uniform uboSharedData
+{
+    vec4 color;
+} inputData;
+
+layout(set = 0, binding = 2) writeonly buffer ssboOutput
+{
+    vec4 color;
+} outData;
+
+layout(set = 0, binding = 4) readonly buffer ssboInput
+{
+    mat4 color;
+} readData;
+
+void main (void)
+{
+    outData.color = inputData.color;
+    outData.color.g = readData.color[3][1];
+    outData.color.b = readData.color[3][2];
+}

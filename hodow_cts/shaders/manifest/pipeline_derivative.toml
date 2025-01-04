@@ -1,0 +1,14 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.derivative.compute.*
+#
+# `initComputeDerivativePrograms`: a trivial do-nothing compute shader.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineDerivativeTests.cpp"
+rust_module = "pipeline/derivative_tests"
+
+[[case]]
+name = "derivative"
+rust_const = "DERIVATIVE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "pipeline/derivative.comp", stage = "comp" },
+]

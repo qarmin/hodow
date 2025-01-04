@@ -1,0 +1,9 @@
+#version 450
+layout(local_size_x=16, local_size_x=1, local_size_x=1) in;
+layout(binding = 0) buffer Output {
+    uint values[16];
+} buffer_out;
+
+void main() {
+    buffer_out.values[gl_LocalInvocationID.x] = gl_LocalInvocationID.x + 2;
+}

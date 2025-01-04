@@ -1,0 +1,15 @@
+#version 450
+layout (set = 0, binding = 0) buffer SSBO_0 {
+  uint x;
+} ssbo0;
+
+layout(set = 0, binding = 1, std430) buffer SSBO_1 {
+  vec4 data;
+  uint not_set[];
+} ssbo1;
+
+void main() {
+  ssbo0.x = 23;
+  ssbo0.x = ssbo1.not_set.length();
+  ssbo1.data *= 2.0;
+}

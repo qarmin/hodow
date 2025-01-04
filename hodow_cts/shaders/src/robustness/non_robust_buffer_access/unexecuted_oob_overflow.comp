@@ -1,0 +1,40 @@
+#version 430
+
+layout(local_size_x = 4, local_size_y = 1, local_size_z = 1) in;
+layout(set = 0, binding = 0) readonly buffer In0 { int data_in0[512]; };
+layout(set = 0, binding = 1) readonly buffer In1 { int data_in1[512]; };
+layout(set = 0, binding = 2) readonly buffer In2 { int data_in2[8]; };
+layout(set = 0, binding = 3) writeonly buffer Out0 { int data_out0[1024]; };
+
+void main()
+{
+	uint base_index_in = 128 * gl_WorkGroupID.x;
+	uint base_index_out = 256 * gl_WorkGroupID.x;
+	int index_in0 = 127;
+	int index_in1 = 383;
+	int index_out0 = 255;
+	int index_out1 = 383;
+	int condition_index = 0;
+	for(int i = 0; i < 256; ++i)
+	{
+		if (data_in2[condition_index] == 0)
+		{
+			data_out0[base_index_out + index_out0] = data_in1[base_index_in + index_in0];
+			--index_out0;
+			--index_in1;
+		}
+		else
+		{
+			data_out0[base_index_out + index_out1] = data_in0[base_index_in + index_in1];
+			--index_out1;
+			--index_in1;
+		}
+		condition_index += data_in2[condition_index + 1];
+		int temp0 = index_in0;
+		index_in0 = index_in1;
+		index_in1 = temp0;
+		int temp1 = index_out0;
+		index_out0 = index_out1;
+		index_out1 = temp1;
+	}
+}
