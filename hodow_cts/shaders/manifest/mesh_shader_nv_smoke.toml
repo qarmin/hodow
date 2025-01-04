@@ -1,0 +1,66 @@
+# Shader manifest for dEQP-VK.mesh_shader.nv.smoke.*
+#
+# The `initPrograms` of vktMeshShaderSmokeTests.cpp: the three triangle cases and the fullscreen gradient. The gradient with a
+# fragment size replaces the mesh shader by SPIR-V assembly (upstream's precomputed one), with the image size and the shading rate
+# written in; the assembly is in shaders/src/mesh_shader/nv_smoke_gradient_fs.asm.
+
+upstream_source = "external/vulkancts/modules/vulkan/mesh_shader/vktMeshShaderSmokeTests.cpp"
+rust_module = "mesh_shader/smoke_nv_tests"
+
+[[case]]
+name = "mesh_only"
+rust_const = "NV_SMOKE_MESH_ONLY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/nv_smoke/mesh_only.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/nv_smoke/frag_triangle.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mesh_task"
+rust_const = "NV_SMOKE_MESH_TASK"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/nv_smoke/mesh_task.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/nv_smoke/mesh_task.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/nv_smoke/frag_triangle.frag", stage = "frag" },
+]
+
+[[case]]
+name = "task_only"
+rust_const = "NV_SMOKE_TASK_ONLY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/nv_smoke/task_only.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/nv_smoke/task_only.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/nv_smoke/frag_triangle.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gradient"
+rust_const = "NV_SMOKE_GRADIENT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "frag", template = "mesh_shader/nv_smoke/gradient_frag.frag", stage = "frag" },
+    { name = "mesh", template = "mesh_shader/nv_smoke/gradient.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "gradient_fs2x2"
+rust_const = "NV_SMOKE_GRADIENT_FS2X2"
+rust_type = "SharedProgram"
+programs = [
+    { name = "frag", template = "mesh_shader/nv_smoke/gradient_frag.frag", stage = "frag" },
+    { name = "mesh", template = "mesh_shader/nv_smoke_gradient_fs.asm", stage = "asm" },
+]
+derived = { WIDTH = "256", HEIGHT = "256", RATE = "5" }
+
+[[case]]
+name = "gradient_fs2x1"
+rust_const = "NV_SMOKE_GRADIENT_FS2X1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "frag", template = "mesh_shader/nv_smoke/gradient_frag.frag", stage = "frag" },
+    { name = "mesh", template = "mesh_shader/nv_smoke_gradient_fs.asm", stage = "asm" },
+]
+derived = { WIDTH = "256", HEIGHT = "256", RATE = "4" }

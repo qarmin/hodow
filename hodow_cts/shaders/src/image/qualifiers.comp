@@ -1,0 +1,36 @@
+#version 440
+
+precision highp ${'u' if fmt == 'u' else 'i' if fmt == 'i' else ''}image${'1D' if kind == '1d' else '1DArray' if kind == '1d_array' else '2D' if kind == '2d' else '2DArray' if kind == '2d_array' else '3D' if kind == '3d' else 'Cube' if kind == 'cube' else 'CubeArray' if kind == 'cube_array' else 'Buffer'};
+
+layout (local_size_x = 8, local_size_y = ${1 if kind in ('1d', 'buffer') else 8}, local_size_z = ${2 if kind in ('2d_array', '3d', 'cube', 'cube_array') else 1}) in;
+layout (${'r32ui' if fmt == 'u' else 'r32i' if fmt == 'i' else 'r32f'}, binding=0) ${qualifier} uniform ${'u' if fmt == 'u' else 'i' if fmt == 'i' else ''}image${'1D' if kind == '1d' else '1DArray' if kind == '1d_array' else '2D' if kind == '2d' else '2DArray' if kind == '2d_array' else '3D' if kind == '3d' else 'Cube' if kind == 'cube' else 'CubeArray' if kind == 'cube_array' else 'Buffer'} u_image;
+void main (void)
+{
+    int gx = int(gl_GlobalInvocationID.x);
+    int gy = int(gl_GlobalInvocationID.y);
+    int gz = int(gl_GlobalInvocationID.z);
+    imageStore(u_image, ${'gx' if kind in ('1d', 'buffer') else 'ivec2(gx,gy)' if kind in ('1d_array', '2d') else 'ivec3(gx,gy,gz)'}, ${'uvec4' if fmt == 'u' else 'ivec4' if fmt == 'i' else 'vec4'}(gx^gy^gz));
+
+    memoryBarrier();
+    barrier();
+
+    ${'uint' if fmt == 'u' else 'int' if fmt == 'i' else 'float'} sum = ${'uint' if fmt == 'u' else 'int' if fmt == 'i' else 'float'}(0);
+    int groupBaseX = gx/8*8;
+    int groupBaseY = gy/${1 if kind in ('1d', 'buffer') else 8}*${1 if kind in ('1d', 'buffer') else 8};
+    int groupBaseZ = gz/${2 if kind in ('2d_array', '3d', 'cube', 'cube_array') else 1}*${2 if kind in ('2d_array', '3d', 'cube', 'cube_array') else 1};
+    int xOffsets[] = int[]( 1, 4, 7, 10 );
+    int yOffsets[] = int[]( 2, 5, 8, 11 );
+    int zOffsets[] = int[]( 3, 6, 9, 12 );
+    for (int i = 0; i < 4; i++)
+    {
+        int readX = groupBaseX + (gx + xOffsets[i]) % 8;
+        int readY = groupBaseY + (gy + yOffsets[i]) % ${1 if kind in ('1d', 'buffer') else 8};
+        int readZ = groupBaseZ + (gz + zOffsets[i]) % ${2 if kind in ('2d_array', '3d', 'cube', 'cube_array') else 1};
+        sum += imageLoad(u_image, ${'readX' if kind in ('1d', 'buffer') else 'ivec2(readX,readY)' if kind in ('1d_array', '2d') else 'ivec3(readX,readY,readZ)'}).x;
+    }
+
+    memoryBarrier();
+    barrier();
+
+    imageStore(u_image, ${'gx' if kind in ('1d', 'buffer') else 'ivec2(gx,gy)' if kind in ('1d_array', '2d') else 'ivec3(gx,gy,gz)'}, ${'uvec4' if fmt == 'u' else 'ivec4' if fmt == 'i' else 'vec4'}(sum));
+}

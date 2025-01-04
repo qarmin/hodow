@@ -1,0 +1,12 @@
+#version 450 core
+#extension GL_EXT_shader_16bit_storage: require
+#extension GL_EXT_shader_explicit_arithmetic_types: require
+#extension GL_EXT_bfloat16: require
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(set = 0, binding = 0, std140) buffer issbodef { bfloat16_t val[66288]; } issbo;
+layout(set = 0, binding = 1, std140) buffer ossbodef { double val[66288]; } ossbo;
+void main()
+{
+    bfloat16_t f = issbo.val[gl_WorkGroupID.x];
+    ossbo.val[gl_WorkGroupID.x] = double(f);
+}

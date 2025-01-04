@@ -1,0 +1,17 @@
+# Shader manifest for dEQP-VK.spirv_assembly.instruction.function_params.sampler_param
+#
+# Sources extracted from external/vulkancts/data/vulkan/amber/spirv_assembly/instruction/function_params/sampler_param.amber.
+
+upstream_source = "external/vulkancts/data/vulkan/amber/spirv_assembly/instruction/function_params/sampler_param.amber"
+rust_module = "spirv_assembly/function_params_tests"
+
+[[case]]
+name = "programs"
+rust_const = "FUNCTION_PARAMS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "passthrough_vert", template = "spirv_assembly/function_params/passthrough.vert", stage = "vert" },
+    { name = "green_frag", template = "spirv_assembly/function_params/green.frag", stage = "frag" },
+    { name = "texcoord_vert", template = "spirv_assembly/function_params/texcoord.vert", stage = "vert" },
+    { name = "sampler_param_frag", template = "spirv_assembly/function_params/sampler_param.asm", stage = "asm" },
+]

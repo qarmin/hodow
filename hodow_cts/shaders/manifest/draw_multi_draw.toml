@@ -1,0 +1,22 @@
+# Shader manifest for dEQP-VK.draw.*.multi_draw.*
+#
+# `MultiDrawTest::initPrograms`: one vertex shader per (multiview, gl_DrawID) pair (`vert_<sv|mv>_<id|noid>`), the shared
+# fragment shader and the tessellation and geometry shaders the cases with those stages add.
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawMultiExtTests.cpp"
+rust_module = "draw/multi_draw_tests"
+
+[[case]]
+name = "multi_draw"
+rust_const = "MULTI_DRAW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert_sv_id", template = "draw/multi_draw_sv_id.vert", stage = "vert" },
+    { name = "vert_sv_noid", template = "draw/multi_draw_sv_noid.vert", stage = "vert" },
+    { name = "vert_mv_id", template = "draw/multi_draw_mv_id.vert", stage = "vert" },
+    { name = "vert_mv_noid", template = "draw/multi_draw_mv_noid.vert", stage = "vert" },
+    { name = "frag", template = "draw/multi_draw.frag", stage = "frag" },
+    { name = "tesc", template = "draw/multi_draw.tesc", stage = "tesc" },
+    { name = "tese", template = "draw/multi_draw.tese", stage = "tese" },
+    { name = "geom", template = "draw/multi_draw.geom", stage = "geom" },
+]

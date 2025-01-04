@@ -1,0 +1,10 @@
+OpCapability Shader
+%glsl_ext_inst = OpExtInstImport "GLSL.std.450"
+OpMemoryModel Logical GLSL450
+OpEntryPoint Vertex %main_fun "main"
+%type_void       = OpTypeVoid
+%type_void_f     = OpTypeFunction %type_void
+%main_fun        = OpFunction %type_void None %type_void_f
+%main_label      = OpLabel
+OpReturn
+OpFunctionEnd

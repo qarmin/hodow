@@ -1,0 +1,15 @@
+#version 460
+#extension GL_NV_mesh_shader : enable
+
+layout (local_size_x=1) in;
+layout (triangles) out;
+layout (max_vertices=3, max_primitives=1) out;
+
+layout (set=0, binding=0) buffer OutputBlock { uint values[]; } ov;
+
+
+void main ()
+{
+    gl_PrimitiveCountNV = 0u;
+    ov.values[gl_WorkGroupID.x] = gl_WorkGroupID.x;
+}

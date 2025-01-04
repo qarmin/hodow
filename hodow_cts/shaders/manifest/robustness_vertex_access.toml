@@ -1,0 +1,548 @@
+# Shader manifest for dEQP-VK.robustness.vertex_access.*
+#
+# `VertexAccessTest::initPrograms`: the vertex shader copies every attribute channel of three identical attributes into a
+# storage buffer, so its source depends on the format class and channel count, the number of vertices and instances drawn.
+# The indexed cases all draw six vertices and one instance, so they share one program per format.
+
+upstream_source = "external/vulkancts/modules/vulkan/robustness/vktRobustnessVertexAccessTests.cpp"
+rust_module = "robustness/vertex_access_tests"
+
+[[case]]
+name = "r32_uint_vertex_out_of_bounds"
+rust_const = "VA_R32_UINT_VERTEX_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32_uint_vertex_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32_uint_vertex_incomplete"
+rust_const = "VA_R32_UINT_VERTEX_INCOMPLETE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32_uint_vertex_incomplete.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32_uint_instance_out_of_bounds"
+rust_const = "VA_R32_UINT_INSTANCE_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32_uint_instance_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32_uint_indexed"
+rust_const = "VA_R32_UINT_INDEXED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32_uint_indexed.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32_sint_vertex_out_of_bounds"
+rust_const = "VA_R32_SINT_VERTEX_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32_sint_vertex_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32_sint_vertex_incomplete"
+rust_const = "VA_R32_SINT_VERTEX_INCOMPLETE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32_sint_vertex_incomplete.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32_sint_instance_out_of_bounds"
+rust_const = "VA_R32_SINT_INSTANCE_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32_sint_instance_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32_sint_indexed"
+rust_const = "VA_R32_SINT_INDEXED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32_sint_indexed.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32_sfloat_vertex_out_of_bounds"
+rust_const = "VA_R32_SFLOAT_VERTEX_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32_sfloat_vertex_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32_sfloat_vertex_incomplete"
+rust_const = "VA_R32_SFLOAT_VERTEX_INCOMPLETE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32_sfloat_vertex_incomplete.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32_sfloat_instance_out_of_bounds"
+rust_const = "VA_R32_SFLOAT_INSTANCE_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32_sfloat_instance_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32_sfloat_indexed"
+rust_const = "VA_R32_SFLOAT_INDEXED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32_sfloat_indexed.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32_uint_vertex_out_of_bounds"
+rust_const = "VA_R32G32_UINT_VERTEX_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32_uint_vertex_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32_uint_vertex_incomplete"
+rust_const = "VA_R32G32_UINT_VERTEX_INCOMPLETE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32_uint_vertex_incomplete.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32_uint_instance_out_of_bounds"
+rust_const = "VA_R32G32_UINT_INSTANCE_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32_uint_instance_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32_uint_indexed"
+rust_const = "VA_R32G32_UINT_INDEXED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32_uint_indexed.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32_sint_vertex_out_of_bounds"
+rust_const = "VA_R32G32_SINT_VERTEX_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32_sint_vertex_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32_sint_vertex_incomplete"
+rust_const = "VA_R32G32_SINT_VERTEX_INCOMPLETE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32_sint_vertex_incomplete.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32_sint_instance_out_of_bounds"
+rust_const = "VA_R32G32_SINT_INSTANCE_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32_sint_instance_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32_sint_indexed"
+rust_const = "VA_R32G32_SINT_INDEXED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32_sint_indexed.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32_sfloat_vertex_out_of_bounds"
+rust_const = "VA_R32G32_SFLOAT_VERTEX_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32_sfloat_vertex_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32_sfloat_vertex_incomplete"
+rust_const = "VA_R32G32_SFLOAT_VERTEX_INCOMPLETE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32_sfloat_vertex_incomplete.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32_sfloat_instance_out_of_bounds"
+rust_const = "VA_R32G32_SFLOAT_INSTANCE_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32_sfloat_instance_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32_sfloat_indexed"
+rust_const = "VA_R32G32_SFLOAT_INDEXED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32_sfloat_indexed.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32b32_uint_vertex_out_of_bounds"
+rust_const = "VA_R32G32B32_UINT_VERTEX_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32b32_uint_vertex_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32b32_uint_vertex_incomplete"
+rust_const = "VA_R32G32B32_UINT_VERTEX_INCOMPLETE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32b32_uint_vertex_incomplete.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32b32_uint_instance_out_of_bounds"
+rust_const = "VA_R32G32B32_UINT_INSTANCE_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32b32_uint_instance_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32b32_uint_indexed"
+rust_const = "VA_R32G32B32_UINT_INDEXED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32b32_uint_indexed.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32b32_sint_vertex_out_of_bounds"
+rust_const = "VA_R32G32B32_SINT_VERTEX_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32b32_sint_vertex_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32b32_sint_vertex_incomplete"
+rust_const = "VA_R32G32B32_SINT_VERTEX_INCOMPLETE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32b32_sint_vertex_incomplete.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32b32_sint_instance_out_of_bounds"
+rust_const = "VA_R32G32B32_SINT_INSTANCE_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32b32_sint_instance_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32b32_sint_indexed"
+rust_const = "VA_R32G32B32_SINT_INDEXED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32b32_sint_indexed.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32b32_sfloat_vertex_out_of_bounds"
+rust_const = "VA_R32G32B32_SFLOAT_VERTEX_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32b32_sfloat_vertex_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32b32_sfloat_vertex_incomplete"
+rust_const = "VA_R32G32B32_SFLOAT_VERTEX_INCOMPLETE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32b32_sfloat_vertex_incomplete.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32b32_sfloat_instance_out_of_bounds"
+rust_const = "VA_R32G32B32_SFLOAT_INSTANCE_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32b32_sfloat_instance_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32b32_sfloat_indexed"
+rust_const = "VA_R32G32B32_SFLOAT_INDEXED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32b32_sfloat_indexed.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32b32a32_uint_vertex_out_of_bounds"
+rust_const = "VA_R32G32B32A32_UINT_VERTEX_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32b32a32_uint_vertex_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32b32a32_uint_vertex_incomplete"
+rust_const = "VA_R32G32B32A32_UINT_VERTEX_INCOMPLETE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32b32a32_uint_vertex_incomplete.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32b32a32_uint_instance_out_of_bounds"
+rust_const = "VA_R32G32B32A32_UINT_INSTANCE_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32b32a32_uint_instance_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32b32a32_uint_indexed"
+rust_const = "VA_R32G32B32A32_UINT_INDEXED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32b32a32_uint_indexed.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32b32a32_sint_vertex_out_of_bounds"
+rust_const = "VA_R32G32B32A32_SINT_VERTEX_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32b32a32_sint_vertex_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32b32a32_sint_vertex_incomplete"
+rust_const = "VA_R32G32B32A32_SINT_VERTEX_INCOMPLETE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32b32a32_sint_vertex_incomplete.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32b32a32_sint_instance_out_of_bounds"
+rust_const = "VA_R32G32B32A32_SINT_INSTANCE_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32b32a32_sint_instance_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32b32a32_sint_indexed"
+rust_const = "VA_R32G32B32A32_SINT_INDEXED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32b32a32_sint_indexed.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32b32a32_sfloat_vertex_out_of_bounds"
+rust_const = "VA_R32G32B32A32_SFLOAT_VERTEX_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32b32a32_sfloat_vertex_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32b32a32_sfloat_vertex_incomplete"
+rust_const = "VA_R32G32B32A32_SFLOAT_VERTEX_INCOMPLETE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32b32a32_sfloat_vertex_incomplete.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32b32a32_sfloat_instance_out_of_bounds"
+rust_const = "VA_R32G32B32A32_SFLOAT_INSTANCE_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32b32a32_sfloat_instance_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r32g32b32a32_sfloat_indexed"
+rust_const = "VA_R32G32B32A32_SFLOAT_INDEXED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r32g32b32a32_sfloat_indexed.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r64_uint_vertex_out_of_bounds"
+rust_const = "VA_R64_UINT_VERTEX_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r64_uint_vertex_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r64_uint_vertex_incomplete"
+rust_const = "VA_R64_UINT_VERTEX_INCOMPLETE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r64_uint_vertex_incomplete.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r64_uint_instance_out_of_bounds"
+rust_const = "VA_R64_UINT_INSTANCE_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r64_uint_instance_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r64_uint_indexed"
+rust_const = "VA_R64_UINT_INDEXED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r64_uint_indexed.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r64_sint_vertex_out_of_bounds"
+rust_const = "VA_R64_SINT_VERTEX_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r64_sint_vertex_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r64_sint_vertex_incomplete"
+rust_const = "VA_R64_SINT_VERTEX_INCOMPLETE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r64_sint_vertex_incomplete.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r64_sint_instance_out_of_bounds"
+rust_const = "VA_R64_SINT_INSTANCE_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r64_sint_instance_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "r64_sint_indexed"
+rust_const = "VA_R64_SINT_INDEXED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/r64_sint_indexed.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "a2b10g10r10_unorm_pack32_vertex_out_of_bounds"
+rust_const = "VA_A2B10G10R10_UNORM_PACK32_VERTEX_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/a2b10g10r10_unorm_pack32_vertex_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "a2b10g10r10_unorm_pack32_vertex_incomplete"
+rust_const = "VA_A2B10G10R10_UNORM_PACK32_VERTEX_INCOMPLETE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/a2b10g10r10_unorm_pack32_vertex_incomplete.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "a2b10g10r10_unorm_pack32_instance_out_of_bounds"
+rust_const = "VA_A2B10G10R10_UNORM_PACK32_INSTANCE_OUT_OF_BOUNDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/a2b10g10r10_unorm_pack32_instance_out_of_bounds.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]
+
+[[case]]
+name = "a2b10g10r10_unorm_pack32_indexed"
+rust_const = "VA_A2B10G10R10_UNORM_PACK32_INDEXED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/vertex_access/a2b10g10r10_unorm_pack32_indexed.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/vertex_access/fragment.frag", stage = "frag" },
+]

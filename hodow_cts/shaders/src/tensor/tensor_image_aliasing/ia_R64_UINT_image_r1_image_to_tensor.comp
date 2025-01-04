@@ -1,0 +1,16 @@
+#version 450
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+#extension GL_EXT_shader_image_int64 : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set = 0, binding = 2, r64ui) uniform u64image1D image;
+layout(set = 0, binding = 3, std430) buffer _buff { uint64_t data[]; };
+void main()
+{
+	const uint buffer_idx = gl_GlobalInvocationID.x * 1;
+	const int image_dims = imageSize(image);
+	if (gl_GlobalInvocationID.x >= image_dims) return;
+	const uint image_coord_0 = gl_GlobalInvocationID.x % image_dims;
+	const int image_coord = int(image_coord_0);
+	const u64vec4 pixel_data = u64vec4(data[buffer_idx + 0], data[buffer_idx + 1], data[buffer_idx + 2], data[buffer_idx + 3]);
+	imageStore(image, image_coord, pixel_data);
+}

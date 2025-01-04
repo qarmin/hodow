@@ -1,0 +1,48 @@
+[package]
+name = "hodow_cts_base"
+version = "0.1.0"
+authors = ["Rafał Mikrut <mikrutrafal@protonmail.com>"]
+edition = "2024"
+rust-version = "1.98"
+description = "The shared half of hodow_cts: frameworks, the OpenGL ES and desktop OpenGL halves, runner, fuzzer and board driver"
+license = "Apache-2.0"
+repository = "https://github.com/qarmin/hodow"
+
+[lib]
+name = "hodow_cts_base"
+path = "../../src/base.rs"
+
+# `gles` also switches on the modules the Vulkan texture tests use (glu::texture_test_util_surface needs sglr); it does not
+# register any case - that is hodow_cts's job, from its own `gles` feature.
+[features]
+default = ["gles"]
+gles = []
+gl = ["gles"]
+# Embed the GLSL of every Vulkan shader next to its SPIR-V (only used to quote the failing shader); ~900 MB.
+shader_sources = []
+
+[dependencies]
+vulkanalia = { version = "0.35", default-features = false, features = ["std", "libloading"] }
+libloading = "0.9"
+clap = { version = "4.6", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+toml = "1"
+log = "0.4.35"
+sysinfo = { version = "0.40", default-features = false, features = ["system"] }
+handsome_logger = "0.10.0"
+
+# The ported Khronos CTS keeps the C++ shape of its source (so it can be diffed against upstream), which the workspace's strict
+# lint set of the hand-written crates would flag everywhere; only the allows the whole project shares apply here.
+[lints.clippy]
+upper_case_acronyms = "allow"
+approx_constant = "allow"
+needless_range_loop = "allow"
+chunks_exact_to_as_chunks = "allow"
+too_many_arguments = "allow"
+type_complexity = "allow"
+enum_variant_names = "allow"
+field_reassign_with_default = "allow"
+
+[lints.cargo]
+non_kebab_case_bins = "allow"

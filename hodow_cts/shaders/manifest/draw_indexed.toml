@@ -1,0 +1,26 @@
+# Shader manifest for dEQP-VK.draw.*.indexed_draw.*
+#
+# The plain and instanced indexed draws reuse `draw_simple`'s VertexFetch programs. What is here is the
+# VertexFetchCount pair (the maintenance6 `_count` cases, which count fragments in an SSBO) and
+# `bluePointsPrograms` of the multibind_8bit / update_index_buffer_before_draw cases.
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawIndexedTest.cpp"
+rust_module = "draw/indexed_tests"
+
+[[case]]
+name = "indexed_count"
+rust_const = "INDEXED_COUNT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/vertex_fetch_count.vert", stage = "vert" },
+    { name = "frag", template = "draw/vertex_fetch_count.frag", stage = "frag" },
+]
+
+[[case]]
+name = "blue_points"
+rust_const = "BLUE_POINTS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/blue_points.vert", stage = "vert" },
+    { name = "frag", template = "draw/blue_points.frag", stage = "frag" },
+]

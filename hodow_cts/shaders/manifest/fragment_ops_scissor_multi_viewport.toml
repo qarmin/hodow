@@ -1,0 +1,17 @@
+# Shader manifest for dEQP-VK.fragment_operations.scissor.multi_viewport.*
+#
+# Each input point becomes a fullscreen quad in the viewport named by its primitive ID, so
+# the geometry shader writes gl_ViewportIndex.
+
+upstream_source = "external/vulkancts/modules/vulkan/fragment_ops/vktFragmentOperationsScissorMultiViewportTests.cpp"
+rust_module = "fragment_ops/scissor_multi_viewport_tests"
+
+[[case]]
+name = "multi_viewport"
+rust_const = "SCISSOR_MULTI_VIEWPORT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "fragment_ops/scissor_multi_viewport.vert", stage = "vert" },
+    { name = "geom", template = "fragment_ops/scissor_multi_viewport.geom", stage = "geom" },
+    { name = "frag", template = "fragment_ops/scissor_multi_viewport.frag", stage = "frag" },
+]

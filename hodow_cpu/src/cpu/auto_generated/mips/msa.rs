@@ -1,0 +1,836 @@
+mod add;
+mod adds;
+mod addv;
+mod addvi;
+mod and;
+mod andi;
+mod asub;
+mod ave;
+mod aver;
+mod bclr;
+mod bclri;
+mod binsl;
+mod binsli;
+mod binsr;
+mod binsri;
+mod bmnz;
+mod bmnzi;
+mod bmz;
+mod bmzi;
+mod bneg;
+mod bnegi;
+mod bnz;
+mod bsel;
+mod bseli;
+mod bset;
+mod bseti;
+mod bz;
+mod ceq;
+mod ceqi;
+mod cfcmsa;
+mod cle;
+mod clei;
+mod clt;
+mod clti;
+mod copy;
+mod ctcmsa;
+mod div;
+mod dotp;
+mod dpadd;
+mod dpsub;
+mod fadd;
+mod fcaf;
+mod fceq;
+mod fclass;
+mod fcle;
+mod fclt;
+mod fcne;
+mod fcor;
+mod fcueq;
+mod fcule;
+mod fcult;
+mod fcun;
+mod fcune;
+mod fdiv;
+mod fexdo;
+mod fexp2;
+mod fexupl;
+mod fexupr;
+mod ffint;
+mod ffql;
+mod ffqr;
+mod fill;
+mod flog2;
+mod fmadd;
+mod fmax;
+mod fmin;
+mod fmsub;
+mod fmul;
+mod frcp;
+mod frint;
+mod frsqrt;
+mod fsaf;
+mod fseq;
+mod fsle;
+mod fslt;
+mod fsne;
+mod fsor;
+mod fsqrt;
+mod fsub;
+mod fsueq;
+mod fsule;
+mod fsult;
+mod fsun;
+mod fsune;
+mod ftint;
+mod ftq;
+mod ftrunc;
+mod hadd;
+mod hsub;
+mod ilvev;
+mod ilvl;
+mod ilvod;
+mod ilvr;
+mod insert;
+mod insve;
+mod ld;
+mod ldi;
+mod madd;
+mod maddr;
+mod maddv;
+mod max;
+mod maxi;
+mod min;
+mod mini;
+mod mod_;
+mod move_;
+mod msub;
+mod msubr;
+mod msubv;
+mod mul;
+mod mulr;
+mod mulv;
+mod nloc;
+mod nlzc;
+mod nor;
+mod nori;
+mod or;
+mod ori;
+mod pckev;
+mod pckod;
+mod pcnt;
+mod sat;
+mod shf;
+mod sld;
+mod sldi;
+mod sll;
+mod slli;
+mod splat;
+mod splati;
+mod sra;
+mod srai;
+mod srar;
+mod srari;
+mod srl;
+mod srli;
+mod srlr;
+mod srlri;
+mod st;
+mod subs;
+mod subsus;
+mod subsuu;
+mod subv;
+mod subvi;
+mod vshf;
+mod xor;
+mod xori;
+
+use crate::cpu::auto_generated::mips::msa::add::*;
+use crate::cpu::auto_generated::mips::msa::adds::*;
+use crate::cpu::auto_generated::mips::msa::addv::*;
+use crate::cpu::auto_generated::mips::msa::addvi::*;
+use crate::cpu::auto_generated::mips::msa::and::*;
+use crate::cpu::auto_generated::mips::msa::andi::*;
+use crate::cpu::auto_generated::mips::msa::asub::*;
+use crate::cpu::auto_generated::mips::msa::ave::*;
+use crate::cpu::auto_generated::mips::msa::aver::*;
+use crate::cpu::auto_generated::mips::msa::bclr::*;
+use crate::cpu::auto_generated::mips::msa::bclri::*;
+use crate::cpu::auto_generated::mips::msa::binsl::*;
+use crate::cpu::auto_generated::mips::msa::binsli::*;
+use crate::cpu::auto_generated::mips::msa::binsr::*;
+use crate::cpu::auto_generated::mips::msa::binsri::*;
+use crate::cpu::auto_generated::mips::msa::bmnz::*;
+use crate::cpu::auto_generated::mips::msa::bmnzi::*;
+use crate::cpu::auto_generated::mips::msa::bmz::*;
+use crate::cpu::auto_generated::mips::msa::bmzi::*;
+use crate::cpu::auto_generated::mips::msa::bneg::*;
+use crate::cpu::auto_generated::mips::msa::bnegi::*;
+use crate::cpu::auto_generated::mips::msa::bnz::*;
+use crate::cpu::auto_generated::mips::msa::bsel::*;
+use crate::cpu::auto_generated::mips::msa::bseli::*;
+use crate::cpu::auto_generated::mips::msa::bset::*;
+use crate::cpu::auto_generated::mips::msa::bseti::*;
+use crate::cpu::auto_generated::mips::msa::bz::*;
+use crate::cpu::auto_generated::mips::msa::ceq::*;
+use crate::cpu::auto_generated::mips::msa::ceqi::*;
+use crate::cpu::auto_generated::mips::msa::cfcmsa::*;
+use crate::cpu::auto_generated::mips::msa::cle::*;
+use crate::cpu::auto_generated::mips::msa::clei::*;
+use crate::cpu::auto_generated::mips::msa::clt::*;
+use crate::cpu::auto_generated::mips::msa::clti::*;
+use crate::cpu::auto_generated::mips::msa::copy::*;
+use crate::cpu::auto_generated::mips::msa::ctcmsa::*;
+use crate::cpu::auto_generated::mips::msa::div::*;
+use crate::cpu::auto_generated::mips::msa::dotp::*;
+use crate::cpu::auto_generated::mips::msa::dpadd::*;
+use crate::cpu::auto_generated::mips::msa::dpsub::*;
+use crate::cpu::auto_generated::mips::msa::fadd::*;
+use crate::cpu::auto_generated::mips::msa::fcaf::*;
+use crate::cpu::auto_generated::mips::msa::fceq::*;
+use crate::cpu::auto_generated::mips::msa::fclass::*;
+use crate::cpu::auto_generated::mips::msa::fcle::*;
+use crate::cpu::auto_generated::mips::msa::fclt::*;
+use crate::cpu::auto_generated::mips::msa::fcne::*;
+use crate::cpu::auto_generated::mips::msa::fcor::*;
+use crate::cpu::auto_generated::mips::msa::fcueq::*;
+use crate::cpu::auto_generated::mips::msa::fcule::*;
+use crate::cpu::auto_generated::mips::msa::fcult::*;
+use crate::cpu::auto_generated::mips::msa::fcun::*;
+use crate::cpu::auto_generated::mips::msa::fcune::*;
+use crate::cpu::auto_generated::mips::msa::fdiv::*;
+use crate::cpu::auto_generated::mips::msa::fexdo::*;
+use crate::cpu::auto_generated::mips::msa::fexp2::*;
+use crate::cpu::auto_generated::mips::msa::fexupl::*;
+use crate::cpu::auto_generated::mips::msa::fexupr::*;
+use crate::cpu::auto_generated::mips::msa::ffint::*;
+use crate::cpu::auto_generated::mips::msa::ffql::*;
+use crate::cpu::auto_generated::mips::msa::ffqr::*;
+use crate::cpu::auto_generated::mips::msa::fill::*;
+use crate::cpu::auto_generated::mips::msa::flog2::*;
+use crate::cpu::auto_generated::mips::msa::fmadd::*;
+use crate::cpu::auto_generated::mips::msa::fmax::*;
+use crate::cpu::auto_generated::mips::msa::fmin::*;
+use crate::cpu::auto_generated::mips::msa::fmsub::*;
+use crate::cpu::auto_generated::mips::msa::fmul::*;
+use crate::cpu::auto_generated::mips::msa::frcp::*;
+use crate::cpu::auto_generated::mips::msa::frint::*;
+use crate::cpu::auto_generated::mips::msa::frsqrt::*;
+use crate::cpu::auto_generated::mips::msa::fsaf::*;
+use crate::cpu::auto_generated::mips::msa::fseq::*;
+use crate::cpu::auto_generated::mips::msa::fsle::*;
+use crate::cpu::auto_generated::mips::msa::fslt::*;
+use crate::cpu::auto_generated::mips::msa::fsne::*;
+use crate::cpu::auto_generated::mips::msa::fsor::*;
+use crate::cpu::auto_generated::mips::msa::fsqrt::*;
+use crate::cpu::auto_generated::mips::msa::fsub::*;
+use crate::cpu::auto_generated::mips::msa::fsueq::*;
+use crate::cpu::auto_generated::mips::msa::fsule::*;
+use crate::cpu::auto_generated::mips::msa::fsult::*;
+use crate::cpu::auto_generated::mips::msa::fsun::*;
+use crate::cpu::auto_generated::mips::msa::fsune::*;
+use crate::cpu::auto_generated::mips::msa::ftint::*;
+use crate::cpu::auto_generated::mips::msa::ftq::*;
+use crate::cpu::auto_generated::mips::msa::ftrunc::*;
+use crate::cpu::auto_generated::mips::msa::hadd::*;
+use crate::cpu::auto_generated::mips::msa::hsub::*;
+use crate::cpu::auto_generated::mips::msa::ilvev::*;
+use crate::cpu::auto_generated::mips::msa::ilvl::*;
+use crate::cpu::auto_generated::mips::msa::ilvod::*;
+use crate::cpu::auto_generated::mips::msa::ilvr::*;
+use crate::cpu::auto_generated::mips::msa::insert::*;
+use crate::cpu::auto_generated::mips::msa::insve::*;
+use crate::cpu::auto_generated::mips::msa::ld::*;
+use crate::cpu::auto_generated::mips::msa::ldi::*;
+use crate::cpu::auto_generated::mips::msa::madd::*;
+use crate::cpu::auto_generated::mips::msa::maddr::*;
+use crate::cpu::auto_generated::mips::msa::maddv::*;
+use crate::cpu::auto_generated::mips::msa::max::*;
+use crate::cpu::auto_generated::mips::msa::maxi::*;
+use crate::cpu::auto_generated::mips::msa::min::*;
+use crate::cpu::auto_generated::mips::msa::mini::*;
+use crate::cpu::auto_generated::mips::msa::mod_::*;
+use crate::cpu::auto_generated::mips::msa::move_::*;
+use crate::cpu::auto_generated::mips::msa::msub::*;
+use crate::cpu::auto_generated::mips::msa::msubr::*;
+use crate::cpu::auto_generated::mips::msa::msubv::*;
+use crate::cpu::auto_generated::mips::msa::mul::*;
+use crate::cpu::auto_generated::mips::msa::mulr::*;
+use crate::cpu::auto_generated::mips::msa::mulv::*;
+use crate::cpu::auto_generated::mips::msa::nloc::*;
+use crate::cpu::auto_generated::mips::msa::nlzc::*;
+use crate::cpu::auto_generated::mips::msa::nor::*;
+use crate::cpu::auto_generated::mips::msa::nori::*;
+use crate::cpu::auto_generated::mips::msa::or::*;
+use crate::cpu::auto_generated::mips::msa::ori::*;
+use crate::cpu::auto_generated::mips::msa::pckev::*;
+use crate::cpu::auto_generated::mips::msa::pckod::*;
+use crate::cpu::auto_generated::mips::msa::pcnt::*;
+use crate::cpu::auto_generated::mips::msa::sat::*;
+use crate::cpu::auto_generated::mips::msa::shf::*;
+use crate::cpu::auto_generated::mips::msa::sld::*;
+use crate::cpu::auto_generated::mips::msa::sldi::*;
+use crate::cpu::auto_generated::mips::msa::sll::*;
+use crate::cpu::auto_generated::mips::msa::slli::*;
+use crate::cpu::auto_generated::mips::msa::splat::*;
+use crate::cpu::auto_generated::mips::msa::splati::*;
+use crate::cpu::auto_generated::mips::msa::sra::*;
+use crate::cpu::auto_generated::mips::msa::srai::*;
+use crate::cpu::auto_generated::mips::msa::srar::*;
+use crate::cpu::auto_generated::mips::msa::srari::*;
+use crate::cpu::auto_generated::mips::msa::srl::*;
+use crate::cpu::auto_generated::mips::msa::srli::*;
+use crate::cpu::auto_generated::mips::msa::srlr::*;
+use crate::cpu::auto_generated::mips::msa::srlri::*;
+use crate::cpu::auto_generated::mips::msa::st::*;
+use crate::cpu::auto_generated::mips::msa::subs::*;
+use crate::cpu::auto_generated::mips::msa::subsus::*;
+use crate::cpu::auto_generated::mips::msa::subsuu::*;
+use crate::cpu::auto_generated::mips::msa::subv::*;
+use crate::cpu::auto_generated::mips::msa::subvi::*;
+use crate::cpu::auto_generated::mips::msa::vshf::*;
+use crate::cpu::auto_generated::mips::msa::xor::*;
+use crate::cpu::auto_generated::mips::msa::xori::*;
+
+use crate::cpu::{ExtensionTest, TestFunction};
+
+#[allow(non_camel_case_types)]
+pub struct MSA;
+
+impl ExtensionTest for MSA {
+    fn get_name() -> &'static str {
+        "mips::MSA"
+    }
+
+    fn get_tests() -> &'static [(TestFunction, &'static str)] {
+        &[
+            (test_mips_msa_msa_add_a_b, "test_mips_msa_msa_add_a_b"),
+            (test_mips_msa_msa_add_a_h, "test_mips_msa_msa_add_a_h"),
+            (test_mips_msa_msa_add_a_w, "test_mips_msa_msa_add_a_w"),
+            (test_mips_msa_msa_add_a_d, "test_mips_msa_msa_add_a_d"),
+            (test_mips_msa_msa_adds_a_b, "test_mips_msa_msa_adds_a_b"),
+            (test_mips_msa_msa_adds_a_h, "test_mips_msa_msa_adds_a_h"),
+            (test_mips_msa_msa_adds_a_w, "test_mips_msa_msa_adds_a_w"),
+            (test_mips_msa_msa_adds_a_d, "test_mips_msa_msa_adds_a_d"),
+            (test_mips_msa_msa_adds_s_b, "test_mips_msa_msa_adds_s_b"),
+            (test_mips_msa_msa_adds_s_h, "test_mips_msa_msa_adds_s_h"),
+            (test_mips_msa_msa_adds_s_w, "test_mips_msa_msa_adds_s_w"),
+            (test_mips_msa_msa_adds_s_d, "test_mips_msa_msa_adds_s_d"),
+            (test_mips_msa_msa_adds_u_b, "test_mips_msa_msa_adds_u_b"),
+            (test_mips_msa_msa_adds_u_h, "test_mips_msa_msa_adds_u_h"),
+            (test_mips_msa_msa_adds_u_w, "test_mips_msa_msa_adds_u_w"),
+            (test_mips_msa_msa_adds_u_d, "test_mips_msa_msa_adds_u_d"),
+            (test_mips_msa_msa_addv_b, "test_mips_msa_msa_addv_b"),
+            (test_mips_msa_msa_addv_h, "test_mips_msa_msa_addv_h"),
+            (test_mips_msa_msa_addv_w, "test_mips_msa_msa_addv_w"),
+            (test_mips_msa_msa_addv_d, "test_mips_msa_msa_addv_d"),
+            (test_mips_msa_msa_addvi_b, "test_mips_msa_msa_addvi_b"),
+            (test_mips_msa_msa_addvi_h, "test_mips_msa_msa_addvi_h"),
+            (test_mips_msa_msa_addvi_w, "test_mips_msa_msa_addvi_w"),
+            (test_mips_msa_msa_addvi_d, "test_mips_msa_msa_addvi_d"),
+            (test_mips_msa_msa_and_v, "test_mips_msa_msa_and_v"),
+            (test_mips_msa_msa_andi_b, "test_mips_msa_msa_andi_b"),
+            (test_mips_msa_msa_asub_s_b, "test_mips_msa_msa_asub_s_b"),
+            (test_mips_msa_msa_asub_s_h, "test_mips_msa_msa_asub_s_h"),
+            (test_mips_msa_msa_asub_s_w, "test_mips_msa_msa_asub_s_w"),
+            (test_mips_msa_msa_asub_s_d, "test_mips_msa_msa_asub_s_d"),
+            (test_mips_msa_msa_asub_u_b, "test_mips_msa_msa_asub_u_b"),
+            (test_mips_msa_msa_asub_u_h, "test_mips_msa_msa_asub_u_h"),
+            (test_mips_msa_msa_asub_u_w, "test_mips_msa_msa_asub_u_w"),
+            (test_mips_msa_msa_asub_u_d, "test_mips_msa_msa_asub_u_d"),
+            (test_mips_msa_msa_ave_s_b, "test_mips_msa_msa_ave_s_b"),
+            (test_mips_msa_msa_ave_s_h, "test_mips_msa_msa_ave_s_h"),
+            (test_mips_msa_msa_ave_s_w, "test_mips_msa_msa_ave_s_w"),
+            (test_mips_msa_msa_ave_s_d, "test_mips_msa_msa_ave_s_d"),
+            (test_mips_msa_msa_ave_u_b, "test_mips_msa_msa_ave_u_b"),
+            (test_mips_msa_msa_ave_u_h, "test_mips_msa_msa_ave_u_h"),
+            (test_mips_msa_msa_ave_u_w, "test_mips_msa_msa_ave_u_w"),
+            (test_mips_msa_msa_ave_u_d, "test_mips_msa_msa_ave_u_d"),
+            (test_mips_msa_msa_aver_s_b, "test_mips_msa_msa_aver_s_b"),
+            (test_mips_msa_msa_aver_s_h, "test_mips_msa_msa_aver_s_h"),
+            (test_mips_msa_msa_aver_s_w, "test_mips_msa_msa_aver_s_w"),
+            (test_mips_msa_msa_aver_s_d, "test_mips_msa_msa_aver_s_d"),
+            (test_mips_msa_msa_aver_u_b, "test_mips_msa_msa_aver_u_b"),
+            (test_mips_msa_msa_aver_u_h, "test_mips_msa_msa_aver_u_h"),
+            (test_mips_msa_msa_aver_u_w, "test_mips_msa_msa_aver_u_w"),
+            (test_mips_msa_msa_aver_u_d, "test_mips_msa_msa_aver_u_d"),
+            (test_mips_msa_msa_bclr_b, "test_mips_msa_msa_bclr_b"),
+            (test_mips_msa_msa_bclr_h, "test_mips_msa_msa_bclr_h"),
+            (test_mips_msa_msa_bclr_w, "test_mips_msa_msa_bclr_w"),
+            (test_mips_msa_msa_bclr_d, "test_mips_msa_msa_bclr_d"),
+            (test_mips_msa_msa_bclri_b, "test_mips_msa_msa_bclri_b"),
+            (test_mips_msa_msa_bclri_h, "test_mips_msa_msa_bclri_h"),
+            (test_mips_msa_msa_bclri_w, "test_mips_msa_msa_bclri_w"),
+            (test_mips_msa_msa_bclri_d, "test_mips_msa_msa_bclri_d"),
+            (test_mips_msa_msa_binsl_b, "test_mips_msa_msa_binsl_b"),
+            (test_mips_msa_msa_binsl_h, "test_mips_msa_msa_binsl_h"),
+            (test_mips_msa_msa_binsl_w, "test_mips_msa_msa_binsl_w"),
+            (test_mips_msa_msa_binsl_d, "test_mips_msa_msa_binsl_d"),
+            (test_mips_msa_msa_binsli_b, "test_mips_msa_msa_binsli_b"),
+            (test_mips_msa_msa_binsli_h, "test_mips_msa_msa_binsli_h"),
+            (test_mips_msa_msa_binsli_w, "test_mips_msa_msa_binsli_w"),
+            (test_mips_msa_msa_binsli_d, "test_mips_msa_msa_binsli_d"),
+            (test_mips_msa_msa_binsr_b, "test_mips_msa_msa_binsr_b"),
+            (test_mips_msa_msa_binsr_h, "test_mips_msa_msa_binsr_h"),
+            (test_mips_msa_msa_binsr_w, "test_mips_msa_msa_binsr_w"),
+            (test_mips_msa_msa_binsr_d, "test_mips_msa_msa_binsr_d"),
+            (test_mips_msa_msa_binsri_b, "test_mips_msa_msa_binsri_b"),
+            (test_mips_msa_msa_binsri_h, "test_mips_msa_msa_binsri_h"),
+            (test_mips_msa_msa_binsri_w, "test_mips_msa_msa_binsri_w"),
+            (test_mips_msa_msa_binsri_d, "test_mips_msa_msa_binsri_d"),
+            (test_mips_msa_msa_bmnz_v, "test_mips_msa_msa_bmnz_v"),
+            (test_mips_msa_msa_bmnzi_b, "test_mips_msa_msa_bmnzi_b"),
+            (test_mips_msa_msa_bmz_v, "test_mips_msa_msa_bmz_v"),
+            (test_mips_msa_msa_bmzi_b, "test_mips_msa_msa_bmzi_b"),
+            (test_mips_msa_msa_bneg_b, "test_mips_msa_msa_bneg_b"),
+            (test_mips_msa_msa_bneg_h, "test_mips_msa_msa_bneg_h"),
+            (test_mips_msa_msa_bneg_w, "test_mips_msa_msa_bneg_w"),
+            (test_mips_msa_msa_bneg_d, "test_mips_msa_msa_bneg_d"),
+            (test_mips_msa_msa_bnegi_b, "test_mips_msa_msa_bnegi_b"),
+            (test_mips_msa_msa_bnegi_h, "test_mips_msa_msa_bnegi_h"),
+            (test_mips_msa_msa_bnegi_w, "test_mips_msa_msa_bnegi_w"),
+            (test_mips_msa_msa_bnegi_d, "test_mips_msa_msa_bnegi_d"),
+            (test_mips_msa_msa_bnz_b, "test_mips_msa_msa_bnz_b"),
+            (test_mips_msa_msa_bnz_h, "test_mips_msa_msa_bnz_h"),
+            (test_mips_msa_msa_bnz_w, "test_mips_msa_msa_bnz_w"),
+            (test_mips_msa_msa_bnz_d, "test_mips_msa_msa_bnz_d"),
+            (test_mips_msa_msa_bnz_v, "test_mips_msa_msa_bnz_v"),
+            (test_mips_msa_msa_bsel_v, "test_mips_msa_msa_bsel_v"),
+            (test_mips_msa_msa_bseli_b, "test_mips_msa_msa_bseli_b"),
+            (test_mips_msa_msa_bset_b, "test_mips_msa_msa_bset_b"),
+            (test_mips_msa_msa_bset_h, "test_mips_msa_msa_bset_h"),
+            (test_mips_msa_msa_bset_w, "test_mips_msa_msa_bset_w"),
+            (test_mips_msa_msa_bset_d, "test_mips_msa_msa_bset_d"),
+            (test_mips_msa_msa_bseti_b, "test_mips_msa_msa_bseti_b"),
+            (test_mips_msa_msa_bseti_h, "test_mips_msa_msa_bseti_h"),
+            (test_mips_msa_msa_bseti_w, "test_mips_msa_msa_bseti_w"),
+            (test_mips_msa_msa_bseti_d, "test_mips_msa_msa_bseti_d"),
+            (test_mips_msa_msa_bz_b, "test_mips_msa_msa_bz_b"),
+            (test_mips_msa_msa_bz_h, "test_mips_msa_msa_bz_h"),
+            (test_mips_msa_msa_bz_w, "test_mips_msa_msa_bz_w"),
+            (test_mips_msa_msa_bz_d, "test_mips_msa_msa_bz_d"),
+            (test_mips_msa_msa_bz_v, "test_mips_msa_msa_bz_v"),
+            (test_mips_msa_msa_ceq_b, "test_mips_msa_msa_ceq_b"),
+            (test_mips_msa_msa_ceq_h, "test_mips_msa_msa_ceq_h"),
+            (test_mips_msa_msa_ceq_w, "test_mips_msa_msa_ceq_w"),
+            (test_mips_msa_msa_ceq_d, "test_mips_msa_msa_ceq_d"),
+            (test_mips_msa_msa_ceqi_b, "test_mips_msa_msa_ceqi_b"),
+            (test_mips_msa_msa_ceqi_h, "test_mips_msa_msa_ceqi_h"),
+            (test_mips_msa_msa_ceqi_w, "test_mips_msa_msa_ceqi_w"),
+            (test_mips_msa_msa_ceqi_d, "test_mips_msa_msa_ceqi_d"),
+            (test_mips_msa_msa_cfcmsa, "test_mips_msa_msa_cfcmsa"),
+            (test_mips_msa_msa_cle_s_b, "test_mips_msa_msa_cle_s_b"),
+            (test_mips_msa_msa_cle_s_h, "test_mips_msa_msa_cle_s_h"),
+            (test_mips_msa_msa_cle_s_w, "test_mips_msa_msa_cle_s_w"),
+            (test_mips_msa_msa_cle_s_d, "test_mips_msa_msa_cle_s_d"),
+            (test_mips_msa_msa_cle_u_b, "test_mips_msa_msa_cle_u_b"),
+            (test_mips_msa_msa_cle_u_h, "test_mips_msa_msa_cle_u_h"),
+            (test_mips_msa_msa_cle_u_w, "test_mips_msa_msa_cle_u_w"),
+            (test_mips_msa_msa_cle_u_d, "test_mips_msa_msa_cle_u_d"),
+            (test_mips_msa_msa_clei_s_b, "test_mips_msa_msa_clei_s_b"),
+            (test_mips_msa_msa_clei_s_h, "test_mips_msa_msa_clei_s_h"),
+            (test_mips_msa_msa_clei_s_w, "test_mips_msa_msa_clei_s_w"),
+            (test_mips_msa_msa_clei_s_d, "test_mips_msa_msa_clei_s_d"),
+            (test_mips_msa_msa_clei_u_b, "test_mips_msa_msa_clei_u_b"),
+            (test_mips_msa_msa_clei_u_h, "test_mips_msa_msa_clei_u_h"),
+            (test_mips_msa_msa_clei_u_w, "test_mips_msa_msa_clei_u_w"),
+            (test_mips_msa_msa_clei_u_d, "test_mips_msa_msa_clei_u_d"),
+            (test_mips_msa_msa_clt_s_b, "test_mips_msa_msa_clt_s_b"),
+            (test_mips_msa_msa_clt_s_h, "test_mips_msa_msa_clt_s_h"),
+            (test_mips_msa_msa_clt_s_w, "test_mips_msa_msa_clt_s_w"),
+            (test_mips_msa_msa_clt_s_d, "test_mips_msa_msa_clt_s_d"),
+            (test_mips_msa_msa_clt_u_b, "test_mips_msa_msa_clt_u_b"),
+            (test_mips_msa_msa_clt_u_h, "test_mips_msa_msa_clt_u_h"),
+            (test_mips_msa_msa_clt_u_w, "test_mips_msa_msa_clt_u_w"),
+            (test_mips_msa_msa_clt_u_d, "test_mips_msa_msa_clt_u_d"),
+            (test_mips_msa_msa_clti_s_b, "test_mips_msa_msa_clti_s_b"),
+            (test_mips_msa_msa_clti_s_h, "test_mips_msa_msa_clti_s_h"),
+            (test_mips_msa_msa_clti_s_w, "test_mips_msa_msa_clti_s_w"),
+            (test_mips_msa_msa_clti_s_d, "test_mips_msa_msa_clti_s_d"),
+            (test_mips_msa_msa_clti_u_b, "test_mips_msa_msa_clti_u_b"),
+            (test_mips_msa_msa_clti_u_h, "test_mips_msa_msa_clti_u_h"),
+            (test_mips_msa_msa_clti_u_w, "test_mips_msa_msa_clti_u_w"),
+            (test_mips_msa_msa_clti_u_d, "test_mips_msa_msa_clti_u_d"),
+            (test_mips_msa_msa_copy_s_b, "test_mips_msa_msa_copy_s_b"),
+            (test_mips_msa_msa_copy_s_h, "test_mips_msa_msa_copy_s_h"),
+            (test_mips_msa_msa_copy_s_w, "test_mips_msa_msa_copy_s_w"),
+            (test_mips_msa_msa_copy_s_d, "test_mips_msa_msa_copy_s_d"),
+            (test_mips_msa_msa_copy_u_b, "test_mips_msa_msa_copy_u_b"),
+            (test_mips_msa_msa_copy_u_h, "test_mips_msa_msa_copy_u_h"),
+            (test_mips_msa_msa_copy_u_w, "test_mips_msa_msa_copy_u_w"),
+            (test_mips_msa_msa_copy_u_d, "test_mips_msa_msa_copy_u_d"),
+            (test_mips_msa_msa_ctcmsa, "test_mips_msa_msa_ctcmsa"),
+            (test_mips_msa_msa_div_s_b, "test_mips_msa_msa_div_s_b"),
+            (test_mips_msa_msa_div_s_h, "test_mips_msa_msa_div_s_h"),
+            (test_mips_msa_msa_div_s_w, "test_mips_msa_msa_div_s_w"),
+            (test_mips_msa_msa_div_s_d, "test_mips_msa_msa_div_s_d"),
+            (test_mips_msa_msa_div_u_b, "test_mips_msa_msa_div_u_b"),
+            (test_mips_msa_msa_div_u_h, "test_mips_msa_msa_div_u_h"),
+            (test_mips_msa_msa_div_u_w, "test_mips_msa_msa_div_u_w"),
+            (test_mips_msa_msa_div_u_d, "test_mips_msa_msa_div_u_d"),
+            (test_mips_msa_msa_dotp_s_h, "test_mips_msa_msa_dotp_s_h"),
+            (test_mips_msa_msa_dotp_s_w, "test_mips_msa_msa_dotp_s_w"),
+            (test_mips_msa_msa_dotp_s_d, "test_mips_msa_msa_dotp_s_d"),
+            (test_mips_msa_msa_dotp_u_h, "test_mips_msa_msa_dotp_u_h"),
+            (test_mips_msa_msa_dotp_u_w, "test_mips_msa_msa_dotp_u_w"),
+            (test_mips_msa_msa_dotp_u_d, "test_mips_msa_msa_dotp_u_d"),
+            (test_mips_msa_msa_dpadd_s_h, "test_mips_msa_msa_dpadd_s_h"),
+            (test_mips_msa_msa_dpadd_s_w, "test_mips_msa_msa_dpadd_s_w"),
+            (test_mips_msa_msa_dpadd_s_d, "test_mips_msa_msa_dpadd_s_d"),
+            (test_mips_msa_msa_dpadd_u_h, "test_mips_msa_msa_dpadd_u_h"),
+            (test_mips_msa_msa_dpadd_u_w, "test_mips_msa_msa_dpadd_u_w"),
+            (test_mips_msa_msa_dpadd_u_d, "test_mips_msa_msa_dpadd_u_d"),
+            (test_mips_msa_msa_dpsub_s_h, "test_mips_msa_msa_dpsub_s_h"),
+            (test_mips_msa_msa_dpsub_s_w, "test_mips_msa_msa_dpsub_s_w"),
+            (test_mips_msa_msa_dpsub_s_d, "test_mips_msa_msa_dpsub_s_d"),
+            (test_mips_msa_msa_dpsub_u_h, "test_mips_msa_msa_dpsub_u_h"),
+            (test_mips_msa_msa_dpsub_u_w, "test_mips_msa_msa_dpsub_u_w"),
+            (test_mips_msa_msa_dpsub_u_d, "test_mips_msa_msa_dpsub_u_d"),
+            (test_mips_msa_msa_fadd_w, "test_mips_msa_msa_fadd_w"),
+            (test_mips_msa_msa_fadd_d, "test_mips_msa_msa_fadd_d"),
+            (test_mips_msa_msa_fcaf_w, "test_mips_msa_msa_fcaf_w"),
+            (test_mips_msa_msa_fcaf_d, "test_mips_msa_msa_fcaf_d"),
+            (test_mips_msa_msa_fceq_w, "test_mips_msa_msa_fceq_w"),
+            (test_mips_msa_msa_fceq_d, "test_mips_msa_msa_fceq_d"),
+            (test_mips_msa_msa_fclass_w, "test_mips_msa_msa_fclass_w"),
+            (test_mips_msa_msa_fclass_d, "test_mips_msa_msa_fclass_d"),
+            (test_mips_msa_msa_fcle_w, "test_mips_msa_msa_fcle_w"),
+            (test_mips_msa_msa_fcle_d, "test_mips_msa_msa_fcle_d"),
+            (test_mips_msa_msa_fclt_w, "test_mips_msa_msa_fclt_w"),
+            (test_mips_msa_msa_fclt_d, "test_mips_msa_msa_fclt_d"),
+            (test_mips_msa_msa_fcne_w, "test_mips_msa_msa_fcne_w"),
+            (test_mips_msa_msa_fcne_d, "test_mips_msa_msa_fcne_d"),
+            (test_mips_msa_msa_fcor_w, "test_mips_msa_msa_fcor_w"),
+            (test_mips_msa_msa_fcor_d, "test_mips_msa_msa_fcor_d"),
+            (test_mips_msa_msa_fcueq_w, "test_mips_msa_msa_fcueq_w"),
+            (test_mips_msa_msa_fcueq_d, "test_mips_msa_msa_fcueq_d"),
+            (test_mips_msa_msa_fcule_w, "test_mips_msa_msa_fcule_w"),
+            (test_mips_msa_msa_fcule_d, "test_mips_msa_msa_fcule_d"),
+            (test_mips_msa_msa_fcult_w, "test_mips_msa_msa_fcult_w"),
+            (test_mips_msa_msa_fcult_d, "test_mips_msa_msa_fcult_d"),
+            (test_mips_msa_msa_fcun_w, "test_mips_msa_msa_fcun_w"),
+            (test_mips_msa_msa_fcun_d, "test_mips_msa_msa_fcun_d"),
+            (test_mips_msa_msa_fcune_w, "test_mips_msa_msa_fcune_w"),
+            (test_mips_msa_msa_fcune_d, "test_mips_msa_msa_fcune_d"),
+            (test_mips_msa_msa_fdiv_w, "test_mips_msa_msa_fdiv_w"),
+            (test_mips_msa_msa_fdiv_d, "test_mips_msa_msa_fdiv_d"),
+            (test_mips_msa_msa_fexdo_w, "test_mips_msa_msa_fexdo_w"),
+            (test_mips_msa_msa_fexp2_w, "test_mips_msa_msa_fexp2_w"),
+            (test_mips_msa_msa_fexp2_d, "test_mips_msa_msa_fexp2_d"),
+            (test_mips_msa_msa_fexupl_d, "test_mips_msa_msa_fexupl_d"),
+            (test_mips_msa_msa_fexupr_d, "test_mips_msa_msa_fexupr_d"),
+            (test_mips_msa_msa_ffint_s_w, "test_mips_msa_msa_ffint_s_w"),
+            (test_mips_msa_msa_ffint_s_d, "test_mips_msa_msa_ffint_s_d"),
+            (test_mips_msa_msa_ffint_u_w, "test_mips_msa_msa_ffint_u_w"),
+            (test_mips_msa_msa_ffint_u_d, "test_mips_msa_msa_ffint_u_d"),
+            (test_mips_msa_msa_ffql_w, "test_mips_msa_msa_ffql_w"),
+            (test_mips_msa_msa_ffql_d, "test_mips_msa_msa_ffql_d"),
+            (test_mips_msa_msa_ffqr_w, "test_mips_msa_msa_ffqr_w"),
+            (test_mips_msa_msa_ffqr_d, "test_mips_msa_msa_ffqr_d"),
+            (test_mips_msa_msa_fill_b, "test_mips_msa_msa_fill_b"),
+            (test_mips_msa_msa_fill_h, "test_mips_msa_msa_fill_h"),
+            (test_mips_msa_msa_fill_w, "test_mips_msa_msa_fill_w"),
+            (test_mips_msa_msa_fill_d, "test_mips_msa_msa_fill_d"),
+            (test_mips_msa_msa_flog2_w, "test_mips_msa_msa_flog2_w"),
+            (test_mips_msa_msa_flog2_d, "test_mips_msa_msa_flog2_d"),
+            (test_mips_msa_msa_fmadd_w, "test_mips_msa_msa_fmadd_w"),
+            (test_mips_msa_msa_fmadd_d, "test_mips_msa_msa_fmadd_d"),
+            (test_mips_msa_msa_fmax_w, "test_mips_msa_msa_fmax_w"),
+            (test_mips_msa_msa_fmax_d, "test_mips_msa_msa_fmax_d"),
+            (test_mips_msa_msa_fmax_a_w, "test_mips_msa_msa_fmax_a_w"),
+            (test_mips_msa_msa_fmax_a_d, "test_mips_msa_msa_fmax_a_d"),
+            (test_mips_msa_msa_fmin_w, "test_mips_msa_msa_fmin_w"),
+            (test_mips_msa_msa_fmin_d, "test_mips_msa_msa_fmin_d"),
+            (test_mips_msa_msa_fmin_a_w, "test_mips_msa_msa_fmin_a_w"),
+            (test_mips_msa_msa_fmin_a_d, "test_mips_msa_msa_fmin_a_d"),
+            (test_mips_msa_msa_fmsub_w, "test_mips_msa_msa_fmsub_w"),
+            (test_mips_msa_msa_fmsub_d, "test_mips_msa_msa_fmsub_d"),
+            (test_mips_msa_msa_fmul_w, "test_mips_msa_msa_fmul_w"),
+            (test_mips_msa_msa_fmul_d, "test_mips_msa_msa_fmul_d"),
+            (test_mips_msa_msa_frint_w, "test_mips_msa_msa_frint_w"),
+            (test_mips_msa_msa_frint_d, "test_mips_msa_msa_frint_d"),
+            (test_mips_msa_msa_frcp_w, "test_mips_msa_msa_frcp_w"),
+            (test_mips_msa_msa_frcp_d, "test_mips_msa_msa_frcp_d"),
+            (test_mips_msa_msa_frsqrt_w, "test_mips_msa_msa_frsqrt_w"),
+            (test_mips_msa_msa_frsqrt_d, "test_mips_msa_msa_frsqrt_d"),
+            (test_mips_msa_msa_fsaf_w, "test_mips_msa_msa_fsaf_w"),
+            (test_mips_msa_msa_fsaf_d, "test_mips_msa_msa_fsaf_d"),
+            (test_mips_msa_msa_fseq_w, "test_mips_msa_msa_fseq_w"),
+            (test_mips_msa_msa_fseq_d, "test_mips_msa_msa_fseq_d"),
+            (test_mips_msa_msa_fsle_w, "test_mips_msa_msa_fsle_w"),
+            (test_mips_msa_msa_fsle_d, "test_mips_msa_msa_fsle_d"),
+            (test_mips_msa_msa_fslt_w, "test_mips_msa_msa_fslt_w"),
+            (test_mips_msa_msa_fslt_d, "test_mips_msa_msa_fslt_d"),
+            (test_mips_msa_msa_fsne_w, "test_mips_msa_msa_fsne_w"),
+            (test_mips_msa_msa_fsne_d, "test_mips_msa_msa_fsne_d"),
+            (test_mips_msa_msa_fsor_w, "test_mips_msa_msa_fsor_w"),
+            (test_mips_msa_msa_fsor_d, "test_mips_msa_msa_fsor_d"),
+            (test_mips_msa_msa_fsqrt_w, "test_mips_msa_msa_fsqrt_w"),
+            (test_mips_msa_msa_fsqrt_d, "test_mips_msa_msa_fsqrt_d"),
+            (test_mips_msa_msa_fsub_w, "test_mips_msa_msa_fsub_w"),
+            (test_mips_msa_msa_fsub_d, "test_mips_msa_msa_fsub_d"),
+            (test_mips_msa_msa_fsueq_w, "test_mips_msa_msa_fsueq_w"),
+            (test_mips_msa_msa_fsueq_d, "test_mips_msa_msa_fsueq_d"),
+            (test_mips_msa_msa_fsule_w, "test_mips_msa_msa_fsule_w"),
+            (test_mips_msa_msa_fsule_d, "test_mips_msa_msa_fsule_d"),
+            (test_mips_msa_msa_fsult_w, "test_mips_msa_msa_fsult_w"),
+            (test_mips_msa_msa_fsult_d, "test_mips_msa_msa_fsult_d"),
+            (test_mips_msa_msa_fsun_w, "test_mips_msa_msa_fsun_w"),
+            (test_mips_msa_msa_fsun_d, "test_mips_msa_msa_fsun_d"),
+            (test_mips_msa_msa_fsune_w, "test_mips_msa_msa_fsune_w"),
+            (test_mips_msa_msa_fsune_d, "test_mips_msa_msa_fsune_d"),
+            (test_mips_msa_msa_ftint_s_w, "test_mips_msa_msa_ftint_s_w"),
+            (test_mips_msa_msa_ftint_s_d, "test_mips_msa_msa_ftint_s_d"),
+            (test_mips_msa_msa_ftint_u_w, "test_mips_msa_msa_ftint_u_w"),
+            (test_mips_msa_msa_ftint_u_d, "test_mips_msa_msa_ftint_u_d"),
+            (test_mips_msa_msa_ftq_h, "test_mips_msa_msa_ftq_h"),
+            (test_mips_msa_msa_ftq_w, "test_mips_msa_msa_ftq_w"),
+            (test_mips_msa_msa_ftrunc_s_w, "test_mips_msa_msa_ftrunc_s_w"),
+            (test_mips_msa_msa_ftrunc_s_d, "test_mips_msa_msa_ftrunc_s_d"),
+            (test_mips_msa_msa_ftrunc_u_w, "test_mips_msa_msa_ftrunc_u_w"),
+            (test_mips_msa_msa_ftrunc_u_d, "test_mips_msa_msa_ftrunc_u_d"),
+            (test_mips_msa_msa_hadd_s_h, "test_mips_msa_msa_hadd_s_h"),
+            (test_mips_msa_msa_hadd_s_w, "test_mips_msa_msa_hadd_s_w"),
+            (test_mips_msa_msa_hadd_s_d, "test_mips_msa_msa_hadd_s_d"),
+            (test_mips_msa_msa_hadd_u_h, "test_mips_msa_msa_hadd_u_h"),
+            (test_mips_msa_msa_hadd_u_w, "test_mips_msa_msa_hadd_u_w"),
+            (test_mips_msa_msa_hadd_u_d, "test_mips_msa_msa_hadd_u_d"),
+            (test_mips_msa_msa_hsub_s_h, "test_mips_msa_msa_hsub_s_h"),
+            (test_mips_msa_msa_hsub_s_w, "test_mips_msa_msa_hsub_s_w"),
+            (test_mips_msa_msa_hsub_s_d, "test_mips_msa_msa_hsub_s_d"),
+            (test_mips_msa_msa_hsub_u_h, "test_mips_msa_msa_hsub_u_h"),
+            (test_mips_msa_msa_hsub_u_w, "test_mips_msa_msa_hsub_u_w"),
+            (test_mips_msa_msa_hsub_u_d, "test_mips_msa_msa_hsub_u_d"),
+            (test_mips_msa_msa_ilvev_b, "test_mips_msa_msa_ilvev_b"),
+            (test_mips_msa_msa_ilvev_h, "test_mips_msa_msa_ilvev_h"),
+            (test_mips_msa_msa_ilvev_w, "test_mips_msa_msa_ilvev_w"),
+            (test_mips_msa_msa_ilvev_d, "test_mips_msa_msa_ilvev_d"),
+            (test_mips_msa_msa_ilvl_b, "test_mips_msa_msa_ilvl_b"),
+            (test_mips_msa_msa_ilvl_h, "test_mips_msa_msa_ilvl_h"),
+            (test_mips_msa_msa_ilvl_w, "test_mips_msa_msa_ilvl_w"),
+            (test_mips_msa_msa_ilvl_d, "test_mips_msa_msa_ilvl_d"),
+            (test_mips_msa_msa_ilvod_b, "test_mips_msa_msa_ilvod_b"),
+            (test_mips_msa_msa_ilvod_h, "test_mips_msa_msa_ilvod_h"),
+            (test_mips_msa_msa_ilvod_w, "test_mips_msa_msa_ilvod_w"),
+            (test_mips_msa_msa_ilvod_d, "test_mips_msa_msa_ilvod_d"),
+            (test_mips_msa_msa_ilvr_b, "test_mips_msa_msa_ilvr_b"),
+            (test_mips_msa_msa_ilvr_h, "test_mips_msa_msa_ilvr_h"),
+            (test_mips_msa_msa_ilvr_w, "test_mips_msa_msa_ilvr_w"),
+            (test_mips_msa_msa_ilvr_d, "test_mips_msa_msa_ilvr_d"),
+            (test_mips_msa_msa_insert_b, "test_mips_msa_msa_insert_b"),
+            (test_mips_msa_msa_insert_h, "test_mips_msa_msa_insert_h"),
+            (test_mips_msa_msa_insert_w, "test_mips_msa_msa_insert_w"),
+            (test_mips_msa_msa_insert_d, "test_mips_msa_msa_insert_d"),
+            (test_mips_msa_msa_insve_b, "test_mips_msa_msa_insve_b"),
+            (test_mips_msa_msa_insve_h, "test_mips_msa_msa_insve_h"),
+            (test_mips_msa_msa_insve_w, "test_mips_msa_msa_insve_w"),
+            (test_mips_msa_msa_insve_d, "test_mips_msa_msa_insve_d"),
+            (test_mips_msa_msa_ld_b, "test_mips_msa_msa_ld_b"),
+            (test_mips_msa_msa_ld_h, "test_mips_msa_msa_ld_h"),
+            (test_mips_msa_msa_ld_w, "test_mips_msa_msa_ld_w"),
+            (test_mips_msa_msa_ld_d, "test_mips_msa_msa_ld_d"),
+            (test_mips_msa_msa_ldi_b, "test_mips_msa_msa_ldi_b"),
+            (test_mips_msa_msa_ldi_h, "test_mips_msa_msa_ldi_h"),
+            (test_mips_msa_msa_ldi_w, "test_mips_msa_msa_ldi_w"),
+            (test_mips_msa_msa_ldi_d, "test_mips_msa_msa_ldi_d"),
+            (test_mips_msa_msa_madd_q_h, "test_mips_msa_msa_madd_q_h"),
+            (test_mips_msa_msa_madd_q_w, "test_mips_msa_msa_madd_q_w"),
+            (test_mips_msa_msa_maddr_q_h, "test_mips_msa_msa_maddr_q_h"),
+            (test_mips_msa_msa_maddr_q_w, "test_mips_msa_msa_maddr_q_w"),
+            (test_mips_msa_msa_maddv_b, "test_mips_msa_msa_maddv_b"),
+            (test_mips_msa_msa_maddv_h, "test_mips_msa_msa_maddv_h"),
+            (test_mips_msa_msa_maddv_w, "test_mips_msa_msa_maddv_w"),
+            (test_mips_msa_msa_maddv_d, "test_mips_msa_msa_maddv_d"),
+            (test_mips_msa_msa_max_a_b, "test_mips_msa_msa_max_a_b"),
+            (test_mips_msa_msa_max_a_h, "test_mips_msa_msa_max_a_h"),
+            (test_mips_msa_msa_max_a_w, "test_mips_msa_msa_max_a_w"),
+            (test_mips_msa_msa_max_a_d, "test_mips_msa_msa_max_a_d"),
+            (test_mips_msa_msa_max_s_b, "test_mips_msa_msa_max_s_b"),
+            (test_mips_msa_msa_max_s_h, "test_mips_msa_msa_max_s_h"),
+            (test_mips_msa_msa_max_s_w, "test_mips_msa_msa_max_s_w"),
+            (test_mips_msa_msa_max_s_d, "test_mips_msa_msa_max_s_d"),
+            (test_mips_msa_msa_max_u_b, "test_mips_msa_msa_max_u_b"),
+            (test_mips_msa_msa_max_u_h, "test_mips_msa_msa_max_u_h"),
+            (test_mips_msa_msa_max_u_w, "test_mips_msa_msa_max_u_w"),
+            (test_mips_msa_msa_max_u_d, "test_mips_msa_msa_max_u_d"),
+            (test_mips_msa_msa_maxi_s_b, "test_mips_msa_msa_maxi_s_b"),
+            (test_mips_msa_msa_maxi_s_h, "test_mips_msa_msa_maxi_s_h"),
+            (test_mips_msa_msa_maxi_s_w, "test_mips_msa_msa_maxi_s_w"),
+            (test_mips_msa_msa_maxi_s_d, "test_mips_msa_msa_maxi_s_d"),
+            (test_mips_msa_msa_maxi_u_b, "test_mips_msa_msa_maxi_u_b"),
+            (test_mips_msa_msa_maxi_u_h, "test_mips_msa_msa_maxi_u_h"),
+            (test_mips_msa_msa_maxi_u_w, "test_mips_msa_msa_maxi_u_w"),
+            (test_mips_msa_msa_maxi_u_d, "test_mips_msa_msa_maxi_u_d"),
+            (test_mips_msa_msa_min_a_b, "test_mips_msa_msa_min_a_b"),
+            (test_mips_msa_msa_min_a_h, "test_mips_msa_msa_min_a_h"),
+            (test_mips_msa_msa_min_a_w, "test_mips_msa_msa_min_a_w"),
+            (test_mips_msa_msa_min_a_d, "test_mips_msa_msa_min_a_d"),
+            (test_mips_msa_msa_min_s_b, "test_mips_msa_msa_min_s_b"),
+            (test_mips_msa_msa_min_s_h, "test_mips_msa_msa_min_s_h"),
+            (test_mips_msa_msa_min_s_w, "test_mips_msa_msa_min_s_w"),
+            (test_mips_msa_msa_min_s_d, "test_mips_msa_msa_min_s_d"),
+            (test_mips_msa_msa_mini_s_b, "test_mips_msa_msa_mini_s_b"),
+            (test_mips_msa_msa_mini_s_h, "test_mips_msa_msa_mini_s_h"),
+            (test_mips_msa_msa_mini_s_w, "test_mips_msa_msa_mini_s_w"),
+            (test_mips_msa_msa_mini_s_d, "test_mips_msa_msa_mini_s_d"),
+            (test_mips_msa_msa_min_u_b, "test_mips_msa_msa_min_u_b"),
+            (test_mips_msa_msa_min_u_h, "test_mips_msa_msa_min_u_h"),
+            (test_mips_msa_msa_min_u_w, "test_mips_msa_msa_min_u_w"),
+            (test_mips_msa_msa_min_u_d, "test_mips_msa_msa_min_u_d"),
+            (test_mips_msa_msa_mini_u_b, "test_mips_msa_msa_mini_u_b"),
+            (test_mips_msa_msa_mini_u_h, "test_mips_msa_msa_mini_u_h"),
+            (test_mips_msa_msa_mini_u_w, "test_mips_msa_msa_mini_u_w"),
+            (test_mips_msa_msa_mini_u_d, "test_mips_msa_msa_mini_u_d"),
+            (test_mips_msa_msa_mod_s_b, "test_mips_msa_msa_mod_s_b"),
+            (test_mips_msa_msa_mod_s_h, "test_mips_msa_msa_mod_s_h"),
+            (test_mips_msa_msa_mod_s_w, "test_mips_msa_msa_mod_s_w"),
+            (test_mips_msa_msa_mod_s_d, "test_mips_msa_msa_mod_s_d"),
+            (test_mips_msa_msa_mod_u_b, "test_mips_msa_msa_mod_u_b"),
+            (test_mips_msa_msa_mod_u_h, "test_mips_msa_msa_mod_u_h"),
+            (test_mips_msa_msa_mod_u_w, "test_mips_msa_msa_mod_u_w"),
+            (test_mips_msa_msa_mod_u_d, "test_mips_msa_msa_mod_u_d"),
+            (test_mips_msa_msa_move_v, "test_mips_msa_msa_move_v"),
+            (test_mips_msa_msa_msub_q_h, "test_mips_msa_msa_msub_q_h"),
+            (test_mips_msa_msa_msub_q_w, "test_mips_msa_msa_msub_q_w"),
+            (test_mips_msa_msa_msubr_q_h, "test_mips_msa_msa_msubr_q_h"),
+            (test_mips_msa_msa_msubr_q_w, "test_mips_msa_msa_msubr_q_w"),
+            (test_mips_msa_msa_msubv_b, "test_mips_msa_msa_msubv_b"),
+            (test_mips_msa_msa_msubv_h, "test_mips_msa_msa_msubv_h"),
+            (test_mips_msa_msa_msubv_w, "test_mips_msa_msa_msubv_w"),
+            (test_mips_msa_msa_msubv_d, "test_mips_msa_msa_msubv_d"),
+            (test_mips_msa_msa_mul_q_h, "test_mips_msa_msa_mul_q_h"),
+            (test_mips_msa_msa_mul_q_w, "test_mips_msa_msa_mul_q_w"),
+            (test_mips_msa_msa_mulr_q_h, "test_mips_msa_msa_mulr_q_h"),
+            (test_mips_msa_msa_mulr_q_w, "test_mips_msa_msa_mulr_q_w"),
+            (test_mips_msa_msa_mulv_b, "test_mips_msa_msa_mulv_b"),
+            (test_mips_msa_msa_mulv_h, "test_mips_msa_msa_mulv_h"),
+            (test_mips_msa_msa_mulv_w, "test_mips_msa_msa_mulv_w"),
+            (test_mips_msa_msa_mulv_d, "test_mips_msa_msa_mulv_d"),
+            (test_mips_msa_msa_nloc_b, "test_mips_msa_msa_nloc_b"),
+            (test_mips_msa_msa_nloc_h, "test_mips_msa_msa_nloc_h"),
+            (test_mips_msa_msa_nloc_w, "test_mips_msa_msa_nloc_w"),
+            (test_mips_msa_msa_nloc_d, "test_mips_msa_msa_nloc_d"),
+            (test_mips_msa_msa_nlzc_b, "test_mips_msa_msa_nlzc_b"),
+            (test_mips_msa_msa_nlzc_h, "test_mips_msa_msa_nlzc_h"),
+            (test_mips_msa_msa_nlzc_w, "test_mips_msa_msa_nlzc_w"),
+            (test_mips_msa_msa_nlzc_d, "test_mips_msa_msa_nlzc_d"),
+            (test_mips_msa_msa_nor_v, "test_mips_msa_msa_nor_v"),
+            (test_mips_msa_msa_nori_b, "test_mips_msa_msa_nori_b"),
+            (test_mips_msa_msa_or_v, "test_mips_msa_msa_or_v"),
+            (test_mips_msa_msa_ori_b, "test_mips_msa_msa_ori_b"),
+            (test_mips_msa_msa_pckev_b, "test_mips_msa_msa_pckev_b"),
+            (test_mips_msa_msa_pckev_h, "test_mips_msa_msa_pckev_h"),
+            (test_mips_msa_msa_pckev_w, "test_mips_msa_msa_pckev_w"),
+            (test_mips_msa_msa_pckev_d, "test_mips_msa_msa_pckev_d"),
+            (test_mips_msa_msa_pckod_b, "test_mips_msa_msa_pckod_b"),
+            (test_mips_msa_msa_pckod_h, "test_mips_msa_msa_pckod_h"),
+            (test_mips_msa_msa_pckod_w, "test_mips_msa_msa_pckod_w"),
+            (test_mips_msa_msa_pckod_d, "test_mips_msa_msa_pckod_d"),
+            (test_mips_msa_msa_pcnt_b, "test_mips_msa_msa_pcnt_b"),
+            (test_mips_msa_msa_pcnt_h, "test_mips_msa_msa_pcnt_h"),
+            (test_mips_msa_msa_pcnt_w, "test_mips_msa_msa_pcnt_w"),
+            (test_mips_msa_msa_pcnt_d, "test_mips_msa_msa_pcnt_d"),
+            (test_mips_msa_msa_sat_s_b, "test_mips_msa_msa_sat_s_b"),
+            (test_mips_msa_msa_sat_s_h, "test_mips_msa_msa_sat_s_h"),
+            (test_mips_msa_msa_sat_s_w, "test_mips_msa_msa_sat_s_w"),
+            (test_mips_msa_msa_sat_s_d, "test_mips_msa_msa_sat_s_d"),
+            (test_mips_msa_msa_sat_u_b, "test_mips_msa_msa_sat_u_b"),
+            (test_mips_msa_msa_sat_u_h, "test_mips_msa_msa_sat_u_h"),
+            (test_mips_msa_msa_sat_u_w, "test_mips_msa_msa_sat_u_w"),
+            (test_mips_msa_msa_sat_u_d, "test_mips_msa_msa_sat_u_d"),
+            (test_mips_msa_msa_shf_b, "test_mips_msa_msa_shf_b"),
+            (test_mips_msa_msa_shf_h, "test_mips_msa_msa_shf_h"),
+            (test_mips_msa_msa_shf_w, "test_mips_msa_msa_shf_w"),
+            (test_mips_msa_msa_sld_b, "test_mips_msa_msa_sld_b"),
+            (test_mips_msa_msa_sld_h, "test_mips_msa_msa_sld_h"),
+            (test_mips_msa_msa_sld_w, "test_mips_msa_msa_sld_w"),
+            (test_mips_msa_msa_sld_d, "test_mips_msa_msa_sld_d"),
+            (test_mips_msa_msa_sldi_b, "test_mips_msa_msa_sldi_b"),
+            (test_mips_msa_msa_sldi_h, "test_mips_msa_msa_sldi_h"),
+            (test_mips_msa_msa_sldi_w, "test_mips_msa_msa_sldi_w"),
+            (test_mips_msa_msa_sldi_d, "test_mips_msa_msa_sldi_d"),
+            (test_mips_msa_msa_sll_b, "test_mips_msa_msa_sll_b"),
+            (test_mips_msa_msa_sll_h, "test_mips_msa_msa_sll_h"),
+            (test_mips_msa_msa_sll_w, "test_mips_msa_msa_sll_w"),
+            (test_mips_msa_msa_sll_d, "test_mips_msa_msa_sll_d"),
+            (test_mips_msa_msa_slli_b, "test_mips_msa_msa_slli_b"),
+            (test_mips_msa_msa_slli_h, "test_mips_msa_msa_slli_h"),
+            (test_mips_msa_msa_slli_w, "test_mips_msa_msa_slli_w"),
+            (test_mips_msa_msa_slli_d, "test_mips_msa_msa_slli_d"),
+            (test_mips_msa_msa_splat_b, "test_mips_msa_msa_splat_b"),
+            (test_mips_msa_msa_splat_h, "test_mips_msa_msa_splat_h"),
+            (test_mips_msa_msa_splat_w, "test_mips_msa_msa_splat_w"),
+            (test_mips_msa_msa_splat_d, "test_mips_msa_msa_splat_d"),
+            (test_mips_msa_msa_splati_b, "test_mips_msa_msa_splati_b"),
+            (test_mips_msa_msa_splati_h, "test_mips_msa_msa_splati_h"),
+            (test_mips_msa_msa_splati_w, "test_mips_msa_msa_splati_w"),
+            (test_mips_msa_msa_splati_d, "test_mips_msa_msa_splati_d"),
+            (test_mips_msa_msa_sra_b, "test_mips_msa_msa_sra_b"),
+            (test_mips_msa_msa_sra_h, "test_mips_msa_msa_sra_h"),
+            (test_mips_msa_msa_sra_w, "test_mips_msa_msa_sra_w"),
+            (test_mips_msa_msa_sra_d, "test_mips_msa_msa_sra_d"),
+            (test_mips_msa_msa_srai_b, "test_mips_msa_msa_srai_b"),
+            (test_mips_msa_msa_srai_h, "test_mips_msa_msa_srai_h"),
+            (test_mips_msa_msa_srai_w, "test_mips_msa_msa_srai_w"),
+            (test_mips_msa_msa_srai_d, "test_mips_msa_msa_srai_d"),
+            (test_mips_msa_msa_srar_b, "test_mips_msa_msa_srar_b"),
+            (test_mips_msa_msa_srar_h, "test_mips_msa_msa_srar_h"),
+            (test_mips_msa_msa_srar_w, "test_mips_msa_msa_srar_w"),
+            (test_mips_msa_msa_srar_d, "test_mips_msa_msa_srar_d"),
+            (test_mips_msa_msa_srari_b, "test_mips_msa_msa_srari_b"),
+            (test_mips_msa_msa_srari_h, "test_mips_msa_msa_srari_h"),
+            (test_mips_msa_msa_srari_w, "test_mips_msa_msa_srari_w"),
+            (test_mips_msa_msa_srari_d, "test_mips_msa_msa_srari_d"),
+            (test_mips_msa_msa_srl_b, "test_mips_msa_msa_srl_b"),
+            (test_mips_msa_msa_srl_h, "test_mips_msa_msa_srl_h"),
+            (test_mips_msa_msa_srl_w, "test_mips_msa_msa_srl_w"),
+            (test_mips_msa_msa_srl_d, "test_mips_msa_msa_srl_d"),
+            (test_mips_msa_msa_srli_b, "test_mips_msa_msa_srli_b"),
+            (test_mips_msa_msa_srli_h, "test_mips_msa_msa_srli_h"),
+            (test_mips_msa_msa_srli_w, "test_mips_msa_msa_srli_w"),
+            (test_mips_msa_msa_srli_d, "test_mips_msa_msa_srli_d"),
+            (test_mips_msa_msa_srlr_b, "test_mips_msa_msa_srlr_b"),
+            (test_mips_msa_msa_srlr_h, "test_mips_msa_msa_srlr_h"),
+            (test_mips_msa_msa_srlr_w, "test_mips_msa_msa_srlr_w"),
+            (test_mips_msa_msa_srlr_d, "test_mips_msa_msa_srlr_d"),
+            (test_mips_msa_msa_srlri_b, "test_mips_msa_msa_srlri_b"),
+            (test_mips_msa_msa_srlri_h, "test_mips_msa_msa_srlri_h"),
+            (test_mips_msa_msa_srlri_w, "test_mips_msa_msa_srlri_w"),
+            (test_mips_msa_msa_srlri_d, "test_mips_msa_msa_srlri_d"),
+            (test_mips_msa_msa_st_b, "test_mips_msa_msa_st_b"),
+            (test_mips_msa_msa_st_h, "test_mips_msa_msa_st_h"),
+            (test_mips_msa_msa_st_w, "test_mips_msa_msa_st_w"),
+            (test_mips_msa_msa_st_d, "test_mips_msa_msa_st_d"),
+            (test_mips_msa_msa_subs_s_b, "test_mips_msa_msa_subs_s_b"),
+            (test_mips_msa_msa_subs_s_h, "test_mips_msa_msa_subs_s_h"),
+            (test_mips_msa_msa_subs_s_w, "test_mips_msa_msa_subs_s_w"),
+            (test_mips_msa_msa_subs_s_d, "test_mips_msa_msa_subs_s_d"),
+            (test_mips_msa_msa_subs_u_b, "test_mips_msa_msa_subs_u_b"),
+            (test_mips_msa_msa_subs_u_h, "test_mips_msa_msa_subs_u_h"),
+            (test_mips_msa_msa_subs_u_w, "test_mips_msa_msa_subs_u_w"),
+            (test_mips_msa_msa_subs_u_d, "test_mips_msa_msa_subs_u_d"),
+            (test_mips_msa_msa_subsus_u_b, "test_mips_msa_msa_subsus_u_b"),
+            (test_mips_msa_msa_subsus_u_h, "test_mips_msa_msa_subsus_u_h"),
+            (test_mips_msa_msa_subsus_u_w, "test_mips_msa_msa_subsus_u_w"),
+            (test_mips_msa_msa_subsus_u_d, "test_mips_msa_msa_subsus_u_d"),
+            (test_mips_msa_msa_subsuu_s_b, "test_mips_msa_msa_subsuu_s_b"),
+            (test_mips_msa_msa_subsuu_s_h, "test_mips_msa_msa_subsuu_s_h"),
+            (test_mips_msa_msa_subsuu_s_w, "test_mips_msa_msa_subsuu_s_w"),
+            (test_mips_msa_msa_subsuu_s_d, "test_mips_msa_msa_subsuu_s_d"),
+            (test_mips_msa_msa_subv_b, "test_mips_msa_msa_subv_b"),
+            (test_mips_msa_msa_subv_h, "test_mips_msa_msa_subv_h"),
+            (test_mips_msa_msa_subv_w, "test_mips_msa_msa_subv_w"),
+            (test_mips_msa_msa_subv_d, "test_mips_msa_msa_subv_d"),
+            (test_mips_msa_msa_subvi_b, "test_mips_msa_msa_subvi_b"),
+            (test_mips_msa_msa_subvi_h, "test_mips_msa_msa_subvi_h"),
+            (test_mips_msa_msa_subvi_w, "test_mips_msa_msa_subvi_w"),
+            (test_mips_msa_msa_subvi_d, "test_mips_msa_msa_subvi_d"),
+            (test_mips_msa_msa_vshf_b, "test_mips_msa_msa_vshf_b"),
+            (test_mips_msa_msa_vshf_h, "test_mips_msa_msa_vshf_h"),
+            (test_mips_msa_msa_vshf_w, "test_mips_msa_msa_vshf_w"),
+            (test_mips_msa_msa_vshf_d, "test_mips_msa_msa_vshf_d"),
+            (test_mips_msa_msa_xor_v, "test_mips_msa_msa_xor_v"),
+            (test_mips_msa_msa_xori_b, "test_mips_msa_msa_xori_b"),
+        ]
+    }
+}

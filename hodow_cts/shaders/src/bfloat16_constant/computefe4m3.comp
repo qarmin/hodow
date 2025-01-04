@@ -1,0 +1,34 @@
+#version 450
+#extension GL_EXT_float_e4m3: require
+layout(binding=0) buffer InBufferX { fe4m3vec4 x[]; };
+layout(binding=1) buffer InBufferY { fe4m3vec4 y[]; };
+layout(binding=2) buffer OutBuffer { fe4m3vec4 z[]; };
+layout(local_size_x_id = 0, local_size_y_id = 2, local_size_z_id = 4) in;
+// local_size_x_id
+layout(constant_id = 1)  const floate4m3_t c1 = floate4m3_t(0.0);
+// local_size_y_id
+layout(constant_id = 3)  const floate4m3_t c3 = floate4m3_t(0.0);
+// local_size_z_id
+layout(constant_id = 5)  const floate4m3_t c5 = floate4m3_t(0.0);
+layout(constant_id = 6)  const floate4m3_t c6 = floate4m3_t(0.0);
+layout(constant_id = 7)  const float c7 = 0.0;
+layout(constant_id = 8)  const floate4m3_t c8 = floate4m3_t(0.0);
+layout(constant_id = 9)  const floate4m3_t c9 = floate4m3_t(0.0);
+layout(constant_id = 10) const floate4m3_t c10 = floate4m3_t(0.0);
+layout(constant_id = 11) const float c11 = 0.0;
+const floate4m3_t c12 = floate4m3_t(c11);
+const float c13 = float(c12);
+void main() {
+    z[0].x = floate4m3_t(float(gl_WorkGroupSize.x));
+    z[0].y = floate4m3_t(c1);
+    z[0].z = floate4m3_t(float(gl_WorkGroupSize.y));
+    z[0].w = floate4m3_t(c3);
+    z[1].x = floate4m3_t(float(gl_WorkGroupSize.z));
+    z[1].y = floate4m3_t(c5);
+    z[1].z = floate4m3_t(c6);
+    z[1].w = floate4m3_t(c7);
+    z[2].x = floate4m3_t(c8);
+    z[2].y = floate4m3_t(c9);
+    z[2].z = floate4m3_t(c10);
+    z[2].w = floate4m3_t(c13);
+}

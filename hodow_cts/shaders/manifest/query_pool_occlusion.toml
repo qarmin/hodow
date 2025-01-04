@@ -1,0 +1,44 @@
+# Shader manifest for dEQP-VK.query_pool.occlusion_query.*
+#
+# The vertex shader is shared with the concurrent-queries group. The fragment shader of the
+# basic and functional cases discards every pixel whose x and y parities agree when
+# `discard_half` is set, which is the only thing that varies. The no-attachment cases use their
+# own pair.
+
+upstream_source = "external/vulkancts/modules/vulkan/query_pool/vktQueryPoolOcclusionTests.cpp"
+rust_module = "query_pool/occlusion_tests"
+
+[[case]]
+name = "keep_all"
+rust_const = "OCCLUSION_KEEP_ALL"
+rust_type = "OcclusionProgram"
+programs = [
+    { name = "vert", template = "query_pool/concurrent.vert", stage = "vert" },
+    { name = "frag", template = "query_pool/occlusion.frag", stage = "frag" },
+]
+[case.params]
+discard_half = { type = "bool", value = false }
+[case.derived]
+discard_code = "'    if ((int(gl_FragCoord.x) % 2) == (int(gl_FragCoord.y) % 2))\\n        discard;' if discard_half else ''"
+
+[[case]]
+name = "discard_half"
+rust_const = "OCCLUSION_DISCARD_HALF"
+rust_type = "OcclusionProgram"
+programs = [
+    { name = "vert", template = "query_pool/concurrent.vert", stage = "vert" },
+    { name = "frag", template = "query_pool/occlusion.frag", stage = "frag" },
+]
+[case.params]
+discard_half = { type = "bool", value = true }
+[case.derived]
+discard_code = "'    if ((int(gl_FragCoord.x) % 2) == (int(gl_FragCoord.y) % 2))\\n        discard;' if discard_half else ''"
+
+[[case]]
+name = "no_attachments"
+rust_const = "OCCLUSION_NO_ATTACHMENTS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "query_pool/occlusion_no_attachments.vert", stage = "vert" },
+    { name = "frag", template = "query_pool/occlusion_no_attachments.frag", stage = "frag" },
+]

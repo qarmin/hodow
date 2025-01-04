@@ -1,0 +1,24 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.early_destroy.*
+#
+# `EarlyDestroyTestCase::initPrograms`: a trivial compute shader writing one image, or a vertex/fragment pair
+# (the fragment shader is built by upstream but the pipeline never uses it, rasterizer discard being on).
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineEarlyDestroyTests.cpp"
+rust_module = "pipeline/early_destroy_tests"
+
+[[case]]
+name = "compute"
+rust_const = "EARLY_DESTROY_COMPUTE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "pipeline/early_destroy.comp", stage = "comp" },
+]
+
+[[case]]
+name = "graphics"
+rust_const = "EARLY_DESTROY_GRAPHICS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/early_destroy.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/early_destroy.frag", stage = "frag" },
+]

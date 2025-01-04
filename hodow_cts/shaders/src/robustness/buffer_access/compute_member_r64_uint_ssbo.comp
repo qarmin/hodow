@@ -1,0 +1,28 @@
+#version 440
+#extension GL_EXT_texture_buffer : require
+#extension GL_EXT_shader_explicit_arithmetic_types_int64 : require
+precision highp float;
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(binding = 0, std430) buffer readonly InBuffer
+{
+    u64vec4 inVec;
+};
+
+layout(binding = 1, std430) buffer OutBuffer
+{
+    u64vec4 outVec;
+};
+
+layout(binding = 2, std140) uniform Indices
+{
+    int inIndex;
+    int outIndex;
+};
+
+void main (void)
+{
+    outVec[outIndex] = inVec[inIndex];
+    outVec[outIndex + 1] = inVec[inIndex + 1];
+    outVec[outIndex + 2] = inVec[inIndex + 2];
+    outVec[outIndex + 3] = inVec[inIndex + 3];
+}

@@ -1,0 +1,33 @@
+#version 450
+#extension GL_EXT_long_vector : enable
+layout(local_size_x = 1) in;
+
+struct Inputs
+{
+	mediump vector<uint, 5> value;
+};
+struct Outputs
+{
+	lowp vector<int, 5> msb;
+};
+
+layout(set = 0, binding = 0, std430) buffer InBuffer
+{
+    Inputs inputs[];
+};
+layout(set = 0, binding = 1, std430) buffer OutBuffer
+{
+    Outputs outputs[];
+};
+
+void main (void)
+{
+    uint invocationNdx = gl_NumWorkGroups.x*gl_NumWorkGroups.y*gl_WorkGroupID.z
+                       + gl_NumWorkGroups.x*gl_WorkGroupID.y + gl_WorkGroupID.x;
+	vector<uint, 5> value = vector<uint, 5>(inputs[invocationNdx].value);
+	vector<int, 5> msb;
+
+	msb = findMSB(value);
+
+	outputs[invocationNdx].msb = msb;
+}

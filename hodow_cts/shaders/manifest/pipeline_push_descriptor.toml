@@ -1,0 +1,503 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.push_descriptor.{graphics,compute}.*
+#
+# `initPrograms` of the push descriptor test cases, expanded per descriptor type and binding (the only things the sources depend on): the buffer
+# graphics/compute cases (the buffer is `uniform`/`readonly buffer` in the graphics shader and `uniform`/`buffer` in the compute one),
+# the sampler/image graphics and compute cases (`binding_next`/`binding_next2` are the descriptors after the first), the texel buffer cases,
+# the input attachment cases and `PushDescriptorIncrementalUpdatesComputeTest`. Every textured graphics case shares `textured.vert`.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelinePushDescriptorTests.cpp"
+rust_module = "pipeline/push_descriptor_tests"
+
+[[case]]
+name = "pd_buffer_graphics_uniform_binding0"
+rust_const = "PD_BUFFER_GRAPHICS_UNIFORM_BINDING0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/buffer_graphics.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/buffer_graphics.frag", stage = "frag" },
+]
+derived = { binding = "0", binding_next = "1", buffer_type = "'uniform'" }
+
+[[case]]
+name = "pd_buffer_graphics_uniform_binding1"
+rust_const = "PD_BUFFER_GRAPHICS_UNIFORM_BINDING1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/buffer_graphics.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/buffer_graphics.frag", stage = "frag" },
+]
+derived = { binding = "1", binding_next = "2", buffer_type = "'uniform'" }
+
+[[case]]
+name = "pd_buffer_graphics_uniform_binding3"
+rust_const = "PD_BUFFER_GRAPHICS_UNIFORM_BINDING3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/buffer_graphics.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/buffer_graphics.frag", stage = "frag" },
+]
+derived = { binding = "3", binding_next = "4", buffer_type = "'uniform'" }
+
+[[case]]
+name = "pd_buffer_graphics_storage_binding0"
+rust_const = "PD_BUFFER_GRAPHICS_STORAGE_BINDING0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/buffer_graphics.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/buffer_graphics.frag", stage = "frag" },
+]
+derived = { binding = "0", binding_next = "1", buffer_type = "'readonly buffer'" }
+
+[[case]]
+name = "pd_buffer_graphics_storage_binding1"
+rust_const = "PD_BUFFER_GRAPHICS_STORAGE_BINDING1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/buffer_graphics.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/buffer_graphics.frag", stage = "frag" },
+]
+derived = { binding = "1", binding_next = "2", buffer_type = "'readonly buffer'" }
+
+[[case]]
+name = "pd_buffer_graphics_storage_binding3"
+rust_const = "PD_BUFFER_GRAPHICS_STORAGE_BINDING3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/buffer_graphics.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/buffer_graphics.frag", stage = "frag" },
+]
+derived = { binding = "3", binding_next = "4", buffer_type = "'readonly buffer'" }
+
+[[case]]
+name = "pd_buffer_compute_uniform_binding0"
+rust_const = "PD_BUFFER_COMPUTE_UNIFORM_BINDING0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_descriptor/buffer_compute.comp", stage = "comp" },
+]
+derived = { binding = "0", binding_next = "1", buffer_type = "'uniform'" }
+
+[[case]]
+name = "pd_buffer_compute_uniform_binding1"
+rust_const = "PD_BUFFER_COMPUTE_UNIFORM_BINDING1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_descriptor/buffer_compute.comp", stage = "comp" },
+]
+derived = { binding = "1", binding_next = "2", buffer_type = "'uniform'" }
+
+[[case]]
+name = "pd_buffer_compute_uniform_binding3"
+rust_const = "PD_BUFFER_COMPUTE_UNIFORM_BINDING3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_descriptor/buffer_compute.comp", stage = "comp" },
+]
+derived = { binding = "3", binding_next = "4", buffer_type = "'uniform'" }
+
+[[case]]
+name = "pd_buffer_compute_storage_binding0"
+rust_const = "PD_BUFFER_COMPUTE_STORAGE_BINDING0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_descriptor/buffer_compute.comp", stage = "comp" },
+]
+derived = { binding = "0", binding_next = "1", buffer_type = "'buffer'" }
+
+[[case]]
+name = "pd_buffer_compute_storage_binding1"
+rust_const = "PD_BUFFER_COMPUTE_STORAGE_BINDING1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_descriptor/buffer_compute.comp", stage = "comp" },
+]
+derived = { binding = "1", binding_next = "2", buffer_type = "'buffer'" }
+
+[[case]]
+name = "pd_buffer_compute_storage_binding3"
+rust_const = "PD_BUFFER_COMPUTE_STORAGE_BINDING3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_descriptor/buffer_compute.comp", stage = "comp" },
+]
+derived = { binding = "3", binding_next = "4", buffer_type = "'buffer'" }
+
+[[case]]
+name = "pd_incremental_updates"
+rust_const = "PD_INCREMENTAL_UPDATES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "pipeline/push_descriptor/incremental_updates.comp", stage = "comp" },
+]
+
+[[case]]
+name = "pd_image_graphics_combined_binding0"
+rust_const = "PD_IMAGE_GRAPHICS_COMBINED_BINDING0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/textured.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/image_graphics_combined.frag", stage = "frag" },
+]
+derived = { binding = "0", binding_next = "1", binding_next2 = "2" }
+
+[[case]]
+name = "pd_image_graphics_combined_binding1"
+rust_const = "PD_IMAGE_GRAPHICS_COMBINED_BINDING1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/textured.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/image_graphics_combined.frag", stage = "frag" },
+]
+derived = { binding = "1", binding_next = "2", binding_next2 = "3" }
+
+[[case]]
+name = "pd_image_graphics_combined_binding3"
+rust_const = "PD_IMAGE_GRAPHICS_COMBINED_BINDING3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/textured.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/image_graphics_combined.frag", stage = "frag" },
+]
+derived = { binding = "3", binding_next = "4", binding_next2 = "5" }
+
+[[case]]
+name = "pd_image_graphics_sampler_binding0"
+rust_const = "PD_IMAGE_GRAPHICS_SAMPLER_BINDING0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/textured.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/image_graphics_sampler.frag", stage = "frag" },
+]
+derived = { binding = "0", binding_next = "1", binding_next2 = "2" }
+
+[[case]]
+name = "pd_image_graphics_sampler_binding1"
+rust_const = "PD_IMAGE_GRAPHICS_SAMPLER_BINDING1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/textured.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/image_graphics_sampler.frag", stage = "frag" },
+]
+derived = { binding = "1", binding_next = "2", binding_next2 = "3" }
+
+[[case]]
+name = "pd_image_graphics_sampler_binding3"
+rust_const = "PD_IMAGE_GRAPHICS_SAMPLER_BINDING3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/textured.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/image_graphics_sampler.frag", stage = "frag" },
+]
+derived = { binding = "3", binding_next = "4", binding_next2 = "5" }
+
+[[case]]
+name = "pd_image_graphics_sampled_image_binding0"
+rust_const = "PD_IMAGE_GRAPHICS_SAMPLED_IMAGE_BINDING0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/textured.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/image_graphics_sampled_image.frag", stage = "frag" },
+]
+derived = { binding = "0", binding_next = "1", binding_next2 = "2" }
+
+[[case]]
+name = "pd_image_graphics_sampled_image_binding1"
+rust_const = "PD_IMAGE_GRAPHICS_SAMPLED_IMAGE_BINDING1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/textured.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/image_graphics_sampled_image.frag", stage = "frag" },
+]
+derived = { binding = "1", binding_next = "2", binding_next2 = "3" }
+
+[[case]]
+name = "pd_image_graphics_sampled_image_binding3"
+rust_const = "PD_IMAGE_GRAPHICS_SAMPLED_IMAGE_BINDING3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/textured.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/image_graphics_sampled_image.frag", stage = "frag" },
+]
+derived = { binding = "3", binding_next = "4", binding_next2 = "5" }
+
+[[case]]
+name = "pd_image_graphics_storage_binding0"
+rust_const = "PD_IMAGE_GRAPHICS_STORAGE_BINDING0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/textured.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/image_graphics_storage.frag", stage = "frag" },
+]
+derived = { binding = "0", binding_next = "1", binding_next2 = "2" }
+
+[[case]]
+name = "pd_image_graphics_storage_binding1"
+rust_const = "PD_IMAGE_GRAPHICS_STORAGE_BINDING1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/textured.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/image_graphics_storage.frag", stage = "frag" },
+]
+derived = { binding = "1", binding_next = "2", binding_next2 = "3" }
+
+[[case]]
+name = "pd_image_graphics_storage_binding3"
+rust_const = "PD_IMAGE_GRAPHICS_STORAGE_BINDING3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/textured.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/image_graphics_storage.frag", stage = "frag" },
+]
+derived = { binding = "3", binding_next = "4", binding_next2 = "5" }
+
+[[case]]
+name = "pd_image_compute_combined_binding0"
+rust_const = "PD_IMAGE_COMPUTE_COMBINED_BINDING0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_descriptor/image_compute_combined.comp", stage = "comp" },
+]
+derived = { binding = "0", binding_next = "1", binding_next2 = "2" }
+
+[[case]]
+name = "pd_image_compute_combined_binding1"
+rust_const = "PD_IMAGE_COMPUTE_COMBINED_BINDING1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_descriptor/image_compute_combined.comp", stage = "comp" },
+]
+derived = { binding = "1", binding_next = "2", binding_next2 = "3" }
+
+[[case]]
+name = "pd_image_compute_combined_binding3"
+rust_const = "PD_IMAGE_COMPUTE_COMBINED_BINDING3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_descriptor/image_compute_combined.comp", stage = "comp" },
+]
+derived = { binding = "3", binding_next = "4", binding_next2 = "5" }
+
+[[case]]
+name = "pd_image_compute_sampler_binding0"
+rust_const = "PD_IMAGE_COMPUTE_SAMPLER_BINDING0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_descriptor/image_compute_sampler.comp", stage = "comp" },
+]
+derived = { binding = "0", binding_next = "1", binding_next2 = "2" }
+
+[[case]]
+name = "pd_image_compute_sampler_binding1"
+rust_const = "PD_IMAGE_COMPUTE_SAMPLER_BINDING1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_descriptor/image_compute_sampler.comp", stage = "comp" },
+]
+derived = { binding = "1", binding_next = "2", binding_next2 = "3" }
+
+[[case]]
+name = "pd_image_compute_sampler_binding3"
+rust_const = "PD_IMAGE_COMPUTE_SAMPLER_BINDING3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_descriptor/image_compute_sampler.comp", stage = "comp" },
+]
+derived = { binding = "3", binding_next = "4", binding_next2 = "5" }
+
+[[case]]
+name = "pd_image_compute_sampled_image_binding0"
+rust_const = "PD_IMAGE_COMPUTE_SAMPLED_IMAGE_BINDING0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_descriptor/image_compute_sampled_image.comp", stage = "comp" },
+]
+derived = { binding = "0", binding_next = "1", binding_next2 = "2" }
+
+[[case]]
+name = "pd_image_compute_sampled_image_binding1"
+rust_const = "PD_IMAGE_COMPUTE_SAMPLED_IMAGE_BINDING1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_descriptor/image_compute_sampled_image.comp", stage = "comp" },
+]
+derived = { binding = "1", binding_next = "2", binding_next2 = "3" }
+
+[[case]]
+name = "pd_image_compute_sampled_image_binding3"
+rust_const = "PD_IMAGE_COMPUTE_SAMPLED_IMAGE_BINDING3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_descriptor/image_compute_sampled_image.comp", stage = "comp" },
+]
+derived = { binding = "3", binding_next = "4", binding_next2 = "5" }
+
+[[case]]
+name = "pd_image_compute_storage_binding0"
+rust_const = "PD_IMAGE_COMPUTE_STORAGE_BINDING0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_descriptor/image_compute_storage.comp", stage = "comp" },
+]
+derived = { binding = "0", binding_next = "1", binding_next2 = "2" }
+
+[[case]]
+name = "pd_image_compute_storage_binding1"
+rust_const = "PD_IMAGE_COMPUTE_STORAGE_BINDING1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_descriptor/image_compute_storage.comp", stage = "comp" },
+]
+derived = { binding = "1", binding_next = "2", binding_next2 = "3" }
+
+[[case]]
+name = "pd_image_compute_storage_binding3"
+rust_const = "PD_IMAGE_COMPUTE_STORAGE_BINDING3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_descriptor/image_compute_storage.comp", stage = "comp" },
+]
+derived = { binding = "3", binding_next = "4", binding_next2 = "5" }
+
+[[case]]
+name = "pd_texel_graphics_uniform_binding0"
+rust_const = "PD_TEXEL_GRAPHICS_UNIFORM_BINDING0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/textured.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/texel_graphics_uniform.frag", stage = "frag" },
+]
+derived = { binding = "0", binding_next = "1" }
+
+[[case]]
+name = "pd_texel_graphics_uniform_binding1"
+rust_const = "PD_TEXEL_GRAPHICS_UNIFORM_BINDING1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/textured.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/texel_graphics_uniform.frag", stage = "frag" },
+]
+derived = { binding = "1", binding_next = "2" }
+
+[[case]]
+name = "pd_texel_graphics_uniform_binding3"
+rust_const = "PD_TEXEL_GRAPHICS_UNIFORM_BINDING3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/textured.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/texel_graphics_uniform.frag", stage = "frag" },
+]
+derived = { binding = "3", binding_next = "4" }
+
+[[case]]
+name = "pd_texel_graphics_storage_binding0"
+rust_const = "PD_TEXEL_GRAPHICS_STORAGE_BINDING0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/textured.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/texel_graphics_storage.frag", stage = "frag" },
+]
+derived = { binding = "0", binding_next = "1" }
+
+[[case]]
+name = "pd_texel_graphics_storage_binding1"
+rust_const = "PD_TEXEL_GRAPHICS_STORAGE_BINDING1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/textured.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/texel_graphics_storage.frag", stage = "frag" },
+]
+derived = { binding = "1", binding_next = "2" }
+
+[[case]]
+name = "pd_texel_graphics_storage_binding3"
+rust_const = "PD_TEXEL_GRAPHICS_STORAGE_BINDING3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/textured.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/texel_graphics_storage.frag", stage = "frag" },
+]
+derived = { binding = "3", binding_next = "4" }
+
+[[case]]
+name = "pd_texel_compute_uniform_binding0"
+rust_const = "PD_TEXEL_COMPUTE_UNIFORM_BINDING0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_descriptor/texel_compute_uniform.comp", stage = "comp" },
+]
+derived = { binding = "0", binding_next = "1" }
+
+[[case]]
+name = "pd_texel_compute_uniform_binding1"
+rust_const = "PD_TEXEL_COMPUTE_UNIFORM_BINDING1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_descriptor/texel_compute_uniform.comp", stage = "comp" },
+]
+derived = { binding = "1", binding_next = "2" }
+
+[[case]]
+name = "pd_texel_compute_uniform_binding3"
+rust_const = "PD_TEXEL_COMPUTE_UNIFORM_BINDING3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_descriptor/texel_compute_uniform.comp", stage = "comp" },
+]
+derived = { binding = "3", binding_next = "4" }
+
+[[case]]
+name = "pd_texel_compute_storage_binding0"
+rust_const = "PD_TEXEL_COMPUTE_STORAGE_BINDING0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_descriptor/texel_compute_storage.comp", stage = "comp" },
+]
+derived = { binding = "0", binding_next = "1" }
+
+[[case]]
+name = "pd_texel_compute_storage_binding1"
+rust_const = "PD_TEXEL_COMPUTE_STORAGE_BINDING1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_descriptor/texel_compute_storage.comp", stage = "comp" },
+]
+derived = { binding = "1", binding_next = "2" }
+
+[[case]]
+name = "pd_texel_compute_storage_binding3"
+rust_const = "PD_TEXEL_COMPUTE_STORAGE_BINDING3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_descriptor/texel_compute_storage.comp", stage = "comp" },
+]
+derived = { binding = "3", binding_next = "4" }
+
+[[case]]
+name = "pd_input_attachment_binding0"
+rust_const = "PD_INPUT_ATTACHMENT_BINDING0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/textured.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/input_attachment.frag", stage = "frag" },
+]
+derived = { binding = "0" }
+
+[[case]]
+name = "pd_input_attachment_binding1"
+rust_const = "PD_INPUT_ATTACHMENT_BINDING1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/textured.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/input_attachment.frag", stage = "frag" },
+]
+derived = { binding = "1" }
+
+[[case]]
+name = "pd_input_attachment_binding3"
+rust_const = "PD_INPUT_ATTACHMENT_BINDING3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_descriptor/textured.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_descriptor/input_attachment.frag", stage = "frag" },
+]
+derived = { binding = "3" }

@@ -1,0 +1,20 @@
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+#extension GL_EXT_float_e5m2 : require
+#extension GL_ARM_tensors_float_e5m2 : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding = 0) uniform tensorARM<floate5m2_t, 1> tens;
+layout(set=0, binding = 1, std430) buffer _buff { floate5m2_t data[]; };
+void main()
+{
+	const uint size_d0 = tensorSizeARM(tens, 0);
+	const uint line = gl_GlobalInvocationID.x;
+	const uint line_count = 1;
+	if (line >= line_count) return;
+	const uint buffer_base_index = gl_GlobalInvocationID.x * 4;
+	tensorWriteARM(tens, uint[](size_d0 + -1), data[buffer_base_index + 0]);
+	tensorWriteARM(tens, uint[](size_d0 + 0), data[buffer_base_index + 1]);
+	tensorWriteARM(tens, uint[](size_d0 + 13), data[buffer_base_index + 2]);
+	tensorWriteARM(tens, uint[](size_d0 + 65537), data[buffer_base_index + 3]);
+}

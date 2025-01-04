@@ -1,0 +1,32 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+layout(local_size_x=8, local_size_y=4, local_size_z=4) in;
+layout(triangles) out;
+layout(max_vertices=256, max_primitives=256) out;
+
+layout (set=0, binding=0) uniform CoordsBuffer {
+    vec4 coords[3];
+} cb;
+layout (set=0, binding=1, std430) readonly buffer IndexBuffer {
+    uint indices[3];
+} ib;
+
+layout (location=0) out perprimitiveEXT vec4 triangleColor[];
+
+void main ()
+{
+    SetMeshOutputsEXT(3u, 1u);
+    triangleColor[0] = vec4(0.0, 0.0, 1.0, 1.0);
+
+    const uint vertexIndex = gl_LocalInvocationIndex;
+    if (vertexIndex < 3u)
+    {
+        const uint coordsIndex = ib.indices[vertexIndex];
+        gl_MeshVerticesEXT[vertexIndex].gl_Position = cb.coords[coordsIndex];
+    }
+    if (vertexIndex == 0u)
+    {
+        gl_PrimitiveTriangleIndicesEXT[0] = uvec3(0, 1, 2);
+    }
+}

@@ -1,0 +1,17 @@
+# Shader manifest for dEQP-VK.memory.concurrent_access.*
+#
+# One case. Upstream's initPrograms() adds all three integer widths and the test picks
+# the smallest the device can read from a storage buffer, so all three are declared.
+
+upstream_source = "external/vulkancts/modules/vulkan/memory/vktMemoryConcurrentAccessTests.cpp"
+rust_module = "memory/concurrent_access_tests"
+
+[[case]]
+name = "shader_and_host"
+rust_const = "SHADER_AND_HOST"
+rust_type = "ConcurrentAccessCase"
+programs = [
+  { name = "comp_1", template = "memory/concurrent_access_comp_1.comp", stage = "comp" },
+  { name = "comp_2", template = "memory/concurrent_access_comp_2.comp", stage = "comp" },
+  { name = "comp_4", template = "memory/concurrent_access_comp_4.comp", stage = "comp" },
+]

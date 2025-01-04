@@ -1,0 +1,12 @@
+#version 450
+layout (location = 1) out uvec4 outColor1;
+layout (location = 2) out uvec4 outColor2;
+layout (location = 3) out uvec4 outColor3;
+layout (location = 4) out uvec4 outColor4;
+void main() {
+    outColor1 = uvec4(255);
+    outColor2 = uvec4(255);
+    outColor3 = uvec4(255);
+    outColor4 = uvec4(255);
+    gl_FragDepth = 0.5f;
+}

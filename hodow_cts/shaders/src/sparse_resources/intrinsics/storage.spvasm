@@ -1,0 +1,127 @@
+OpCapability Shader
+OpCapability ImageCubeArray
+OpCapability SparseResidency
+OpCapability StorageImageExtendedFormats
+${r64_capabilities}%ext_import = OpExtInstImport "GLSL.std.450"
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %func_main "main" %input_GlobalInvocationID ${interface}
+OpExecutionMode %func_main LocalSize 1 1 1
+OpSource GLSL 440
+OpName %func_main "main"
+OpName %input_GlobalInvocationID "gl_GlobalInvocationID"
+OpName %input_WorkGroupSize "gl_WorkGroupSize"
+OpName %uniform_image_sparse_plane0 "u_imageSparse_plane0"
+OpName %uniform_image_texels_plane0 "u_imageTexels_plane0"
+OpName %uniform_image_residency_plane0 "u_imageResidency_plane0"
+OpDecorate %input_GlobalInvocationID BuiltIn GlobalInvocationId
+OpDecorate %input_WorkGroupSize BuiltIn WorkgroupSize
+OpDecorate %constant_uint_grid_x SpecId 1
+OpDecorate %constant_uint_grid_y SpecId 2
+OpDecorate %constant_uint_grid_z SpecId 3
+OpDecorate %constant_uint_work_group_size_x SpecId 4
+OpDecorate %constant_uint_work_group_size_y SpecId 5
+OpDecorate %constant_uint_work_group_size_z SpecId 6
+OpDecorate %uniform_image_sparse_plane0 DescriptorSet 0
+OpDecorate %uniform_image_sparse_plane0 Binding 0
+OpDecorate %uniform_image_texels_plane0 DescriptorSet 0
+OpDecorate %uniform_image_texels_plane0 Binding 1
+OpDecorate %uniform_image_texels_plane0 NonReadable
+OpDecorate %uniform_image_residency_plane0 DescriptorSet 0
+OpDecorate %uniform_image_residency_plane0 Binding 2
+OpDecorate %uniform_image_residency_plane0 NonReadable
+%type_bool = OpTypeBool
+${r64_types}%type_int = OpTypeInt 32 1
+%type_uint = OpTypeInt 32 0
+%type_float = OpTypeFloat 32
+%type_ivec2 = OpTypeVector %type_int  2
+%type_ivec3 = OpTypeVector %type_int  3
+%type_ivec4 = OpTypeVector %type_int  4
+%type_uvec3 = OpTypeVector %type_uint 3
+%type_uvec4 = OpTypeVector %type_uint 4
+%type_vec2 = OpTypeVector %type_float 2
+%type_vec3 = OpTypeVector %type_float 3
+%type_vec4 = OpTypeVector %type_float 4
+%type_input_uint = OpTypePointer Input %type_uint
+%type_input_uvec3 = OpTypePointer Input %type_uvec3
+%type_function_int             = OpTypePointer Function %type_int
+%type_function_img_comp_vec4 = OpTypePointer Function ${img_comp_vec4}
+%type_void = OpTypeVoid
+%type_void_func = OpTypeFunction %type_void
+%type_struct_int_img_comp_vec4_plane0 = OpTypeStruct %type_int ${img_comp_vec4}
+%type_image_sparse_fmt = ${op_type_image_sparse}
+%type_uniformconst_image_sparse_plane0 = OpTypePointer UniformConstant %type_image_sparse_fmt
+%type_image_sparse_with_sampler_fmt = ${op_type_image_sparse_with_sampler}
+%type_uniformconst_image_sparse_with_sampler_plane0 = OpTypePointer UniformConstant %type_image_sparse_with_sampler_fmt
+${residency_type_declaration}%type_uniformconst_image_residency_plane0 = OpTypePointer UniformConstant ${residency_type}
+%uniform_image_sparse_plane0 = OpVariable ${sparse_pointer_type} UniformConstant
+%uniform_image_texels_plane0 = OpVariable %type_uniformconst_image_sparse_plane0 UniformConstant
+%uniform_image_residency_plane0 = OpVariable %type_uniformconst_image_residency_plane0 UniformConstant
+%input_GlobalInvocationID = OpVariable %type_input_uvec3 Input
+%constant_uint_grid_x = OpSpecConstant %type_uint 1
+%constant_uint_grid_y = OpSpecConstant %type_uint 1
+%constant_uint_grid_z = OpSpecConstant %type_uint 1
+%constant_uint_work_group_size_x = OpSpecConstant %type_uint 1
+%constant_uint_work_group_size_y = OpSpecConstant %type_uint 1
+%constant_uint_work_group_size_z = OpSpecConstant %type_uint 1
+%input_WorkGroupSize = OpSpecConstantComposite %type_uvec3 %constant_uint_work_group_size_x %constant_uint_work_group_size_y %constant_uint_work_group_size_z
+%constant_uint_0 = OpConstant %type_uint 0
+%constant_uint_1 = OpConstant %type_uint 1
+%constant_uint_2 = OpConstant %type_uint 2
+%constant_int_0 = OpConstant %type_int 0
+%constant_int_1 = OpConstant %type_int 1
+%constant_int_2 = OpConstant %type_int 2
+%constant_bool_true = OpConstantTrue %type_bool
+%constant_uint_resident = OpConstant %type_uint 1
+%constant_uvec4_resident = OpConstantComposite %type_uvec4 %constant_uint_resident %constant_uint_resident %constant_uint_resident %constant_uint_resident
+%constant_uint_not_resident = OpConstant %type_uint 2
+%constant_uvec4_not_resident = OpConstantComposite %type_uvec4 %constant_uint_not_resident %constant_uint_not_resident %constant_uint_not_resident %constant_uint_not_resident
+%func_main         = OpFunction %type_void None %type_void_func
+%label_func_main = OpLabel
+%access_GlobalInvocationID_x = OpAccessChain %type_input_uint %input_GlobalInvocationID %constant_uint_0
+%local_uint_GlobalInvocationID_x = OpLoad %type_uint %access_GlobalInvocationID_x
+%local_int_GlobalInvocationID_x = OpBitcast %type_int %local_uint_GlobalInvocationID_x
+%access_GlobalInvocationID_y = OpAccessChain %type_input_uint %input_GlobalInvocationID %constant_uint_1
+%local_uint_GlobalInvocationID_y = OpLoad %type_uint %access_GlobalInvocationID_y
+%local_int_GlobalInvocationID_y = OpBitcast %type_int %local_uint_GlobalInvocationID_y
+%access_GlobalInvocationID_z = OpAccessChain %type_input_uint %input_GlobalInvocationID %constant_uint_2
+%local_uint_GlobalInvocationID_z = OpLoad %type_uint %access_GlobalInvocationID_z
+%local_int_GlobalInvocationID_z = OpBitcast %type_int %local_uint_GlobalInvocationID_z
+%local_ivec2_GlobalInvocationID_xy = OpCompositeConstruct %type_ivec2 %local_int_GlobalInvocationID_x %local_int_GlobalInvocationID_y
+%local_ivec3_GlobalInvocationID_xyz = OpCompositeConstruct %type_ivec3 %local_int_GlobalInvocationID_x %local_int_GlobalInvocationID_y %local_int_GlobalInvocationID_z
+%comparison_range_x = OpULessThan %type_bool %local_uint_GlobalInvocationID_x %constant_uint_grid_x
+OpSelectionMerge %label_out_range_x None
+OpBranchConditional %comparison_range_x %label_in_range_x %label_out_range_x
+%label_in_range_x = OpLabel
+%comparison_range_y = OpULessThan %type_bool %local_uint_GlobalInvocationID_y %constant_uint_grid_y
+OpSelectionMerge %label_out_range_y None
+OpBranchConditional %comparison_range_y %label_in_range_y %label_out_range_y
+%label_in_range_y = OpLabel
+%comparison_range_z = OpULessThan %type_bool %local_uint_GlobalInvocationID_z %constant_uint_grid_z
+OpSelectionMerge %label_out_range_z None
+OpBranchConditional %comparison_range_z %label_in_range_z %label_out_range_z
+%label_in_range_z = OpLabel
+%local_image_sparse_plane0 = OpLoad ${sparse_load_type} %uniform_image_sparse_plane0
+${sparse_op}
+%local_img_comp_vec4_plane0 = OpCompositeExtract ${img_comp_vec4} %local_sparse_op_result_plane0 1
+%local_residency_code_plane0 = OpCompositeExtract %type_int %local_sparse_op_result_plane0 0
+%local_image_texels_plane0 = OpLoad %type_image_sparse_fmt %uniform_image_texels_plane0
+OpImageWrite %local_image_texels_plane0 ${coord} %local_img_comp_vec4_plane0
+%local_image_residency_plane0 = OpLoad ${residency_type} %uniform_image_residency_plane0
+%local_texel_resident_plane0 = OpImageSparseTexelsResident %type_bool %local_residency_code_plane0
+OpSelectionMerge %branch_texel_resident_plane0 None
+OpBranchConditional %local_texel_resident_plane0 %label_texel_resident_plane0 %label_texel_not_resident_plane0
+%label_texel_resident_plane0 = OpLabel
+OpImageWrite %local_image_residency_plane0 ${coord} %constant_uvec4_resident
+OpBranch %branch_texel_resident_plane0
+%label_texel_not_resident_plane0 = OpLabel
+OpImageWrite %local_image_residency_plane0 ${coord} %constant_uvec4_not_resident
+OpBranch %branch_texel_resident_plane0
+%branch_texel_resident_plane0 = OpLabel
+OpBranch %label_out_range_z
+%label_out_range_z = OpLabel
+OpBranch %label_out_range_y
+%label_out_range_y = OpLabel
+OpBranch %label_out_range_x
+%label_out_range_x = OpLabel
+OpReturn
+OpFunctionEnd

@@ -1,0 +1,7 @@
+#version 460
+layout (local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout (push_constant, std430) uniform PushConstantBlock { uint index; } pc;
+layout (set=0, binding=0, std430) buffer OutputBlock { uint data[]; } outputValues;
+void main (void) {
+    outputValues.data[pc.index] += pc.index + 1000000u;
+}

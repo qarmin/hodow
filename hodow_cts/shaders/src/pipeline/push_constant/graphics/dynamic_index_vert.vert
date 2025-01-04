@@ -1,0 +1,27 @@
+#version 450
+#extension GL_EXT_long_vector : enable
+layout(location = 0) in highp vec4 position;
+layout(location = 1) in highp vec4 color;
+layout(location = 0) out highp vec4 vtxColor;
+out gl_PerVertex { vec4 gl_Position; };
+layout(push_constant) uniform Material {
+    layout(offset = 0)  vec4 index; 
+    layout(offset = 16) vec4 vecType; 
+    layout(offset = 32) mat2 matType; 
+    layout(offset = 48) float[4] arrType; 
+} matInst;
+void main()
+{
+    gl_Position = position;
+    vtxColor = vec4(1.0, 0.0, 0.0, 1.0);
+    // Mix in gl_Position to (hopefully) prevent optimizing our index away
+    int vec_selector = int(abs(gl_Position.x) * 0.0000001 + 0);
+    int mat_selector = int(abs(gl_Position.x) * 0.0000001 + 1);
+    int arr_selector = int(abs(gl_Position.x) * 0.0000001 + 2);
+    if (matInst.vecType[int(matInst.index[vec_selector])] != 0.25)
+        vtxColor += vec4(0.0, 0.5, 0.0, 1.0);
+    if (matInst.matType[int(matInst.index[mat_selector])][0] != 0.5)
+        vtxColor += vec4(0.0, 0.0, 0.5, 1.0);
+    if (matInst.arrType[int(matInst.index[arr_selector])] != 0.75)
+        vtxColor = vec4(0.0, 0.5, 0.5, 1.0);
+}

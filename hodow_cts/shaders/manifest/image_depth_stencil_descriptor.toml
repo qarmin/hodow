@@ -1,0 +1,184 @@
+# Shader manifest for dEQP-VK.image.depth_stencil_descriptor.*
+#
+# `DepthStencilDescriptorCase::initPrograms` writes the descriptors of the read-only accesses (input attachments and
+# sampled images, depth first and then stencil, bindings in that order) into the source, so the source depends only on the
+# list of descriptor kinds per aspect and on compute vs graphics. Each kind list is `n` (none), `ia`, `s` or `ia_s`.
+
+upstream_source = "external/vulkancts/modules/vulkan/image/vktImageDepthStencilDescriptorTests.cpp"
+rust_module = "image/depth_stencil_descriptor_tests"
+
+[[case]]
+name = "g_n_n"
+rust_const = "DSD_G_N_N"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/depth_stencil_descriptor/pass_through.vert", stage = "vert" },
+    { name = "frag", template = "image/depth_stencil_descriptor/frag_n_n.frag", stage = "frag" },
+]
+
+[[case]]
+name = "g_n_ia"
+rust_const = "DSD_G_N_IA"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/depth_stencil_descriptor/pass_through.vert", stage = "vert" },
+    { name = "frag", template = "image/depth_stencil_descriptor/frag_n_ia.frag", stage = "frag" },
+]
+
+[[case]]
+name = "g_n_s"
+rust_const = "DSD_G_N_S"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/depth_stencil_descriptor/pass_through.vert", stage = "vert" },
+    { name = "frag", template = "image/depth_stencil_descriptor/frag_n_s.frag", stage = "frag" },
+]
+
+[[case]]
+name = "g_n_ia_s"
+rust_const = "DSD_G_N_IA_S"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/depth_stencil_descriptor/pass_through.vert", stage = "vert" },
+    { name = "frag", template = "image/depth_stencil_descriptor/frag_n_ia_s.frag", stage = "frag" },
+]
+
+[[case]]
+name = "g_ia_n"
+rust_const = "DSD_G_IA_N"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/depth_stencil_descriptor/pass_through.vert", stage = "vert" },
+    { name = "frag", template = "image/depth_stencil_descriptor/frag_ia_n.frag", stage = "frag" },
+]
+
+[[case]]
+name = "g_ia_ia"
+rust_const = "DSD_G_IA_IA"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/depth_stencil_descriptor/pass_through.vert", stage = "vert" },
+    { name = "frag", template = "image/depth_stencil_descriptor/frag_ia_ia.frag", stage = "frag" },
+]
+
+[[case]]
+name = "g_ia_s"
+rust_const = "DSD_G_IA_S"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/depth_stencil_descriptor/pass_through.vert", stage = "vert" },
+    { name = "frag", template = "image/depth_stencil_descriptor/frag_ia_s.frag", stage = "frag" },
+]
+
+[[case]]
+name = "g_ia_ia_s"
+rust_const = "DSD_G_IA_IA_S"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/depth_stencil_descriptor/pass_through.vert", stage = "vert" },
+    { name = "frag", template = "image/depth_stencil_descriptor/frag_ia_ia_s.frag", stage = "frag" },
+]
+
+[[case]]
+name = "g_s_n"
+rust_const = "DSD_G_S_N"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/depth_stencil_descriptor/pass_through.vert", stage = "vert" },
+    { name = "frag", template = "image/depth_stencil_descriptor/frag_s_n.frag", stage = "frag" },
+]
+
+[[case]]
+name = "g_s_ia"
+rust_const = "DSD_G_S_IA"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/depth_stencil_descriptor/pass_through.vert", stage = "vert" },
+    { name = "frag", template = "image/depth_stencil_descriptor/frag_s_ia.frag", stage = "frag" },
+]
+
+[[case]]
+name = "g_s_s"
+rust_const = "DSD_G_S_S"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/depth_stencil_descriptor/pass_through.vert", stage = "vert" },
+    { name = "frag", template = "image/depth_stencil_descriptor/frag_s_s.frag", stage = "frag" },
+]
+
+[[case]]
+name = "g_s_ia_s"
+rust_const = "DSD_G_S_IA_S"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/depth_stencil_descriptor/pass_through.vert", stage = "vert" },
+    { name = "frag", template = "image/depth_stencil_descriptor/frag_s_ia_s.frag", stage = "frag" },
+]
+
+[[case]]
+name = "g_ia_s_n"
+rust_const = "DSD_G_IA_S_N"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/depth_stencil_descriptor/pass_through.vert", stage = "vert" },
+    { name = "frag", template = "image/depth_stencil_descriptor/frag_ia_s_n.frag", stage = "frag" },
+]
+
+[[case]]
+name = "g_ia_s_ia"
+rust_const = "DSD_G_IA_S_IA"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/depth_stencil_descriptor/pass_through.vert", stage = "vert" },
+    { name = "frag", template = "image/depth_stencil_descriptor/frag_ia_s_ia.frag", stage = "frag" },
+]
+
+[[case]]
+name = "g_ia_s_s"
+rust_const = "DSD_G_IA_S_S"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/depth_stencil_descriptor/pass_through.vert", stage = "vert" },
+    { name = "frag", template = "image/depth_stencil_descriptor/frag_ia_s_s.frag", stage = "frag" },
+]
+
+[[case]]
+name = "g_ia_s_ia_s"
+rust_const = "DSD_G_IA_S_IA_S"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/depth_stencil_descriptor/pass_through.vert", stage = "vert" },
+    { name = "frag", template = "image/depth_stencil_descriptor/frag_ia_s_ia_s.frag", stage = "frag" },
+]
+
+[[case]]
+name = "c_n_n"
+rust_const = "DSD_C_N_N"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "image/depth_stencil_descriptor/comp_n_n.comp", stage = "comp" },
+]
+
+[[case]]
+name = "c_n_s"
+rust_const = "DSD_C_N_S"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "image/depth_stencil_descriptor/comp_n_s.comp", stage = "comp" },
+]
+
+[[case]]
+name = "c_s_n"
+rust_const = "DSD_C_S_N"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "image/depth_stencil_descriptor/comp_s_n.comp", stage = "comp" },
+]
+
+[[case]]
+name = "c_s_s"
+rust_const = "DSD_C_S_S"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "image/depth_stencil_descriptor/comp_s_s.comp", stage = "comp" },
+]

@@ -1,0 +1,34 @@
+# Shader manifest for dEQP-VK.fragment_shading_rate.*.misc.*
+#
+# vktFragmentShadingRateMiscTests.cpp: `initDefaultVertFragShaders` (a pass-through vertex colour pair),
+# `initNoFragShaders` (the same vertex shader alone) and `initOOBShaders` (a full-screen triangle and a fragment shader that
+# checks gl_ShadingRateEXT against the buffer of the in-bounds attachment size).
+
+upstream_source = "external/vulkancts/modules/vulkan/fragment_shading_rate/vktFragmentShadingRateMiscTests.cpp"
+rust_module = "fragment_shading_rate/misc_tests"
+
+[[case]]
+name = "vert_frag"
+rust_const = "FSR_MISC_VERT_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "fragment_shading_rate/misc/default.vert", stage = "vert" },
+    { name = "frag", template = "fragment_shading_rate/misc/default.frag", stage = "frag" },
+]
+
+[[case]]
+name = "no_frag"
+rust_const = "FSR_MISC_NO_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "fragment_shading_rate/misc/default.vert", stage = "vert" },
+]
+
+[[case]]
+name = "oob"
+rust_const = "FSR_MISC_OOB"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "fragment_shading_rate/misc/oob.vert", stage = "vert" },
+    { name = "frag", template = "fragment_shading_rate/misc/oob.frag", stage = "frag" },
+]

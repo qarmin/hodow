@@ -1,0 +1,18 @@
+# Shader manifest for dEQP-VK.robustness.non_robust_buffer_access.*
+#
+# The two Amber scripts of vktNonRobustBufferAccessTests.cpp, whose compute shaders are written out as GLSL: out of bounds accesses on paths that are never executed.
+
+upstream_source = "external/vulkancts/modules/vulkan/robustness/vktNonRobustBufferAccessTests.cpp"
+rust_module = "robustness/non_robust_buffer_access_tests"
+
+[[case]]
+name = "unexecuted_oob_underflow"
+rust_const = "NON_ROBUST_UNEXECUTED_OOB_UNDERFLOW"
+rust_type = "NonRobustBufferAccessProgram"
+programs = [{ name = "compute", template = "robustness/non_robust_buffer_access/unexecuted_oob_underflow.comp", stage = "comp" }]
+
+[[case]]
+name = "unexecuted_oob_overflow"
+rust_const = "NON_ROBUST_UNEXECUTED_OOB_OVERFLOW"
+rust_type = "NonRobustBufferAccessProgram"
+programs = [{ name = "compute", template = "robustness/non_robust_buffer_access/unexecuted_oob_overflow.comp", stage = "comp" }]

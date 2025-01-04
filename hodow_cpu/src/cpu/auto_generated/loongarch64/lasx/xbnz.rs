@@ -1,0 +1,61 @@
+use std::arch::loongarch64::*;
+
+#[allow(unused_imports)]
+use crate::cpu::common::{check_array_equality, check_float_array_equality, check_float_equality, check_int_equality};
+#[allow(unused_imports)]
+use crate::cpu::Verdict;
+
+pub(super) fn test_loongarch64_lasx_lasx_xbnz_b() -> Result<Verdict, String> {
+    unsafe {
+        let result = lasx_xbnz_b(0 /* m256i */);
+
+        crate::cpu::fuzz(&mut || {
+            let _ = lasx_xbnz_b(0 /* m256i */);
+        });
+        Ok(Verdict::Unverified(Some(format!("{result:?}"))))
+    }
+}
+
+pub(super) fn test_loongarch64_lasx_lasx_xbnz_d() -> Result<Verdict, String> {
+    unsafe {
+        let result = lasx_xbnz_d(0 /* m256i */);
+
+        crate::cpu::fuzz(&mut || {
+            let _ = lasx_xbnz_d(0 /* m256i */);
+        });
+        Ok(Verdict::Unverified(Some(format!("{result:?}"))))
+    }
+}
+
+pub(super) fn test_loongarch64_lasx_lasx_xbnz_h() -> Result<Verdict, String> {
+    unsafe {
+        let result = lasx_xbnz_h(0 /* m256i */);
+
+        crate::cpu::fuzz(&mut || {
+            let _ = lasx_xbnz_h(0 /* m256i */);
+        });
+        Ok(Verdict::Unverified(Some(format!("{result:?}"))))
+    }
+}
+
+pub(super) fn test_loongarch64_lasx_lasx_xbnz_v() -> Result<Verdict, String> {
+    unsafe {
+        let result = lasx_xbnz_v(0 /* m256i */);
+
+        crate::cpu::fuzz(&mut || {
+            let _ = lasx_xbnz_v(0 /* m256i */);
+        });
+        Ok(Verdict::Unverified(Some(format!("{result:?}"))))
+    }
+}
+
+pub(super) fn test_loongarch64_lasx_lasx_xbnz_w() -> Result<Verdict, String> {
+    unsafe {
+        let result = lasx_xbnz_w(0 /* m256i */);
+
+        crate::cpu::fuzz(&mut || {
+            let _ = lasx_xbnz_w(0 /* m256i */);
+        });
+        Ok(Verdict::Unverified(Some(format!("{result:?}"))))
+    }
+}

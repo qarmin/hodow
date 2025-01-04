@@ -1,0 +1,17 @@
+# Shader manifest for dEQP-VK.draw.*.multiple_clears_within_render_pass.*
+#
+# `MultipleClearsWithinRenderPassTest::initPrograms`: a pass-through vertex shader and a fragment shader that writes the
+# push constant colour (`frag`), or nothing for the depth-only formats (`frag_depthonly`).
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawMultipleClearsWithinRenderPass.cpp"
+rust_module = "draw/multiple_clears_tests"
+
+[[case]]
+name = "multiple_clears"
+rust_const = "MULTIPLE_CLEARS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/multiple_clears.vert", stage = "vert" },
+    { name = "frag", template = "draw/multiple_clears.frag", stage = "frag" },
+    { name = "frag_depthonly", template = "draw/multiple_clears_depthonly.frag", stage = "frag" },
+]

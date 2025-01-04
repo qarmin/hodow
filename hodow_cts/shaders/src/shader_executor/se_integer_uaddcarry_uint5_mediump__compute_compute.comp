@@ -1,0 +1,38 @@
+#version 450
+#extension GL_EXT_long_vector : enable
+layout(local_size_x = 1) in;
+
+struct Inputs
+{
+	mediump vector<uint, 5> x;
+	mediump vector<uint, 5> y;
+};
+struct Outputs
+{
+	mediump vector<uint, 5> sum;
+	lowp vector<uint, 5> carry;
+};
+
+layout(set = 0, binding = 0, std430) buffer InBuffer
+{
+    Inputs inputs[];
+};
+layout(set = 0, binding = 1, std430) buffer OutBuffer
+{
+    Outputs outputs[];
+};
+
+void main (void)
+{
+    uint invocationNdx = gl_NumWorkGroups.x*gl_NumWorkGroups.y*gl_WorkGroupID.z
+                       + gl_NumWorkGroups.x*gl_WorkGroupID.y + gl_WorkGroupID.x;
+	vector<uint, 5> x = vector<uint, 5>(inputs[invocationNdx].x);
+	vector<uint, 5> y = vector<uint, 5>(inputs[invocationNdx].y);
+	vector<uint, 5> sum;
+	vector<uint, 5> carry;
+
+	sum = uaddCarry(x, y, carry);
+
+	outputs[invocationNdx].sum = sum;
+	outputs[invocationNdx].carry = carry;
+}

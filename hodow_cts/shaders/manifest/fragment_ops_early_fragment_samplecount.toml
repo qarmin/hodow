@@ -1,0 +1,40 @@
+# Shader manifest for dEQP-VK.fragment_operations.early_fragment.sample_count_*
+#
+# `EarlyFragmentSampleCountTest::initPrograms`: a vertex shader, a fragment shader for the run without early fragment tests that writes
+# half of the samples out of the sample mask (`frag`) and one for the run with them that kills all samples after sample counting
+# (`frag_early`), through gl_SampleMask or through alpha to coverage; with `EarlyAndLate`, upstream's SPIR-V text for both.
+
+upstream_source = "external/vulkancts/modules/vulkan/fragment_ops/vktFragmentOperationsEarlyFragmentTests.cpp"
+rust_module = "fragment_ops/early_fragment_samplecount_tests"
+
+[[case]]
+name = "sc_plain"
+rust_const = "SC_PLAIN"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "fragment_ops/early_fragment_samplecount.vert", stage = "vert" },
+    { name = "frag", template = "fragment_ops/early_fragment_samplecount.frag", stage = "frag" },
+    { name = "frag_early", template = "fragment_ops/early_fragment_samplecount_early.frag", stage = "frag" },
+]
+derived = { body = "'    // Sample mask kills all the samples, but the sample counting has already happened.\\n    gl_SampleMask[0] = 0x0;\\n    fragColor = vec4(1.0, 1.0, 0.0, 1.0);\\n'" }
+
+[[case]]
+name = "sc_alpha_to_coverage"
+rust_const = "SC_ALPHA_TO_COVERAGE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "fragment_ops/early_fragment_samplecount.vert", stage = "vert" },
+    { name = "frag", template = "fragment_ops/early_fragment_samplecount.frag", stage = "frag" },
+    { name = "frag_early", template = "fragment_ops/early_fragment_samplecount_early.frag", stage = "frag" },
+]
+derived = { body = "'    // alphaToCoverageEnable = TRUE and emitting 0 alpha kills all the samples, but the sample counting has already happened.\\n    fragColor = vec4(1.0, 1.0, 0.0, 0.0);\\n'" }
+
+[[case]]
+name = "sc_early_and_late"
+rust_const = "SC_EARLY_AND_LATE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "fragment_ops/early_fragment_samplecount.vert", stage = "vert" },
+    { name = "frag", template = "fragment_ops/early_fragment_samplecount.spvasm", stage = "asm", spirv_version = "spirv1.3" },
+    { name = "frag_early", template = "fragment_ops/early_fragment_samplecount_early.spvasm", stage = "asm", spirv_version = "spirv1.3" },
+]

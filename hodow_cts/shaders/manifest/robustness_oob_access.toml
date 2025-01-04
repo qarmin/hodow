@@ -1,0 +1,87 @@
+# Shader manifest for dEQP-VK.robustness.oob_access.*
+#
+# OOBBufferTestCase and OOBImageTestCase build one compute shader from (texel buffer kind or storage image, read or write,
+# 32 or 64 bit). The 64 bit variants add the int64 image extensions and are built for SPIR-V 1.3.
+
+upstream_source = "external/vulkancts/modules/vulkan/robustness/vktRobustnessOOBAccessTests.cpp"
+rust_module = "robustness/oob_access_tests"
+
+[[case]]
+name = "buf_uniform_read_32"
+rust_const = "OOB_BUF_UNIFORM_READ_32"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "robustness/oob_access/buf_uniform_read_32.comp", stage = "comp" },
+]
+
+[[case]]
+name = "buf_uniform_read_64"
+rust_const = "OOB_BUF_UNIFORM_READ_64"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "robustness/oob_access/buf_uniform_read_64.comp", stage = "comp", spirv_version = "spirv1.3" },
+]
+
+[[case]]
+name = "buf_storage_read_32"
+rust_const = "OOB_BUF_STORAGE_READ_32"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "robustness/oob_access/buf_storage_read_32.comp", stage = "comp" },
+]
+
+[[case]]
+name = "buf_storage_read_64"
+rust_const = "OOB_BUF_STORAGE_READ_64"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "robustness/oob_access/buf_storage_read_64.comp", stage = "comp", spirv_version = "spirv1.3" },
+]
+
+[[case]]
+name = "buf_storage_write_32"
+rust_const = "OOB_BUF_STORAGE_WRITE_32"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "robustness/oob_access/buf_storage_write_32.comp", stage = "comp" },
+]
+
+[[case]]
+name = "buf_storage_write_64"
+rust_const = "OOB_BUF_STORAGE_WRITE_64"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "robustness/oob_access/buf_storage_write_64.comp", stage = "comp", spirv_version = "spirv1.3" },
+]
+
+[[case]]
+name = "img_read_32"
+rust_const = "OOB_IMG_READ_32"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "robustness/oob_access/img_read_32.comp", stage = "comp" },
+]
+
+[[case]]
+name = "img_read_64"
+rust_const = "OOB_IMG_READ_64"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "robustness/oob_access/img_read_64.comp", stage = "comp", spirv_version = "spirv1.3" },
+]
+
+[[case]]
+name = "img_write_32"
+rust_const = "OOB_IMG_WRITE_32"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "robustness/oob_access/img_write_32.comp", stage = "comp" },
+]
+
+[[case]]
+name = "img_write_64"
+rust_const = "OOB_IMG_WRITE_64"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "robustness/oob_access/img_write_64.comp", stage = "comp", spirv_version = "spirv1.3" },
+]

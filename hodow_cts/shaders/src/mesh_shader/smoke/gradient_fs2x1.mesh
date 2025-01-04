@@ -1,0 +1,57 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_EXT_fragment_shading_rate : enable
+
+layout(local_size_x=4) in;
+layout(triangles) out;
+layout(max_vertices=256, max_primitives=256) out;
+
+layout (location=0) out vec4 outColor[];
+
+perprimitiveEXT out gl_MeshPerPrimitiveEXT {
+   int gl_PrimitiveShadingRateEXT;
+} gl_MeshPrimitivesEXT[];
+
+void main ()
+{
+    SetMeshOutputsEXT(4u, 2u);
+
+    const uint vertex    = gl_LocalInvocationIndex;
+    const uint primitive = gl_LocalInvocationIndex;
+
+    const vec4 topLeft      = vec4(-1.0, -1.0, 0.0, 1.0);
+    const vec4 botLeft      = vec4(-1.0,  1.0, 0.0, 1.0);
+    const vec4 topRight     = vec4( 1.0, -1.0, 0.0, 1.0);
+    const vec4 botRight     = vec4( 1.0,  1.0, 0.0, 1.0);
+    const vec4 positions[4] = vec4[](topLeft, botLeft, topRight, botRight);
+
+    const float width      = 256;
+    const float height     = 256;
+    const float halfWidth  = (1.0 / (width - 1.0)) / 2.0;
+    const float halfHeight = (1.0 / (height - 1.0)) / 2.0;
+    const float minGreen   = -halfWidth;
+    const float maxGreen   = 1.0+halfWidth;
+    const float minBlue    = -halfHeight;
+    const float maxBlue    = 1.0+halfHeight;
+    const vec4  colors[4]  = vec4[](
+        vec4(0, minGreen, minBlue, 1.0),
+        vec4(0, minGreen, maxBlue, 1.0),
+        vec4(0, maxGreen, minBlue, 1.0),
+        vec4(0, maxGreen, maxBlue, 1.0)
+    );
+
+    const uvec3 indices[2] = uvec3[](
+        uvec3(0, 1, 2),
+        uvec3(1, 3, 2)
+    );
+    if (vertex < 4u)
+    {
+        gl_MeshVerticesEXT[vertex].gl_Position = positions[vertex];
+        outColor[vertex] = colors[vertex];
+    }
+    if (primitive < 2u)
+    {
+        gl_MeshPrimitivesEXT[primitive].gl_PrimitiveShadingRateEXT = gl_ShadingRateFlag2HorizontalPixelsEXT;
+        gl_PrimitiveTriangleIndicesEXT[primitive] = indices[primitive];
+    }
+}

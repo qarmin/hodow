@@ -1,0 +1,35 @@
+# Shader manifest for dEQP-VK.shader_object.link.*
+#
+# `addBasicShaderObjectShaders` plus the four extra programs of `ShaderObjectLinkCase::initPrograms` (vert2, tese2 and geom2 write the result
+# buffer, comp2 is an empty compute shader), and the task/mesh/frag/comp2 set of `MeshShaderObjectLinkCase::initPrograms`.
+
+upstream_source = "external/vulkancts/modules/vulkan/shader_object/vktShaderObjectLinkTests.cpp"
+rust_module = "shader_object/link_tests"
+
+[[case]]
+name = "link"
+rust_const = "SHADER_OBJECT_LINK"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/basic.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/basic.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/basic.tese", stage = "tese" },
+    { name = "geom", template = "shader_object/basic.geom", stage = "geom" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+    { name = "comp", template = "shader_object/basic.comp", stage = "comp" },
+    { name = "vert2", template = "shader_object/link/vert2.vert", stage = "vert" },
+    { name = "tese2", template = "shader_object/link/tese2.tese", stage = "tese" },
+    { name = "geom2", template = "shader_object/link/geom2.geom", stage = "geom" },
+    { name = "comp2", template = "shader_object/link/comp2.comp", stage = "comp" },
+]
+
+[[case]]
+name = "link_mesh"
+rust_const = "SHADER_OBJECT_LINK_MESH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "shader_object/link/mesh_task.task", stage = "task", spirv_version = "spirv1.4" },
+    { name = "mesh", template = "shader_object/link/mesh_mesh.mesh", stage = "mesh", spirv_version = "spirv1.4" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+    { name = "comp2", template = "shader_object/link/comp2.comp", stage = "comp" },
+]

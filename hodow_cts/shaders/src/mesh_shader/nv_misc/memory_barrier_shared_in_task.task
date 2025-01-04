@@ -1,0 +1,27 @@
+#version 450
+#extension GL_NV_mesh_shader : enable
+
+layout (local_size_x=2) in;
+
+shared uint flags[2];
+
+out taskNV TaskData { float blue; } td;
+
+void main ()
+{
+flags[gl_LocalInvocationID.x] = 0u;
+barrier();
+flags[gl_LocalInvocationID.x] = 1u;
+memoryBarrierShared();
+uint otherInvocation = 1u - gl_LocalInvocationID.x;
+uint iterations = 0u;
+while (flags[otherInvocation] != 1u) {
+    iterations++;
+}
+if (gl_LocalInvocationID.x == 0u) {
+
+gl_TaskCountNV = 1u;
+td.blue = float(iterations % 2u);
+
+}
+}

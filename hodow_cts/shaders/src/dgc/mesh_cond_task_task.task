@@ -1,0 +1,17 @@
+#version 460
+#extension GL_EXT_mesh_shader : enable
+layout(local_size_x=1) in;
+uint getWorkGroupIndex (void) {
+    const uint workGroupIndex = gl_NumWorkGroups.x * gl_NumWorkGroups.y * gl_WorkGroupID.z +
+                                gl_NumWorkGroups.x * gl_WorkGroupID.y +
+                                gl_WorkGroupID.x;
+    return workGroupIndex;
+}
+struct TaskData {
+    uint baseVertex;
+};
+taskPayloadSharedEXT TaskData td;
+void main (void) {
+    td.baseVertex = getWorkGroupIndex() * 2;
+    EmitMeshTasksEXT(1, 1, 2);
+}

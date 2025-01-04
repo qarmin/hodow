@@ -1,0 +1,41 @@
+# Shader manifest for dEQP-VK.api.descriptor_set.{descriptor_set_layout_lifetime,descriptor_set_layout_binding}
+#
+# The three sources of vktApiDescriptorSetTests.cpp, none of which takes a parameter:
+# a vertex-only graphics pipeline, an empty compute shader, and the compute shader that
+# reads an array of two uniform buffers followed by a third binding.
+# The amber case `layout_binding_order` of the same file is not ported.
+
+upstream_source = "external/vulkancts/modules/vulkan/api/vktApiDescriptorSetTests.cpp"
+rust_module = "api/descriptor_set_tests"
+
+[[case]]
+name = "lifetime_graphics"
+rust_const = "DESCRIPTOR_SET_LIFETIME_GRAPHICS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "api/descriptor_set_lifetime.vert", stage = "vert" },
+]
+
+[[case]]
+name = "lifetime_compute"
+rust_const = "DESCRIPTOR_SET_LIFETIME_COMPUTE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "api/descriptor_set_lifetime.comp", stage = "comp" },
+]
+
+[[case]]
+name = "binding_ordering"
+rust_const = "DESCRIPTOR_SET_BINDING_ORDERING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "api/descriptor_set_binding_ordering.comp", stage = "comp" },
+]
+
+[[case]]
+name = "layout_binding_order"
+rust_const = "DESCRIPTOR_SET_LAYOUT_BINDING_ORDER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "api/descriptor_set_layout_binding_order.comp", stage = "comp" },
+]

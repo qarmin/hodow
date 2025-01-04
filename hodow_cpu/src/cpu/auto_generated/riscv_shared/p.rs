@@ -1,0 +1,332 @@
+mod add16;
+mod add8;
+mod clrs16;
+mod clrs32;
+mod clrs8;
+mod clz16;
+mod clz32;
+mod clz8;
+mod cmpeq16;
+mod cmpeq8;
+mod cras16;
+mod crsa16;
+mod kabs16;
+mod kabs8;
+mod kadd16;
+mod kadd8;
+mod kaddh;
+mod kcras16;
+mod kcrsa16;
+mod ksll16;
+mod ksll8;
+mod kslra16;
+mod kslra16u;
+mod kslra8;
+mod kslra8u;
+mod kstas16;
+mod kstsa16;
+mod ksub16;
+mod ksub8;
+mod ksubh;
+mod pbsad;
+mod pbsada;
+mod pkbt16;
+mod pktb16;
+mod radd16;
+mod radd8;
+mod rcras16;
+mod rcrsa16;
+mod rstas16;
+mod rstsa16;
+mod rsub16;
+mod rsub8;
+mod scmple16;
+mod scmple8;
+mod scmplt16;
+mod scmplt8;
+mod sll16;
+mod sll8;
+mod smaqa;
+mod smaqasu;
+mod smax16;
+mod smax8;
+mod smin16;
+mod smin8;
+mod sra16;
+mod sra16u;
+mod sra8;
+mod sra8u;
+mod srl16;
+mod srl16u;
+mod srl8;
+mod srl8u;
+mod stas16;
+mod stsa16;
+mod sub16;
+mod sub8;
+mod sunpkd810;
+mod sunpkd820;
+mod sunpkd830;
+mod sunpkd831;
+mod sunpkd832;
+mod swap16;
+mod swap8;
+mod ucmple16;
+mod ucmple8;
+mod ucmplt16;
+mod ucmplt8;
+mod ukadd16;
+mod ukadd8;
+mod ukaddh;
+mod ukcras16;
+mod ukcrsa16;
+mod ukstas16;
+mod ukstsa16;
+mod uksub16;
+mod uksub8;
+mod uksubh;
+mod umaqa;
+mod umax16;
+mod umax8;
+mod umin16;
+mod umin8;
+mod uradd16;
+mod uradd8;
+mod urcras16;
+mod urcrsa16;
+mod urstas16;
+mod urstsa16;
+mod ursub16;
+mod ursub8;
+mod zunpkd810;
+mod zunpkd820;
+mod zunpkd830;
+mod zunpkd831;
+mod zunpkd832;
+
+use crate::cpu::auto_generated::riscv_shared::p::add16::*;
+use crate::cpu::auto_generated::riscv_shared::p::add8::*;
+use crate::cpu::auto_generated::riscv_shared::p::clrs16::*;
+use crate::cpu::auto_generated::riscv_shared::p::clrs32::*;
+use crate::cpu::auto_generated::riscv_shared::p::clrs8::*;
+use crate::cpu::auto_generated::riscv_shared::p::clz16::*;
+use crate::cpu::auto_generated::riscv_shared::p::clz32::*;
+use crate::cpu::auto_generated::riscv_shared::p::clz8::*;
+use crate::cpu::auto_generated::riscv_shared::p::cmpeq16::*;
+use crate::cpu::auto_generated::riscv_shared::p::cmpeq8::*;
+use crate::cpu::auto_generated::riscv_shared::p::cras16::*;
+use crate::cpu::auto_generated::riscv_shared::p::crsa16::*;
+use crate::cpu::auto_generated::riscv_shared::p::kabs16::*;
+use crate::cpu::auto_generated::riscv_shared::p::kabs8::*;
+use crate::cpu::auto_generated::riscv_shared::p::kadd16::*;
+use crate::cpu::auto_generated::riscv_shared::p::kadd8::*;
+use crate::cpu::auto_generated::riscv_shared::p::kaddh::*;
+use crate::cpu::auto_generated::riscv_shared::p::kcras16::*;
+use crate::cpu::auto_generated::riscv_shared::p::kcrsa16::*;
+use crate::cpu::auto_generated::riscv_shared::p::ksll16::*;
+use crate::cpu::auto_generated::riscv_shared::p::ksll8::*;
+use crate::cpu::auto_generated::riscv_shared::p::kslra16::*;
+use crate::cpu::auto_generated::riscv_shared::p::kslra16u::*;
+use crate::cpu::auto_generated::riscv_shared::p::kslra8::*;
+use crate::cpu::auto_generated::riscv_shared::p::kslra8u::*;
+use crate::cpu::auto_generated::riscv_shared::p::kstas16::*;
+use crate::cpu::auto_generated::riscv_shared::p::kstsa16::*;
+use crate::cpu::auto_generated::riscv_shared::p::ksub16::*;
+use crate::cpu::auto_generated::riscv_shared::p::ksub8::*;
+use crate::cpu::auto_generated::riscv_shared::p::ksubh::*;
+use crate::cpu::auto_generated::riscv_shared::p::pbsad::*;
+use crate::cpu::auto_generated::riscv_shared::p::pbsada::*;
+use crate::cpu::auto_generated::riscv_shared::p::pkbt16::*;
+use crate::cpu::auto_generated::riscv_shared::p::pktb16::*;
+use crate::cpu::auto_generated::riscv_shared::p::radd16::*;
+use crate::cpu::auto_generated::riscv_shared::p::radd8::*;
+use crate::cpu::auto_generated::riscv_shared::p::rcras16::*;
+use crate::cpu::auto_generated::riscv_shared::p::rcrsa16::*;
+use crate::cpu::auto_generated::riscv_shared::p::rstas16::*;
+use crate::cpu::auto_generated::riscv_shared::p::rstsa16::*;
+use crate::cpu::auto_generated::riscv_shared::p::rsub16::*;
+use crate::cpu::auto_generated::riscv_shared::p::rsub8::*;
+use crate::cpu::auto_generated::riscv_shared::p::scmple16::*;
+use crate::cpu::auto_generated::riscv_shared::p::scmple8::*;
+use crate::cpu::auto_generated::riscv_shared::p::scmplt16::*;
+use crate::cpu::auto_generated::riscv_shared::p::scmplt8::*;
+use crate::cpu::auto_generated::riscv_shared::p::sll16::*;
+use crate::cpu::auto_generated::riscv_shared::p::sll8::*;
+use crate::cpu::auto_generated::riscv_shared::p::smaqa::*;
+use crate::cpu::auto_generated::riscv_shared::p::smaqasu::*;
+use crate::cpu::auto_generated::riscv_shared::p::smax16::*;
+use crate::cpu::auto_generated::riscv_shared::p::smax8::*;
+use crate::cpu::auto_generated::riscv_shared::p::smin16::*;
+use crate::cpu::auto_generated::riscv_shared::p::smin8::*;
+use crate::cpu::auto_generated::riscv_shared::p::sra16::*;
+use crate::cpu::auto_generated::riscv_shared::p::sra16u::*;
+use crate::cpu::auto_generated::riscv_shared::p::sra8::*;
+use crate::cpu::auto_generated::riscv_shared::p::sra8u::*;
+use crate::cpu::auto_generated::riscv_shared::p::srl16::*;
+use crate::cpu::auto_generated::riscv_shared::p::srl16u::*;
+use crate::cpu::auto_generated::riscv_shared::p::srl8::*;
+use crate::cpu::auto_generated::riscv_shared::p::srl8u::*;
+use crate::cpu::auto_generated::riscv_shared::p::stas16::*;
+use crate::cpu::auto_generated::riscv_shared::p::stsa16::*;
+use crate::cpu::auto_generated::riscv_shared::p::sub16::*;
+use crate::cpu::auto_generated::riscv_shared::p::sub8::*;
+use crate::cpu::auto_generated::riscv_shared::p::sunpkd810::*;
+use crate::cpu::auto_generated::riscv_shared::p::sunpkd820::*;
+use crate::cpu::auto_generated::riscv_shared::p::sunpkd830::*;
+use crate::cpu::auto_generated::riscv_shared::p::sunpkd831::*;
+use crate::cpu::auto_generated::riscv_shared::p::sunpkd832::*;
+use crate::cpu::auto_generated::riscv_shared::p::swap16::*;
+use crate::cpu::auto_generated::riscv_shared::p::swap8::*;
+use crate::cpu::auto_generated::riscv_shared::p::ucmple16::*;
+use crate::cpu::auto_generated::riscv_shared::p::ucmple8::*;
+use crate::cpu::auto_generated::riscv_shared::p::ucmplt16::*;
+use crate::cpu::auto_generated::riscv_shared::p::ucmplt8::*;
+use crate::cpu::auto_generated::riscv_shared::p::ukadd16::*;
+use crate::cpu::auto_generated::riscv_shared::p::ukadd8::*;
+use crate::cpu::auto_generated::riscv_shared::p::ukaddh::*;
+use crate::cpu::auto_generated::riscv_shared::p::ukcras16::*;
+use crate::cpu::auto_generated::riscv_shared::p::ukcrsa16::*;
+use crate::cpu::auto_generated::riscv_shared::p::ukstas16::*;
+use crate::cpu::auto_generated::riscv_shared::p::ukstsa16::*;
+use crate::cpu::auto_generated::riscv_shared::p::uksub16::*;
+use crate::cpu::auto_generated::riscv_shared::p::uksub8::*;
+use crate::cpu::auto_generated::riscv_shared::p::uksubh::*;
+use crate::cpu::auto_generated::riscv_shared::p::umaqa::*;
+use crate::cpu::auto_generated::riscv_shared::p::umax16::*;
+use crate::cpu::auto_generated::riscv_shared::p::umax8::*;
+use crate::cpu::auto_generated::riscv_shared::p::umin16::*;
+use crate::cpu::auto_generated::riscv_shared::p::umin8::*;
+use crate::cpu::auto_generated::riscv_shared::p::uradd16::*;
+use crate::cpu::auto_generated::riscv_shared::p::uradd8::*;
+use crate::cpu::auto_generated::riscv_shared::p::urcras16::*;
+use crate::cpu::auto_generated::riscv_shared::p::urcrsa16::*;
+use crate::cpu::auto_generated::riscv_shared::p::urstas16::*;
+use crate::cpu::auto_generated::riscv_shared::p::urstsa16::*;
+use crate::cpu::auto_generated::riscv_shared::p::ursub16::*;
+use crate::cpu::auto_generated::riscv_shared::p::ursub8::*;
+use crate::cpu::auto_generated::riscv_shared::p::zunpkd810::*;
+use crate::cpu::auto_generated::riscv_shared::p::zunpkd820::*;
+use crate::cpu::auto_generated::riscv_shared::p::zunpkd830::*;
+use crate::cpu::auto_generated::riscv_shared::p::zunpkd831::*;
+use crate::cpu::auto_generated::riscv_shared::p::zunpkd832::*;
+
+use crate::cpu::{ExtensionTest, TestFunction};
+
+#[allow(non_camel_case_types)]
+pub struct P;
+
+impl ExtensionTest for P {
+    fn get_name() -> &'static str {
+        "riscv_shared::P"
+    }
+
+    fn get_tests() -> &'static [(TestFunction, &'static str)] {
+        &[
+            (test_riscv_shared_p_add16, "test_riscv_shared_p_add16"),
+            (test_riscv_shared_p_radd16, "test_riscv_shared_p_radd16"),
+            (test_riscv_shared_p_uradd16, "test_riscv_shared_p_uradd16"),
+            (test_riscv_shared_p_kadd16, "test_riscv_shared_p_kadd16"),
+            (test_riscv_shared_p_ukadd16, "test_riscv_shared_p_ukadd16"),
+            (test_riscv_shared_p_sub16, "test_riscv_shared_p_sub16"),
+            (test_riscv_shared_p_rsub16, "test_riscv_shared_p_rsub16"),
+            (test_riscv_shared_p_ursub16, "test_riscv_shared_p_ursub16"),
+            (test_riscv_shared_p_ksub16, "test_riscv_shared_p_ksub16"),
+            (test_riscv_shared_p_uksub16, "test_riscv_shared_p_uksub16"),
+            (test_riscv_shared_p_cras16, "test_riscv_shared_p_cras16"),
+            (test_riscv_shared_p_rcras16, "test_riscv_shared_p_rcras16"),
+            (test_riscv_shared_p_urcras16, "test_riscv_shared_p_urcras16"),
+            (test_riscv_shared_p_kcras16, "test_riscv_shared_p_kcras16"),
+            (test_riscv_shared_p_ukcras16, "test_riscv_shared_p_ukcras16"),
+            (test_riscv_shared_p_crsa16, "test_riscv_shared_p_crsa16"),
+            (test_riscv_shared_p_rcrsa16, "test_riscv_shared_p_rcrsa16"),
+            (test_riscv_shared_p_urcrsa16, "test_riscv_shared_p_urcrsa16"),
+            (test_riscv_shared_p_kcrsa16, "test_riscv_shared_p_kcrsa16"),
+            (test_riscv_shared_p_ukcrsa16, "test_riscv_shared_p_ukcrsa16"),
+            (test_riscv_shared_p_stas16, "test_riscv_shared_p_stas16"),
+            (test_riscv_shared_p_rstas16, "test_riscv_shared_p_rstas16"),
+            (test_riscv_shared_p_urstas16, "test_riscv_shared_p_urstas16"),
+            (test_riscv_shared_p_kstas16, "test_riscv_shared_p_kstas16"),
+            (test_riscv_shared_p_ukstas16, "test_riscv_shared_p_ukstas16"),
+            (test_riscv_shared_p_stsa16, "test_riscv_shared_p_stsa16"),
+            (test_riscv_shared_p_rstsa16, "test_riscv_shared_p_rstsa16"),
+            (test_riscv_shared_p_urstsa16, "test_riscv_shared_p_urstsa16"),
+            (test_riscv_shared_p_kstsa16, "test_riscv_shared_p_kstsa16"),
+            (test_riscv_shared_p_ukstsa16, "test_riscv_shared_p_ukstsa16"),
+            (test_riscv_shared_p_add8, "test_riscv_shared_p_add8"),
+            (test_riscv_shared_p_radd8, "test_riscv_shared_p_radd8"),
+            (test_riscv_shared_p_uradd8, "test_riscv_shared_p_uradd8"),
+            (test_riscv_shared_p_kadd8, "test_riscv_shared_p_kadd8"),
+            (test_riscv_shared_p_ukadd8, "test_riscv_shared_p_ukadd8"),
+            (test_riscv_shared_p_sub8, "test_riscv_shared_p_sub8"),
+            (test_riscv_shared_p_rsub8, "test_riscv_shared_p_rsub8"),
+            (test_riscv_shared_p_ursub8, "test_riscv_shared_p_ursub8"),
+            (test_riscv_shared_p_ksub8, "test_riscv_shared_p_ksub8"),
+            (test_riscv_shared_p_uksub8, "test_riscv_shared_p_uksub8"),
+            (test_riscv_shared_p_sra16, "test_riscv_shared_p_sra16"),
+            (test_riscv_shared_p_sra16u, "test_riscv_shared_p_sra16u"),
+            (test_riscv_shared_p_srl16, "test_riscv_shared_p_srl16"),
+            (test_riscv_shared_p_srl16u, "test_riscv_shared_p_srl16u"),
+            (test_riscv_shared_p_sll16, "test_riscv_shared_p_sll16"),
+            (test_riscv_shared_p_ksll16, "test_riscv_shared_p_ksll16"),
+            (test_riscv_shared_p_kslra16, "test_riscv_shared_p_kslra16"),
+            (test_riscv_shared_p_kslra16u, "test_riscv_shared_p_kslra16u"),
+            (test_riscv_shared_p_sra8, "test_riscv_shared_p_sra8"),
+            (test_riscv_shared_p_sra8u, "test_riscv_shared_p_sra8u"),
+            (test_riscv_shared_p_srl8, "test_riscv_shared_p_srl8"),
+            (test_riscv_shared_p_srl8u, "test_riscv_shared_p_srl8u"),
+            (test_riscv_shared_p_sll8, "test_riscv_shared_p_sll8"),
+            (test_riscv_shared_p_ksll8, "test_riscv_shared_p_ksll8"),
+            (test_riscv_shared_p_kslra8, "test_riscv_shared_p_kslra8"),
+            (test_riscv_shared_p_kslra8u, "test_riscv_shared_p_kslra8u"),
+            (test_riscv_shared_p_cmpeq16, "test_riscv_shared_p_cmpeq16"),
+            (test_riscv_shared_p_scmplt16, "test_riscv_shared_p_scmplt16"),
+            (test_riscv_shared_p_scmple16, "test_riscv_shared_p_scmple16"),
+            (test_riscv_shared_p_ucmplt16, "test_riscv_shared_p_ucmplt16"),
+            (test_riscv_shared_p_ucmple16, "test_riscv_shared_p_ucmple16"),
+            (test_riscv_shared_p_cmpeq8, "test_riscv_shared_p_cmpeq8"),
+            (test_riscv_shared_p_scmplt8, "test_riscv_shared_p_scmplt8"),
+            (test_riscv_shared_p_scmple8, "test_riscv_shared_p_scmple8"),
+            (test_riscv_shared_p_ucmplt8, "test_riscv_shared_p_ucmplt8"),
+            (test_riscv_shared_p_ucmple8, "test_riscv_shared_p_ucmple8"),
+            (test_riscv_shared_p_smin16, "test_riscv_shared_p_smin16"),
+            (test_riscv_shared_p_umin16, "test_riscv_shared_p_umin16"),
+            (test_riscv_shared_p_smax16, "test_riscv_shared_p_smax16"),
+            (test_riscv_shared_p_umax16, "test_riscv_shared_p_umax16"),
+            (test_riscv_shared_p_kabs16, "test_riscv_shared_p_kabs16"),
+            (test_riscv_shared_p_clrs16, "test_riscv_shared_p_clrs16"),
+            (test_riscv_shared_p_clz16, "test_riscv_shared_p_clz16"),
+            (test_riscv_shared_p_swap16, "test_riscv_shared_p_swap16"),
+            (test_riscv_shared_p_smin8, "test_riscv_shared_p_smin8"),
+            (test_riscv_shared_p_umin8, "test_riscv_shared_p_umin8"),
+            (test_riscv_shared_p_smax8, "test_riscv_shared_p_smax8"),
+            (test_riscv_shared_p_umax8, "test_riscv_shared_p_umax8"),
+            (test_riscv_shared_p_kabs8, "test_riscv_shared_p_kabs8"),
+            (test_riscv_shared_p_clrs8, "test_riscv_shared_p_clrs8"),
+            (test_riscv_shared_p_clz8, "test_riscv_shared_p_clz8"),
+            (test_riscv_shared_p_swap8, "test_riscv_shared_p_swap8"),
+            (test_riscv_shared_p_sunpkd810, "test_riscv_shared_p_sunpkd810"),
+            (test_riscv_shared_p_sunpkd820, "test_riscv_shared_p_sunpkd820"),
+            (test_riscv_shared_p_sunpkd830, "test_riscv_shared_p_sunpkd830"),
+            (test_riscv_shared_p_sunpkd831, "test_riscv_shared_p_sunpkd831"),
+            (test_riscv_shared_p_sunpkd832, "test_riscv_shared_p_sunpkd832"),
+            (test_riscv_shared_p_zunpkd810, "test_riscv_shared_p_zunpkd810"),
+            (test_riscv_shared_p_zunpkd820, "test_riscv_shared_p_zunpkd820"),
+            (test_riscv_shared_p_zunpkd830, "test_riscv_shared_p_zunpkd830"),
+            (test_riscv_shared_p_zunpkd831, "test_riscv_shared_p_zunpkd831"),
+            (test_riscv_shared_p_zunpkd832, "test_riscv_shared_p_zunpkd832"),
+            (test_riscv_shared_p_pkbt16, "test_riscv_shared_p_pkbt16"),
+            (test_riscv_shared_p_pktb16, "test_riscv_shared_p_pktb16"),
+            (test_riscv_shared_p_clrs32, "test_riscv_shared_p_clrs32"),
+            (test_riscv_shared_p_clz32, "test_riscv_shared_p_clz32"),
+            (test_riscv_shared_p_pbsad, "test_riscv_shared_p_pbsad"),
+            (test_riscv_shared_p_pbsada, "test_riscv_shared_p_pbsada"),
+            (test_riscv_shared_p_smaqa, "test_riscv_shared_p_smaqa"),
+            (test_riscv_shared_p_umaqa, "test_riscv_shared_p_umaqa"),
+            (test_riscv_shared_p_smaqasu, "test_riscv_shared_p_smaqasu"),
+            (test_riscv_shared_p_kaddh, "test_riscv_shared_p_kaddh"),
+            (test_riscv_shared_p_ksubh, "test_riscv_shared_p_ksubh"),
+            (test_riscv_shared_p_ukaddh, "test_riscv_shared_p_ukaddh"),
+            (test_riscv_shared_p_uksubh, "test_riscv_shared_p_uksubh"),
+        ]
+    }
+}

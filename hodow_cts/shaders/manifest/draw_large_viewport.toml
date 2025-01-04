@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.draw.*.large_viewport.*
+#
+# `LargeViewportTestCase::initPrograms`: a full-screen strip of four vertices and a solid red fragment.
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawLargeViewportTests.cpp"
+rust_module = "draw/large_viewport_tests"
+
+[[case]]
+name = "large_viewport"
+rust_const = "LARGE_VIEWPORT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/large_viewport.vert", stage = "vert" },
+    { name = "frag", template = "draw/large_viewport.frag", stage = "frag" },
+]

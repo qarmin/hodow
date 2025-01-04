@@ -1,0 +1,320 @@
+#  Per-function test-generation policy - the one hand-maintained file for "this function
+#  needs different treatment", replacing what used to be four Python tables inside
+#  scripts/cpu/generate_tests.py plus two flat lists next to this file.
+#
+#  Everything else about a test is derived: the valid values of a const generic come from the
+#  function's own `static_assert!` in stdarch (see extract_signatures.py), the lane type from
+#  its name, the expected result from a capture on real hardware. Only what CANNOT be derived
+#  from the source belongs here - a hardware fault the compiler does not know about, or a
+#  result the architecture leaves undefined.
+#
+#  Every entry needs a `reason` stating what would go wrong without it. "Seemed risky" is not
+#  a reason; if it cannot be pinned to a concrete fault or a concrete undefined value, the
+#  function most likely needs no entry at all.
+#
+#  The generator warns about entries matching no function in signatures.txt, so a rename
+#  upstream shows up as a warning rather than a silently dead line.
+#
+#  ── Schema ───────────────────────────────────────────────────────────────────────────────
+#
+#  [[exclude]]                 - never generated at all. Grouped by shared reason.
+#    category  = "slug"        - short label the CLI's `coverage` report counts by.
+#    reason    = "..."         - what happens if it is generated.
+#    functions = [...]
+#
+#  [function.<name>]           - generated, but with one aspect overridden.
+#    reason              = "..."
+#    params.<param>      = "<rust expr>"   force this argument's value (the CPU validates it)
+#    consts.<CONST>      = 12              force this const generic (beyond its static_assert)
+#    no_fuzz             = true            keep the random-value loop away from it
+#    skip_result_check   = true            call it, assert nothing (machine-identity result)
+#    skip_output_check   = true            don't read back what it wrote (not a function of the args)
+#    check_lanes         = 2               compare only the leading N lanes of the result
+#    no_value_scenarios  = true            single fixed scenario only, no value-axis expansion
+
+# ── Excluded from generation ─────────────────────────────────────────────────────────────
+
+[[exclude]]
+category = "deprecated"
+reason = "Deprecated upstream in favour of a non-intrinsic API (core::hint::spin_loop, inline asm)."
+functions = [
+    "_MM_GET_EXCEPTION_MASK",
+    "_MM_GET_EXCEPTION_STATE",
+    "_MM_GET_FLUSH_ZERO_MODE",
+    "_MM_GET_ROUNDING_MODE",
+    "_MM_SET_EXCEPTION_MASK",
+    "_MM_SET_EXCEPTION_STATE",
+    "_MM_SET_FLUSH_ZERO_MODE",
+    "_MM_SET_ROUNDING_MODE",
+    "_MM_TRANSPOSE4_PS",
+]
+
+[[exclude]]
+category = "unavailable-target-feature"
+reason = """\
+Calling these is undefined behaviour on this project's build: each is the AVX-VNNI / \
+AVX-IFMA / SM3 / SM4 / SHA512 "VEX-encoded on an AVX-512 part" form, whose target feature \
+the generated wrapper cannot enable without also enabling the AVX-512 encoding.\
+"""
+functions = [
+    "_mm256_madd52hi_avx_epu64",
+    "_mm256_madd52lo_avx_epu64",
+    "_mm_madd52hi_avx_epu64",
+    "_mm_madd52lo_avx_epu64",
+    "_mm256_dpbssd_epi32",
+    "_mm256_dpbssds_epi32",
+    "_mm256_dpbsud_epi32",
+    "_mm256_dpbsuds_epi32",
+    "_mm256_dpbusd_avx_epi32",
+    "_mm256_dpbusds_avx_epi32",
+    "_mm256_dpbuud_epi32",
+    "_mm256_dpbuuds_epi32",
+    "_mm256_dpwssd_avx_epi32",
+    "_mm256_dpwssds_avx_epi32",
+    "_mm256_dpwsud_epi32",
+    "_mm256_dpwsuds_epi32",
+    "_mm256_dpwusd_epi32",
+    "_mm256_dpwusds_epi32",
+    "_mm256_dpwuud_epi32",
+    "_mm256_dpwuuds_epi32",
+    "_mm256_sha512msg1_epi64",
+    "_mm256_sha512msg2_epi64",
+    "_mm256_sha512rnds2_epi64",
+    "_mm256_sm4key4_epi32",
+    "_mm256_sm4rnds4_epi32",
+    "_mm_dpbssd_epi32",
+    "_mm_dpbssds_epi32",
+    "_mm_dpbsud_epi32",
+    "_mm_dpbsuds_epi32",
+    "_mm_dpbusd_avx_epi32",
+    "_mm_dpbusds_avx_epi32",
+    "_mm_dpbuud_epi32",
+    "_mm_dpbuuds_epi32",
+    "_mm_dpwssd_avx_epi32",
+    "_mm_dpwssds_avx_epi32",
+    "_mm_dpwsud_epi32",
+    "_mm_dpwsuds_epi32",
+    "_mm_dpwusd_epi32",
+    "_mm_dpwusds_epi32",
+    "_mm_dpwuud_epi32",
+    "_mm_dpwuuds_epi32",
+    "_mm_sm3msg1_epi32",
+    "_mm_sm3msg2_epi32",
+    "_mm_sm3rnds2_epi32",
+    "_mm_sm4key4_epi32",
+    "_mm_sm4rnds4_epi32",
+]
+
+[[exclude]]
+category = "unstable-intrinsic"
+reason = """\
+Needs a nightly feature gate (stdarch_x86_mm_shuffle) inside an otherwise stable group, and \
+the x86 build has to keep compiling on stable for `cargo install`. _MM_SHUFFLE is also not an \
+instruction: it packs four lane selectors into the immediate another intrinsic takes.\
+"""
+functions = ["_MM_SHUFFLE"]
+
+[[exclude]]
+category = "unstable-intrinsic"
+reason = """\
+The 128/256-bit AVX512VL forms of cvtepu32_ps need a nightly feature gate \
+(stdarch_x86_avx512_vl_u32_to_f32_conversions) inside a stable group, and the x86 build has to \
+keep compiling on stable for `cargo install`.\
+"""
+functions = [
+    "_mm256_cvtepu32_ps",
+    "_mm256_mask_cvtepu32_ps",
+    "_mm256_maskz_cvtepu32_ps",
+    "_mm_cvtepu32_ps",
+    "_mm_mask_cvtepu32_ps",
+    "_mm_maskz_cvtepu32_ps",
+]
+
+[[exclude]]
+category = "process-state-corruption"
+reason = """\
+State-restore / control-register writes: applying arbitrary buffer contents faults (#GP on \
+an invalid MXCSR/XCR0) or corrupts the process state the test harness itself runs on.\
+"""
+functions = ["_fxrstor", "_fxrstor64", "_xrstor", "_xrstor64", "_xrstors", "_xrstors64", "_xsetbv"]
+
+[[exclude]]
+category = "privileged"
+reason = "Supervisor-only (CPL0) - faults in user mode on every machine."
+functions = ["_xsaves", "_xsaves64"]
+
+[[exclude]]
+category = "unsupported-signature"
+reason = """\
+aarch64 MTE: generic over a bare type parameter T on top of the OFFSET const generic \
+(`__arm_mte_increment_tag<const OFFSET: i64, T>(src: *const T)`), which the generator has no \
+substitution for - it emits a call missing the second generic argument, so this does not \
+compile. MTE is also an optional ARMv8.5 extension real chips may not implement.\
+"""
+functions = ["__arm_mte_create_random_tag", "__arm_mte_increment_tag", "__arm_mte_ptrdiff"]
+
+[[exclude]]
+category = "does-not-exist"
+reason = """\
+Extracted from arm/neon.rs but not actually defined by stdarch (the extractor was confused by \
+a doc comment or macro template naming the poly64 form next to the real one). stdarch defines \
+only the _s64/_u64 forms of these shift-insert intrinsics - confirmed by grepping \
+arm_shared/neon/generated.rs for "fn vsli_n_p64" versus "fn vsli_n_s64".\
+"""
+functions = ["vsli_n_p64", "vsliq_n_p64", "vsri_n_p64", "vsriq_n_p64"]
+
+# ── Per-function overrides ───────────────────────────────────────────────────────────────
+
+[function._mm_loadiwkey]
+reason = """\
+`control: u32` is a bitfield the CPU validates, not a value to vary: control[1:4] (KeySource) \
+allows only 0 or 1, control[5:31] must be 0, and per stdarch's own doc comment "using any \
+other value may result in a General Protection Exception" - a real #GP, i.e. a crash. A raw \
+rand::random::<u32>() hits an invalid KeySource on 14 of 16 draws. 0 (NoBackup=0, \
+KeySource=0) is the one encoding needing no CPUID leaf 0x19 permission check at all.\
+"""
+params.control = "0u32"
+no_fuzz = true
+
+[function._xgetbv]
+reason = """\
+`xcr_no: u32` selects which XCR to read: only XCR0 (index 0) is architecturally defined, and \
+XGETBV on any other index raises #GP, delivered as SIGSEGV - reproduced by the generic \
+sequential-counter default of 1u32 segfaulting `just cpu` on an AMD GX-420GI while this \
+project's Ryzen 9 7900 happened not to fault. The result is then a machine-identity fact \
+(that CPU's XCR0 bits), so asserting one machine's captured value against another is a false \
+positive: `Got 7, expected 743` on the same GX-420GI.\
+"""
+params.xcr_no = "0u32"
+no_fuzz = true
+skip_result_check = true
+
+[function._mm_extract_si64]
+reason = """\
+SSE4A EXTRQ/INSERTQ: stdarch promises only what the LOWER 64 bits of the result hold ("a \
+128-bit integer vector whose lower 64 bits contain the extracted bits") and says nothing \
+about the upper 64. Those come back differently between a debug and a release build of \
+identical source on identical hardware, and a `just cpu-remote` run against a real AMD \
+GX-420GI mismatched on exactly lanes 2-3 while lanes 0-1 matched every time. Upstream's own \
+test sidesteps it by zeroing the input's upper half rather than asserting anything. Checking \
+2 of the 4 i32 lanes keeps the defined half verified and the undefined half unasserted.
+
+The value axis is skipped for the register form on top of that: length is bits [5:0] and \
+index bits [13:8] of the second __m128i parameter, so an all-ones/i32::MAX override decodes \
+to length=63, index=63 - `length + index > 64`, which the same doc comment calls undefined.\
+"""
+check_lanes = 2
+no_value_scenarios = true
+
+[function._mm_insert_si64]
+reason = "SSE4A INSERTQ register form - see _mm_extract_si64, same guarantee and same control-field encoding."
+check_lanes = 2
+no_value_scenarios = true
+
+[function._mm_extracti_si64]
+reason = """\
+SSE4A EXTRQI, the immediate form of _mm_extract_si64: same "lower 64 bits" guarantee, so the \
+same partial check. The value axis is fine here - length/index are const generics bounded by \
+stdarch's own static_assert, so an out-of-range combination is a build error, not a bad test.\
+"""
+check_lanes = 2
+
+[function._mm_inserti_si64]
+reason = "SSE4A INSERTQI - see _mm_extracti_si64."
+check_lanes = 2
+
+# ── Outputs that are not a function of the call's arguments ──────────────────────────────
+#
+# These do write through their output pointer, so `out_readbacks` would read it back and
+# compare it - but what lands there is a property of the machine or the moment, not of the
+# inputs, so a value captured on one box is a guaranteed false positive on the next. Same
+# reasoning as `skip_result_check`, applied to memory instead of the return value; the
+# XSAVE/FXSAVE state region is excluded by the generator itself (`is_state_save`) since its
+# buffer size already has to be special-cased there.
+
+[function._rdrand16_step]
+reason = "Writes a hardware random number. The `i32` return (1 = a random value was produced) is the only part of this that is a function of anything, and stays checked."
+skip_output_check = true
+
+[function._rdrand32_step]
+reason = "See _rdrand16_step."
+skip_output_check = true
+
+[function._rdrand64_step]
+reason = "See _rdrand16_step."
+skip_output_check = true
+
+[function._rdseed16_step]
+reason = "Writes a hardware entropy sample - see _rdrand16_step, same shape."
+skip_output_check = true
+
+[function._rdseed32_step]
+reason = "See _rdseed16_step."
+skip_output_check = true
+
+[function._rdseed64_step]
+reason = "See _rdseed16_step."
+skip_output_check = true
+
+[function.__rdtscp]
+reason = """\
+`aux` receives IA32_TSC_AUX, which Linux loads with the CPU number the call ran on. That is \
+a machine-identity fact and not even stable between two runs on the same box, since nothing \
+pins the thread to a core.\
+"""
+skip_output_check = true
+
+[function.__rndr]
+reason = "aarch64 RNDR writes a hardware random number - see _rdrand16_step."
+skip_output_check = true
+
+[function.__rndrrs]
+reason = "aarch64 RNDRRS, reseeded form of __rndr."
+skip_output_check = true
+
+[function._mm_encodekey128_u32]
+reason = """\
+Writes a key handle wrapped with IWKEY, the CPU's internal Key Locker key - loaded by \
+LOADIWKEY, random per boot and not readable back, so the handle differs on every machine and \
+every boot of the same machine.\
+"""
+skip_output_check = true
+
+[function._mm_encodekey256_u32]
+reason = "See _mm_encodekey128_u32."
+skip_output_check = true
+
+[function._mm_aesenc128kl_u8]
+reason = """\
+Decrypts its key handle with IWKEY before using it, so its output depends on that per-boot \
+internal key (and on a handle this test cannot construct validly - see _mm_encodekey128_u32).\
+"""
+skip_output_check = true
+
+[function._mm_aesdec128kl_u8]
+reason = "See _mm_aesenc128kl_u8."
+skip_output_check = true
+
+[function._mm_aesenc256kl_u8]
+reason = "See _mm_aesenc128kl_u8."
+skip_output_check = true
+
+[function._mm_aesdec256kl_u8]
+reason = "See _mm_aesenc128kl_u8."
+skip_output_check = true
+
+[function._mm_aesencwide128kl_u8]
+reason = "See _mm_aesenc128kl_u8."
+skip_output_check = true
+
+[function._mm_aesdecwide128kl_u8]
+reason = "See _mm_aesenc128kl_u8."
+skip_output_check = true
+
+[function._mm_aesencwide256kl_u8]
+reason = "See _mm_aesenc128kl_u8."
+skip_output_check = true
+
+[function._mm_aesdecwide256kl_u8]
+reason = "See _mm_aesenc128kl_u8."
+skip_output_check = true

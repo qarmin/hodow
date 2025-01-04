@@ -1,0 +1,31 @@
+# Shader manifest for dEQP-VK.pipeline.*.extended_dynamic_state.<ordering>.{cull_*,front_face_*,disable_raster,enable_raster}
+#
+# `ExtendedDynamicStateTest::initPrograms` for the default vertex generator (a `vec2` position), one colour attachment of a unorm format and no geometry or tessellation stage.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineExtendedDynamicStateTests.cpp"
+rust_module = "pipeline/extended_dynamic_state_basic_tests"
+
+[[case]]
+name = "extended_dynamic_state_basic"
+rust_const = "EXTENDED_DYNAMIC_STATE_BASIC"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/extended_dynamic_state_basic/basic.vert", stage = "vert" },
+    { name = "vertExtra", template = "pipeline/extended_dynamic_state_basic/extra_attributes.vert", stage = "vert" },
+    { name = "vertPadding16", template = "pipeline/extended_dynamic_state_basic/padding16.vert", stage = "vert" },
+    { name = "vertInstance", template = "pipeline/extended_dynamic_state_basic/instance_data.vert", stage = "vert" },
+    { name = "vertMultiple", template = "pipeline/extended_dynamic_state_basic/multiple_bindings.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/extended_dynamic_state_basic/basic.frag", stage = "frag" },
+    { name = "fragDual", template = "pipeline/extended_dynamic_state_basic/dual_source.frag", stage = "frag" },
+    { name = "fragAtomicEarly", template = "pipeline/extended_dynamic_state_basic/atomic_early.frag", stage = "frag" },
+    { name = "fragAtomicSample", template = "pipeline/extended_dynamic_state_basic/atomic_sample.frag", stage = "frag" },
+    { name = "fragUint", template = "pipeline/extended_dynamic_state_basic/basic_uint.frag", stage = "frag" },
+    { name = "geom", template = "pipeline/extended_dynamic_state_basic/basic.geom", stage = "geom" },
+    { name = "geomTriangle", template = "pipeline/extended_dynamic_state_basic/basic_triangle.geom", stage = "geom" },
+    { name = "geomLine", template = "pipeline/extended_dynamic_state_basic/basic_line.geom", stage = "geom" },
+    { name = "tesc", template = "pipeline/extended_dynamic_state_basic/basic.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/extended_dynamic_state_basic/basic.tese", stage = "tese" },
+    { name = "provokingVertFirst", template = "pipeline/extended_dynamic_state_basic/provoking_first.vert", stage = "vert" },
+    { name = "provokingVertLast", template = "pipeline/extended_dynamic_state_basic/provoking_last.vert", stage = "vert" },
+    { name = "provokingFrag", template = "pipeline/extended_dynamic_state_basic/provoking.frag", stage = "frag" },
+]

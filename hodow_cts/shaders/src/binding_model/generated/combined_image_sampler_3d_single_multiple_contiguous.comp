@@ -1,0 +1,23 @@
+#version 310 es
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(set = 0, binding = 1) uniform highp sampler3D u_combinedTextureSamplerA;
+layout(set = 0, binding = 2) uniform highp sampler3D u_combinedTextureSamplerB;
+layout(set = 0, binding = 0, std140) writeonly buffer OutBuf
+{
+    highp vec4 read_colors[4];
+} b_out;
+void main (void)
+{
+    highp int quadrant_id = int(gl_WorkGroupID.x);
+    highp vec4 result_color;
+    result_color = vec4(0.0);
+    if (quadrant_id == 0)
+        result_color += textureLod(u_combinedTextureSamplerA, vec3(float(0.0117188), float(0.0078125), float(0.191406)), 0.0);
+    else if (quadrant_id == 1)
+        result_color += textureLod(u_combinedTextureSamplerB, vec3(float(0.363281), float(0.148438), float(1.25781)), 0.0);
+    else if (quadrant_id == 2)
+        result_color += textureLod(u_combinedTextureSamplerA, vec3(float(-0.667969), float(1.32031), float(0.839844)), 0.0);
+    else
+        result_color += textureLod(u_combinedTextureSamplerB, vec3(float(1.00781), float(0.175781), float(1.30078)), 0.0);
+    b_out.read_colors[gl_WorkGroupID.x] = result_color;
+}

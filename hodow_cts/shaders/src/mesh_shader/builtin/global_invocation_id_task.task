@@ -1,0 +1,17 @@
+#version 460
+#extension GL_EXT_mesh_shader : enable
+
+layout (local_size_x=8) in;
+
+struct TaskData {
+    uint pixelId[8];
+    uint size;
+};
+taskPayloadSharedEXT TaskData td;
+
+void main ()
+{
+    td.pixelId[gl_LocalInvocationIndex] = gl_GlobalInvocationID.x;
+    td.size = 64;
+    EmitMeshTasksEXT(1u, 1u, 1u);
+}

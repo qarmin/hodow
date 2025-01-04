@@ -1,0 +1,19 @@
+#version 450
+#extension GL_EXT_buffer_reference2 : require
+#extension GL_EXT_buffer_reference_uvec2 : require
+#extension GL_EXT_scalar_block_layout : require
+layout (local_size_x=64, local_size_y=1, local_size_z=1) in;
+
+layout (set=0, binding=0, std430) uniform SrcBufferBlock {
+    uint values[64];
+} srcBuffer;
+
+layout (set=0, binding=1, std430) writeonly buffer DstBufferBlock {
+    uint values[];
+} dstBuffer;
+
+void main()
+{
+    const uint idx = gl_LocalInvocationIndex;
+    dstBuffer.values[idx] = srcBuffer.values[idx];
+}

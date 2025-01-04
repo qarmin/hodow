@@ -1,0 +1,29 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+layout (local_size_x=32) in;
+
+shared uint counter;
+
+void main ()
+{
+    uvec3 workGroupSize = uvec3(0u, 0u, 0u);
+counter = 0;
+memoryBarrierShared();
+barrier();
+atomicAdd(counter, 1u);
+memoryBarrierShared();
+barrier();
+if (gl_LocalInvocationIndex == 0u) {
+    if (counter == 32) {
+
+workGroupSize = uvec3(1u, 1u, 1u);
+
+    } else {
+
+workGroupSize = uvec3(0u, 0u, 0u);
+
+    }
+}
+    EmitMeshTasksEXT(workGroupSize.x, workGroupSize.y, workGroupSize.z);
+}

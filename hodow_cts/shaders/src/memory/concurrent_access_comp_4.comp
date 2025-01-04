@@ -1,0 +1,9 @@
+#version 460
+layout(local_size_x = 1) in;
+layout(binding = 0, std430) buffer InOutBuf { uint v[]; } inOutBuf;
+void main()
+{
+  uint index = gl_WorkGroupID.x * 2;
+  if (int(inOutBuf.v[index]) == 1532713819u)
+    inOutBuf.v[index] = 3402287818u;
+}

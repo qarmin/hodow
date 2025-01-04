@@ -1,0 +1,624 @@
+mod bnz;
+mod bz;
+mod vadd;
+mod vaddwev;
+mod vaddwod;
+mod vandi;
+mod vbitclri;
+mod vbitrevi;
+mod vbitsel;
+mod vbitseli;
+mod vbitseti;
+mod vdiv;
+mod vexth;
+mod vextl;
+mod vextrins;
+mod vfclass;
+mod vfcmp;
+mod vfcvt;
+mod vfcvth;
+mod vfcvtl;
+mod vffint;
+mod vffinth;
+mod vffintl;
+mod vflogb;
+mod vfmax;
+mod vfmaxa;
+mod vfmin;
+mod vfmina;
+mod vfrecipe;
+mod vfrint;
+mod vfrintrne;
+mod vfrsqrte;
+mod vfrstp;
+mod vfrstpi;
+mod vftint;
+mod vftinth;
+mod vftintl;
+mod vftintrm;
+mod vftintrmh;
+mod vftintrml;
+mod vftintrne;
+mod vftintrneh;
+mod vftintrnel;
+mod vftintrp;
+mod vftintrph;
+mod vftintrpl;
+mod vftintrz;
+mod vftintrzh;
+mod vftintrzl;
+mod vhaddw;
+mod vhsubw;
+mod vldrepl;
+mod vmaddwev;
+mod vmaddwod;
+mod vmod;
+mod vmskgez;
+mod vmskltz;
+mod vmsknz;
+mod vmulwev;
+mod vmulwod;
+mod vnori;
+mod vori;
+mod vpermi;
+mod vreplve;
+mod vsat;
+mod vshuf;
+mod vsigncov;
+mod vsllwil;
+mod vsran;
+mod vsrani;
+mod vsrar;
+mod vsrari;
+mod vsrarn;
+mod vsrarni;
+mod vsrln;
+mod vsrlni;
+mod vsrlr;
+mod vsrlri;
+mod vsrlrn;
+mod vsrlrni;
+mod vssran;
+mod vssrani;
+mod vssrarn;
+mod vssrarni;
+mod vssrln;
+mod vssrlni;
+mod vssrlrn;
+mod vssrlrni;
+mod vstelm;
+mod vsub;
+mod vsubi;
+mod vsubwev;
+mod vsubwod;
+mod vxori;
+
+use crate::cpu::auto_generated::loongarch64::lsx::bnz::*;
+use crate::cpu::auto_generated::loongarch64::lsx::bz::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vadd::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vaddwev::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vaddwod::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vandi::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vbitclri::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vbitrevi::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vbitsel::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vbitseli::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vbitseti::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vdiv::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vexth::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vextl::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vextrins::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vfclass::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vfcmp::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vfcvt::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vfcvth::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vfcvtl::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vffint::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vffinth::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vffintl::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vflogb::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vfmax::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vfmaxa::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vfmin::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vfmina::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vfrecipe::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vfrint::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vfrintrne::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vfrsqrte::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vfrstp::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vfrstpi::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vftint::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vftinth::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vftintl::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vftintrm::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vftintrmh::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vftintrml::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vftintrne::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vftintrneh::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vftintrnel::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vftintrp::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vftintrph::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vftintrpl::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vftintrz::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vftintrzh::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vftintrzl::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vhaddw::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vhsubw::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vldrepl::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vmaddwev::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vmaddwod::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vmod::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vmskgez::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vmskltz::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vmsknz::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vmulwev::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vmulwod::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vnori::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vori::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vpermi::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vreplve::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vsat::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vshuf::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vsigncov::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vsllwil::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vsran::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vsrani::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vsrar::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vsrari::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vsrarn::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vsrarni::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vsrln::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vsrlni::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vsrlr::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vsrlri::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vsrlrn::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vsrlrni::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vssran::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vssrani::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vssrarn::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vssrarni::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vssrln::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vssrlni::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vssrlrn::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vssrlrni::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vstelm::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vsub::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vsubi::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vsubwev::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vsubwod::*;
+use crate::cpu::auto_generated::loongarch64::lsx::vxori::*;
+
+use crate::cpu::{ExtensionTest, TestFunction};
+
+#[allow(non_camel_case_types)]
+pub struct LSX;
+
+impl ExtensionTest for LSX {
+    fn get_name() -> &'static str {
+        "loongarch64::LSX"
+    }
+
+    fn get_tests() -> &'static [(TestFunction, &'static str)] {
+        &[
+            (test_loongarch64_lsx_lsx_vsrar_b, "test_loongarch64_lsx_lsx_vsrar_b"),
+            (test_loongarch64_lsx_lsx_vsrar_h, "test_loongarch64_lsx_lsx_vsrar_h"),
+            (test_loongarch64_lsx_lsx_vsrar_w, "test_loongarch64_lsx_lsx_vsrar_w"),
+            (test_loongarch64_lsx_lsx_vsrar_d, "test_loongarch64_lsx_lsx_vsrar_d"),
+            (test_loongarch64_lsx_lsx_vsrari_b, "test_loongarch64_lsx_lsx_vsrari_b"),
+            (test_loongarch64_lsx_lsx_vsrari_h, "test_loongarch64_lsx_lsx_vsrari_h"),
+            (test_loongarch64_lsx_lsx_vsrari_w, "test_loongarch64_lsx_lsx_vsrari_w"),
+            (test_loongarch64_lsx_lsx_vsrari_d, "test_loongarch64_lsx_lsx_vsrari_d"),
+            (test_loongarch64_lsx_lsx_vsrlr_b, "test_loongarch64_lsx_lsx_vsrlr_b"),
+            (test_loongarch64_lsx_lsx_vsrlr_h, "test_loongarch64_lsx_lsx_vsrlr_h"),
+            (test_loongarch64_lsx_lsx_vsrlr_w, "test_loongarch64_lsx_lsx_vsrlr_w"),
+            (test_loongarch64_lsx_lsx_vsrlr_d, "test_loongarch64_lsx_lsx_vsrlr_d"),
+            (test_loongarch64_lsx_lsx_vsrlri_b, "test_loongarch64_lsx_lsx_vsrlri_b"),
+            (test_loongarch64_lsx_lsx_vsrlri_h, "test_loongarch64_lsx_lsx_vsrlri_h"),
+            (test_loongarch64_lsx_lsx_vsrlri_w, "test_loongarch64_lsx_lsx_vsrlri_w"),
+            (test_loongarch64_lsx_lsx_vsrlri_d, "test_loongarch64_lsx_lsx_vsrlri_d"),
+            (test_loongarch64_lsx_lsx_vbitclri_b, "test_loongarch64_lsx_lsx_vbitclri_b"),
+            (test_loongarch64_lsx_lsx_vbitclri_h, "test_loongarch64_lsx_lsx_vbitclri_h"),
+            (test_loongarch64_lsx_lsx_vbitclri_w, "test_loongarch64_lsx_lsx_vbitclri_w"),
+            (test_loongarch64_lsx_lsx_vbitclri_d, "test_loongarch64_lsx_lsx_vbitclri_d"),
+            (test_loongarch64_lsx_lsx_vbitseti_b, "test_loongarch64_lsx_lsx_vbitseti_b"),
+            (test_loongarch64_lsx_lsx_vbitseti_h, "test_loongarch64_lsx_lsx_vbitseti_h"),
+            (test_loongarch64_lsx_lsx_vbitseti_w, "test_loongarch64_lsx_lsx_vbitseti_w"),
+            (test_loongarch64_lsx_lsx_vbitseti_d, "test_loongarch64_lsx_lsx_vbitseti_d"),
+            (test_loongarch64_lsx_lsx_vbitrevi_b, "test_loongarch64_lsx_lsx_vbitrevi_b"),
+            (test_loongarch64_lsx_lsx_vbitrevi_h, "test_loongarch64_lsx_lsx_vbitrevi_h"),
+            (test_loongarch64_lsx_lsx_vbitrevi_w, "test_loongarch64_lsx_lsx_vbitrevi_w"),
+            (test_loongarch64_lsx_lsx_vbitrevi_d, "test_loongarch64_lsx_lsx_vbitrevi_d"),
+            (test_loongarch64_lsx_lsx_vsubi_bu, "test_loongarch64_lsx_lsx_vsubi_bu"),
+            (test_loongarch64_lsx_lsx_vsubi_hu, "test_loongarch64_lsx_lsx_vsubi_hu"),
+            (test_loongarch64_lsx_lsx_vsubi_wu, "test_loongarch64_lsx_lsx_vsubi_wu"),
+            (test_loongarch64_lsx_lsx_vsubi_du, "test_loongarch64_lsx_lsx_vsubi_du"),
+            (test_loongarch64_lsx_lsx_vsat_b, "test_loongarch64_lsx_lsx_vsat_b"),
+            (test_loongarch64_lsx_lsx_vsat_h, "test_loongarch64_lsx_lsx_vsat_h"),
+            (test_loongarch64_lsx_lsx_vsat_w, "test_loongarch64_lsx_lsx_vsat_w"),
+            (test_loongarch64_lsx_lsx_vsat_d, "test_loongarch64_lsx_lsx_vsat_d"),
+            (test_loongarch64_lsx_lsx_vsat_bu, "test_loongarch64_lsx_lsx_vsat_bu"),
+            (test_loongarch64_lsx_lsx_vsat_hu, "test_loongarch64_lsx_lsx_vsat_hu"),
+            (test_loongarch64_lsx_lsx_vsat_wu, "test_loongarch64_lsx_lsx_vsat_wu"),
+            (test_loongarch64_lsx_lsx_vsat_du, "test_loongarch64_lsx_lsx_vsat_du"),
+            (test_loongarch64_lsx_lsx_vdiv_b, "test_loongarch64_lsx_lsx_vdiv_b"),
+            (test_loongarch64_lsx_lsx_vdiv_h, "test_loongarch64_lsx_lsx_vdiv_h"),
+            (test_loongarch64_lsx_lsx_vdiv_w, "test_loongarch64_lsx_lsx_vdiv_w"),
+            (test_loongarch64_lsx_lsx_vdiv_d, "test_loongarch64_lsx_lsx_vdiv_d"),
+            (test_loongarch64_lsx_lsx_vdiv_bu, "test_loongarch64_lsx_lsx_vdiv_bu"),
+            (test_loongarch64_lsx_lsx_vdiv_hu, "test_loongarch64_lsx_lsx_vdiv_hu"),
+            (test_loongarch64_lsx_lsx_vdiv_wu, "test_loongarch64_lsx_lsx_vdiv_wu"),
+            (test_loongarch64_lsx_lsx_vdiv_du, "test_loongarch64_lsx_lsx_vdiv_du"),
+            (test_loongarch64_lsx_lsx_vhaddw_h_b, "test_loongarch64_lsx_lsx_vhaddw_h_b"),
+            (test_loongarch64_lsx_lsx_vhaddw_w_h, "test_loongarch64_lsx_lsx_vhaddw_w_h"),
+            (test_loongarch64_lsx_lsx_vhaddw_d_w, "test_loongarch64_lsx_lsx_vhaddw_d_w"),
+            (test_loongarch64_lsx_lsx_vhaddw_hu_bu, "test_loongarch64_lsx_lsx_vhaddw_hu_bu"),
+            (test_loongarch64_lsx_lsx_vhaddw_wu_hu, "test_loongarch64_lsx_lsx_vhaddw_wu_hu"),
+            (test_loongarch64_lsx_lsx_vhaddw_du_wu, "test_loongarch64_lsx_lsx_vhaddw_du_wu"),
+            (test_loongarch64_lsx_lsx_vhsubw_h_b, "test_loongarch64_lsx_lsx_vhsubw_h_b"),
+            (test_loongarch64_lsx_lsx_vhsubw_w_h, "test_loongarch64_lsx_lsx_vhsubw_w_h"),
+            (test_loongarch64_lsx_lsx_vhsubw_d_w, "test_loongarch64_lsx_lsx_vhsubw_d_w"),
+            (test_loongarch64_lsx_lsx_vhsubw_hu_bu, "test_loongarch64_lsx_lsx_vhsubw_hu_bu"),
+            (test_loongarch64_lsx_lsx_vhsubw_wu_hu, "test_loongarch64_lsx_lsx_vhsubw_wu_hu"),
+            (test_loongarch64_lsx_lsx_vhsubw_du_wu, "test_loongarch64_lsx_lsx_vhsubw_du_wu"),
+            (test_loongarch64_lsx_lsx_vmod_b, "test_loongarch64_lsx_lsx_vmod_b"),
+            (test_loongarch64_lsx_lsx_vmod_h, "test_loongarch64_lsx_lsx_vmod_h"),
+            (test_loongarch64_lsx_lsx_vmod_w, "test_loongarch64_lsx_lsx_vmod_w"),
+            (test_loongarch64_lsx_lsx_vmod_d, "test_loongarch64_lsx_lsx_vmod_d"),
+            (test_loongarch64_lsx_lsx_vmod_bu, "test_loongarch64_lsx_lsx_vmod_bu"),
+            (test_loongarch64_lsx_lsx_vmod_hu, "test_loongarch64_lsx_lsx_vmod_hu"),
+            (test_loongarch64_lsx_lsx_vmod_wu, "test_loongarch64_lsx_lsx_vmod_wu"),
+            (test_loongarch64_lsx_lsx_vmod_du, "test_loongarch64_lsx_lsx_vmod_du"),
+            (test_loongarch64_lsx_lsx_vreplve_b, "test_loongarch64_lsx_lsx_vreplve_b"),
+            (test_loongarch64_lsx_lsx_vreplve_h, "test_loongarch64_lsx_lsx_vreplve_h"),
+            (test_loongarch64_lsx_lsx_vreplve_w, "test_loongarch64_lsx_lsx_vreplve_w"),
+            (test_loongarch64_lsx_lsx_vreplve_d, "test_loongarch64_lsx_lsx_vreplve_d"),
+            (test_loongarch64_lsx_lsx_vshuf_h, "test_loongarch64_lsx_lsx_vshuf_h"),
+            (test_loongarch64_lsx_lsx_vshuf_w, "test_loongarch64_lsx_lsx_vshuf_w"),
+            (test_loongarch64_lsx_lsx_vshuf_d, "test_loongarch64_lsx_lsx_vshuf_d"),
+            (test_loongarch64_lsx_lsx_vandi_b, "test_loongarch64_lsx_lsx_vandi_b"),
+            (test_loongarch64_lsx_lsx_vori_b, "test_loongarch64_lsx_lsx_vori_b"),
+            (test_loongarch64_lsx_lsx_vnori_b, "test_loongarch64_lsx_lsx_vnori_b"),
+            (test_loongarch64_lsx_lsx_vxori_b, "test_loongarch64_lsx_lsx_vxori_b"),
+            (test_loongarch64_lsx_lsx_vbitsel_v, "test_loongarch64_lsx_lsx_vbitsel_v"),
+            (test_loongarch64_lsx_lsx_vbitseli_b, "test_loongarch64_lsx_lsx_vbitseli_b"),
+            (test_loongarch64_lsx_lsx_vfcvt_h_s, "test_loongarch64_lsx_lsx_vfcvt_h_s"),
+            (test_loongarch64_lsx_lsx_vfcvt_s_d, "test_loongarch64_lsx_lsx_vfcvt_s_d"),
+            (test_loongarch64_lsx_lsx_vfmin_s, "test_loongarch64_lsx_lsx_vfmin_s"),
+            (test_loongarch64_lsx_lsx_vfmin_d, "test_loongarch64_lsx_lsx_vfmin_d"),
+            (test_loongarch64_lsx_lsx_vfmina_s, "test_loongarch64_lsx_lsx_vfmina_s"),
+            (test_loongarch64_lsx_lsx_vfmina_d, "test_loongarch64_lsx_lsx_vfmina_d"),
+            (test_loongarch64_lsx_lsx_vfmax_s, "test_loongarch64_lsx_lsx_vfmax_s"),
+            (test_loongarch64_lsx_lsx_vfmax_d, "test_loongarch64_lsx_lsx_vfmax_d"),
+            (test_loongarch64_lsx_lsx_vfmaxa_s, "test_loongarch64_lsx_lsx_vfmaxa_s"),
+            (test_loongarch64_lsx_lsx_vfmaxa_d, "test_loongarch64_lsx_lsx_vfmaxa_d"),
+            (test_loongarch64_lsx_lsx_vfclass_s, "test_loongarch64_lsx_lsx_vfclass_s"),
+            (test_loongarch64_lsx_lsx_vfclass_d, "test_loongarch64_lsx_lsx_vfclass_d"),
+            (test_loongarch64_lsx_lsx_vfrecipe_s, "test_loongarch64_lsx_lsx_vfrecipe_s"),
+            (test_loongarch64_lsx_lsx_vfrecipe_d, "test_loongarch64_lsx_lsx_vfrecipe_d"),
+            (test_loongarch64_lsx_lsx_vfrsqrte_s, "test_loongarch64_lsx_lsx_vfrsqrte_s"),
+            (test_loongarch64_lsx_lsx_vfrsqrte_d, "test_loongarch64_lsx_lsx_vfrsqrte_d"),
+            (test_loongarch64_lsx_lsx_vfrint_s, "test_loongarch64_lsx_lsx_vfrint_s"),
+            (test_loongarch64_lsx_lsx_vfrint_d, "test_loongarch64_lsx_lsx_vfrint_d"),
+            (test_loongarch64_lsx_lsx_vflogb_s, "test_loongarch64_lsx_lsx_vflogb_s"),
+            (test_loongarch64_lsx_lsx_vflogb_d, "test_loongarch64_lsx_lsx_vflogb_d"),
+            (test_loongarch64_lsx_lsx_vfcvth_s_h, "test_loongarch64_lsx_lsx_vfcvth_s_h"),
+            (test_loongarch64_lsx_lsx_vfcvth_d_s, "test_loongarch64_lsx_lsx_vfcvth_d_s"),
+            (test_loongarch64_lsx_lsx_vfcvtl_s_h, "test_loongarch64_lsx_lsx_vfcvtl_s_h"),
+            (test_loongarch64_lsx_lsx_vfcvtl_d_s, "test_loongarch64_lsx_lsx_vfcvtl_d_s"),
+            (test_loongarch64_lsx_lsx_vftint_w_s, "test_loongarch64_lsx_lsx_vftint_w_s"),
+            (test_loongarch64_lsx_lsx_vftint_l_d, "test_loongarch64_lsx_lsx_vftint_l_d"),
+            (test_loongarch64_lsx_lsx_vftint_wu_s, "test_loongarch64_lsx_lsx_vftint_wu_s"),
+            (test_loongarch64_lsx_lsx_vftint_lu_d, "test_loongarch64_lsx_lsx_vftint_lu_d"),
+            (test_loongarch64_lsx_lsx_vftintrz_w_s, "test_loongarch64_lsx_lsx_vftintrz_w_s"),
+            (test_loongarch64_lsx_lsx_vftintrz_l_d, "test_loongarch64_lsx_lsx_vftintrz_l_d"),
+            (test_loongarch64_lsx_lsx_vftintrz_wu_s, "test_loongarch64_lsx_lsx_vftintrz_wu_s"),
+            (test_loongarch64_lsx_lsx_vftintrz_lu_d, "test_loongarch64_lsx_lsx_vftintrz_lu_d"),
+            (test_loongarch64_lsx_lsx_vffint_s_w, "test_loongarch64_lsx_lsx_vffint_s_w"),
+            (test_loongarch64_lsx_lsx_vffint_d_l, "test_loongarch64_lsx_lsx_vffint_d_l"),
+            (test_loongarch64_lsx_lsx_vffint_s_wu, "test_loongarch64_lsx_lsx_vffint_s_wu"),
+            (test_loongarch64_lsx_lsx_vffint_d_lu, "test_loongarch64_lsx_lsx_vffint_d_lu"),
+            (test_loongarch64_lsx_lsx_vsllwil_h_b, "test_loongarch64_lsx_lsx_vsllwil_h_b"),
+            (test_loongarch64_lsx_lsx_vsllwil_w_h, "test_loongarch64_lsx_lsx_vsllwil_w_h"),
+            (test_loongarch64_lsx_lsx_vsllwil_d_w, "test_loongarch64_lsx_lsx_vsllwil_d_w"),
+            (test_loongarch64_lsx_lsx_vsllwil_hu_bu, "test_loongarch64_lsx_lsx_vsllwil_hu_bu"),
+            (test_loongarch64_lsx_lsx_vsllwil_wu_hu, "test_loongarch64_lsx_lsx_vsllwil_wu_hu"),
+            (test_loongarch64_lsx_lsx_vsllwil_du_wu, "test_loongarch64_lsx_lsx_vsllwil_du_wu"),
+            (test_loongarch64_lsx_lsx_vsran_b_h, "test_loongarch64_lsx_lsx_vsran_b_h"),
+            (test_loongarch64_lsx_lsx_vsran_h_w, "test_loongarch64_lsx_lsx_vsran_h_w"),
+            (test_loongarch64_lsx_lsx_vsran_w_d, "test_loongarch64_lsx_lsx_vsran_w_d"),
+            (test_loongarch64_lsx_lsx_vssran_b_h, "test_loongarch64_lsx_lsx_vssran_b_h"),
+            (test_loongarch64_lsx_lsx_vssran_h_w, "test_loongarch64_lsx_lsx_vssran_h_w"),
+            (test_loongarch64_lsx_lsx_vssran_w_d, "test_loongarch64_lsx_lsx_vssran_w_d"),
+            (test_loongarch64_lsx_lsx_vssran_bu_h, "test_loongarch64_lsx_lsx_vssran_bu_h"),
+            (test_loongarch64_lsx_lsx_vssran_hu_w, "test_loongarch64_lsx_lsx_vssran_hu_w"),
+            (test_loongarch64_lsx_lsx_vssran_wu_d, "test_loongarch64_lsx_lsx_vssran_wu_d"),
+            (test_loongarch64_lsx_lsx_vsrarn_b_h, "test_loongarch64_lsx_lsx_vsrarn_b_h"),
+            (test_loongarch64_lsx_lsx_vsrarn_h_w, "test_loongarch64_lsx_lsx_vsrarn_h_w"),
+            (test_loongarch64_lsx_lsx_vsrarn_w_d, "test_loongarch64_lsx_lsx_vsrarn_w_d"),
+            (test_loongarch64_lsx_lsx_vssrarn_b_h, "test_loongarch64_lsx_lsx_vssrarn_b_h"),
+            (test_loongarch64_lsx_lsx_vssrarn_h_w, "test_loongarch64_lsx_lsx_vssrarn_h_w"),
+            (test_loongarch64_lsx_lsx_vssrarn_w_d, "test_loongarch64_lsx_lsx_vssrarn_w_d"),
+            (test_loongarch64_lsx_lsx_vssrarn_bu_h, "test_loongarch64_lsx_lsx_vssrarn_bu_h"),
+            (test_loongarch64_lsx_lsx_vssrarn_hu_w, "test_loongarch64_lsx_lsx_vssrarn_hu_w"),
+            (test_loongarch64_lsx_lsx_vssrarn_wu_d, "test_loongarch64_lsx_lsx_vssrarn_wu_d"),
+            (test_loongarch64_lsx_lsx_vsrln_b_h, "test_loongarch64_lsx_lsx_vsrln_b_h"),
+            (test_loongarch64_lsx_lsx_vsrln_h_w, "test_loongarch64_lsx_lsx_vsrln_h_w"),
+            (test_loongarch64_lsx_lsx_vsrln_w_d, "test_loongarch64_lsx_lsx_vsrln_w_d"),
+            (test_loongarch64_lsx_lsx_vssrln_bu_h, "test_loongarch64_lsx_lsx_vssrln_bu_h"),
+            (test_loongarch64_lsx_lsx_vssrln_hu_w, "test_loongarch64_lsx_lsx_vssrln_hu_w"),
+            (test_loongarch64_lsx_lsx_vssrln_wu_d, "test_loongarch64_lsx_lsx_vssrln_wu_d"),
+            (test_loongarch64_lsx_lsx_vsrlrn_b_h, "test_loongarch64_lsx_lsx_vsrlrn_b_h"),
+            (test_loongarch64_lsx_lsx_vsrlrn_h_w, "test_loongarch64_lsx_lsx_vsrlrn_h_w"),
+            (test_loongarch64_lsx_lsx_vsrlrn_w_d, "test_loongarch64_lsx_lsx_vsrlrn_w_d"),
+            (test_loongarch64_lsx_lsx_vssrlrn_bu_h, "test_loongarch64_lsx_lsx_vssrlrn_bu_h"),
+            (test_loongarch64_lsx_lsx_vssrlrn_hu_w, "test_loongarch64_lsx_lsx_vssrlrn_hu_w"),
+            (test_loongarch64_lsx_lsx_vssrlrn_wu_d, "test_loongarch64_lsx_lsx_vssrlrn_wu_d"),
+            (test_loongarch64_lsx_lsx_vfrstpi_b, "test_loongarch64_lsx_lsx_vfrstpi_b"),
+            (test_loongarch64_lsx_lsx_vfrstpi_h, "test_loongarch64_lsx_lsx_vfrstpi_h"),
+            (test_loongarch64_lsx_lsx_vfrstp_b, "test_loongarch64_lsx_lsx_vfrstp_b"),
+            (test_loongarch64_lsx_lsx_vfrstp_h, "test_loongarch64_lsx_lsx_vfrstp_h"),
+            (test_loongarch64_lsx_lsx_vextrins_b, "test_loongarch64_lsx_lsx_vextrins_b"),
+            (test_loongarch64_lsx_lsx_vextrins_h, "test_loongarch64_lsx_lsx_vextrins_h"),
+            (test_loongarch64_lsx_lsx_vextrins_w, "test_loongarch64_lsx_lsx_vextrins_w"),
+            (test_loongarch64_lsx_lsx_vextrins_d, "test_loongarch64_lsx_lsx_vextrins_d"),
+            (test_loongarch64_lsx_lsx_vmskltz_b, "test_loongarch64_lsx_lsx_vmskltz_b"),
+            (test_loongarch64_lsx_lsx_vmskltz_h, "test_loongarch64_lsx_lsx_vmskltz_h"),
+            (test_loongarch64_lsx_lsx_vmskltz_w, "test_loongarch64_lsx_lsx_vmskltz_w"),
+            (test_loongarch64_lsx_lsx_vmskltz_d, "test_loongarch64_lsx_lsx_vmskltz_d"),
+            (test_loongarch64_lsx_lsx_vsigncov_b, "test_loongarch64_lsx_lsx_vsigncov_b"),
+            (test_loongarch64_lsx_lsx_vsigncov_h, "test_loongarch64_lsx_lsx_vsigncov_h"),
+            (test_loongarch64_lsx_lsx_vsigncov_w, "test_loongarch64_lsx_lsx_vsigncov_w"),
+            (test_loongarch64_lsx_lsx_vsigncov_d, "test_loongarch64_lsx_lsx_vsigncov_d"),
+            (test_loongarch64_lsx_lsx_vftintrne_w_s, "test_loongarch64_lsx_lsx_vftintrne_w_s"),
+            (test_loongarch64_lsx_lsx_vftintrne_l_d, "test_loongarch64_lsx_lsx_vftintrne_l_d"),
+            (test_loongarch64_lsx_lsx_vftintrp_w_s, "test_loongarch64_lsx_lsx_vftintrp_w_s"),
+            (test_loongarch64_lsx_lsx_vftintrp_l_d, "test_loongarch64_lsx_lsx_vftintrp_l_d"),
+            (test_loongarch64_lsx_lsx_vftintrm_w_s, "test_loongarch64_lsx_lsx_vftintrm_w_s"),
+            (test_loongarch64_lsx_lsx_vftintrm_l_d, "test_loongarch64_lsx_lsx_vftintrm_l_d"),
+            (test_loongarch64_lsx_lsx_vftint_w_d, "test_loongarch64_lsx_lsx_vftint_w_d"),
+            (test_loongarch64_lsx_lsx_vffint_s_l, "test_loongarch64_lsx_lsx_vffint_s_l"),
+            (test_loongarch64_lsx_lsx_vftintrz_w_d, "test_loongarch64_lsx_lsx_vftintrz_w_d"),
+            (test_loongarch64_lsx_lsx_vftintrp_w_d, "test_loongarch64_lsx_lsx_vftintrp_w_d"),
+            (test_loongarch64_lsx_lsx_vftintrm_w_d, "test_loongarch64_lsx_lsx_vftintrm_w_d"),
+            (test_loongarch64_lsx_lsx_vftintrne_w_d, "test_loongarch64_lsx_lsx_vftintrne_w_d"),
+            (test_loongarch64_lsx_lsx_vftintl_l_s, "test_loongarch64_lsx_lsx_vftintl_l_s"),
+            (test_loongarch64_lsx_lsx_vftinth_l_s, "test_loongarch64_lsx_lsx_vftinth_l_s"),
+            (test_loongarch64_lsx_lsx_vffinth_d_w, "test_loongarch64_lsx_lsx_vffinth_d_w"),
+            (test_loongarch64_lsx_lsx_vffintl_d_w, "test_loongarch64_lsx_lsx_vffintl_d_w"),
+            (test_loongarch64_lsx_lsx_vftintrzl_l_s, "test_loongarch64_lsx_lsx_vftintrzl_l_s"),
+            (test_loongarch64_lsx_lsx_vftintrzh_l_s, "test_loongarch64_lsx_lsx_vftintrzh_l_s"),
+            (test_loongarch64_lsx_lsx_vftintrpl_l_s, "test_loongarch64_lsx_lsx_vftintrpl_l_s"),
+            (test_loongarch64_lsx_lsx_vftintrph_l_s, "test_loongarch64_lsx_lsx_vftintrph_l_s"),
+            (test_loongarch64_lsx_lsx_vftintrml_l_s, "test_loongarch64_lsx_lsx_vftintrml_l_s"),
+            (test_loongarch64_lsx_lsx_vftintrmh_l_s, "test_loongarch64_lsx_lsx_vftintrmh_l_s"),
+            (test_loongarch64_lsx_lsx_vftintrnel_l_s, "test_loongarch64_lsx_lsx_vftintrnel_l_s"),
+            (test_loongarch64_lsx_lsx_vftintrneh_l_s, "test_loongarch64_lsx_lsx_vftintrneh_l_s"),
+            (test_loongarch64_lsx_lsx_vfrintrne_s, "test_loongarch64_lsx_lsx_vfrintrne_s"),
+            (test_loongarch64_lsx_lsx_vfrintrne_d, "test_loongarch64_lsx_lsx_vfrintrne_d"),
+            (test_loongarch64_lsx_lsx_vstelm_b, "test_loongarch64_lsx_lsx_vstelm_b"),
+            (test_loongarch64_lsx_lsx_vstelm_h, "test_loongarch64_lsx_lsx_vstelm_h"),
+            (test_loongarch64_lsx_lsx_vstelm_w, "test_loongarch64_lsx_lsx_vstelm_w"),
+            (test_loongarch64_lsx_lsx_vstelm_d, "test_loongarch64_lsx_lsx_vstelm_d"),
+            (test_loongarch64_lsx_lsx_vaddwev_d_w, "test_loongarch64_lsx_lsx_vaddwev_d_w"),
+            (test_loongarch64_lsx_lsx_vaddwev_w_h, "test_loongarch64_lsx_lsx_vaddwev_w_h"),
+            (test_loongarch64_lsx_lsx_vaddwev_h_b, "test_loongarch64_lsx_lsx_vaddwev_h_b"),
+            (test_loongarch64_lsx_lsx_vaddwod_d_w, "test_loongarch64_lsx_lsx_vaddwod_d_w"),
+            (test_loongarch64_lsx_lsx_vaddwod_w_h, "test_loongarch64_lsx_lsx_vaddwod_w_h"),
+            (test_loongarch64_lsx_lsx_vaddwod_h_b, "test_loongarch64_lsx_lsx_vaddwod_h_b"),
+            (test_loongarch64_lsx_lsx_vaddwev_d_wu, "test_loongarch64_lsx_lsx_vaddwev_d_wu"),
+            (test_loongarch64_lsx_lsx_vaddwev_w_hu, "test_loongarch64_lsx_lsx_vaddwev_w_hu"),
+            (test_loongarch64_lsx_lsx_vaddwev_h_bu, "test_loongarch64_lsx_lsx_vaddwev_h_bu"),
+            (test_loongarch64_lsx_lsx_vaddwod_d_wu, "test_loongarch64_lsx_lsx_vaddwod_d_wu"),
+            (test_loongarch64_lsx_lsx_vaddwod_w_hu, "test_loongarch64_lsx_lsx_vaddwod_w_hu"),
+            (test_loongarch64_lsx_lsx_vaddwod_h_bu, "test_loongarch64_lsx_lsx_vaddwod_h_bu"),
+            (test_loongarch64_lsx_lsx_vaddwev_d_wu_w, "test_loongarch64_lsx_lsx_vaddwev_d_wu_w"),
+            (test_loongarch64_lsx_lsx_vaddwev_w_hu_h, "test_loongarch64_lsx_lsx_vaddwev_w_hu_h"),
+            (test_loongarch64_lsx_lsx_vaddwev_h_bu_b, "test_loongarch64_lsx_lsx_vaddwev_h_bu_b"),
+            (test_loongarch64_lsx_lsx_vaddwod_d_wu_w, "test_loongarch64_lsx_lsx_vaddwod_d_wu_w"),
+            (test_loongarch64_lsx_lsx_vaddwod_w_hu_h, "test_loongarch64_lsx_lsx_vaddwod_w_hu_h"),
+            (test_loongarch64_lsx_lsx_vaddwod_h_bu_b, "test_loongarch64_lsx_lsx_vaddwod_h_bu_b"),
+            (test_loongarch64_lsx_lsx_vsubwev_d_w, "test_loongarch64_lsx_lsx_vsubwev_d_w"),
+            (test_loongarch64_lsx_lsx_vsubwev_w_h, "test_loongarch64_lsx_lsx_vsubwev_w_h"),
+            (test_loongarch64_lsx_lsx_vsubwev_h_b, "test_loongarch64_lsx_lsx_vsubwev_h_b"),
+            (test_loongarch64_lsx_lsx_vsubwod_d_w, "test_loongarch64_lsx_lsx_vsubwod_d_w"),
+            (test_loongarch64_lsx_lsx_vsubwod_w_h, "test_loongarch64_lsx_lsx_vsubwod_w_h"),
+            (test_loongarch64_lsx_lsx_vsubwod_h_b, "test_loongarch64_lsx_lsx_vsubwod_h_b"),
+            (test_loongarch64_lsx_lsx_vsubwev_d_wu, "test_loongarch64_lsx_lsx_vsubwev_d_wu"),
+            (test_loongarch64_lsx_lsx_vsubwev_w_hu, "test_loongarch64_lsx_lsx_vsubwev_w_hu"),
+            (test_loongarch64_lsx_lsx_vsubwev_h_bu, "test_loongarch64_lsx_lsx_vsubwev_h_bu"),
+            (test_loongarch64_lsx_lsx_vsubwod_d_wu, "test_loongarch64_lsx_lsx_vsubwod_d_wu"),
+            (test_loongarch64_lsx_lsx_vsubwod_w_hu, "test_loongarch64_lsx_lsx_vsubwod_w_hu"),
+            (test_loongarch64_lsx_lsx_vsubwod_h_bu, "test_loongarch64_lsx_lsx_vsubwod_h_bu"),
+            (test_loongarch64_lsx_lsx_vaddwev_q_d, "test_loongarch64_lsx_lsx_vaddwev_q_d"),
+            (test_loongarch64_lsx_lsx_vaddwod_q_d, "test_loongarch64_lsx_lsx_vaddwod_q_d"),
+            (test_loongarch64_lsx_lsx_vaddwev_q_du, "test_loongarch64_lsx_lsx_vaddwev_q_du"),
+            (test_loongarch64_lsx_lsx_vaddwod_q_du, "test_loongarch64_lsx_lsx_vaddwod_q_du"),
+            (test_loongarch64_lsx_lsx_vsubwev_q_d, "test_loongarch64_lsx_lsx_vsubwev_q_d"),
+            (test_loongarch64_lsx_lsx_vsubwod_q_d, "test_loongarch64_lsx_lsx_vsubwod_q_d"),
+            (test_loongarch64_lsx_lsx_vsubwev_q_du, "test_loongarch64_lsx_lsx_vsubwev_q_du"),
+            (test_loongarch64_lsx_lsx_vsubwod_q_du, "test_loongarch64_lsx_lsx_vsubwod_q_du"),
+            (test_loongarch64_lsx_lsx_vaddwev_q_du_d, "test_loongarch64_lsx_lsx_vaddwev_q_du_d"),
+            (test_loongarch64_lsx_lsx_vaddwod_q_du_d, "test_loongarch64_lsx_lsx_vaddwod_q_du_d"),
+            (test_loongarch64_lsx_lsx_vmulwev_d_w, "test_loongarch64_lsx_lsx_vmulwev_d_w"),
+            (test_loongarch64_lsx_lsx_vmulwev_w_h, "test_loongarch64_lsx_lsx_vmulwev_w_h"),
+            (test_loongarch64_lsx_lsx_vmulwev_h_b, "test_loongarch64_lsx_lsx_vmulwev_h_b"),
+            (test_loongarch64_lsx_lsx_vmulwod_d_w, "test_loongarch64_lsx_lsx_vmulwod_d_w"),
+            (test_loongarch64_lsx_lsx_vmulwod_w_h, "test_loongarch64_lsx_lsx_vmulwod_w_h"),
+            (test_loongarch64_lsx_lsx_vmulwod_h_b, "test_loongarch64_lsx_lsx_vmulwod_h_b"),
+            (test_loongarch64_lsx_lsx_vmulwev_d_wu, "test_loongarch64_lsx_lsx_vmulwev_d_wu"),
+            (test_loongarch64_lsx_lsx_vmulwev_w_hu, "test_loongarch64_lsx_lsx_vmulwev_w_hu"),
+            (test_loongarch64_lsx_lsx_vmulwev_h_bu, "test_loongarch64_lsx_lsx_vmulwev_h_bu"),
+            (test_loongarch64_lsx_lsx_vmulwod_d_wu, "test_loongarch64_lsx_lsx_vmulwod_d_wu"),
+            (test_loongarch64_lsx_lsx_vmulwod_w_hu, "test_loongarch64_lsx_lsx_vmulwod_w_hu"),
+            (test_loongarch64_lsx_lsx_vmulwod_h_bu, "test_loongarch64_lsx_lsx_vmulwod_h_bu"),
+            (test_loongarch64_lsx_lsx_vmulwev_d_wu_w, "test_loongarch64_lsx_lsx_vmulwev_d_wu_w"),
+            (test_loongarch64_lsx_lsx_vmulwev_w_hu_h, "test_loongarch64_lsx_lsx_vmulwev_w_hu_h"),
+            (test_loongarch64_lsx_lsx_vmulwev_h_bu_b, "test_loongarch64_lsx_lsx_vmulwev_h_bu_b"),
+            (test_loongarch64_lsx_lsx_vmulwod_d_wu_w, "test_loongarch64_lsx_lsx_vmulwod_d_wu_w"),
+            (test_loongarch64_lsx_lsx_vmulwod_w_hu_h, "test_loongarch64_lsx_lsx_vmulwod_w_hu_h"),
+            (test_loongarch64_lsx_lsx_vmulwod_h_bu_b, "test_loongarch64_lsx_lsx_vmulwod_h_bu_b"),
+            (test_loongarch64_lsx_lsx_vmulwev_q_d, "test_loongarch64_lsx_lsx_vmulwev_q_d"),
+            (test_loongarch64_lsx_lsx_vmulwod_q_d, "test_loongarch64_lsx_lsx_vmulwod_q_d"),
+            (test_loongarch64_lsx_lsx_vmulwev_q_du, "test_loongarch64_lsx_lsx_vmulwev_q_du"),
+            (test_loongarch64_lsx_lsx_vmulwod_q_du, "test_loongarch64_lsx_lsx_vmulwod_q_du"),
+            (test_loongarch64_lsx_lsx_vmulwev_q_du_d, "test_loongarch64_lsx_lsx_vmulwev_q_du_d"),
+            (test_loongarch64_lsx_lsx_vmulwod_q_du_d, "test_loongarch64_lsx_lsx_vmulwod_q_du_d"),
+            (test_loongarch64_lsx_lsx_vhaddw_q_d, "test_loongarch64_lsx_lsx_vhaddw_q_d"),
+            (test_loongarch64_lsx_lsx_vhaddw_qu_du, "test_loongarch64_lsx_lsx_vhaddw_qu_du"),
+            (test_loongarch64_lsx_lsx_vhsubw_q_d, "test_loongarch64_lsx_lsx_vhsubw_q_d"),
+            (test_loongarch64_lsx_lsx_vhsubw_qu_du, "test_loongarch64_lsx_lsx_vhsubw_qu_du"),
+            (test_loongarch64_lsx_lsx_vmaddwev_d_w, "test_loongarch64_lsx_lsx_vmaddwev_d_w"),
+            (test_loongarch64_lsx_lsx_vmaddwev_w_h, "test_loongarch64_lsx_lsx_vmaddwev_w_h"),
+            (test_loongarch64_lsx_lsx_vmaddwev_h_b, "test_loongarch64_lsx_lsx_vmaddwev_h_b"),
+            (test_loongarch64_lsx_lsx_vmaddwev_d_wu, "test_loongarch64_lsx_lsx_vmaddwev_d_wu"),
+            (test_loongarch64_lsx_lsx_vmaddwev_w_hu, "test_loongarch64_lsx_lsx_vmaddwev_w_hu"),
+            (test_loongarch64_lsx_lsx_vmaddwev_h_bu, "test_loongarch64_lsx_lsx_vmaddwev_h_bu"),
+            (test_loongarch64_lsx_lsx_vmaddwod_d_w, "test_loongarch64_lsx_lsx_vmaddwod_d_w"),
+            (test_loongarch64_lsx_lsx_vmaddwod_w_h, "test_loongarch64_lsx_lsx_vmaddwod_w_h"),
+            (test_loongarch64_lsx_lsx_vmaddwod_h_b, "test_loongarch64_lsx_lsx_vmaddwod_h_b"),
+            (test_loongarch64_lsx_lsx_vmaddwod_d_wu, "test_loongarch64_lsx_lsx_vmaddwod_d_wu"),
+            (test_loongarch64_lsx_lsx_vmaddwod_w_hu, "test_loongarch64_lsx_lsx_vmaddwod_w_hu"),
+            (test_loongarch64_lsx_lsx_vmaddwod_h_bu, "test_loongarch64_lsx_lsx_vmaddwod_h_bu"),
+            (test_loongarch64_lsx_lsx_vmaddwev_d_wu_w, "test_loongarch64_lsx_lsx_vmaddwev_d_wu_w"),
+            (test_loongarch64_lsx_lsx_vmaddwev_w_hu_h, "test_loongarch64_lsx_lsx_vmaddwev_w_hu_h"),
+            (test_loongarch64_lsx_lsx_vmaddwev_h_bu_b, "test_loongarch64_lsx_lsx_vmaddwev_h_bu_b"),
+            (test_loongarch64_lsx_lsx_vmaddwod_d_wu_w, "test_loongarch64_lsx_lsx_vmaddwod_d_wu_w"),
+            (test_loongarch64_lsx_lsx_vmaddwod_w_hu_h, "test_loongarch64_lsx_lsx_vmaddwod_w_hu_h"),
+            (test_loongarch64_lsx_lsx_vmaddwod_h_bu_b, "test_loongarch64_lsx_lsx_vmaddwod_h_bu_b"),
+            (test_loongarch64_lsx_lsx_vmaddwev_q_d, "test_loongarch64_lsx_lsx_vmaddwev_q_d"),
+            (test_loongarch64_lsx_lsx_vmaddwod_q_d, "test_loongarch64_lsx_lsx_vmaddwod_q_d"),
+            (test_loongarch64_lsx_lsx_vmaddwev_q_du, "test_loongarch64_lsx_lsx_vmaddwev_q_du"),
+            (test_loongarch64_lsx_lsx_vmaddwod_q_du, "test_loongarch64_lsx_lsx_vmaddwod_q_du"),
+            (test_loongarch64_lsx_lsx_vmaddwev_q_du_d, "test_loongarch64_lsx_lsx_vmaddwev_q_du_d"),
+            (test_loongarch64_lsx_lsx_vmaddwod_q_du_d, "test_loongarch64_lsx_lsx_vmaddwod_q_du_d"),
+            (test_loongarch64_lsx_lsx_vadd_q, "test_loongarch64_lsx_lsx_vadd_q"),
+            (test_loongarch64_lsx_lsx_vsub_q, "test_loongarch64_lsx_lsx_vsub_q"),
+            (test_loongarch64_lsx_lsx_vldrepl_b, "test_loongarch64_lsx_lsx_vldrepl_b"),
+            (test_loongarch64_lsx_lsx_vldrepl_h, "test_loongarch64_lsx_lsx_vldrepl_h"),
+            (test_loongarch64_lsx_lsx_vldrepl_w, "test_loongarch64_lsx_lsx_vldrepl_w"),
+            (test_loongarch64_lsx_lsx_vldrepl_d, "test_loongarch64_lsx_lsx_vldrepl_d"),
+            (test_loongarch64_lsx_lsx_vmskgez_b, "test_loongarch64_lsx_lsx_vmskgez_b"),
+            (test_loongarch64_lsx_lsx_vmsknz_b, "test_loongarch64_lsx_lsx_vmsknz_b"),
+            (test_loongarch64_lsx_lsx_vexth_h_b, "test_loongarch64_lsx_lsx_vexth_h_b"),
+            (test_loongarch64_lsx_lsx_vexth_w_h, "test_loongarch64_lsx_lsx_vexth_w_h"),
+            (test_loongarch64_lsx_lsx_vexth_d_w, "test_loongarch64_lsx_lsx_vexth_d_w"),
+            (test_loongarch64_lsx_lsx_vexth_q_d, "test_loongarch64_lsx_lsx_vexth_q_d"),
+            (test_loongarch64_lsx_lsx_vexth_hu_bu, "test_loongarch64_lsx_lsx_vexth_hu_bu"),
+            (test_loongarch64_lsx_lsx_vexth_wu_hu, "test_loongarch64_lsx_lsx_vexth_wu_hu"),
+            (test_loongarch64_lsx_lsx_vexth_du_wu, "test_loongarch64_lsx_lsx_vexth_du_wu"),
+            (test_loongarch64_lsx_lsx_vexth_qu_du, "test_loongarch64_lsx_lsx_vexth_qu_du"),
+            (test_loongarch64_lsx_lsx_vextl_q_d, "test_loongarch64_lsx_lsx_vextl_q_d"),
+            (test_loongarch64_lsx_lsx_vsrlni_b_h, "test_loongarch64_lsx_lsx_vsrlni_b_h"),
+            (test_loongarch64_lsx_lsx_vsrlni_h_w, "test_loongarch64_lsx_lsx_vsrlni_h_w"),
+            (test_loongarch64_lsx_lsx_vsrlni_w_d, "test_loongarch64_lsx_lsx_vsrlni_w_d"),
+            (test_loongarch64_lsx_lsx_vsrlni_d_q, "test_loongarch64_lsx_lsx_vsrlni_d_q"),
+            (test_loongarch64_lsx_lsx_vsrlrni_b_h, "test_loongarch64_lsx_lsx_vsrlrni_b_h"),
+            (test_loongarch64_lsx_lsx_vsrlrni_h_w, "test_loongarch64_lsx_lsx_vsrlrni_h_w"),
+            (test_loongarch64_lsx_lsx_vsrlrni_w_d, "test_loongarch64_lsx_lsx_vsrlrni_w_d"),
+            (test_loongarch64_lsx_lsx_vsrlrni_d_q, "test_loongarch64_lsx_lsx_vsrlrni_d_q"),
+            (test_loongarch64_lsx_lsx_vssrlni_b_h, "test_loongarch64_lsx_lsx_vssrlni_b_h"),
+            (test_loongarch64_lsx_lsx_vssrlni_h_w, "test_loongarch64_lsx_lsx_vssrlni_h_w"),
+            (test_loongarch64_lsx_lsx_vssrlni_w_d, "test_loongarch64_lsx_lsx_vssrlni_w_d"),
+            (test_loongarch64_lsx_lsx_vssrlni_d_q, "test_loongarch64_lsx_lsx_vssrlni_d_q"),
+            (test_loongarch64_lsx_lsx_vssrlni_bu_h, "test_loongarch64_lsx_lsx_vssrlni_bu_h"),
+            (test_loongarch64_lsx_lsx_vssrlni_hu_w, "test_loongarch64_lsx_lsx_vssrlni_hu_w"),
+            (test_loongarch64_lsx_lsx_vssrlni_wu_d, "test_loongarch64_lsx_lsx_vssrlni_wu_d"),
+            (test_loongarch64_lsx_lsx_vssrlni_du_q, "test_loongarch64_lsx_lsx_vssrlni_du_q"),
+            (test_loongarch64_lsx_lsx_vssrlrni_b_h, "test_loongarch64_lsx_lsx_vssrlrni_b_h"),
+            (test_loongarch64_lsx_lsx_vssrlrni_h_w, "test_loongarch64_lsx_lsx_vssrlrni_h_w"),
+            (test_loongarch64_lsx_lsx_vssrlrni_w_d, "test_loongarch64_lsx_lsx_vssrlrni_w_d"),
+            (test_loongarch64_lsx_lsx_vssrlrni_d_q, "test_loongarch64_lsx_lsx_vssrlrni_d_q"),
+            (test_loongarch64_lsx_lsx_vssrlrni_bu_h, "test_loongarch64_lsx_lsx_vssrlrni_bu_h"),
+            (test_loongarch64_lsx_lsx_vssrlrni_hu_w, "test_loongarch64_lsx_lsx_vssrlrni_hu_w"),
+            (test_loongarch64_lsx_lsx_vssrlrni_wu_d, "test_loongarch64_lsx_lsx_vssrlrni_wu_d"),
+            (test_loongarch64_lsx_lsx_vssrlrni_du_q, "test_loongarch64_lsx_lsx_vssrlrni_du_q"),
+            (test_loongarch64_lsx_lsx_vsrani_b_h, "test_loongarch64_lsx_lsx_vsrani_b_h"),
+            (test_loongarch64_lsx_lsx_vsrani_h_w, "test_loongarch64_lsx_lsx_vsrani_h_w"),
+            (test_loongarch64_lsx_lsx_vsrani_w_d, "test_loongarch64_lsx_lsx_vsrani_w_d"),
+            (test_loongarch64_lsx_lsx_vsrani_d_q, "test_loongarch64_lsx_lsx_vsrani_d_q"),
+            (test_loongarch64_lsx_lsx_vsrarni_b_h, "test_loongarch64_lsx_lsx_vsrarni_b_h"),
+            (test_loongarch64_lsx_lsx_vsrarni_h_w, "test_loongarch64_lsx_lsx_vsrarni_h_w"),
+            (test_loongarch64_lsx_lsx_vsrarni_w_d, "test_loongarch64_lsx_lsx_vsrarni_w_d"),
+            (test_loongarch64_lsx_lsx_vsrarni_d_q, "test_loongarch64_lsx_lsx_vsrarni_d_q"),
+            (test_loongarch64_lsx_lsx_vssrani_b_h, "test_loongarch64_lsx_lsx_vssrani_b_h"),
+            (test_loongarch64_lsx_lsx_vssrani_h_w, "test_loongarch64_lsx_lsx_vssrani_h_w"),
+            (test_loongarch64_lsx_lsx_vssrani_w_d, "test_loongarch64_lsx_lsx_vssrani_w_d"),
+            (test_loongarch64_lsx_lsx_vssrani_d_q, "test_loongarch64_lsx_lsx_vssrani_d_q"),
+            (test_loongarch64_lsx_lsx_vssrani_bu_h, "test_loongarch64_lsx_lsx_vssrani_bu_h"),
+            (test_loongarch64_lsx_lsx_vssrani_hu_w, "test_loongarch64_lsx_lsx_vssrani_hu_w"),
+            (test_loongarch64_lsx_lsx_vssrani_wu_d, "test_loongarch64_lsx_lsx_vssrani_wu_d"),
+            (test_loongarch64_lsx_lsx_vssrani_du_q, "test_loongarch64_lsx_lsx_vssrani_du_q"),
+            (test_loongarch64_lsx_lsx_vssrarni_b_h, "test_loongarch64_lsx_lsx_vssrarni_b_h"),
+            (test_loongarch64_lsx_lsx_vssrarni_h_w, "test_loongarch64_lsx_lsx_vssrarni_h_w"),
+            (test_loongarch64_lsx_lsx_vssrarni_w_d, "test_loongarch64_lsx_lsx_vssrarni_w_d"),
+            (test_loongarch64_lsx_lsx_vssrarni_d_q, "test_loongarch64_lsx_lsx_vssrarni_d_q"),
+            (test_loongarch64_lsx_lsx_vssrarni_bu_h, "test_loongarch64_lsx_lsx_vssrarni_bu_h"),
+            (test_loongarch64_lsx_lsx_vssrarni_hu_w, "test_loongarch64_lsx_lsx_vssrarni_hu_w"),
+            (test_loongarch64_lsx_lsx_vssrarni_wu_d, "test_loongarch64_lsx_lsx_vssrarni_wu_d"),
+            (test_loongarch64_lsx_lsx_vssrarni_du_q, "test_loongarch64_lsx_lsx_vssrarni_du_q"),
+            (test_loongarch64_lsx_lsx_vpermi_w, "test_loongarch64_lsx_lsx_vpermi_w"),
+            (test_loongarch64_lsx_lsx_vssrlrn_b_h, "test_loongarch64_lsx_lsx_vssrlrn_b_h"),
+            (test_loongarch64_lsx_lsx_vssrlrn_h_w, "test_loongarch64_lsx_lsx_vssrlrn_h_w"),
+            (test_loongarch64_lsx_lsx_vssrlrn_w_d, "test_loongarch64_lsx_lsx_vssrlrn_w_d"),
+            (test_loongarch64_lsx_lsx_vssrln_b_h, "test_loongarch64_lsx_lsx_vssrln_b_h"),
+            (test_loongarch64_lsx_lsx_vssrln_h_w, "test_loongarch64_lsx_lsx_vssrln_h_w"),
+            (test_loongarch64_lsx_lsx_vssrln_w_d, "test_loongarch64_lsx_lsx_vssrln_w_d"),
+            (test_loongarch64_lsx_lsx_vshuf_b, "test_loongarch64_lsx_lsx_vshuf_b"),
+            (test_loongarch64_lsx_lsx_vextl_qu_du, "test_loongarch64_lsx_lsx_vextl_qu_du"),
+            (test_loongarch64_lsx_lsx_bnz_b, "test_loongarch64_lsx_lsx_bnz_b"),
+            (test_loongarch64_lsx_lsx_bnz_d, "test_loongarch64_lsx_lsx_bnz_d"),
+            (test_loongarch64_lsx_lsx_bnz_h, "test_loongarch64_lsx_lsx_bnz_h"),
+            (test_loongarch64_lsx_lsx_bnz_v, "test_loongarch64_lsx_lsx_bnz_v"),
+            (test_loongarch64_lsx_lsx_bnz_w, "test_loongarch64_lsx_lsx_bnz_w"),
+            (test_loongarch64_lsx_lsx_bz_b, "test_loongarch64_lsx_lsx_bz_b"),
+            (test_loongarch64_lsx_lsx_bz_d, "test_loongarch64_lsx_lsx_bz_d"),
+            (test_loongarch64_lsx_lsx_bz_h, "test_loongarch64_lsx_lsx_bz_h"),
+            (test_loongarch64_lsx_lsx_bz_v, "test_loongarch64_lsx_lsx_bz_v"),
+            (test_loongarch64_lsx_lsx_bz_w, "test_loongarch64_lsx_lsx_bz_w"),
+            (test_loongarch64_lsx_lsx_vfcmp_caf_d, "test_loongarch64_lsx_lsx_vfcmp_caf_d"),
+            (test_loongarch64_lsx_lsx_vfcmp_caf_s, "test_loongarch64_lsx_lsx_vfcmp_caf_s"),
+            (test_loongarch64_lsx_lsx_vfcmp_ceq_d, "test_loongarch64_lsx_lsx_vfcmp_ceq_d"),
+            (test_loongarch64_lsx_lsx_vfcmp_ceq_s, "test_loongarch64_lsx_lsx_vfcmp_ceq_s"),
+            (test_loongarch64_lsx_lsx_vfcmp_cle_d, "test_loongarch64_lsx_lsx_vfcmp_cle_d"),
+            (test_loongarch64_lsx_lsx_vfcmp_cle_s, "test_loongarch64_lsx_lsx_vfcmp_cle_s"),
+            (test_loongarch64_lsx_lsx_vfcmp_clt_d, "test_loongarch64_lsx_lsx_vfcmp_clt_d"),
+            (test_loongarch64_lsx_lsx_vfcmp_clt_s, "test_loongarch64_lsx_lsx_vfcmp_clt_s"),
+            (test_loongarch64_lsx_lsx_vfcmp_cne_d, "test_loongarch64_lsx_lsx_vfcmp_cne_d"),
+            (test_loongarch64_lsx_lsx_vfcmp_cne_s, "test_loongarch64_lsx_lsx_vfcmp_cne_s"),
+            (test_loongarch64_lsx_lsx_vfcmp_cor_d, "test_loongarch64_lsx_lsx_vfcmp_cor_d"),
+            (test_loongarch64_lsx_lsx_vfcmp_cor_s, "test_loongarch64_lsx_lsx_vfcmp_cor_s"),
+            (test_loongarch64_lsx_lsx_vfcmp_cueq_d, "test_loongarch64_lsx_lsx_vfcmp_cueq_d"),
+            (test_loongarch64_lsx_lsx_vfcmp_cueq_s, "test_loongarch64_lsx_lsx_vfcmp_cueq_s"),
+            (test_loongarch64_lsx_lsx_vfcmp_cule_d, "test_loongarch64_lsx_lsx_vfcmp_cule_d"),
+            (test_loongarch64_lsx_lsx_vfcmp_cule_s, "test_loongarch64_lsx_lsx_vfcmp_cule_s"),
+            (test_loongarch64_lsx_lsx_vfcmp_cult_d, "test_loongarch64_lsx_lsx_vfcmp_cult_d"),
+            (test_loongarch64_lsx_lsx_vfcmp_cult_s, "test_loongarch64_lsx_lsx_vfcmp_cult_s"),
+            (test_loongarch64_lsx_lsx_vfcmp_cun_d, "test_loongarch64_lsx_lsx_vfcmp_cun_d"),
+            (test_loongarch64_lsx_lsx_vfcmp_cune_d, "test_loongarch64_lsx_lsx_vfcmp_cune_d"),
+            (test_loongarch64_lsx_lsx_vfcmp_cune_s, "test_loongarch64_lsx_lsx_vfcmp_cune_s"),
+            (test_loongarch64_lsx_lsx_vfcmp_cun_s, "test_loongarch64_lsx_lsx_vfcmp_cun_s"),
+            (test_loongarch64_lsx_lsx_vfcmp_saf_d, "test_loongarch64_lsx_lsx_vfcmp_saf_d"),
+            (test_loongarch64_lsx_lsx_vfcmp_saf_s, "test_loongarch64_lsx_lsx_vfcmp_saf_s"),
+            (test_loongarch64_lsx_lsx_vfcmp_seq_d, "test_loongarch64_lsx_lsx_vfcmp_seq_d"),
+            (test_loongarch64_lsx_lsx_vfcmp_seq_s, "test_loongarch64_lsx_lsx_vfcmp_seq_s"),
+            (test_loongarch64_lsx_lsx_vfcmp_sle_d, "test_loongarch64_lsx_lsx_vfcmp_sle_d"),
+            (test_loongarch64_lsx_lsx_vfcmp_sle_s, "test_loongarch64_lsx_lsx_vfcmp_sle_s"),
+            (test_loongarch64_lsx_lsx_vfcmp_slt_d, "test_loongarch64_lsx_lsx_vfcmp_slt_d"),
+            (test_loongarch64_lsx_lsx_vfcmp_slt_s, "test_loongarch64_lsx_lsx_vfcmp_slt_s"),
+            (test_loongarch64_lsx_lsx_vfcmp_sne_d, "test_loongarch64_lsx_lsx_vfcmp_sne_d"),
+            (test_loongarch64_lsx_lsx_vfcmp_sne_s, "test_loongarch64_lsx_lsx_vfcmp_sne_s"),
+            (test_loongarch64_lsx_lsx_vfcmp_sor_d, "test_loongarch64_lsx_lsx_vfcmp_sor_d"),
+            (test_loongarch64_lsx_lsx_vfcmp_sor_s, "test_loongarch64_lsx_lsx_vfcmp_sor_s"),
+            (test_loongarch64_lsx_lsx_vfcmp_sueq_d, "test_loongarch64_lsx_lsx_vfcmp_sueq_d"),
+            (test_loongarch64_lsx_lsx_vfcmp_sueq_s, "test_loongarch64_lsx_lsx_vfcmp_sueq_s"),
+            (test_loongarch64_lsx_lsx_vfcmp_sule_d, "test_loongarch64_lsx_lsx_vfcmp_sule_d"),
+            (test_loongarch64_lsx_lsx_vfcmp_sule_s, "test_loongarch64_lsx_lsx_vfcmp_sule_s"),
+            (test_loongarch64_lsx_lsx_vfcmp_sult_d, "test_loongarch64_lsx_lsx_vfcmp_sult_d"),
+            (test_loongarch64_lsx_lsx_vfcmp_sult_s, "test_loongarch64_lsx_lsx_vfcmp_sult_s"),
+            (test_loongarch64_lsx_lsx_vfcmp_sun_d, "test_loongarch64_lsx_lsx_vfcmp_sun_d"),
+            (test_loongarch64_lsx_lsx_vfcmp_sune_d, "test_loongarch64_lsx_lsx_vfcmp_sune_d"),
+            (test_loongarch64_lsx_lsx_vfcmp_sune_s, "test_loongarch64_lsx_lsx_vfcmp_sune_s"),
+            (test_loongarch64_lsx_lsx_vfcmp_sun_s, "test_loongarch64_lsx_lsx_vfcmp_sun_s"),
+        ]
+    }
+}

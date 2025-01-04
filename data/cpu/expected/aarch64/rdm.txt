@@ -1,0 +1,91 @@
+# Expected values captured from real hardware for this extension's generated tests.
+# Format: test_name - rust_expr
+#
+# One file per (architecture, extension) - written by scripts/cpu/capture_expected.py and
+# capture_expected_cross.py, read by generate_tests.py. Do not hand-edit: recapture instead.
+# A qemu-derived value is not a real-silicon one; see CLAUDE.md's "Non-x86 architectures".
+
+test_aarch64_rdm_vqrdmlah_lane_s16 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlah_lane_s16_imm_1 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlah_lane_s16_imm_3 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlah_lane_s32 - [1, 2]
+test_aarch64_rdm_vqrdmlah_lane_s32_imm_1 - [1, 2]
+test_aarch64_rdm_vqrdmlah_laneq_s16 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlah_laneq_s16_imm_1 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlah_laneq_s16_imm_3 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlah_laneq_s16_imm_7 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlah_laneq_s32 - [1, 2]
+test_aarch64_rdm_vqrdmlah_laneq_s32_imm_1 - [1, 2]
+test_aarch64_rdm_vqrdmlah_laneq_s32_imm_3 - [1, 2]
+test_aarch64_rdm_vqrdmlah_s16 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlah_s32 - [1, 2]
+test_aarch64_rdm_vqrdmlahh_lane_s16 - 1
+test_aarch64_rdm_vqrdmlahh_lane_s16_imm_1 - 1
+test_aarch64_rdm_vqrdmlahh_lane_s16_imm_3 - 1
+test_aarch64_rdm_vqrdmlahh_laneq_s16 - 1
+test_aarch64_rdm_vqrdmlahh_laneq_s16_imm_1 - 1
+test_aarch64_rdm_vqrdmlahh_laneq_s16_imm_3 - 1
+test_aarch64_rdm_vqrdmlahh_laneq_s16_imm_7 - 1
+test_aarch64_rdm_vqrdmlahh_s16 - 1
+test_aarch64_rdm_vqrdmlahq_lane_s16 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_rdm_vqrdmlahq_lane_s16_imm_1 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_rdm_vqrdmlahq_lane_s16_imm_3 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_rdm_vqrdmlahq_lane_s32 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlahq_lane_s32_imm_1 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlahq_laneq_s16 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_rdm_vqrdmlahq_laneq_s16_imm_1 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_rdm_vqrdmlahq_laneq_s16_imm_3 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_rdm_vqrdmlahq_laneq_s16_imm_7 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_rdm_vqrdmlahq_laneq_s32 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlahq_laneq_s32_imm_1 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlahq_laneq_s32_imm_3 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlahq_s16 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_rdm_vqrdmlahq_s32 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlahs_lane_s32 - 1
+test_aarch64_rdm_vqrdmlahs_lane_s32_imm_1 - 1
+test_aarch64_rdm_vqrdmlahs_laneq_s32 - 1
+test_aarch64_rdm_vqrdmlahs_laneq_s32_imm_1 - 1
+test_aarch64_rdm_vqrdmlahs_laneq_s32_imm_3 - 1
+test_aarch64_rdm_vqrdmlahs_s32 - 1
+test_aarch64_rdm_vqrdmlsh_lane_s16 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlsh_lane_s16_imm_1 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlsh_lane_s16_imm_3 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlsh_lane_s32 - [1, 2]
+test_aarch64_rdm_vqrdmlsh_lane_s32_imm_1 - [1, 2]
+test_aarch64_rdm_vqrdmlsh_laneq_s16 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlsh_laneq_s16_imm_1 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlsh_laneq_s16_imm_3 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlsh_laneq_s16_imm_7 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlsh_laneq_s32 - [1, 2]
+test_aarch64_rdm_vqrdmlsh_laneq_s32_imm_1 - [1, 2]
+test_aarch64_rdm_vqrdmlsh_laneq_s32_imm_3 - [1, 2]
+test_aarch64_rdm_vqrdmlsh_s16 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlsh_s32 - [1, 2]
+test_aarch64_rdm_vqrdmlshh_lane_s16 - 1
+test_aarch64_rdm_vqrdmlshh_lane_s16_imm_1 - 1
+test_aarch64_rdm_vqrdmlshh_lane_s16_imm_3 - 1
+test_aarch64_rdm_vqrdmlshh_laneq_s16 - 1
+test_aarch64_rdm_vqrdmlshh_laneq_s16_imm_1 - 1
+test_aarch64_rdm_vqrdmlshh_laneq_s16_imm_3 - 1
+test_aarch64_rdm_vqrdmlshh_laneq_s16_imm_7 - 1
+test_aarch64_rdm_vqrdmlshh_s16 - 1
+test_aarch64_rdm_vqrdmlshq_lane_s16 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_rdm_vqrdmlshq_lane_s16_imm_1 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_rdm_vqrdmlshq_lane_s16_imm_3 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_rdm_vqrdmlshq_lane_s32 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlshq_lane_s32_imm_1 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlshq_laneq_s16 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_rdm_vqrdmlshq_laneq_s16_imm_1 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_rdm_vqrdmlshq_laneq_s16_imm_3 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_rdm_vqrdmlshq_laneq_s16_imm_7 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_rdm_vqrdmlshq_laneq_s32 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlshq_laneq_s32_imm_1 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlshq_laneq_s32_imm_3 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlshq_s16 - [1, 2, 3, 4, 5, 6, 7, 8]
+test_aarch64_rdm_vqrdmlshq_s32 - [1, 2, 3, 4]
+test_aarch64_rdm_vqrdmlshs_lane_s32 - 1
+test_aarch64_rdm_vqrdmlshs_lane_s32_imm_1 - 1
+test_aarch64_rdm_vqrdmlshs_laneq_s32 - 1
+test_aarch64_rdm_vqrdmlshs_laneq_s32_imm_1 - 1
+test_aarch64_rdm_vqrdmlshs_laneq_s32_imm_3 - 1
+test_aarch64_rdm_vqrdmlshs_s32 - 1

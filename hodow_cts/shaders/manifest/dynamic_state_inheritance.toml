@@ -1,0 +1,17 @@
+# Shader manifest for dEQP-VK.dynamic_state.monolithic.inheritance.*
+#
+# `pipelinestate::vert_glsl`/`geom_glsl`/`frag_glsl`: the vertex shader passes a rectangle (corner, colour, size, viewport
+# index) through, the geometry shader turns the point into a rectangle on the selected viewport.
+
+upstream_source = "external/vulkancts/modules/vulkan/dynamic_state/vktDynamicStateInheritanceTests.cpp"
+rust_module = "dynamic_state/inheritance_tests"
+
+[[case]]
+name = "inheritance"
+rust_const = "INHERITANCE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "dynamic_state/inheritance.vert", stage = "vert" },
+    { name = "geom", template = "dynamic_state/inheritance.geom", stage = "geom" },
+    { name = "frag", template = "dynamic_state/inheritance.frag", stage = "frag" },
+]

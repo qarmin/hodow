@@ -1,0 +1,44 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.executable_properties.*
+#
+# `GraphicsExecutablePropertiesTest::initPrograms` adds "color_vert" and "color_frag" always, "dummy_geo" when the case has a
+# geometry stage and "basic_tcs"/"basic_tes" when it has tessellation; the three sets below are those three shapes. The compute
+# cases add "basic_compute".
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineExecutablePropertiesTests.cpp"
+rust_module = "pipeline/executable_properties_tests"
+
+[[case]]
+name = "vert_frag"
+rust_const = "EXECUTABLE_PROPERTIES_VERT_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/executable_properties/color.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/executable_properties/color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vert_geom_frag"
+rust_const = "EXECUTABLE_PROPERTIES_VERT_GEOM_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/executable_properties/color.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/executable_properties/color.frag", stage = "frag" },
+    { name = "dummy_geo", template = "pipeline/executable_properties/dummy.geom", stage = "geom" },
+]
+
+[[case]]
+name = "vert_tess_frag"
+rust_const = "EXECUTABLE_PROPERTIES_VERT_TESS_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/executable_properties/color.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/executable_properties/color.frag", stage = "frag" },
+    { name = "basic_tcs", template = "pipeline/executable_properties/basic.tesc", stage = "tesc" },
+    { name = "basic_tes", template = "pipeline/executable_properties/basic.tese", stage = "tese" },
+]
+
+[[case]]
+name = "compute"
+rust_const = "EXECUTABLE_PROPERTIES_COMPUTE"
+rust_type = "SharedProgram"
+programs = [{ name = "basic_compute", template = "pipeline/executable_properties/basic_compute.comp", stage = "comp" }]

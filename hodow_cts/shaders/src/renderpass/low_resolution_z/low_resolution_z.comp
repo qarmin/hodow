@@ -1,0 +1,15 @@
+#version 450
+layout(binding = 0, rgba8) readonly uniform image2D frame;
+layout(binding = 1) buffer Buf
+{
+    vec4 expectedEven;  // in
+    vec4 expectedOdd;   // in
+    uint isDifferent;   // out, verification expects this to be at index 8
+    uint atomicValue;   // out, used only by atomic-frag
+};
+void main()
+{
+    vec4 expectedColor = mix(expectedEven, expectedOdd, float(gl_GlobalInvocationID.y % 2));
+    if (length(imageLoad(frame, ivec2(gl_GlobalInvocationID.xy)) - expectedColor) > 0.01)
+        atomicExchange(isDifferent, 1);
+}

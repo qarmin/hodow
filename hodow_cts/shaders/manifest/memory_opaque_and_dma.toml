@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.memory.opaque_and_dma.*_sample
+#
+# `initPrograms` only adds the shaders when `params->sample` is set and the extent is always 64x64, so the two sample cases (one per format) share one pair.
+
+upstream_source = "external/vulkancts/modules/vulkan/memory/vktMemoryOpaqueAndDmaImageTests.cpp"
+rust_module = "memory/opaque_and_dma_tests"
+
+[[case]]
+name = "opaque_and_dma_sample"
+rust_const = "OPAQUE_AND_DMA_SAMPLE_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "memory/opaque_and_dma.vert", stage = "vert" },
+    { name = "frag", template = "memory/opaque_and_dma.frag", stage = "frag" },
+]

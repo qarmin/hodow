@@ -1,0 +1,61 @@
+use std::arch::loongarch64::*;
+
+#[allow(unused_imports)]
+use crate::cpu::common::{check_array_equality, check_float_array_equality, check_float_equality, check_int_equality};
+#[allow(unused_imports)]
+use crate::cpu::Verdict;
+
+pub(super) fn test_loongarch64_lsx_lsx_vftintrz_w_s() -> Result<Verdict, String> {
+    unsafe {
+        let _result = core::hint::black_box(lsx_vftintrz_w_s(0 /* m128 */));
+
+        crate::cpu::fuzz(&mut || {
+            let _ = lsx_vftintrz_w_s(0 /* m128 */);
+        });
+        Ok(Verdict::Unverified(None))
+    }
+}
+
+pub(super) fn test_loongarch64_lsx_lsx_vftintrz_l_d() -> Result<Verdict, String> {
+    unsafe {
+        let _result = core::hint::black_box(lsx_vftintrz_l_d(0 /* m128d */));
+
+        crate::cpu::fuzz(&mut || {
+            let _ = lsx_vftintrz_l_d(0 /* m128d */);
+        });
+        Ok(Verdict::Unverified(None))
+    }
+}
+
+pub(super) fn test_loongarch64_lsx_lsx_vftintrz_wu_s() -> Result<Verdict, String> {
+    unsafe {
+        let _result = core::hint::black_box(lsx_vftintrz_wu_s(0 /* m128 */));
+
+        crate::cpu::fuzz(&mut || {
+            let _ = lsx_vftintrz_wu_s(0 /* m128 */);
+        });
+        Ok(Verdict::Unverified(None))
+    }
+}
+
+pub(super) fn test_loongarch64_lsx_lsx_vftintrz_lu_d() -> Result<Verdict, String> {
+    unsafe {
+        let _result = core::hint::black_box(lsx_vftintrz_lu_d(0 /* m128d */));
+
+        crate::cpu::fuzz(&mut || {
+            let _ = lsx_vftintrz_lu_d(0 /* m128d */);
+        });
+        Ok(Verdict::Unverified(None))
+    }
+}
+
+pub(super) fn test_loongarch64_lsx_lsx_vftintrz_w_d() -> Result<Verdict, String> {
+    unsafe {
+        let _result = core::hint::black_box(lsx_vftintrz_w_d(0 /* m128d */, 0 /* m128d */));
+
+        crate::cpu::fuzz(&mut || {
+            let _ = lsx_vftintrz_w_d(0 /* m128d */, 0 /* m128d */);
+        });
+        Ok(Verdict::Unverified(None))
+    }
+}

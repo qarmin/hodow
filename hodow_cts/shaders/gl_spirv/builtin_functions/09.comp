@@ -1,0 +1,23 @@
+#version 450
+
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+
+void main()
+{
+    mat2 m2val1 = mat2(
+        0.1, 0.5,
+        0.2, 0.4
+    );
+    mat2 m2val2 = mat2(
+        0.8, 0.2,
+        0.9, 0.1
+    );
+    vec2 v2val1 = vec2(0.3, 0.4);
+    vec2 v2val2 = vec2(0.5, 0.6);
+
+    mat2 m2comp = matrixCompMult(m2val1, m2val2);
+    mat2 m2outerp = outerProduct(v2val1, v2val2);
+    mat2 m2trans = transpose(m2val1);
+    float fdet = determinant(m2val2);
+    mat2 m2inv = inverse(m2trans);
+}

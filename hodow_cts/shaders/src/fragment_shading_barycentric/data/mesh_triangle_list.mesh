@@ -1,0 +1,41 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+${dataStruct}
+layout(local_size_x = 8, local_size_y = 4, local_size_z = 1) in;
+layout(triangles) out;
+layout(max_vertices=6, max_primitives=6) out;
+
+layout(set = 0, binding = 0) buffer PerVertexData{ 
+    vec4 vertexBuffer[6];
+} pvd;
+layout (location=0) out ${typePrefix} data[]${typeSuffix};
+${meshInterpOut}${meshFlatOut}
+out gl_MeshPerVertexEXT 
+{
+    vec4  gl_Position;
+    float gl_PointSize;
+} gl_MeshVerticesEXT[];
+
+void main()
+{
+    uint maxVertex = 6;
+    uint maxPrimitive = 2;
+    SetMeshOutputsEXT(maxVertex, maxPrimitive);
+    const uint vertex = gl_LocalInvocationIndex;
+    const uint primitive = gl_LocalInvocationIndex;
+    const uvec3 indices[2] = uvec3[](
+        uvec3(0, 1, 2),
+        uvec3(3, 4, 5)
+    );
+    if (vertex < maxVertex)
+    {
+        gl_MeshVerticesEXT[vertex].gl_Position = pvd.vertexBuffer[vertex];
+        gl_MeshVerticesEXT[vertex].gl_PointSize = 1.0;
+        uint n  = vertex + 1;
+        data[vertex] = ${value};
+${meshInterpAssign}${meshFlatAssign}    }
+    if(primitive < maxPrimitive){
+        gl_PrimitiveTriangleIndicesEXT[primitive] = indices[primitive];
+    }
+}

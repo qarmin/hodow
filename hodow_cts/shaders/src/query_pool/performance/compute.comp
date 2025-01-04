@@ -1,0 +1,10 @@
+#version 430
+layout (local_size_x = 1) in;
+layout(binding = 0) writeonly buffer Output {
+        uint values[];
+} sb_out;
+
+void main (void) {
+        uint index = uint(gl_GlobalInvocationID.x);
+        sb_out.values[index] += gl_GlobalInvocationID.y*2;
+}

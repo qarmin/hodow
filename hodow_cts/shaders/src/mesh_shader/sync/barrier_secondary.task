@@ -1,0 +1,15 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+layout(local_size_x=128) in;
+layout (set=0, binding=0, std430) buffer OutputBlock {
+    uint values[];
+} outBuffer;
+layout (set=0, binding=1, std430) buffer VerificationBlock {
+    uint values[];
+} verificationBuffer;
+void main ()
+{
+    const uint verifResult = ((outBuffer.values[gl_GlobalInvocationID.x] == gl_GlobalInvocationID.x) ? 1u : 0u);
+    verificationBuffer.values[gl_GlobalInvocationID.x] = verifResult;
+    EmitMeshTasksEXT(0u, 0u, 0u);
+}

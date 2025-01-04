@@ -1,0 +1,177 @@
+# Shader manifest for dEQP-VK.binding_model.dynamic_offset.two_pipelines*
+#
+# Upstream builds comp0/comp1 from one StringTemplate; only four distinct sources
+# result (comp0 with or without the push constant block, comp1 on set 0 binding 1
+# or set 1 binding 0), written out under shaders/src/binding_model/dynamic_offset/.
+# The Amber cases of the group (shader_reuse_differing_layout_*) are not ported.
+
+upstream_source = "external/vulkancts/modules/vulkan/binding_model/vktBindingDynamicOffsetTests.cpp"
+rust_module = "binding_model/dynamic_offset_tests"
+
+[[case]]
+name = "two_pipelines"
+rust_const = "TWO_PIPELINES"
+rust_type = "DynamicOffsetPcCase"
+programs = [
+    { name = "comp0", template = "binding_model/dynamic_offset/comp0_plain.comp", stage = "comp" },
+    { name = "comp1", template = "binding_model/dynamic_offset/comp1_sets0.comp", stage = "comp" },
+]
+[case.params]
+separate_offsets = { type = "bool", value = false }
+pc_first = { type = "bool", value = false }
+single_layout = { type = "bool", value = false }
+different_sets = { type = "bool", value = false }
+
+[[case]]
+name = "two_pipelines_different_sets"
+rust_const = "TWO_PIPELINES_DIFFERENT_SETS"
+rust_type = "DynamicOffsetPcCase"
+programs = [
+    { name = "comp0", template = "binding_model/dynamic_offset/comp0_plain.comp", stage = "comp" },
+    { name = "comp1", template = "binding_model/dynamic_offset/comp1_sets1.comp", stage = "comp" },
+]
+[case.params]
+separate_offsets = { type = "bool", value = false }
+pc_first = { type = "bool", value = false }
+single_layout = { type = "bool", value = false }
+different_sets = { type = "bool", value = true }
+
+[[case]]
+name = "two_pipelines_single_layout"
+rust_const = "TWO_PIPELINES_SINGLE_LAYOUT"
+rust_type = "DynamicOffsetPcCase"
+programs = [
+    { name = "comp0", template = "binding_model/dynamic_offset/comp0_pc.comp", stage = "comp" },
+    { name = "comp1", template = "binding_model/dynamic_offset/comp1_sets0.comp", stage = "comp" },
+]
+[case.params]
+separate_offsets = { type = "bool", value = false }
+pc_first = { type = "bool", value = false }
+single_layout = { type = "bool", value = true }
+different_sets = { type = "bool", value = false }
+
+[[case]]
+name = "two_pipelines_pc_first"
+rust_const = "TWO_PIPELINES_PC_FIRST"
+rust_type = "DynamicOffsetPcCase"
+programs = [
+    { name = "comp0", template = "binding_model/dynamic_offset/comp0_plain.comp", stage = "comp" },
+    { name = "comp1", template = "binding_model/dynamic_offset/comp1_sets0.comp", stage = "comp" },
+]
+[case.params]
+separate_offsets = { type = "bool", value = false }
+pc_first = { type = "bool", value = true }
+single_layout = { type = "bool", value = false }
+different_sets = { type = "bool", value = false }
+
+[[case]]
+name = "two_pipelines_pc_first_different_sets"
+rust_const = "TWO_PIPELINES_PC_FIRST_DIFFERENT_SETS"
+rust_type = "DynamicOffsetPcCase"
+programs = [
+    { name = "comp0", template = "binding_model/dynamic_offset/comp0_plain.comp", stage = "comp" },
+    { name = "comp1", template = "binding_model/dynamic_offset/comp1_sets1.comp", stage = "comp" },
+]
+[case.params]
+separate_offsets = { type = "bool", value = false }
+pc_first = { type = "bool", value = true }
+single_layout = { type = "bool", value = false }
+different_sets = { type = "bool", value = true }
+
+[[case]]
+name = "two_pipelines_pc_first_single_layout"
+rust_const = "TWO_PIPELINES_PC_FIRST_SINGLE_LAYOUT"
+rust_type = "DynamicOffsetPcCase"
+programs = [
+    { name = "comp0", template = "binding_model/dynamic_offset/comp0_pc.comp", stage = "comp" },
+    { name = "comp1", template = "binding_model/dynamic_offset/comp1_sets0.comp", stage = "comp" },
+]
+[case.params]
+separate_offsets = { type = "bool", value = false }
+pc_first = { type = "bool", value = true }
+single_layout = { type = "bool", value = true }
+different_sets = { type = "bool", value = false }
+
+[[case]]
+name = "two_pipelines_separate_offsets"
+rust_const = "TWO_PIPELINES_SEPARATE_OFFSETS"
+rust_type = "DynamicOffsetPcCase"
+programs = [
+    { name = "comp0", template = "binding_model/dynamic_offset/comp0_plain.comp", stage = "comp" },
+    { name = "comp1", template = "binding_model/dynamic_offset/comp1_sets0.comp", stage = "comp" },
+]
+[case.params]
+separate_offsets = { type = "bool", value = true }
+pc_first = { type = "bool", value = false }
+single_layout = { type = "bool", value = false }
+different_sets = { type = "bool", value = false }
+
+[[case]]
+name = "two_pipelines_separate_offsets_different_sets"
+rust_const = "TWO_PIPELINES_SEPARATE_OFFSETS_DIFFERENT_SETS"
+rust_type = "DynamicOffsetPcCase"
+programs = [
+    { name = "comp0", template = "binding_model/dynamic_offset/comp0_plain.comp", stage = "comp" },
+    { name = "comp1", template = "binding_model/dynamic_offset/comp1_sets1.comp", stage = "comp" },
+]
+[case.params]
+separate_offsets = { type = "bool", value = true }
+pc_first = { type = "bool", value = false }
+single_layout = { type = "bool", value = false }
+different_sets = { type = "bool", value = true }
+
+[[case]]
+name = "two_pipelines_separate_offsets_single_layout"
+rust_const = "TWO_PIPELINES_SEPARATE_OFFSETS_SINGLE_LAYOUT"
+rust_type = "DynamicOffsetPcCase"
+programs = [
+    { name = "comp0", template = "binding_model/dynamic_offset/comp0_pc.comp", stage = "comp" },
+    { name = "comp1", template = "binding_model/dynamic_offset/comp1_sets0.comp", stage = "comp" },
+]
+[case.params]
+separate_offsets = { type = "bool", value = true }
+pc_first = { type = "bool", value = false }
+single_layout = { type = "bool", value = true }
+different_sets = { type = "bool", value = false }
+
+[[case]]
+name = "two_pipelines_separate_offsets_pc_first"
+rust_const = "TWO_PIPELINES_SEPARATE_OFFSETS_PC_FIRST"
+rust_type = "DynamicOffsetPcCase"
+programs = [
+    { name = "comp0", template = "binding_model/dynamic_offset/comp0_plain.comp", stage = "comp" },
+    { name = "comp1", template = "binding_model/dynamic_offset/comp1_sets0.comp", stage = "comp" },
+]
+[case.params]
+separate_offsets = { type = "bool", value = true }
+pc_first = { type = "bool", value = true }
+single_layout = { type = "bool", value = false }
+different_sets = { type = "bool", value = false }
+
+[[case]]
+name = "two_pipelines_separate_offsets_pc_first_different_sets"
+rust_const = "TWO_PIPELINES_SEPARATE_OFFSETS_PC_FIRST_DIFFERENT_SETS"
+rust_type = "DynamicOffsetPcCase"
+programs = [
+    { name = "comp0", template = "binding_model/dynamic_offset/comp0_plain.comp", stage = "comp" },
+    { name = "comp1", template = "binding_model/dynamic_offset/comp1_sets1.comp", stage = "comp" },
+]
+[case.params]
+separate_offsets = { type = "bool", value = true }
+pc_first = { type = "bool", value = true }
+single_layout = { type = "bool", value = false }
+different_sets = { type = "bool", value = true }
+
+[[case]]
+name = "two_pipelines_separate_offsets_pc_first_single_layout"
+rust_const = "TWO_PIPELINES_SEPARATE_OFFSETS_PC_FIRST_SINGLE_LAYOUT"
+rust_type = "DynamicOffsetPcCase"
+programs = [
+    { name = "comp0", template = "binding_model/dynamic_offset/comp0_pc.comp", stage = "comp" },
+    { name = "comp1", template = "binding_model/dynamic_offset/comp1_sets0.comp", stage = "comp" },
+]
+[case.params]
+separate_offsets = { type = "bool", value = true }
+pc_first = { type = "bool", value = true }
+single_layout = { type = "bool", value = true }
+different_sets = { type = "bool", value = false }

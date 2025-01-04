@@ -1,0 +1,6 @@
+#version 460
+layout (local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout (push_constant, std430) uniform PCBlock { uint index; } pc;
+layout (set=0, binding=0, std430) buffer BufferBlock { uint values[]; } ssbo;
+layout (constant_id=0) const uint value = 0;
+void main(void) { ssbo.values[pc.index] = value; }

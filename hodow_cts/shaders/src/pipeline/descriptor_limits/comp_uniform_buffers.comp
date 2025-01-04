@@ -1,0 +1,16 @@
+#version 450
+
+layout(set = 0, binding = ${binding}) uniform uboInput
+{
+    vec4 color;
+} inputData;
+
+layout(set = 1, binding = 0) buffer ssboOutput
+{
+    vec4 color;
+} outputData;
+
+void main (void)
+{
+    outputData.color = inputData.color;
+}

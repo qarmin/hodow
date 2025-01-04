@@ -1,0 +1,1105 @@
+# Shader manifest for dEQP-VK.mesh_shader.ext.synchronization.*
+#
+# `MeshShaderSyncCase::initPrograms`: the task, mesh and fragment shaders that read or write the resource depend on the case (resource
+# type, write access and test value), next to fixed passthrough shaders. Upstream formats them at run time; each case is pre-expanded
+# here and found by its test value. `BarrierAcrossSecondaryCase` has its own fixed compute, task and mesh set.
+
+upstream_source = "external/vulkancts/modules/vulkan/mesh_shader/vktMeshShaderSyncTestsEXT.cpp"
+rust_module = "mesh_shader/sync_tests"
+spirv_version = "spirv1.4"
+
+[[case]]
+name = "v1628510124"
+rust_const = "SYNC_V1628510124"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510124.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510124.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510124.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510125"
+rust_const = "SYNC_V1628510125"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510125.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510125.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510125.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510126"
+rust_const = "SYNC_V1628510126"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510126.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510126.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510126.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510127"
+rust_const = "SYNC_V1628510127"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510127.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510127.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510127.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510128"
+rust_const = "SYNC_V1628510128"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510128.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510128.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510128.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510129"
+rust_const = "SYNC_V1628510129"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510129.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510129.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510129.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510130"
+rust_const = "SYNC_V1628510130"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510130.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510130.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510131"
+rust_const = "SYNC_V1628510131"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510131.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510131.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510132"
+rust_const = "SYNC_V1628510132"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510132.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510132.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510133"
+rust_const = "SYNC_V1628510133"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510133.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510133.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510134"
+rust_const = "SYNC_V1628510134"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510134.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510134.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510135"
+rust_const = "SYNC_V1628510135"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510135.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510135.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510136"
+rust_const = "SYNC_V1628510136"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510136.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510136.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510136.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510137"
+rust_const = "SYNC_V1628510137"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510137.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510137.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510137.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510138"
+rust_const = "SYNC_V1628510138"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510138.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510138.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510138.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510139"
+rust_const = "SYNC_V1628510139"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510139.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510139.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510139.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510140"
+rust_const = "SYNC_V1628510140"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510140.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510140.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510140.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510141"
+rust_const = "SYNC_V1628510141"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510141.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510141.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510141.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510142"
+rust_const = "SYNC_V1628510142"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510142.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510142.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510142.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510143"
+rust_const = "SYNC_V1628510143"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510143.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510143.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510143.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510144"
+rust_const = "SYNC_V1628510144"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510144.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510144.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510144.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510145"
+rust_const = "SYNC_V1628510145"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510145.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510145.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510145.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510146"
+rust_const = "SYNC_V1628510146"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510146.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510146.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510147"
+rust_const = "SYNC_V1628510147"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510147.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510147.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510148"
+rust_const = "SYNC_V1628510148"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510148.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510148.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510149"
+rust_const = "SYNC_V1628510149"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510149.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510149.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510150"
+rust_const = "SYNC_V1628510150"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510150.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510150.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510151"
+rust_const = "SYNC_V1628510151"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510151.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510151.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510152"
+rust_const = "SYNC_V1628510152"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510152.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510152.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510153"
+rust_const = "SYNC_V1628510153"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510153.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510153.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510154"
+rust_const = "SYNC_V1628510154"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510154.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510154.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510155"
+rust_const = "SYNC_V1628510155"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510155.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510155.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510156"
+rust_const = "SYNC_V1628510156"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510156.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510156.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510156.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510157"
+rust_const = "SYNC_V1628510157"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510157.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510157.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510157.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510158"
+rust_const = "SYNC_V1628510158"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510158.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510158.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510158.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510159"
+rust_const = "SYNC_V1628510159"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510159.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510159.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510159.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510160"
+rust_const = "SYNC_V1628510160"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510160.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510160.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510160.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510161"
+rust_const = "SYNC_V1628510161"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510161.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510161.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510161.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510162"
+rust_const = "SYNC_V1628510162"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510162.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510162.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510162.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510163"
+rust_const = "SYNC_V1628510163"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510163.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510163.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510163.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510164"
+rust_const = "SYNC_V1628510164"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510164.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510164.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510164.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510165"
+rust_const = "SYNC_V1628510165"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510165.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510165.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510165.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510166"
+rust_const = "SYNC_V1628510166"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510166.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510166.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510166.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510167"
+rust_const = "SYNC_V1628510167"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510167.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510167.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510167.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510168"
+rust_const = "SYNC_V1628510168"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510168.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510168.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510168.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510169"
+rust_const = "SYNC_V1628510169"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510169.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510169.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510169.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510170"
+rust_const = "SYNC_V1628510170"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510170.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510170.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510170.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510171"
+rust_const = "SYNC_V1628510171"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510171.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510171.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510171.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510172"
+rust_const = "SYNC_V1628510172"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510172.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510172.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510172.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510173"
+rust_const = "SYNC_V1628510173"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510173.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510173.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510173.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510174"
+rust_const = "SYNC_V1628510174"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510174.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510174.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510175"
+rust_const = "SYNC_V1628510175"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510175.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510175.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510176"
+rust_const = "SYNC_V1628510176"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510176.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510176.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510177"
+rust_const = "SYNC_V1628510177"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510177.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510177.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510178"
+rust_const = "SYNC_V1628510178"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510178.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510178.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510179"
+rust_const = "SYNC_V1628510179"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510179.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510179.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510180"
+rust_const = "SYNC_V1628510180"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510180.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510180.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510181"
+rust_const = "SYNC_V1628510181"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510181.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510181.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510182"
+rust_const = "SYNC_V1628510182"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510182.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510182.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510183"
+rust_const = "SYNC_V1628510183"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510183.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510183.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510184"
+rust_const = "SYNC_V1628510184"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510184.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510184.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510185"
+rust_const = "SYNC_V1628510185"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510185.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510185.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510186"
+rust_const = "SYNC_V1628510186"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510186.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510186.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510186.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510187"
+rust_const = "SYNC_V1628510187"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510187.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510187.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510187.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510188"
+rust_const = "SYNC_V1628510188"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510188.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510188.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510188.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510189"
+rust_const = "SYNC_V1628510189"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510189.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510189.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510189.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510190"
+rust_const = "SYNC_V1628510190"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510190.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510190.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510190.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510191"
+rust_const = "SYNC_V1628510191"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510191.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510191.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510191.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510192"
+rust_const = "SYNC_V1628510192"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510192.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510192.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510192.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510193"
+rust_const = "SYNC_V1628510193"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510193.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510193.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510193.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510194"
+rust_const = "SYNC_V1628510194"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510194.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510194.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510194.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510195"
+rust_const = "SYNC_V1628510195"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510195.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510195.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510195.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510196"
+rust_const = "SYNC_V1628510196"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510196.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510196.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510196.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510197"
+rust_const = "SYNC_V1628510197"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/sync/task_v1628510197.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510197.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510197.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510198"
+rust_const = "SYNC_V1628510198"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510198.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510198.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510199"
+rust_const = "SYNC_V1628510199"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510199.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510199.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510200"
+rust_const = "SYNC_V1628510200"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510200.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510200.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510201"
+rust_const = "SYNC_V1628510201"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510201.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510201.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510202"
+rust_const = "SYNC_V1628510202"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510202.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510202.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "v1628510203"
+rust_const = "SYNC_V1628510203"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/sync/mesh_v1628510203.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/sync/frag_v1628510203.frag", stage = "frag" },
+    { name = "taskPassthrough", template = "mesh_shader/sync/pass.task", stage = "task" },
+    { name = "fragPassthrough", template = "mesh_shader/sync/pass.frag", stage = "frag" },
+    { name = "meshPassthrough", template = "mesh_shader/sync/pass.mesh", stage = "mesh" },
+    { name = "meshPassthroughWithTask", template = "mesh_shader/sync/pass_with_task.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "barrier_across_secondary"
+rust_const = "SYNC_BARRIER_ACROSS_SECONDARY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "mesh_shader/sync/barrier_secondary.comp", stage = "comp" },
+    { name = "task", template = "mesh_shader/sync/barrier_secondary.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/sync/barrier_secondary.mesh", stage = "mesh" },
+]

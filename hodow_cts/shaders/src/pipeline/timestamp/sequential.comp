@@ -1,0 +1,14 @@
+#version 310 es
+layout(local_size_x = 16) in;
+layout(std430, binding = 0) buffer Buffer
+{
+ uint values[];
+};
+void main(void)
+{
+ uint gID = gl_GlobalInvocationID.x;
+ if (gID < uint(values.length()))
+ {
+ values[gID] = gID * 2u;
+ }
+}

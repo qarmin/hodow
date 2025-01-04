@@ -1,0 +1,20 @@
+#version 450
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set = 0, binding = 2, r8i) uniform iimage2D image;
+layout(set = 0, binding = 3, std430) buffer _buff { int8_t data[]; };
+layout(set = 0, binding = 4) uniform isampler2D samplr;
+void main()
+{
+	const uint buffer_idx = gl_GlobalInvocationID.x * 1;
+	const ivec2 image_dims = imageSize(image);
+	const uint texel_count = image_dims[0] * image_dims[1];
+	if (gl_GlobalInvocationID.x >= texel_count) return;
+	const uint image_coord_0 = gl_GlobalInvocationID.x / (1) % image_dims[0];
+	const uint image_coord_1 = gl_GlobalInvocationID.x / (1 * image_dims[0]) % image_dims[1];
+	const float sampled_coord_0 = (float(image_coord_0) + 0.5) / float(image_dims[0]);
+	const float sampled_coord_1 = (float(image_coord_1) + 0.5) / float(image_dims[1]);
+	const vec2 sampled_coord = vec2(sampled_coord_0, sampled_coord_1);
+	const ivec4 pixel_data = texture(samplr, sampled_coord);
+	data[buffer_idx+0] = int8_t(pixel_data[0]);
+}

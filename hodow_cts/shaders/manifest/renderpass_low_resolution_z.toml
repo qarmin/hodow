@@ -1,0 +1,28 @@
+# Shader manifest for dEQP-VK.renderpasses.*.low_resolution_z.*
+#
+# `BaseTestCase::initPrograms` adds only the fragment shaders a case binds; the programs are fixed text, so every case
+# here carries all of them and the test creates a module for the ones its pipelines use. The push constant block is
+# the same in every stage: colour, depth, framebuffer height and the draw mode (0 full quad, 1 even rows, 2 odd rows).
+
+upstream_source = "external/vulkancts/modules/vulkan/renderpass/vktRenderPassLowResolutionZTests.cpp"
+rust_module = "renderpass/low_resolution_z_tests"
+
+[[case]]
+name = "low_resolution_z"
+rust_const = "LOW_RESOLUTION_Z"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/low_resolution_z/low_resolution_z.vert", stage = "vert" },
+    { name = "basic-frag", template = "renderpass/low_resolution_z/basic.frag", stage = "frag" },
+    { name = "depth-greater-frag", template = "renderpass/low_resolution_z/depth_greater.frag", stage = "frag" },
+    { name = "depth-less-frag", template = "renderpass/low_resolution_z/depth_less.frag", stage = "frag" },
+    { name = "depth-unchanged-frag", template = "renderpass/low_resolution_z/depth_unchanged.frag", stage = "frag" },
+    { name = "depth-greater-override-frag", template = "renderpass/low_resolution_z/depth_greater_override.frag", stage = "frag" },
+    { name = "depth-less-override-frag", template = "renderpass/low_resolution_z/depth_less_override.frag", stage = "frag" },
+    { name = "write-depth-override-frag", template = "renderpass/low_resolution_z/write_depth_override.frag", stage = "frag" },
+    { name = "early-frag-tests-frag", template = "renderpass/low_resolution_z/early_frag_tests.frag", stage = "frag" },
+    { name = "discard-frag", template = "renderpass/low_resolution_z/discard.frag", stage = "frag" },
+    { name = "atomic-frag", template = "renderpass/low_resolution_z/atomic.frag", stage = "frag" },
+    { name = "image-store-frag", template = "renderpass/low_resolution_z/image_store.frag", stage = "frag" },
+    { name = "comp", template = "renderpass/low_resolution_z/low_resolution_z.comp", stage = "comp" },
+]

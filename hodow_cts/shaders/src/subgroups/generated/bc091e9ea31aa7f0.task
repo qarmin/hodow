@@ -1,0 +1,226 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_clustered: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int64 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  uint64_t data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  bool tempResult = true;
+  uvec4 mask = subgroupBallot(true);
+  {
+    const uint clusterSize = 1;
+    if (clusterSize <= gl_SubgroupSize)
+    {
+      uint64_t op = subgroupClusteredMin(data[gl_SubgroupInvocationID], clusterSize);
+      for (uint clusterOffset = 0; clusterOffset < gl_SubgroupSize; clusterOffset += clusterSize)
+      {
+        uint64_t ref = uint64_t(-1);
+        for (uint index = clusterOffset; index < (clusterOffset + clusterSize); index++)
+        {
+          if (subgroupBallotBitExtract(mask, index))
+          {
+            ref = min(ref, data[index]);
+          }
+        }
+        if ((clusterOffset <= gl_SubgroupInvocationID) && (gl_SubgroupInvocationID < (clusterOffset + clusterSize)))
+        {
+          if (!(ref == op))
+          {
+            tempResult = false;
+          }
+        }
+      }
+    }
+  }
+  {
+    const uint clusterSize = 2;
+    if (clusterSize <= gl_SubgroupSize)
+    {
+      uint64_t op = subgroupClusteredMin(data[gl_SubgroupInvocationID], clusterSize);
+      for (uint clusterOffset = 0; clusterOffset < gl_SubgroupSize; clusterOffset += clusterSize)
+      {
+        uint64_t ref = uint64_t(-1);
+        for (uint index = clusterOffset; index < (clusterOffset + clusterSize); index++)
+        {
+          if (subgroupBallotBitExtract(mask, index))
+          {
+            ref = min(ref, data[index]);
+          }
+        }
+        if ((clusterOffset <= gl_SubgroupInvocationID) && (gl_SubgroupInvocationID < (clusterOffset + clusterSize)))
+        {
+          if (!(ref == op))
+          {
+            tempResult = false;
+          }
+        }
+      }
+    }
+  }
+  {
+    const uint clusterSize = 4;
+    if (clusterSize <= gl_SubgroupSize)
+    {
+      uint64_t op = subgroupClusteredMin(data[gl_SubgroupInvocationID], clusterSize);
+      for (uint clusterOffset = 0; clusterOffset < gl_SubgroupSize; clusterOffset += clusterSize)
+      {
+        uint64_t ref = uint64_t(-1);
+        for (uint index = clusterOffset; index < (clusterOffset + clusterSize); index++)
+        {
+          if (subgroupBallotBitExtract(mask, index))
+          {
+            ref = min(ref, data[index]);
+          }
+        }
+        if ((clusterOffset <= gl_SubgroupInvocationID) && (gl_SubgroupInvocationID < (clusterOffset + clusterSize)))
+        {
+          if (!(ref == op))
+          {
+            tempResult = false;
+          }
+        }
+      }
+    }
+  }
+  {
+    const uint clusterSize = 8;
+    if (clusterSize <= gl_SubgroupSize)
+    {
+      uint64_t op = subgroupClusteredMin(data[gl_SubgroupInvocationID], clusterSize);
+      for (uint clusterOffset = 0; clusterOffset < gl_SubgroupSize; clusterOffset += clusterSize)
+      {
+        uint64_t ref = uint64_t(-1);
+        for (uint index = clusterOffset; index < (clusterOffset + clusterSize); index++)
+        {
+          if (subgroupBallotBitExtract(mask, index))
+          {
+            ref = min(ref, data[index]);
+          }
+        }
+        if ((clusterOffset <= gl_SubgroupInvocationID) && (gl_SubgroupInvocationID < (clusterOffset + clusterSize)))
+        {
+          if (!(ref == op))
+          {
+            tempResult = false;
+          }
+        }
+      }
+    }
+  }
+  {
+    const uint clusterSize = 16;
+    if (clusterSize <= gl_SubgroupSize)
+    {
+      uint64_t op = subgroupClusteredMin(data[gl_SubgroupInvocationID], clusterSize);
+      for (uint clusterOffset = 0; clusterOffset < gl_SubgroupSize; clusterOffset += clusterSize)
+      {
+        uint64_t ref = uint64_t(-1);
+        for (uint index = clusterOffset; index < (clusterOffset + clusterSize); index++)
+        {
+          if (subgroupBallotBitExtract(mask, index))
+          {
+            ref = min(ref, data[index]);
+          }
+        }
+        if ((clusterOffset <= gl_SubgroupInvocationID) && (gl_SubgroupInvocationID < (clusterOffset + clusterSize)))
+        {
+          if (!(ref == op))
+          {
+            tempResult = false;
+          }
+        }
+      }
+    }
+  }
+  {
+    const uint clusterSize = 32;
+    if (clusterSize <= gl_SubgroupSize)
+    {
+      uint64_t op = subgroupClusteredMin(data[gl_SubgroupInvocationID], clusterSize);
+      for (uint clusterOffset = 0; clusterOffset < gl_SubgroupSize; clusterOffset += clusterSize)
+      {
+        uint64_t ref = uint64_t(-1);
+        for (uint index = clusterOffset; index < (clusterOffset + clusterSize); index++)
+        {
+          if (subgroupBallotBitExtract(mask, index))
+          {
+            ref = min(ref, data[index]);
+          }
+        }
+        if ((clusterOffset <= gl_SubgroupInvocationID) && (gl_SubgroupInvocationID < (clusterOffset + clusterSize)))
+        {
+          if (!(ref == op))
+          {
+            tempResult = false;
+          }
+        }
+      }
+    }
+  }
+  {
+    const uint clusterSize = 64;
+    if (clusterSize <= gl_SubgroupSize)
+    {
+      uint64_t op = subgroupClusteredMin(data[gl_SubgroupInvocationID], clusterSize);
+      for (uint clusterOffset = 0; clusterOffset < gl_SubgroupSize; clusterOffset += clusterSize)
+      {
+        uint64_t ref = uint64_t(-1);
+        for (uint index = clusterOffset; index < (clusterOffset + clusterSize); index++)
+        {
+          if (subgroupBallotBitExtract(mask, index))
+          {
+            ref = min(ref, data[index]);
+          }
+        }
+        if ((clusterOffset <= gl_SubgroupInvocationID) && (gl_SubgroupInvocationID < (clusterOffset + clusterSize)))
+        {
+          if (!(ref == op))
+          {
+            tempResult = false;
+          }
+        }
+      }
+    }
+  }
+  {
+    const uint clusterSize = 128;
+    if (clusterSize <= gl_SubgroupSize)
+    {
+      uint64_t op = subgroupClusteredMin(data[gl_SubgroupInvocationID], clusterSize);
+      for (uint clusterOffset = 0; clusterOffset < gl_SubgroupSize; clusterOffset += clusterSize)
+      {
+        uint64_t ref = uint64_t(-1);
+        for (uint index = clusterOffset; index < (clusterOffset + clusterSize); index++)
+        {
+          if (subgroupBallotBitExtract(mask, index))
+          {
+            ref = min(ref, data[index]);
+          }
+        }
+        if ((clusterOffset <= gl_SubgroupInvocationID) && (gl_SubgroupInvocationID < (clusterOffset + clusterSize)))
+        {
+          if (!(ref == op))
+          {
+            tempResult = false;
+          }
+        }
+      }
+    }
+  }
+  tempRes = tempResult ? 1 : 0;
+  result[offset] = tempRes;
+  EmitMeshTasksEXT(0, 0, 0);
+}

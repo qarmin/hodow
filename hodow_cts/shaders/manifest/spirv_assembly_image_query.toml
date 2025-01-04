@@ -1,0 +1,14 @@
+# Shader manifest for dEQP-VK.spirv_assembly.instruction.image_query.samples_storage
+#
+# Source extracted from external/vulkancts/data/vulkan/amber/spirv_assembly/instruction/image_query/samples_storage.amber.
+
+upstream_source = "external/vulkancts/data/vulkan/amber/spirv_assembly/instruction/image_query/samples_storage.amber"
+rust_module = "spirv_assembly/image_query_tests"
+
+[[case]]
+name = "programs"
+rust_const = "IMAGE_QUERY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "spirv_assembly/image_query/samples_storage.asm", stage = "asm" },
+]

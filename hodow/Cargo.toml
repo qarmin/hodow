@@ -1,0 +1,61 @@
+[package]
+name = "hodow"
+version = "0.1.0"
+authors = ["Rafał Mikrut <mikrutrafal@protonmail.com>"]
+edition = "2024"
+rust-version = "1.98"
+description = "Tests CPU (SIMD) and GPU (OpenGL, Vulkan) instructions and functions by running them and checking the results; web dashboard, burn, bench and a Khronos CTS port"
+license = "Apache-2.0"
+repository = "https://github.com/qarmin/hodow"
+
+[[bin]]
+name = "hodow"
+path = "src/main.rs"
+
+[dependencies]
+hodow_common = { path = "../hodow_common" }
+hodow_cpu = { path = "../hodow_cpu", default-features = false }
+hodow_gpu = { path = "../hodow_gpu", default-features = false }
+hodow_bench = { path = "../hodow_bench", default-features = false }
+hodow_cts = { path = "../hodow_cts", default-features = false, optional = true }
+log = "0.4.35"
+sysinfo = { version = "0.40", default-features = false, features = ["system"] }
+handsome_logger = "0.10.0"
+clap = { version = "4.6", features = ["derive"] }
+indicatif = "0.18.6"
+ctrlc = "3.5"
+tokio = { version = "1.54", features = ["rt-multi-thread", "sync", "time", "net", "macros"], optional = true }
+axum = { version = "0.8", features = ["ws"], optional = true }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+ureq = { version = "3", default-features = false, features = ["json"], optional = true }
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
+[features]
+default = ["cpu_suite", "avx512", "gpu", "serve", "opencl", "bench_gles", "tflite"]
+# The generated CPU instruction tests; see hodow_cpu
+cpu_suite = ["hodow_cpu/cpu_suite"]
+avx512 = ["hodow_cpu/avx512"]
+miri_build = ["cpu_suite", "hodow_cpu/miri_build"]
+# OpenGL tests
+gpu = ["hodow_gpu/gpu"]
+# Vulkan compute validation and the Vulkan backend of `hodow bench`
+vulkan = ["hodow_gpu/vulkan", "hodow_bench/vulkan"]
+# OpenCL backend of `hodow bench`
+opencl = ["hodow_bench/opencl"]
+# TensorFlow Lite / NPU backend of `hodow bench`
+tflite = ["hodow_bench/tflite"]
+# GLES 3.1 compute backend of `hodow bench`
+bench_gles = ["gpu", "hodow_bench/bench_gles"]
+# The Khronos CTS port (`hodow cts`), one feature per half. Vulkan alone adds 67 MB of SPIR-V and ~625k registrations.
+cts_opengles = ["dep:hodow_cts", "hodow_cts/gles"]
+# Desktop OpenGL (KHR-GL30..KHR-GL46); the desktop groups share code with the ES ones, so it brings the ES half along.
+cts_opengl = ["cts_opengles", "hodow_cts/gl"]
+cts_vulkan = ["dep:hodow_cts", "hodow_cts/vulkan"]
+# Job-queue server (`hodow serve`) + remote job submission (`--submit-to`)
+serve = ["dep:tokio", "dep:axum", "dep:ureq"]
+
+[lints]
+workspace = true

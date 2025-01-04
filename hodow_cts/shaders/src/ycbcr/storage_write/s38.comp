@@ -1,0 +1,12 @@
+#version 440
+layout (local_size_x = 128, local_size_y = 1, local_size_z = 1) in; 
+layout (binding = 0, r8) writeonly uniform highp image2D u_image;
+void main (void)
+{
+    if( gl_GlobalInvocationID.x < 256 ) 
+    if( gl_GlobalInvocationID.y < 256 ) 
+    if( gl_GlobalInvocationID.z < 1 ) 
+    {
+        imageStore(u_image, ivec2( gl_GlobalInvocationID.x, gl_GlobalInvocationID.y ) ,vec4( float(int(gl_GlobalInvocationID.x) % 127) / 127.0, 0, 0, 0 ));
+    }
+}

@@ -1,0 +1,117 @@
+#version 450
+void main() {
+    vec2 positions[6] = vec2[6](vec2(-1.0, -1.0), vec2(1.0, -1.0), vec2(-1.0, 1.0), vec2(1.0, -1.0), vec2(1.0, 1.0), vec2(-1.0, 1.0));
+    gl_Position = vec4(positions[gl_VertexIndex], 0.0, 1.0);
+}
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos Glslang Reference Front End; 10
+; Bound: 70
+; Schema: 0
+               OpCapability Shader
+          %1 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint Fragment %4 "main" %51
+               OpExecutionMode %4 OriginUpperLeft
+               OpSource ESSL 310
+               OpName %4 "main"
+               OpName %8 "a"
+               OpName %12 "buf0"
+               OpMemberName %12 0 "_GLF_uniform_int_values"
+               OpName %14 ""
+               OpName %20 "i"
+               OpName %51 "_GLF_color"
+               OpDecorate %11 ArrayStride 16
+               OpMemberDecorate %12 0 Offset 0
+               OpDecorate %12 Block
+               OpDecorate %14 DescriptorSet 0
+               OpDecorate %14 Binding 0
+               OpDecorate %51 Location 0
+          %2 = OpTypeVoid
+          %3 = OpTypeFunction %2
+          %6 = OpTypeInt 32 1
+          %7 = OpTypePointer Function %6
+          %9 = OpTypeInt 32 0
+         %10 = OpConstant %9 3
+         %11 = OpTypeArray %6 %10
+         %12 = OpTypeStruct %11
+         %13 = OpTypePointer Uniform %12
+         %14 = OpVariable %13 Uniform
+         %15 = OpConstant %6 0
+         %16 = OpConstant %6 2
+         %17 = OpTypePointer Uniform %6
+         %31 = OpTypeBool
+         %36 = OpConstant %6 1
+         %48 = OpTypeFloat 32
+         %49 = OpTypeVector %48 4
+         %50 = OpTypePointer Output %49
+         %51 = OpVariable %50 Output
+          %4 = OpFunction %2 None %3
+          %5 = OpLabel
+          %8 = OpVariable %7 Function
+         %20 = OpVariable %7 Function
+         %18 = OpAccessChain %17 %14 %15 %16
+         %19 = OpLoad %6 %18
+               OpStore %8 %19
+         %21 = OpAccessChain %17 %14 %15 %16
+         %22 = OpLoad %6 %21
+               OpStore %20 %22
+               OpBranch %23
+         %23 = OpLabel
+               OpLoopMerge %25 %26 None
+               OpBranch %27
+         %27 = OpLabel
+         %28 = OpLoad %6 %20
+         %29 = OpAccessChain %17 %14 %15 %15
+         %30 = OpLoad %6 %29
+         %32 = OpSLessThan %31 %28 %30
+               OpBranchConditional %32 %24 %25
+         %24 = OpLabel
+         %33 = OpLoad %6 %20
+               OpSelectionMerge %35 None
+               OpSwitch %33 %35 -1 %34 0 %34
+         %34 = OpLabel
+         %37 = OpAccessChain %17 %14 %15 %36
+         %38 = OpLoad %6 %37
+               OpStore %8 %38
+               OpBranch %35
+         %35 = OpLabel
+               OpBranch %26
+         %26 = OpLabel
+         %40 = OpLoad %6 %20
+         %41 = OpIAdd %6 %40 %36
+               OpStore %20 %41
+               OpBranch %23
+         %25 = OpLabel
+         %42 = OpLoad %6 %8
+         %43 = OpAccessChain %17 %14 %15 %36
+         %44 = OpLoad %6 %43
+         %45 = OpIEqual %31 %42 %44
+               OpSelectionMerge %47 None
+               OpBranchConditional %45 %46 %65
+         %46 = OpLabel
+         %52 = OpAccessChain %17 %14 %15 %36
+         %53 = OpLoad %6 %52
+         %54 = OpConvertSToF %48 %53
+         %55 = OpAccessChain %17 %14 %15 %16
+         %56 = OpLoad %6 %55
+         %57 = OpConvertSToF %48 %56
+         %58 = OpAccessChain %17 %14 %15 %16
+         %59 = OpLoad %6 %58
+         %60 = OpConvertSToF %48 %59
+         %61 = OpAccessChain %17 %14 %15 %36
+         %62 = OpLoad %6 %61
+         %63 = OpConvertSToF %48 %62
+         %64 = OpCompositeConstruct %49 %54 %57 %60 %63
+               OpStore %51 %64
+               OpBranch %47
+         %65 = OpLabel
+         %66 = OpAccessChain %17 %14 %15 %16
+         %67 = OpLoad %6 %66
+         %68 = OpConvertSToF %48 %67
+         %69 = OpCompositeConstruct %49 %68 %68 %68 %68
+               OpStore %51 %69
+               OpBranch %47
+         %47 = OpLabel
+               OpReturn
+               OpFunctionEnd

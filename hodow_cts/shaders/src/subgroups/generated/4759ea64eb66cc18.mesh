@@ -1,0 +1,43 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_long_vector : enable
+#extension GL_EXT_shader_subgroup_extended_types_int64 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  vector<int64_t, 8> data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  uint sgSize = gl_SubgroupSize;
+  uint sgInvocation = gl_SubgroupInvocationID;
+  tempRes= 0x3;
+  for (uint id = 0; id < sgSize; id++)
+  {
+    vector<int64_t, 8> op = subgroupBroadcast(data[sgInvocation], id);
+    if (subgroupBallotBitExtract(mask, id) && op != data[id])
+        tempRes = 0;
+  }
+  // Test lane id that is only uniform across active lanes
+  if (sgInvocation >= sgSize / 2)
+  {
+    uint id = sgInvocation & ~((sgSize / 2) - 1);
+    vector<int64_t, 8> op = subgroupBroadcast(data[sgInvocation], id);
+    if (subgroupBallotBitExtract(mask, id) && op != data[id])
+        tempRes = 0;
+  }
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}

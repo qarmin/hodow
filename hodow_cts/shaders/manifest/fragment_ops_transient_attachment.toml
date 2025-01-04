@@ -1,0 +1,49 @@
+# Shader manifest for dEQP-VK.fragment_operations.transient_attachment_bit.*
+#
+# The fragment shader reads the transient attachment back as an input attachment and writes it as a colour.
+# `mode` is 0 colour, 1 depth, 2 stencil (an unsigned integer input).
+
+upstream_source = "external/vulkancts/modules/vulkan/fragment_ops/vktFragmentOperationsTransientAttachmentTests.cpp"
+rust_module = "fragment_ops/transient_attachment_tests"
+
+[[case]]
+name = "color"
+rust_const = "TRANSIENT_COLOR"
+rust_type = "TransientProgram"
+programs = [
+    { name = "vert", template = "fragment_ops/transient_attachment.vert", stage = "vert" },
+    { name = "frag", template = "fragment_ops/transient_attachment.frag", stage = "frag" },
+]
+[case.params]
+mode = { type = "u32", value = 0 }
+[case.derived]
+input_type = "'subpassInput'"
+load_expr = "'subpassLoad(inputValue)'"
+
+[[case]]
+name = "depth"
+rust_const = "TRANSIENT_DEPTH"
+rust_type = "TransientProgram"
+programs = [
+    { name = "vert", template = "fragment_ops/transient_attachment.vert", stage = "vert" },
+    { name = "frag", template = "fragment_ops/transient_attachment.frag", stage = "frag" },
+]
+[case.params]
+mode = { type = "u32", value = 1 }
+[case.derived]
+input_type = "'subpassInput'"
+load_expr = "'vec4(subpassLoad(inputValue).r, 0.0, 0.0, 1.0)'"
+
+[[case]]
+name = "stencil"
+rust_const = "TRANSIENT_STENCIL"
+rust_type = "TransientProgram"
+programs = [
+    { name = "vert", template = "fragment_ops/transient_attachment.vert", stage = "vert" },
+    { name = "frag", template = "fragment_ops/transient_attachment.frag", stage = "frag" },
+]
+[case.params]
+mode = { type = "u32", value = 2 }
+[case.derived]
+input_type = "'usubpassInput'"
+load_expr = "'vec4(0.0, 0.0, float(subpassLoad(inputValue).r) / 256.0, 1.0)'"

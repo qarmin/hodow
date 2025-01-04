@@ -1,0 +1,66 @@
+# Shader manifest for dEQP-VK.draw.*.shader_viewport_index.*
+#
+# gl_ViewportIndex written from the vertex shader (`vertex_shader_N`), implicitly read by the fragment shader (`fragment_shader_*`,
+# whose uniform array has N colours baked in) or written by the tessellation evaluation shader. As in shader_layer each
+# vertex/evaluation shader exists twice: as is and built for SPIR-V 1.5 (`_1_2`).
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawShaderViewportIndexTests.cpp"
+rust_module = "draw/shader_viewport_index_tests"
+
+[[case]]
+name = "vertex_shader"
+rust_const = "SHADER_VIEWPORT_INDEX_VERTEX"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/shader_viewport_index.vert", stage = "vert" },
+    { name = "vert_1_2", template = "draw/shader_viewport_index.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag", template = "draw/shader_viewport_index.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_shader_write"
+rust_const = "SHADER_VIEWPORT_INDEX_FRAGMENT_WRITE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/shader_viewport_index_fragtest_write.vert", stage = "vert" },
+    { name = "vert_1_2", template = "draw/shader_viewport_index_fragtest_write.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag_1", template = "draw/shader_viewport_index_color_1.frag", stage = "frag" },
+    { name = "frag_2", template = "draw/shader_viewport_index_color_2.frag", stage = "frag" },
+    { name = "frag_3", template = "draw/shader_viewport_index_color_3.frag", stage = "frag" },
+    { name = "frag_4", template = "draw/shader_viewport_index_color_4.frag", stage = "frag" },
+    { name = "frag_5", template = "draw/shader_viewport_index_color_5.frag", stage = "frag" },
+    { name = "frag_6", template = "draw/shader_viewport_index_color_6.frag", stage = "frag" },
+    { name = "frag_7", template = "draw/shader_viewport_index_color_7.frag", stage = "frag" },
+    { name = "frag_8", template = "draw/shader_viewport_index_color_8.frag", stage = "frag" },
+    { name = "frag_9", template = "draw/shader_viewport_index_color_9.frag", stage = "frag" },
+    { name = "frag_10", template = "draw/shader_viewport_index_color_10.frag", stage = "frag" },
+    { name = "frag_11", template = "draw/shader_viewport_index_color_11.frag", stage = "frag" },
+    { name = "frag_12", template = "draw/shader_viewport_index_color_12.frag", stage = "frag" },
+    { name = "frag_13", template = "draw/shader_viewport_index_color_13.frag", stage = "frag" },
+    { name = "frag_14", template = "draw/shader_viewport_index_color_14.frag", stage = "frag" },
+    { name = "frag_15", template = "draw/shader_viewport_index_color_15.frag", stage = "frag" },
+    { name = "frag_16", template = "draw/shader_viewport_index_color_16.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_shader_implicit"
+rust_const = "SHADER_VIEWPORT_INDEX_FRAGMENT_IMPLICIT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/shader_viewport_index_fragtest_implicit.vert", stage = "vert" },
+    { name = "vert_1_2", template = "draw/shader_viewport_index_fragtest_implicit.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "frag_1", template = "draw/shader_viewport_index_color_1.frag", stage = "frag" },
+]
+
+[[case]]
+name = "tessellation_shader"
+rust_const = "SHADER_VIEWPORT_INDEX_TESSELLATION"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/shader_layer_tess.vert", stage = "vert" },
+    { name = "vert_1_2", template = "draw/shader_layer_tess.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "tesc", template = "draw/shader_layer.tesc", stage = "tesc" },
+    { name = "tese", template = "draw/shader_viewport_index.tese", stage = "tese" },
+    { name = "tese_1_2", template = "draw/shader_viewport_index.tese", stage = "tese", spirv_version = "spirv1.5" },
+    { name = "frag", template = "draw/shader_viewport_index.frag", stage = "frag" },
+]

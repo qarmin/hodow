@@ -1,0 +1,439 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.dynamic_offset.{graphics,compute}.*
+#
+# `DynamicOffsetGraphicsTest::initPrograms` and `DynamicOffsetComputeTest::initPrograms`, one program set per value of what
+# the sources depend on: the grouping of the descriptors (one set, one set per binding, arrays), the descriptor type
+# (uniform or storage buffer), and the number of dynamic and non-dynamic bindings. The graphics vertex shader adds the
+# colours of every binding into its output colour; the compute shader adds them into a storage buffer.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineDynamicOffsetTests.cpp"
+rust_module = "pipeline/dynamic_offset_tests"
+
+[[case]]
+name = "gfx_single_set_uniform_buffer_d1_n0"
+rust_const = "DYNAMIC_OFFSET_GFX_SINGLE_SET_UNIFORM_BUFFER_D1_N0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/gfx_single_set_uniform_buffer_d1_n0.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/gfx_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gfx_single_set_uniform_buffer_d1_n1"
+rust_const = "DYNAMIC_OFFSET_GFX_SINGLE_SET_UNIFORM_BUFFER_D1_N1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/gfx_single_set_uniform_buffer_d1_n1.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/gfx_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gfx_single_set_uniform_buffer_d2_n0"
+rust_const = "DYNAMIC_OFFSET_GFX_SINGLE_SET_UNIFORM_BUFFER_D2_N0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/gfx_single_set_uniform_buffer_d2_n0.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/gfx_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gfx_single_set_uniform_buffer_d2_n1"
+rust_const = "DYNAMIC_OFFSET_GFX_SINGLE_SET_UNIFORM_BUFFER_D2_N1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/gfx_single_set_uniform_buffer_d2_n1.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/gfx_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gfx_single_set_storage_buffer_d1_n0"
+rust_const = "DYNAMIC_OFFSET_GFX_SINGLE_SET_STORAGE_BUFFER_D1_N0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/gfx_single_set_storage_buffer_d1_n0.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/gfx_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gfx_single_set_storage_buffer_d1_n1"
+rust_const = "DYNAMIC_OFFSET_GFX_SINGLE_SET_STORAGE_BUFFER_D1_N1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/gfx_single_set_storage_buffer_d1_n1.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/gfx_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gfx_single_set_storage_buffer_d2_n0"
+rust_const = "DYNAMIC_OFFSET_GFX_SINGLE_SET_STORAGE_BUFFER_D2_N0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/gfx_single_set_storage_buffer_d2_n0.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/gfx_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gfx_single_set_storage_buffer_d2_n1"
+rust_const = "DYNAMIC_OFFSET_GFX_SINGLE_SET_STORAGE_BUFFER_D2_N1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/gfx_single_set_storage_buffer_d2_n1.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/gfx_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gfx_multiset_uniform_buffer_d1_n0"
+rust_const = "DYNAMIC_OFFSET_GFX_MULTISET_UNIFORM_BUFFER_D1_N0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/gfx_multiset_uniform_buffer_d1_n0.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/gfx_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gfx_multiset_uniform_buffer_d1_n1"
+rust_const = "DYNAMIC_OFFSET_GFX_MULTISET_UNIFORM_BUFFER_D1_N1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/gfx_multiset_uniform_buffer_d1_n1.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/gfx_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gfx_multiset_uniform_buffer_d2_n0"
+rust_const = "DYNAMIC_OFFSET_GFX_MULTISET_UNIFORM_BUFFER_D2_N0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/gfx_multiset_uniform_buffer_d2_n0.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/gfx_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gfx_multiset_uniform_buffer_d2_n1"
+rust_const = "DYNAMIC_OFFSET_GFX_MULTISET_UNIFORM_BUFFER_D2_N1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/gfx_multiset_uniform_buffer_d2_n1.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/gfx_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gfx_multiset_storage_buffer_d1_n0"
+rust_const = "DYNAMIC_OFFSET_GFX_MULTISET_STORAGE_BUFFER_D1_N0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/gfx_multiset_storage_buffer_d1_n0.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/gfx_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gfx_multiset_storage_buffer_d1_n1"
+rust_const = "DYNAMIC_OFFSET_GFX_MULTISET_STORAGE_BUFFER_D1_N1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/gfx_multiset_storage_buffer_d1_n1.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/gfx_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gfx_multiset_storage_buffer_d2_n0"
+rust_const = "DYNAMIC_OFFSET_GFX_MULTISET_STORAGE_BUFFER_D2_N0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/gfx_multiset_storage_buffer_d2_n0.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/gfx_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gfx_multiset_storage_buffer_d2_n1"
+rust_const = "DYNAMIC_OFFSET_GFX_MULTISET_STORAGE_BUFFER_D2_N1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/gfx_multiset_storage_buffer_d2_n1.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/gfx_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gfx_arrays_uniform_buffer_d1_n0"
+rust_const = "DYNAMIC_OFFSET_GFX_ARRAYS_UNIFORM_BUFFER_D1_N0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/gfx_arrays_uniform_buffer_d1_n0.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/gfx_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gfx_arrays_uniform_buffer_d1_n1"
+rust_const = "DYNAMIC_OFFSET_GFX_ARRAYS_UNIFORM_BUFFER_D1_N1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/gfx_arrays_uniform_buffer_d1_n1.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/gfx_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gfx_arrays_uniform_buffer_d2_n0"
+rust_const = "DYNAMIC_OFFSET_GFX_ARRAYS_UNIFORM_BUFFER_D2_N0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/gfx_arrays_uniform_buffer_d2_n0.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/gfx_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gfx_arrays_uniform_buffer_d2_n1"
+rust_const = "DYNAMIC_OFFSET_GFX_ARRAYS_UNIFORM_BUFFER_D2_N1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/gfx_arrays_uniform_buffer_d2_n1.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/gfx_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gfx_arrays_storage_buffer_d1_n0"
+rust_const = "DYNAMIC_OFFSET_GFX_ARRAYS_STORAGE_BUFFER_D1_N0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/gfx_arrays_storage_buffer_d1_n0.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/gfx_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gfx_arrays_storage_buffer_d1_n1"
+rust_const = "DYNAMIC_OFFSET_GFX_ARRAYS_STORAGE_BUFFER_D1_N1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/gfx_arrays_storage_buffer_d1_n1.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/gfx_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gfx_arrays_storage_buffer_d2_n0"
+rust_const = "DYNAMIC_OFFSET_GFX_ARRAYS_STORAGE_BUFFER_D2_N0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/gfx_arrays_storage_buffer_d2_n0.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/gfx_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "gfx_arrays_storage_buffer_d2_n1"
+rust_const = "DYNAMIC_OFFSET_GFX_ARRAYS_STORAGE_BUFFER_D2_N1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/gfx_arrays_storage_buffer_d2_n1.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/gfx_passthrough.frag", stage = "frag" },
+]
+
+[[case]]
+name = "comp_single_set_uniform_buffer_d1_n0"
+rust_const = "DYNAMIC_OFFSET_COMP_SINGLE_SET_UNIFORM_BUFFER_D1_N0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/dynamic_offset/comp_single_set_uniform_buffer_d1_n0.comp", stage = "comp" },
+]
+
+[[case]]
+name = "comp_single_set_uniform_buffer_d1_n1"
+rust_const = "DYNAMIC_OFFSET_COMP_SINGLE_SET_UNIFORM_BUFFER_D1_N1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/dynamic_offset/comp_single_set_uniform_buffer_d1_n1.comp", stage = "comp" },
+]
+
+[[case]]
+name = "comp_single_set_uniform_buffer_d2_n0"
+rust_const = "DYNAMIC_OFFSET_COMP_SINGLE_SET_UNIFORM_BUFFER_D2_N0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/dynamic_offset/comp_single_set_uniform_buffer_d2_n0.comp", stage = "comp" },
+]
+
+[[case]]
+name = "comp_single_set_uniform_buffer_d2_n1"
+rust_const = "DYNAMIC_OFFSET_COMP_SINGLE_SET_UNIFORM_BUFFER_D2_N1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/dynamic_offset/comp_single_set_uniform_buffer_d2_n1.comp", stage = "comp" },
+]
+
+[[case]]
+name = "comp_single_set_storage_buffer_d1_n0"
+rust_const = "DYNAMIC_OFFSET_COMP_SINGLE_SET_STORAGE_BUFFER_D1_N0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/dynamic_offset/comp_single_set_storage_buffer_d1_n0.comp", stage = "comp" },
+]
+
+[[case]]
+name = "comp_single_set_storage_buffer_d1_n1"
+rust_const = "DYNAMIC_OFFSET_COMP_SINGLE_SET_STORAGE_BUFFER_D1_N1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/dynamic_offset/comp_single_set_storage_buffer_d1_n1.comp", stage = "comp" },
+]
+
+[[case]]
+name = "comp_single_set_storage_buffer_d2_n0"
+rust_const = "DYNAMIC_OFFSET_COMP_SINGLE_SET_STORAGE_BUFFER_D2_N0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/dynamic_offset/comp_single_set_storage_buffer_d2_n0.comp", stage = "comp" },
+]
+
+[[case]]
+name = "comp_single_set_storage_buffer_d2_n1"
+rust_const = "DYNAMIC_OFFSET_COMP_SINGLE_SET_STORAGE_BUFFER_D2_N1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/dynamic_offset/comp_single_set_storage_buffer_d2_n1.comp", stage = "comp" },
+]
+
+[[case]]
+name = "comp_multiset_uniform_buffer_d1_n0"
+rust_const = "DYNAMIC_OFFSET_COMP_MULTISET_UNIFORM_BUFFER_D1_N0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/dynamic_offset/comp_multiset_uniform_buffer_d1_n0.comp", stage = "comp" },
+]
+
+[[case]]
+name = "comp_multiset_uniform_buffer_d1_n1"
+rust_const = "DYNAMIC_OFFSET_COMP_MULTISET_UNIFORM_BUFFER_D1_N1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/dynamic_offset/comp_multiset_uniform_buffer_d1_n1.comp", stage = "comp" },
+]
+
+[[case]]
+name = "comp_multiset_uniform_buffer_d2_n0"
+rust_const = "DYNAMIC_OFFSET_COMP_MULTISET_UNIFORM_BUFFER_D2_N0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/dynamic_offset/comp_multiset_uniform_buffer_d2_n0.comp", stage = "comp" },
+]
+
+[[case]]
+name = "comp_multiset_uniform_buffer_d2_n1"
+rust_const = "DYNAMIC_OFFSET_COMP_MULTISET_UNIFORM_BUFFER_D2_N1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/dynamic_offset/comp_multiset_uniform_buffer_d2_n1.comp", stage = "comp" },
+]
+
+[[case]]
+name = "comp_multiset_storage_buffer_d1_n0"
+rust_const = "DYNAMIC_OFFSET_COMP_MULTISET_STORAGE_BUFFER_D1_N0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/dynamic_offset/comp_multiset_storage_buffer_d1_n0.comp", stage = "comp" },
+]
+
+[[case]]
+name = "comp_multiset_storage_buffer_d1_n1"
+rust_const = "DYNAMIC_OFFSET_COMP_MULTISET_STORAGE_BUFFER_D1_N1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/dynamic_offset/comp_multiset_storage_buffer_d1_n1.comp", stage = "comp" },
+]
+
+[[case]]
+name = "comp_multiset_storage_buffer_d2_n0"
+rust_const = "DYNAMIC_OFFSET_COMP_MULTISET_STORAGE_BUFFER_D2_N0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/dynamic_offset/comp_multiset_storage_buffer_d2_n0.comp", stage = "comp" },
+]
+
+[[case]]
+name = "comp_multiset_storage_buffer_d2_n1"
+rust_const = "DYNAMIC_OFFSET_COMP_MULTISET_STORAGE_BUFFER_D2_N1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/dynamic_offset/comp_multiset_storage_buffer_d2_n1.comp", stage = "comp" },
+]
+
+[[case]]
+name = "comp_arrays_uniform_buffer_d1_n0"
+rust_const = "DYNAMIC_OFFSET_COMP_ARRAYS_UNIFORM_BUFFER_D1_N0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/dynamic_offset/comp_arrays_uniform_buffer_d1_n0.comp", stage = "comp" },
+]
+
+[[case]]
+name = "comp_arrays_uniform_buffer_d1_n1"
+rust_const = "DYNAMIC_OFFSET_COMP_ARRAYS_UNIFORM_BUFFER_D1_N1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/dynamic_offset/comp_arrays_uniform_buffer_d1_n1.comp", stage = "comp" },
+]
+
+[[case]]
+name = "comp_arrays_uniform_buffer_d2_n0"
+rust_const = "DYNAMIC_OFFSET_COMP_ARRAYS_UNIFORM_BUFFER_D2_N0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/dynamic_offset/comp_arrays_uniform_buffer_d2_n0.comp", stage = "comp" },
+]
+
+[[case]]
+name = "comp_arrays_uniform_buffer_d2_n1"
+rust_const = "DYNAMIC_OFFSET_COMP_ARRAYS_UNIFORM_BUFFER_D2_N1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/dynamic_offset/comp_arrays_uniform_buffer_d2_n1.comp", stage = "comp" },
+]
+
+[[case]]
+name = "comp_arrays_storage_buffer_d1_n0"
+rust_const = "DYNAMIC_OFFSET_COMP_ARRAYS_STORAGE_BUFFER_D1_N0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/dynamic_offset/comp_arrays_storage_buffer_d1_n0.comp", stage = "comp" },
+]
+
+[[case]]
+name = "comp_arrays_storage_buffer_d1_n1"
+rust_const = "DYNAMIC_OFFSET_COMP_ARRAYS_STORAGE_BUFFER_D1_N1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/dynamic_offset/comp_arrays_storage_buffer_d1_n1.comp", stage = "comp" },
+]
+
+[[case]]
+name = "comp_arrays_storage_buffer_d2_n0"
+rust_const = "DYNAMIC_OFFSET_COMP_ARRAYS_STORAGE_BUFFER_D2_N0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/dynamic_offset/comp_arrays_storage_buffer_d2_n0.comp", stage = "comp" },
+]
+
+[[case]]
+name = "comp_arrays_storage_buffer_d2_n1"
+rust_const = "DYNAMIC_OFFSET_COMP_ARRAYS_STORAGE_BUFFER_D2_N1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/dynamic_offset/comp_arrays_storage_buffer_d2_n1.comp", stage = "comp" },
+]
+
+# `DynamicOffsetMixedTest::initPrograms`: one program set for each order of the five dynamic bindings (the combined
+# descriptors cases).
+[[case]]
+name = "mixed_same_order"
+rust_const = "DYNAMIC_OFFSET_MIXED_SAME_ORDER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/mixed_same.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/mixed_same.frag", stage = "frag" },
+    { name = "comp", template = "pipeline/dynamic_offset/mixed_same.comp", stage = "comp" },
+]
+
+[[case]]
+name = "mixed_reverse_order"
+rust_const = "DYNAMIC_OFFSET_MIXED_REVERSE_ORDER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/dynamic_offset/mixed_reverse.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/dynamic_offset/mixed_reverse.frag", stage = "frag" },
+    { name = "comp", template = "pipeline/dynamic_offset/mixed_reverse.comp", stage = "comp" },
+]

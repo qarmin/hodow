@@ -1,0 +1,54 @@
+#version 450
+#extension GL_EXT_gpu_shader5 : require
+layout(set = 1, binding = 0) uniform highp isampler2DArray texSampler[8];
+layout(set = 1, binding = 8, std140) uniform Indices
+{
+	highp int index0;
+	highp int index1;
+	highp int index2;
+	highp int index3;
+};
+
+layout(local_size_x = 1) in;
+
+struct Inputs
+{
+	highp vec3 coords;
+};
+struct Outputs
+{
+	highp ivec4 result0;
+	highp ivec4 result1;
+	highp ivec4 result2;
+	highp ivec4 result3;
+};
+
+layout(set = 0, binding = 0, std430) buffer InBuffer
+{
+    Inputs inputs[];
+};
+layout(set = 0, binding = 1, std430) buffer OutBuffer
+{
+    Outputs outputs[];
+};
+
+void main (void)
+{
+    uint invocationNdx = gl_NumWorkGroups.x*gl_NumWorkGroups.y*gl_WorkGroupID.z
+                       + gl_NumWorkGroups.x*gl_WorkGroupID.y + gl_WorkGroupID.x;
+	vec3 coords = vec3(inputs[invocationNdx].coords);
+	ivec4 result0;
+	ivec4 result1;
+	ivec4 result2;
+	ivec4 result3;
+
+	result0 = texture(texSampler[index0], coords);
+	result1 = texture(texSampler[index1], coords);
+	result2 = texture(texSampler[index2], coords);
+	result3 = texture(texSampler[index3], coords);
+
+	outputs[invocationNdx].result0 = result0;
+	outputs[invocationNdx].result1 = result1;
+	outputs[invocationNdx].result2 = result2;
+	outputs[invocationNdx].result3 = result3;
+}

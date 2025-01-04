@@ -1,0 +1,91 @@
+# On every push to master: cross-build the Windows (x86_64) release binaries with mingw (`just binaries-windows`) and add them to the release
+# tagged `Nightly`. Two builds are published: windows_hodow.zip with Vulkan (~1.6 GB of SPIR-V) and windows_hodow_no_vulkan.zip: a zip with hodow.exe and ANGLE's DLLs (libEGL, libGLESv2, d3dcompiler_47) beside it.
+#
+# Secret: PAT_REPOSITORY, a personal access token that may write contents of this repository. Without it the zips are only kept as workflow artifacts.
+
+name: 🏁 Windows
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: windows-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  HAVE_PAT: ${{ secrets.PAT_REPOSITORY != '' }}
+  # The runner has 16 GB; with two rustc at a time the Vulkan crates need about 18 GB, with one about 11 GB.
+  HODOW_VULKAN_JOBS: "1"
+
+jobs:
+  windows:
+    name: 🏁 Windows x86_64${{ matrix.vulkan == 'yes' && ' Vulkan' || '' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        vulkan: [no, yes]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          df -h /
+
+      # Linking the whole binary is the memory peak; a swap file keeps a spike from killing the runner.
+      - name: Swap
+        run: |
+          sudo swapoff -a || true
+          sudo fallocate -l 16G /swapfile
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
+          free -h
+
+      - name: The pinned nightly toolchain
+        run: |
+          toolchain=$(grep -m1 '^NIGHTLY' justfile | sed 's/.*"\(.*\)".*/\1/')
+          rustup toolchain install "$toolchain" --profile minimal --no-self-update
+
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: just
+
+      - name: The Windows cross-compiler
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends gcc-mingw-w64-x86-64 zip
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-targets: false
+          key: vulkan-${{ matrix.vulkan }}
+
+      - name: Build
+        run: just binaries-windows ${{ matrix.vulkan }} no
+
+      - name: Check the archives
+        run: |
+          for z in binaries/windows_hodow*.zip; do unzip -l "$z"; done
+          unzip -l binaries/windows_hodow*.zip | grep -q libEGL.dll
+          unzip -l binaries/windows_hodow*.zip | grep -q libGLESv2.dll
+
+      - name: Store archives
+        uses: actions/upload-artifact@v7
+        with:
+          name: windows-x86_64-vulkan-${{ matrix.vulkan }}
+          path: binaries/windows_hodow*.zip
+          retention-days: 7
+          if-no-files-found: error
+
+      - name: Release
+        if: github.ref == 'refs/heads/master' && env.HAVE_PAT == 'true'
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: Nightly
+          prerelease: true
+          files: binaries/windows_hodow*.zip
+          token: ${{ secrets.PAT_REPOSITORY }}

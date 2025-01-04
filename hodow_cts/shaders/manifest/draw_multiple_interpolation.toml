@@ -1,0 +1,80 @@
+# Shader manifest for dEQP-VK.draw.*.multiple_interpolation.*
+#
+# `DrawTestCase::initPrograms`: for each (useStructure, includeSampleDecoration) pair a vertex/fragment pair that passes all
+# interpolation qualifiers at once (`vert_multi`/`frag_multi`) and one pair per single qualifier. The upstream string templates
+# are expanded here; `sep` is the plain-variable form and `blk` the form with an interface block.
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawMultipleInterpolationTests.cpp"
+rust_module = "draw/multiple_interpolation_tests"
+
+[[case]]
+name = "sep_nosample"
+rust_const = "MULTIPLE_INTERPOLATION_SEP_NOSAMPLE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert_multi", template = "draw/multiple_interpolation/sep_nosample_multi.vert", stage = "vert" },
+    { name = "frag_multi", template = "draw/multiple_interpolation/sep_nosample_multi.frag", stage = "frag" },
+    { name = "vert_smooth", template = "draw/multiple_interpolation/sep_nosample_smooth.vert", stage = "vert" },
+    { name = "frag_smooth", template = "draw/multiple_interpolation/sep_nosample_smooth.frag", stage = "frag" },
+    { name = "vert_flat", template = "draw/multiple_interpolation/sep_nosample_flat.vert", stage = "vert" },
+    { name = "frag_flat", template = "draw/multiple_interpolation/sep_nosample_flat.frag", stage = "frag" },
+    { name = "vert_noperspective", template = "draw/multiple_interpolation/sep_nosample_noperspective.vert", stage = "vert" },
+    { name = "frag_noperspective", template = "draw/multiple_interpolation/sep_nosample_noperspective.frag", stage = "frag" },
+    { name = "vert_centroid", template = "draw/multiple_interpolation/sep_nosample_centroid.vert", stage = "vert" },
+    { name = "frag_centroid", template = "draw/multiple_interpolation/sep_nosample_centroid.frag", stage = "frag" },
+]
+
+[[case]]
+name = "sep_sample"
+rust_const = "MULTIPLE_INTERPOLATION_SEP_SAMPLE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert_multi", template = "draw/multiple_interpolation/sep_sample_multi.vert", stage = "vert" },
+    { name = "frag_multi", template = "draw/multiple_interpolation/sep_sample_multi.frag", stage = "frag" },
+    { name = "vert_smooth", template = "draw/multiple_interpolation/sep_sample_smooth.vert", stage = "vert" },
+    { name = "frag_smooth", template = "draw/multiple_interpolation/sep_sample_smooth.frag", stage = "frag" },
+    { name = "vert_flat", template = "draw/multiple_interpolation/sep_sample_flat.vert", stage = "vert" },
+    { name = "frag_flat", template = "draw/multiple_interpolation/sep_sample_flat.frag", stage = "frag" },
+    { name = "vert_noperspective", template = "draw/multiple_interpolation/sep_sample_noperspective.vert", stage = "vert" },
+    { name = "frag_noperspective", template = "draw/multiple_interpolation/sep_sample_noperspective.frag", stage = "frag" },
+    { name = "vert_centroid", template = "draw/multiple_interpolation/sep_sample_centroid.vert", stage = "vert" },
+    { name = "frag_centroid", template = "draw/multiple_interpolation/sep_sample_centroid.frag", stage = "frag" },
+    { name = "vert_sample", template = "draw/multiple_interpolation/sep_sample_sample.vert", stage = "vert" },
+    { name = "frag_sample", template = "draw/multiple_interpolation/sep_sample_sample.frag", stage = "frag" },
+]
+
+[[case]]
+name = "blk_nosample"
+rust_const = "MULTIPLE_INTERPOLATION_BLK_NOSAMPLE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert_multi", template = "draw/multiple_interpolation/blk_nosample_multi.vert", stage = "vert" },
+    { name = "frag_multi", template = "draw/multiple_interpolation/blk_nosample_multi.frag", stage = "frag" },
+    { name = "vert_smooth", template = "draw/multiple_interpolation/blk_nosample_smooth.vert", stage = "vert" },
+    { name = "frag_smooth", template = "draw/multiple_interpolation/blk_nosample_smooth.frag", stage = "frag" },
+    { name = "vert_flat", template = "draw/multiple_interpolation/blk_nosample_flat.vert", stage = "vert" },
+    { name = "frag_flat", template = "draw/multiple_interpolation/blk_nosample_flat.frag", stage = "frag" },
+    { name = "vert_noperspective", template = "draw/multiple_interpolation/blk_nosample_noperspective.vert", stage = "vert" },
+    { name = "frag_noperspective", template = "draw/multiple_interpolation/blk_nosample_noperspective.frag", stage = "frag" },
+    { name = "vert_centroid", template = "draw/multiple_interpolation/blk_nosample_centroid.vert", stage = "vert" },
+    { name = "frag_centroid", template = "draw/multiple_interpolation/blk_nosample_centroid.frag", stage = "frag" },
+]
+
+[[case]]
+name = "blk_sample"
+rust_const = "MULTIPLE_INTERPOLATION_BLK_SAMPLE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert_multi", template = "draw/multiple_interpolation/blk_sample_multi.vert", stage = "vert" },
+    { name = "frag_multi", template = "draw/multiple_interpolation/blk_sample_multi.frag", stage = "frag" },
+    { name = "vert_smooth", template = "draw/multiple_interpolation/blk_sample_smooth.vert", stage = "vert" },
+    { name = "frag_smooth", template = "draw/multiple_interpolation/blk_sample_smooth.frag", stage = "frag" },
+    { name = "vert_flat", template = "draw/multiple_interpolation/blk_sample_flat.vert", stage = "vert" },
+    { name = "frag_flat", template = "draw/multiple_interpolation/blk_sample_flat.frag", stage = "frag" },
+    { name = "vert_noperspective", template = "draw/multiple_interpolation/blk_sample_noperspective.vert", stage = "vert" },
+    { name = "frag_noperspective", template = "draw/multiple_interpolation/blk_sample_noperspective.frag", stage = "frag" },
+    { name = "vert_centroid", template = "draw/multiple_interpolation/blk_sample_centroid.vert", stage = "vert" },
+    { name = "frag_centroid", template = "draw/multiple_interpolation/blk_sample_centroid.frag", stage = "frag" },
+    { name = "vert_sample", template = "draw/multiple_interpolation/blk_sample_sample.vert", stage = "vert" },
+    { name = "frag_sample", template = "draw/multiple_interpolation/blk_sample_sample.frag", stage = "frag" },
+]

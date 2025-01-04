@@ -1,0 +1,16 @@
+# Shader manifest for dEQP-VK.renderpasses.*.dithering.*
+#
+# `initPrograms` is one vertex/fragment pair for every case; the fragment shader writes the
+# interpolated colour to three outputs so a case may attach one, two or three colour targets.
+
+upstream_source = "external/vulkancts/modules/vulkan/renderpass/vktRenderPassDitheringTests.cpp"
+rust_module = "renderpass/dithering_tests"
+
+[[case]]
+name = "dithering"
+rust_const = "DITHERING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "renderpass/dithering.vert", stage = "vert" },
+    { name = "color_frag", template = "renderpass/dithering.frag", stage = "frag" },
+]

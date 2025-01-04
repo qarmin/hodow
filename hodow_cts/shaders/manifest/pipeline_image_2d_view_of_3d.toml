@@ -1,0 +1,103 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.image_2d_view_3d_image.*
+#
+# `ComputeImage2DView3DImageTest::initPrograms` and `FragmentImage2DView3DImageTest::initPrograms`, pre-expanded over what the
+# shaders depend on: the stage, the way the image is accessed (storage, sampler, combined_image_sampler) and, for the two sampling
+# ways only, the width of the tested mip level `size` (64 at mip 0, 16 at mip 2; 0 for storage, whose shader does not use it).
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineImage2DViewOf3DTests.cpp"
+rust_module = "pipeline/image_2d_view_of_3d_tests"
+
+[[case]]
+name = "comp_storage_s0"
+rust_const = "VIEW_2D_COMP_STORAGE_S0"
+rust_type = "ImageViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/image_2d_view_of_3d/storage.comp", stage = "comp" },
+]
+params = { image_type = { type = "str", value = "storage" }, stage = { type = "str", value = "comp" }, size = { type = "u32", value = 0 } }
+
+[[case]]
+name = "comp_sampler_s16"
+rust_const = "VIEW_2D_COMP_SAMPLER_S16"
+rust_type = "ImageViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/image_2d_view_of_3d/sampler.comp", stage = "comp" },
+]
+params = { image_type = { type = "str", value = "sampler" }, stage = { type = "str", value = "comp" }, size = { type = "u32", value = 16 } }
+
+[[case]]
+name = "comp_sampler_s64"
+rust_const = "VIEW_2D_COMP_SAMPLER_S64"
+rust_type = "ImageViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/image_2d_view_of_3d/sampler.comp", stage = "comp" },
+]
+params = { image_type = { type = "str", value = "sampler" }, stage = { type = "str", value = "comp" }, size = { type = "u32", value = 64 } }
+
+[[case]]
+name = "comp_combined_s16"
+rust_const = "VIEW_2D_COMP_COMBINED_S16"
+rust_type = "ImageViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/image_2d_view_of_3d/combined.comp", stage = "comp" },
+]
+params = { image_type = { type = "str", value = "combined_image_sampler" }, stage = { type = "str", value = "comp" }, size = { type = "u32", value = 16 } }
+
+[[case]]
+name = "comp_combined_s64"
+rust_const = "VIEW_2D_COMP_COMBINED_S64"
+rust_type = "ImageViewPrograms"
+programs = [
+    { name = "comp", template = "pipeline/image_2d_view_of_3d/combined.comp", stage = "comp" },
+]
+params = { image_type = { type = "str", value = "combined_image_sampler" }, stage = { type = "str", value = "comp" }, size = { type = "u32", value = 64 } }
+
+[[case]]
+name = "frag_storage_s0"
+rust_const = "VIEW_2D_FRAG_STORAGE_S0"
+rust_type = "ImageViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/image_2d_view_of_3d/passthrough.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/image_2d_view_of_3d/storage.frag", stage = "frag" },
+]
+params = { image_type = { type = "str", value = "storage" }, stage = { type = "str", value = "frag" }, size = { type = "u32", value = 0 } }
+
+[[case]]
+name = "frag_sampler_s16"
+rust_const = "VIEW_2D_FRAG_SAMPLER_S16"
+rust_type = "ImageViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/image_2d_view_of_3d/passthrough.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/image_2d_view_of_3d/sampler.frag", stage = "frag" },
+]
+params = { image_type = { type = "str", value = "sampler" }, stage = { type = "str", value = "frag" }, size = { type = "u32", value = 16 } }
+
+[[case]]
+name = "frag_sampler_s64"
+rust_const = "VIEW_2D_FRAG_SAMPLER_S64"
+rust_type = "ImageViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/image_2d_view_of_3d/passthrough.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/image_2d_view_of_3d/sampler.frag", stage = "frag" },
+]
+params = { image_type = { type = "str", value = "sampler" }, stage = { type = "str", value = "frag" }, size = { type = "u32", value = 64 } }
+
+[[case]]
+name = "frag_combined_s16"
+rust_const = "VIEW_2D_FRAG_COMBINED_S16"
+rust_type = "ImageViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/image_2d_view_of_3d/passthrough.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/image_2d_view_of_3d/combined.frag", stage = "frag" },
+]
+params = { image_type = { type = "str", value = "combined_image_sampler" }, stage = { type = "str", value = "frag" }, size = { type = "u32", value = 16 } }
+
+[[case]]
+name = "frag_combined_s64"
+rust_const = "VIEW_2D_FRAG_COMBINED_S64"
+rust_type = "ImageViewPrograms"
+programs = [
+    { name = "vert", template = "pipeline/image_2d_view_of_3d/passthrough.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/image_2d_view_of_3d/combined.frag", stage = "frag" },
+]
+params = { image_type = { type = "str", value = "combined_image_sampler" }, stage = { type = "str", value = "frag" }, size = { type = "u32", value = 64 } }

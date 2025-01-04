@@ -1,0 +1,89 @@
+
+; The SPIR-V shader below is based on the following GLSL shader, but OpAtomicIAdd has been
+; replaced with a template parameter and the last argument for it has been made optional.
+;
+; #version 440
+; precision highp iimage3D;
+;
+; layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+; layout (r32i, binding=0) coherent uniform iimage3D u_resultImage;
+;
+; void main (void)
+; {
+;     int gx = int(gl_GlobalInvocationID.x);
+;     int gy = int(gl_GlobalInvocationID.y);
+;     int gz = int(gl_GlobalInvocationID.z);
+;     imageAtomicAdd(u_resultImage, ivec3(gx % 48,gy,gz), int(gx*gx + gy*gy + gz*gz));
+; }
+;
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos Glslang Reference Front End; 7
+; Bound: 53
+; Schema: 0
+OpCapability Shader
+%1 = OpExtInstImport "GLSL.std.450"
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %4 "main" %12
+OpExecutionMode %4 LocalSize 1 1 1
+OpDecorate %12 BuiltIn GlobalInvocationId
+OpDecorate %30 DescriptorSet 0
+OpDecorate %30 Binding 0
+OpDecorate %30 Coherent
+OpDecorate %52 BuiltIn WorkgroupSize
+%2 = OpTypeVoid
+%3 = OpTypeFunction %2
+%6 = OpTypeInt 32 1
+%7 = OpTypePointer Function %6
+%9 = OpTypeInt 32 0
+%10 = OpTypeVector %9 3
+%11 = OpTypePointer Input %10
+%12 = OpVariable %11 Input
+%13 = OpConstant %9 0
+%14 = OpTypePointer Input %9
+%19 = OpConstant %9 1
+%24 = OpConstant %9 2
+%28 = OpTypeImage %6 3D 0 0 0 2 R32i
+%29 = OpTypePointer UniformConstant %28
+%30 = OpVariable %29 UniformConstant
+%32 = OpConstant %6 48
+%36 = OpTypeVector %6 3
+%49 = OpTypePointer Image %6
+%52 = OpConstantComposite %10 %19 %19 %19
+%4 = OpFunction %2 None %3
+%5 = OpLabel
+%8 = OpVariable %7 Function
+%18 = OpVariable %7 Function
+%23 = OpVariable %7 Function
+%15 = OpAccessChain %14 %12 %13
+%16 = OpLoad %9 %15
+%17 = OpBitcast %6 %16
+OpStore %8 %17
+%20 = OpAccessChain %14 %12 %19
+%21 = OpLoad %9 %20
+%22 = OpBitcast %6 %21
+OpStore %18 %22
+%25 = OpAccessChain %14 %12 %24
+%26 = OpLoad %9 %25
+%27 = OpBitcast %6 %26
+OpStore %23 %27
+%31 = OpLoad %6 %8
+%33 = OpSMod %6 %31 %32
+%34 = OpLoad %6 %18
+%35 = OpLoad %6 %23
+%37 = OpCompositeConstruct %36 %33 %34 %35
+%38 = OpLoad %6 %8
+%39 = OpLoad %6 %8
+%40 = OpIMul %6 %38 %39
+%41 = OpLoad %6 %18
+%42 = OpLoad %6 %18
+%43 = OpIMul %6 %41 %42
+%44 = OpIAdd %6 %40 %43
+%45 = OpLoad %6 %23
+%46 = OpLoad %6 %23
+%47 = OpIMul %6 %45 %46
+%48 = OpIAdd %6 %44 %47
+%50 = OpImageTexelPointer %49 %30 %37 %13
+%51 = OpAtomicISub %6 %50 %19 %13 %48
+OpReturn
+OpFunctionEnd

@@ -1,0 +1,13 @@
+# Shader manifest for dEQP-VK.transform_feedback.primitive_restart.*
+#
+# One vertex shader for all four cases; upstream's kRestartMarker (65535, the 16-bit
+# primitive restart index) is written into it literally.
+
+upstream_source = "external/vulkancts/modules/vulkan/transform_feedback/vktTransformFeedbackPrimitiveRestartTests.cpp"
+rust_module = "transform_feedback/primitive_restart_tests"
+
+[[case]]
+name = "primitive_restart"
+rust_const = "PRIMITIVE_RESTART_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [{ name = "vert", template = "transform_feedback/primitive_restart/vert.vert", stage = "vert" }]

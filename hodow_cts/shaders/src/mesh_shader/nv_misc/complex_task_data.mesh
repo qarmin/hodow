@@ -1,0 +1,110 @@
+#version 450
+#extension GL_NV_mesh_shader : enable
+
+layout(local_size_x=2) in;
+layout(triangles) out;
+layout(max_vertices=4, max_primitives=2) out;
+
+layout (location=0) out perprimitiveNV vec4 triangleColor[];
+
+struct RowId {
+    uint id;
+};
+
+struct WorkGroupData {
+    float WorkGroupIdPlusOnex1000Iota[10];
+    RowId rowId;
+    uvec3 WorkGroupIdPlusOnex2000Iota;
+    vec2  WorkGroupIdPlusOnex3000Iota;
+};
+
+struct ExternalData {
+    float OneMillion;
+    uint  TwoMillion;
+    WorkGroupData workGroupData;
+};
+
+in taskNV TaskData {
+    uint yes;
+    ExternalData externalData;
+} td;
+
+void main ()
+{
+    bool dataOK = true;
+    dataOK = (dataOK && (td.yes == 1u));
+    dataOK = (dataOK && (td.externalData.OneMillion == 1000000.0 && td.externalData.TwoMillion == 2000000u));
+    uint rowId = td.externalData.workGroupData.rowId.id;
+    dataOK = (dataOK && (rowId == 0u || rowId == 1u));
+
+    {
+        uint baseVal = (rowId + 1u) * 1000u;
+        for (uint i = 0; i < 10; i++) {
+            if (td.externalData.workGroupData.WorkGroupIdPlusOnex1000Iota[i] != float(baseVal + i)) {
+                dataOK = false;
+                break;
+            }
+        }
+    }
+
+    {
+        uint baseVal = (rowId + 1u) * 2000;
+        uvec3 expected = uvec3(baseVal, baseVal + 1, baseVal + 2);
+        if (td.externalData.workGroupData.WorkGroupIdPlusOnex2000Iota != expected) {
+            dataOK = false;
+        }
+    }
+
+    {
+        uint baseVal = (rowId + 1u) * 3000;
+        vec2 expected = vec2(baseVal, baseVal + 1);
+        if (td.externalData.workGroupData.WorkGroupIdPlusOnex3000Iota != expected) {
+            dataOK = false;
+        }
+    }
+
+    uint columnId = gl_WorkGroupID.x;
+
+    if (dataOK) {
+        gl_PrimitiveCountNV = 2u;
+    }
+    else {
+        gl_PrimitiveCountNV = 0u;
+        return;
+    }
+
+    const vec4 outColor = vec4(rowId, columnId, 1.0f, 1.0f);
+    triangleColor[0] = outColor;
+    triangleColor[1] = outColor;
+
+    // Each local invocation will generate two points and one triangle from the quad.
+    // The first local invocation will generate the top quad vertices.
+    // The second invocation will generate the two bottom vertices.
+    vec4 left  = vec4(0.0, 0.0, 0.0, 1.0);
+    vec4 right = vec4(1.0, 0.0, 0.0, 1.0);
+
+    float localInvocationOffsetY = float(gl_LocalInvocationID.x);
+    left.y  += localInvocationOffsetY;
+    right.y += localInvocationOffsetY;
+
+    // The code above creates a quad from (0, 0) to (1, 1) but we need to offset it
+    // in X and/or Y depending on the row and column, to place it in other quadrants.
+    float quadrantOffsetX = float(int(columnId) - 1);
+    float quadrantOffsetY = float(int(rowId) - 1);
+
+    left.x  += quadrantOffsetX;
+    right.x += quadrantOffsetX;
+
+    left.y  += quadrantOffsetY;
+    right.y += quadrantOffsetY;
+
+    uint baseVertexId = 2*gl_LocalInvocationID.x;
+    gl_MeshVerticesNV[baseVertexId + 0].gl_Position = left;
+    gl_MeshVerticesNV[baseVertexId + 1].gl_Position = right;
+
+    uint baseIndexId = 3*gl_LocalInvocationID.x;
+    // 0,1,2 or 1,2,3 (note: triangles alternate front face this way)
+    gl_PrimitiveIndicesNV[baseIndexId + 0] = 0 + gl_LocalInvocationID.x;
+    gl_PrimitiveIndicesNV[baseIndexId + 1] = 1 + gl_LocalInvocationID.x;
+    gl_PrimitiveIndicesNV[baseIndexId + 2] = 2 + gl_LocalInvocationID.x;
+}

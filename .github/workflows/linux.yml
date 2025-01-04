@@ -1,0 +1,108 @@
+# On every push to master: build the full Linux release binaries (`just binaries-linux`, for x86_64,
+# aarch64, armv7 and riscv64) and add them to the release tagged `Nightly`, replacing the files of the same name.
+# The full build with Vulkan is a separate job (linux_hodow_<arch>, ~1.6 GB of SPIR-V, under the 2 GiB limit of a release asset) except on armv7, where it cannot be linked; the builds without it are linux_hodow_no_vulkan_<arch>.
+#
+# Secret: PAT_REPOSITORY, a personal access token that may write contents of this repository. Without it the binaries are only kept as workflow artifacts.
+
+name: 🐧 Linux
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: linux-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  ZIG_VERSION: "0.16.0"
+  HAVE_PAT: ${{ secrets.PAT_REPOSITORY != '' }}
+  # The runner has 16 GB; with two rustc at a time the Vulkan crates need about 18 GB, with one about 11 GB.
+  HODOW_VULKAN_JOBS: "1"
+
+jobs:
+  linux:
+    name: 🐧 Linux ${{ matrix.arch }}${{ matrix.vulkan == 'yes' && ' Vulkan' || '' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [x86_64, aarch64, armv7, riscv64]
+        vulkan: [no]
+        include:
+          - { arch: x86_64, vulkan: "yes" }
+          - { arch: aarch64, vulkan: "yes" }
+          - { arch: riscv64, vulkan: "yes" }
+    steps:
+      - uses: actions/checkout@v7
+
+      # Release builds with LTO and the 120 MB generated test suite need more disk than a runner starts with.
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /opt/hostedtoolcache/CodeQL
+          df -h /
+
+      # Linking the whole binary is the memory peak; a swap file keeps a spike from killing the runner.
+      - name: Swap
+        run: |
+          sudo swapoff -a || true
+          sudo fallocate -l 16G /swapfile
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
+          free -h
+
+      - name: The pinned nightly toolchain
+        run: |
+          toolchain=$(grep -m1 '^NIGHTLY' justfile | sed 's/.*"\(.*\)".*/\1/')
+          rustup toolchain install "$toolchain" --profile minimal --no-self-update
+
+      # setup-zig still runs on Node 20, so zig is unpacked by hand (cargo-zigbuild only needs `zig` on PATH).
+      - name: Zig
+        run: |
+          curl -fsSL "https://ziglang.org/download/${ZIG_VERSION}/zig-x86_64-linux-${ZIG_VERSION}.tar.xz" | tar -C "$HOME" -xJ
+          echo "$HOME/zig-x86_64-linux-${ZIG_VERSION}" >> "$GITHUB_PATH"
+
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: just,cargo-zigbuild
+
+      # Only the registry: a cached target directory of these builds is far over the size GitHub keeps.
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-targets: false
+          key: ${{ matrix.arch }}-${{ matrix.vulkan }}
+
+      - name: Build
+        run: just binaries-linux ${{ matrix.arch }} ${{ matrix.vulkan }} no
+
+      # A binary that does not even start is not worth publishing (only the host's own architecture can run here).
+      - name: Smoke test
+        if: matrix.arch == 'x86_64'
+        run: |
+          chmod +x binaries/linux_hodow*
+          bin=$(ls binaries/linux_hodow*_x86_64)
+          $bin info --no-gpu > /dev/null
+          $bin --no-results --no-log-file test cpu -t test_x86_adx_addcarry_u32 > /dev/null
+          $bin cts --list --case 'dEQP-GLES2.info.*' > /dev/null
+          if [ "${{ matrix.vulkan }}" = yes ]; then $bin cts --list --case 'dEQP-VK.info.*' > /dev/null; fi
+
+      - name: Store binaries
+        uses: actions/upload-artifact@v7
+        with:
+          name: linux-${{ matrix.arch }}-vulkan-${{ matrix.vulkan }}
+          path: binaries/linux_hodow*
+          retention-days: 7
+          if-no-files-found: error
+
+      - name: Release
+        if: github.ref == 'refs/heads/master' && env.HAVE_PAT == 'true'
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: Nightly
+          prerelease: true
+          files: binaries/linux_hodow*
+          token: ${{ secrets.PAT_REPOSITORY }}

@@ -1,0 +1,358 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.push_constant.*
+#
+# initPrograms of vktPipelinePushConstantTests.cpp. The graphics_pipeline cases (PushConstantGraphicsDisjointTest and
+# PushConstantGraphicsOverlapTest) generate their GLSL from the case parameters (ranges, stage using them, index type), so each case has
+# its own set of files under shaders/src/pipeline/push_constant/graphics/, one per stage the case's ranges name, written out
+# for every case. The `_command2` variants of a case use the same programs.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelinePushConstantTests.cpp"
+rust_module = "pipeline/push_constant_tests"
+
+[[case]]
+name = "compute"
+rust_const = "PC_COMPUTE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "pipeline/push_constant/compute.comp", stage = "comp" },
+]
+
+[[case]]
+name = "overwrite_compute"
+rust_const = "PC_OVERWRITE_COMPUTE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "pipeline/push_constant/overwrite.comp", stage = "comp" },
+]
+
+[[case]]
+name = "overwrite_graphics"
+rust_const = "PC_OVERWRITE_GRAPHICS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/push_constant/overwrite.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/push_constant/overwrite.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lifetime"
+rust_const = "PC_LIFETIME"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert_lt", template = "pipeline/push_constant/lifetime.vert", stage = "vert" },
+    { name = "color_frag_lt", template = "pipeline/push_constant/lifetime.frag", stage = "frag" },
+    { name = "compute_lt", template = "pipeline/push_constant/lifetime.comp", stage = "comp" },
+]
+
+[[case]]
+name = "range_size_4"
+rust_const = "PC_RANGE_SIZE_4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/range_size_4.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/range_size_4.frag", stage = "frag" },
+]
+
+[[case]]
+name = "range_size_16"
+rust_const = "PC_RANGE_SIZE_16"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/range_size_16.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/range_size_16.frag", stage = "frag" },
+]
+
+[[case]]
+name = "range_size_128"
+rust_const = "PC_RANGE_SIZE_128"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/range_size_128.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/range_size_128.frag", stage = "frag" },
+]
+
+[[case]]
+name = "range_size_256"
+rust_const = "PC_RANGE_SIZE_256"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/range_size_256.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/range_size_256.frag", stage = "frag" },
+]
+
+[[case]]
+name = "range_size_128_longvec"
+rust_const = "PC_RANGE_SIZE_128_LONGVEC"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/range_size_128_longvec.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/range_size_128_longvec.frag", stage = "frag" },
+]
+
+[[case]]
+name = "range_size_256_longvec"
+rust_const = "PC_RANGE_SIZE_256_LONGVEC"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/range_size_256_longvec.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/range_size_256_longvec.frag", stage = "frag" },
+]
+
+[[case]]
+name = "range_size_max"
+rust_const = "PC_RANGE_SIZE_MAX"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/range_size_max.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/range_size_max.frag", stage = "frag" },
+]
+
+[[case]]
+name = "count_2_shaders_vert_frag"
+rust_const = "PC_COUNT_2_SHADERS_VERT_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/count_2_shaders_vert_frag.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/count_2_shaders_vert_frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "count_3_shaders_vert_geom_frag"
+rust_const = "PC_COUNT_3_SHADERS_VERT_GEOM_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/count_3_shaders_vert_geom_frag.vert", stage = "vert" },
+    { name = "color_geom", template = "pipeline/push_constant/graphics/count_3_shaders_vert_geom_frag.geom", stage = "geom" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/count_3_shaders_vert_geom_frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "count_5_shaders_vert_tess_geom_frag"
+rust_const = "PC_COUNT_5_SHADERS_VERT_TESS_GEOM_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/count_5_shaders_vert_tess_geom_frag.vert", stage = "vert" },
+    { name = "color_tesc", template = "pipeline/push_constant/graphics/count_5_shaders_vert_tess_geom_frag.tesc", stage = "tesc" },
+    { name = "color_tese", template = "pipeline/push_constant/graphics/count_5_shaders_vert_tess_geom_frag.tese", stage = "tese" },
+    { name = "color_geom", template = "pipeline/push_constant/graphics/count_5_shaders_vert_tess_geom_frag.geom", stage = "geom" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/count_5_shaders_vert_tess_geom_frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "count_1_shader_vert_frag"
+rust_const = "PC_COUNT_1_SHADER_VERT_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/count_1_shader_vert_frag.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/count_1_shader_vert_frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "data_update_partial_1"
+rust_const = "PC_DATA_UPDATE_PARTIAL_1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/data_update_partial_1.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/data_update_partial_1.frag", stage = "frag" },
+]
+
+[[case]]
+name = "data_update_partial_2"
+rust_const = "PC_DATA_UPDATE_PARTIAL_2"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/data_update_partial_2.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/data_update_partial_2.frag", stage = "frag" },
+]
+
+[[case]]
+name = "data_update_multiple"
+rust_const = "PC_DATA_UPDATE_MULTIPLE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/data_update_multiple.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/data_update_multiple.frag", stage = "frag" },
+]
+
+[[case]]
+name = "dynamic_index_vert"
+rust_const = "PC_DYNAMIC_INDEX_VERT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/dynamic_index_vert.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/dynamic_index_vert.frag", stage = "frag" },
+]
+
+[[case]]
+name = "dynamic_index_frag"
+rust_const = "PC_DYNAMIC_INDEX_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/dynamic_index_frag.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/dynamic_index_frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "unused_disjoint_1"
+rust_const = "PC_UNUSED_DISJOINT_1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/unused_disjoint_1.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/unused_disjoint_1.frag", stage = "frag" },
+]
+
+[[case]]
+name = "unused_disjoint_2"
+rust_const = "PC_UNUSED_DISJOINT_2"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/unused_disjoint_2.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/unused_disjoint_2.frag", stage = "frag" },
+]
+
+[[case]]
+name = "unused_disjoint_3"
+rust_const = "PC_UNUSED_DISJOINT_3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/unused_disjoint_3.vert", stage = "vert" },
+    { name = "color_geom", template = "pipeline/push_constant/graphics/unused_disjoint_3.geom", stage = "geom" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/unused_disjoint_3.frag", stage = "frag" },
+]
+
+[[case]]
+name = "unused_disjoint_4"
+rust_const = "PC_UNUSED_DISJOINT_4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/unused_disjoint_4.vert", stage = "vert" },
+    { name = "color_geom", template = "pipeline/push_constant/graphics/unused_disjoint_4.geom", stage = "geom" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/unused_disjoint_4.frag", stage = "frag" },
+]
+
+[[case]]
+name = "unused_disjoint_5"
+rust_const = "PC_UNUSED_DISJOINT_5"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/unused_disjoint_5.vert", stage = "vert" },
+    { name = "color_tesc", template = "pipeline/push_constant/graphics/unused_disjoint_5.tesc", stage = "tesc" },
+    { name = "color_tese", template = "pipeline/push_constant/graphics/unused_disjoint_5.tese", stage = "tese" },
+    { name = "color_geom", template = "pipeline/push_constant/graphics/unused_disjoint_5.geom", stage = "geom" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/unused_disjoint_5.frag", stage = "frag" },
+]
+
+[[case]]
+name = "unused_disjoint_6"
+rust_const = "PC_UNUSED_DISJOINT_6"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/unused_disjoint_6.vert", stage = "vert" },
+    { name = "color_tesc", template = "pipeline/push_constant/graphics/unused_disjoint_6.tesc", stage = "tesc" },
+    { name = "color_tese", template = "pipeline/push_constant/graphics/unused_disjoint_6.tese", stage = "tese" },
+    { name = "color_geom", template = "pipeline/push_constant/graphics/unused_disjoint_6.geom", stage = "geom" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/unused_disjoint_6.frag", stage = "frag" },
+]
+
+[[case]]
+name = "overlap_2_shaders_vert_frag"
+rust_const = "PC_OVERLAP_2_SHADERS_VERT_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/overlap_2_shaders_vert_frag.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/overlap_2_shaders_vert_frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "overlap_3_shaders_vert_geom_frag"
+rust_const = "PC_OVERLAP_3_SHADERS_VERT_GEOM_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/overlap_3_shaders_vert_geom_frag.vert", stage = "vert" },
+    { name = "color_geom", template = "pipeline/push_constant/graphics/overlap_3_shaders_vert_geom_frag.geom", stage = "geom" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/overlap_3_shaders_vert_geom_frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "overlap_4_shaders_vert_tess_frag"
+rust_const = "PC_OVERLAP_4_SHADERS_VERT_TESS_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/overlap_4_shaders_vert_tess_frag.vert", stage = "vert" },
+    { name = "color_tesc", template = "pipeline/push_constant/graphics/overlap_4_shaders_vert_tess_frag.tesc", stage = "tesc" },
+    { name = "color_tese", template = "pipeline/push_constant/graphics/overlap_4_shaders_vert_tess_frag.tese", stage = "tese" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/overlap_4_shaders_vert_tess_frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "overlap_5_shaders_vert_tess_geom_frag"
+rust_const = "PC_OVERLAP_5_SHADERS_VERT_TESS_GEOM_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/overlap_5_shaders_vert_tess_geom_frag.vert", stage = "vert" },
+    { name = "color_tesc", template = "pipeline/push_constant/graphics/overlap_5_shaders_vert_tess_geom_frag.tesc", stage = "tesc" },
+    { name = "color_tese", template = "pipeline/push_constant/graphics/overlap_5_shaders_vert_tess_geom_frag.tese", stage = "tese" },
+    { name = "color_geom", template = "pipeline/push_constant/graphics/overlap_5_shaders_vert_tess_geom_frag.geom", stage = "geom" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/overlap_5_shaders_vert_tess_geom_frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "unused_overlap_1"
+rust_const = "PC_UNUSED_OVERLAP_1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/unused_overlap_1.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/unused_overlap_1.frag", stage = "frag" },
+]
+
+[[case]]
+name = "unused_overlap_2"
+rust_const = "PC_UNUSED_OVERLAP_2"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/unused_overlap_2.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/unused_overlap_2.frag", stage = "frag" },
+]
+
+[[case]]
+name = "unused_overlap_3"
+rust_const = "PC_UNUSED_OVERLAP_3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/unused_overlap_3.vert", stage = "vert" },
+    { name = "color_geom", template = "pipeline/push_constant/graphics/unused_overlap_3.geom", stage = "geom" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/unused_overlap_3.frag", stage = "frag" },
+]
+
+[[case]]
+name = "unused_overlap_4"
+rust_const = "PC_UNUSED_OVERLAP_4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/unused_overlap_4.vert", stage = "vert" },
+    { name = "color_geom", template = "pipeline/push_constant/graphics/unused_overlap_4.geom", stage = "geom" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/unused_overlap_4.frag", stage = "frag" },
+]
+
+[[case]]
+name = "unused_overlap_5"
+rust_const = "PC_UNUSED_OVERLAP_5"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/unused_overlap_5.vert", stage = "vert" },
+    { name = "color_tesc", template = "pipeline/push_constant/graphics/unused_overlap_5.tesc", stage = "tesc" },
+    { name = "color_tese", template = "pipeline/push_constant/graphics/unused_overlap_5.tese", stage = "tese" },
+    { name = "color_geom", template = "pipeline/push_constant/graphics/unused_overlap_5.geom", stage = "geom" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/unused_overlap_5.frag", stage = "frag" },
+]
+
+[[case]]
+name = "unused_overlap_6"
+rust_const = "PC_UNUSED_OVERLAP_6"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/push_constant/graphics/unused_overlap_6.vert", stage = "vert" },
+    { name = "color_tesc", template = "pipeline/push_constant/graphics/unused_overlap_6.tesc", stage = "tesc" },
+    { name = "color_tese", template = "pipeline/push_constant/graphics/unused_overlap_6.tese", stage = "tese" },
+    { name = "color_geom", template = "pipeline/push_constant/graphics/unused_overlap_6.geom", stage = "geom" },
+    { name = "color_frag", template = "pipeline/push_constant/graphics/unused_overlap_6.frag", stage = "frag" },
+]

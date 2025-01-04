@@ -1,0 +1,22 @@
+#version 460
+#extension GL_EXT_mesh_shader : enable
+
+layout (local_size_x=1) in;
+
+layout (push_constant, std430) uniform TaskPushConstantBlock {
+    layout (offset=12) uint one;
+    layout (offset=16) uint dimCoord;
+} pc;
+
+struct TaskData {
+    uint blockNumber;
+    uint blockRow;
+};
+taskPayloadSharedEXT TaskData td;
+
+void main ()
+{
+    const uint workGroupID = ((pc.dimCoord == 2) ? gl_WorkGroupID.z : ((pc.dimCoord == 1) ? gl_WorkGroupID.y : gl_WorkGroupID.x));
+    td.blockNumber         = uint(gl_DrawID);
+    td.blockRow            = workGroupID;
+    EmitMeshTasksEXT(pc.one, pc.one, pc.one);}

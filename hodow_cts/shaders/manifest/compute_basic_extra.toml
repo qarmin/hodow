@@ -1,0 +1,124 @@
+# Shader/parameter manifest for the remaining non-Amber cases of
+# dEQP-VK.compute.pipeline.basic.*: the two image-backed ones whose GLSL already
+# lived in shaders/src (image_atomic_op, image_barrier), plus the cases that need
+# something the plain path does not have - a partially bound SSBO, a robustness2
+# device, VK_KHR_device_group, a second queue, or Vulkan 1.2.
+#
+# Kept in its own file rather than folded into compute_basic.toml /
+# compute_basic_images.toml so the group can be ported and re-synced without
+# touching the manifests those two already-passing sets read from.
+#
+# `derived` entries restate the formulas from the upstream initPrograms() verbatim.
+# Case order follows the upstream createBasicComputeShaderTests() registration order.
+
+upstream_source = "external/vulkancts/modules/vulkan/compute/vktComputeBasicComputeShaderTests.cpp"
+rust_module = "compute/basic_compute_extra_tests"
+
+# --- ConcurrentCompute ------------------------------------------------------------
+[[case]]
+name = "concurrent_compute"
+rust_const = "CONCURRENT_COMPUTE"
+rust_type = "ConcurrentComputeCase"
+programs = [{ name = "comp", template = "compute/bextra_concurrent_compute.comp", stage = "comp" }]
+[case.params]
+num_values = { type = "u32", value = 1024 }
+# ConcurrentComputeInstance::iterate
+random_seed = { type = "u32", value = 0x82ce7f }
+
+# --- BufferToBufferInvertTest: CopyInvertSSBOCase with doBoundsCheck --------------
+# Same GLSL as the plain copy_ssbo_* cases; what differs is the host side, which
+# binds a descriptor range shorter than the buffer and needs robustBufferAccess2 to
+# define what an out-of-range access returns.
+[[case]]
+name = "copy_ssbo_bounds"
+rust_const = "COPY_SSBO_BOUNDS"
+rust_type = "CopySsboBoundsCase"
+programs = [{ name = "comp", template = "compute/copy_invert_ssbo.comp", stage = "comp" }]
+[case.params]
+num_values = { type = "u32", value = 512 }
+local_size = { type = "IVec3", value = [1, 1, 1] }
+work_size = { type = "IVec3", value = [1, 1, 1] }
+random_seed = { type = "u32", value = 0x124fef }
+
+# --- ReadUnboundSSBOTest ----------------------------------------------------------
+[[case]]
+name = "read_unbound_ssbo"
+rust_const = "READ_UNBOUND_SSBO"
+rust_type = "ReadUnboundSsboCase"
+programs = [{ name = "comp", template = "compute/bextra_read_unbound_ssbo.comp", stage = "comp" }]
+
+# --- ImageAtomicOpTest ------------------------------------------------------------
+[[case]]
+name = "image_atomic_op_local_size_1"
+rust_const = "IMAGE_ATOMIC_OP_LOCAL_SIZE_1"
+rust_type = "ImageAtomicOpCase"
+programs = [{ name = "comp", template = "compute/image_atomic_op.comp", stage = "comp" }]
+[case.params]
+local_size = { type = "u32", value = 1 }
+image_size = { type = "IVec2", value = [64, 64] }
+[case.derived]
+num_values = "image_size[0] * image_size[1] * local_size"
+
+[[case]]
+name = "image_atomic_op_local_size_8"
+rust_const = "IMAGE_ATOMIC_OP_LOCAL_SIZE_8"
+rust_type = "ImageAtomicOpCase"
+programs = [{ name = "comp", template = "compute/image_atomic_op.comp", stage = "comp" }]
+[case.params]
+local_size = { type = "u32", value = 8 }
+image_size = { type = "IVec2", value = [64, 64] }
+[case.derived]
+num_values = "image_size[0] * image_size[1] * local_size"
+
+# --- ImageBarrierTest -------------------------------------------------------------
+[[case]]
+name = "image_barrier_single"
+rust_const = "IMAGE_BARRIER_SINGLE"
+rust_type = "ImageBarrierCase"
+programs = [
+    { name = "comp0", template = "compute/image_barrier_0.comp", stage = "comp" },
+    { name = "comp1", template = "compute/image_barrier_1.comp", stage = "comp" },
+]
+[case.params]
+image_size = { type = "IVec2", value = [1, 1] }
+# ImageBarrierTestInstance::queuePass
+base_value = { type = "u32", value = 127 }
+
+[[case]]
+name = "image_barrier_multiple"
+rust_const = "IMAGE_BARRIER_MULTIPLE"
+rust_type = "ImageBarrierCase"
+programs = [
+    { name = "comp0", template = "compute/image_barrier_0.comp", stage = "comp" },
+    { name = "comp1", template = "compute/image_barrier_1.comp", stage = "comp" },
+]
+[case.params]
+image_size = { type = "IVec2", value = [64, 64] }
+base_value = { type = "u32", value = 127 }
+
+# --- UndefinedValues --------------------------------------------------------------
+[[case]]
+name = "undefined_values"
+rust_const = "UNDEFINED_VALUES"
+rust_type = "UndefinedValuesCase"
+# Upstream builds this one with vk::SPIRV_VERSION_1_5; per-program so the rest of
+# this manifest keeps the default and its SPIR-V does not change.
+programs = [{ name = "comp", template = "compute/bextra_undefined_values.comp", stage = "comp", spirv_version = "spirv1.5" }]
+
+# --- SequentialDispatchTest -------------------------------------------------------
+# The group counts are the constants SequentialDispatchTestInstance::queuePass
+# declares; they are here rather than in the Rust so the expected counter value and
+# the dispatches that produce it come from one place.
+[[case]]
+name = "indirect_after_base_dispatch"
+rust_const = "INDIRECT_AFTER_BASE_DISPATCH"
+rust_type = "SequentialDispatchCase"
+programs = [{ name = "comp", template = "compute/bextra_sequential_dispatch.comp", stage = "comp" }]
+[case.params]
+base_group_x = { type = "u32", value = 2 }
+base_group_y = { type = "u32", value = 3 }
+base_group_z = { type = "u32", value = 4 }
+first_group_count_xyz = { type = "u32", value = 1 }
+second_group_count_x = { type = "u32", value = 3 }
+second_group_count_y = { type = "u32", value = 3 }
+second_group_count_z = { type = "u32", value = 1 }

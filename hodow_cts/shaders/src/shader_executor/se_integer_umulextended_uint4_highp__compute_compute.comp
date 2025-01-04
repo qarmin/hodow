@@ -1,0 +1,37 @@
+#version 450
+layout(local_size_x = 1) in;
+
+struct Inputs
+{
+	highp uvec4 x;
+	highp uvec4 y;
+};
+struct Outputs
+{
+	highp uvec4 msb;
+	highp uvec4 lsb;
+};
+
+layout(set = 0, binding = 0, std430) buffer InBuffer
+{
+    Inputs inputs[];
+};
+layout(set = 0, binding = 1, std430) buffer OutBuffer
+{
+    Outputs outputs[];
+};
+
+void main (void)
+{
+    uint invocationNdx = gl_NumWorkGroups.x*gl_NumWorkGroups.y*gl_WorkGroupID.z
+                       + gl_NumWorkGroups.x*gl_WorkGroupID.y + gl_WorkGroupID.x;
+	uvec4 x = uvec4(inputs[invocationNdx].x);
+	uvec4 y = uvec4(inputs[invocationNdx].y);
+	uvec4 msb;
+	uvec4 lsb;
+
+	umulExtended(x, y, msb, lsb);
+
+	outputs[invocationNdx].msb = msb;
+	outputs[invocationNdx].lsb = lsb;
+}

@@ -1,0 +1,117 @@
+#version 450 core
+#pragma use_vulkan_memory_model
+#extension GL_KHR_shader_subgroup_basic : enable
+#extension GL_KHR_memory_scope_semantics : enable
+#extension GL_KHR_cooperative_matrix : enable
+#extension GL_EXT_split_barrier : enable
+#extension GL_NV_cooperative_matrix2 : enable
+#extension GL_EXT_bfloat16 : enable
+#extension GL_EXT_float_e5m2 : enable
+#extension GL_EXT_float_e4m3 : enable
+#extension GL_EXT_shader_explicit_arithmetic_types : enable
+#extension GL_EXT_buffer_reference : enable
+#extension GL_EXT_bfloat16 : enable
+// strides overriden by spec constants
+layout(constant_id = 2) const int AStride = 1;
+layout(constant_id = 3) const int BStride = 1;
+layout(constant_id = 4) const int CStride = 1;
+layout(constant_id = 5) const int OStride = 1;
+layout(constant_id = 6) const int M = 1;
+layout(constant_id = 7) const int N = 1;
+layout(constant_id = 8) const int K = 1;
+layout(local_size_x_id = 0, local_size_y_id = 1, local_size_z = 1) in;
+#pragma use_variable_pointers
+const int workgroupsX = 4;
+const uvec2 subgroupsPerWG = uvec2(2, 2);
+layout(set=0, binding=0) coherent buffer InputA { int32_t x[]; } inputA;
+layout(set=0, binding=1) coherent buffer InputB { int32_t x[]; } inputB;
+layout(set=0, binding=2) coherent buffer InputC { int32_t x[]; } inputC;
+layout(set=0, binding=3) coherent buffer Output { int32_t x[]; } outputO;
+shared int32_t sharedA[M * K * subgroupsPerWG.x * subgroupsPerWG.y];
+shared int32_t sharedB[K * N * subgroupsPerWG.x * subgroupsPerWG.y];
+shared int32_t sharedC[M * N * subgroupsPerWG.x * subgroupsPerWG.y];
+shared int32_t sharedO[M * N * subgroupsPerWG.x * subgroupsPerWG.y];
+#define ARows M
+#define ACols K
+#define ORows M
+#define OCols N
+coopmat<int32_t, gl_ScopeSubgroup, ARows, ACols, gl_MatrixUseA> matA;
+coopmat<int32_t, gl_ScopeSubgroup, K, N, gl_MatrixUseB> matB;
+coopmat<int32_t, gl_ScopeSubgroup, M, N, gl_MatrixUseAccumulator> matC;
+coopmat<int32_t, gl_ScopeSubgroup, ORows, OCols, gl_MatrixUseAccumulator> matO;
+void main()
+{
+   uvec2 subgroupXY = uvec2(gl_SubgroupID % subgroupsPerWG.x, gl_SubgroupID / subgroupsPerWG.x);
+   uvec2 matrixID = uvec2(gl_WorkGroupID.xy) * subgroupsPerWG + subgroupXY;
+   if (gl_SubgroupID >= subgroupsPerWG.x * subgroupsPerWG.y)
+       return;
+   int offset00 = int(M * matrixID.y); int offset01 = int(K * matrixID.x);
+   int offset10 = int(K * matrixID.y); int offset11 = int(N * matrixID.x);
+   int offset20 = int(M * matrixID.y); int offset21 = int(N * matrixID.x);
+   int offset30 = int(M * matrixID.y); int offset31 = int(N * matrixID.x);
+   uint span00 = M; uint span01 = K;
+   uint span10 = K; uint span11 = N;
+   uint span20 = M; uint span21 = N;
+   uint span30 = M; uint span31 = N;
+   uint element0 = (K * 8 * M * matrixID.y + K * matrixID.x);
+   uint element1 = (N * 8 * K * matrixID.y + N * matrixID.x);
+   uint element2 = (N * 8 * M * matrixID.y + N * matrixID.x);
+   uint element3 = (N * 8 * M * matrixID.y + N * matrixID.x);
+   uint elementS0, elementS1, elementS2, elementS3;
+       elementS0 = (K * 8 / workgroupsX * M * subgroupXY.y + K * subgroupXY.x);
+       elementS1 = (N * 8 / workgroupsX * K * subgroupXY.y + N * subgroupXY.x);
+       elementS2 = (N * 8 / workgroupsX * M * subgroupXY.y + N * subgroupXY.x);
+       elementS3 = (N * 8 / workgroupsX * M * subgroupXY.y + N * subgroupXY.x);
+   if (subgroupElect()) {
+       for (int i = 0; i < M; ++i) {
+       for (int j = 0; j < K; ++j) {
+           int localElementInput = (K * 8 * i + j);
+           int localElementShared = (K * 8 / workgroupsX * i + j);
+           sharedA[elementS0 + localElementShared] = inputA.x[element0 + localElementInput];
+       }
+       }
+       for (int i = 0; i < K; ++i) {
+       for (int j = 0; j < N; ++j) {
+           int localElementInput = (N * 8 * i + j);
+           int localElementShared = (N * 8 / workgroupsX * i + j);
+           sharedB[elementS1 + localElementShared] = inputB.x[element1 + localElementInput];
+       }
+       }
+       for (int i = 0; i < M; ++i) {
+       for (int j = 0; j < N; ++j) {
+           int localElementInput = (N * 8 * i + j);
+           int localElementShared = (N * 8 / workgroupsX * i + j);
+           sharedC[elementS2 + localElementShared] = inputC.x[element2 + localElementInput];
+       }
+       }
+   }
+   controlBarrier(gl_ScopeSubgroup, gl_ScopeSubgroup, gl_StorageSemanticsShared, gl_SemanticsAcquireRelease);
+   tensorLayoutNV<2> tensorLayout0 = createTensorLayoutNV(2);
+   tensorLayoutNV<2> tensorLayout1 = createTensorLayoutNV(2);
+   tensorLayoutNV<2> tensorLayout2 = createTensorLayoutNV(2);
+   tensorLayout0 = setTensorLayoutDimensionNV(tensorLayout0, M * 8, K * 8 / workgroupsX);
+   tensorLayout1 = setTensorLayoutDimensionNV(tensorLayout1, K * 8, N * 8 / workgroupsX);
+   tensorLayout2 = setTensorLayoutDimensionNV(tensorLayout2, M * 8, N * 8 / workgroupsX);
+   tensorLayout0 = sliceTensorLayoutNV(tensorLayout0, 0, span00, 0, span01);
+   tensorLayout1 = sliceTensorLayoutNV(tensorLayout1, 0, span10, 0, span11);
+   tensorLayout2 = sliceTensorLayoutNV(tensorLayout2, 0, span20, 0, span21);
+   coopMatLoadTensorNV(matA, sharedA, elementS0, tensorLayout0);
+   coopMatLoadTensorNV(matB, sharedB, elementS1, tensorLayout1);
+   coopMatLoadTensorNV(matC, sharedC, elementS2, tensorLayout2);
+   matO = coopMatMulAdd(matA, matB, matC);
+   tensorLayoutNV<2> tensorLayout3 = createTensorLayoutNV(2);
+   tensorLayout3 = setTensorLayoutDimensionNV(tensorLayout3, M * 8, N * 8 / workgroupsX);
+   tensorLayout3 = sliceTensorLayoutNV(tensorLayout3, 0, span30, 0, span31);
+   tensorViewNV<2, false, 1, 0> colMajorView3 = createTensorViewNV(2, false, 1, 0);
+   coopMatStoreTensorNV(matO, sharedO, elementS3, tensorLayout3);
+   controlBarrier(gl_ScopeSubgroup, gl_ScopeSubgroup, gl_StorageSemanticsShared, gl_SemanticsAcquireRelease);
+   if (subgroupElect()) {
+       for (int i = 0; i < M; ++i) {
+       for (int j = 0; j < N; ++j) {
+           int localElementInput = (N * 8 * i + j);
+           int localElementShared = (N * 8 / workgroupsX * i + j);
+           outputO.x[element3 + localElementInput] = sharedO[elementS3 + localElementShared];
+       }
+       }
+   }
+}

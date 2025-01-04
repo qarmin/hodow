@@ -1,0 +1,203 @@
+# Shader manifest for dEQP-VK.shader_object.{create,binary}.*
+#
+# `addBasicShaderObjectShaders` (binary: query and incompatible) and the two initPrograms of the create tests: the `multiple` group builds one
+# shader per stage (plus mesh and task for `all_with_mesh`), and every `create.<stage>.*` case builds ten variants of each stage whose only
+# difference is a constant, named `<stage><0..9>`.
+
+upstream_source = "external/vulkancts/modules/vulkan/shader_object/vktShaderObjectCreateTests.cpp"
+rust_module = "shader_object/create_tests"
+
+[[case]]
+name = "basic"
+rust_const = "SHADER_OBJECT_BASIC"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/basic.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/basic.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/basic.tese", stage = "tese" },
+    { name = "geom", template = "shader_object/basic.geom", stage = "geom" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+    { name = "comp", template = "shader_object/basic.comp", stage = "comp" },
+]
+
+[[case]]
+name = "create_all"
+rust_const = "SHADER_OBJECT_CREATE_ALL"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/create.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/create.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/create.tese", stage = "tese" },
+    { name = "geom", template = "shader_object/create.geom", stage = "geom" },
+    { name = "frag", template = "shader_object/create.frag", stage = "frag" },
+    { name = "comp", template = "shader_object/create.comp", stage = "comp" },
+]
+
+[[case]]
+name = "create_all_mesh"
+rust_const = "SHADER_OBJECT_CREATE_ALL_MESH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/create.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/create.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/create.tese", stage = "tese" },
+    { name = "geom", template = "shader_object/create.geom", stage = "geom" },
+    { name = "frag", template = "shader_object/create.frag", stage = "frag" },
+    { name = "comp", template = "shader_object/create.comp", stage = "comp" },
+    { name = "mesh", template = "shader_object/create.mesh", stage = "mesh", spirv_version = "spirv1.4" },
+    { name = "task", template = "shader_object/create.task", stage = "task", spirv_version = "spirv1.4" },
+]
+
+[[case]]
+name = "stage_set"
+rust_const = "SHADER_OBJECT_STAGE_SET"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert0", template = "shader_object/stage_vert0.vert", stage = "vert" },
+    { name = "tesc0", template = "shader_object/stage_tesc0.tesc", stage = "tesc" },
+    { name = "tese0", template = "shader_object/stage_tese0.tese", stage = "tese" },
+    { name = "geom0", template = "shader_object/stage_geom0.geom", stage = "geom" },
+    { name = "frag0", template = "shader_object/stage_frag0.frag", stage = "frag" },
+    { name = "comp0", template = "shader_object/stage_comp0.comp", stage = "comp" },
+    { name = "vert1", template = "shader_object/stage_vert1.vert", stage = "vert" },
+    { name = "tesc1", template = "shader_object/stage_tesc1.tesc", stage = "tesc" },
+    { name = "tese1", template = "shader_object/stage_tese1.tese", stage = "tese" },
+    { name = "geom1", template = "shader_object/stage_geom1.geom", stage = "geom" },
+    { name = "frag1", template = "shader_object/stage_frag1.frag", stage = "frag" },
+    { name = "comp1", template = "shader_object/stage_comp1.comp", stage = "comp" },
+    { name = "vert2", template = "shader_object/stage_vert2.vert", stage = "vert" },
+    { name = "tesc2", template = "shader_object/stage_tesc2.tesc", stage = "tesc" },
+    { name = "tese2", template = "shader_object/stage_tese2.tese", stage = "tese" },
+    { name = "geom2", template = "shader_object/stage_geom2.geom", stage = "geom" },
+    { name = "frag2", template = "shader_object/stage_frag2.frag", stage = "frag" },
+    { name = "comp2", template = "shader_object/stage_comp2.comp", stage = "comp" },
+    { name = "vert3", template = "shader_object/stage_vert3.vert", stage = "vert" },
+    { name = "tesc3", template = "shader_object/stage_tesc3.tesc", stage = "tesc" },
+    { name = "tese3", template = "shader_object/stage_tese3.tese", stage = "tese" },
+    { name = "geom3", template = "shader_object/stage_geom3.geom", stage = "geom" },
+    { name = "frag3", template = "shader_object/stage_frag3.frag", stage = "frag" },
+    { name = "comp3", template = "shader_object/stage_comp3.comp", stage = "comp" },
+    { name = "vert4", template = "shader_object/stage_vert4.vert", stage = "vert" },
+    { name = "tesc4", template = "shader_object/stage_tesc4.tesc", stage = "tesc" },
+    { name = "tese4", template = "shader_object/stage_tese4.tese", stage = "tese" },
+    { name = "geom4", template = "shader_object/stage_geom4.geom", stage = "geom" },
+    { name = "frag4", template = "shader_object/stage_frag4.frag", stage = "frag" },
+    { name = "comp4", template = "shader_object/stage_comp4.comp", stage = "comp" },
+    { name = "vert5", template = "shader_object/stage_vert5.vert", stage = "vert" },
+    { name = "tesc5", template = "shader_object/stage_tesc5.tesc", stage = "tesc" },
+    { name = "tese5", template = "shader_object/stage_tese5.tese", stage = "tese" },
+    { name = "geom5", template = "shader_object/stage_geom5.geom", stage = "geom" },
+    { name = "frag5", template = "shader_object/stage_frag5.frag", stage = "frag" },
+    { name = "comp5", template = "shader_object/stage_comp5.comp", stage = "comp" },
+    { name = "vert6", template = "shader_object/stage_vert6.vert", stage = "vert" },
+    { name = "tesc6", template = "shader_object/stage_tesc6.tesc", stage = "tesc" },
+    { name = "tese6", template = "shader_object/stage_tese6.tese", stage = "tese" },
+    { name = "geom6", template = "shader_object/stage_geom6.geom", stage = "geom" },
+    { name = "frag6", template = "shader_object/stage_frag6.frag", stage = "frag" },
+    { name = "comp6", template = "shader_object/stage_comp6.comp", stage = "comp" },
+    { name = "vert7", template = "shader_object/stage_vert7.vert", stage = "vert" },
+    { name = "tesc7", template = "shader_object/stage_tesc7.tesc", stage = "tesc" },
+    { name = "tese7", template = "shader_object/stage_tese7.tese", stage = "tese" },
+    { name = "geom7", template = "shader_object/stage_geom7.geom", stage = "geom" },
+    { name = "frag7", template = "shader_object/stage_frag7.frag", stage = "frag" },
+    { name = "comp7", template = "shader_object/stage_comp7.comp", stage = "comp" },
+    { name = "vert8", template = "shader_object/stage_vert8.vert", stage = "vert" },
+    { name = "tesc8", template = "shader_object/stage_tesc8.tesc", stage = "tesc" },
+    { name = "tese8", template = "shader_object/stage_tese8.tese", stage = "tese" },
+    { name = "geom8", template = "shader_object/stage_geom8.geom", stage = "geom" },
+    { name = "frag8", template = "shader_object/stage_frag8.frag", stage = "frag" },
+    { name = "comp8", template = "shader_object/stage_comp8.comp", stage = "comp" },
+    { name = "vert9", template = "shader_object/stage_vert9.vert", stage = "vert" },
+    { name = "tesc9", template = "shader_object/stage_tesc9.tesc", stage = "tesc" },
+    { name = "tese9", template = "shader_object/stage_tese9.tese", stage = "tese" },
+    { name = "geom9", template = "shader_object/stage_geom9.geom", stage = "geom" },
+    { name = "frag9", template = "shader_object/stage_frag9.frag", stage = "frag" },
+    { name = "comp9", template = "shader_object/stage_comp9.comp", stage = "comp" },
+]
+
+[[case]]
+name = "stage_set_mesh"
+rust_const = "SHADER_OBJECT_STAGE_SET_MESH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert0", template = "shader_object/stage_vert0.vert", stage = "vert" },
+    { name = "tesc0", template = "shader_object/stage_tesc0.tesc", stage = "tesc" },
+    { name = "tese0", template = "shader_object/stage_tese0.tese", stage = "tese" },
+    { name = "geom0", template = "shader_object/stage_geom0.geom", stage = "geom" },
+    { name = "frag0", template = "shader_object/stage_frag0.frag", stage = "frag" },
+    { name = "comp0", template = "shader_object/stage_comp0.comp", stage = "comp" },
+    { name = "mesh0", template = "shader_object/create.mesh", stage = "mesh", spirv_version = "spirv1.4" },
+    { name = "task0", template = "shader_object/create.task", stage = "task", spirv_version = "spirv1.4" },
+    { name = "vert1", template = "shader_object/stage_vert1.vert", stage = "vert" },
+    { name = "tesc1", template = "shader_object/stage_tesc1.tesc", stage = "tesc" },
+    { name = "tese1", template = "shader_object/stage_tese1.tese", stage = "tese" },
+    { name = "geom1", template = "shader_object/stage_geom1.geom", stage = "geom" },
+    { name = "frag1", template = "shader_object/stage_frag1.frag", stage = "frag" },
+    { name = "comp1", template = "shader_object/stage_comp1.comp", stage = "comp" },
+    { name = "mesh1", template = "shader_object/create.mesh", stage = "mesh", spirv_version = "spirv1.4" },
+    { name = "task1", template = "shader_object/create.task", stage = "task", spirv_version = "spirv1.4" },
+    { name = "vert2", template = "shader_object/stage_vert2.vert", stage = "vert" },
+    { name = "tesc2", template = "shader_object/stage_tesc2.tesc", stage = "tesc" },
+    { name = "tese2", template = "shader_object/stage_tese2.tese", stage = "tese" },
+    { name = "geom2", template = "shader_object/stage_geom2.geom", stage = "geom" },
+    { name = "frag2", template = "shader_object/stage_frag2.frag", stage = "frag" },
+    { name = "comp2", template = "shader_object/stage_comp2.comp", stage = "comp" },
+    { name = "mesh2", template = "shader_object/create.mesh", stage = "mesh", spirv_version = "spirv1.4" },
+    { name = "task2", template = "shader_object/create.task", stage = "task", spirv_version = "spirv1.4" },
+    { name = "vert3", template = "shader_object/stage_vert3.vert", stage = "vert" },
+    { name = "tesc3", template = "shader_object/stage_tesc3.tesc", stage = "tesc" },
+    { name = "tese3", template = "shader_object/stage_tese3.tese", stage = "tese" },
+    { name = "geom3", template = "shader_object/stage_geom3.geom", stage = "geom" },
+    { name = "frag3", template = "shader_object/stage_frag3.frag", stage = "frag" },
+    { name = "comp3", template = "shader_object/stage_comp3.comp", stage = "comp" },
+    { name = "mesh3", template = "shader_object/create.mesh", stage = "mesh", spirv_version = "spirv1.4" },
+    { name = "task3", template = "shader_object/create.task", stage = "task", spirv_version = "spirv1.4" },
+    { name = "vert4", template = "shader_object/stage_vert4.vert", stage = "vert" },
+    { name = "tesc4", template = "shader_object/stage_tesc4.tesc", stage = "tesc" },
+    { name = "tese4", template = "shader_object/stage_tese4.tese", stage = "tese" },
+    { name = "geom4", template = "shader_object/stage_geom4.geom", stage = "geom" },
+    { name = "frag4", template = "shader_object/stage_frag4.frag", stage = "frag" },
+    { name = "comp4", template = "shader_object/stage_comp4.comp", stage = "comp" },
+    { name = "mesh4", template = "shader_object/create.mesh", stage = "mesh", spirv_version = "spirv1.4" },
+    { name = "task4", template = "shader_object/create.task", stage = "task", spirv_version = "spirv1.4" },
+    { name = "vert5", template = "shader_object/stage_vert5.vert", stage = "vert" },
+    { name = "tesc5", template = "shader_object/stage_tesc5.tesc", stage = "tesc" },
+    { name = "tese5", template = "shader_object/stage_tese5.tese", stage = "tese" },
+    { name = "geom5", template = "shader_object/stage_geom5.geom", stage = "geom" },
+    { name = "frag5", template = "shader_object/stage_frag5.frag", stage = "frag" },
+    { name = "comp5", template = "shader_object/stage_comp5.comp", stage = "comp" },
+    { name = "mesh5", template = "shader_object/create.mesh", stage = "mesh", spirv_version = "spirv1.4" },
+    { name = "task5", template = "shader_object/create.task", stage = "task", spirv_version = "spirv1.4" },
+    { name = "vert6", template = "shader_object/stage_vert6.vert", stage = "vert" },
+    { name = "tesc6", template = "shader_object/stage_tesc6.tesc", stage = "tesc" },
+    { name = "tese6", template = "shader_object/stage_tese6.tese", stage = "tese" },
+    { name = "geom6", template = "shader_object/stage_geom6.geom", stage = "geom" },
+    { name = "frag6", template = "shader_object/stage_frag6.frag", stage = "frag" },
+    { name = "comp6", template = "shader_object/stage_comp6.comp", stage = "comp" },
+    { name = "mesh6", template = "shader_object/create.mesh", stage = "mesh", spirv_version = "spirv1.4" },
+    { name = "task6", template = "shader_object/create.task", stage = "task", spirv_version = "spirv1.4" },
+    { name = "vert7", template = "shader_object/stage_vert7.vert", stage = "vert" },
+    { name = "tesc7", template = "shader_object/stage_tesc7.tesc", stage = "tesc" },
+    { name = "tese7", template = "shader_object/stage_tese7.tese", stage = "tese" },
+    { name = "geom7", template = "shader_object/stage_geom7.geom", stage = "geom" },
+    { name = "frag7", template = "shader_object/stage_frag7.frag", stage = "frag" },
+    { name = "comp7", template = "shader_object/stage_comp7.comp", stage = "comp" },
+    { name = "mesh7", template = "shader_object/create.mesh", stage = "mesh", spirv_version = "spirv1.4" },
+    { name = "task7", template = "shader_object/create.task", stage = "task", spirv_version = "spirv1.4" },
+    { name = "vert8", template = "shader_object/stage_vert8.vert", stage = "vert" },
+    { name = "tesc8", template = "shader_object/stage_tesc8.tesc", stage = "tesc" },
+    { name = "tese8", template = "shader_object/stage_tese8.tese", stage = "tese" },
+    { name = "geom8", template = "shader_object/stage_geom8.geom", stage = "geom" },
+    { name = "frag8", template = "shader_object/stage_frag8.frag", stage = "frag" },
+    { name = "comp8", template = "shader_object/stage_comp8.comp", stage = "comp" },
+    { name = "mesh8", template = "shader_object/create.mesh", stage = "mesh", spirv_version = "spirv1.4" },
+    { name = "task8", template = "shader_object/create.task", stage = "task", spirv_version = "spirv1.4" },
+    { name = "vert9", template = "shader_object/stage_vert9.vert", stage = "vert" },
+    { name = "tesc9", template = "shader_object/stage_tesc9.tesc", stage = "tesc" },
+    { name = "tese9", template = "shader_object/stage_tese9.tese", stage = "tese" },
+    { name = "geom9", template = "shader_object/stage_geom9.geom", stage = "geom" },
+    { name = "frag9", template = "shader_object/stage_frag9.frag", stage = "frag" },
+    { name = "comp9", template = "shader_object/stage_comp9.comp", stage = "comp" },
+    { name = "mesh9", template = "shader_object/create.mesh", stage = "mesh", spirv_version = "spirv1.4" },
+    { name = "task9", template = "shader_object/create.task", stage = "task", spirv_version = "spirv1.4" },
+]

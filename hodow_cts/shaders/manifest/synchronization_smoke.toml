@@ -1,0 +1,30 @@
+# Shader manifest for dEQP-VK.synchronization{,2}.smoke.*
+#
+# `initQueueFamilyTypePrograms` ignores its parameters, so the eight cases (four family
+# types, legacy and synchronization2) all use the same two stages. The loop that
+# registers them lives in the Rust; only the shared shader pair is declared here.
+# `getQueueFamilyTypeGeomColor()` is (0, 0, 1, 1) and is restated in the fragment shader.
+
+upstream_source = "external/vulkancts/modules/vulkan/synchronization/vktSynchronizationSmokeTests.cpp"
+rust_module = "synchronization/smoke_tests"
+
+[[case]]
+name = "queue_type_ignore_image"
+rust_const = "QUEUE_TYPE_PROGRAMS"
+rust_type = "QueueTypePrograms"
+programs = [
+  { name = "vert", template = "synchronization/smoke_queue_type.vert", stage = "vert" },
+  { name = "frag", template = "synchronization/smoke_queue_type.frag", stage = "frag" },
+]
+
+# `initShaders` / `buildShaders`: the vertex-position-in, flat-red-out pair `generateWork`
+# draws with. Shared by `fences`, `binary_semaphores` and `timeline_semaphores` of both
+# trees, none of which look at the other's parameters.
+[[case]]
+name = "smoke_work"
+rust_const = "SMOKE_WORK_PROGRAMS"
+rust_type = "SmokeWorkPrograms"
+programs = [
+  { name = "glslvert", template = "synchronization/smoke_work.vert", stage = "vert" },
+  { name = "glslfrag", template = "synchronization/smoke_work.frag", stage = "frag" },
+]

@@ -1,0 +1,20 @@
+#version 450
+#extension GL_NV_mesh_shader : enable
+
+layout(local_size_x=1) in;
+layout(triangles) out;
+layout(max_vertices=256, max_primitives=256) out;
+
+layout (location=0) out perprimitiveNV vec4 triangleColor[];
+
+void main ()
+{
+    gl_PrimitiveCountNV = 1u;
+    triangleColor[0] = vec4(0.0f, 1.0f, 1.0f, 1.0f);
+    gl_MeshVerticesNV[0].gl_Position = vec4(0.285714, -0.4, 0.0f, 1.0f);
+    gl_MeshVerticesNV[1].gl_Position = vec4(0.285714, 0.4, 0.0f, 1.0f);
+    gl_MeshVerticesNV[2].gl_Position = vec4(-0.285714, 0.0f, 0.0f, 1.0f);
+    gl_PrimitiveIndicesNV[0] = 0;
+    gl_PrimitiveIndicesNV[1] = 1;
+    gl_PrimitiveIndicesNV[2] = 2;
+}

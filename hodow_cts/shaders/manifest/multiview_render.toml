@@ -1,0 +1,300 @@
+# Shader manifest for dEQP-VK.multiview.*
+#
+# `MultiViewRenderTestsCase::initPrograms`: the program set depends only on the test type, so there is one case per type. The
+# shaders that read gl_ViewIndex and the ones that pass the colour through are told apart by the vertex and fragment names.
+
+upstream_source = "external/vulkancts/modules/vulkan/multiview/vktMultiViewRenderTests.cpp"
+rust_module = "multiview/render_tests"
+
+[[case]]
+name = "mv_masks"
+rust_const = "MV_MASKS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_plain.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_view_index_in_vertex"
+rust_const = "MV_VIEW_INDEX_IN_VERTEX"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_color.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_view_index_in_fragment"
+rust_const = "MV_VIEW_INDEX_IN_FRAGMENT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_plain.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_view_index.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_view_index_in_geometry"
+rust_const = "MV_VIEW_INDEX_IN_GEOMETRY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_plain.vert", stage = "vert" },
+    { name = "geometry", template = "multiview/geom.geom", stage = "geom" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_view_index_in_tessellation"
+rust_const = "MV_VIEW_INDEX_IN_TESSELLATION"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_plain.vert", stage = "vert" },
+    { name = "tessellation_control", template = "multiview/tesc.tesc", stage = "tesc" },
+    { name = "tessellation_evaluation", template = "multiview/tese.tese", stage = "tese" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_input_attachments"
+rust_const = "MV_INPUT_ATTACHMENTS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_plain.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_input.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_input_attachments_geometry"
+rust_const = "MV_INPUT_ATTACHMENTS_GEOMETRY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_plain.vert", stage = "vert" },
+    { name = "geometry", template = "multiview/geom.geom", stage = "geom" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_instanced_rendering"
+rust_const = "MV_INSTANCED_RENDERING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_instanced.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_input_rate_instance"
+rust_const = "MV_INPUT_RATE_INSTANCE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_input_rate.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_draw_indirect"
+rust_const = "MV_DRAW_INDIRECT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_color.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_draw_indirect_indexed"
+rust_const = "MV_DRAW_INDIRECT_INDEXED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_color.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_draw_indexed"
+rust_const = "MV_DRAW_INDEXED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_plain.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_clear_attachments"
+rust_const = "MV_CLEAR_ATTACHMENTS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_color.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_secondary_cmd_buffer"
+rust_const = "MV_SECONDARY_CMD_BUFFER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_plain.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_view_index.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_secondary_cmd_buffer_geometry"
+rust_const = "MV_SECONDARY_CMD_BUFFER_GEOMETRY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_plain.vert", stage = "vert" },
+    { name = "geometry", template = "multiview/geom.geom", stage = "geom" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_point_size"
+rust_const = "MV_POINT_SIZE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_point_size.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_nested_cmd_buffer"
+rust_const = "MV_NESTED_CMD_BUFFER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_plain.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_view_index.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_multisample"
+rust_const = "MV_MULTISAMPLE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_plain.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_multisample_resolve"
+rust_const = "MV_MULTISAMPLE_RESOLVE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_plain.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_readback_implicit_clear"
+rust_const = "MV_READBACK_IMPLICIT_CLEAR"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_plain.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_readback_explicit_clear"
+rust_const = "MV_READBACK_EXPLICIT_CLEAR"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_plain.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_depth"
+rust_const = "MV_DEPTH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_plain.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_depth_without_fragment_shader"
+rust_const = "MV_DEPTH_WITHOUT_FRAGMENT_SHADER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_plain.vert", stage = "vert" },
+]
+
+[[case]]
+name = "mv_depth_different_ranges"
+rust_const = "MV_DEPTH_DIFFERENT_RANGES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_plain.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_stencil"
+rust_const = "MV_STENCIL"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_plain.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_view_mask_iteration"
+rust_const = "MV_VIEW_MASK_ITERATION"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert-spv10", template = "multiview/vert_mask_iteration.vert", stage = "vert" },
+    { name = "vert-spv15", template = "multiview/vert_mask_iteration.vert", stage = "vert", spirv_version = "spirv1.5" },
+    { name = "view_mask_iteration", template = "multiview/frag_mask_iteration.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_queries"
+rust_const = "MV_QUERIES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_plain.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_queries_and_timestamps"
+rust_const = "MV_QUERIES_AND_TIMESTAMPS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_plain.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_non_precise_queries"
+rust_const = "MV_NON_PRECISE_QUERIES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_plain.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_non_precise_queries_and_timestamps"
+rust_const = "MV_NON_PRECISE_QUERIES_AND_TIMESTAMPS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_plain.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_non_precise_queries_with_availability"
+rust_const = "MV_NON_PRECISE_QUERIES_WITH_AVAILABILITY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_plain.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mv_non_precise_queries_with_availability_and_timestamps"
+rust_const = "MV_NON_PRECISE_QUERIES_WITH_AVAILABILITY_AND_TIMESTAMPS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "multiview/vert_plain.vert", stage = "vert" },
+    { name = "fragment", template = "multiview/frag_plain.frag", stage = "frag" },
+]

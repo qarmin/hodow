@@ -1,0 +1,34 @@
+# Shader manifest for dEQP-VK.conditional_rendering.conditional_ignore.*
+#
+# `pushConstantComputeShaders`: a compute shader writing 1 when its two push constants are equal. `graphicsBindInitPrograms`:
+# a position pass-through vertex shader and two fragment shaders that output one of the two colours of a storage buffer. `rayTracingInitPrograms`:
+# a ray generation shader writing 1 to a storage buffer.
+
+upstream_source = "external/vulkancts/modules/vulkan/conditional_rendering/vktConditionalIgnoreTests.cpp"
+rust_module = "conditional_rendering/ignore_tests"
+
+[[case]]
+name = "push_constant"
+rust_const = "IGNORE_PUSH_CONSTANT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "conditional_rendering/ignore_push_constant.comp", stage = "comp" },
+]
+
+[[case]]
+name = "graphics_bind"
+rust_const = "IGNORE_GRAPHICS_BIND"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "conditional_rendering/ignore_bind.vert", stage = "vert" },
+    { name = "frag0", template = "conditional_rendering/ignore_bind0.frag", stage = "frag" },
+    { name = "frag1", template = "conditional_rendering/ignore_bind1.frag", stage = "frag" },
+]
+
+[[case]]
+name = "ray_tracing"
+rust_const = "IGNORE_RAY_TRACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "rgen", template = "conditional_rendering/ignore_rt.rgen", stage = "rgen", spirv_version = "spirv1.4" },
+]

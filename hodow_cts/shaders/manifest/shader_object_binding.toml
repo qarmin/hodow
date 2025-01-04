@@ -1,0 +1,215 @@
+# Shader manifest for dEQP-VK.shader_object.binding.*
+#
+# `ShaderObjectBindingDrawCase::initPrograms` (one set per stage whose alternative shader declares an output nothing consumes: the
+# `unused` derived value is 0 for none, 1 vert, 2 tesc, 3 tese, 4 geom, 5 frag), `MeshShaderObjectBindingCase::initPrograms`,
+# `ShaderObjectBindingCase::initPrograms` (with mesh shaders) and `ShaderObjectUnbindCase::initPrograms`.
+
+upstream_source = "external/vulkancts/modules/vulkan/shader_object/vktShaderObjectBindingTests.cpp"
+rust_module = "shader_object/binding_tests"
+
+[[case]]
+name = "draw_none"
+rust_const = "BINDING_DRAW_NONE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/basic.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/basic.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/basic.tese", stage = "tese" },
+    { name = "geom", template = "shader_object/basic.geom", stage = "geom" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+    { name = "comp", template = "shader_object/basic.comp", stage = "comp" },
+    { name = "passThroughGeom", template = "shader_object/binding/pass_through.geom", stage = "geom" },
+    { name = "blendFrag", template = "shader_object/binding/blend.frag", stage = "frag" },
+    { name = "vertAlt", template = "shader_object/binding/vert_alt.vert", stage = "vert" },
+    { name = "tescAlt", template = "shader_object/binding/tesc_alt.tesc", stage = "tesc" },
+    { name = "teseAlt", template = "shader_object/binding/tese_alt.tese", stage = "tese" },
+    { name = "geomAlt", template = "shader_object/binding/geom_alt.geom", stage = "geom" },
+    { name = "fragAlt", template = "shader_object/binding/frag_alt.frag", stage = "frag" },
+    { name = "vertNoTess", template = "shader_object/binding/vert_no_tess.vert", stage = "vert" },
+    { name = "vertNoGeom", template = "shader_object/binding/vert_no_geom.vert", stage = "vert" },
+    { name = "vertNoTessGeom", template = "shader_object/binding/vert_no_tess_geom.vert", stage = "vert" },
+    { name = "vertAltNoTess", template = "shader_object/binding/vert_alt_no_tess.vert", stage = "vert" },
+    { name = "vertAltNoGeom", template = "shader_object/binding/vert_alt_no_geom.vert", stage = "vert" },
+    { name = "vertAltNoTessGeom", template = "shader_object/binding/vert_alt_no_tess_geom.vert", stage = "vert" },
+]
+derived = { unused = "0" }
+
+[[case]]
+name = "draw_vert"
+rust_const = "BINDING_DRAW_VERT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/basic.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/basic.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/basic.tese", stage = "tese" },
+    { name = "geom", template = "shader_object/basic.geom", stage = "geom" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+    { name = "comp", template = "shader_object/basic.comp", stage = "comp" },
+    { name = "passThroughGeom", template = "shader_object/binding/pass_through.geom", stage = "geom" },
+    { name = "blendFrag", template = "shader_object/binding/blend.frag", stage = "frag" },
+    { name = "vertAlt", template = "shader_object/binding/vert_alt.vert", stage = "vert" },
+    { name = "tescAlt", template = "shader_object/binding/tesc_alt.tesc", stage = "tesc" },
+    { name = "teseAlt", template = "shader_object/binding/tese_alt.tese", stage = "tese" },
+    { name = "geomAlt", template = "shader_object/binding/geom_alt.geom", stage = "geom" },
+    { name = "fragAlt", template = "shader_object/binding/frag_alt.frag", stage = "frag" },
+    { name = "vertNoTess", template = "shader_object/binding/vert_no_tess.vert", stage = "vert" },
+    { name = "vertNoGeom", template = "shader_object/binding/vert_no_geom.vert", stage = "vert" },
+    { name = "vertNoTessGeom", template = "shader_object/binding/vert_no_tess_geom.vert", stage = "vert" },
+    { name = "vertAltNoTess", template = "shader_object/binding/vert_alt_no_tess.vert", stage = "vert" },
+    { name = "vertAltNoGeom", template = "shader_object/binding/vert_alt_no_geom.vert", stage = "vert" },
+    { name = "vertAltNoTessGeom", template = "shader_object/binding/vert_alt_no_tess_geom.vert", stage = "vert" },
+]
+derived = { unused = "1" }
+
+[[case]]
+name = "draw_tesc"
+rust_const = "BINDING_DRAW_TESC"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/basic.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/basic.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/basic.tese", stage = "tese" },
+    { name = "geom", template = "shader_object/basic.geom", stage = "geom" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+    { name = "comp", template = "shader_object/basic.comp", stage = "comp" },
+    { name = "passThroughGeom", template = "shader_object/binding/pass_through.geom", stage = "geom" },
+    { name = "blendFrag", template = "shader_object/binding/blend.frag", stage = "frag" },
+    { name = "vertAlt", template = "shader_object/binding/vert_alt.vert", stage = "vert" },
+    { name = "tescAlt", template = "shader_object/binding/tesc_alt.tesc", stage = "tesc" },
+    { name = "teseAlt", template = "shader_object/binding/tese_alt.tese", stage = "tese" },
+    { name = "geomAlt", template = "shader_object/binding/geom_alt.geom", stage = "geom" },
+    { name = "fragAlt", template = "shader_object/binding/frag_alt.frag", stage = "frag" },
+    { name = "vertNoTess", template = "shader_object/binding/vert_no_tess.vert", stage = "vert" },
+    { name = "vertNoGeom", template = "shader_object/binding/vert_no_geom.vert", stage = "vert" },
+    { name = "vertNoTessGeom", template = "shader_object/binding/vert_no_tess_geom.vert", stage = "vert" },
+    { name = "vertAltNoTess", template = "shader_object/binding/vert_alt_no_tess.vert", stage = "vert" },
+    { name = "vertAltNoGeom", template = "shader_object/binding/vert_alt_no_geom.vert", stage = "vert" },
+    { name = "vertAltNoTessGeom", template = "shader_object/binding/vert_alt_no_tess_geom.vert", stage = "vert" },
+]
+derived = { unused = "2" }
+
+[[case]]
+name = "draw_tese"
+rust_const = "BINDING_DRAW_TESE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/basic.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/basic.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/basic.tese", stage = "tese" },
+    { name = "geom", template = "shader_object/basic.geom", stage = "geom" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+    { name = "comp", template = "shader_object/basic.comp", stage = "comp" },
+    { name = "passThroughGeom", template = "shader_object/binding/pass_through.geom", stage = "geom" },
+    { name = "blendFrag", template = "shader_object/binding/blend.frag", stage = "frag" },
+    { name = "vertAlt", template = "shader_object/binding/vert_alt.vert", stage = "vert" },
+    { name = "tescAlt", template = "shader_object/binding/tesc_alt.tesc", stage = "tesc" },
+    { name = "teseAlt", template = "shader_object/binding/tese_alt.tese", stage = "tese" },
+    { name = "geomAlt", template = "shader_object/binding/geom_alt.geom", stage = "geom" },
+    { name = "fragAlt", template = "shader_object/binding/frag_alt.frag", stage = "frag" },
+    { name = "vertNoTess", template = "shader_object/binding/vert_no_tess.vert", stage = "vert" },
+    { name = "vertNoGeom", template = "shader_object/binding/vert_no_geom.vert", stage = "vert" },
+    { name = "vertNoTessGeom", template = "shader_object/binding/vert_no_tess_geom.vert", stage = "vert" },
+    { name = "vertAltNoTess", template = "shader_object/binding/vert_alt_no_tess.vert", stage = "vert" },
+    { name = "vertAltNoGeom", template = "shader_object/binding/vert_alt_no_geom.vert", stage = "vert" },
+    { name = "vertAltNoTessGeom", template = "shader_object/binding/vert_alt_no_tess_geom.vert", stage = "vert" },
+]
+derived = { unused = "3" }
+
+[[case]]
+name = "draw_geom"
+rust_const = "BINDING_DRAW_GEOM"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/basic.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/basic.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/basic.tese", stage = "tese" },
+    { name = "geom", template = "shader_object/basic.geom", stage = "geom" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+    { name = "comp", template = "shader_object/basic.comp", stage = "comp" },
+    { name = "passThroughGeom", template = "shader_object/binding/pass_through.geom", stage = "geom" },
+    { name = "blendFrag", template = "shader_object/binding/blend.frag", stage = "frag" },
+    { name = "vertAlt", template = "shader_object/binding/vert_alt.vert", stage = "vert" },
+    { name = "tescAlt", template = "shader_object/binding/tesc_alt.tesc", stage = "tesc" },
+    { name = "teseAlt", template = "shader_object/binding/tese_alt.tese", stage = "tese" },
+    { name = "geomAlt", template = "shader_object/binding/geom_alt.geom", stage = "geom" },
+    { name = "fragAlt", template = "shader_object/binding/frag_alt.frag", stage = "frag" },
+    { name = "vertNoTess", template = "shader_object/binding/vert_no_tess.vert", stage = "vert" },
+    { name = "vertNoGeom", template = "shader_object/binding/vert_no_geom.vert", stage = "vert" },
+    { name = "vertNoTessGeom", template = "shader_object/binding/vert_no_tess_geom.vert", stage = "vert" },
+    { name = "vertAltNoTess", template = "shader_object/binding/vert_alt_no_tess.vert", stage = "vert" },
+    { name = "vertAltNoGeom", template = "shader_object/binding/vert_alt_no_geom.vert", stage = "vert" },
+    { name = "vertAltNoTessGeom", template = "shader_object/binding/vert_alt_no_tess_geom.vert", stage = "vert" },
+]
+derived = { unused = "4" }
+
+[[case]]
+name = "draw_frag"
+rust_const = "BINDING_DRAW_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/basic.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/basic.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/basic.tese", stage = "tese" },
+    { name = "geom", template = "shader_object/basic.geom", stage = "geom" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+    { name = "comp", template = "shader_object/basic.comp", stage = "comp" },
+    { name = "passThroughGeom", template = "shader_object/binding/pass_through.geom", stage = "geom" },
+    { name = "blendFrag", template = "shader_object/binding/blend.frag", stage = "frag" },
+    { name = "vertAlt", template = "shader_object/binding/vert_alt.vert", stage = "vert" },
+    { name = "tescAlt", template = "shader_object/binding/tesc_alt.tesc", stage = "tesc" },
+    { name = "teseAlt", template = "shader_object/binding/tese_alt.tese", stage = "tese" },
+    { name = "geomAlt", template = "shader_object/binding/geom_alt.geom", stage = "geom" },
+    { name = "fragAlt", template = "shader_object/binding/frag_alt.frag", stage = "frag" },
+    { name = "vertNoTess", template = "shader_object/binding/vert_no_tess.vert", stage = "vert" },
+    { name = "vertNoGeom", template = "shader_object/binding/vert_no_geom.vert", stage = "vert" },
+    { name = "vertNoTessGeom", template = "shader_object/binding/vert_no_tess_geom.vert", stage = "vert" },
+    { name = "vertAltNoTess", template = "shader_object/binding/vert_alt_no_tess.vert", stage = "vert" },
+    { name = "vertAltNoGeom", template = "shader_object/binding/vert_alt_no_geom.vert", stage = "vert" },
+    { name = "vertAltNoTessGeom", template = "shader_object/binding/vert_alt_no_tess_geom.vert", stage = "vert" },
+]
+derived = { unused = "5" }
+
+[[case]]
+name = "mesh_swap"
+rust_const = "BINDING_MESH_SWAP"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task1", template = "shader_object/binding/mesh_swap_task1.task", stage = "task", spirv_version = "spirv1.4" },
+    { name = "task2", template = "shader_object/binding/mesh_swap_task2.task", stage = "task", spirv_version = "spirv1.4" },
+    { name = "mesh1", template = "shader_object/binding/mesh_swap_mesh1.mesh", stage = "mesh", spirv_version = "spirv1.4" },
+    { name = "mesh2", template = "shader_object/binding/mesh_swap_mesh2.mesh", stage = "mesh", spirv_version = "spirv1.4" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "bindings_mesh"
+rust_const = "BINDING_BINDINGS_MESH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/basic.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/basic.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/basic.tese", stage = "tese" },
+    { name = "geom", template = "shader_object/basic.geom", stage = "geom" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+    { name = "comp", template = "shader_object/basic.comp", stage = "comp" },
+    { name = "task", template = "shader_object/link/mesh_task.task", stage = "task", spirv_version = "spirv1.4" },
+    { name = "mesh", template = "shader_object/link/mesh_mesh.mesh", stage = "mesh", spirv_version = "spirv1.4" },
+]
+
+[[case]]
+name = "unbind"
+rust_const = "BINDING_UNBIND"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "shader_object/basic.vert", stage = "vert" },
+    { name = "tesc", template = "shader_object/basic.tesc", stage = "tesc" },
+    { name = "tese", template = "shader_object/basic.tese", stage = "tese" },
+    { name = "geom", template = "shader_object/basic.geom", stage = "geom" },
+    { name = "frag", template = "shader_object/basic.frag", stage = "frag" },
+    { name = "comp", template = "shader_object/basic.comp", stage = "comp" },
+    { name = "vert_offset", template = "shader_object/binding/vert_offset.vert", stage = "vert" },
+    { name = "task", template = "shader_object/link/mesh_task.task", stage = "task", spirv_version = "spirv1.4" },
+    { name = "mesh", template = "shader_object/link/mesh_mesh.mesh", stage = "mesh", spirv_version = "spirv1.4" },
+    { name = "frag_white", template = "shader_object/binding/frag_white.frag", stage = "frag" },
+    { name = "frag_red", template = "shader_object/binding/frag_red.frag", stage = "frag" },
+]

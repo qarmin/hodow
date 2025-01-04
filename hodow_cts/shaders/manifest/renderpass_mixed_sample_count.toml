@@ -1,0 +1,17 @@
+# Shader manifest for dEQP-VK.renderpasses.renderpass{1,2}.*.multisample_resolve.mixed_sample_count.*
+#
+# Two triangles drawn in a 4 sample and a 1 sample subpass, and a comparison pass sampling the two resolved images.
+
+upstream_source = "external/vulkancts/modules/vulkan/renderpass/vktRenderPassMultisampleResolveTests.cpp"
+rust_module = "renderpass/mixed_sample_count_tests"
+
+[[case]]
+name = "mixed_sample_count"
+rust_const = "MIXED_SAMPLE_COUNT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "draw-vert", template = "renderpass/mixed_sample_count.draw.vert", stage = "vert" },
+    { name = "draw-frag", template = "renderpass/mixed_sample_count.draw.frag", stage = "frag" },
+    { name = "compare-vert", template = "renderpass/mixed_sample_count.compare.vert", stage = "vert" },
+    { name = "compare-frag", template = "renderpass/mixed_sample_count.compare.frag", stage = "frag" },
+]

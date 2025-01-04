@@ -1,0 +1,78 @@
+# Shader manifest for dEQP-VK.renderpasses.*.subpass_dependencies.single_attachment.*
+#
+# `SubpassPrograms::init` for depth/stencil formats (`late_fragment_<subpass count>`), `SeparateChannelsPrograms::init` (the colour variant: one fragment shader reading red and green of the input attachment) and
+# `SingleAttachmentPrograms::init`: a pass-through vertex shader and three fragment shaders (a solid colour, one that adds to the
+# input attachment, one that adds to a sampled texture).
+
+upstream_source = "external/vulkancts/modules/vulkan/renderpass/vktRenderPassSubpassDependencyTests.cpp"
+rust_module = "renderpass/subpass_dependency_tests"
+
+[[case]]
+name = "single_attachment"
+rust_const = "SINGLE_ATTACHMENT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/subpass_dependencies/single_attachment.vert", stage = "vert" },
+    { name = "frag_solid_color", template = "renderpass/subpass_dependencies/single_attachment_solid_color.frag", stage = "frag" },
+    { name = "frag_input_attachment", template = "renderpass/subpass_dependencies/single_attachment_input_attachment.frag", stage = "frag" },
+    { name = "frag_combined_image_sampler", template = "renderpass/subpass_dependencies/single_attachment_combined_image_sampler.frag", stage = "frag" },
+]
+
+[[case]]
+name = "separate_channels"
+rust_const = "SEPARATE_CHANNELS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/subpass_dependencies/single_attachment.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/subpass_dependencies/separate_channels.frag", stage = "frag" },
+]
+
+[[case]]
+name = "late_fragment_2"
+rust_const = "LATE_FRAGMENT_2"
+rust_type = "SharedProgram"
+programs = [
+    { name = "subpass-vert-0", template = "renderpass/subpass_dependencies/late_fragment_0.vert", stage = "vert" },
+    { name = "subpass-frag-0", template = "renderpass/subpass_dependencies/late_fragment_0.frag", stage = "frag" },
+    { name = "subpass-vert-1", template = "renderpass/subpass_dependencies/late_fragment_n.vert", stage = "vert" },
+    { name = "subpass-frag-1", template = "renderpass/subpass_dependencies/late_fragment_n.frag", stage = "frag" },
+]
+
+[[case]]
+name = "late_fragment_3"
+rust_const = "LATE_FRAGMENT_3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "subpass-vert-0", template = "renderpass/subpass_dependencies/late_fragment_0.vert", stage = "vert" },
+    { name = "subpass-frag-0", template = "renderpass/subpass_dependencies/late_fragment_0.frag", stage = "frag" },
+    { name = "subpass-vert-1", template = "renderpass/subpass_dependencies/late_fragment_n.vert", stage = "vert" },
+    { name = "subpass-frag-1", template = "renderpass/subpass_dependencies/late_fragment_n.frag", stage = "frag" },
+    { name = "subpass-vert-2", template = "renderpass/subpass_dependencies/late_fragment_n.vert", stage = "vert" },
+    { name = "subpass-frag-2", template = "renderpass/subpass_dependencies/late_fragment_n.frag", stage = "frag" },
+]
+
+[[case]]
+name = "late_fragment_5"
+rust_const = "LATE_FRAGMENT_5"
+rust_type = "SharedProgram"
+programs = [
+    { name = "subpass-vert-0", template = "renderpass/subpass_dependencies/late_fragment_0.vert", stage = "vert" },
+    { name = "subpass-frag-0", template = "renderpass/subpass_dependencies/late_fragment_0.frag", stage = "frag" },
+    { name = "subpass-vert-1", template = "renderpass/subpass_dependencies/late_fragment_n.vert", stage = "vert" },
+    { name = "subpass-frag-1", template = "renderpass/subpass_dependencies/late_fragment_n.frag", stage = "frag" },
+    { name = "subpass-vert-2", template = "renderpass/subpass_dependencies/late_fragment_n.vert", stage = "vert" },
+    { name = "subpass-frag-2", template = "renderpass/subpass_dependencies/late_fragment_n.frag", stage = "frag" },
+    { name = "subpass-vert-3", template = "renderpass/subpass_dependencies/late_fragment_n.vert", stage = "vert" },
+    { name = "subpass-frag-3", template = "renderpass/subpass_dependencies/late_fragment_n.frag", stage = "frag" },
+    { name = "subpass-vert-4", template = "renderpass/subpass_dependencies/late_fragment_n.vert", stage = "vert" },
+    { name = "subpass-frag-4", template = "renderpass/subpass_dependencies/late_fragment_n.frag", stage = "frag" },
+]
+
+[[case]]
+name = "separate_channels_ds"
+rust_const = "SEPARATE_CHANNELS_DS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/subpass_dependencies/single_attachment.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/subpass_dependencies/separate_channels_ds.frag", stage = "frag" },
+]

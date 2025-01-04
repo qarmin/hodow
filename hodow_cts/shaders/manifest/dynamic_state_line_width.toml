@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.dynamic_state.*.line_width.*
+#
+# `LineWidthCase::initPrograms`: a vertex shader passing xy through and a fragment shader writing the pushed colour.
+
+upstream_source = "external/vulkancts/modules/vulkan/dynamic_state/vktDynamicStateLineWidthTests.cpp"
+rust_module = "dynamic_state/line_width_tests"
+
+[[case]]
+name = "line_width"
+rust_const = "LINE_WIDTH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "dynamic_state/line_width.vert", stage = "vert" },
+    { name = "frag", template = "dynamic_state/line_width.frag", stage = "frag" },
+]

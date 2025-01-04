@@ -1,0 +1,32 @@
+#version 450
+layout(local_size_x = 1) in;
+
+struct Inputs
+{
+	highp ivec4 value;
+};
+struct Outputs
+{
+	lowp ivec4 lsb;
+};
+
+layout(set = 0, binding = 0, std430) buffer InBuffer
+{
+    Inputs inputs[];
+};
+layout(set = 0, binding = 1, std430) buffer OutBuffer
+{
+    Outputs outputs[];
+};
+
+void main (void)
+{
+    uint invocationNdx = gl_NumWorkGroups.x*gl_NumWorkGroups.y*gl_WorkGroupID.z
+                       + gl_NumWorkGroups.x*gl_WorkGroupID.y + gl_WorkGroupID.x;
+	ivec4 value = ivec4(inputs[invocationNdx].value);
+	ivec4 lsb;
+
+	lsb = findLSB(value);
+
+	outputs[invocationNdx].lsb = lsb;
+}

@@ -1,0 +1,31 @@
+# Shader manifest for dEQP-VK.rasterization.provoking_vertex.*
+#
+# The vertex shader forwards the colour flat and, for the transform feedback cases, also writes the position to an
+# xfb output at location 1.
+
+upstream_source = "external/vulkancts/modules/vulkan/rasterization/vktRasterizationProvokingVertexTests.cpp"
+rust_module = "rasterization/provoking_vertex_tests"
+
+[[case]]
+name = "draw"
+rust_const = "PROVOKING_VERTEX_DRAW"
+rust_type = "ProvokingVertexProgram"
+programs = [
+    { name = "vert", template = "rasterization/provoking_vertex.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/provoking_vertex.frag", stage = "frag" },
+]
+[case.derived]
+xfb_decl = "''"
+xfb_write = "''"
+
+[[case]]
+name = "transform_feedback"
+rust_const = "PROVOKING_VERTEX_XFB"
+rust_type = "ProvokingVertexProgram"
+programs = [
+    { name = "vert", template = "rasterization/provoking_vertex.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/provoking_vertex.frag", stage = "frag" },
+]
+[case.derived]
+xfb_decl = "'layout(xfb_buffer = 0, xfb_offset = 0, location = 1) out vec4 out_xfb;'"
+xfb_write = "'out_xfb = in_position;'"

@@ -1,0 +1,34 @@
+# Shader manifest for dEQP-VK.api.smoke.{triangle,asm_triangle,asm_triangle_no_opname,unused_resolve_attachment}
+#
+# `createTriangleProgs` (shared by triangle and unused_resolve_attachment), `createTriangleAsmProgs` and `createProgsNoOpName`:
+# a vertex shader passing a_position through and a fragment shader writing magenta, the last two written in SPIR-V assembly.
+
+upstream_source = "external/vulkancts/modules/vulkan/api/vktApiSmokeTests.cpp"
+rust_module = "api/smoke_triangle_tests"
+
+[[case]]
+name = "triangle"
+rust_const = "SMOKE_TRIANGLE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "api/smoke_triangle.vert", stage = "vert" },
+    { name = "frag", template = "api/smoke_triangle.frag", stage = "frag" },
+]
+
+[[case]]
+name = "asm_triangle"
+rust_const = "SMOKE_TRIANGLE_ASM"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "api/smoke_triangle_asm.vert.asm", stage = "asm" },
+    { name = "frag", template = "api/smoke_triangle_asm.frag.asm", stage = "asm" },
+]
+
+[[case]]
+name = "asm_triangle_no_opname"
+rust_const = "SMOKE_TRIANGLE_ASM_NO_OPNAME"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "api/smoke_triangle_noopname.vert.asm", stage = "asm" },
+    { name = "frag", template = "api/smoke_triangle_noopname.frag.asm", stage = "asm" },
+]

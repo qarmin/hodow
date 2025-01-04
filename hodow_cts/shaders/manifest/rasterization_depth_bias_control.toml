@@ -1,0 +1,16 @@
+# Shader manifest for dEQP-VK.rasterization.depth_bias_control.*
+#
+# Every case shares the one pair: the vertex shader forwards the position and the fragment shader writes
+# `DepthBiasControlCase::kOutColor`, which the test compares against.
+
+upstream_source = "external/vulkancts/modules/vulkan/rasterization/vktRasterizationDepthBiasControlTests.cpp"
+rust_module = "rasterization/depth_bias_control_tests"
+
+[[case]]
+name = "depth_bias_control"
+rust_const = "DEPTH_BIAS_CONTROL"
+rust_type = "DepthBiasControlProgram"
+programs = [
+    { name = "vert", template = "rasterization/depth_bias_control.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/depth_bias_control.frag", stage = "frag" },
+]

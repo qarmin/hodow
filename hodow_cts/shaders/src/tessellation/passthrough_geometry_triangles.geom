@@ -1,0 +1,17 @@
+#version 310 es
+#extension GL_EXT_geometry_shader : require
+layout(triangles) in;
+layout(triangle_strip, max_vertices=3) out;
+
+layout(location = 0) in  highp vec4 v_evaluated_color[];
+layout(location = 0) out highp vec4 v_fragment_color;
+
+void main (void)
+{
+    for (int ndx = 0; ndx < gl_in.length(); ++ndx)
+    {
+        gl_Position = gl_in[ndx].gl_Position;
+        v_fragment_color = v_evaluated_color[ndx];
+        EmitVertex();
+    }
+}

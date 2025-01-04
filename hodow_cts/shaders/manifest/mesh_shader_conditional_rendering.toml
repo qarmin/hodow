@@ -1,0 +1,46 @@
+# Shader manifest for dEQP-VK.mesh_shader.ext.conditional_rendering.*
+#
+# `ConditionalRenderingCase::initPrograms`: an optional task shader that emits one mesh task, a mesh shader drawing a full screen
+# triangle and a fragment shader writing a constant colour, or the view index in red for the multiview cases.
+
+upstream_source = "external/vulkancts/modules/vulkan/mesh_shader/vktMeshShaderConditionalRenderingTestsEXT.cpp"
+rust_module = "mesh_shader/conditional_rendering_tests"
+spirv_version = "spirv1.4"
+
+[[case]]
+name = "mesh_only"
+rust_const = "COND_MESH_ONLY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/conditional_rendering/cond.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/conditional_rendering/cond.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mesh_and_task"
+rust_const = "COND_MESH_AND_TASK"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/conditional_rendering/cond.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/conditional_rendering/cond.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/conditional_rendering/cond.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mesh_only_multiview"
+rust_const = "COND_MESH_ONLY_MULTIVIEW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/conditional_rendering/cond.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/conditional_rendering/cond_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mesh_and_task_multiview"
+rust_const = "COND_MESH_AND_TASK_MULTIVIEW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/conditional_rendering/cond.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/conditional_rendering/cond.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/conditional_rendering/cond_multiview.frag", stage = "frag" },
+]

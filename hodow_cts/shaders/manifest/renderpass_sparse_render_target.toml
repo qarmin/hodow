@@ -1,0 +1,508 @@
+# Shader manifest for dEQP-VK.renderpasses.*.suballocation.sparserendertarget.*
+#
+# `Programs::init` of vktRenderPassSparseRenderTargetTests.cpp: one pass-through quad vertex shader and a fragment shader chosen
+# by the channel class of the format. The integer ones write 1 << (bits - 1/2/3) (unsigned) or 1 << (bits - 2/3/4) (signed) per
+# channel; the shift count wraps modulo 32 for a channel the format lacks, as the C++ `1u << (0u - n)` does on x86.
+
+upstream_source = "external/vulkancts/modules/vulkan/renderpass/vktRenderPassSparseRenderTargetTests.cpp"
+rust_module = "renderpass/sparse_render_target_tests"
+
+[[case]]
+name = "r5g6b5_unorm_pack16"
+rust_const = "SPARSE_RT_R5G6B5_UNORM_PACK16"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "r8_unorm"
+rust_const = "SPARSE_RT_R8_UNORM"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "r8_snorm"
+rust_const = "SPARSE_RT_R8_SNORM"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "r8_uint"
+rust_const = "SPARSE_RT_R8_UINT"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/uint.frag", stage = "frag" },
+]
+derived = { r = "128", g = "1073741824", b = "536870912" }
+
+[[case]]
+name = "r8_sint"
+rust_const = "SPARSE_RT_R8_SINT"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/sint.frag", stage = "frag" },
+]
+derived = { r = "64", g = "536870912", b = "268435456" }
+
+[[case]]
+name = "a8_unorm"
+rust_const = "SPARSE_RT_A8_UNORM"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "r8g8_unorm"
+rust_const = "SPARSE_RT_R8G8_UNORM"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "r8g8_snorm"
+rust_const = "SPARSE_RT_R8G8_SNORM"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "r8g8_uint"
+rust_const = "SPARSE_RT_R8G8_UINT"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/uint.frag", stage = "frag" },
+]
+derived = { r = "128", g = "64", b = "536870912" }
+
+[[case]]
+name = "r8g8_sint"
+rust_const = "SPARSE_RT_R8G8_SINT"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/sint.frag", stage = "frag" },
+]
+derived = { r = "64", g = "32", b = "268435456" }
+
+[[case]]
+name = "r8g8b8a8_unorm"
+rust_const = "SPARSE_RT_R8G8B8A8_UNORM"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "r8g8b8a8_snorm"
+rust_const = "SPARSE_RT_R8G8B8A8_SNORM"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "r8g8b8a8_uint"
+rust_const = "SPARSE_RT_R8G8B8A8_UINT"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/uint.frag", stage = "frag" },
+]
+derived = { r = "128", g = "64", b = "32" }
+
+[[case]]
+name = "r8g8b8a8_sint"
+rust_const = "SPARSE_RT_R8G8B8A8_SINT"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/sint.frag", stage = "frag" },
+]
+derived = { r = "64", g = "32", b = "16" }
+
+[[case]]
+name = "r8g8b8a8_srgb"
+rust_const = "SPARSE_RT_R8G8B8A8_SRGB"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "a8b8g8r8_unorm_pack32"
+rust_const = "SPARSE_RT_A8B8G8R8_UNORM_PACK32"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "a8b8g8r8_snorm_pack32"
+rust_const = "SPARSE_RT_A8B8G8R8_SNORM_PACK32"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "a8b8g8r8_uint_pack32"
+rust_const = "SPARSE_RT_A8B8G8R8_UINT_PACK32"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/uint.frag", stage = "frag" },
+]
+derived = { r = "128", g = "64", b = "32" }
+
+[[case]]
+name = "a8b8g8r8_sint_pack32"
+rust_const = "SPARSE_RT_A8B8G8R8_SINT_PACK32"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/sint.frag", stage = "frag" },
+]
+derived = { r = "64", g = "32", b = "16" }
+
+[[case]]
+name = "a8b8g8r8_srgb_pack32"
+rust_const = "SPARSE_RT_A8B8G8R8_SRGB_PACK32"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "b8g8r8a8_unorm"
+rust_const = "SPARSE_RT_B8G8R8A8_UNORM"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "b8g8r8a8_srgb"
+rust_const = "SPARSE_RT_B8G8R8A8_SRGB"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "a2r10g10b10_unorm_pack32"
+rust_const = "SPARSE_RT_A2R10G10B10_UNORM_PACK32"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "a2b10g10r10_unorm_pack32"
+rust_const = "SPARSE_RT_A2B10G10R10_UNORM_PACK32"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "a2b10g10r10_uint_pack32"
+rust_const = "SPARSE_RT_A2B10G10R10_UINT_PACK32"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/uint.frag", stage = "frag" },
+]
+derived = { r = "512", g = "256", b = "128" }
+
+[[case]]
+name = "r16_unorm"
+rust_const = "SPARSE_RT_R16_UNORM"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "r16_snorm"
+rust_const = "SPARSE_RT_R16_SNORM"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "r16_uint"
+rust_const = "SPARSE_RT_R16_UINT"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/uint.frag", stage = "frag" },
+]
+derived = { r = "32768", g = "1073741824", b = "536870912" }
+
+[[case]]
+name = "r16_sint"
+rust_const = "SPARSE_RT_R16_SINT"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/sint.frag", stage = "frag" },
+]
+derived = { r = "16384", g = "536870912", b = "268435456" }
+
+[[case]]
+name = "r16_sfloat"
+rust_const = "SPARSE_RT_R16_SFLOAT"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "r16g16_unorm"
+rust_const = "SPARSE_RT_R16G16_UNORM"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "r16g16_snorm"
+rust_const = "SPARSE_RT_R16G16_SNORM"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "r16g16_uint"
+rust_const = "SPARSE_RT_R16G16_UINT"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/uint.frag", stage = "frag" },
+]
+derived = { r = "32768", g = "16384", b = "536870912" }
+
+[[case]]
+name = "r16g16_sint"
+rust_const = "SPARSE_RT_R16G16_SINT"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/sint.frag", stage = "frag" },
+]
+derived = { r = "16384", g = "8192", b = "268435456" }
+
+[[case]]
+name = "r16g16_sfloat"
+rust_const = "SPARSE_RT_R16G16_SFLOAT"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "r16g16b16a16_unorm"
+rust_const = "SPARSE_RT_R16G16B16A16_UNORM"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "r16g16b16a16_snorm"
+rust_const = "SPARSE_RT_R16G16B16A16_SNORM"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "r16g16b16a16_uint"
+rust_const = "SPARSE_RT_R16G16B16A16_UINT"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/uint.frag", stage = "frag" },
+]
+derived = { r = "32768", g = "16384", b = "8192" }
+
+[[case]]
+name = "r16g16b16a16_sint"
+rust_const = "SPARSE_RT_R16G16B16A16_SINT"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/sint.frag", stage = "frag" },
+]
+derived = { r = "16384", g = "8192", b = "4096" }
+
+[[case]]
+name = "r16g16b16a16_sfloat"
+rust_const = "SPARSE_RT_R16G16B16A16_SFLOAT"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "r32_uint"
+rust_const = "SPARSE_RT_R32_UINT"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/uint.frag", stage = "frag" },
+]
+derived = { r = "2147483648", g = "1073741824", b = "536870912" }
+
+[[case]]
+name = "r32_sint"
+rust_const = "SPARSE_RT_R32_SINT"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/sint.frag", stage = "frag" },
+]
+derived = { r = "1073741824", g = "536870912", b = "268435456" }
+
+[[case]]
+name = "r32_sfloat"
+rust_const = "SPARSE_RT_R32_SFLOAT"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "r32g32_uint"
+rust_const = "SPARSE_RT_R32G32_UINT"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/uint.frag", stage = "frag" },
+]
+derived = { r = "2147483648", g = "1073741824", b = "536870912" }
+
+[[case]]
+name = "r32g32_sint"
+rust_const = "SPARSE_RT_R32G32_SINT"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/sint.frag", stage = "frag" },
+]
+derived = { r = "1073741824", g = "536870912", b = "268435456" }
+
+[[case]]
+name = "r32g32_sfloat"
+rust_const = "SPARSE_RT_R32G32_SFLOAT"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "r32g32b32a32_uint"
+rust_const = "SPARSE_RT_R32G32B32A32_UINT"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/uint.frag", stage = "frag" },
+]
+derived = { r = "2147483648", g = "1073741824", b = "536870912" }
+
+[[case]]
+name = "r32g32b32a32_sint"
+rust_const = "SPARSE_RT_R32G32B32A32_SINT"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/sint.frag", stage = "frag" },
+]
+derived = { r = "1073741824", g = "536870912", b = "268435456" }
+
+[[case]]
+name = "r32g32b32a32_sfloat"
+rust_const = "SPARSE_RT_R32G32B32A32_SFLOAT"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }
+
+[[case]]
+name = "r10x6g10x6b10x6a10x6_unorm_4pack16"
+rust_const = "SPARSE_RT_R10X6G10X6B10X6A10X6_UNORM_4PACK16"
+rust_type = "SparseRenderTargetProgram"
+programs = [
+    { name = "quad-vert", template = "renderpass/sparse_render_target/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "renderpass/sparse_render_target/float.frag", stage = "frag" },
+]
+derived = { r = "0", g = "0", b = "0" }

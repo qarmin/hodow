@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.renderpasses.renderpass.multiple_subpasses_multiple_command_buffers.*
+#
+# A pass-through vertex colour pair shared by both cases.
+
+upstream_source = "external/vulkancts/modules/vulkan/renderpass/vktRenderPassMultipleSubpassesMultipleCommandBuffersTests.cpp"
+rust_module = "renderpass/multiple_subpasses_cmd_buffers_tests"
+
+[[case]]
+name = "multiple_subpasses"
+rust_const = "MULTIPLE_SUBPASSES_CMD_BUFFERS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert_shader", template = "renderpass/multiple_subpasses_cmd_buffers.vert", stage = "vert" },
+    { name = "frag_shader", template = "renderpass/multiple_subpasses_cmd_buffers.frag", stage = "frag" },
+]

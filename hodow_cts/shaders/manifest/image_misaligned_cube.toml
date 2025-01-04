@@ -1,0 +1,13 @@
+# Shader manifest for dEQP-VK.image.misaligned_cube.*
+#
+# `initPrograms` builds the same compute shader for every size; the format qualifier
+# `getShaderImageFormatQualifier(mapVkFormat(VK_FORMAT_R8G8B8A8_UNORM))` is `rgba8`.
+
+upstream_source = "external/vulkancts/modules/vulkan/image/vktImageMisalignedCubeTests.cpp"
+rust_module = "image/misaligned_cube_tests"
+
+[[case]]
+name = "misaligned_cube"
+rust_const = "MISALIGNED_CUBE_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "image/misaligned_cube.comp", stage = "comp" }]

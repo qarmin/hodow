@@ -1,0 +1,20 @@
+#version 450
+
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+
+void main()
+{
+    int ival = 0;
+    uint uival = 200;
+    uint uivalRet1;
+    uint uivalRet2;
+    uivalRet2 = uaddCarry(uival, 0xFFFFFFFF, uivalRet1);
+    uivalRet2 = usubBorrow(uival, 0xFFFFFFFF, uivalRet1);
+    umulExtended(uival, 0xFFFFFFFF, uivalRet1, uivalRet2);
+    uivalRet1 = bitfieldExtract(uival, 3, 8);
+    uivalRet1 = bitfieldInsert(uival, 0xFFFFFFFF, 3, 8);
+    uivalRet1 = bitfieldReverse(uival);
+    ival = bitCount(uival);
+    ival = findLSB(uival);
+    ival = findMSB(uival);
+}

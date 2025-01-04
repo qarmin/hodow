@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.dynamic_state.*.discard.*
+#
+# `DiscardTestCase::initPrograms`: the fragment shader discards everything, because the uniform it tests against is zero.
+
+upstream_source = "external/vulkancts/modules/vulkan/dynamic_state/vktDynamicStateDiscardTests.cpp"
+rust_module = "dynamic_state/discard_tests"
+
+[[case]]
+name = "discard"
+rust_const = "DISCARD"
+rust_type = "SharedProgram"
+programs = [
+    { name = "discard.vert", template = "dynamic_state/discard.vert", stage = "vert" },
+    { name = "discard.frag", template = "dynamic_state/discard.frag", stage = "frag" },
+]

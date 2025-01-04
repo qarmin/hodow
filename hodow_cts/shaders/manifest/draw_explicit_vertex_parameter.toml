@@ -1,0 +1,465 @@
+# Shader manifest for dEQP-VK.draw.*.explicit_vertex_parameter.*
+#
+# `DrawTestCase::initPrograms` (VK_AMD_shader_explicit_vertex_parameter): one vertex and one fragment shader per
+# (sample count, interpolation, auxiliary storage qualifier). The storage buffer holds one vec4 per sample, and upstream
+# sizes it as `WIDTH * HEIGHT * samples * samples`. The sample count is the decimal value of the enum, which is what
+# `de::toString` puts into both the GLSL and the case name.
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawExplicitVertexParameterTests.cpp"
+rust_module = "draw/explicit_vertex_parameter_tests"
+
+[[case]]
+name = "smooth_none_samples_1"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_SMOOTH_NONE_SAMPLES_1"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 1 }, qualifier = { type = "str", value = "smooth" }, auxqualifier = { type = "str", value = "" }, barycoord = { type = "str", value = "gl_BaryCoordSmoothAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "noperspective_none_samples_1"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_NOPERSPECTIVE_NONE_SAMPLES_1"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 1 }, qualifier = { type = "str", value = "noperspective" }, auxqualifier = { type = "str", value = "" }, barycoord = { type = "str", value = "gl_BaryCoordNoPerspAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "smooth_none_samples_2"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_SMOOTH_NONE_SAMPLES_2"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 2 }, qualifier = { type = "str", value = "smooth" }, auxqualifier = { type = "str", value = "" }, barycoord = { type = "str", value = "gl_BaryCoordSmoothAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "smooth_sample_samples_2"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_SMOOTH_SAMPLE_SAMPLES_2"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 2 }, qualifier = { type = "str", value = "smooth" }, auxqualifier = { type = "str", value = "sample" }, barycoord = { type = "str", value = "gl_BaryCoordSmoothSampleAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "smooth_centroid_samples_2"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_SMOOTH_CENTROID_SAMPLES_2"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 2 }, qualifier = { type = "str", value = "smooth" }, auxqualifier = { type = "str", value = "centroid" }, barycoord = { type = "str", value = "gl_BaryCoordSmoothCentroidAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "noperspective_none_samples_2"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_NOPERSPECTIVE_NONE_SAMPLES_2"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 2 }, qualifier = { type = "str", value = "noperspective" }, auxqualifier = { type = "str", value = "" }, barycoord = { type = "str", value = "gl_BaryCoordNoPerspAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "noperspective_sample_samples_2"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_NOPERSPECTIVE_SAMPLE_SAMPLES_2"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 2 }, qualifier = { type = "str", value = "noperspective" }, auxqualifier = { type = "str", value = "sample" }, barycoord = { type = "str", value = "gl_BaryCoordNoPerspSampleAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "noperspective_centroid_samples_2"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_NOPERSPECTIVE_CENTROID_SAMPLES_2"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 2 }, qualifier = { type = "str", value = "noperspective" }, auxqualifier = { type = "str", value = "centroid" }, barycoord = { type = "str", value = "gl_BaryCoordNoPerspCentroidAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "smooth_none_samples_4"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_SMOOTH_NONE_SAMPLES_4"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 4 }, qualifier = { type = "str", value = "smooth" }, auxqualifier = { type = "str", value = "" }, barycoord = { type = "str", value = "gl_BaryCoordSmoothAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "smooth_sample_samples_4"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_SMOOTH_SAMPLE_SAMPLES_4"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 4 }, qualifier = { type = "str", value = "smooth" }, auxqualifier = { type = "str", value = "sample" }, barycoord = { type = "str", value = "gl_BaryCoordSmoothSampleAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "smooth_centroid_samples_4"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_SMOOTH_CENTROID_SAMPLES_4"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 4 }, qualifier = { type = "str", value = "smooth" }, auxqualifier = { type = "str", value = "centroid" }, barycoord = { type = "str", value = "gl_BaryCoordSmoothCentroidAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "noperspective_none_samples_4"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_NOPERSPECTIVE_NONE_SAMPLES_4"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 4 }, qualifier = { type = "str", value = "noperspective" }, auxqualifier = { type = "str", value = "" }, barycoord = { type = "str", value = "gl_BaryCoordNoPerspAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "noperspective_sample_samples_4"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_NOPERSPECTIVE_SAMPLE_SAMPLES_4"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 4 }, qualifier = { type = "str", value = "noperspective" }, auxqualifier = { type = "str", value = "sample" }, barycoord = { type = "str", value = "gl_BaryCoordNoPerspSampleAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "noperspective_centroid_samples_4"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_NOPERSPECTIVE_CENTROID_SAMPLES_4"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 4 }, qualifier = { type = "str", value = "noperspective" }, auxqualifier = { type = "str", value = "centroid" }, barycoord = { type = "str", value = "gl_BaryCoordNoPerspCentroidAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "smooth_none_samples_8"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_SMOOTH_NONE_SAMPLES_8"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 8 }, qualifier = { type = "str", value = "smooth" }, auxqualifier = { type = "str", value = "" }, barycoord = { type = "str", value = "gl_BaryCoordSmoothAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "smooth_sample_samples_8"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_SMOOTH_SAMPLE_SAMPLES_8"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 8 }, qualifier = { type = "str", value = "smooth" }, auxqualifier = { type = "str", value = "sample" }, barycoord = { type = "str", value = "gl_BaryCoordSmoothSampleAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "smooth_centroid_samples_8"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_SMOOTH_CENTROID_SAMPLES_8"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 8 }, qualifier = { type = "str", value = "smooth" }, auxqualifier = { type = "str", value = "centroid" }, barycoord = { type = "str", value = "gl_BaryCoordSmoothCentroidAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "noperspective_none_samples_8"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_NOPERSPECTIVE_NONE_SAMPLES_8"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 8 }, qualifier = { type = "str", value = "noperspective" }, auxqualifier = { type = "str", value = "" }, barycoord = { type = "str", value = "gl_BaryCoordNoPerspAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "noperspective_sample_samples_8"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_NOPERSPECTIVE_SAMPLE_SAMPLES_8"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 8 }, qualifier = { type = "str", value = "noperspective" }, auxqualifier = { type = "str", value = "sample" }, barycoord = { type = "str", value = "gl_BaryCoordNoPerspSampleAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "noperspective_centroid_samples_8"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_NOPERSPECTIVE_CENTROID_SAMPLES_8"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 8 }, qualifier = { type = "str", value = "noperspective" }, auxqualifier = { type = "str", value = "centroid" }, barycoord = { type = "str", value = "gl_BaryCoordNoPerspCentroidAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "smooth_none_samples_16"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_SMOOTH_NONE_SAMPLES_16"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 16 }, qualifier = { type = "str", value = "smooth" }, auxqualifier = { type = "str", value = "" }, barycoord = { type = "str", value = "gl_BaryCoordSmoothAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "smooth_sample_samples_16"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_SMOOTH_SAMPLE_SAMPLES_16"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 16 }, qualifier = { type = "str", value = "smooth" }, auxqualifier = { type = "str", value = "sample" }, barycoord = { type = "str", value = "gl_BaryCoordSmoothSampleAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "smooth_centroid_samples_16"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_SMOOTH_CENTROID_SAMPLES_16"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 16 }, qualifier = { type = "str", value = "smooth" }, auxqualifier = { type = "str", value = "centroid" }, barycoord = { type = "str", value = "gl_BaryCoordSmoothCentroidAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "noperspective_none_samples_16"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_NOPERSPECTIVE_NONE_SAMPLES_16"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 16 }, qualifier = { type = "str", value = "noperspective" }, auxqualifier = { type = "str", value = "" }, barycoord = { type = "str", value = "gl_BaryCoordNoPerspAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "noperspective_sample_samples_16"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_NOPERSPECTIVE_SAMPLE_SAMPLES_16"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 16 }, qualifier = { type = "str", value = "noperspective" }, auxqualifier = { type = "str", value = "sample" }, barycoord = { type = "str", value = "gl_BaryCoordNoPerspSampleAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "noperspective_centroid_samples_16"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_NOPERSPECTIVE_CENTROID_SAMPLES_16"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 16 }, qualifier = { type = "str", value = "noperspective" }, auxqualifier = { type = "str", value = "centroid" }, barycoord = { type = "str", value = "gl_BaryCoordNoPerspCentroidAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "smooth_none_samples_32"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_SMOOTH_NONE_SAMPLES_32"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 32 }, qualifier = { type = "str", value = "smooth" }, auxqualifier = { type = "str", value = "" }, barycoord = { type = "str", value = "gl_BaryCoordSmoothAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "smooth_sample_samples_32"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_SMOOTH_SAMPLE_SAMPLES_32"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 32 }, qualifier = { type = "str", value = "smooth" }, auxqualifier = { type = "str", value = "sample" }, barycoord = { type = "str", value = "gl_BaryCoordSmoothSampleAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "smooth_centroid_samples_32"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_SMOOTH_CENTROID_SAMPLES_32"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 32 }, qualifier = { type = "str", value = "smooth" }, auxqualifier = { type = "str", value = "centroid" }, barycoord = { type = "str", value = "gl_BaryCoordSmoothCentroidAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "noperspective_none_samples_32"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_NOPERSPECTIVE_NONE_SAMPLES_32"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 32 }, qualifier = { type = "str", value = "noperspective" }, auxqualifier = { type = "str", value = "" }, barycoord = { type = "str", value = "gl_BaryCoordNoPerspAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "noperspective_sample_samples_32"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_NOPERSPECTIVE_SAMPLE_SAMPLES_32"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 32 }, qualifier = { type = "str", value = "noperspective" }, auxqualifier = { type = "str", value = "sample" }, barycoord = { type = "str", value = "gl_BaryCoordNoPerspSampleAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "noperspective_centroid_samples_32"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_NOPERSPECTIVE_CENTROID_SAMPLES_32"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 32 }, qualifier = { type = "str", value = "noperspective" }, auxqualifier = { type = "str", value = "centroid" }, barycoord = { type = "str", value = "gl_BaryCoordNoPerspCentroidAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "smooth_none_samples_64"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_SMOOTH_NONE_SAMPLES_64"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 64 }, qualifier = { type = "str", value = "smooth" }, auxqualifier = { type = "str", value = "" }, barycoord = { type = "str", value = "gl_BaryCoordSmoothAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "smooth_sample_samples_64"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_SMOOTH_SAMPLE_SAMPLES_64"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 64 }, qualifier = { type = "str", value = "smooth" }, auxqualifier = { type = "str", value = "sample" }, barycoord = { type = "str", value = "gl_BaryCoordSmoothSampleAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "smooth_centroid_samples_64"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_SMOOTH_CENTROID_SAMPLES_64"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 64 }, qualifier = { type = "str", value = "smooth" }, auxqualifier = { type = "str", value = "centroid" }, barycoord = { type = "str", value = "gl_BaryCoordSmoothCentroidAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "noperspective_none_samples_64"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_NOPERSPECTIVE_NONE_SAMPLES_64"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 64 }, qualifier = { type = "str", value = "noperspective" }, auxqualifier = { type = "str", value = "" }, barycoord = { type = "str", value = "gl_BaryCoordNoPerspAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "noperspective_sample_samples_64"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_NOPERSPECTIVE_SAMPLE_SAMPLES_64"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 64 }, qualifier = { type = "str", value = "noperspective" }, auxqualifier = { type = "str", value = "sample" }, barycoord = { type = "str", value = "gl_BaryCoordNoPerspSampleAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"
+
+[[case]]
+name = "noperspective_centroid_samples_64"
+rust_const = "EXPLICIT_VERTEX_PARAMETER_NOPERSPECTIVE_CENTROID_SAMPLES_64"
+rust_type = "ExplicitVertexParameterPrograms"
+programs = [
+    { name = "vert", template = "draw/explicit_vertex_parameter.vert", stage = "vert" },
+    { name = "frag", template = "draw/explicit_vertex_parameter.frag", stage = "frag" },
+]
+params = { samples = { type = "u32", value = 64 }, qualifier = { type = "str", value = "noperspective" }, auxqualifier = { type = "str", value = "centroid" }, barycoord = { type = "str", value = "gl_BaryCoordNoPerspCentroidAMD" } }
+[case.derived]
+numValues = "256 * samples * samples"

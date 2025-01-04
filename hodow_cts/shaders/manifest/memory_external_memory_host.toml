@@ -1,0 +1,17 @@
+# Shader manifest for dEQP-VK.memory.external_memory_host.*
+#
+# `AddPrograms::init` ignores its TestParams, so the nine cases that use it (eight
+# render-image formats and the synchronization case) share one shader pair. The loop that
+# registers them lives in the Rust.
+
+upstream_source = "external/vulkancts/modules/vulkan/memory/vktMemoryExternalMemoryHostTests.cpp"
+rust_module = "memory/external_memory_host_tests"
+
+[[case]]
+name = "external_memory_host_programs"
+rust_const = "EXTERNAL_MEMORY_HOST_PROGRAMS"
+rust_type = "ExternalMemoryHostPrograms"
+programs = [
+  { name = "position_only.vert", template = "memory/external_memory_host_position_only.vert", stage = "vert" },
+  { name = "only_color_out.frag", template = "memory/external_memory_host_only_color_out.frag", stage = "frag" },
+]

@@ -1,0 +1,13 @@
+#version 440
+
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout (binding = 0${format_qualifier}) writeonly uniform ${image_type} u_image;
+${layer_block}
+void main (void)
+{
+    int gx = int(gl_GlobalInvocationID.x);
+    int gy = int(gl_GlobalInvocationID.y);
+    int gz = ${gz};
+    ${color_type} storedColor = ${color_expression};
+    imageStore(u_image, ${texel_coordinate}, storedColor);
+}

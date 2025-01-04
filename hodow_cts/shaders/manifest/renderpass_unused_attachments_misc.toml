@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.renderpasses.dynamic_rendering.*.unused_attachments.misc.*
+#
+# `usedThenUnusedPrograms`: a full-screen triangle strip vertex shader and a fragment shader writing a push constant colour.
+
+upstream_source = "external/vulkancts/modules/vulkan/renderpass/vktDynamicRenderingUnusedAttachmentsTests.cpp"
+rust_module = "renderpass/unused_attachments_tests"
+
+[[case]]
+name = "used_then_unused"
+rust_const = "USED_THEN_UNUSED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/unused_attachments/used_then_unused.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/unused_attachments/used_then_unused.frag", stage = "frag" },
+]

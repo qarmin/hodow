@@ -1,0 +1,35 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.blend.*
+#
+# `BlendTest::initPrograms` and `ClampTest::initPrograms` share one pass-through pair; `DualSourceBlendTest::initPrograms`
+# passes two colours through and writes them as the two blend sources, either as plain variables or as arrays of one,
+# discarding column 2 and row 3 so the reference has to leave those pixels at the clear colour.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineBlendTests.cpp"
+rust_module = "pipeline/blend_tests"
+
+[[case]]
+name = "color"
+rust_const = "BLEND_COLOR"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/blend/color.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/blend/color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "dual_source_variable"
+rust_const = "BLEND_DUAL_SOURCE_VARIABLE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/blend/dual_source.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/blend/dual_source_variable.frag", stage = "frag" },
+]
+
+[[case]]
+name = "dual_source_array"
+rust_const = "BLEND_DUAL_SOURCE_ARRAY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/blend/dual_source.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/blend/dual_source_array.frag", stage = "frag" },
+]

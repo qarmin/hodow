@@ -1,0 +1,711 @@
+# Shader manifest for dEQP-VK.mesh_shader.ext.query.*
+#
+# `MeshQueryCase::initPrograms`: the fragment shader depends on multiview, the mesh shader on the geometry type, whether a task
+# shader is used and the image height (which follows the draw blocks), and the task shader on the pseudorandomly shuffled mesh
+# task counts (a 2 in one of three positions). Every combination of the five is its own set.
+
+upstream_source = "external/vulkancts/modules/vulkan/mesh_shader/vktMeshShaderQueryTestsEXT.cpp"
+rust_module = "mesh_shader/query_tests"
+spirv_version = "spirv1.4"
+
+[[case]]
+name = "points_notask_h0_mv0"
+rust_const = "QUERY_POINTS_NOTASK_H0_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/query/points_notask_h0.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "points_notask_h0_mv1"
+rust_const = "QUERY_POINTS_NOTASK_H0_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/query/points_notask_h0.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "points_task_t0_h0_mv0"
+rust_const = "QUERY_POINTS_TASK_T0_H0_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t0.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/points_task_h0.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "points_task_t1_h0_mv0"
+rust_const = "QUERY_POINTS_TASK_T1_H0_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t1.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/points_task_h0.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "points_task_t2_h0_mv0"
+rust_const = "QUERY_POINTS_TASK_T2_H0_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t2.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/points_task_h0.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "points_task_t0_h0_mv1"
+rust_const = "QUERY_POINTS_TASK_T0_H0_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t0.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/points_task_h0.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "points_task_t1_h0_mv1"
+rust_const = "QUERY_POINTS_TASK_T1_H0_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t1.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/points_task_h0.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "points_task_t2_h0_mv1"
+rust_const = "QUERY_POINTS_TASK_T2_H0_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t2.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/points_task_h0.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "points_notask_h40_mv0"
+rust_const = "QUERY_POINTS_NOTASK_H40_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/query/points_notask_h40.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "points_notask_h40_mv1"
+rust_const = "QUERY_POINTS_NOTASK_H40_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/query/points_notask_h40.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "points_task_t0_h40_mv0"
+rust_const = "QUERY_POINTS_TASK_T0_H40_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t0.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/points_task_h40.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "points_task_t1_h40_mv0"
+rust_const = "QUERY_POINTS_TASK_T1_H40_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t1.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/points_task_h40.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "points_task_t2_h40_mv0"
+rust_const = "QUERY_POINTS_TASK_T2_H40_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t2.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/points_task_h40.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "points_task_t0_h40_mv1"
+rust_const = "QUERY_POINTS_TASK_T0_H40_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t0.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/points_task_h40.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "points_task_t1_h40_mv1"
+rust_const = "QUERY_POINTS_TASK_T1_H40_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t1.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/points_task_h40.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "points_task_t2_h40_mv1"
+rust_const = "QUERY_POINTS_TASK_T2_H40_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t2.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/points_task_h40.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "points_notask_h240_mv0"
+rust_const = "QUERY_POINTS_NOTASK_H240_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/query/points_notask_h240.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "points_notask_h240_mv1"
+rust_const = "QUERY_POINTS_NOTASK_H240_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/query/points_notask_h240.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "points_task_t0_h240_mv0"
+rust_const = "QUERY_POINTS_TASK_T0_H240_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t0.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/points_task_h240.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "points_task_t1_h240_mv0"
+rust_const = "QUERY_POINTS_TASK_T1_H240_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t1.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/points_task_h240.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "points_task_t2_h240_mv0"
+rust_const = "QUERY_POINTS_TASK_T2_H240_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t2.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/points_task_h240.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "points_task_t0_h240_mv1"
+rust_const = "QUERY_POINTS_TASK_T0_H240_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t0.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/points_task_h240.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "points_task_t1_h240_mv1"
+rust_const = "QUERY_POINTS_TASK_T1_H240_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t1.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/points_task_h240.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "points_task_t2_h240_mv1"
+rust_const = "QUERY_POINTS_TASK_T2_H240_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t2.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/points_task_h240.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lines_notask_h0_mv0"
+rust_const = "QUERY_LINES_NOTASK_H0_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/query/lines_notask_h0.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lines_notask_h0_mv1"
+rust_const = "QUERY_LINES_NOTASK_H0_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/query/lines_notask_h0.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lines_task_t0_h0_mv0"
+rust_const = "QUERY_LINES_TASK_T0_H0_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t0.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/lines_task_h0.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lines_task_t1_h0_mv0"
+rust_const = "QUERY_LINES_TASK_T1_H0_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t1.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/lines_task_h0.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lines_task_t2_h0_mv0"
+rust_const = "QUERY_LINES_TASK_T2_H0_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t2.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/lines_task_h0.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lines_task_t0_h0_mv1"
+rust_const = "QUERY_LINES_TASK_T0_H0_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t0.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/lines_task_h0.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lines_task_t1_h0_mv1"
+rust_const = "QUERY_LINES_TASK_T1_H0_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t1.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/lines_task_h0.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lines_task_t2_h0_mv1"
+rust_const = "QUERY_LINES_TASK_T2_H0_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t2.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/lines_task_h0.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lines_notask_h40_mv0"
+rust_const = "QUERY_LINES_NOTASK_H40_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/query/lines_notask_h40.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lines_notask_h40_mv1"
+rust_const = "QUERY_LINES_NOTASK_H40_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/query/lines_notask_h40.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lines_task_t0_h40_mv0"
+rust_const = "QUERY_LINES_TASK_T0_H40_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t0.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/lines_task_h40.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lines_task_t1_h40_mv0"
+rust_const = "QUERY_LINES_TASK_T1_H40_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t1.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/lines_task_h40.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lines_task_t2_h40_mv0"
+rust_const = "QUERY_LINES_TASK_T2_H40_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t2.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/lines_task_h40.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lines_task_t0_h40_mv1"
+rust_const = "QUERY_LINES_TASK_T0_H40_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t0.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/lines_task_h40.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lines_task_t1_h40_mv1"
+rust_const = "QUERY_LINES_TASK_T1_H40_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t1.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/lines_task_h40.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lines_task_t2_h40_mv1"
+rust_const = "QUERY_LINES_TASK_T2_H40_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t2.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/lines_task_h40.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lines_notask_h240_mv0"
+rust_const = "QUERY_LINES_NOTASK_H240_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/query/lines_notask_h240.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lines_notask_h240_mv1"
+rust_const = "QUERY_LINES_NOTASK_H240_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/query/lines_notask_h240.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lines_task_t0_h240_mv0"
+rust_const = "QUERY_LINES_TASK_T0_H240_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t0.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/lines_task_h240.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lines_task_t1_h240_mv0"
+rust_const = "QUERY_LINES_TASK_T1_H240_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t1.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/lines_task_h240.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lines_task_t2_h240_mv0"
+rust_const = "QUERY_LINES_TASK_T2_H240_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t2.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/lines_task_h240.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lines_task_t0_h240_mv1"
+rust_const = "QUERY_LINES_TASK_T0_H240_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t0.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/lines_task_h240.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lines_task_t1_h240_mv1"
+rust_const = "QUERY_LINES_TASK_T1_H240_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t1.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/lines_task_h240.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "lines_task_t2_h240_mv1"
+rust_const = "QUERY_LINES_TASK_T2_H240_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t2.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/lines_task_h240.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_notask_h0_mv0"
+rust_const = "QUERY_TRIANGLES_NOTASK_H0_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/query/triangles_notask_h0.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_notask_h0_mv1"
+rust_const = "QUERY_TRIANGLES_NOTASK_H0_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/query/triangles_notask_h0.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_task_t0_h0_mv0"
+rust_const = "QUERY_TRIANGLES_TASK_T0_H0_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t0.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/triangles_task_h0.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_task_t1_h0_mv0"
+rust_const = "QUERY_TRIANGLES_TASK_T1_H0_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t1.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/triangles_task_h0.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_task_t2_h0_mv0"
+rust_const = "QUERY_TRIANGLES_TASK_T2_H0_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t2.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/triangles_task_h0.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_task_t0_h0_mv1"
+rust_const = "QUERY_TRIANGLES_TASK_T0_H0_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t0.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/triangles_task_h0.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_task_t1_h0_mv1"
+rust_const = "QUERY_TRIANGLES_TASK_T1_H0_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t1.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/triangles_task_h0.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_task_t2_h0_mv1"
+rust_const = "QUERY_TRIANGLES_TASK_T2_H0_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t2.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/triangles_task_h0.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_notask_h40_mv0"
+rust_const = "QUERY_TRIANGLES_NOTASK_H40_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/query/triangles_notask_h40.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_notask_h40_mv1"
+rust_const = "QUERY_TRIANGLES_NOTASK_H40_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/query/triangles_notask_h40.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_task_t0_h40_mv0"
+rust_const = "QUERY_TRIANGLES_TASK_T0_H40_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t0.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/triangles_task_h40.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_task_t1_h40_mv0"
+rust_const = "QUERY_TRIANGLES_TASK_T1_H40_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t1.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/triangles_task_h40.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_task_t2_h40_mv0"
+rust_const = "QUERY_TRIANGLES_TASK_T2_H40_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t2.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/triangles_task_h40.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_task_t0_h40_mv1"
+rust_const = "QUERY_TRIANGLES_TASK_T0_H40_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t0.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/triangles_task_h40.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_task_t1_h40_mv1"
+rust_const = "QUERY_TRIANGLES_TASK_T1_H40_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t1.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/triangles_task_h40.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_task_t2_h40_mv1"
+rust_const = "QUERY_TRIANGLES_TASK_T2_H40_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t2.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/triangles_task_h40.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_notask_h240_mv0"
+rust_const = "QUERY_TRIANGLES_NOTASK_H240_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/query/triangles_notask_h240.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_notask_h240_mv1"
+rust_const = "QUERY_TRIANGLES_NOTASK_H240_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/query/triangles_notask_h240.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_task_t0_h240_mv0"
+rust_const = "QUERY_TRIANGLES_TASK_T0_H240_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t0.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/triangles_task_h240.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_task_t1_h240_mv0"
+rust_const = "QUERY_TRIANGLES_TASK_T1_H240_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t1.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/triangles_task_h240.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_task_t2_h240_mv0"
+rust_const = "QUERY_TRIANGLES_TASK_T2_H240_MV0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t2.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/triangles_task_h240.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_task_t0_h240_mv1"
+rust_const = "QUERY_TRIANGLES_TASK_T0_H240_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t0.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/triangles_task_h240.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_task_t1_h240_mv1"
+rust_const = "QUERY_TRIANGLES_TASK_T1_H240_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t1.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/triangles_task_h240.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_task_t2_h240_mv1"
+rust_const = "QUERY_TRIANGLES_TASK_T2_H240_MV1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/query/query_t2.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/query/triangles_task_h240.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/query/query_multiview.frag", stage = "frag" },
+]

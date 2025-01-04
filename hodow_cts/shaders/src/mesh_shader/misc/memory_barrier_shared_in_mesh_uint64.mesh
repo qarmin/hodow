@@ -1,0 +1,37 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_EXT_shader_explicit_arithmetic_types_int64 : enable
+
+layout (local_size_x=2) in;
+layout (points) out;
+layout (max_vertices=1, max_primitives=1) out;
+
+layout (location=0) out perprimitiveEXT vec4 primitiveColor[];
+
+shared uint flags[2];
+
+void main ()
+{
+    uvec2 vertPrim = uvec2(0u, 0u);
+flags[gl_LocalInvocationIndex] = 0u;
+barrier();
+flags[gl_LocalInvocationIndex] = 1u;
+memoryBarrierShared();
+uint otherInvocation = 1u - gl_LocalInvocationIndex;
+uint iterations = 0u;
+while (flags[otherInvocation] != 1u) {
+    iterations++;
+}
+if (gl_LocalInvocationIndex == 0u) {
+
+vertPrim = uvec2(1u, 1u);
+
+}
+    SetMeshOutputsEXT(vertPrim.x, vertPrim.y);
+    if (gl_LocalInvocationIndex == 0u && vertPrim.x > 0u) {
+        gl_MeshVerticesEXT[0].gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
+        gl_MeshVerticesEXT[0].gl_PointSize = 1.0;
+        primitiveColor[0] = vec4(0.0, 0.0, float(iterations % 2u), 1.0);
+        gl_PrimitivePointIndicesEXT[0] = 0;
+    }
+}

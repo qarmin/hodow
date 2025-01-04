@@ -1,0 +1,8258 @@
+OpCapability Shader
+OpCapability Int8
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %input3 DescriptorSet 0
+OpDecorate %input3 Binding 3
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 4
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %bufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%input3 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_testtype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %testtype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input3_loc = OpAccessChain %up_scalartype %input3 %c_i32_0 %counter_val
+%input3_val = OpLoad %scalartype %input3_loc
+%op_result = OpBitFieldInsert %testtype %input0_val %input1_val %input2_val %input3_val
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int16
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %input3 DescriptorSet 0
+OpDecorate %input3 Binding 3
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 4
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u16 = OpTypeInt 16 0
+%v2u16 = OpTypeVector %u16 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %bufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%input3 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_testtype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %testtype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input3_loc = OpAccessChain %up_scalartype %input3 %c_i32_0 %counter_val
+%input3_val = OpLoad %scalartype %input3_loc
+%input3_val_16 = OpSConvert %u16 %input3_val
+%op_result = OpBitFieldInsert %testtype %input0_val %input1_val %input2_val %input3_val_16
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %input3 DescriptorSet 0
+OpDecorate %input3 Binding 3
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 4
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %bufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%input3 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_testtype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %testtype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input3_loc = OpAccessChain %up_scalartype %input3 %c_i32_0 %counter_val
+%input3_val = OpLoad %scalartype %input3_loc
+%input3_val_32 = OpSConvert %u32 %input3_val
+%op_result = OpBitFieldInsert %testtype %input0_val %input1_val %input2_val %input3_val_32
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int64
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %input3 DescriptorSet 0
+OpDecorate %input3 Binding 3
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 4
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u64 = OpTypeInt 64 0
+%v2u64 = OpTypeVector %u64 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %bufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%input3 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_testtype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %testtype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input3_loc = OpAccessChain %up_scalartype %input3 %c_i32_0 %counter_val
+%input3_val = OpLoad %scalartype %input3_loc
+%input3_val_64 = OpSConvert %u64 %input3_val
+%op_result = OpBitFieldInsert %testtype %input0_val %input1_val %input2_val %input3_val_64
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int16
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %input3 DescriptorSet 0
+OpDecorate %input3 Binding 3
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 4
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u16 = OpTypeInt 16 0
+%v2u16 = OpTypeVector %u16 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %bufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%input3 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_testtype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %testtype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input3_loc = OpAccessChain %up_scalartype %input3 %c_i32_0 %counter_val
+%input3_val = OpLoad %scalartype %input3_loc
+%input2_val_16 = OpSConvert %u16 %input2_val
+%op_result = OpBitFieldInsert %testtype %input0_val %input1_val %input2_val_16 %input3_val
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int16
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %input3 DescriptorSet 0
+OpDecorate %input3 Binding 3
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 4
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u16 = OpTypeInt 16 0
+%v2u16 = OpTypeVector %u16 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %bufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%input3 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_testtype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %testtype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input3_loc = OpAccessChain %up_scalartype %input3 %c_i32_0 %counter_val
+%input3_val = OpLoad %scalartype %input3_loc
+%input2_val_16 = OpSConvert %u16 %input2_val
+%input3_val_16 = OpSConvert %u16 %input3_val
+%op_result = OpBitFieldInsert %testtype %input0_val %input1_val %input2_val_16 %input3_val_16
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int16
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %input3 DescriptorSet 0
+OpDecorate %input3 Binding 3
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 4
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u16 = OpTypeInt 16 0
+%v2u16 = OpTypeVector %u16 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %bufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%input3 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_testtype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %testtype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input3_loc = OpAccessChain %up_scalartype %input3 %c_i32_0 %counter_val
+%input3_val = OpLoad %scalartype %input3_loc
+%input2_val_16 = OpSConvert %u16 %input2_val
+%input3_val_32 = OpSConvert %u32 %input3_val
+%op_result = OpBitFieldInsert %testtype %input0_val %input1_val %input2_val_16 %input3_val_32
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int16
+OpCapability Int64
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %input3 DescriptorSet 0
+OpDecorate %input3 Binding 3
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 4
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u16 = OpTypeInt 16 0
+%v2u16 = OpTypeVector %u16 2
+%u64 = OpTypeInt 64 0
+%v2u64 = OpTypeVector %u64 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %bufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%input3 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_testtype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %testtype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input3_loc = OpAccessChain %up_scalartype %input3 %c_i32_0 %counter_val
+%input3_val = OpLoad %scalartype %input3_loc
+%input2_val_16 = OpSConvert %u16 %input2_val
+%input3_val_64 = OpSConvert %u64 %input3_val
+%op_result = OpBitFieldInsert %testtype %input0_val %input1_val %input2_val_16 %input3_val_64
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %input3 DescriptorSet 0
+OpDecorate %input3 Binding 3
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 4
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %bufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%input3 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_testtype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %testtype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input3_loc = OpAccessChain %up_scalartype %input3 %c_i32_0 %counter_val
+%input3_val = OpLoad %scalartype %input3_loc
+%input2_val_32 = OpSConvert %u32 %input2_val
+%op_result = OpBitFieldInsert %testtype %input0_val %input1_val %input2_val_32 %input3_val
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int16
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %input3 DescriptorSet 0
+OpDecorate %input3 Binding 3
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 4
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u16 = OpTypeInt 16 0
+%v2u16 = OpTypeVector %u16 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %bufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%input3 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_testtype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %testtype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input3_loc = OpAccessChain %up_scalartype %input3 %c_i32_0 %counter_val
+%input3_val = OpLoad %scalartype %input3_loc
+%input2_val_32 = OpSConvert %u32 %input2_val
+%input3_val_16 = OpSConvert %u16 %input3_val
+%op_result = OpBitFieldInsert %testtype %input0_val %input1_val %input2_val_32 %input3_val_16
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %input3 DescriptorSet 0
+OpDecorate %input3 Binding 3
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 4
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %bufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%input3 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_testtype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %testtype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input3_loc = OpAccessChain %up_scalartype %input3 %c_i32_0 %counter_val
+%input3_val = OpLoad %scalartype %input3_loc
+%input2_val_32 = OpSConvert %u32 %input2_val
+%input3_val_32 = OpSConvert %u32 %input3_val
+%op_result = OpBitFieldInsert %testtype %input0_val %input1_val %input2_val_32 %input3_val_32
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int64
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %input3 DescriptorSet 0
+OpDecorate %input3 Binding 3
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 4
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u64 = OpTypeInt 64 0
+%v2u64 = OpTypeVector %u64 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %bufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%input3 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_testtype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %testtype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input3_loc = OpAccessChain %up_scalartype %input3 %c_i32_0 %counter_val
+%input3_val = OpLoad %scalartype %input3_loc
+%input2_val_32 = OpSConvert %u32 %input2_val
+%input3_val_64 = OpSConvert %u64 %input3_val
+%op_result = OpBitFieldInsert %testtype %input0_val %input1_val %input2_val_32 %input3_val_64
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int64
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %input3 DescriptorSet 0
+OpDecorate %input3 Binding 3
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 4
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u64 = OpTypeInt 64 0
+%v2u64 = OpTypeVector %u64 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %bufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%input3 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_testtype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %testtype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input3_loc = OpAccessChain %up_scalartype %input3 %c_i32_0 %counter_val
+%input3_val = OpLoad %scalartype %input3_loc
+%input2_val_64 = OpSConvert %u64 %input2_val
+%op_result = OpBitFieldInsert %testtype %input0_val %input1_val %input2_val_64 %input3_val
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int16
+OpCapability Int64
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %input3 DescriptorSet 0
+OpDecorate %input3 Binding 3
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 4
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u16 = OpTypeInt 16 0
+%v2u16 = OpTypeVector %u16 2
+%u64 = OpTypeInt 64 0
+%v2u64 = OpTypeVector %u64 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %bufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%input3 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_testtype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %testtype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input3_loc = OpAccessChain %up_scalartype %input3 %c_i32_0 %counter_val
+%input3_val = OpLoad %scalartype %input3_loc
+%input2_val_64 = OpSConvert %u64 %input2_val
+%input3_val_16 = OpSConvert %u16 %input3_val
+%op_result = OpBitFieldInsert %testtype %input0_val %input1_val %input2_val_64 %input3_val_16
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int64
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %input3 DescriptorSet 0
+OpDecorate %input3 Binding 3
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 4
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u64 = OpTypeInt 64 0
+%v2u64 = OpTypeVector %u64 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %bufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%input3 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_testtype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %testtype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input3_loc = OpAccessChain %up_scalartype %input3 %c_i32_0 %counter_val
+%input3_val = OpLoad %scalartype %input3_loc
+%input2_val_64 = OpSConvert %u64 %input2_val
+%input3_val_32 = OpSConvert %u32 %input3_val
+%op_result = OpBitFieldInsert %testtype %input0_val %input1_val %input2_val_64 %input3_val_32
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int64
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %input3 DescriptorSet 0
+OpDecorate %input3 Binding 3
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 4
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u64 = OpTypeInt 64 0
+%v2u64 = OpTypeVector %u64 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %bufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%input3 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_testtype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %testtype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input3_loc = OpAccessChain %up_scalartype %input3 %c_i32_0 %counter_val
+%input3_val = OpLoad %scalartype %input3_loc
+%input2_val_64 = OpSConvert %u64 %input2_val
+%input3_val_64 = OpSConvert %u64 %input3_val
+%op_result = OpBitFieldInsert %testtype %input0_val %input1_val %input2_val_64 %input3_val_64
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%op_result = OpBitFieldSExtract %testtype %input0_val %input1_val %input2_val
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int16
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u16 = OpTypeInt 16 0
+%v2u16 = OpTypeVector %u16 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input2_val_16 = OpSConvert %u16 %input2_val
+%op_result = OpBitFieldSExtract %testtype %input0_val %input1_val %input2_val_16
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input2_val_32 = OpSConvert %u32 %input2_val
+%op_result = OpBitFieldSExtract %testtype %input0_val %input1_val %input2_val_32
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int64
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u64 = OpTypeInt 64 0
+%v2u64 = OpTypeVector %u64 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input2_val_64 = OpSConvert %u64 %input2_val
+%op_result = OpBitFieldSExtract %testtype %input0_val %input1_val %input2_val_64
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int16
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u16 = OpTypeInt 16 0
+%v2u16 = OpTypeVector %u16 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input1_val_16 = OpSConvert %u16 %input1_val
+%op_result = OpBitFieldSExtract %testtype %input0_val %input1_val_16 %input2_val
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int16
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u16 = OpTypeInt 16 0
+%v2u16 = OpTypeVector %u16 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input1_val_16 = OpSConvert %u16 %input1_val
+%input2_val_16 = OpSConvert %u16 %input2_val
+%op_result = OpBitFieldSExtract %testtype %input0_val %input1_val_16 %input2_val_16
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int16
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u16 = OpTypeInt 16 0
+%v2u16 = OpTypeVector %u16 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input1_val_16 = OpSConvert %u16 %input1_val
+%input2_val_32 = OpSConvert %u32 %input2_val
+%op_result = OpBitFieldSExtract %testtype %input0_val %input1_val_16 %input2_val_32
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int16
+OpCapability Int64
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u16 = OpTypeInt 16 0
+%v2u16 = OpTypeVector %u16 2
+%u64 = OpTypeInt 64 0
+%v2u64 = OpTypeVector %u64 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input1_val_16 = OpSConvert %u16 %input1_val
+%input2_val_64 = OpSConvert %u64 %input2_val
+%op_result = OpBitFieldSExtract %testtype %input0_val %input1_val_16 %input2_val_64
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input1_val_32 = OpSConvert %u32 %input1_val
+%op_result = OpBitFieldSExtract %testtype %input0_val %input1_val_32 %input2_val
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int16
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u16 = OpTypeInt 16 0
+%v2u16 = OpTypeVector %u16 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input1_val_32 = OpSConvert %u32 %input1_val
+%input2_val_16 = OpSConvert %u16 %input2_val
+%op_result = OpBitFieldSExtract %testtype %input0_val %input1_val_32 %input2_val_16
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input1_val_32 = OpSConvert %u32 %input1_val
+%input2_val_32 = OpSConvert %u32 %input2_val
+%op_result = OpBitFieldSExtract %testtype %input0_val %input1_val_32 %input2_val_32
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int64
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u64 = OpTypeInt 64 0
+%v2u64 = OpTypeVector %u64 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input1_val_32 = OpSConvert %u32 %input1_val
+%input2_val_64 = OpSConvert %u64 %input2_val
+%op_result = OpBitFieldSExtract %testtype %input0_val %input1_val_32 %input2_val_64
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int64
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u64 = OpTypeInt 64 0
+%v2u64 = OpTypeVector %u64 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input1_val_64 = OpSConvert %u64 %input1_val
+%op_result = OpBitFieldSExtract %testtype %input0_val %input1_val_64 %input2_val
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int16
+OpCapability Int64
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u16 = OpTypeInt 16 0
+%v2u16 = OpTypeVector %u16 2
+%u64 = OpTypeInt 64 0
+%v2u64 = OpTypeVector %u64 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input1_val_64 = OpSConvert %u64 %input1_val
+%input2_val_16 = OpSConvert %u16 %input2_val
+%op_result = OpBitFieldSExtract %testtype %input0_val %input1_val_64 %input2_val_16
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int64
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u64 = OpTypeInt 64 0
+%v2u64 = OpTypeVector %u64 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input1_val_64 = OpSConvert %u64 %input1_val
+%input2_val_32 = OpSConvert %u32 %input2_val
+%op_result = OpBitFieldSExtract %testtype %input0_val %input1_val_64 %input2_val_32
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int64
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u64 = OpTypeInt 64 0
+%v2u64 = OpTypeVector %u64 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input1_val_64 = OpSConvert %u64 %input1_val
+%input2_val_64 = OpSConvert %u64 %input2_val
+%op_result = OpBitFieldSExtract %testtype %input0_val %input1_val_64 %input2_val_64
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%op_result = OpBitFieldUExtract %testtype %input0_val %input1_val %input2_val
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int16
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u16 = OpTypeInt 16 0
+%v2u16 = OpTypeVector %u16 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input2_val_16 = OpSConvert %u16 %input2_val
+%op_result = OpBitFieldUExtract %testtype %input0_val %input1_val %input2_val_16
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input2_val_32 = OpSConvert %u32 %input2_val
+%op_result = OpBitFieldUExtract %testtype %input0_val %input1_val %input2_val_32
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int64
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u64 = OpTypeInt 64 0
+%v2u64 = OpTypeVector %u64 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input2_val_64 = OpSConvert %u64 %input2_val
+%op_result = OpBitFieldUExtract %testtype %input0_val %input1_val %input2_val_64
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int16
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u16 = OpTypeInt 16 0
+%v2u16 = OpTypeVector %u16 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input1_val_16 = OpSConvert %u16 %input1_val
+%op_result = OpBitFieldUExtract %testtype %input0_val %input1_val_16 %input2_val
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int16
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u16 = OpTypeInt 16 0
+%v2u16 = OpTypeVector %u16 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input1_val_16 = OpSConvert %u16 %input1_val
+%input2_val_16 = OpSConvert %u16 %input2_val
+%op_result = OpBitFieldUExtract %testtype %input0_val %input1_val_16 %input2_val_16
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int16
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u16 = OpTypeInt 16 0
+%v2u16 = OpTypeVector %u16 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input1_val_16 = OpSConvert %u16 %input1_val
+%input2_val_32 = OpSConvert %u32 %input2_val
+%op_result = OpBitFieldUExtract %testtype %input0_val %input1_val_16 %input2_val_32
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int16
+OpCapability Int64
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u16 = OpTypeInt 16 0
+%v2u16 = OpTypeVector %u16 2
+%u64 = OpTypeInt 64 0
+%v2u64 = OpTypeVector %u64 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input1_val_16 = OpSConvert %u16 %input1_val
+%input2_val_64 = OpSConvert %u64 %input2_val
+%op_result = OpBitFieldUExtract %testtype %input0_val %input1_val_16 %input2_val_64
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input1_val_32 = OpSConvert %u32 %input1_val
+%op_result = OpBitFieldUExtract %testtype %input0_val %input1_val_32 %input2_val
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int16
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u16 = OpTypeInt 16 0
+%v2u16 = OpTypeVector %u16 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input1_val_32 = OpSConvert %u32 %input1_val
+%input2_val_16 = OpSConvert %u16 %input2_val
+%op_result = OpBitFieldUExtract %testtype %input0_val %input1_val_32 %input2_val_16
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input1_val_32 = OpSConvert %u32 %input1_val
+%input2_val_32 = OpSConvert %u32 %input2_val
+%op_result = OpBitFieldUExtract %testtype %input0_val %input1_val_32 %input2_val_32
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int64
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u64 = OpTypeInt 64 0
+%v2u64 = OpTypeVector %u64 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input1_val_32 = OpSConvert %u32 %input1_val
+%input2_val_64 = OpSConvert %u64 %input2_val
+%op_result = OpBitFieldUExtract %testtype %input0_val %input1_val_32 %input2_val_64
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int64
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u64 = OpTypeInt 64 0
+%v2u64 = OpTypeVector %u64 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input1_val_64 = OpSConvert %u64 %input1_val
+%op_result = OpBitFieldUExtract %testtype %input0_val %input1_val_64 %input2_val
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int16
+OpCapability Int64
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u16 = OpTypeInt 16 0
+%v2u16 = OpTypeVector %u16 2
+%u64 = OpTypeInt 64 0
+%v2u64 = OpTypeVector %u64 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input1_val_64 = OpSConvert %u64 %input1_val
+%input2_val_16 = OpSConvert %u16 %input2_val
+%op_result = OpBitFieldUExtract %testtype %input0_val %input1_val_64 %input2_val_16
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int64
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u64 = OpTypeInt 64 0
+%v2u64 = OpTypeVector %u64 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input1_val_64 = OpSConvert %u64 %input1_val
+%input2_val_32 = OpSConvert %u32 %input2_val
+%op_result = OpBitFieldUExtract %testtype %input0_val %input1_val_64 %input2_val_32
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability Int64
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %input1 DescriptorSet 0
+OpDecorate %input1 Binding 1
+OpDecorate %input2 DescriptorSet 0
+OpDecorate %input2 Binding 2
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 3
+OpDecorate %a640testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a640scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_640 = OpConstant %u32 640
+%c_i32_640 = OpConstant %i32 640
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a640scalartype = OpTypeArray %scalartype %c_u32_640
+%up_scalartype = OpTypePointer Uniform %scalartype
+%scalarbuf = OpTypeStruct %a640scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a640testtype = OpTypeArray %testtype %c_u32_640
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a640testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+%u64 = OpTypeInt 64 0
+%v2u64 = OpTypeVector %u64 2
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%input1 = OpVariable %scalarbufptr Uniform
+%input2 = OpVariable %scalarbufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_640
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%input1_loc = OpAccessChain %up_scalartype %input1 %c_i32_0 %counter_val
+%input1_val = OpLoad %scalartype %input1_loc
+%input2_loc = OpAccessChain %up_scalartype %input2 %c_i32_0 %counter_val
+%input2_val = OpLoad %scalartype %input2_loc
+%input1_val_64 = OpSConvert %u64 %input1_val
+%input2_val_64 = OpSConvert %u64 %input2_val
+%op_result = OpBitFieldUExtract %testtype %input0_val %input1_val_64 %input2_val_64
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 1
+OpDecorate %a10testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a10scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_10 = OpConstant %u32 10
+%c_i32_10 = OpConstant %i32 10
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a10scalartype = OpTypeArray %u32 %c_u32_10
+%up_scalartype = OpTypePointer Uniform %u32
+%scalarbuf = OpTypeStruct %a10scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a10testtype = OpTypeArray %testtype %c_u32_10
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a10testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_10
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%op_result = OpBitReverse %testtype %input0_val
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd
+OpCapability Shader
+OpCapability Int8
+OpCapability UniformAndStorageBuffer8BitAccess
+OpExtension "SPV_KHR_8bit_storage"
+
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %BP_main "main"
+OpExecutionMode %BP_main LocalSize 1 1 1
+OpDecorate %input0 DescriptorSet 0
+OpDecorate %input0 Binding 0
+OpDecorate %output DescriptorSet 0
+OpDecorate %output Binding 1
+OpDecorate %a10testtype ArrayStride 2
+OpDecorate %buf BufferBlock
+OpMemberDecorate %buf 0 Offset 0
+OpDecorate %a10scalartype ArrayStride 2
+OpDecorate %scalarbuf BufferBlock
+OpMemberDecorate %scalarbuf 0 Offset 0
+%void = OpTypeVoid
+%bool = OpTypeBool
+%i32 = OpTypeInt 32 1
+%u32 = OpTypeInt 32 0
+%f32 = OpTypeFloat 32
+%v2i32 = OpTypeVector %i32 2
+%v2u32 = OpTypeVector %u32 2
+%v2f32 = OpTypeVector %f32 2
+%v3i32 = OpTypeVector %i32 3
+%v3u32 = OpTypeVector %u32 3
+%v3f32 = OpTypeVector %f32 3
+%v4i32 = OpTypeVector %i32 4
+%v4u32 = OpTypeVector %u32 4
+%v4f32 = OpTypeVector %f32 4
+%v4bool = OpTypeVector %bool 4
+%v4f32_v4f32_function = OpTypeFunction %v4f32 %v4f32
+%bool_function = OpTypeFunction %bool
+%voidf = OpTypeFunction %void
+%ip_f32 = OpTypePointer Input %f32
+%ip_i32 = OpTypePointer Input %i32
+%ip_u32 = OpTypePointer Input %u32
+%ip_v2f32 = OpTypePointer Input %v2f32
+%ip_v2i32 = OpTypePointer Input %v2i32
+%ip_v2u32 = OpTypePointer Input %v2u32
+%ip_v3f32 = OpTypePointer Input %v3f32
+%ip_v4f32 = OpTypePointer Input %v4f32
+%ip_v4i32 = OpTypePointer Input %v4i32
+%ip_v4u32 = OpTypePointer Input %v4u32
+%op_f32 = OpTypePointer Output %f32
+%op_i32 = OpTypePointer Output %i32
+%op_u32 = OpTypePointer Output %u32
+%op_v2f32 = OpTypePointer Output %v2f32
+%op_v2i32 = OpTypePointer Output %v2i32
+%op_v2u32 = OpTypePointer Output %v2u32
+%op_v4f32 = OpTypePointer Output %v4f32
+%op_v4i32 = OpTypePointer Output %v4i32
+%op_v4u32 = OpTypePointer Output %v4u32
+%fp_f32   = OpTypePointer Function %f32
+%fp_i32   = OpTypePointer Function %i32
+%fp_v4f32 = OpTypePointer Function %v4f32
+%c_f32_1 = OpConstant %f32 1.0
+%c_f32_0 = OpConstant %f32 0.0
+%c_f32_0_5 = OpConstant %f32 0.5
+%c_f32_n1  = OpConstant %f32 -1.
+%c_f32_7 = OpConstant %f32 7.0
+%c_f32_8 = OpConstant %f32 8.0
+%c_i32_0 = OpConstant %i32 0
+%c_i32_1 = OpConstant %i32 1
+%c_i32_2 = OpConstant %i32 2
+%c_i32_3 = OpConstant %i32 3
+%c_i32_4 = OpConstant %i32 4
+%c_u32_0 = OpConstant %u32 0
+%c_u32_1 = OpConstant %u32 1
+%c_u32_2 = OpConstant %u32 2
+%c_u32_3 = OpConstant %u32 3
+%c_u32_32 = OpConstant %u32 32
+%c_u32_4 = OpConstant %u32 4
+%c_u32_31_bits = OpConstant %u32 0x7FFFFFFF
+%c_v4f32_1_1_1_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_1 %c_f32_1 %c_f32_1
+%c_v4f32_1_0_0_1 = OpConstantComposite %v4f32 %c_f32_1 %c_f32_0 %c_f32_0 %c_f32_1
+%c_v4f32_0_5_0_5_0_5_0_5 = OpConstantComposite %v4f32 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5 %c_f32_0_5
+%a1f32 = OpTypeArray %f32 %c_u32_1
+%a2f32 = OpTypeArray %f32 %c_u32_2
+%a3v4f32 = OpTypeArray %v4f32 %c_u32_3
+%a4f32 = OpTypeArray %f32 %c_u32_4
+%a32v4f32 = OpTypeArray %v4f32 %c_u32_32
+%ip_a3v4f32 = OpTypePointer Input %a3v4f32
+%ip_a32v4f32 = OpTypePointer Input %a32v4f32
+%op_a2f32 = OpTypePointer Output %a2f32
+%op_a3v4f32 = OpTypePointer Output %a3v4f32
+%op_a4f32 = OpTypePointer Output %a4f32
+%BP_color = OpConstantComposite %v4f32 %c_f32_0 %c_f32_0 %c_f32_0 %c_f32_1
+%c_u32_10 = OpConstant %u32 10
+%c_i32_10 = OpConstant %i32 10
+
+%scalartype = OpTypeInt 8 0
+%testtype = OpTypeVector %scalartype 2
+%c_shift1 = OpConstant %u32 16
+%c_shift  = OpConstantComposite %v2u32  %c_shift1 %c_shift1
+%v2bool = OpTypeVector %bool 2
+%c_zero = OpConstantComposite %v2u32 %c_u32_0 %c_u32_0
+%c_one = OpConstantComposite %v2u32 %c_u32_1 %c_u32_1
+%a10scalartype = OpTypeArray %u32 %c_u32_10
+%up_scalartype = OpTypePointer Uniform %u32
+%scalarbuf = OpTypeStruct %a10scalartype
+%scalarbufptr = OpTypePointer Uniform %scalarbuf
+%a10testtype = OpTypeArray %testtype %c_u32_10
+%up_testtype = OpTypePointer Uniform %testtype
+%buf = OpTypeStruct %a10testtype
+%bufptr = OpTypePointer Uniform %buf
+%output = OpVariable %bufptr Uniform
+
+%fp_testtype = OpTypePointer Function %testtype
+
+%input0 = OpVariable %bufptr Uniform
+%BP_main = OpFunction %void None %voidf
+%BP_label_main = OpLabel
+%BP_in_color = OpVariable %fp_v4f32 Function
+%BP_out_color = OpVariable %fp_v4f32 Function
+OpStore %BP_in_color %BP_color
+%BP_tmp1 = OpLoad %v4f32 %BP_in_color
+%BP_tmp2 = OpFunctionCall %v4f32 %test_code %BP_tmp1
+OpStore %BP_out_color %BP_tmp2
+OpReturn
+OpFunctionEnd
+
+%test_code = OpFunction %v4f32 None %v4f32_v4f32_function
+%param = OpFunctionParameter %v4f32
+%entry = OpLabel
+%op_constant = OpVariable %fp_testtype Function
+%counter = OpVariable %fp_i32 Function
+OpStore %counter %c_i32_0
+OpBranch %loop
+%loop = OpLabel
+%counter_val = OpLoad %i32 %counter
+%lt = OpSLessThan %bool %counter_val %c_i32_10
+OpLoopMerge %exit %inc None
+OpBranchConditional %lt %write %exit
+%write = OpLabel
+%output_loc = OpAccessChain %up_testtype %output %c_i32_0 %counter_val
+%input0_loc = OpAccessChain %up_testtype %input0 %c_i32_0 %counter_val
+%input0_val = OpLoad %testtype %input0_loc
+%op_result = OpBitCount %testtype %input0_val
+OpStore %output_loc %op_result
+OpBranch %inc
+%inc = OpLabel
+%counter_val_next = OpIAdd %i32 %counter_val %c_i32_1
+OpStore %counter %counter_val_next
+OpBranch %loop
+%exit = OpLabel
+OpReturnValue %param
+OpFunctionEnd

@@ -1,0 +1,49 @@
+# Shader manifest for dEQP-VK.image.sample_texture.*
+#
+# `SampleDrawnTextureTest::initPrograms`: the compute shader fills a storage image with pure red/blue BC1 or BC3 blocks
+# (blue only when two samplers are used, otherwise red on pass 0 and blue on pass 1 chosen by a push constant), the
+# vertex shader passes a texture coordinate through and the fragment shader samples one or both views. The version
+# declaration is `glu::getGLSLVersionDeclaration(GLSL_VERSION_450)`.
+
+upstream_source = "external/vulkancts/modules/vulkan/image/vktImageSampleCompressedTextureTests.cpp"
+rust_module = "image/sample_compressed_texture_tests"
+
+[[case]]
+name = "bc1"
+rust_const = "SAMPLE_TEXTURE_BC1"
+rust_type = "SharedProgram"
+programs = [
+  { name = "comp", template = "image/sample_texture/bc1.comp", stage = "comp" },
+  { name = "vert", template = "image/sample_texture/sample_texture.vert", stage = "vert" },
+  { name = "frag", template = "image/sample_texture/sample_texture.frag", stage = "frag" },
+]
+
+[[case]]
+name = "bc1_two_samplers"
+rust_const = "SAMPLE_TEXTURE_BC1_TWO_SAMPLERS"
+rust_type = "SharedProgram"
+programs = [
+  { name = "comp", template = "image/sample_texture/bc1_two_samplers.comp", stage = "comp" },
+  { name = "vert", template = "image/sample_texture/sample_texture.vert", stage = "vert" },
+  { name = "frag", template = "image/sample_texture/sample_texture_two_samplers.frag", stage = "frag" },
+]
+
+[[case]]
+name = "bc3"
+rust_const = "SAMPLE_TEXTURE_BC3"
+rust_type = "SharedProgram"
+programs = [
+  { name = "comp", template = "image/sample_texture/bc3.comp", stage = "comp" },
+  { name = "vert", template = "image/sample_texture/sample_texture.vert", stage = "vert" },
+  { name = "frag", template = "image/sample_texture/sample_texture.frag", stage = "frag" },
+]
+
+[[case]]
+name = "bc3_two_samplers"
+rust_const = "SAMPLE_TEXTURE_BC3_TWO_SAMPLERS"
+rust_type = "SharedProgram"
+programs = [
+  { name = "comp", template = "image/sample_texture/bc3_two_samplers.comp", stage = "comp" },
+  { name = "vert", template = "image/sample_texture/sample_texture.vert", stage = "vert" },
+  { name = "frag", template = "image/sample_texture/sample_texture_two_samplers.frag", stage = "frag" },
+]

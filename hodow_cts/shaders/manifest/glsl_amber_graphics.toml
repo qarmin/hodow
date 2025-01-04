@@ -1,0 +1,36 @@
+# Shader manifest for the graphics Amber scripts of dEQP-VK.glsl.{crash_test,logical_copy,combined_operations}
+#
+# Written by scripts/gen_glsl_amber_graphics_shaders.py together with the sources it names; do not hand-edit either.
+
+upstream_source = "external/vulkancts/data/vulkan/amber/crash_test/divbyzero_vert.amber"
+rust_module = "glsl/amber_graphics_tests"
+
+[[case]]
+name = "scripts"
+rust_const = "GLSL_AMBER_GRAPHICS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "crash_test_divbyzero_vert_vert", template = "glsl/amber/crash_test_divbyzero_vert_vert.vert", stage = "vert" },
+    { name = "crash_test_divbyzero_vert_frag", template = "glsl/amber/crash_test_divbyzero_vert_frag.frag", stage = "frag" },
+    { name = "crash_test_divbyzero_frag_vert", template = "glsl/amber/crash_test_divbyzero_frag_vert.vert", stage = "vert" },
+    { name = "crash_test_divbyzero_frag_frag", template = "glsl/amber/crash_test_divbyzero_frag_frag.frag", stage = "frag" },
+    { name = "crash_test_divbyzero_geom_vert", template = "glsl/amber/crash_test_divbyzero_geom_vert.vert", stage = "vert" },
+    { name = "crash_test_divbyzero_geom_geom", template = "glsl/amber/crash_test_divbyzero_geom_geom.geom", stage = "geom" },
+    { name = "crash_test_divbyzero_geom_frag", template = "glsl/amber/crash_test_divbyzero_geom_frag.frag", stage = "frag" },
+    { name = "crash_test_divbyzero_tesc_vert", template = "glsl/amber/crash_test_divbyzero_tesc_vert.vert", stage = "vert" },
+    { name = "crash_test_divbyzero_tesc_tesc", template = "glsl/amber/crash_test_divbyzero_tesc_tesc.tesc", stage = "tesc" },
+    { name = "crash_test_divbyzero_tesc_tese", template = "glsl/amber/crash_test_divbyzero_tesc_tese.tese", stage = "tese" },
+    { name = "crash_test_divbyzero_tesc_frag", template = "glsl/amber/crash_test_divbyzero_tesc_frag.frag", stage = "frag" },
+    { name = "crash_test_divbyzero_tese_vert", template = "glsl/amber/crash_test_divbyzero_tese_vert.vert", stage = "vert" },
+    { name = "crash_test_divbyzero_tese_tesc", template = "glsl/amber/crash_test_divbyzero_tese_tesc.tesc", stage = "tesc" },
+    { name = "crash_test_divbyzero_tese_tese", template = "glsl/amber/crash_test_divbyzero_tese_tese.tese", stage = "tese" },
+    { name = "crash_test_divbyzero_tese_frag", template = "glsl/amber/crash_test_divbyzero_tese_frag.frag", stage = "frag" },
+    { name = "logical_copy_initialized_struct_vert", template = "glsl/amber/logical_copy_initialized_struct_vert.vert", stage = "vert" },
+    { name = "logical_copy_initialized_struct_frag", template = "glsl/amber/logical_copy_initialized_struct_frag.frag", stage = "frag" },
+    { name = "logical_copy_undefined_memory_vert", template = "glsl/amber/logical_copy_undefined_memory_vert.vert", stage = "vert" },
+    { name = "logical_copy_undefined_memory_frag", template = "glsl/amber/logical_copy_undefined_memory_frag.frag", stage = "frag" },
+    { name = "combined_operations_negintdivand_vert", template = "glsl/amber/combined_operations_negintdivand_vert.vert", stage = "vert" },
+    { name = "combined_operations_negintdivand_frag", template = "glsl/amber/combined_operations_negintdivand_frag.frag", stage = "frag" },
+    { name = "combined_operations_notxor_vert", template = "glsl/amber/combined_operations_notxor_vert.vert", stage = "vert" },
+    { name = "combined_operations_notxor_frag", template = "glsl/amber/combined_operations_notxor_frag.frag", stage = "frag" },
+]

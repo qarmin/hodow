@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.depth.xfer_queue_layout.*
+#
+# `transferLayoutChangePrograms`: a full screen triangle at the geometry depth (1.0) and a blue fragment shader.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineDepthTests.cpp"
+rust_module = "pipeline/depth_xfer_layout_tests"
+
+[[case]]
+name = "xfer_layout"
+rust_const = "XFER_LAYOUT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/depth_xfer_layout/xfer.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/depth_xfer_layout/xfer.frag", stage = "frag" },
+]

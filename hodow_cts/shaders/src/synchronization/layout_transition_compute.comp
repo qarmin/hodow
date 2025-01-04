@@ -1,0 +1,15 @@
+#version 460
+layout (local_size_x=${local_size_x}, local_size_y=${local_size_y}, local_size_z=${sample_count}) in;
+${image_decl}
+layout (set=0, binding=1, std430) buffer OutBlock { vec4 color[]; } outBuffer;
+void main (void) {
+    const uint width = gl_WorkGroupSize.x;
+    const uint height = gl_WorkGroupSize.y;
+    const uint samples = gl_WorkGroupSize.z;
+    const uint x = gl_LocalInvocationID.x;
+    const uint y = gl_LocalInvocationID.y;
+    const uint s = gl_LocalInvocationID.z;
+    const uint idx = samples * width * y + samples * x + s;
+    ${load_expr}
+    outBuffer.color[idx] = color;
+}

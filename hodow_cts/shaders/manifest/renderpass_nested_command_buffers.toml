@@ -1,0 +1,16 @@
+# Shader manifest for dEQP-VK.renderpasses.*.nested_command_buffers.*
+#
+# `initPrograms` is the same vertex/fragment pair for every case: six instanced quads whose
+# colour is the instance index, so the host can tell which draw landed where.
+
+upstream_source = "external/vulkancts/modules/vulkan/renderpass/vktRenderPassNestedCommandBuffersTests.cpp"
+rust_module = "renderpass/nested_command_buffers_tests"
+
+[[case]]
+name = "nested_command_buffers"
+rust_const = "NESTED_COMMAND_BUFFERS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/nested_command_buffers.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/nested_command_buffers.frag", stage = "frag" },
+]

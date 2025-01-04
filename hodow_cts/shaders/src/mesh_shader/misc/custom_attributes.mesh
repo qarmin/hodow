@@ -1,0 +1,92 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+layout (local_size_x=1) in;
+layout (max_primitives=2, max_vertices=4) out;
+layout (triangles) out;
+
+out gl_MeshPerVertexEXT {
+    vec4  gl_Position;
+    float gl_PointSize;
+    float gl_ClipDistance[1];
+} gl_MeshVerticesEXT[];
+
+layout (location=0) out vec4 customAttribute1[];
+layout (location=1) out flat float customAttribute2[];
+layout (location=2) out int customAttribute3[];
+
+layout (location=3) out perprimitiveEXT uvec4 customAttribute4[];
+layout (location=4) out perprimitiveEXT float customAttribute5[];
+
+out perprimitiveEXT gl_MeshPerPrimitiveEXT {
+  int gl_PrimitiveID;
+  int gl_ViewportIndex;
+} gl_MeshPrimitivesEXT[];
+
+layout (set=0, binding=0, std430) buffer PerVertexData {
+    vec4 positions[4];
+    float pointSizes[4];
+    float clipDistances[4];
+    vec4 custom1[4];
+    float custom2[4];
+    int custom3[4];
+} pvd;
+layout (set=0, binding=1) uniform PerPrimitiveData {
+    int primitiveIds[2];
+    int viewportIndices[2];
+    uvec4 custom4[2];
+    float custom5[2];
+} ppd;
+
+void main ()
+{
+    SetMeshOutputsEXT(4u, 2u);
+
+    gl_MeshVerticesEXT[0].gl_Position = pvd.positions[0];
+    gl_MeshVerticesEXT[1].gl_Position = pvd.positions[1];
+    gl_MeshVerticesEXT[2].gl_Position = pvd.positions[2];
+    gl_MeshVerticesEXT[3].gl_Position = pvd.positions[3];
+
+    gl_MeshVerticesEXT[0].gl_PointSize = pvd.pointSizes[0];
+    gl_MeshVerticesEXT[1].gl_PointSize = pvd.pointSizes[1];
+    gl_MeshVerticesEXT[2].gl_PointSize = pvd.pointSizes[2];
+    gl_MeshVerticesEXT[3].gl_PointSize = pvd.pointSizes[3];
+
+    // Remove geometry on the right side.
+    gl_MeshVerticesEXT[0].gl_ClipDistance[0] = pvd.clipDistances[0];
+    gl_MeshVerticesEXT[1].gl_ClipDistance[0] = pvd.clipDistances[1];
+    gl_MeshVerticesEXT[2].gl_ClipDistance[0] = pvd.clipDistances[2];
+    gl_MeshVerticesEXT[3].gl_ClipDistance[0] = pvd.clipDistances[3];
+    
+    gl_PrimitiveTriangleIndicesEXT[0] = uvec3(0, 1, 2);
+    gl_PrimitiveTriangleIndicesEXT[1] = uvec3(2, 3, 1);
+
+    gl_MeshPrimitivesEXT[0].gl_PrimitiveID = ppd.primitiveIds[0];
+    gl_MeshPrimitivesEXT[1].gl_PrimitiveID = ppd.primitiveIds[1];
+
+    gl_MeshPrimitivesEXT[0].gl_ViewportIndex = ppd.viewportIndices[0];
+    gl_MeshPrimitivesEXT[1].gl_ViewportIndex = ppd.viewportIndices[1];
+
+    // Custom per-vertex attributes
+    customAttribute1[0] = pvd.custom1[0];
+    customAttribute1[1] = pvd.custom1[1];
+    customAttribute1[2] = pvd.custom1[2];
+    customAttribute1[3] = pvd.custom1[3];
+
+    customAttribute2[0] = pvd.custom2[0];
+    customAttribute2[1] = pvd.custom2[1];
+    customAttribute2[2] = pvd.custom2[2];
+    customAttribute2[3] = pvd.custom2[3];
+
+    customAttribute3[0] = pvd.custom3[0];
+    customAttribute3[1] = pvd.custom3[1];
+    customAttribute3[2] = pvd.custom3[2];
+    customAttribute3[3] = pvd.custom3[3];
+
+    // Custom per-primitive attributes.
+    customAttribute4[0] = ppd.custom4[0];
+    customAttribute4[1] = ppd.custom4[1];
+
+    customAttribute5[0] = ppd.custom5[0];
+    customAttribute5[1] = ppd.custom5[1];
+}

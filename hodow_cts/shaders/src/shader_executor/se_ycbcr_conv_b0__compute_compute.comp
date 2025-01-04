@@ -1,0 +1,33 @@
+#version 450
+layout(set=1, binding=0) uniform highp sampler2D u_sampler;
+layout(local_size_x = 1) in;
+
+struct Inputs
+{
+	highp vec2 uv;
+};
+struct Outputs
+{
+	highp vec4 o_color;
+};
+
+layout(set = 0, binding = 0, std430) buffer InBuffer
+{
+    Inputs inputs[];
+};
+layout(set = 0, binding = 1, std430) buffer OutBuffer
+{
+    Outputs outputs[];
+};
+
+void main (void)
+{
+    uint invocationNdx = gl_NumWorkGroups.x*gl_NumWorkGroups.y*gl_WorkGroupID.z
+                       + gl_NumWorkGroups.x*gl_WorkGroupID.y + gl_WorkGroupID.x;
+	vec2 uv = vec2(inputs[invocationNdx].uv);
+	vec4 o_color;
+
+	o_color = texture(u_sampler, uv);
+
+	outputs[invocationNdx].o_color = o_color;
+}

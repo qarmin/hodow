@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.multisample.compatible_render_pass.*
+#
+# `CompatibleRenderPassTest::initPrograms`: a full-screen strip and a white fragment shader.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineMultisampleTests.cpp"
+rust_module = "pipeline/compatible_render_pass_tests"
+
+[[case]]
+name = "compatible"
+rust_const = "COMPATIBLE_RENDER_PASS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/compatible_render_pass/compatible.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/compatible_render_pass/compatible.frag", stage = "frag" },
+]

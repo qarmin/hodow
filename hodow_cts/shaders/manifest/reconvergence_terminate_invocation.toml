@@ -1,0 +1,43 @@
+# Shader manifest for dEQP-VK.reconvergence.terminate_invocation.*
+#
+# `TermInvCase::initPrograms`: a full-screen triangle and one fragment shader per sub case. The bit_count and oob_read shaders are
+# built for SPIR-V 1.3 and the two that read gl_HelperInvocation for SPIR-V 1.6, as `usesHelperInvBuiltIn` picks upstream.
+
+upstream_source = "external/vulkancts/modules/vulkan/reconvergence/vktReconvergenceTerminateInvocationTests.cpp"
+rust_module = "reconvergence/terminate_invocation_tests"
+
+[[case]]
+name = "bit_count"
+rust_const = "TERMINATE_INVOCATION_BIT_COUNT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "reconvergence/terminate_invocation/full_screen.vert", stage = "vert" },
+    { name = "frag", template = "reconvergence/terminate_invocation/bit_count.frag", stage = "frag", spirv_version = "spirv1.3" },
+]
+
+[[case]]
+name = "terminate_helpers"
+rust_const = "TERMINATE_INVOCATION_TERMINATE_HELPERS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "reconvergence/terminate_invocation/full_screen.vert", stage = "vert" },
+    { name = "frag", template = "reconvergence/terminate_invocation/terminate_helpers.frag", stage = "frag", spirv_version = "spirv1.6" },
+]
+
+[[case]]
+name = "oob_read"
+rust_const = "TERMINATE_INVOCATION_OOB_READ"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "reconvergence/terminate_invocation/full_screen.vert", stage = "vert" },
+    { name = "frag", template = "reconvergence/terminate_invocation/oob_read.frag", stage = "frag", spirv_version = "spirv1.3" },
+]
+
+[[case]]
+name = "quad_any"
+rust_const = "TERMINATE_INVOCATION_QUAD_ANY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "reconvergence/terminate_invocation/full_screen.vert", stage = "vert" },
+    { name = "frag", template = "reconvergence/terminate_invocation/quad_any.frag", stage = "frag", spirv_version = "spirv1.6" },
+]

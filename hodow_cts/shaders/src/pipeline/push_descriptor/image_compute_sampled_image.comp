@@ -1,0 +1,14 @@
+#version 450
+layout(set = 0, binding = ${binding_next}) uniform sampler texSampler;
+layout(set = 0, binding = ${binding}) uniform texture2D texImage;
+layout(set = 0, binding = ${binding_next2}) writeonly buffer Output
+{
+    vec4 innerColor;
+    vec4 outerColor;
+} outData;
+
+void main()
+{
+    outData.innerColor = texture(sampler2D(texImage, texSampler), vec2(0.5));
+    outData.outerColor = texture(sampler2D(texImage, texSampler), vec2(-0.1));
+}

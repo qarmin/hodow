@@ -1,0 +1,12 @@
+#version 450 core
+#extension GL_EXT_float_e4m3 : enable
+#extension GL_EXT_float_e5m2 : enable
+#extension GL_EXT_long_vector: require
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(set = 0, binding = 0, std140) buffer issbodef { vector<double, 8> val[186]; } issbo;
+layout(set = 0, binding = 1, std140) buffer ossbodef { vector<floate5m2_t, 8> val[186]; } ossbo;
+void main()
+{
+    vector<double, 8> f = issbo.val[gl_WorkGroupID.x];
+    ossbo.val[gl_WorkGroupID.x] = vector<floate5m2_t, 8>(f);
+}

@@ -1,0 +1,55 @@
+# Shader manifest for dEQP-VK.depth.*
+#
+# The shaders of the Amber scripts under data/vulkan/amber/depth: a vertex shader that puts the position at a given clip space depth
+# and a fragment shader that either stores gl_FragCoord.z for the host, does so with early fragment tests, or writes gl_FragDepth = 2.0.
+
+upstream_source = "external/vulkancts/data/vulkan/amber/depth/fs_clamp.amber"
+rust_module = "depth/depth_clamp_tests"
+
+[[case]]
+name = "bias_fs_clamp"
+rust_const = "DEPTH_BIAS_FS_CLAMP"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "depth/vert_z2.vert", stage = "vert" }, { name = "frag", template = "depth/frag_store.frag", stage = "frag" } ]
+
+[[case]]
+name = "bias_outside_range"
+rust_const = "DEPTH_BIAS_OUTSIDE_RANGE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "depth/vert_z1.vert", stage = "vert" }, { name = "frag", template = "depth/frag_store.frag", stage = "frag" } ]
+
+[[case]]
+name = "bias_outside_range_fs_clamp"
+rust_const = "DEPTH_BIAS_OUTSIDE_RANGE_FS_CLAMP"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "depth/vert_z1.vert", stage = "vert" }, { name = "frag", template = "depth/frag_store.frag", stage = "frag" } ]
+
+[[case]]
+name = "bias_outside_range_fs_clamp_unrestricted"
+rust_const = "DEPTH_BIAS_OUTSIDE_RANGE_FS_CLAMP_UNRESTRICTED"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "depth/vert_z1.vert", stage = "vert" }, { name = "frag", template = "depth/frag_store.frag", stage = "frag" } ]
+
+[[case]]
+name = "ez_fs_clamp"
+rust_const = "DEPTH_EZ_FS_CLAMP"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "depth/vert_z2.vert", stage = "vert" }, { name = "frag", template = "depth/frag_store_early.frag", stage = "frag" } ]
+
+[[case]]
+name = "fs_clamp"
+rust_const = "DEPTH_FS_CLAMP"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "depth/vert_z2.vert", stage = "vert" }, { name = "frag", template = "depth/frag_store.frag", stage = "frag" } ]
+
+[[case]]
+name = "out_of_range"
+rust_const = "DEPTH_OUT_OF_RANGE"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "depth/vert_z0.vert", stage = "vert" }, { name = "frag", template = "depth/frag_depth2.frag", stage = "frag" } ]
+
+[[case]]
+name = "out_of_range_unrestricted"
+rust_const = "DEPTH_OUT_OF_RANGE_UNRESTRICTED"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "depth/vert_z0.vert", stage = "vert" }, { name = "frag", template = "depth/frag_depth2.frag", stage = "frag" } ]

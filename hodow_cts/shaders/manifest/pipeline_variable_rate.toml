@@ -1,0 +1,16 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.multisample.{variable_rate,mixed_count}.*
+#
+# `VariableRateTestCase::initPrograms`: a pass-through vertex shader and a fragment shader that marks the buffer slot of
+# every covered sample, read per sample (gl_SampleID makes the pipeline run at sample rate).
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineMultisampleTests.cpp"
+rust_module = "pipeline/variable_rate_tests"
+
+[[case]]
+name = "variable_rate"
+rust_const = "VARIABLE_RATE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/variable_rate/variable_rate.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/variable_rate/variable_rate.frag", stage = "frag" },
+]

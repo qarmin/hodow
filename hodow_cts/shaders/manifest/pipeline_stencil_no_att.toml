@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.pipeline.*.stencil.no_stencil_att.*
+#
+# `NoStencilAttachmentCase::initPrograms`: a full screen triangle at the depth of a push constant, and a blue fragment shader.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineStencilTests.cpp"
+rust_module = "pipeline/stencil_no_att_tests"
+
+[[case]]
+name = "no_stencil_att"
+rust_const = "NO_STENCIL_ATT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/stencil_no_att/no_stencil.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/stencil_no_att/no_stencil.frag", stage = "frag" },
+]

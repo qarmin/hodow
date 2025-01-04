@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.fragment_operations.occlusion_query.*
+#
+# Every case renders at 32x32, which is where the fragment shader's divisors come from, so one pair serves all.
+
+upstream_source = "external/vulkancts/modules/vulkan/fragment_ops/vktFragmentOperationsOcclusionQueryTests.cpp"
+rust_module = "fragment_ops/occlusion_query_tests"
+
+[[case]]
+name = "occlusion_query"
+rust_const = "FRAGMENT_OPS_OCCLUSION_QUERY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "fragment_ops/occlusion_query.vert", stage = "vert" },
+    { name = "frag", template = "fragment_ops/occlusion_query.frag", stage = "frag" },
+]

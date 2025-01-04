@@ -1,0 +1,15 @@
+#version 450
+${ext}
+layout(local_size_x = 1) in;
+layout(set = 0, binding = 1${fq}) writeonly uniform ${ms_type} u_msImage;
+
+void main (void)
+{
+    int gx = int(gl_GlobalInvocationID.x);
+    int gy = int(gl_GlobalInvocationID.y);
+    int gz = int(gl_GlobalInvocationID.z);
+
+    for (int sampleNdx = 0; sampleNdx < ${samples}; ++sampleNdx) {
+        imageStore(u_msImage, ${texel}, sampleNdx, ${color});
+    }
+}

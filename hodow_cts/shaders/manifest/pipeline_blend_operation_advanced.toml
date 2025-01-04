@@ -1,0 +1,51 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.blend_operation_advanced.*
+#
+# The vertex shader is shared; the fragment shader writes the pushed colour to as many attachments as the case has (1, 2, 4, 8 or 16).
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineBlendOperationAdvancedTests.cpp"
+rust_module = "pipeline/blend_operation_advanced_tests"
+
+[[case]]
+name = "attachments_1"
+rust_const = "BLEND_ADVANCED_ATTACHMENTS_1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/blend_operation_advanced/blend_operation_advanced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/blend_operation_advanced/blend_operation_advanced_1.frag", stage = "frag" },
+]
+
+[[case]]
+name = "attachments_2"
+rust_const = "BLEND_ADVANCED_ATTACHMENTS_2"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/blend_operation_advanced/blend_operation_advanced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/blend_operation_advanced/blend_operation_advanced_2.frag", stage = "frag" },
+]
+
+[[case]]
+name = "attachments_4"
+rust_const = "BLEND_ADVANCED_ATTACHMENTS_4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/blend_operation_advanced/blend_operation_advanced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/blend_operation_advanced/blend_operation_advanced_4.frag", stage = "frag" },
+]
+
+[[case]]
+name = "attachments_8"
+rust_const = "BLEND_ADVANCED_ATTACHMENTS_8"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/blend_operation_advanced/blend_operation_advanced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/blend_operation_advanced/blend_operation_advanced_8.frag", stage = "frag" },
+]
+
+[[case]]
+name = "attachments_16"
+rust_const = "BLEND_ADVANCED_ATTACHMENTS_16"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/blend_operation_advanced/blend_operation_advanced.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/blend_operation_advanced/blend_operation_advanced_16.frag", stage = "frag" },
+]

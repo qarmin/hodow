@@ -1,0 +1,58 @@
+# Shader manifest for dEQP-VK.robustness.index_access.* and dEQP-VK.robustness.bind_index_buffer2.*
+#
+# DrawIndexedTestCase builds vert and frag always, tessc/tesse for the two tessellation stage combinations and geom for the
+# two geometry ones; BindIndexBuffer2TestCase has its own fragment shader.
+
+upstream_source = "external/vulkancts/modules/vulkan/robustness/vktRobustnessIndexAccessTests.cpp"
+rust_module = "robustness/index_access_tests"
+
+[[case]]
+name = "vert_frag"
+rust_const = "INDEX_ACCESS_VERT_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "robustness/index_access/vert.vert", stage = "vert" },
+    { name = "frag", template = "robustness/index_access/frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vert_geom_frag"
+rust_const = "INDEX_ACCESS_VERT_GEOM_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "robustness/index_access/vert.vert", stage = "vert" },
+    { name = "frag", template = "robustness/index_access/frag.frag", stage = "frag" },
+    { name = "geom", template = "robustness/index_access/geom.geom", stage = "geom" },
+]
+
+[[case]]
+name = "vert_tess_frag"
+rust_const = "INDEX_ACCESS_VERT_TESS_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "robustness/index_access/vert.vert", stage = "vert" },
+    { name = "frag", template = "robustness/index_access/frag.frag", stage = "frag" },
+    { name = "tessc", template = "robustness/index_access/tessc.tesc", stage = "tesc" },
+    { name = "tesse", template = "robustness/index_access/tesse.tese", stage = "tese" },
+]
+
+[[case]]
+name = "vert_tess_geom_frag"
+rust_const = "INDEX_ACCESS_VERT_TESS_GEOM_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "robustness/index_access/vert.vert", stage = "vert" },
+    { name = "frag", template = "robustness/index_access/frag.frag", stage = "frag" },
+    { name = "tessc", template = "robustness/index_access/tessc.tesc", stage = "tesc" },
+    { name = "tesse", template = "robustness/index_access/tesse.tese", stage = "tese" },
+    { name = "geom", template = "robustness/index_access/geom.geom", stage = "geom" },
+]
+
+[[case]]
+name = "bind_index_buffer2"
+rust_const = "BIND_INDEX_BUFFER2"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "robustness/index_access/vert.vert", stage = "vert" },
+    { name = "frag", template = "robustness/index_access/bi2_frag.frag", stage = "frag" },
+]

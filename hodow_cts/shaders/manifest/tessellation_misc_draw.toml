@@ -1,0 +1,574 @@
+# Shader manifest for dEQP-VK.tessellation.misc_draw.*
+#
+# vktTessellationMiscDrawTests.cpp's initPrograms, pre-expanded: the fill_cover/fill_overlap/isolines cases (shared by their draw and
+# draw_indirect variants), the TessStateSwitch cases (every case names its two control and evaluation shaders), tess_factor_barrier_bug,
+# non_zero_vertex_instance and unused_builtin_outputs.
+
+upstream_source = "external/vulkancts/modules/vulkan/tessellation/vktTessellationMiscDrawTests.cpp"
+rust_module = "tessellation/misc_draw_tests"
+
+[[case]]
+name = "fill_cover_triangles_equal_spacing"
+rust_const = "MD_FILL_COVER_TRIANGLES_EQUAL_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/common.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/misc_draw/common_v3.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/misc_draw/fill_cover_triangles_equal_spacing.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/common.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fill_cover_triangles_fractional_odd_spacing"
+rust_const = "MD_FILL_COVER_TRIANGLES_FRACTIONAL_ODD_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/common.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/misc_draw/common_v3.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/misc_draw/fill_cover_triangles_fractional_odd_spacing.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/common.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fill_cover_triangles_fractional_even_spacing"
+rust_const = "MD_FILL_COVER_TRIANGLES_FRACTIONAL_EVEN_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/common.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/misc_draw/common_v3.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/misc_draw/fill_cover_triangles_fractional_even_spacing.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/common.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fill_cover_quads_equal_spacing"
+rust_const = "MD_FILL_COVER_QUADS_EQUAL_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/common.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/misc_draw/common_v4.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/misc_draw/fill_cover_quads_equal_spacing.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/common.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fill_cover_quads_fractional_odd_spacing"
+rust_const = "MD_FILL_COVER_QUADS_FRACTIONAL_ODD_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/common.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/misc_draw/common_v4.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/misc_draw/fill_cover_quads_fractional_odd_spacing.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/common.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fill_cover_quads_fractional_even_spacing"
+rust_const = "MD_FILL_COVER_QUADS_FRACTIONAL_EVEN_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/common.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/misc_draw/common_v4.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/misc_draw/fill_cover_quads_fractional_even_spacing.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/common.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fill_overlap_triangles_equal_spacing"
+rust_const = "MD_FILL_OVERLAP_TRIANGLES_EQUAL_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/common.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/misc_draw/common_v3.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/misc_draw/fill_overlap_triangles_equal_spacing.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/common.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fill_overlap_triangles_fractional_odd_spacing"
+rust_const = "MD_FILL_OVERLAP_TRIANGLES_FRACTIONAL_ODD_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/common.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/misc_draw/common_v3.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/misc_draw/fill_overlap_triangles_fractional_odd_spacing.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/common.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fill_overlap_triangles_fractional_even_spacing"
+rust_const = "MD_FILL_OVERLAP_TRIANGLES_FRACTIONAL_EVEN_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/common.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/misc_draw/common_v3.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/misc_draw/fill_overlap_triangles_fractional_even_spacing.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/common.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fill_overlap_quads_equal_spacing"
+rust_const = "MD_FILL_OVERLAP_QUADS_EQUAL_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/common.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/misc_draw/common_v4.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/misc_draw/fill_overlap_quads_equal_spacing.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/common.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fill_overlap_quads_fractional_odd_spacing"
+rust_const = "MD_FILL_OVERLAP_QUADS_FRACTIONAL_ODD_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/common.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/misc_draw/common_v4.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/misc_draw/fill_overlap_quads_fractional_odd_spacing.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/common.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fill_overlap_quads_fractional_even_spacing"
+rust_const = "MD_FILL_OVERLAP_QUADS_FRACTIONAL_EVEN_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/common.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/misc_draw/common_v4.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/misc_draw/fill_overlap_quads_fractional_even_spacing.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/common.frag", stage = "frag" },
+]
+
+[[case]]
+name = "isolines_equal_spacing"
+rust_const = "MD_ISOLINES_EQUAL_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/common.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/misc_draw/common_v4.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/misc_draw/isolines_equal_spacing.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/common.frag", stage = "frag" },
+]
+
+[[case]]
+name = "isolines_fractional_odd_spacing"
+rust_const = "MD_ISOLINES_FRACTIONAL_ODD_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/common.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/misc_draw/common_v4.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/misc_draw/isolines_fractional_odd_spacing.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/common.frag", stage = "frag" },
+]
+
+[[case]]
+name = "isolines_fractional_even_spacing"
+rust_const = "MD_ISOLINES_FRACTIONAL_EVEN_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/common.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/misc_draw/common_v4.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/misc_draw/isolines_fractional_even_spacing.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/common.frag", stage = "frag" },
+]
+
+[[case]]
+name = "switch_primitive_triangles_to_quads"
+rust_const = "SW_SWITCH_PRIMITIVE_TRIANGLES_TO_QUADS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/switch.vert", stage = "vert" },
+    { name = "tesc0", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tesc1", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tese0", template = "tessellation/misc_draw/switch_triangles_equal_spacing_v4.tese", stage = "tese" },
+    { name = "tese1", template = "tessellation/misc_draw/switch_quads_equal_spacing_v4.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/switch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "switch_primitive_quads_to_triangles"
+rust_const = "SW_SWITCH_PRIMITIVE_QUADS_TO_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/switch.vert", stage = "vert" },
+    { name = "tesc0", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tesc1", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tese0", template = "tessellation/misc_draw/switch_quads_equal_spacing_v4.tese", stage = "tese" },
+    { name = "tese1", template = "tessellation/misc_draw/switch_triangles_equal_spacing_v4.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/switch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "switch_domain_origin_lower_left_to_upper_left"
+rust_const = "SW_SWITCH_DOMAIN_ORIGIN_LOWER_LEFT_TO_UPPER_LEFT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/switch.vert", stage = "vert" },
+    { name = "tesc0", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tesc1", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tese0", template = "tessellation/misc_draw/switch_quads_equal_spacing_v4.tese", stage = "tese" },
+    { name = "tese1", template = "tessellation/misc_draw/switch_quads_equal_spacing_v4.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/switch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "switch_domain_origin_upper_left_to_lower_left"
+rust_const = "SW_SWITCH_DOMAIN_ORIGIN_UPPER_LEFT_TO_LOWER_LEFT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/switch.vert", stage = "vert" },
+    { name = "tesc0", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tesc1", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tese0", template = "tessellation/misc_draw/switch_quads_equal_spacing_v4.tese", stage = "tese" },
+    { name = "tese1", template = "tessellation/misc_draw/switch_quads_equal_spacing_v4.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/switch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "switch_spacing_mode_equal_spacing_to_fractional_odd_spacing"
+rust_const = "SW_SWITCH_SPACING_MODE_EQUAL_SPACING_TO_FRACTIONAL_ODD_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/switch.vert", stage = "vert" },
+    { name = "tesc0", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tesc1", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tese0", template = "tessellation/misc_draw/switch_quads_equal_spacing_v4.tese", stage = "tese" },
+    { name = "tese1", template = "tessellation/misc_draw/switch_quads_fractional_odd_spacing_v4.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/switch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "switch_spacing_mode_equal_spacing_to_fractional_even_spacing"
+rust_const = "SW_SWITCH_SPACING_MODE_EQUAL_SPACING_TO_FRACTIONAL_EVEN_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/switch.vert", stage = "vert" },
+    { name = "tesc0", template = "tessellation/misc_draw/switch_v4_e1.tesc", stage = "tesc" },
+    { name = "tesc1", template = "tessellation/misc_draw/switch_v4_e1.tesc", stage = "tesc" },
+    { name = "tese0", template = "tessellation/misc_draw/switch_quads_equal_spacing_v4.tese", stage = "tese" },
+    { name = "tese1", template = "tessellation/misc_draw/switch_quads_fractional_even_spacing_v4.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/switch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "switch_spacing_mode_fractional_odd_spacing_to_equal_spacing"
+rust_const = "SW_SWITCH_SPACING_MODE_FRACTIONAL_ODD_SPACING_TO_EQUAL_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/switch.vert", stage = "vert" },
+    { name = "tesc0", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tesc1", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tese0", template = "tessellation/misc_draw/switch_quads_fractional_odd_spacing_v4.tese", stage = "tese" },
+    { name = "tese1", template = "tessellation/misc_draw/switch_quads_equal_spacing_v4.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/switch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "switch_spacing_mode_fractional_odd_spacing_to_fractional_even_spacing"
+rust_const = "SW_SWITCH_SPACING_MODE_FRACTIONAL_ODD_SPACING_TO_FRACTIONAL_EVEN_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/switch.vert", stage = "vert" },
+    { name = "tesc0", template = "tessellation/misc_draw/switch_v4_e1.tesc", stage = "tesc" },
+    { name = "tesc1", template = "tessellation/misc_draw/switch_v4_e1.tesc", stage = "tesc" },
+    { name = "tese0", template = "tessellation/misc_draw/switch_quads_fractional_odd_spacing_v4.tese", stage = "tese" },
+    { name = "tese1", template = "tessellation/misc_draw/switch_quads_fractional_even_spacing_v4.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/switch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "switch_spacing_mode_fractional_even_spacing_to_equal_spacing"
+rust_const = "SW_SWITCH_SPACING_MODE_FRACTIONAL_EVEN_SPACING_TO_EQUAL_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/switch.vert", stage = "vert" },
+    { name = "tesc0", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tesc1", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tese0", template = "tessellation/misc_draw/switch_quads_fractional_even_spacing_v4.tese", stage = "tese" },
+    { name = "tese1", template = "tessellation/misc_draw/switch_quads_equal_spacing_v4.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/switch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "switch_spacing_mode_fractional_even_spacing_to_fractional_odd_spacing"
+rust_const = "SW_SWITCH_SPACING_MODE_FRACTIONAL_EVEN_SPACING_TO_FRACTIONAL_ODD_SPACING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/switch.vert", stage = "vert" },
+    { name = "tesc0", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tesc1", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tese0", template = "tessellation/misc_draw/switch_quads_fractional_even_spacing_v4.tese", stage = "tese" },
+    { name = "tese1", template = "tessellation/misc_draw/switch_quads_fractional_odd_spacing_v4.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/switch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "switch_out_vertices_3_to_4"
+rust_const = "SW_SWITCH_OUT_VERTICES_3_TO_4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/switch.vert", stage = "vert" },
+    { name = "tesc0", template = "tessellation/misc_draw/switch_v3_e0.tesc", stage = "tesc" },
+    { name = "tesc1", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tese0", template = "tessellation/misc_draw/switch_quads_equal_spacing_v3.tese", stage = "tese" },
+    { name = "tese1", template = "tessellation/misc_draw/switch_quads_equal_spacing_v4.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/switch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "switch_out_vertices_4_to_3"
+rust_const = "SW_SWITCH_OUT_VERTICES_4_TO_3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/switch.vert", stage = "vert" },
+    { name = "tesc0", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tesc1", template = "tessellation/misc_draw/switch_v3_e0.tesc", stage = "tesc" },
+    { name = "tese0", template = "tessellation/misc_draw/switch_quads_equal_spacing_v4.tese", stage = "tese" },
+    { name = "tese1", template = "tessellation/misc_draw/switch_quads_equal_spacing_v3.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/switch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "switch_primitive_triangles_to_quads_with_geom_shader"
+rust_const = "SW_SWITCH_PRIMITIVE_TRIANGLES_TO_QUADS_WITH_GEOM_SHADER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/switch.vert", stage = "vert" },
+    { name = "geom", template = "tessellation/misc_draw/switch.geom", stage = "geom" },
+    { name = "tesc0", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tesc1", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tese0", template = "tessellation/misc_draw/switch_triangles_equal_spacing_v4.tese", stage = "tese" },
+    { name = "tese1", template = "tessellation/misc_draw/switch_quads_equal_spacing_v4.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/switch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "switch_primitive_quads_to_triangles_with_geom_shader"
+rust_const = "SW_SWITCH_PRIMITIVE_QUADS_TO_TRIANGLES_WITH_GEOM_SHADER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/switch.vert", stage = "vert" },
+    { name = "geom", template = "tessellation/misc_draw/switch.geom", stage = "geom" },
+    { name = "tesc0", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tesc1", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tese0", template = "tessellation/misc_draw/switch_quads_equal_spacing_v4.tese", stage = "tese" },
+    { name = "tese1", template = "tessellation/misc_draw/switch_triangles_equal_spacing_v4.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/switch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "switch_domain_origin_lower_left_to_upper_left_with_geom_shader"
+rust_const = "SW_SWITCH_DOMAIN_ORIGIN_LOWER_LEFT_TO_UPPER_LEFT_WITH_GEOM_SHADER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/switch.vert", stage = "vert" },
+    { name = "geom", template = "tessellation/misc_draw/switch.geom", stage = "geom" },
+    { name = "tesc0", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tesc1", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tese0", template = "tessellation/misc_draw/switch_quads_equal_spacing_v4.tese", stage = "tese" },
+    { name = "tese1", template = "tessellation/misc_draw/switch_quads_equal_spacing_v4.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/switch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "switch_domain_origin_upper_left_to_lower_left_with_geom_shader"
+rust_const = "SW_SWITCH_DOMAIN_ORIGIN_UPPER_LEFT_TO_LOWER_LEFT_WITH_GEOM_SHADER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/switch.vert", stage = "vert" },
+    { name = "geom", template = "tessellation/misc_draw/switch.geom", stage = "geom" },
+    { name = "tesc0", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tesc1", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tese0", template = "tessellation/misc_draw/switch_quads_equal_spacing_v4.tese", stage = "tese" },
+    { name = "tese1", template = "tessellation/misc_draw/switch_quads_equal_spacing_v4.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/switch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "switch_spacing_mode_equal_spacing_to_fractional_odd_spacing_with_geom_shader"
+rust_const = "SW_SWITCH_SPACING_MODE_EQUAL_SPACING_TO_FRACTIONAL_ODD_SPACING_WITH_GEOM_SHADER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/switch.vert", stage = "vert" },
+    { name = "geom", template = "tessellation/misc_draw/switch.geom", stage = "geom" },
+    { name = "tesc0", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tesc1", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tese0", template = "tessellation/misc_draw/switch_quads_equal_spacing_v4.tese", stage = "tese" },
+    { name = "tese1", template = "tessellation/misc_draw/switch_quads_fractional_odd_spacing_v4.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/switch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "switch_spacing_mode_equal_spacing_to_fractional_even_spacing_with_geom_shader"
+rust_const = "SW_SWITCH_SPACING_MODE_EQUAL_SPACING_TO_FRACTIONAL_EVEN_SPACING_WITH_GEOM_SHADER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/switch.vert", stage = "vert" },
+    { name = "geom", template = "tessellation/misc_draw/switch.geom", stage = "geom" },
+    { name = "tesc0", template = "tessellation/misc_draw/switch_v4_e1.tesc", stage = "tesc" },
+    { name = "tesc1", template = "tessellation/misc_draw/switch_v4_e1.tesc", stage = "tesc" },
+    { name = "tese0", template = "tessellation/misc_draw/switch_quads_equal_spacing_v4.tese", stage = "tese" },
+    { name = "tese1", template = "tessellation/misc_draw/switch_quads_fractional_even_spacing_v4.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/switch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "switch_spacing_mode_fractional_odd_spacing_to_equal_spacing_with_geom_shader"
+rust_const = "SW_SWITCH_SPACING_MODE_FRACTIONAL_ODD_SPACING_TO_EQUAL_SPACING_WITH_GEOM_SHADER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/switch.vert", stage = "vert" },
+    { name = "geom", template = "tessellation/misc_draw/switch.geom", stage = "geom" },
+    { name = "tesc0", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tesc1", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tese0", template = "tessellation/misc_draw/switch_quads_fractional_odd_spacing_v4.tese", stage = "tese" },
+    { name = "tese1", template = "tessellation/misc_draw/switch_quads_equal_spacing_v4.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/switch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "switch_spacing_mode_fractional_odd_spacing_to_fractional_even_spacing_with_geom_shader"
+rust_const = "SW_SWITCH_SPACING_MODE_FRACTIONAL_ODD_SPACING_TO_FRACTIONAL_EVEN_SPACING_WITH_GEOM_SHADER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/switch.vert", stage = "vert" },
+    { name = "geom", template = "tessellation/misc_draw/switch.geom", stage = "geom" },
+    { name = "tesc0", template = "tessellation/misc_draw/switch_v4_e1.tesc", stage = "tesc" },
+    { name = "tesc1", template = "tessellation/misc_draw/switch_v4_e1.tesc", stage = "tesc" },
+    { name = "tese0", template = "tessellation/misc_draw/switch_quads_fractional_odd_spacing_v4.tese", stage = "tese" },
+    { name = "tese1", template = "tessellation/misc_draw/switch_quads_fractional_even_spacing_v4.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/switch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "switch_spacing_mode_fractional_even_spacing_to_equal_spacing_with_geom_shader"
+rust_const = "SW_SWITCH_SPACING_MODE_FRACTIONAL_EVEN_SPACING_TO_EQUAL_SPACING_WITH_GEOM_SHADER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/switch.vert", stage = "vert" },
+    { name = "geom", template = "tessellation/misc_draw/switch.geom", stage = "geom" },
+    { name = "tesc0", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tesc1", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tese0", template = "tessellation/misc_draw/switch_quads_fractional_even_spacing_v4.tese", stage = "tese" },
+    { name = "tese1", template = "tessellation/misc_draw/switch_quads_equal_spacing_v4.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/switch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "switch_spacing_mode_fractional_even_spacing_to_fractional_odd_spacing_with_geom_shader"
+rust_const = "SW_SWITCH_SPACING_MODE_FRACTIONAL_EVEN_SPACING_TO_FRACTIONAL_ODD_SPACING_WITH_GEOM_SHADER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/switch.vert", stage = "vert" },
+    { name = "geom", template = "tessellation/misc_draw/switch.geom", stage = "geom" },
+    { name = "tesc0", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tesc1", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tese0", template = "tessellation/misc_draw/switch_quads_fractional_even_spacing_v4.tese", stage = "tese" },
+    { name = "tese1", template = "tessellation/misc_draw/switch_quads_fractional_odd_spacing_v4.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/switch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "switch_out_vertices_3_to_4_with_geom_shader"
+rust_const = "SW_SWITCH_OUT_VERTICES_3_TO_4_WITH_GEOM_SHADER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/switch.vert", stage = "vert" },
+    { name = "geom", template = "tessellation/misc_draw/switch.geom", stage = "geom" },
+    { name = "tesc0", template = "tessellation/misc_draw/switch_v3_e0.tesc", stage = "tesc" },
+    { name = "tesc1", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tese0", template = "tessellation/misc_draw/switch_quads_equal_spacing_v3.tese", stage = "tese" },
+    { name = "tese1", template = "tessellation/misc_draw/switch_quads_equal_spacing_v4.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/switch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "switch_out_vertices_4_to_3_with_geom_shader"
+rust_const = "SW_SWITCH_OUT_VERTICES_4_TO_3_WITH_GEOM_SHADER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/switch.vert", stage = "vert" },
+    { name = "geom", template = "tessellation/misc_draw/switch.geom", stage = "geom" },
+    { name = "tesc0", template = "tessellation/misc_draw/switch_v4_e0.tesc", stage = "tesc" },
+    { name = "tesc1", template = "tessellation/misc_draw/switch_v3_e0.tesc", stage = "tesc" },
+    { name = "tese0", template = "tessellation/misc_draw/switch_quads_equal_spacing_v4.tese", stage = "tese" },
+    { name = "tese1", template = "tessellation/misc_draw/switch_quads_equal_spacing_v3.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/switch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "barrier_bug"
+rust_const = "MD_BARRIER_BUG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/barrier_bug.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/misc_draw/barrier_bug.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/misc_draw/barrier_bug.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/barrier_bug.frag", stage = "frag" },
+]
+
+[[case]]
+name = "non_zero_vertex_instance"
+rust_const = "MD_NON_ZERO_VERTEX_INSTANCE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/non_zero.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/misc_draw/non_zero.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/misc_draw/non_zero.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/non_zero.frag", stage = "frag" },
+]
+
+[[case]]
+name = "unused_vertex_to_tesc"
+rust_const = "MD_UNUSED_VERTEX_TO_TESC"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/unused_vertex_to_tesc.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/misc_draw/unused_vertex_to_tesc.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/misc_draw/unused_vertex_to_tesc.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/unused.frag", stage = "frag" },
+]
+
+[[case]]
+name = "unused_tesc_to_tese"
+rust_const = "MD_UNUSED_TESC_TO_TESE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/unused_tesc_to_tese.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/misc_draw/unused_tesc_to_tese.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/misc_draw/unused_tesc_to_tese.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/unused.frag", stage = "frag" },
+]
+
+[[case]]
+name = "unused_tese_to_frag"
+rust_const = "MD_UNUSED_TESE_TO_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/unused_tese_to_frag.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/misc_draw/unused_tese_to_frag.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/misc_draw/unused_tese_to_frag.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/unused.frag", stage = "frag" },
+]
+
+[[case]]
+name = "instanced_triangles"
+rust_const = "MD_INSTANCED_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/instanced.vert", stage = "vert" },
+    { name = "tess_ctrl", template = "tessellation/misc_draw/instanced_triangles.tesc", stage = "tesc" },
+    { name = "tess_eval", template = "tessellation/misc_draw/instanced_triangles.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/instanced.frag", stage = "frag" },
+]
+
+[[case]]
+name = "instanced_quads"
+rust_const = "MD_INSTANCED_QUADS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/misc_draw/instanced.vert", stage = "vert" },
+    { name = "tess_ctrl", template = "tessellation/misc_draw/instanced_quads.tesc", stage = "tesc" },
+    { name = "tess_eval", template = "tessellation/misc_draw/instanced_quads.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/misc_draw/instanced.frag", stage = "frag" },
+]

@@ -1,0 +1,50 @@
+use std::arch::mips::*;
+
+#[allow(unused_imports)]
+use crate::cpu::common::{check_array_equality, check_float_array_equality, check_float_equality, check_int_equality};
+#[allow(unused_imports)]
+use crate::cpu::Verdict;
+
+pub(super) fn test_mips_msa_msa_bclr_b() -> Result<Verdict, String> {
+    unsafe {
+        let _result = core::hint::black_box(__msa_bclr_b(0 /* v16u8 */, 0 /* v16u8 */));
+
+        crate::cpu::fuzz(&mut || {
+            let _ = __msa_bclr_b(0 /* v16u8 */, 0 /* v16u8 */);
+        });
+        Ok(Verdict::Unverified(None))
+    }
+}
+
+pub(super) fn test_mips_msa_msa_bclr_h() -> Result<Verdict, String> {
+    unsafe {
+        let _result = core::hint::black_box(__msa_bclr_h(0 /* v8u16 */, 0 /* v8u16 */));
+
+        crate::cpu::fuzz(&mut || {
+            let _ = __msa_bclr_h(0 /* v8u16 */, 0 /* v8u16 */);
+        });
+        Ok(Verdict::Unverified(None))
+    }
+}
+
+pub(super) fn test_mips_msa_msa_bclr_w() -> Result<Verdict, String> {
+    unsafe {
+        let _result = core::hint::black_box(__msa_bclr_w(0 /* v4u32 */, 0 /* v4u32 */));
+
+        crate::cpu::fuzz(&mut || {
+            let _ = __msa_bclr_w(0 /* v4u32 */, 0 /* v4u32 */);
+        });
+        Ok(Verdict::Unverified(None))
+    }
+}
+
+pub(super) fn test_mips_msa_msa_bclr_d() -> Result<Verdict, String> {
+    unsafe {
+        let _result = core::hint::black_box(__msa_bclr_d(0 /* v2u64 */, 0 /* v2u64 */));
+
+        crate::cpu::fuzz(&mut || {
+            let _ = __msa_bclr_d(0 /* v2u64 */, 0 /* v2u64 */);
+        });
+        Ok(Verdict::Unverified(None))
+    }
+}

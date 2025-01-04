@@ -1,0 +1,19 @@
+# Shader manifest for dEQP-VK.geometry.builtin_variable.primitive_id.matching
+#
+# `BuiltinVariableMatchingPrimitiveIDTest::initPrograms`: every stage writes gl_PrimitiveID (or a copy of it) to the
+# colour output through flat varyings, so the fragment shader can show that the stages agree.
+
+upstream_source = "external/vulkancts/modules/vulkan/geometry/vktGeometryBuiltinVariableGeometryShaderTests.cpp"
+rust_module = "geometry/builtin_variable_tests"
+
+[[case]]
+name = "primitive_id_matching"
+rust_const = "PRIMITIVE_ID_MATCHING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "geometry/primitive_id_matching.vert", stage = "vert" },
+    { name = "tesc", template = "geometry/primitive_id_matching.tesc", stage = "tesc" },
+    { name = "tese", template = "geometry/primitive_id_matching.tese", stage = "tese" },
+    { name = "geom", template = "geometry/primitive_id_matching.geom", stage = "geom" },
+    { name = "frag", template = "geometry/primitive_id_matching.frag", stage = "frag" },
+]

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>hodow</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header>
+  <h1>hodow</h1>
+  <span id="host" class="muted"></span>
+  <span id="conn" class="pill pending">connecting</span>
+  <button type="button" class="help-top" data-action="help" data-topic="index">Help</button>
+</header>
+<main>
+  <section>
+    <h2>Checks <button type="button" class="info" data-action="help" data-topic="overview" title="Explain: how to read this page" aria-label="Explain how to read this page">i</button></h2>
+    <div id="modules" class="cards"></div>
+  </section>
+  <section id="live-section">
+    <h2>Running now <button type="button" class="info" data-action="help" data-topic="steps" title="Explain: progress" aria-label="Explain progress">i</button></h2>
+    <div id="live"></div>
+  </section>
+  <section id="queue-section" hidden>
+    <h2>Queue <button type="button" class="info" data-action="help" data-topic="queue" title="Explain: the queue" aria-label="Explain the queue">i</button></h2>
+    <div id="queue"></div>
+  </section>
+  <section>
+    <h2>Runs <button type="button" class="info" data-action="help" data-topic="runs" title="Explain: runs" aria-label="Explain runs">i</button> <span class="muted small" id="runs-where"></span></h2>
+    <div id="runs"></div>
+  </section>
+</main>
+
+<dialog id="start-dialog">
+  <form method="dialog" id="start-form" class="dlg-form">
+    <button type="button" class="dlg-x" id="start-x" aria-label="Close">×</button>
+    <div class="dlg-body">
+      <h3 id="start-title"></h3>
+      <div id="start-fields"></div>
+      <div class="field-head">Extra arguments <button type="button" class="info" data-action="help" data-topic="extra" title="Explain: extra arguments" aria-label="Explain extra arguments">i</button></div>
+      <input id="start-extra" aria-label="Extra arguments" placeholder="e.g. --flows" autocomplete="off">
+      <p class="muted small" id="start-preview"></p>
+      <p class="error small" id="start-error"></p>
+    </div>
+    <div class="row dlg-foot">
+      <button type="button" id="start-cancel">Cancel</button>
+      <button type="submit" id="start-go" class="primary">Queue it</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="run-dialog" class="wide">
+  <button type="button" class="dlg-x" id="run-x" aria-label="Close">×</button>
+  <div id="run-detail" class="dlg-body"></div>
+  <div class="row dlg-foot"><button type="button" id="run-close">Close</button></div>
+</dialog>
+
+<dialog id="help-dialog" class="wide">
+  <button type="button" class="dlg-x" id="help-x" aria-label="Close">×</button>
+  <div id="help-body" class="dlg-body help-body"></div>
+  <div class="row dlg-foot">
+    <button type="button" id="help-all" data-action="help" data-topic="index">All topics</button>
+    <button type="button" id="help-close">Close</button>
+  </div>
+</dialog>
+
+<script src="/help.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+#version 450 core
+#extension GL_EXT_mesh_shader : enable
+${'#extension GL_EXT_fragment_shading_rate : enable\n' if shader_writes_rate else ''}layout(local_size_x=3) in;
+layout(triangles) out;
+layout(max_vertices=3, max_primitives=1) out;
+layout(push_constant, std430) uniform PC {
+  int shadingRate;
+  uint instanceIndex;
+} pc;
+layout(set=1, binding=0, std430) readonly buffer PosBuffer {
+  vec2 vertexPositions[];
+} pb;
+layout(location = 0) flat out int instanceIndex[];
+layout(location = 1) flat out int readbackok[];
+layout(location = 2) out float zero[];
+${('perprimitiveEXT out gl_MeshPerPrimitiveEXT {\n' + ('  int gl_Layer;\n' if color_layered else '') + ('  int gl_ViewportIndex;\n' if multi_viewport else '') + '  int gl_PrimitiveShadingRateEXT;\n} gl_MeshPrimitivesEXT[];\n') if shader_writes_rate else ''}void main()
+{
+  SetMeshOutputsEXT(3u, 1u);
+  const uint vertexIdx = (pc.instanceIndex * 3u + gl_LocalInvocationIndex);
+  float vtxDepth = ${'0.4' if vtx_depth else '0.0'};
+  gl_MeshVerticesEXT[gl_LocalInvocationIndex].gl_Position = vec4(pb.vertexPositions[vertexIdx], vtxDepth, 1);
+  if (gl_LocalInvocationIndex == 0) {
+    gl_PrimitiveTriangleIndicesEXT[0] = uvec3(0, 1, 2);
+  }
+  instanceIndex[gl_LocalInvocationIndex] = int(pc.instanceIndex);
+  readbackok[gl_LocalInvocationIndex] = 1;
+  zero[gl_LocalInvocationIndex] = 0;
+${('  gl_MeshPrimitivesEXT[0].gl_PrimitiveShadingRateEXT = pc.shadingRate;\n' + ('  gl_MeshPrimitivesEXT[0].gl_ViewportIndex = int(pc.instanceIndex & 1);\n' if multi_viewport else '') + ('  gl_MeshPrimitivesEXT[0].gl_Layer = int((pc.instanceIndex & 2) >> 1);\n' if color_layered else '')) if shader_writes_rate else ''}}

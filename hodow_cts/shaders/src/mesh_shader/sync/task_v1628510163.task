@@ -1,0 +1,19 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+layout(local_size_x=1) in;
+
+struct TaskData { uint value; }; taskPayloadSharedEXT TaskData td;
+
+layout (set=0, binding=0) buffer StorageBuffer { uint value; } sb;
+layout (push_constant, std430) uniform PushConstantBlock {
+    uint writeVal;
+    uint readVal;
+} pc;
+
+void main ()
+{
+    td.value = 0u;
+    if (pc.writeVal > 0u) { sb.value = 1628510163; }
+    EmitMeshTasksEXT(1u, 1u, 1u);
+}

@@ -1,0 +1,17 @@
+# Expected values captured from real hardware for this extension's generated tests.
+# Format: test_name - rust_expr
+#
+# One file per (architecture, extension) - written by scripts/cpu/capture_expected.py and
+# capture_expected_cross.py, read by generate_tests.py. Do not hand-edit: recapture instead.
+# A qemu-derived value is not a real-silicon one; see CLAUDE.md's "Non-x86 architectures".
+
+test_arm_shared_sha2_vsha1cq_u32 - [3222844805, 2147534251, 1073742219, 1073741836]
+test_arm_shared_sha2_vsha1h_u32 - 1073741824
+test_arm_shared_sha2_vsha1mq_u32 - [3222712689, 46475, 363, 1073741835]
+test_arm_shared_sha2_vsha1pq_u32 - [1075331970, 3221275115, 1610613123, 12]
+test_arm_shared_sha2_vsha1su0q_u32 - [11, 12, 13, 14]
+test_arm_shared_sha2_vsha1su1q_u32 - [14, 10, 22, 20]
+test_arm_shared_sha2_vsha256h2q_u32 - [77087866, 3826767424, 1592807317, 69206167]
+test_arm_shared_sha2_vsha256hq_u32 - [614735485, 2568595302, 1897146188, 1420297882]
+test_arm_shared_sha2_vsha256su0q_u32 - [67141633, 100712450, 134283267, 167854084]
+test_arm_shared_sha2_vsha256su1q_u32 - [319495, 491529, 3959644485, 805675504]

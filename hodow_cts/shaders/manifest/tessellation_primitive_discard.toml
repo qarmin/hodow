@@ -1,0 +1,423 @@
+# Shader manifest for dEQP-VK.tessellation.primitive_discard.*
+#
+# `initPrograms`: a vertex shader passing one float per vertex on, a control shader that takes the tessellation levels,
+# position scale and offset from ten consecutive vertices, a fragment shader writing white and one evaluation shader per
+# (primitive type, spacing, winding, point mode). Point mode has a second evaluation shader (`tese_psw`) that writes
+# gl_PointSize, for devices with shaderTessellationAndGeometryPointSize.
+
+upstream_source = "external/vulkancts/modules/vulkan/tessellation/vktTessellationPrimitiveDiscardTests.cpp"
+rust_module = "tessellation/primitive_discard_tests"
+
+[[case]]
+name = "triangles_equal_spacing_ccw"
+rust_const = "PRIMITIVE_DISCARD_TRIANGLES_EQUAL_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_triangles_equal_spacing_ccw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_equal_spacing_ccw_point_mode"
+rust_const = "PRIMITIVE_DISCARD_TRIANGLES_EQUAL_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_triangles_equal_spacing_ccw_point_mode.tese", stage = "tese" },
+    { name = "tese_psw", template = "tessellation/primitive_discard_triangles_equal_spacing_ccw_point_mode_psw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_equal_spacing_cw"
+rust_const = "PRIMITIVE_DISCARD_TRIANGLES_EQUAL_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_triangles_equal_spacing_cw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_equal_spacing_cw_point_mode"
+rust_const = "PRIMITIVE_DISCARD_TRIANGLES_EQUAL_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_triangles_equal_spacing_cw_point_mode.tese", stage = "tese" },
+    { name = "tese_psw", template = "tessellation/primitive_discard_triangles_equal_spacing_cw_point_mode_psw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_fractional_odd_spacing_ccw"
+rust_const = "PRIMITIVE_DISCARD_TRIANGLES_FRACTIONAL_ODD_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_triangles_fractional_odd_spacing_ccw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_fractional_odd_spacing_ccw_point_mode"
+rust_const = "PRIMITIVE_DISCARD_TRIANGLES_FRACTIONAL_ODD_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_triangles_fractional_odd_spacing_ccw_point_mode.tese", stage = "tese" },
+    { name = "tese_psw", template = "tessellation/primitive_discard_triangles_fractional_odd_spacing_ccw_point_mode_psw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_fractional_odd_spacing_cw"
+rust_const = "PRIMITIVE_DISCARD_TRIANGLES_FRACTIONAL_ODD_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_triangles_fractional_odd_spacing_cw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_fractional_odd_spacing_cw_point_mode"
+rust_const = "PRIMITIVE_DISCARD_TRIANGLES_FRACTIONAL_ODD_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_triangles_fractional_odd_spacing_cw_point_mode.tese", stage = "tese" },
+    { name = "tese_psw", template = "tessellation/primitive_discard_triangles_fractional_odd_spacing_cw_point_mode_psw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_fractional_even_spacing_ccw"
+rust_const = "PRIMITIVE_DISCARD_TRIANGLES_FRACTIONAL_EVEN_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_triangles_fractional_even_spacing_ccw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_fractional_even_spacing_ccw_point_mode"
+rust_const = "PRIMITIVE_DISCARD_TRIANGLES_FRACTIONAL_EVEN_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_triangles_fractional_even_spacing_ccw_point_mode.tese", stage = "tese" },
+    { name = "tese_psw", template = "tessellation/primitive_discard_triangles_fractional_even_spacing_ccw_point_mode_psw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_fractional_even_spacing_cw"
+rust_const = "PRIMITIVE_DISCARD_TRIANGLES_FRACTIONAL_EVEN_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_triangles_fractional_even_spacing_cw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "triangles_fractional_even_spacing_cw_point_mode"
+rust_const = "PRIMITIVE_DISCARD_TRIANGLES_FRACTIONAL_EVEN_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_triangles_fractional_even_spacing_cw_point_mode.tese", stage = "tese" },
+    { name = "tese_psw", template = "tessellation/primitive_discard_triangles_fractional_even_spacing_cw_point_mode_psw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "quads_equal_spacing_ccw"
+rust_const = "PRIMITIVE_DISCARD_QUADS_EQUAL_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_quads_equal_spacing_ccw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "quads_equal_spacing_ccw_point_mode"
+rust_const = "PRIMITIVE_DISCARD_QUADS_EQUAL_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_quads_equal_spacing_ccw_point_mode.tese", stage = "tese" },
+    { name = "tese_psw", template = "tessellation/primitive_discard_quads_equal_spacing_ccw_point_mode_psw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "quads_equal_spacing_cw"
+rust_const = "PRIMITIVE_DISCARD_QUADS_EQUAL_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_quads_equal_spacing_cw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "quads_equal_spacing_cw_point_mode"
+rust_const = "PRIMITIVE_DISCARD_QUADS_EQUAL_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_quads_equal_spacing_cw_point_mode.tese", stage = "tese" },
+    { name = "tese_psw", template = "tessellation/primitive_discard_quads_equal_spacing_cw_point_mode_psw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "quads_fractional_odd_spacing_ccw"
+rust_const = "PRIMITIVE_DISCARD_QUADS_FRACTIONAL_ODD_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_quads_fractional_odd_spacing_ccw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "quads_fractional_odd_spacing_ccw_point_mode"
+rust_const = "PRIMITIVE_DISCARD_QUADS_FRACTIONAL_ODD_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_quads_fractional_odd_spacing_ccw_point_mode.tese", stage = "tese" },
+    { name = "tese_psw", template = "tessellation/primitive_discard_quads_fractional_odd_spacing_ccw_point_mode_psw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "quads_fractional_odd_spacing_cw"
+rust_const = "PRIMITIVE_DISCARD_QUADS_FRACTIONAL_ODD_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_quads_fractional_odd_spacing_cw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "quads_fractional_odd_spacing_cw_point_mode"
+rust_const = "PRIMITIVE_DISCARD_QUADS_FRACTIONAL_ODD_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_quads_fractional_odd_spacing_cw_point_mode.tese", stage = "tese" },
+    { name = "tese_psw", template = "tessellation/primitive_discard_quads_fractional_odd_spacing_cw_point_mode_psw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "quads_fractional_even_spacing_ccw"
+rust_const = "PRIMITIVE_DISCARD_QUADS_FRACTIONAL_EVEN_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_quads_fractional_even_spacing_ccw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "quads_fractional_even_spacing_ccw_point_mode"
+rust_const = "PRIMITIVE_DISCARD_QUADS_FRACTIONAL_EVEN_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_quads_fractional_even_spacing_ccw_point_mode.tese", stage = "tese" },
+    { name = "tese_psw", template = "tessellation/primitive_discard_quads_fractional_even_spacing_ccw_point_mode_psw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "quads_fractional_even_spacing_cw"
+rust_const = "PRIMITIVE_DISCARD_QUADS_FRACTIONAL_EVEN_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_quads_fractional_even_spacing_cw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "quads_fractional_even_spacing_cw_point_mode"
+rust_const = "PRIMITIVE_DISCARD_QUADS_FRACTIONAL_EVEN_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_quads_fractional_even_spacing_cw_point_mode.tese", stage = "tese" },
+    { name = "tese_psw", template = "tessellation/primitive_discard_quads_fractional_even_spacing_cw_point_mode_psw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "isolines_equal_spacing_ccw"
+rust_const = "PRIMITIVE_DISCARD_ISOLINES_EQUAL_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_isolines_equal_spacing_ccw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "isolines_equal_spacing_ccw_point_mode"
+rust_const = "PRIMITIVE_DISCARD_ISOLINES_EQUAL_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_isolines_equal_spacing_ccw_point_mode.tese", stage = "tese" },
+    { name = "tese_psw", template = "tessellation/primitive_discard_isolines_equal_spacing_ccw_point_mode_psw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "isolines_equal_spacing_cw"
+rust_const = "PRIMITIVE_DISCARD_ISOLINES_EQUAL_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_isolines_equal_spacing_cw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "isolines_equal_spacing_cw_point_mode"
+rust_const = "PRIMITIVE_DISCARD_ISOLINES_EQUAL_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_isolines_equal_spacing_cw_point_mode.tese", stage = "tese" },
+    { name = "tese_psw", template = "tessellation/primitive_discard_isolines_equal_spacing_cw_point_mode_psw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "isolines_fractional_odd_spacing_ccw"
+rust_const = "PRIMITIVE_DISCARD_ISOLINES_FRACTIONAL_ODD_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_isolines_fractional_odd_spacing_ccw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "isolines_fractional_odd_spacing_ccw_point_mode"
+rust_const = "PRIMITIVE_DISCARD_ISOLINES_FRACTIONAL_ODD_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_isolines_fractional_odd_spacing_ccw_point_mode.tese", stage = "tese" },
+    { name = "tese_psw", template = "tessellation/primitive_discard_isolines_fractional_odd_spacing_ccw_point_mode_psw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "isolines_fractional_odd_spacing_cw"
+rust_const = "PRIMITIVE_DISCARD_ISOLINES_FRACTIONAL_ODD_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_isolines_fractional_odd_spacing_cw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "isolines_fractional_odd_spacing_cw_point_mode"
+rust_const = "PRIMITIVE_DISCARD_ISOLINES_FRACTIONAL_ODD_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_isolines_fractional_odd_spacing_cw_point_mode.tese", stage = "tese" },
+    { name = "tese_psw", template = "tessellation/primitive_discard_isolines_fractional_odd_spacing_cw_point_mode_psw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "isolines_fractional_even_spacing_ccw"
+rust_const = "PRIMITIVE_DISCARD_ISOLINES_FRACTIONAL_EVEN_SPACING_CCW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_isolines_fractional_even_spacing_ccw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "isolines_fractional_even_spacing_ccw_point_mode"
+rust_const = "PRIMITIVE_DISCARD_ISOLINES_FRACTIONAL_EVEN_SPACING_CCW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_isolines_fractional_even_spacing_ccw_point_mode.tese", stage = "tese" },
+    { name = "tese_psw", template = "tessellation/primitive_discard_isolines_fractional_even_spacing_ccw_point_mode_psw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "isolines_fractional_even_spacing_cw"
+rust_const = "PRIMITIVE_DISCARD_ISOLINES_FRACTIONAL_EVEN_SPACING_CW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_isolines_fractional_even_spacing_cw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]
+
+[[case]]
+name = "isolines_fractional_even_spacing_cw_point_mode"
+rust_const = "PRIMITIVE_DISCARD_ISOLINES_FRACTIONAL_EVEN_SPACING_CW_POINT_MODE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/primitive_discard.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/primitive_discard.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/primitive_discard_isolines_fractional_even_spacing_cw_point_mode.tese", stage = "tese" },
+    { name = "tese_psw", template = "tessellation/primitive_discard_isolines_fractional_even_spacing_cw_point_mode_psw.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/primitive_discard.frag", stage = "frag" },
+]

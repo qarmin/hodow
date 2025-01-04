@@ -1,0 +1,61 @@
+#version 310 es
+layout(location = 0) in highp vec4 a_position;
+layout(location = 1) in highp vec4 a_coords;
+layout(location = 0) out mediump vec4 v_color;
+layout (std140, set = 0, binding = 0) uniform buffer0 { int ui_zero; };
+layout (std140, set = 0, binding = 1) uniform buffer1 { int ui_one; };
+layout (std140, set = 0, binding = 2) uniform buffer2 { int ui_two; };
+layout (std140, set = 0, binding = 3) uniform buffer3 { mediump float uf_two; };
+layout (std140, set = 0, binding = 4) uniform buffer4 { mediump float uf_three; };
+layout (std140, set = 0, binding = 5) uniform buffer5 { mediump float uf_four; };
+layout (std140, set = 0, binding = 6) uniform buffer6 { mediump float uf_half; };
+layout (std140, set = 0, binding = 7) uniform buffer7 { mediump float uf_third; };
+layout (std140, set = 0, binding = 8) uniform buffer8 { mediump float uf_fourth; };
+
+struct T {
+    mediump float    a;
+    mediump vec2    b[2];
+};
+struct S {
+    mediump float    a;
+    T                b[3];
+    int                c;
+};
+
+void main (void)
+{
+    S s[2];
+
+    // S[0]
+    s[0].a         = a_coords.x;
+    s[0].b[0].a    = uf_half;
+    s[0].b[0].b[0] = a_coords.xy;
+    s[0].b[0].b[1] = a_coords.zw;
+    s[0].b[1].a    = uf_third;
+    s[0].b[1].b[0] = a_coords.zw;
+    s[0].b[1].b[1] = a_coords.xy;
+    s[0].b[2].a    = uf_fourth;
+    s[0].b[2].b[0] = a_coords.xz;
+    s[0].b[2].b[1] = a_coords.yw;
+    s[0].c         = ui_zero;
+
+    // S[1]
+    s[1].a         = a_coords.w;
+    s[1].b[0].a    = uf_two;
+    s[1].b[0].b[0] = a_coords.xx;
+    s[1].b[0].b[1] = a_coords.yy;
+    s[1].b[1].a    = uf_three;
+    s[1].b[1].b[0] = a_coords.zz;
+    s[1].b[1].b[1] = a_coords.ww;
+    s[1].b[2].a    = uf_four;
+    s[1].b[2].b[0] = a_coords.yx;
+    s[1].b[2].b[1] = a_coords.wz;
+    s[1].c         = ui_one;
+
+    mediump float r = (s[0].b[1].b[0].x + s[1].b[2].b[1].y) * s[0].b[0].a; // (z + z) * 0.5
+    mediump float g = s[1].b[0].b[0].y * s[0].b[2].a * s[1].b[2].a; // x * 0.25 * 4
+    mediump float b = (s[0].b[2].b[1].y + s[0].b[1].b[0].y + s[1].a) * s[0].b[1].a; // (w + w + w) * 0.333
+    mediump float a = float(s[0].c) + s[1].b[2].a - s[1].b[1].a; // 0 + 4.0 - 3.0
+    v_color = vec4(r, g, b, a);
+    gl_Position = a_position;
+}

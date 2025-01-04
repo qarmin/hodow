@@ -1,0 +1,16 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.depth_range_unrestricted.*
+#
+# `DepthRangeUnrestrictedTest::initPrograms`: a point-size-1 passthrough vertex shader and a passthrough colour
+# fragment shader.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineDepthRangeUnrestrictedTests.cpp"
+rust_module = "pipeline/depth_range_unrestricted_tests"
+
+[[case]]
+name = "depth_range_unrestricted"
+rust_const = "DEPTH_RANGE_UNRESTRICTED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/depth_range_unrestricted.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/depth_range_unrestricted.frag", stage = "frag" },
+]

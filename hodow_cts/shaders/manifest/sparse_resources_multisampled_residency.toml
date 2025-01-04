@@ -1,0 +1,359 @@
+# Shader manifest for dEQP-VK.sparse_resources.multisampled_image_sparse_residency.*
+#
+# `MultisampledImageSparseResidencyCase::initPrograms`: one compute shader per (format, sample count) that stores the sample count,
+# reads it back with sparseImageLoadARB and zeroes the result where the texel is not resident.
+
+upstream_source = "external/vulkancts/modules/vulkan/sparse_resources/vktSparseResourcesMultisampledImageSparseResidency.cpp"
+rust_module = "sparse_resources/multisampled_image_sparse_residency_tests"
+
+[[case]]
+name = "rgba32f_s2"
+rust_const = "MS_RESIDENCY_RGBA32F_S2"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba32f" }, samples = { type = "u32", value = 2 } }
+derived = { prefix = "''" }
+
+[[case]]
+name = "rgba32f_s4"
+rust_const = "MS_RESIDENCY_RGBA32F_S4"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba32f" }, samples = { type = "u32", value = 4 } }
+derived = { prefix = "''" }
+
+[[case]]
+name = "rgba32f_s8"
+rust_const = "MS_RESIDENCY_RGBA32F_S8"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba32f" }, samples = { type = "u32", value = 8 } }
+derived = { prefix = "''" }
+
+[[case]]
+name = "rgba32f_s16"
+rust_const = "MS_RESIDENCY_RGBA32F_S16"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba32f" }, samples = { type = "u32", value = 16 } }
+derived = { prefix = "''" }
+
+[[case]]
+name = "rgba16f_s2"
+rust_const = "MS_RESIDENCY_RGBA16F_S2"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba16f" }, samples = { type = "u32", value = 2 } }
+derived = { prefix = "''" }
+
+[[case]]
+name = "rgba16f_s4"
+rust_const = "MS_RESIDENCY_RGBA16F_S4"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba16f" }, samples = { type = "u32", value = 4 } }
+derived = { prefix = "''" }
+
+[[case]]
+name = "rgba16f_s8"
+rust_const = "MS_RESIDENCY_RGBA16F_S8"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba16f" }, samples = { type = "u32", value = 8 } }
+derived = { prefix = "''" }
+
+[[case]]
+name = "rgba16f_s16"
+rust_const = "MS_RESIDENCY_RGBA16F_S16"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba16f" }, samples = { type = "u32", value = 16 } }
+derived = { prefix = "''" }
+
+[[case]]
+name = "r32f_s2"
+rust_const = "MS_RESIDENCY_R32F_S2"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "r32f" }, samples = { type = "u32", value = 2 } }
+derived = { prefix = "''" }
+
+[[case]]
+name = "r32f_s4"
+rust_const = "MS_RESIDENCY_R32F_S4"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "r32f" }, samples = { type = "u32", value = 4 } }
+derived = { prefix = "''" }
+
+[[case]]
+name = "r32f_s8"
+rust_const = "MS_RESIDENCY_R32F_S8"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "r32f" }, samples = { type = "u32", value = 8 } }
+derived = { prefix = "''" }
+
+[[case]]
+name = "r32f_s16"
+rust_const = "MS_RESIDENCY_R32F_S16"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "r32f" }, samples = { type = "u32", value = 16 } }
+derived = { prefix = "''" }
+
+[[case]]
+name = "rgba32ui_s2"
+rust_const = "MS_RESIDENCY_RGBA32UI_S2"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba32ui" }, samples = { type = "u32", value = 2 } }
+derived = { prefix = "'u'" }
+
+[[case]]
+name = "rgba32ui_s4"
+rust_const = "MS_RESIDENCY_RGBA32UI_S4"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba32ui" }, samples = { type = "u32", value = 4 } }
+derived = { prefix = "'u'" }
+
+[[case]]
+name = "rgba32ui_s8"
+rust_const = "MS_RESIDENCY_RGBA32UI_S8"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba32ui" }, samples = { type = "u32", value = 8 } }
+derived = { prefix = "'u'" }
+
+[[case]]
+name = "rgba32ui_s16"
+rust_const = "MS_RESIDENCY_RGBA32UI_S16"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba32ui" }, samples = { type = "u32", value = 16 } }
+derived = { prefix = "'u'" }
+
+[[case]]
+name = "rgba16ui_s2"
+rust_const = "MS_RESIDENCY_RGBA16UI_S2"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba16ui" }, samples = { type = "u32", value = 2 } }
+derived = { prefix = "'u'" }
+
+[[case]]
+name = "rgba16ui_s4"
+rust_const = "MS_RESIDENCY_RGBA16UI_S4"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba16ui" }, samples = { type = "u32", value = 4 } }
+derived = { prefix = "'u'" }
+
+[[case]]
+name = "rgba16ui_s8"
+rust_const = "MS_RESIDENCY_RGBA16UI_S8"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba16ui" }, samples = { type = "u32", value = 8 } }
+derived = { prefix = "'u'" }
+
+[[case]]
+name = "rgba16ui_s16"
+rust_const = "MS_RESIDENCY_RGBA16UI_S16"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba16ui" }, samples = { type = "u32", value = 16 } }
+derived = { prefix = "'u'" }
+
+[[case]]
+name = "rgba8ui_s2"
+rust_const = "MS_RESIDENCY_RGBA8UI_S2"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba8ui" }, samples = { type = "u32", value = 2 } }
+derived = { prefix = "'u'" }
+
+[[case]]
+name = "rgba8ui_s4"
+rust_const = "MS_RESIDENCY_RGBA8UI_S4"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba8ui" }, samples = { type = "u32", value = 4 } }
+derived = { prefix = "'u'" }
+
+[[case]]
+name = "rgba8ui_s8"
+rust_const = "MS_RESIDENCY_RGBA8UI_S8"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba8ui" }, samples = { type = "u32", value = 8 } }
+derived = { prefix = "'u'" }
+
+[[case]]
+name = "rgba8ui_s16"
+rust_const = "MS_RESIDENCY_RGBA8UI_S16"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba8ui" }, samples = { type = "u32", value = 16 } }
+derived = { prefix = "'u'" }
+
+[[case]]
+name = "r32ui_s2"
+rust_const = "MS_RESIDENCY_R32UI_S2"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "r32ui" }, samples = { type = "u32", value = 2 } }
+derived = { prefix = "'u'" }
+
+[[case]]
+name = "r32ui_s4"
+rust_const = "MS_RESIDENCY_R32UI_S4"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "r32ui" }, samples = { type = "u32", value = 4 } }
+derived = { prefix = "'u'" }
+
+[[case]]
+name = "r32ui_s8"
+rust_const = "MS_RESIDENCY_R32UI_S8"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "r32ui" }, samples = { type = "u32", value = 8 } }
+derived = { prefix = "'u'" }
+
+[[case]]
+name = "r32ui_s16"
+rust_const = "MS_RESIDENCY_R32UI_S16"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "r32ui" }, samples = { type = "u32", value = 16 } }
+derived = { prefix = "'u'" }
+
+[[case]]
+name = "rgba32i_s2"
+rust_const = "MS_RESIDENCY_RGBA32I_S2"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba32i" }, samples = { type = "u32", value = 2 } }
+derived = { prefix = "'i'" }
+
+[[case]]
+name = "rgba32i_s4"
+rust_const = "MS_RESIDENCY_RGBA32I_S4"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba32i" }, samples = { type = "u32", value = 4 } }
+derived = { prefix = "'i'" }
+
+[[case]]
+name = "rgba32i_s8"
+rust_const = "MS_RESIDENCY_RGBA32I_S8"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba32i" }, samples = { type = "u32", value = 8 } }
+derived = { prefix = "'i'" }
+
+[[case]]
+name = "rgba32i_s16"
+rust_const = "MS_RESIDENCY_RGBA32I_S16"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba32i" }, samples = { type = "u32", value = 16 } }
+derived = { prefix = "'i'" }
+
+[[case]]
+name = "rgba16i_s2"
+rust_const = "MS_RESIDENCY_RGBA16I_S2"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba16i" }, samples = { type = "u32", value = 2 } }
+derived = { prefix = "'i'" }
+
+[[case]]
+name = "rgba16i_s4"
+rust_const = "MS_RESIDENCY_RGBA16I_S4"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba16i" }, samples = { type = "u32", value = 4 } }
+derived = { prefix = "'i'" }
+
+[[case]]
+name = "rgba16i_s8"
+rust_const = "MS_RESIDENCY_RGBA16I_S8"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba16i" }, samples = { type = "u32", value = 8 } }
+derived = { prefix = "'i'" }
+
+[[case]]
+name = "rgba16i_s16"
+rust_const = "MS_RESIDENCY_RGBA16I_S16"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba16i" }, samples = { type = "u32", value = 16 } }
+derived = { prefix = "'i'" }
+
+[[case]]
+name = "rgba8i_s2"
+rust_const = "MS_RESIDENCY_RGBA8I_S2"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba8i" }, samples = { type = "u32", value = 2 } }
+derived = { prefix = "'i'" }
+
+[[case]]
+name = "rgba8i_s4"
+rust_const = "MS_RESIDENCY_RGBA8I_S4"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba8i" }, samples = { type = "u32", value = 4 } }
+derived = { prefix = "'i'" }
+
+[[case]]
+name = "rgba8i_s8"
+rust_const = "MS_RESIDENCY_RGBA8I_S8"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba8i" }, samples = { type = "u32", value = 8 } }
+derived = { prefix = "'i'" }
+
+[[case]]
+name = "rgba8i_s16"
+rust_const = "MS_RESIDENCY_RGBA8I_S16"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "rgba8i" }, samples = { type = "u32", value = 16 } }
+derived = { prefix = "'i'" }
+
+[[case]]
+name = "r32i_s2"
+rust_const = "MS_RESIDENCY_R32I_S2"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "r32i" }, samples = { type = "u32", value = 2 } }
+derived = { prefix = "'i'" }
+
+[[case]]
+name = "r32i_s4"
+rust_const = "MS_RESIDENCY_R32I_S4"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "r32i" }, samples = { type = "u32", value = 4 } }
+derived = { prefix = "'i'" }
+
+[[case]]
+name = "r32i_s8"
+rust_const = "MS_RESIDENCY_R32I_S8"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "r32i" }, samples = { type = "u32", value = 8 } }
+derived = { prefix = "'i'" }
+
+[[case]]
+name = "r32i_s16"
+rust_const = "MS_RESIDENCY_R32I_S16"
+rust_type = "MultisampledResidencyProgram"
+programs = [{ name = "compute", template = "sparse_resources/multisampled_residency.comp", stage = "comp" }]
+params = { format_id = { type = "str", value = "r32i" }, samples = { type = "u32", value = 16 } }
+derived = { prefix = "'i'" }

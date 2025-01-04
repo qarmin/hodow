@@ -1,0 +1,92 @@
+[package]
+name = "hodow_cts"
+version = "0.1.0"
+authors = ["Rafał Mikrut <mikrutrafal@protonmail.com>"]
+edition = "2024"
+rust-version = "1.98"
+description = "Rust rewrite of the Khronos Vulkan/OpenGL Conformance Test Suite (VK-GL-CTS)"
+license = "Apache-2.0"
+repository = "https://github.com/qarmin/hodow"
+
+[lib]
+name = "hodow_cts"
+path = "src/lib.rs"
+
+[[bin]]
+name = "hodow_cts"
+path = "src/main.rs"
+
+# Which half of the suite is compiled in. Both halves are ~100% data by volume - the
+# Vulkan one carries 67 MB of committed SPIR-V and 625k case registrations, the GLES one
+# 11 MB of shader-library data - so leaving one out is worth several times what it costs
+# to type. The framework, `tcu`, `glu` and the runner are always present; only the ported
+# cases and their generated data move.
+#
+# Deliberately an API axis rather than an "old code" one: it is stable (today's new port
+# is next month's old one), it needs cfg in five places rather than at every registration
+# site, and it matches the board this targets, which has no Vulkan driver at all.
+#
+# `--no-default-features --features vulkan` is the mirror image; enabling both is what a
+# release build wants, and `cargo test` covers each combination separately.
+[features]
+default = ["gles"]
+gles = ["hodow_cts_base/gles"]
+# Desktop OpenGL ported from the Khronos GL CTS (root KHR-GL46), diffed against the real `glcts`. Not in the default set: it needs a driver with a desktop GL context.
+# Implies `gles`: the desktop groups reuse the shared test code that lives with the ES ones (gls::, the ES shader-render cases), with the Khronos copy's differences switched on.
+gl = ["gles", "hodow_cts_base/gl"]
+# The Vulkan groups are crates of their own (vk_crates.toml). They need the OpenGL ES helper modules of the base crate (the texture tests use
+# glu::texture_test_util_surface), which this feature switches on without registering any GLES case.
+vulkan = [
+    "hodow_cts_base/gles",
+    "dep:hodow_cts_vk_main",
+    "dep:hodow_cts_vk_a",
+    "dep:hodow_cts_vk_b",
+    "dep:hodow_cts_vk_c",
+    "dep:hodow_cts_vk_d",
+]
+
+shader_sources = ["hodow_cts_base/shader_sources"]
+
+[dependencies]
+hodow_cts_base = { path = "crates/base", default-features = false }
+hodow_cts_vk_main = { path = "crates/vk_main", optional = true }
+hodow_cts_vk_a = { path = "crates/vk_a", optional = true }
+hodow_cts_vk_b = { path = "crates/vk_b", optional = true }
+hodow_cts_vk_c = { path = "crates/vk_c", optional = true }
+hodow_cts_vk_d = { path = "crates/vk_d", optional = true }
+# Vulkan bindings generated from vk.xml - same source the upstream CTS framework
+# generates its own dispatch tables from. `libloading` makes the loader a runtime
+# dlopen, so the binary never links against libvulkan and needs no -dev package.
+vulkanalia = { version = "0.35", default-features = false, features = ["std", "libloading"] }
+# libEGL and libGLESv2 are opened at run time for the same reason the Vulkan loader is:
+# the binary links against neither, so it needs no -dev package to build and runs on a
+# board that has only the vendor driver.
+libloading = "0.9"
+clap = { version = "4.6", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+# For `quarantine.toml` alone. Everything else the fuzzer writes is machine-written and
+# machine-read, and is JSON; the quarantine is the one file a person edits by hand, where
+# comments and a forgiving syntax are the point. Pure Rust, so the binary still links
+# nothing but libc and libgcc.
+toml = "1"
+log = "0.4.35"
+sysinfo = { version = "0.40", default-features = false, features = ["system"] }
+env_logger = "0.11"
+# The `board` subcommand's progress log, in the same format hodow prints.
+handsome_logger = "0.10.0"
+
+# The ported Khronos CTS keeps the C++ shape of its source (so it can be diffed against upstream), which the workspace's strict
+# lint set of the hand-written crates would flag everywhere; only the allows the whole project shares apply here.
+[lints.clippy]
+upper_case_acronyms = "allow"
+approx_constant = "allow"
+needless_range_loop = "allow"
+chunks_exact_to_as_chunks = "allow"
+too_many_arguments = "allow"
+type_complexity = "allow"
+enum_variant_names = "allow"
+field_reassign_with_default = "allow"
+
+[lints.cargo]
+non_kebab_case_bins = "allow"

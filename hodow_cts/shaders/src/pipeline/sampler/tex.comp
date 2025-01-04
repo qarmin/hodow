@@ -1,0 +1,43 @@
+#version 440
+layout(local_size_x = 1, local_size_y = 1) in;
+layout(set = 0, binding = 0) uniform highp ${sampler_type} texSampler;
+layout(set = 0, binding = 1, rgba8) uniform writeonly highp image2D outImage;
+struct Vertex {
+    vec4 position;
+    vec4 texCoord;
+};
+layout(std430, set = 0, binding = 2) readonly buffer Vertices {
+    Vertex v[];
+};
+layout(push_constant, std430) uniform PushConstants
+{
+    vec4 scale;
+    vec4 bias;
+    float lod;
+} pc;
+vec4 interpolateTexCoord(vec2 ndc) {
+    for (int i = 0; i < v.length(); i += 3) {
+        vec2 p0 = v[i].position.xy;
+        vec2 p1 = v[i+1].position.xy;
+        vec2 p2 = v[i+2].position.xy;
+        float area = (p1.x - p0.x) * (p2.y - p0.y) - (p1.y - p0.y) * (p2.x - p0.x);
+        if (abs(area) < 1e-5) continue;
+        float l0 = ((p2.x - p1.x) * (ndc.y - p1.y) - (p2.y - p1.y) * (ndc.x - p1.x)) / area;
+        float l1 = ((p0.x - p2.x) * (ndc.y - p2.y) - (p0.y - p2.y) * (ndc.x - p2.x)) / area;
+        float l2 = 1.0 - l0 - l1;
+        if (l0 >= -1e-5 && l1 >= -1e-5 && l2 >= -1e-5) {
+            return v[i].texCoord * l0 + v[i+1].texCoord * l1 + v[i+2].texCoord * l2;
+        }
+    }
+    return v[0].texCoord;
+}
+void main (void)
+{
+    vec2 pixelCenter = vec2(gl_GlobalInvocationID.xy) + vec2(0.5);
+    vec2 ndc = (pixelCenter / vec2(gl_NumWorkGroups.xy)) * 2.0 - 1.0;
+    vec4 vtxTexCoords = interpolateTexCoord(ndc);
+    vec4 color;
+    color = ${lookup};
+    color = color * pc.scale + pc.bias;
+    imageStore(outImage, ivec2(gl_GlobalInvocationID.xy), color);
+}

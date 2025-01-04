@@ -1,0 +1,13 @@
+#version 450
+
+layout(set = 0, binding = ${binding}) uniform sampler2D texSamplerInput;
+layout(set = 1, binding = 0) buffer ssboOutput
+{
+    vec4 color;
+} outputData;
+
+void main (void)
+{
+    const vec2 coords = vec2(0, 0);
+    outputData.color = texture(texSamplerInput, coords);
+}

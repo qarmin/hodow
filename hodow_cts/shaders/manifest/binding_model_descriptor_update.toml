@@ -1,0 +1,69 @@
+# Shader manifest for dEQP-VK.binding_model.descriptor_update.samplerless.*
+#
+# Upstream composes the fragment and compute shaders from the descriptor type and the set
+# number the descriptor lives in; that is six distinct sets of programs (three types x set 0
+# or 1), shared by every pointer / layout / pipeline combination. An input attachment has no
+# compute variant.
+# Not ported from the descriptor_update group: `random` (needs its own port of the random
+# descriptor-update machinery) and `acceleration_structure`.
+
+upstream_source = "external/vulkancts/modules/vulkan/binding_model/vktBindingDescriptorUpdateTests.cpp"
+rust_module = "binding_model/descriptor_update_tests"
+
+[[case]]
+name = "samplerless_sampled_img_set0"
+rust_const = "SAMPLERLESS_SAMPLED_IMG_SET0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "binding_model/descriptor_update/samplerless_vert.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/descriptor_update/samplerless_sampled_img_set0.frag", stage = "frag" },
+    { name = "comp", template = "binding_model/descriptor_update/samplerless_sampled_img_set0.comp", stage = "comp" },
+]
+
+[[case]]
+name = "samplerless_sampled_img_set1"
+rust_const = "SAMPLERLESS_SAMPLED_IMG_SET1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "binding_model/descriptor_update/samplerless_vert.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/descriptor_update/samplerless_sampled_img_set1.frag", stage = "frag" },
+    { name = "comp", template = "binding_model/descriptor_update/samplerless_sampled_img_set1.comp", stage = "comp" },
+]
+
+[[case]]
+name = "samplerless_storage_img_set0"
+rust_const = "SAMPLERLESS_STORAGE_IMG_SET0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "binding_model/descriptor_update/samplerless_vert.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/descriptor_update/samplerless_storage_img_set0.frag", stage = "frag" },
+    { name = "comp", template = "binding_model/descriptor_update/samplerless_storage_img_set0.comp", stage = "comp" },
+]
+
+[[case]]
+name = "samplerless_storage_img_set1"
+rust_const = "SAMPLERLESS_STORAGE_IMG_SET1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "binding_model/descriptor_update/samplerless_vert.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/descriptor_update/samplerless_storage_img_set1.frag", stage = "frag" },
+    { name = "comp", template = "binding_model/descriptor_update/samplerless_storage_img_set1.comp", stage = "comp" },
+]
+
+[[case]]
+name = "samplerless_input_attachment_set0"
+rust_const = "SAMPLERLESS_INPUT_ATTACHMENT_SET0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "binding_model/descriptor_update/samplerless_vert.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/descriptor_update/samplerless_input_attachment_set0.frag", stage = "frag" },
+]
+
+[[case]]
+name = "samplerless_input_attachment_set1"
+rust_const = "SAMPLERLESS_INPUT_ATTACHMENT_SET1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "binding_model/descriptor_update/samplerless_vert.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/descriptor_update/samplerless_input_attachment_set1.frag", stage = "frag" },
+]

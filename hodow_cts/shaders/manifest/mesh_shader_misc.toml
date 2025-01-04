@@ -1,0 +1,695 @@
+# Shader manifest for dEQP-VK.mesh_shader.ext.misc.*
+#
+# The `initPrograms` of the families of vktMeshShaderMiscTestsEXT.cpp ported so far. Every value upstream formats into its GLSL is written
+# out; the generic fragment shader is shared by all of them.
+
+upstream_source = "external/vulkancts/modules/vulkan/mesh_shader/vktMeshShaderMiscTestsEXT.cpp"
+rust_module = "mesh_shader/misc_tests"
+spirv_version = "spirv1.4"
+
+[[case]]
+name = "complex_task_data"
+rust_const = "MISC_COMPLEX_TASK_DATA"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/complex_task_data.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/complex_task_data.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "single_point"
+rust_const = "MISC_SINGLE_POINT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/single_point.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "single_point_default_size"
+rust_const = "MISC_SINGLE_POINT_DEFAULT_SIZE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/single_point_default_size.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "single_line"
+rust_const = "MISC_SINGLE_LINE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/single_line.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "single_triangle"
+rust_const = "MISC_SINGLE_TRIANGLE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/single_triangle.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_points"
+rust_const = "MISC_MAX_POINTS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/max_points.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_lines"
+rust_const = "MISC_MAX_LINES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/max_lines.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_triangles_workgroupsize_64"
+rust_const = "MISC_MAX_TRIANGLES_WORKGROUPSIZE_64"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/max_triangles_workgroupsize_64.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_triangles_workgroupsize_32"
+rust_const = "MISC_MAX_TRIANGLES_WORKGROUPSIZE_32"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/max_triangles_workgroupsize_32.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_triangles_workgroupsize_16"
+rust_const = "MISC_MAX_TRIANGLES_WORKGROUPSIZE_16"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/max_triangles_workgroupsize_16.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "many_task_work_groups_x"
+rust_const = "MISC_MANY_TASK_WORK_GROUPS_X"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/many_task_work_groups_x.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/many_task_work_groups_x.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "many_mesh_work_groups_x"
+rust_const = "MISC_MANY_MESH_WORK_GROUPS_X"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/many_mesh_work_groups_x.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "many_task_mesh_work_groups_x"
+rust_const = "MISC_MANY_TASK_MESH_WORK_GROUPS_X"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/many_task_mesh_work_groups_x.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/many_task_mesh_work_groups_x.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "many_task_work_groups_y"
+rust_const = "MISC_MANY_TASK_WORK_GROUPS_Y"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/many_task_work_groups_y.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/many_task_work_groups_y.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "many_mesh_work_groups_y"
+rust_const = "MISC_MANY_MESH_WORK_GROUPS_Y"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/many_mesh_work_groups_y.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "many_task_mesh_work_groups_y"
+rust_const = "MISC_MANY_TASK_MESH_WORK_GROUPS_Y"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/many_task_mesh_work_groups_y.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/many_task_mesh_work_groups_y.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "many_task_work_groups_z"
+rust_const = "MISC_MANY_TASK_WORK_GROUPS_Z"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/many_task_work_groups_z.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/many_task_work_groups_z.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "many_mesh_work_groups_z"
+rust_const = "MISC_MANY_MESH_WORK_GROUPS_Z"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/many_mesh_work_groups_z.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "many_task_mesh_work_groups_z"
+rust_const = "MISC_MANY_TASK_MESH_WORK_GROUPS_Z"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/many_task_mesh_work_groups_z.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/many_task_mesh_work_groups_z.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "no_points"
+rust_const = "MISC_NO_POINTS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/no_points.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "no_lines"
+rust_const = "MISC_NO_LINES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/no_lines.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "no_triangles"
+rust_const = "MISC_NO_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/no_triangles.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "barrier_in_task"
+rust_const = "MISC_BARRIER_IN_TASK"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/barrier_in_task.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/barrier_in_task.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "barrier_in_mesh"
+rust_const = "MISC_BARRIER_IN_MESH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/barrier_in_mesh.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "memory_barrier_shared_in_task_struct"
+rust_const = "MISC_MEMORY_BARRIER_SHARED_IN_TASK_STRUCT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/memory_barrier_shared_in_task_struct.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/memory_barrier_shared_in_task_struct.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "memory_barrier_shared_in_task_float"
+rust_const = "MISC_MEMORY_BARRIER_SHARED_IN_TASK_FLOAT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/memory_barrier_shared_in_task_float.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/memory_barrier_shared_in_task_float.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "memory_barrier_shared_in_task_vector"
+rust_const = "MISC_MEMORY_BARRIER_SHARED_IN_TASK_VECTOR"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/memory_barrier_shared_in_task_vector.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/memory_barrier_shared_in_task_vector.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "memory_barrier_shared_in_task_array"
+rust_const = "MISC_MEMORY_BARRIER_SHARED_IN_TASK_ARRAY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/memory_barrier_shared_in_task_array.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/memory_barrier_shared_in_task_array.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "memory_barrier_shared_in_task_uint64"
+rust_const = "MISC_MEMORY_BARRIER_SHARED_IN_TASK_UINT64"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/memory_barrier_shared_in_task_uint64.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/memory_barrier_shared_in_task_uint64.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "memory_barrier_shared_in_mesh_struct"
+rust_const = "MISC_MEMORY_BARRIER_SHARED_IN_MESH_STRUCT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/memory_barrier_shared_in_mesh_struct.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "memory_barrier_shared_in_mesh_float"
+rust_const = "MISC_MEMORY_BARRIER_SHARED_IN_MESH_FLOAT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/memory_barrier_shared_in_mesh_float.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "memory_barrier_shared_in_mesh_vector"
+rust_const = "MISC_MEMORY_BARRIER_SHARED_IN_MESH_VECTOR"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/memory_barrier_shared_in_mesh_vector.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "memory_barrier_shared_in_mesh_array"
+rust_const = "MISC_MEMORY_BARRIER_SHARED_IN_MESH_ARRAY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/memory_barrier_shared_in_mesh_array.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "memory_barrier_shared_in_mesh_uint64"
+rust_const = "MISC_MEMORY_BARRIER_SHARED_IN_MESH_UINT64"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/memory_barrier_shared_in_mesh_uint64.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "group_memory_barrier_in_task_struct"
+rust_const = "MISC_GROUP_MEMORY_BARRIER_IN_TASK_STRUCT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/group_memory_barrier_in_task_struct.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/group_memory_barrier_in_task_struct.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "group_memory_barrier_in_task_float"
+rust_const = "MISC_GROUP_MEMORY_BARRIER_IN_TASK_FLOAT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/group_memory_barrier_in_task_float.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/group_memory_barrier_in_task_float.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "group_memory_barrier_in_task_vector"
+rust_const = "MISC_GROUP_MEMORY_BARRIER_IN_TASK_VECTOR"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/group_memory_barrier_in_task_vector.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/group_memory_barrier_in_task_vector.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "group_memory_barrier_in_task_array"
+rust_const = "MISC_GROUP_MEMORY_BARRIER_IN_TASK_ARRAY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/group_memory_barrier_in_task_array.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/group_memory_barrier_in_task_array.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "group_memory_barrier_in_task_uint64"
+rust_const = "MISC_GROUP_MEMORY_BARRIER_IN_TASK_UINT64"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/group_memory_barrier_in_task_uint64.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/group_memory_barrier_in_task_uint64.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "group_memory_barrier_in_mesh_struct"
+rust_const = "MISC_GROUP_MEMORY_BARRIER_IN_MESH_STRUCT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/group_memory_barrier_in_mesh_struct.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "group_memory_barrier_in_mesh_float"
+rust_const = "MISC_GROUP_MEMORY_BARRIER_IN_MESH_FLOAT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/group_memory_barrier_in_mesh_float.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "group_memory_barrier_in_mesh_vector"
+rust_const = "MISC_GROUP_MEMORY_BARRIER_IN_MESH_VECTOR"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/group_memory_barrier_in_mesh_vector.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "group_memory_barrier_in_mesh_array"
+rust_const = "MISC_GROUP_MEMORY_BARRIER_IN_MESH_ARRAY"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/group_memory_barrier_in_mesh_array.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "group_memory_barrier_in_mesh_uint64"
+rust_const = "MISC_GROUP_MEMORY_BARRIER_IN_MESH_UINT64"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/group_memory_barrier_in_mesh_uint64.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "payload_read"
+rust_const = "MISC_PAYLOAD_READ"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/payload_read.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/payload_read.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "maximize_primitives"
+rust_const = "MISC_MAXIMIZE_PRIMITIVES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/maximize_primitives.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "maximize_vertices"
+rust_const = "MISC_MAXIMIZE_VERTICES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/maximize_vertices.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "maximize_invocations_32"
+rust_const = "MISC_MAXIMIZE_INVOCATIONS_32"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/maximize_invocations_32.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "maximize_invocations_64"
+rust_const = "MISC_MAXIMIZE_INVOCATIONS_64"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/maximize_invocations_64.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "maximize_invocations_128"
+rust_const = "MISC_MAXIMIZE_INVOCATIONS_128"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/maximize_invocations_128.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "maximize_invocations_256"
+rust_const = "MISC_MAXIMIZE_INVOCATIONS_256"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/maximize_invocations_256.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "first_invocation_mesh"
+rust_const = "MISC_FIRST_INVOCATION_MESH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/first_invocation_mesh.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "first_invocation_task"
+rust_const = "MISC_FIRST_INVOCATION_TASK"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/first_invocation_task.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/first_invocation_task.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "multiple_outputs_vertices"
+rust_const = "MISC_MULTIPLE_OUTPUTS_VERTICES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/multiple_outputs_vertices.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/multiple_outputs_vertices.frag", stage = "frag" },
+]
+
+[[case]]
+name = "per_prim_block_output"
+rust_const = "MISC_PER_PRIM_BLOCK_OUTPUT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/per_prim_block_output.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/per_prim_block_output.frag", stage = "frag" },
+]
+
+[[case]]
+name = "push_constant"
+rust_const = "MISC_PUSH_CONSTANT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/push_constant.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "push_constant_and_task_shader"
+rust_const = "MISC_PUSH_CONSTANT_AND_TASK_SHADER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/push_constant_and_task_shader.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/push_constant_and_task_shader.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "custom_attributes"
+rust_const = "MISC_CUSTOM_ATTRIBUTES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/custom_attributes.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/custom_attributes.frag", stage = "frag" },
+]
+
+[[case]]
+name = "custom_attributes_and_task_shader"
+rust_const = "MISC_CUSTOM_ATTRIBUTES_AND_TASK_SHADER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/custom_attributes_and_task_shader.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/custom_attributes_and_task_shader.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/custom_attributes.frag", stage = "frag" },
+]
+
+[[case]]
+name = "clip_geom"
+rust_const = "MISC_CLIP_GEOM"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/clip_geom.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/clip_geom.frag", stage = "frag" },
+]
+
+[[case]]
+name = "clip_geom_provoking_last"
+rust_const = "MISC_CLIP_GEOM_PROVOKING_LAST"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/clip_geom_provoking_last.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/clip_geom_provoking_last.frag", stage = "frag" },
+]
+
+[[case]]
+name = "clip_plane"
+rust_const = "MISC_CLIP_PLANE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/clip_plane.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/clip_plane.frag", stage = "frag" },
+]
+
+[[case]]
+name = "clip_plane_provoking_last"
+rust_const = "MISC_CLIP_PLANE_PROVOKING_LAST"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/clip_plane_provoking_last.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/clip_plane_provoking_last.frag", stage = "frag" },
+]
+
+[[case]]
+name = "clip_geom_and_task_shader"
+rust_const = "MISC_CLIP_GEOM_AND_TASK_SHADER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/clip_geom_and_task_shader.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/clip_geom_and_task_shader.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/clip_geom_and_task_shader.frag", stage = "frag" },
+]
+
+[[case]]
+name = "clip_geom_and_task_shader_provoking_last"
+rust_const = "MISC_CLIP_GEOM_AND_TASK_SHADER_PROVOKING_LAST"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/clip_geom_and_task_shader_provoking_last.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/clip_geom_and_task_shader_provoking_last.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/clip_geom_and_task_shader_provoking_last.frag", stage = "frag" },
+]
+
+[[case]]
+name = "clip_plane_and_task_shader"
+rust_const = "MISC_CLIP_PLANE_AND_TASK_SHADER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/clip_plane_and_task_shader.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/clip_plane_and_task_shader.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/clip_plane_and_task_shader.frag", stage = "frag" },
+]
+
+[[case]]
+name = "clip_plane_and_task_shader_provoking_last"
+rust_const = "MISC_CLIP_PLANE_AND_TASK_SHADER_PROVOKING_LAST"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/clip_plane_and_task_shader_provoking_last.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/clip_plane_and_task_shader_provoking_last.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/clip_plane_and_task_shader_provoking_last.frag", stage = "frag" },
+]
+
+[[case]]
+name = "payload_not_accessed"
+rust_const = "MISC_PAYLOAD_NOT_ACCESSED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/payload_not_accessed.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/payload_not_accessed.frag", stage = "frag" },
+]
+
+[[case]]
+name = "emit_in_control_flow"
+rust_const = "MISC_EMIT_IN_CONTROL_FLOW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/emit_in_control_flow.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/emit_in_control_flow.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/emit_in_control_flow.frag", stage = "frag" },
+]
+
+[[case]]
+name = "emit_in_control_flow_bad_emit_last"
+rust_const = "MISC_EMIT_IN_CONTROL_FLOW_BAD_EMIT_LAST"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/emit_in_control_flow_bad_emit_last.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/emit_in_control_flow_bad_emit_last.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/emit_in_control_flow_bad_emit_last.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mixed_pipelines"
+rust_const = "MISC_MIXED_PIPELINES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "mesh_shader/misc/mixed_pipelines.vert", stage = "vert" },
+    { name = "mesh", template = "mesh_shader/misc/mixed_pipelines.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/mixed_pipelines.frag", stage = "frag" },
+]
+
+[[case]]
+name = "rebind_sets"
+rust_const = "MISC_REBIND_SETS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/misc/rebind_sets.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/misc/rebind_sets.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/generic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_state"
+rust_const = "MISC_VERTEX_STATE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/misc/vertex_state.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/misc/vertex_state.frag", stage = "frag" },
+]

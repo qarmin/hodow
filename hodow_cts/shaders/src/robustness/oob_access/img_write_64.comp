@@ -1,0 +1,16 @@
+#version 450
+#extension GL_EXT_shader_explicit_arithmetic_types_int64 : require
+#extension GL_EXT_shader_image_int64 : require
+layout(set = 0, binding = 0, r64ui) uniform u64image2D storageImage;
+layout(set = 0, binding = 1, std430) buffer InputBuffer { 
+    uint64_t inputData; 
+} inBuffer;
+layout(push_constant) uniform PushConstants {
+    ivec2 index;
+} pc;
+layout(local_size_x = 1) in;
+void main (void)
+{
+    u64vec4 value = u64vec4(inBuffer.inputData, 0u, 0u, 0u);
+    imageStore(storageImage, pc.index, value); 
+}

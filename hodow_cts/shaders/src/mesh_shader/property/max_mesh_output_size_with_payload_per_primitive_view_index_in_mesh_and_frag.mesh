@@ -1,0 +1,48 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_EXT_multiview : enable
+
+layout (local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout (points) out;
+layout (max_vertices=96, max_primitives=96) out;
+
+out gl_MeshPerVertexEXT {
+    vec4  gl_Position;
+    float gl_PointSize;
+} gl_MeshVerticesEXT[];
+
+layout (constant_id=0) const uint payloadElements = 1u;
+layout (constant_id=1) const uint locationCount = 1u;
+struct TaskData {
+    uint elements[payloadElements];
+};
+taskPayloadSharedEXT TaskData td;
+
+struct LocationBlock {
+    uvec4 elements[locationCount];
+};
+layout (location=0) out perprimitiveEXT LocationBlock loc[];
+
+void main (void) {
+    bool payloadOK = true;
+    for (uint i = 0; i < payloadElements; ++i) {
+        if (td.elements[i] != 1000000u + i) {
+            payloadOK = false;
+            break;
+        }
+    }
+
+    SetMeshOutputsEXT(96, 96);
+    const uint payloadOffset = (payloadOK ? 10u : 0u);
+    const uint compOffset = (4u * uint(gl_ViewIndex));
+    for (uint pointIdx = 0u; pointIdx < 96; ++pointIdx) {
+        const float xCoord = ((float(pointIdx) + 0.5) / float(96)) * 2.0 - 1.0;
+        gl_MeshVerticesEXT[pointIdx].gl_Position = vec4(xCoord, 0.0, 0.0, 1.0);
+        gl_MeshVerticesEXT[pointIdx].gl_PointSize = 1.0f;
+        gl_PrimitivePointIndicesEXT[pointIdx] = pointIdx;
+        for (uint elemIdx = 0; elemIdx < locationCount; ++elemIdx) {
+            const uint baseVal = 200000000u + 100000u * pointIdx + 1000u * elemIdx + payloadOffset;
+            loc[pointIdx].elements[elemIdx] = uvec4(baseVal + 1u + compOffset, baseVal + 2u + compOffset, baseVal + 3u + compOffset, baseVal + 4u + compOffset);
+        }
+    }
+}

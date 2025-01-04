@@ -1,0 +1,86 @@
+#version 460
+layout (location=0) in vec4 inColor;
+layout (location=0) out vec4 outColor;
+void main(void) {
+    outColor = inColor;
+}
+#version 460
+#extension GL_EXT_mesh_shader : enable
+layout (local_size_x=32) in;
+layout (push_constant, std430) uniform PCBlock { uint rowOffset; } pc;
+struct TaskPayload {
+    vec4 color;
+    uint row;
+};
+taskPayloadSharedEXT TaskPayload payload;
+void main(void) {
+    payload.color = vec4(0.0, 0.0, 1.0, 1.0);
+    payload.row = gl_WorkGroupID.x + pc.rowOffset;
+    EmitMeshTasksEXT(8u, 1u, 1u);
+}
+#version 460
+#extension GL_EXT_mesh_shader : enable
+layout (local_size_x=64) in;
+struct TaskPayload {
+    vec4 color;
+    uint row;
+};
+taskPayloadSharedEXT TaskPayload payload;
+layout (triangles) out;
+layout (max_vertices=3, max_primitives=1) out;
+layout (set=0, binding=0, std430) readonly buffer PositionsBlock {
+    vec4 positions[];
+} ssbo;
+layout (location=0) out vec4 outColor[];
+void main(void) {
+    uint pixel_id = payload.row * 8 + gl_WorkGroupID.x;
+    uint vertex_id = pixel_id * 3 + gl_LocalInvocationIndex;
+    SetMeshOutputsEXT(3u, 1u);
+    if (gl_LocalInvocationIndex < 3)
+    {
+        gl_MeshVerticesEXT[gl_LocalInvocationIndex].gl_Position = ssbo.positions[vertex_id];
+        outColor[gl_LocalInvocationIndex] = payload.color;
+    }
+    if (gl_LocalInvocationIndex == 0)
+        gl_PrimitiveTriangleIndicesEXT[0] = uvec3(0, 1, 2);
+}
+#version 460
+#extension GL_EXT_mesh_shader : enable
+layout (local_size_x=32) in;
+layout (push_constant, std430) uniform PCBlock { uint rowOffset; } pc;
+struct TaskPayload {
+    vec4 color;
+    uint row;
+};
+taskPayloadSharedEXT TaskPayload payload;
+void main(void) {
+    payload.color = vec4(1.0, 0.0, 1.0, 1.0);
+    payload.row = gl_WorkGroupID.x + pc.rowOffset;
+    EmitMeshTasksEXT(8u, 1u, 1u);
+}
+#version 460
+#extension GL_EXT_mesh_shader : enable
+layout (local_size_x=64) in;
+struct TaskPayload {
+    vec4 color;
+    uint row;
+};
+taskPayloadSharedEXT TaskPayload payload;
+layout (triangles) out;
+layout (max_vertices=3, max_primitives=1) out;
+layout (set=0, binding=0, std430) readonly buffer PositionsBlock {
+    vec4 positions[];
+} ssbo;
+layout (location=0) out vec4 outColor[];
+void main(void) {
+    uint pixel_id = payload.row * 8 + gl_WorkGroupID.x;
+    uint vertex_id = pixel_id * 3 + gl_LocalInvocationIndex;
+    SetMeshOutputsEXT(3u, 1u);
+    if (gl_LocalInvocationIndex < 3)
+    {
+        gl_MeshVerticesEXT[gl_LocalInvocationIndex].gl_Position = ssbo.positions[vertex_id];
+        outColor[gl_LocalInvocationIndex] = vec4(payload.color.r, 1.0, payload.color.ba);
+    }
+    if (gl_LocalInvocationIndex == 0)
+        gl_PrimitiveTriangleIndicesEXT[0] = uvec3(0, 1, 2);
+}

@@ -1,0 +1,26 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.extended_dynamic_state.misc.*
+#
+# "sample_shading" is `sampleShadingWithDynamicSampleCountPrograms` (a full-screen quad and a fragment shader that reads
+# gl_SampleID and counts invocations); "dynamic_sample_shading" is `dynamicSampleShadingPrograms`, shared by all ten
+# static/dynamic sample count combinations.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineExtendedDynamicStateMiscTests.cpp"
+rust_module = "pipeline/extended_dynamic_state_misc_tests"
+
+[[case]]
+name = "sample_shading"
+rust_const = "SAMPLE_SHADING_DYNAMIC_SAMPLE_COUNT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/extended_dynamic_state_misc/quad.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/extended_dynamic_state_misc/blue_atomic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "dynamic_sample_shading"
+rust_const = "DYNAMIC_SAMPLE_SHADING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/extended_dynamic_state_misc/dss.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/extended_dynamic_state_misc/dss.frag", stage = "frag" },
+]

@@ -1,0 +1,12 @@
+#version 450
+layout(location = 0) in mediump vec3 v_coord;
+layout(location = 0) out mediump vec4 o_color;
+layout(location = 1) out mediump vec3 intermediateStore;
+layout(binding = 0, std140) uniform Scale { mediump vec3 u_scale; };
+layout(binding = 1, std140) uniform Bias { mediump vec3 u_bias; };
+void main (void)
+{
+    intermediateStore = v_coord;
+    mediump vec3 res = fwidthFine(intermediateStore) * u_scale + u_bias;
+    o_color = vec4(res, 1.0);
+}

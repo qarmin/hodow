@@ -1,0 +1,33 @@
+#version 450
+#extension GL_KHR_shader_subgroup_basic: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout (set = 0, binding = 1, std430) buffer Buffer2
+{
+  uint tempBuffer[];
+};
+layout (set = 0, binding = 2, std430) buffer Buffer3
+{
+  uint value;
+};
+layout (set = 0, binding = 3, r32ui) uniform uimage2D tempImage;
+shared uint tempShared[gl_WorkGroupSize.x * gl_WorkGroupSize.y * gl_WorkGroupSize.z];
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint localId = gl_SubgroupID;
+  uint id = globalSize.x * ((globalSize.y * gl_WorkGroupID.z) + gl_WorkGroupID.y) + gl_WorkGroupID.x + localId;
+  uint tempResult = 0;
+  if (subgroupElect())
+  {
+    imageStore(tempImage, ivec2(id, 0), ivec4(value));
+  }
+  subgroupMemoryBarrierImage();
+  tempResult = imageLoad(tempImage, ivec2(id, 0)).x;
+  result[offset] = tempResult;
+}

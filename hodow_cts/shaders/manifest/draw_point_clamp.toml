@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.draw.renderpass.point_size_clamp.*
+#
+# `createPointSizeClampProgs`: a vertex shader that takes the point size from a push constant, and a flat pass-through fragment shader.
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawPointClampTests.cpp"
+rust_module = "draw/point_clamp_tests"
+
+[[case]]
+name = "point_size_clamp"
+rust_const = "POINT_SIZE_CLAMP"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/point_size_clamp.vert", stage = "vert" },
+    { name = "frag", template = "draw/point_size_clamp.frag", stage = "frag" },
+]

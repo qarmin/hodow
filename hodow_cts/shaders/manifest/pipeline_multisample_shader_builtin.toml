@@ -1,0 +1,179 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.multisample_shader_builtin.*
+#
+# `MSCase<...>::initPrograms` (every case also carries the two programs of `MSCaseBaseResolveAndPerSampleFetch::initPrograms`)
+# and `WriteSampleTest::initPrograms`. The bit count shader depends on the sample count and on the shading rate
+# (`bit_count_<samples>_r1` for 1.0, `_r05` for 0.5): its bounds are `minCount = 1` and `maxCount = samples - (minInvocations - 1)`
+# with `minInvocations = ceil(samples * shadingRate)`.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineMultisampleShaderBuiltInTests.cpp"
+rust_module = "pipeline/multisample_shader_builtin_tests"
+
+[[case]]
+name = "sample_id"
+rust_const = "BUILTIN_SAMPLE_ID"
+rust_type = "SharedProgram"
+programs = [ { name = "per_sample_fetch_vs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.vert", stage = "vert" }, { name = "per_sample_fetch_fs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.frag", stage = "frag" }, { name = "vertex_shader", template = "pipeline/multisample_shader_builtin/ndc.vert", stage = "vert" }, { name = "fragment_shader", template = "pipeline/multisample_shader_builtin/sample_id.frag", stage = "frag" } ]
+
+[[case]]
+name = "sample_pos_distribution"
+rust_const = "BUILTIN_SAMPLE_POS_DISTRIBUTION"
+rust_type = "SharedProgram"
+programs = [ { name = "per_sample_fetch_vs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.vert", stage = "vert" }, { name = "per_sample_fetch_fs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.frag", stage = "frag" }, { name = "vertex_shader", template = "pipeline/multisample_shader_builtin/ndc.vert", stage = "vert" }, { name = "fragment_shader", template = "pipeline/multisample_shader_builtin/sample_pos_distribution.frag", stage = "frag" } ]
+
+[[case]]
+name = "sample_pos_correctness"
+rust_const = "BUILTIN_SAMPLE_POS_CORRECTNESS"
+rust_type = "SharedProgram"
+programs = [ { name = "per_sample_fetch_vs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.vert", stage = "vert" }, { name = "per_sample_fetch_fs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.frag", stage = "frag" }, { name = "vertex_shader", template = "pipeline/multisample_shader_builtin/ndc_screen.vert", stage = "vert" }, { name = "fragment_shader", template = "pipeline/multisample_shader_builtin/sample_pos_correctness.frag", stage = "frag" } ]
+
+[[case]]
+name = "mask_pattern"
+rust_const = "BUILTIN_MASK_PATTERN"
+rust_type = "SharedProgram"
+programs = [ { name = "per_sample_fetch_vs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.vert", stage = "vert" }, { name = "per_sample_fetch_fs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.frag", stage = "frag" }, { name = "vertex_shader", template = "pipeline/multisample_shader_builtin/ndc.vert", stage = "vert" }, { name = "fragment_shader", template = "pipeline/multisample_shader_builtin/sample_mask_pattern.frag", stage = "frag" } ]
+
+[[case]]
+name = "mask_correct_bit"
+rust_const = "BUILTIN_MASK_CORRECT_BIT"
+rust_type = "SharedProgram"
+programs = [ { name = "per_sample_fetch_vs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.vert", stage = "vert" }, { name = "per_sample_fetch_fs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.frag", stage = "frag" }, { name = "vertex_shader", template = "pipeline/multisample_shader_builtin/ndc.vert", stage = "vert" }, { name = "fragment_shader", template = "pipeline/multisample_shader_builtin/sample_mask_correct_bit.frag", stage = "frag" } ]
+
+[[case]]
+name = "mask_write"
+rust_const = "BUILTIN_MASK_WRITE"
+rust_type = "SharedProgram"
+programs = [ { name = "per_sample_fetch_vs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.vert", stage = "vert" }, { name = "per_sample_fetch_fs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.frag", stage = "frag" }, { name = "vertex_shader", template = "pipeline/multisample_shader_builtin/ndc.vert", stage = "vert" }, { name = "fragment_shader", template = "pipeline/multisample_shader_builtin/sample_mask_write.frag", stage = "frag" } ]
+
+[[case]]
+name = "bit_count_2_r1"
+rust_const = "BUILTIN_BIT_COUNT_2_R1"
+rust_type = "SharedProgram"
+programs = [ { name = "per_sample_fetch_vs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.vert", stage = "vert" }, { name = "per_sample_fetch_fs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.frag", stage = "frag" }, { name = "vertex_shader", template = "pipeline/multisample_shader_builtin/ndc.vert", stage = "vert" }, { name = "fragment_shader", template = "pipeline/multisample_shader_builtin/sample_mask_bit_count.frag", stage = "frag" } ]
+derived = { min_count = "1", max_count = "1" }
+
+[[case]]
+name = "bit_count_2_r05"
+rust_const = "BUILTIN_BIT_COUNT_2_R05"
+rust_type = "SharedProgram"
+programs = [ { name = "per_sample_fetch_vs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.vert", stage = "vert" }, { name = "per_sample_fetch_fs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.frag", stage = "frag" }, { name = "vertex_shader", template = "pipeline/multisample_shader_builtin/ndc.vert", stage = "vert" }, { name = "fragment_shader", template = "pipeline/multisample_shader_builtin/sample_mask_bit_count.frag", stage = "frag" } ]
+derived = { min_count = "1", max_count = "2" }
+
+[[case]]
+name = "bit_count_4_r1"
+rust_const = "BUILTIN_BIT_COUNT_4_R1"
+rust_type = "SharedProgram"
+programs = [ { name = "per_sample_fetch_vs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.vert", stage = "vert" }, { name = "per_sample_fetch_fs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.frag", stage = "frag" }, { name = "vertex_shader", template = "pipeline/multisample_shader_builtin/ndc.vert", stage = "vert" }, { name = "fragment_shader", template = "pipeline/multisample_shader_builtin/sample_mask_bit_count.frag", stage = "frag" } ]
+derived = { min_count = "1", max_count = "1" }
+
+[[case]]
+name = "bit_count_4_r05"
+rust_const = "BUILTIN_BIT_COUNT_4_R05"
+rust_type = "SharedProgram"
+programs = [ { name = "per_sample_fetch_vs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.vert", stage = "vert" }, { name = "per_sample_fetch_fs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.frag", stage = "frag" }, { name = "vertex_shader", template = "pipeline/multisample_shader_builtin/ndc.vert", stage = "vert" }, { name = "fragment_shader", template = "pipeline/multisample_shader_builtin/sample_mask_bit_count.frag", stage = "frag" } ]
+derived = { min_count = "1", max_count = "3" }
+
+[[case]]
+name = "bit_count_8_r1"
+rust_const = "BUILTIN_BIT_COUNT_8_R1"
+rust_type = "SharedProgram"
+programs = [ { name = "per_sample_fetch_vs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.vert", stage = "vert" }, { name = "per_sample_fetch_fs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.frag", stage = "frag" }, { name = "vertex_shader", template = "pipeline/multisample_shader_builtin/ndc.vert", stage = "vert" }, { name = "fragment_shader", template = "pipeline/multisample_shader_builtin/sample_mask_bit_count.frag", stage = "frag" } ]
+derived = { min_count = "1", max_count = "1" }
+
+[[case]]
+name = "bit_count_8_r05"
+rust_const = "BUILTIN_BIT_COUNT_8_R05"
+rust_type = "SharedProgram"
+programs = [ { name = "per_sample_fetch_vs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.vert", stage = "vert" }, { name = "per_sample_fetch_fs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.frag", stage = "frag" }, { name = "vertex_shader", template = "pipeline/multisample_shader_builtin/ndc.vert", stage = "vert" }, { name = "fragment_shader", template = "pipeline/multisample_shader_builtin/sample_mask_bit_count.frag", stage = "frag" } ]
+derived = { min_count = "1", max_count = "5" }
+
+[[case]]
+name = "bit_count_16_r1"
+rust_const = "BUILTIN_BIT_COUNT_16_R1"
+rust_type = "SharedProgram"
+programs = [ { name = "per_sample_fetch_vs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.vert", stage = "vert" }, { name = "per_sample_fetch_fs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.frag", stage = "frag" }, { name = "vertex_shader", template = "pipeline/multisample_shader_builtin/ndc.vert", stage = "vert" }, { name = "fragment_shader", template = "pipeline/multisample_shader_builtin/sample_mask_bit_count.frag", stage = "frag" } ]
+derived = { min_count = "1", max_count = "1" }
+
+[[case]]
+name = "bit_count_16_r05"
+rust_const = "BUILTIN_BIT_COUNT_16_R05"
+rust_type = "SharedProgram"
+programs = [ { name = "per_sample_fetch_vs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.vert", stage = "vert" }, { name = "per_sample_fetch_fs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.frag", stage = "frag" }, { name = "vertex_shader", template = "pipeline/multisample_shader_builtin/ndc.vert", stage = "vert" }, { name = "fragment_shader", template = "pipeline/multisample_shader_builtin/sample_mask_bit_count.frag", stage = "frag" } ]
+derived = { min_count = "1", max_count = "9" }
+
+[[case]]
+name = "bit_count_32_r1"
+rust_const = "BUILTIN_BIT_COUNT_32_R1"
+rust_type = "SharedProgram"
+programs = [ { name = "per_sample_fetch_vs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.vert", stage = "vert" }, { name = "per_sample_fetch_fs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.frag", stage = "frag" }, { name = "vertex_shader", template = "pipeline/multisample_shader_builtin/ndc.vert", stage = "vert" }, { name = "fragment_shader", template = "pipeline/multisample_shader_builtin/sample_mask_bit_count.frag", stage = "frag" } ]
+derived = { min_count = "1", max_count = "1" }
+
+[[case]]
+name = "bit_count_32_r05"
+rust_const = "BUILTIN_BIT_COUNT_32_R05"
+rust_type = "SharedProgram"
+programs = [ { name = "per_sample_fetch_vs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.vert", stage = "vert" }, { name = "per_sample_fetch_fs", template = "pipeline/multisample_shader_builtin/per_sample_fetch.frag", stage = "frag" }, { name = "vertex_shader", template = "pipeline/multisample_shader_builtin/ndc.vert", stage = "vert" }, { name = "fragment_shader", template = "pipeline/multisample_shader_builtin/sample_mask_bit_count.frag", stage = "frag" } ]
+derived = { min_count = "1", max_count = "17" }
+
+[[case]]
+name = "write_sample_2"
+rust_const = "BUILTIN_WRITE_SAMPLE_2"
+rust_type = "SharedProgram"
+programs = [ { name = "write", template = "pipeline/multisample_shader_builtin/write_sample.comp", stage = "comp" }, { name = "verify", template = "pipeline/multisample_shader_builtin/write_sample_verify.comp", stage = "comp" } ]
+derived = { count = "2", bpc = "1" }
+
+[[case]]
+name = "write_sample_4"
+rust_const = "BUILTIN_WRITE_SAMPLE_4"
+rust_type = "SharedProgram"
+programs = [ { name = "write", template = "pipeline/multisample_shader_builtin/write_sample.comp", stage = "comp" }, { name = "verify", template = "pipeline/multisample_shader_builtin/write_sample_verify.comp", stage = "comp" } ]
+derived = { count = "4", bpc = "2" }
+
+[[case]]
+name = "write_sample_8"
+rust_const = "BUILTIN_WRITE_SAMPLE_8"
+rust_type = "SharedProgram"
+programs = [ { name = "write", template = "pipeline/multisample_shader_builtin/write_sample.comp", stage = "comp" }, { name = "verify", template = "pipeline/multisample_shader_builtin/write_sample_verify.comp", stage = "comp" } ]
+derived = { count = "8", bpc = "4" }
+
+[[case]]
+name = "write_sample_16"
+rust_const = "BUILTIN_WRITE_SAMPLE_16"
+rust_type = "SharedProgram"
+programs = [ { name = "write", template = "pipeline/multisample_shader_builtin/write_sample.comp", stage = "comp" }, { name = "verify", template = "pipeline/multisample_shader_builtin/write_sample_verify.comp", stage = "comp" } ]
+derived = { count = "16", bpc = "8" }
+
+[[case]]
+name = "write_sample_mask_1"
+rust_const = "BUILTIN_WRITE_SAMPLE_MASK_1"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_shader_builtin/write_sample_mask.vert", stage = "vert" }, { name = "frag_write", template = "pipeline/multisample_shader_builtin/write_sample_mask_write.frag", stage = "frag" }, { name = "frag_check", template = "pipeline/multisample_shader_builtin/write_sample_mask_check.frag", stage = "frag" } ]
+derived = { bpc = "0", buffer_elems = "2", width = "2", count = "1", ms = "''", load_args = "''" }
+
+[[case]]
+name = "write_sample_mask_2"
+rust_const = "BUILTIN_WRITE_SAMPLE_MASK_2"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_shader_builtin/write_sample_mask.vert", stage = "vert" }, { name = "frag_write", template = "pipeline/multisample_shader_builtin/write_sample_mask_write.frag", stage = "frag" }, { name = "frag_check", template = "pipeline/multisample_shader_builtin/write_sample_mask_check.frag", stage = "frag" } ]
+derived = { bpc = "1", buffer_elems = "8", width = "2", count = "2", ms = "'MS'", load_args = "', gl_SampleID'" }
+
+[[case]]
+name = "write_sample_mask_4"
+rust_const = "BUILTIN_WRITE_SAMPLE_MASK_4"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_shader_builtin/write_sample_mask.vert", stage = "vert" }, { name = "frag_write", template = "pipeline/multisample_shader_builtin/write_sample_mask_write.frag", stage = "frag" }, { name = "frag_check", template = "pipeline/multisample_shader_builtin/write_sample_mask_check.frag", stage = "frag" } ]
+derived = { bpc = "2", buffer_elems = "64", width = "4", count = "4", ms = "'MS'", load_args = "', gl_SampleID'" }
+
+[[case]]
+name = "write_sample_mask_8"
+rust_const = "BUILTIN_WRITE_SAMPLE_MASK_8"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_shader_builtin/write_sample_mask.vert", stage = "vert" }, { name = "frag_write", template = "pipeline/multisample_shader_builtin/write_sample_mask_write.frag", stage = "frag" }, { name = "frag_check", template = "pipeline/multisample_shader_builtin/write_sample_mask_check.frag", stage = "frag" } ]
+derived = { bpc = "4", buffer_elems = "2048", width = "16", count = "8", ms = "'MS'", load_args = "', gl_SampleID'" }
+
+[[case]]
+name = "write_sample_mask_16"
+rust_const = "BUILTIN_WRITE_SAMPLE_MASK_16"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_shader_builtin/write_sample_mask.vert", stage = "vert" }, { name = "frag_write", template = "pipeline/multisample_shader_builtin/write_sample_mask_write.frag", stage = "frag" }, { name = "frag_check", template = "pipeline/multisample_shader_builtin/write_sample_mask_check.frag", stage = "frag" } ]
+derived = { bpc = "8", buffer_elems = "1048576", width = "256", count = "16", ms = "'MS'", load_args = "', gl_SampleID'" }
+

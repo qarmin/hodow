@@ -1,0 +1,52 @@
+#version 450
+
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout (set = 0, binding = 0) uniform sampler2D inputImage;
+layout (set = 0, binding = 1) buffer outputBuffer {
+    vec4 color[];
+} data;
+
+void main() {
+    vec2 pixelCoords = vec2(gl_GlobalInvocationID.xy / vec2(32.0f, 32.0f));
+    uint index = gl_GlobalInvocationID.y * 32 + gl_GlobalInvocationID.x;
+    data.color[index] = texture(inputImage, pixelCoords);
+}
+#version 450
+
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout (set = 0, binding = 0) uniform sampler3D inputImage;
+layout (set = 0, binding = 1) buffer outputBuffer {
+    vec4 color[];
+} data;
+
+void main() {
+    vec3 pixelCoords = vec3(gl_GlobalInvocationID.xy / vec2(32.0f, 32.0f), 1.0f / 8.0f);
+    uint index = gl_GlobalInvocationID.y * 32 + gl_GlobalInvocationID.x;
+    data.color[index] = texture(inputImage, pixelCoords);
+}
+#version 450
+
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout (set = 0, binding = 0) uniform sampler3D inputImage;
+layout (set = 0, binding = 1) buffer outputBuffer {
+    vec4 color[];
+} data;
+
+void main() {
+    vec3 pixelCoords = vec3(gl_GlobalInvocationID.xy / vec2(32.0f, 32.0f), 7.0f / 16.0f);
+    uint index = gl_GlobalInvocationID.y * 32 + gl_GlobalInvocationID.x;
+    data.color[index] = texture(inputImage, pixelCoords);
+}
+#version 450
+
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout (set = 0, binding = 0) uniform sampler3D inputImage;
+layout (set = 0, binding = 1) buffer outputBuffer {
+    vec4 color[];
+} data;
+
+void main() {
+    vec3 pixelCoords = vec3(gl_GlobalInvocationID.xy / vec2(32.0f, 32.0f), 4.0f / 5.0f);
+    uint index = gl_GlobalInvocationID.y * 32 + gl_GlobalInvocationID.x;
+    data.color[index] = texture(inputImage, pixelCoords);
+}

@@ -1,0 +1,25 @@
+# Shader manifest for dEQP-VK.draw.*.simple_draw.*
+#
+# The Draw framework's pass-through pair (data/vulkan/draw/VertexFetch.{vert,frag}), and for the instanced
+# cases the same fragment shader behind a vertex shader that offsets each instance.
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawSimpleTest.cpp"
+rust_module = "draw/simple_tests"
+
+[[case]]
+name = "simple_draw"
+rust_const = "SIMPLE_DRAW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/vertex_fetch.vert", stage = "vert" },
+    { name = "frag", template = "draw/vertex_fetch.frag", stage = "frag" },
+]
+
+[[case]]
+name = "simple_draw_instanced"
+rust_const = "SIMPLE_DRAW_INSTANCED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/vertex_fetch_instanced_first_instance.vert", stage = "vert" },
+    { name = "frag", template = "draw/vertex_fetch.frag", stage = "frag" },
+]

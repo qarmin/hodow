@@ -1,0 +1,42 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.srgb_vertex_formats.*
+#
+# `SRGBVertexInputCase::initPrograms`: one vertex shader per tested component, all sharing the same fragment shader.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineVertexInputSRGBTests.cpp"
+rust_module = "pipeline/vertex_input_srgb_tests"
+
+[[case]]
+name = "component_x"
+rust_const = "SRGB_VERTEX_X"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/srgb_vertex_x.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/srgb_vertex.frag", stage = "frag" },
+]
+
+[[case]]
+name = "component_y"
+rust_const = "SRGB_VERTEX_Y"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/srgb_vertex_y.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/srgb_vertex.frag", stage = "frag" },
+]
+
+[[case]]
+name = "component_z"
+rust_const = "SRGB_VERTEX_Z"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/srgb_vertex_z.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/srgb_vertex.frag", stage = "frag" },
+]
+
+[[case]]
+name = "component_w"
+rust_const = "SRGB_VERTEX_W"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/srgb_vertex_w.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/srgb_vertex.frag", stage = "frag" },
+]

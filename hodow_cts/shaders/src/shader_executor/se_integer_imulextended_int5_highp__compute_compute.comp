@@ -1,0 +1,38 @@
+#version 450
+#extension GL_EXT_long_vector : enable
+layout(local_size_x = 1) in;
+
+struct Inputs
+{
+	highp vector<int, 5> x;
+	highp vector<int, 5> y;
+};
+struct Outputs
+{
+	highp vector<int, 5> msb;
+	highp vector<int, 5> lsb;
+};
+
+layout(set = 0, binding = 0, std430) buffer InBuffer
+{
+    Inputs inputs[];
+};
+layout(set = 0, binding = 1, std430) buffer OutBuffer
+{
+    Outputs outputs[];
+};
+
+void main (void)
+{
+    uint invocationNdx = gl_NumWorkGroups.x*gl_NumWorkGroups.y*gl_WorkGroupID.z
+                       + gl_NumWorkGroups.x*gl_WorkGroupID.y + gl_WorkGroupID.x;
+	vector<int, 5> x = vector<int, 5>(inputs[invocationNdx].x);
+	vector<int, 5> y = vector<int, 5>(inputs[invocationNdx].y);
+	vector<int, 5> msb;
+	vector<int, 5> lsb;
+
+	imulExtended(x, y, msb, lsb);
+
+	outputs[invocationNdx].msb = msb;
+	outputs[invocationNdx].lsb = lsb;
+}

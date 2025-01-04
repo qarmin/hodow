@@ -1,0 +1,1048 @@
+# Shader manifest for dEQP-VK.robustness.buffer_access.*
+#
+# `RobustBufferAccessTest::initBufferAccessPrograms`: the stage under test copies from an input buffer (uniform or storage, or a
+# texel buffer) to a storage buffer through an index read from a uniform block, the other graphics stage is a plain pass-through.
+# The source depends on the stage, the copy kind, the format class and whether the input is read from storage.
+
+upstream_source = "external/vulkancts/modules/vulkan/robustness/vktRobustnessBufferAccessTests.cpp"
+rust_module = "robustness/buffer_access_tests"
+
+[[case]]
+name = "vertex_mat4_r32_sfloat_ubo"
+rust_const = "BA_VERTEX_MAT4_R32_SFLOAT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_mat4_r32_sfloat_ubo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_mat4_r32_sfloat_ssbo"
+rust_const = "BA_VERTEX_MAT4_R32_SFLOAT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_mat4_r32_sfloat_ssbo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_vec4_r32_sint_ubo"
+rust_const = "BA_VERTEX_VEC4_R32_SINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_vec4_r32_sint_ubo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_vec4_r32_sint_ssbo"
+rust_const = "BA_VERTEX_VEC4_R32_SINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_vec4_r32_sint_ssbo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_vec4_r32_uint_ubo"
+rust_const = "BA_VERTEX_VEC4_R32_UINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_vec4_r32_uint_ubo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_vec4_r32_uint_ssbo"
+rust_const = "BA_VERTEX_VEC4_R32_UINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_vec4_r32_uint_ssbo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_vec4_r64_sint_ubo"
+rust_const = "BA_VERTEX_VEC4_R64_SINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_vec4_r64_sint_ubo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_vec4_r64_sint_ssbo"
+rust_const = "BA_VERTEX_VEC4_R64_SINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_vec4_r64_sint_ssbo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_vec4_r64_uint_ubo"
+rust_const = "BA_VERTEX_VEC4_R64_UINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_vec4_r64_uint_ubo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_vec4_r64_uint_ssbo"
+rust_const = "BA_VERTEX_VEC4_R64_UINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_vec4_r64_uint_ssbo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_vec4_r32_sfloat_ubo"
+rust_const = "BA_VERTEX_VEC4_R32_SFLOAT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_vec4_r32_sfloat_ubo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_vec4_r32_sfloat_ssbo"
+rust_const = "BA_VERTEX_VEC4_R32_SFLOAT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_vec4_r32_sfloat_ssbo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_member_r32_sint_ubo"
+rust_const = "BA_VERTEX_MEMBER_R32_SINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_member_r32_sint_ubo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_member_r32_sint_ssbo"
+rust_const = "BA_VERTEX_MEMBER_R32_SINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_member_r32_sint_ssbo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_member_r32_uint_ubo"
+rust_const = "BA_VERTEX_MEMBER_R32_UINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_member_r32_uint_ubo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_member_r32_uint_ssbo"
+rust_const = "BA_VERTEX_MEMBER_R32_UINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_member_r32_uint_ssbo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_member_r64_sint_ubo"
+rust_const = "BA_VERTEX_MEMBER_R64_SINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_member_r64_sint_ubo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_member_r64_sint_ssbo"
+rust_const = "BA_VERTEX_MEMBER_R64_SINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_member_r64_sint_ssbo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_member_r64_uint_ubo"
+rust_const = "BA_VERTEX_MEMBER_R64_UINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_member_r64_uint_ubo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_member_r64_uint_ssbo"
+rust_const = "BA_VERTEX_MEMBER_R64_UINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_member_r64_uint_ssbo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_member_r32_sfloat_ubo"
+rust_const = "BA_VERTEX_MEMBER_R32_SFLOAT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_member_r32_sfloat_ubo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_member_r32_sfloat_ssbo"
+rust_const = "BA_VERTEX_MEMBER_R32_SFLOAT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_member_r32_sfloat_ssbo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_scalar_r32_sint_ubo"
+rust_const = "BA_VERTEX_SCALAR_R32_SINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_scalar_r32_sint_ubo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_scalar_r32_sint_ssbo"
+rust_const = "BA_VERTEX_SCALAR_R32_SINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_scalar_r32_sint_ssbo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_scalar_r32_uint_ubo"
+rust_const = "BA_VERTEX_SCALAR_R32_UINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_scalar_r32_uint_ubo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_scalar_r32_uint_ssbo"
+rust_const = "BA_VERTEX_SCALAR_R32_UINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_scalar_r32_uint_ssbo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_scalar_r64_sint_ubo"
+rust_const = "BA_VERTEX_SCALAR_R64_SINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_scalar_r64_sint_ubo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_scalar_r64_sint_ssbo"
+rust_const = "BA_VERTEX_SCALAR_R64_SINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_scalar_r64_sint_ssbo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_scalar_r64_uint_ubo"
+rust_const = "BA_VERTEX_SCALAR_R64_UINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_scalar_r64_uint_ubo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_scalar_r64_uint_ssbo"
+rust_const = "BA_VERTEX_SCALAR_R64_UINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_scalar_r64_uint_ssbo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_scalar_r32_sfloat_ubo"
+rust_const = "BA_VERTEX_SCALAR_R32_SFLOAT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_scalar_r32_sfloat_ubo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_scalar_r32_sfloat_ssbo"
+rust_const = "BA_VERTEX_SCALAR_R32_SFLOAT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_scalar_r32_sfloat_ssbo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_texel_r32g32b32a32_sint_ubo"
+rust_const = "BA_VERTEX_TEXEL_R32G32B32A32_SINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_texel_r32g32b32a32_sint_ubo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_texel_r32g32b32a32_sint_ssbo"
+rust_const = "BA_VERTEX_TEXEL_R32G32B32A32_SINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_texel_r32g32b32a32_sint_ssbo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_texel_r32g32b32a32_uint_ubo"
+rust_const = "BA_VERTEX_TEXEL_R32G32B32A32_UINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_texel_r32g32b32a32_uint_ubo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_texel_r32g32b32a32_uint_ssbo"
+rust_const = "BA_VERTEX_TEXEL_R32G32B32A32_UINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_texel_r32g32b32a32_uint_ssbo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_texel_r32g32b32a32_sfloat_ubo"
+rust_const = "BA_VERTEX_TEXEL_R32G32B32A32_SFLOAT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_texel_r32g32b32a32_sfloat_ubo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_texel_r32g32b32a32_sfloat_ssbo"
+rust_const = "BA_VERTEX_TEXEL_R32G32B32A32_SFLOAT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_texel_r32g32b32a32_sfloat_ssbo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_texel_a2b10g10r10_unorm_pack32_ubo"
+rust_const = "BA_VERTEX_TEXEL_A2B10G10R10_UNORM_PACK32_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_texel_a2b10g10r10_unorm_pack32_ubo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vertex_texel_a2b10g10r10_unorm_pack32_ssbo"
+rust_const = "BA_VERTEX_TEXEL_A2B10G10R10_UNORM_PACK32_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_texel_a2b10g10r10_unorm_pack32_ssbo.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_plain.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_mat4_r32_sfloat_ubo"
+rust_const = "BA_FRAGMENT_MAT4_R32_SFLOAT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_mat4_r32_sfloat_ubo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_mat4_r32_sfloat_ssbo"
+rust_const = "BA_FRAGMENT_MAT4_R32_SFLOAT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_mat4_r32_sfloat_ssbo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_vec4_r32_sint_ubo"
+rust_const = "BA_FRAGMENT_VEC4_R32_SINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_vec4_r32_sint_ubo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_vec4_r32_sint_ssbo"
+rust_const = "BA_FRAGMENT_VEC4_R32_SINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_vec4_r32_sint_ssbo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_vec4_r32_uint_ubo"
+rust_const = "BA_FRAGMENT_VEC4_R32_UINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_vec4_r32_uint_ubo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_vec4_r32_uint_ssbo"
+rust_const = "BA_FRAGMENT_VEC4_R32_UINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_vec4_r32_uint_ssbo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_vec4_r64_sint_ubo"
+rust_const = "BA_FRAGMENT_VEC4_R64_SINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_vec4_r64_sint_ubo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_vec4_r64_sint_ssbo"
+rust_const = "BA_FRAGMENT_VEC4_R64_SINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_vec4_r64_sint_ssbo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_vec4_r64_uint_ubo"
+rust_const = "BA_FRAGMENT_VEC4_R64_UINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_vec4_r64_uint_ubo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_vec4_r64_uint_ssbo"
+rust_const = "BA_FRAGMENT_VEC4_R64_UINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_vec4_r64_uint_ssbo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_vec4_r32_sfloat_ubo"
+rust_const = "BA_FRAGMENT_VEC4_R32_SFLOAT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_vec4_r32_sfloat_ubo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_vec4_r32_sfloat_ssbo"
+rust_const = "BA_FRAGMENT_VEC4_R32_SFLOAT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_vec4_r32_sfloat_ssbo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_member_r32_sint_ubo"
+rust_const = "BA_FRAGMENT_MEMBER_R32_SINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_member_r32_sint_ubo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_member_r32_sint_ssbo"
+rust_const = "BA_FRAGMENT_MEMBER_R32_SINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_member_r32_sint_ssbo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_member_r32_uint_ubo"
+rust_const = "BA_FRAGMENT_MEMBER_R32_UINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_member_r32_uint_ubo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_member_r32_uint_ssbo"
+rust_const = "BA_FRAGMENT_MEMBER_R32_UINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_member_r32_uint_ssbo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_member_r64_sint_ubo"
+rust_const = "BA_FRAGMENT_MEMBER_R64_SINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_member_r64_sint_ubo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_member_r64_sint_ssbo"
+rust_const = "BA_FRAGMENT_MEMBER_R64_SINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_member_r64_sint_ssbo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_member_r64_uint_ubo"
+rust_const = "BA_FRAGMENT_MEMBER_R64_UINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_member_r64_uint_ubo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_member_r64_uint_ssbo"
+rust_const = "BA_FRAGMENT_MEMBER_R64_UINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_member_r64_uint_ssbo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_member_r32_sfloat_ubo"
+rust_const = "BA_FRAGMENT_MEMBER_R32_SFLOAT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_member_r32_sfloat_ubo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_member_r32_sfloat_ssbo"
+rust_const = "BA_FRAGMENT_MEMBER_R32_SFLOAT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_member_r32_sfloat_ssbo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_scalar_r32_sint_ubo"
+rust_const = "BA_FRAGMENT_SCALAR_R32_SINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_scalar_r32_sint_ubo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_scalar_r32_sint_ssbo"
+rust_const = "BA_FRAGMENT_SCALAR_R32_SINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_scalar_r32_sint_ssbo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_scalar_r32_uint_ubo"
+rust_const = "BA_FRAGMENT_SCALAR_R32_UINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_scalar_r32_uint_ubo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_scalar_r32_uint_ssbo"
+rust_const = "BA_FRAGMENT_SCALAR_R32_UINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_scalar_r32_uint_ssbo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_scalar_r64_sint_ubo"
+rust_const = "BA_FRAGMENT_SCALAR_R64_SINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_scalar_r64_sint_ubo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_scalar_r64_sint_ssbo"
+rust_const = "BA_FRAGMENT_SCALAR_R64_SINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_scalar_r64_sint_ssbo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_scalar_r64_uint_ubo"
+rust_const = "BA_FRAGMENT_SCALAR_R64_UINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_scalar_r64_uint_ubo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_scalar_r64_uint_ssbo"
+rust_const = "BA_FRAGMENT_SCALAR_R64_UINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_scalar_r64_uint_ssbo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_scalar_r32_sfloat_ubo"
+rust_const = "BA_FRAGMENT_SCALAR_R32_SFLOAT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_scalar_r32_sfloat_ubo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_scalar_r32_sfloat_ssbo"
+rust_const = "BA_FRAGMENT_SCALAR_R32_SFLOAT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_scalar_r32_sfloat_ssbo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_texel_r32g32b32a32_sint_ubo"
+rust_const = "BA_FRAGMENT_TEXEL_R32G32B32A32_SINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_texel_r32g32b32a32_sint_ubo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_texel_r32g32b32a32_sint_ssbo"
+rust_const = "BA_FRAGMENT_TEXEL_R32G32B32A32_SINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_texel_r32g32b32a32_sint_ssbo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_texel_r32g32b32a32_uint_ubo"
+rust_const = "BA_FRAGMENT_TEXEL_R32G32B32A32_UINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_texel_r32g32b32a32_uint_ubo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_texel_r32g32b32a32_uint_ssbo"
+rust_const = "BA_FRAGMENT_TEXEL_R32G32B32A32_UINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_texel_r32g32b32a32_uint_ssbo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_texel_r32g32b32a32_sfloat_ubo"
+rust_const = "BA_FRAGMENT_TEXEL_R32G32B32A32_SFLOAT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_texel_r32g32b32a32_sfloat_ubo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_texel_r32g32b32a32_sfloat_ssbo"
+rust_const = "BA_FRAGMENT_TEXEL_R32G32B32A32_SFLOAT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_texel_r32g32b32a32_sfloat_ssbo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_texel_a2b10g10r10_unorm_pack32_ubo"
+rust_const = "BA_FRAGMENT_TEXEL_A2B10G10R10_UNORM_PACK32_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_texel_a2b10g10r10_unorm_pack32_ubo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "fragment_texel_a2b10g10r10_unorm_pack32_ssbo"
+rust_const = "BA_FRAGMENT_TEXEL_A2B10G10R10_UNORM_PACK32_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex", template = "robustness/buffer_access/vertex_plain.vert", stage = "vert" },
+    { name = "fragment", template = "robustness/buffer_access/fragment_texel_a2b10g10r10_unorm_pack32_ssbo.frag", stage = "frag" },
+]
+
+[[case]]
+name = "compute_mat4_r32_sfloat_ubo"
+rust_const = "BA_COMPUTE_MAT4_R32_SFLOAT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_mat4_r32_sfloat_ubo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_mat4_r32_sfloat_ssbo"
+rust_const = "BA_COMPUTE_MAT4_R32_SFLOAT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_mat4_r32_sfloat_ssbo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_vec4_r32_sint_ubo"
+rust_const = "BA_COMPUTE_VEC4_R32_SINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_vec4_r32_sint_ubo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_vec4_r32_sint_ssbo"
+rust_const = "BA_COMPUTE_VEC4_R32_SINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_vec4_r32_sint_ssbo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_vec4_r32_uint_ubo"
+rust_const = "BA_COMPUTE_VEC4_R32_UINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_vec4_r32_uint_ubo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_vec4_r32_uint_ssbo"
+rust_const = "BA_COMPUTE_VEC4_R32_UINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_vec4_r32_uint_ssbo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_vec4_r64_sint_ubo"
+rust_const = "BA_COMPUTE_VEC4_R64_SINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_vec4_r64_sint_ubo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_vec4_r64_sint_ssbo"
+rust_const = "BA_COMPUTE_VEC4_R64_SINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_vec4_r64_sint_ssbo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_vec4_r64_uint_ubo"
+rust_const = "BA_COMPUTE_VEC4_R64_UINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_vec4_r64_uint_ubo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_vec4_r64_uint_ssbo"
+rust_const = "BA_COMPUTE_VEC4_R64_UINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_vec4_r64_uint_ssbo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_vec4_r32_sfloat_ubo"
+rust_const = "BA_COMPUTE_VEC4_R32_SFLOAT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_vec4_r32_sfloat_ubo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_vec4_r32_sfloat_ssbo"
+rust_const = "BA_COMPUTE_VEC4_R32_SFLOAT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_vec4_r32_sfloat_ssbo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_member_r32_sint_ubo"
+rust_const = "BA_COMPUTE_MEMBER_R32_SINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_member_r32_sint_ubo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_member_r32_sint_ssbo"
+rust_const = "BA_COMPUTE_MEMBER_R32_SINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_member_r32_sint_ssbo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_member_r32_uint_ubo"
+rust_const = "BA_COMPUTE_MEMBER_R32_UINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_member_r32_uint_ubo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_member_r32_uint_ssbo"
+rust_const = "BA_COMPUTE_MEMBER_R32_UINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_member_r32_uint_ssbo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_member_r64_sint_ubo"
+rust_const = "BA_COMPUTE_MEMBER_R64_SINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_member_r64_sint_ubo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_member_r64_sint_ssbo"
+rust_const = "BA_COMPUTE_MEMBER_R64_SINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_member_r64_sint_ssbo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_member_r64_uint_ubo"
+rust_const = "BA_COMPUTE_MEMBER_R64_UINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_member_r64_uint_ubo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_member_r64_uint_ssbo"
+rust_const = "BA_COMPUTE_MEMBER_R64_UINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_member_r64_uint_ssbo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_member_r32_sfloat_ubo"
+rust_const = "BA_COMPUTE_MEMBER_R32_SFLOAT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_member_r32_sfloat_ubo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_member_r32_sfloat_ssbo"
+rust_const = "BA_COMPUTE_MEMBER_R32_SFLOAT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_member_r32_sfloat_ssbo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_scalar_r32_sint_ubo"
+rust_const = "BA_COMPUTE_SCALAR_R32_SINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_scalar_r32_sint_ubo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_scalar_r32_sint_ssbo"
+rust_const = "BA_COMPUTE_SCALAR_R32_SINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_scalar_r32_sint_ssbo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_scalar_r32_uint_ubo"
+rust_const = "BA_COMPUTE_SCALAR_R32_UINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_scalar_r32_uint_ubo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_scalar_r32_uint_ssbo"
+rust_const = "BA_COMPUTE_SCALAR_R32_UINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_scalar_r32_uint_ssbo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_scalar_r64_sint_ubo"
+rust_const = "BA_COMPUTE_SCALAR_R64_SINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_scalar_r64_sint_ubo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_scalar_r64_sint_ssbo"
+rust_const = "BA_COMPUTE_SCALAR_R64_SINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_scalar_r64_sint_ssbo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_scalar_r64_uint_ubo"
+rust_const = "BA_COMPUTE_SCALAR_R64_UINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_scalar_r64_uint_ubo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_scalar_r64_uint_ssbo"
+rust_const = "BA_COMPUTE_SCALAR_R64_UINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_scalar_r64_uint_ssbo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_scalar_r32_sfloat_ubo"
+rust_const = "BA_COMPUTE_SCALAR_R32_SFLOAT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_scalar_r32_sfloat_ubo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_scalar_r32_sfloat_ssbo"
+rust_const = "BA_COMPUTE_SCALAR_R32_SFLOAT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_scalar_r32_sfloat_ssbo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_texel_r32g32b32a32_sint_ubo"
+rust_const = "BA_COMPUTE_TEXEL_R32G32B32A32_SINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_texel_r32g32b32a32_sint_ubo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_texel_r32g32b32a32_sint_ssbo"
+rust_const = "BA_COMPUTE_TEXEL_R32G32B32A32_SINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_texel_r32g32b32a32_sint_ssbo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_texel_r32g32b32a32_uint_ubo"
+rust_const = "BA_COMPUTE_TEXEL_R32G32B32A32_UINT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_texel_r32g32b32a32_uint_ubo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_texel_r32g32b32a32_uint_ssbo"
+rust_const = "BA_COMPUTE_TEXEL_R32G32B32A32_UINT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_texel_r32g32b32a32_uint_ssbo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_texel_r32g32b32a32_sfloat_ubo"
+rust_const = "BA_COMPUTE_TEXEL_R32G32B32A32_SFLOAT_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_texel_r32g32b32a32_sfloat_ubo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_texel_r32g32b32a32_sfloat_ssbo"
+rust_const = "BA_COMPUTE_TEXEL_R32G32B32A32_SFLOAT_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_texel_r32g32b32a32_sfloat_ssbo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_texel_a2b10g10r10_unorm_pack32_ubo"
+rust_const = "BA_COMPUTE_TEXEL_A2B10G10R10_UNORM_PACK32_UBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_texel_a2b10g10r10_unorm_pack32_ubo.comp", stage = "comp" },
+]
+
+[[case]]
+name = "compute_texel_a2b10g10r10_unorm_pack32_ssbo"
+rust_const = "BA_COMPUTE_TEXEL_A2B10G10R10_UNORM_PACK32_SSBO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "robustness/buffer_access/compute_texel_a2b10g10r10_unorm_pack32_ssbo.comp", stage = "comp" },
+]

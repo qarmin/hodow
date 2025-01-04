@@ -1,0 +1,41 @@
+#version 460
+#extension GL_EXT_mesh_shader : enable
+
+layout(set=0, binding=1, std430) readonly buffer DirectDrawBaseRowBlock {
+    uint baseRow[];
+} directDrawData;
+layout (set=0, binding=2, std430) readonly buffer CoverageBlock { uint colsPerRow[32]; } cb;
+
+struct TaskData {
+    uint rowIndex;          // Set by first task invocation.
+    uint columnIndices[32]; // 2 of these items per task invocation.
+};
+taskPayloadSharedEXT TaskData td;
+
+layout (push_constant, std430) uniform PushConstantBlock {
+    uint width;
+    uint height;
+    uint baseDrawIndex;
+} pc;
+
+layout(local_size_x=16) in;
+
+uint getWorkGroupIndex (void) {
+    const uint workGroupIndex = gl_NumWorkGroups.x * gl_NumWorkGroups.y * gl_WorkGroupID.z +
+                                gl_NumWorkGroups.x * gl_WorkGroupID.y +
+                                gl_WorkGroupID.x;
+    return workGroupIndex;
+}
+
+void main() {
+    const uint wgIndex = getWorkGroupIndex();
+    const uint rowIndex = directDrawData.baseRow[pc.baseDrawIndex + uint(gl_DrawID)] + wgIndex;
+    td.rowIndex = rowIndex;
+    const uint baseEntryIdx = gl_LocalInvocationIndex * 2u;
+    for (uint i = 0u; i < 2u; ++i) {
+        const uint idx = baseEntryIdx + i;
+        const uint value = uint(0 + ((1) * int(idx)));
+        td.columnIndices[idx] = value;
+    }
+    EmitMeshTasksEXT(cb.colsPerRow[rowIndex], 1, 1);
+}

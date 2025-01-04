@@ -1,0 +1,63 @@
+#version 450 core
+#pragma use_vulkan_memory_model
+#extension GL_KHR_shader_subgroup_basic : enable
+#extension GL_KHR_memory_scope_semantics : enable
+#extension GL_KHR_cooperative_matrix : enable
+#extension GL_EXT_split_barrier : enable
+#extension GL_NV_cooperative_matrix2 : enable
+#extension GL_EXT_bfloat16 : enable
+#extension GL_EXT_float_e5m2 : enable
+#extension GL_EXT_float_e4m3 : enable
+#extension GL_EXT_shader_explicit_arithmetic_types : enable
+#extension GL_EXT_buffer_reference : enable
+#extension GL_EXT_bfloat16 : enable
+// strides overriden by spec constants
+layout(constant_id = 2) const int AStride = 1;
+layout(constant_id = 3) const int BStride = 1;
+layout(constant_id = 4) const int CStride = 1;
+layout(constant_id = 5) const int OStride = 1;
+layout(constant_id = 6) const int M = 1;
+layout(constant_id = 7) const int N = 1;
+layout(constant_id = 8) const int K = 1;
+layout(local_size_x_id = 0, local_size_y_id = 1, local_size_z = 1) in;
+const int workgroupsX = 4;
+layout(buffer_reference) buffer InputA { bfloat16_t x[]; };
+layout(buffer_reference) buffer InputB { bfloat16_t x[]; };
+layout(buffer_reference) buffer InputC { float32_t x[]; };
+layout(buffer_reference) buffer Output { float32_t x[]; };
+layout(set=0, binding=4) buffer Params { InputA inputA; InputB inputB; InputC inputC; Output outputO; } params;
+#define ARows M
+#define ACols K
+#define ORows M
+#define OCols N
+coopmat<bfloat16_t, gl_ScopeWorkgroup, ARows, ACols, gl_MatrixUseA> matA;
+coopmat<bfloat16_t, gl_ScopeWorkgroup, K, N, gl_MatrixUseB> matB;
+coopmat<float32_t, gl_ScopeWorkgroup, M, N, gl_MatrixUseAccumulator> matC;
+coopmat<float32_t, gl_ScopeWorkgroup, ORows, OCols, gl_MatrixUseAccumulator> matO;
+void main()
+{
+   uvec2 matrixID = uvec2(gl_WorkGroupID.xy);
+   InputA inputA = params.inputA;
+   InputB inputB = params.inputB;
+   InputC inputC = params.inputC;
+   Output outputO = params.outputO;
+   uint element0 = (K * 4 * M * matrixID.y + K * matrixID.x);
+   uint element1 = (N * 4 * K * matrixID.y + N * matrixID.x);
+   uint element2 = (N * 4 * M * matrixID.y + N * matrixID.x);
+   uint element3 = (N * 4 * M * matrixID.y + N * matrixID.x);
+   uint elementS0, elementS1, elementS2, elementS3;
+   coopMatLoad(matA, inputA.x, element0, K * 4, gl_CooperativeMatrixLayoutRowMajor);
+   coopMatLoad(matB, inputB.x, element1, N * 4, gl_CooperativeMatrixLayoutRowMajor);
+   coopMatLoad(matC, inputC.x, element2, N * 4, gl_CooperativeMatrixLayoutRowMajor);
+   coopmat<bfloat16_t, gl_ScopeWorkgroup, ARows, ACols, gl_MatrixUseA> matAArr[2];
+    matAArr[1] = matA; matAArr[0] = coopmat<bfloat16_t, gl_ScopeWorkgroup, ARows, ACols, gl_MatrixUseA>(0.0);
+   coopmat<bfloat16_t, gl_ScopeWorkgroup, K, N, gl_MatrixUseB> matBArr[2];
+    matBArr[1] = matB; matBArr[0] = coopmat<bfloat16_t, gl_ScopeWorkgroup, K, N, gl_MatrixUseB>(0.0);
+   coopmat<float32_t, gl_ScopeWorkgroup, M, N, gl_MatrixUseAccumulator> matCArr[2];
+    matCArr[1] = matC; matCArr[0] = coopmat<float32_t, gl_ScopeWorkgroup, M, N, gl_MatrixUseAccumulator>(0.0);
+   coopmat<float32_t, gl_ScopeWorkgroup, ORows, OCols, gl_MatrixUseAccumulator> matOArr[2];
+   matOArr[1] = coopMatMulAdd(matAArr[1], matBArr[1], matCArr[1]);
+   matOArr[0] = coopmat<float32_t, gl_ScopeWorkgroup, ORows, OCols, gl_MatrixUseAccumulator>(0.0);
+   matO = matOArr[1];
+   coopMatStore(matO, outputO.x, element3, N * 4, gl_CooperativeMatrixLayoutRowMajor);
+}

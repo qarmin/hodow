@@ -1,0 +1,12 @@
+#version 450
+#extension GL_NV_mesh_shader : enable
+
+layout (local_size_x=32) in;
+layout (triangles) out;
+layout (max_vertices=256, max_primitives=256) out;
+
+layout (location=0) out perprimitiveNV vec4 primitiveColor[];
+
+void main () {
+    gl_PrimitiveCountNV = 0u;
+}

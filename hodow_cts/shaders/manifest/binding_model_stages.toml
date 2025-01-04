@@ -1,0 +1,43 @@
+# Shader manifest for dEQP-VK.binding_model.stages.*
+#
+# Three cases, one per descriptor type read by both a fragment and a compute shader
+# through a single vkCmdBindDescriptorSets2 call. The vertex shader is shared.
+
+upstream_source = "external/vulkancts/modules/vulkan/binding_model/vktBindingStagesTests.cpp"
+rust_module = "binding_model/stages_tests"
+
+[[case]]
+name = "storage_buffer"
+rust_const = "STAGES_STORAGE_BUFFER"
+rust_type = "StagesCase"
+programs = [
+    { name = "comp", template = "binding_model/stages/storage_buffer.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/stages/vert.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/stages/storage_buffer.frag", stage = "frag" },
+]
+[case.params]
+descriptor_type = { type = "str", value = "storage_buffer" }
+
+[[case]]
+name = "uniform_buffer"
+rust_const = "STAGES_UNIFORM_BUFFER"
+rust_type = "StagesCase"
+programs = [
+    { name = "comp", template = "binding_model/stages/uniform_buffer.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/stages/vert.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/stages/uniform_buffer.frag", stage = "frag" },
+]
+[case.params]
+descriptor_type = { type = "str", value = "uniform_buffer" }
+
+[[case]]
+name = "combined_image_sampler"
+rust_const = "STAGES_COMBINED_IMAGE_SAMPLER"
+rust_type = "StagesCase"
+programs = [
+    { name = "comp", template = "binding_model/stages/combined_image_sampler.comp", stage = "comp" },
+    { name = "vert", template = "binding_model/stages/vert.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/stages/combined_image_sampler.frag", stage = "frag" },
+]
+[case.params]
+descriptor_type = { type = "str", value = "combined_image_sampler" }

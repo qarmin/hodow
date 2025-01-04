@@ -1,0 +1,7 @@
+[project]
+name = "hodow-scripts"
+version = "0.0.0"
+description = "Generators and helpers for hodow (CPU test generation, GL tables, Miri runs); run with `uv run --no-project`"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []

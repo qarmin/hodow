@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.renderpasses.renderpass1.*.multisample_resolve.resolve_into_3d_image.*
+#
+# One fragment shader writing white and a vertex shader for a four-vertex strip covering the target; every case shares them.
+
+upstream_source = "external/vulkancts/modules/vulkan/renderpass/vktRenderPassMultisampleResolveTests.cpp"
+rust_module = "renderpass/resolve_into_3d_image_tests"
+
+[[case]]
+name = "resolve_into_3d_image"
+rust_const = "RESOLVE_INTO_3D_IMAGE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/resolve_into_3d_image.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/resolve_into_3d_image.frag", stage = "frag" },
+]

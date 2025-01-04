@@ -1,0 +1,32 @@
+# Expected values captured from real hardware for this extension's generated tests.
+# Format: test_name - rust_expr
+#
+# One file per (architecture, extension) - written by scripts/cpu/capture_expected.py and
+# capture_expected_cross.py, read by generate_tests.py. Do not hand-edit: recapture instead.
+# A qemu-derived value is not a real-silicon one; see CLAUDE.md's "Non-x86 architectures".
+
+test_arm_shared_i8mm_vmmlaq_s32 - [1709, 2254, 3279, 4336]
+test_arm_shared_i8mm_vmmlaq_u32 - [1709, 2254, 3279, 4336]
+test_arm_shared_i8mm_vsudot_lane_s32 - [231, 432]
+test_arm_shared_i8mm_vsudot_lane_s32_imm_1 - [303, 568]
+test_arm_shared_i8mm_vsudot_laneq_s32 - [231, 432]
+test_arm_shared_i8mm_vsudot_laneq_s32_imm_1 - [303, 568]
+test_arm_shared_i8mm_vsudot_laneq_s32_imm_3 - [447, 840]
+test_arm_shared_i8mm_vsudotq_lane_s32 - [591, 952, 1313, 1674]
+test_arm_shared_i8mm_vsudotq_lane_s32_imm_1 - [695, 1120, 1545, 1970]
+test_arm_shared_i8mm_vsudotq_laneq_s32 - [591, 952, 1313, 1674]
+test_arm_shared_i8mm_vsudotq_laneq_s32_imm_1 - [695, 1120, 1545, 1970]
+test_arm_shared_i8mm_vsudotq_laneq_s32_imm_3 - [903, 1456, 2009, 2562]
+test_arm_shared_i8mm_vusdot_lane_s32 - [231, 432]
+test_arm_shared_i8mm_vusdot_lane_s32_imm_1 - [303, 568]
+test_arm_shared_i8mm_vusdot_laneq_s32 - [231, 432]
+test_arm_shared_i8mm_vusdot_laneq_s32_imm_1 - [303, 568]
+test_arm_shared_i8mm_vusdot_laneq_s32_imm_3 - [447, 840]
+test_arm_shared_i8mm_vusdot_s32 - [231, 568]
+test_arm_shared_i8mm_vusdotq_lane_s32 - [591, 952, 1313, 1674]
+test_arm_shared_i8mm_vusdotq_lane_s32_imm_1 - [695, 1120, 1545, 1970]
+test_arm_shared_i8mm_vusdotq_laneq_s32 - [591, 952, 1313, 1674]
+test_arm_shared_i8mm_vusdotq_laneq_s32_imm_1 - [695, 1120, 1545, 1970]
+test_arm_shared_i8mm_vusdotq_laneq_s32_imm_3 - [903, 1456, 2009, 2562]
+test_arm_shared_i8mm_vusdotq_s32 - [591, 1120, 1777, 2562]
+test_arm_shared_i8mm_vusmmlaq_s32 - [1709, 2254, 3279, 4336]

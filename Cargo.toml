@@ -1,0 +1,187 @@
+[workspace]
+resolver = "2"
+members = [
+    "hodow_common",
+    "hodow_cpu",
+    "hodow_gpu",
+    "hodow_bench",
+    "hodow",
+    "hodow_cts",
+    "hodow_cts/crates/base",
+    "hodow_cts/crates/vk_main",
+    "hodow_cts/crates/vk_a",
+    "hodow_cts/crates/vk_b",
+    "hodow_cts/crates/vk_c",
+    "hodow_cts/crates/vk_d",
+]
+exclude = ["tmp"]
+
+# Small but still quick to build: `just binaries`. Thin LTO and default codegen units on purpose.
+[profile.binaries]
+inherits = "release"
+lto = "thin"
+strip = true
+
+# release with debug symbols (use for samply / perf / valgrind)
+[profile.rdebug]
+inherits = "release"
+debug = "full"
+strip = "none"
+debug-assertions = false
+
+# maximum release. VERY slow to compile (fat LTO + codegen-units = 1), and `panic = "abort"` turns every panic into a dead process:
+# do not use it for hodow, whose runner reports a panicking test as `Panicked` through `catch_unwind`.
+[profile.fastest]
+inherits = "release"
+panic = "abort"
+lto = "fat"
+codegen-units = 1
+strip = "symbols"
+opt-level = 3
+
+# fast iterative release (local dev, no LTO)
+[profile.fast_release]
+inherits = "release"
+incremental = true
+strip = true
+
+# compile all dependencies at O3 even in debug builds
+[profile.dev.package."*"]
+opt-level = 3
+
+[workspace.lints.clippy]
+upper_case_acronyms = "allow"
+approx_constant = "allow"
+# `hodow_cts` ports VK-GL-CTS's C++ test sources keeping their original shape (see
+# hodow_cts/CLAUDE.md's "Ported code keeps upstream shape") - a `for (int i = 0; i <
+# n; i++)` loop indexing an array is deliberately left as a C-style index loop rather
+# than rewritten into an iterator, so the port stays easy to diff against upstream on
+# re-sync. That shape is exactly what this lint flags.
+needless_range_loop = "allow"
+# `chunks_exact(4)` over a readback buffer mirrors the C++ loop over pixels; the lint wants
+# `as_chunks`, whose machine fix does not compile for most of these (slice vs array shapes).
+chunks_exact_to_as_chunks = "allow"
+# Same reason: ported signatures, enums and Vulkan create-info structs keep the C++ shape
+# (a many-argument helper, `VK_FOO_*` variants sharing a prefix, a struct filled field by
+# field before its `pNext` is chained).
+too_many_arguments = "allow"
+type_complexity = "allow"
+enum_variant_names = "allow"
+field_reassign_with_default = "allow"
+
+# From the rust-setup skill (the existing allows above win where they overlap), except for four lints that do not fit this project:
+# `indexing_slicing` (pixel, matrix and register kernels index buffers whose length is fixed by construction; a checked `get` in every
+# inner loop is noise and slower), `undocumented_unsafe_blocks` (several hundred FFI and intrinsic calls in the GPU and CPU crates; a
+# generic SAFETY comment would be worse than none), `print_stdout` and `print_stderr` (`hodow` is a CLI whose reports are its output).
+indexing_slicing = "allow"
+undocumented_unsafe_blocks = "allow"
+print_stdout = "allow"
+print_stderr = "allow"
+collapsible_else_if = "allow"
+iter_on_single_items = "allow"
+unreachable = "warn"
+doc_broken_link = "warn"
+ip_constant = "warn"
+unnecessary_semicolon = "warn"
+trivially_copy_pass_by_ref = "warn"
+non_std_lazy_statics = "warn"
+manual_midpoint = "warn"
+ignore_without_reason = "warn"
+elidable_lifetime_names = "warn"
+allow_attributes = "warn"
+assertions_on_result_states = "warn"
+bool_to_int_with_if = "warn"
+branches_sharing_code = "warn"
+collection_is_never_read = "warn"
+dbg_macro = "warn"
+debug_assert_with_mut_call = "warn"
+empty_enum_variants_with_brackets = "warn"
+enum_glob_use = "warn"
+equatable_if_let = "warn"
+error_impl_error = "warn"
+explicit_into_iter_loop = "warn"
+explicit_iter_loop = "warn"
+expl_impl_clone_on_copy = "warn"
+fallible_impl_from = "warn"
+filter_map_next = "warn"
+flat_map_option = "warn"
+float_cmp = "warn"
+ignored_unit_patterns = "warn"
+implicit_clone = "warn"
+index_refutable_slice = "warn"
+invalid_upcast_comparisons = "warn"
+iter_filter_is_ok = "warn"
+iter_filter_is_some = "warn"
+iter_on_empty_collections = "warn"
+iter_with_drain = "warn"
+large_stack_arrays = "warn"
+large_types_passed_by_value = "warn"
+literal_string_with_formatting_args = "warn"
+lossy_float_literal = "warn"
+macro_use_imports = "warn"
+manual_assert = "warn"
+manual_instant_elapsed = "warn"
+manual_is_variant_and = "warn"
+manual_let_else = "warn"
+manual_ok_or = "warn"
+map_unwrap_or = "warn"
+match_bool = "warn"
+match_same_arms = "warn"
+match_wildcard_for_single_variants = "warn"
+mutex_atomic = "warn"
+mutex_integer = "warn"
+mut_mut = "warn"
+needless_bitwise_bool = "warn"
+needless_collect = "warn"
+needless_continue = "warn"
+needless_for_each = "warn"
+needless_pass_by_ref_mut = "warn"
+needless_pass_by_value = "warn"
+needless_raw_strings = "warn"
+nonstandard_macro_braces = "warn"
+option_as_ref_cloned = "warn"
+pathbuf_init_then_push = "warn"
+path_buf_push_overwrite = "warn"
+pub_underscore_fields = "warn"
+question_mark = "warn"
+range_minus_one = "warn"
+range_plus_one = "warn"
+redundant_clone = "warn"
+redundant_else = "warn"
+ref_binding_to_reference = "warn"
+ref_option_ref = "warn"
+same_functions_in_if_condition = "warn"
+semicolon_if_nothing_returned = "warn"
+set_contains_or_insert = "warn"
+stable_sort_primitive = "warn"
+string_add_assign = "warn"
+string_slice = "warn"
+suspicious_operation_groupings = "warn"
+suspicious_xor_used_as_pow = "warn"
+todo = "warn"
+trait_duplication_in_bounds = "warn"
+trivial_regex = "warn"
+type_repetition_in_bounds = "warn"
+unimplemented = "warn"
+uninlined_format_args = "warn"
+unnecessary_box_returns = "warn"
+unnecessary_join = "warn"
+unnecessary_wraps = "warn"
+unnested_or_patterns = "warn"
+unused_async = "warn"
+unused_result_ok = "warn"
+unused_rounding = "warn"
+unused_self = "warn"
+unwrap_used = "warn"
+used_underscore_binding = "warn"
+useless_let_if_seq = "warn"
+use_self = "warn"
+verbose_file_reads = "warn"
+wildcard_imports = "warn"
+
+[workspace.lints.cargo]
+# The binaries are `hodow`/`hodow_cts`/`hodow_gui` on purpose, matching the crate names.
+# Renaming them to kebab-case would change what `just install` puts on PATH, what every recipe
+# and script invokes, and what `serve`'s `current_exe()` re-executes - all to satisfy a naming
+# preference. Warned once per cargo invocation otherwise, which buries real warnings.
+non_kebab_case_bins = "allow"

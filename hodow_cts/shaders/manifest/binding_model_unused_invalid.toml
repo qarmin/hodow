@@ -1,0 +1,37 @@
+# Shader manifest for dEQP-VK.binding_model.unused_invalid_descriptor.*
+#
+# One compute shader per resource type, shared by the write (unused / invalid) and the copy
+# cases: upstream builds the same source in both initPrograms().
+
+upstream_source = "external/vulkancts/modules/vulkan/binding_model/vktBindingUnusedInvalidDescriptorTests.cpp"
+rust_module = "binding_model/unused_invalid_descriptor_tests"
+
+[[case]]
+name = "uniform_buffer"
+rust_const = "UNUSED_INVALID_UNIFORM_BUFFER"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "binding_model/unused_invalid/uniform_buffer.comp", stage = "comp" }]
+
+[[case]]
+name = "storage_buffer"
+rust_const = "UNUSED_INVALID_STORAGE_BUFFER"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "binding_model/unused_invalid/storage_buffer.comp", stage = "comp" }]
+
+[[case]]
+name = "sampled_image"
+rust_const = "UNUSED_INVALID_SAMPLED_IMAGE"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "binding_model/unused_invalid/sampled_image.comp", stage = "comp" }]
+
+[[case]]
+name = "combined_image_sampler"
+rust_const = "UNUSED_INVALID_COMBINED_IMAGE_SAMPLER"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "binding_model/unused_invalid/combined_image_sampler.comp", stage = "comp" }]
+
+[[case]]
+name = "storage_image"
+rust_const = "UNUSED_INVALID_STORAGE_IMAGE"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "binding_model/unused_invalid/storage_image.comp", stage = "comp" }]

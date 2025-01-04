@@ -1,0 +1,38 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+layout(binding = 0, set = 1) uniform highp sampler2D u_image;
+
+layout(local_size_x = 1) in;
+layout(points) out;
+layout(max_vertices=1, max_primitives=1) out;
+
+struct Inputs
+{
+	highp int lod;
+};
+struct Outputs
+{
+	highp int result;
+};
+
+layout(set = 0, binding = 0, std430) buffer InBuffer
+{
+    Inputs inputs[];
+};
+layout(set = 0, binding = 1, std430) buffer OutBuffer
+{
+    Outputs outputs[];
+};
+
+void main (void)
+{
+    uint invocationNdx = gl_NumWorkGroups.x*gl_NumWorkGroups.y*gl_WorkGroupID.z
+                       + gl_NumWorkGroups.x*gl_WorkGroupID.y + gl_WorkGroupID.x;
+	int lod = int(inputs[invocationNdx].lod);
+	int result;
+
+	result = textureQueryLevels(u_image);
+
+	outputs[invocationNdx].result = result;
+    SetMeshOutputsEXT(0u, 0u);
+}

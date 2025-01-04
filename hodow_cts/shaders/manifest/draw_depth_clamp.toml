@@ -1,0 +1,18 @@
+# Shader manifest for dEQP-VK.draw.*.depth_clamp.*
+#
+# `DepthClampTest::initPrograms`: a pass-through vertex shader, an empty fragment shader and, for the one case with four
+# viewports (`_clamp_four_viewports`), a geometry shader that draws the quad to every viewport with that viewport's own
+# depth (std::to_string(0.7f) and friends, i.e. six decimals, baked in).
+
+upstream_source = "external/vulkancts/modules/vulkan/draw/vktDrawDepthClampTests.cpp"
+rust_module = "draw/depth_clamp_tests"
+
+[[case]]
+name = "depth_clamp"
+rust_const = "DEPTH_CLAMP"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/depth_clamp.vert", stage = "vert" },
+    { name = "geom", template = "draw/depth_clamp_4.geom", stage = "geom" },
+    { name = "frag", template = "draw/depth_clamp.frag", stage = "frag" },
+]

@@ -1,0 +1,14 @@
+#version 450
+layout(set = 0, binding = 0) uniform utextureBuffer texelBuffer;
+layout(set = 0, binding = 1, std430) buffer OutputBuffer { 
+    uint outputData; 
+} outBuffer;
+layout(push_constant) uniform PushConstants {
+    int index;
+} pc;
+layout(local_size_x = 1) in;
+void main (void)
+{
+    uint value = texelFetch(texelBuffer, pc.index).x; 
+    outBuffer.outputData = value; 
+}

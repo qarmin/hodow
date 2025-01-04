@@ -1,0 +1,9 @@
+#version 460
+#extension GL_EXT_mesh_shader : enable
+
+layout (location=0) out vec4 outColor;
+
+void main ()
+{
+    outColor = ((gl_ClipDistance[0] >= 0.0 && gl_ClipDistance[1] >= 0.0) ? vec4(0.0, 0.0, 1.0, 1.0) : vec4(1.0, 1.0, 1.0, 1.0));
+}

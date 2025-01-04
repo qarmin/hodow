@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.wsi.*.incremental_present.*
+#
+# `IncrementalPresentTestCase::initPrograms`: a full-screen quad whose fragment colour is a bit pattern of the pixel position xor-ed with a push constant (the frame number).
+
+upstream_source = "external/vulkancts/modules/vulkan/wsi/vktWsiIncrementalPresentTests.cpp"
+rust_module = "wsi/incremental_present_tests"
+
+[[case]]
+name = "incremental_present"
+rust_const = "INCREMENTAL_PRESENT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "quad-vert", template = "wsi/incremental_present/quad.vert", stage = "vert" },
+    { name = "quad-frag", template = "wsi/incremental_present/quad.frag", stage = "frag" },
+]

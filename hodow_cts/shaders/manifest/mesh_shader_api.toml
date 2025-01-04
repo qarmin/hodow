@@ -1,0 +1,27 @@
+# Shader manifest for dEQP-VK.mesh_shader.ext.api.*
+#
+# `MeshApiCase::initPrograms`: an optional task shader forwarding the draw id and workgroup row as a payload, a mesh shader filling
+# one framebuffer row per workgroup (reading the block sizes from an SSBO) and a fragment shader writing the per-primitive colour.
+
+upstream_source = "external/vulkancts/modules/vulkan/mesh_shader/vktMeshShaderApiTestsEXT.cpp"
+rust_module = "mesh_shader/api_tests"
+spirv_version = "spirv1.4"
+
+[[case]]
+name = "no_task"
+rust_const = "API_NO_TASK"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/api/api_no_task.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/api/api.frag", stage = "frag" },
+]
+
+[[case]]
+name = "with_task"
+rust_const = "API_WITH_TASK"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/api/api.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/api/api_task.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/api/api.frag", stage = "frag" },
+]

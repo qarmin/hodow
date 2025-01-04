@@ -1,0 +1,12 @@
+#version 450
+layout(set = 0, binding = 0, rgba32ui) uniform highp uimage2D img;
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(push_constant) uniform constants {
+    int pass;
+} pc;
+void main() {
+    uvec4 color = uvec4(4294967295u, 4294967295u, 4160813056u, 0u);
+    if (pc.pass == 1)
+        color = uvec4(4294967295u, 4294967295u, 2031647, 0u);
+    imageStore(img, ivec2(gl_GlobalInvocationID.xy), color);
+}

@@ -1,0 +1,93 @@
+# Shader manifest for dEQP-VK.renderpasses.dynamic_rendering.primary_cmd_buff.local_read.*
+#
+# The null_color_attachment_location_*, mapping_*_attachments_to_locs_from_* and attachment_mapping_* cases. Each one is a
+# fullscreen quad (vertex z 1.0 for the first two families, 0.0 for attachment_mapping) and the fragment shaders upstream
+# builds with string streams. The remapping cases differ only in how many outputs they declare and from which location,
+# the attachment mapping ones in (attachments, input attachments).
+
+upstream_source = "external/vulkancts/modules/vulkan/renderpass/vktDynamicRenderingLocalReadTests.cpp"
+rust_module = "renderpass/dynamic_rendering_local_read_tests"
+
+[[case]]
+name = "null"
+rust_const = "LOCAL_READ_NULL"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/local_read/vert_z1.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/local_read/null.frag", stage = "frag" },
+]
+
+[[case]]
+name = "high_1_from_1"
+rust_const = "LOCAL_READ_HIGH_1_FROM_1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/local_read/vert_z1.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/local_read/high_1_from_1.frag", stage = "frag" },
+]
+
+[[case]]
+name = "high_1_from_2"
+rust_const = "LOCAL_READ_HIGH_1_FROM_2"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/local_read/vert_z1.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/local_read/high_1_from_2.frag", stage = "frag" },
+]
+
+[[case]]
+name = "high_1_from_3"
+rust_const = "LOCAL_READ_HIGH_1_FROM_3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/local_read/vert_z1.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/local_read/high_1_from_3.frag", stage = "frag" },
+]
+
+[[case]]
+name = "high_2_from_2"
+rust_const = "LOCAL_READ_HIGH_2_FROM_2"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/local_read/vert_z1.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/local_read/high_2_from_2.frag", stage = "frag" },
+]
+
+[[case]]
+name = "map_a4_i0"
+rust_const = "LOCAL_READ_MAP_A4_I0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/local_read/vert_z0.vert", stage = "vert" },
+    { name = "frag0", template = "renderpass/local_read/map_frag0_4.frag", stage = "frag" },
+]
+
+[[case]]
+name = "map_a4_i2"
+rust_const = "LOCAL_READ_MAP_A4_I2"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/local_read/vert_z0.vert", stage = "vert" },
+    { name = "frag0", template = "renderpass/local_read/map_frag0_4.frag", stage = "frag" },
+    { name = "frag1", template = "renderpass/local_read/map_frag1_i2_a4.frag", stage = "frag" },
+]
+
+[[case]]
+name = "map_a8_i4"
+rust_const = "LOCAL_READ_MAP_A8_I4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/local_read/vert_z0.vert", stage = "vert" },
+    { name = "frag0", template = "renderpass/local_read/map_frag0_8.frag", stage = "frag" },
+    { name = "frag1", template = "renderpass/local_read/map_frag1_i4_a8.frag", stage = "frag" },
+]
+
+[[case]]
+name = "map_a8_i6"
+rust_const = "LOCAL_READ_MAP_A8_I6"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/local_read/vert_z0.vert", stage = "vert" },
+    { name = "frag0", template = "renderpass/local_read/map_frag0_8.frag", stage = "frag" },
+    { name = "frag1", template = "renderpass/local_read/map_frag1_i6_a8.frag", stage = "frag" },
+]

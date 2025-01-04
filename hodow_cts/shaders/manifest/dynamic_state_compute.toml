@@ -1,0 +1,32 @@
+# Shader manifest for dEQP-VK.dynamic_state.*.compute_transfer.*
+#
+# `DynamicStateComputeCase::initPrograms`: the compute shader only for the compute operation, and the passthrough vertex shader of
+# the stand-in graphics pipeline only for cases that include VK_DYNAMIC_STATE_VERTEX_INPUT_BINDING_STRIDE.
+
+upstream_source = "external/vulkancts/modules/vulkan/dynamic_state/vktDynamicStateComputeTests.cpp"
+rust_module = "dynamic_state/compute_transfer_tests"
+
+[[case]]
+name = "comp"
+rust_const = "COMPUTE_TRANSFER_COMP"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "dynamic_state/compute_transfer.comp", stage = "comp" },
+]
+
+[[case]]
+name = "comp_vert"
+rust_const = "COMPUTE_TRANSFER_COMP_VERT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp", template = "dynamic_state/compute_transfer.comp", stage = "comp" },
+    { name = "vert", template = "dynamic_state/compute_transfer.vert", stage = "vert" },
+]
+
+[[case]]
+name = "vert"
+rust_const = "COMPUTE_TRANSFER_VERT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "dynamic_state/compute_transfer.vert", stage = "vert" },
+]

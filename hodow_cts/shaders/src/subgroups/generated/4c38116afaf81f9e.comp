@@ -1,0 +1,47 @@
+#version 450
+#extension GL_KHR_shader_subgroup_quad: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+#extension GL_EXT_shader_subgroup_extended_types_int8 : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout(set = 0, binding = 1, std430) buffer Buffer2
+{
+  u8vec4 data[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uvec4 mask = subgroupBallot(true);
+  tempRes = 1;
+  {
+  u8vec4 op = subgroupQuadBroadcast(data[gl_SubgroupInvocationID], 0);
+  uint otherID = (gl_SubgroupInvocationID & ~0x3) + 0;
+  if (subgroupBallotBitExtract(mask, otherID) && op !=data[otherID])
+    tempRes = 0;
+  }
+  {
+  u8vec4 op = subgroupQuadBroadcast(data[gl_SubgroupInvocationID], 1);
+  uint otherID = (gl_SubgroupInvocationID & ~0x3) + 1;
+  if (subgroupBallotBitExtract(mask, otherID) && op !=data[otherID])
+    tempRes = 0;
+  }
+  {
+  u8vec4 op = subgroupQuadBroadcast(data[gl_SubgroupInvocationID], 2);
+  uint otherID = (gl_SubgroupInvocationID & ~0x3) + 2;
+  if (subgroupBallotBitExtract(mask, otherID) && op !=data[otherID])
+    tempRes = 0;
+  }
+  {
+  u8vec4 op = subgroupQuadBroadcast(data[gl_SubgroupInvocationID], 3);
+  uint otherID = (gl_SubgroupInvocationID & ~0x3) + 3;
+  if (subgroupBallotBitExtract(mask, otherID) && op !=data[otherID])
+    tempRes = 0;
+  }
+  result[offset] = tempRes;
+}

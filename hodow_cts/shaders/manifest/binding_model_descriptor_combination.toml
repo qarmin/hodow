@@ -1,0 +1,27 @@
+# Shader manifest for dEQP-VK.binding_model.descriptor_combination.basic.*
+#
+# `descriptor_buffer_and_legacy_descriptor_in_command_buffer` runs two compute shaders (an
+# initialising one and an adding one, both reading their factor from a push constant);
+# `descriptor_buffer_capture_replay_with_custom_border_color` draws a full-screen triangle that
+# mixes the results of three differently bordered samplers.
+
+upstream_source = "external/vulkancts/modules/vulkan/binding_model/vktBindingDescriptorCombinationTests.cpp"
+rust_module = "binding_model/descriptor_combination_tests"
+
+[[case]]
+name = "legacy_and_buffer"
+rust_const = "DESCRIPTOR_COMBINATION_LEGACY_AND_BUFFER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "comp_init", template = "binding_model/descriptor_combination_init.comp", stage = "comp" },
+    { name = "comp_add", template = "binding_model/descriptor_combination_add.comp", stage = "comp" },
+]
+
+[[case]]
+name = "custom_border_color"
+rust_const = "DESCRIPTOR_COMBINATION_CUSTOM_BORDER_COLOR"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "binding_model/descriptor_combination.vert", stage = "vert" },
+    { name = "frag", template = "binding_model/descriptor_combination.frag", stage = "frag" },
+]

@@ -1,0 +1,45 @@
+#version 450
+#extension GL_NV_mesh_shader : enable
+
+layout (local_size_x=32) in;
+layout (points) out;
+layout (max_vertices=32, max_primitives=32) out;
+
+in taskNV TaskData {
+    uint localInvocations[32];
+} td;
+
+layout (location=0) out perprimitiveNV vec4 primitiveColor[];
+
+shared uint sumOfIds;
+
+const float PI_2 = 1.57079632679489661923;
+const float RADIUS = 1.0f;
+
+void main ()
+{
+    sumOfIds = 0u;
+    memoryBarrierShared();
+    barrier();
+    atomicAdd(sumOfIds, td.localInvocations[gl_LocalInvocationID.x]);
+    memoryBarrierShared();
+    barrier();
+    // This should dynamically give 0
+    gl_PrimitiveCountNV = sumOfIds - (496);
+
+    // Emit points and primitives to the arrays in any case
+    if (gl_LocalInvocationID.x > 0u) {
+        float proportion = (float(gl_LocalInvocationID.x - 1u) + 0.5f) / float(32 - 1u);
+        float angle = PI_2 * proportion;
+        float xCoord = cos(angle) * RADIUS - 1.0;
+        float yCoord = sin(angle) * RADIUS - 1.0;
+        gl_MeshVerticesNV[gl_LocalInvocationID.x].gl_Position = vec4(xCoord, yCoord, 0.0, 1.0);
+        gl_MeshVerticesNV[gl_LocalInvocationID.x].gl_PointSize = 1.0;
+    } else {
+        gl_MeshVerticesNV[gl_LocalInvocationID.x].gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
+        gl_MeshVerticesNV[gl_LocalInvocationID.x].gl_PointSize = 1.0;
+    }
+    uint primitiveId = max(gl_LocalInvocationID.x, 31);
+    primitiveColor[primitiveId] = vec4(0.0, 0.0, 1.0, 1.0);
+    gl_PrimitiveIndicesNV[primitiveId] = primitiveId;
+}

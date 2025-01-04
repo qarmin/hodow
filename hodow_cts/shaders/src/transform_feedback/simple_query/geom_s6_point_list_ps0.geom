@@ -1,0 +1,24 @@
+#version 450
+
+layout(points) in;
+layout(location = 0) in vec4 in0[];
+
+layout(points, max_vertices = 1) out;
+layout(stream = 6, xfb_buffer = 0, xfb_offset = 0, xfb_stride = 16, location = 0) out vec4 out0;
+
+in gl_PerVertex
+{
+    vec4  gl_Position;
+} gl_in[];
+out gl_PerVertex
+{
+    vec4  gl_Position;
+};
+
+void main(void)
+{
+    gl_Position  = gl_in[0].gl_Position;
+    out0 = in0[0];
+    EmitStreamVertex(6);
+    EndStreamPrimitive(6);
+}

@@ -1,0 +1,275 @@
+# Shader manifest for dEQP-VK.mesh_shader.ext.properties.*
+#
+# The `initPrograms` of the payload and shared memory size, max view index, max output layers, max mesh output primitives and vertices,
+# max mesh output components and max mesh output size cases of vktMeshShaderPropertyTestsEXT.cpp. Limits that depend on the device go
+# in through specialization constants, so these sets are the fixed shader text of each case.
+
+upstream_source = "external/vulkancts/modules/vulkan/mesh_shader/vktMeshShaderPropertyTestsEXT.cpp"
+rust_module = "mesh_shader/property_tests"
+spirv_version = "spirv1.4"
+
+[[case]]
+name = "payload_shmem_task_payload"
+rust_const = "PROPERTY_TASK_PAYLOAD"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/property/task_payload.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/property/task_payload.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "payload_shmem_task_shared"
+rust_const = "PROPERTY_TASK_SHARED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/property/task_shared.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/property/task_shared.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "payload_shmem_task_both"
+rust_const = "PROPERTY_TASK_BOTH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/property/task_both.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/property/task_both.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "payload_shmem_mesh_payload"
+rust_const = "PROPERTY_MESH_PAYLOAD"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/property/mesh_payload.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/property/mesh_payload.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "payload_shmem_mesh_shared"
+rust_const = "PROPERTY_MESH_SHARED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/property/mesh_shared.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "payload_shmem_mesh_both"
+rust_const = "PROPERTY_MESH_BOTH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/property/mesh_both.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/property/mesh_both.mesh", stage = "mesh" },
+]
+
+[[case]]
+name = "max_view_index"
+rust_const = "PROPERTY_MAX_VIEW_INDEX"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/property/max_view_index.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/property/max_view_index.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_output_layers"
+rust_const = "PROPERTY_MAX_OUTPUT_LAYERS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/property/max_output_layers.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/property/max_output_layers.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_mesh_output_primitives_256"
+rust_const = "PROPERTY_MAX_MESH_OUTPUT_PRIMITIVES_256"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/property/max_mesh_output_primitives_256.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/property/max_mesh_output_primitives_256.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_mesh_output_primitives_512"
+rust_const = "PROPERTY_MAX_MESH_OUTPUT_PRIMITIVES_512"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/property/max_mesh_output_primitives_512.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/property/max_mesh_output_primitives_512.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_mesh_output_primitives_1024"
+rust_const = "PROPERTY_MAX_MESH_OUTPUT_PRIMITIVES_1024"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/property/max_mesh_output_primitives_1024.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/property/max_mesh_output_primitives_1024.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_mesh_output_primitives_2048"
+rust_const = "PROPERTY_MAX_MESH_OUTPUT_PRIMITIVES_2048"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/property/max_mesh_output_primitives_2048.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/property/max_mesh_output_primitives_2048.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_mesh_output_vertices_256"
+rust_const = "PROPERTY_MAX_MESH_OUTPUT_VERTICES_256"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/property/max_mesh_output_vertices_256.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/property/max_mesh_output_vertices_256.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_mesh_output_vertices_512"
+rust_const = "PROPERTY_MAX_MESH_OUTPUT_VERTICES_512"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/property/max_mesh_output_vertices_512.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/property/max_mesh_output_vertices_512.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_mesh_output_vertices_1024"
+rust_const = "PROPERTY_MAX_MESH_OUTPUT_VERTICES_1024"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/property/max_mesh_output_vertices_1024.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/property/max_mesh_output_vertices_1024.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_mesh_output_vertices_2048"
+rust_const = "PROPERTY_MAX_MESH_OUTPUT_VERTICES_2048"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/property/max_mesh_output_vertices_2048.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/property/max_mesh_output_vertices_2048.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_mesh_output_components"
+rust_const = "PROPERTY_MAX_MESH_OUTPUT_COMPONENTS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/property/max_mesh_output_components.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/property/max_mesh_output_components.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_mesh_output_size_without_payload_per_primitive_no_view_index"
+rust_const = "PROPERTY_MAX_MESH_OUTPUT_SIZE_WITHOUT_PAYLOAD_PER_PRIMITIVE_NO_VIEW_INDEX"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/property/max_mesh_output_size_without_payload_per_primitive_no_view_index.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/property/max_mesh_output_size_without_payload_per_primitive_no_view_index.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_mesh_output_size_without_payload_per_primitive_view_index_in_frag"
+rust_const = "PROPERTY_MAX_MESH_OUTPUT_SIZE_WITHOUT_PAYLOAD_PER_PRIMITIVE_VIEW_INDEX_IN_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/property/max_mesh_output_size_without_payload_per_primitive_view_index_in_frag.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/property/max_mesh_output_size_without_payload_per_primitive_view_index_in_frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_mesh_output_size_without_payload_per_primitive_view_index_in_mesh_and_frag"
+rust_const = "PROPERTY_MAX_MESH_OUTPUT_SIZE_WITHOUT_PAYLOAD_PER_PRIMITIVE_VIEW_INDEX_IN_MESH_AND_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/property/max_mesh_output_size_without_payload_per_primitive_view_index_in_mesh_and_frag.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/property/max_mesh_output_size_without_payload_per_primitive_view_index_in_mesh_and_frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_mesh_output_size_without_payload_per_vertex_no_view_index"
+rust_const = "PROPERTY_MAX_MESH_OUTPUT_SIZE_WITHOUT_PAYLOAD_PER_VERTEX_NO_VIEW_INDEX"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/property/max_mesh_output_size_without_payload_per_vertex_no_view_index.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/property/max_mesh_output_size_without_payload_per_vertex_no_view_index.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_mesh_output_size_without_payload_per_vertex_view_index_in_frag"
+rust_const = "PROPERTY_MAX_MESH_OUTPUT_SIZE_WITHOUT_PAYLOAD_PER_VERTEX_VIEW_INDEX_IN_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/property/max_mesh_output_size_without_payload_per_vertex_view_index_in_frag.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/property/max_mesh_output_size_without_payload_per_vertex_view_index_in_frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_mesh_output_size_without_payload_per_vertex_view_index_in_mesh_and_frag"
+rust_const = "PROPERTY_MAX_MESH_OUTPUT_SIZE_WITHOUT_PAYLOAD_PER_VERTEX_VIEW_INDEX_IN_MESH_AND_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/property/max_mesh_output_size_without_payload_per_vertex_view_index_in_mesh_and_frag.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/property/max_mesh_output_size_without_payload_per_vertex_view_index_in_mesh_and_frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_mesh_output_size_with_payload_per_primitive_no_view_index"
+rust_const = "PROPERTY_MAX_MESH_OUTPUT_SIZE_WITH_PAYLOAD_PER_PRIMITIVE_NO_VIEW_INDEX"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/property/max_mesh_output_size_with_payload_per_primitive_no_view_index.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/property/max_mesh_output_size_with_payload_per_primitive_no_view_index.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/property/max_mesh_output_size_with_payload_per_primitive_no_view_index.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_mesh_output_size_with_payload_per_primitive_view_index_in_frag"
+rust_const = "PROPERTY_MAX_MESH_OUTPUT_SIZE_WITH_PAYLOAD_PER_PRIMITIVE_VIEW_INDEX_IN_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/property/max_mesh_output_size_with_payload_per_primitive_view_index_in_frag.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/property/max_mesh_output_size_with_payload_per_primitive_view_index_in_frag.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/property/max_mesh_output_size_with_payload_per_primitive_view_index_in_frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_mesh_output_size_with_payload_per_primitive_view_index_in_mesh_and_frag"
+rust_const = "PROPERTY_MAX_MESH_OUTPUT_SIZE_WITH_PAYLOAD_PER_PRIMITIVE_VIEW_INDEX_IN_MESH_AND_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/property/max_mesh_output_size_with_payload_per_primitive_view_index_in_mesh_and_frag.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/property/max_mesh_output_size_with_payload_per_primitive_view_index_in_mesh_and_frag.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/property/max_mesh_output_size_with_payload_per_primitive_view_index_in_mesh_and_frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_mesh_output_size_with_payload_per_vertex_no_view_index"
+rust_const = "PROPERTY_MAX_MESH_OUTPUT_SIZE_WITH_PAYLOAD_PER_VERTEX_NO_VIEW_INDEX"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/property/max_mesh_output_size_with_payload_per_vertex_no_view_index.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/property/max_mesh_output_size_with_payload_per_vertex_no_view_index.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/property/max_mesh_output_size_with_payload_per_vertex_no_view_index.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_mesh_output_size_with_payload_per_vertex_view_index_in_frag"
+rust_const = "PROPERTY_MAX_MESH_OUTPUT_SIZE_WITH_PAYLOAD_PER_VERTEX_VIEW_INDEX_IN_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/property/max_mesh_output_size_with_payload_per_vertex_view_index_in_frag.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/property/max_mesh_output_size_with_payload_per_vertex_view_index_in_frag.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/property/max_mesh_output_size_with_payload_per_vertex_view_index_in_frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "max_mesh_output_size_with_payload_per_vertex_view_index_in_mesh_and_frag"
+rust_const = "PROPERTY_MAX_MESH_OUTPUT_SIZE_WITH_PAYLOAD_PER_VERTEX_VIEW_INDEX_IN_MESH_AND_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/property/max_mesh_output_size_with_payload_per_vertex_view_index_in_mesh_and_frag.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/property/max_mesh_output_size_with_payload_per_vertex_view_index_in_mesh_and_frag.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/property/max_mesh_output_size_with_payload_per_vertex_view_index_in_mesh_and_frag.frag", stage = "frag" },
+]

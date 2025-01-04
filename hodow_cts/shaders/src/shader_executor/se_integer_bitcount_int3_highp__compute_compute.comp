@@ -1,0 +1,32 @@
+#version 450
+layout(local_size_x = 1) in;
+
+struct Inputs
+{
+	highp ivec3 value;
+};
+struct Outputs
+{
+	mediump ivec3 count;
+};
+
+layout(set = 0, binding = 0, std430) buffer InBuffer
+{
+    Inputs inputs[];
+};
+layout(set = 0, binding = 1, std430) buffer OutBuffer
+{
+    Outputs outputs[];
+};
+
+void main (void)
+{
+    uint invocationNdx = gl_NumWorkGroups.x*gl_NumWorkGroups.y*gl_WorkGroupID.z
+                       + gl_NumWorkGroups.x*gl_WorkGroupID.y + gl_WorkGroupID.x;
+	ivec3 value = ivec3(inputs[invocationNdx].value);
+	ivec3 count;
+
+	count = bitCount(value);
+
+	outputs[invocationNdx].count = count;
+}

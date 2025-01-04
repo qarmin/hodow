@@ -1,0 +1,418 @@
+# Shader manifest for dEQP-VK.geometry.layered.*
+#
+# `initPrograms` builds the geometry shader from the test type and the number of layers (the depth for a 3D image), and the
+# fragment shader from the test type (and, for the secondary command buffer case, the storage image's view type). The
+# number of layers is 4, 6, 8 or 12 over the ten image configurations and `render_to_one` draws to layer 2, 3, 4 or 6, so
+# the cases are the distinct combinations. `test_type` is one of default, single, all, different, layer_id, invocation,
+# multiple, readback and secondary; `target_layer` only matters to single, `num_layers` to every other type but default,
+# and `view` to secondary (`none` elsewhere). The secondary case draws like `all`: its geometry shader is the same.
+
+upstream_source = "external/vulkancts/modules/vulkan/geometry/vktGeometryLayeredRenderingTests.cpp"
+rust_module = "geometry/layered_tests"
+
+[[case]]
+name = "default"
+rust_const = "LAYERED_DEFAULT"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_default_layer.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_white.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "default" }, num_layers = { type = "u32", value = 0 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "single_t2"
+rust_const = "LAYERED_SINGLE_2"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_single_layer.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_white.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "single" }, num_layers = { type = "u32", value = 0 }, target_layer = { type = "u32", value = 2 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "single_t3"
+rust_const = "LAYERED_SINGLE_3"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_single_layer.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_white.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "single" }, num_layers = { type = "u32", value = 0 }, target_layer = { type = "u32", value = 3 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "single_t4"
+rust_const = "LAYERED_SINGLE_4"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_single_layer.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_white.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "single" }, num_layers = { type = "u32", value = 0 }, target_layer = { type = "u32", value = 4 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "single_t6"
+rust_const = "LAYERED_SINGLE_6"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_single_layer.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_white.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "single" }, num_layers = { type = "u32", value = 0 }, target_layer = { type = "u32", value = 6 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "all_n4"
+rust_const = "LAYERED_ALL_4"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_all_layers.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_color.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "all" }, num_layers = { type = "u32", value = 4 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "all_n6"
+rust_const = "LAYERED_ALL_6"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_all_layers.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_color.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "all" }, num_layers = { type = "u32", value = 6 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "all_n8"
+rust_const = "LAYERED_ALL_8"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_all_layers.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_color.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "all" }, num_layers = { type = "u32", value = 8 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "all_n12"
+rust_const = "LAYERED_ALL_12"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_all_layers.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_color.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "all" }, num_layers = { type = "u32", value = 12 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "different_n4"
+rust_const = "LAYERED_DIFFERENT_4"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_different_content.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_white.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "different" }, num_layers = { type = "u32", value = 4 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "different_n6"
+rust_const = "LAYERED_DIFFERENT_6"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_different_content.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_white.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "different" }, num_layers = { type = "u32", value = 6 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "different_n8"
+rust_const = "LAYERED_DIFFERENT_8"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_different_content.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_white.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "different" }, num_layers = { type = "u32", value = 8 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "different_n12"
+rust_const = "LAYERED_DIFFERENT_12"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_different_content.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_white.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "different" }, num_layers = { type = "u32", value = 12 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "layer_id_n4"
+rust_const = "LAYERED_LAYER_ID_4"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_layer_id.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_layer_id.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "layer_id" }, num_layers = { type = "u32", value = 4 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "layer_id_n6"
+rust_const = "LAYERED_LAYER_ID_6"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_layer_id.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_layer_id.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "layer_id" }, num_layers = { type = "u32", value = 6 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "layer_id_n8"
+rust_const = "LAYERED_LAYER_ID_8"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_layer_id.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_layer_id.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "layer_id" }, num_layers = { type = "u32", value = 8 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "layer_id_n12"
+rust_const = "LAYERED_LAYER_ID_12"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_layer_id.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_layer_id.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "layer_id" }, num_layers = { type = "u32", value = 12 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "invocation_n4"
+rust_const = "LAYERED_INVOCATION_4"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_invocation_per_layer.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_color.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "invocation" }, num_layers = { type = "u32", value = 4 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "invocation_n6"
+rust_const = "LAYERED_INVOCATION_6"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_invocation_per_layer.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_color.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "invocation" }, num_layers = { type = "u32", value = 6 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "invocation_n8"
+rust_const = "LAYERED_INVOCATION_8"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_invocation_per_layer.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_color.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "invocation" }, num_layers = { type = "u32", value = 8 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "invocation_n12"
+rust_const = "LAYERED_INVOCATION_12"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_invocation_per_layer.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_color.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "invocation" }, num_layers = { type = "u32", value = 12 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "multiple_n4"
+rust_const = "LAYERED_MULTIPLE_4"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_multiple_layers.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_white.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "multiple" }, num_layers = { type = "u32", value = 4 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "multiple_n6"
+rust_const = "LAYERED_MULTIPLE_6"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_multiple_layers.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_white.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "multiple" }, num_layers = { type = "u32", value = 6 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "multiple_n8"
+rust_const = "LAYERED_MULTIPLE_8"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_multiple_layers.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_white.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "multiple" }, num_layers = { type = "u32", value = 8 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "multiple_n12"
+rust_const = "LAYERED_MULTIPLE_12"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_multiple_layers.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_white.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "multiple" }, num_layers = { type = "u32", value = 12 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "readback_n4"
+rust_const = "LAYERED_READBACK_4"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_readback.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_color.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "readback" }, num_layers = { type = "u32", value = 4 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "readback_n6"
+rust_const = "LAYERED_READBACK_6"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_readback.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_color.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "readback" }, num_layers = { type = "u32", value = 6 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "readback_n8"
+rust_const = "LAYERED_READBACK_8"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_readback.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_color.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "readback" }, num_layers = { type = "u32", value = 8 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "readback_n12"
+rust_const = "LAYERED_READBACK_12"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_readback.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_color.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "readback" }, num_layers = { type = "u32", value = 12 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "none" } }
+
+[[case]]
+name = "secondary_n4_1d_array"
+rust_const = "LAYERED_SECONDARY_4_1D_ARRAY"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_all_layers.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_secondary.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "secondary" }, num_layers = { type = "u32", value = 4 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "1d_array" } }
+
+[[case]]
+name = "secondary_n6_1d_array"
+rust_const = "LAYERED_SECONDARY_6_1D_ARRAY"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_all_layers.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_secondary.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "secondary" }, num_layers = { type = "u32", value = 6 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "1d_array" } }
+
+[[case]]
+name = "secondary_n4_2d_array"
+rust_const = "LAYERED_SECONDARY_4_2D_ARRAY"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_all_layers.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_secondary.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "secondary" }, num_layers = { type = "u32", value = 4 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "2d_array" } }
+
+[[case]]
+name = "secondary_n6_2d_array"
+rust_const = "LAYERED_SECONDARY_6_2D_ARRAY"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_all_layers.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_secondary.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "secondary" }, num_layers = { type = "u32", value = 6 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "2d_array" } }
+
+[[case]]
+name = "secondary_n6_cube"
+rust_const = "LAYERED_SECONDARY_6_CUBE"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_all_layers.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_secondary.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "secondary" }, num_layers = { type = "u32", value = 6 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "cube" } }
+
+[[case]]
+name = "secondary_n12_cube_array"
+rust_const = "LAYERED_SECONDARY_12_CUBE_ARRAY"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_all_layers.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_secondary.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "secondary" }, num_layers = { type = "u32", value = 12 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "cube_array" } }
+
+[[case]]
+name = "secondary_n8_3d"
+rust_const = "LAYERED_SECONDARY_8_3D"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_all_layers.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_secondary.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "secondary" }, num_layers = { type = "u32", value = 8 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "3d" } }
+
+[[case]]
+name = "secondary_n6_3d"
+rust_const = "LAYERED_SECONDARY_6_3D"
+rust_type = "LayeredPrograms"
+programs = [
+  { name = "vert", template = "geometry/layered.vert", stage = "vert" },
+  { name = "geom", template = "geometry/layered_all_layers.geom", stage = "geom" },
+  { name = "frag", template = "geometry/layered_secondary.frag", stage = "frag" },
+]
+params = { test_type = { type = "str", value = "secondary" }, num_layers = { type = "u32", value = 6 }, target_layer = { type = "u32", value = 0 }, view = { type = "str", value = "3d" } }

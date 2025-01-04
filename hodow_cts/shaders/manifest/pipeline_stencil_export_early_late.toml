@@ -1,0 +1,23 @@
+# Shader manifest for dEQP-VK.pipeline.*.shader_stencil_export.*.op_replace_early_and_late
+#
+# `initPrograms` with `early_and_late`: the full screen vertex shader and the constant colour fragment shader of `pipeline_stencil_export.toml`,
+# and six fragment shaders in SPIR-V assembly (taken verbatim from upstream, one per stencil reference execution mode) that write
+# FragStencilRefEXT under EarlyAndLateFragmentTestsAMD.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineStencilExportTests.cpp"
+rust_module = "pipeline/stencil_export_tests"
+
+[[case]]
+name = "stencil_export_early_late"
+rust_const = "STENCIL_EXPORT_EARLY_LATE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/stencil_export/vert.vert", stage = "vert" },
+    { name = "frag-stencil0", template = "pipeline/stencil_export/early_late_0.frag.asm", stage = "asm", spirv_version = "spirv1.1" },
+    { name = "frag-stencil1", template = "pipeline/stencil_export/early_late_1.frag.asm", stage = "asm", spirv_version = "spirv1.1" },
+    { name = "frag-stencil2", template = "pipeline/stencil_export/early_late_2.frag.asm", stage = "asm", spirv_version = "spirv1.1" },
+    { name = "frag-stencil3", template = "pipeline/stencil_export/early_late_3.frag.asm", stage = "asm", spirv_version = "spirv1.1" },
+    { name = "frag-stencil4", template = "pipeline/stencil_export/early_late_4.frag.asm", stage = "asm", spirv_version = "spirv1.1" },
+    { name = "frag-stencil5", template = "pipeline/stencil_export/early_late_5.frag.asm", stage = "asm", spirv_version = "spirv1.1" },
+    { name = "frag-color", template = "pipeline/stencil_export/frag_color.frag", stage = "frag" },
+]

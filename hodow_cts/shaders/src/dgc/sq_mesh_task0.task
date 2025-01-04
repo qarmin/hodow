@@ -1,0 +1,14 @@
+#version 460
+#extension GL_EXT_mesh_shader : enable
+layout (local_size_x=32) in;
+layout (push_constant, std430) uniform PCBlock { uint rowOffset; } pc;
+struct TaskPayload {
+    vec4 color;
+    uint row;
+};
+taskPayloadSharedEXT TaskPayload payload;
+void main(void) {
+    payload.color = vec4(0.0, 0.0, 1.0, 1.0);
+    payload.row = gl_WorkGroupID.x + pc.rowOffset;
+    EmitMeshTasksEXT(8u, 1u, 1u);
+}

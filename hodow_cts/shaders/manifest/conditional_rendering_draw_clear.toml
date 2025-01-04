@@ -1,0 +1,41 @@
+# Shader manifest for dEQP-VK.conditional_rendering.draw_clear.draw.*
+#
+# `AddProgramsDraw`: a vertex shader reading positions from a storage buffer and a fragment shader that keeps one of
+# four horizontal bands, chosen by a push constant. `AddProgramsUpdateBufferUsingRendering`, once per value of the
+# test parameter (atomicMin to 0 when the predicate is to be discarded, atomicMax to 1 otherwise): the vertex shader
+# that updates the predicate, the same position-only vertex shader, a fragment shader that always discards, and a
+# plain green one.
+
+upstream_source = "external/vulkancts/modules/vulkan/conditional_rendering/vktConditionalDrawAndClearTests.cpp"
+rust_module = "conditional_rendering/draw_and_clear_tests"
+
+[[case]]
+name = "draw"
+rust_const = "DRAW_CLEAR_DRAW"
+rust_type = "SharedProgram"
+programs = [
+    { name = "position_only.vert", template = "conditional_rendering/draw_clear_position_only.vert", stage = "vert" },
+    { name = "only_color_out.frag", template = "conditional_rendering/draw_clear_area_select.frag", stage = "frag" },
+]
+
+[[case]]
+name = "update_discard"
+rust_const = "DRAW_CLEAR_UPDATE_DISCARD"
+rust_type = "SharedProgram"
+programs = [
+    { name = "update.vert", template = "conditional_rendering/draw_clear_update_min.vert", stage = "vert" },
+    { name = "position_only.vert", template = "conditional_rendering/draw_clear_position_only.vert", stage = "vert" },
+    { name = "discard.frag", template = "conditional_rendering/draw_clear_discard.frag", stage = "frag" },
+    { name = "only_color_out.frag", template = "conditional_rendering/draw_clear_color_out.frag", stage = "frag" },
+]
+
+[[case]]
+name = "update_no_discard"
+rust_const = "DRAW_CLEAR_UPDATE_NO_DISCARD"
+rust_type = "SharedProgram"
+programs = [
+    { name = "update.vert", template = "conditional_rendering/draw_clear_update_max.vert", stage = "vert" },
+    { name = "position_only.vert", template = "conditional_rendering/draw_clear_position_only.vert", stage = "vert" },
+    { name = "discard.frag", template = "conditional_rendering/draw_clear_discard.frag", stage = "frag" },
+    { name = "only_color_out.frag", template = "conditional_rendering/draw_clear_color_out.frag", stage = "frag" },
+]

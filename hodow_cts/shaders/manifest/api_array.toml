@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.api.array.oversized_array.core.{create_pipeline_binaries,get_pipeline_executable_*}
+#
+# The one trivial vertex/fragment pair the four pipeline-based cases create a pipeline from.
+
+upstream_source = "external/vulkancts/modules/vulkan/api/vktApiArrayTests.cpp"
+rust_module = "api/array_tests"
+
+[[case]]
+name = "pipeline"
+rust_const = "ARRAY_PIPELINE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "api/array_pipeline.vert", stage = "vert" },
+    { name = "frag", template = "api/array_pipeline.frag", stage = "frag" },
+]

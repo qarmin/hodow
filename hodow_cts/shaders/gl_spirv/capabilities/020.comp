@@ -1,0 +1,26 @@
+#version 450
+
+layout (location = 0) uniform sampler2D uniSamp[10];
+layout (location = 10, rgba8) uniform image2D uniImg[10];
+layout (binding = 5) uniform UniData
+{
+   int a[10];
+} uniBuff[10];
+layout (binding = 5) buffer StorageData
+{
+   int a[10];
+} storageBuff[10];
+
+void main()
+{
+    vec2 coord = vec2(0.0);
+    ivec2 point = ivec2(0);
+
+    int ret = 0;
+    for (int i = 0; i < 10; ++i)    {
+        ret = ret + uniBuff[i].a[i] + storageBuff[i].a[i];
+        textureGather(uniSamp[i], coord);
+        imageLoad(uniImg[i], point);
+    }
+    memoryBarrier();
+}

@@ -1,0 +1,11 @@
+#version 450
+layout (location = 1) out ivec4 outColor1;
+layout (location = 2) out ivec4 outColor2;
+layout (location = 3) out ivec4 outColor3;
+layout (location = 4) out ivec4 outColor4;
+void main() {
+    outColor1 = ivec4(255);
+    outColor2 = ivec4(255);
+    outColor3 = ivec4(255);
+    outColor4 = ivec4(255);
+}

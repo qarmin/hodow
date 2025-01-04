@@ -1,0 +1,30 @@
+#version 450
+#extension GL_ARM_tensors : require
+#extension GL_EXT_shader_explicit_arithmetic_types : require
+#extension GL_EXT_scalar_block_layout : require
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+layout(set=0, binding=0) uniform tensorARM<int8_t, 4> tens[6];
+layout(set=0, binding=1, std430) uniform desc_idx_buff { uint desc_arr[6]; };
+layout(set=0, binding=2, std430) buffer buff { int8_t data[]; };
+void main()
+{
+	const uint element_idx = gl_GlobalInvocationID.x;
+	const uint tens_idx = gl_GlobalInvocationID.y;
+	const uint desc_idx = desc_arr[tens_idx];
+
+	const uint size_d0 = tensorSizeARM(tens[desc_idx], 0);
+	const uint size_d1 = tensorSizeARM(tens[desc_idx], 1);
+	const uint size_d2 = tensorSizeARM(tens[desc_idx], 2);
+	const uint size_d3 = tensorSizeARM(tens[desc_idx], 3);
+	const uint tens_element_count = size_d0 * size_d1 * size_d2 * size_d3;
+
+	if (gl_GlobalInvocationID.x >= tens_element_count) return;
+
+	const uint coord_0 = element_idx / (1 * size_d1 * size_d2 * size_d3) % size_d0;
+	const uint coord_1 = element_idx / (1 * size_d2 * size_d3) % size_d1;
+	const uint coord_2 = element_idx / (1 * size_d3) % size_d2;
+	const uint coord_3 = element_idx / (1) % size_d3;
+
+	const uint out_idx = tens_idx * tens_element_count + element_idx;
+	tensorReadARM(tens[desc_idx], uint[](coord_0, coord_1, coord_2, coord_3), data[out_idx]);
+}

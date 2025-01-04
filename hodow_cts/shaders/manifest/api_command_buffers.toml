@@ -1,0 +1,79 @@
+# Shader manifest for dEQP-VK.api.command_buffers.*
+#
+# `IndirectDispatchAlignmentCase::initPrograms`: one compute shader adding its invocation index and kIndirectDispatchValueOffset (1000000) to a 64 element
+# storage buffer, shared by the 64 `indirect_compute_dispatch_offsets_<memory offset>_<dispatch offset>` cases.
+
+upstream_source = "external/vulkancts/modules/vulkan/api/vktApiCommandBuffersTests.cpp"
+rust_module = "api/command_buffers_indirect_tests"
+
+[[case]]
+name = "indirect_dispatch_alignment"
+rust_const = "INDIRECT_DISPATCH_ALIGNMENT"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "api/command_buffers/indirect_dispatch_alignment.comp", stage = "comp" }]
+
+[[case]]
+name = "many_indirect_dispatches"
+rust_const = "MANY_INDIRECT_DISPATCHES"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "api/command_buffers/many_indirect_dispatches.comp", stage = "comp" }]
+
+[[case]]
+name = "many_indirect_draws"
+rust_const = "MANY_INDIRECT_DRAWS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "api/command_buffers/many_indirect_draws.vert", stage = "vert" },
+    { name = "frag", template = "api/command_buffers/many_indirect_draws.frag", stage = "frag" },
+]
+
+[[case]]
+name = "secondary_extra_pc"
+rust_const = "SECONDARY_EXTRA_PC"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "api/command_buffers/secondary_extra_pc.comp", stage = "comp" }]
+
+[[case]]
+name = "secondary_extra_buffer"
+rust_const = "SECONDARY_EXTRA_BUFFER"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "api/command_buffers/secondary_extra_buffer.comp", stage = "comp" }]
+
+[[case]]
+name = "compute_increment"
+rust_const = "COMPUTE_INCREMENT"
+rust_type = "SharedProgram"
+programs = [{ name = "compute_increment", template = "api/command_buffers/compute_increment.comp", stage = "comp" }]
+
+[[case]]
+name = "order_bind_pipeline"
+rust_const = "ORDER_BIND_PIPELINE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute_good", template = "api/command_buffers/order_bind_good.comp", stage = "comp" },
+    { name = "compute_bad", template = "api/command_buffers/order_bind_bad.comp", stage = "comp" },
+]
+
+[[case]]
+name = "inherited_occlusion"
+rust_const = "INHERITED_OCCLUSION"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "api/command_buffers/inherited_occlusion.vert", stage = "vert" },
+    { name = "frag", template = "api/command_buffers/inherited_occlusion.frag", stage = "frag" },
+]
+
+[[case]]
+name = "many_draws"
+rust_const = "MANY_DRAWS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "api/command_buffers/many_draws.vert", stage = "vert" },
+    { name = "frag", template = "api/command_buffers/many_draws.frag", stage = "frag" },
+]
+
+[[case]]
+name = "mix_secondaries"
+rust_const = "MIX_SECONDARIES"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "api/command_buffers/mix_secondaries.comp", stage = "comp" }]

@@ -1,0 +1,815 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.multisample.{sampled_image,3d,storage_image,standardsampleposition,samples_mapping_order}
+#
+# One case per (format, layer count, sample count) of the sampled and storage image groups (`sampled_<format>_l<layers>_s<samples>`,
+# `storage_<format>_l<layers>_s<samples>`), per (format, sample count) of the standard sample position group
+# (`position_<format>_s<samples>`), per sample count of the samples mapping order group (`mapping_order_s<samples>`), and one for the
+# 3D group (`image3d`). What the upstream `initPrograms` builds out of the format (`getColorFormatStr`, `getSamplerTypeStr`,
+# `getReferenceClearColorStr`, `getShaderImageFormatQualifier`, ...) is written down per format below.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineMultisampleImageTests.cpp"
+rust_module = "pipeline/multisample_image_tests"
+
+[[case]]
+name = "sampled_r8g8b8a8_unorm_l1_s2"
+rust_const = "IMG_SAMPLED_R8G8B8A8_UNORM_L1_S2"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_single.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", sampler_type = "'sampler2DMS'", texel_type = "'vec4'", ref_clear = "'vec4(0, 0, 1, 1)'", ref_primitive = "'vec4(1, 0, 0, 1)'", layers = "1", samples = "2" }
+
+[[case]]
+name = "storage_r8g8b8a8_unorm_l1_s2"
+rust_const = "IMG_STORAGE_R8G8B8A8_UNORM_L1_S2"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", format_qualifier = "'rgba8'", image_type = "'image2DMS'", gvec4 = "'vec4'", texel_coord = "'ivec2(gx, gy)'", samples = "2" }
+
+[[case]]
+name = "sampled_r8g8b8a8_unorm_l1_s4"
+rust_const = "IMG_SAMPLED_R8G8B8A8_UNORM_L1_S4"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_single.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", sampler_type = "'sampler2DMS'", texel_type = "'vec4'", ref_clear = "'vec4(0, 0, 1, 1)'", ref_primitive = "'vec4(1, 0, 0, 1)'", layers = "1", samples = "4" }
+
+[[case]]
+name = "storage_r8g8b8a8_unorm_l1_s4"
+rust_const = "IMG_STORAGE_R8G8B8A8_UNORM_L1_S4"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", format_qualifier = "'rgba8'", image_type = "'image2DMS'", gvec4 = "'vec4'", texel_coord = "'ivec2(gx, gy)'", samples = "4" }
+
+[[case]]
+name = "sampled_r8g8b8a8_unorm_l1_s8"
+rust_const = "IMG_SAMPLED_R8G8B8A8_UNORM_L1_S8"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_single.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", sampler_type = "'sampler2DMS'", texel_type = "'vec4'", ref_clear = "'vec4(0, 0, 1, 1)'", ref_primitive = "'vec4(1, 0, 0, 1)'", layers = "1", samples = "8" }
+
+[[case]]
+name = "storage_r8g8b8a8_unorm_l1_s8"
+rust_const = "IMG_STORAGE_R8G8B8A8_UNORM_L1_S8"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", format_qualifier = "'rgba8'", image_type = "'image2DMS'", gvec4 = "'vec4'", texel_coord = "'ivec2(gx, gy)'", samples = "8" }
+
+[[case]]
+name = "sampled_r8g8b8a8_unorm_l1_s16"
+rust_const = "IMG_SAMPLED_R8G8B8A8_UNORM_L1_S16"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_single.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", sampler_type = "'sampler2DMS'", texel_type = "'vec4'", ref_clear = "'vec4(0, 0, 1, 1)'", ref_primitive = "'vec4(1, 0, 0, 1)'", layers = "1", samples = "16" }
+
+[[case]]
+name = "storage_r8g8b8a8_unorm_l1_s16"
+rust_const = "IMG_STORAGE_R8G8B8A8_UNORM_L1_S16"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", format_qualifier = "'rgba8'", image_type = "'image2DMS'", gvec4 = "'vec4'", texel_coord = "'ivec2(gx, gy)'", samples = "16" }
+
+[[case]]
+name = "sampled_r8g8b8a8_unorm_l1_s32"
+rust_const = "IMG_SAMPLED_R8G8B8A8_UNORM_L1_S32"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_single.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", sampler_type = "'sampler2DMS'", texel_type = "'vec4'", ref_clear = "'vec4(0, 0, 1, 1)'", ref_primitive = "'vec4(1, 0, 0, 1)'", layers = "1", samples = "32" }
+
+[[case]]
+name = "storage_r8g8b8a8_unorm_l1_s32"
+rust_const = "IMG_STORAGE_R8G8B8A8_UNORM_L1_S32"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", format_qualifier = "'rgba8'", image_type = "'image2DMS'", gvec4 = "'vec4'", texel_coord = "'ivec2(gx, gy)'", samples = "32" }
+
+[[case]]
+name = "sampled_r8g8b8a8_unorm_l1_s64"
+rust_const = "IMG_SAMPLED_R8G8B8A8_UNORM_L1_S64"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_single.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", sampler_type = "'sampler2DMS'", texel_type = "'vec4'", ref_clear = "'vec4(0, 0, 1, 1)'", ref_primitive = "'vec4(1, 0, 0, 1)'", layers = "1", samples = "64" }
+
+[[case]]
+name = "storage_r8g8b8a8_unorm_l1_s64"
+rust_const = "IMG_STORAGE_R8G8B8A8_UNORM_L1_S64"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", format_qualifier = "'rgba8'", image_type = "'image2DMS'", gvec4 = "'vec4'", texel_coord = "'ivec2(gx, gy)'", samples = "64" }
+
+[[case]]
+name = "sampled_r8g8b8a8_unorm_l4_s2"
+rust_const = "IMG_SAMPLED_R8G8B8A8_UNORM_L4_S2"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_array.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", sampler_type = "'sampler2DMSArray'", texel_type = "'vec4'", ref_clear = "'vec4(0, 0, 1, 1)'", ref_primitive = "'vec4(1, 0, 0, 1)'", layers = "4", samples = "2" }
+
+[[case]]
+name = "storage_r8g8b8a8_unorm_l4_s2"
+rust_const = "IMG_STORAGE_R8G8B8A8_UNORM_L4_S2"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", format_qualifier = "'rgba8'", image_type = "'image2DMSArray'", gvec4 = "'vec4'", texel_coord = "'ivec3(gx, gy, gz)'", samples = "2" }
+
+[[case]]
+name = "sampled_r8g8b8a8_unorm_l4_s4"
+rust_const = "IMG_SAMPLED_R8G8B8A8_UNORM_L4_S4"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_array.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", sampler_type = "'sampler2DMSArray'", texel_type = "'vec4'", ref_clear = "'vec4(0, 0, 1, 1)'", ref_primitive = "'vec4(1, 0, 0, 1)'", layers = "4", samples = "4" }
+
+[[case]]
+name = "storage_r8g8b8a8_unorm_l4_s4"
+rust_const = "IMG_STORAGE_R8G8B8A8_UNORM_L4_S4"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", format_qualifier = "'rgba8'", image_type = "'image2DMSArray'", gvec4 = "'vec4'", texel_coord = "'ivec3(gx, gy, gz)'", samples = "4" }
+
+[[case]]
+name = "sampled_r8g8b8a8_unorm_l4_s8"
+rust_const = "IMG_SAMPLED_R8G8B8A8_UNORM_L4_S8"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_array.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", sampler_type = "'sampler2DMSArray'", texel_type = "'vec4'", ref_clear = "'vec4(0, 0, 1, 1)'", ref_primitive = "'vec4(1, 0, 0, 1)'", layers = "4", samples = "8" }
+
+[[case]]
+name = "storage_r8g8b8a8_unorm_l4_s8"
+rust_const = "IMG_STORAGE_R8G8B8A8_UNORM_L4_S8"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", format_qualifier = "'rgba8'", image_type = "'image2DMSArray'", gvec4 = "'vec4'", texel_coord = "'ivec3(gx, gy, gz)'", samples = "8" }
+
+[[case]]
+name = "sampled_r8g8b8a8_unorm_l4_s16"
+rust_const = "IMG_SAMPLED_R8G8B8A8_UNORM_L4_S16"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_array.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", sampler_type = "'sampler2DMSArray'", texel_type = "'vec4'", ref_clear = "'vec4(0, 0, 1, 1)'", ref_primitive = "'vec4(1, 0, 0, 1)'", layers = "4", samples = "16" }
+
+[[case]]
+name = "storage_r8g8b8a8_unorm_l4_s16"
+rust_const = "IMG_STORAGE_R8G8B8A8_UNORM_L4_S16"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", format_qualifier = "'rgba8'", image_type = "'image2DMSArray'", gvec4 = "'vec4'", texel_coord = "'ivec3(gx, gy, gz)'", samples = "16" }
+
+[[case]]
+name = "sampled_r8g8b8a8_unorm_l4_s32"
+rust_const = "IMG_SAMPLED_R8G8B8A8_UNORM_L4_S32"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_array.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", sampler_type = "'sampler2DMSArray'", texel_type = "'vec4'", ref_clear = "'vec4(0, 0, 1, 1)'", ref_primitive = "'vec4(1, 0, 0, 1)'", layers = "4", samples = "32" }
+
+[[case]]
+name = "storage_r8g8b8a8_unorm_l4_s32"
+rust_const = "IMG_STORAGE_R8G8B8A8_UNORM_L4_S32"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", format_qualifier = "'rgba8'", image_type = "'image2DMSArray'", gvec4 = "'vec4'", texel_coord = "'ivec3(gx, gy, gz)'", samples = "32" }
+
+[[case]]
+name = "sampled_r8g8b8a8_unorm_l4_s64"
+rust_const = "IMG_SAMPLED_R8G8B8A8_UNORM_L4_S64"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_array.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", sampler_type = "'sampler2DMSArray'", texel_type = "'vec4'", ref_clear = "'vec4(0, 0, 1, 1)'", ref_primitive = "'vec4(1, 0, 0, 1)'", layers = "4", samples = "64" }
+
+[[case]]
+name = "storage_r8g8b8a8_unorm_l4_s64"
+rust_const = "IMG_STORAGE_R8G8B8A8_UNORM_L4_S64"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", format_qualifier = "'rgba8'", image_type = "'image2DMSArray'", gvec4 = "'vec4'", texel_coord = "'ivec3(gx, gy, gz)'", samples = "64" }
+
+[[case]]
+name = "sampled_r32_uint_l1_s2"
+rust_const = "IMG_SAMPLED_R32_UINT_L1_S2"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_single.frag", stage = "frag" } ]
+derived = { color_type = "'uint'", swizzle = "'in_color.r'", sampler_type = "'usampler2DMS'", texel_type = "'uvec4'", ref_clear = "'uvec4(16, 0, 0, 1)'", ref_primitive = "'uvec4(1, 0, 0, 1)'", layers = "1", samples = "2" }
+
+[[case]]
+name = "storage_r32_uint_l1_s2"
+rust_const = "IMG_STORAGE_R32_UINT_L1_S2"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'uint'", swizzle = "'in_color.r'", format_qualifier = "'r32ui'", image_type = "'uimage2DMS'", gvec4 = "'uvec4'", texel_coord = "'ivec2(gx, gy)'", samples = "2" }
+
+[[case]]
+name = "sampled_r32_uint_l1_s4"
+rust_const = "IMG_SAMPLED_R32_UINT_L1_S4"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_single.frag", stage = "frag" } ]
+derived = { color_type = "'uint'", swizzle = "'in_color.r'", sampler_type = "'usampler2DMS'", texel_type = "'uvec4'", ref_clear = "'uvec4(16, 0, 0, 1)'", ref_primitive = "'uvec4(1, 0, 0, 1)'", layers = "1", samples = "4" }
+
+[[case]]
+name = "storage_r32_uint_l1_s4"
+rust_const = "IMG_STORAGE_R32_UINT_L1_S4"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'uint'", swizzle = "'in_color.r'", format_qualifier = "'r32ui'", image_type = "'uimage2DMS'", gvec4 = "'uvec4'", texel_coord = "'ivec2(gx, gy)'", samples = "4" }
+
+[[case]]
+name = "sampled_r32_uint_l1_s8"
+rust_const = "IMG_SAMPLED_R32_UINT_L1_S8"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_single.frag", stage = "frag" } ]
+derived = { color_type = "'uint'", swizzle = "'in_color.r'", sampler_type = "'usampler2DMS'", texel_type = "'uvec4'", ref_clear = "'uvec4(16, 0, 0, 1)'", ref_primitive = "'uvec4(1, 0, 0, 1)'", layers = "1", samples = "8" }
+
+[[case]]
+name = "storage_r32_uint_l1_s8"
+rust_const = "IMG_STORAGE_R32_UINT_L1_S8"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'uint'", swizzle = "'in_color.r'", format_qualifier = "'r32ui'", image_type = "'uimage2DMS'", gvec4 = "'uvec4'", texel_coord = "'ivec2(gx, gy)'", samples = "8" }
+
+[[case]]
+name = "sampled_r32_uint_l1_s16"
+rust_const = "IMG_SAMPLED_R32_UINT_L1_S16"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_single.frag", stage = "frag" } ]
+derived = { color_type = "'uint'", swizzle = "'in_color.r'", sampler_type = "'usampler2DMS'", texel_type = "'uvec4'", ref_clear = "'uvec4(16, 0, 0, 1)'", ref_primitive = "'uvec4(1, 0, 0, 1)'", layers = "1", samples = "16" }
+
+[[case]]
+name = "storage_r32_uint_l1_s16"
+rust_const = "IMG_STORAGE_R32_UINT_L1_S16"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'uint'", swizzle = "'in_color.r'", format_qualifier = "'r32ui'", image_type = "'uimage2DMS'", gvec4 = "'uvec4'", texel_coord = "'ivec2(gx, gy)'", samples = "16" }
+
+[[case]]
+name = "sampled_r32_uint_l1_s32"
+rust_const = "IMG_SAMPLED_R32_UINT_L1_S32"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_single.frag", stage = "frag" } ]
+derived = { color_type = "'uint'", swizzle = "'in_color.r'", sampler_type = "'usampler2DMS'", texel_type = "'uvec4'", ref_clear = "'uvec4(16, 0, 0, 1)'", ref_primitive = "'uvec4(1, 0, 0, 1)'", layers = "1", samples = "32" }
+
+[[case]]
+name = "storage_r32_uint_l1_s32"
+rust_const = "IMG_STORAGE_R32_UINT_L1_S32"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'uint'", swizzle = "'in_color.r'", format_qualifier = "'r32ui'", image_type = "'uimage2DMS'", gvec4 = "'uvec4'", texel_coord = "'ivec2(gx, gy)'", samples = "32" }
+
+[[case]]
+name = "sampled_r32_uint_l1_s64"
+rust_const = "IMG_SAMPLED_R32_UINT_L1_S64"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_single.frag", stage = "frag" } ]
+derived = { color_type = "'uint'", swizzle = "'in_color.r'", sampler_type = "'usampler2DMS'", texel_type = "'uvec4'", ref_clear = "'uvec4(16, 0, 0, 1)'", ref_primitive = "'uvec4(1, 0, 0, 1)'", layers = "1", samples = "64" }
+
+[[case]]
+name = "storage_r32_uint_l1_s64"
+rust_const = "IMG_STORAGE_R32_UINT_L1_S64"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'uint'", swizzle = "'in_color.r'", format_qualifier = "'r32ui'", image_type = "'uimage2DMS'", gvec4 = "'uvec4'", texel_coord = "'ivec2(gx, gy)'", samples = "64" }
+
+[[case]]
+name = "sampled_r32_uint_l4_s2"
+rust_const = "IMG_SAMPLED_R32_UINT_L4_S2"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_array.frag", stage = "frag" } ]
+derived = { color_type = "'uint'", swizzle = "'in_color.r'", sampler_type = "'usampler2DMSArray'", texel_type = "'uvec4'", ref_clear = "'uvec4(16, 0, 0, 1)'", ref_primitive = "'uvec4(1, 0, 0, 1)'", layers = "4", samples = "2" }
+
+[[case]]
+name = "storage_r32_uint_l4_s2"
+rust_const = "IMG_STORAGE_R32_UINT_L4_S2"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'uint'", swizzle = "'in_color.r'", format_qualifier = "'r32ui'", image_type = "'uimage2DMSArray'", gvec4 = "'uvec4'", texel_coord = "'ivec3(gx, gy, gz)'", samples = "2" }
+
+[[case]]
+name = "sampled_r32_uint_l4_s4"
+rust_const = "IMG_SAMPLED_R32_UINT_L4_S4"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_array.frag", stage = "frag" } ]
+derived = { color_type = "'uint'", swizzle = "'in_color.r'", sampler_type = "'usampler2DMSArray'", texel_type = "'uvec4'", ref_clear = "'uvec4(16, 0, 0, 1)'", ref_primitive = "'uvec4(1, 0, 0, 1)'", layers = "4", samples = "4" }
+
+[[case]]
+name = "storage_r32_uint_l4_s4"
+rust_const = "IMG_STORAGE_R32_UINT_L4_S4"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'uint'", swizzle = "'in_color.r'", format_qualifier = "'r32ui'", image_type = "'uimage2DMSArray'", gvec4 = "'uvec4'", texel_coord = "'ivec3(gx, gy, gz)'", samples = "4" }
+
+[[case]]
+name = "sampled_r32_uint_l4_s8"
+rust_const = "IMG_SAMPLED_R32_UINT_L4_S8"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_array.frag", stage = "frag" } ]
+derived = { color_type = "'uint'", swizzle = "'in_color.r'", sampler_type = "'usampler2DMSArray'", texel_type = "'uvec4'", ref_clear = "'uvec4(16, 0, 0, 1)'", ref_primitive = "'uvec4(1, 0, 0, 1)'", layers = "4", samples = "8" }
+
+[[case]]
+name = "storage_r32_uint_l4_s8"
+rust_const = "IMG_STORAGE_R32_UINT_L4_S8"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'uint'", swizzle = "'in_color.r'", format_qualifier = "'r32ui'", image_type = "'uimage2DMSArray'", gvec4 = "'uvec4'", texel_coord = "'ivec3(gx, gy, gz)'", samples = "8" }
+
+[[case]]
+name = "sampled_r32_uint_l4_s16"
+rust_const = "IMG_SAMPLED_R32_UINT_L4_S16"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_array.frag", stage = "frag" } ]
+derived = { color_type = "'uint'", swizzle = "'in_color.r'", sampler_type = "'usampler2DMSArray'", texel_type = "'uvec4'", ref_clear = "'uvec4(16, 0, 0, 1)'", ref_primitive = "'uvec4(1, 0, 0, 1)'", layers = "4", samples = "16" }
+
+[[case]]
+name = "storage_r32_uint_l4_s16"
+rust_const = "IMG_STORAGE_R32_UINT_L4_S16"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'uint'", swizzle = "'in_color.r'", format_qualifier = "'r32ui'", image_type = "'uimage2DMSArray'", gvec4 = "'uvec4'", texel_coord = "'ivec3(gx, gy, gz)'", samples = "16" }
+
+[[case]]
+name = "sampled_r32_uint_l4_s32"
+rust_const = "IMG_SAMPLED_R32_UINT_L4_S32"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_array.frag", stage = "frag" } ]
+derived = { color_type = "'uint'", swizzle = "'in_color.r'", sampler_type = "'usampler2DMSArray'", texel_type = "'uvec4'", ref_clear = "'uvec4(16, 0, 0, 1)'", ref_primitive = "'uvec4(1, 0, 0, 1)'", layers = "4", samples = "32" }
+
+[[case]]
+name = "storage_r32_uint_l4_s32"
+rust_const = "IMG_STORAGE_R32_UINT_L4_S32"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'uint'", swizzle = "'in_color.r'", format_qualifier = "'r32ui'", image_type = "'uimage2DMSArray'", gvec4 = "'uvec4'", texel_coord = "'ivec3(gx, gy, gz)'", samples = "32" }
+
+[[case]]
+name = "sampled_r32_uint_l4_s64"
+rust_const = "IMG_SAMPLED_R32_UINT_L4_S64"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_array.frag", stage = "frag" } ]
+derived = { color_type = "'uint'", swizzle = "'in_color.r'", sampler_type = "'usampler2DMSArray'", texel_type = "'uvec4'", ref_clear = "'uvec4(16, 0, 0, 1)'", ref_primitive = "'uvec4(1, 0, 0, 1)'", layers = "4", samples = "64" }
+
+[[case]]
+name = "storage_r32_uint_l4_s64"
+rust_const = "IMG_STORAGE_R32_UINT_L4_S64"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'uint'", swizzle = "'in_color.r'", format_qualifier = "'r32ui'", image_type = "'uimage2DMSArray'", gvec4 = "'uvec4'", texel_coord = "'ivec3(gx, gy, gz)'", samples = "64" }
+
+[[case]]
+name = "sampled_r16g16_sint_l1_s2"
+rust_const = "IMG_SAMPLED_R16G16_SINT_L1_S2"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_single.frag", stage = "frag" } ]
+derived = { color_type = "'ivec2'", swizzle = "'in_color.rg'", sampler_type = "'isampler2DMS'", texel_type = "'ivec4'", ref_clear = "'ivec4(16, 32, 0, 1)'", ref_primitive = "'ivec4(1, 0, 0, 1)'", layers = "1", samples = "2" }
+
+[[case]]
+name = "storage_r16g16_sint_l1_s2"
+rust_const = "IMG_STORAGE_R16G16_SINT_L1_S2"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'ivec2'", swizzle = "'in_color.rg'", format_qualifier = "'rg16i'", image_type = "'iimage2DMS'", gvec4 = "'ivec4'", texel_coord = "'ivec2(gx, gy)'", samples = "2" }
+
+[[case]]
+name = "sampled_r16g16_sint_l1_s4"
+rust_const = "IMG_SAMPLED_R16G16_SINT_L1_S4"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_single.frag", stage = "frag" } ]
+derived = { color_type = "'ivec2'", swizzle = "'in_color.rg'", sampler_type = "'isampler2DMS'", texel_type = "'ivec4'", ref_clear = "'ivec4(16, 32, 0, 1)'", ref_primitive = "'ivec4(1, 0, 0, 1)'", layers = "1", samples = "4" }
+
+[[case]]
+name = "storage_r16g16_sint_l1_s4"
+rust_const = "IMG_STORAGE_R16G16_SINT_L1_S4"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'ivec2'", swizzle = "'in_color.rg'", format_qualifier = "'rg16i'", image_type = "'iimage2DMS'", gvec4 = "'ivec4'", texel_coord = "'ivec2(gx, gy)'", samples = "4" }
+
+[[case]]
+name = "sampled_r16g16_sint_l1_s8"
+rust_const = "IMG_SAMPLED_R16G16_SINT_L1_S8"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_single.frag", stage = "frag" } ]
+derived = { color_type = "'ivec2'", swizzle = "'in_color.rg'", sampler_type = "'isampler2DMS'", texel_type = "'ivec4'", ref_clear = "'ivec4(16, 32, 0, 1)'", ref_primitive = "'ivec4(1, 0, 0, 1)'", layers = "1", samples = "8" }
+
+[[case]]
+name = "storage_r16g16_sint_l1_s8"
+rust_const = "IMG_STORAGE_R16G16_SINT_L1_S8"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'ivec2'", swizzle = "'in_color.rg'", format_qualifier = "'rg16i'", image_type = "'iimage2DMS'", gvec4 = "'ivec4'", texel_coord = "'ivec2(gx, gy)'", samples = "8" }
+
+[[case]]
+name = "sampled_r16g16_sint_l1_s16"
+rust_const = "IMG_SAMPLED_R16G16_SINT_L1_S16"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_single.frag", stage = "frag" } ]
+derived = { color_type = "'ivec2'", swizzle = "'in_color.rg'", sampler_type = "'isampler2DMS'", texel_type = "'ivec4'", ref_clear = "'ivec4(16, 32, 0, 1)'", ref_primitive = "'ivec4(1, 0, 0, 1)'", layers = "1", samples = "16" }
+
+[[case]]
+name = "storage_r16g16_sint_l1_s16"
+rust_const = "IMG_STORAGE_R16G16_SINT_L1_S16"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'ivec2'", swizzle = "'in_color.rg'", format_qualifier = "'rg16i'", image_type = "'iimage2DMS'", gvec4 = "'ivec4'", texel_coord = "'ivec2(gx, gy)'", samples = "16" }
+
+[[case]]
+name = "sampled_r16g16_sint_l1_s32"
+rust_const = "IMG_SAMPLED_R16G16_SINT_L1_S32"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_single.frag", stage = "frag" } ]
+derived = { color_type = "'ivec2'", swizzle = "'in_color.rg'", sampler_type = "'isampler2DMS'", texel_type = "'ivec4'", ref_clear = "'ivec4(16, 32, 0, 1)'", ref_primitive = "'ivec4(1, 0, 0, 1)'", layers = "1", samples = "32" }
+
+[[case]]
+name = "storage_r16g16_sint_l1_s32"
+rust_const = "IMG_STORAGE_R16G16_SINT_L1_S32"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'ivec2'", swizzle = "'in_color.rg'", format_qualifier = "'rg16i'", image_type = "'iimage2DMS'", gvec4 = "'ivec4'", texel_coord = "'ivec2(gx, gy)'", samples = "32" }
+
+[[case]]
+name = "sampled_r16g16_sint_l1_s64"
+rust_const = "IMG_SAMPLED_R16G16_SINT_L1_S64"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_single.frag", stage = "frag" } ]
+derived = { color_type = "'ivec2'", swizzle = "'in_color.rg'", sampler_type = "'isampler2DMS'", texel_type = "'ivec4'", ref_clear = "'ivec4(16, 32, 0, 1)'", ref_primitive = "'ivec4(1, 0, 0, 1)'", layers = "1", samples = "64" }
+
+[[case]]
+name = "storage_r16g16_sint_l1_s64"
+rust_const = "IMG_STORAGE_R16G16_SINT_L1_S64"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'ivec2'", swizzle = "'in_color.rg'", format_qualifier = "'rg16i'", image_type = "'iimage2DMS'", gvec4 = "'ivec4'", texel_coord = "'ivec2(gx, gy)'", samples = "64" }
+
+[[case]]
+name = "sampled_r16g16_sint_l4_s2"
+rust_const = "IMG_SAMPLED_R16G16_SINT_L4_S2"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_array.frag", stage = "frag" } ]
+derived = { color_type = "'ivec2'", swizzle = "'in_color.rg'", sampler_type = "'isampler2DMSArray'", texel_type = "'ivec4'", ref_clear = "'ivec4(16, 32, 0, 1)'", ref_primitive = "'ivec4(1, 0, 0, 1)'", layers = "4", samples = "2" }
+
+[[case]]
+name = "storage_r16g16_sint_l4_s2"
+rust_const = "IMG_STORAGE_R16G16_SINT_L4_S2"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'ivec2'", swizzle = "'in_color.rg'", format_qualifier = "'rg16i'", image_type = "'iimage2DMSArray'", gvec4 = "'ivec4'", texel_coord = "'ivec3(gx, gy, gz)'", samples = "2" }
+
+[[case]]
+name = "sampled_r16g16_sint_l4_s4"
+rust_const = "IMG_SAMPLED_R16G16_SINT_L4_S4"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_array.frag", stage = "frag" } ]
+derived = { color_type = "'ivec2'", swizzle = "'in_color.rg'", sampler_type = "'isampler2DMSArray'", texel_type = "'ivec4'", ref_clear = "'ivec4(16, 32, 0, 1)'", ref_primitive = "'ivec4(1, 0, 0, 1)'", layers = "4", samples = "4" }
+
+[[case]]
+name = "storage_r16g16_sint_l4_s4"
+rust_const = "IMG_STORAGE_R16G16_SINT_L4_S4"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'ivec2'", swizzle = "'in_color.rg'", format_qualifier = "'rg16i'", image_type = "'iimage2DMSArray'", gvec4 = "'ivec4'", texel_coord = "'ivec3(gx, gy, gz)'", samples = "4" }
+
+[[case]]
+name = "sampled_r16g16_sint_l4_s8"
+rust_const = "IMG_SAMPLED_R16G16_SINT_L4_S8"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_array.frag", stage = "frag" } ]
+derived = { color_type = "'ivec2'", swizzle = "'in_color.rg'", sampler_type = "'isampler2DMSArray'", texel_type = "'ivec4'", ref_clear = "'ivec4(16, 32, 0, 1)'", ref_primitive = "'ivec4(1, 0, 0, 1)'", layers = "4", samples = "8" }
+
+[[case]]
+name = "storage_r16g16_sint_l4_s8"
+rust_const = "IMG_STORAGE_R16G16_SINT_L4_S8"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'ivec2'", swizzle = "'in_color.rg'", format_qualifier = "'rg16i'", image_type = "'iimage2DMSArray'", gvec4 = "'ivec4'", texel_coord = "'ivec3(gx, gy, gz)'", samples = "8" }
+
+[[case]]
+name = "sampled_r16g16_sint_l4_s16"
+rust_const = "IMG_SAMPLED_R16G16_SINT_L4_S16"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_array.frag", stage = "frag" } ]
+derived = { color_type = "'ivec2'", swizzle = "'in_color.rg'", sampler_type = "'isampler2DMSArray'", texel_type = "'ivec4'", ref_clear = "'ivec4(16, 32, 0, 1)'", ref_primitive = "'ivec4(1, 0, 0, 1)'", layers = "4", samples = "16" }
+
+[[case]]
+name = "storage_r16g16_sint_l4_s16"
+rust_const = "IMG_STORAGE_R16G16_SINT_L4_S16"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'ivec2'", swizzle = "'in_color.rg'", format_qualifier = "'rg16i'", image_type = "'iimage2DMSArray'", gvec4 = "'ivec4'", texel_coord = "'ivec3(gx, gy, gz)'", samples = "16" }
+
+[[case]]
+name = "sampled_r16g16_sint_l4_s32"
+rust_const = "IMG_SAMPLED_R16G16_SINT_L4_S32"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_array.frag", stage = "frag" } ]
+derived = { color_type = "'ivec2'", swizzle = "'in_color.rg'", sampler_type = "'isampler2DMSArray'", texel_type = "'ivec4'", ref_clear = "'ivec4(16, 32, 0, 1)'", ref_primitive = "'ivec4(1, 0, 0, 1)'", layers = "4", samples = "32" }
+
+[[case]]
+name = "storage_r16g16_sint_l4_s32"
+rust_const = "IMG_STORAGE_R16G16_SINT_L4_S32"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'ivec2'", swizzle = "'in_color.rg'", format_qualifier = "'rg16i'", image_type = "'iimage2DMSArray'", gvec4 = "'ivec4'", texel_coord = "'ivec3(gx, gy, gz)'", samples = "32" }
+
+[[case]]
+name = "sampled_r16g16_sint_l4_s64"
+rust_const = "IMG_SAMPLED_R16G16_SINT_L4_S64"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_array.frag", stage = "frag" } ]
+derived = { color_type = "'ivec2'", swizzle = "'in_color.rg'", sampler_type = "'isampler2DMSArray'", texel_type = "'ivec4'", ref_clear = "'ivec4(16, 32, 0, 1)'", ref_primitive = "'ivec4(1, 0, 0, 1)'", layers = "4", samples = "64" }
+
+[[case]]
+name = "storage_r16g16_sint_l4_s64"
+rust_const = "IMG_STORAGE_R16G16_SINT_L4_S64"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'ivec2'", swizzle = "'in_color.rg'", format_qualifier = "'rg16i'", image_type = "'iimage2DMSArray'", gvec4 = "'ivec4'", texel_coord = "'ivec3(gx, gy, gz)'", samples = "64" }
+
+[[case]]
+name = "sampled_r32g32b32a32_sfloat_l1_s2"
+rust_const = "IMG_SAMPLED_R32G32B32A32_SFLOAT_L1_S2"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_single.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", sampler_type = "'sampler2DMS'", texel_type = "'vec4'", ref_clear = "'vec4(0, 0, 1, 1)'", ref_primitive = "'vec4(1, 0, 0, 1)'", layers = "1", samples = "2" }
+
+[[case]]
+name = "storage_r32g32b32a32_sfloat_l1_s2"
+rust_const = "IMG_STORAGE_R32G32B32A32_SFLOAT_L1_S2"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", format_qualifier = "'rgba32f'", image_type = "'image2DMS'", gvec4 = "'vec4'", texel_coord = "'ivec2(gx, gy)'", samples = "2" }
+
+[[case]]
+name = "sampled_r32g32b32a32_sfloat_l1_s4"
+rust_const = "IMG_SAMPLED_R32G32B32A32_SFLOAT_L1_S4"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_single.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", sampler_type = "'sampler2DMS'", texel_type = "'vec4'", ref_clear = "'vec4(0, 0, 1, 1)'", ref_primitive = "'vec4(1, 0, 0, 1)'", layers = "1", samples = "4" }
+
+[[case]]
+name = "storage_r32g32b32a32_sfloat_l1_s4"
+rust_const = "IMG_STORAGE_R32G32B32A32_SFLOAT_L1_S4"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", format_qualifier = "'rgba32f'", image_type = "'image2DMS'", gvec4 = "'vec4'", texel_coord = "'ivec2(gx, gy)'", samples = "4" }
+
+[[case]]
+name = "sampled_r32g32b32a32_sfloat_l1_s8"
+rust_const = "IMG_SAMPLED_R32G32B32A32_SFLOAT_L1_S8"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_single.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", sampler_type = "'sampler2DMS'", texel_type = "'vec4'", ref_clear = "'vec4(0, 0, 1, 1)'", ref_primitive = "'vec4(1, 0, 0, 1)'", layers = "1", samples = "8" }
+
+[[case]]
+name = "storage_r32g32b32a32_sfloat_l1_s8"
+rust_const = "IMG_STORAGE_R32G32B32A32_SFLOAT_L1_S8"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", format_qualifier = "'rgba32f'", image_type = "'image2DMS'", gvec4 = "'vec4'", texel_coord = "'ivec2(gx, gy)'", samples = "8" }
+
+[[case]]
+name = "sampled_r32g32b32a32_sfloat_l1_s16"
+rust_const = "IMG_SAMPLED_R32G32B32A32_SFLOAT_L1_S16"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_single.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", sampler_type = "'sampler2DMS'", texel_type = "'vec4'", ref_clear = "'vec4(0, 0, 1, 1)'", ref_primitive = "'vec4(1, 0, 0, 1)'", layers = "1", samples = "16" }
+
+[[case]]
+name = "storage_r32g32b32a32_sfloat_l1_s16"
+rust_const = "IMG_STORAGE_R32G32B32A32_SFLOAT_L1_S16"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", format_qualifier = "'rgba32f'", image_type = "'image2DMS'", gvec4 = "'vec4'", texel_coord = "'ivec2(gx, gy)'", samples = "16" }
+
+[[case]]
+name = "sampled_r32g32b32a32_sfloat_l1_s32"
+rust_const = "IMG_SAMPLED_R32G32B32A32_SFLOAT_L1_S32"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_single.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", sampler_type = "'sampler2DMS'", texel_type = "'vec4'", ref_clear = "'vec4(0, 0, 1, 1)'", ref_primitive = "'vec4(1, 0, 0, 1)'", layers = "1", samples = "32" }
+
+[[case]]
+name = "storage_r32g32b32a32_sfloat_l1_s32"
+rust_const = "IMG_STORAGE_R32G32B32A32_SFLOAT_L1_S32"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", format_qualifier = "'rgba32f'", image_type = "'image2DMS'", gvec4 = "'vec4'", texel_coord = "'ivec2(gx, gy)'", samples = "32" }
+
+[[case]]
+name = "sampled_r32g32b32a32_sfloat_l1_s64"
+rust_const = "IMG_SAMPLED_R32G32B32A32_SFLOAT_L1_S64"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_single.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", sampler_type = "'sampler2DMS'", texel_type = "'vec4'", ref_clear = "'vec4(0, 0, 1, 1)'", ref_primitive = "'vec4(1, 0, 0, 1)'", layers = "1", samples = "64" }
+
+[[case]]
+name = "storage_r32g32b32a32_sfloat_l1_s64"
+rust_const = "IMG_STORAGE_R32G32B32A32_SFLOAT_L1_S64"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", format_qualifier = "'rgba32f'", image_type = "'image2DMS'", gvec4 = "'vec4'", texel_coord = "'ivec2(gx, gy)'", samples = "64" }
+
+[[case]]
+name = "sampled_r32g32b32a32_sfloat_l4_s2"
+rust_const = "IMG_SAMPLED_R32G32B32A32_SFLOAT_L4_S2"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_array.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", sampler_type = "'sampler2DMSArray'", texel_type = "'vec4'", ref_clear = "'vec4(0, 0, 1, 1)'", ref_primitive = "'vec4(1, 0, 0, 1)'", layers = "4", samples = "2" }
+
+[[case]]
+name = "storage_r32g32b32a32_sfloat_l4_s2"
+rust_const = "IMG_STORAGE_R32G32B32A32_SFLOAT_L4_S2"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", format_qualifier = "'rgba32f'", image_type = "'image2DMSArray'", gvec4 = "'vec4'", texel_coord = "'ivec3(gx, gy, gz)'", samples = "2" }
+
+[[case]]
+name = "sampled_r32g32b32a32_sfloat_l4_s4"
+rust_const = "IMG_SAMPLED_R32G32B32A32_SFLOAT_L4_S4"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_array.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", sampler_type = "'sampler2DMSArray'", texel_type = "'vec4'", ref_clear = "'vec4(0, 0, 1, 1)'", ref_primitive = "'vec4(1, 0, 0, 1)'", layers = "4", samples = "4" }
+
+[[case]]
+name = "storage_r32g32b32a32_sfloat_l4_s4"
+rust_const = "IMG_STORAGE_R32G32B32A32_SFLOAT_L4_S4"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", format_qualifier = "'rgba32f'", image_type = "'image2DMSArray'", gvec4 = "'vec4'", texel_coord = "'ivec3(gx, gy, gz)'", samples = "4" }
+
+[[case]]
+name = "sampled_r32g32b32a32_sfloat_l4_s8"
+rust_const = "IMG_SAMPLED_R32G32B32A32_SFLOAT_L4_S8"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_array.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", sampler_type = "'sampler2DMSArray'", texel_type = "'vec4'", ref_clear = "'vec4(0, 0, 1, 1)'", ref_primitive = "'vec4(1, 0, 0, 1)'", layers = "4", samples = "8" }
+
+[[case]]
+name = "storage_r32g32b32a32_sfloat_l4_s8"
+rust_const = "IMG_STORAGE_R32G32B32A32_SFLOAT_L4_S8"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", format_qualifier = "'rgba32f'", image_type = "'image2DMSArray'", gvec4 = "'vec4'", texel_coord = "'ivec3(gx, gy, gz)'", samples = "8" }
+
+[[case]]
+name = "sampled_r32g32b32a32_sfloat_l4_s16"
+rust_const = "IMG_SAMPLED_R32G32B32A32_SFLOAT_L4_S16"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_array.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", sampler_type = "'sampler2DMSArray'", texel_type = "'vec4'", ref_clear = "'vec4(0, 0, 1, 1)'", ref_primitive = "'vec4(1, 0, 0, 1)'", layers = "4", samples = "16" }
+
+[[case]]
+name = "storage_r32g32b32a32_sfloat_l4_s16"
+rust_const = "IMG_STORAGE_R32G32B32A32_SFLOAT_L4_S16"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", format_qualifier = "'rgba32f'", image_type = "'image2DMSArray'", gvec4 = "'vec4'", texel_coord = "'ivec3(gx, gy, gz)'", samples = "16" }
+
+[[case]]
+name = "sampled_r32g32b32a32_sfloat_l4_s32"
+rust_const = "IMG_SAMPLED_R32G32B32A32_SFLOAT_L4_S32"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_array.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", sampler_type = "'sampler2DMSArray'", texel_type = "'vec4'", ref_clear = "'vec4(0, 0, 1, 1)'", ref_primitive = "'vec4(1, 0, 0, 1)'", layers = "4", samples = "32" }
+
+[[case]]
+name = "storage_r32g32b32a32_sfloat_l4_s32"
+rust_const = "IMG_STORAGE_R32G32B32A32_SFLOAT_L4_S32"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", format_qualifier = "'rgba32f'", image_type = "'image2DMSArray'", gvec4 = "'vec4'", texel_coord = "'ivec3(gx, gy, gz)'", samples = "32" }
+
+[[case]]
+name = "sampled_r32g32b32a32_sfloat_l4_s64"
+rust_const = "IMG_SAMPLED_R32G32B32A32_SFLOAT_L4_S64"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/sampled_array.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", sampler_type = "'sampler2DMSArray'", texel_type = "'vec4'", ref_clear = "'vec4(0, 0, 1, 1)'", ref_primitive = "'vec4(1, 0, 0, 1)'", layers = "4", samples = "64" }
+
+[[case]]
+name = "storage_r32g32b32a32_sfloat_l4_s64"
+rust_const = "IMG_STORAGE_R32G32B32A32_SFLOAT_L4_S64"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/storage.comp", stage = "comp" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", format_qualifier = "'rgba32f'", image_type = "'image2DMSArray'", gvec4 = "'vec4'", texel_coord = "'ivec3(gx, gy, gz)'", samples = "64" }
+
+[[case]]
+name = "position_r8g8b8a8_unorm_s2"
+rust_const = "IMG_POSITION_R8G8B8A8_UNORM_S2"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/position.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", samples = "2" }
+
+[[case]]
+name = "position_r8g8b8a8_unorm_s4"
+rust_const = "IMG_POSITION_R8G8B8A8_UNORM_S4"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/position.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", samples = "4" }
+
+[[case]]
+name = "position_r8g8b8a8_unorm_s8"
+rust_const = "IMG_POSITION_R8G8B8A8_UNORM_S8"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/position.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", samples = "8" }
+
+[[case]]
+name = "position_r8g8b8a8_unorm_s16"
+rust_const = "IMG_POSITION_R8G8B8A8_UNORM_S16"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/position.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", samples = "16" }
+
+[[case]]
+name = "position_r8g8b8a8_unorm_s32"
+rust_const = "IMG_POSITION_R8G8B8A8_UNORM_S32"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/position.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", samples = "32" }
+
+[[case]]
+name = "position_r8g8b8a8_unorm_s64"
+rust_const = "IMG_POSITION_R8G8B8A8_UNORM_S64"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/position.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", samples = "64" }
+
+[[case]]
+name = "position_r32g32b32a32_sfloat_s2"
+rust_const = "IMG_POSITION_R32G32B32A32_SFLOAT_S2"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/position.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", samples = "2" }
+
+[[case]]
+name = "position_r32g32b32a32_sfloat_s4"
+rust_const = "IMG_POSITION_R32G32B32A32_SFLOAT_S4"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/position.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", samples = "4" }
+
+[[case]]
+name = "position_r32g32b32a32_sfloat_s8"
+rust_const = "IMG_POSITION_R32G32B32A32_SFLOAT_S8"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/position.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", samples = "8" }
+
+[[case]]
+name = "position_r32g32b32a32_sfloat_s16"
+rust_const = "IMG_POSITION_R32G32B32A32_SFLOAT_S16"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/position.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", samples = "16" }
+
+[[case]]
+name = "position_r32g32b32a32_sfloat_s32"
+rust_const = "IMG_POSITION_R32G32B32A32_SFLOAT_S32"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/position.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", samples = "32" }
+
+[[case]]
+name = "position_r32g32b32a32_sfloat_s64"
+rust_const = "IMG_POSITION_R32G32B32A32_SFLOAT_S64"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/simple.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/simple.frag", stage = "frag" }, { name = "sample_vert", template = "pipeline/multisample_image/sample.vert", stage = "vert" }, { name = "sample_frag", template = "pipeline/multisample_image/position.frag", stage = "frag" } ]
+derived = { color_type = "'vec4'", swizzle = "'in_color'", samples = "64" }
+
+[[case]]
+name = "mapping_order_s2"
+rust_const = "IMG_MAPPING_ORDER_S2"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/mapping.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/mapping.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/mapping.comp", stage = "comp" } ]
+derived = { samples = "2" }
+
+[[case]]
+name = "mapping_order_s4"
+rust_const = "IMG_MAPPING_ORDER_S4"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/mapping.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/mapping.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/mapping.comp", stage = "comp" } ]
+derived = { samples = "4" }
+
+[[case]]
+name = "mapping_order_s8"
+rust_const = "IMG_MAPPING_ORDER_S8"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/mapping.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/mapping.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/mapping.comp", stage = "comp" } ]
+derived = { samples = "8" }
+
+[[case]]
+name = "mapping_order_s16"
+rust_const = "IMG_MAPPING_ORDER_S16"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/mapping.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/mapping.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/mapping.comp", stage = "comp" } ]
+derived = { samples = "16" }
+
+[[case]]
+name = "mapping_order_s32"
+rust_const = "IMG_MAPPING_ORDER_S32"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/mapping.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/mapping.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/mapping.comp", stage = "comp" } ]
+derived = { samples = "32" }
+
+[[case]]
+name = "mapping_order_s64"
+rust_const = "IMG_MAPPING_ORDER_S64"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/mapping.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/mapping.frag", stage = "frag" }, { name = "comp", template = "pipeline/multisample_image/mapping.comp", stage = "comp" } ]
+derived = { samples = "64" }
+
+[[case]]
+name = "image3d"
+rust_const = "IMG_IMAGE3D"
+rust_type = "SharedProgram"
+programs = [ { name = "vert", template = "pipeline/multisample_image/image3d.vert", stage = "vert" }, { name = "frag", template = "pipeline/multisample_image/image3d.frag", stage = "frag" } ]
+

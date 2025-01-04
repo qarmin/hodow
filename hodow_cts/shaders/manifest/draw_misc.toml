@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.draw.renderpass.basic_draw.misc.flat_b_sat_error
+#
+# The Amber script data/vulkan/amber/draw/misc/flat_b_sat_error.amber, a reproducer for mesa issue 10999.
+
+upstream_source = "external/vulkancts/data/vulkan/amber/draw/misc/flat_b_sat_error.amber"
+rust_module = "draw/misc_tests"
+
+[[case]]
+name = "flat_b_sat_error"
+rust_const = "FLAT_B_SAT_ERROR"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "draw/misc/flat_b_sat_error.vert", stage = "vert" },
+    { name = "frag", template = "draw/misc/flat_b_sat_error.frag", stage = "frag" },
+]

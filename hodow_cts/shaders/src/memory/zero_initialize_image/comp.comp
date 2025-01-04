@@ -1,0 +1,18 @@
+#version 460
+layout (local_size_x=64, local_size_y=1, local_size_z=1) in;
+${descriptors}void main(void) {
+    // One row per WG.
+    const uint width = ${width};
+    const uint height = ${height};
+    const uint wgSize = gl_WorkGroupSize.x;
+    const uint pixelsPerInv = (width + (wgSize - 1u)) / wgSize;
+    for (uint i = 0; i < pixelsPerInv; ++i) {
+        const uint col = i * wgSize + gl_LocalInvocationIndex;
+        const uint row = gl_WorkGroupID.x;
+        if (col < width && row < height) {
+            ${pixel_type} color = ${read_op}(res, ivec2(col, row)${lod_arg});
+            const uint outIndex = row * width + col;
+            ssbo.pixels[outIndex] = color;
+        }
+    }
+}

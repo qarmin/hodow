@@ -1,0 +1,95 @@
+# Shader manifest for dEQP-VK.image.general_layout.*
+#
+# `AstcSampleCase`, `MemoryBarrierCase` (`storage` is 1 when the read access is a storage read, 0 for the sampled read),
+# `InputAttachmentCase` (`input_attachment` picks subpassLoad over a sampler for the first fragment shader) and `MsaaCase` (the
+# second fragment shader writes one output per attachment).
+
+upstream_source = "external/vulkancts/modules/vulkan/image/vktImageGeneralLayoutTests.cpp"
+rust_module = "image/general_layout_tests"
+
+[[case]]
+name = "astc"
+rust_const = "GENERAL_LAYOUT_ASTC"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/general_layout/quad.vert", stage = "vert" },
+    { name = "frag", template = "image/general_layout/astc.frag", stage = "frag" },
+]
+
+[[case]]
+name = "memory_barrier_storage"
+rust_const = "GENERAL_LAYOUT_MEMORY_BARRIER_STORAGE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/general_layout/quad.vert", stage = "vert" },
+    { name = "write_frag", template = "image/general_layout/write.frag", stage = "frag" },
+    { name = "read_frag", template = "image/general_layout/read.frag", stage = "frag" },
+    { name = "write_comp", template = "image/general_layout/write.comp", stage = "comp" },
+    { name = "read_comp", template = "image/general_layout/read.comp", stage = "comp" },
+]
+derived = { storage = "1" }
+
+[[case]]
+name = "memory_barrier_sampled"
+rust_const = "GENERAL_LAYOUT_MEMORY_BARRIER_SAMPLED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/general_layout/quad.vert", stage = "vert" },
+    { name = "write_frag", template = "image/general_layout/write.frag", stage = "frag" },
+    { name = "read_frag", template = "image/general_layout/read.frag", stage = "frag" },
+    { name = "write_comp", template = "image/general_layout/write.comp", stage = "comp" },
+    { name = "read_comp", template = "image/general_layout/read.comp", stage = "comp" },
+]
+derived = { storage = "0" }
+
+[[case]]
+name = "input_input_attachment"
+rust_const = "GENERAL_LAYOUT_INPUT_INPUT_ATTACHMENT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/general_layout/quad.vert", stage = "vert" },
+    { name = "frag1", template = "image/general_layout/input1.frag", stage = "frag" },
+    { name = "frag2", template = "image/general_layout/input2.frag", stage = "frag" },
+]
+derived = { input_attachment = "1" }
+
+[[case]]
+name = "input_sampled"
+rust_const = "GENERAL_LAYOUT_INPUT_SAMPLED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/general_layout/quad.vert", stage = "vert" },
+    { name = "frag1", template = "image/general_layout/input1.frag", stage = "frag" },
+    { name = "frag2", template = "image/general_layout/input2.frag", stage = "frag" },
+]
+derived = { input_attachment = "0" }
+
+[[case]]
+name = "msaa_4"
+rust_const = "GENERAL_LAYOUT_MSAA_4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/general_layout/msaa.vert", stage = "vert" },
+    { name = "frag1", template = "image/general_layout/msaa1.frag", stage = "frag" },
+    { name = "frag2", template = "image/general_layout/msaa2_4.frag", stage = "frag" },
+]
+
+[[case]]
+name = "msaa_8"
+rust_const = "GENERAL_LAYOUT_MSAA_8"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/general_layout/msaa.vert", stage = "vert" },
+    { name = "frag1", template = "image/general_layout/msaa1.frag", stage = "frag" },
+    { name = "frag2", template = "image/general_layout/msaa2_8.frag", stage = "frag" },
+]
+
+[[case]]
+name = "msaa_16"
+rust_const = "GENERAL_LAYOUT_MSAA_16"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/general_layout/msaa.vert", stage = "vert" },
+    { name = "frag1", template = "image/general_layout/msaa1.frag", stage = "frag" },
+    { name = "frag2", template = "image/general_layout/msaa2_16.frag", stage = "frag" },
+]

@@ -1,0 +1,29 @@
+#version 450
+#extension GL_NV_mesh_shader : enable
+
+layout(local_size_x=32) in;
+layout(triangles) out;
+layout(max_vertices=256, max_primitives=256) out;
+
+layout (set=0, binding=0) uniform CoordsBuffer {
+    vec4 coords[3];
+} cb;
+layout (set=0, binding=1, std430) readonly buffer IndexBuffer {
+    uint indices[3];
+} ib;
+
+layout (location=0) out perprimitiveNV vec4 triangleColor[];
+
+void main ()
+{
+    gl_PrimitiveCountNV = 1u;
+    triangleColor[0] = vec4(0.0, 0.0, 1.0, 1.0);
+
+    const uint vertex = gl_LocalInvocationIndex;
+    if (vertex < 3u)
+    {
+        const uint vertexIndex = ib.indices[vertex];
+        gl_PrimitiveIndicesNV[vertex] = vertexIndex;
+        gl_MeshVerticesNV[vertexIndex].gl_Position = cb.coords[vertexIndex];
+    }
+}

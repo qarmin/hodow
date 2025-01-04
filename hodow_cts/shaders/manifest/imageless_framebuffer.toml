@@ -1,0 +1,73 @@
+# Shader manifest for dEQP-VK.imageless_framebuffer.*
+#
+# `BaseTestCase::initPrograms` picks the vertex shader by test type; the resolve types add the
+# demultisample shaders that read one sample at a time, and the multisubpass type a second pair
+# that reads the first subpass's colour as an input attachment. Both `none` and `extended_flags`
+# groups share these programs.
+
+upstream_source = "external/vulkancts/modules/vulkan/imageless_framebuffer/vktImagelessFramebufferTests.cpp"
+rust_module = "imageless_framebuffer/imageless_framebuffer_tests"
+
+[[case]]
+name = "color"
+rust_const = "IMAGELESS_COLOR"
+rust_type = "ImagelessProgram"
+programs = [
+    { name = "vert", template = "imageless_framebuffer/vert_gray.vert", stage = "vert" },
+    { name = "frag", template = "imageless_framebuffer/frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "depth_stencil"
+rust_const = "IMAGELESS_DEPTH_STENCIL"
+rust_type = "ImagelessProgram"
+programs = [
+    { name = "vert", template = "imageless_framebuffer/vert_gray.vert", stage = "vert" },
+    { name = "frag", template = "imageless_framebuffer/frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "color_resolve"
+rust_const = "IMAGELESS_COLOR_RESOLVE"
+rust_type = "ImagelessProgram"
+programs = [
+    { name = "vert", template = "imageless_framebuffer/vert_gray.vert", stage = "vert" },
+    { name = "frag", template = "imageless_framebuffer/frag.frag", stage = "frag" },
+    { name = "demultisample-vert", template = "imageless_framebuffer/demultisample.vert", stage = "vert" },
+    { name = "demultisample-color-frag", template = "imageless_framebuffer/demultisample_color.frag", stage = "frag" },
+    { name = "demultisample-depth-frag", template = "imageless_framebuffer/demultisample_depth.frag", stage = "frag" },
+    { name = "demultisample-stencil-frag", template = "imageless_framebuffer/demultisample_stencil.frag", stage = "frag" },
+]
+
+[[case]]
+name = "depth_stencil_resolve"
+rust_const = "IMAGELESS_DEPTH_STENCIL_RESOLVE"
+rust_type = "ImagelessProgram"
+programs = [
+    { name = "vert", template = "imageless_framebuffer/vert_dsr.vert", stage = "vert" },
+    { name = "frag", template = "imageless_framebuffer/frag.frag", stage = "frag" },
+    { name = "demultisample-vert", template = "imageless_framebuffer/demultisample.vert", stage = "vert" },
+    { name = "demultisample-color-frag", template = "imageless_framebuffer/demultisample_color.frag", stage = "frag" },
+    { name = "demultisample-depth-frag", template = "imageless_framebuffer/demultisample_depth.frag", stage = "frag" },
+    { name = "demultisample-stencil-frag", template = "imageless_framebuffer/demultisample_stencil.frag", stage = "frag" },
+]
+
+[[case]]
+name = "multisubpass"
+rust_const = "IMAGELESS_MULTISUBPASS"
+rust_type = "ImagelessProgram"
+programs = [
+    { name = "vert", template = "imageless_framebuffer/vert_blue.vert", stage = "vert" },
+    { name = "frag", template = "imageless_framebuffer/frag.frag", stage = "frag" },
+    { name = "vert1", template = "imageless_framebuffer/demultisample.vert", stage = "vert" },
+    { name = "frag1", template = "imageless_framebuffer/subpass1.frag", stage = "frag" },
+]
+
+[[case]]
+name = "different_attachments"
+rust_const = "IMAGELESS_DIFFERENT_ATTACHMENTS"
+rust_type = "ImagelessProgram"
+programs = [
+    { name = "vert", template = "imageless_framebuffer/vert_blue.vert", stage = "vert" },
+    { name = "frag", template = "imageless_framebuffer/frag.frag", stage = "frag" },
+]

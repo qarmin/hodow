@@ -1,0 +1,66 @@
+# Shader manifest for dEQP-VK.pipeline.*.blend.dynamic_dual_disable.* and blend.drlr_remap.*
+#
+# `DynamicDualBlendDisableCase::initPrograms`: a full screen strip and a fragment shader writing one constant color to each of the attachments.
+# One entry per attachment count (1, 2 and 8, each also with one extra attachment), and the shaders of `RemapCase::initPrograms` (`remap`).
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineBlendTests.cpp"
+rust_module = "pipeline/blend_dynamic_tests"
+
+[[case]]
+name = "dual_disable_1"
+rust_const = "DUAL_DISABLE_1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/blend_dynamic/dual_disable.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/blend_dynamic/dual_disable.frag", stage = "frag" },
+]
+derived = { frag_source = "'#version 460\\nlayout (location=0) out vec4 outColor0;\\nvoid main(void) {\\n    outColor0 = vec4(0.0, 0.0, 1.0, 1.0);\\n}\\n'" }
+
+[[case]]
+name = "dual_disable_2"
+rust_const = "DUAL_DISABLE_2"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/blend_dynamic/dual_disable.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/blend_dynamic/dual_disable.frag", stage = "frag" },
+]
+derived = { frag_source = "'#version 460\\nlayout (location=0) out vec4 outColor0;\\nlayout (location=1) out vec4 outColor1;\\nvoid main(void) {\\n    outColor0 = vec4(0.0, 0.0, 1.0, 1.0);\\n    outColor1 = vec4(0.0, 1.0, 1.0, 1.0);\\n}\\n'" }
+
+[[case]]
+name = "dual_disable_3"
+rust_const = "DUAL_DISABLE_3"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/blend_dynamic/dual_disable.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/blend_dynamic/dual_disable.frag", stage = "frag" },
+]
+derived = { frag_source = "'#version 460\\nlayout (location=0) out vec4 outColor0;\\nlayout (location=1) out vec4 outColor1;\\nlayout (location=2) out vec4 outColor2;\\nvoid main(void) {\\n    outColor0 = vec4(0.0, 0.0, 1.0, 1.0);\\n    outColor1 = vec4(0.0, 1.0, 1.0, 1.0);\\n    outColor2 = vec4(1.0, 1.0, 0.0, 1.0);\\n}\\n'" }
+
+[[case]]
+name = "dual_disable_8"
+rust_const = "DUAL_DISABLE_8"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/blend_dynamic/dual_disable.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/blend_dynamic/dual_disable.frag", stage = "frag" },
+]
+derived = { frag_source = "'#version 460\\nlayout (location=0) out vec4 outColor0;\\nlayout (location=1) out vec4 outColor1;\\nlayout (location=2) out vec4 outColor2;\\nlayout (location=3) out vec4 outColor3;\\nlayout (location=4) out vec4 outColor4;\\nlayout (location=5) out vec4 outColor5;\\nlayout (location=6) out vec4 outColor6;\\nlayout (location=7) out vec4 outColor7;\\nvoid main(void) {\\n    outColor0 = vec4(0.0, 0.0, 1.0, 1.0);\\n    outColor1 = vec4(0.0, 1.0, 1.0, 1.0);\\n    outColor2 = vec4(1.0, 1.0, 0.0, 1.0);\\n    outColor3 = vec4(1.0, 1.0, 1.0, 1.0);\\n    outColor4 = vec4(0.0, 0.0, 1.0, 1.0);\\n    outColor5 = vec4(0.0, 1.0, 1.0, 1.0);\\n    outColor6 = vec4(1.0, 1.0, 0.0, 1.0);\\n    outColor7 = vec4(1.0, 1.0, 1.0, 1.0);\\n}\\n'" }
+
+[[case]]
+name = "dual_disable_9"
+rust_const = "DUAL_DISABLE_9"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/blend_dynamic/dual_disable.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/blend_dynamic/dual_disable.frag", stage = "frag" },
+]
+derived = { frag_source = "'#version 460\\nlayout (location=0) out vec4 outColor0;\\nlayout (location=1) out vec4 outColor1;\\nlayout (location=2) out vec4 outColor2;\\nlayout (location=3) out vec4 outColor3;\\nlayout (location=4) out vec4 outColor4;\\nlayout (location=5) out vec4 outColor5;\\nlayout (location=6) out vec4 outColor6;\\nlayout (location=7) out vec4 outColor7;\\nlayout (location=8) out vec4 outColor8;\\nvoid main(void) {\\n    outColor0 = vec4(0.0, 0.0, 1.0, 1.0);\\n    outColor1 = vec4(0.0, 1.0, 1.0, 1.0);\\n    outColor2 = vec4(1.0, 1.0, 0.0, 1.0);\\n    outColor3 = vec4(1.0, 1.0, 1.0, 1.0);\\n    outColor4 = vec4(0.0, 0.0, 1.0, 1.0);\\n    outColor5 = vec4(0.0, 1.0, 1.0, 1.0);\\n    outColor6 = vec4(1.0, 1.0, 0.0, 1.0);\\n    outColor7 = vec4(1.0, 1.0, 1.0, 1.0);\\n    outColor8 = vec4(0.0, 0.0, 1.0, 1.0);\\n}\\n'" }
+
+[[case]]
+name = "remap"
+rust_const = "REMAP"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/blend_dynamic/remap.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/blend_dynamic/remap.frag", stage = "frag" },
+]

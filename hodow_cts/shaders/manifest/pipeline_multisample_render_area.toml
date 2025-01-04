@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.resolve.renderpass_renderarea.*
+#
+# `MultisampleRenderAreaTest::initPrograms`: a position passthrough vertex shader and a yellow fragment shader.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineMultisampleResolveRenderAreaTests.cpp"
+rust_module = "pipeline/multisample_resolve_render_area_tests"
+
+[[case]]
+name = "render_area"
+rust_const = "RENDER_AREA"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/multisample_render_area/render_area.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/multisample_render_area/render_area.frag", stage = "frag" },
+]

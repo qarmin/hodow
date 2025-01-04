@@ -1,0 +1,83 @@
+# Shader manifest for dEQP-VK.tessellation.geometry_interaction.point_size.*
+#
+# `initPrograms`, one program set per flag combination: a vertex shader that sets gl_PointSize to 2.0 or leaves it, a
+# flat fragment shader, and the tessellation (a pass-through pair that sets 4.0, or forwards and adds 2.0) and geometry
+# (sets 6.0, or adds 2.0) stages the flags ask for.
+
+upstream_source = "external/vulkancts/modules/vulkan/tessellation/vktTessellationGeometryPointSizeTests.cpp"
+rust_module = "tessellation/geometry_point_size_tests"
+
+[[case]]
+name = "vertex_set"
+rust_const = "POINT_SIZE_VERTEX_SET"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/point_size_vert_set.vert", stage = "vert" },
+    { name = "frag", template = "tessellation/point_size.frag", stage = "frag" },
+]
+
+[[case]]
+name = "evaluation_set"
+rust_const = "POINT_SIZE_EVALUATION_SET"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/point_size_vert_noset.vert", stage = "vert" },
+    { name = "frag", template = "tessellation/point_size.frag", stage = "frag" },
+    { name = "tesc", template = "tessellation/point_size_plain.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/point_size_set.tese", stage = "tese" },
+]
+
+[[case]]
+name = "geometry_set"
+rust_const = "POINT_SIZE_GEOMETRY_SET"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/point_size_vert_noset.vert", stage = "vert" },
+    { name = "frag", template = "tessellation/point_size.frag", stage = "frag" },
+    { name = "geom", template = "tessellation/point_size_set.geom", stage = "geom" },
+]
+
+[[case]]
+name = "vertex_set_evaluation_set"
+rust_const = "POINT_SIZE_VERTEX_SET_EVALUATION_SET"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/point_size_vert_set.vert", stage = "vert" },
+    { name = "frag", template = "tessellation/point_size.frag", stage = "frag" },
+    { name = "tesc", template = "tessellation/point_size_plain.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/point_size_set.tese", stage = "tese" },
+]
+
+[[case]]
+name = "vertex_set_geometry_set"
+rust_const = "POINT_SIZE_VERTEX_SET_GEOMETRY_SET"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/point_size_vert_set.vert", stage = "vert" },
+    { name = "frag", template = "tessellation/point_size.frag", stage = "frag" },
+    { name = "geom", template = "tessellation/point_size_set.geom", stage = "geom" },
+]
+
+[[case]]
+name = "vertex_set_evaluation_set_geometry_set"
+rust_const = "POINT_SIZE_VERTEX_SET_EVALUATION_SET_GEOMETRY_SET"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/point_size_vert_set.vert", stage = "vert" },
+    { name = "frag", template = "tessellation/point_size.frag", stage = "frag" },
+    { name = "tesc", template = "tessellation/point_size_plain.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/point_size_set.tese", stage = "tese" },
+    { name = "geom", template = "tessellation/point_size_set.geom", stage = "geom" },
+]
+
+[[case]]
+name = "vertex_set_control_pass_eval_add_geometry_add"
+rust_const = "POINT_SIZE_VERTEX_SET_CONTROL_PASS_EVAL_ADD_GEOMETRY_ADD"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/point_size_vert_set.vert", stage = "vert" },
+    { name = "frag", template = "tessellation/point_size.frag", stage = "frag" },
+    { name = "tesc", template = "tessellation/point_size_add.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/point_size_add.tese", stage = "tese" },
+    { name = "geom", template = "tessellation/point_size_add.geom", stage = "geom" },
+]

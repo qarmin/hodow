@@ -1,0 +1,98 @@
+# Shader manifest for dEQP-VK.fragment_operations.early_fragment.{early,no_early,early_and_late}_*
+#
+# Upstream builds the early-and-late variant from SPIR-V text; the GLSL qualifier of
+# GL_AMD_shader_early_and_late_fragment_tests compiles to the same execution mode.
+# `mode` is 0 for layout(early_fragment_tests), 1 for neither, 2 for early and late.
+
+upstream_source = "external/vulkancts/modules/vulkan/fragment_ops/vktFragmentOperationsEarlyFragmentTests.cpp"
+rust_module = "fragment_ops/early_fragment_tests"
+
+[[case]]
+name = "early"
+rust_const = "EARLY_FRAGMENT_EARLY"
+rust_type = "EarlyFragmentProgram"
+programs = [
+    { name = "vert", template = "fragment_ops/early_fragment.vert", stage = "vert" },
+    { name = "frag", template = "fragment_ops/early_fragment.frag", stage = "frag" },
+]
+[case.params]
+mode = { type = "u32", value = 0 }
+[case.derived]
+extension = "''"
+layout_qualifier = "'layout(early_fragment_tests) in;'"
+
+[[case]]
+name = "none"
+rust_const = "EARLY_FRAGMENT_NONE"
+rust_type = "EarlyFragmentProgram"
+programs = [
+    { name = "vert", template = "fragment_ops/early_fragment.vert", stage = "vert" },
+    { name = "frag", template = "fragment_ops/early_fragment.frag", stage = "frag" },
+]
+[case.params]
+mode = { type = "u32", value = 1 }
+[case.derived]
+extension = "''"
+layout_qualifier = "''"
+
+[[case]]
+name = "early_and_late"
+rust_const = "EARLY_FRAGMENT_EARLY_AND_LATE"
+rust_type = "EarlyFragmentProgram"
+programs = [
+    { name = "vert", template = "fragment_ops/early_fragment.vert", stage = "vert" },
+    { name = "frag", template = "fragment_ops/early_fragment.frag", stage = "frag" },
+]
+[case.params]
+mode = { type = "u32", value = 2 }
+[case.derived]
+extension = "'#extension GL_AMD_shader_early_and_late_fragment_tests : require'"
+layout_qualifier = "'layout(early_and_late_fragment_tests_amd) in;'"
+
+# The `discard_*` cases: the same counting shader that also writes gl_FragDepth and then discards. Upstream's
+# early-and-late variant is SPIR-V text with the DepthGreater execution mode, which is what `depth_qualifier` states.
+
+[[case]]
+name = "discard_early"
+rust_const = "EARLY_FRAGMENT_DISCARD_EARLY"
+rust_type = "EarlyFragmentProgram"
+programs = [
+    { name = "vert", template = "fragment_ops/early_fragment.vert", stage = "vert" },
+    { name = "frag", template = "fragment_ops/early_fragment_discard.frag", stage = "frag" },
+]
+[case.params]
+mode = { type = "u32", value = 0 }
+[case.derived]
+extension = "''"
+layout_qualifier = "'layout(early_fragment_tests) in;'"
+depth_qualifier = "''"
+
+[[case]]
+name = "discard_none"
+rust_const = "EARLY_FRAGMENT_DISCARD_NONE"
+rust_type = "EarlyFragmentProgram"
+programs = [
+    { name = "vert", template = "fragment_ops/early_fragment.vert", stage = "vert" },
+    { name = "frag", template = "fragment_ops/early_fragment_discard.frag", stage = "frag" },
+]
+[case.params]
+mode = { type = "u32", value = 1 }
+[case.derived]
+extension = "''"
+layout_qualifier = "''"
+depth_qualifier = "''"
+
+[[case]]
+name = "discard_early_and_late"
+rust_const = "EARLY_FRAGMENT_DISCARD_EARLY_AND_LATE"
+rust_type = "EarlyFragmentProgram"
+programs = [
+    { name = "vert", template = "fragment_ops/early_fragment.vert", stage = "vert" },
+    { name = "frag", template = "fragment_ops/early_fragment_discard.frag", stage = "frag" },
+]
+[case.params]
+mode = { type = "u32", value = 2 }
+[case.derived]
+extension = "'#extension GL_AMD_shader_early_and_late_fragment_tests : require'"
+layout_qualifier = "'layout(early_and_late_fragment_tests_amd) in;'"
+depth_qualifier = "'layout(depth_greater) out float gl_FragDepth;'"

@@ -1,0 +1,104 @@
+# Shader manifest for dEQP-VK.renderpasses.dynamic_rendering.primary_cmd_buff.random.*
+#
+# `initPrograms` always builds vert and frag; the geometry programs follow enableGeometry, the
+# tessellation programs enableTessellation, and the fragment shader reads gl_ViewIndex when
+# enableMultiview. Eight cases cover the combinations.
+
+upstream_source = "external/vulkancts/modules/vulkan/renderpass/vktDynamicRenderingRandomTests.cpp"
+rust_module = "renderpass/dynamic_rendering_random_tests"
+
+[[case]]
+name = "g0_t0_m0"
+rust_const = "RANDOM_G0_T0_M0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/dynamic_rendering_random/vert.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/dynamic_rendering_random/frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "g0_t0_m1"
+rust_const = "RANDOM_G0_T0_M1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/dynamic_rendering_random/vert.vert", stage = "vert" },
+    { name = "frag", template = "renderpass/dynamic_rendering_random/frag_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "g0_t1_m0"
+rust_const = "RANDOM_G0_T1_M0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/dynamic_rendering_random/vert.vert", stage = "vert" },
+    { name = "tsc", template = "renderpass/dynamic_rendering_random/tsc.tesc", stage = "tesc" },
+    { name = "tse", template = "renderpass/dynamic_rendering_random/tse.tese", stage = "tese" },
+    { name = "frag", template = "renderpass/dynamic_rendering_random/frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "g0_t1_m1"
+rust_const = "RANDOM_G0_T1_M1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/dynamic_rendering_random/vert.vert", stage = "vert" },
+    { name = "tsc", template = "renderpass/dynamic_rendering_random/tsc.tesc", stage = "tesc" },
+    { name = "tse", template = "renderpass/dynamic_rendering_random/tse.tese", stage = "tese" },
+    { name = "frag", template = "renderpass/dynamic_rendering_random/frag_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "g1_t0_m0"
+rust_const = "RANDOM_G1_T0_M0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/dynamic_rendering_random/vert.vert", stage = "vert" },
+    { name = "vertPassthrough", template = "renderpass/dynamic_rendering_random/vert_passthrough.vert", stage = "vert" },
+    { name = "vertLayer", template = "renderpass/dynamic_rendering_random/vert_layer.vert", stage = "vert" },
+    { name = "geom", template = "renderpass/dynamic_rendering_random/geom.geom", stage = "geom" },
+    { name = "geomLayer", template = "renderpass/dynamic_rendering_random/geom_layer.geom", stage = "geom" },
+    { name = "frag", template = "renderpass/dynamic_rendering_random/frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "g1_t0_m1"
+rust_const = "RANDOM_G1_T0_M1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/dynamic_rendering_random/vert.vert", stage = "vert" },
+    { name = "vertPassthrough", template = "renderpass/dynamic_rendering_random/vert_passthrough.vert", stage = "vert" },
+    { name = "vertLayer", template = "renderpass/dynamic_rendering_random/vert_layer.vert", stage = "vert" },
+    { name = "geom", template = "renderpass/dynamic_rendering_random/geom.geom", stage = "geom" },
+    { name = "geomLayer", template = "renderpass/dynamic_rendering_random/geom_layer.geom", stage = "geom" },
+    { name = "frag", template = "renderpass/dynamic_rendering_random/frag_multiview.frag", stage = "frag" },
+]
+
+[[case]]
+name = "g1_t1_m0"
+rust_const = "RANDOM_G1_T1_M0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/dynamic_rendering_random/vert.vert", stage = "vert" },
+    { name = "vertPassthrough", template = "renderpass/dynamic_rendering_random/vert_passthrough.vert", stage = "vert" },
+    { name = "vertLayer", template = "renderpass/dynamic_rendering_random/vert_layer.vert", stage = "vert" },
+    { name = "geom", template = "renderpass/dynamic_rendering_random/geom.geom", stage = "geom" },
+    { name = "geomLayer", template = "renderpass/dynamic_rendering_random/geom_layer.geom", stage = "geom" },
+    { name = "tsc", template = "renderpass/dynamic_rendering_random/tsc.tesc", stage = "tesc" },
+    { name = "tse", template = "renderpass/dynamic_rendering_random/tse.tese", stage = "tese" },
+    { name = "frag", template = "renderpass/dynamic_rendering_random/frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "g1_t1_m1"
+rust_const = "RANDOM_G1_T1_M1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "renderpass/dynamic_rendering_random/vert.vert", stage = "vert" },
+    { name = "vertPassthrough", template = "renderpass/dynamic_rendering_random/vert_passthrough.vert", stage = "vert" },
+    { name = "vertLayer", template = "renderpass/dynamic_rendering_random/vert_layer.vert", stage = "vert" },
+    { name = "geom", template = "renderpass/dynamic_rendering_random/geom.geom", stage = "geom" },
+    { name = "geomLayer", template = "renderpass/dynamic_rendering_random/geom_layer.geom", stage = "geom" },
+    { name = "tsc", template = "renderpass/dynamic_rendering_random/tsc.tesc", stage = "tesc" },
+    { name = "tse", template = "renderpass/dynamic_rendering_random/tse.tese", stage = "tese" },
+    { name = "frag", template = "renderpass/dynamic_rendering_random/frag_multiview.frag", stage = "frag" },
+]

@@ -1,0 +1,27 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.primitive_restart_index.*
+#
+# `RestartIndexCase::initPrograms`: a pass-through vertex shader, a fragment shader writing a push constant colour, and a
+# passthrough tessellation pair that only the patch list topology uses.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelinePrimitiveRestartIndexTests.cpp"
+rust_module = "pipeline/primitive_restart_index_tests"
+
+[[case]]
+name = "default"
+rust_const = "RESTART_INDEX_DEFAULT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/primitive_restart_index/restart.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/primitive_restart_index/restart.frag", stage = "frag" },
+]
+
+[[case]]
+name = "patch_list"
+rust_const = "RESTART_INDEX_PATCH_LIST"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/primitive_restart_index/restart.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/primitive_restart_index/restart.frag", stage = "frag" },
+    { name = "tesc", template = "pipeline/primitive_restart_index/restart.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/primitive_restart_index/restart.tese", stage = "tese" },
+]

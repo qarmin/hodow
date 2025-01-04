@@ -1,0 +1,27 @@
+# Shader manifest for dEQP-VK.sparse_resources.buffer.ssbo.sparse_residency.*
+#
+# `commonPrograms` (a 32-wide copy kernel, GLSL 440) serves the size cases and every non-resident case but one; the exception is a
+# non-resident copy whose sparse buffer is the destination, which verifies in the shader instead (`copyVerificationProgram`, GLSL 450,
+# one source for a completely non-resident buffer and one for a partially resident one). The upstream source has `;\n;` after the
+# `val` load and the `ok` lines indented behind it, which is kept so the text is the same.
+
+upstream_source = "external/vulkancts/modules/vulkan/sparse_resources/vktSparseResourcesBufferSparseResidency.cpp"
+rust_module = "sparse_resources/buffer_sparse_residency_tests"
+
+[[case]]
+name = "common"
+rust_const = "SPARSE_RESIDENCY_COPY"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "sparse_resources/buffer_residency_copy.comp", stage = "comp" }]
+
+[[case]]
+name = "verify_none"
+rust_const = "SPARSE_RESIDENCY_VERIFY_NONE"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "sparse_resources/buffer_residency_verify_none.comp", stage = "comp" }]
+
+[[case]]
+name = "verify_partial"
+rust_const = "SPARSE_RESIDENCY_VERIFY_PARTIAL"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "sparse_resources/buffer_residency_verify_partial.comp", stage = "comp" }]

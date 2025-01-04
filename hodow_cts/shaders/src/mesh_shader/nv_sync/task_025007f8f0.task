@@ -1,0 +1,19 @@
+#version 450
+#extension GL_NV_mesh_shader : enable
+
+layout(local_size_x=1) in;
+
+out taskNV TaskData { uint value; } td;
+
+layout (set=0, binding=0) readonly buffer StorageBuffer { uint value; } sb;
+layout (push_constant, std430) uniform PushConstantBlock {
+    uint writeVal;
+    uint readVal;
+} pc;
+
+void main ()
+{
+    gl_TaskCountNV = 1u;
+    td.value = 0u;
+    if (pc.readVal > 0u) { td.value = sb.value; }
+}

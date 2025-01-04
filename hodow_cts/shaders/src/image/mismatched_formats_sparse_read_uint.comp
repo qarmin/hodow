@@ -1,0 +1,10 @@
+#version 460 core
+#extension GL_ARB_sparse_texture2 : require
+
+layout (${glsl_format}, binding=0) uniform uimage2D inputImage;
+
+void main()
+{
+    uvec4 result;
+    int r = sparseImageLoadARB(inputImage, ivec2(gl_GlobalInvocationID.xy), result);
+}

@@ -1,0 +1,9 @@
+#version 450 core
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(set = 0, binding = 0, std140) buffer issbodef { vec2 val[624]; } issbo;
+layout(set = 0, binding = 1, std140) buffer ossbodef { uvec2 val[624]; } ossbo;
+void main()
+{
+    vec2 f = issbo.val[gl_WorkGroupID.x];
+    ossbo.val[gl_WorkGroupID.x] = uvec2(f);
+}

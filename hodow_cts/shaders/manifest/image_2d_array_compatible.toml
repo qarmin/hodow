@@ -1,0 +1,43 @@
+# Shader manifest for dEQP-VK.image.2d_array_compatible.*
+#
+# `ArrayCompatibleTestCase::initPrograms`: one shader for the 2D view and one per (second layer, total layers) pair for the 3D view,
+# whose sampling coordinate depends on both.
+
+upstream_source = "external/vulkancts/modules/vulkan/image/vktImage2dArrayCompatibleTests.cpp"
+rust_module = "image/array_compatible_tests"
+
+[[case]]
+name = "view_2d"
+rust_const = "ARRAY_COMPATIBLE_2D"
+rust_type = "ArrayCompatiblePrograms"
+programs = [
+    { name = "comp", template = "image/array_compatible_2d.comp", stage = "comp" },
+]
+params = { view = { type = "str", value = "2d" }, second = { type = "u32", value = 0 }, total = { type = "u32", value = 0 } }
+
+[[case]]
+name = "view_3d_l1_t8"
+rust_const = "ARRAY_COMPATIBLE_3D_L1_T8"
+rust_type = "ArrayCompatiblePrograms"
+programs = [
+    { name = "comp", template = "image/array_compatible_3d.comp", stage = "comp" },
+]
+params = { view = { type = "str", value = "3d" }, second = { type = "u32", value = 1 }, total = { type = "u32", value = 8 } }
+
+[[case]]
+name = "view_3d_l7_t16"
+rust_const = "ARRAY_COMPATIBLE_3D_L7_T16"
+rust_type = "ArrayCompatiblePrograms"
+programs = [
+    { name = "comp", template = "image/array_compatible_3d.comp", stage = "comp" },
+]
+params = { view = { type = "str", value = "3d" }, second = { type = "u32", value = 7 }, total = { type = "u32", value = 16 } }
+
+[[case]]
+name = "view_3d_l4_t5"
+rust_const = "ARRAY_COMPATIBLE_3D_L4_T5"
+rust_type = "ArrayCompatiblePrograms"
+programs = [
+    { name = "comp", template = "image/array_compatible_3d.comp", stage = "comp" },
+]
+params = { view = { type = "str", value = "3d" }, second = { type = "u32", value = 4 }, total = { type = "u32", value = 5 } }

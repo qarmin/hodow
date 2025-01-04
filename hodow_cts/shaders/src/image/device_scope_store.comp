@@ -1,0 +1,12 @@
+#version 450
+
+#pragma use_vulkan_memory_model
+#extension GL_KHR_memory_scope_semantics : enable
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout (binding = 0, ${qualifier}) readonly uniform ${image_type} u_image0;
+layout (binding = 1, ${qualifier}) writeonly uniform ${image_type} u_image1;
+
+void main (void)
+{
+${store_body}    memoryBarrier(gl_ScopeDevice, gl_StorageSemanticsImage, gl_SemanticsAcquireRelease | gl_SemanticsMakeAvailable);
+}

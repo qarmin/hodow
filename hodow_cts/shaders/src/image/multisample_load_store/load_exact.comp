@@ -1,0 +1,21 @@
+#version 450
+${ext}
+layout(local_size_x = 1) in;
+layout(set = 0, binding = 1${fq}) readonly  uniform ${ms_type} u_msImage;
+layout(set = 0, binding = 2, r32i) writeonly uniform ${cs_type} u_checksumImage;
+
+void main (void)
+{
+    int gx = int(gl_GlobalInvocationID.x);
+    int gy = int(gl_GlobalInvocationID.y);
+    int gz = int(gl_GlobalInvocationID.z);
+
+    int checksum = 0;
+    for (int sampleNdx = 0; sampleNdx < ${samples}; ++sampleNdx) {
+        ${gvec4} color = imageLoad(u_msImage, ${texel}, sampleNdx);
+        if (color == ${expected})
+            ++checksum;
+    }
+
+    imageStore(u_checksumImage, ${texel}, ivec4(checksum));
+}

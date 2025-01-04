@@ -1,0 +1,13 @@
+#version 450
+layout(set = 0, binding = ${binding}) uniform sampler2D combinedSampler;
+layout(set = 0, binding = ${binding_next}) writeonly buffer Output
+{
+    vec4 innerColor;
+    vec4 outerColor;
+} outData;
+
+void main()
+{
+    outData.innerColor = texture(combinedSampler, vec2(0.5));
+    outData.outerColor = texture(combinedSampler, vec2(-0.1));
+}

@@ -1,0 +1,15 @@
+# Shader manifest for dEQP-VK.api.external.*
+#
+# `initProgramsToGetNativeFd`: the long-running atomic calculation the semaphore and fence tests submit so the exported
+# handle is not signalled yet. It ignores its test config, so every case that uses it shares one shader.
+
+upstream_source = "external/vulkancts/modules/vulkan/api/vktApiExternalMemoryTests.cpp"
+rust_module = "api/external_memory_tests"
+
+[[case]]
+name = "get_native_fd"
+rust_const = "GET_NATIVE_FD"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute", template = "api/external/get_native_fd.comp", stage = "comp" },
+]

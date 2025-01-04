@@ -1,0 +1,83 @@
+#version 450
+#extension GL_KHR_shader_subgroup_basic: enable
+#extension GL_EXT_mesh_shader : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices=1, max_primitives=1) out;
+layout (set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout (set = 0, binding = 1, std430) buffer Buffer2
+{
+  uint tempBuffer[];
+};
+layout (set = 0, binding = 2, std430) buffer Buffer3
+{
+  uint value;
+};
+layout (set = 0, binding = 3, r32ui) uniform uimage2D tempImage;
+shared uint tempShared[gl_WorkGroupSize.x * gl_WorkGroupSize.y * gl_WorkGroupSize.z];
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint localId = gl_SubgroupID;
+  uint id = globalSize.x * ((globalSize.y * gl_WorkGroupID.z) + gl_WorkGroupID.y) + gl_WorkGroupID.x + localId;
+  uint tempResult = 0;
+  if (subgroupElect())
+  {
+    tempBuffer[id] = value;
+  }
+  subgroupBarrier();
+  tempResult = tempBuffer[id];
+  result[offset] = tempResult;
+  SetMeshOutputsEXT(0u, 0u);
+}
+#version 450
+#extension GL_KHR_shader_subgroup_basic: enable
+#extension GL_EXT_mesh_shader : enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+layout (set = 0, binding = 1, std430) buffer Buffer2
+{
+  uint tempBuffer[];
+};
+layout (set = 0, binding = 2, std430) buffer Buffer3
+{
+  uint value;
+};
+layout (set = 0, binding = 3, r32ui) uniform uimage2D tempImage;
+shared uint tempShared[gl_WorkGroupSize.x * gl_WorkGroupSize.y * gl_WorkGroupSize.z];
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint localId = gl_SubgroupID;
+  uint id = globalSize.x * ((globalSize.y * gl_WorkGroupID.z) + gl_WorkGroupID.y) + gl_WorkGroupID.x + localId;
+  uint tempResult = 0;
+  if (subgroupElect())
+  {
+    tempBuffer[id] = value;
+  }
+  subgroupBarrier();
+  tempResult = tempBuffer[id];
+  result[offset] = tempResult;
+  EmitMeshTasksEXT(0, 0, 0);
+}
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+
+void main (void)
+{
+  SetMeshOutputsEXT(0u, 0u);
+}

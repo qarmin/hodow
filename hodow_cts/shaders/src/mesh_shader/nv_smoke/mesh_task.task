@@ -1,0 +1,17 @@
+#version 450
+#extension GL_NV_mesh_shader : enable
+
+layout(local_size_x=32) in;
+
+out taskNV TaskData {
+    uint triangleIndex;
+} td;
+
+void main ()
+{
+    if (gl_LocalInvocationIndex == 0u)
+    {
+        gl_TaskCountNV = 1u;
+        td.triangleIndex = gl_WorkGroupID.x;
+    }
+}

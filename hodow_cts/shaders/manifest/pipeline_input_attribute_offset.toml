@@ -1,0 +1,43 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.input_attribute_offset.*
+#
+# `InputAttributeOffsetCase::initPrograms`: the vertex shader depends on the attribute type (vec4, vec2, or a vec4
+# read over vec2 data whose zw are made to matter), plus a two-binding one; the fragment shader is always blue.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineInputAttributeOffsetTests.cpp"
+rust_module = "pipeline/input_attribute_offset_tests"
+
+[[case]]
+name = "vec4"
+rust_const = "INPUT_ATTRIBUTE_OFFSET_VEC4"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/input_attribute_offset_vec4.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/input_attribute_offset.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vec2"
+rust_const = "INPUT_ATTRIBUTE_OFFSET_VEC2"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/input_attribute_offset_vec2.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/input_attribute_offset.frag", stage = "frag" },
+]
+
+[[case]]
+name = "overlapping"
+rust_const = "INPUT_ATTRIBUTE_OFFSET_OVERLAPPING"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/input_attribute_offset_overlapping.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/input_attribute_offset.frag", stage = "frag" },
+]
+
+[[case]]
+name = "two_binds"
+rust_const = "INPUT_ATTRIBUTE_OFFSET_TWO_BINDS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/input_attribute_offset_two_binds.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/input_attribute_offset.frag", stage = "frag" },
+]

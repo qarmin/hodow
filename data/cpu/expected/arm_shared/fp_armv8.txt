@@ -1,0 +1,13 @@
+# Expected values captured from real hardware for this extension's generated tests.
+# Format: test_name - rust_expr
+#
+# One file per (architecture, extension) - written by scripts/cpu/capture_expected.py and
+# capture_expected_cross.py, read by generate_tests.py. Do not hand-edit: recapture instead.
+# A qemu-derived value is not a real-silicon one; see CLAUDE.md's "Non-x86 architectures".
+
+test_arm_shared_fp_armv8_vmaxnm_f32 - [3.0, 4.0]
+test_arm_shared_fp_armv8_vmaxnmq_f32 - [5.0, 6.0, 7.0, 8.0]
+test_arm_shared_fp_armv8_vminnm_f32 - [1.0, 2.0]
+test_arm_shared_fp_armv8_vminnmq_f32 - [1.0, 2.0, 3.0, 4.0]
+test_arm_shared_fp_armv8_vrndn_f32 - [1.0, 2.0]
+test_arm_shared_fp_armv8_vrndnq_f32 - [1.0, 2.0, 3.0, 4.0]

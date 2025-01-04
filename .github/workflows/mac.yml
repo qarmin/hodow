@@ -1,0 +1,74 @@
+# On every push to master: build the macOS release binaries (`just binaries-mac`: CPU tests, burn, bench and the dashboard, for Apple silicon
+# and Intel) and add them to the release tagged `Nightly`. There is no GPU or conformance suite build: macOS has no
+# EGL and glutin's CGL backend has no pbuffer surfaces, which the GL tests render into.
+#
+# Secret: PAT_REPOSITORY, a personal access token that may write contents of this repository. Without it the binaries are only kept as workflow artifacts.
+
+name: 🍎 MacOS
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: mac-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  HAVE_PAT: ${{ secrets.PAT_REPOSITORY != '' }}
+
+jobs:
+  mac:
+    name: 🍎 MacOS ${{ matrix.arch }}
+    # The runner is an Apple silicon Mac; the Intel binaries are cross-built on it with the same Apple toolchain.
+    runs-on: macos-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [aarch64, x86_64]
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: The pinned nightly toolchain
+        run: |
+          toolchain=$(grep -m1 '^NIGHTLY' justfile | sed 's/.*"\(.*\)".*/\1/')
+          rustup toolchain install "$toolchain" --profile minimal --no-self-update
+
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: just
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-targets: false
+          key: ${{ matrix.arch }}
+
+      - name: Build
+        run: just binaries-mac ${{ matrix.arch }} no
+
+      # The Intel binaries cannot be started here without Rosetta.
+      - name: Smoke test
+        if: matrix.arch == 'aarch64'
+        run: |
+          chmod +x binaries/mac_hodow*
+          binaries/mac_hodow_no_gpu_aarch64 info --no-gpu > /dev/null
+
+      - name: Store binaries
+        uses: actions/upload-artifact@v7
+        with:
+          name: mac-${{ matrix.arch }}
+          path: binaries/mac_hodow*
+          retention-days: 7
+          if-no-files-found: error
+
+      - name: Release
+        if: github.ref == 'refs/heads/master' && env.HAVE_PAT == 'true'
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: Nightly
+          prerelease: true
+          files: binaries/mac_hodow*
+          token: ${{ secrets.PAT_REPOSITORY }}

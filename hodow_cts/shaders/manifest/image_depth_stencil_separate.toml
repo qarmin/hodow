@@ -1,0 +1,35 @@
+# Shader manifest for dEQP-VK.image.depth_stencil_separate_access.*
+#
+# `DepthStencilSeparateCase::initPrograms`: the vertex shader passes everything through, the fragment shader copies the
+# sampled aspect into a storage image (depth into r32f, stencil into r32ui) and, when the stencil reference is dynamic,
+# also exports it with GL_ARB_shader_stencil_export. Only the read aspect and the dynamic reference choose the shader.
+
+upstream_source = "external/vulkancts/modules/vulkan/image/vktImageDepthStencilSeparateTests.cpp"
+rust_module = "image/depth_stencil_separate_tests"
+
+[[case]]
+name = "read_depth"
+rust_const = "DSS_READ_DEPTH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/depth_stencil_separate/pass_through.vert", stage = "vert" },
+    { name = "frag", template = "image/depth_stencil_separate/read_depth.frag", stage = "frag" },
+]
+
+[[case]]
+name = "read_depth_stencil_ref"
+rust_const = "DSS_READ_DEPTH_STENCIL_REF"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/depth_stencil_separate/pass_through.vert", stage = "vert" },
+    { name = "frag", template = "image/depth_stencil_separate/read_depth_stencil_ref.frag", stage = "frag" },
+]
+
+[[case]]
+name = "read_stencil"
+rust_const = "DSS_READ_STENCIL"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "image/depth_stencil_separate/pass_through.vert", stage = "vert" },
+    { name = "frag", template = "image/depth_stencil_separate/read_stencil.frag", stage = "frag" },
+]

@@ -1,0 +1,25 @@
+# Shader manifest for dEQP-VK.dynamic_state.*.rs_state.nonzero_depth_bias_*
+#
+# `DepthBiasNonZeroCase::initPrograms`: a full-screen triangle at a pushed depth, and a fragment shader that only writes
+# the expected colour when the biased depth lies in the pushed range.
+
+upstream_source = "external/vulkancts/modules/vulkan/dynamic_state/vktDynamicStateRSTests.cpp"
+rust_module = "dynamic_state/rs_state_tests"
+
+[[case]]
+name = "depth_bias_nonzero"
+rust_const = "DEPTH_BIAS_NONZERO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "dynamic_state/depth_bias_nonzero.vert", stage = "vert" },
+    { name = "frag", template = "dynamic_state/depth_bias_nonzero.frag", stage = "frag" },
+]
+
+[[case]]
+name = "depth_bias_nonzero_mesh"
+rust_const = "DEPTH_BIAS_NONZERO_MESH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "dynamic_state/depth_bias_nonzero.mesh", stage = "mesh", spirv_version = "spirv1.4" },
+    { name = "frag", template = "dynamic_state/depth_bias_nonzero.frag", stage = "frag" },
+]

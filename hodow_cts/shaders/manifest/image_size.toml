@@ -1,0 +1,198 @@
+# Shader manifest for dEQP-VK.image.image_size.*
+#
+# One program per (image type, access qualifiers) and, for 3D, per 2D view of 3D. The format is always
+# VK_FORMAT_R32G32B32A32_SFLOAT (`rgba32f`). `flags` is upstream's `SizeTest::TestFlags`: 1 readonly, 2 writeonly.
+# The body follows `Texture::dimension()` as in `SizeTest::initPrograms`: a 1D image (and a buffer) returns an int, a
+# 2D one (a cube, a 2D view of a 3D image) an ivec2, anything else an ivec3.
+
+upstream_source = "external/vulkancts/modules/vulkan/image/vktImageSizeTests.cpp"
+rust_module = "image/size_tests"
+
+[[case]]
+name = "1d_flags1"
+rust_const = "SIZE_1D_RO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "1d" }, flags = { type = "u32", value = 1 }, view_2d = { type = "bool", value = false }, access = { type = "str", value = " readonly" }, glsl_type = { type = "str", value = "image1D" }, body = { type = "str", value = "    sb_out.size = ivec3(imageSize(u_image), 0, 0);" } }
+
+[[case]]
+name = "1d_flags2"
+rust_const = "SIZE_1D_WO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "1d" }, flags = { type = "u32", value = 2 }, view_2d = { type = "bool", value = false }, access = { type = "str", value = " writeonly" }, glsl_type = { type = "str", value = "image1D" }, body = { type = "str", value = "    sb_out.size = ivec3(imageSize(u_image), 0, 0);" } }
+
+[[case]]
+name = "1d_flags3"
+rust_const = "SIZE_1D_ROWO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "1d" }, flags = { type = "u32", value = 3 }, view_2d = { type = "bool", value = false }, access = { type = "str", value = " readonly writeonly" }, glsl_type = { type = "str", value = "image1D" }, body = { type = "str", value = "    sb_out.size = ivec3(imageSize(u_image), 0, 0);" } }
+
+[[case]]
+name = "1d_array_flags1"
+rust_const = "SIZE_1D_ARRAY_RO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "1d_array" }, flags = { type = "u32", value = 1 }, view_2d = { type = "bool", value = false }, access = { type = "str", value = " readonly" }, glsl_type = { type = "str", value = "image1DArray" }, body = { type = "str", value = "    sb_out.size = ivec3(imageSize(u_image), 0);" } }
+
+[[case]]
+name = "1d_array_flags2"
+rust_const = "SIZE_1D_ARRAY_WO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "1d_array" }, flags = { type = "u32", value = 2 }, view_2d = { type = "bool", value = false }, access = { type = "str", value = " writeonly" }, glsl_type = { type = "str", value = "image1DArray" }, body = { type = "str", value = "    sb_out.size = ivec3(imageSize(u_image), 0);" } }
+
+[[case]]
+name = "1d_array_flags3"
+rust_const = "SIZE_1D_ARRAY_ROWO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "1d_array" }, flags = { type = "u32", value = 3 }, view_2d = { type = "bool", value = false }, access = { type = "str", value = " readonly writeonly" }, glsl_type = { type = "str", value = "image1DArray" }, body = { type = "str", value = "    sb_out.size = ivec3(imageSize(u_image), 0);" } }
+
+[[case]]
+name = "2d_flags1"
+rust_const = "SIZE_2D_RO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "2d" }, flags = { type = "u32", value = 1 }, view_2d = { type = "bool", value = false }, access = { type = "str", value = " readonly" }, glsl_type = { type = "str", value = "image2D" }, body = { type = "str", value = "    sb_out.size = ivec3(imageSize(u_image), 0);" } }
+
+[[case]]
+name = "2d_flags2"
+rust_const = "SIZE_2D_WO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "2d" }, flags = { type = "u32", value = 2 }, view_2d = { type = "bool", value = false }, access = { type = "str", value = " writeonly" }, glsl_type = { type = "str", value = "image2D" }, body = { type = "str", value = "    sb_out.size = ivec3(imageSize(u_image), 0);" } }
+
+[[case]]
+name = "2d_flags3"
+rust_const = "SIZE_2D_ROWO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "2d" }, flags = { type = "u32", value = 3 }, view_2d = { type = "bool", value = false }, access = { type = "str", value = " readonly writeonly" }, glsl_type = { type = "str", value = "image2D" }, body = { type = "str", value = "    sb_out.size = ivec3(imageSize(u_image), 0);" } }
+
+[[case]]
+name = "2d_array_flags1"
+rust_const = "SIZE_2D_ARRAY_RO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "2d_array" }, flags = { type = "u32", value = 1 }, view_2d = { type = "bool", value = false }, access = { type = "str", value = " readonly" }, glsl_type = { type = "str", value = "image2DArray" }, body = { type = "str", value = "    sb_out.size = imageSize(u_image);" } }
+
+[[case]]
+name = "2d_array_flags2"
+rust_const = "SIZE_2D_ARRAY_WO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "2d_array" }, flags = { type = "u32", value = 2 }, view_2d = { type = "bool", value = false }, access = { type = "str", value = " writeonly" }, glsl_type = { type = "str", value = "image2DArray" }, body = { type = "str", value = "    sb_out.size = imageSize(u_image);" } }
+
+[[case]]
+name = "2d_array_flags3"
+rust_const = "SIZE_2D_ARRAY_ROWO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "2d_array" }, flags = { type = "u32", value = 3 }, view_2d = { type = "bool", value = false }, access = { type = "str", value = " readonly writeonly" }, glsl_type = { type = "str", value = "image2DArray" }, body = { type = "str", value = "    sb_out.size = imageSize(u_image);" } }
+
+[[case]]
+name = "3d_flags1"
+rust_const = "SIZE_3D_RO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "3d" }, flags = { type = "u32", value = 1 }, view_2d = { type = "bool", value = false }, access = { type = "str", value = " readonly" }, glsl_type = { type = "str", value = "image3D" }, body = { type = "str", value = "    sb_out.size = imageSize(u_image);" } }
+
+[[case]]
+name = "3d_flags2"
+rust_const = "SIZE_3D_WO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "3d" }, flags = { type = "u32", value = 2 }, view_2d = { type = "bool", value = false }, access = { type = "str", value = " writeonly" }, glsl_type = { type = "str", value = "image3D" }, body = { type = "str", value = "    sb_out.size = imageSize(u_image);" } }
+
+[[case]]
+name = "3d_flags3"
+rust_const = "SIZE_3D_ROWO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "3d" }, flags = { type = "u32", value = 3 }, view_2d = { type = "bool", value = false }, access = { type = "str", value = " readonly writeonly" }, glsl_type = { type = "str", value = "image3D" }, body = { type = "str", value = "    sb_out.size = imageSize(u_image);" } }
+
+[[case]]
+name = "3d_view2d_flags1"
+rust_const = "SIZE_3D_VIEW2D_RO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "3d" }, flags = { type = "u32", value = 1 }, view_2d = { type = "bool", value = true }, access = { type = "str", value = " readonly" }, glsl_type = { type = "str", value = "image2D" }, body = { type = "str", value = "    sb_out.size = ivec3(imageSize(u_image), 0);" } }
+
+[[case]]
+name = "3d_view2d_flags2"
+rust_const = "SIZE_3D_VIEW2D_WO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "3d" }, flags = { type = "u32", value = 2 }, view_2d = { type = "bool", value = true }, access = { type = "str", value = " writeonly" }, glsl_type = { type = "str", value = "image2D" }, body = { type = "str", value = "    sb_out.size = ivec3(imageSize(u_image), 0);" } }
+
+[[case]]
+name = "3d_view2d_flags3"
+rust_const = "SIZE_3D_VIEW2D_ROWO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "3d" }, flags = { type = "u32", value = 3 }, view_2d = { type = "bool", value = true }, access = { type = "str", value = " readonly writeonly" }, glsl_type = { type = "str", value = "image2D" }, body = { type = "str", value = "    sb_out.size = ivec3(imageSize(u_image), 0);" } }
+
+[[case]]
+name = "cube_flags1"
+rust_const = "SIZE_CUBE_RO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "cube" }, flags = { type = "u32", value = 1 }, view_2d = { type = "bool", value = false }, access = { type = "str", value = " readonly" }, glsl_type = { type = "str", value = "imageCube" }, body = { type = "str", value = "    sb_out.size = ivec3(imageSize(u_image), 0);" } }
+
+[[case]]
+name = "cube_flags2"
+rust_const = "SIZE_CUBE_WO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "cube" }, flags = { type = "u32", value = 2 }, view_2d = { type = "bool", value = false }, access = { type = "str", value = " writeonly" }, glsl_type = { type = "str", value = "imageCube" }, body = { type = "str", value = "    sb_out.size = ivec3(imageSize(u_image), 0);" } }
+
+[[case]]
+name = "cube_flags3"
+rust_const = "SIZE_CUBE_ROWO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "cube" }, flags = { type = "u32", value = 3 }, view_2d = { type = "bool", value = false }, access = { type = "str", value = " readonly writeonly" }, glsl_type = { type = "str", value = "imageCube" }, body = { type = "str", value = "    sb_out.size = ivec3(imageSize(u_image), 0);" } }
+
+[[case]]
+name = "cube_array_flags1"
+rust_const = "SIZE_CUBE_ARRAY_RO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "cube_array" }, flags = { type = "u32", value = 1 }, view_2d = { type = "bool", value = false }, access = { type = "str", value = " readonly" }, glsl_type = { type = "str", value = "imageCubeArray" }, body = { type = "str", value = "    sb_out.size = imageSize(u_image);" } }
+
+[[case]]
+name = "cube_array_flags2"
+rust_const = "SIZE_CUBE_ARRAY_WO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "cube_array" }, flags = { type = "u32", value = 2 }, view_2d = { type = "bool", value = false }, access = { type = "str", value = " writeonly" }, glsl_type = { type = "str", value = "imageCubeArray" }, body = { type = "str", value = "    sb_out.size = imageSize(u_image);" } }
+
+[[case]]
+name = "cube_array_flags3"
+rust_const = "SIZE_CUBE_ARRAY_ROWO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "cube_array" }, flags = { type = "u32", value = 3 }, view_2d = { type = "bool", value = false }, access = { type = "str", value = " readonly writeonly" }, glsl_type = { type = "str", value = "imageCubeArray" }, body = { type = "str", value = "    sb_out.size = imageSize(u_image);" } }
+
+[[case]]
+name = "buffer_flags1"
+rust_const = "SIZE_BUFFER_RO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "buffer" }, flags = { type = "u32", value = 1 }, view_2d = { type = "bool", value = false }, access = { type = "str", value = " readonly" }, glsl_type = { type = "str", value = "imageBuffer" }, body = { type = "str", value = "    sb_out.size = ivec3(imageSize(u_image), 0, 0);" } }
+
+[[case]]
+name = "buffer_flags2"
+rust_const = "SIZE_BUFFER_WO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "buffer" }, flags = { type = "u32", value = 2 }, view_2d = { type = "bool", value = false }, access = { type = "str", value = " writeonly" }, glsl_type = { type = "str", value = "imageBuffer" }, body = { type = "str", value = "    sb_out.size = ivec3(imageSize(u_image), 0, 0);" } }
+
+[[case]]
+name = "buffer_flags3"
+rust_const = "SIZE_BUFFER_ROWO"
+rust_type = "ImageSizePrograms"
+programs = [{ name = "comp", template = "image/image_size.comp", stage = "comp" }]
+params = { kind = { type = "str", value = "buffer" }, flags = { type = "u32", value = 3 }, view_2d = { type = "bool", value = false }, access = { type = "str", value = " readonly writeonly" }, glsl_type = { type = "str", value = "imageBuffer" }, body = { type = "str", value = "    sb_out.size = ivec3(imageSize(u_image), 0, 0);" } }

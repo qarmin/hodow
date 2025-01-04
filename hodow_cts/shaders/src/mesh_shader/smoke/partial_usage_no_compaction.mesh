@@ -1,0 +1,59 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+layout (local_size_x=64, local_size_y=1, local_size_z=1) in;
+layout (triangles) out;
+layout (max_vertices=256, max_primitives=64) out;
+
+layout (location=0) perprimitiveEXT out vec4 primitiveColor[];
+
+layout (set=0, binding=0, std430) readonly buffer VerticesBlock {
+    vec2 coords[];
+} vertex;
+
+struct IndexAndColor {
+    uint  index;
+    float color;
+};
+
+layout (set=0, binding=1, std430) readonly buffer PrimitiveDataBlock {
+    IndexAndColor data[];
+} primitive;
+
+layout (push_constant, std430) uniform PushConstantBlock {
+    uint  totalTriangles;
+    float depth;
+    float red;
+} pc;
+
+void main ()
+{
+    const uint firstPrimitive   = gl_WorkGroupID.x * gl_WorkGroupSize.x;
+    const uint wgTriangleCount  = ((pc.totalTriangles >= firstPrimitive) ? min(pc.totalTriangles - firstPrimitive, 64) : 0u);
+    const uint wgVertexCount    = wgTriangleCount * 3u + 64u;
+
+    {
+        const float proportion = float(gl_LocalInvocationIndex) / float(gl_WorkGroupSize.x);
+        gl_MeshVerticesEXT[gl_LocalInvocationIndex].gl_Position = vec4(proportion, 1.0 - proportion, pc.depth, 1.0);
+    }
+
+    SetMeshOutputsEXT(wgVertexCount, wgTriangleCount);
+
+    if (gl_LocalInvocationIndex < wgTriangleCount) {
+        const uint  primitiveID         = firstPrimitive + gl_LocalInvocationIndex;
+        const uint  primitiveIndex      = primitive.data[primitiveID].index;
+        const float blue                = primitive.data[primitiveID].color;
+        const uint  firstVertexIndex    = primitiveIndex * 3u;
+        const uvec3 globalVertexIndices = uvec3(firstVertexIndex, firstVertexIndex+1u, firstVertexIndex+2u);
+        const uint  localPrimitiveID    = gl_LocalInvocationIndex;
+        const uint  firstLocalVertex    = localPrimitiveID * 3u + 64u;
+        const uvec3 localVertexIndices  = uvec3(firstLocalVertex, firstLocalVertex+1u, firstLocalVertex+2u);
+
+        gl_MeshVerticesEXT[localVertexIndices.x].gl_Position = vec4(vertex.coords[globalVertexIndices.x], pc.depth, 1.0);
+        gl_MeshVerticesEXT[localVertexIndices.y].gl_Position = vec4(vertex.coords[globalVertexIndices.y], pc.depth, 1.0);
+        gl_MeshVerticesEXT[localVertexIndices.z].gl_Position = vec4(vertex.coords[globalVertexIndices.z], pc.depth, 1.0);
+
+        gl_PrimitiveTriangleIndicesEXT[localPrimitiveID] = localVertexIndices;
+        primitiveColor[localPrimitiveID]                 = vec4(pc.red, 0.0, blue, 1.0f);
+    }
+}

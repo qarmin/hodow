@@ -1,0 +1,17 @@
+#version 450
+
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+
+layout (set = 0, binding = 0, ${format_id}) uniform ${prefix}image2DMS u_msImage;
+layout (set = 0, binding = 1, r32ui)  writeonly uniform uimage2D  u_resultImage;
+
+void main (void)
+{
+    int gx = int(gl_GlobalInvocationID.x);
+    int gy = int(gl_GlobalInvocationID.y);
+    int gz = int(gl_GlobalInvocationID.z);
+
+    imageStore(u_msImage, ivec2(gx, gy), 0, ${prefix}vec4(${samples}));
+    ${prefix}vec4 color = imageLoad(u_msImage, ivec2(gx, gy), 0);
+    imageStore(u_resultImage, ivec2(gx, gy), uvec4(color));
+}

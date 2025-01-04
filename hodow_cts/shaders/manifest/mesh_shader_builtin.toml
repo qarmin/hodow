@@ -1,0 +1,348 @@
+# Shader manifest for dEQP-VK.mesh_shader.ext.builtin.*
+#
+# The `initPrograms` of every case in vktMeshShaderBuiltinTestsEXT.cpp's `builtin` group (the `pipeline` group only exists for the
+# non-monolithic construction types). Everything upstream formats in (extents, task data sizes, shading rate masks) is written out.
+# `primitive_id_spirv` pairs the same mesh shader with upstream's hand-assembled fragment shader.
+
+upstream_source = "external/vulkancts/modules/vulkan/mesh_shader/vktMeshShaderBuiltinTestsEXT.cpp"
+rust_module = "mesh_shader/builtin_tests"
+spirv_version = "spirv1.4"
+
+[[case]]
+name = "position"
+rust_const = "BUILTIN_POSITION"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/position.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/basic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "point_size"
+rust_const = "BUILTIN_POINT_SIZE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/point_size.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/basic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "clip_distance"
+rust_const = "BUILTIN_CLIP_DISTANCE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/clip_distance.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/clip_distance.frag", stage = "frag" },
+]
+
+[[case]]
+name = "cull_distance"
+rust_const = "BUILTIN_CULL_DISTANCE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/cull_distance.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/cull_distance.frag", stage = "frag" },
+]
+
+[[case]]
+name = "clip_distance_mix"
+rust_const = "BUILTIN_CLIP_DISTANCE_MIX"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/clip_distance_mix.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/clip_distance_mix.frag", stage = "frag" },
+]
+
+[[case]]
+name = "cull_distance_mix"
+rust_const = "BUILTIN_CULL_DISTANCE_MIX"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/cull_distance_mix.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/cull_distance_mix.frag", stage = "frag" },
+]
+
+[[case]]
+name = "primitive_id_glsl"
+rust_const = "BUILTIN_PRIMITIVE_ID_GLSL"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/primitive_id.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/primitive_id.frag", stage = "frag" },
+]
+
+[[case]]
+name = "primitive_id_spirv"
+rust_const = "BUILTIN_PRIMITIVE_ID_SPIRV"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/primitive_id.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin_primitive_id_frag.asm", stage = "asm" },
+]
+
+[[case]]
+name = "layer"
+rust_const = "BUILTIN_LAYER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/layer.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/layer.frag", stage = "frag" },
+]
+
+[[case]]
+name = "layer_shared"
+rust_const = "BUILTIN_LAYER_SHARED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/layer_shared.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/layer_shared.frag", stage = "frag" },
+]
+
+[[case]]
+name = "layer_no_write"
+rust_const = "BUILTIN_LAYER_NO_WRITE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/layer_no_write.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/layer_no_write.frag", stage = "frag" },
+]
+
+[[case]]
+name = "viewport_index"
+rust_const = "BUILTIN_VIEWPORT_INDEX"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/viewport_index.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/viewport_index.frag", stage = "frag" },
+]
+
+[[case]]
+name = "viewport_index_shared"
+rust_const = "BUILTIN_VIEWPORT_INDEX_SHARED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/viewport_index_shared.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/viewport_index_shared.frag", stage = "frag" },
+]
+
+[[case]]
+name = "viewport_index_no_write"
+rust_const = "BUILTIN_VIEWPORT_INDEX_NO_WRITE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/viewport_index_no_write.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/viewport_index_no_write.frag", stage = "frag" },
+]
+
+[[case]]
+name = "work_group_id_mesh"
+rust_const = "BUILTIN_WORK_GROUP_ID_MESH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/work_group_id_mesh.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/basic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "work_group_id_task"
+rust_const = "BUILTIN_WORK_GROUP_ID_TASK"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/builtin/work_group_id_task.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/builtin/work_group_id_task.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/basic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "local_invocation_id_mesh"
+rust_const = "BUILTIN_LOCAL_INVOCATION_ID_MESH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/local_invocation_id_mesh.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/basic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "local_invocation_index_mesh"
+rust_const = "BUILTIN_LOCAL_INVOCATION_INDEX_MESH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/local_invocation_index_mesh.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/basic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "local_invocation_id_task"
+rust_const = "BUILTIN_LOCAL_INVOCATION_ID_TASK"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/builtin/local_invocation_id_task.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/builtin/local_invocation_id_task.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/basic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "local_invocation_index_task"
+rust_const = "BUILTIN_LOCAL_INVOCATION_INDEX_TASK"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/builtin/local_invocation_index_task.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/builtin/local_invocation_index_task.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/basic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "num_work_groups_mesh"
+rust_const = "BUILTIN_NUM_WORK_GROUPS_MESH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/num_work_groups_mesh.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/basic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "num_work_groups_task_and_mesh"
+rust_const = "BUILTIN_NUM_WORK_GROUPS_TASK_AND_MESH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/builtin/num_work_groups_task_and_mesh.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/builtin/num_work_groups_task_and_mesh.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/basic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "global_invocation_id_mesh"
+rust_const = "BUILTIN_GLOBAL_INVOCATION_ID_MESH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/global_invocation_id_mesh.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/basic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "global_invocation_id_task"
+rust_const = "BUILTIN_GLOBAL_INVOCATION_ID_TASK"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/builtin/global_invocation_id_task.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/builtin/global_invocation_id_task.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/basic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "draw_index_mesh"
+rust_const = "BUILTIN_DRAW_INDEX_MESH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/draw_index_mesh.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/basic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "draw_index_task"
+rust_const = "BUILTIN_DRAW_INDEX_TASK"
+rust_type = "SharedProgram"
+programs = [
+    { name = "task", template = "mesh_shader/builtin/draw_index_task.task", stage = "task" },
+    { name = "mesh", template = "mesh_shader/builtin/draw_index_task.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/basic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "view_index"
+rust_const = "BUILTIN_VIEW_INDEX"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/view_index.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/view_index.frag", stage = "frag" },
+]
+
+[[case]]
+name = "cull_primitives"
+rust_const = "BUILTIN_CULL_PRIMITIVES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/cull_primitives.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/basic.frag", stage = "frag" },
+]
+
+[[case]]
+name = "primitive_shading_rate_2x2_2x2"
+rust_const = "BUILTIN_PRIMITIVE_SHADING_RATE_2X2_2X2"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/primitive_shading_rate_2x2_2x2.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/primitive_shading_rate_2x2_2x2.frag", stage = "frag" },
+]
+
+[[case]]
+name = "primitive_shading_rate_2x2_2x1"
+rust_const = "BUILTIN_PRIMITIVE_SHADING_RATE_2X2_2X1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/primitive_shading_rate_2x2_2x1.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/primitive_shading_rate_2x2_2x1.frag", stage = "frag" },
+]
+
+[[case]]
+name = "primitive_shading_rate_2x2_1x1"
+rust_const = "BUILTIN_PRIMITIVE_SHADING_RATE_2X2_1X1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/primitive_shading_rate_2x2_1x1.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/primitive_shading_rate_2x2_1x1.frag", stage = "frag" },
+]
+
+[[case]]
+name = "primitive_shading_rate_2x1_2x2"
+rust_const = "BUILTIN_PRIMITIVE_SHADING_RATE_2X1_2X2"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/primitive_shading_rate_2x1_2x2.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/primitive_shading_rate_2x1_2x2.frag", stage = "frag" },
+]
+
+[[case]]
+name = "primitive_shading_rate_2x1_2x1"
+rust_const = "BUILTIN_PRIMITIVE_SHADING_RATE_2X1_2X1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/primitive_shading_rate_2x1_2x1.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/primitive_shading_rate_2x1_2x1.frag", stage = "frag" },
+]
+
+[[case]]
+name = "primitive_shading_rate_2x1_1x1"
+rust_const = "BUILTIN_PRIMITIVE_SHADING_RATE_2X1_1X1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/primitive_shading_rate_2x1_1x1.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/primitive_shading_rate_2x1_1x1.frag", stage = "frag" },
+]
+
+[[case]]
+name = "primitive_shading_rate_1x1_2x2"
+rust_const = "BUILTIN_PRIMITIVE_SHADING_RATE_1X1_2X2"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/primitive_shading_rate_1x1_2x2.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/primitive_shading_rate_1x1_2x2.frag", stage = "frag" },
+]
+
+[[case]]
+name = "primitive_shading_rate_1x1_2x1"
+rust_const = "BUILTIN_PRIMITIVE_SHADING_RATE_1X1_2X1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/primitive_shading_rate_1x1_2x1.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/primitive_shading_rate_1x1_2x1.frag", stage = "frag" },
+]
+
+[[case]]
+name = "primitive_shading_rate_1x1_1x1"
+rust_const = "BUILTIN_PRIMITIVE_SHADING_RATE_1X1_1X1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "mesh", template = "mesh_shader/builtin/primitive_shading_rate_1x1_1x1.mesh", stage = "mesh" },
+    { name = "frag", template = "mesh_shader/builtin/primitive_shading_rate_1x1_1x1.frag", stage = "frag" },
+]

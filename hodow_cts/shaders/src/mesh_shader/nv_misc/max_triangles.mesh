@@ -1,0 +1,40 @@
+#version 450
+#extension GL_NV_mesh_shader : enable
+
+layout(local_size_x=32) in;
+layout(triangles) out;
+layout(max_vertices=256, max_primitives=254) out;
+
+layout (location=0) out perprimitiveNV vec4 triangleColor[];
+
+const float PI_2 = 1.57079632679489661923;
+const float RADIUS = 4.5;
+
+void main ()
+{
+    gl_PrimitiveCountNV = 254u;
+    uint firstTriangle = 8u * gl_LocalInvocationID.x;
+    for (uint i = 0u; i < 8u; i++) {
+        uint triangleId = firstTriangle + i;
+        if (triangleId < 254u) {
+            uint vertexId = triangleId + 2u;
+            float angleProportion = float(vertexId - 1u) / 254.0f;
+            float angle = PI_2 * angleProportion;
+            float xCoord = cos(angle) * RADIUS - 1.0;
+            float yCoord = sin(angle) * RADIUS - 1.0;
+            gl_MeshVerticesNV[vertexId].gl_Position = vec4(xCoord, yCoord, 0.0, 1.0);
+            gl_PrimitiveIndicesNV[triangleId * 3u + 0u] = 0u;
+            gl_PrimitiveIndicesNV[triangleId * 3u + 1u] = triangleId + 1u;
+            gl_PrimitiveIndicesNV[triangleId * 3u + 2u] = triangleId + 2u;
+            triangleColor[triangleId] = vec4(0.0f, 0.0f, 1.0f, 1.0f);
+        } else {
+            // The last iterations of the last invocation emit the first two vertices
+            uint vertexId = triangleId - 254u;
+            if (vertexId == 0u) {
+                gl_MeshVerticesNV[0u].gl_Position = vec4(-1.0, -1.0, 0.0, 1.0);
+            } else {
+                gl_MeshVerticesNV[1u].gl_Position = vec4(RADIUS, -1.0, 0.0, 1.0);
+            }
+        }
+    }
+}

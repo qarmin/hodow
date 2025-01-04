@@ -1,0 +1,2954 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.no_position.*
+#
+# `NoPositionCase::initPrograms`, pre-expanded by a shell loop over its parameters: `explicit` declares the gl_PerVertex
+# blocks, `ssbo` makes every selected stage count its invocations, `views` is the number of views (more than one adds
+# GL_EXT_multiview and makes the counters per view). `stages` and `writes` are bit masks over vertex (1), tessellation
+# control (2), tessellation evaluation (4) and geometry (8): the stages present and the subset that write gl_Position.
+# The device-group variant (`device_index_as_view_index`) is not ported.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineNoPositionTests.cpp"
+rust_module = "pipeline/no_position_tests"
+
+[[case]]
+name = "e0_b1_s1_w0"
+rust_const = "NO_POSITION_E0_B1_S1_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w0.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 1 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e0_b1_s1_w1"
+rust_const = "NO_POSITION_E0_B1_S1_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w1.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 1 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e0_b1_s7_w0"
+rust_const = "NO_POSITION_E0_B1_S7_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b1_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e0_b1_s7_w1"
+rust_const = "NO_POSITION_E0_B1_S7_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b1_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e0_b1_s7_w2"
+rust_const = "NO_POSITION_E0_B1_S7_W2"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b1_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 2 } }
+
+[[case]]
+name = "e0_b1_s7_w3"
+rust_const = "NO_POSITION_E0_B1_S7_W3"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b1_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 3 } }
+
+[[case]]
+name = "e0_b1_s7_w4"
+rust_const = "NO_POSITION_E0_B1_S7_W4"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b1_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 4 } }
+
+[[case]]
+name = "e0_b1_s7_w5"
+rust_const = "NO_POSITION_E0_B1_S7_W5"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b1_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 5 } }
+
+[[case]]
+name = "e0_b1_s7_w6"
+rust_const = "NO_POSITION_E0_B1_S7_W6"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b1_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 6 } }
+
+[[case]]
+name = "e0_b1_s7_w7"
+rust_const = "NO_POSITION_E0_B1_S7_W7"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b1_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 7 } }
+
+[[case]]
+name = "e0_b1_s9_w0"
+rust_const = "NO_POSITION_E0_B1_S9_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w0.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e0_b1_s9_w1"
+rust_const = "NO_POSITION_E0_B1_S9_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w1.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e0_b1_s9_w8"
+rust_const = "NO_POSITION_E0_B1_S9_W8"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w0.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 8 } }
+
+[[case]]
+name = "e0_b1_s9_w9"
+rust_const = "NO_POSITION_E0_B1_S9_W9"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w1.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 9 } }
+
+[[case]]
+name = "e0_b1_s15_w0"
+rust_const = "NO_POSITION_E0_B1_S15_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e0_b1_s15_w1"
+rust_const = "NO_POSITION_E0_B1_S15_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e0_b1_s15_w2"
+rust_const = "NO_POSITION_E0_B1_S15_W2"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 2 } }
+
+[[case]]
+name = "e0_b1_s15_w3"
+rust_const = "NO_POSITION_E0_B1_S15_W3"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 3 } }
+
+[[case]]
+name = "e0_b1_s15_w4"
+rust_const = "NO_POSITION_E0_B1_S15_W4"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 4 } }
+
+[[case]]
+name = "e0_b1_s15_w5"
+rust_const = "NO_POSITION_E0_B1_S15_W5"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 5 } }
+
+[[case]]
+name = "e0_b1_s15_w6"
+rust_const = "NO_POSITION_E0_B1_S15_W6"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 6 } }
+
+[[case]]
+name = "e0_b1_s15_w7"
+rust_const = "NO_POSITION_E0_B1_S15_W7"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 7 } }
+
+[[case]]
+name = "e0_b1_s15_w8"
+rust_const = "NO_POSITION_E0_B1_S15_W8"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 8 } }
+
+[[case]]
+name = "e0_b1_s15_w9"
+rust_const = "NO_POSITION_E0_B1_S15_W9"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 9 } }
+
+[[case]]
+name = "e0_b1_s15_w10"
+rust_const = "NO_POSITION_E0_B1_S15_W10"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 10 } }
+
+[[case]]
+name = "e0_b1_s15_w11"
+rust_const = "NO_POSITION_E0_B1_S15_W11"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 11 } }
+
+[[case]]
+name = "e0_b1_s15_w12"
+rust_const = "NO_POSITION_E0_B1_S15_W12"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 12 } }
+
+[[case]]
+name = "e0_b1_s15_w13"
+rust_const = "NO_POSITION_E0_B1_S15_W13"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 13 } }
+
+[[case]]
+name = "e0_b1_s15_w14"
+rust_const = "NO_POSITION_E0_B1_S15_W14"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 14 } }
+
+[[case]]
+name = "e0_b1_s15_w15"
+rust_const = "NO_POSITION_E0_B1_S15_W15"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 15 } }
+
+[[case]]
+name = "e0_b2_s1_w0"
+rust_const = "NO_POSITION_E0_B2_S1_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w0.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 1 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e0_b2_s1_w1"
+rust_const = "NO_POSITION_E0_B2_S1_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w1.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 1 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e0_b2_s7_w0"
+rust_const = "NO_POSITION_E0_B2_S7_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b2_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e0_b2_s7_w1"
+rust_const = "NO_POSITION_E0_B2_S7_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b2_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e0_b2_s7_w2"
+rust_const = "NO_POSITION_E0_B2_S7_W2"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b2_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 2 } }
+
+[[case]]
+name = "e0_b2_s7_w3"
+rust_const = "NO_POSITION_E0_B2_S7_W3"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b2_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 3 } }
+
+[[case]]
+name = "e0_b2_s7_w4"
+rust_const = "NO_POSITION_E0_B2_S7_W4"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b2_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 4 } }
+
+[[case]]
+name = "e0_b2_s7_w5"
+rust_const = "NO_POSITION_E0_B2_S7_W5"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b2_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 5 } }
+
+[[case]]
+name = "e0_b2_s7_w6"
+rust_const = "NO_POSITION_E0_B2_S7_W6"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b2_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 6 } }
+
+[[case]]
+name = "e0_b2_s7_w7"
+rust_const = "NO_POSITION_E0_B2_S7_W7"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b2_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 7 } }
+
+[[case]]
+name = "e0_b2_s9_w0"
+rust_const = "NO_POSITION_E0_B2_S9_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w0.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e0_b2_s9_w1"
+rust_const = "NO_POSITION_E0_B2_S9_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w1.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e0_b2_s9_w8"
+rust_const = "NO_POSITION_E0_B2_S9_W8"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w0.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 8 } }
+
+[[case]]
+name = "e0_b2_s9_w9"
+rust_const = "NO_POSITION_E0_B2_S9_W9"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w1.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 9 } }
+
+[[case]]
+name = "e0_b2_s15_w0"
+rust_const = "NO_POSITION_E0_B2_S15_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e0_b2_s15_w1"
+rust_const = "NO_POSITION_E0_B2_S15_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e0_b2_s15_w2"
+rust_const = "NO_POSITION_E0_B2_S15_W2"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 2 } }
+
+[[case]]
+name = "e0_b2_s15_w3"
+rust_const = "NO_POSITION_E0_B2_S15_W3"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 3 } }
+
+[[case]]
+name = "e0_b2_s15_w4"
+rust_const = "NO_POSITION_E0_B2_S15_W4"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 4 } }
+
+[[case]]
+name = "e0_b2_s15_w5"
+rust_const = "NO_POSITION_E0_B2_S15_W5"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 5 } }
+
+[[case]]
+name = "e0_b2_s15_w6"
+rust_const = "NO_POSITION_E0_B2_S15_W6"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 6 } }
+
+[[case]]
+name = "e0_b2_s15_w7"
+rust_const = "NO_POSITION_E0_B2_S15_W7"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 7 } }
+
+[[case]]
+name = "e0_b2_s15_w8"
+rust_const = "NO_POSITION_E0_B2_S15_W8"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 8 } }
+
+[[case]]
+name = "e0_b2_s15_w9"
+rust_const = "NO_POSITION_E0_B2_S15_W9"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 9 } }
+
+[[case]]
+name = "e0_b2_s15_w10"
+rust_const = "NO_POSITION_E0_B2_S15_W10"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 10 } }
+
+[[case]]
+name = "e0_b2_s15_w11"
+rust_const = "NO_POSITION_E0_B2_S15_W11"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 11 } }
+
+[[case]]
+name = "e0_b2_s15_w12"
+rust_const = "NO_POSITION_E0_B2_S15_W12"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 12 } }
+
+[[case]]
+name = "e0_b2_s15_w13"
+rust_const = "NO_POSITION_E0_B2_S15_W13"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 13 } }
+
+[[case]]
+name = "e0_b2_s15_w14"
+rust_const = "NO_POSITION_E0_B2_S15_W14"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 14 } }
+
+[[case]]
+name = "e0_b2_s15_w15"
+rust_const = "NO_POSITION_E0_B2_S15_W15"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_b2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_b2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_b2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_b2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 15 } }
+
+[[case]]
+name = "e0_s1_s1_w0"
+rust_const = "NO_POSITION_E0_S1_S1_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w0.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 1 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e0_s1_s1_w1"
+rust_const = "NO_POSITION_E0_S1_S1_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w1.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 1 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e0_s1_s7_w0"
+rust_const = "NO_POSITION_E0_S1_S7_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s1_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e0_s1_s7_w1"
+rust_const = "NO_POSITION_E0_S1_S7_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s1_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e0_s1_s7_w2"
+rust_const = "NO_POSITION_E0_S1_S7_W2"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s1_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 2 } }
+
+[[case]]
+name = "e0_s1_s7_w3"
+rust_const = "NO_POSITION_E0_S1_S7_W3"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s1_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 3 } }
+
+[[case]]
+name = "e0_s1_s7_w4"
+rust_const = "NO_POSITION_E0_S1_S7_W4"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s1_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 4 } }
+
+[[case]]
+name = "e0_s1_s7_w5"
+rust_const = "NO_POSITION_E0_S1_S7_W5"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s1_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 5 } }
+
+[[case]]
+name = "e0_s1_s7_w6"
+rust_const = "NO_POSITION_E0_S1_S7_W6"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s1_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 6 } }
+
+[[case]]
+name = "e0_s1_s7_w7"
+rust_const = "NO_POSITION_E0_S1_S7_W7"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s1_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 7 } }
+
+[[case]]
+name = "e0_s1_s9_w0"
+rust_const = "NO_POSITION_E0_S1_S9_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w0.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e0_s1_s9_w1"
+rust_const = "NO_POSITION_E0_S1_S9_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w1.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e0_s1_s9_w8"
+rust_const = "NO_POSITION_E0_S1_S9_W8"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w0.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 8 } }
+
+[[case]]
+name = "e0_s1_s9_w9"
+rust_const = "NO_POSITION_E0_S1_S9_W9"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w1.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 9 } }
+
+[[case]]
+name = "e0_s1_s15_w0"
+rust_const = "NO_POSITION_E0_S1_S15_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e0_s1_s15_w1"
+rust_const = "NO_POSITION_E0_S1_S15_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e0_s1_s15_w2"
+rust_const = "NO_POSITION_E0_S1_S15_W2"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 2 } }
+
+[[case]]
+name = "e0_s1_s15_w3"
+rust_const = "NO_POSITION_E0_S1_S15_W3"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 3 } }
+
+[[case]]
+name = "e0_s1_s15_w4"
+rust_const = "NO_POSITION_E0_S1_S15_W4"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 4 } }
+
+[[case]]
+name = "e0_s1_s15_w5"
+rust_const = "NO_POSITION_E0_S1_S15_W5"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 5 } }
+
+[[case]]
+name = "e0_s1_s15_w6"
+rust_const = "NO_POSITION_E0_S1_S15_W6"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 6 } }
+
+[[case]]
+name = "e0_s1_s15_w7"
+rust_const = "NO_POSITION_E0_S1_S15_W7"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 7 } }
+
+[[case]]
+name = "e0_s1_s15_w8"
+rust_const = "NO_POSITION_E0_S1_S15_W8"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 8 } }
+
+[[case]]
+name = "e0_s1_s15_w9"
+rust_const = "NO_POSITION_E0_S1_S15_W9"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 9 } }
+
+[[case]]
+name = "e0_s1_s15_w10"
+rust_const = "NO_POSITION_E0_S1_S15_W10"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 10 } }
+
+[[case]]
+name = "e0_s1_s15_w11"
+rust_const = "NO_POSITION_E0_S1_S15_W11"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 11 } }
+
+[[case]]
+name = "e0_s1_s15_w12"
+rust_const = "NO_POSITION_E0_S1_S15_W12"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 12 } }
+
+[[case]]
+name = "e0_s1_s15_w13"
+rust_const = "NO_POSITION_E0_S1_S15_W13"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 13 } }
+
+[[case]]
+name = "e0_s1_s15_w14"
+rust_const = "NO_POSITION_E0_S1_S15_W14"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 14 } }
+
+[[case]]
+name = "e0_s1_s15_w15"
+rust_const = "NO_POSITION_E0_S1_S15_W15"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 15 } }
+
+[[case]]
+name = "e0_s2_s1_w0"
+rust_const = "NO_POSITION_E0_S2_S1_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w0.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 1 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e0_s2_s1_w1"
+rust_const = "NO_POSITION_E0_S2_S1_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w1.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 1 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e0_s2_s7_w0"
+rust_const = "NO_POSITION_E0_S2_S7_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s2_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e0_s2_s7_w1"
+rust_const = "NO_POSITION_E0_S2_S7_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s2_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e0_s2_s7_w2"
+rust_const = "NO_POSITION_E0_S2_S7_W2"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s2_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 2 } }
+
+[[case]]
+name = "e0_s2_s7_w3"
+rust_const = "NO_POSITION_E0_S2_S7_W3"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s2_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 3 } }
+
+[[case]]
+name = "e0_s2_s7_w4"
+rust_const = "NO_POSITION_E0_S2_S7_W4"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s2_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 4 } }
+
+[[case]]
+name = "e0_s2_s7_w5"
+rust_const = "NO_POSITION_E0_S2_S7_W5"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s2_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 5 } }
+
+[[case]]
+name = "e0_s2_s7_w6"
+rust_const = "NO_POSITION_E0_S2_S7_W6"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s2_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 6 } }
+
+[[case]]
+name = "e0_s2_s7_w7"
+rust_const = "NO_POSITION_E0_S2_S7_W7"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s2_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 7 } }
+
+[[case]]
+name = "e0_s2_s9_w0"
+rust_const = "NO_POSITION_E0_S2_S9_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w0.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e0_s2_s9_w1"
+rust_const = "NO_POSITION_E0_S2_S9_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w1.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e0_s2_s9_w8"
+rust_const = "NO_POSITION_E0_S2_S9_W8"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w0.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 8 } }
+
+[[case]]
+name = "e0_s2_s9_w9"
+rust_const = "NO_POSITION_E0_S2_S9_W9"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w1.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 9 } }
+
+[[case]]
+name = "e0_s2_s15_w0"
+rust_const = "NO_POSITION_E0_S2_S15_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e0_s2_s15_w1"
+rust_const = "NO_POSITION_E0_S2_S15_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e0_s2_s15_w2"
+rust_const = "NO_POSITION_E0_S2_S15_W2"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 2 } }
+
+[[case]]
+name = "e0_s2_s15_w3"
+rust_const = "NO_POSITION_E0_S2_S15_W3"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 3 } }
+
+[[case]]
+name = "e0_s2_s15_w4"
+rust_const = "NO_POSITION_E0_S2_S15_W4"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 4 } }
+
+[[case]]
+name = "e0_s2_s15_w5"
+rust_const = "NO_POSITION_E0_S2_S15_W5"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 5 } }
+
+[[case]]
+name = "e0_s2_s15_w6"
+rust_const = "NO_POSITION_E0_S2_S15_W6"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 6 } }
+
+[[case]]
+name = "e0_s2_s15_w7"
+rust_const = "NO_POSITION_E0_S2_S15_W7"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 7 } }
+
+[[case]]
+name = "e0_s2_s15_w8"
+rust_const = "NO_POSITION_E0_S2_S15_W8"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 8 } }
+
+[[case]]
+name = "e0_s2_s15_w9"
+rust_const = "NO_POSITION_E0_S2_S15_W9"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 9 } }
+
+[[case]]
+name = "e0_s2_s15_w10"
+rust_const = "NO_POSITION_E0_S2_S15_W10"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 10 } }
+
+[[case]]
+name = "e0_s2_s15_w11"
+rust_const = "NO_POSITION_E0_S2_S15_W11"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 11 } }
+
+[[case]]
+name = "e0_s2_s15_w12"
+rust_const = "NO_POSITION_E0_S2_S15_W12"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 12 } }
+
+[[case]]
+name = "e0_s2_s15_w13"
+rust_const = "NO_POSITION_E0_S2_S15_W13"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 13 } }
+
+[[case]]
+name = "e0_s2_s15_w14"
+rust_const = "NO_POSITION_E0_S2_S15_W14"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 14 } }
+
+[[case]]
+name = "e0_s2_s15_w15"
+rust_const = "NO_POSITION_E0_S2_S15_W15"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e0_s2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e0_s2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e0_s2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e0_s2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = false }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 15 } }
+
+[[case]]
+name = "e1_b1_s1_w0"
+rust_const = "NO_POSITION_E1_B1_S1_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w0.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 1 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e1_b1_s1_w1"
+rust_const = "NO_POSITION_E1_B1_S1_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w1.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 1 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e1_b1_s7_w0"
+rust_const = "NO_POSITION_E1_B1_S7_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b1_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e1_b1_s7_w1"
+rust_const = "NO_POSITION_E1_B1_S7_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b1_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e1_b1_s7_w2"
+rust_const = "NO_POSITION_E1_B1_S7_W2"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b1_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 2 } }
+
+[[case]]
+name = "e1_b1_s7_w3"
+rust_const = "NO_POSITION_E1_B1_S7_W3"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b1_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 3 } }
+
+[[case]]
+name = "e1_b1_s7_w4"
+rust_const = "NO_POSITION_E1_B1_S7_W4"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b1_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 4 } }
+
+[[case]]
+name = "e1_b1_s7_w5"
+rust_const = "NO_POSITION_E1_B1_S7_W5"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b1_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 5 } }
+
+[[case]]
+name = "e1_b1_s7_w6"
+rust_const = "NO_POSITION_E1_B1_S7_W6"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b1_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 6 } }
+
+[[case]]
+name = "e1_b1_s7_w7"
+rust_const = "NO_POSITION_E1_B1_S7_W7"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b1_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 7 } }
+
+[[case]]
+name = "e1_b1_s9_w0"
+rust_const = "NO_POSITION_E1_B1_S9_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w0.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e1_b1_s9_w1"
+rust_const = "NO_POSITION_E1_B1_S9_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w1.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e1_b1_s9_w8"
+rust_const = "NO_POSITION_E1_B1_S9_W8"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w0.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 8 } }
+
+[[case]]
+name = "e1_b1_s9_w9"
+rust_const = "NO_POSITION_E1_B1_S9_W9"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w1.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 9 } }
+
+[[case]]
+name = "e1_b1_s15_w0"
+rust_const = "NO_POSITION_E1_B1_S15_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e1_b1_s15_w1"
+rust_const = "NO_POSITION_E1_B1_S15_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e1_b1_s15_w2"
+rust_const = "NO_POSITION_E1_B1_S15_W2"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 2 } }
+
+[[case]]
+name = "e1_b1_s15_w3"
+rust_const = "NO_POSITION_E1_B1_S15_W3"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 3 } }
+
+[[case]]
+name = "e1_b1_s15_w4"
+rust_const = "NO_POSITION_E1_B1_S15_W4"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 4 } }
+
+[[case]]
+name = "e1_b1_s15_w5"
+rust_const = "NO_POSITION_E1_B1_S15_W5"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 5 } }
+
+[[case]]
+name = "e1_b1_s15_w6"
+rust_const = "NO_POSITION_E1_B1_S15_W6"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 6 } }
+
+[[case]]
+name = "e1_b1_s15_w7"
+rust_const = "NO_POSITION_E1_B1_S15_W7"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 7 } }
+
+[[case]]
+name = "e1_b1_s15_w8"
+rust_const = "NO_POSITION_E1_B1_S15_W8"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 8 } }
+
+[[case]]
+name = "e1_b1_s15_w9"
+rust_const = "NO_POSITION_E1_B1_S15_W9"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 9 } }
+
+[[case]]
+name = "e1_b1_s15_w10"
+rust_const = "NO_POSITION_E1_B1_S15_W10"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 10 } }
+
+[[case]]
+name = "e1_b1_s15_w11"
+rust_const = "NO_POSITION_E1_B1_S15_W11"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 11 } }
+
+[[case]]
+name = "e1_b1_s15_w12"
+rust_const = "NO_POSITION_E1_B1_S15_W12"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 12 } }
+
+[[case]]
+name = "e1_b1_s15_w13"
+rust_const = "NO_POSITION_E1_B1_S15_W13"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 13 } }
+
+[[case]]
+name = "e1_b1_s15_w14"
+rust_const = "NO_POSITION_E1_B1_S15_W14"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 14 } }
+
+[[case]]
+name = "e1_b1_s15_w15"
+rust_const = "NO_POSITION_E1_B1_S15_W15"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 15 } }
+
+[[case]]
+name = "e1_b2_s1_w0"
+rust_const = "NO_POSITION_E1_B2_S1_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w0.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 1 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e1_b2_s1_w1"
+rust_const = "NO_POSITION_E1_B2_S1_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w1.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 1 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e1_b2_s7_w0"
+rust_const = "NO_POSITION_E1_B2_S7_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b2_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e1_b2_s7_w1"
+rust_const = "NO_POSITION_E1_B2_S7_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b2_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e1_b2_s7_w2"
+rust_const = "NO_POSITION_E1_B2_S7_W2"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b2_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 2 } }
+
+[[case]]
+name = "e1_b2_s7_w3"
+rust_const = "NO_POSITION_E1_B2_S7_W3"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b2_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 3 } }
+
+[[case]]
+name = "e1_b2_s7_w4"
+rust_const = "NO_POSITION_E1_B2_S7_W4"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b2_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 4 } }
+
+[[case]]
+name = "e1_b2_s7_w5"
+rust_const = "NO_POSITION_E1_B2_S7_W5"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b2_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 5 } }
+
+[[case]]
+name = "e1_b2_s7_w6"
+rust_const = "NO_POSITION_E1_B2_S7_W6"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b2_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 6 } }
+
+[[case]]
+name = "e1_b2_s7_w7"
+rust_const = "NO_POSITION_E1_B2_S7_W7"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b2_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 7 } }
+
+[[case]]
+name = "e1_b2_s9_w0"
+rust_const = "NO_POSITION_E1_B2_S9_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w0.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e1_b2_s9_w1"
+rust_const = "NO_POSITION_E1_B2_S9_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w1.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e1_b2_s9_w8"
+rust_const = "NO_POSITION_E1_B2_S9_W8"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w0.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 8 } }
+
+[[case]]
+name = "e1_b2_s9_w9"
+rust_const = "NO_POSITION_E1_B2_S9_W9"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w1.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 9 } }
+
+[[case]]
+name = "e1_b2_s15_w0"
+rust_const = "NO_POSITION_E1_B2_S15_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e1_b2_s15_w1"
+rust_const = "NO_POSITION_E1_B2_S15_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e1_b2_s15_w2"
+rust_const = "NO_POSITION_E1_B2_S15_W2"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 2 } }
+
+[[case]]
+name = "e1_b2_s15_w3"
+rust_const = "NO_POSITION_E1_B2_S15_W3"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 3 } }
+
+[[case]]
+name = "e1_b2_s15_w4"
+rust_const = "NO_POSITION_E1_B2_S15_W4"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 4 } }
+
+[[case]]
+name = "e1_b2_s15_w5"
+rust_const = "NO_POSITION_E1_B2_S15_W5"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 5 } }
+
+[[case]]
+name = "e1_b2_s15_w6"
+rust_const = "NO_POSITION_E1_B2_S15_W6"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 6 } }
+
+[[case]]
+name = "e1_b2_s15_w7"
+rust_const = "NO_POSITION_E1_B2_S15_W7"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 7 } }
+
+[[case]]
+name = "e1_b2_s15_w8"
+rust_const = "NO_POSITION_E1_B2_S15_W8"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 8 } }
+
+[[case]]
+name = "e1_b2_s15_w9"
+rust_const = "NO_POSITION_E1_B2_S15_W9"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 9 } }
+
+[[case]]
+name = "e1_b2_s15_w10"
+rust_const = "NO_POSITION_E1_B2_S15_W10"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 10 } }
+
+[[case]]
+name = "e1_b2_s15_w11"
+rust_const = "NO_POSITION_E1_B2_S15_W11"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 11 } }
+
+[[case]]
+name = "e1_b2_s15_w12"
+rust_const = "NO_POSITION_E1_B2_S15_W12"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 12 } }
+
+[[case]]
+name = "e1_b2_s15_w13"
+rust_const = "NO_POSITION_E1_B2_S15_W13"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 13 } }
+
+[[case]]
+name = "e1_b2_s15_w14"
+rust_const = "NO_POSITION_E1_B2_S15_W14"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 14 } }
+
+[[case]]
+name = "e1_b2_s15_w15"
+rust_const = "NO_POSITION_E1_B2_S15_W15"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_b2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_b2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_b2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_b2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = false }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 15 } }
+
+[[case]]
+name = "e1_s1_s1_w0"
+rust_const = "NO_POSITION_E1_S1_S1_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w0.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 1 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e1_s1_s1_w1"
+rust_const = "NO_POSITION_E1_S1_S1_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w1.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 1 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e1_s1_s7_w0"
+rust_const = "NO_POSITION_E1_S1_S7_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s1_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e1_s1_s7_w1"
+rust_const = "NO_POSITION_E1_S1_S7_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s1_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e1_s1_s7_w2"
+rust_const = "NO_POSITION_E1_S1_S7_W2"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s1_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 2 } }
+
+[[case]]
+name = "e1_s1_s7_w3"
+rust_const = "NO_POSITION_E1_S1_S7_W3"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s1_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 3 } }
+
+[[case]]
+name = "e1_s1_s7_w4"
+rust_const = "NO_POSITION_E1_S1_S7_W4"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s1_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 4 } }
+
+[[case]]
+name = "e1_s1_s7_w5"
+rust_const = "NO_POSITION_E1_S1_S7_W5"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s1_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 5 } }
+
+[[case]]
+name = "e1_s1_s7_w6"
+rust_const = "NO_POSITION_E1_S1_S7_W6"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s1_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 6 } }
+
+[[case]]
+name = "e1_s1_s7_w7"
+rust_const = "NO_POSITION_E1_S1_S7_W7"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s1_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 7 } }
+
+[[case]]
+name = "e1_s1_s9_w0"
+rust_const = "NO_POSITION_E1_S1_S9_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w0.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e1_s1_s9_w1"
+rust_const = "NO_POSITION_E1_S1_S9_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w1.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e1_s1_s9_w8"
+rust_const = "NO_POSITION_E1_S1_S9_W8"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w0.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 8 } }
+
+[[case]]
+name = "e1_s1_s9_w9"
+rust_const = "NO_POSITION_E1_S1_S9_W9"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w1.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 9 } }
+
+[[case]]
+name = "e1_s1_s15_w0"
+rust_const = "NO_POSITION_E1_S1_S15_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e1_s1_s15_w1"
+rust_const = "NO_POSITION_E1_S1_S15_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e1_s1_s15_w2"
+rust_const = "NO_POSITION_E1_S1_S15_W2"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 2 } }
+
+[[case]]
+name = "e1_s1_s15_w3"
+rust_const = "NO_POSITION_E1_S1_S15_W3"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 3 } }
+
+[[case]]
+name = "e1_s1_s15_w4"
+rust_const = "NO_POSITION_E1_S1_S15_W4"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 4 } }
+
+[[case]]
+name = "e1_s1_s15_w5"
+rust_const = "NO_POSITION_E1_S1_S15_W5"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 5 } }
+
+[[case]]
+name = "e1_s1_s15_w6"
+rust_const = "NO_POSITION_E1_S1_S15_W6"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 6 } }
+
+[[case]]
+name = "e1_s1_s15_w7"
+rust_const = "NO_POSITION_E1_S1_S15_W7"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s1_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 7 } }
+
+[[case]]
+name = "e1_s1_s15_w8"
+rust_const = "NO_POSITION_E1_S1_S15_W8"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 8 } }
+
+[[case]]
+name = "e1_s1_s15_w9"
+rust_const = "NO_POSITION_E1_S1_S15_W9"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 9 } }
+
+[[case]]
+name = "e1_s1_s15_w10"
+rust_const = "NO_POSITION_E1_S1_S15_W10"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 10 } }
+
+[[case]]
+name = "e1_s1_s15_w11"
+rust_const = "NO_POSITION_E1_S1_S15_W11"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s1_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 11 } }
+
+[[case]]
+name = "e1_s1_s15_w12"
+rust_const = "NO_POSITION_E1_S1_S15_W12"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 12 } }
+
+[[case]]
+name = "e1_s1_s15_w13"
+rust_const = "NO_POSITION_E1_S1_S15_W13"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s1_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 13 } }
+
+[[case]]
+name = "e1_s1_s15_w14"
+rust_const = "NO_POSITION_E1_S1_S15_W14"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 14 } }
+
+[[case]]
+name = "e1_s1_s15_w15"
+rust_const = "NO_POSITION_E1_S1_S15_W15"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s1_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s1_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s1_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s1_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 1 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 15 } }
+
+[[case]]
+name = "e1_s2_s1_w0"
+rust_const = "NO_POSITION_E1_S2_S1_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w0.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 1 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e1_s2_s1_w1"
+rust_const = "NO_POSITION_E1_S2_S1_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w1.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 1 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e1_s2_s7_w0"
+rust_const = "NO_POSITION_E1_S2_S7_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s2_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e1_s2_s7_w1"
+rust_const = "NO_POSITION_E1_S2_S7_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s2_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e1_s2_s7_w2"
+rust_const = "NO_POSITION_E1_S2_S7_W2"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s2_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 2 } }
+
+[[case]]
+name = "e1_s2_s7_w3"
+rust_const = "NO_POSITION_E1_S2_S7_W3"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s2_w0.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 3 } }
+
+[[case]]
+name = "e1_s2_s7_w4"
+rust_const = "NO_POSITION_E1_S2_S7_W4"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s2_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 4 } }
+
+[[case]]
+name = "e1_s2_s7_w5"
+rust_const = "NO_POSITION_E1_S2_S7_W5"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s2_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 5 } }
+
+[[case]]
+name = "e1_s2_s7_w6"
+rust_const = "NO_POSITION_E1_S2_S7_W6"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s2_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 6 } }
+
+[[case]]
+name = "e1_s2_s7_w7"
+rust_const = "NO_POSITION_E1_S2_S7_W7"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s2_w1.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 7 }, writes = { type = "u32", value = 7 } }
+
+[[case]]
+name = "e1_s2_s9_w0"
+rust_const = "NO_POSITION_E1_S2_S9_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w0.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e1_s2_s9_w1"
+rust_const = "NO_POSITION_E1_S2_S9_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w1.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e1_s2_s9_w8"
+rust_const = "NO_POSITION_E1_S2_S9_W8"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w0.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 8 } }
+
+[[case]]
+name = "e1_s2_s9_w9"
+rust_const = "NO_POSITION_E1_S2_S9_W9"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w1.vert", stage = "vert" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 9 }, writes = { type = "u32", value = 9 } }
+
+[[case]]
+name = "e1_s2_s15_w0"
+rust_const = "NO_POSITION_E1_S2_S15_W0"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 0 } }
+
+[[case]]
+name = "e1_s2_s15_w1"
+rust_const = "NO_POSITION_E1_S2_S15_W1"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 1 } }
+
+[[case]]
+name = "e1_s2_s15_w2"
+rust_const = "NO_POSITION_E1_S2_S15_W2"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 2 } }
+
+[[case]]
+name = "e1_s2_s15_w3"
+rust_const = "NO_POSITION_E1_S2_S15_W3"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 3 } }
+
+[[case]]
+name = "e1_s2_s15_w4"
+rust_const = "NO_POSITION_E1_S2_S15_W4"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 4 } }
+
+[[case]]
+name = "e1_s2_s15_w5"
+rust_const = "NO_POSITION_E1_S2_S15_W5"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 5 } }
+
+[[case]]
+name = "e1_s2_s15_w6"
+rust_const = "NO_POSITION_E1_S2_S15_W6"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 6 } }
+
+[[case]]
+name = "e1_s2_s15_w7"
+rust_const = "NO_POSITION_E1_S2_S15_W7"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s2_w0.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 7 } }
+
+[[case]]
+name = "e1_s2_s15_w8"
+rust_const = "NO_POSITION_E1_S2_S15_W8"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 8 } }
+
+[[case]]
+name = "e1_s2_s15_w9"
+rust_const = "NO_POSITION_E1_S2_S15_W9"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 9 } }
+
+[[case]]
+name = "e1_s2_s15_w10"
+rust_const = "NO_POSITION_E1_S2_S15_W10"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 10 } }
+
+[[case]]
+name = "e1_s2_s15_w11"
+rust_const = "NO_POSITION_E1_S2_S15_W11"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s2_w0.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 11 } }
+
+[[case]]
+name = "e1_s2_s15_w12"
+rust_const = "NO_POSITION_E1_S2_S15_W12"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 12 } }
+
+[[case]]
+name = "e1_s2_s15_w13"
+rust_const = "NO_POSITION_E1_S2_S15_W13"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s2_w0.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 13 } }
+
+[[case]]
+name = "e1_s2_s15_w14"
+rust_const = "NO_POSITION_E1_S2_S15_W14"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w0.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 14 } }
+
+[[case]]
+name = "e1_s2_s15_w15"
+rust_const = "NO_POSITION_E1_S2_S15_W15"
+rust_type = "NoPositionPrograms"
+programs = [
+    { name = "vert", template = "pipeline/no_position/vert_e1_s2_w1.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/no_position/tesc_e1_s2_w1.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/no_position/tese_e1_s2_w1.tese", stage = "tese" },
+    { name = "geom", template = "pipeline/no_position/geom_e1_s2_w1.geom", stage = "geom" },
+    { name = "frag", template = "pipeline/no_position/frag.frag", stage = "frag" },
+]
+params = { explicit = { type = "bool", value = true }, ssbo = { type = "bool", value = true }, views = { type = "u32", value = 2 }, stages = { type = "u32", value = 15 }, writes = { type = "u32", value = 15 } }

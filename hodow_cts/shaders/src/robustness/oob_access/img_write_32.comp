@@ -1,0 +1,14 @@
+#version 450
+layout(set = 0, binding = 0, r32ui) uniform uimage2D storageImage;
+layout(set = 0, binding = 1, std430) buffer InputBuffer { 
+    uint inputData; 
+} inBuffer;
+layout(push_constant) uniform PushConstants {
+    ivec2 index;
+} pc;
+layout(local_size_x = 1) in;
+void main (void)
+{
+    uvec4 value = uvec4(inBuffer.inputData, 0u, 0u, 0u);
+    imageStore(storageImage, pc.index, value); 
+}

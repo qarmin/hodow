@@ -1,0 +1,39 @@
+#version 440
+#extension GL_EXT_texture_buffer : require
+precision highp float;
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(binding = 0, std140) uniform InBuffer
+{
+    mat4 inMatrix[128];
+};
+
+layout(binding = 1, std430) buffer OutBuffer
+{
+    mat4 outMatrix[128];
+};
+
+layout(binding = 2, std140) uniform Indices
+{
+    int inIndex;
+    int outIndex;
+};
+
+void main (void)
+{
+    outMatrix[outIndex][0][0] = inMatrix[inIndex][0][0];
+    outMatrix[outIndex][0][1] = inMatrix[inIndex][0][1];
+    outMatrix[outIndex][0][2] = inMatrix[inIndex][0][2];
+    outMatrix[outIndex][0][3] = inMatrix[inIndex][0][3];
+    outMatrix[outIndex][1][0] = inMatrix[inIndex][1][0];
+    outMatrix[outIndex][1][1] = inMatrix[inIndex][1][1];
+    outMatrix[outIndex][1][2] = inMatrix[inIndex][1][2];
+    outMatrix[outIndex][1][3] = inMatrix[inIndex][1][3];
+    outMatrix[outIndex][2][0] = inMatrix[inIndex][2][0];
+    outMatrix[outIndex][2][1] = inMatrix[inIndex][2][1];
+    outMatrix[outIndex][2][2] = inMatrix[inIndex][2][2];
+    outMatrix[outIndex][2][3] = inMatrix[inIndex][2][3];
+    outMatrix[outIndex][3][0] = inMatrix[inIndex][3][0];
+    outMatrix[outIndex][3][1] = inMatrix[inIndex][3][1];
+    outMatrix[outIndex][3][2] = inMatrix[inIndex][3][2];
+    outMatrix[outIndex][3][3] = inMatrix[inIndex][3][3];
+}

@@ -1,0 +1,202 @@
+#[cfg(target_arch = "x86")]
+use std::arch::x86::*;
+#[cfg(target_arch = "x86_64")]
+use std::arch::x86_64::*;
+
+#[allow(unused_imports)]
+use crate::cpu::common::x86::*;
+#[allow(unused_imports)]
+use crate::cpu::common::{check_array_equality, check_float_array_equality, check_float_equality, check_int_equality};
+#[allow(unused_imports)]
+use crate::cpu::Verdict;
+
+#[target_feature(enable = "avx2")]
+fn test_x86_avx2_mm256_maddubs_epi16_impl() -> Result<Verdict, String> {
+    unsafe {
+        let result = unpack__m256i_to_i16_array(_mm256_maddubs_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[9, 0, 20, 0, 33, 0, 48, 0, 65, 0, 84, 0, 105, 0, 128, 0]).map_err(|e| crate::cpu::with_call(e, "_mm256_maddubs_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]))"))?;
+
+        crate::cpu::fuzz(&mut || {
+            let _ = _mm256_maddubs_epi16(create_random__m256i(), create_random__m256i());
+        });
+        Ok(Verdict::Checked)
+    }
+}
+
+pub(super) fn test_x86_avx2_mm256_maddubs_epi16() -> Result<Verdict, String> {
+    unsafe { test_x86_avx2_mm256_maddubs_epi16_impl() }
+}
+
+#[target_feature(enable = "avx2")]
+fn test_x86_avx2_mm256_maddubs_epi16_normal2_impl() -> Result<Verdict, String> {
+    unsafe {
+        let result = unpack__m256i_to_i16_array(_mm256_maddubs_epi16(create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__m256i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3])));
+        check_array_equality(&result, &[0, 2295, 24, 1771, 56, 1255, 96, 747, 0, 2295, 24, 1771, 56, 1255, 96, 747]).map_err(|e| crate::cpu::with_call(e, "_mm256_maddubs_epi16(create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]), create__m256i_from_i16_array([10, 9, 12, 7, 14, 5, 16, 3, 10, 9, 12, 7, 14, 5, 16, 3]))"))?;
+
+        crate::cpu::fuzz(&mut || {
+            let _ = _mm256_maddubs_epi16(create_random__m256i(), create_random__m256i());
+        });
+        Ok(Verdict::Checked)
+    }
+}
+
+pub(super) fn test_x86_avx2_mm256_maddubs_epi16_normal2() -> Result<Verdict, String> {
+    unsafe { test_x86_avx2_mm256_maddubs_epi16_normal2_impl() }
+}
+
+#[target_feature(enable = "avx2")]
+fn test_x86_avx2_mm256_maddubs_epi16_normal3_impl() -> Result<Verdict, String> {
+    unsafe {
+        let result = unpack__m256i_to_i16_array(_mm256_maddubs_epi16(create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]), create__m256i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810, 910, 1010, 1110, 1210, 1310, 1410, 1510, 1610])));
+        check_array_equality(&result, &[11000, -9200, 2377, -14687, -487, 8628, -10900, 1353, -15039, -3239, 6552, -12304, 625, -15095, -5695, 4772]).map_err(|e| crate::cpu::with_call(e, "_mm256_maddubs_epi16(create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]), create__m256i_from_i16_array([110, 210, 310, 410, 510, 610, 710, 810, 910, 1010, 1110, 1210, 1310, 1410, 1510, 1610]))"))?;
+
+        crate::cpu::fuzz(&mut || {
+            let _ = _mm256_maddubs_epi16(create_random__m256i(), create_random__m256i());
+        });
+        Ok(Verdict::Checked)
+    }
+}
+
+pub(super) fn test_x86_avx2_mm256_maddubs_epi16_normal3() -> Result<Verdict, String> {
+    unsafe { test_x86_avx2_mm256_maddubs_epi16_normal3_impl() }
+}
+
+#[target_feature(enable = "avx2")]
+fn test_x86_avx2_mm256_maddubs_epi16_boundary_min_impl() -> Result<Verdict, String> {
+    unsafe {
+        let result = unpack__m256i_to_i16_array(_mm256_maddubs_epi16(create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
+        check_array_equality(&result, &[-16384, -16384, -16384, -16384, -16384, -16384, -16384, -16384, -16384, -16384, -16384, -16384, -16384, -16384, -16384, -16384]).map_err(|e| crate::cpu::with_call(e, "_mm256_maddubs_epi16(create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
+
+        crate::cpu::fuzz(&mut || {
+            let _ = _mm256_maddubs_epi16(create_random__m256i(), create_random__m256i());
+        });
+        Ok(Verdict::Checked)
+    }
+}
+
+pub(super) fn test_x86_avx2_mm256_maddubs_epi16_boundary_min() -> Result<Verdict, String> {
+    unsafe { test_x86_avx2_mm256_maddubs_epi16_boundary_min_impl() }
+}
+
+#[target_feature(enable = "avx2")]
+fn test_x86_avx2_mm256_maddubs_epi16_boundary_max_impl() -> Result<Verdict, String> {
+    unsafe {
+        let result = unpack__m256i_to_i16_array(_mm256_maddubs_epi16(create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
+        check_array_equality(&result, &[15874, 15874, 15874, 15874, 15874, 15874, 15874, 15874, 15874, 15874, 15874, 15874, 15874, 15874, 15874, 15874]).map_err(|e| crate::cpu::with_call(e, "_mm256_maddubs_epi16(create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
+
+        crate::cpu::fuzz(&mut || {
+            let _ = _mm256_maddubs_epi16(create_random__m256i(), create_random__m256i());
+        });
+        Ok(Verdict::Checked)
+    }
+}
+
+pub(super) fn test_x86_avx2_mm256_maddubs_epi16_boundary_max() -> Result<Verdict, String> {
+    unsafe { test_x86_avx2_mm256_maddubs_epi16_boundary_max_impl() }
+}
+
+#[target_feature(enable = "avx2")]
+fn test_x86_avx2_mm256_maddubs_epi16_boundary_zero_impl() -> Result<Verdict, String> {
+    unsafe {
+        let result = unpack__m256i_to_i16_array(_mm256_maddubs_epi16(create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])));
+        check_array_equality(&result, &[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]).map_err(|e| crate::cpu::with_call(e, "_mm256_maddubs_epi16(create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]), create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))"))?;
+
+        crate::cpu::fuzz(&mut || {
+            let _ = _mm256_maddubs_epi16(create_random__m256i(), create_random__m256i());
+        });
+        Ok(Verdict::Checked)
+    }
+}
+
+pub(super) fn test_x86_avx2_mm256_maddubs_epi16_boundary_zero() -> Result<Verdict, String> {
+    unsafe { test_x86_avx2_mm256_maddubs_epi16_boundary_zero_impl() }
+}
+
+#[target_feature(enable = "avx2")]
+fn test_x86_avx2_mm256_maddubs_epi16_boundary_allones_impl() -> Result<Verdict, String> {
+    unsafe {
+        let result = unpack__m256i_to_i16_array(_mm256_maddubs_epi16(create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])));
+        check_array_equality(&result, &[-510, -510, -510, -510, -510, -510, -510, -510, -510, -510, -510, -510, -510, -510, -510, -510]).map_err(|e| crate::cpu::with_call(e, "_mm256_maddubs_epi16(create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]), create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]))"))?;
+
+        crate::cpu::fuzz(&mut || {
+            let _ = _mm256_maddubs_epi16(create_random__m256i(), create_random__m256i());
+        });
+        Ok(Verdict::Checked)
+    }
+}
+
+pub(super) fn test_x86_avx2_mm256_maddubs_epi16_boundary_allones() -> Result<Verdict, String> {
+    unsafe { test_x86_avx2_mm256_maddubs_epi16_boundary_allones_impl() }
+}
+
+#[target_feature(enable = "avx2")]
+fn test_x86_avx2_mm256_maddubs_epi16_boundary_mixed_impl() -> Result<Verdict, String> {
+    unsafe {
+        let result = unpack__m256i_to_i16_array(_mm256_maddubs_epi16(create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1])));
+        check_array_equality(&result, &[-16384, 15874, 0, -510, -16384, 15874, 0, -510, -16384, 15874, 0, -510, -16384, 15874, 0, -510]).map_err(|e| crate::cpu::with_call(e, "_mm256_maddubs_epi16(create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]), create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]))"))?;
+
+        crate::cpu::fuzz(&mut || {
+            let _ = _mm256_maddubs_epi16(create_random__m256i(), create_random__m256i());
+        });
+        Ok(Verdict::Checked)
+    }
+}
+
+pub(super) fn test_x86_avx2_mm256_maddubs_epi16_boundary_mixed() -> Result<Verdict, String> {
+    unsafe { test_x86_avx2_mm256_maddubs_epi16_boundary_mixed_impl() }
+}
+
+#[target_feature(enable = "avx2")]
+fn test_x86_avx2_mm256_maddubs_epi16_asym_min_max_impl() -> Result<Verdict, String> {
+    unsafe {
+        let result = unpack__m256i_to_i16_array(_mm256_maddubs_epi16(create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX])));
+        check_array_equality(&result, &[16256, 16256, 16256, 16256, 16256, 16256, 16256, 16256, 16256, 16256, 16256, 16256, 16256, 16256, 16256, 16256]).map_err(|e| crate::cpu::with_call(e, "_mm256_maddubs_epi16(create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]))"))?;
+
+        crate::cpu::fuzz(&mut || {
+            let _ = _mm256_maddubs_epi16(create_random__m256i(), create_random__m256i());
+        });
+        Ok(Verdict::Checked)
+    }
+}
+
+pub(super) fn test_x86_avx2_mm256_maddubs_epi16_asym_min_max() -> Result<Verdict, String> {
+    unsafe { test_x86_avx2_mm256_maddubs_epi16_asym_min_max_impl() }
+}
+
+#[target_feature(enable = "avx2")]
+fn test_x86_avx2_mm256_maddubs_epi16_asym_max_min_impl() -> Result<Verdict, String> {
+    unsafe {
+        let result = unpack__m256i_to_i16_array(_mm256_maddubs_epi16(create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN])));
+        check_array_equality(&result, &[-16256, -16256, -16256, -16256, -16256, -16256, -16256, -16256, -16256, -16256, -16256, -16256, -16256, -16256, -16256, -16256]).map_err(|e| crate::cpu::with_call(e, "_mm256_maddubs_epi16(create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]))"))?;
+
+        crate::cpu::fuzz(&mut || {
+            let _ = _mm256_maddubs_epi16(create_random__m256i(), create_random__m256i());
+        });
+        Ok(Verdict::Checked)
+    }
+}
+
+pub(super) fn test_x86_avx2_mm256_maddubs_epi16_asym_max_min() -> Result<Verdict, String> {
+    unsafe { test_x86_avx2_mm256_maddubs_epi16_asym_max_min_impl() }
+}
+
+#[target_feature(enable = "avx2,ssse3")]
+fn test_x86_avx2_mm256_maddubs_epi16_vs_narrow_impl() -> Result<Verdict, String> {
+        if !(std::arch::is_x86_feature_detected!("ssse3")) {
+            return Ok(Verdict::Skipped("ssse3 not present"));
+        }
+    unsafe {
+        let a_wide = create__m256i_from_i16_array([1i16, 2i16, 3i16, 4i16, 5i16, 6i16, 7i16, 8i16, 9i16, 10i16, 11i16, 12i16, 13i16, 14i16, 15i16, 16i16]);
+        let a_narrow = create__m128i_from_i16_array([1i16, 2i16, 3i16, 4i16, 5i16, 6i16, 7i16, 8i16]);
+        let b_wide = create__m256i_from_i16_array([17i16, 18i16, 19i16, 20i16, 21i16, 22i16, 23i16, 24i16, 25i16, 26i16, 27i16, 28i16, 29i16, 30i16, 31i16, 32i16]);
+        let b_narrow = create__m128i_from_i16_array([17i16, 18i16, 19i16, 20i16, 21i16, 22i16, 23i16, 24i16]);
+        let wide = unpack__m256i_to_i16_array(_mm256_maddubs_epi16(a_wide, b_wide));
+        let narrow = unpack__m128i_to_i16_array(_mm_maddubs_epi16(a_narrow, b_narrow));
+        check_array_equality(&wide[..8], &narrow).map_err(|e| crate::cpu::with_call(e, "_mm256_maddubs_epi16(a_wide, b_wide) vs _mm_maddubs_epi16(a_narrow, b_narrow)"))?;
+        Ok(Verdict::Checked)
+    }
+}
+
+pub(super) fn test_x86_avx2_mm256_maddubs_epi16_vs_narrow() -> Result<Verdict, String> {
+    unsafe { test_x86_avx2_mm256_maddubs_epi16_vs_narrow_impl() }
+}

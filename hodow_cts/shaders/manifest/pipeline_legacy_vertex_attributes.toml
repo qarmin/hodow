@@ -1,0 +1,160 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.vertex_input.legacy_vertex_attributes.*
+#
+# `LegacyVertexAttributesCase::initPrograms`: the shaders depend only on the GLSL type of each binding (and on whether
+# the verification buffers use the scalar layout, which is needed as soon as a vec3 is involved), so every case with
+# the same list of types shares one program set. The lists below are the ones the case tree can produce: the twelve
+# single types, and the three binding tuples of `populateMultipleBindingsGroup` with the shader format
+# `populateMultipleBindingsFormatGroup` derives for each format.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineLegacyAttrTests.cpp"
+rust_module = "pipeline/legacy_vertex_attributes_tests"
+
+[[case]]
+name = "float"
+rust_const = "LEGACY_ATTR_FLOAT"
+rust_type = "LegacyAttrPrograms"
+programs = [
+    { name = "vert", template = "pipeline/legacy_attr.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/legacy_attr.frag", stage = "frag" },
+]
+params = { t0 = { type = "str", value = "float" }, t1 = { type = "str", value = "" }, t2 = { type = "str", value = "" }, layout = { type = "str", value = "std430" } }
+
+[[case]]
+name = "vec2"
+rust_const = "LEGACY_ATTR_VEC2"
+rust_type = "LegacyAttrPrograms"
+programs = [
+    { name = "vert", template = "pipeline/legacy_attr.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/legacy_attr.frag", stage = "frag" },
+]
+params = { t0 = { type = "str", value = "vec2" }, t1 = { type = "str", value = "" }, t2 = { type = "str", value = "" }, layout = { type = "str", value = "std430" } }
+
+[[case]]
+name = "vec3"
+rust_const = "LEGACY_ATTR_VEC3"
+rust_type = "LegacyAttrPrograms"
+programs = [
+    { name = "vert", template = "pipeline/legacy_attr.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/legacy_attr.frag", stage = "frag" },
+]
+params = { t0 = { type = "str", value = "vec3" }, t1 = { type = "str", value = "" }, t2 = { type = "str", value = "" }, layout = { type = "str", value = "scalar" } }
+
+[[case]]
+name = "vec4"
+rust_const = "LEGACY_ATTR_VEC4"
+rust_type = "LegacyAttrPrograms"
+programs = [
+    { name = "vert", template = "pipeline/legacy_attr.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/legacy_attr.frag", stage = "frag" },
+]
+params = { t0 = { type = "str", value = "vec4" }, t1 = { type = "str", value = "" }, t2 = { type = "str", value = "" }, layout = { type = "str", value = "std430" } }
+
+[[case]]
+name = "int"
+rust_const = "LEGACY_ATTR_INT"
+rust_type = "LegacyAttrPrograms"
+programs = [
+    { name = "vert", template = "pipeline/legacy_attr.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/legacy_attr.frag", stage = "frag" },
+]
+params = { t0 = { type = "str", value = "int" }, t1 = { type = "str", value = "" }, t2 = { type = "str", value = "" }, layout = { type = "str", value = "std430" } }
+
+[[case]]
+name = "ivec2"
+rust_const = "LEGACY_ATTR_IVEC2"
+rust_type = "LegacyAttrPrograms"
+programs = [
+    { name = "vert", template = "pipeline/legacy_attr.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/legacy_attr.frag", stage = "frag" },
+]
+params = { t0 = { type = "str", value = "ivec2" }, t1 = { type = "str", value = "" }, t2 = { type = "str", value = "" }, layout = { type = "str", value = "std430" } }
+
+[[case]]
+name = "ivec3"
+rust_const = "LEGACY_ATTR_IVEC3"
+rust_type = "LegacyAttrPrograms"
+programs = [
+    { name = "vert", template = "pipeline/legacy_attr.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/legacy_attr.frag", stage = "frag" },
+]
+params = { t0 = { type = "str", value = "ivec3" }, t1 = { type = "str", value = "" }, t2 = { type = "str", value = "" }, layout = { type = "str", value = "scalar" } }
+
+[[case]]
+name = "ivec4"
+rust_const = "LEGACY_ATTR_IVEC4"
+rust_type = "LegacyAttrPrograms"
+programs = [
+    { name = "vert", template = "pipeline/legacy_attr.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/legacy_attr.frag", stage = "frag" },
+]
+params = { t0 = { type = "str", value = "ivec4" }, t1 = { type = "str", value = "" }, t2 = { type = "str", value = "" }, layout = { type = "str", value = "std430" } }
+
+[[case]]
+name = "uint"
+rust_const = "LEGACY_ATTR_UINT"
+rust_type = "LegacyAttrPrograms"
+programs = [
+    { name = "vert", template = "pipeline/legacy_attr.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/legacy_attr.frag", stage = "frag" },
+]
+params = { t0 = { type = "str", value = "uint" }, t1 = { type = "str", value = "" }, t2 = { type = "str", value = "" }, layout = { type = "str", value = "std430" } }
+
+[[case]]
+name = "uvec2"
+rust_const = "LEGACY_ATTR_UVEC2"
+rust_type = "LegacyAttrPrograms"
+programs = [
+    { name = "vert", template = "pipeline/legacy_attr.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/legacy_attr.frag", stage = "frag" },
+]
+params = { t0 = { type = "str", value = "uvec2" }, t1 = { type = "str", value = "" }, t2 = { type = "str", value = "" }, layout = { type = "str", value = "std430" } }
+
+[[case]]
+name = "uvec3"
+rust_const = "LEGACY_ATTR_UVEC3"
+rust_type = "LegacyAttrPrograms"
+programs = [
+    { name = "vert", template = "pipeline/legacy_attr.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/legacy_attr.frag", stage = "frag" },
+]
+params = { t0 = { type = "str", value = "uvec3" }, t1 = { type = "str", value = "" }, t2 = { type = "str", value = "" }, layout = { type = "str", value = "scalar" } }
+
+[[case]]
+name = "uvec4"
+rust_const = "LEGACY_ATTR_UVEC4"
+rust_type = "LegacyAttrPrograms"
+programs = [
+    { name = "vert", template = "pipeline/legacy_attr.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/legacy_attr.frag", stage = "frag" },
+]
+params = { t0 = { type = "str", value = "uvec4" }, t1 = { type = "str", value = "" }, t2 = { type = "str", value = "" }, layout = { type = "str", value = "std430" } }
+
+[[case]]
+name = "multi_uint_ivec2_vec4"
+rust_const = "LEGACY_ATTR_MULTI_UINT_IVEC2_VEC4"
+rust_type = "LegacyAttrPrograms"
+programs = [
+    { name = "vert", template = "pipeline/legacy_attr.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/legacy_attr.frag", stage = "frag" },
+]
+params = { t0 = { type = "str", value = "uint" }, t1 = { type = "str", value = "ivec2" }, t2 = { type = "str", value = "vec4" }, layout = { type = "str", value = "std430" } }
+
+[[case]]
+name = "multi_int_uvec3_ivec2"
+rust_const = "LEGACY_ATTR_MULTI_INT_UVEC3_IVEC2"
+rust_type = "LegacyAttrPrograms"
+programs = [
+    { name = "vert", template = "pipeline/legacy_attr.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/legacy_attr.frag", stage = "frag" },
+]
+params = { t0 = { type = "str", value = "int" }, t1 = { type = "str", value = "uvec3" }, t2 = { type = "str", value = "ivec2" }, layout = { type = "str", value = "scalar" } }
+
+[[case]]
+name = "multi_uvec4_uint_ivec2"
+rust_const = "LEGACY_ATTR_MULTI_UVEC4_UINT_IVEC2"
+rust_type = "LegacyAttrPrograms"
+programs = [
+    { name = "vert", template = "pipeline/legacy_attr.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/legacy_attr.frag", stage = "frag" },
+]
+params = { t0 = { type = "str", value = "uvec4" }, t1 = { type = "str", value = "uint" }, t2 = { type = "str", value = "ivec2" }, layout = { type = "str", value = "std430" } }

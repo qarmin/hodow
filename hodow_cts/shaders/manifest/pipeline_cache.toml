@@ -1,0 +1,94 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.cache.*
+#
+# `GraphicsTest::initPrograms`: a vertex/fragment pair, plus a pass-through geometry shader or a tessellation
+# control/evaluation pair depending on the stage set. The `_miss` copies (colour offset by 0.1) are built only when
+# `compileMissShaders` is set, i.e. for the `merge` cases. `ComputeTest` and `InternallySynchronizedTest` add one
+# compute shader each.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineCacheTests.cpp"
+rust_module = "pipeline/cache_tests"
+
+[[case]]
+name = "vert_frag"
+rust_const = "CACHE_VERT_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/cache/color.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/cache/color.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vert_geom_frag"
+rust_const = "CACHE_VERT_GEOM_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/cache/color.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/cache/color.frag", stage = "frag" },
+    { name = "unused_geo", template = "pipeline/cache/unused_geo.geom", stage = "geom" },
+]
+
+[[case]]
+name = "vert_tess_frag"
+rust_const = "CACHE_VERT_TESS_FRAG"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/cache/color.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/cache/color.frag", stage = "frag" },
+    { name = "basic_tcs", template = "pipeline/cache/basic_tcs.tesc", stage = "tesc" },
+    { name = "basic_tes", template = "pipeline/cache/basic_tes.tese", stage = "tese" },
+]
+
+[[case]]
+name = "vert_frag_miss"
+rust_const = "CACHE_VERT_FRAG_MISS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/cache/color.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/cache/color.frag", stage = "frag" },
+    { name = "color_vert_miss", template = "pipeline/cache/color_miss.vert", stage = "vert" },
+    { name = "color_frag_miss", template = "pipeline/cache/color_miss.frag", stage = "frag" },
+]
+
+[[case]]
+name = "vert_geom_frag_miss"
+rust_const = "CACHE_VERT_GEOM_FRAG_MISS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/cache/color.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/cache/color.frag", stage = "frag" },
+    { name = "unused_geo", template = "pipeline/cache/unused_geo.geom", stage = "geom" },
+    { name = "color_vert_miss", template = "pipeline/cache/color_miss.vert", stage = "vert" },
+    { name = "color_frag_miss", template = "pipeline/cache/color_miss.frag", stage = "frag" },
+    { name = "unused_geo_miss", template = "pipeline/cache/unused_geo_miss.geom", stage = "geom" },
+]
+
+[[case]]
+name = "vert_tess_frag_miss"
+rust_const = "CACHE_VERT_TESS_FRAG_MISS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "color_vert", template = "pipeline/cache/color.vert", stage = "vert" },
+    { name = "color_frag", template = "pipeline/cache/color.frag", stage = "frag" },
+    { name = "basic_tcs", template = "pipeline/cache/basic_tcs.tesc", stage = "tesc" },
+    { name = "basic_tes", template = "pipeline/cache/basic_tes.tese", stage = "tese" },
+    { name = "color_vert_miss", template = "pipeline/cache/color_miss.vert", stage = "vert" },
+    { name = "color_frag_miss", template = "pipeline/cache/color_miss.frag", stage = "frag" },
+    { name = "basic_tcs_miss", template = "pipeline/cache/basic_tcs_miss.tesc", stage = "tesc" },
+    { name = "basic_tes_miss", template = "pipeline/cache/basic_tes_miss.tese", stage = "tese" },
+]
+
+[[case]]
+name = "compute"
+rust_const = "CACHE_COMPUTE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "basic_compute", template = "pipeline/cache/basic_compute.comp", stage = "comp" },
+]
+
+[[case]]
+name = "internally_synchronized"
+rust_const = "CACHE_INTERNALLY_SYNCHRONIZED"
+rust_type = "SharedProgram"
+programs = [
+    { name = "basic_compute", template = "pipeline/cache/internally_synchronized.comp", stage = "comp" },
+]

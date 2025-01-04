@@ -1,0 +1,25 @@
+#version 310 es
+layout(location = 0) in highp vec4 a_position;
+layout(location = 1) in highp vec4 a_coords;
+layout(location = 0) out mediump vec3 v_color;
+layout(std140, binding = 0) uniform something0 { mediump int ui_zero; };
+layout(std140, binding = 1) uniform something1 { mediump int ui_one; };
+layout(std140, binding = 2) uniform something2 { mediump int ui_two; };
+layout(std140, binding = 3) uniform something3 { mediump int ui_three; };
+
+void main()
+{
+    gl_Position = a_position;
+    mediump vec4 coords = vec4(a_coords);
+    mediump vec4 tmp;
+    tmp[ui_zero]  = coords.x;
+    tmp[ui_one]    = coords.y * 0.5;
+    tmp[ui_two]    = coords.z * 0.25;
+    tmp[ui_three] = coords.w * 0.125;
+    mediump float res = 0.0;
+    res += tmp.x;
+    res += tmp.y;
+    res += tmp.z;
+    res += tmp.w;
+    v_color = vec3(res);
+}

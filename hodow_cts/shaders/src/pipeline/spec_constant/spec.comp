@@ -1,0 +1,8 @@
+#version 450
+${extensions}
+// Don't define work group size, use the default or specialization constants
+
+${spec_block}${ssbo_block}${global_block}
+void main (void)
+{
+${main_code}}

@@ -1,0 +1,29 @@
+#version 310 es
+layout(location = 0) in highp vec4 a_position;
+layout(location = 1) in highp vec4 a_coords;
+layout(location = 0) out mediump vec4 v_color;
+layout (std140, set = 0, binding = 0) uniform buffer0 { int ui_zero; };
+layout (std140, set = 0, binding = 1) uniform buffer1 { int ui_one; };
+
+struct T {
+    int                a;
+    mediump vec2    b;
+};
+struct S {
+    mediump float    a;
+    T                b;
+    int                c;
+};
+
+mediump vec4 myFunc (S s)
+{
+    return vec4(s.a, s.b.b, s.b.a + s.c);
+}
+
+void main (void)
+{
+    S s = S(a_coords.x, T(0, vec2(0.0)), ui_one);
+    s.b = T(ui_zero, a_coords.yz);
+    v_color = myFunc(s);
+    gl_Position = a_position;
+}

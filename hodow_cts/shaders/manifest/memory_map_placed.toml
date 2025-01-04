@@ -1,0 +1,13 @@
+# Shader manifest for dEQP-VK.memory.map_placed.gpu_access.read_write
+#
+# `MapPlacedTestCase::initPrograms` adds the shader only when `gpuAccessTest` is set, which
+# is the one case that carries it. Its increment-every-element kernel is restated verbatim.
+
+upstream_source = "external/vulkancts/modules/vulkan/memory/vktMemoryMapPlacedTests.cpp"
+rust_module = "memory/map_placed_tests"
+
+[[case]]
+name = "map_placed_gpu_access"
+rust_const = "MAP_PLACED_PROGRAMS"
+rust_type = "MapPlacedPrograms"
+programs = [{ name = "comp", template = "memory/map_placed_gpu_access.comp", stage = "comp" }]

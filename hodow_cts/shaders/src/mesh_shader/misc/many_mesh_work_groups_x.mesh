@@ -1,0 +1,25 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+layout (local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout (points) out;
+layout (max_vertices=1, max_primitives=1) out;
+
+
+layout (location=0) out perprimitiveEXT vec4 pointColor[];
+
+void main () {
+    uint parentTask = 0;
+    SetMeshOutputsEXT(1, 1);
+    const uint workGroupIndex = gl_NumWorkGroups.x * gl_NumWorkGroups.y * gl_WorkGroupID.z + gl_NumWorkGroups.x * gl_WorkGroupID.y + gl_WorkGroupID.x;
+    uint jobId = ((parentTask * 4194240) + workGroupIndex) * 1 + gl_LocalInvocationIndex;
+    uint row = jobId / 2040;
+    uint col = jobId % 2040;
+    float yCoord = (float(row + 0.5) / 2056.0) * 2.0 - 1.0;
+    float xCoord = (float(col + 0.5) / 2040.0) * 2.0 - 1.0;
+    gl_MeshVerticesEXT[gl_LocalInvocationIndex].gl_Position = vec4(xCoord, yCoord, 0.0, 1.0);
+    gl_MeshVerticesEXT[gl_LocalInvocationIndex].gl_PointSize = 1.0;
+    gl_PrimitivePointIndicesEXT[gl_LocalInvocationIndex] = gl_LocalInvocationIndex;
+    vec4 resultColor = vec4(0.0, 0.0, 1.0, 1.0);
+    pointColor[gl_LocalInvocationIndex] = resultColor;
+}

@@ -1,0 +1,14 @@
+# Shader manifest for dEQP-VK.subgroups.multiple_dispatches.uniform_subgroup_size
+#
+# `MultipleDispatchesUniformSubgroupSize::initPrograms`: one compute shader whose local size is specialization constant 0.
+
+upstream_source = "external/vulkancts/modules/vulkan/subgroups/vktSubgroupsMultipleDispatchesUniformSubgroupSizeTests.cpp"
+rust_module = "subgroups/multiple_dispatches_tests"
+
+[[case]]
+name = "uniform_subgroup_size"
+rust_const = "MULTIPLE_DISPATCHES_UNIFORM_SUBGROUP_SIZE"
+rust_type = "MultipleDispatchesCase"
+programs = [
+    { name = "comp", template = "subgroups_multiple_dispatches/uniform_subgroup_size.comp", stage = "comp", spirv_version = "spirv1.3" },
+]

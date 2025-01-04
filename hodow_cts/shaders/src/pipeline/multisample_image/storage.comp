@@ -1,0 +1,18 @@
+#version 450
+layout(local_size_x = 1) in;
+layout(set = 0, binding = 0, ${format_qualifier}) uniform ${image_type} u_msImage;
+
+void main(void)
+{
+    int gx = int(gl_GlobalInvocationID.x);
+    int gy = int(gl_GlobalInvocationID.y);
+    int gz = int(gl_GlobalInvocationID.z);
+
+    ${gvec4} prevColor = imageLoad(u_msImage, ${texel_coord}, 0);
+    for (int sampleNdx = 1; sampleNdx < ${samples}; ++sampleNdx) {
+        ${gvec4} color = imageLoad(u_msImage, ${texel_coord}, sampleNdx);
+        imageStore(u_msImage, ${texel_coord}, sampleNdx, prevColor);
+        prevColor = color;
+    }
+    imageStore(u_msImage, ${texel_coord}, 0, prevColor);
+}

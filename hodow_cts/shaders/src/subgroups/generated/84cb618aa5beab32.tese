@@ -1,0 +1,36 @@
+#version 450
+#extension GL_KHR_shader_subgroup_quad: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout(isolines) in;
+layout(set = 0, binding = 2, std430) buffer Buffer1
+{
+  uint result[];
+};
+
+void main (void)
+{
+  uint tempRes;
+  uint tempResult = 0x1;
+  uvec4 mask = subgroupBallot(true);
+  uint cluster[4] =
+  {
+    subgroupQuadBroadcast(gl_SubgroupInvocationID, 0),
+    subgroupQuadBroadcast(gl_SubgroupInvocationID, 1),
+    subgroupQuadBroadcast(gl_SubgroupInvocationID, 2),
+    subgroupQuadBroadcast(gl_SubgroupInvocationID, 3)
+  };
+  uint rootID = gl_SubgroupInvocationID & ~0x3;
+  for (uint i = 0; i < 4; i++)
+  {
+    uint nextID = rootID + i;
+    if (subgroupBallotBitExtract(mask, nextID) && (cluster[i] != nextID))
+    {
+      tempResult = mask.x;
+    }
+  }
+  tempRes = tempResult;
+  result[gl_PrimitiveID * 2 + uint(gl_TessCoord.x + 0.5)] = tempRes;
+  float pixelSize = 2.0f/1024.0f;
+  gl_Position = gl_in[0].gl_Position + gl_TessCoord.x * pixelSize / 2.0f;
+  gl_PointSize = gl_in[0].gl_PointSize;
+}

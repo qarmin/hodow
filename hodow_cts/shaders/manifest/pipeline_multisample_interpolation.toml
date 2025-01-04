@@ -1,0 +1,169 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.multisample_interpolation.*
+#
+# One case per `MSCase<...>::initPrograms`; the consistency cases are split by `ComponentSource` the way upstream's
+# initPrograms branches on it (all components, a constant component 0/1, a push constant component).
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineMultisampleInterpolationTests.cpp"
+rust_module = "pipeline/multisample_interpolation_tests"
+
+[[case]]
+name = "distinct_sample_qualifier"
+rust_const = "DISTINCT_SAMPLE_QUALIFIER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex_shader", template = "pipeline/multisample_interpolation/distinct_values.vert", stage = "vert" },
+    { name = "fragment_shader", template = "pipeline/multisample_interpolation/sample_qualifier_distinct_values.frag", stage = "frag" },
+]
+
+[[case]]
+name = "distinct_interpolate_at_sample"
+rust_const = "DISTINCT_INTERPOLATE_AT_SAMPLE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex_shader", template = "pipeline/multisample_interpolation/distinct_values.vert", stage = "vert" },
+    { name = "fragment_shader", template = "pipeline/multisample_interpolation/interpolate_at_sample_distinct_values.frag", stage = "frag" },
+]
+
+[[case]]
+name = "at_sample_single_sample"
+rust_const = "AT_SAMPLE_SINGLE_SAMPLE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex_shader", template = "pipeline/multisample_interpolation/screen_position.vert", stage = "vert" },
+    { name = "fragment_shader", template = "pipeline/multisample_interpolation/interpolate_at_sample_single_sample.frag", stage = "frag" },
+]
+
+[[case]]
+name = "at_sample_ignores_centroid"
+rust_const = "AT_SAMPLE_IGNORES_CENTROID"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex_shader", template = "pipeline/multisample_interpolation/ignores_centroid.vert", stage = "vert" },
+    { name = "fragment_shader", template = "pipeline/multisample_interpolation/interpolate_at_sample_ignores_centroid.frag", stage = "frag" },
+]
+
+[[case]]
+name = "sample_consistency_none"
+rust_const = "SAMPLE_CONSISTENCY_NONE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex_shader", template = "pipeline/multisample_interpolation/sample_consistency.vert", stage = "vert" },
+    { name = "fragment_shader", template = "pipeline/multisample_interpolation/sample_consistency_none.frag", stage = "frag" },
+]
+
+[[case]]
+name = "centroid_consistency_none"
+rust_const = "CENTROID_CONSISTENCY_NONE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex_shader", template = "pipeline/multisample_interpolation/centroid_consistency.vert", stage = "vert" },
+    { name = "fragment_shader", template = "pipeline/multisample_interpolation/centroid_consistency_none.frag", stage = "frag" },
+]
+
+[[case]]
+name = "offset_sample_position_none"
+rust_const = "OFFSET_SAMPLE_POSITION_NONE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex_shader", template = "pipeline/multisample_interpolation/offset_sample_position.vert", stage = "vert" },
+    { name = "fragment_shader", template = "pipeline/multisample_interpolation/offset_sample_position_none.frag", stage = "frag" },
+]
+
+[[case]]
+name = "sample_consistency_const0"
+rust_const = "SAMPLE_CONSISTENCY_CONST0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex_shader", template = "pipeline/multisample_interpolation/sample_consistency.vert", stage = "vert" },
+    { name = "fragment_shader", template = "pipeline/multisample_interpolation/sample_consistency_const0.frag", stage = "frag" },
+]
+
+[[case]]
+name = "centroid_consistency_const0"
+rust_const = "CENTROID_CONSISTENCY_CONST0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex_shader", template = "pipeline/multisample_interpolation/centroid_consistency.vert", stage = "vert" },
+    { name = "fragment_shader", template = "pipeline/multisample_interpolation/centroid_consistency_const0.frag", stage = "frag" },
+]
+
+[[case]]
+name = "offset_sample_position_const0"
+rust_const = "OFFSET_SAMPLE_POSITION_CONST0"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex_shader", template = "pipeline/multisample_interpolation/offset_sample_position.vert", stage = "vert" },
+    { name = "fragment_shader", template = "pipeline/multisample_interpolation/offset_sample_position_const0.frag", stage = "frag" },
+]
+
+[[case]]
+name = "sample_consistency_const1"
+rust_const = "SAMPLE_CONSISTENCY_CONST1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex_shader", template = "pipeline/multisample_interpolation/sample_consistency.vert", stage = "vert" },
+    { name = "fragment_shader", template = "pipeline/multisample_interpolation/sample_consistency_const1.frag", stage = "frag" },
+]
+
+[[case]]
+name = "centroid_consistency_const1"
+rust_const = "CENTROID_CONSISTENCY_CONST1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex_shader", template = "pipeline/multisample_interpolation/centroid_consistency.vert", stage = "vert" },
+    { name = "fragment_shader", template = "pipeline/multisample_interpolation/centroid_consistency_const1.frag", stage = "frag" },
+]
+
+[[case]]
+name = "offset_sample_position_const1"
+rust_const = "OFFSET_SAMPLE_POSITION_CONST1"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex_shader", template = "pipeline/multisample_interpolation/offset_sample_position.vert", stage = "vert" },
+    { name = "fragment_shader", template = "pipeline/multisample_interpolation/offset_sample_position_const1.frag", stage = "frag" },
+]
+
+[[case]]
+name = "sample_consistency_push"
+rust_const = "SAMPLE_CONSISTENCY_PUSH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex_shader", template = "pipeline/multisample_interpolation/sample_consistency.vert", stage = "vert" },
+    { name = "fragment_shader", template = "pipeline/multisample_interpolation/sample_consistency_push.frag", stage = "frag" },
+]
+
+[[case]]
+name = "centroid_consistency_push"
+rust_const = "CENTROID_CONSISTENCY_PUSH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex_shader", template = "pipeline/multisample_interpolation/centroid_consistency.vert", stage = "vert" },
+    { name = "fragment_shader", template = "pipeline/multisample_interpolation/centroid_consistency_push.frag", stage = "frag" },
+]
+
+[[case]]
+name = "offset_sample_position_push"
+rust_const = "OFFSET_SAMPLE_POSITION_PUSH"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex_shader", template = "pipeline/multisample_interpolation/offset_sample_position.vert", stage = "vert" },
+    { name = "fragment_shader", template = "pipeline/multisample_interpolation/offset_sample_position_push.frag", stage = "frag" },
+]
+
+[[case]]
+name = "centroid_inside_primitive"
+rust_const = "CENTROID_INSIDE_PRIMITIVE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex_shader", template = "pipeline/multisample_interpolation/centroid_inside_primitive.vert", stage = "vert" },
+    { name = "fragment_shader", template = "pipeline/multisample_interpolation/centroid_inside_primitive.frag", stage = "frag" },
+]
+
+[[case]]
+name = "offset_pixel_center"
+rust_const = "OFFSET_PIXEL_CENTER"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vertex_shader", template = "pipeline/multisample_interpolation/offset_pixel_center.vert", stage = "vert" },
+    { name = "fragment_shader", template = "pipeline/multisample_interpolation/offset_pixel_center.frag", stage = "frag" },
+]

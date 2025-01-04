@@ -1,0 +1,158 @@
+# Shader manifest for the basic, resume, draw_outside, xfb_* built-in, holes_* and max_output_components cases of
+# dEQP-VK.transform_feedback.simple.*
+#
+# Every one of those cases is registered with a point size of 1 (the point-size-less
+# variant is illegal for point lists and skipped by addTransformFeedbackTestCaseVariants),
+# so the vertex shaders carry `gl_PointSize = 1.0` literally. basic and resume share one
+# shader; draw_outside writes a second one for the draw made outside transform feedback.
+
+upstream_source = "external/vulkancts/modules/vulkan/transform_feedback/vktTransformFeedbackSimpleTests.cpp"
+rust_module = "transform_feedback/simple_tests"
+
+[[case]]
+name = "basic"
+rust_const = "SIMPLE_BASIC_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [{ name = "vert", template = "transform_feedback/simple/basic.vert", stage = "vert" }]
+
+[[case]]
+name = "draw_outside"
+rust_const = "SIMPLE_DRAW_OUTSIDE_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "transform_feedback/simple/draw_outside.vert", stage = "vert" },
+    { name = "vert2", template = "transform_feedback/simple/draw_outside_vert2.vert", stage = "vert" },
+]
+
+# The built-in cases (xfb_pointsize, xfb_clipdistance, xfb_culldistance, xfb_clip_and_cull)
+# differ per part count only in `xfb_buffer = partCount - 1`; as with the others the point
+# size is always wanted, so the shaders write gl_PointSize alongside the built-in under test.
+
+[[case]]
+name = "xfb_pointsize_1"
+rust_const = "SIMPLE_XFB_POINTSIZE_1_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [{ name = "vert", template = "transform_feedback/simple/xfb_pointsize_1.vert", stage = "vert" }]
+
+[[case]]
+name = "xfb_pointsize_2"
+rust_const = "SIMPLE_XFB_POINTSIZE_2_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [{ name = "vert", template = "transform_feedback/simple/xfb_pointsize_2.vert", stage = "vert" }]
+
+[[case]]
+name = "xfb_pointsize_4"
+rust_const = "SIMPLE_XFB_POINTSIZE_4_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [{ name = "vert", template = "transform_feedback/simple/xfb_pointsize_4.vert", stage = "vert" }]
+
+[[case]]
+name = "xfb_pointsize_8"
+rust_const = "SIMPLE_XFB_POINTSIZE_8_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [{ name = "vert", template = "transform_feedback/simple/xfb_pointsize_8.vert", stage = "vert" }]
+
+[[case]]
+name = "xfb_clipdistance_1"
+rust_const = "SIMPLE_XFB_CLIPDISTANCE_1_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [{ name = "vert", template = "transform_feedback/simple/xfb_clipdistance_1.vert", stage = "vert" }]
+
+[[case]]
+name = "xfb_clipdistance_2"
+rust_const = "SIMPLE_XFB_CLIPDISTANCE_2_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [{ name = "vert", template = "transform_feedback/simple/xfb_clipdistance_2.vert", stage = "vert" }]
+
+[[case]]
+name = "xfb_clipdistance_4"
+rust_const = "SIMPLE_XFB_CLIPDISTANCE_4_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [{ name = "vert", template = "transform_feedback/simple/xfb_clipdistance_4.vert", stage = "vert" }]
+
+[[case]]
+name = "xfb_clipdistance_8"
+rust_const = "SIMPLE_XFB_CLIPDISTANCE_8_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [{ name = "vert", template = "transform_feedback/simple/xfb_clipdistance_8.vert", stage = "vert" }]
+
+[[case]]
+name = "xfb_culldistance_1"
+rust_const = "SIMPLE_XFB_CULLDISTANCE_1_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [{ name = "vert", template = "transform_feedback/simple/xfb_culldistance_1.vert", stage = "vert" }]
+
+[[case]]
+name = "xfb_culldistance_2"
+rust_const = "SIMPLE_XFB_CULLDISTANCE_2_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [{ name = "vert", template = "transform_feedback/simple/xfb_culldistance_2.vert", stage = "vert" }]
+
+[[case]]
+name = "xfb_culldistance_4"
+rust_const = "SIMPLE_XFB_CULLDISTANCE_4_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [{ name = "vert", template = "transform_feedback/simple/xfb_culldistance_4.vert", stage = "vert" }]
+
+[[case]]
+name = "xfb_culldistance_8"
+rust_const = "SIMPLE_XFB_CULLDISTANCE_8_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [{ name = "vert", template = "transform_feedback/simple/xfb_culldistance_8.vert", stage = "vert" }]
+
+[[case]]
+name = "xfb_clip_and_cull_1"
+rust_const = "SIMPLE_XFB_CLIP_AND_CULL_1_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [{ name = "vert", template = "transform_feedback/simple/xfb_clip_and_cull_1.vert", stage = "vert" }]
+
+[[case]]
+name = "xfb_clip_and_cull_2"
+rust_const = "SIMPLE_XFB_CLIP_AND_CULL_2_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [{ name = "vert", template = "transform_feedback/simple/xfb_clip_and_cull_2.vert", stage = "vert" }]
+
+[[case]]
+name = "xfb_clip_and_cull_4"
+rust_const = "SIMPLE_XFB_CLIP_AND_CULL_4_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [{ name = "vert", template = "transform_feedback/simple/xfb_clip_and_cull_4.vert", stage = "vert" }]
+
+[[case]]
+name = "xfb_clip_and_cull_8"
+rust_const = "SIMPLE_XFB_CLIP_AND_CULL_8_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [{ name = "vert", template = "transform_feedback/simple/xfb_clip_and_cull_8.vert", stage = "vert" }]
+
+# holes_vert / holes_geom (pointSize is 1 for both, and the extra-draw variants share the shaders).
+[[case]]
+name = "holes_vert"
+rust_const = "SIMPLE_HOLES_VERT_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "transform_feedback/simple/holes_vert_only.vert", stage = "vert" },
+    { name = "frag", template = "transform_feedback/simple/holes_frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "holes_geom"
+rust_const = "SIMPLE_HOLES_GEOM_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "transform_feedback/simple/holes_geom_vert.vert", stage = "vert" },
+    { name = "geom", template = "transform_feedback/simple/holes_geom.geom", stage = "geom" },
+    { name = "frag", template = "transform_feedback/simple/holes_frag.frag", stage = "frag" },
+]
+
+# max_output_components: the part count is compCount / 4 - 1 (15 for 64 components, 31 for 128).
+[[case]]
+name = "max_output_components_64"
+rust_const = "SIMPLE_MAX_OUTPUT_COMPONENTS_64_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [{ name = "vert", template = "transform_feedback/simple/max_output_components_64.vert", stage = "vert" }]
+
+[[case]]
+name = "max_output_components_128"
+rust_const = "SIMPLE_MAX_OUTPUT_COMPONENTS_128_PROGRAMS"
+rust_type = "SharedProgram"
+programs = [{ name = "vert", template = "transform_feedback/simple/max_output_components_128.vert", stage = "vert" }]

@@ -1,0 +1,22 @@
+# Shader manifest for dEQP-VK.api.object_management.*
+#
+# `ShaderModule::getSource` has one source per stage, and upstream registers them
+# under whatever binary name the case asks for: "test" for the bare shader_module
+# case, "vert"/"frag" for the graphics pipeline, "comp" for the compute pipeline and
+# the pipeline caches. "test" and "comp" are the same compute source under two names,
+# which is why this one collection carries four entries for three shaders - the
+# collection is a lookup, so handing every case all four costs nothing.
+
+upstream_source = "external/vulkancts/modules/vulkan/api/vktApiObjectManagementTests.cpp"
+rust_module = "api/object_management_tests"
+
+[[case]]
+name = "programs"
+rust_const = "OBJECT_MANAGEMENT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "api/object_management.vert", stage = "vert" },
+    { name = "frag", template = "api/object_management.frag", stage = "frag" },
+    { name = "comp", template = "api/object_management.comp", stage = "comp" },
+    { name = "test", template = "api/object_management.comp", stage = "comp" },
+]

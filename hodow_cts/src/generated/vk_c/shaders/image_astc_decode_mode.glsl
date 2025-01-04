@@ -1,0 +1,84 @@
+#version 450
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+
+layout (binding = 0) uniform sampler2D compressed_tested;
+layout (binding = 1) uniform sampler2D compressed_reference;
+layout (binding = 2, rgba8) writeonly uniform image2D result;
+void main (void)
+{
+    const vec2 pixels_resolution = vec2(gl_NumWorkGroups.xy);
+    const vec2 cord = vec2(gl_GlobalInvocationID.xy) / vec2(pixels_resolution);
+    const ivec2 pos = ivec2(gl_GlobalInvocationID.xy); 
+    vec4 tested = texture(compressed_tested, cord);
+    vec4 reference = texture(compressed_reference, cord);
+    float result_color = 0.5 * float(distance(tested, reference) < 0.01);
+    imageStore(result, pos, vec4(result_color));
+}
+#version 450
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+
+layout (binding = 0) uniform sampler2D compressed_tested;
+layout (binding = 1) uniform sampler2D compressed_reference;
+layout (binding = 2, rgba8) writeonly uniform image2D result;
+void main (void)
+{
+    const vec2 pixels_resolution = vec2(gl_NumWorkGroups.xy);
+    const vec2 cord = vec2(gl_GlobalInvocationID.xy) / vec2(pixels_resolution);
+    const ivec2 pos = ivec2(gl_GlobalInvocationID.xy); 
+    vec4 tested = texture(compressed_tested, cord);
+    vec4 reference = texture(compressed_reference, cord);
+    reference = max(vec4(0,0,0,1), reference);
+    float result_color = 0.5 * float(distance(tested, reference) < 0.01);
+    imageStore(result, pos, vec4(result_color));
+}
+#version 450
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+
+layout (binding = 0) uniform sampler3D compressed_tested;
+layout (binding = 1) uniform sampler3D compressed_reference;
+layout (binding = 2, rgba8) writeonly uniform image3D result;
+void main (void)
+{
+    const vec3 pixels_resolution = vec3(gl_NumWorkGroups.xyz);
+    const vec3 cord = vec3(gl_GlobalInvocationID.xyz) / vec3(pixels_resolution);
+    const ivec3 pos = ivec3(gl_GlobalInvocationID.xyz); 
+    vec4 tested = texture(compressed_tested, cord);
+    vec4 reference = texture(compressed_reference, cord);
+    float result_color = 0.5 * float(distance(tested, reference) < 0.01);
+    imageStore(result, pos, vec4(result_color));
+}
+#version 450
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+
+layout (binding = 0) uniform sampler3D compressed_tested;
+layout (binding = 1) uniform sampler3D compressed_reference;
+layout (binding = 2, rgba8) writeonly uniform image3D result;
+void main (void)
+{
+    const vec3 pixels_resolution = vec3(gl_NumWorkGroups.xyz);
+    const vec3 cord = vec3(gl_GlobalInvocationID.xyz) / vec3(pixels_resolution);
+    const ivec3 pos = ivec3(gl_GlobalInvocationID.xyz); 
+    vec4 tested = texture(compressed_tested, cord);
+    vec4 reference = texture(compressed_reference, cord);
+    reference = max(vec4(0,0,0,1), reference);
+    float result_color = 0.5 * float(distance(tested, reference) < 0.01);
+    imageStore(result, pos, vec4(result_color));
+}
+#version 450
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+
+layout (binding = 0) uniform sampler3D compressed_tested;
+layout (binding = 1) uniform sampler3D compressed_reference;
+layout (binding = 2, rgba8) writeonly uniform image3D result;
+void main (void)
+{
+    const vec3 pixels_resolution = vec3(gl_NumWorkGroups.xyz);
+    const vec3 cord = vec3(gl_GlobalInvocationID.xyz) / vec3(pixels_resolution);
+    const ivec3 pos = ivec3(gl_GlobalInvocationID.xyz); 
+    vec4 tested = texture(compressed_tested, cord);
+    vec4 reference = texture(compressed_reference, cord);
+    reference = max(vec4(0,0,0,1), reference);
+    tested = min(vec4(65504, 65504, 65504, 65504), tested);
+    float result_color = 0.5 * float(distance(tested, reference) < 0.01);
+    imageStore(result, pos, vec4(result_color));
+}

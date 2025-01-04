@@ -1,0 +1,18 @@
+#version 450
+
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+
+void main()
+{
+    vec2 v2val1 = vec2(0.5, 0.2);
+    vec2 v2val2 = vec2(0.1, 0.8);
+    bvec2 bv2val1 = lessThan(v2val1, v2val2);
+    bvec2 bv2val2 = lessThanEqual(v2val1, v2val2);
+    bvec2 bv2val3 = greaterThan(v2val1, v2val2);
+    bvec2 bv2val4 = greaterThanEqual(v2val1, v2val2);
+    bvec2 bv2val5 = equal(v2val1, v2val2);
+    bvec2 bv2val6 = notEqual(v2val1, v2val2);
+    bool bval1 = any(bv2val1);
+    bool bval2 = all(bv2val1);
+    bvec2 bv2val7 = not(bv2val1);
+}

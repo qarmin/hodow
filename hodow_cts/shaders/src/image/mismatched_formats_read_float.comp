@@ -1,0 +1,8 @@
+#version 460 core
+
+layout (${glsl_format}, binding=0) uniform image2D inputImage;
+
+void main()
+{
+    vec4 value = imageLoad(inputImage, ivec2(gl_GlobalInvocationID.xy));
+}

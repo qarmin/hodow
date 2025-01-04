@@ -1,0 +1,11 @@
+#version 450
+#extension GL_EXT_null_initializer : enable
+#extension GL_EXT_shader_explicit_arithmetic_types : enable
+
+${''.join(['layout(constant_id = %d) const uint specId%d = 1;\n' % (i, i) for i in (0,1,2,3,4)[:num_spec_values]])}
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(set = 0, binding = 0) buffer A { uint a[]; } a;
+
+${type_definition}
+void main() {
+${assignment}}

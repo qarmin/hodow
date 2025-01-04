@@ -1,0 +1,95 @@
+#version 450 core
+#extension GL_KHR_shader_subgroup_ballot : enable
+#extension GL_KHR_shader_subgroup_vote : enable
+#extension GL_NV_shader_subgroup_partitioned : enable
+#extension GL_EXT_subgroup_uniform_control_flow : enable
+layout(local_size_x_id = 0, local_size_y_id = 1, local_size_z = 1) in;
+layout(set=0, binding=2) coherent buffer OutputC { uint loc[]; } outputC;
+layout(set=0, binding=1) coherent buffer OutputB { uvec4 b[]; } outputB;
+layout(set=0, binding=0) coherent buffer InputA  { uint  a[]; } inputA;
+layout(push_constant) uniform PC {
+   // set to the real stride when writing out ballots, or zero when just counting
+   int  invocationStride;
+   // wildcard fields, for an example the dimensions of rendered area in the case of graphics shaders
+   int  width;
+   int  height;
+   uint primitiveStride;
+   uint subgroupStride;
+   uint enableInvocationIndex;
+};
+int outLoc = 0;
+bool testBit(uvec4 mask, uint bit) { return ((mask[bit / 32] >> (bit % 32)) & 1) != 0; }
+uint elect() { return int(subgroupElect()) + 1; }
+
+
+void main()
+[[subgroup_uniform_control_flow]]
+{
+
+    outputC.loc[gl_LocalInvocationIndex]++;
+    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10000;
+    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = elect();
+    switch (inputA.a[0]) {
+        case 1:
+        {
+            {
+                int loopIdx0 = 0;
+                do {
+                    loopIdx0++;
+                    outputC.loc[gl_LocalInvocationIndex]++;
+                    outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10005;
+                    outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = elect();
+                } while (loopIdx0 < inputA.a[5]);
+            }
+            break;
+        }
+        case 0:
+        {
+            outputC.loc[gl_LocalInvocationIndex]++;
+            outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x1000a;
+            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = elect();
+            if (testBit(uvec4(0x2a35705c, 0xcb7b08d0, 0x2994b495, 0x2887ea1d), gl_SubgroupInvocationID)) {
+            } else {
+            }
+            break;
+        }
+        case 2:
+        {
+            if (testBit(uvec4(0x3c98e8be, 0x9e00d764, 0x779b3c1c, 0x5ec07957), gl_SubgroupInvocationID)) {
+                outputC.loc[gl_LocalInvocationIndex]++;
+                outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10012;
+                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = elect();
+            }
+            outputC.loc[gl_LocalInvocationIndex]++;
+            outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10015;
+            outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = elect();
+            break;
+        }
+    }
+    {
+        int loopIdx0 = 0;
+        do {
+            for (int loopIdx1 = 0;
+                     loopIdx1 < inputA.a[5];
+                     loopIdx1++) {
+            }
+            if (gl_SubgroupInvocationID == loopIdx0) {
+            } else {
+            }
+            if (subgroupElect()) {
+                break;
+            }
+            if (subgroupElect()) {
+            }
+            if (testBit(uvec4(0x149ea62d, 0xefb87e7c, 0xe71cc1d1, 0x49c96f28), gl_SubgroupInvocationID)) {
+                outputC.loc[gl_LocalInvocationIndex]++;
+                outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = 0x10025;
+                outputC.loc[gl_LocalInvocationIndex]++,outputB.b[(outLoc++)*invocationStride + gl_LocalInvocationIndex].x = elect();
+            }
+            loopIdx0++;
+        } while (true);
+    }
+
+
+
+}

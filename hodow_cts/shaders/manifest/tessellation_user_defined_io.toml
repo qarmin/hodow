@@ -1,0 +1,658 @@
+# Shader manifest for dEQP-VK.tessellation.user_defined_io.*
+#
+# `UserDefinedIOTest::initPrograms`, expanded per case. The vertex shader forwards an attribute to the control shader and the
+# fragment shader forwards the colour; both are the same in every case. The control and evaluation shaders are one pair of
+# templates per IO type (what the upstream constructor builds out of `glu::VarType`s: per-patch/per-vertex variables, arrays,
+# blocks and block arrays), with the size of the per-vertex input arrays (`vertex_size`: implicit, `gl_MaxPatchVertices` or the
+# specification minimum 32) and the primitive type of the evaluation shader substituted per case.
+
+upstream_source = "external/vulkancts/modules/vulkan/tessellation/vktTessellationUserDefinedIO.cpp"
+rust_module = "tessellation/user_defined_io_tests"
+
+[[case]]
+name = "udio_per_patch_implicit_triangles"
+rust_const = "UDIO_PER_PATCH_IMPLICIT_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "''", primitive = "'triangles'" }
+
+[[case]]
+name = "udio_per_patch_implicit_quads"
+rust_const = "UDIO_PER_PATCH_IMPLICIT_QUADS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "''", primitive = "'quads'" }
+
+[[case]]
+name = "udio_per_patch_implicit_isolines"
+rust_const = "UDIO_PER_PATCH_IMPLICIT_ISOLINES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "''", primitive = "'isolines'" }
+
+[[case]]
+name = "udio_per_patch_shader_builtin_triangles"
+rust_const = "UDIO_PER_PATCH_SHADER_BUILTIN_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'gl_MaxPatchVertices'", primitive = "'triangles'" }
+
+[[case]]
+name = "udio_per_patch_shader_builtin_quads"
+rust_const = "UDIO_PER_PATCH_SHADER_BUILTIN_QUADS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'gl_MaxPatchVertices'", primitive = "'quads'" }
+
+[[case]]
+name = "udio_per_patch_shader_builtin_isolines"
+rust_const = "UDIO_PER_PATCH_SHADER_BUILTIN_ISOLINES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'gl_MaxPatchVertices'", primitive = "'isolines'" }
+
+[[case]]
+name = "udio_per_patch_spec_min_triangles"
+rust_const = "UDIO_PER_PATCH_SPEC_MIN_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'32'", primitive = "'triangles'" }
+
+[[case]]
+name = "udio_per_patch_spec_min_quads"
+rust_const = "UDIO_PER_PATCH_SPEC_MIN_QUADS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'32'", primitive = "'quads'" }
+
+[[case]]
+name = "udio_per_patch_spec_min_isolines"
+rust_const = "UDIO_PER_PATCH_SPEC_MIN_ISOLINES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'32'", primitive = "'isolines'" }
+
+[[case]]
+name = "udio_per_patch_array_implicit_triangles"
+rust_const = "UDIO_PER_PATCH_ARRAY_IMPLICIT_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_array.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_array.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "''", primitive = "'triangles'" }
+
+[[case]]
+name = "udio_per_patch_array_implicit_quads"
+rust_const = "UDIO_PER_PATCH_ARRAY_IMPLICIT_QUADS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_array.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_array.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "''", primitive = "'quads'" }
+
+[[case]]
+name = "udio_per_patch_array_implicit_isolines"
+rust_const = "UDIO_PER_PATCH_ARRAY_IMPLICIT_ISOLINES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_array.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_array.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "''", primitive = "'isolines'" }
+
+[[case]]
+name = "udio_per_patch_array_shader_builtin_triangles"
+rust_const = "UDIO_PER_PATCH_ARRAY_SHADER_BUILTIN_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_array.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_array.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'gl_MaxPatchVertices'", primitive = "'triangles'" }
+
+[[case]]
+name = "udio_per_patch_array_shader_builtin_quads"
+rust_const = "UDIO_PER_PATCH_ARRAY_SHADER_BUILTIN_QUADS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_array.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_array.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'gl_MaxPatchVertices'", primitive = "'quads'" }
+
+[[case]]
+name = "udio_per_patch_array_shader_builtin_isolines"
+rust_const = "UDIO_PER_PATCH_ARRAY_SHADER_BUILTIN_ISOLINES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_array.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_array.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'gl_MaxPatchVertices'", primitive = "'isolines'" }
+
+[[case]]
+name = "udio_per_patch_array_spec_min_triangles"
+rust_const = "UDIO_PER_PATCH_ARRAY_SPEC_MIN_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_array.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_array.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'32'", primitive = "'triangles'" }
+
+[[case]]
+name = "udio_per_patch_array_spec_min_quads"
+rust_const = "UDIO_PER_PATCH_ARRAY_SPEC_MIN_QUADS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_array.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_array.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'32'", primitive = "'quads'" }
+
+[[case]]
+name = "udio_per_patch_array_spec_min_isolines"
+rust_const = "UDIO_PER_PATCH_ARRAY_SPEC_MIN_ISOLINES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_array.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_array.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'32'", primitive = "'isolines'" }
+
+[[case]]
+name = "udio_per_patch_block_implicit_triangles"
+rust_const = "UDIO_PER_PATCH_BLOCK_IMPLICIT_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_block.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_block.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "''", primitive = "'triangles'" }
+
+[[case]]
+name = "udio_per_patch_block_implicit_quads"
+rust_const = "UDIO_PER_PATCH_BLOCK_IMPLICIT_QUADS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_block.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_block.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "''", primitive = "'quads'" }
+
+[[case]]
+name = "udio_per_patch_block_implicit_isolines"
+rust_const = "UDIO_PER_PATCH_BLOCK_IMPLICIT_ISOLINES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_block.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_block.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "''", primitive = "'isolines'" }
+
+[[case]]
+name = "udio_per_patch_block_shader_builtin_triangles"
+rust_const = "UDIO_PER_PATCH_BLOCK_SHADER_BUILTIN_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_block.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_block.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'gl_MaxPatchVertices'", primitive = "'triangles'" }
+
+[[case]]
+name = "udio_per_patch_block_shader_builtin_quads"
+rust_const = "UDIO_PER_PATCH_BLOCK_SHADER_BUILTIN_QUADS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_block.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_block.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'gl_MaxPatchVertices'", primitive = "'quads'" }
+
+[[case]]
+name = "udio_per_patch_block_shader_builtin_isolines"
+rust_const = "UDIO_PER_PATCH_BLOCK_SHADER_BUILTIN_ISOLINES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_block.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_block.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'gl_MaxPatchVertices'", primitive = "'isolines'" }
+
+[[case]]
+name = "udio_per_patch_block_spec_min_triangles"
+rust_const = "UDIO_PER_PATCH_BLOCK_SPEC_MIN_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_block.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_block.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'32'", primitive = "'triangles'" }
+
+[[case]]
+name = "udio_per_patch_block_spec_min_quads"
+rust_const = "UDIO_PER_PATCH_BLOCK_SPEC_MIN_QUADS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_block.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_block.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'32'", primitive = "'quads'" }
+
+[[case]]
+name = "udio_per_patch_block_spec_min_isolines"
+rust_const = "UDIO_PER_PATCH_BLOCK_SPEC_MIN_ISOLINES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_block.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_block.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'32'", primitive = "'isolines'" }
+
+[[case]]
+name = "udio_per_patch_block_array_implicit_triangles"
+rust_const = "UDIO_PER_PATCH_BLOCK_ARRAY_IMPLICIT_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_block_array.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_block_array.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "''", primitive = "'triangles'" }
+
+[[case]]
+name = "udio_per_patch_block_array_implicit_quads"
+rust_const = "UDIO_PER_PATCH_BLOCK_ARRAY_IMPLICIT_QUADS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_block_array.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_block_array.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "''", primitive = "'quads'" }
+
+[[case]]
+name = "udio_per_patch_block_array_implicit_isolines"
+rust_const = "UDIO_PER_PATCH_BLOCK_ARRAY_IMPLICIT_ISOLINES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_block_array.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_block_array.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "''", primitive = "'isolines'" }
+
+[[case]]
+name = "udio_per_patch_block_array_shader_builtin_triangles"
+rust_const = "UDIO_PER_PATCH_BLOCK_ARRAY_SHADER_BUILTIN_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_block_array.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_block_array.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'gl_MaxPatchVertices'", primitive = "'triangles'" }
+
+[[case]]
+name = "udio_per_patch_block_array_shader_builtin_quads"
+rust_const = "UDIO_PER_PATCH_BLOCK_ARRAY_SHADER_BUILTIN_QUADS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_block_array.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_block_array.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'gl_MaxPatchVertices'", primitive = "'quads'" }
+
+[[case]]
+name = "udio_per_patch_block_array_shader_builtin_isolines"
+rust_const = "UDIO_PER_PATCH_BLOCK_ARRAY_SHADER_BUILTIN_ISOLINES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_block_array.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_block_array.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'gl_MaxPatchVertices'", primitive = "'isolines'" }
+
+[[case]]
+name = "udio_per_patch_block_array_spec_min_triangles"
+rust_const = "UDIO_PER_PATCH_BLOCK_ARRAY_SPEC_MIN_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_block_array.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_block_array.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'32'", primitive = "'triangles'" }
+
+[[case]]
+name = "udio_per_patch_block_array_spec_min_quads"
+rust_const = "UDIO_PER_PATCH_BLOCK_ARRAY_SPEC_MIN_QUADS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_block_array.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_block_array.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'32'", primitive = "'quads'" }
+
+[[case]]
+name = "udio_per_patch_block_array_spec_min_isolines"
+rust_const = "UDIO_PER_PATCH_BLOCK_ARRAY_SPEC_MIN_ISOLINES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_patch_block_array.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_patch_block_array.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'32'", primitive = "'isolines'" }
+
+[[case]]
+name = "udio_per_vertex_implicit_triangles"
+rust_const = "UDIO_PER_VERTEX_IMPLICIT_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_vertex.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_vertex.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "''", primitive = "'triangles'" }
+
+[[case]]
+name = "udio_per_vertex_implicit_quads"
+rust_const = "UDIO_PER_VERTEX_IMPLICIT_QUADS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_vertex.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_vertex.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "''", primitive = "'quads'" }
+
+[[case]]
+name = "udio_per_vertex_implicit_isolines"
+rust_const = "UDIO_PER_VERTEX_IMPLICIT_ISOLINES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_vertex.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_vertex.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "''", primitive = "'isolines'" }
+
+[[case]]
+name = "udio_per_vertex_shader_builtin_triangles"
+rust_const = "UDIO_PER_VERTEX_SHADER_BUILTIN_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_vertex.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_vertex.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'gl_MaxPatchVertices'", primitive = "'triangles'" }
+
+[[case]]
+name = "udio_per_vertex_shader_builtin_quads"
+rust_const = "UDIO_PER_VERTEX_SHADER_BUILTIN_QUADS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_vertex.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_vertex.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'gl_MaxPatchVertices'", primitive = "'quads'" }
+
+[[case]]
+name = "udio_per_vertex_shader_builtin_isolines"
+rust_const = "UDIO_PER_VERTEX_SHADER_BUILTIN_ISOLINES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_vertex.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_vertex.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'gl_MaxPatchVertices'", primitive = "'isolines'" }
+
+[[case]]
+name = "udio_per_vertex_spec_min_triangles"
+rust_const = "UDIO_PER_VERTEX_SPEC_MIN_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_vertex.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_vertex.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'32'", primitive = "'triangles'" }
+
+[[case]]
+name = "udio_per_vertex_spec_min_quads"
+rust_const = "UDIO_PER_VERTEX_SPEC_MIN_QUADS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_vertex.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_vertex.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'32'", primitive = "'quads'" }
+
+[[case]]
+name = "udio_per_vertex_spec_min_isolines"
+rust_const = "UDIO_PER_VERTEX_SPEC_MIN_ISOLINES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_vertex.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_vertex.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'32'", primitive = "'isolines'" }
+
+[[case]]
+name = "udio_per_vertex_block_implicit_triangles"
+rust_const = "UDIO_PER_VERTEX_BLOCK_IMPLICIT_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_vertex_block.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_vertex_block.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "''", primitive = "'triangles'" }
+
+[[case]]
+name = "udio_per_vertex_block_implicit_quads"
+rust_const = "UDIO_PER_VERTEX_BLOCK_IMPLICIT_QUADS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_vertex_block.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_vertex_block.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "''", primitive = "'quads'" }
+
+[[case]]
+name = "udio_per_vertex_block_implicit_isolines"
+rust_const = "UDIO_PER_VERTEX_BLOCK_IMPLICIT_ISOLINES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_vertex_block.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_vertex_block.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "''", primitive = "'isolines'" }
+
+[[case]]
+name = "udio_per_vertex_block_shader_builtin_triangles"
+rust_const = "UDIO_PER_VERTEX_BLOCK_SHADER_BUILTIN_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_vertex_block.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_vertex_block.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'gl_MaxPatchVertices'", primitive = "'triangles'" }
+
+[[case]]
+name = "udio_per_vertex_block_shader_builtin_quads"
+rust_const = "UDIO_PER_VERTEX_BLOCK_SHADER_BUILTIN_QUADS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_vertex_block.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_vertex_block.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'gl_MaxPatchVertices'", primitive = "'quads'" }
+
+[[case]]
+name = "udio_per_vertex_block_shader_builtin_isolines"
+rust_const = "UDIO_PER_VERTEX_BLOCK_SHADER_BUILTIN_ISOLINES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_vertex_block.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_vertex_block.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'gl_MaxPatchVertices'", primitive = "'isolines'" }
+
+[[case]]
+name = "udio_per_vertex_block_spec_min_triangles"
+rust_const = "UDIO_PER_VERTEX_BLOCK_SPEC_MIN_TRIANGLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_vertex_block.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_vertex_block.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'32'", primitive = "'triangles'" }
+
+[[case]]
+name = "udio_per_vertex_block_spec_min_quads"
+rust_const = "UDIO_PER_VERTEX_BLOCK_SPEC_MIN_QUADS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_vertex_block.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_vertex_block.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'32'", primitive = "'quads'" }
+
+[[case]]
+name = "udio_per_vertex_block_spec_min_isolines"
+rust_const = "UDIO_PER_VERTEX_BLOCK_SPEC_MIN_ISOLINES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "tessellation/sio_attr.vert", stage = "vert" },
+    { name = "tesc", template = "tessellation/udio_per_vertex_block.tesc", stage = "tesc" },
+    { name = "tese", template = "tessellation/udio_per_vertex_block.tese", stage = "tese" },
+    { name = "frag", template = "tessellation/udio.frag", stage = "frag" },
+]
+derived = { vertex_size = "'32'", primitive = "'isolines'" }

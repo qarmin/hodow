@@ -1,0 +1,660 @@
+#version 460
+#extension GL_KHR_shader_subgroup_basic  : require
+#extension GL_KHR_shader_subgroup_ballot : require
+
+layout (local_size_x=16, local_size_y=1, local_size_z=1) in;
+
+layout (set=0, binding=0) buffer NumSubgroupsBlock { uint verification[]; } numSubgroupsBuffer;
+layout (set=0, binding=1) buffer SubgroupIdBlock   { uint verification[]; } subgroupIdBuffer;
+layout (set=0, binding=2) buffer SubgroupSizeBlock { uint verification[]; } subgroupSizeBuffer;
+layout (set=0, binding=3) buffer invocationIdBlock { uint verification[]; } invocationIdBuffer;
+layout (set=0, binding=4) buffer eqMaskBlock       { uint verification[]; } eqMaskBuffer;
+layout (set=0, binding=5) buffer geMaskBlock       { uint verification[]; } geMaskBuffer;
+layout (set=0, binding=6) buffer gtMaskBlock       { uint verification[]; } gtMaskBuffer;
+layout (set=0, binding=7) buffer leMaskBlock       { uint verification[]; } leMaskBuffer;
+layout (set=0, binding=8) buffer ltMaskBlock       { uint verification[]; } ltMaskBuffer;
+
+uint boolToUint (bool value)
+{
+   return (value ? 1 : 0);
+}
+
+bool checkMaskComponent (uint mask, uint offset, uint validBits, uint bitIndex, uint expectedLess, uint expectedEqual, uint expectedGreater)
+{
+    bool ok = true;
+    for (uint i = 0; i < 32; ++i)
+    {
+        const uint bit = ((mask >> i) & 1);
+        const uint idx = offset + i;
+
+        if (idx < validBits) {
+            if (idx < bitIndex && bit != expectedLess)
+                ok = false;
+            else if (idx == bitIndex && bit != expectedEqual)
+                ok = false;
+            else if (idx > bitIndex && bit != expectedGreater)
+                ok = false;
+        }
+        else if (bit != 0)
+            ok = false;
+    }
+    return ok;
+}
+
+bool checkMask (uvec4 mask, uint validBits, uint bitIndex, uint expectedLess, uint expectedEqual, uint expectedGreater)
+{
+   return (checkMaskComponent(mask.x,  0, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.y, 32, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.z, 64, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.w, 96, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater));
+}
+
+void main (void)
+{
+    const uint index = gl_SubgroupInvocationID + gl_SubgroupID * gl_SubgroupSize;
+
+    numSubgroupsBuffer.verification[index] = boolToUint(gl_NumSubgroups == 1);
+    subgroupIdBuffer.verification  [index] = boolToUint(gl_SubgroupID >= 0 && gl_SubgroupID < gl_NumSubgroups);
+    subgroupSizeBuffer.verification[index] = boolToUint(gl_SubgroupSize == 16);
+    invocationIdBuffer.verification[index] = boolToUint(gl_SubgroupInvocationID >= 0 && gl_SubgroupInvocationID < gl_SubgroupSize);
+
+    eqMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupEqMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 1, 0));
+    geMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupGeMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 1, 1));
+    gtMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupGtMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 0, 1));
+    leMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupLeMask, gl_SubgroupSize, gl_SubgroupInvocationID, 1, 1, 0));
+    ltMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupLtMask, gl_SubgroupSize, gl_SubgroupInvocationID, 1, 0, 0));
+}
+#version 460
+#extension GL_KHR_shader_subgroup_basic  : require
+#extension GL_KHR_shader_subgroup_ballot : require
+
+layout (local_size_x=32, local_size_y=1, local_size_z=1) in;
+
+layout (set=0, binding=0) buffer NumSubgroupsBlock { uint verification[]; } numSubgroupsBuffer;
+layout (set=0, binding=1) buffer SubgroupIdBlock   { uint verification[]; } subgroupIdBuffer;
+layout (set=0, binding=2) buffer SubgroupSizeBlock { uint verification[]; } subgroupSizeBuffer;
+layout (set=0, binding=3) buffer invocationIdBlock { uint verification[]; } invocationIdBuffer;
+layout (set=0, binding=4) buffer eqMaskBlock       { uint verification[]; } eqMaskBuffer;
+layout (set=0, binding=5) buffer geMaskBlock       { uint verification[]; } geMaskBuffer;
+layout (set=0, binding=6) buffer gtMaskBlock       { uint verification[]; } gtMaskBuffer;
+layout (set=0, binding=7) buffer leMaskBlock       { uint verification[]; } leMaskBuffer;
+layout (set=0, binding=8) buffer ltMaskBlock       { uint verification[]; } ltMaskBuffer;
+
+uint boolToUint (bool value)
+{
+   return (value ? 1 : 0);
+}
+
+bool checkMaskComponent (uint mask, uint offset, uint validBits, uint bitIndex, uint expectedLess, uint expectedEqual, uint expectedGreater)
+{
+    bool ok = true;
+    for (uint i = 0; i < 32; ++i)
+    {
+        const uint bit = ((mask >> i) & 1);
+        const uint idx = offset + i;
+
+        if (idx < validBits) {
+            if (idx < bitIndex && bit != expectedLess)
+                ok = false;
+            else if (idx == bitIndex && bit != expectedEqual)
+                ok = false;
+            else if (idx > bitIndex && bit != expectedGreater)
+                ok = false;
+        }
+        else if (bit != 0)
+            ok = false;
+    }
+    return ok;
+}
+
+bool checkMask (uvec4 mask, uint validBits, uint bitIndex, uint expectedLess, uint expectedEqual, uint expectedGreater)
+{
+   return (checkMaskComponent(mask.x,  0, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.y, 32, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.z, 64, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.w, 96, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater));
+}
+
+void main (void)
+{
+    const uint index = gl_SubgroupInvocationID + gl_SubgroupID * gl_SubgroupSize;
+
+    numSubgroupsBuffer.verification[index] = boolToUint(gl_NumSubgroups == 2);
+    subgroupIdBuffer.verification  [index] = boolToUint(gl_SubgroupID >= 0 && gl_SubgroupID < gl_NumSubgroups);
+    subgroupSizeBuffer.verification[index] = boolToUint(gl_SubgroupSize == 16);
+    invocationIdBuffer.verification[index] = boolToUint(gl_SubgroupInvocationID >= 0 && gl_SubgroupInvocationID < gl_SubgroupSize);
+
+    eqMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupEqMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 1, 0));
+    geMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupGeMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 1, 1));
+    gtMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupGtMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 0, 1));
+    leMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupLeMask, gl_SubgroupSize, gl_SubgroupInvocationID, 1, 1, 0));
+    ltMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupLtMask, gl_SubgroupSize, gl_SubgroupInvocationID, 1, 0, 0));
+}
+#version 460
+#extension GL_KHR_shader_subgroup_basic  : require
+#extension GL_KHR_shader_subgroup_ballot : require
+
+layout (local_size_x=32, local_size_y=1, local_size_z=1) in;
+
+layout (set=0, binding=0) buffer NumSubgroupsBlock { uint verification[]; } numSubgroupsBuffer;
+layout (set=0, binding=1) buffer SubgroupIdBlock   { uint verification[]; } subgroupIdBuffer;
+layout (set=0, binding=2) buffer SubgroupSizeBlock { uint verification[]; } subgroupSizeBuffer;
+layout (set=0, binding=3) buffer invocationIdBlock { uint verification[]; } invocationIdBuffer;
+layout (set=0, binding=4) buffer eqMaskBlock       { uint verification[]; } eqMaskBuffer;
+layout (set=0, binding=5) buffer geMaskBlock       { uint verification[]; } geMaskBuffer;
+layout (set=0, binding=6) buffer gtMaskBlock       { uint verification[]; } gtMaskBuffer;
+layout (set=0, binding=7) buffer leMaskBlock       { uint verification[]; } leMaskBuffer;
+layout (set=0, binding=8) buffer ltMaskBlock       { uint verification[]; } ltMaskBuffer;
+
+uint boolToUint (bool value)
+{
+   return (value ? 1 : 0);
+}
+
+bool checkMaskComponent (uint mask, uint offset, uint validBits, uint bitIndex, uint expectedLess, uint expectedEqual, uint expectedGreater)
+{
+    bool ok = true;
+    for (uint i = 0; i < 32; ++i)
+    {
+        const uint bit = ((mask >> i) & 1);
+        const uint idx = offset + i;
+
+        if (idx < validBits) {
+            if (idx < bitIndex && bit != expectedLess)
+                ok = false;
+            else if (idx == bitIndex && bit != expectedEqual)
+                ok = false;
+            else if (idx > bitIndex && bit != expectedGreater)
+                ok = false;
+        }
+        else if (bit != 0)
+            ok = false;
+    }
+    return ok;
+}
+
+bool checkMask (uvec4 mask, uint validBits, uint bitIndex, uint expectedLess, uint expectedEqual, uint expectedGreater)
+{
+   return (checkMaskComponent(mask.x,  0, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.y, 32, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.z, 64, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.w, 96, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater));
+}
+
+void main (void)
+{
+    const uint index = gl_SubgroupInvocationID + gl_SubgroupID * gl_SubgroupSize;
+
+    numSubgroupsBuffer.verification[index] = boolToUint(gl_NumSubgroups == 1);
+    subgroupIdBuffer.verification  [index] = boolToUint(gl_SubgroupID >= 0 && gl_SubgroupID < gl_NumSubgroups);
+    subgroupSizeBuffer.verification[index] = boolToUint(gl_SubgroupSize == 32);
+    invocationIdBuffer.verification[index] = boolToUint(gl_SubgroupInvocationID >= 0 && gl_SubgroupInvocationID < gl_SubgroupSize);
+
+    eqMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupEqMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 1, 0));
+    geMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupGeMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 1, 1));
+    gtMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupGtMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 0, 1));
+    leMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupLeMask, gl_SubgroupSize, gl_SubgroupInvocationID, 1, 1, 0));
+    ltMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupLtMask, gl_SubgroupSize, gl_SubgroupInvocationID, 1, 0, 0));
+}
+#version 460
+#extension GL_KHR_shader_subgroup_basic  : require
+#extension GL_KHR_shader_subgroup_ballot : require
+
+layout (local_size_x=64, local_size_y=1, local_size_z=1) in;
+
+layout (set=0, binding=0) buffer NumSubgroupsBlock { uint verification[]; } numSubgroupsBuffer;
+layout (set=0, binding=1) buffer SubgroupIdBlock   { uint verification[]; } subgroupIdBuffer;
+layout (set=0, binding=2) buffer SubgroupSizeBlock { uint verification[]; } subgroupSizeBuffer;
+layout (set=0, binding=3) buffer invocationIdBlock { uint verification[]; } invocationIdBuffer;
+layout (set=0, binding=4) buffer eqMaskBlock       { uint verification[]; } eqMaskBuffer;
+layout (set=0, binding=5) buffer geMaskBlock       { uint verification[]; } geMaskBuffer;
+layout (set=0, binding=6) buffer gtMaskBlock       { uint verification[]; } gtMaskBuffer;
+layout (set=0, binding=7) buffer leMaskBlock       { uint verification[]; } leMaskBuffer;
+layout (set=0, binding=8) buffer ltMaskBlock       { uint verification[]; } ltMaskBuffer;
+
+uint boolToUint (bool value)
+{
+   return (value ? 1 : 0);
+}
+
+bool checkMaskComponent (uint mask, uint offset, uint validBits, uint bitIndex, uint expectedLess, uint expectedEqual, uint expectedGreater)
+{
+    bool ok = true;
+    for (uint i = 0; i < 32; ++i)
+    {
+        const uint bit = ((mask >> i) & 1);
+        const uint idx = offset + i;
+
+        if (idx < validBits) {
+            if (idx < bitIndex && bit != expectedLess)
+                ok = false;
+            else if (idx == bitIndex && bit != expectedEqual)
+                ok = false;
+            else if (idx > bitIndex && bit != expectedGreater)
+                ok = false;
+        }
+        else if (bit != 0)
+            ok = false;
+    }
+    return ok;
+}
+
+bool checkMask (uvec4 mask, uint validBits, uint bitIndex, uint expectedLess, uint expectedEqual, uint expectedGreater)
+{
+   return (checkMaskComponent(mask.x,  0, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.y, 32, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.z, 64, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.w, 96, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater));
+}
+
+void main (void)
+{
+    const uint index = gl_SubgroupInvocationID + gl_SubgroupID * gl_SubgroupSize;
+
+    numSubgroupsBuffer.verification[index] = boolToUint(gl_NumSubgroups == 4);
+    subgroupIdBuffer.verification  [index] = boolToUint(gl_SubgroupID >= 0 && gl_SubgroupID < gl_NumSubgroups);
+    subgroupSizeBuffer.verification[index] = boolToUint(gl_SubgroupSize == 16);
+    invocationIdBuffer.verification[index] = boolToUint(gl_SubgroupInvocationID >= 0 && gl_SubgroupInvocationID < gl_SubgroupSize);
+
+    eqMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupEqMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 1, 0));
+    geMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupGeMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 1, 1));
+    gtMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupGtMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 0, 1));
+    leMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupLeMask, gl_SubgroupSize, gl_SubgroupInvocationID, 1, 1, 0));
+    ltMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupLtMask, gl_SubgroupSize, gl_SubgroupInvocationID, 1, 0, 0));
+}
+#version 460
+#extension GL_KHR_shader_subgroup_basic  : require
+#extension GL_KHR_shader_subgroup_ballot : require
+
+layout (local_size_x=64, local_size_y=1, local_size_z=1) in;
+
+layout (set=0, binding=0) buffer NumSubgroupsBlock { uint verification[]; } numSubgroupsBuffer;
+layout (set=0, binding=1) buffer SubgroupIdBlock   { uint verification[]; } subgroupIdBuffer;
+layout (set=0, binding=2) buffer SubgroupSizeBlock { uint verification[]; } subgroupSizeBuffer;
+layout (set=0, binding=3) buffer invocationIdBlock { uint verification[]; } invocationIdBuffer;
+layout (set=0, binding=4) buffer eqMaskBlock       { uint verification[]; } eqMaskBuffer;
+layout (set=0, binding=5) buffer geMaskBlock       { uint verification[]; } geMaskBuffer;
+layout (set=0, binding=6) buffer gtMaskBlock       { uint verification[]; } gtMaskBuffer;
+layout (set=0, binding=7) buffer leMaskBlock       { uint verification[]; } leMaskBuffer;
+layout (set=0, binding=8) buffer ltMaskBlock       { uint verification[]; } ltMaskBuffer;
+
+uint boolToUint (bool value)
+{
+   return (value ? 1 : 0);
+}
+
+bool checkMaskComponent (uint mask, uint offset, uint validBits, uint bitIndex, uint expectedLess, uint expectedEqual, uint expectedGreater)
+{
+    bool ok = true;
+    for (uint i = 0; i < 32; ++i)
+    {
+        const uint bit = ((mask >> i) & 1);
+        const uint idx = offset + i;
+
+        if (idx < validBits) {
+            if (idx < bitIndex && bit != expectedLess)
+                ok = false;
+            else if (idx == bitIndex && bit != expectedEqual)
+                ok = false;
+            else if (idx > bitIndex && bit != expectedGreater)
+                ok = false;
+        }
+        else if (bit != 0)
+            ok = false;
+    }
+    return ok;
+}
+
+bool checkMask (uvec4 mask, uint validBits, uint bitIndex, uint expectedLess, uint expectedEqual, uint expectedGreater)
+{
+   return (checkMaskComponent(mask.x,  0, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.y, 32, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.z, 64, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.w, 96, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater));
+}
+
+void main (void)
+{
+    const uint index = gl_SubgroupInvocationID + gl_SubgroupID * gl_SubgroupSize;
+
+    numSubgroupsBuffer.verification[index] = boolToUint(gl_NumSubgroups == 2);
+    subgroupIdBuffer.verification  [index] = boolToUint(gl_SubgroupID >= 0 && gl_SubgroupID < gl_NumSubgroups);
+    subgroupSizeBuffer.verification[index] = boolToUint(gl_SubgroupSize == 32);
+    invocationIdBuffer.verification[index] = boolToUint(gl_SubgroupInvocationID >= 0 && gl_SubgroupInvocationID < gl_SubgroupSize);
+
+    eqMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupEqMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 1, 0));
+    geMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupGeMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 1, 1));
+    gtMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupGtMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 0, 1));
+    leMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupLeMask, gl_SubgroupSize, gl_SubgroupInvocationID, 1, 1, 0));
+    ltMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupLtMask, gl_SubgroupSize, gl_SubgroupInvocationID, 1, 0, 0));
+}
+#version 460
+#extension GL_KHR_shader_subgroup_basic  : require
+#extension GL_KHR_shader_subgroup_ballot : require
+
+layout (local_size_x=64, local_size_y=1, local_size_z=1) in;
+
+layout (set=0, binding=0) buffer NumSubgroupsBlock { uint verification[]; } numSubgroupsBuffer;
+layout (set=0, binding=1) buffer SubgroupIdBlock   { uint verification[]; } subgroupIdBuffer;
+layout (set=0, binding=2) buffer SubgroupSizeBlock { uint verification[]; } subgroupSizeBuffer;
+layout (set=0, binding=3) buffer invocationIdBlock { uint verification[]; } invocationIdBuffer;
+layout (set=0, binding=4) buffer eqMaskBlock       { uint verification[]; } eqMaskBuffer;
+layout (set=0, binding=5) buffer geMaskBlock       { uint verification[]; } geMaskBuffer;
+layout (set=0, binding=6) buffer gtMaskBlock       { uint verification[]; } gtMaskBuffer;
+layout (set=0, binding=7) buffer leMaskBlock       { uint verification[]; } leMaskBuffer;
+layout (set=0, binding=8) buffer ltMaskBlock       { uint verification[]; } ltMaskBuffer;
+
+uint boolToUint (bool value)
+{
+   return (value ? 1 : 0);
+}
+
+bool checkMaskComponent (uint mask, uint offset, uint validBits, uint bitIndex, uint expectedLess, uint expectedEqual, uint expectedGreater)
+{
+    bool ok = true;
+    for (uint i = 0; i < 32; ++i)
+    {
+        const uint bit = ((mask >> i) & 1);
+        const uint idx = offset + i;
+
+        if (idx < validBits) {
+            if (idx < bitIndex && bit != expectedLess)
+                ok = false;
+            else if (idx == bitIndex && bit != expectedEqual)
+                ok = false;
+            else if (idx > bitIndex && bit != expectedGreater)
+                ok = false;
+        }
+        else if (bit != 0)
+            ok = false;
+    }
+    return ok;
+}
+
+bool checkMask (uvec4 mask, uint validBits, uint bitIndex, uint expectedLess, uint expectedEqual, uint expectedGreater)
+{
+   return (checkMaskComponent(mask.x,  0, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.y, 32, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.z, 64, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.w, 96, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater));
+}
+
+void main (void)
+{
+    const uint index = gl_SubgroupInvocationID + gl_SubgroupID * gl_SubgroupSize;
+
+    numSubgroupsBuffer.verification[index] = boolToUint(gl_NumSubgroups == 1);
+    subgroupIdBuffer.verification  [index] = boolToUint(gl_SubgroupID >= 0 && gl_SubgroupID < gl_NumSubgroups);
+    subgroupSizeBuffer.verification[index] = boolToUint(gl_SubgroupSize == 64);
+    invocationIdBuffer.verification[index] = boolToUint(gl_SubgroupInvocationID >= 0 && gl_SubgroupInvocationID < gl_SubgroupSize);
+
+    eqMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupEqMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 1, 0));
+    geMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupGeMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 1, 1));
+    gtMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupGtMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 0, 1));
+    leMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupLeMask, gl_SubgroupSize, gl_SubgroupInvocationID, 1, 1, 0));
+    ltMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupLtMask, gl_SubgroupSize, gl_SubgroupInvocationID, 1, 0, 0));
+}
+#version 460
+#extension GL_KHR_shader_subgroup_basic  : require
+#extension GL_KHR_shader_subgroup_ballot : require
+
+layout (local_size_x=128, local_size_y=1, local_size_z=1) in;
+
+layout (set=0, binding=0) buffer NumSubgroupsBlock { uint verification[]; } numSubgroupsBuffer;
+layout (set=0, binding=1) buffer SubgroupIdBlock   { uint verification[]; } subgroupIdBuffer;
+layout (set=0, binding=2) buffer SubgroupSizeBlock { uint verification[]; } subgroupSizeBuffer;
+layout (set=0, binding=3) buffer invocationIdBlock { uint verification[]; } invocationIdBuffer;
+layout (set=0, binding=4) buffer eqMaskBlock       { uint verification[]; } eqMaskBuffer;
+layout (set=0, binding=5) buffer geMaskBlock       { uint verification[]; } geMaskBuffer;
+layout (set=0, binding=6) buffer gtMaskBlock       { uint verification[]; } gtMaskBuffer;
+layout (set=0, binding=7) buffer leMaskBlock       { uint verification[]; } leMaskBuffer;
+layout (set=0, binding=8) buffer ltMaskBlock       { uint verification[]; } ltMaskBuffer;
+
+uint boolToUint (bool value)
+{
+   return (value ? 1 : 0);
+}
+
+bool checkMaskComponent (uint mask, uint offset, uint validBits, uint bitIndex, uint expectedLess, uint expectedEqual, uint expectedGreater)
+{
+    bool ok = true;
+    for (uint i = 0; i < 32; ++i)
+    {
+        const uint bit = ((mask >> i) & 1);
+        const uint idx = offset + i;
+
+        if (idx < validBits) {
+            if (idx < bitIndex && bit != expectedLess)
+                ok = false;
+            else if (idx == bitIndex && bit != expectedEqual)
+                ok = false;
+            else if (idx > bitIndex && bit != expectedGreater)
+                ok = false;
+        }
+        else if (bit != 0)
+            ok = false;
+    }
+    return ok;
+}
+
+bool checkMask (uvec4 mask, uint validBits, uint bitIndex, uint expectedLess, uint expectedEqual, uint expectedGreater)
+{
+   return (checkMaskComponent(mask.x,  0, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.y, 32, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.z, 64, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.w, 96, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater));
+}
+
+void main (void)
+{
+    const uint index = gl_SubgroupInvocationID + gl_SubgroupID * gl_SubgroupSize;
+
+    numSubgroupsBuffer.verification[index] = boolToUint(gl_NumSubgroups == 8);
+    subgroupIdBuffer.verification  [index] = boolToUint(gl_SubgroupID >= 0 && gl_SubgroupID < gl_NumSubgroups);
+    subgroupSizeBuffer.verification[index] = boolToUint(gl_SubgroupSize == 16);
+    invocationIdBuffer.verification[index] = boolToUint(gl_SubgroupInvocationID >= 0 && gl_SubgroupInvocationID < gl_SubgroupSize);
+
+    eqMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupEqMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 1, 0));
+    geMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupGeMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 1, 1));
+    gtMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupGtMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 0, 1));
+    leMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupLeMask, gl_SubgroupSize, gl_SubgroupInvocationID, 1, 1, 0));
+    ltMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupLtMask, gl_SubgroupSize, gl_SubgroupInvocationID, 1, 0, 0));
+}
+#version 460
+#extension GL_KHR_shader_subgroup_basic  : require
+#extension GL_KHR_shader_subgroup_ballot : require
+
+layout (local_size_x=128, local_size_y=1, local_size_z=1) in;
+
+layout (set=0, binding=0) buffer NumSubgroupsBlock { uint verification[]; } numSubgroupsBuffer;
+layout (set=0, binding=1) buffer SubgroupIdBlock   { uint verification[]; } subgroupIdBuffer;
+layout (set=0, binding=2) buffer SubgroupSizeBlock { uint verification[]; } subgroupSizeBuffer;
+layout (set=0, binding=3) buffer invocationIdBlock { uint verification[]; } invocationIdBuffer;
+layout (set=0, binding=4) buffer eqMaskBlock       { uint verification[]; } eqMaskBuffer;
+layout (set=0, binding=5) buffer geMaskBlock       { uint verification[]; } geMaskBuffer;
+layout (set=0, binding=6) buffer gtMaskBlock       { uint verification[]; } gtMaskBuffer;
+layout (set=0, binding=7) buffer leMaskBlock       { uint verification[]; } leMaskBuffer;
+layout (set=0, binding=8) buffer ltMaskBlock       { uint verification[]; } ltMaskBuffer;
+
+uint boolToUint (bool value)
+{
+   return (value ? 1 : 0);
+}
+
+bool checkMaskComponent (uint mask, uint offset, uint validBits, uint bitIndex, uint expectedLess, uint expectedEqual, uint expectedGreater)
+{
+    bool ok = true;
+    for (uint i = 0; i < 32; ++i)
+    {
+        const uint bit = ((mask >> i) & 1);
+        const uint idx = offset + i;
+
+        if (idx < validBits) {
+            if (idx < bitIndex && bit != expectedLess)
+                ok = false;
+            else if (idx == bitIndex && bit != expectedEqual)
+                ok = false;
+            else if (idx > bitIndex && bit != expectedGreater)
+                ok = false;
+        }
+        else if (bit != 0)
+            ok = false;
+    }
+    return ok;
+}
+
+bool checkMask (uvec4 mask, uint validBits, uint bitIndex, uint expectedLess, uint expectedEqual, uint expectedGreater)
+{
+   return (checkMaskComponent(mask.x,  0, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.y, 32, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.z, 64, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.w, 96, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater));
+}
+
+void main (void)
+{
+    const uint index = gl_SubgroupInvocationID + gl_SubgroupID * gl_SubgroupSize;
+
+    numSubgroupsBuffer.verification[index] = boolToUint(gl_NumSubgroups == 4);
+    subgroupIdBuffer.verification  [index] = boolToUint(gl_SubgroupID >= 0 && gl_SubgroupID < gl_NumSubgroups);
+    subgroupSizeBuffer.verification[index] = boolToUint(gl_SubgroupSize == 32);
+    invocationIdBuffer.verification[index] = boolToUint(gl_SubgroupInvocationID >= 0 && gl_SubgroupInvocationID < gl_SubgroupSize);
+
+    eqMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupEqMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 1, 0));
+    geMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupGeMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 1, 1));
+    gtMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupGtMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 0, 1));
+    leMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupLeMask, gl_SubgroupSize, gl_SubgroupInvocationID, 1, 1, 0));
+    ltMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupLtMask, gl_SubgroupSize, gl_SubgroupInvocationID, 1, 0, 0));
+}
+#version 460
+#extension GL_KHR_shader_subgroup_basic  : require
+#extension GL_KHR_shader_subgroup_ballot : require
+
+layout (local_size_x=128, local_size_y=1, local_size_z=1) in;
+
+layout (set=0, binding=0) buffer NumSubgroupsBlock { uint verification[]; } numSubgroupsBuffer;
+layout (set=0, binding=1) buffer SubgroupIdBlock   { uint verification[]; } subgroupIdBuffer;
+layout (set=0, binding=2) buffer SubgroupSizeBlock { uint verification[]; } subgroupSizeBuffer;
+layout (set=0, binding=3) buffer invocationIdBlock { uint verification[]; } invocationIdBuffer;
+layout (set=0, binding=4) buffer eqMaskBlock       { uint verification[]; } eqMaskBuffer;
+layout (set=0, binding=5) buffer geMaskBlock       { uint verification[]; } geMaskBuffer;
+layout (set=0, binding=6) buffer gtMaskBlock       { uint verification[]; } gtMaskBuffer;
+layout (set=0, binding=7) buffer leMaskBlock       { uint verification[]; } leMaskBuffer;
+layout (set=0, binding=8) buffer ltMaskBlock       { uint verification[]; } ltMaskBuffer;
+
+uint boolToUint (bool value)
+{
+   return (value ? 1 : 0);
+}
+
+bool checkMaskComponent (uint mask, uint offset, uint validBits, uint bitIndex, uint expectedLess, uint expectedEqual, uint expectedGreater)
+{
+    bool ok = true;
+    for (uint i = 0; i < 32; ++i)
+    {
+        const uint bit = ((mask >> i) & 1);
+        const uint idx = offset + i;
+
+        if (idx < validBits) {
+            if (idx < bitIndex && bit != expectedLess)
+                ok = false;
+            else if (idx == bitIndex && bit != expectedEqual)
+                ok = false;
+            else if (idx > bitIndex && bit != expectedGreater)
+                ok = false;
+        }
+        else if (bit != 0)
+            ok = false;
+    }
+    return ok;
+}
+
+bool checkMask (uvec4 mask, uint validBits, uint bitIndex, uint expectedLess, uint expectedEqual, uint expectedGreater)
+{
+   return (checkMaskComponent(mask.x,  0, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.y, 32, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.z, 64, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.w, 96, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater));
+}
+
+void main (void)
+{
+    const uint index = gl_SubgroupInvocationID + gl_SubgroupID * gl_SubgroupSize;
+
+    numSubgroupsBuffer.verification[index] = boolToUint(gl_NumSubgroups == 2);
+    subgroupIdBuffer.verification  [index] = boolToUint(gl_SubgroupID >= 0 && gl_SubgroupID < gl_NumSubgroups);
+    subgroupSizeBuffer.verification[index] = boolToUint(gl_SubgroupSize == 64);
+    invocationIdBuffer.verification[index] = boolToUint(gl_SubgroupInvocationID >= 0 && gl_SubgroupInvocationID < gl_SubgroupSize);
+
+    eqMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupEqMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 1, 0));
+    geMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupGeMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 1, 1));
+    gtMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupGtMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 0, 1));
+    leMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupLeMask, gl_SubgroupSize, gl_SubgroupInvocationID, 1, 1, 0));
+    ltMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupLtMask, gl_SubgroupSize, gl_SubgroupInvocationID, 1, 0, 0));
+}
+#version 460
+#extension GL_KHR_shader_subgroup_basic  : require
+#extension GL_KHR_shader_subgroup_ballot : require
+
+layout (local_size_x=128, local_size_y=1, local_size_z=1) in;
+
+layout (set=0, binding=0) buffer NumSubgroupsBlock { uint verification[]; } numSubgroupsBuffer;
+layout (set=0, binding=1) buffer SubgroupIdBlock   { uint verification[]; } subgroupIdBuffer;
+layout (set=0, binding=2) buffer SubgroupSizeBlock { uint verification[]; } subgroupSizeBuffer;
+layout (set=0, binding=3) buffer invocationIdBlock { uint verification[]; } invocationIdBuffer;
+layout (set=0, binding=4) buffer eqMaskBlock       { uint verification[]; } eqMaskBuffer;
+layout (set=0, binding=5) buffer geMaskBlock       { uint verification[]; } geMaskBuffer;
+layout (set=0, binding=6) buffer gtMaskBlock       { uint verification[]; } gtMaskBuffer;
+layout (set=0, binding=7) buffer leMaskBlock       { uint verification[]; } leMaskBuffer;
+layout (set=0, binding=8) buffer ltMaskBlock       { uint verification[]; } ltMaskBuffer;
+
+uint boolToUint (bool value)
+{
+   return (value ? 1 : 0);
+}
+
+bool checkMaskComponent (uint mask, uint offset, uint validBits, uint bitIndex, uint expectedLess, uint expectedEqual, uint expectedGreater)
+{
+    bool ok = true;
+    for (uint i = 0; i < 32; ++i)
+    {
+        const uint bit = ((mask >> i) & 1);
+        const uint idx = offset + i;
+
+        if (idx < validBits) {
+            if (idx < bitIndex && bit != expectedLess)
+                ok = false;
+            else if (idx == bitIndex && bit != expectedEqual)
+                ok = false;
+            else if (idx > bitIndex && bit != expectedGreater)
+                ok = false;
+        }
+        else if (bit != 0)
+            ok = false;
+    }
+    return ok;
+}
+
+bool checkMask (uvec4 mask, uint validBits, uint bitIndex, uint expectedLess, uint expectedEqual, uint expectedGreater)
+{
+   return (checkMaskComponent(mask.x,  0, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.y, 32, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.z, 64, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater) &&
+           checkMaskComponent(mask.w, 96, validBits, bitIndex, expectedLess, expectedEqual, expectedGreater));
+}
+
+void main (void)
+{
+    const uint index = gl_SubgroupInvocationID + gl_SubgroupID * gl_SubgroupSize;
+
+    numSubgroupsBuffer.verification[index] = boolToUint(gl_NumSubgroups == 1);
+    subgroupIdBuffer.verification  [index] = boolToUint(gl_SubgroupID >= 0 && gl_SubgroupID < gl_NumSubgroups);
+    subgroupSizeBuffer.verification[index] = boolToUint(gl_SubgroupSize == 128);
+    invocationIdBuffer.verification[index] = boolToUint(gl_SubgroupInvocationID >= 0 && gl_SubgroupInvocationID < gl_SubgroupSize);
+
+    eqMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupEqMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 1, 0));
+    geMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupGeMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 1, 1));
+    gtMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupGtMask, gl_SubgroupSize, gl_SubgroupInvocationID, 0, 0, 1));
+    leMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupLeMask, gl_SubgroupSize, gl_SubgroupInvocationID, 1, 1, 0));
+    ltMaskBuffer.verification[index] = boolToUint(checkMask(gl_SubgroupLtMask, gl_SubgroupSize, gl_SubgroupInvocationID, 1, 0, 0));
+}

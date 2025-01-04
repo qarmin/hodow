@@ -1,0 +1,25 @@
+[package]
+name = "hodow_cpu"
+version = "0.1.0"
+authors = ["Rafał Mikrut <mikrutrafal@protonmail.com>"]
+edition = "2024"
+rust-version = "1.98"
+description = "CPU instruction tests of hodow: x86_64 SIMD, ARM NEON and SVE, compared with values captured on real hardware"
+license = "Apache-2.0"
+repository = "https://github.com/qarmin/hodow"
+
+[dependencies]
+log = "0.4.35"
+rand = "0.10.4"
+
+[features]
+default = ["cpu_suite", "avx512"]
+# The generated CPU instruction tests (`cpu/auto_generated`, ~120 MB of source). Off, the
+# registry is empty and the crate builds in seconds.
+cpu_suite = []
+# The AVX-512 tests: ~80% of the x86 suite, so the biggest single cut in binary size.
+avx512 = []
+miri_build = []
+
+[lints]
+workspace = true

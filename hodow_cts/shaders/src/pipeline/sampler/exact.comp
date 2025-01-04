@@ -1,0 +1,34 @@
+#version 450
+layout(local_size_x = 16, local_size_y = 16) in;
+
+layout(set = 0, binding = 0) uniform ${sampler_type} texSampler;
+layout(set = 0, binding = 1${format_qualifier}) uniform writeonly ${image_type} outImage;
+
+layout(push_constant, std430) uniform PushConstants
+{
+    float texWidth;
+    float texHeight;
+    float minU;
+    float minV;
+    float scaleU;
+    float scaleV;
+} pushc;
+
+void main() {
+    ivec2 pos = ivec2(gl_GlobalInvocationID.xy);
+    ivec2 size = imageSize(outImage);
+    if (pos.x >= size.x || pos.y >= size.y) return;
+
+    vec2 normPos = (vec2(pos) + 0.5) / vec2(size);
+    vec2 uv = vec2(pushc.minU, pushc.minV) + normPos * vec2(pushc.scaleU, pushc.scaleV);
+
+    if (${unnormalized}) {
+        uv.x *= pushc.texWidth;
+        uv.y *= pushc.texHeight;
+        ${color_type} color = textureLod(texSampler, uv, 0.0f);
+        imageStore(outImage, pos, color);
+    } else {
+        ${color_type} color = texture(texSampler, uv);
+        imageStore(outImage, pos, color);
+    }
+}

@@ -1,0 +1,27 @@
+#version 440
+#extension GL_EXT_texture_buffer : require
+precision highp float;
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(binding = 0, std430) buffer readonly InBuffer
+{
+    uvec4 inVecs[128][4];
+};
+
+layout(binding = 1, std430) buffer OutBuffer
+{
+    uvec4 outVecs[128][4];
+};
+
+layout(binding = 2, std140) uniform Indices
+{
+    int inIndex;
+    int outIndex;
+};
+
+void main (void)
+{
+    outVecs[outIndex][0] = inVecs[inIndex][0];
+    outVecs[outIndex][1] = inVecs[inIndex][1];
+    outVecs[outIndex][2] = inVecs[inIndex][2];
+    outVecs[outIndex][3] = inVecs[inIndex][3];
+}

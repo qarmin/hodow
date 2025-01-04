@@ -1,0 +1,18 @@
+#version 450
+layout (local_size_x = 1, local_size_y = 1) in;
+#if ${storage} == 1
+layout (binding = 0, r32f) uniform image2D storageImage;
+#else
+layout (binding = 1) uniform sampler2D image;
+#endif
+layout (binding = 2) buffer OutputBuffer { float data[]; } outputBuffer;
+void main()
+{
+    ivec2 coord = ivec2(gl_GlobalInvocationID.xy);
+#if ${storage} == 1
+    vec4 color = imageLoad(storageImage, coord);
+#else
+    vec4 color = texture(image, vec2(coord) / vec2(128.0f));
+#endif
+    outputBuffer.data[coord.y * 128 + coord.x] = color.r;
+}

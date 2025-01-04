@@ -1,0 +1,25 @@
+#version 450
+
+layout (local_size_x = 1, local_size_y = 2, local_size_z = 1) in;
+
+layout (location = 0, rgba8ui) uniform uimage2D img0;
+layout (location = 1, rgba8ui) uniform uimage2D img1;
+layout (location = 2, rgba8ui) uniform uimage2D img2;
+layout (location = 3, rgba8ui) uniform uimage2D img3;
+layout (location = 4, rgba8ui) uniform uimage2D img4;
+
+void main()
+{
+    ivec3 point = ivec3(gl_GlobalInvocationID);
+    uvec3 color0 = uvec3(gl_NumWorkGroups);
+    uvec3 color1 = uvec3(gl_WorkGroupSize);
+    uvec3 color2 = uvec3(gl_WorkGroupID);
+    uvec3 color3 = uvec3(gl_LocalInvocationID);
+    uvec3 color4 = uvec3(gl_LocalInvocationIndex);
+    imageStore(img0, point.xy, uvec4(color0, 0xFF));
+    imageStore(img1, point.xy, uvec4(color1, 0xFF));
+    imageStore(img2, point.xy, uvec4(color2, 0xFF));
+    imageStore(img3, point.xy, uvec4(color3, 0xFF));
+    imageStore(img4, point.xy, uvec4(color4, 0xFF));
+    memoryBarrier();
+}

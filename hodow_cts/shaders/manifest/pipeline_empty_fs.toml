@@ -1,0 +1,63 @@
+# Shader manifest for dEQP-VK.pipeline.monolithic.empty_fs.*
+#
+# `EmptyFSCase::initPrograms`, one program set per combination it can produce: the last vertex stage
+# (vertex, or tessellation evaluation with a passthrough control shader), with a fragment shader declaring
+# the two user inputs and doing nothing or with none, and the two selective depth/stencil cases.
+
+upstream_source = "external/vulkancts/modules/vulkan/pipeline/vktPipelineEmptyFSTests.cpp"
+rust_module = "pipeline/empty_fs_tests"
+
+[[case]]
+name = "vert_no_fs"
+rust_const = "EMPTY_FS_VERT_NO_FS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/empty_fs_vert_outputs.vert", stage = "vert" },
+]
+
+[[case]]
+name = "vert_empty_fs"
+rust_const = "EMPTY_FS_VERT_EMPTY_FS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/empty_fs_vert_outputs.vert", stage = "vert" },
+    { name = "frag", template = "pipeline/empty_fs.frag", stage = "frag" },
+]
+
+[[case]]
+name = "tess_no_fs"
+rust_const = "EMPTY_FS_TESS_NO_FS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/empty_fs_vert_plain.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/empty_fs.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/empty_fs.tese", stage = "tese" },
+]
+
+[[case]]
+name = "tess_empty_fs"
+rust_const = "EMPTY_FS_TESS_EMPTY_FS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/empty_fs_vert_plain.vert", stage = "vert" },
+    { name = "tesc", template = "pipeline/empty_fs.tesc", stage = "tesc" },
+    { name = "tese", template = "pipeline/empty_fs.tese", stage = "tese" },
+    { name = "frag", template = "pipeline/empty_fs.frag", stage = "frag" },
+]
+
+[[case]]
+name = "primitive_discard"
+rust_const = "EMPTY_FS_PRIMITIVE_DISCARD"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/primitive_discard.vert", stage = "vert" },
+]
+
+[[case]]
+name = "masked_samples"
+rust_const = "EMPTY_FS_MASKED_SAMPLES"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "pipeline/masked_samples.vert", stage = "vert" },
+    { name = "comp", template = "pipeline/masked_samples.comp", stage = "comp" },
+]

@@ -1,0 +1,16 @@
+#version 460
+#extension GL_NV_mesh_shader : enable
+
+layout (local_size_x=8) in;
+
+out taskNV TaskData {
+    uint indexNumber[8];
+    uint size;
+} td;
+
+void main ()
+{
+    gl_TaskCountNV = 8;
+    td.indexNumber[gl_LocalInvocationID.x] = gl_LocalInvocationID.x;
+    td.size = gl_WorkGroupSize.x;
+}

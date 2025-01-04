@@ -1,0 +1,28 @@
+# Shader manifest for dEQP-VK.synchronization.internally_synchronized_objects.*
+#
+# `PipelineCacheComputeTest::initPrograms` ("compute_0".."compute_2") and `PipelineCacheGraphicTest::initPrograms`
+# ("vert_0".."vert_2" and "frag").
+
+upstream_source = "external/vulkancts/modules/vulkan/synchronization/vktSynchronizationInternallySynchronizedObjectsTests.cpp"
+rust_module = "synchronization/internally_synchronized_objects_tests"
+
+[[case]]
+name = "compute"
+rust_const = "PIPELINE_CACHE_COMPUTE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "compute_0", template = "synchronization/internally_synchronized_objects/compute_0.comp", stage = "comp" },
+    { name = "compute_1", template = "synchronization/internally_synchronized_objects/compute_1.comp", stage = "comp" },
+    { name = "compute_2", template = "synchronization/internally_synchronized_objects/compute_2.comp", stage = "comp" },
+]
+
+[[case]]
+name = "graphics"
+rust_const = "PIPELINE_CACHE_GRAPHICS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert_0", template = "synchronization/internally_synchronized_objects/vert_0.vert", stage = "vert" },
+    { name = "vert_1", template = "synchronization/internally_synchronized_objects/vert_1.vert", stage = "vert" },
+    { name = "vert_2", template = "synchronization/internally_synchronized_objects/vert_2.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/internally_synchronized_objects/frag.frag", stage = "frag" },
+]

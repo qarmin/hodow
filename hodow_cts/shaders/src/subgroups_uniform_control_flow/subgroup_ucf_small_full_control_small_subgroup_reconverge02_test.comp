@@ -1,0 +1,24 @@
+#version 450 core
+#extension GL_KHR_shader_subgroup_basic : enable
+#extension GL_KHR_shader_subgroup_ballot : enable
+#extension GL_EXT_subgroup_uniform_control_flow : enable
+layout(local_size_x = 128, local_size_y = 1, local_size_z = 1) in;
+
+layout(set=0, binding=0) coherent buffer A { uint a[]; } a;
+layout(set=0, binding=1) coherent buffer B { uint b[]; } b;
+layout(set=0, binding=2) coherent buffer C { uint c[]; } c;
+layout(set=0, binding=3) coherent buffer D { uint d[]; } d;
+
+void main()
+[[subgroup_uniform_control_flow]]
+{
+  uint idx = gl_SubgroupID * gl_SubgroupSize + gl_SubgroupInvocationID;
+  if (a.a[gl_SubgroupID] % 2 == 0) {
+    while (true) {
+      atomicAdd(c.c[0], 1);
+      if (subgroupElect())
+        break;
+    }
+    b.b[idx] = subgroupElect() ? 1 : 0;
+  }
+}

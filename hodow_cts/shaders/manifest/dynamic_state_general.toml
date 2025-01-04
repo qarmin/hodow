@@ -1,0 +1,25 @@
+# Shader manifest for dEQP-VK.dynamic_state.*.general_state.*
+#
+# `static_stencil_mask_zero` and `double_static_bind` build their own programs; `state_switch`, `bind_order` and
+# `state_persistence` use the shared `VertexFetch` pair of `dynamic_state_vertex_fetch.toml`.
+
+upstream_source = "external/vulkancts/modules/vulkan/dynamic_state/vktDynamicStateGeneralTests.cpp"
+rust_module = "dynamic_state/general_state_tests"
+
+[[case]]
+name = "static_stencil_mask_zero"
+rust_const = "STATIC_STENCIL_MASK_ZERO"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "dynamic_state/static_stencil_mask_zero.vert", stage = "vert" },
+    { name = "frag", template = "dynamic_state/static_stencil_mask_zero.frag", stage = "frag" },
+]
+
+[[case]]
+name = "double_bind"
+rust_const = "DOUBLE_BIND"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "dynamic_state/double_bind.vert", stage = "vert" },
+    { name = "frag", template = "dynamic_state/double_bind.frag", stage = "frag" },
+]

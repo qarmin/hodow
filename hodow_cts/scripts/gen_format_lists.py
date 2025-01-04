@@ -1,0 +1,253 @@
+#!/usr/bin/env python3
+"""Generate src/vkt/tests/api/copy_format_lists.rs from upstream's vkFormatLists.inl.
+
+`colorImageFormatsToTest` is ten compatible-format groups totalling ~200 entries, and
+the copy tests name every case after the format. Retyping that is a few hundred chances
+to get a name or a group membership wrong, and a wrong entry here does not fail to
+build - it registers a case upstream does not have, or misses one it does.
+
+The two groups that live in vktApiCopyImageToImageTests.cpp rather than the generated
+header are read from there.
+
+Usage:
+    python3 hodow_cts/scripts/gen_format_lists.py [--cts-dir tmp/VK-GL-CTS]
+"""
+
+from __future__ import annotations
+
+import argparse
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+CRATE_DIR = Path(__file__).resolve().parent.parent
+REPO_DIR = CRATE_DIR.parent
+OUT = CRATE_DIR / "src" / "vkt" / "tests" / "api" / "copy_format_lists.rs"
+
+# The order `colorImageFormatsToTest` lists them in. The two *A/Astc entries are local
+# to the test file; the rest come from the generated header.
+# The uncompressed `colorImageFormatsToTestBlit` lists. The compressed ones need a
+# compressed-format model in tcu and are not generated.
+BLIT_GROUPS = [
+    "compatibleFormatsUInts",
+    "compatibleFormatsSInts",
+    "compatibleFormatsFloats",
+    "compatibleFormatsSrgb",
+]
+
+GROUP_ORDER = [
+    ("compatibleFormats8BitA", "local"),
+    ("compatibleFormats8Bit", "header"),
+    ("compatibleFormats16Bit", "header"),
+    ("compatibleFormats24Bit", "header"),
+    ("compatibleFormats32Bit", "header"),
+    ("compatibleFormats48Bit", "header"),
+    ("compatibleFormats64Bit", "header"),
+    ("compatibleFormats96Bit", "header"),
+    ("compatibleFormats128Bit", "header"),
+    ("compatibleFormats128BitAstc", "local"),
+    ("compatibleFormats192Bit", "header"),
+    ("compatibleFormats256Bit", "header"),
+]
+
+
+def read_group(text: str, name: str) -> list[str]:
+    m = re.search(r"\b" + name + r"\b[^{]*\{(.*?)\}", text, re.S)
+    if not m:
+        raise SystemExit(f"could not find {name}")
+    return re.findall(r"VK_FORMAT_(\w+)", m.group(1))
+
+
+# vulkanalia names a format without its vendor suffix once it is promoted to core and
+# keeps the suffix otherwise. The 3D ASTC formats - the ones with three block
+# dimensions - are the only family here that never moved; the 2D ASTC HDR ones did.
+ASTC_3D = re.compile(r"^ASTC_\d+x\d+x\d+_")
+
+
+def rust_name(enum_name: str) -> str:
+    """The vulkanalia identifier: block dimensions uppercased (ASTC_4x4 -> ASTC_4X4),
+    a leading digit prefixed, and the vendor suffix dropped only where it was promoted."""
+    name = enum_name if ASTC_3D.match(enum_name) else re.sub(r"_(KHR|EXT)$", "", enum_name)
+    name = re.sub(r"(?<=\d)x(?=\d)", "X", name)
+    if name[0].isdigit():
+        name = "_" + name
+    return name
+
+
+def case_name(enum_name: str) -> str:
+    """`getFormatCaseName` - the enum name lowercased, vendor suffix dropped.
+
+    Except for the 3D ASTC formats: upstream's own name for them still carries `_EXT`,
+    because they were never promoted, so the case name does too."""
+    if ASTC_3D.match(enum_name):
+        return enum_name.lower()
+    return re.sub(r"_(khr|ext)$", "", enum_name.lower())
+
+
+
+def is_ycbcr(name: str) -> bool:
+    """`vk::isYCbCrFormat` - the YCbCr formats are exactly those named for a plane
+    layout or a chroma subsampling, which upstream enumerates one by one. Matching on
+    the shape of the name reproduces that list without retyping it."""
+    n = name.upper()
+    if "_PLANE_" in n or "PLANE_" in n:
+        return True
+    return bool(re.search(r"^VK_FORMAT_G\d", n)) or "_422_" in n or "_420_" in n or "_444_" in n
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--cts-dir", type=Path, default=REPO_DIR / "tmp" / "VK-GL-CTS")
+    args = ap.parse_args()
+
+    header = args.cts_dir / "external/vulkancts/framework/vulkan/generated/vulkan/vkFormatLists.inl"
+    local = args.cts_dir / "external/vulkancts/modules/vulkan/api/vktApiCopyImageToImageTests.cpp"
+    for p in (header, local):
+        if not p.is_file():
+            print(f"error: {p} not found; is --cts-dir right?", file=sys.stderr)
+            return 2
+
+    header_text, local_text = header.read_text(), local.read_text()
+
+    groups: list[tuple[str, list[str]]] = []
+    for name, where in GROUP_ORDER:
+        text = header_text if where == "header" else local_text
+        groups.append((name, read_group(text, name)))
+
+    total = sum(len(f) for _, f in groups)
+    print(f"{len(groups)} groups, {total} formats")
+
+    lines = [
+        "// SPDX-License-Identifier: Apache-2.0",
+        "//",
+        "// Derived from VK-GL-CTS:",
+        "//   external/vulkancts/framework/vulkan/generated/vulkan/vkFormatLists.inl",
+        "//   external/vulkancts/modules/vulkan/api/vktApiCopyImageToImageTests.cpp",
+        "// Upstream revision: see hodow_cts/upstream/COMMIT",
+        "//",
+        "// Copyright (c) 2025 The Khronos Group Inc.",
+        "// Licensed under the Apache License, Version 2.0 (see LICENSE at the repo root).",
+        "//",
+        "// Generated by scripts/gen_format_lists.py; do not hand-edit.",
+        "",
+        "use vulkanalia::vk;",
+        "",
+        "/// One entry of `colorImageFormatsToTest`: the format, the name its cases are",
+        "/// registered under, and whether it is block-compressed.",
+        "pub struct CopyFormat {",
+        "    pub format: vk::Format,",
+        "    pub name: &'static str,",
+        "    pub compressed: bool,",
+        "}",
+        "",
+        "/// `colorImageFormatsToTest`, in upstream's order.",
+        "pub static COLOR_IMAGE_FORMATS_TO_TEST: &[&[CopyFormat]] = &[",
+    ]
+    for name, fmts in groups:
+        lines.append(f"    // {name}")
+        lines.append("    &[")
+        for f in fmts:
+            compressed = "true" if re.search(r"BLOCK|_2BPP|_4BPP", f) else "false"
+            lines.append(
+                f'        CopyFormat {{ format: vk::Format::{rust_name(f)}, '
+                f'name: "{case_name(f)}", compressed: {compressed} }},'
+            )
+        lines.append("    ],")
+    lines.append("];")
+    lines.append("")
+
+    # FILL_MODE_RANDOM_GRAY takes a different branch for these, to keep it from
+    # generating byte patterns that read back as NaN in a float format.
+    float_formats = read_group(header_text, "signedAndUnsignedFloatFormats")
+    print(f"signedAndUnsignedFloatFormats: {len(float_formats)} formats")
+    ds_formats = read_group(header_text, "depthAndStencilFormats")
+    print(f"depthAndStencilFormats: {len(ds_formats)} formats")
+    lines.append("/// `formats::depthAndStencilFormats`, paired with the case name.")
+    lines.append("pub static DEPTH_AND_STENCIL_FORMATS: &[(vk::Format, &str)] = &[")
+    for f in ds_formats:
+        lines.append(f'    (vk::Format::{rust_name(f)}, "{case_name(f)}"),')
+    lines.append("];")
+    lines.append("")
+
+    lines.append("/// `formats::signedAndUnsignedFloatFormats`")
+    lines.append("pub static SIGNED_AND_UNSIGNED_FLOAT_FORMATS: &[vk::Format] = &[")
+    for f in float_formats:
+        lines.append(f"    vk::Format::{rust_name(f)},")
+    lines.append("];")
+    lines.append("")
+
+    # `formats::compressedFormatsFloats` - the format list the compressed
+    # image-to-buffer mip_copies cases loop over.
+    cf_formats = read_group(header_text, "compressedFormatsFloats")
+    print(f"compressedFormatsFloats: {len(cf_formats)} formats")
+    lines.append("/// `formats::compressedFormatsFloats`, paired with the case name.")
+    lines.append("pub static COMPRESSED_FORMATS_FLOATS: &[(vk::Format, &str)] = &[")
+    for f in cf_formats:
+        lines.append(f'    (vk::Format::{rust_name(f)}, "{case_name(f)}"),')
+    lines.append("];")
+    lines.append("")
+
+    # `formats::compressedFormatsSrgb` - the sRGB half of the same, which the blit
+    # tests pair with the sRGB destination list.
+    cs_formats = read_group(header_text, "compressedFormatsSrgb")
+    print(f"compressedFormatsSrgb: {len(cs_formats)} formats")
+    lines.append("/// `formats::compressedFormatsSrgb`, paired with the case name.")
+    lines.append("pub static COMPRESSED_FORMATS_SRGB: &[(vk::Format, &str)] = &[")
+    for f in cs_formats:
+        lines.append(f'    (vk::Format::{rust_name(f)}, "{case_name(f)}"),')
+    lines.append("];")
+    lines.append("")
+
+    # `colorImageFormatsToTestBlit` groups formats by channel class rather than by bit
+    # width, because a blit converts between formats instead of reinterpreting bytes.
+    lines.append("/// One entry of a `colorImageFormatsToTestBlit` list.")
+    lines.append("#[derive(Clone, Copy)]")
+    lines.append("pub struct BlitFormat {")
+    lines.append("    pub format: vk::Format,")
+    lines.append("    pub name: &'static str,")
+    lines.append("}")
+    lines.append("")
+    # `formats::bufferViewAccessFormats` - the format list the texel-buffer access
+    # tests loop over.
+    bv_formats = read_group(header_text, "bufferViewAccessFormats")
+    print(f"bufferViewAccessFormats: {len(bv_formats)} formats")
+    lines.append("/// `formats::bufferViewAccessFormats`, paired with the case name.")
+    lines.append("pub static BUFFER_VIEW_ACCESS_FORMATS: &[(vk::Format, &str)] = &[")
+    for f in bv_formats:
+        lines.append(f'    (vk::Format::{rust_name(f)}, "{case_name(f)}"),')
+    lines.append("];")
+    lines.append("")
+
+    for group in BLIT_GROUPS:
+        fmts = read_group(header_text, group)
+        print(f"{group}: {len(fmts)} formats")
+        lines.append(f"/// `formats::{group}`")
+        lines.append(f"pub static {re.sub(r'(?<!^)(?=[A-Z])', '_', group).upper()}: &[BlitFormat] = &[")
+        for f in fmts:
+            lines.append(f'    BlitFormat {{ format: vk::Format::{rust_name(f)}, name: "{case_name(f)}" }},')
+        lines.append("];")
+        lines.append("")
+
+    # `formats::basicUnsignedFloatFormats` - what the ycbcr copy tests cross with
+    # themselves. Both plain and YCbCr formats are in here; which is which decides the
+    # image size and half of the support checks, so it is recorded alongside.
+    basic_formats = read_group(header_text, "basicUnsignedFloatFormats")
+    print(f"basicUnsignedFloatFormats: {len(basic_formats)} formats")
+    lines.append("/// `formats::basicUnsignedFloatFormats`, paired with the case name and")
+    lines.append("/// whether `isYCbCrFormat` holds for it.")
+    lines.append("pub static BASIC_UNSIGNED_FLOAT_FORMATS: &[(vk::Format, &str, bool)] = &[")
+    for f in basic_formats:
+        ycbcr = is_ycbcr(f)
+        lines.append(f'    (vk::Format::{rust_name(f)}, "{case_name(f)}", {str(ycbcr).lower()}),')
+    lines.append("];")
+    lines.append("")
+
+    OUT.write_text("\n".join(lines))
+    subprocess.run(["rustfmt", "--edition", "2024", "--config", "max_width=180", str(OUT)], cwd=CRATE_DIR, check=False)
+    print(f"wrote {OUT.relative_to(REPO_DIR)}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

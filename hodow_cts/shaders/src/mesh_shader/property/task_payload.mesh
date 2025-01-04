@@ -1,0 +1,29 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+layout (local_size_x=1, local_size_y=1, local_size_z=1) in;
+layout (triangles) out;
+layout (max_vertices=3, max_primitives=1) out;
+layout (constant_id=0) const uint payloadElements = 1u;
+layout (constant_id=1) const uint sharedMemoryElements = 1u;
+layout (set=0, binding=0, std430) buffer ResultBlock {
+    uint sharedOK;
+    uint payloadOK;
+} result;
+struct TaskData {
+    uint elements[payloadElements];
+};
+taskPayloadSharedEXT TaskData td;
+
+void main () {
+    bool allOK = true;
+    for (uint i = 0u; i < payloadElements; ++i) {
+        if (td.elements[i] != i + 2000u) {
+            allOK = false;
+            break;
+        }
+    }
+    result.payloadOK = (allOK ? 1u : 0u);
+
+    SetMeshOutputsEXT(0u, 0u);
+}

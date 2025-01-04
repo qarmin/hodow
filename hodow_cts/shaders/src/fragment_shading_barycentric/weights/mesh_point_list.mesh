@@ -1,0 +1,26 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(points) out;
+layout(max_vertices=1, max_primitives = 1) out;
+layout(push_constant) uniform PushConstant { mat4 mvp; } pc;
+
+layout(set = 0, binding = 0) buffer PerVertexData{ 
+    vec4 vertexBuffer[32768];
+} pvd;
+layout (location=0) out vec3 outColor[];
+
+void main ()
+{
+    uint maxVertex = 1;
+    uint maxPrimitive = 1;
+    SetMeshOutputsEXT(maxVertex, maxPrimitive);
+    const uint vertex = gl_LocalInvocationIndex;
+    const uint primitive = gl_LocalInvocationIndex;
+    const uint workGroupIndex = gl_NumWorkGroups.x * gl_NumWorkGroups.y * gl_WorkGroupID.z + gl_NumWorkGroups.x * gl_WorkGroupID.y + gl_WorkGroupID.x;
+    uint jobId = workGroupIndex + gl_LocalInvocationIndex;
+    gl_MeshVerticesEXT[vertex].gl_Position = transpose(pc.mvp) * pvd.vertexBuffer[jobId*2];
+    outColor[vertex] = pvd.vertexBuffer[jobId*2+1].xyz;
+    gl_PrimitivePointIndicesEXT[primitive] = primitive;
+}

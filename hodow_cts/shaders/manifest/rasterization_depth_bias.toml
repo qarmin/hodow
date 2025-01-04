@@ -1,0 +1,35 @@
+# Shader manifest for dEQP-VK.rasterization.depth_bias.*
+#
+# The Amber scripts rasterization/depth_bias/<format>_constant_one_{less,greater}.amber (`simple`): a vertex shader that passes the position and a
+# fragment shader that writes the colour of a storage buffer; and <format>_constant_one and d16_unorm_slope (`white`): the same vertex shader and a
+# fragment shader that writes white.
+
+upstream_source = "external/vulkancts/data/vulkan/amber/rasterization/depth_bias/d16_unorm_constant_one_less.amber"
+rust_module = "rasterization/depth_bias_tests"
+
+[[case]]
+name = "simple"
+rust_const = "DEPTH_BIAS_SIMPLE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "rasterization/depth_bias/vert.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/depth_bias/frag.frag", stage = "frag" },
+]
+
+[[case]]
+name = "white"
+rust_const = "DEPTH_BIAS_WHITE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "rasterization/depth_bias/vert.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/depth_bias/frag_white.frag", stage = "frag" },
+]
+
+[[case]]
+name = "rect"
+rust_const = "DEPTH_BIAS_RECT"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "rasterization/depth_bias/vert_rect.vert", stage = "vert" },
+    { name = "frag", template = "rasterization/depth_bias/frag_color.frag", stage = "frag" },
+]

@@ -1,0 +1,39 @@
+#version 450
+#extension GL_EXT_mesh_shader : enable
+#extension GL_KHR_shader_subgroup_quad: enable
+#extension GL_KHR_shader_subgroup_ballot: enable
+layout (local_size_x_id = 0, local_size_y_id = 1, local_size_z_id = 2) in;
+layout (points) out;
+layout (max_vertices = 1, max_primitives = 1) out;
+layout(set = 0, binding = 0, std430) buffer Buffer1
+{
+  uint result[];
+};
+
+void main (void)
+{
+  uvec3 globalSize = gl_NumWorkGroups * gl_WorkGroupSize;
+  highp uint offset = globalSize.x * ((globalSize.y * gl_GlobalInvocationID.z) + gl_GlobalInvocationID.y) + gl_GlobalInvocationID.x;
+  uint tempRes;
+  uint tempResult = 0x1;
+  uvec4 mask = subgroupBallot(true);
+  uint cluster[4] =
+  {
+    subgroupQuadBroadcast(gl_SubgroupInvocationID, 0),
+    subgroupQuadBroadcast(gl_SubgroupInvocationID, 1),
+    subgroupQuadBroadcast(gl_SubgroupInvocationID, 2),
+    subgroupQuadBroadcast(gl_SubgroupInvocationID, 3)
+  };
+  uint rootID = gl_SubgroupInvocationID & ~0x3;
+  for (uint i = 0; i < 4; i++)
+  {
+    uint nextID = rootID + i;
+    if (subgroupBallotBitExtract(mask, nextID) && (cluster[i] != nextID))
+    {
+      tempResult = mask.x;
+    }
+  }
+  tempRes = tempResult;
+  result[offset] = tempRes;
+  SetMeshOutputsEXT(0u, 0u);
+}
