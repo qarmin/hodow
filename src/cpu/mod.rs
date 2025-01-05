@@ -5,6 +5,9 @@ use crate::cpu::sse1::SSE1;
 mod sse1;
 mod sse4_1;
 
+#[cfg(miri)]
+pub const DEFAULT_TEST_ITERATIONS: usize = 20;
+#[cfg(not(miri))]
 pub const DEFAULT_TEST_ITERATIONS: usize = 100;
 
 pub trait ExtensionTest {

@@ -1,4 +1,7 @@
-use std::arch::x86_64::{__m128, _mm_add_ps, _mm_div_ps, _mm_load_ps, _mm_loadu_ps, _mm_movemask_ps, _mm_rsqrt_ps, _mm_set1_ps, _mm_set_ps, _mm_setzero_ps, _mm_sqrt_ps, _mm_store_ps, _mm_sub_ps};
+#[allow(dead_code)]
+// TODO remove
+
+use std::arch::x86_64::{__m128, _mm_add_ps, _mm_and_ps, _mm_andnot_ps, _mm_cmpeq_ps, _mm_cmpge_ps, _mm_cmpgt_ps, _mm_cmple_ps, _mm_cmplt_ps, _mm_div_ps, _mm_load_ps, _mm_loadu_ps, _mm_max_ps, _mm_min_ps, _mm_movemask_ps, _mm_or_ps, _mm_rsqrt_ps, _mm_set1_ps, _mm_set_ps, _mm_setzero_ps, _mm_sqrt_ps, _mm_store_ps, _mm_sub_ps, _mm_xor_ps};
 
 use log::{info};
 
@@ -25,6 +28,17 @@ impl ExtensionTest for SSE1 {
             (&test_mm_movemask_ps, "test_mm_movemask_ps"),
             (&test_mm_sqrt_ps, "test_mm_sqrt_ps"),
             (&test_mm_rsqrt_ps, "test_mm_rsqrt_ps"),
+            (&test_mm_and_ps, "test_mm_and_ps"),
+            (&test_mm_andnot_ps, "test_mm_andnot_ps"),
+            (&test_mm_or_ps, "test_mm_or_ps"),
+            (&test_mm_xor_ps, "test_mm_xor_ps"),
+            (&test_mm_min_ps, "test_mm_min_ps"),
+            (&test_mm_max_ps, "test_mm_max_ps"),
+            (&test_mm_cmpeq_ps, "test_mm_cmpeq_ps"),
+            (&test_mm_cmpgt_ps, "test_mm_cmpgt_ps"),
+            (&test_mm_cmplt_ps, "test_mm_cmplt_ps"),
+            (&test_mm_cmpge_ps, "test_mm_cmpge_ps"),
+            (&test_mm_cmple_ps, "test_mm_cmple_ps"),
         ]
 
     }
@@ -344,25 +358,300 @@ fn test_mm_rsqrt_ps() -> Result<(), String> {
 
     Ok(())
 }
+fn test_mm_and_ps() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 0.0, -1.0, 0.0);
+        let b = _mm_set_ps(1.0, 1.0, 0.0, 0.0);
+        let result = _mm_and_ps(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        check_array_equality(&result, &[0.0, 0.0, 0.0, 1.0])?;
+    }
 
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..DEFAULT_TEST_ITERATIONS {
+            unsafe {
+                let arr1 = get_four_random_floats();
+                let arr2 = get_four_random_floats();
+                let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
+                let vec2 = _mm_set_ps(arr2[0], arr2[1], arr2[2], arr2[3]);
+                let result = _mm_and_ps(vec1, vec2);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
+    Ok(())
+}
+
+fn test_mm_andnot_ps() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 0.0, -1.0, 0.0);
+        let b = _mm_set_ps(1.0, 1.0, 0.0, 0.0);
+        let result = _mm_andnot_ps(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        check_array_equality(&result, &[0.0, 0.0, 1.0, 0.0])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..DEFAULT_TEST_ITERATIONS {
+            unsafe {
+                let arr1 = get_four_random_floats();
+                let arr2 = get_four_random_floats();
+                let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
+                let vec2 = _mm_set_ps(arr2[0], arr2[1], arr2[2], arr2[0]);
+                let result = _mm_andnot_ps(vec1, vec2);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
+    Ok(())
+}
+fn test_mm_or_ps() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 0.0, -1.0, 0.0);
+        let b = _mm_set_ps(1.0, 1.0, 0.0, 0.0);
+        let result = _mm_or_ps(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        check_array_equality(&result, &[0.0, -1.0, 1.0, 1.0])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..DEFAULT_TEST_ITERATIONS {
+            unsafe {
+                let arr1 = get_four_random_floats();
+                let arr2 = get_four_random_floats();
+                let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
+                let vec2 = _mm_set_ps(arr2[0], arr2[1], arr2[2], arr2[3]);
+                let result = _mm_or_ps(vec1, vec2);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
+    Ok(())
+}
+
+fn test_mm_xor_ps() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 0.0, -1.0, 0.0);
+        let b = _mm_set_ps(1.0, 1.0, 0.0, 0.0);
+        let result = _mm_xor_ps(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        check_array_equality(&result, &[0.0, -1.0, 1.0, 0.0])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..DEFAULT_TEST_ITERATIONS {
+            unsafe {
+                let arr1 = get_four_random_floats();
+                let arr2 = get_four_random_floats();
+                let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
+                let vec2 = _mm_set_ps(arr2[0], arr2[1], arr2[2], arr2[3]);
+                let result = _mm_xor_ps(vec1, vec2);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
+    Ok(())
+}
+
+fn test_mm_min_ps() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
+        let b = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
+        let result = _mm_min_ps(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        check_array_equality(&result, &[1.0, 2.0, 2.0, 1.0])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..DEFAULT_TEST_ITERATIONS {
+            unsafe {
+                let arr1 = get_four_random_floats();
+                let arr2 = get_four_random_floats();
+                let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
+                let vec2 = _mm_set_ps(arr2[0], arr2[1], arr2[2], arr2[3]);
+                let result = _mm_min_ps(vec1, vec2);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
+    Ok(())
+}
+
+fn test_mm_max_ps() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
+        let b = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
+        let result = _mm_max_ps(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        check_array_equality(&result, &[4.0, 3.0, 3.0, 4.0])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..DEFAULT_TEST_ITERATIONS {
+            unsafe {
+                let arr1 = get_four_random_floats();
+                let arr2 = get_four_random_floats();
+                let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
+                let vec2 = _mm_set_ps(arr2[0], arr2[1], arr2[2], arr2[3]);
+                let result = _mm_max_ps(vec1, vec2);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
+    Ok(())
+}
+fn test_mm_cmpeq_ps() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
+        let b = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
+        let result = _mm_cmpeq_ps(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        check_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..DEFAULT_TEST_ITERATIONS {
+            unsafe {
+                let arr1 = get_four_random_floats();
+                let arr2 = arr1;
+                let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
+                let vec2 = _mm_set_ps(arr2[3], arr2[2], arr2[1], arr2[0]);
+                let result = _mm_cmpeq_ps(vec1, vec2);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
+    Ok(())
+}
+
+fn test_mm_cmpgt_ps() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
+        let b = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
+        let result = _mm_cmpgt_ps(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        check_array_equality(&result, &[f32::NAN, f32::NAN, 0.0,0.0])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..DEFAULT_TEST_ITERATIONS {
+            unsafe {
+                let arr1 = get_four_random_floats();
+                let arr2 = get_four_random_floats();
+                let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
+                let vec2 = _mm_set_ps(arr2[3], arr2[2], arr2[1], arr2[0]);
+                let result = _mm_cmpgt_ps(vec1, vec2);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
+    Ok(())
+}
+
+fn test_mm_cmplt_ps() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
+        let b = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
+        let result = _mm_cmplt_ps(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        check_array_equality(&result, &[0.0, 0.0,f32::NAN, f32::NAN])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..DEFAULT_TEST_ITERATIONS {
+            unsafe {
+                let arr1 = get_four_random_floats();
+                let arr2 = get_four_random_floats();
+                let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
+                let vec2 = _mm_set_ps(arr2[3], arr2[2], arr2[1], arr2[0]);
+                let result = _mm_cmplt_ps(vec1, vec2);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
+    Ok(())
+}
+
+fn test_mm_cmpge_ps() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
+        let b = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
+        let result = _mm_cmpge_ps(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        check_array_equality(&result, &[f32::NAN, f32::NAN, 0.0, 0.0])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..DEFAULT_TEST_ITERATIONS {
+            unsafe {
+                let arr1 = get_four_random_floats();
+                let arr2 = get_four_random_floats();
+                let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
+                let vec2 = _mm_set_ps(arr2[3], arr2[2], arr2[1], arr2[0]);
+                let result = _mm_cmpge_ps(vec1, vec2);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
+    Ok(())
+}
+
+fn test_mm_cmple_ps() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
+        let b = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
+        let result = _mm_cmple_ps(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        check_array_equality(&result, &[0.0, 0.0, f32::NAN, f32::NAN])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..DEFAULT_TEST_ITERATIONS {
+            unsafe {
+                let arr1 = get_four_random_floats();
+                let arr2 = get_four_random_floats();
+                let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
+                let vec2 = _mm_set_ps(arr2[3], arr2[2], arr2[1], arr2[0]);
+                let result = _mm_cmple_ps(vec1, vec2);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
+    Ok(())
+}
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
-    fn test_all() {
-        // test_mm_set_ps().unwrap();
-        // test_mm_add_ps().unwrap();
-        // test_mm_sub_ps().unwrap();
-        // test_mm_div_ps().unwrap();
-        // test_mm_set1_ps().unwrap();
-        // test_mm_setzero_ps().unwrap();
-        // test_mm_load_ps().unwrap();
-        // test_mm_loadu_ps().unwrap();
-        // test_mm_store_ps().unwrap();
-        // test_mm_movemask_ps().unwrap();
-        // test_mm_sqrt_ps().unwrap();
-        test_mm_rsqrt_ps().unwrap();
+    fn test_sse1() {
+        let tests = SSE1::get_tests();
+        for (fun, name) in tests {
+            println!("Running test {}", name);
+            fun().unwrap();
+        }
     }
 
 }
