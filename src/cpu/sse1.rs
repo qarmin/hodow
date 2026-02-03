@@ -901,8 +901,10 @@ fn test_mm_unpackhi_ps() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
         let result = _mm_unpackhi_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // Interleave high halves: [a[3], b[3], a[2], b[2]]
-        check_array_equality(&result, &[6.0, 2.0, 5.0, 1.0])?;
+        // Interleave high halves: [b[2], a[2], b[3], a[3]]
+        // a = [4, 3, 2, 1], b = [8, 7, 6, 5]
+        // result = [2, 6, 1, 5]
+        check_array_equality(&result, &[2.0, 6.0, 1.0, 5.0])?;
     }
     Ok(())
 }
@@ -913,8 +915,10 @@ fn test_mm_unpacklo_ps() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
         let result = _mm_unpacklo_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // Interleave low halves: [a[1], b[1], a[0], b[0]]
-        check_array_equality(&result, &[8.0, 4.0, 7.0, 3.0])?;
+        // Interleave low halves: [b[0], a[0], b[1], a[1]]
+        // a = [4, 3, 2, 1], b = [8, 7, 6, 5]
+        // result = [4, 8, 3, 7]
+        check_array_equality(&result, &[4.0, 8.0, 3.0, 7.0])?;
     }
     Ok(())
 }
@@ -937,8 +941,10 @@ fn test_mm_movelh_ps() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
         let result = _mm_movelh_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // result = [b[1], b[0], a[1], a[0]]
-        check_array_equality(&result, &[8.0, 7.0, 4.0, 3.0])?;
+        // result = [a[0], a[1], b[0], b[1]]
+        // a = [4, 3, 2, 1], b = [8, 7, 6, 5]
+        // result = [4, 3, 8, 7]
+        check_array_equality(&result, &[4.0, 3.0, 8.0, 7.0])?;
     }
     Ok(())
 }
