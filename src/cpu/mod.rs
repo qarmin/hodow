@@ -2,6 +2,7 @@ use log::{error, info};
 
 use crate::cpu::sse1::SSE1;
 
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 mod sse1;
 mod sse4_1;
 
@@ -51,6 +52,35 @@ fn check_array_equality(a: &[f32], b: &[f32]) -> Result<(), String> {
         } else if (a[i] - b[i]).abs() > 0.001 {
             return Err(format!("Got {a:?}, expected {b:?} (Difference is too big)"));
         }
+    }
+
+    Ok(())
+}
+
+pub const DEFAULT_FLOAT_DIFF: f32 = 0.001;
+fn check_float_equality(a: f32, b: f32, max_diff: f32) -> Result<(), String> {
+    if a.is_infinite() && !b.is_infinite() {
+        return Err(format!("Got {a:?}, expected {b:?} (One is infinite, other is not)"));
+    } else if a.is_nan() && !b.is_nan() {
+        return Err(format!("Got {a:?}, expected {b:?} (One is NaN, other is not)"));
+    } else if (a - b).abs() > max_diff {
+        return Err(format!("Got {a:?}, expected {b:?} (Difference is too big)"));
+    }
+
+    Ok(())
+}
+#[allow(unused)]
+pub fn check_int_equality(a: i32, b: i32) -> Result<(), String> {
+    if a != b {
+        return Err(format!("Got {a:?}, expected {b:?}"));
+    }
+
+    Ok(())
+}
+#[allow(unused)]
+pub fn check_int_equality_with_error(a: i32, b: i32, error: i32) -> Result<(), String> {
+    if (a != b) && ((a > b && a - error > b) || (a < b && a + error < b)) {
+        return Err(format!("Got {a:?}, expected {b:?}"));
     }
 
     Ok(())

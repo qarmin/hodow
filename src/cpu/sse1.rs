@@ -1,11 +1,18 @@
 #[allow(dead_code)]
 // TODO remove
-
+#[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::{__m128, _mm_add_ps, _mm_and_ps, _mm_andnot_ps, _mm_cmpeq_ps, _mm_cmpge_ps, _mm_cmpgt_ps, _mm_cmple_ps, _mm_cmplt_ps, _mm_div_ps, _mm_load_ps, _mm_loadu_ps, _mm_max_ps, _mm_min_ps, _mm_movemask_ps, _mm_or_ps, _mm_rsqrt_ps, _mm_set1_ps, _mm_set_ps, _mm_setzero_ps, _mm_sqrt_ps, _mm_store_ps, _mm_sub_ps, _mm_xor_ps};
+#[cfg(target_arch = "x86_64")]
+use std::arch::x86_64::{_mm_cvtsi32_ss, _mm_cvtss_f32, _mm_cvtss_si32, _mm_setzero_si128};
+#[cfg(target_arch = "x86")]
+use std::arch::x86::{__m128, _mm_add_ps, _mm_and_ps, _mm_andnot_ps, _mm_cmpeq_ps, _mm_cmpge_ps, _mm_cmpgt_ps, _mm_cmple_ps, _mm_cmplt_ps, _mm_div_ps, _mm_load_ps, _mm_loadu_ps, _mm_max_ps, _mm_min_ps, _mm_movemask_ps, _mm_or_ps, _mm_rsqrt_ps, _mm_set1_ps, _mm_set_ps, _mm_setzero_ps, _mm_sqrt_ps, _mm_store_ps, _mm_sub_ps, _mm_xor_ps};
+#[cfg(target_arch = "x86")]
+use std::arch::x86::{_mm_cvtsi32_ss, _mm_cvtss_f32, _mm_cvtss_si32, _mm_setzero_si128};
 
-use log::{info};
 
-use crate::cpu::{check_array_equality, ExtensionTest, DEFAULT_TEST_ITERATIONS};
+use log::{error, info};
+
+use crate::cpu::{check_array_equality, check_float_equality, check_int_equality, check_int_equality_with_error, ExtensionTest, DEFAULT_FLOAT_DIFF, DEFAULT_TEST_ITERATIONS};
 use crate::{get_four_random_floats, get_fuzzing, get_random_float};
 
 pub struct SSE1;
@@ -39,6 +46,9 @@ impl ExtensionTest for SSE1 {
             (&test_mm_cmplt_ps, "test_mm_cmplt_ps"),
             (&test_mm_cmpge_ps, "test_mm_cmpge_ps"),
             (&test_mm_cmple_ps, "test_mm_cmple_ps"),
+            (&test_mm_cvtss_f32, "test_mm_cvtss_f32"),
+            (&test_mm_cvtss_si32, "test_mm_cvtss_si32"),
+            (&test_mm_cvtsi32_ss, "test_mm_cvtsi32_ss"),
         ]
 
     }
@@ -641,6 +651,71 @@ fn test_mm_cmple_ps() -> Result<(), String> {
 
     Ok(())
 }
+
+fn test_mm_cvtss_f32() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
+        let result = _mm_cvtss_f32(a);
+        if result != 4.0 {
+            return Err(format!("Expected 4.0, got {}", result));
+        }
+    }if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..DEFAULT_TEST_ITERATIONS {
+            unsafe {
+                let arr = get_four_random_floats();
+                let vec = _mm_set_ps(arr[3], arr[2], arr[1], arr[0]);
+                let result = _mm_cvtss_f32(vec);
+                check_float_equality(result, arr[0], DEFAULT_FLOAT_DIFF)?;
+            }
+        }
+    }
+    Ok(())
+}
+
+
+fn test_mm_cvtsi32_ss() -> Result<(), String> {
+    unsafe {
+        let a = _mm_setzero_ps();
+        let result = _mm_cvtsi32_ss(a, 42);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        check_array_equality(&result, &[42.0, 0.0, 0.0, 0.0])?;
+    }
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..DEFAULT_TEST_ITERATIONS {
+            unsafe {
+                let value = get_random_float() as i32;
+                let vec = _mm_setzero_ps();
+                let result = _mm_cvtsi32_ss(vec, value);
+                let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+                check_array_equality(&result, &[value as f32, 0.0, 0.0, 0.0])?;
+            }
+        }
+    }
+    Ok(())
+}
+
+fn test_mm_cvtss_si32() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
+        let result = _mm_cvtss_si32(a);
+        if result != 4 {
+            return Err(format!("Expected 4, got {}", result));
+        }
+    }if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..DEFAULT_TEST_ITERATIONS {
+            unsafe {
+                let arr = get_four_random_floats();
+                let vec = _mm_set_ps(arr[3], arr[2], arr[1], arr[0]);
+                let _result = _mm_cvtss_si32(vec); // Not sure how to test this
+            }
+        }
+    }
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
