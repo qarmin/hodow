@@ -21,6 +21,16 @@ use crate::cpu::avx2::AVX2;
 use crate::cpu::fma::FMA;
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 use crate::cpu::avx512f::AVX512F;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+use crate::cpu::avx512bitalg::AVX512BITALG;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+use crate::cpu::avx512bf16::AVX512BF16;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+use crate::cpu::avx512cd::AVX512CD;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+use crate::cpu::avx512ifma::AVX512IFMA;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+use crate::cpu::avx512vbmi::AVX512VBMI;
 
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 mod sse1;
@@ -42,6 +52,16 @@ mod avx2;
 mod fma;
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 mod avx512f;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+mod avx512bitalg;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+mod avx512bf16;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+mod avx512cd;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+mod avx512ifma;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+mod avx512vbmi;
 
 #[cfg(miri)]
 pub const DEFAULT_TEST_ITERATIONS: usize = 20;
@@ -139,6 +159,26 @@ pub fn test_all_extensions() -> Result<(), String> {
 
         if std::arch::is_x86_feature_detected!("avx512f") {
             AVX512F::test()?;
+        }
+
+        if std::arch::is_x86_feature_detected!("avx512bitalg") {
+            AVX512BITALG::test()?;
+        }
+
+        if std::arch::is_x86_feature_detected!("avx512bf16") {
+            AVX512BF16::test()?;
+        }
+
+        if std::arch::is_x86_feature_detected!("avx512cd") {
+            AVX512CD::test()?;
+        }
+
+        if std::arch::is_x86_feature_detected!("avx512ifma") {
+            AVX512IFMA::test()?;
+        }
+
+        if std::arch::is_x86_feature_detected!("avx512vbmi") {
+            AVX512VBMI::test()?;
         }
     }
 
