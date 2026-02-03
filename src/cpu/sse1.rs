@@ -1,11 +1,11 @@
 #[allow(dead_code)]
 // TODO remove
 #[cfg(target_arch = "x86_64")]
-use std::arch::x86_64::{__m128, _mm_add_ps, _mm_and_ps, _mm_andnot_ps, _mm_cmpeq_ps, _mm_cmpge_ps, _mm_cmpgt_ps, _mm_cmple_ps, _mm_cmplt_ps, _mm_div_ps, _mm_load_ps, _mm_loadu_ps, _mm_max_ps, _mm_min_ps, _mm_movemask_ps, _mm_or_ps, _mm_rsqrt_ps, _mm_set1_ps, _mm_set_ps, _mm_setzero_ps, _mm_sqrt_ps, _mm_store_ps, _mm_sub_ps, _mm_xor_ps};
+use std::arch::x86_64::{__m128, _mm_add_ps, _mm_add_ss, _mm_and_ps, _mm_andnot_ps, _mm_cmpeq_ps, _mm_cmpge_ps, _mm_cmpgt_ps, _mm_cmple_ps, _mm_cmplt_ps, _mm_div_ps, _mm_div_ss, _mm_load_ps, _mm_loadu_ps, _mm_max_ps, _mm_max_ss, _mm_min_ps, _mm_min_ss, _mm_movemask_ps, _mm_mul_ps, _mm_mul_ss, _mm_or_ps, _mm_rcp_ps, _mm_rcp_ss, _mm_rsqrt_ps, _mm_rsqrt_ss, _mm_set1_ps, _mm_set_ps, _mm_set_ss, _mm_setzero_ps, _mm_sqrt_ps, _mm_sqrt_ss, _mm_store_ps, _mm_sub_ps, _mm_sub_ss, _mm_xor_ps};
 #[cfg(target_arch = "x86_64")]
-use std::arch::x86_64::{_mm_cvtsi32_ss, _mm_cvtss_f32, _mm_cvtss_si32};
+use std::arch::x86_64::{_mm_cvtsi32_ss, _mm_cvtss_f32, _mm_cvtss_si32, _mm_shuffle_ps, _mm_unpackhi_ps, _mm_unpacklo_ps, _mm_movehl_ps, _mm_movelh_ps, _mm_move_ss};
 #[cfg(target_arch = "x86")]
-use std::arch::x86::{_mm_cvtsi32_ss, _mm_cvtss_f32, _mm_cvtss_si32};
+use std::arch::x86::{_mm_cvtsi32_ss, _mm_cvtss_f32, _mm_cvtss_si32, _mm_shuffle_ps, _mm_unpackhi_ps, _mm_unpacklo_ps, _mm_movehl_ps, _mm_movelh_ps, _mm_move_ss};
 
 
 use log::info;
@@ -22,28 +22,46 @@ impl ExtensionTest for SSE1 {
     fn get_tests() -> &'static [(&'static dyn Fn() -> Result<(), String>, &'static str)] {
         &[
             (&test_mm_set_ps, "test_mm_set_ps"),
+            (&test_mm_set_ss, "test_mm_set_ss"),
             (&test_mm_add_ps, "test_mm_add_ps"),
+            (&test_mm_add_ss, "test_mm_add_ss"),
             (&test_mm_sub_ps, "test_mm_sub_ps"),
+            (&test_mm_sub_ss, "test_mm_sub_ss"),
+            (&test_mm_mul_ps, "test_mm_mul_ps"),
+            (&test_mm_mul_ss, "test_mm_mul_ss"),
             (&test_mm_div_ps, "test_mm_div_ps"),
+            (&test_mm_div_ss, "test_mm_div_ss"),
+            (&test_mm_sqrt_ps, "test_mm_sqrt_ps"),
+            (&test_mm_sqrt_ss, "test_mm_sqrt_ss"),
+            (&test_mm_rcp_ps, "test_mm_rcp_ps"),
+            (&test_mm_rcp_ss, "test_mm_rcp_ss"),
+            (&test_mm_rsqrt_ps, "test_mm_rsqrt_ps"),
+            (&test_mm_rsqrt_ss, "test_mm_rsqrt_ss"),
+            (&test_mm_min_ps, "test_mm_min_ps"),
+            (&test_mm_min_ss, "test_mm_min_ss"),
+            (&test_mm_max_ps, "test_mm_max_ps"),
+            (&test_mm_max_ss, "test_mm_max_ss"),
             (&test_mm_set1_ps, "test_mm_set1_ps"),
             (&test_mm_setzero_ps, "test_mm_setzero_ps"),
             (&test_mm_load_ps, "test_mm_load_ps"),
             (&test_mm_loadu_ps, "test_mm_loadu_ps"),
             (&test_mm_store_ps, "test_mm_store_ps"),
             (&test_mm_movemask_ps, "test_mm_movemask_ps"),
-            (&test_mm_sqrt_ps, "test_mm_sqrt_ps"),
-            (&test_mm_rsqrt_ps, "test_mm_rsqrt_ps"),
             (&test_mm_and_ps, "test_mm_and_ps"),
             (&test_mm_andnot_ps, "test_mm_andnot_ps"),
             (&test_mm_or_ps, "test_mm_or_ps"),
             (&test_mm_xor_ps, "test_mm_xor_ps"),
-            (&test_mm_min_ps, "test_mm_min_ps"),
-            (&test_mm_max_ps, "test_mm_max_ps"),
             (&test_mm_cmpeq_ps, "test_mm_cmpeq_ps"),
             (&test_mm_cmpgt_ps, "test_mm_cmpgt_ps"),
             (&test_mm_cmplt_ps, "test_mm_cmplt_ps"),
             (&test_mm_cmpge_ps, "test_mm_cmpge_ps"),
             (&test_mm_cmple_ps, "test_mm_cmple_ps"),
+            (&test_mm_shuffle_ps, "test_mm_shuffle_ps"),
+            (&test_mm_unpackhi_ps, "test_mm_unpackhi_ps"),
+            (&test_mm_unpacklo_ps, "test_mm_unpacklo_ps"),
+            (&test_mm_movehl_ps, "test_mm_movehl_ps"),
+            (&test_mm_movelh_ps, "test_mm_movelh_ps"),
+            (&test_mm_move_ss, "test_mm_move_ss"),
             (&test_mm_cvtss_f32, "test_mm_cvtss_f32"),
             (&test_mm_cvtss_si32, "test_mm_cvtss_si32"),
             (&test_mm_cvtsi32_ss, "test_mm_cvtsi32_ss"),
@@ -162,6 +180,33 @@ fn test_mm_sub_ps() -> Result<(), String> {
 
     Ok(())
 }
+
+fn test_mm_mul_ps() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
+        let b = _mm_set_ps(2.0, 2.0, 2.0, 2.0);
+        let result = _mm_mul_ps(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        check_array_equality(&result, &[8.0, 6.0, 4.0, 2.0])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = get_four_random_floats();
+                let b = get_four_random_floats();
+                let _result = _mm_mul_ps(
+                    _mm_set_ps(a[3], a[2], a[1], a[0]),
+                    _mm_set_ps(b[3], b[2], b[1], b[0]),
+                );
+            }
+        }
+    }
+
+    Ok(())
+}
+
 fn test_mm_div_ps() -> Result<(), String> {
     fn use_mm_div_ps(a: [f32; 4], b: [f32; 4]) -> [f32; 4] {
         unsafe {
@@ -710,6 +755,202 @@ fn test_mm_cvtss_si32() -> Result<(), String> {
                 let _result = _mm_cvtss_si32(vec); // Not sure how to test this
             }
         }
+    }
+    Ok(())
+}
+
+fn test_mm_set_ss() -> Result<(), String> {
+    unsafe {
+        let result = _mm_set_ss(3.14);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        check_array_equality(&result, &[3.14, 0.0, 0.0, 0.0])?;
+    }
+    Ok(())
+}
+
+fn test_mm_add_ss() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
+        let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
+        let result = _mm_add_ss(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        // Only lowest element is added, others are from a
+        check_array_equality(&result, &[12.0, 3.0, 2.0, 1.0])?;
+    }
+    Ok(())
+}
+
+fn test_mm_sub_ss() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 10.0);
+        let b = _mm_set_ps(5.0, 6.0, 7.0, 3.0);
+        let result = _mm_sub_ss(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        check_array_equality(&result, &[7.0, 3.0, 2.0, 1.0])?;
+    }
+    Ok(())
+}
+
+fn test_mm_mul_ss() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
+        let b = _mm_set_ps(5.0, 6.0, 7.0, 2.0);
+        let result = _mm_mul_ss(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        check_array_equality(&result, &[8.0, 3.0, 2.0, 1.0])?;
+    }
+    Ok(())
+}
+
+fn test_mm_div_ss() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 8.0);
+        let b = _mm_set_ps(5.0, 6.0, 7.0, 2.0);
+        let result = _mm_div_ss(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        check_array_equality(&result, &[4.0, 3.0, 2.0, 1.0])?;
+    }
+    Ok(())
+}
+
+fn test_mm_sqrt_ss() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 16.0);
+        let result = _mm_sqrt_ss(a);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        check_array_equality(&result, &[4.0, 3.0, 2.0, 1.0])?;
+    }
+    Ok(())
+}
+
+fn test_mm_rcp_ss() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
+        let result = _mm_rcp_ss(a);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        // rcp is approximate reciprocal, check first element is ~0.25
+        if (result[0] - 0.25).abs() > 0.01 {
+            return Err(format!("Expected ~0.25, got {}", result[0]));
+        }
+    }
+    Ok(())
+}
+
+fn test_mm_rcp_ps() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 4.0, 8.0);
+        let result = _mm_rcp_ps(a);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        // Approximate reciprocal
+        check_array_equality(&result, &[0.125, 0.25, 0.5, 1.0])?;
+    }
+    Ok(())
+}
+
+fn test_mm_rsqrt_ss() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 16.0);
+        let result = _mm_rsqrt_ss(a);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        // Approximate 1/sqrt(16) = 0.25
+        if (result[0] - 0.25).abs() > 0.01 {
+            return Err(format!("Expected ~0.25, got {}", result[0]));
+        }
+    }
+    Ok(())
+}
+
+fn test_mm_min_ss() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
+        let b = _mm_set_ps(5.0, 6.0, 7.0, 2.0);
+        let result = _mm_min_ss(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        check_array_equality(&result, &[2.0, 3.0, 2.0, 1.0])?;
+    }
+    Ok(())
+}
+
+fn test_mm_max_ss() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
+        let b = _mm_set_ps(5.0, 6.0, 7.0, 2.0);
+        let result = _mm_max_ss(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        check_array_equality(&result, &[4.0, 3.0, 2.0, 1.0])?;
+    }
+    Ok(())
+}
+
+fn test_mm_shuffle_ps() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
+        let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
+        // Shuffle with mask 0b00_01_10_11 = 0x1B
+        let result = _mm_shuffle_ps::<0x1B>(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        // result[0] = a[3], result[1] = a[2], result[2] = b[1], result[3] = b[0]
+        check_array_equality(&result, &[1.0, 2.0, 7.0, 8.0])?;
+    }
+    Ok(())
+}
+
+fn test_mm_unpackhi_ps() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
+        let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
+        let result = _mm_unpackhi_ps(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        // Interleave high halves: [a[3], b[3], a[2], b[2]]
+        check_array_equality(&result, &[6.0, 2.0, 5.0, 1.0])?;
+    }
+    Ok(())
+}
+
+fn test_mm_unpacklo_ps() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
+        let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
+        let result = _mm_unpacklo_ps(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        // Interleave low halves: [a[1], b[1], a[0], b[0]]
+        check_array_equality(&result, &[8.0, 4.0, 7.0, 3.0])?;
+    }
+    Ok(())
+}
+
+fn test_mm_movehl_ps() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
+        let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
+        let result = _mm_movehl_ps(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        // result = [a[3], a[2], b[3], b[2]]
+        check_array_equality(&result, &[6.0, 5.0, 2.0, 1.0])?;
+    }
+    Ok(())
+}
+
+fn test_mm_movelh_ps() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
+        let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
+        let result = _mm_movelh_ps(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        // result = [b[1], b[0], a[1], a[0]]
+        check_array_equality(&result, &[8.0, 7.0, 4.0, 3.0])?;
+    }
+    Ok(())
+}
+
+fn test_mm_move_ss() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
+        let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
+        let result = _mm_move_ss(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+        // result = [b[0], a[1], a[2], a[3]]
+        check_array_equality(&result, &[8.0, 3.0, 2.0, 1.0])?;
     }
     Ok(())
 }

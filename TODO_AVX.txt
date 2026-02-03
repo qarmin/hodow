@@ -1,0 +1,1609 @@
+
+src/rust/library/stdarch/crates/core_arch/src/x86/avx512fp16.rs
+12:pub fn _mm_set_ph(
+107:pub fn _mm_set_sh(a: f16) -> __m128h {
+117:pub fn _mm_set1_ph(a: f16) -> __m128h {
+147:pub fn _mm_setr_ph(
+241:pub fn _mm_setzero_ph() -> __m128h {
+274:pub fn _mm_undefined_ph() -> __m128h {
+311:pub fn _mm_castpd_ph(a: __m128d) -> __m128h {
+344:pub fn _mm_castph_pd(a: __m128h) -> __m128d {
+377:pub fn _mm_castps_ph(a: __m128) -> __m128h {
+410:pub fn _mm_castph_ps(a: __m128h) -> __m128 {
+443:pub fn _mm_castsi128_ph(a: __m128i) -> __m128h {
+476:pub fn _mm_castph_si128(a: __m128h) -> __m128i {
+691:pub fn _mm_cmp_ph_mask<const IMM5: i32>(a: __m128h, b: __m128h) -> __mmask8 {
+707:pub fn _mm_mask_cmp_ph_mask<const IMM5: i32>(k1: __mmask8, a: __m128h, b: __m128h) -> __mmask8 {
+864:pub fn _mm_cmp_round_sh_mask<const IMM5: i32, const SAE: i32>(a: __m128h, b: __m128h) -> __mmask8 {
+879:pub fn _mm_mask_cmp_round_sh_mask<const IMM5: i32, const SAE: i32>(
+899:pub fn _mm_cmp_sh_mask<const IMM5: i32>(a: __m128h, b: __m128h) -> __mmask8 {
+912:pub fn _mm_mask_cmp_sh_mask<const IMM5: i32>(k1: __mmask8, a: __m128h, b: __m128h) -> __mmask8 {
+926:pub fn _mm_comi_round_sh<const IMM5: i32, const SAE: i32>(a: __m128h, b: __m128h) -> i32 {
+942:pub fn _mm_comi_sh<const IMM5: i32>(a: __m128h, b: __m128h) -> i32 {
+954:pub fn _mm_comieq_sh(a: __m128h, b: __m128h) -> i32 {
+965:pub fn _mm_comige_sh(a: __m128h, b: __m128h) -> i32 {
+976:pub fn _mm_comigt_sh(a: __m128h, b: __m128h) -> i32 {
+987:pub fn _mm_comile_sh(a: __m128h, b: __m128h) -> i32 {
+998:pub fn _mm_comilt_sh(a: __m128h, b: __m128h) -> i32 {
+1009:pub fn _mm_comineq_sh(a: __m128h, b: __m128h) -> i32 {
+1020:pub fn _mm_ucomieq_sh(a: __m128h, b: __m128h) -> i32 {
+1031:pub fn _mm_ucomige_sh(a: __m128h, b: __m128h) -> i32 {
+1042:pub fn _mm_ucomigt_sh(a: __m128h, b: __m128h) -> i32 {
+1053:pub fn _mm_ucomile_sh(a: __m128h, b: __m128h) -> i32 {
+1064:pub fn _mm_ucomilt_sh(a: __m128h, b: __m128h) -> i32 {
+1075:pub fn _mm_ucomineq_sh(a: __m128h, b: __m128h) -> i32 {
+1086:pub unsafe fn _mm_load_ph(mem_addr: *const f16) -> __m128h {
+1119:pub unsafe fn _mm_load_sh(mem_addr: *const f16) -> __m128h {
+1130:pub unsafe fn _mm_mask_load_sh(src: __m128h, k: __mmask8, mem_addr: *const f16) -> __m128h {
+1149:pub unsafe fn _mm_maskz_load_sh(k: __mmask8, mem_addr: *const f16) -> __m128h {
+1168:pub unsafe fn _mm_loadu_ph(mem_addr: *const f16) -> __m128h {
+1202:pub fn _mm_mask_move_sh(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+1220:pub fn _mm_maskz_move_sh(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+1237:pub fn _mm_move_sh(a: __m128h, b: __m128h) -> __m128h {
+1251:pub unsafe fn _mm_store_ph(mem_addr: *mut f16, a: __m128h) {
+1283:pub unsafe fn _mm_store_sh(mem_addr: *mut f16, a: __m128h) {
+1293:pub unsafe fn _mm_mask_store_sh(mem_addr: *mut f16, k: __mmask8, a: __m128h) {
+1310:pub unsafe fn _mm_storeu_ph(mem_addr: *mut f16, a: __m128h) {
+1343:pub fn _mm_add_ph(a: __m128h, b: __m128h) -> __m128h {
+1355:pub fn _mm_mask_add_ph(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+1370:pub fn _mm_maskz_add_ph(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+1553:pub fn _mm_add_round_sh<const ROUNDING: i32>(a: __m128h, b: __m128h) -> __m128h {
+1575:pub fn _mm_mask_add_round_sh<const ROUNDING: i32>(
+1604:pub fn _mm_maskz_add_round_sh<const ROUNDING: i32>(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+1617:pub fn _mm_add_sh(a: __m128h, b: __m128h) -> __m128h {
+1630:pub fn _mm_mask_add_sh(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+1652:pub fn _mm_maskz_add_sh(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+1671:pub fn _mm_sub_ph(a: __m128h, b: __m128h) -> __m128h {
+1683:pub fn _mm_mask_sub_ph(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+1698:pub fn _mm_maskz_sub_ph(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+1882:pub fn _mm_sub_round_sh<const ROUNDING: i32>(a: __m128h, b: __m128h) -> __m128h {
+1904:pub fn _mm_mask_sub_round_sh<const ROUNDING: i32>(
+1933:pub fn _mm_maskz_sub_round_sh<const ROUNDING: i32>(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+1946:pub fn _mm_sub_sh(a: __m128h, b: __m128h) -> __m128h {
+1959:pub fn _mm_mask_sub_sh(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+1981:pub fn _mm_maskz_sub_sh(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+2000:pub fn _mm_mul_ph(a: __m128h, b: __m128h) -> __m128h {
+2012:pub fn _mm_mask_mul_ph(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+2027:pub fn _mm_maskz_mul_ph(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+2211:pub fn _mm_mul_round_sh<const ROUNDING: i32>(a: __m128h, b: __m128h) -> __m128h {
+2233:pub fn _mm_mask_mul_round_sh<const ROUNDING: i32>(
+2262:pub fn _mm_maskz_mul_round_sh<const ROUNDING: i32>(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+2275:pub fn _mm_mul_sh(a: __m128h, b: __m128h) -> __m128h {
+2288:pub fn _mm_mask_mul_sh(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+2310:pub fn _mm_maskz_mul_sh(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+2329:pub fn _mm_div_ph(a: __m128h, b: __m128h) -> __m128h {
+2341:pub fn _mm_mask_div_ph(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+2356:pub fn _mm_maskz_div_ph(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+2540:pub fn _mm_div_round_sh<const ROUNDING: i32>(a: __m128h, b: __m128h) -> __m128h {
+2562:pub fn _mm_mask_div_round_sh<const ROUNDING: i32>(
+2591:pub fn _mm_maskz_div_round_sh<const ROUNDING: i32>(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+2604:pub fn _mm_div_sh(a: __m128h, b: __m128h) -> __m128h {
+2617:pub fn _mm_mask_div_sh(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+2639:pub fn _mm_maskz_div_sh(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+2660:pub fn _mm_mul_pch(a: __m128h, b: __m128h) -> __m128h {
+2673:pub fn _mm_mask_mul_pch(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+2686:pub fn _mm_maskz_mul_pch(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+2864:pub fn _mm_mul_sch(a: __m128h, b: __m128h) -> __m128h {
+2878:pub fn _mm_mask_mul_sch(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+2892:pub fn _mm_maskz_mul_sch(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+2915:pub fn _mm_mul_round_sch<const ROUNDING: i32>(a: __m128h, b: __m128h) -> __m128h {
+2939:pub fn _mm_mask_mul_round_sch<const ROUNDING: i32>(
+2976:pub fn _mm_maskz_mul_round_sch<const ROUNDING: i32>(
+2994:pub fn _mm_fmul_pch(a: __m128h, b: __m128h) -> __m128h {
+3007:pub fn _mm_mask_fmul_pch(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+3020:pub fn _mm_maskz_fmul_pch(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+3184:pub fn _mm_fmul_sch(a: __m128h, b: __m128h) -> __m128h {
+3197:pub fn _mm_mask_fmul_sch(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+3210:pub fn _mm_maskz_fmul_sch(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+3231:pub fn _mm_fmul_round_sch<const ROUNDING: i32>(a: __m128h, b: __m128h) -> __m128h {
+3254:pub fn _mm_mask_fmul_round_sch<const ROUNDING: i32>(
+3282:pub fn _mm_maskz_fmul_round_sch<const ROUNDING: i32>(
+3301:pub fn _mm_cmul_pch(a: __m128h, b: __m128h) -> __m128h {
+3315:pub fn _mm_mask_cmul_pch(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+3329:pub fn _mm_maskz_cmul_pch(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+3515:pub fn _mm_cmul_sch(a: __m128h, b: __m128h) -> __m128h {
+3529:pub fn _mm_mask_cmul_sch(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+3543:pub fn _mm_maskz_cmul_sch(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+3565:pub fn _mm_cmul_round_sch<const ROUNDING: i32>(a: __m128h, b: __m128h) -> __m128h {
+3589:pub fn _mm_mask_cmul_round_sch<const ROUNDING: i32>(
+3626:pub fn _mm_maskz_cmul_round_sch<const ROUNDING: i32>(
+3645:pub fn _mm_fcmul_pch(a: __m128h, b: __m128h) -> __m128h {
+3659:pub fn _mm_mask_fcmul_pch(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+3673:pub fn _mm_maskz_fcmul_pch(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+3851:pub fn _mm_fcmul_sch(a: __m128h, b: __m128h) -> __m128h {
+3865:pub fn _mm_mask_fcmul_sch(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+3879:pub fn _mm_maskz_fcmul_sch(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+3901:pub fn _mm_fcmul_round_sch<const ROUNDING: i32>(a: __m128h, b: __m128h) -> __m128h {
+3925:pub fn _mm_mask_fcmul_round_sch<const ROUNDING: i32>(
+3954:pub fn _mm_maskz_fcmul_round_sch<const ROUNDING: i32>(
+3970:pub fn _mm_abs_ph(v2: __m128h) -> __m128h {
+4005:pub fn _mm_conj_pch(a: __m128h) -> __m128h {
+4018:pub fn _mm_mask_conj_pch(src: __m128h, k: __mmask8, a: __m128h) -> __m128h {
+4034:pub fn _mm_maskz_conj_pch(k: __mmask8, a: __m128h) -> __m128h {
+4129:pub fn _mm_fmadd_pch(a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+4143:pub fn _mm_mask_fmadd_pch(a: __m128h, k: __mmask8, b: __m128h, c: __m128h) -> __m128h {
+4160:pub fn _mm_mask3_fmadd_pch(a: __m128h, b: __m128h, c: __m128h, k: __mmask8) -> __m128h {
+4181:pub fn _mm_maskz_fmadd_pch(k: __mmask8, a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+4458:pub fn _mm_fmadd_sch(a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+4473:pub fn _mm_mask_fmadd_sch(a: __m128h, k: __mmask8, b: __m128h, c: __m128h) -> __m128h {
+4488:pub fn _mm_mask3_fmadd_sch(a: __m128h, b: __m128h, c: __m128h, k: __mmask8) -> __m128h {
+4503:pub fn _mm_maskz_fmadd_sch(k: __mmask8, a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+4525:pub fn _mm_fmadd_round_sch<const ROUNDING: i32>(a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+4558:pub fn _mm_mask_fmadd_round_sch<const ROUNDING: i32>(
+4592:pub fn _mm_mask3_fmadd_round_sch<const ROUNDING: i32>(
+4626:pub fn _mm_maskz_fmadd_round_sch<const ROUNDING: i32>(
+4654:pub fn _mm_fcmadd_pch(a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+4669:pub fn _mm_mask_fcmadd_pch(a: __m128h, k: __mmask8, b: __m128h, c: __m128h) -> __m128h {
+4687:pub fn _mm_mask3_fcmadd_pch(a: __m128h, b: __m128h, c: __m128h, k: __mmask8) -> __m128h {
+4709:pub fn _mm_maskz_fcmadd_pch(k: __mmask8, a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+4999:pub fn _mm_fcmadd_sch(a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+5015:pub fn _mm_mask_fcmadd_sch(a: __m128h, k: __mmask8, b: __m128h, c: __m128h) -> __m128h {
+5031:pub fn _mm_mask3_fcmadd_sch(a: __m128h, b: __m128h, c: __m128h, k: __mmask8) -> __m128h {
+5047:pub fn _mm_maskz_fcmadd_sch(k: __mmask8, a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+5071:pub fn _mm_fcmadd_round_sch<const ROUNDING: i32>(a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+5105:pub fn _mm_mask_fcmadd_round_sch<const ROUNDING: i32>(
+5140:pub fn _mm_mask3_fcmadd_round_sch<const ROUNDING: i32>(
+5175:pub fn _mm_maskz_fcmadd_round_sch<const ROUNDING: i32>(
+5201:pub fn _mm_fmadd_ph(a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+5214:pub fn _mm_mask_fmadd_ph(a: __m128h, k: __mmask8, b: __m128h, c: __m128h) -> __m128h {
+5227:pub fn _mm_mask3_fmadd_ph(a: __m128h, b: __m128h, c: __m128h, k: __mmask8) -> __m128h {
+5240:pub fn _mm_maskz_fmadd_ph(k: __mmask8, a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+5473:pub fn _mm_fmadd_sh(a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+5493:pub fn _mm_mask_fmadd_sh(a: __m128h, k: __mmask8, b: __m128h, c: __m128h) -> __m128h {
+5515:pub fn _mm_mask3_fmadd_sh(a: __m128h, b: __m128h, c: __m128h, k: __mmask8) -> __m128h {
+5537:pub fn _mm_maskz_fmadd_sh(k: __mmask8, a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+5568:pub fn _mm_fmadd_round_sh<const ROUNDING: i32>(a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+5598:pub fn _mm_mask_fmadd_round_sh<const ROUNDING: i32>(
+5635:pub fn _mm_mask3_fmadd_round_sh<const ROUNDING: i32>(
+5672:pub fn _mm_maskz_fmadd_round_sh<const ROUNDING: i32>(
+5700:pub fn _mm_fmsub_ph(a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+5713:pub fn _mm_mask_fmsub_ph(a: __m128h, k: __mmask8, b: __m128h, c: __m128h) -> __m128h {
+5726:pub fn _mm_mask3_fmsub_ph(a: __m128h, b: __m128h, c: __m128h, k: __mmask8) -> __m128h {
+5739:pub fn _mm_maskz_fmsub_ph(k: __mmask8, a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+5972:pub fn _mm_fmsub_sh(a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+5992:pub fn _mm_mask_fmsub_sh(a: __m128h, k: __mmask8, b: __m128h, c: __m128h) -> __m128h {
+6014:pub fn _mm_mask3_fmsub_sh(a: __m128h, b: __m128h, c: __m128h, k: __mmask8) -> __m128h {
+6036:pub fn _mm_maskz_fmsub_sh(k: __mmask8, a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+6067:pub fn _mm_fmsub_round_sh<const ROUNDING: i32>(a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+6097:pub fn _mm_mask_fmsub_round_sh<const ROUNDING: i32>(
+6134:pub fn _mm_mask3_fmsub_round_sh<const ROUNDING: i32>(
+6163:pub fn _mm_maskz_fmsub_round_sh<const ROUNDING: i32>(
+6190:pub fn _mm_fnmadd_ph(a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+6203:pub fn _mm_mask_fnmadd_ph(a: __m128h, k: __mmask8, b: __m128h, c: __m128h) -> __m128h {
+6216:pub fn _mm_mask3_fnmadd_ph(a: __m128h, b: __m128h, c: __m128h, k: __mmask8) -> __m128h {
+6229:pub fn _mm_maskz_fnmadd_ph(k: __mmask8, a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+6462:pub fn _mm_fnmadd_sh(a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+6482:pub fn _mm_mask_fnmadd_sh(a: __m128h, k: __mmask8, b: __m128h, c: __m128h) -> __m128h {
+6504:pub fn _mm_mask3_fnmadd_sh(a: __m128h, b: __m128h, c: __m128h, k: __mmask8) -> __m128h {
+6526:pub fn _mm_maskz_fnmadd_sh(k: __mmask8, a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+6557:pub fn _mm_fnmadd_round_sh<const ROUNDING: i32>(a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+6587:pub fn _mm_mask_fnmadd_round_sh<const ROUNDING: i32>(
+6624:pub fn _mm_mask3_fnmadd_round_sh<const ROUNDING: i32>(
+6661:pub fn _mm_maskz_fnmadd_round_sh<const ROUNDING: i32>(
+6688:pub fn _mm_fnmsub_ph(a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+6701:pub fn _mm_mask_fnmsub_ph(a: __m128h, k: __mmask8, b: __m128h, c: __m128h) -> __m128h {
+6714:pub fn _mm_mask3_fnmsub_ph(a: __m128h, b: __m128h, c: __m128h, k: __mmask8) -> __m128h {
+6727:pub fn _mm_maskz_fnmsub_ph(k: __mmask8, a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+6960:pub fn _mm_fnmsub_sh(a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+6980:pub fn _mm_mask_fnmsub_sh(a: __m128h, k: __mmask8, b: __m128h, c: __m128h) -> __m128h {
+7002:pub fn _mm_mask3_fnmsub_sh(a: __m128h, b: __m128h, c: __m128h, k: __mmask8) -> __m128h {
+7024:pub fn _mm_maskz_fnmsub_sh(k: __mmask8, a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+7055:pub fn _mm_fnmsub_round_sh<const ROUNDING: i32>(a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+7085:pub fn _mm_mask_fnmsub_round_sh<const ROUNDING: i32>(
+7122:pub fn _mm_mask3_fnmsub_round_sh<const ROUNDING: i32>(
+7159:pub fn _mm_maskz_fnmsub_round_sh<const ROUNDING: i32>(
+7186:pub fn _mm_fmaddsub_ph(a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+7203:pub fn _mm_mask_fmaddsub_ph(a: __m128h, k: __mmask8, b: __m128h, c: __m128h) -> __m128h {
+7216:pub fn _mm_mask3_fmaddsub_ph(a: __m128h, b: __m128h, c: __m128h, k: __mmask8) -> __m128h {
+7229:pub fn _mm_maskz_fmaddsub_ph(k: __mmask8, a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+7484:pub fn _mm_fmsubadd_ph(a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+7497:pub fn _mm_mask_fmsubadd_ph(a: __m128h, k: __mmask8, b: __m128h, c: __m128h) -> __m128h {
+7510:pub fn _mm_mask3_fmsubadd_ph(a: __m128h, b: __m128h, c: __m128h, k: __mmask8) -> __m128h {
+7523:pub fn _mm_maskz_fmsubadd_ph(k: __mmask8, a: __m128h, b: __m128h, c: __m128h) -> __m128h {
+7759:pub fn _mm_rcp_ph(a: __m128h) -> __m128h {
+7772:pub fn _mm_mask_rcp_ph(src: __m128h, k: __mmask8, a: __m128h) -> __m128h {
+7785:pub fn _mm_maskz_rcp_ph(k: __mmask8, a: __m128h) -> __m128h {
+7875:pub fn _mm_rcp_sh(a: __m128h, b: __m128h) -> __m128h {
+7889:pub fn _mm_mask_rcp_sh(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+7903:pub fn _mm_maskz_rcp_sh(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+7916:pub fn _mm_rsqrt_ph(a: __m128h) -> __m128h {
+7930:pub fn _mm_mask_rsqrt_ph(src: __m128h, k: __mmask8, a: __m128h) -> __m128h {
+7944:pub fn _mm_maskz_rsqrt_ph(k: __mmask8, a: __m128h) -> __m128h {
+8040:pub fn _mm_rsqrt_sh(a: __m128h, b: __m128h) -> __m128h {
+8054:pub fn _mm_mask_rsqrt_sh(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+8068:pub fn _mm_maskz_rsqrt_sh(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+8080:pub fn _mm_sqrt_ph(a: __m128h) -> __m128h {
+8092:pub fn _mm_mask_sqrt_ph(src: __m128h, k: __mmask8, a: __m128h) -> __m128h {
+8104:pub fn _mm_maskz_sqrt_ph(k: __mmask8, a: __m128h) -> __m128h {
+8262:pub fn _mm_sqrt_sh(a: __m128h, b: __m128h) -> __m128h {
+8275:pub fn _mm_mask_sqrt_sh(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+8288:pub fn _mm_maskz_sqrt_sh(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+8309:pub fn _mm_sqrt_round_sh<const ROUNDING: i32>(a: __m128h, b: __m128h) -> __m128h {
+8331:pub fn _mm_mask_sqrt_round_sh<const ROUNDING: i32>(
+8360:pub fn _mm_maskz_sqrt_round_sh<const ROUNDING: i32>(
+8378:pub fn _mm_max_ph(a: __m128h, b: __m128h) -> __m128h {
+8392:pub fn _mm_mask_max_ph(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+8406:pub fn _mm_maskz_max_ph(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+8561:pub fn _mm_max_sh(a: __m128h, b: __m128h) -> __m128h {
+8575:pub fn _mm_mask_max_sh(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+8589:pub fn _mm_maskz_max_sh(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+8604:pub fn _mm_max_round_sh<const SAE: i32>(a: __m128h, b: __m128h) -> __m128h {
+8621:pub fn _mm_mask_max_round_sh<const SAE: i32>(
+8645:pub fn _mm_maskz_max_round_sh<const SAE: i32>(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+8659:pub fn _mm_min_ph(a: __m128h, b: __m128h) -> __m128h {
+8673:pub fn _mm_mask_min_ph(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+8687:pub fn _mm_maskz_min_ph(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+8841:pub fn _mm_min_sh(a: __m128h, b: __m128h) -> __m128h {
+8855:pub fn _mm_mask_min_sh(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+8869:pub fn _mm_maskz_min_sh(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+8884:pub fn _mm_min_round_sh<const SAE: i32>(a: __m128h, b: __m128h) -> __m128h {
+8901:pub fn _mm_mask_min_round_sh<const SAE: i32>(
+8925:pub fn _mm_maskz_min_round_sh<const SAE: i32>(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+8939:pub fn _mm_getexp_ph(a: __m128h) -> __m128h {
+8953:pub fn _mm_mask_getexp_ph(src: __m128h, k: __mmask8, a: __m128h) -> __m128h {
+8967:pub fn _mm_maskz_getexp_ph(k: __mmask8, a: __m128h) -> __m128h {
+9117:pub fn _mm_getexp_sh(a: __m128h, b: __m128h) -> __m128h {
+9132:pub fn _mm_mask_getexp_sh(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+9147:pub fn _mm_maskz_getexp_sh(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+9163:pub fn _mm_getexp_round_sh<const SAE: i32>(a: __m128h, b: __m128h) -> __m128h {
+9180:pub fn _mm_mask_getexp_round_sh<const SAE: i32>(
+9204:pub fn _mm_maskz_getexp_round_sh<const SAE: i32>(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+9232:pub fn _mm_getmant_ph<const NORM: _MM_MANTISSA_NORM_ENUM, const SIGN: _MM_MANTISSA_SIGN_ENUM>(
+9264:pub fn _mm_mask_getmant_ph<
+9303:pub fn _mm_maskz_getmant_ph<
+9673:pub fn _mm_getmant_sh<const NORM: _MM_MANTISSA_NORM_ENUM, const SIGN: _MM_MANTISSA_SIGN_ENUM>(
+9707:pub fn _mm_mask_getmant_sh<
+9746:pub fn _mm_maskz_getmant_sh<
+9786:pub fn _mm_getmant_round_sh<
+9827:pub fn _mm_mask_getmant_round_sh<
+9872:pub fn _mm_maskz_getmant_round_sh<
+9904:pub fn _mm_roundscale_ph<const IMM8: i32>(a: __m128h) -> __m128h {
+9927:pub fn _mm_mask_roundscale_ph<const IMM8: i32>(src: __m128h, k: __mmask8, a: __m128h) -> __m128h {
+9952:pub fn _mm_maskz_roundscale_ph<const IMM8: i32>(k: __mmask8, a: __m128h) -> __m128h {
+10203:pub fn _mm_roundscale_sh<const IMM8: i32>(a: __m128h, b: __m128h) -> __m128h {
+10226:pub fn _mm_mask_roundscale_sh<const IMM8: i32>(
+10254:pub fn _mm_maskz_roundscale_sh<const IMM8: i32>(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+10279:pub fn _mm_roundscale_round_sh<const IMM8: i32, const SAE: i32>(a: __m128h, b: __m128h) -> __m128h {
+10305:pub fn _mm_mask_roundscale_round_sh<const IMM8: i32, const SAE: i32>(
+10338:pub fn _mm_maskz_roundscale_round_sh<const IMM8: i32, const SAE: i32>(
+10356:pub fn _mm_scalef_ph(a: __m128h, b: __m128h) -> __m128h {
+10368:pub fn _mm_mask_scalef_ph(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+10380:pub fn _mm_maskz_scalef_ph(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+10542:pub fn _mm_scalef_sh(a: __m128h, b: __m128h) -> __m128h {
+10555:pub fn _mm_mask_scalef_sh(src: __m128h, k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+10568:pub fn _mm_maskz_scalef_sh(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+10590:pub fn _mm_scalef_round_sh<const ROUNDING: i32>(a: __m128h, b: __m128h) -> __m128h {
+10613:pub fn _mm_mask_scalef_round_sh<const ROUNDING: i32>(
+10643:pub fn _mm_maskz_scalef_round_sh<const ROUNDING: i32>(
+10669:pub fn _mm_reduce_ph<const IMM8: i32>(a: __m128h) -> __m128h {
+10692:pub fn _mm_mask_reduce_ph<const IMM8: i32>(src: __m128h, k: __mmask8, a: __m128h) -> __m128h {
+10717:pub fn _mm_maskz_reduce_ph<const IMM8: i32>(k: __mmask8, a: __m128h) -> __m128h {
+10964:pub fn _mm_reduce_sh<const IMM8: i32>(a: __m128h, b: __m128h) -> __m128h {
+10988:pub fn _mm_mask_reduce_sh<const IMM8: i32>(
+11017:pub fn _mm_maskz_reduce_sh<const IMM8: i32>(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+11042:pub fn _mm_reduce_round_sh<const IMM8: i32, const SAE: i32>(a: __m128h, b: __m128h) -> __m128h {
+11069:pub fn _mm_mask_reduce_round_sh<const IMM8: i32, const SAE: i32>(
+11103:pub fn _mm_maskz_reduce_round_sh<const IMM8: i32, const SAE: i32>(
+11120:pub fn _mm_reduce_add_ph(a: __m128h) -> f16 {
+11173:pub fn _mm_reduce_mul_ph(a: __m128h) -> f16 {
+11226:pub fn _mm_reduce_min_ph(a: __m128h) -> f16 {
+11280:pub fn _mm_reduce_max_ph(a: __m128h) -> f16 {
+11372:pub fn _mm_fpclass_ph_mask<const IMM8: i32>(a: __m128h) -> __mmask8 {
+11399:pub fn _mm_mask_fpclass_ph_mask<const IMM8: i32>(k1: __mmask8, a: __m128h) -> __mmask8 {
+11531:pub fn _mm_fpclass_sh_mask<const IMM8: i32>(a: __m128h) -> __mmask8 {
+11555:pub fn _mm_mask_fpclass_sh_mask<const IMM8: i32>(k1: __mmask8, a: __m128h) -> __mmask8 {
+11569:pub fn _mm_mask_blend_ph(k: __mmask8, a: __m128h, b: __m128h) -> __m128h {
+11602:pub fn _mm_permutex2var_ph(a: __m128h, idx: __m128i, b: __m128h) -> __m128h {
+11647:pub fn _mm_permutexvar_ph(idx: __m128i, a: __m128h) -> __m128h {
+11681:pub fn _mm_cvtepi16_ph(a: __m128i) -> __m128h {
+11694:pub fn _mm_mask_cvtepi16_ph(src: __m128h, k: __mmask8, a: __m128i) -> __m128h {
+11706:pub fn _mm_maskz_cvtepi16_ph(k: __mmask8, a: __m128i) -> __m128h {
+11867:pub fn _mm_cvtepu16_ph(a: __m128i) -> __m128h {
+11880:pub fn _mm_mask_cvtepu16_ph(src: __m128h, k: __mmask8, a: __m128i) -> __m128h {
+11892:pub fn _mm_maskz_cvtepu16_ph(k: __mmask8, a: __m128i) -> __m128h {
+12053:pub fn _mm_cvtepi32_ph(a: __m128i) -> __m128h {
+12066:pub fn _mm_mask_cvtepi32_ph(src: __m128h, k: __mmask8, a: __m128i) -> __m128h {
+12079:pub fn _mm_maskz_cvtepi32_ph(k: __mmask8, a: __m128i) -> __m128h {
+12241:pub fn _mm_cvti32_sh(a: __m128h, b: i32) -> __m128h {
+12263:pub fn _mm_cvt_roundi32_sh<const ROUNDING: i32>(a: __m128h, b: i32) -> __m128h {
+12278:pub fn _mm_cvtepu32_ph(a: __m128i) -> __m128h {
+12291:pub fn _mm_mask_cvtepu32_ph(src: __m128h, k: __mmask8, a: __m128i) -> __m128h {
+12304:pub fn _mm_maskz_cvtepu32_ph(k: __mmask8, a: __m128i) -> __m128h {
+12466:pub fn _mm_cvtu32_sh(a: __m128h, b: u32) -> __m128h {
+12488:pub fn _mm_cvt_roundu32_sh<const ROUNDING: i32>(a: __m128h, b: u32) -> __m128h {
+12503:pub fn _mm_cvtepi64_ph(a: __m128i) -> __m128h {
+12516:pub fn _mm_mask_cvtepi64_ph(src: __m128h, k: __mmask8, a: __m128i) -> __m128h {
+12529:pub fn _mm_maskz_cvtepi64_ph(k: __mmask8, a: __m128i) -> __m128h {
+12691:pub fn _mm_cvtepu64_ph(a: __m128i) -> __m128h {
+12704:pub fn _mm_mask_cvtepu64_ph(src: __m128h, k: __mmask8, a: __m128i) -> __m128h {
+12717:pub fn _mm_maskz_cvtepu64_ph(k: __mmask8, a: __m128i) -> __m128h {
+12879:pub fn _mm_cvtxps_ph(a: __m128) -> __m128h {
+12892:pub fn _mm_mask_cvtxps_ph(src: __m128h, k: __mmask8, a: __m128) -> __m128h {
+12905:pub fn _mm_maskz_cvtxps_ph(k: __mmask8, a: __m128) -> __m128h {
+13068:pub fn _mm_cvtss_sh(a: __m128h, b: __m128) -> __m128h {
+13082:pub fn _mm_mask_cvtss_sh(src: __m128h, k: __mmask8, a: __m128h, b: __m128) -> __m128h {
+13096:pub fn _mm_maskz_cvtss_sh(k: __mmask8, a: __m128h, b: __m128) -> __m128h {
+13118:pub fn _mm_cvt_roundss_sh<const ROUNDING: i32>(a: __m128h, b: __m128) -> __m128h {
+13142:pub fn _mm_mask_cvt_roundss_sh<const ROUNDING: i32>(
+13173:pub fn _mm_maskz_cvt_roundss_sh<const ROUNDING: i32>(
+13190:pub fn _mm_cvtpd_ph(a: __m128d) -> __m128h {
+13203:pub fn _mm_mask_cvtpd_ph(src: __m128h, k: __mmask8, a: __m128d) -> __m128h {
+13216:pub fn _mm_maskz_cvtpd_ph(k: __mmask8, a: __m128d) -> __m128h {
+13379:pub fn _mm_cvtsd_sh(a: __m128h, b: __m128d) -> __m128h {
+13393:pub fn _mm_mask_cvtsd_sh(src: __m128h, k: __mmask8, a: __m128h, b: __m128d) -> __m128h {
+13407:pub fn _mm_maskz_cvtsd_sh(k: __mmask8, a: __m128h, b: __m128d) -> __m128h {
+13429:pub fn _mm_cvt_roundsd_sh<const ROUNDING: i32>(a: __m128h, b: __m128d) -> __m128h {
+13453:pub fn _mm_mask_cvt_roundsd_sh<const ROUNDING: i32>(
+13484:pub fn _mm_maskz_cvt_roundsd_sh<const ROUNDING: i32>(
+13501:pub fn _mm_cvtph_epi16(a: __m128h) -> __m128i {
+13514:pub fn _mm_mask_cvtph_epi16(src: __m128i, k: __mmask8, a: __m128h) -> __m128i {
+13526:pub fn _mm_maskz_cvtph_epi16(k: __mmask8, a: __m128h) -> __m128i {
+13692:pub fn _mm_cvtph_epu16(a: __m128h) -> __m128i {
+13705:pub fn _mm_mask_cvtph_epu16(src: __m128i, k: __mmask8, a: __m128h) -> __m128i {
+13717:pub fn _mm_maskz_cvtph_epu16(k: __mmask8, a: __m128h) -> __m128i {
+13865:pub fn _mm_cvttph_epi16(a: __m128h) -> __m128i {
+13878:pub fn _mm_mask_cvttph_epi16(src: __m128i, k: __mmask8, a: __m128h) -> __m128i {
+13891:pub fn _mm_maskz_cvttph_epi16(k: __mmask8, a: __m128h) -> __m128i {
+14042:pub fn _mm_cvttph_epu16(a: __m128h) -> __m128i {
+14055:pub fn _mm_mask_cvttph_epu16(src: __m128i, k: __mmask8, a: __m128h) -> __m128i {
+14068:pub fn _mm_maskz_cvttph_epu16(k: __mmask8, a: __m128h) -> __m128i {
+14219:pub fn _mm_cvtph_epi32(a: __m128h) -> __m128i {
+14231:pub fn _mm_mask_cvtph_epi32(src: __m128i, k: __mmask8, a: __m128h) -> __m128i {
+14243:pub fn _mm_maskz_cvtph_epi32(k: __mmask8, a: __m128h) -> __m128i {
+14406:pub fn _mm_cvtsh_i32(a: __m128h) -> i32 {
+14427:pub fn _mm_cvt_roundsh_i32<const ROUNDING: i32>(a: __m128h) -> i32 {
+14442:pub fn _mm_cvtph_epu32(a: __m128h) -> __m128i {
+14454:pub fn _mm_mask_cvtph_epu32(src: __m128i, k: __mmask8, a: __m128h) -> __m128i {
+14466:pub fn _mm_maskz_cvtph_epu32(k: __mmask8, a: __m128h) -> __m128i {
+14629:pub fn _mm_cvtsh_u32(a: __m128h) -> u32 {
+14644:pub fn _mm_cvt_roundsh_u32<const SAE: i32>(a: __m128h) -> u32 {
+14659:pub fn _mm_cvttph_epi32(a: __m128h) -> __m128i {
+14671:pub fn _mm_mask_cvttph_epi32(src: __m128i, k: __mmask8, a: __m128h) -> __m128i {
+14683:pub fn _mm_maskz_cvttph_epi32(k: __mmask8, a: __m128h) -> __m128i {
+14828:pub fn _mm_cvttsh_i32(a: __m128h) -> i32 {
+14843:pub fn _mm_cvtt_roundsh_i32<const SAE: i32>(a: __m128h) -> i32 {
+14858:pub fn _mm_cvttph_epu32(a: __m128h) -> __m128i {
+14870:pub fn _mm_mask_cvttph_epu32(src: __m128i, k: __mmask8, a: __m128h) -> __m128i {
+14882:pub fn _mm_maskz_cvttph_epu32(k: __mmask8, a: __m128h) -> __m128i {
+15027:pub fn _mm_cvttsh_u32(a: __m128h) -> u32 {
+15042:pub fn _mm_cvtt_roundsh_u32<const SAE: i32>(a: __m128h) -> u32 {
+15057:pub fn _mm_cvtph_epi64(a: __m128h) -> __m128i {
+15069:pub fn _mm_mask_cvtph_epi64(src: __m128i, k: __mmask8, a: __m128h) -> __m128i {
+15081:pub fn _mm_maskz_cvtph_epi64(k: __mmask8, a: __m128h) -> __m128i {
+15244:pub fn _mm_cvtph_epu64(a: __m128h) -> __m128i {
+15256:pub fn _mm_mask_cvtph_epu64(src: __m128i, k: __mmask8, a: __m128h) -> __m128i {
+15268:pub fn _mm_maskz_cvtph_epu64(k: __mmask8, a: __m128h) -> __m128i {
+15431:pub fn _mm_cvttph_epi64(a: __m128h) -> __m128i {
+15443:pub fn _mm_mask_cvttph_epi64(src: __m128i, k: __mmask8, a: __m128h) -> __m128i {
+15455:pub fn _mm_maskz_cvttph_epi64(k: __mmask8, a: __m128h) -> __m128i {
+15600:pub fn _mm_cvttph_epu64(a: __m128h) -> __m128i {
+15612:pub fn _mm_mask_cvttph_epu64(src: __m128i, k: __mmask8, a: __m128h) -> __m128i {
+15624:pub fn _mm_maskz_cvttph_epu64(k: __mmask8, a: __m128h) -> __m128i {
+15769:pub fn _mm_cvtxph_ps(a: __m128h) -> __m128 {
+15782:pub fn _mm_mask_cvtxph_ps(src: __m128, k: __mmask8, a: __m128h) -> __m128 {
+15795:pub fn _mm_maskz_cvtxph_ps(k: __mmask8, a: __m128h) -> __m128 {
+15940:pub fn _mm_cvtsh_ss(a: __m128, b: __m128h) -> __m128 {
+15954:pub fn _mm_mask_cvtsh_ss(src: __m128, k: __mmask8, a: __m128, b: __m128h) -> __m128 {
+15968:pub fn _mm_maskz_cvtsh_ss(k: __mmask8, a: __m128, b: __m128h) -> __m128 {
+15984:pub fn _mm_cvt_roundsh_ss<const SAE: i32>(a: __m128, b: __m128h) -> __m128 {
+16002:pub fn _mm_mask_cvt_roundsh_ss<const SAE: i32>(
+16027:pub fn _mm_maskz_cvt_roundsh_ss<const SAE: i32>(k: __mmask8, a: __m128, b: __m128h) -> __m128 {
+16040:pub fn _mm_cvtph_pd(a: __m128h) -> __m128d {
+16053:pub fn _mm_mask_cvtph_pd(src: __m128d, k: __mmask8, a: __m128h) -> __m128d {
+16066:pub fn _mm_maskz_cvtph_pd(k: __mmask8, a: __m128h) -> __m128d {
+16211:pub fn _mm_cvtsh_sd(a: __m128d, b: __m128h) -> __m128d {
+16225:pub fn _mm_mask_cvtsh_sd(src: __m128d, k: __mmask8, a: __m128d, b: __m128h) -> __m128d {
+16238:pub fn _mm_maskz_cvtsh_sd(k: __mmask8, a: __m128d, b: __m128h) -> __m128d {
+16254:pub fn _mm_cvt_roundsh_sd<const SAE: i32>(a: __m128d, b: __m128h) -> __m128d {
+16272:pub fn _mm_mask_cvt_roundsh_sd<const SAE: i32>(
+16296:pub fn _mm_maskz_cvt_roundsh_sd<const SAE: i32>(k: __mmask8, a: __m128d, b: __m128h) -> __m128d {
+16307:pub fn _mm_cvtsh_h(a: __m128h) -> f16 {
+16337:pub fn _mm_cvtsi128_si16(a: __m128i) -> i16 {
+16347:pub fn _mm_cvtsi16_si128(a: i16) -> __m128i {
+16717:    unsafe fn _mm_set1_pch(re: f16, im: f16) -> __m128h {
+
+
+src/rust/library/stdarch/crates/core_arch/src/x86/avx512f.rs
+95:pub fn _mm_mask_abs_epi32(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+109:pub fn _mm_maskz_abs_epi32(k: __mmask8, a: __m128i) -> __m128i {
+209:pub fn _mm_abs_epi64(a: __m128i) -> __m128i {
+224:pub fn _mm_mask_abs_epi64(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+238:pub fn _mm_maskz_abs_epi64(k: __mmask8, a: __m128i) -> __m128i {
+352:pub fn _mm_mask_mov_epi32(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+366:pub fn _mm_maskz_mov_epi32(k: __mmask8, a: __m128i) -> __m128i {
+436:pub fn _mm_mask_mov_epi64(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+450:pub fn _mm_maskz_mov_epi64(k: __mmask8, a: __m128i) -> __m128i {
+520:pub fn _mm_mask_mov_ps(src: __m128, k: __mmask8, a: __m128) -> __m128 {
+534:pub fn _mm_maskz_mov_ps(k: __mmask8, a: __m128) -> __m128 {
+604:pub fn _mm_mask_mov_pd(src: __m128d, k: __mmask8, a: __m128d) -> __m128d {
+618:pub fn _mm_maskz_mov_pd(k: __mmask8, a: __m128d) -> __m128d {
+699:pub fn _mm_mask_add_epi32(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+713:pub fn _mm_maskz_add_epi32(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+794:pub fn _mm_mask_add_epi64(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+808:pub fn _mm_maskz_add_epi64(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+889:pub fn _mm_mask_add_ps(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+903:pub fn _mm_maskz_add_ps(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+984:pub fn _mm_mask_add_pd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+998:pub fn _mm_maskz_add_pd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+1079:pub fn _mm_mask_sub_epi32(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+1093:pub fn _mm_maskz_sub_epi32(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+1174:pub fn _mm_mask_sub_epi64(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+1188:pub fn _mm_maskz_sub_epi64(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+1269:pub fn _mm_mask_sub_ps(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+1283:pub fn _mm_maskz_sub_ps(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+1364:pub fn _mm_mask_sub_pd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+1378:pub fn _mm_maskz_sub_pd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+1463:pub fn _mm_mask_mul_epi32(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+1477:pub fn _mm_maskz_mul_epi32(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+1558:pub fn _mm_mask_mullo_epi32(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+1572:pub fn _mm_maskz_mullo_epi32(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+1685:pub fn _mm_mask_mul_epu32(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+1699:pub fn _mm_maskz_mul_epu32(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+1780:pub fn _mm_mask_mul_ps(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+1794:pub fn _mm_maskz_mul_ps(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+1875:pub fn _mm_mask_mul_pd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+1889:pub fn _mm_maskz_mul_pd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+1970:pub fn _mm_mask_div_ps(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+1984:pub fn _mm_maskz_div_ps(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+2065:pub fn _mm_mask_div_pd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+2079:pub fn _mm_maskz_div_pd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+2164:pub fn _mm_mask_max_epi32(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+2178:pub fn _mm_maskz_max_epi32(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+2278:pub fn _mm_max_epi64(a: __m128i, b: __m128i) -> __m128i {
+2293:pub fn _mm_mask_max_epi64(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+2307:pub fn _mm_maskz_max_epi64(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+2394:pub fn _mm_mask_max_ps(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+2408:pub fn _mm_maskz_max_ps(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+2489:pub fn _mm_mask_max_pd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+2503:pub fn _mm_maskz_max_pd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+2588:pub fn _mm_mask_max_epu32(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+2602:pub fn _mm_maskz_max_epu32(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+2702:pub fn _mm_max_epu64(a: __m128i, b: __m128i) -> __m128i {
+2717:pub fn _mm_mask_max_epu64(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+2731:pub fn _mm_maskz_max_epu64(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+2816:pub fn _mm_mask_min_epi32(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+2830:pub fn _mm_maskz_min_epi32(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+2930:pub fn _mm_min_epi64(a: __m128i, b: __m128i) -> __m128i {
+2945:pub fn _mm_mask_min_epi64(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+2959:pub fn _mm_maskz_min_epi64(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+3046:pub fn _mm_mask_min_ps(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+3060:pub fn _mm_maskz_min_ps(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+3141:pub fn _mm_mask_min_pd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+3155:pub fn _mm_maskz_min_pd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+3240:pub fn _mm_mask_min_epu32(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+3254:pub fn _mm_maskz_min_epu32(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+3354:pub fn _mm_min_epu64(a: __m128i, b: __m128i) -> __m128i {
+3369:pub fn _mm_mask_min_epu64(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+3383:pub fn _mm_maskz_min_epu64(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+3452:pub fn _mm_mask_sqrt_ps(src: __m128, k: __mmask8, a: __m128) -> __m128 {
+3463:pub fn _mm_maskz_sqrt_ps(k: __mmask8, a: __m128) -> __m128 {
+3529:pub fn _mm_mask_sqrt_pd(src: __m128d, k: __mmask8, a: __m128d) -> __m128d {
+3540:pub fn _mm_maskz_sqrt_pd(k: __mmask8, a: __m128d) -> __m128d {
+3628:pub fn _mm_mask_fmadd_ps(a: __m128, k: __mmask8, b: __m128, c: __m128) -> __m128 {
+3639:pub fn _mm_maskz_fmadd_ps(k: __mmask8, a: __m128, b: __m128, c: __m128) -> __m128 {
+3650:pub fn _mm_mask3_fmadd_ps(a: __m128, b: __m128, c: __m128, k: __mmask8) -> __m128 {
+3738:pub fn _mm_mask_fmadd_pd(a: __m128d, k: __mmask8, b: __m128d, c: __m128d) -> __m128d {
+3749:pub fn _mm_maskz_fmadd_pd(k: __mmask8, a: __m128d, b: __m128d, c: __m128d) -> __m128d {
+3760:pub fn _mm_mask3_fmadd_pd(a: __m128d, b: __m128d, c: __m128d, k: __mmask8) -> __m128d {
+3848:pub fn _mm_mask_fmsub_ps(a: __m128, k: __mmask8, b: __m128, c: __m128) -> __m128 {
+3859:pub fn _mm_maskz_fmsub_ps(k: __mmask8, a: __m128, b: __m128, c: __m128) -> __m128 {
+3870:pub fn _mm_mask3_fmsub_ps(a: __m128, b: __m128, c: __m128, k: __mmask8) -> __m128 {
+3958:pub fn _mm_mask_fmsub_pd(a: __m128d, k: __mmask8, b: __m128d, c: __m128d) -> __m128d {
+3969:pub fn _mm_maskz_fmsub_pd(k: __mmask8, a: __m128d, b: __m128d, c: __m128d) -> __m128d {
+3980:pub fn _mm_mask3_fmsub_pd(a: __m128d, b: __m128d, c: __m128d, k: __mmask8) -> __m128d {
+4076:pub fn _mm_mask_fmaddsub_ps(a: __m128, k: __mmask8, b: __m128, c: __m128) -> __m128 {
+4087:pub fn _mm_maskz_fmaddsub_ps(k: __mmask8, a: __m128, b: __m128, c: __m128) -> __m128 {
+4098:pub fn _mm_mask3_fmaddsub_ps(a: __m128, b: __m128, c: __m128, k: __mmask8) -> __m128 {
+4190:pub fn _mm_mask_fmaddsub_pd(a: __m128d, k: __mmask8, b: __m128d, c: __m128d) -> __m128d {
+4201:pub fn _mm_maskz_fmaddsub_pd(k: __mmask8, a: __m128d, b: __m128d, c: __m128d) -> __m128d {
+4212:pub fn _mm_mask3_fmaddsub_pd(a: __m128d, b: __m128d, c: __m128d, k: __mmask8) -> __m128d {
+4308:pub fn _mm_mask_fmsubadd_ps(a: __m128, k: __mmask8, b: __m128, c: __m128) -> __m128 {
+4319:pub fn _mm_maskz_fmsubadd_ps(k: __mmask8, a: __m128, b: __m128, c: __m128) -> __m128 {
+4330:pub fn _mm_mask3_fmsubadd_ps(a: __m128, b: __m128, c: __m128, k: __mmask8) -> __m128 {
+4422:pub fn _mm_mask_fmsubadd_pd(a: __m128d, k: __mmask8, b: __m128d, c: __m128d) -> __m128d {
+4433:pub fn _mm_maskz_fmsubadd_pd(k: __mmask8, a: __m128d, b: __m128d, c: __m128d) -> __m128d {
+4444:pub fn _mm_mask3_fmsubadd_pd(a: __m128d, b: __m128d, c: __m128d, k: __mmask8) -> __m128d {
+4532:pub fn _mm_mask_fnmadd_ps(a: __m128, k: __mmask8, b: __m128, c: __m128) -> __m128 {
+4543:pub fn _mm_maskz_fnmadd_ps(k: __mmask8, a: __m128, b: __m128, c: __m128) -> __m128 {
+4554:pub fn _mm_mask3_fnmadd_ps(a: __m128, b: __m128, c: __m128, k: __mmask8) -> __m128 {
+4642:pub fn _mm_mask_fnmadd_pd(a: __m128d, k: __mmask8, b: __m128d, c: __m128d) -> __m128d {
+4653:pub fn _mm_maskz_fnmadd_pd(k: __mmask8, a: __m128d, b: __m128d, c: __m128d) -> __m128d {
+4664:pub fn _mm_mask3_fnmadd_pd(a: __m128d, b: __m128d, c: __m128d, k: __mmask8) -> __m128d {
+4752:pub fn _mm_mask_fnmsub_ps(a: __m128, k: __mmask8, b: __m128, c: __m128) -> __m128 {
+4763:pub fn _mm_maskz_fnmsub_ps(k: __mmask8, a: __m128, b: __m128, c: __m128) -> __m128 {
+4774:pub fn _mm_mask3_fnmsub_ps(a: __m128, b: __m128, c: __m128, k: __mmask8) -> __m128 {
+4862:pub fn _mm_mask_fnmsub_pd(a: __m128d, k: __mmask8, b: __m128d, c: __m128d) -> __m128d {
+4873:pub fn _mm_maskz_fnmsub_pd(k: __mmask8, a: __m128d, b: __m128d, c: __m128d) -> __m128d {
+4884:pub fn _mm_mask3_fnmsub_pd(a: __m128d, b: __m128d, c: __m128d, k: __mmask8) -> __m128d {
+4961:pub fn _mm_rcp14_ps(a: __m128) -> __m128 {
+4972:pub fn _mm_mask_rcp14_ps(src: __m128, k: __mmask8, a: __m128) -> __m128 {
+4983:pub fn _mm_maskz_rcp14_ps(k: __mmask8, a: __m128) -> __m128 {
+5060:pub fn _mm_rcp14_pd(a: __m128d) -> __m128d {
+5071:pub fn _mm_mask_rcp14_pd(src: __m128d, k: __mmask8, a: __m128d) -> __m128d {
+5082:pub fn _mm_maskz_rcp14_pd(k: __mmask8, a: __m128d) -> __m128d {
+5159:pub fn _mm_rsqrt14_ps(a: __m128) -> __m128 {
+5170:pub fn _mm_mask_rsqrt14_ps(src: __m128, k: __mmask8, a: __m128) -> __m128 {
+5181:pub fn _mm_maskz_rsqrt14_ps(k: __mmask8, a: __m128) -> __m128 {
+5258:pub fn _mm_rsqrt14_pd(a: __m128d) -> __m128d {
+5269:pub fn _mm_mask_rsqrt14_pd(src: __m128d, k: __mmask8, a: __m128d) -> __m128d {
+5280:pub fn _mm_maskz_rsqrt14_pd(k: __mmask8, a: __m128d) -> __m128d {
+5378:pub fn _mm_getexp_ps(a: __m128) -> __m128 {
+5389:pub fn _mm_mask_getexp_ps(src: __m128, k: __mmask8, a: __m128) -> __m128 {
+5400:pub fn _mm_maskz_getexp_ps(k: __mmask8, a: __m128) -> __m128 {
+5498:pub fn _mm_getexp_pd(a: __m128d) -> __m128d {
+5509:pub fn _mm_mask_getexp_pd(src: __m128d, k: __mmask8, a: __m128d) -> __m128d {
+5520:pub fn _mm_maskz_getexp_pd(k: __mmask8, a: __m128d) -> __m128d {
+5684:pub fn _mm_roundscale_ps<const IMM8: i32>(a: __m128) -> __m128 {
+5707:pub fn _mm_mask_roundscale_ps<const IMM8: i32>(src: __m128, k: __mmask8, a: __m128) -> __m128 {
+5731:pub fn _mm_maskz_roundscale_ps<const IMM8: i32>(k: __mmask8, a: __m128) -> __m128 {
+5902:pub fn _mm_roundscale_pd<const IMM8: i32>(a: __m128d) -> __m128d {
+5925:pub fn _mm_mask_roundscale_pd<const IMM8: i32>(src: __m128d, k: __mmask8, a: __m128d) -> __m128d {
+5949:pub fn _mm_maskz_roundscale_pd<const IMM8: i32>(k: __mmask8, a: __m128d) -> __m128d {
+6062:pub fn _mm_scalef_ps(a: __m128, b: __m128) -> __m128 {
+6080:pub fn _mm_mask_scalef_ps(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+6091:pub fn _mm_maskz_scalef_ps(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+6199:pub fn _mm_scalef_pd(a: __m128d, b: __m128d) -> __m128d {
+6217:pub fn _mm_mask_scalef_pd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+6228:pub fn _mm_maskz_scalef_pd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+6374:pub fn _mm_fixupimm_ps<const IMM8: i32>(a: __m128, b: __m128, c: __m128i) -> __m128 {
+6393:pub fn _mm_mask_fixupimm_ps<const IMM8: i32>(
+6417:pub fn _mm_maskz_fixupimm_ps<const IMM8: i32>(
+6575:pub fn _mm_fixupimm_pd<const IMM8: i32>(a: __m128d, b: __m128d, c: __m128i) -> __m128d {
+6594:pub fn _mm_mask_fixupimm_pd<const IMM8: i32>(
+6618:pub fn _mm_maskz_fixupimm_pd<const IMM8: i32>(
+6776:pub fn _mm_ternarylogic_epi32<const IMM8: i32>(a: __m128i, b: __m128i, c: __m128i) -> __m128i {
+6795:pub fn _mm_mask_ternarylogic_epi32<const IMM8: i32>(
+6819:pub fn _mm_maskz_ternarylogic_epi32<const IMM8: i32>(
+6977:pub fn _mm_ternarylogic_epi64<const IMM8: i32>(a: __m128i, b: __m128i, c: __m128i) -> __m128i {
+6996:pub fn _mm_mask_ternarylogic_epi64<const IMM8: i32>(
+7020:pub fn _mm_maskz_ternarylogic_epi64<const IMM8: i32>(
+7260:pub fn _mm_getmant_ps<const NORM: _MM_MANTISSA_NORM_ENUM, const SIGN: _MM_MANTISSA_SIGN_ENUM>(
+7289:pub fn _mm_mask_getmant_ps<
+7324:pub fn _mm_maskz_getmant_ps<
+7564:pub fn _mm_getmant_pd<const NORM: _MM_MANTISSA_NORM_ENUM, const SIGN: _MM_MANTISSA_SIGN_ENUM>(
+7593:pub fn _mm_mask_getmant_pd<
+7628:pub fn _mm_maskz_getmant_pd<
+10895:pub fn _mm_mask_cvtps_epi32(src: __m128i, k: __mmask8, a: __m128) -> __m128i {
+10909:pub fn _mm_maskz_cvtps_epi32(k: __mmask8, a: __m128) -> __m128i {
+11010:pub fn _mm_cvtps_epu32(a: __m128) -> __m128i {
+11021:pub fn _mm_mask_cvtps_epu32(src: __m128i, k: __mmask8, a: __m128) -> __m128i {
+11032:pub fn _mm_maskz_cvtps_epu32(k: __mmask8, a: __m128) -> __m128i {
+11215:pub fn _mm_mask_cvtpd_ps(src: __m128, k: __mmask8, a: __m128d) -> __m128 {
+11229:pub fn _mm_maskz_cvtpd_ps(k: __mmask8, a: __m128d) -> __m128 {
+11325:pub fn _mm_mask_cvtpd_epi32(src: __m128i, k: __mmask8, a: __m128d) -> __m128i {
+11339:pub fn _mm_maskz_cvtpd_epi32(k: __mmask8, a: __m128d) -> __m128i {
+11440:pub fn _mm_cvtpd_epu32(a: __m128d) -> __m128i {
+11451:pub fn _mm_mask_cvtpd_epu32(src: __m128i, k: __mmask8, a: __m128d) -> __m128i {
+11462:pub fn _mm_maskz_cvtpd_epu32(k: __mmask8, a: __m128d) -> __m128i {
+11589:pub fn _mm_mask_cvtepi8_epi32(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+11603:pub fn _mm_maskz_cvtepi8_epi32(k: __mmask8, a: __m128i) -> __m128i {
+11688:pub fn _mm_mask_cvtepi8_epi64(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+11702:pub fn _mm_maskz_cvtepi8_epi64(k: __mmask8, a: __m128i) -> __m128i {
+11786:pub fn _mm_mask_cvtepu8_epi32(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+11800:pub fn _mm_maskz_cvtepu8_epi32(k: __mmask8, a: __m128i) -> __m128i {
+11885:pub fn _mm_mask_cvtepu8_epi64(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+11899:pub fn _mm_maskz_cvtepu8_epi64(k: __mmask8, a: __m128i) -> __m128i {
+11983:pub fn _mm_mask_cvtepi16_epi32(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+11997:pub fn _mm_maskz_cvtepi16_epi32(k: __mmask8, a: __m128i) -> __m128i {
+12081:pub fn _mm_mask_cvtepi16_epi64(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+12095:pub fn _mm_maskz_cvtepi16_epi64(k: __mmask8, a: __m128i) -> __m128i {
+12179:pub fn _mm_mask_cvtepu16_epi32(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+12193:pub fn _mm_maskz_cvtepu16_epi32(k: __mmask8, a: __m128i) -> __m128i {
+12277:pub fn _mm_mask_cvtepu16_epi64(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+12291:pub fn _mm_maskz_cvtepu16_epi64(k: __mmask8, a: __m128i) -> __m128i {
+12375:pub fn _mm_mask_cvtepi32_epi64(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+12389:pub fn _mm_maskz_cvtepi32_epi64(k: __mmask8, a: __m128i) -> __m128i {
+12473:pub fn _mm_mask_cvtepu32_epi64(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+12487:pub fn _mm_maskz_cvtepu32_epi64(k: __mmask8, a: __m128i) -> __m128i {
+12571:pub fn _mm_mask_cvtepi32_ps(src: __m128, k: __mmask8, a: __m128i) -> __m128 {
+12585:pub fn _mm_maskz_cvtepi32_ps(k: __mmask8, a: __m128i) -> __m128 {
+12669:pub fn _mm_mask_cvtepi32_pd(src: __m128d, k: __mmask8, a: __m128i) -> __m128d {
+12683:pub fn _mm_maskz_cvtepi32_pd(k: __mmask8, a: __m128i) -> __m128d {
+12823:pub fn _mm_cvtepu32_pd(a: __m128i) -> __m128d {
+12838:pub fn _mm_mask_cvtepu32_pd(src: __m128d, k: __mmask8, a: __m128i) -> __m128d {
+12852:pub fn _mm_maskz_cvtepu32_pd(k: __mmask8, a: __m128i) -> __m128d {
+13008:pub fn _mm_cvtepi32_epi16(a: __m128i) -> __m128i {
+13019:pub fn _mm_mask_cvtepi32_epi16(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+13030:pub fn _mm_maskz_cvtepi32_epi16(k: __mmask8, a: __m128i) -> __m128i {
+13116:pub fn _mm_cvtepi32_epi8(a: __m128i) -> __m128i {
+13127:pub fn _mm_mask_cvtepi32_epi8(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+13138:pub fn _mm_maskz_cvtepi32_epi8(k: __mmask8, a: __m128i) -> __m128i {
+13233:pub fn _mm_cvtepi64_epi32(a: __m128i) -> __m128i {
+13244:pub fn _mm_mask_cvtepi64_epi32(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+13255:pub fn _mm_maskz_cvtepi64_epi32(k: __mmask8, a: __m128i) -> __m128i {
+13341:pub fn _mm_cvtepi64_epi16(a: __m128i) -> __m128i {
+13352:pub fn _mm_mask_cvtepi64_epi16(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+13363:pub fn _mm_maskz_cvtepi64_epi16(k: __mmask8, a: __m128i) -> __m128i {
+13440:pub fn _mm_cvtepi64_epi8(a: __m128i) -> __m128i {
+13451:pub fn _mm_mask_cvtepi64_epi8(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+13462:pub fn _mm_maskz_cvtepi64_epi8(k: __mmask8, a: __m128i) -> __m128i {
+13539:pub fn _mm_cvtsepi32_epi16(a: __m128i) -> __m128i {
+13550:pub fn _mm_mask_cvtsepi32_epi16(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+13561:pub fn _mm_maskz_cvtsepi32_epi16(k: __mmask8, a: __m128i) -> __m128i {
+13638:pub fn _mm_cvtsepi32_epi8(a: __m128i) -> __m128i {
+13649:pub fn _mm_mask_cvtsepi32_epi8(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+13660:pub fn _mm_maskz_cvtsepi32_epi8(k: __mmask8, a: __m128i) -> __m128i {
+13737:pub fn _mm_cvtsepi64_epi32(a: __m128i) -> __m128i {
+13748:pub fn _mm_mask_cvtsepi64_epi32(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+13759:pub fn _mm_maskz_cvtsepi64_epi32(k: __mmask8, a: __m128i) -> __m128i {
+13836:pub fn _mm_cvtsepi64_epi16(a: __m128i) -> __m128i {
+13847:pub fn _mm_mask_cvtsepi64_epi16(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+13858:pub fn _mm_maskz_cvtsepi64_epi16(k: __mmask8, a: __m128i) -> __m128i {
+13935:pub fn _mm_cvtsepi64_epi8(a: __m128i) -> __m128i {
+13946:pub fn _mm_mask_cvtsepi64_epi8(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+13957:pub fn _mm_maskz_cvtsepi64_epi8(k: __mmask8, a: __m128i) -> __m128i {
+14034:pub fn _mm_cvtusepi32_epi16(a: __m128i) -> __m128i {
+14045:pub fn _mm_mask_cvtusepi32_epi16(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+14056:pub fn _mm_maskz_cvtusepi32_epi16(k: __mmask8, a: __m128i) -> __m128i {
+14133:pub fn _mm_cvtusepi32_epi8(a: __m128i) -> __m128i {
+14144:pub fn _mm_mask_cvtusepi32_epi8(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+14155:pub fn _mm_maskz_cvtusepi32_epi8(k: __mmask8, a: __m128i) -> __m128i {
+14232:pub fn _mm_cvtusepi64_epi32(a: __m128i) -> __m128i {
+14243:pub fn _mm_mask_cvtusepi64_epi32(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+14254:pub fn _mm_maskz_cvtusepi64_epi32(k: __mmask8, a: __m128i) -> __m128i {
+14331:pub fn _mm_cvtusepi64_epi16(a: __m128i) -> __m128i {
+14342:pub fn _mm_mask_cvtusepi64_epi16(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+14353:pub fn _mm_maskz_cvtusepi64_epi16(k: __mmask8, a: __m128i) -> __m128i {
+14430:pub fn _mm_cvtusepi64_epi8(a: __m128i) -> __m128i {
+14441:pub fn _mm_mask_cvtusepi64_epi8(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+14452:pub fn _mm_maskz_cvtusepi64_epi8(k: __mmask8, a: __m128i) -> __m128i {
+15202:pub fn _mm_mask_cvt_roundps_ph<const IMM8: i32>(src: __m128i, k: __mmask8, a: __m128) -> __m128i {
+15226:pub fn _mm_maskz_cvt_roundps_ph<const IMM8: i32>(k: __mmask8, a: __m128) -> __m128i {
+15381:pub fn _mm_mask_cvtps_ph<const IMM8: i32>(src: __m128i, k: __mmask8, a: __m128) -> __m128i {
+15405:pub fn _mm_maskz_cvtps_ph<const IMM8: i32>(k: __mmask8, a: __m128) -> __m128i {
+15551:pub fn _mm_mask_cvtph_ps(src: __m128, k: __mmask8, a: __m128i) -> __m128 {
+15565:pub fn _mm_maskz_cvtph_ps(k: __mmask8, a: __m128i) -> __m128 {
+15873:pub fn _mm_mask_cvttps_epi32(src: __m128i, k: __mmask8, a: __m128) -> __m128i {
+15884:pub fn _mm_maskz_cvttps_epi32(k: __mmask8, a: __m128) -> __m128i {
+15982:pub fn _mm_cvttps_epu32(a: __m128) -> __m128i {
+15993:pub fn _mm_mask_cvttps_epu32(src: __m128i, k: __mmask8, a: __m128) -> __m128i {
+16004:pub fn _mm_maskz_cvttps_epu32(k: __mmask8, a: __m128) -> __m128i {
+16109:pub fn _mm_mask_cvttpd_epi32(src: __m128i, k: __mmask8, a: __m128d) -> __m128i {
+16120:pub fn _mm_maskz_cvttpd_epi32(k: __mmask8, a: __m128d) -> __m128i {
+16218:pub fn _mm_cvttpd_epu32(a: __m128d) -> __m128i {
+16229:pub fn _mm_mask_cvttpd_epu32(src: __m128i, k: __mmask8, a: __m128d) -> __m128i {
+16240:pub fn _mm_maskz_cvttpd_epu32(k: __mmask8, a: __m128d) -> __m128i {
+17917:pub unsafe fn _mm_i32scatter_epi32<const SCALE: i32>(
+17936:pub unsafe fn _mm_mask_i32scatter_epi32<const SCALE: i32>(
+17955:pub unsafe fn _mm_i32scatter_epi64<const SCALE: i32>(
+17974:pub unsafe fn _mm_mask_i32scatter_epi64<const SCALE: i32>(
+17993:pub unsafe fn _mm_i32scatter_pd<const SCALE: i32>(
+18012:pub unsafe fn _mm_mask_i32scatter_pd<const SCALE: i32>(
+18031:pub unsafe fn _mm_i32scatter_ps<const SCALE: i32>(base_addr: *mut f32, vindex: __m128i, a: __m128) {
+18046:pub unsafe fn _mm_mask_i32scatter_ps<const SCALE: i32>(
+18065:pub unsafe fn _mm_i64scatter_epi32<const SCALE: i32>(
+18084:pub unsafe fn _mm_mask_i64scatter_epi32<const SCALE: i32>(
+18103:pub unsafe fn _mm_i64scatter_epi64<const SCALE: i32>(
+18122:pub unsafe fn _mm_mask_i64scatter_epi64<const SCALE: i32>(
+18141:pub unsafe fn _mm_i64scatter_pd<const SCALE: i32>(
+18160:pub unsafe fn _mm_mask_i64scatter_pd<const SCALE: i32>(
+18179:pub unsafe fn _mm_i64scatter_ps<const SCALE: i32>(base_addr: *mut f32, vindex: __m128i, a: __m128) {
+18193:pub unsafe fn _mm_mask_i64scatter_ps<const SCALE: i32>(
+18213:pub unsafe fn _mm_mmask_i32gather_epi32<const SCALE: i32>(
+18239:pub unsafe fn _mm_mmask_i32gather_epi64<const SCALE: i32>(
+18265:pub unsafe fn _mm_mmask_i32gather_pd<const SCALE: i32>(
+18291:pub unsafe fn _mm_mmask_i32gather_ps<const SCALE: i32>(
+18317:pub unsafe fn _mm_mmask_i64gather_epi32<const SCALE: i32>(
+18343:pub unsafe fn _mm_mmask_i64gather_epi64<const SCALE: i32>(
+18369:pub unsafe fn _mm_mmask_i64gather_pd<const SCALE: i32>(
+18395:pub unsafe fn _mm_mmask_i64gather_ps<const SCALE: i32>(
+18462:pub fn _mm_mask_compress_epi32(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+18473:pub fn _mm_maskz_compress_epi32(k: __mmask8, a: __m128i) -> __m128i {
+18528:pub fn _mm_mask_compress_epi64(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+18539:pub fn _mm_maskz_compress_epi64(k: __mmask8, a: __m128i) -> __m128i {
+18594:pub fn _mm_mask_compress_ps(src: __m128, k: __mmask8, a: __m128) -> __m128 {
+18605:pub fn _mm_maskz_compress_ps(k: __mmask8, a: __m128) -> __m128 {
+18660:pub fn _mm_mask_compress_pd(src: __m128d, k: __mmask8, a: __m128d) -> __m128d {
+18671:pub fn _mm_maskz_compress_pd(k: __mmask8, a: __m128d) -> __m128d {
+18704:pub unsafe fn _mm_mask_compressstoreu_epi32(base_addr: *mut i32, k: __mmask8, a: __m128i) {
+18737:pub unsafe fn _mm_mask_compressstoreu_epi64(base_addr: *mut i64, k: __mmask8, a: __m128i) {
+18770:pub unsafe fn _mm_mask_compressstoreu_ps(base_addr: *mut f32, k: __mmask8, a: __m128) {
+18803:pub unsafe fn _mm_mask_compressstoreu_pd(base_addr: *mut f64, k: __mmask8, a: __m128d) {
+18858:pub fn _mm_mask_expand_epi32(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+18869:pub fn _mm_maskz_expand_epi32(k: __mmask8, a: __m128i) -> __m128i {
+18924:pub fn _mm_mask_expand_epi64(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+18935:pub fn _mm_maskz_expand_epi64(k: __mmask8, a: __m128i) -> __m128i {
+18990:pub fn _mm_mask_expand_ps(src: __m128, k: __mmask8, a: __m128) -> __m128 {
+19001:pub fn _mm_maskz_expand_ps(k: __mmask8, a: __m128) -> __m128 {
+19056:pub fn _mm_mask_expand_pd(src: __m128d, k: __mmask8, a: __m128d) -> __m128d {
+19067:pub fn _mm_maskz_expand_pd(k: __mmask8, a: __m128d) -> __m128d {
+19157:pub fn _mm_rol_epi32<const IMM8: i32>(a: __m128i) -> __m128i {
+19170:pub fn _mm_mask_rol_epi32<const IMM8: i32>(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+19183:pub fn _mm_maskz_rol_epi32<const IMM8: i32>(k: __mmask8, a: __m128i) -> __m128i {
+19274:pub fn _mm_ror_epi32<const IMM8: i32>(a: __m128i) -> __m128i {
+19287:pub fn _mm_mask_ror_epi32<const IMM8: i32>(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+19300:pub fn _mm_maskz_ror_epi32<const IMM8: i32>(k: __mmask8, a: __m128i) -> __m128i {
+19391:pub fn _mm_rol_epi64<const IMM8: i32>(a: __m128i) -> __m128i {
+19404:pub fn _mm_mask_rol_epi64<const IMM8: i32>(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+19417:pub fn _mm_maskz_rol_epi64<const IMM8: i32>(k: __mmask8, a: __m128i) -> __m128i {
+19508:pub fn _mm_ror_epi64<const IMM8: i32>(a: __m128i) -> __m128i {
+19521:pub fn _mm_mask_ror_epi64<const IMM8: i32>(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+19534:pub fn _mm_maskz_ror_epi64<const IMM8: i32>(k: __mmask8, a: __m128i) -> __m128i {
+19646:pub fn _mm_mask_slli_epi32<const IMM8: u32>(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+19666:pub fn _mm_maskz_slli_epi32<const IMM8: u32>(k: __mmask8, a: __m128i) -> __m128i {
+19785:pub fn _mm_mask_srli_epi32<const IMM8: u32>(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+19805:pub fn _mm_maskz_srli_epi32<const IMM8: u32>(k: __mmask8, a: __m128i) -> __m128i {
+19924:pub fn _mm_mask_slli_epi64<const IMM8: u32>(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+19944:pub fn _mm_maskz_slli_epi64<const IMM8: u32>(k: __mmask8, a: __m128i) -> __m128i {
+20063:pub fn _mm_mask_srli_epi64<const IMM8: u32>(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+20083:pub fn _mm_maskz_srli_epi64<const IMM8: u32>(k: __mmask8, a: __m128i) -> __m128i {
+20169:pub fn _mm_mask_sll_epi32(src: __m128i, k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+20183:pub fn _mm_maskz_sll_epi32(k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+20264:pub fn _mm_mask_srl_epi32(src: __m128i, k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+20278:pub fn _mm_maskz_srl_epi32(k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+20359:pub fn _mm_mask_sll_epi64(src: __m128i, k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+20373:pub fn _mm_maskz_sll_epi64(k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+20454:pub fn _mm_mask_srl_epi64(src: __m128i, k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+20468:pub fn _mm_maskz_srl_epi64(k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+20549:pub fn _mm_mask_sra_epi32(src: __m128i, k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+20563:pub fn _mm_maskz_sra_epi32(k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+20655:pub fn _mm_sra_epi64(a: __m128i, count: __m128i) -> __m128i {
+20666:pub fn _mm_mask_sra_epi64(src: __m128i, k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+20680:pub fn _mm_maskz_sra_epi64(k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+20772:pub fn _mm_mask_srai_epi32<const IMM8: u32>(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+20787:pub fn _mm_maskz_srai_epi32<const IMM8: u32>(k: __mmask8, a: __m128i) -> __m128i {
+20896:pub fn _mm_srai_epi64<const IMM8: u32>(a: __m128i) -> __m128i {
+20911:pub fn _mm_mask_srai_epi64<const IMM8: u32>(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+20927:pub fn _mm_maskz_srai_epi64<const IMM8: u32>(k: __mmask8, a: __m128i) -> __m128i {
+21014:pub fn _mm_mask_srav_epi32(src: __m128i, k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+21028:pub fn _mm_maskz_srav_epi32(k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+21130:pub fn _mm_srav_epi64(a: __m128i, count: __m128i) -> __m128i {
+21146:pub fn _mm_mask_srav_epi64(src: __m128i, k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+21160:pub fn _mm_maskz_srav_epi64(k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+21264:pub fn _mm_rolv_epi32(a: __m128i, b: __m128i) -> __m128i {
+21281:pub fn _mm_mask_rolv_epi32(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+21295:pub fn _mm_maskz_rolv_epi32(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+21399:pub fn _mm_rorv_epi32(a: __m128i, b: __m128i) -> __m128i {
+21416:pub fn _mm_mask_rorv_epi32(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+21430:pub fn _mm_maskz_rorv_epi32(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+21534:pub fn _mm_rolv_epi64(a: __m128i, b: __m128i) -> __m128i {
+21551:pub fn _mm_mask_rolv_epi64(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+21565:pub fn _mm_maskz_rolv_epi64(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+21669:pub fn _mm_rorv_epi64(a: __m128i, b: __m128i) -> __m128i {
+21686:pub fn _mm_mask_rorv_epi64(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+21700:pub fn _mm_maskz_rorv_epi64(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+21786:pub fn _mm_mask_sllv_epi32(src: __m128i, k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+21800:pub fn _mm_maskz_sllv_epi32(k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+21886:pub fn _mm_mask_srlv_epi32(src: __m128i, k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+21900:pub fn _mm_maskz_srlv_epi32(k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+21986:pub fn _mm_mask_sllv_epi64(src: __m128i, k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+22000:pub fn _mm_maskz_sllv_epi64(k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+22086:pub fn _mm_mask_srlv_epi64(src: __m128i, k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+22100:pub fn _mm_maskz_srlv_epi64(k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+22213:pub fn _mm_mask_permute_ps<const MASK: i32>(src: __m128, k: __mmask8, a: __m128) -> __m128 {
+22228:pub fn _mm_maskz_permute_ps<const MASK: i32>(k: __mmask8, a: __m128) -> __m128 {
+22335:pub fn _mm_mask_permute_pd<const IMM2: i32>(src: __m128d, k: __mmask8, a: __m128d) -> __m128d {
+22351:pub fn _mm_maskz_permute_pd<const IMM2: i32>(k: __mmask8, a: __m128d) -> __m128d {
+22701:pub fn _mm_mask_permutevar_ps(src: __m128, k: __mmask8, a: __m128, b: __m128i) -> __m128 {
+22715:pub fn _mm_maskz_permutevar_ps(k: __mmask8, a: __m128, b: __m128i) -> __m128 {
+22796:pub fn _mm_mask_permutevar_pd(src: __m128d, k: __mmask8, a: __m128d, b: __m128i) -> __m128d {
+22810:pub fn _mm_maskz_permutevar_pd(k: __mmask8, a: __m128d, b: __m128i) -> __m128d {
+23292:pub fn _mm_permutex2var_epi32(a: __m128i, idx: __m128i, b: __m128i) -> __m128i {
+23303:pub fn _mm_mask_permutex2var_epi32(a: __m128i, k: __mmask8, idx: __m128i, b: __m128i) -> __m128i {
+23317:pub fn _mm_maskz_permutex2var_epi32(k: __mmask8, a: __m128i, idx: __m128i, b: __m128i) -> __m128i {
+23331:pub fn _mm_mask2_permutex2var_epi32(a: __m128i, idx: __m128i, k: __mmask8, b: __m128i) -> __m128i {
+23481:pub fn _mm_permutex2var_epi64(a: __m128i, idx: __m128i, b: __m128i) -> __m128i {
+23492:pub fn _mm_mask_permutex2var_epi64(a: __m128i, k: __mmask8, idx: __m128i, b: __m128i) -> __m128i {
+23506:pub fn _mm_maskz_permutex2var_epi64(k: __mmask8, a: __m128i, idx: __m128i, b: __m128i) -> __m128i {
+23520:pub fn _mm_mask2_permutex2var_epi64(a: __m128i, idx: __m128i, k: __mmask8, b: __m128i) -> __m128i {
+23642:pub fn _mm_permutex2var_ps(a: __m128, idx: __m128i, b: __m128) -> __m128 {
+23653:pub fn _mm_mask_permutex2var_ps(a: __m128, k: __mmask8, idx: __m128i, b: __m128) -> __m128 {
+23667:pub fn _mm_maskz_permutex2var_ps(k: __mmask8, a: __m128, idx: __m128i, b: __m128) -> __m128 {
+23681:pub fn _mm_mask2_permutex2var_ps(a: __m128, idx: __m128i, k: __mmask8, b: __m128) -> __m128 {
+23804:pub fn _mm_permutex2var_pd(a: __m128d, idx: __m128i, b: __m128d) -> __m128d {
+23815:pub fn _mm_mask_permutex2var_pd(a: __m128d, k: __mmask8, idx: __m128i, b: __m128d) -> __m128d {
+23829:pub fn _mm_maskz_permutex2var_pd(k: __mmask8, a: __m128d, idx: __m128i, b: __m128d) -> __m128d {
+23843:pub fn _mm_mask2_permutex2var_pd(a: __m128d, idx: __m128i, k: __mmask8, b: __m128d) -> __m128d {
+23968:pub fn _mm_mask_shuffle_epi32<const MASK: _MM_PERM_ENUM>(
+23988:pub fn _mm_maskz_shuffle_epi32<const MASK: _MM_PERM_ENUM>(k: __mmask8, a: __m128i) -> __m128i {
+24114:pub fn _mm_mask_shuffle_ps<const MASK: i32>(
+24135:pub fn _mm_maskz_shuffle_ps<const MASK: i32>(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+24253:pub fn _mm_mask_shuffle_pd<const MASK: i32>(
+24274:pub fn _mm_maskz_shuffle_pd<const MASK: i32>(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+25255:pub fn _mm_mask_moveldup_ps(src: __m128, k: __mmask8, a: __m128) -> __m128 {
+25269:pub fn _mm_maskz_moveldup_ps(k: __mmask8, a: __m128) -> __m128 {
+25355:pub fn _mm_mask_movehdup_ps(src: __m128, k: __mmask8, a: __m128) -> __m128 {
+25369:pub fn _mm_maskz_movehdup_ps(k: __mmask8, a: __m128) -> __m128 {
+25453:pub fn _mm_mask_movedup_pd(src: __m128d, k: __mmask8, a: __m128d) -> __m128d {
+25467:pub fn _mm_maskz_movedup_pd(k: __mmask8, a: __m128d) -> __m128d {
+25950:pub fn _mm_mask_unpackhi_epi32(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+25964:pub fn _mm_maskz_unpackhi_epi32(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+26045:pub fn _mm_mask_unpackhi_epi64(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+26059:pub fn _mm_maskz_unpackhi_epi64(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+26149:pub fn _mm_mask_unpackhi_ps(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+26163:pub fn _mm_maskz_unpackhi_ps(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+26244:pub fn _mm_mask_unpackhi_pd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+26258:pub fn _mm_maskz_unpackhi_pd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+26351:pub fn _mm_mask_unpacklo_epi32(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+26365:pub fn _mm_maskz_unpacklo_epi32(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+26446:pub fn _mm_mask_unpacklo_epi64(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+26460:pub fn _mm_maskz_unpacklo_epi64(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+26549:pub fn _mm_mask_unpacklo_ps(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+26563:pub fn _mm_maskz_unpacklo_ps(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+26644:pub fn _mm_mask_unpacklo_pd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+26658:pub fn _mm_maskz_unpacklo_pd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+27038:pub fn _mm_mask_broadcastd_epi32(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+27052:pub fn _mm_maskz_broadcastd_epi32(k: __mmask8, a: __m128i) -> __m128i {
+27133:pub fn _mm_mask_broadcastq_epi64(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+27147:pub fn _mm_maskz_broadcastq_epi64(k: __mmask8, a: __m128i) -> __m128i {
+27228:pub fn _mm_mask_broadcastss_ps(src: __m128, k: __mmask8, a: __m128) -> __m128 {
+27242:pub fn _mm_maskz_broadcastss_ps(k: __mmask8, a: __m128) -> __m128 {
+27569:pub fn _mm_mask_blend_epi32(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+27602:pub fn _mm_mask_blend_epi64(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+27635:pub fn _mm_mask_blend_ps(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+27668:pub fn _mm_mask_blend_pd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+27870:pub fn _mm_alignr_epi32<const IMM8: i32>(a: __m128i, b: __m128i) -> __m128i {
+27895:pub fn _mm_mask_alignr_epi32<const IMM8: i32>(
+27916:pub fn _mm_maskz_alignr_epi32<const IMM8: i32>(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+28062:pub fn _mm_alignr_epi64<const IMM8: i32>(a: __m128i, b: __m128i) -> __m128i {
+28083:pub fn _mm_mask_alignr_epi64<const IMM8: i32>(
+28104:pub fn _mm_maskz_alignr_epi64<const IMM8: i32>(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+28186:pub fn _mm_mask_and_epi32(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+28200:pub fn _mm_maskz_and_epi32(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+28281:pub fn _mm_mask_and_epi64(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+28295:pub fn _mm_maskz_and_epi64(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+28398:pub fn _mm_or_epi32(a: __m128i, b: __m128i) -> __m128i {
+28409:pub fn _mm_mask_or_epi32(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+28423:pub fn _mm_maskz_or_epi32(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+28515:pub fn _mm_or_epi64(a: __m128i, b: __m128i) -> __m128i {
+28526:pub fn _mm_mask_or_epi64(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+28540:pub fn _mm_maskz_or_epi64(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+28643:pub fn _mm_xor_epi32(a: __m128i, b: __m128i) -> __m128i {
+28654:pub fn _mm_mask_xor_epi32(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+28668:pub fn _mm_maskz_xor_epi32(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+28760:pub fn _mm_xor_epi64(a: __m128i, b: __m128i) -> __m128i {
+28771:pub fn _mm_mask_xor_epi64(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+28785:pub fn _mm_maskz_xor_epi64(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+28879:pub fn _mm_mask_andnot_epi32(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+28894:pub fn _mm_maskz_andnot_epi32(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+28978:pub fn _mm_mask_andnot_epi64(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+28993:pub fn _mm_maskz_andnot_epi64(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+29365:pub fn _mm_test_epi32_mask(a: __m128i, b: __m128i) -> __mmask8 {
+29378:pub fn _mm_mask_test_epi32_mask(k: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+29443:pub fn _mm_test_epi64_mask(a: __m128i, b: __m128i) -> __mmask8 {
+29456:pub fn _mm_mask_test_epi64_mask(k: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+29521:pub fn _mm_testn_epi32_mask(a: __m128i, b: __m128i) -> __mmask8 {
+29534:pub fn _mm_mask_testn_epi32_mask(k: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+29599:pub fn _mm_testn_epi64_mask(a: __m128i, b: __m128i) -> __mmask8 {
+29612:pub fn _mm_mask_testn_epi64_mask(k: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+29922:pub fn _mm_mask_set1_epi32(src: __m128i, k: __mmask8, a: i32) -> __m128i {
+29936:pub fn _mm_maskz_set1_epi32(k: __mmask8, a: i32) -> __m128i {
+30016:pub fn _mm_mask_set1_epi64(src: __m128i, k: __mmask8, a: i64) -> __m128i {
+30030:pub fn _mm_maskz_set1_epi64(k: __mmask8, a: i64) -> __m128i {
+30271:pub fn _mm_cmp_ps_mask<const IMM8: i32>(a: __m128, b: __m128) -> __mmask8 {
+30290:pub fn _mm_mask_cmp_ps_mask<const IMM8: i32>(k1: __mmask8, a: __m128, b: __m128) -> __mmask8 {
+30606:pub fn _mm_cmp_pd_mask<const IMM8: i32>(a: __m128d, b: __m128d) -> __mmask8 {
+30625:pub fn _mm_mask_cmp_pd_mask<const IMM8: i32>(k1: __mmask8, a: __m128d, b: __m128d) -> __mmask8 {
+30735:pub fn _mm_cmp_ss_mask<const IMM8: i32>(a: __m128, b: __m128) -> __mmask8 {
+30752:pub fn _mm_mask_cmp_ss_mask<const IMM8: i32>(k1: __mmask8, a: __m128, b: __m128) -> __mmask8 {
+30769:pub fn _mm_cmp_round_ss_mask<const IMM5: i32, const SAE: i32>(a: __m128, b: __m128) -> __mmask8 {
+30788:pub fn _mm_mask_cmp_round_ss_mask<const IMM5: i32, const SAE: i32>(
+30809:pub fn _mm_cmp_sd_mask<const IMM8: i32>(a: __m128d, b: __m128d) -> __mmask8 {
+30826:pub fn _mm_mask_cmp_sd_mask<const IMM8: i32>(k1: __mmask8, a: __m128d, b: __m128d) -> __mmask8 {
+30843:pub fn _mm_cmp_round_sd_mask<const IMM5: i32, const SAE: i32>(a: __m128d, b: __m128d) -> __mmask8 {
+30862:pub fn _mm_mask_cmp_round_sd_mask<const IMM5: i32, const SAE: i32>(
+30926:pub fn _mm_cmplt_epu32_mask(a: __m128i, b: __m128i) -> __mmask8 {
+30937:pub fn _mm_mask_cmplt_epu32_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+30992:pub fn _mm_cmpgt_epu32_mask(a: __m128i, b: __m128i) -> __mmask8 {
+31003:pub fn _mm_mask_cmpgt_epu32_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+31058:pub fn _mm_cmple_epu32_mask(a: __m128i, b: __m128i) -> __mmask8 {
+31069:pub fn _mm_mask_cmple_epu32_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+31124:pub fn _mm_cmpge_epu32_mask(a: __m128i, b: __m128i) -> __mmask8 {
+31135:pub fn _mm_mask_cmpge_epu32_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+31190:pub fn _mm_cmpeq_epu32_mask(a: __m128i, b: __m128i) -> __mmask8 {
+31201:pub fn _mm_mask_cmpeq_epu32_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+31256:pub fn _mm_cmpneq_epu32_mask(a: __m128i, b: __m128i) -> __mmask8 {
+31267:pub fn _mm_mask_cmpneq_epu32_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+31397:pub fn _mm_cmp_epu32_mask<const IMM3: _MM_CMPINT_ENUM>(a: __m128i, b: __m128i) -> __mmask8 {
+31424:pub fn _mm_mask_cmp_epu32_mask<const IMM3: _MM_CMPINT_ENUM>(
+31499:pub fn _mm_cmplt_epi32_mask(a: __m128i, b: __m128i) -> __mmask8 {
+31510:pub fn _mm_mask_cmplt_epi32_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+31565:pub fn _mm_cmpgt_epi32_mask(a: __m128i, b: __m128i) -> __mmask8 {
+31576:pub fn _mm_mask_cmpgt_epi32_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+31631:pub fn _mm_cmple_epi32_mask(a: __m128i, b: __m128i) -> __mmask8 {
+31642:pub fn _mm_mask_cmple_epi32_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+31697:pub fn _mm_cmpge_epi32_mask(a: __m128i, b: __m128i) -> __mmask8 {
+31708:pub fn _mm_mask_cmpge_epi32_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+31763:pub fn _mm_cmpeq_epi32_mask(a: __m128i, b: __m128i) -> __mmask8 {
+31774:pub fn _mm_mask_cmpeq_epi32_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+31829:pub fn _mm_cmpneq_epi32_mask(a: __m128i, b: __m128i) -> __mmask8 {
+31840:pub fn _mm_mask_cmpneq_epi32_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+31970:pub fn _mm_cmp_epi32_mask<const IMM3: _MM_CMPINT_ENUM>(a: __m128i, b: __m128i) -> __mmask8 {
+31997:pub fn _mm_mask_cmp_epi32_mask<const IMM3: _MM_CMPINT_ENUM>(
+32072:pub fn _mm_cmplt_epu64_mask(a: __m128i, b: __m128i) -> __mmask8 {
+32083:pub fn _mm_mask_cmplt_epu64_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+32138:pub fn _mm_cmpgt_epu64_mask(a: __m128i, b: __m128i) -> __mmask8 {
+32149:pub fn _mm_mask_cmpgt_epu64_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+32204:pub fn _mm_cmple_epu64_mask(a: __m128i, b: __m128i) -> __mmask8 {
+32215:pub fn _mm_mask_cmple_epu64_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+32270:pub fn _mm_cmpge_epu64_mask(a: __m128i, b: __m128i) -> __mmask8 {
+32281:pub fn _mm_mask_cmpge_epu64_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+32336:pub fn _mm_cmpeq_epu64_mask(a: __m128i, b: __m128i) -> __mmask8 {
+32347:pub fn _mm_mask_cmpeq_epu64_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+32402:pub fn _mm_cmpneq_epu64_mask(a: __m128i, b: __m128i) -> __mmask8 {
+32413:pub fn _mm_mask_cmpneq_epu64_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+32543:pub fn _mm_cmp_epu64_mask<const IMM3: _MM_CMPINT_ENUM>(a: __m128i, b: __m128i) -> __mmask8 {
+32570:pub fn _mm_mask_cmp_epu64_mask<const IMM3: _MM_CMPINT_ENUM>(
+32645:pub fn _mm_cmplt_epi64_mask(a: __m128i, b: __m128i) -> __mmask8 {
+32656:pub fn _mm_mask_cmplt_epi64_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+32711:pub fn _mm_cmpgt_epi64_mask(a: __m128i, b: __m128i) -> __mmask8 {
+32722:pub fn _mm_mask_cmpgt_epi64_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+32777:pub fn _mm_cmple_epi64_mask(a: __m128i, b: __m128i) -> __mmask8 {
+32788:pub fn _mm_mask_cmple_epi64_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+32843:pub fn _mm_cmpge_epi64_mask(a: __m128i, b: __m128i) -> __mmask8 {
+32854:pub fn _mm_mask_cmpge_epi64_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+32909:pub fn _mm_cmpeq_epi64_mask(a: __m128i, b: __m128i) -> __mmask8 {
+32920:pub fn _mm_mask_cmpeq_epi64_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+32975:pub fn _mm_cmpneq_epi64_mask(a: __m128i, b: __m128i) -> __mmask8 {
+32986:pub fn _mm_mask_cmpneq_epi64_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+33116:pub fn _mm_cmp_epi64_mask<const IMM3: _MM_CMPINT_ENUM>(a: __m128i, b: __m128i) -> __mmask8 {
+33143:pub fn _mm_mask_cmp_epi64_mask<const IMM3: _MM_CMPINT_ENUM>(
+33824:pub unsafe fn _mm_loadu_epi32(mem_addr: *const i32) -> __m128i {
+33857:pub unsafe fn _mm_mask_cvtepi32_storeu_epi16(mem_addr: *mut i16, k: __mmask8, a: __m128i) {
+33890:pub unsafe fn _mm_mask_cvtsepi32_storeu_epi16(mem_addr: *mut i16, k: __mmask8, a: __m128i) {
+33923:pub unsafe fn _mm_mask_cvtusepi32_storeu_epi16(mem_addr: *mut i16, k: __mmask8, a: __m128i) {
+33956:pub unsafe fn _mm_mask_cvtepi32_storeu_epi8(mem_addr: *mut i8, k: __mmask8, a: __m128i) {
+33989:pub unsafe fn _mm_mask_cvtsepi32_storeu_epi8(mem_addr: *mut i8, k: __mmask8, a: __m128i) {
+34022:pub unsafe fn _mm_mask_cvtusepi32_storeu_epi8(mem_addr: *mut i8, k: __mmask8, a: __m128i) {
+34055:pub unsafe fn _mm_mask_cvtepi64_storeu_epi16(mem_addr: *mut i16, k: __mmask8, a: __m128i) {
+34088:pub unsafe fn _mm_mask_cvtsepi64_storeu_epi16(mem_addr: *mut i16, k: __mmask8, a: __m128i) {
+34121:pub unsafe fn _mm_mask_cvtusepi64_storeu_epi16(mem_addr: *mut i16, k: __mmask8, a: __m128i) {
+34154:pub unsafe fn _mm_mask_cvtepi64_storeu_epi8(mem_addr: *mut i8, k: __mmask8, a: __m128i) {
+34187:pub unsafe fn _mm_mask_cvtsepi64_storeu_epi8(mem_addr: *mut i8, k: __mmask8, a: __m128i) {
+34220:pub unsafe fn _mm_mask_cvtusepi64_storeu_epi8(mem_addr: *mut i8, k: __mmask8, a: __m128i) {
+34253:pub unsafe fn _mm_mask_cvtepi64_storeu_epi32(mem_addr: *mut i32, k: __mmask8, a: __m128i) {
+34286:pub unsafe fn _mm_mask_cvtsepi64_storeu_epi32(mem_addr: *mut i32, k: __mmask8, a: __m128i) {
+34319:pub unsafe fn _mm_mask_cvtusepi64_storeu_epi32(mem_addr: *mut i32, k: __mmask8, a: __m128i) {
+34352:pub unsafe fn _mm_storeu_epi32(mem_addr: *mut i32, a: __m128i) {
+34385:pub unsafe fn _mm_loadu_epi64(mem_addr: *const i64) -> __m128i {
+34418:pub unsafe fn _mm_storeu_epi64(mem_addr: *mut i64, a: __m128i) {
+34562:pub unsafe fn _mm_load_epi32(mem_addr: *const i32) -> __m128i {
+34604:pub unsafe fn _mm_store_epi32(mem_addr: *mut i32, a: __m128i) {
+34646:pub unsafe fn _mm_load_epi64(mem_addr: *const i64) -> __m128i {
+34688:pub unsafe fn _mm_store_epi64(mem_addr: *mut i64, a: __m128i) {
+34973:pub unsafe fn _mm_mask_loadu_epi32(src: __m128i, k: __mmask8, mem_addr: *const i32) -> __m128i {
+34987:pub unsafe fn _mm_maskz_loadu_epi32(k: __mmask8, mem_addr: *const i32) -> __m128i {
+35000:pub unsafe fn _mm_mask_loadu_epi64(src: __m128i, k: __mmask8, mem_addr: *const i64) -> __m128i {
+35014:pub unsafe fn _mm_maskz_loadu_epi64(k: __mmask8, mem_addr: *const i64) -> __m128i {
+35027:pub unsafe fn _mm_mask_loadu_ps(src: __m128, k: __mmask8, mem_addr: *const f32) -> __m128 {
+35041:pub unsafe fn _mm_maskz_loadu_ps(k: __mmask8, mem_addr: *const f32) -> __m128 {
+35054:pub unsafe fn _mm_mask_loadu_pd(src: __m128d, k: __mmask8, mem_addr: *const f64) -> __m128d {
+35068:pub unsafe fn _mm_maskz_loadu_pd(k: __mmask8, mem_addr: *const f64) -> __m128d {
+35297:pub unsafe fn _mm_mask_load_epi32(src: __m128i, k: __mmask8, mem_addr: *const i32) -> __m128i {
+35311:pub unsafe fn _mm_maskz_load_epi32(k: __mmask8, mem_addr: *const i32) -> __m128i {
+35324:pub unsafe fn _mm_mask_load_epi64(src: __m128i, k: __mmask8, mem_addr: *const i64) -> __m128i {
+35338:pub unsafe fn _mm_maskz_load_epi64(k: __mmask8, mem_addr: *const i64) -> __m128i {
+35351:pub unsafe fn _mm_mask_load_ps(src: __m128, k: __mmask8, mem_addr: *const f32) -> __m128 {
+35365:pub unsafe fn _mm_maskz_load_ps(k: __mmask8, mem_addr: *const f32) -> __m128 {
+35378:pub unsafe fn _mm_mask_load_pd(src: __m128d, k: __mmask8, mem_addr: *const f64) -> __m128d {
+35392:pub unsafe fn _mm_maskz_load_pd(k: __mmask8, mem_addr: *const f64) -> __m128d {
+35406:pub unsafe fn _mm_mask_load_ss(src: __m128, k: __mmask8, mem_addr: *const f32) -> __m128 {
+35428:pub unsafe fn _mm_maskz_load_ss(k: __mmask8, mem_addr: *const f32) -> __m128 {
+35450:pub unsafe fn _mm_mask_load_sd(src: __m128d, k: __mmask8, mem_addr: *const f64) -> __m128d {
+35472:pub unsafe fn _mm_maskz_load_sd(k: __mmask8, mem_addr: *const f64) -> __m128d {
+35596:pub unsafe fn _mm_mask_storeu_epi32(mem_addr: *mut i32, mask: __mmask8, a: __m128i) {
+35609:pub unsafe fn _mm_mask_storeu_epi64(mem_addr: *mut i64, mask: __mmask8, a: __m128i) {
+35622:pub unsafe fn _mm_mask_storeu_ps(mem_addr: *mut f32, mask: __mmask8, a: __m128) {
+35635:pub unsafe fn _mm_mask_storeu_pd(mem_addr: *mut f64, mask: __mmask8, a: __m128d) {
+35752:pub unsafe fn _mm_mask_store_epi32(mem_addr: *mut i32, mask: __mmask8, a: __m128i) {
+35765:pub unsafe fn _mm_mask_store_epi64(mem_addr: *mut i64, mask: __mmask8, a: __m128i) {
+35778:pub unsafe fn _mm_mask_store_ps(mem_addr: *mut f32, mask: __mmask8, a: __m128) {
+35791:pub unsafe fn _mm_mask_store_pd(mem_addr: *mut f64, mask: __mmask8, a: __m128d) {
+35804:pub unsafe fn _mm_mask_store_ss(mem_addr: *mut f32, k: __mmask8, a: __m128) {
+35822:pub unsafe fn _mm_mask_store_sd(mem_addr: *mut f64, k: __mmask8, a: __m128d) {
+35891:pub unsafe fn _mm_mask_expandloadu_epi32(
+35906:pub unsafe fn _mm_maskz_expandloadu_epi32(k: __mmask8, mem_addr: *const i32) -> __m128i {
+35969:pub unsafe fn _mm_mask_expandloadu_epi64(
+35984:pub unsafe fn _mm_maskz_expandloadu_epi64(k: __mmask8, mem_addr: *const i64) -> __m128i {
+36043:pub unsafe fn _mm_mask_expandloadu_ps(src: __m128, k: __mmask8, mem_addr: *const f32) -> __m128 {
+36054:pub unsafe fn _mm_maskz_expandloadu_ps(k: __mmask8, mem_addr: *const f32) -> __m128 {
+36117:pub unsafe fn _mm_mask_expandloadu_pd(src: __m128d, k: __mmask8, mem_addr: *const f64) -> __m128d {
+36128:pub unsafe fn _mm_maskz_expandloadu_pd(k: __mmask8, mem_addr: *const f64) -> __m128d {
+36180:pub fn _mm_mask_move_ss(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+36198:pub fn _mm_maskz_move_ss(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+36215:pub fn _mm_mask_move_sd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+36233:pub fn _mm_maskz_move_sd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+36250:pub fn _mm_mask_add_ss(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+36270:pub fn _mm_maskz_add_ss(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+36289:pub fn _mm_mask_add_sd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+36309:pub fn _mm_maskz_add_sd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+36328:pub fn _mm_mask_sub_ss(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+36348:pub fn _mm_maskz_sub_ss(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+36367:pub fn _mm_mask_sub_sd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+36387:pub fn _mm_maskz_sub_sd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+36406:pub fn _mm_mask_mul_ss(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+36426:pub fn _mm_maskz_mul_ss(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+36445:pub fn _mm_mask_mul_sd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+36465:pub fn _mm_maskz_mul_sd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+36484:pub fn _mm_mask_div_ss(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+36504:pub fn _mm_maskz_div_ss(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+36523:pub fn _mm_mask_div_sd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+36543:pub fn _mm_maskz_div_sd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+36562:pub fn _mm_mask_max_ss(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+36581:pub fn _mm_maskz_max_ss(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+36600:pub fn _mm_mask_max_sd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+36619:pub fn _mm_maskz_max_sd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+36638:pub fn _mm_mask_min_ss(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+36657:pub fn _mm_maskz_min_ss(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+36676:pub fn _mm_mask_min_sd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+36695:pub fn _mm_maskz_min_sd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+36714:pub fn _mm_mask_sqrt_ss(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+36725:pub fn _mm_maskz_sqrt_ss(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+36736:pub fn _mm_mask_sqrt_sd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+36747:pub fn _mm_maskz_sqrt_sd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+36758:pub fn _mm_rsqrt14_ss(a: __m128, b: __m128) -> __m128 {
+36769:pub fn _mm_mask_rsqrt14_ss(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+36780:pub fn _mm_maskz_rsqrt14_ss(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+36791:pub fn _mm_rsqrt14_sd(a: __m128d, b: __m128d) -> __m128d {
+36802:pub fn _mm_mask_rsqrt14_sd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+36813:pub fn _mm_maskz_rsqrt14_sd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+36824:pub fn _mm_rcp14_ss(a: __m128, b: __m128) -> __m128 {
+36835:pub fn _mm_mask_rcp14_ss(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+36846:pub fn _mm_maskz_rcp14_ss(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+36857:pub fn _mm_rcp14_sd(a: __m128d, b: __m128d) -> __m128d {
+36868:pub fn _mm_mask_rcp14_sd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+36879:pub fn _mm_maskz_rcp14_sd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+36890:pub fn _mm_getexp_ss(a: __m128, b: __m128) -> __m128 {
+36909:pub fn _mm_mask_getexp_ss(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+36928:pub fn _mm_maskz_getexp_ss(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+36947:pub fn _mm_getexp_sd(a: __m128d, b: __m128d) -> __m128d {
+36966:pub fn _mm_mask_getexp_sd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+36985:pub fn _mm_maskz_getexp_sd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+37015:pub fn _mm_getmant_ss<const NORM: _MM_MANTISSA_NORM_ENUM, const SIGN: _MM_MANTISSA_SIGN_ENUM>(
+37054:pub fn _mm_mask_getmant_ss<
+37092:pub fn _mm_maskz_getmant_ss<
+37135:pub fn _mm_getmant_sd<const NORM: _MM_MANTISSA_NORM_ENUM, const SIGN: _MM_MANTISSA_SIGN_ENUM>(
+37174:pub fn _mm_mask_getmant_sd<
+37212:pub fn _mm_maskz_getmant_sd<
+37251:pub fn _mm_roundscale_ss<const IMM8: i32>(a: __m128, b: __m128) -> __m128 {
+37282:pub fn _mm_mask_roundscale_ss<const IMM8: i32>(
+37312:pub fn _mm_maskz_roundscale_ss<const IMM8: i32>(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+37336:pub fn _mm_roundscale_sd<const IMM8: i32>(a: __m128d, b: __m128d) -> __m128d {
+37367:pub fn _mm_mask_roundscale_sd<const IMM8: i32>(
+37397:pub fn _mm_maskz_roundscale_sd<const IMM8: i32>(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+37414:pub fn _mm_scalef_ss(a: __m128, b: __m128) -> __m128 {
+37435:pub fn _mm_mask_scalef_ss(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+37451:pub fn _mm_maskz_scalef_ss(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+37470:pub fn _mm_scalef_sd(a: __m128d, b: __m128d) -> __m128d {
+37489:pub fn _mm_mask_scalef_sd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+37508:pub fn _mm_maskz_scalef_sd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+37527:pub fn _mm_mask_fmadd_ss(a: __m128, k: __mmask8, b: __m128, c: __m128) -> __m128 {
+37546:pub fn _mm_maskz_fmadd_ss(k: __mmask8, a: __m128, b: __m128, c: __m128) -> __m128 {
+37566:pub fn _mm_mask3_fmadd_ss(a: __m128, b: __m128, c: __m128, k: __mmask8) -> __m128 {
+37585:pub fn _mm_mask_fmadd_sd(a: __m128d, k: __mmask8, b: __m128d, c: __m128d) -> __m128d {
+37604:pub fn _mm_maskz_fmadd_sd(k: __mmask8, a: __m128d, b: __m128d, c: __m128d) -> __m128d {
+37624:pub fn _mm_mask3_fmadd_sd(a: __m128d, b: __m128d, c: __m128d, k: __mmask8) -> __m128d {
+37643:pub fn _mm_mask_fmsub_ss(a: __m128, k: __mmask8, b: __m128, c: __m128) -> __m128 {
+37663:pub fn _mm_maskz_fmsub_ss(k: __mmask8, a: __m128, b: __m128, c: __m128) -> __m128 {
+37684:pub fn _mm_mask3_fmsub_ss(a: __m128, b: __m128, c: __m128, k: __mmask8) -> __m128 {
+37704:pub fn _mm_mask_fmsub_sd(a: __m128d, k: __mmask8, b: __m128d, c: __m128d) -> __m128d {
+37724:pub fn _mm_maskz_fmsub_sd(k: __mmask8, a: __m128d, b: __m128d, c: __m128d) -> __m128d {
+37745:pub fn _mm_mask3_fmsub_sd(a: __m128d, b: __m128d, c: __m128d, k: __mmask8) -> __m128d {
+37765:pub fn _mm_mask_fnmadd_ss(a: __m128, k: __mmask8, b: __m128, c: __m128) -> __m128 {
+37785:pub fn _mm_maskz_fnmadd_ss(k: __mmask8, a: __m128, b: __m128, c: __m128) -> __m128 {
+37806:pub fn _mm_mask3_fnmadd_ss(a: __m128, b: __m128, c: __m128, k: __mmask8) -> __m128 {
+37826:pub fn _mm_mask_fnmadd_sd(a: __m128d, k: __mmask8, b: __m128d, c: __m128d) -> __m128d {
+37846:pub fn _mm_maskz_fnmadd_sd(k: __mmask8, a: __m128d, b: __m128d, c: __m128d) -> __m128d {
+37867:pub fn _mm_mask3_fnmadd_sd(a: __m128d, b: __m128d, c: __m128d, k: __mmask8) -> __m128d {
+37887:pub fn _mm_mask_fnmsub_ss(a: __m128, k: __mmask8, b: __m128, c: __m128) -> __m128 {
+37908:pub fn _mm_maskz_fnmsub_ss(k: __mmask8, a: __m128, b: __m128, c: __m128) -> __m128 {
+37930:pub fn _mm_mask3_fnmsub_ss(a: __m128, b: __m128, c: __m128, k: __mmask8) -> __m128 {
+37951:pub fn _mm_mask_fnmsub_sd(a: __m128d, k: __mmask8, b: __m128d, c: __m128d) -> __m128d {
+37972:pub fn _mm_maskz_fnmsub_sd(k: __mmask8, a: __m128d, b: __m128d, c: __m128d) -> __m128d {
+37994:pub fn _mm_mask3_fnmsub_sd(a: __m128d, b: __m128d, c: __m128d, k: __mmask8) -> __m128d {
+38023:pub fn _mm_add_round_ss<const ROUNDING: i32>(a: __m128, b: __m128) -> __m128 {
+38048:pub fn _mm_mask_add_round_ss<const ROUNDING: i32>(
+38079:pub fn _mm_maskz_add_round_ss<const ROUNDING: i32>(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+38104:pub fn _mm_add_round_sd<const ROUNDING: i32>(a: __m128d, b: __m128d) -> __m128d {
+38129:pub fn _mm_mask_add_round_sd<const ROUNDING: i32>(
+38160:pub fn _mm_maskz_add_round_sd<const ROUNDING: i32>(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+38185:pub fn _mm_sub_round_ss<const ROUNDING: i32>(a: __m128, b: __m128) -> __m128 {
+38210:pub fn _mm_mask_sub_round_ss<const ROUNDING: i32>(
+38241:pub fn _mm_maskz_sub_round_ss<const ROUNDING: i32>(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+38266:pub fn _mm_sub_round_sd<const ROUNDING: i32>(a: __m128d, b: __m128d) -> __m128d {
+38291:pub fn _mm_mask_sub_round_sd<const ROUNDING: i32>(
+38322:pub fn _mm_maskz_sub_round_sd<const ROUNDING: i32>(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+38347:pub fn _mm_mul_round_ss<const ROUNDING: i32>(a: __m128, b: __m128) -> __m128 {
+38372:pub fn _mm_mask_mul_round_ss<const ROUNDING: i32>(
+38403:pub fn _mm_maskz_mul_round_ss<const ROUNDING: i32>(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+38428:pub fn _mm_mul_round_sd<const ROUNDING: i32>(a: __m128d, b: __m128d) -> __m128d {
+38453:pub fn _mm_mask_mul_round_sd<const ROUNDING: i32>(
+38484:pub fn _mm_maskz_mul_round_sd<const ROUNDING: i32>(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+38509:pub fn _mm_div_round_ss<const ROUNDING: i32>(a: __m128, b: __m128) -> __m128 {
+38534:pub fn _mm_mask_div_round_ss<const ROUNDING: i32>(
+38565:pub fn _mm_maskz_div_round_ss<const ROUNDING: i32>(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+38590:pub fn _mm_div_round_sd<const ROUNDING: i32>(a: __m128d, b: __m128d) -> __m128d {
+38615:pub fn _mm_mask_div_round_sd<const ROUNDING: i32>(
+38646:pub fn _mm_maskz_div_round_sd<const ROUNDING: i32>(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+38665:pub fn _mm_max_round_ss<const SAE: i32>(a: __m128, b: __m128) -> __m128 {
+38684:pub fn _mm_mask_max_round_ss<const SAE: i32>(
+38709:pub fn _mm_maskz_max_round_ss<const SAE: i32>(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+38728:pub fn _mm_max_round_sd<const SAE: i32>(a: __m128d, b: __m128d) -> __m128d {
+38747:pub fn _mm_mask_max_round_sd<const SAE: i32>(
+38772:pub fn _mm_maskz_max_round_sd<const SAE: i32>(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+38791:pub fn _mm_min_round_ss<const SAE: i32>(a: __m128, b: __m128) -> __m128 {
+38810:pub fn _mm_mask_min_round_ss<const SAE: i32>(
+38835:pub fn _mm_maskz_min_round_ss<const SAE: i32>(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+38854:pub fn _mm_min_round_sd<const SAE: i32>(a: __m128d, b: __m128d) -> __m128d {
+38873:pub fn _mm_mask_min_round_sd<const SAE: i32>(
+38898:pub fn _mm_maskz_min_round_sd<const SAE: i32>(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+38923:pub fn _mm_sqrt_round_ss<const ROUNDING: i32>(a: __m128, b: __m128) -> __m128 {
+38945:pub fn _mm_mask_sqrt_round_ss<const ROUNDING: i32>(
+38972:pub fn _mm_maskz_sqrt_round_ss<const ROUNDING: i32>(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+38994:pub fn _mm_sqrt_round_sd<const ROUNDING: i32>(a: __m128d, b: __m128d) -> __m128d {
+39016:pub fn _mm_mask_sqrt_round_sd<const ROUNDING: i32>(
+39043:pub fn _mm_maskz_sqrt_round_sd<const ROUNDING: i32>(
+39063:pub fn _mm_getexp_round_ss<const SAE: i32>(a: __m128, b: __m128) -> __m128 {
+39082:pub fn _mm_mask_getexp_round_ss<const SAE: i32>(
+39107:pub fn _mm_maskz_getexp_round_ss<const SAE: i32>(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+39126:pub fn _mm_getexp_round_sd<const SAE: i32>(a: __m128d, b: __m128d) -> __m128d {
+39145:pub fn _mm_mask_getexp_round_sd<const SAE: i32>(
+39170:pub fn _mm_maskz_getexp_round_sd<const SAE: i32>(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+39198:pub fn _mm_getmant_round_ss<
+39235:pub fn _mm_mask_getmant_round_ss<
+39275:pub fn _mm_maskz_getmant_round_ss<
+39313:pub fn _mm_getmant_round_sd<
+39350:pub fn _mm_mask_getmant_round_sd<
+39390:pub fn _mm_maskz_getmant_round_sd<
+39425:pub fn _mm_roundscale_round_ss<const IMM8: i32, const SAE: i32>(a: __m128, b: __m128) -> __m128 {
+39451:pub fn _mm_mask_roundscale_round_ss<const IMM8: i32, const SAE: i32>(
+39483:pub fn _mm_maskz_roundscale_round_ss<const IMM8: i32, const SAE: i32>(
+39513:pub fn _mm_roundscale_round_sd<const IMM8: i32, const SAE: i32>(a: __m128d, b: __m128d) -> __m128d {
+39539:pub fn _mm_mask_roundscale_round_sd<const IMM8: i32, const SAE: i32>(
+39571:pub fn _mm_maskz_roundscale_round_sd<const IMM8: i32, const SAE: i32>(
+39601:pub fn _mm_scalef_round_ss<const ROUNDING: i32>(a: __m128, b: __m128) -> __m128 {
+39626:pub fn _mm_mask_scalef_round_ss<const ROUNDING: i32>(
+39657:pub fn _mm_maskz_scalef_round_ss<const ROUNDING: i32>(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+39682:pub fn _mm_scalef_round_sd<const ROUNDING: i32>(a: __m128d, b: __m128d) -> __m128d {
+39707:pub fn _mm_mask_scalef_round_sd<const ROUNDING: i32>(
+39737:pub fn _mm_maskz_scalef_round_sd<const ROUNDING: i32>(
+39766:pub fn _mm_fmadd_round_ss<const ROUNDING: i32>(a: __m128, b: __m128, c: __m128) -> __m128 {
+39792:pub fn _mm_mask_fmadd_round_ss<const ROUNDING: i32>(
+39825:pub fn _mm_maskz_fmadd_round_ss<const ROUNDING: i32>(
+39859:pub fn _mm_mask3_fmadd_round_ss<const ROUNDING: i32>(
+39892:pub fn _mm_fmadd_round_sd<const ROUNDING: i32>(a: __m128d, b: __m128d, c: __m128d) -> __m128d {
+39918:pub fn _mm_mask_fmadd_round_sd<const ROUNDING: i32>(
+39951:pub fn _mm_maskz_fmadd_round_sd<const ROUNDING: i32>(
+39985:pub fn _mm_mask3_fmadd_round_sd<const ROUNDING: i32>(
+40018:pub fn _mm_fmsub_round_ss<const ROUNDING: i32>(a: __m128, b: __m128, c: __m128) -> __m128 {
+40045:pub fn _mm_mask_fmsub_round_ss<const ROUNDING: i32>(
+40079:pub fn _mm_maskz_fmsub_round_ss<const ROUNDING: i32>(
+40114:pub fn _mm_mask3_fmsub_round_ss<const ROUNDING: i32>(
+40148:pub fn _mm_fmsub_round_sd<const ROUNDING: i32>(a: __m128d, b: __m128d, c: __m128d) -> __m128d {
+40175:pub fn _mm_mask_fmsub_round_sd<const ROUNDING: i32>(
+40209:pub fn _mm_maskz_fmsub_round_sd<const ROUNDING: i32>(
+40244:pub fn _mm_mask3_fmsub_round_sd<const ROUNDING: i32>(
+40278:pub fn _mm_fnmadd_round_ss<const ROUNDING: i32>(a: __m128, b: __m128, c: __m128) -> __m128 {
+40305:pub fn _mm_mask_fnmadd_round_ss<const ROUNDING: i32>(
+40339:pub fn _mm_maskz_fnmadd_round_ss<const ROUNDING: i32>(
+40374:pub fn _mm_mask3_fnmadd_round_ss<const ROUNDING: i32>(
+40408:pub fn _mm_fnmadd_round_sd<const ROUNDING: i32>(a: __m128d, b: __m128d, c: __m128d) -> __m128d {
+40435:pub fn _mm_mask_fnmadd_round_sd<const ROUNDING: i32>(
+40469:pub fn _mm_maskz_fnmadd_round_sd<const ROUNDING: i32>(
+40504:pub fn _mm_mask3_fnmadd_round_sd<const ROUNDING: i32>(
+40538:pub fn _mm_fnmsub_round_ss<const ROUNDING: i32>(a: __m128, b: __m128, c: __m128) -> __m128 {
+40566:pub fn _mm_mask_fnmsub_round_ss<const ROUNDING: i32>(
+40601:pub fn _mm_maskz_fnmsub_round_ss<const ROUNDING: i32>(
+40637:pub fn _mm_mask3_fnmsub_round_ss<const ROUNDING: i32>(
+40672:pub fn _mm_fnmsub_round_sd<const ROUNDING: i32>(a: __m128d, b: __m128d, c: __m128d) -> __m128d {
+40700:pub fn _mm_mask_fnmsub_round_sd<const ROUNDING: i32>(
+40735:pub fn _mm_maskz_fnmsub_round_sd<const ROUNDING: i32>(
+40771:pub fn _mm_mask3_fnmsub_round_sd<const ROUNDING: i32>(
+40799:pub fn _mm_fixupimm_ss<const IMM8: i32>(a: __m128, b: __m128, c: __m128i) -> __m128 {
+40820:pub fn _mm_mask_fixupimm_ss<const IMM8: i32>(
+40846:pub fn _mm_maskz_fixupimm_ss<const IMM8: i32>(
+40872:pub fn _mm_fixupimm_sd<const IMM8: i32>(a: __m128d, b: __m128d, c: __m128i) -> __m128d {
+40893:pub fn _mm_mask_fixupimm_sd<const IMM8: i32>(
+40919:pub fn _mm_maskz_fixupimm_sd<const IMM8: i32>(
+40946:pub fn _mm_fixupimm_round_ss<const IMM8: i32, const SAE: i32>(
+40973:pub fn _mm_mask_fixupimm_round_ss<const IMM8: i32, const SAE: i32>(
+41001:pub fn _mm_maskz_fixupimm_round_ss<const IMM8: i32, const SAE: i32>(
+41029:pub fn _mm_fixupimm_round_sd<const IMM8: i32, const SAE: i32>(
+41056:pub fn _mm_mask_fixupimm_round_sd<const IMM8: i32, const SAE: i32>(
+41084:pub fn _mm_maskz_fixupimm_round_sd<const IMM8: i32, const SAE: i32>(
+41110:pub fn _mm_mask_cvtss_sd(src: __m128d, k: __mmask8, a: __m128d, b: __m128) -> __m128d {
+41129:pub fn _mm_maskz_cvtss_sd(k: __mmask8, a: __m128d, b: __m128) -> __m128d {
+41148:pub fn _mm_mask_cvtsd_ss(src: __m128, k: __mmask8, a: __m128, b: __m128d) -> __m128 {
+41167:pub fn _mm_maskz_cvtsd_ss(k: __mmask8, a: __m128, b: __m128d) -> __m128 {
+41188:pub fn _mm_cvt_roundss_sd<const SAE: i32>(a: __m128d, b: __m128) -> __m128d {
+41207:pub fn _mm_mask_cvt_roundss_sd<const SAE: i32>(
+41232:pub fn _mm_maskz_cvt_roundss_sd<const SAE: i32>(k: __mmask8, a: __m128d, b: __m128) -> __m128d {
+41256:pub fn _mm_cvt_roundsd_ss<const ROUNDING: i32>(a: __m128, b: __m128d) -> __m128 {
+41280:pub fn _mm_mask_cvt_roundsd_ss<const ROUNDING: i32>(
+41310:pub fn _mm_maskz_cvt_roundsd_ss<const ROUNDING: i32>(k: __mmask8, a: __m128, b: __m128d) -> __m128 {
+41334:pub fn _mm_cvt_roundss_si32<const ROUNDING: i32>(a: __m128) -> i32 {
+41356:pub fn _mm_cvt_roundss_i32<const ROUNDING: i32>(a: __m128) -> i32 {
+41378:pub fn _mm_cvt_roundss_u32<const ROUNDING: i32>(a: __m128) -> u32 {
+41393:pub fn _mm_cvtss_i32(a: __m128) -> i32 {
+41404:pub fn _mm_cvtss_u32(a: __m128) -> u32 {
+41422:pub fn _mm_cvt_roundsd_si32<const ROUNDING: i32>(a: __m128d) -> i32 {
+41444:pub fn _mm_cvt_roundsd_i32<const ROUNDING: i32>(a: __m128d) -> i32 {
+41466:pub fn _mm_cvt_roundsd_u32<const ROUNDING: i32>(a: __m128d) -> u32 {
+41481:pub fn _mm_cvtsd_i32(a: __m128d) -> i32 {
+41492:pub fn _mm_cvtsd_u32(a: __m128d) -> u32 {
+41511:pub fn _mm_cvt_roundi32_ss<const ROUNDING: i32>(a: __m128, b: i32) -> __m128 {
+41535:pub fn _mm_cvt_roundsi32_ss<const ROUNDING: i32>(a: __m128, b: i32) -> __m128 {
+41558:pub fn _mm_cvt_roundu32_ss<const ROUNDING: i32>(a: __m128, b: u32) -> __m128 {
+41574:pub fn _mm_cvti32_ss(a: __m128, b: i32) -> __m128 {
+41588:pub fn _mm_cvti32_sd(a: __m128d, b: i32) -> __m128d {
+41604:pub fn _mm_cvtt_roundss_si32<const SAE: i32>(a: __m128) -> i32 {
+41621:pub fn _mm_cvtt_roundss_i32<const SAE: i32>(a: __m128) -> i32 {
+41638:pub fn _mm_cvtt_roundss_u32<const SAE: i32>(a: __m128) -> u32 {
+41653:pub fn _mm_cvttss_i32(a: __m128) -> i32 {
+41664:pub fn _mm_cvttss_u32(a: __m128) -> u32 {
+41677:pub fn _mm_cvtt_roundsd_si32<const SAE: i32>(a: __m128d) -> i32 {
+41694:pub fn _mm_cvtt_roundsd_i32<const SAE: i32>(a: __m128d) -> i32 {
+41711:pub fn _mm_cvtt_roundsd_u32<const SAE: i32>(a: __m128d) -> u32 {
+41726:pub fn _mm_cvttsd_i32(a: __m128d) -> i32 {
+41737:pub fn _mm_cvttsd_u32(a: __m128d) -> u32 {
+41748:pub fn _mm_cvtu32_ss(a: __m128, b: u32) -> __m128 {
+41762:pub fn _mm_cvtu32_sd(a: __m128d, b: u32) -> __m128d {
+41778:pub fn _mm_comi_round_ss<const IMM5: i32, const SAE: i32>(a: __m128, b: __m128) -> i32 {
+41797:pub fn _mm_comi_round_sd<const IMM5: i32, const SAE: i32>(a: __m128d, b: __m128d) -> i32 {
+}
+
+
+src/rust/library/stdarch/crates/core_arch/src/x86/avx512dq.rs
+18:pub fn _mm_mask_and_pd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+33:pub fn _mm_maskz_and_pd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+123:pub fn _mm_mask_and_ps(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+138:pub fn _mm_maskz_and_ps(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+235:pub fn _mm_mask_andnot_pd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+251:pub fn _mm_maskz_andnot_pd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+343:pub fn _mm_mask_andnot_ps(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+359:pub fn _mm_maskz_andnot_ps(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+453:pub fn _mm_mask_or_pd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+468:pub fn _mm_maskz_or_pd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+558:pub fn _mm_mask_or_ps(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+573:pub fn _mm_maskz_or_ps(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+670:pub fn _mm_mask_xor_pd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+685:pub fn _mm_maskz_xor_pd(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+775:pub fn _mm_mask_xor_ps(src: __m128, k: __mmask8, a: __m128, b: __m128) -> __m128 {
+790:pub fn _mm_maskz_xor_ps(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+1098:pub fn _mm_broadcast_i32x2(a: __m128i) -> __m128i {
+1114:pub fn _mm_mask_broadcast_i32x2(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+1129:pub fn _mm_maskz_broadcast_i32x2(k: __mmask8, a: __m128i) -> __m128i {
+2176:pub fn _mm_cvtepi64_pd(a: __m128i) -> __m128d {
+2189:pub fn _mm_mask_cvtepi64_pd(src: __m128d, k: __mmask8, a: __m128i) -> __m128d {
+2204:pub fn _mm_maskz_cvtepi64_pd(k: __mmask8, a: __m128i) -> __m128d {
+2379:pub fn _mm_cvtepi64_ps(a: __m128i) -> __m128 {
+2392:pub fn _mm_mask_cvtepi64_ps(src: __m128, k: __mmask8, a: __m128i) -> __m128 {
+2404:pub fn _mm_maskz_cvtepi64_ps(k: __mmask8, a: __m128i) -> __m128 {
+2576:pub fn _mm_cvtepu64_pd(a: __m128i) -> __m128d {
+2589:pub fn _mm_mask_cvtepu64_pd(src: __m128d, k: __mmask8, a: __m128i) -> __m128d {
+2604:pub fn _mm_maskz_cvtepu64_pd(k: __mmask8, a: __m128i) -> __m128d {
+2779:pub fn _mm_cvtepu64_ps(a: __m128i) -> __m128 {
+2792:pub fn _mm_mask_cvtepu64_ps(src: __m128, k: __mmask8, a: __m128i) -> __m128 {
+2804:pub fn _mm_maskz_cvtepu64_ps(k: __mmask8, a: __m128i) -> __m128 {
+2970:pub fn _mm_cvtpd_epi64(a: __m128d) -> __m128i {
+2983:pub fn _mm_mask_cvtpd_epi64(src: __m128i, k: __mmask8, a: __m128d) -> __m128i {
+2995:pub fn _mm_maskz_cvtpd_epi64(k: __mmask8, a: __m128d) -> __m128i {
+3156:pub fn _mm_cvtps_epi64(a: __m128) -> __m128i {
+3169:pub fn _mm_mask_cvtps_epi64(src: __m128i, k: __mmask8, a: __m128) -> __m128i {
+3181:pub fn _mm_maskz_cvtps_epi64(k: __mmask8, a: __m128) -> __m128i {
+3342:pub fn _mm_cvtpd_epu64(a: __m128d) -> __m128i {
+3355:pub fn _mm_mask_cvtpd_epu64(src: __m128i, k: __mmask8, a: __m128d) -> __m128i {
+3367:pub fn _mm_maskz_cvtpd_epu64(k: __mmask8, a: __m128d) -> __m128i {
+3528:pub fn _mm_cvtps_epu64(a: __m128) -> __m128i {
+3541:pub fn _mm_mask_cvtps_epu64(src: __m128i, k: __mmask8, a: __m128) -> __m128i {
+3553:pub fn _mm_maskz_cvtps_epu64(k: __mmask8, a: __m128) -> __m128i {
+3697:pub fn _mm_cvttpd_epi64(a: __m128d) -> __m128i {
+3710:pub fn _mm_mask_cvttpd_epi64(src: __m128i, k: __mmask8, a: __m128d) -> __m128i {
+3723:pub fn _mm_maskz_cvttpd_epi64(k: __mmask8, a: __m128d) -> __m128i {
+3869:pub fn _mm_cvttps_epi64(a: __m128) -> __m128i {
+3882:pub fn _mm_mask_cvttps_epi64(src: __m128i, k: __mmask8, a: __m128) -> __m128i {
+3895:pub fn _mm_maskz_cvttps_epi64(k: __mmask8, a: __m128) -> __m128i {
+4041:pub fn _mm_cvttpd_epu64(a: __m128d) -> __m128i {
+4054:pub fn _mm_mask_cvttpd_epu64(src: __m128i, k: __mmask8, a: __m128d) -> __m128i {
+4067:pub fn _mm_maskz_cvttpd_epu64(k: __mmask8, a: __m128d) -> __m128i {
+4213:pub fn _mm_cvttps_epu64(a: __m128) -> __m128i {
+4226:pub fn _mm_mask_cvttps_epu64(src: __m128i, k: __mmask8, a: __m128) -> __m128i {
+4239:pub fn _mm_maskz_cvttps_epu64(k: __mmask8, a: __m128) -> __m128i {
+4336:pub fn _mm_mullo_epi64(a: __m128i, b: __m128i) -> __m128i {
+4349:pub fn _mm_mask_mullo_epi64(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+4365:pub fn _mm_maskz_mullo_epi64(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+4716:pub fn _mm_movepi32_mask(a: __m128i) -> __mmask8 {
+4752:pub fn _mm_movepi64_mask(a: __m128i) -> __mmask8 {
+4789:pub fn _mm_movm_epi32(k: __mmask8) -> __m128i {
+4828:pub fn _mm_movm_epi64(k: __mmask8) -> __m128i {
+4954:pub fn _mm_range_pd<const IMM8: i32>(a: __m128d, b: __m128d) -> __m128d {
+4973:pub fn _mm_mask_range_pd<const IMM8: i32>(
+5005:pub fn _mm_maskz_range_pd<const IMM8: i32>(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+5240:pub fn _mm_range_ps<const IMM8: i32>(a: __m128, b: __m128) -> __m128 {
+5259:pub fn _mm_mask_range_ps<const IMM8: i32>(
+5291:pub fn _mm_maskz_range_ps<const IMM8: i32>(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+5450:pub fn _mm_range_round_sd<const IMM8: i32, const SAE: i32>(a: __m128d, b: __m128d) -> __m128d {
+5472:pub fn _mm_mask_range_round_sd<const IMM8: i32, const SAE: i32>(
+5508:pub fn _mm_maskz_range_round_sd<const IMM8: i32, const SAE: i32>(
+5533:pub fn _mm_mask_range_sd<const IMM8: i32>(
+5567:pub fn _mm_maskz_range_sd<const IMM8: i32>(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+5587:pub fn _mm_range_round_ss<const IMM8: i32, const SAE: i32>(a: __m128, b: __m128) -> __m128 {
+5609:pub fn _mm_mask_range_round_ss<const IMM8: i32, const SAE: i32>(
+5645:pub fn _mm_maskz_range_round_ss<const IMM8: i32, const SAE: i32>(
+5670:pub fn _mm_mask_range_ss<const IMM8: i32>(
+5704:pub fn _mm_maskz_range_ss<const IMM8: i32>(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+5810:pub fn _mm_reduce_pd<const IMM8: i32>(a: __m128d) -> __m128d {
+5832:pub fn _mm_mask_reduce_pd<const IMM8: i32>(src: __m128d, k: __mmask8, a: __m128d) -> __m128d {
+5856:pub fn _mm_maskz_reduce_pd<const IMM8: i32>(k: __mmask8, a: __m128d) -> __m128d {
+6100:pub fn _mm_reduce_ps<const IMM8: i32>(a: __m128) -> __m128 {
+6122:pub fn _mm_mask_reduce_ps<const IMM8: i32>(src: __m128, k: __mmask8, a: __m128) -> __m128 {
+6146:pub fn _mm_maskz_reduce_ps<const IMM8: i32>(k: __mmask8, a: __m128) -> __m128 {
+6310:pub fn _mm_reduce_round_sd<const IMM8: i32, const SAE: i32>(a: __m128d, b: __m128d) -> __m128d {
+6336:pub fn _mm_mask_reduce_round_sd<const IMM8: i32, const SAE: i32>(
+6376:pub fn _mm_maskz_reduce_round_sd<const IMM8: i32, const SAE: i32>(
+6404:pub fn _mm_reduce_sd<const IMM8: i32>(a: __m128d, b: __m128d) -> __m128d {
+6427:pub fn _mm_mask_reduce_sd<const IMM8: i32>(
+6464:pub fn _mm_maskz_reduce_sd<const IMM8: i32>(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
+6489:pub fn _mm_reduce_round_ss<const IMM8: i32, const SAE: i32>(a: __m128, b: __m128) -> __m128 {
+6515:pub fn _mm_mask_reduce_round_ss<const IMM8: i32, const SAE: i32>(
+6555:pub fn _mm_maskz_reduce_round_ss<const IMM8: i32, const SAE: i32>(
+6583:pub fn _mm_reduce_ss<const IMM8: i32>(a: __m128, b: __m128) -> __m128 {
+6606:pub fn _mm_mask_reduce_ss<const IMM8: i32>(
+6643:pub fn _mm_maskz_reduce_ss<const IMM8: i32>(k: __mmask8, a: __m128, b: __m128) -> __m128 {
+6669:pub fn _mm_fpclass_pd_mask<const IMM8: i32>(a: __m128d) -> __mmask8 {
+6694:pub fn _mm_mask_fpclass_pd_mask<const IMM8: i32>(k1: __mmask8, a: __m128d) -> __mmask8 {
+6822:pub fn _mm_fpclass_ps_mask<const IMM8: i32>(a: __m128) -> __mmask8 {
+6847:pub fn _mm_mask_fpclass_ps_mask<const IMM8: i32>(k1: __mmask8, a: __m128) -> __mmask8 {
+6975:pub fn _mm_fpclass_sd_mask<const IMM8: i32>(a: __m128d) -> __mmask8 {
+7000:pub fn _mm_mask_fpclass_sd_mask<const IMM8: i32>(k1: __mmask8, a: __m128d) -> __mmask8 {
+7026:pub fn _mm_fpclass_ss_mask<const IMM8: i32>(a: __m128) -> __mmask8 {
+7051:pub fn _mm_mask_fpclass_ss_mask<const IMM8: i32>(k1: __mmask8, a: __m128) -> __mmask8 {
+
+
+
+src/rust/library/stdarch/crates/core_arch/src/x86/avx512bw.rs
+88:pub fn _mm_mask_abs_epi16(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+102:pub fn _mm_maskz_abs_epi16(k: __mmask8, a: __m128i) -> __m128i {
+187:pub fn _mm_mask_abs_epi8(src: __m128i, k: __mmask16, a: __m128i) -> __m128i {
+201:pub fn _mm_maskz_abs_epi8(k: __mmask16, a: __m128i) -> __m128i {
+282:pub fn _mm_mask_add_epi16(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+296:pub fn _mm_maskz_add_epi16(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+377:pub fn _mm_mask_add_epi8(src: __m128i, k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+391:pub fn _mm_maskz_add_epi8(k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+472:pub fn _mm_mask_adds_epu16(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+486:pub fn _mm_maskz_adds_epu16(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+567:pub fn _mm_mask_adds_epu8(src: __m128i, k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+581:pub fn _mm_maskz_adds_epu8(k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+662:pub fn _mm_mask_adds_epi16(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+676:pub fn _mm_maskz_adds_epi16(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+757:pub fn _mm_mask_adds_epi8(src: __m128i, k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+771:pub fn _mm_maskz_adds_epi8(k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+852:pub fn _mm_mask_sub_epi16(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+866:pub fn _mm_maskz_sub_epi16(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+947:pub fn _mm_mask_sub_epi8(src: __m128i, k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+961:pub fn _mm_maskz_sub_epi8(k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+1042:pub fn _mm_mask_subs_epu16(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+1056:pub fn _mm_maskz_subs_epu16(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+1137:pub fn _mm_mask_subs_epu8(src: __m128i, k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+1151:pub fn _mm_maskz_subs_epu8(k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+1232:pub fn _mm_mask_subs_epi16(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+1246:pub fn _mm_maskz_subs_epi16(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+1327:pub fn _mm_mask_subs_epi8(src: __m128i, k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+1341:pub fn _mm_maskz_subs_epi8(k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+1427:pub fn _mm_mask_mulhi_epu16(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+1441:pub fn _mm_maskz_mulhi_epu16(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+1527:pub fn _mm_mask_mulhi_epi16(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+1541:pub fn _mm_maskz_mulhi_epi16(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+1622:pub fn _mm_mask_mulhrs_epi16(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+1636:pub fn _mm_maskz_mulhrs_epi16(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+1717:pub fn _mm_mask_mullo_epi16(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+1731:pub fn _mm_maskz_mullo_epi16(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+1816:pub fn _mm_mask_max_epu16(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+1830:pub fn _mm_maskz_max_epu16(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+1915:pub fn _mm_mask_max_epu8(src: __m128i, k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+1929:pub fn _mm_maskz_max_epu8(k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+2014:pub fn _mm_mask_max_epi16(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+2028:pub fn _mm_maskz_max_epi16(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+2113:pub fn _mm_mask_max_epi8(src: __m128i, k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+2127:pub fn _mm_maskz_max_epi8(k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+2212:pub fn _mm_mask_min_epu16(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+2226:pub fn _mm_maskz_min_epu16(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+2311:pub fn _mm_mask_min_epu8(src: __m128i, k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+2325:pub fn _mm_maskz_min_epu8(k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+2410:pub fn _mm_mask_min_epi16(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+2424:pub fn _mm_maskz_min_epi16(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+2509:pub fn _mm_mask_min_epi8(src: __m128i, k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+2523:pub fn _mm_maskz_min_epi8(k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+2581:pub fn _mm_cmplt_epu16_mask(a: __m128i, b: __m128i) -> __mmask8 {
+2592:pub fn _mm_mask_cmplt_epu16_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+2647:pub fn _mm_cmplt_epu8_mask(a: __m128i, b: __m128i) -> __mmask16 {
+2658:pub fn _mm_mask_cmplt_epu8_mask(k1: __mmask16, a: __m128i, b: __m128i) -> __mmask16 {
+2713:pub fn _mm_cmplt_epi16_mask(a: __m128i, b: __m128i) -> __mmask8 {
+2724:pub fn _mm_mask_cmplt_epi16_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+2779:pub fn _mm_cmplt_epi8_mask(a: __m128i, b: __m128i) -> __mmask16 {
+2790:pub fn _mm_mask_cmplt_epi8_mask(k1: __mmask16, a: __m128i, b: __m128i) -> __mmask16 {
+2845:pub fn _mm_cmpgt_epu16_mask(a: __m128i, b: __m128i) -> __mmask8 {
+2856:pub fn _mm_mask_cmpgt_epu16_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+2911:pub fn _mm_cmpgt_epu8_mask(a: __m128i, b: __m128i) -> __mmask16 {
+2922:pub fn _mm_mask_cmpgt_epu8_mask(k1: __mmask16, a: __m128i, b: __m128i) -> __mmask16 {
+2977:pub fn _mm_cmpgt_epi16_mask(a: __m128i, b: __m128i) -> __mmask8 {
+2988:pub fn _mm_mask_cmpgt_epi16_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+3043:pub fn _mm_cmpgt_epi8_mask(a: __m128i, b: __m128i) -> __mmask16 {
+3054:pub fn _mm_mask_cmpgt_epi8_mask(k1: __mmask16, a: __m128i, b: __m128i) -> __mmask16 {
+3109:pub fn _mm_cmple_epu16_mask(a: __m128i, b: __m128i) -> __mmask8 {
+3120:pub fn _mm_mask_cmple_epu16_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+3175:pub fn _mm_cmple_epu8_mask(a: __m128i, b: __m128i) -> __mmask16 {
+3186:pub fn _mm_mask_cmple_epu8_mask(k1: __mmask16, a: __m128i, b: __m128i) -> __mmask16 {
+3241:pub fn _mm_cmple_epi16_mask(a: __m128i, b: __m128i) -> __mmask8 {
+3252:pub fn _mm_mask_cmple_epi16_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+3307:pub fn _mm_cmple_epi8_mask(a: __m128i, b: __m128i) -> __mmask16 {
+3318:pub fn _mm_mask_cmple_epi8_mask(k1: __mmask16, a: __m128i, b: __m128i) -> __mmask16 {
+3373:pub fn _mm_cmpge_epu16_mask(a: __m128i, b: __m128i) -> __mmask8 {
+3384:pub fn _mm_mask_cmpge_epu16_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+3439:pub fn _mm_cmpge_epu8_mask(a: __m128i, b: __m128i) -> __mmask16 {
+3450:pub fn _mm_mask_cmpge_epu8_mask(k1: __mmask16, a: __m128i, b: __m128i) -> __mmask16 {
+3505:pub fn _mm_cmpge_epi16_mask(a: __m128i, b: __m128i) -> __mmask8 {
+3516:pub fn _mm_mask_cmpge_epi16_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+3571:pub fn _mm_cmpge_epi8_mask(a: __m128i, b: __m128i) -> __mmask16 {
+3582:pub fn _mm_mask_cmpge_epi8_mask(k1: __mmask16, a: __m128i, b: __m128i) -> __mmask16 {
+3637:pub fn _mm_cmpeq_epu16_mask(a: __m128i, b: __m128i) -> __mmask8 {
+3648:pub fn _mm_mask_cmpeq_epu16_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+3703:pub fn _mm_cmpeq_epu8_mask(a: __m128i, b: __m128i) -> __mmask16 {
+3714:pub fn _mm_mask_cmpeq_epu8_mask(k1: __mmask16, a: __m128i, b: __m128i) -> __mmask16 {
+3769:pub fn _mm_cmpeq_epi16_mask(a: __m128i, b: __m128i) -> __mmask8 {
+3780:pub fn _mm_mask_cmpeq_epi16_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+3835:pub fn _mm_cmpeq_epi8_mask(a: __m128i, b: __m128i) -> __mmask16 {
+3846:pub fn _mm_mask_cmpeq_epi8_mask(k1: __mmask16, a: __m128i, b: __m128i) -> __mmask16 {
+3901:pub fn _mm_cmpneq_epu16_mask(a: __m128i, b: __m128i) -> __mmask8 {
+3912:pub fn _mm_mask_cmpneq_epu16_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+3967:pub fn _mm_cmpneq_epu8_mask(a: __m128i, b: __m128i) -> __mmask16 {
+3978:pub fn _mm_mask_cmpneq_epu8_mask(k1: __mmask16, a: __m128i, b: __m128i) -> __mmask16 {
+4033:pub fn _mm_cmpneq_epi16_mask(a: __m128i, b: __m128i) -> __mmask8 {
+4044:pub fn _mm_mask_cmpneq_epi16_mask(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+4099:pub fn _mm_cmpneq_epi8_mask(a: __m128i, b: __m128i) -> __mmask16 {
+4110:pub fn _mm_mask_cmpneq_epi8_mask(k1: __mmask16, a: __m128i, b: __m128i) -> __mmask16 {
+4240:pub fn _mm_cmp_epu16_mask<const IMM8: i32>(a: __m128i, b: __m128i) -> __mmask8 {
+4267:pub fn _mm_mask_cmp_epu16_mask<const IMM8: i32>(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+4413:pub fn _mm_cmp_epu8_mask<const IMM8: i32>(a: __m128i, b: __m128i) -> __mmask16 {
+4440:pub fn _mm_mask_cmp_epu8_mask<const IMM8: i32>(k1: __mmask16, a: __m128i, b: __m128i) -> __mmask16 {
+4586:pub fn _mm_cmp_epi16_mask<const IMM8: i32>(a: __m128i, b: __m128i) -> __mmask8 {
+4613:pub fn _mm_mask_cmp_epi16_mask<const IMM8: i32>(k1: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+4759:pub fn _mm_cmp_epi8_mask<const IMM8: i32>(a: __m128i, b: __m128i) -> __mmask16 {
+4786:pub fn _mm_mask_cmp_epi8_mask<const IMM8: i32>(k1: __mmask16, a: __m128i, b: __m128i) -> __mmask16 {
+4832:pub fn _mm_reduce_add_epi16(a: __m128i) -> i16 {
+4842:pub fn _mm_mask_reduce_add_epi16(k: __mmask8, a: __m128i) -> i16 {
+4872:pub fn _mm_reduce_add_epi8(a: __m128i) -> i8 {
+4882:pub fn _mm_mask_reduce_add_epi8(k: __mmask16, a: __m128i) -> i8 {
+4918:pub fn _mm_reduce_and_epi16(a: __m128i) -> i16 {
+4928:pub fn _mm_mask_reduce_and_epi16(k: __mmask8, a: __m128i) -> i16 {
+4970:pub fn _mm_reduce_and_epi8(a: __m128i) -> i8 {
+4980:pub fn _mm_mask_reduce_and_epi8(k: __mmask16, a: __m128i) -> i8 {
+5016:pub fn _mm_reduce_max_epi16(a: __m128i) -> i16 {
+5026:pub fn _mm_mask_reduce_max_epi16(k: __mmask8, a: __m128i) -> i16 {
+5056:pub fn _mm_reduce_max_epi8(a: __m128i) -> i8 {
+5066:pub fn _mm_mask_reduce_max_epi8(k: __mmask16, a: __m128i) -> i8 {
+5096:pub fn _mm_reduce_max_epu16(a: __m128i) -> u16 {
+5106:pub fn _mm_mask_reduce_max_epu16(k: __mmask8, a: __m128i) -> u16 {
+5136:pub fn _mm_reduce_max_epu8(a: __m128i) -> u8 {
+5146:pub fn _mm_mask_reduce_max_epu8(k: __mmask16, a: __m128i) -> u8 {
+5176:pub fn _mm_reduce_min_epi16(a: __m128i) -> i16 {
+5186:pub fn _mm_mask_reduce_min_epi16(k: __mmask8, a: __m128i) -> i16 {
+5216:pub fn _mm_reduce_min_epi8(a: __m128i) -> i8 {
+5226:pub fn _mm_mask_reduce_min_epi8(k: __mmask16, a: __m128i) -> i8 {
+5256:pub fn _mm_reduce_min_epu16(a: __m128i) -> u16 {
+5266:pub fn _mm_mask_reduce_min_epu16(k: __mmask8, a: __m128i) -> u16 {
+5296:pub fn _mm_reduce_min_epu8(a: __m128i) -> u8 {
+5306:pub fn _mm_mask_reduce_min_epu8(k: __mmask16, a: __m128i) -> u8 {
+5336:pub fn _mm_reduce_mul_epi16(a: __m128i) -> i16 {
+5346:pub fn _mm_mask_reduce_mul_epi16(k: __mmask8, a: __m128i) -> i16 {
+5376:pub fn _mm_reduce_mul_epi8(a: __m128i) -> i8 {
+5386:pub fn _mm_mask_reduce_mul_epi8(k: __mmask16, a: __m128i) -> i8 {
+5416:pub fn _mm_reduce_or_epi16(a: __m128i) -> i16 {
+5426:pub fn _mm_mask_reduce_or_epi16(k: __mmask8, a: __m128i) -> i16 {
+5456:pub fn _mm_reduce_or_epi8(a: __m128i) -> i8 {
+5466:pub fn _mm_mask_reduce_or_epi8(k: __mmask16, a: __m128i) -> i8 {
+5499:pub unsafe fn _mm_loadu_epi16(mem_addr: *const i16) -> __m128i {
+5532:pub unsafe fn _mm_loadu_epi8(mem_addr: *const i8) -> __m128i {
+5565:pub unsafe fn _mm_storeu_epi16(mem_addr: *mut i16, a: __m128i) {
+5598:pub unsafe fn _mm_storeu_epi8(mem_addr: *mut i8, a: __m128i) {
+5719:pub unsafe fn _mm_mask_loadu_epi16(src: __m128i, k: __mmask8, mem_addr: *const i16) -> __m128i {
+5733:pub unsafe fn _mm_maskz_loadu_epi16(k: __mmask8, mem_addr: *const i16) -> __m128i {
+5746:pub unsafe fn _mm_mask_loadu_epi8(src: __m128i, k: __mmask16, mem_addr: *const i8) -> __m128i {
+5760:pub unsafe fn _mm_maskz_loadu_epi8(k: __mmask16, mem_addr: *const i8) -> __m128i {
+5824:pub unsafe fn _mm_mask_storeu_epi16(mem_addr: *mut i16, mask: __mmask8, a: __m128i) {
+5837:pub unsafe fn _mm_mask_storeu_epi8(mem_addr: *mut i8, mask: __mmask16, a: __m128i) {
+5928:pub fn _mm_mask_madd_epi16(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+5942:pub fn _mm_maskz_madd_epi16(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+6023:pub fn _mm_mask_maddubs_epi16(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+6037:pub fn _mm_maskz_maddubs_epi16(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+6118:pub fn _mm_mask_packs_epi32(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+6132:pub fn _mm_maskz_packs_epi32(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+6213:pub fn _mm_mask_packs_epi16(src: __m128i, k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+6227:pub fn _mm_maskz_packs_epi16(k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+6308:pub fn _mm_mask_packus_epi32(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+6322:pub fn _mm_maskz_packus_epi32(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+6403:pub fn _mm_mask_packus_epi16(src: __m128i, k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+6417:pub fn _mm_maskz_packus_epi16(k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+6503:pub fn _mm_mask_avg_epu16(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+6517:pub fn _mm_maskz_avg_epu16(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+6603:pub fn _mm_mask_avg_epu8(src: __m128i, k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+6617:pub fn _mm_maskz_avg_epu8(k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+6698:pub fn _mm_mask_sll_epi16(src: __m128i, k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+6712:pub fn _mm_maskz_sll_epi16(k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+6826:pub fn _mm_mask_slli_epi16<const IMM8: u32>(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+6846:pub fn _mm_maskz_slli_epi16<const IMM8: u32>(k: __mmask8, a: __m128i) -> __m128i {
+6953:pub fn _mm_sllv_epi16(a: __m128i, count: __m128i) -> __m128i {
+6969:pub fn _mm_mask_sllv_epi16(src: __m128i, k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+6983:pub fn _mm_maskz_sllv_epi16(k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+7064:pub fn _mm_mask_srl_epi16(src: __m128i, k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+7078:pub fn _mm_maskz_srl_epi16(k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+7185:pub fn _mm_mask_srli_epi16<const IMM8: i32>(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+7201:pub fn _mm_maskz_srli_epi16<const IMM8: i32>(k: __mmask8, a: __m128i) -> __m128i {
+7304:pub fn _mm_srlv_epi16(a: __m128i, count: __m128i) -> __m128i {
+7320:pub fn _mm_mask_srlv_epi16(src: __m128i, k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+7334:pub fn _mm_maskz_srlv_epi16(k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+7415:pub fn _mm_mask_sra_epi16(src: __m128i, k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+7429:pub fn _mm_maskz_sra_epi16(k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+7523:pub fn _mm_mask_srai_epi16<const IMM8: u32>(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+7539:pub fn _mm_maskz_srai_epi16<const IMM8: u32>(k: __mmask8, a: __m128i) -> __m128i {
+7642:pub fn _mm_srav_epi16(a: __m128i, count: __m128i) -> __m128i {
+7658:pub fn _mm_mask_srav_epi16(src: __m128i, k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+7672:pub fn _mm_maskz_srav_epi16(k: __mmask8, a: __m128i, count: __m128i) -> __m128i {
+7822:pub fn _mm_permutex2var_epi16(a: __m128i, idx: __m128i, b: __m128i) -> __m128i {
+7833:pub fn _mm_mask_permutex2var_epi16(a: __m128i, k: __mmask8, idx: __m128i, b: __m128i) -> __m128i {
+7847:pub fn _mm_maskz_permutex2var_epi16(k: __mmask8, a: __m128i, idx: __m128i, b: __m128i) -> __m128i {
+7861:pub fn _mm_mask2_permutex2var_epi16(a: __m128i, idx: __m128i, k: __mmask8, b: __m128i) -> __m128i {
+7963:pub fn _mm_permutexvar_epi16(idx: __m128i, a: __m128i) -> __m128i {
+7974:pub fn _mm_mask_permutexvar_epi16(src: __m128i, k: __mmask8, idx: __m128i, a: __m128i) -> __m128i {
+7988:pub fn _mm_maskz_permutexvar_epi16(k: __mmask8, idx: __m128i, a: __m128i) -> __m128i {
+8024:pub fn _mm_mask_blend_epi16(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+8057:pub fn _mm_mask_blend_epi8(k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+8146:pub fn _mm_mask_broadcastw_epi16(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+8160:pub fn _mm_maskz_broadcastw_epi16(k: __mmask8, a: __m128i) -> __m128i {
+8253:pub fn _mm_mask_broadcastb_epi8(src: __m128i, k: __mmask16, a: __m128i) -> __m128i {
+8267:pub fn _mm_maskz_broadcastb_epi8(k: __mmask16, a: __m128i) -> __m128i {
+8367:pub fn _mm_mask_unpackhi_epi16(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+8381:pub fn _mm_maskz_unpackhi_epi16(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+8489:pub fn _mm_mask_unpackhi_epi8(src: __m128i, k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+8503:pub fn _mm_maskz_unpackhi_epi8(k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+8603:pub fn _mm_mask_unpacklo_epi16(src: __m128i, k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+8617:pub fn _mm_maskz_unpacklo_epi16(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+8725:pub fn _mm_mask_unpacklo_epi8(src: __m128i, k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+8739:pub fn _mm_maskz_unpacklo_epi8(k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+8809:pub fn _mm_mask_mov_epi16(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+8823:pub fn _mm_maskz_mov_epi16(k: __mmask8, a: __m128i) -> __m128i {
+8893:pub fn _mm_mask_mov_epi8(src: __m128i, k: __mmask16, a: __m128i) -> __m128i {
+8907:pub fn _mm_maskz_mov_epi8(k: __mmask16, a: __m128i) -> __m128i {
+8977:pub fn _mm_mask_set1_epi16(src: __m128i, k: __mmask8, a: i16) -> __m128i {
+8991:pub fn _mm_maskz_set1_epi16(k: __mmask8, a: i16) -> __m128i {
+9061:pub fn _mm_mask_set1_epi8(src: __m128i, k: __mmask16, a: i8) -> __m128i {
+9075:pub fn _mm_maskz_set1_epi8(k: __mmask16, a: i8) -> __m128i {
+9216:pub fn _mm_mask_shufflelo_epi16<const IMM8: i32>(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+9232:pub fn _mm_maskz_shufflelo_epi16<const IMM8: i32>(k: __mmask8, a: __m128i) -> __m128i {
+9374:pub fn _mm_mask_shufflehi_epi16<const IMM8: i32>(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+9390:pub fn _mm_maskz_shufflehi_epi16<const IMM8: i32>(k: __mmask8, a: __m128i) -> __m128i {
+9472:pub fn _mm_mask_shuffle_epi8(src: __m128i, k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+9486:pub fn _mm_maskz_shuffle_epi8(k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+9552:pub fn _mm_test_epi16_mask(a: __m128i, b: __m128i) -> __mmask8 {
+9565:pub fn _mm_mask_test_epi16_mask(k: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+9630:pub fn _mm_test_epi8_mask(a: __m128i, b: __m128i) -> __mmask16 {
+9643:pub fn _mm_mask_test_epi8_mask(k: __mmask16, a: __m128i, b: __m128i) -> __mmask16 {
+9708:pub fn _mm_testn_epi16_mask(a: __m128i, b: __m128i) -> __mmask8 {
+9721:pub fn _mm_mask_testn_epi16_mask(k: __mmask8, a: __m128i, b: __m128i) -> __mmask8 {
+9786:pub fn _mm_testn_epi8_mask(a: __m128i, b: __m128i) -> __mmask16 {
+9799:pub fn _mm_mask_testn_epi8_mask(k: __mmask16, a: __m128i, b: __m128i) -> __mmask16 {
+9986:pub fn _mm_dbsad_epu8<const IMM8: i32>(a: __m128i, b: __m128i) -> __m128i {
+10004:pub fn _mm_mask_dbsad_epu8<const IMM8: i32>(
+10027:pub fn _mm_maskz_dbsad_epu8<const IMM8: i32>(k: __mmask8, a: __m128i, b: __m128i) -> __m128i {
+10070:pub fn _mm_movepi16_mask(a: __m128i) -> __mmask8 {
+10111:pub fn _mm_movepi8_mask(a: __m128i) -> __mmask16 {
+10188:pub fn _mm_movm_epi16(k: __mmask8) -> __m128i {
+10252:pub fn _mm_movm_epi8(k: __mmask16) -> __m128i {
+10718:pub fn _mm_cvtepi16_epi8(a: __m128i) -> __m128i {
+10737:pub fn _mm_mask_cvtepi16_epi8(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+10752:pub fn _mm_maskz_cvtepi16_epi8(k: __mmask8, a: __m128i) -> __m128i {
+10839:pub fn _mm_cvtsepi16_epi8(a: __m128i) -> __m128i {
+10850:pub fn _mm_mask_cvtsepi16_epi8(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+10861:pub fn _mm_maskz_cvtsepi16_epi8(k: __mmask8, a: __m128i) -> __m128i {
+10950:pub fn _mm_cvtusepi16_epi8(a: __m128i) -> __m128i {
+10961:pub fn _mm_mask_cvtusepi16_epi8(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+10972:pub fn _mm_maskz_cvtusepi16_epi8(k: __mmask8, a: __m128i) -> __m128i {
+11053:pub fn _mm_mask_cvtepi8_epi16(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+11067:pub fn _mm_maskz_cvtepi8_epi16(k: __mmask8, a: __m128i) -> __m128i {
+11151:pub fn _mm_mask_cvtepu8_epi16(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
+11165:pub fn _mm_maskz_cvtepu8_epi16(k: __mmask8, a: __m128i) -> __m128i {
+11556:pub fn _mm_mask_alignr_epi8<const IMM8: i32>(
+11577:pub fn _mm_maskz_alignr_epi8<const IMM8: i32>(k: __mmask16, a: __m128i, b: __m128i) -> __m128i {
+11614:pub unsafe fn _mm_mask_cvtsepi16_storeu_epi8(mem_addr: *mut i8, k: __mmask8, a: __m128i) {
+11647:pub unsafe fn _mm_mask_cvtepi16_storeu_epi8(mem_addr: *mut i8, k: __mmask8, a: __m128i) {
+11680:pub unsafe fn _mm_mask_cvtusepi16_storeu_epi8(mem_addr: *mut i8, k: __mmask8, a: __m128i) {

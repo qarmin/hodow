@@ -19,6 +19,8 @@ use crate::cpu::avx::AVX;
 use crate::cpu::avx2::AVX2;
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 use crate::cpu::fma::FMA;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+use crate::cpu::avx512f::AVX512F;
 
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 mod sse1;
@@ -38,6 +40,8 @@ mod avx;
 mod avx2;
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 mod fma;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+mod avx512f;
 
 #[cfg(miri)]
 pub const DEFAULT_TEST_ITERATIONS: usize = 20;
@@ -70,6 +74,7 @@ pub fn available_modes() -> Vec<&'static str> {
         modes.push("avx");
         modes.push("avx2");
         modes.push("fma");
+        modes.push("avx512f");
     }
 
     modes
@@ -88,7 +93,7 @@ pub trait ExtensionTest {
                 Err(e) => error!("{} failed: {}", name, e),
             }
         }
-        info!("{} test passed", Self::get_name());
+        info!("___________________{} test passed", Self::get_name());
         Ok(())
     }
 }
@@ -130,6 +135,10 @@ pub fn test_all_extensions() -> Result<(), String> {
 
         if std::arch::is_x86_feature_detected!("fma") {
             FMA::test()?;
+        }
+
+        if std::arch::is_x86_feature_detected!("avx512f") {
+            AVX512F::test()?;
         }
     }
 
