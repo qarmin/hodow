@@ -268,6 +268,8 @@ class TODOValidator:
 
             for instructions in self.todo_instructions.values():
                 for instr in instructions:
+                    if instr.name in self.implemented_tests:
+                        continue # Eksportujemy tylko niezaimplementowane
                     category = self.categorize_instruction(instr)
                     implemented = "TAK" if instr.name in self.implemented_tests else "NIE"
                     source_short = instr.source_file.split('/')[-1] if instr.source_file else 'unknown'
