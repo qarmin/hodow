@@ -21,7 +21,7 @@ use std::arch::x86::{
 
 use log::info;
 
-use crate::cpu::{check_array_equality, ExtensionTest, DEFAULT_TEST_ITERATIONS};
+use crate::cpu::{check_array_equality, ExtensionTest, get_iterations};
 use crate::{get_fuzzing, get_random_float};
 
 pub struct AVX;
@@ -78,7 +78,7 @@ fn test_mm256_set_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr = get_eight_random_floats();
                 let result = _mm256_set_ps(arr[7], arr[6], arr[5], arr[4], arr[3], arr[2], arr[1], arr[0]);
@@ -100,7 +100,7 @@ fn test_mm256_set1_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let value = get_random_float();
                 let result = _mm256_set1_ps(value);
@@ -133,7 +133,7 @@ fn test_mm256_add_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr1 = get_eight_random_floats();
                 let arr2 = get_eight_random_floats();
@@ -159,7 +159,7 @@ fn test_mm256_sub_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr1 = get_eight_random_floats();
                 let arr2 = get_eight_random_floats();
@@ -185,7 +185,7 @@ fn test_mm256_mul_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr1 = get_eight_random_floats();
                 let arr2 = get_eight_random_floats();
@@ -214,7 +214,7 @@ fn test_mm256_div_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr1 = get_eight_random_floats();
                 let arr2 = get_eight_random_floats();
@@ -242,7 +242,7 @@ fn test_mm256_load_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let data = AlignedData(get_eight_random_floats());
                 let result = _mm256_load_ps(data.0.as_ptr());
@@ -265,7 +265,7 @@ fn test_mm256_loadu_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let data = get_eight_random_floats();
                 let result = _mm256_loadu_ps(data.as_ptr());
@@ -292,7 +292,7 @@ fn test_mm256_store_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let data = AlignedData(get_eight_random_floats());
                 let mut result = AlignedData([0.0; 8]);
@@ -317,7 +317,7 @@ fn test_mm256_max_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr1 = get_eight_random_floats();
                 let arr2 = get_eight_random_floats();
@@ -343,7 +343,7 @@ fn test_mm256_min_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr1 = get_eight_random_floats();
                 let arr2 = get_eight_random_floats();
@@ -369,7 +369,7 @@ fn test_mm256_sqrt_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let data = get_eight_random_floats();
                 let vec = _mm256_loadu_ps(data.as_ptr());
@@ -392,7 +392,7 @@ fn test_mm256_and_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr1 = get_eight_random_floats();
                 let arr2 = get_eight_random_floats();
@@ -418,7 +418,7 @@ fn test_mm256_or_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr1 = get_eight_random_floats();
                 let arr2 = get_eight_random_floats();
@@ -444,7 +444,7 @@ fn test_mm256_xor_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr1 = get_eight_random_floats();
                 let arr2 = get_eight_random_floats();
@@ -471,7 +471,7 @@ fn test_mm256_set_pd() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr = [
                     get_random_float() as f64,
@@ -506,7 +506,7 @@ fn test_mm256_add_pd() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a1 = get_random_float() as f64;
                 let a2 = get_random_float() as f64;
@@ -541,7 +541,7 @@ fn test_mm256_sub_pd() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a1 = get_random_float() as f64;
                 let a2 = get_random_float() as f64;
@@ -576,7 +576,7 @@ fn test_mm256_mul_pd() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a1 = get_random_float() as f64;
                 let a2 = get_random_float() as f64;

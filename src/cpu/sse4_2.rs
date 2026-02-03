@@ -5,7 +5,7 @@ use std::arch::x86::*;
 
 use log::info;
 
-use crate::cpu::{check_int_equality, ExtensionTest, DEFAULT_TEST_ITERATIONS};
+use crate::cpu::{check_int_equality, ExtensionTest, get_iterations};
 use crate::get_fuzzing;
 
 pub struct SSE42;
@@ -36,7 +36,7 @@ fn test_mm_cmpgt_epi64() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a = _mm_set_epi64x(rand::random(), rand::random());
                 let b = _mm_set_epi64x(rand::random(), rand::random());
@@ -59,7 +59,7 @@ fn test_mm_crc32_u8() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let crc: u32 = rand::random();
                 let data: u8 = rand::random();
@@ -82,7 +82,7 @@ fn test_mm_crc32_u16() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let crc: u32 = rand::random();
                 let data: u16 = rand::random();
@@ -105,7 +105,7 @@ fn test_mm_crc32_u32() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let crc: u32 = rand::random();
                 let data: u32 = rand::random();

@@ -11,7 +11,7 @@ use std::arch::x86::{
 
 use log::info;
 
-use crate::cpu::{check_array_equality, ExtensionTest, DEFAULT_TEST_ITERATIONS};
+use crate::cpu::{check_array_equality, ExtensionTest, get_iterations};
 use crate::{get_four_random_floats, get_fuzzing, get_random_float};
 
 pub struct SSE3;
@@ -48,7 +48,7 @@ fn test_mm_hadd_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a = get_four_random_floats();
                 let b = get_four_random_floats();
@@ -77,7 +77,7 @@ fn test_mm_hsub_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a = get_four_random_floats();
                 let b = get_four_random_floats();
@@ -106,7 +106,7 @@ fn test_mm_addsub_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a = get_four_random_floats();
                 let b = get_four_random_floats();
@@ -134,7 +134,7 @@ fn test_mm_movehdup_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a = get_four_random_floats();
                 let _result = _mm_movehdup_ps(_mm_set_ps(a[3], a[2], a[1], a[0]));
@@ -158,7 +158,7 @@ fn test_mm_moveldup_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a = get_four_random_floats();
                 let _result = _mm_moveldup_ps(_mm_set_ps(a[3], a[2], a[1], a[0]));
@@ -183,7 +183,7 @@ fn test_mm_hadd_pd() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a1 = get_random_float() as f64;
                 let a2 = get_random_float() as f64;
@@ -211,7 +211,7 @@ fn test_mm_hsub_pd() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a1 = get_random_float() as f64;
                 let a2 = get_random_float() as f64;
@@ -239,7 +239,7 @@ fn test_mm_addsub_pd() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a1 = get_random_float() as f64;
                 let a2 = get_random_float() as f64;

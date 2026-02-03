@@ -1,4 +1,5 @@
 use log::{error, info};
+use once_cell::sync::OnceCell;
 
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 use crate::cpu::sse1::SSE1;
@@ -43,6 +44,36 @@ pub const DEFAULT_TEST_ITERATIONS: usize = 20;
 #[cfg(not(miri))]
 #[allow(dead_code)]
 pub const DEFAULT_TEST_ITERATIONS: usize = 100;
+
+// runtime-configurable iterations (set from CLI)
+static ITERATIONS: OnceCell<usize> = OnceCell::new();
+
+pub fn set_iterations(n: usize) {
+    let _ = ITERATIONS.set(n);
+}
+
+pub fn get_iterations() -> usize {
+    *ITERATIONS.get().unwrap_or(&DEFAULT_TEST_ITERATIONS)
+}
+
+pub fn available_modes() -> Vec<&'static str> {
+    let mut modes = Vec::new();
+
+    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+    {
+        modes.push("sse");
+        modes.push("sse2");
+        modes.push("sse3");
+        modes.push("ssse3");
+        modes.push("sse4.1");
+        modes.push("sse4.2");
+        modes.push("avx");
+        modes.push("avx2");
+        modes.push("fma");
+    }
+
+    modes
+}
 
 #[allow(dead_code)]
 pub trait ExtensionTest {

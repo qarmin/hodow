@@ -1,7 +1,12 @@
 use once_cell::sync::OnceCell;
 use rand::random;
 
-use crate::cpu::test_all_extensions;
+use clap::Parser;
+use log::info;
+use std::env;
+use std::fmt::Write as _;
+
+use crate::cpu::{set_iterations, test_all_extensions, available_modes};
 
 mod cpu;
 
@@ -14,6 +19,55 @@ pub fn get_fuzzing() -> bool {
 
     *FUZZING.get().expect("FUZZING not initialized")
 }
+
+fn print_build_info() {
+    // CPU arch
+    let arch = env::consts::ARCH;
+    let os = env::consts::OS;
+    let mut info = String::new();
+    let _ = write!(&mut info, "arch={}, os={}", arch, os);
+
+    // rustc envs
+    if let Ok(profile) = env::var("PROFILE") {
+        let _ = write!(&mut info, ", profile={}", profile);
+    }
+
+    info!("Build info: {}", info);
+}
+
+#[derive(Parser)]
+#[command(name = "work_tester")]
+#[command(about = "CPU SIMD instruction set tester", version = "0.1")]
+struct Args {
+    #[arg(short = 'n', long = "iterations")]
+    iterations: Option<usize>,
+
+    #[arg(short = 'l', long = "list-modes")]
+    list_modes: bool,
+}
+
+fn main() {
+    handsome_logger::init().unwrap();
+
+    let args = Args::parse();
+
+    if let Some(nv) = args.iterations {
+        set_iterations(nv);
+    }
+
+    print_build_info();
+
+    if args.list_modes {
+        let modes = available_modes();
+        info!("Available modes: {:?}", modes);
+        return;
+    }
+
+    if let Err(e) = test_all_extensions() {
+        log::error!("Running tests failed: {}", e);
+    }
+}
+
 pub fn get_random_float() -> f32 {
     match random::<u8>() % 12 {
         0 => f32::INFINITY,
@@ -30,9 +84,4 @@ pub fn get_four_random_floats() -> [f32; 4] {
         get_random_float(),
         get_random_float(),
     ]
-}
-
-fn main() {
-    handsome_logger::init().unwrap();
-    test_all_extensions().unwrap();
 }

@@ -5,7 +5,7 @@ use std::arch::x86::*;
 
 use log::info;
 
-use crate::cpu::{ExtensionTest, DEFAULT_TEST_ITERATIONS};
+use crate::cpu::{ExtensionTest, get_iterations};
 use crate::get_fuzzing;
 
 pub struct AVX2;
@@ -60,7 +60,7 @@ fn test_mm256_add_epi32() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr1 = get_eight_random_i32();
                 let arr2 = get_eight_random_i32();
@@ -86,7 +86,7 @@ fn test_mm256_sub_epi32() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr1 = get_eight_random_i32();
                 let arr2 = get_eight_random_i32();
@@ -112,7 +112,7 @@ fn test_mm256_mullo_epi32() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr1 = get_eight_random_i32();
                 let arr2 = get_eight_random_i32();

@@ -5,7 +5,7 @@ use std::arch::x86::*;
 
 use log::info;
 
-use crate::cpu::{ExtensionTest, DEFAULT_TEST_ITERATIONS};
+use crate::cpu::{ExtensionTest, get_iterations};
 use crate::{get_fuzzing};
 
 pub struct SSSE3;
@@ -47,7 +47,7 @@ fn test_mm_shuffle_epi8() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a = _mm_set_epi8(rand::random(), rand::random(), rand::random(), rand::random(),
                                     rand::random(), rand::random(), rand::random(), rand::random(),

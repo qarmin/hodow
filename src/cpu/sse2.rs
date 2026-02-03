@@ -17,7 +17,7 @@ use std::arch::x86::{
 
 use log::info;
 
-use crate::cpu::{check_array_equality, ExtensionTest, DEFAULT_TEST_ITERATIONS};
+use crate::cpu::{check_array_equality, ExtensionTest, get_iterations};
 use crate::{get_four_random_floats, get_fuzzing, get_random_float};
 
 pub struct SSE2;
@@ -65,7 +65,7 @@ fn test_mm_set_pd() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a = get_random_float() as f64;
                 let b = get_random_float() as f64;
@@ -91,7 +91,7 @@ fn test_mm_set1_pd() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let value = get_random_float() as f64;
                 let result = _mm_set1_pd(value);
@@ -127,7 +127,7 @@ fn test_mm_add_pd() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a1 = get_random_float() as f64;
                 let a2 = get_random_float() as f64;
@@ -152,7 +152,7 @@ fn test_mm_sub_pd() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a1 = get_random_float() as f64;
                 let a2 = get_random_float() as f64;
@@ -177,7 +177,7 @@ fn test_mm_mul_pd() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a1 = get_random_float() as f64;
                 let a2 = get_random_float() as f64;
@@ -207,7 +207,7 @@ fn test_mm_load_pd() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let data = AlignedData([get_random_float() as f64, get_random_float() as f64]);
                 let result = _mm_load_pd(data.0.as_ptr());
@@ -236,7 +236,7 @@ fn test_mm_loadu_pd() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let data = [get_random_float() as f64, get_random_float() as f64];
                 let result = _mm_loadu_pd(data.as_ptr());
@@ -269,7 +269,7 @@ fn test_mm_store_pd() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let data = AlignedData([get_random_float() as f64, get_random_float() as f64]);
                 let mut result = AlignedData([0.0; 2]);
@@ -297,7 +297,7 @@ fn test_mm_cvtsd_f64() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let value = get_random_float() as f64;
                 let vec = _mm_set_pd(get_random_float() as f64, value);
@@ -323,7 +323,7 @@ fn test_mm_set_epi32() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let values = [
                     get_random_float() as i32,
@@ -354,7 +354,7 @@ fn test_mm_set1_epi32() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let value = get_random_float() as i32;
                 let result = _mm_set1_epi32(value);
@@ -396,7 +396,7 @@ fn test_mm_add_epi32() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a = get_four_random_floats().map(|x| x as i32);
                 let b = get_four_random_floats().map(|x| x as i32);
@@ -424,7 +424,7 @@ fn test_mm_sub_epi32() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a = get_four_random_floats().map(|x| x as i32);
                 let b = get_four_random_floats().map(|x| x as i32);
@@ -452,7 +452,7 @@ fn test_mm_and_si128() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a = get_four_random_floats().map(|x| x as i32);
                 let b = get_four_random_floats().map(|x| x as i32);
@@ -480,7 +480,7 @@ fn test_mm_or_si128() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a = get_four_random_floats().map(|x| x as i32);
                 let b = get_four_random_floats().map(|x| x as i32);
@@ -508,7 +508,7 @@ fn test_mm_xor_si128() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a = get_four_random_floats().map(|x| x as i32);
                 let b = get_four_random_floats().map(|x| x as i32);
@@ -536,7 +536,7 @@ fn test_mm_cmpeq_epi32() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a = get_four_random_floats().map(|x| x as i32);
                 let _result = _mm_cmpeq_epi32(
@@ -561,7 +561,7 @@ fn test_mm_cvtsi32_si128() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let value = get_random_float() as i32;
                 let result = _mm_cvtsi32_si128(value);
@@ -587,7 +587,7 @@ fn test_mm_cvtsi128_si32() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let value = get_random_float() as i32;
                 let vec = _mm_set_epi32(

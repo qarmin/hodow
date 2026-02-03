@@ -10,7 +10,7 @@ use std::arch::x86::{_mm_cvtsi32_ss, _mm_cvtss_f32, _mm_cvtss_si32};
 
 use log::info;
 
-use crate::cpu::{check_array_equality, check_float_equality, ExtensionTest, DEFAULT_FLOAT_DIFF, DEFAULT_TEST_ITERATIONS};
+use crate::cpu::{check_array_equality, check_float_equality, ExtensionTest, DEFAULT_FLOAT_DIFF, get_iterations};
 use crate::{get_four_random_floats, get_fuzzing, get_random_float};
 
 pub struct SSE1;
@@ -61,7 +61,7 @@ fn test_mm_set_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr = [
                     get_random_float(),
@@ -115,7 +115,7 @@ fn test_mm_add_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             use_mm_add_ps(get_four_random_floats(), get_four_random_floats());
         }
     }
@@ -155,7 +155,7 @@ fn test_mm_sub_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             use_mm_sub_ps(get_four_random_floats(), get_four_random_floats());
         }
     }
@@ -185,7 +185,7 @@ fn test_mm_div_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             use_mm_div_ps(get_four_random_floats(), get_four_random_floats());
         }
     }
@@ -203,7 +203,7 @@ fn test_mm_set1_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let value = get_random_float();
                 let result = _mm_set1_ps(value);
@@ -238,7 +238,7 @@ fn test_mm_load_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr = AlignedData(get_four_random_floats());
                 let result = _mm_load_ps(arr.0.as_ptr());
@@ -260,7 +260,7 @@ fn test_mm_loadu_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr = get_four_random_floats();
                 let result = _mm_loadu_ps(arr.as_ptr());
@@ -286,7 +286,7 @@ fn test_mm_store_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr = AlignedData(get_four_random_floats());
                 let mut result = AlignedData([0.0; 4]);
@@ -310,7 +310,7 @@ fn test_mm_movemask_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr = get_four_random_floats();
                 let vec = _mm_set_ps(arr[3], arr[2], arr[1], arr[0]);
@@ -332,7 +332,7 @@ fn test_mm_sqrt_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr = get_four_random_floats();
                 let data_128 = _mm_loadu_ps(arr.as_ptr());
@@ -355,7 +355,7 @@ fn test_mm_rsqrt_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr = get_four_random_floats();
                 let result = _mm_rsqrt_ps(_mm_loadu_ps(arr.as_ptr()));
@@ -377,7 +377,7 @@ fn test_mm_and_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr1 = get_four_random_floats();
                 let arr2 = get_four_random_floats();
@@ -403,7 +403,7 @@ fn test_mm_andnot_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr1 = get_four_random_floats();
                 let arr2 = get_four_random_floats();
@@ -428,7 +428,7 @@ fn test_mm_or_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr1 = get_four_random_floats();
                 let arr2 = get_four_random_floats();
@@ -454,7 +454,7 @@ fn test_mm_xor_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr1 = get_four_random_floats();
                 let arr2 = get_four_random_floats();
@@ -480,7 +480,7 @@ fn test_mm_min_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr1 = get_four_random_floats();
                 let arr2 = get_four_random_floats();
@@ -506,7 +506,7 @@ fn test_mm_max_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr1 = get_four_random_floats();
                 let arr2 = get_four_random_floats();
@@ -531,7 +531,7 @@ fn test_mm_cmpeq_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr1 = get_four_random_floats();
                 let arr2 = arr1;
@@ -557,7 +557,7 @@ fn test_mm_cmpgt_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr1 = get_four_random_floats();
                 let arr2 = get_four_random_floats();
@@ -583,7 +583,7 @@ fn test_mm_cmplt_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr1 = get_four_random_floats();
                 let arr2 = get_four_random_floats();
@@ -609,7 +609,7 @@ fn test_mm_cmpge_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr1 = get_four_random_floats();
                 let arr2 = get_four_random_floats();
@@ -635,7 +635,7 @@ fn test_mm_cmple_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr1 = get_four_random_floats();
                 let arr2 = get_four_random_floats();
@@ -659,7 +659,7 @@ fn test_mm_cvtss_f32() -> Result<(), String> {
         }
     }if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr = get_four_random_floats();
                 let vec = _mm_set_ps(arr[3], arr[2], arr[1], arr[0]);
@@ -681,7 +681,7 @@ fn test_mm_cvtsi32_ss() -> Result<(), String> {
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let value = get_random_float() as i32;
                 let vec = _mm_setzero_ps();
@@ -703,7 +703,7 @@ fn test_mm_cvtss_si32() -> Result<(), String> {
         }
     }if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let arr = get_four_random_floats();
                 let vec = _mm_set_ps(arr[3], arr[2], arr[1], arr[0]);

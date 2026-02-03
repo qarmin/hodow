@@ -5,7 +5,7 @@ use std::arch::x86::*;
 
 use log::info;
 
-use crate::cpu::{check_array_equality, check_float_equality, check_int_equality, ExtensionTest, DEFAULT_TEST_ITERATIONS, DEFAULT_FLOAT_DIFF};
+use crate::cpu::{check_array_equality, check_float_equality, check_int_equality, ExtensionTest, get_iterations, DEFAULT_FLOAT_DIFF};
 use crate::{get_four_random_floats, get_fuzzing};
 
 pub struct SSE41;
@@ -50,7 +50,7 @@ fn test_mm_blend_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a = get_four_random_floats();
                 let b = get_four_random_floats();
@@ -77,7 +77,7 @@ fn test_mm_blendv_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a = get_four_random_floats();
                 let b = get_four_random_floats();
@@ -108,7 +108,7 @@ fn test_mm_dp_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a = get_four_random_floats();
                 let b = get_four_random_floats();
@@ -134,7 +134,7 @@ fn test_mm_max_epi32() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a = _mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random());
                 let b = _mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random());
@@ -157,7 +157,7 @@ fn test_mm_min_epi32() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a = _mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random());
                 let b = _mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random());
@@ -204,7 +204,7 @@ fn test_mm_mullo_epi32() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a = _mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random());
                 let b = _mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random());
@@ -238,7 +238,7 @@ fn test_mm_round_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a = get_four_random_floats();
                 let _result = _mm_round_ps::<_MM_FROUND_TO_NEAREST_INT>(
@@ -261,7 +261,7 @@ fn test_mm_ceil_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a = get_four_random_floats();
                 let _result = _mm_ceil_ps(_mm_set_ps(a[3], a[2], a[1], a[0]));
@@ -282,7 +282,7 @@ fn test_mm_floor_ps() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..DEFAULT_TEST_ITERATIONS {
+        for _ in 0..get_iterations() {
             unsafe {
                 let a = get_four_random_floats();
                 let _result = _mm_floor_ps(_mm_set_ps(a[3], a[2], a[1], a[0]));
