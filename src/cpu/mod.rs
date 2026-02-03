@@ -88,26 +88,6 @@ pub fn get_iterations() -> usize {
     *ITERATIONS.get().unwrap_or(&DEFAULT_TEST_ITERATIONS)
 }
 
-pub fn available_modes() -> Vec<&'static str> {
-    let mut modes = Vec::new();
-
-    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-    {
-        modes.push("sse");
-        modes.push("sse2");
-        modes.push("sse3");
-        modes.push("ssse3");
-        modes.push("sse4.1");
-        modes.push("sse4.2");
-        modes.push("avx");
-        modes.push("avx2");
-        modes.push("fma");
-        modes.push("avx512f");
-    }
-
-    modes
-}
-
 #[allow(dead_code)]
 pub trait ExtensionTest {
     fn get_name() -> &'static str;
@@ -255,3 +235,63 @@ pub fn check_int_equality_with_error(a: i32, b: i32, error: i32) -> Result<(), S
 
     Ok(())
 }
+
+pub fn available_modes() -> Vec<&'static str> {
+    let mut modes = Vec::new();
+
+    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+    {
+        if std::arch::is_x86_feature_detected!("sse") {
+            modes.push("sse");
+        }
+        if std::arch::is_x86_feature_detected!("sse2") {
+            modes.push("sse2");
+        }
+        if std::arch::is_x86_feature_detected!("sse3") {
+            modes.push("sse3");
+        }
+        if std::arch::is_x86_feature_detected!("ssse3") {
+            modes.push("ssse3");
+        }
+        if std::arch::is_x86_feature_detected!("sse4.1") {
+            modes.push("sse4.1");
+        }
+        if std::arch::is_x86_feature_detected!("sse4.2") {
+            modes.push("sse4.2");
+        }
+        if std::arch::is_x86_feature_detected!("avx") {
+            modes.push("avx");
+        }
+        if std::arch::is_x86_feature_detected!("avx2") {
+            modes.push("avx2");
+        }
+        if std::arch::is_x86_feature_detected!("fma") {
+            modes.push("fma");
+        }
+        if std::arch::is_x86_feature_detected!("avx512f") {
+            modes.push("avx512f");
+        }
+        if std::arch::is_x86_feature_detected!("avx512bitalg") {
+            modes.push("avx512bitalg");
+        }
+        if std::arch::is_x86_feature_detected!("avx512bf16") {
+            modes.push("avx512bf16");
+        }
+        if std::arch::is_x86_feature_detected!("avx512cd") {
+            modes.push("avx512cd");
+        }
+        if std::arch::is_x86_feature_detected!("avx512ifma") {
+            modes.push("avx512ifma");
+        }
+        if std::arch::is_x86_feature_detected!("avx512vbmi") {
+            modes.push("avx512vbmi");
+        }
+        if std::arch::is_x86_feature_detected!("aes") {
+            modes.push("aes");
+        }
+    }
+
+    modes
+}
+
+

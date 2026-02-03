@@ -2837,10 +2837,15 @@ fn test_mm_cvtpd_ps() -> Result<(), String> {
 
 fn test_mm_cvtps_pd() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_ps(0.0, 0.0, 2.0, 1.0);
-        let _result = _mm_cvtps_pd(a);
+        // Use cvtepi32_ps to create __m128 from ints
+        let ints = _mm_set_epi32(0, 0, 0x40000000, 0x3f800000); // 2.0, 1.0 in float bits
+        let a = _mm_castsi128_ps(ints);
+        let result = _mm_cvtps_pd(a);
+        let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
+        // Just check it returns something reasonable
+        let _ = result;
+        Ok(())
     }
-    Ok(())
 }
 
 fn test_mm_cvtsd_si32() -> Result<(), String> {
@@ -2856,20 +2861,28 @@ fn test_mm_cvtsd_si32() -> Result<(), String> {
 
 fn test_mm_cvtsd_ss() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_ps(0.0, 0.0, 0.0, 1.0);
+        let a_int = _mm_set_epi32(0, 0, 0, 0x3f800000); // 1.0 in float bits
+        let a = _mm_castsi128_ps(a_int);
         let b = _mm_set_sd(42.5);
         let _result = _mm_cvtsd_ss(a, b);
+        // Can't transmute to __m128 in SSE2 context, just verify it runs
+        Ok(())
     }
-    Ok(())
 }
 
 fn test_mm_cvtss_sd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_sd(1.0);
-        let b = _mm_set_ps(0.0, 0.0, 0.0, 42.5);
-        let _result = _mm_cvtss_sd(a, b);
+        let b_int = _mm_set_epi32(0, 0, 0, 0x422a0000); // 42.5 in float bits
+        let b = _mm_castsi128_ps(b_int);
+        let result = _mm_cvtss_sd(a, b);
+        let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
+        // Verify first element is approximately 42.5
+        if (result[0] - 42.5).abs() > 0.1 {
+            return Err(format!("Got {:?}, expected ~42.5 in first element", result));
+        }
+        Ok(())
     }
-    Ok(())
 }
 
 fn test_mm_cvttsd_si32() -> Result<(), String> {
@@ -2999,7 +3012,7 @@ fn test_mm_storeu_si16() -> Result<(), String> {
     unsafe {
         let mut mem: i16 = 0;
         let a = _mm_set_epi16(0, 0, 0, 0, 0, 0, 0, 42);
-        _mm_storeu_si16(&mut mem as *mut i16 as *mut std::ffi::c_void, a);
+        _mm_storeu_si16(&mut mem as *mut i16 as *mut u8, a);
         if mem != 42 {
             return Err(format!("Expected 42, got {}", mem));
         }
@@ -3011,7 +3024,7 @@ fn test_mm_storeu_si32() -> Result<(), String> {
     unsafe {
         let mut mem: i32 = 0;
         let a = _mm_set_epi32(0, 0, 0, 42);
-        _mm_storeu_si32(&mut mem as *mut i32 as *mut std::ffi::c_void, a);
+        _mm_storeu_si32(&mut mem as *mut i32 as *mut u8, a);
         if mem != 42 {
             return Err(format!("Expected 42, got {}", mem));
         }
@@ -3023,7 +3036,7 @@ fn test_mm_storeu_si64() -> Result<(), String> {
     unsafe {
         let mut mem: i64 = 0;
         let a = _mm_set_epi64x(0, 42);
-        _mm_storeu_si64(&mut mem as *mut i64 as *mut std::ffi::c_void, a);
+        _mm_storeu_si64(&mut mem as *mut i64 as *mut u8, a);
         if mem != 42 {
             return Err(format!("Expected 42, got {}", mem));
         }
@@ -3130,7 +3143,7 @@ fn test_mm_loadr_pd() -> Result<(), String> {
 fn test_mm_loadu_si16() -> Result<(), String> {
     unsafe {
         let mem: i16 = 42;
-        let result = _mm_loadu_si16(&mem as *const i16 as *const std::ffi::c_void);
+        let result = _mm_loadu_si16(&mem as *const i16 as *const u8);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         if result[0] != 42 {
             return Err(format!("Expected 42, got {}", result[0]));
@@ -3142,7 +3155,7 @@ fn test_mm_loadu_si16() -> Result<(), String> {
 fn test_mm_loadu_si32() -> Result<(), String> {
     unsafe {
         let mem: i32 = 42;
-        let result = _mm_loadu_si32(&mem as *const i32 as *const std::ffi::c_void);
+        let result = _mm_loadu_si32(&mem as *const i32 as *const u8);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         if result[0] != 42 {
             return Err(format!("Expected 42, got {}", result[0]));
@@ -3154,7 +3167,7 @@ fn test_mm_loadu_si32() -> Result<(), String> {
 fn test_mm_loadu_si64() -> Result<(), String> {
     unsafe {
         let mem: i64 = 42;
-        let result = _mm_loadu_si64(&mem as *const i64 as *const std::ffi::c_void);
+        let result = _mm_loadu_si64(&mem as *const i64 as *const u8);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
         if result[0] != 42 {
             return Err(format!("Expected 42, got {}", result[0]));
@@ -3208,18 +3221,29 @@ fn test_mm_castpd_si128() -> Result<(), String> {
 
 fn test_mm_castps_pd() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
-        let _result = _mm_castps_pd(a);
+        // Create __m128 using castsi128_ps
+        let a_int = _mm_set_epi32(0x40800000, 0x40400000, 0x40000000, 0x3f800000);
+        let a = _mm_castsi128_ps(a_int);
+        let result = _mm_castps_pd(a);
+        let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
+        let _ = result;
+        Ok(())
     }
-    Ok(())
 }
 
 fn test_mm_castps_si128() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
-        let _result = _mm_castps_si128(a);
+        let a_int = _mm_set_epi32(0x40800000, 0x40400000, 0x40000000, 0x3f800000);
+        let a = _mm_castsi128_ps(a_int);
+        let result = _mm_castps_si128(a);
+        let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
+        // Should be same as input
+        let expected = [0x3f800000, 0x40000000, 0x40400000, 0x40800000];
+        if result != expected {
+            return Err(format!("Got {:?}, expected {:?}", result, expected));
+        }
+        Ok(())
     }
-    Ok(())
 }
 
 fn test_mm_castsi128_pd() -> Result<(), String> {

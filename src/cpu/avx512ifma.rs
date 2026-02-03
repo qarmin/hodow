@@ -32,7 +32,11 @@ fn test_mm_madd52hi_avx_epu64() -> Result<(), String> {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
         let c = _mm_set1_epi64x(100);
-        let _result = _mm_madd52hi_avx_epu64(a, b, c);
+        let result = _mm_madd52hi_avx_epu64(a, b, c);
+        let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
+        if result[0] == 0 && result[1] == 0 {
+            return Err(format!("Got all zeros: {:?}", result));
+        }
         Ok(())
     }
     #[cfg(not(target_feature = "avx512ifma"))]
@@ -45,7 +49,11 @@ fn test_mm_madd52lo_avx_epu64() -> Result<(), String> {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
         let c = _mm_set1_epi64x(100);
-        let _result = _mm_madd52lo_avx_epu64(a, b, c);
+        let result = _mm_madd52lo_avx_epu64(a, b, c);
+        let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
+        if result[0] == 0 && result[1] == 0 {
+            return Err(format!("Got all zeros: {:?}", result));
+        }
         Ok(())
     }
     #[cfg(not(target_feature = "avx512ifma"))]
@@ -58,7 +66,12 @@ fn test_mm_madd52hi_epu64() -> Result<(), String> {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
         let c = _mm_set1_epi64x(100);
-        let _result = _mm_madd52hi_epu64(a, b, c);
+        let result = _mm_madd52hi_epu64(a, b, c);
+        let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
+        // Just verify it produces some result
+        if result[0] == 0 && result[1] == 0 {
+            return Err(format!("Got all zeros: {:?}", result));
+        }
         Ok(())
     }
     #[cfg(not(target_feature = "avx512ifma,avx512vl"))]
@@ -71,7 +84,9 @@ fn test_mm_mask_madd52hi_epu64() -> Result<(), String> {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
         let c = _mm_set1_epi64x(100);
-        let _result = _mm_mask_madd52hi_epu64(a, 0x3, b, c);
+        let result = _mm_mask_madd52hi_epu64(a, 0x3, b, c);
+        let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
+        let _ = result;
         Ok(())
     }
     #[cfg(not(target_feature = "avx512ifma,avx512vl"))]
@@ -84,7 +99,9 @@ fn test_mm_maskz_madd52hi_epu64() -> Result<(), String> {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
         let c = _mm_set1_epi64x(100);
-        let _result = _mm_maskz_madd52hi_epu64(0x3, a, b, c);
+        let result = _mm_maskz_madd52hi_epu64(0x3, a, b, c);
+        let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
+        let _ = result;
         Ok(())
     }
     #[cfg(not(target_feature = "avx512ifma,avx512vl"))]
@@ -97,7 +114,11 @@ fn test_mm_madd52lo_epu64() -> Result<(), String> {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
         let c = _mm_set1_epi64x(100);
-        let _result = _mm_madd52lo_epu64(a, b, c);
+        let result = _mm_madd52lo_epu64(a, b, c);
+        let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
+        if result[0] == 0 && result[1] == 0 {
+            return Err(format!("Got all zeros: {:?}", result));
+        }
         Ok(())
     }
     #[cfg(not(target_feature = "avx512ifma,avx512vl"))]
@@ -110,7 +131,9 @@ fn test_mm_mask_madd52lo_epu64() -> Result<(), String> {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
         let c = _mm_set1_epi64x(100);
-        let _result = _mm_mask_madd52lo_epu64(a, 0x3, b, c);
+        let result = _mm_mask_madd52lo_epu64(a, 0x3, b, c);
+        let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
+        let _ = result;
         Ok(())
     }
     #[cfg(not(target_feature = "avx512ifma,avx512vl"))]
@@ -123,7 +146,9 @@ fn test_mm_maskz_madd52lo_epu64() -> Result<(), String> {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
         let c = _mm_set1_epi64x(100);
-        let _result = _mm_maskz_madd52lo_epu64(0x3, a, b, c);
+        let result = _mm_maskz_madd52lo_epu64(0x3, a, b, c);
+        let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
+        let _ = result;
         Ok(())
     }
     #[cfg(not(target_feature = "avx512ifma,avx512vl"))]
