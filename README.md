@@ -68,10 +68,12 @@ Testowane instrukcje (20 testów):
 
 ## Rozszerzenia Do Zaimplementowania
 
-### ⏳ SSSE3 (Supplemental Streaming SIMD Extensions 3)
-**Status: NIE ZAIMPLEMENTOWANE**
+### ✅ SSSE3 (Supplemental Streaming SIMD Extensions 3)
+**Status: ZAIMPLEMENTOWANE**
 
-Potencjalne instrukcje do przetestowania:
+Plik: `src/cpu/ssse3.rs`
+
+Testowane instrukcje (13 testów):
 - `_mm_shuffle_epi8` - shuffle bajtów
 - `_mm_abs_epi8/16/32` - wartość bezwzględna
 - `_mm_sign_epi8/16/32` - znak liczby
@@ -79,18 +81,20 @@ Potencjalne instrukcje do przetestowania:
 - `_mm_maddubs_epi16` - multiply and add
 - `_mm_alignr_epi8` - concatenate and shift
 
-### ⏳ SSE4.1 (Streaming SIMD Extensions 4.1)
-**Status: PLIK PUSTY** (`src/cpu/sse4_1.rs`)
+### ✅ SSE4.1 (Streaming SIMD Extensions 4.1)
+**Status: ZAIMPLEMENTOWANE**
 
-Potencjalne instrukcje do przetestowania:
+Plik: `src/cpu/sse4_1.rs`
+
+Testowane instrukcje (16 testów):
 - `_mm_blend_ps/pd` - blending
 - `_mm_blendv_ps/pd/epi8` - variable blending
 - `_mm_dp_ps/pd` - dot product
 - `_mm_max_epi8/32`, `_mm_min_epi8/32` - min/max dla integerów
 - `_mm_mul_epi32` - mnożenie 32-bit
 - `_mm_mullo_epi32` - multiply low
-- `_mm_packus_epi32` - pack z saturacją
 - `_mm_round_ps/pd` - zaokrąglanie
+- `_mm_ceil_ps`, `_mm_floor_ps` - zaokrąglanie w górę/w dół
 - `_mm_extract_ps`, `_mm_insert_ps` - extract/insert pojedynczych wartości
 - `_mm_testz_si128`, `_mm_testc_si128` - test bits
 
@@ -117,15 +121,17 @@ Potencjalne instrukcje do przetestowania:
 - `_mm256_broadcast` - broadcast wartości
 - `_mm256_gather` - gather loads
 
-### ⏳ FMA (Fused Multiply-Add)
-**Status: NIE ZAIMPLEMENTOWANE**
+### ✅ FMA (Fused Multiply-Add)
+**Status: ZAIMPLEMENTOWANE**
 
-Potencjalne instrukcje do przetestowania:
-- `_mm_fmadd_ps/pd`, `_mm256_fmadd_ps/pd` - a*b+c
-- `_mm_fmsub_ps/pd`, `_mm256_fmsub_ps/pd` - a*b-c
-- `_mm_fnmadd_ps/pd`, `_mm256_fnmadd_ps/pd` - -(a*b)+c
-- `_mm_fnmsub_ps/pd`, `_mm256_fnmsub_ps/pd` - -(a*b)-c
-- `_mm_fmaddsub_ps/pd`, `_mm256_fmaddsub_ps/pd` - alternating add/sub
+Plik: `src/cpu/fma.rs`
+
+Testowane instrukcje (10 testów):
+- `_mm_fmadd_ps`, `_mm256_fmadd_ps` - a*b+c
+- `_mm_fmsub_ps`, `_mm256_fmsub_ps` - a*b-c
+- `_mm_fnmadd_ps`, `_mm256_fnmadd_ps` - -(a*b)+c
+- `_mm_fnmsub_ps`, `_mm256_fnmsub_ps` - -(a*b)-c
+- `_mm_fmaddsub_ps`, `_mm256_fmaddsub_ps` - alternating add/sub
 
 ### ⏳ AVX-512 (różne warianty)
 **Status: NIE ZAIMPLEMENTOWANE**
@@ -201,14 +207,14 @@ rand = "*"
 | SSE | ✅ Gotowe | 26 | `src/cpu/sse1.rs` |
 | SSE2 | ✅ Gotowe | 21 | `src/cpu/sse2.rs` |
 | SSE3 | ✅ Gotowe | 8 | `src/cpu/sse3.rs` |
+| SSSE3 | ✅ Gotowe | 13 | `src/cpu/ssse3.rs` |
+| SSE4.1 | ✅ Gotowe | 16 | `src/cpu/sse4_1.rs` |
+| SSE4.2 | ✅ Gotowe | 4 | `src/cpu/sse4_2.rs` |
 | AVX | ✅ Gotowe | 20 | `src/cpu/avx.rs` |
-| SSSE3 | ⏳ Do zrobienia | 0 | - |
-| SSE4.1 | ⏳ Plik pusty | 0 | `src/cpu/sse4_1.rs` |
-| SSE4.2 | ⏳ Do zrobienia | 0 | - |
-| AVX2 | ⏳ Do zrobienia | 0 | - |
-| FMA | ⏳ Do zrobienia | 0 | - |
+| AVX2 | ✅ Gotowe | 16 | `src/cpu/avx2.rs` |
+| FMA | ✅ Gotowe | 10 | `src/cpu/fma.rs` |
 | AVX-512 | ⏳ Do zrobienia | 0 | - |
-| **RAZEM** | **4/10+** | **75** | |
+| **RAZEM** | **9/10** | **134** | |
 
 ## Struktura Projektu
 

@@ -3,7 +3,12 @@ use log::{error, info};
 use crate::cpu::sse1::SSE1;
 use crate::cpu::sse2::SSE2;
 use crate::cpu::sse3::SSE3;
+use crate::cpu::ssse3::SSSE3;
+use crate::cpu::sse4_1::SSE41;
+use crate::cpu::sse4_2::SSE42;
 use crate::cpu::avx::AVX;
+use crate::cpu::avx2::AVX2;
+use crate::cpu::fma::FMA;
 
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 mod sse1;
@@ -12,8 +17,17 @@ mod sse2;
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 mod sse3;
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-mod avx;
+mod ssse3;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 mod sse4_1;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+mod sse4_2;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+mod avx;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+mod avx2;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+mod fma;
 
 #[cfg(miri)]
 pub const DEFAULT_TEST_ITERATIONS: usize = 20;
@@ -50,13 +64,29 @@ pub fn test_all_extensions() -> Result<(), String> {
         SSE3::test()?;
     }
 
+    if std::arch::is_x86_feature_detected!("ssse3") {
+        SSSE3::test()?;
+    }
+
+    if std::arch::is_x86_feature_detected!("sse4.1") {
+        SSE41::test()?;
+    }
+
+    if std::arch::is_x86_feature_detected!("sse4.2") {
+        SSE42::test()?;
+    }
+
     if std::arch::is_x86_feature_detected!("avx") {
         AVX::test()?;
     }
 
-    // if std::arch::is_x86_feature_detected!("sse4.1") {
-    //     test_sse4_1();
-    // }
+    if std::arch::is_x86_feature_detected!("avx2") {
+        AVX2::test()?;
+    }
+
+    if std::arch::is_x86_feature_detected!("fma") {
+        FMA::test()?;
+    }
 
     Ok(())
 }
