@@ -1,9 +1,18 @@
 use log::{error, info};
 
 use crate::cpu::sse1::SSE1;
+use crate::cpu::sse2::SSE2;
+use crate::cpu::sse3::SSE3;
+use crate::cpu::avx::AVX;
 
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 mod sse1;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+mod sse2;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+mod sse3;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+mod avx;
 mod sse4_1;
 
 #[cfg(miri)]
@@ -32,6 +41,19 @@ pub fn test_all_extensions() -> Result<(), String> {
     if std::arch::is_x86_feature_detected!("sse") {
         SSE1::test()?;
     }
+
+    if std::arch::is_x86_feature_detected!("sse2") {
+        SSE2::test()?;
+    }
+
+    if std::arch::is_x86_feature_detected!("sse3") {
+        SSE3::test()?;
+    }
+
+    if std::arch::is_x86_feature_detected!("avx") {
+        AVX::test()?;
+    }
+
     // if std::arch::is_x86_feature_detected!("sse4.1") {
     //     test_sse4_1();
     // }

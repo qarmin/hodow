@@ -3,16 +3,14 @@
 #[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::{__m128, _mm_add_ps, _mm_and_ps, _mm_andnot_ps, _mm_cmpeq_ps, _mm_cmpge_ps, _mm_cmpgt_ps, _mm_cmple_ps, _mm_cmplt_ps, _mm_div_ps, _mm_load_ps, _mm_loadu_ps, _mm_max_ps, _mm_min_ps, _mm_movemask_ps, _mm_or_ps, _mm_rsqrt_ps, _mm_set1_ps, _mm_set_ps, _mm_setzero_ps, _mm_sqrt_ps, _mm_store_ps, _mm_sub_ps, _mm_xor_ps};
 #[cfg(target_arch = "x86_64")]
-use std::arch::x86_64::{_mm_cvtsi32_ss, _mm_cvtss_f32, _mm_cvtss_si32, _mm_setzero_si128};
+use std::arch::x86_64::{_mm_cvtsi32_ss, _mm_cvtss_f32, _mm_cvtss_si32};
 #[cfg(target_arch = "x86")]
-use std::arch::x86::{__m128, _mm_add_ps, _mm_and_ps, _mm_andnot_ps, _mm_cmpeq_ps, _mm_cmpge_ps, _mm_cmpgt_ps, _mm_cmple_ps, _mm_cmplt_ps, _mm_div_ps, _mm_load_ps, _mm_loadu_ps, _mm_max_ps, _mm_min_ps, _mm_movemask_ps, _mm_or_ps, _mm_rsqrt_ps, _mm_set1_ps, _mm_set_ps, _mm_setzero_ps, _mm_sqrt_ps, _mm_store_ps, _mm_sub_ps, _mm_xor_ps};
-#[cfg(target_arch = "x86")]
-use std::arch::x86::{_mm_cvtsi32_ss, _mm_cvtss_f32, _mm_cvtss_si32, _mm_setzero_si128};
+use std::arch::x86::{_mm_cvtsi32_ss, _mm_cvtss_f32, _mm_cvtss_si32};
 
 
-use log::{error, info};
+use log::info;
 
-use crate::cpu::{check_array_equality, check_float_equality, check_int_equality, check_int_equality_with_error, ExtensionTest, DEFAULT_FLOAT_DIFF, DEFAULT_TEST_ITERATIONS};
+use crate::cpu::{check_array_equality, check_float_equality, ExtensionTest, DEFAULT_FLOAT_DIFF, DEFAULT_TEST_ITERATIONS};
 use crate::{get_four_random_floats, get_fuzzing, get_random_float};
 
 pub struct SSE1;
