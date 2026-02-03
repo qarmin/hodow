@@ -14,14 +14,42 @@ impl ExtensionTest for AVX512IFMA {
     
     fn get_tests() -> &'static [(&'static dyn Fn() -> Result<(), String>, &'static str)] {
         &[
+            (&test_mm_madd52hi_avx_epu64, "test_mm_madd52hi_avx_epu64"),
             (&test_mm_madd52hi_epu64, "test_mm_madd52hi_epu64"),
             (&test_mm_mask_madd52hi_epu64, "test_mm_mask_madd52hi_epu64"),
             (&test_mm_maskz_madd52hi_epu64, "test_mm_maskz_madd52hi_epu64"),
+            (&test_mm_madd52lo_avx_epu64, "test_mm_madd52lo_avx_epu64"),
             (&test_mm_madd52lo_epu64, "test_mm_madd52lo_epu64"),
             (&test_mm_mask_madd52lo_epu64, "test_mm_mask_madd52lo_epu64"),
             (&test_mm_maskz_madd52lo_epu64, "test_mm_maskz_madd52lo_epu64"),
         ]
     }
+}
+
+fn test_mm_madd52hi_avx_epu64() -> Result<(), String> {
+    #[cfg(target_feature = "avx512ifma")]
+    unsafe {
+        let a = _mm_set1_epi64x(1000);
+        let b = _mm_set1_epi64x(2000);
+        let c = _mm_set1_epi64x(100);
+        let _result = _mm_madd52hi_avx_epu64(a, b, c);
+        Ok(())
+    }
+    #[cfg(not(target_feature = "avx512ifma"))]
+    Ok(())
+}
+
+fn test_mm_madd52lo_avx_epu64() -> Result<(), String> {
+    #[cfg(target_feature = "avx512ifma")]
+    unsafe {
+        let a = _mm_set1_epi64x(1000);
+        let b = _mm_set1_epi64x(2000);
+        let c = _mm_set1_epi64x(100);
+        let _result = _mm_madd52lo_avx_epu64(a, b, c);
+        Ok(())
+    }
+    #[cfg(not(target_feature = "avx512ifma"))]
+    Ok(())
 }
 
 fn test_mm_madd52hi_epu64() -> Result<(), String> {

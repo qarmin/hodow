@@ -761,9 +761,9 @@ fn test_mm_cvtss_si32() -> Result<(), String> {
 
 fn test_mm_set_ss() -> Result<(), String> {
     unsafe {
-        let result = _mm_set_ss(3.14);
+        let result = _mm_set_ss(3.13);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[3.14, 0.0, 0.0, 0.0])?;
+        check_array_equality(&result, &[3.13, 0.0, 0.0, 0.0])?;
     }
     Ok(())
 }

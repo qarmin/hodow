@@ -31,6 +31,10 @@ use crate::cpu::avx512cd::AVX512CD;
 use crate::cpu::avx512ifma::AVX512IFMA;
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 use crate::cpu::avx512vbmi::AVX512VBMI;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+use crate::cpu::aes::AES;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+use crate::cpu::kl::KL;
 
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 mod sse1;
@@ -62,6 +66,10 @@ mod avx512cd;
 mod avx512ifma;
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 mod avx512vbmi;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+mod aes;
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+mod kl;
 
 #[cfg(miri)]
 pub const DEFAULT_TEST_ITERATIONS: usize = 20;
@@ -179,6 +187,14 @@ pub fn test_all_extensions() -> Result<(), String> {
 
         if std::arch::is_x86_feature_detected!("avx512vbmi") {
             AVX512VBMI::test()?;
+        }
+
+        if std::arch::is_x86_feature_detected!("aes") {
+            AES::test()?;
+        }
+
+        if std::arch::is_x86_feature_detected!("kl") && std::arch::is_x86_feature_detected!("aes") {
+            KL::test()?;
         }
     }
 

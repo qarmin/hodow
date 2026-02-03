@@ -295,9 +295,9 @@ fn test_mm512_sqrt_ps() -> Result<(), String> {
 
 fn test_mm512_set1_ps() -> Result<(), String> {
     unsafe {
-        let result = _mm512_set1_ps(3.14);
+        let result = _mm512_set1_ps(3.13);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
-        let expected = [3.14; 16];
+        let expected = [3.13; 16];
         check_array_equality(&result, &expected)?;
     }
 
