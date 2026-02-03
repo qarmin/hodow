@@ -238,9 +238,13 @@ fn test_mm256_shuffle_epi8() -> Result<(), String> {
         );
         let result = _mm256_shuffle_epi8(a, b);
         let result = std::mem::transmute::<__m256i, [i8; 32]>(result);
+        // _mm256_shuffle_epi8 operates on each 128-bit lane independently
+        // a in memory: [0,1,...,15, 16,17,...,31]
+        // b in memory: [15,14,...,0, 15,14,...,0] (shuffle indices)
+        // Result: [15,14,...,0, 31,30,...,16]
         assert_eq!(result, [
-            0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-            16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31
+            15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
+            31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16
         ]);
     }
 
@@ -253,7 +257,11 @@ fn test_mm256_hadd_epi32() -> Result<(), String> {
         let b = _mm256_set_epi32(9, 10, 11, 12, 13, 14, 15, 16);
         let result = _mm256_hadd_epi32(a, b);
         let result = std::mem::transmute::<__m256i, [i32; 8]>(result);
-        assert_eq!(result, [31, 23, 19, 11, 7, 3, 27, 15]);
+        // hadd operates on each 128-bit lane independently
+        // a in memory: [8,7,6,5,4,3,2,1], b in memory: [16,15,14,13,12,11,10,9]
+        // Lower lane: [8+7, 6+5, 16+15, 14+13] = [15, 11, 31, 27]
+        // Upper lane: [4+3, 2+1, 12+11, 10+9] = [7, 3, 23, 19]
+        assert_eq!(result, [15, 11, 31, 27, 7, 3, 23, 19]);
     }
 
     Ok(())
@@ -265,7 +273,11 @@ fn test_mm256_hsub_epi32() -> Result<(), String> {
         let b = _mm256_set_epi32(9, 10, 11, 12, 13, 14, 15, 16);
         let result = _mm256_hsub_epi32(a, b);
         let result = std::mem::transmute::<__m256i, [i32; 8]>(result);
-        assert_eq!(result, [-1, -1, -1, -1, -1, -1, -1, -1]);
+        // hsub operates on each 128-bit lane independently
+        // a in memory: [8,7,6,5,4,3,2,1], b in memory: [16,15,14,13,12,11,10,9]
+        // Lower lane: [8-7, 6-5, 16-15, 14-13] = [1, 1, 1, 1]
+        // Upper lane: [4-3, 2-1, 12-11, 10-9] = [1, 1, 1, 1]
+        assert_eq!(result, [1, 1, 1, 1, 1, 1, 1, 1]);
     }
 
     Ok(())
@@ -288,7 +300,9 @@ fn test_mm256_permutevar8x32_epi32() -> Result<(), String> {
         let b = _mm256_set_epi32(0, 1, 2, 3, 4, 5, 6, 7);
         let result = _mm256_permutevar8x32_epi32(a, b);
         let result = std::mem::transmute::<__m256i, [i32; 8]>(result);
-        assert_eq!(result, [0, 1, 2, 3, 4, 5, 6, 7]);
+        // a in memory: [0,1,2,3,4,5,6,7], b in memory: [7,6,5,4,3,2,1,0] (indices)
+        // result[i] = a[b[i]], so result = [a[7], a[6], ..., a[0]] = [7,6,5,4,3,2,1,0]
+        assert_eq!(result, [7, 6, 5, 4, 3, 2, 1, 0]);
     }
 
     Ok(())

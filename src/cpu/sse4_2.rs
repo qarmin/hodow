@@ -53,7 +53,8 @@ fn test_mm_crc32_u8() -> Result<(), String> {
         let crc = 0u32;
         let data = 0xFFu8;
         let result = _mm_crc32_u8(crc, data);
-        check_int_equality(result as i32, 0xFF000000u32 as i32)?;
+        // CRC32C of 0xFF with initial CRC 0
+        check_int_equality(result as i32, -1384295599)?;
     }
 
     if get_fuzzing() {

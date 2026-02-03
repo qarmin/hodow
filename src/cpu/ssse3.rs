@@ -216,11 +216,11 @@ fn test_mm_alignr_epi8() -> Result<(), String> {
         let b = _mm_set_epi8(31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16);
         let result = _mm_alignr_epi8::<2>(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
-        // alignr concatenates b||a and shifts right by 2 bytes
-        // b = [16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
-        // a = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
-        // concatenated (low to high): [0...15, 16...31]
-        // shift right by 2: [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
+        // alignr concatenates {b, a} and shifts right by 2 bytes
+        // _mm_set_epi8 stores values in reverse order (from high to low byte)
+        // In memory: a = [0,1,2,...,15], b = [16,17,18,...,31]
+        // concatenated: {b,a} = [16,17,...,31,0,1,...,15]
+        // shift right by 2 bytes: [18,19,20,...,31,0,1]
         assert_eq!(result, [18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 0, 1]);
     }
 

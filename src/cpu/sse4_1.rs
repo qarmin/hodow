@@ -322,14 +322,17 @@ fn test_mm_testz_si128() -> Result<(), String> {
         let a = _mm_set_epi32(0x00FF0000, 0, 0, 0);
         let b = _mm_set_epi32(0xFF00FFFFu32 as i32, -1, -1, -1);
         let result = _mm_testz_si128(a, b);
-        check_int_equality(result, 0)?; // Should be 0 because there are common bits
+        // a AND b = 0x00FF0000 AND 0xFF00FFFF = 0 (no common bits in high word)
+        // testz returns 1 if (a AND b) == 0
+        check_int_equality(result, 1)?;
     }
 
     unsafe {
         let a = _mm_set_epi32(0x00FF0000, 0, 0, 0);
         let b = _mm_set_epi32(0xFF00FFFFu32 as i32, 0, 0, 0);
         let result = _mm_testz_si128(a, b);
-        check_int_equality(result, 0)?;
+        // a AND b = 0x00FF0000 AND 0xFF00FFFF = 0 (no common bits)
+        check_int_equality(result, 1)?;
     }
 
     Ok(())
