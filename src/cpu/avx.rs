@@ -93,9 +93,9 @@ fn test_mm256_set_ps() -> Result<(), String> {
 
 fn test_mm256_set1_ps() -> Result<(), String> {
     unsafe {
-        let result = _mm256_set1_ps(3.14);
+        let result = _mm256_set1_ps(3.13);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-        check_array_equality(&result, &[3.14, 3.14, 3.14, 3.14, 3.14, 3.14, 3.14, 3.14])?;
+        check_array_equality(&result, &[3.13, 3.13, 3.13, 3.13, 3.13, 3.13, 3.13, 3.13])?;
     }
 
     if get_fuzzing() {

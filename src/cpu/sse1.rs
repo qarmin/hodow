@@ -195,7 +195,7 @@ fn test_mm_div_ps() -> Result<(), String> {
 
 fn test_mm_set1_ps() -> Result<(), String> {
     unsafe {
-        let value = 3.14;
+        let value = 3.13;
         let result = _mm_set1_ps(value);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
         check_array_equality(&result, &[value, value, value, value])?;

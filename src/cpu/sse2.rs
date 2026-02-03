@@ -84,9 +84,9 @@ fn test_mm_set_pd() -> Result<(), String> {
 
 fn test_mm_set1_pd() -> Result<(), String> {
     unsafe {
-        let result = _mm_set1_pd(3.14);
+        let result = _mm_set1_pd(3.13);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_array_equality(&[result[0] as f32, result[1] as f32], &[3.14, 3.14])?;
+        check_array_equality(&[result[0] as f32, result[1] as f32], &[3.13, 3.13])?;
     }
 
     if get_fuzzing() {
