@@ -1,3 +1,7 @@
+#![allow(dead_code)]
+#![allow(unused_imports)]
+
+
 use std::fmt::Debug;
 use log::{error, info};
 use once_cell::sync::OnceCell;
