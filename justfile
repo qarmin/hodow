@@ -4,6 +4,9 @@ run +args:
 runn +args:
     cargo run {{args}}
 
+clippy:
+    RUSTFLAGS="-C target-cpu=native" cargo clippy --all-features --all-targets
+
 upgrade:
     cargo +nightly -Z unstable-options update --breaking
     cargo update

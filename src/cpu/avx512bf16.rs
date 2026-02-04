@@ -3,7 +3,8 @@ use std::arch::x86::*;
 #[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::*;
 
-use crate::cpu::{check_f32_array_equality, check_int_array_equality, ExtensionTest};
+use crate::cpu::{check_f32_array_equality, check_int_array_equality, ExtensionTest};use crate::cpu::TestFunction;
+
 
 pub struct AVX512BF16;
 
@@ -11,7 +12,7 @@ impl ExtensionTest for AVX512BF16 {
     fn get_name() -> &'static str {
         "AVX-512 BF16"
     }
-    fn get_tests() -> &'static [(&'static dyn Fn() -> Result<(), String>, &'static str)] {
+    fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
             (&test_mm_cvtne2ps_pbh, "test_mm_cvtne2ps_pbh"),
             (&test_mm_mask_cvtne2ps_pbh, "test_mm_mask_cvtne2ps_pbh"),

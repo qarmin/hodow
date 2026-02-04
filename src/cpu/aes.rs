@@ -6,7 +6,8 @@ use std::arch::x86_64::*;
 use log::info;
 
 use crate::cpu::{check_int_array_equality, get_iterations, ExtensionTest};
-use crate::get_fuzzing;
+use crate::get_fuzzing;use crate::cpu::TestFunction;
+
 
 pub struct AES;
 
@@ -15,7 +16,7 @@ impl ExtensionTest for AES {
         "AES-NI"
     }
 
-    fn get_tests() -> &'static [(&'static dyn Fn() -> Result<(), String>, &'static str)] {
+    fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
             (&test_mm_aesdec_si128, "test_mm_aesdec_si128"),
             (&test_mm_aesdeclast_si128, "test_mm_aesdeclast_si128"),

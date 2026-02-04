@@ -6,7 +6,9 @@ use std::arch::x86_64::*;
 use log::info;
 
 use crate::cpu::{check_int_array_equality, ExtensionTest};
-use crate::{get_fuzzing, get_iterations};
+use crate::{get_fuzzing};use crate::cpu::TestFunction;
+use crate::cpu::{check_f32_array_equality, get_iterations};
+
 
 pub struct AVX512VBMI;
 
@@ -15,7 +17,7 @@ impl ExtensionTest for AVX512VBMI {
         "AVX-512 VBMI"
     }
 
-    fn get_tests() -> &'static [(&'static dyn Fn() -> Result<(), String>, &'static str)] {
+    fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
             (&test_mm_permutex2var_epi8, "test_mm_permutex2var_epi8"),
             (&test_mm_mask_permutex2var_epi8, "test_mm_mask_permutex2var_epi8"),

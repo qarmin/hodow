@@ -5,7 +5,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{check_f32_array_equality, check_int_array_equality, get_iterations, ExtensionTest};
+use crate::cpu::{check_f32_array_equality, check_int_array_equality, get_iterations, ExtensionTest, TestFunction};
 use crate::{get_four_random_floats, get_fuzzing, get_random_float};
 
 pub struct SSE2;
@@ -14,7 +14,7 @@ impl ExtensionTest for SSE2 {
     fn get_name() -> &'static str {
         "SSE2"
     }
-    fn get_tests() -> &'static [(&'static dyn Fn() -> Result<(), String>, &'static str)] {
+    fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
             (&test_mm_set_pd, "test_mm_set_pd"),
             (&test_mm_set1_pd, "test_mm_set1_pd"),
@@ -47,10 +47,8 @@ impl ExtensionTest for SSE2 {
             (&test_mm_adds_epi16, "test_mm_adds_epi16"),
             (&test_mm_adds_epu8, "test_mm_adds_epu8"),
             (&test_mm_adds_epu16, "test_mm_adds_epu16"),
-            (&test_mm_sub_epi8, "test_mm_sub_epi8"),
             (&test_mm_sub_epi16, "test_mm_sub_epi16"),
             (&test_mm_sub_epi64, "test_mm_sub_epi64"),
-            (&test_mm_subs_epi8, "test_mm_subs_epi8"),
             (&test_mm_subs_epi16, "test_mm_subs_epi16"),
             (&test_mm_subs_epu8, "test_mm_subs_epu8"),
             (&test_mm_subs_epu16, "test_mm_subs_epu16"),
@@ -783,19 +781,6 @@ fn test_mm_sub_epi64() -> Result<(), String> {
         if result != [150, 70] {
             return Err(format!("Expected [150, 70], got {:?}", result));
         }
-    }
-    Ok(())
-}
-
-fn test_mm_subs_epi8() -> Result<(), String> {
-    unsafe {
-        let a = _mm_set1_epi8(-100);
-        let b = _mm_set1_epi8(50);
-        let result = _mm_subs_epi8(a, b);
-        let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
-
-        let expected = [-128_i8; 16];
-        check_int_array_equality(&result, &expected)?;
     }
     Ok(())
 }

@@ -6,7 +6,8 @@ use std::arch::x86_64::*;
 use log::info;
 
 use crate::cpu::{check_f32_array_equality, check_f64_array_equality, check_int_array_equality, check_int_equality, get_iterations, ExtensionTest};
-use crate::get_fuzzing;
+use crate::get_fuzzing;use crate::cpu::TestFunction;
+
 
 pub struct AVX2;
 
@@ -14,7 +15,7 @@ impl ExtensionTest for AVX2 {
     fn get_name() -> &'static str {
         "AVX2"
     }
-    fn get_tests() -> &'static [(&'static dyn Fn() -> Result<(), String>, &'static str)] {
+    fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
             (&test_mm256_add_epi32, "test_mm256_add_epi32"),
             (&test_mm256_sub_epi32, "test_mm256_sub_epi32"),

@@ -3,7 +3,8 @@ use std::arch::x86::*;
 #[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::*;
 
-use log::info;
+use log::info;use crate::cpu::TestFunction;
+
 
 use crate::cpu::{check_f32_array_equality, check_f64_array_equality, get_iterations, ExtensionTest};
 use crate::{get_fuzzing, get_random_float};
@@ -14,7 +15,7 @@ impl ExtensionTest for AVX512F {
     fn get_name() -> &'static str {
         "AVX-512F"
     }
-    fn get_tests() -> &'static [(&'static dyn Fn() -> Result<(), String>, &'static str)] {
+    fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
             (&test_mm512_add_ps, "test_mm512_add_ps"),
             (&test_mm512_sub_ps, "test_mm512_sub_ps"),

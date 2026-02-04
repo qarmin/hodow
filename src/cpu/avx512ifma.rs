@@ -15,7 +15,7 @@ impl ExtensionTest for AVX512IFMA {
         "AVX-512 IFMA"
     }
 
-    fn get_tests() -> &'static [(&'static dyn Fn() -> Result<(), String>, &'static str)] {
+    fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
             (&test_mm_madd52hi_avx_epu64, "test_mm_madd52hi_avx_epu64"),
             (&test_mm_madd52hi_epu64, "test_mm_madd52hi_epu64"),

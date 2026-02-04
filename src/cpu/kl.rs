@@ -12,7 +12,7 @@ impl ExtensionTest for KL {
     fn get_name() -> &'static str {
         "Key Locker"
     }
-    fn get_tests() -> &'static [(&'static dyn Fn() -> Result<(), String>, &'static str)] {
+    fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
             (&test_mm_loadiwkey, "test_mm_loadiwkey"),
             (&test_mm_encodekey128_u32, "test_mm_encodekey128_u32"),

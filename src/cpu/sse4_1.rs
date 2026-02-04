@@ -3,7 +3,8 @@ use std::arch::x86::*;
 #[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::*;
 
-use log::info;
+use log::info;use crate::cpu::TestFunction;
+
 
 use crate::cpu::{check_f32_array_equality, check_float_equality, check_int_array_equality, check_int_equality, get_iterations, ExtensionTest, DEFAULT_FLOAT_DIFF};
 use crate::{get_four_random_floats, get_fuzzing};
@@ -14,7 +15,7 @@ impl ExtensionTest for SSE41 {
     fn get_name() -> &'static str {
         "SSE4.1"
     }
-    fn get_tests() -> &'static [(&'static dyn Fn() -> Result<(), String>, &'static str)] {
+    fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
             (&test_mm_blend_ps, "test_mm_blend_ps"),
             (&test_mm_blendv_ps, "test_mm_blendv_ps"),

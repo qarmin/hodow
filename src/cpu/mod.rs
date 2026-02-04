@@ -57,10 +57,12 @@ pub fn get_iterations() -> usize {
     *ITERATIONS.get().unwrap_or(&DEFAULT_TEST_ITERATIONS)
 }
 
+pub type TestFunction = dyn Fn() -> Result<(), String>;
+
 #[allow(dead_code)]
 pub trait ExtensionTest {
     fn get_name() -> &'static str;
-    fn get_tests() -> &'static [(&'static dyn Fn() -> Result<(), String>, &'static str)];
+    fn get_tests() -> &'static [(&'static TestFunction, &'static str)];
     fn test() -> Result<(), String> {
         info!("Checking {} support", Self::get_name());
         for (fun, name) in Self::get_tests() {

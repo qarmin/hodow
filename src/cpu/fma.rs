@@ -8,13 +8,14 @@ use log::info;
 use crate::cpu::{check_f32_array_equality, get_iterations, ExtensionTest};
 use crate::{get_four_random_floats, get_fuzzing};
 
-pub struct FMA;
+pub struct FMA;use crate::cpu::TestFunction;
+
 
 impl ExtensionTest for FMA {
     fn get_name() -> &'static str {
         "FMA"
     }
-    fn get_tests() -> &'static [(&'static dyn Fn() -> Result<(), String>, &'static str)] {
+    fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
             (&test_mm_fmadd_ps, "test_mm_fmadd_ps"),
             (&test_mm_fmsub_ps, "test_mm_fmsub_ps"),

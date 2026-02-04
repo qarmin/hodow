@@ -5,7 +5,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{check_f32_array_equality, check_float_equality, get_iterations, ExtensionTest, DEFAULT_FLOAT_DIFF};
+use crate::cpu::{check_f32_array_equality, check_float_equality, get_iterations, ExtensionTest, TestFunction, DEFAULT_FLOAT_DIFF};
 use crate::{get_four_random_floats, get_fuzzing, get_random_float};
 
 pub struct SSE1;
@@ -14,7 +14,7 @@ impl ExtensionTest for SSE1 {
     fn get_name() -> &'static str {
         "SSE1"
     }
-    fn get_tests() -> &'static [(&'static dyn Fn() -> Result<(), String>, &'static str)] {
+    fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
             (&test_mm_set_ps, "test_mm_set_ps"),
             (&test_mm_set_ss, "test_mm_set_ss"),

@@ -12,7 +12,7 @@ impl ExtensionTest for AVX512CD {
         "AVX-512 CD"
     }
 
-    fn get_tests() -> &'static [(&'static dyn Fn() -> Result<(), String>, &'static str)] {
+    fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
             (&test_mm_broadcastmw_epi32, "test_mm_broadcastmw_epi32"),
             (&test_mm_broadcastmb_epi64, "test_mm_broadcastmb_epi64"),
