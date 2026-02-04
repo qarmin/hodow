@@ -804,7 +804,7 @@ fn test_mm_rcp_ss() -> Result<(), String> {
         let data_128 = _mm_loadu_ps(data.as_ptr());
         let result = _mm_rcp_ss(data_128);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_float_equality(result[0], 0.25, DEFAULT_FLOAT_DIFF)?;
+        check_f32_array_equality(&result, &[0.25, 9.0, 16.0, 25.0])?;
     }
 
     if get_fuzzing() {

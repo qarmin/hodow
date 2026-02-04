@@ -274,8 +274,7 @@ fn check_float_equality(a: f32, b: f32, max_diff: f32) -> Result<(), String> {
 
     Ok(())
 }
-#[allow(unused)]
-pub fn check_int_equality(a: i32, b: i32) -> Result<(), String> {
+pub fn check_int_equality<T: PartialEq + Debug>(a: T, b: T) -> Result<(), String> {
     if a != b {
         return Err(format!("Got {a:?}, expected {b:?}"));
     }
