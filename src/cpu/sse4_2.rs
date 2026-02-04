@@ -5,7 +5,7 @@ use std::arch::x86::*;
 
 use log::info;
 
-use crate::cpu::{check_int_equality, ExtensionTest, get_iterations};
+use crate::cpu::{check_int_equality, check_int_array_equality, ExtensionTest, get_iterations};
 use crate::get_fuzzing;
 
 pub struct SSE42;
@@ -30,8 +30,7 @@ fn test_mm_cmpgt_epi64() -> Result<(), String> {
         let b = _mm_set_epi64x(5, 30);
         let result = _mm_cmpgt_epi64(a, b);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        assert_eq!(result[0], 0); // 20 > 30? no
-        assert_eq!(result[1], -1); // 10 > 5? yes
+        check_int_array_equality(&result, &[0, -1])?; // 20 > 30? no, 10 > 5? yes
     }
 
     if get_fuzzing() {

@@ -206,6 +206,25 @@ fn check_f32_array_equality(a: &[f32], b: &[f32]) -> Result<(), String> {
     Ok(())
 }
 
+#[allow(dead_code)]
+fn check_f64_array_equality(a: &[f64], b: &[f64]) -> Result<(), String> {
+    if a.len() != b.len() {
+        return Err(format!("Arrays have different lengths: {} and {}", a.len(), b.len()));
+    }
+
+    for i in 0..a.len() {
+        if a[i].is_infinite() && !b[i].is_infinite() {
+            return Err(format!("Got {a:?}, expected {b:?} (One is infinite, other is not)"));
+        } else if a[i].is_nan() && !b[i].is_nan() {
+            return Err(format!("Got {a:?}, expected {b:?} (One is NaN, other is not)"));
+        } else if (a[i] - b[i]).abs() > 0.001 {
+            return Err(format!("Got {a:?}, expected {b:?} (Difference is too big)"));
+        }
+    }
+
+    Ok(())
+}
+
 fn check_int_array_equality<T: PartialEq + Debug>(a: &[T], b: &[T]) -> Result<(), String> {
     if a.len() != b.len() {
         return Err(format!("Arrays have different lengths: {} and {}", a.len(), b.len()));
@@ -308,4 +327,3 @@ pub fn available_modes() -> Vec<&'static str> {
 
     modes
 }
-

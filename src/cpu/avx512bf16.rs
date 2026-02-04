@@ -59,13 +59,9 @@ fn test_mm_mask_cvtne2ps_pbh() -> Result<(), String> {
         let b = _mm_set1_ps(2.5);
         let result = _mm_mask_cvtne2ps_pbh(src, 0xFF, a, b);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
-        // Check that mask was applied
-        if result[0] == 0 && result[7] != 0 {
-            // Some elements should be converted
-            Ok(())
-        } else {
-            Ok(()) // Accept any result for BF16
-        }
+        // Check that mask was applied (best-effort); accept any result
+        let _ = result;
+        Ok(())
     }
     #[cfg(not(target_feature = "avx512bf16,avx512vl"))]
     Ok(())
@@ -79,9 +75,7 @@ fn test_mm_maskz_cvtne2ps_pbh() -> Result<(), String> {
         let result = _mm_maskz_cvtne2ps_pbh(0xFF, a, b);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
         // Just check it runs
-        if result == [0; 8] {
-            // All masked out is valid
-        }
+        let _ = result;
         Ok(())
     }
     #[cfg(not(target_feature = "avx512bf16,avx512vl"))]

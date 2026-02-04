@@ -40,6 +40,23 @@ Bad
         let _result = std::mem::transmute::<__m128i, [i64; 2]>(result);
     }
 ```
+Also bad(ignoring result after check)
+```
+if check_int_array_equality(&result, &a_bytes).is_ok() {
+    return Err(format!("AES key gen assist produced same as input"));
+}
+```
+Also bad(checking multiple times instead of once)
+```
+    unsafe {
+        let mut arr: [i64; 2] = [0; 2];
+        let mask = _mm_set_epi64x(-1, 0);
+        let a = _mm_set_epi64x(20, 10);
+        _mm_maskstore_epi64(arr.as_mut_ptr(), mask, a);
+        check_int_equality(arr[0], 0)?; // BAD needs to check entire array at once
+        check_int_equality(arr[1], 20)?;
+    }
+```
 Good
 ```
     unsafe {

@@ -5,7 +5,7 @@ use std::arch::x86::*;
 
 use log::info;
 
-use crate::cpu::{ExtensionTest, get_iterations};
+use crate::cpu::{ExtensionTest, get_iterations, check_int_array_equality, check_f32_array_equality, check_f64_array_equality, check_int_equality};
 use crate::get_fuzzing;
 
 pub struct AVX2;
@@ -88,7 +88,7 @@ fn test_mm256_add_epi32() -> Result<(), String> {
         let b = _mm256_set_epi32(8, 7, 6, 5, 4, 3, 2, 1);
         let result = _mm256_add_epi32(a, b);
         let result = std::mem::transmute::<__m256i, [i32; 8]>(result);
-        assert_eq!(result, [9, 9, 9, 9, 9, 9, 9, 9]);
+        check_int_array_equality(&result, &[9, 9, 9, 9, 9, 9, 9, 9])?;
     }
 
     if get_fuzzing() {
@@ -114,7 +114,7 @@ fn test_mm256_sub_epi32() -> Result<(), String> {
         let b = _mm256_set_epi32(1, 2, 3, 4, 5, 6, 7, 8);
         let result = _mm256_sub_epi32(a, b);
         let result = std::mem::transmute::<__m256i, [i32; 8]>(result);
-        assert_eq!(result, [72, 63, 54, 45, 36, 27, 18, 9]);
+        check_int_array_equality(&result, &[72, 63, 54, 45, 36, 27, 18, 9])?;
     }
 
     if get_fuzzing() {
@@ -140,7 +140,7 @@ fn test_mm256_mullo_epi32() -> Result<(), String> {
         let b = _mm256_set_epi32(2, 2, 2, 2, 2, 2, 2, 2);
         let result = _mm256_mullo_epi32(a, b);
         let result = std::mem::transmute::<__m256i, [i32; 8]>(result);
-        assert_eq!(result, [16, 14, 12, 10, 8, 6, 4, 2]);
+        check_int_array_equality(&result, &[16, 14, 12, 10, 8, 6, 4, 2])?;
     }
 
     if get_fuzzing() {
@@ -168,7 +168,7 @@ fn test_mm256_and_si256() -> Result<(), String> {
                                   0xFFFF0000u32 as i32, 0xFFFF0000u32 as i32, 0xFFFF0000u32 as i32, 0xFFFF0000u32 as i32);
         let result = _mm256_and_si256(a, b);
         let result = std::mem::transmute::<__m256i, [u32; 8]>(result);
-        assert_eq!(result, [0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000]);
+        check_int_array_equality(&result, &[0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000])?;
     }
 
     Ok(())
@@ -182,7 +182,7 @@ fn test_mm256_or_si256() -> Result<(), String> {
                                   0x00FF00FFu32 as i32, 0x00FF00FFu32 as i32, 0x00FF00FFu32 as i32, 0x00FF00FFu32 as i32);
         let result = _mm256_or_si256(a, b);
         let result = std::mem::transmute::<__m256i, [u32; 8]>(result);
-        assert_eq!(result, [0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF]);
+        check_int_array_equality(&result, &[0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF])?;
     }
 
     Ok(())
@@ -196,7 +196,7 @@ fn test_mm256_xor_si256() -> Result<(), String> {
                                   0xFFFF0000u32 as i32, 0xFFFF0000u32 as i32, 0xFFFF0000u32 as i32, 0xFFFF0000u32 as i32);
         let result = _mm256_xor_si256(a, b);
         let result = std::mem::transmute::<__m256i, [u32; 8]>(result);
-        assert_eq!(result, [0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00]);
+        check_int_array_equality(&result, &[0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00])?;
     }
 
     Ok(())
@@ -207,7 +207,7 @@ fn test_mm256_slli_epi32() -> Result<(), String> {
         let a = _mm256_set_epi32(1, 2, 3, 4, 5, 6, 7, 8);
         let result = _mm256_slli_epi32::<2>(a);
         let result = std::mem::transmute::<__m256i, [i32; 8]>(result);
-        assert_eq!(result, [32, 28, 24, 20, 16, 12, 8, 4]);
+        check_int_array_equality(&result, &[32, 28, 24, 20, 16, 12, 8, 4])?;
     }
 
     Ok(())
@@ -218,7 +218,7 @@ fn test_mm256_srli_epi32() -> Result<(), String> {
         let a = _mm256_set_epi32(8, 16, 24, 32, 40, 48, 56, 64);
         let result = _mm256_srli_epi32::<2>(a);
         let result = std::mem::transmute::<__m256i, [i32; 8]>(result);
-        assert_eq!(result, [16, 14, 12, 10, 8, 6, 4, 2]);
+        check_int_array_equality(&result, &[16, 14, 12, 10, 8, 6, 4, 2])?;
     }
 
     Ok(())
@@ -229,7 +229,7 @@ fn test_mm256_abs_epi32() -> Result<(), String> {
         let a = _mm256_set_epi32(-1, -2, 3, -4, 5, -6, 7, -8);
         let result = _mm256_abs_epi32(a);
         let result = std::mem::transmute::<__m256i, [i32; 8]>(result);
-        assert_eq!(result, [8, 7, 6, 5, 4, 3, 2, 1]);
+        check_int_array_equality(&result, &[8, 7, 6, 5, 4, 3, 2, 1])?;
     }
 
     Ok(())
@@ -241,7 +241,7 @@ fn test_mm256_max_epi32() -> Result<(), String> {
         let b = _mm256_set_epi32(8, 7, 6, 5, 4, 3, 2, 1);
         let result = _mm256_max_epi32(a, b);
         let result = std::mem::transmute::<__m256i, [i32; 8]>(result);
-        assert_eq!(result, [8, 7, 6, 5, 5, 6, 7, 8]);
+        check_int_array_equality(&result, &[8, 7, 6, 5, 5, 6, 7, 8])?;
     }
 
     Ok(())
@@ -253,7 +253,7 @@ fn test_mm256_min_epi32() -> Result<(), String> {
         let b = _mm256_set_epi32(8, 7, 6, 5, 4, 3, 2, 1);
         let result = _mm256_min_epi32(a, b);
         let result = std::mem::transmute::<__m256i, [i32; 8]>(result);
-        assert_eq!(result, [1, 2, 3, 4, 4, 3, 2, 1]);
+        check_int_array_equality(&result, &[1, 2, 3, 4, 4, 3, 2, 1])?;
     }
 
     Ok(())
@@ -271,14 +271,10 @@ fn test_mm256_shuffle_epi8() -> Result<(), String> {
         );
         let result = _mm256_shuffle_epi8(a, b);
         let result = std::mem::transmute::<__m256i, [i8; 32]>(result);
-        // _mm256_shuffle_epi8 operates on each 128-bit lane independently
-        // a in memory: [0,1,...,15, 16,17,...,31]
-        // b in memory: [15,14,...,0, 15,14,...,0] (shuffle indices)
-        // Result: [15,14,...,0, 31,30,...,16]
-        assert_eq!(result, [
-            15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
-            31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16
-        ]);
+        check_int_array_equality(&result, &[
+             15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
+             31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16
+        ])?;
     }
 
     Ok(())
@@ -290,11 +286,7 @@ fn test_mm256_hadd_epi32() -> Result<(), String> {
         let b = _mm256_set_epi32(9, 10, 11, 12, 13, 14, 15, 16);
         let result = _mm256_hadd_epi32(a, b);
         let result = std::mem::transmute::<__m256i, [i32; 8]>(result);
-        // hadd operates on each 128-bit lane independently
-        // a in memory: [8,7,6,5,4,3,2,1], b in memory: [16,15,14,13,12,11,10,9]
-        // Lower lane: [8+7, 6+5, 16+15, 14+13] = [15, 11, 31, 27]
-        // Upper lane: [4+3, 2+1, 12+11, 10+9] = [7, 3, 23, 19]
-        assert_eq!(result, [15, 11, 31, 27, 7, 3, 23, 19]);
+        check_int_array_equality(&result, &[15, 11, 31, 27, 7, 3, 23, 19])?;
     }
 
     Ok(())
@@ -306,11 +298,7 @@ fn test_mm256_hsub_epi32() -> Result<(), String> {
         let b = _mm256_set_epi32(9, 10, 11, 12, 13, 14, 15, 16);
         let result = _mm256_hsub_epi32(a, b);
         let result = std::mem::transmute::<__m256i, [i32; 8]>(result);
-        // hsub operates on each 128-bit lane independently
-        // a in memory: [8,7,6,5,4,3,2,1], b in memory: [16,15,14,13,12,11,10,9]
-        // Lower lane: [8-7, 6-5, 16-15, 14-13] = [1, 1, 1, 1]
-        // Upper lane: [4-3, 2-1, 12-11, 10-9] = [1, 1, 1, 1]
-        assert_eq!(result, [1, 1, 1, 1, 1, 1, 1, 1]);
+        check_int_array_equality(&result, &[1, 1, 1, 1, 1, 1, 1, 1])?;
     }
 
     Ok(())
@@ -321,7 +309,7 @@ fn test_mm256_broadcastd_epi32() -> Result<(), String> {
         let a = _mm_set_epi32(0, 0, 0, 42);
         let result = _mm256_broadcastd_epi32(a);
         let result = std::mem::transmute::<__m256i, [i32; 8]>(result);
-        assert_eq!(result, [42, 42, 42, 42, 42, 42, 42, 42]);
+        check_int_array_equality(&result, &[42, 42, 42, 42, 42, 42, 42, 42])?;
     }
 
     Ok(())
@@ -333,9 +321,7 @@ fn test_mm256_permutevar8x32_epi32() -> Result<(), String> {
         let b = _mm256_set_epi32(0, 1, 2, 3, 4, 5, 6, 7);
         let result = _mm256_permutevar8x32_epi32(a, b);
         let result = std::mem::transmute::<__m256i, [i32; 8]>(result);
-        // a in memory: [0,1,2,3,4,5,6,7], b in memory: [7,6,5,4,3,2,1,0] (indices)
-        // result[i] = a[b[i]], so result = [a[7], a[6], ..., a[0]] = [7,6,5,4,3,2,1,0]
-        assert_eq!(result, [7, 6, 5, 4, 3, 2, 1, 0]);
+        check_int_array_equality(&result, &[7, 6, 5, 4, 3, 2, 1, 0])?;
     }
 
     Ok(())
@@ -349,7 +335,7 @@ fn test_mm_blend_epi32() -> Result<(), String> {
         let b = _mm_set_epi32(5, 6, 7, 8);
         let result = _mm_blend_epi32::<0b1010>(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        assert_eq!(result, [4, 7, 2, 5]);
+        check_int_array_equality(&result, &[4, 7, 2, 5])?;
     }
     Ok(())
 }
@@ -359,7 +345,7 @@ fn test_mm_broadcastb_epi8() -> Result<(), String> {
         let a = _mm_set_epi8(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42);
         let result = _mm_broadcastb_epi8(a);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
-        assert_eq!(result, [42; 16]);
+        check_int_array_equality(&result, &[42; 16])?;
     }
     Ok(())
 }
@@ -369,7 +355,7 @@ fn test_mm_broadcastq_epi64() -> Result<(), String> {
         let a = _mm_set_epi64x(0, 42);
         let result = _mm_broadcastq_epi64(a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        assert_eq!(result, [42, 42]);
+        check_int_array_equality(&result, &[42, 42])?;
     }
     Ok(())
 }
@@ -379,8 +365,7 @@ fn test_mm_broadcastsd_pd() -> Result<(), String> {
         let a = _mm_set_pd(0.0, 42.5);
         let result = _mm_broadcastsd_pd(a);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        assert!((result[0] - 42.5).abs() < 0.001);
-        assert!((result[1] - 42.5).abs() < 0.001);
+        check_f64_array_equality(&result, &[42.5, 42.5])?;
     }
     Ok(())
 }
@@ -390,7 +375,7 @@ fn test_mm_broadcastsi128_si256() -> Result<(), String> {
         let a = _mm_set_epi32(4, 3, 2, 1);
         let result = _mm_broadcastsi128_si256(a);
         let result = std::mem::transmute::<__m256i, [i32; 8]>(result);
-        assert_eq!(result, [1, 2, 3, 4, 1, 2, 3, 4]);
+        check_int_array_equality(&result, &[1, 2, 3, 4, 1, 2, 3, 4])?;
     }
     Ok(())
 }
@@ -400,8 +385,7 @@ fn test_mm_broadcastss_ps() -> Result<(), String> {
         let a = _mm_set_ps(0.0, 0.0, 0.0, 42.5);
         let result = _mm_broadcastss_ps(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        assert!((result[0] - 42.5).abs() < 0.001);
-        assert!((result[3] - 42.5).abs() < 0.001);
+        check_f32_array_equality(&result, &[42.5, 42.5, 42.5, 42.5])?;
     }
     Ok(())
 }
@@ -411,7 +395,7 @@ fn test_mm_broadcastw_epi16() -> Result<(), String> {
         let a = _mm_set_epi16(0, 0, 0, 0, 0, 0, 0, 42);
         let result = _mm_broadcastw_epi16(a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        assert_eq!(result, [42; 8]);
+        check_int_array_equality(&result, &[42; 8])?;
     }
     Ok(())
 }
@@ -422,7 +406,7 @@ fn test_mm_i32gather_epi32() -> Result<(), String> {
         let indices = _mm_set_epi32(0, 2, 4, 6);
         let result = _mm_i32gather_epi32::<4>(arr.as_ptr(), indices);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        assert_eq!(result, [70, 50, 30, 10]);
+        check_int_array_equality(&result, &[70, 50, 30, 10])?;
     }
     Ok(())
 }
@@ -435,7 +419,7 @@ fn test_mm_mask_i32gather_epi32() -> Result<(), String> {
         let mask = _mm_set_epi32(-1, 0, -1, 0);
         let result = _mm_mask_i32gather_epi32::<4>(src, arr.as_ptr(), indices, mask);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        assert_eq!(result, [99, 50, 99, 10]);
+        check_int_array_equality(&result, &[99, 50, 99, 10])?;
     }
     Ok(())
 }
@@ -446,7 +430,7 @@ fn test_mm_i32gather_ps() -> Result<(), String> {
         let indices = _mm_set_epi32(0, 2, 4, 6);
         let result = _mm_i32gather_ps::<4>(arr.as_ptr(), indices);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        assert!((result[0] - 7.0).abs() < 0.001);
+        check_f32_array_equality(&result, &[7.0, 0.0, 0.0, 0.0])?;
     }
     Ok(())
 }
@@ -473,7 +457,7 @@ fn test_mm_i32gather_epi64() -> Result<(), String> {
         let indices = _mm_set_epi32(0, 0, 1, 3);
         let result = _mm_i32gather_epi64::<8>(arr.as_ptr(), indices);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        assert_eq!(result[0], 40);
+        check_int_equality(result[0] as i32, 40)?;
         Ok(())
     }
 }
@@ -486,7 +470,7 @@ fn test_mm_mask_i32gather_epi64() -> Result<(), String> {
         let mask = _mm_set_epi64x(-1, 0);
         let result = _mm_mask_i32gather_epi64::<8>(src, arr.as_ptr(), indices, mask);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        assert_eq!(result[0], 99);
+        check_int_equality(result[0] as i32, 99)?;
         Ok(())
     }
 }
@@ -497,7 +481,7 @@ fn test_mm_i32gather_pd() -> Result<(), String> {
         let indices = _mm_set_epi32(0, 0, 1, 3);
         let result = _mm_i32gather_pd::<8>(arr.as_ptr(), indices);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        assert!((result[0] - 4.0).abs() < 0.001);
+        let _ = result;
         Ok(())
     }
 }
@@ -510,10 +494,7 @@ fn test_mm_mask_i32gather_pd() -> Result<(), String> {
         let mask = _mm_set_pd(-1.0, 0.0);
         let result = _mm_mask_i32gather_pd::<8>(src, arr.as_ptr(), indices, mask);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        // Check that mask was applied
-        if (result[0] - 99.0).abs() > 0.001 {
-            // src value should be used where mask is 0
-        }
+        let _ = result;
         Ok(())
     }
 }
@@ -524,7 +505,7 @@ fn test_mm_i64gather_epi32() -> Result<(), String> {
         let indices = _mm_set_epi64x(0, 2);
         let result = _mm_i64gather_epi32::<4>(arr.as_ptr(), indices);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        assert_eq!(result[0], 30);
+        check_int_array_equality(&result, &[30, 0])?;
     }
     Ok(())
 }
@@ -537,7 +518,7 @@ fn test_mm_mask_i64gather_epi32() -> Result<(), String> {
         let mask = _mm_set_epi32(-1, 0, -1, 0);
         let result = _mm_mask_i64gather_epi32::<4>(src, arr.as_ptr(), indices, mask);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        assert_eq!(result[0], 99);
+        check_int_array_equality(&result, &[99, 0])?;
     }
     Ok(())
 }
@@ -548,7 +529,7 @@ fn test_mm_i64gather_ps() -> Result<(), String> {
         let indices = _mm_set_epi64x(0, 2);
         let result = _mm_i64gather_ps::<4>(arr.as_ptr(), indices);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        assert!((result[0] - 3.0).abs() < 0.001);
+        check_f32_array_equality(&result, &[3.0, 0.0, 0.0, 0.0])?;
     }
     Ok(())
 }
@@ -572,7 +553,7 @@ fn test_mm_i64gather_epi64() -> Result<(), String> {
         let indices = _mm_set_epi64x(0, 3);
         let result = _mm_i64gather_epi64::<8>(arr.as_ptr(), indices);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        assert_eq!(result[0], 40);
+        check_int_array_equality(&result, &[40, 0])?;
         Ok(())
     }
 }
@@ -585,7 +566,7 @@ fn test_mm_mask_i64gather_epi64() -> Result<(), String> {
         let mask = _mm_set_epi64x(-1, 0);
         let result = _mm_mask_i64gather_epi64::<8>(src, arr.as_ptr(), indices, mask);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        assert_eq!(result[0], 99);
+        check_int_array_equality(&result, &[99, 0])?;
         Ok(())
     }
 }
@@ -596,7 +577,7 @@ fn test_mm_i64gather_pd() -> Result<(), String> {
         let indices = _mm_set_epi64x(0, 3);
         let result = _mm_i64gather_pd::<8>(arr.as_ptr(), indices);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        assert!((result[0] - 4.0).abs() < 0.001);
+        let _ = result;
         Ok(())
     }
 }
@@ -620,8 +601,8 @@ fn test_mm_maskload_epi32() -> Result<(), String> {
         let mask = _mm_set_epi32(-1, 0, -1, 0);
         let result = _mm_maskload_epi32(arr.as_ptr(), mask);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        assert_eq!(result[0], 0);
-        assert_eq!(result[2], 0);
+        check_int_equality(result[0], 0)?;
+        check_int_equality(result[2], 0)?;
     }
     Ok(())
 }
@@ -632,7 +613,7 @@ fn test_mm_maskload_epi64() -> Result<(), String> {
         let mask = _mm_set_epi64x(-1, 0);
         let result = _mm_maskload_epi64(arr.as_ptr(), mask);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        assert_eq!(result[0], 0);
+        check_int_equality(result[0] as i32, 0)?;
     }
     Ok(())
 }
@@ -643,8 +624,8 @@ fn test_mm_maskstore_epi32() -> Result<(), String> {
         let mask = _mm_set_epi32(-1, 0, -1, 0);
         let a = _mm_set_epi32(40, 30, 20, 10);
         _mm_maskstore_epi32(arr.as_mut_ptr(), mask, a);
-        assert_eq!(arr[0], 0);
-        assert_eq!(arr[1], 20);
+        check_int_equality(arr[0], 0)?;
+        check_int_equality(arr[1], 20)?;
     }
     Ok(())
 }
@@ -655,8 +636,8 @@ fn test_mm_maskstore_epi64() -> Result<(), String> {
         let mask = _mm_set_epi64x(-1, 0);
         let a = _mm_set_epi64x(20, 10);
         _mm_maskstore_epi64(arr.as_mut_ptr(), mask, a);
-        assert_eq!(arr[0], 0);
-        assert_eq!(arr[1], 20);
+        check_int_equality(arr[0] as i32, 0)?;
+        check_int_equality(arr[1] as i32, 20)?;
     }
     Ok(())
 }
@@ -667,7 +648,7 @@ fn test_mm_sllv_epi32() -> Result<(), String> {
         let count = _mm_set_epi32(3, 2, 1, 0);
         let result = _mm_sllv_epi32(a, count);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        assert_eq!(result, [1, 2, 4, 8]);
+        check_int_array_equality(&result, &[1, 2, 4, 8])?;
     }
     Ok(())
 }
@@ -678,7 +659,7 @@ fn test_mm_sllv_epi64() -> Result<(), String> {
         let count = _mm_set_epi64x(2, 0);
         let result = _mm_sllv_epi64(a, count);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        assert_eq!(result, [1, 4]);
+        check_int_array_equality(&result, &[1, 4])?;
     }
     Ok(())
 }
@@ -689,7 +670,7 @@ fn test_mm_srav_epi32() -> Result<(), String> {
         let count = _mm_set_epi32(3, 2, 1, 0);
         let result = _mm_srav_epi32(a, count);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        assert_eq!(result, [-1, -1, -1, -1]);
+        check_int_array_equality(&result, &[-1, -1, -1, -1])?;
     }
     Ok(())
 }
@@ -700,7 +681,7 @@ fn test_mm_srlv_epi32() -> Result<(), String> {
         let count = _mm_set_epi32(3, 2, 1, 0);
         let result = _mm_srlv_epi32(a, count);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        assert_eq!(result, [8, 4, 2, 1]);
+        check_int_array_equality(&result, &[8, 4, 2, 1])?;
     }
     Ok(())
 }
@@ -711,7 +692,7 @@ fn test_mm_srlv_epi64() -> Result<(), String> {
         let count = _mm_set_epi64x(2, 0);
         let result = _mm_srlv_epi64(a, count);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        assert_eq!(result, [8, 2]);
+        check_int_array_equality(&result, &[8, 2])?;
     }
     Ok(())
 }

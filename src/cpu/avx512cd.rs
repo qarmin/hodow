@@ -3,7 +3,7 @@ use std::arch::x86_64::*;
 #[cfg(target_arch = "x86")]
 use std::arch::x86::*;
 
-use crate::cpu::ExtensionTest;
+use crate::cpu::{ExtensionTest, check_int_equality};
 
 pub struct AVX512CD;
 
@@ -38,9 +38,7 @@ fn test_mm_broadcastmw_epi32() -> Result<(), String> {
         let k = 0b10101010u8;
         let result = _mm_broadcastmw_epi32(k);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        if result[0] != 0b10101010 {
-            return Err(format!("Expected broadcast of mask, got {:?}", result));
-        }
+        check_int_equality(result[0], 0b10101010)?;
         Ok(())
     }
     #[cfg(not(target_feature = "avx512cd,avx512vl"))]
@@ -53,9 +51,7 @@ fn test_mm_broadcastmb_epi64() -> Result<(), String> {
         let k = 0b10101010u8;
         let result = _mm_broadcastmb_epi64(k);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        if result[0] != 0b10101010 {
-            return Err(format!("Expected broadcast of mask, got {:?}", result));
-        }
+        check_int_equality(result[0] as i32, 0b10101010)?;
         Ok(())
     }
     #[cfg(not(target_feature = "avx512cd,avx512vl"))]
@@ -136,10 +132,7 @@ fn test_mm_lzcnt_epi32() -> Result<(), String> {
         let a = _mm_set1_epi32(0x0000_00FF);
         let result = _mm_lzcnt_epi32(a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        // Leading zeros count for 0xFF = 24
-        if result[0] != 24 {
-            return Err(format!("Expected 24 leading zeros, got {}", result[0]));
-        }
+        check_int_equality(result[0], 24)?;
         Ok(())
     }
     #[cfg(not(target_feature = "avx512cd,avx512vl"))]
@@ -153,15 +146,13 @@ fn test_mm_mask_lzcnt_epi32() -> Result<(), String> {
         let a = _mm_set1_epi32(0x0000_00FF);
         let result = _mm_mask_lzcnt_epi32(src, 0b1100, a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        // Lower 2 elements from src
-        if result[0] != 100 || result[2] != 24 {
-            return Err(format!("Mask not applied correctly: {:?}", result));
-        }
-        Ok(())
-    }
-    #[cfg(not(target_feature = "avx512cd,avx512vl"))]
-    Ok(())
-}
+        check_int_equality(result[0], 100)?;
+        check_int_equality(result[2], 24)?;
+         Ok(())
+     }
+     #[cfg(not(target_feature = "avx512cd,avx512vl"))]
+     Ok(())
+ }
 
 fn test_mm_maskz_lzcnt_epi32() -> Result<(), String> {
     #[cfg(target_feature = "avx512cd,avx512vl")]

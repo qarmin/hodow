@@ -5,7 +5,7 @@ use std::arch::x86::*;
 
 use log::info;
 
-use crate::cpu::{check_f32_array_equality, ExtensionTest, get_iterations};
+use crate::cpu::{check_f32_array_equality, check_f64_array_equality, ExtensionTest, get_iterations};
 use crate::{get_fuzzing, get_random_float};
 
 pub struct AVX512F;
@@ -167,12 +167,8 @@ fn test_mm512_add_pd() -> Result<(), String> {
         let b = _mm512_set1_pd(3.0);
         let result = _mm512_add_pd(a, b);
         let result = std::mem::transmute::<__m512d, [f64; 8]>(result);
-        let expected = [8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0, 8.0];
-        for i in 0..8 {
-            if (result[i] - expected[i]).abs() > 0.001 {
-                return Err(format!("Mismatch at index {}", i));
-            }
-        }
+        let expected = [8.0; 8];
+        check_f64_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -198,11 +194,7 @@ fn test_mm512_sub_pd() -> Result<(), String> {
         let result = _mm512_sub_pd(a, b);
         let result = std::mem::transmute::<__m512d, [f64; 8]>(result);
         let expected = [7.0; 8];
-        for i in 0..8 {
-            if (result[i] - expected[i]).abs() > 0.001 {
-                return Err(format!("Mismatch at index {}", i));
-            }
-        }
+        check_f64_array_equality(&result, &expected)?;
     }
 
     Ok(())
@@ -215,11 +207,7 @@ fn test_mm512_mul_pd() -> Result<(), String> {
         let result = _mm512_mul_pd(a, b);
         let result = std::mem::transmute::<__m512d, [f64; 8]>(result);
         let expected = [6.0; 8];
-        for i in 0..8 {
-            if (result[i] - expected[i]).abs() > 0.001 {
-                return Err(format!("Mismatch at index {}", i));
-            }
-        }
+        check_f64_array_equality(&result, &expected)?;
     }
 
     Ok(())
@@ -232,11 +220,7 @@ fn test_mm512_div_pd() -> Result<(), String> {
         let result = _mm512_div_pd(a, b);
         let result = std::mem::transmute::<__m512d, [f64; 8]>(result);
         let expected = [4.0; 8];
-        for i in 0..8 {
-            if (result[i] - expected[i]).abs() > 0.001 {
-                return Err(format!("Mismatch at index {}", i));
-            }
-        }
+        check_f64_array_equality(&result, &expected)?;
     }
 
     Ok(())

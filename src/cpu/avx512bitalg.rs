@@ -3,7 +3,7 @@ use std::arch::x86_64::*;
 #[cfg(target_arch = "x86")]
 use std::arch::x86::*;
 
-use crate::cpu::ExtensionTest;
+use crate::cpu::{ExtensionTest, check_int_array_equality};
 
 pub struct AVX512BITALG;
 
@@ -33,9 +33,7 @@ fn test_mm_popcnt_epi16() -> Result<(), String> {
         let result = _mm_popcnt_epi16(a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         let expected = [8; 8];
-        if result != expected {
-            return Err(format!("Got {:?}, expected {:?}", result, expected));
-        }
+        check_int_array_equality(&result, &expected)?;
         Ok(())
     }
     #[cfg(not(target_feature = "avx512bitalg,avx512vl"))]
@@ -49,9 +47,7 @@ fn test_mm_maskz_popcnt_epi16() -> Result<(), String> {
         let result = _mm_maskz_popcnt_epi16(0b11110000, a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         let expected = [0, 0, 0, 0, 8, 8, 8, 8];
-        if result != expected {
-            return Err(format!("Got {:?}, expected {:?}", result, expected));
-        }
+        check_int_array_equality(&result, &expected)?;
         Ok(())
     }
     #[cfg(not(target_feature = "avx512bitalg,avx512vl"))]
@@ -66,9 +62,7 @@ fn test_mm_mask_popcnt_epi16() -> Result<(), String> {
         let result = _mm_mask_popcnt_epi16(src, 0b11110000, a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         let expected = [100, 100, 100, 100, 8, 8, 8, 8];
-        if result != expected {
-            return Err(format!("Got {:?}, expected {:?}", result, expected));
-        }
+        check_int_array_equality(&result, &expected)?;
         Ok(())
     }
     #[cfg(not(target_feature = "avx512bitalg,avx512vl"))]
@@ -82,9 +76,7 @@ fn test_mm_popcnt_epi8() -> Result<(), String> {
         let result = _mm_popcnt_epi8(a);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
         let expected = [4; 16];
-        if result != expected {
-            return Err(format!("Got {:?}, expected {:?}", result, expected));
-        }
+        check_int_array_equality(&result, &expected)?;
         Ok(())
     }
     #[cfg(not(target_feature = "avx512bitalg,avx512vl"))]
@@ -98,9 +90,7 @@ fn test_mm_maskz_popcnt_epi8() -> Result<(), String> {
         let result = _mm_maskz_popcnt_epi8(0xFF00, a);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
         let expected = [0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 8, 8, 8, 8];
-        if result != expected {
-            return Err(format!("Got {:?}, expected {:?}", result, expected));
-        }
+        check_int_array_equality(&result, &expected)?;
         Ok(())
     }
     #[cfg(not(target_feature = "avx512bitalg,avx512vl"))]
@@ -115,9 +105,7 @@ fn test_mm_mask_popcnt_epi8() -> Result<(), String> {
         let result = _mm_mask_popcnt_epi8(src, 0xFF00, a);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
         let expected = [100, 100, 100, 100, 100, 100, 100, 100, 8, 8, 8, 8, 8, 8, 8, 8];
-        if result != expected {
-            return Err(format!("Got {:?}, expected {:?}", result, expected));
-        }
+        check_int_array_equality(&result, &expected)?;
         Ok(())
     }
     #[cfg(not(target_feature = "avx512bitalg,avx512vl"))]
@@ -131,9 +119,7 @@ fn test_mm_bitshuffle_epi64_mask() -> Result<(), String> {
         let b = _mm_set1_epi8(0);
         let result = _mm_bitshuffle_epi64_mask(a, b);
         // Just check that it returns a mask value
-        if result == 0 && result != 0xFFFF {
-            // Accept any result for now
-        }
+        // Accept any result for now
         Ok(())
     }
     #[cfg(not(target_feature = "avx512bitalg,avx512vl"))]
@@ -147,9 +133,7 @@ fn test_mm_mask_bitshuffle_epi64_mask() -> Result<(), String> {
         let b = _mm_set1_epi8(0);
         let result = _mm_mask_bitshuffle_epi64_mask(0xFF, a, b);
         // Just check that it returns a mask value
-        if result == 0 && result != 0xFF {
-            // Accept any result for now
-        }
+        // Accept any result for now
         Ok(())
     }
     #[cfg(not(target_feature = "avx512bitalg,avx512vl"))]
