@@ -1,11 +1,7 @@
-#[allow(dead_code)]
-// TODO remove
 #[cfg(target_arch = "x86_64")]
-use std::arch::x86_64::{__m128, _mm_add_ps, _mm_add_ss, _mm_and_ps, _mm_andnot_ps, _mm_cmpeq_ps, _mm_cmpge_ps, _mm_cmpgt_ps, _mm_cmple_ps, _mm_cmplt_ps, _mm_div_ps, _mm_div_ss, _mm_load_ps, _mm_loadu_ps, _mm_max_ps, _mm_max_ss, _mm_min_ps, _mm_min_ss, _mm_movemask_ps, _mm_mul_ps, _mm_mul_ss, _mm_or_ps, _mm_rcp_ps, _mm_rcp_ss, _mm_rsqrt_ps, _mm_rsqrt_ss, _mm_set1_ps, _mm_set_ps, _mm_set_ss, _mm_setzero_ps, _mm_sqrt_ps, _mm_sqrt_ss, _mm_store_ps, _mm_sub_ps, _mm_sub_ss, _mm_xor_ps};
-#[cfg(target_arch = "x86_64")]
-use std::arch::x86_64::{_mm_cvtsi32_ss, _mm_cvtss_f32, _mm_cvtss_si32, _mm_shuffle_ps, _mm_unpackhi_ps, _mm_unpacklo_ps, _mm_movehl_ps, _mm_movelh_ps, _mm_move_ss};
+use std::arch::x86_64::*;
 #[cfg(target_arch = "x86")]
-use std::arch::x86::{_mm_cvtsi32_ss, _mm_cvtss_f32, _mm_cvtss_si32, _mm_shuffle_ps, _mm_unpackhi_ps, _mm_unpacklo_ps, _mm_movehl_ps, _mm_movelh_ps, _mm_move_ss};
+use std::arch::x86::*;
 
 
 use log::info;

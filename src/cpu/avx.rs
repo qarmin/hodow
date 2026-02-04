@@ -1,23 +1,5 @@
-#[cfg(target_arch = "x86_64")]
-use std::arch::x86_64::{
-    __m256, __m256d, _mm256_add_ps, _mm256_add_pd, _mm256_sub_ps, _mm256_sub_pd,
-    _mm256_mul_ps, _mm256_mul_pd, _mm256_div_ps,
-    _mm256_set_ps, _mm256_set_pd, _mm256_set1_ps,
-    _mm256_setzero_ps, _mm256_load_ps,
-    _mm256_loadu_ps, _mm256_store_ps,
-    _mm256_max_ps, _mm256_min_ps, _mm256_sqrt_ps,
-    _mm256_and_ps, _mm256_or_ps, _mm256_xor_ps,
-};
-#[cfg(target_arch = "x86")]
-use std::arch::x86::{
-    __m256, __m256d, _mm256_add_ps, _mm256_add_pd, _mm256_sub_ps, _mm256_sub_pd,
-    _mm256_mul_ps, _mm256_mul_pd, _mm256_div_ps,
-    _mm256_set_ps, _mm256_set_pd, _mm256_set1_ps,
-    _mm256_setzero_ps, _mm256_load_ps,
-    _mm256_loadu_ps, _mm256_store_ps,
-    _mm256_max_ps, _mm256_min_ps, _mm256_sqrt_ps,
-    _mm256_and_ps, _mm256_or_ps, _mm256_xor_ps,
-};
+use std::arch::x86_64::*;
+use std::arch::x86::*;
 
 use log::info;
 

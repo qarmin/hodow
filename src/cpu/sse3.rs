@@ -1,18 +1,12 @@
 #[cfg(target_arch = "x86_64")]
-use std::arch::x86_64::{
-    __m128, __m128d, _mm_addsub_ps, _mm_hadd_ps, _mm_hsub_ps, _mm_movehdup_ps, _mm_moveldup_ps,
-    _mm_set_ps, _mm_addsub_pd, _mm_hadd_pd, _mm_hsub_pd, _mm_set_pd,
-};
+use std::arch::x86_64::*;
 #[cfg(target_arch = "x86")]
-use std::arch::x86::{
-    __m128, __m128d, _mm_addsub_ps, _mm_hadd_ps, _mm_hsub_ps, _mm_movehdup_ps, _mm_moveldup_ps,
-    _mm_set_ps, _mm_addsub_pd, _mm_hadd_pd, _mm_hsub_pd, _mm_set_pd,
-};
+use std::arch::x86::*;
 
 use log::info;
 
-use crate::cpu::{check_f32_array_equality, ExtensionTest, get_iterations};
-use crate::{get_four_random_floats, get_fuzzing, get_random_float};
+use crate::cpu::{ExtensionTest, get_iterations, check_int_array_equality};
+use crate::{get_fuzzing, get_four_random_floats, get_random_float};
 
 pub struct SSE3;
 

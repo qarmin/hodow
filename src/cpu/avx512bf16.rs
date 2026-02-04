@@ -11,7 +11,6 @@ impl ExtensionTest for AVX512BF16 {
     fn get_name() -> &'static str {
         "AVX-512 BF16"
     }
-    
     fn get_tests() -> &'static [(&'static dyn Fn() -> Result<(), String>, &'static str)] {
         &[
             (&test_mm_cvtne2ps_pbh, "test_mm_cvtne2ps_pbh"),

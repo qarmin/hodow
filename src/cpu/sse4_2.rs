@@ -5,8 +5,8 @@ use std::arch::x86::*;
 
 use log::info;
 
-use crate::cpu::{check_int_equality, check_int_array_equality, ExtensionTest, get_iterations};
-use crate::get_fuzzing;
+use crate::cpu::{ExtensionTest, get_iterations};
+use crate::{get_fuzzing};
 
 pub struct SSE42;
 
