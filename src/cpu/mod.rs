@@ -36,7 +36,6 @@ mod avx512cd;
 mod avx512ifma;
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 mod avx512vbmi;
-// Gate AES module on the AES target feature so the module and type exist only when enabled.
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "aes"))]
 mod aes;
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
@@ -140,7 +139,6 @@ pub fn test_all_extensions() -> Result<(), String> {
             crate::cpu::avx512vbmi::AVX512VBMI::test()?;
         }
 
-        // AES: compile-time gate to avoid referencing a module that may be configured out
         #[cfg(target_feature = "aes")]
         {
             if std::arch::is_x86_feature_detected!("aes") {
@@ -148,8 +146,7 @@ pub fn test_all_extensions() -> Result<(), String> {
             }
         }
 
-        // KL depends on AES at runtime; keep runtime detection but avoid referencing AES-only items when AES isn't compiled in.
-        if std::arch::is_x86_feature_detected!("kl") && std::arch::is_x86_feature_detected!("aes") {
+        if std::arch::is_x86_feature_detected!("kl") {
             crate::cpu::kl::KL::test()?;
         }
     }

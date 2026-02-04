@@ -2,16 +2,12 @@
 use std::arch::x86_64::*;
 #[cfg(target_arch = "x86")]
 use std::arch::x86::*;
-
 use crate::cpu::ExtensionTest;
-
 pub struct KL;
-
 impl ExtensionTest for KL {
     fn get_name() -> &'static str {
         "Key Locker"
     }
-
     fn get_tests() -> &'static [(&'static dyn Fn() -> Result<(), String>, &'static str)] {
         &[
             (&test_mm_loadiwkey, "test_mm_loadiwkey"),
@@ -28,9 +24,7 @@ impl ExtensionTest for KL {
         ]
     }
 }
-
 fn test_mm_loadiwkey() -> Result<(), String> {
-    #[cfg(target_feature = "kl")]
     unsafe {
         let ctl = _mm_set_epi64x(0, 0);
         let intkey = _mm_set_epi64x(0x0123456789abcdefi64, 0xfedcba9876543210i64);
@@ -39,29 +33,20 @@ fn test_mm_loadiwkey() -> Result<(), String> {
         _mm_loadiwkey(ctl, intkey, enkey_lo, enkey_hi);
         Ok(())
     }
-    #[cfg(not(target_feature = "kl"))]
-    Ok(())
 }
-
 fn test_mm_encodekey128_u32() -> Result<(), String> {
-    #[cfg(target_feature = "kl")]
     unsafe {
         let htype = 1u32;
         let key = _mm_set_epi64x(0x0123456789abcdefi64, 0xfedcba9876543210i64);
         let mut h_enc_key: [u8; 384] = [0; 384];
         let result = _mm_encodekey128_u32(htype, key, h_enc_key.as_mut_ptr() as *mut std::ffi::c_void);
-        // Check that key was encoded (result should indicate success/failure)
         if result > 1 {
             return Err(format!("Encode key returned unexpected value: {}", result));
         }
         Ok(())
     }
-    #[cfg(not(target_feature = "kl"))]
-    Ok(())
 }
-
 fn test_mm_encodekey256_u32() -> Result<(), String> {
-    #[cfg(target_feature = "kl")]
     unsafe {
         let htype = 1u32;
         let key_lo = _mm_set_epi64x(0x0123456789abcdefi64, 0xfedcba9876543210i64);
@@ -73,28 +58,19 @@ fn test_mm_encodekey256_u32() -> Result<(), String> {
         }
         Ok(())
     }
-    #[cfg(not(target_feature = "kl"))]
-    Ok(())
 }
-
 fn test_mm_aesenc128kl_u8() -> Result<(), String> {
-    #[cfg(all(target_feature = "kl", target_feature = "aes"))]
     unsafe {
         let mut out = _mm_setzero_si128();
         let data = _mm_set_epi64x(0x0123456789abcdefi64, 0xfedcba9876543210i64);
         let h_key: [u8; 384] = [0; 384];
         let result = _mm_aesenc128kl_u8(&mut out, data, h_key.as_ptr() as *const std::ffi::c_void);
-        // Result indicates success (0) or failure (non-zero)
         let out_bytes = std::mem::transmute::<__m128i, [u8; 16]>(out);
         let _ = (result, out_bytes);
         Ok(())
     }
-    #[cfg(not(all(target_feature = "kl", target_feature = "aes")))]
-    Ok(())
 }
-
 fn test_mm_aesdec128kl_u8() -> Result<(), String> {
-    #[cfg(all(target_feature = "kl", target_feature = "aes"))]
     unsafe {
         let mut out = _mm_setzero_si128();
         let data = _mm_set_epi64x(0x0123456789abcdefi64, 0xfedcba9876543210i64);
@@ -104,12 +80,8 @@ fn test_mm_aesdec128kl_u8() -> Result<(), String> {
         let _ = (result, out_bytes);
         Ok(())
     }
-    #[cfg(not(all(target_feature = "kl", target_feature = "aes")))]
-    Ok(())
 }
-
 fn test_mm_aesenc256kl_u8() -> Result<(), String> {
-    #[cfg(all(target_feature = "kl", target_feature = "aes"))]
     unsafe {
         let mut out = _mm_setzero_si128();
         let data = _mm_set_epi64x(0x0123456789abcdefi64, 0xfedcba9876543210i64);
@@ -119,12 +91,8 @@ fn test_mm_aesenc256kl_u8() -> Result<(), String> {
         let _ = (result, out_bytes);
         Ok(())
     }
-    #[cfg(not(all(target_feature = "kl", target_feature = "aes")))]
-    Ok(())
 }
-
 fn test_mm_aesdec256kl_u8() -> Result<(), String> {
-    #[cfg(all(target_feature = "kl", target_feature = "aes"))]
     unsafe {
         let mut out = _mm_setzero_si128();
         let data = _mm_set_epi64x(0x0123456789abcdefi64, 0xfedcba9876543210i64);
@@ -134,12 +102,8 @@ fn test_mm_aesdec256kl_u8() -> Result<(), String> {
         let _ = (result, out_bytes);
         Ok(())
     }
-    #[cfg(not(all(target_feature = "kl", target_feature = "aes")))]
-    Ok(())
 }
-
 fn test_mm_aesencwide128kl_u8() -> Result<(), String> {
-    #[cfg(all(target_feature = "kl", target_feature = "aes"))]
     unsafe {
         let mut odata: [__m128i; 8] = [_mm_setzero_si128(); 8];
         let idata: [__m128i; 8] = [_mm_set1_epi64x(0x0123456789abcdefi64); 8];
@@ -148,12 +112,8 @@ fn test_mm_aesencwide128kl_u8() -> Result<(), String> {
         let _ = (result, odata);
         Ok(())
     }
-    #[cfg(not(all(target_feature = "kl", target_feature = "aes")))]
-    Ok(())
 }
-
 fn test_mm_aesdecwide128kl_u8() -> Result<(), String> {
-    #[cfg(all(target_feature = "kl", target_feature = "aes"))]
     unsafe {
         let mut odata: [__m128i; 8] = [_mm_setzero_si128(); 8];
         let idata: [__m128i; 8] = [_mm_set1_epi64x(0x0123456789abcdefi64); 8];
@@ -162,12 +122,8 @@ fn test_mm_aesdecwide128kl_u8() -> Result<(), String> {
         let _ = (result, odata);
         Ok(())
     }
-    #[cfg(not(all(target_feature = "kl", target_feature = "aes")))]
-    Ok(())
 }
-
 fn test_mm_aesencwide256kl_u8() -> Result<(), String> {
-    #[cfg(all(target_feature = "kl", target_feature = "aes"))]
     unsafe {
         let mut odata: [__m128i; 8] = [_mm_setzero_si128(); 8];
         let idata: [__m128i; 8] = [_mm_set1_epi64x(0x0123456789abcdefi64); 8];
@@ -176,12 +132,8 @@ fn test_mm_aesencwide256kl_u8() -> Result<(), String> {
         let _ = (result, odata);
         Ok(())
     }
-    #[cfg(not(all(target_feature = "kl", target_feature = "aes")))]
-    Ok(())
 }
-
 fn test_mm_aesdecwide256kl_u8() -> Result<(), String> {
-    #[cfg(all(target_feature = "kl", target_feature = "aes"))]
     unsafe {
         let mut odata: [__m128i; 8] = [_mm_setzero_si128(); 8];
         let idata: [__m128i; 8] = [_mm_set1_epi64x(0x0123456789abcdefi64); 8];
@@ -190,6 +142,4 @@ fn test_mm_aesdecwide256kl_u8() -> Result<(), String> {
         let _ = (result, odata);
         Ok(())
     }
-    #[cfg(not(all(target_feature = "kl", target_feature = "aes")))]
-    Ok(())
 }

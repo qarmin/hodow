@@ -1,4 +1,3 @@
-#![cfg(target_feature = "aes")]
 
 #[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::*;
@@ -36,7 +35,6 @@ fn test_mm_aesdec_si128() -> Result<(), String> {
         let result = _mm_aesdec_si128(a, round_key);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
         let a_bytes = std::mem::transmute::<__m128i, [u8; 16]>(a);
-        // Ensure result equals expected bytes
         check_int_array_equality(&result, &a_bytes)?;
     }
 

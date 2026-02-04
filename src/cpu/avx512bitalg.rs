@@ -26,8 +26,8 @@ impl ExtensionTest for AVX512BITALG {
     }
 }
 
+#[cfg(all(target_feature = "avx512bitalg", target_feature = "avx512vl"))]
 fn test_mm_popcnt_epi16() -> Result<(), String> {
-    #[cfg(all(target_feature = "avx512bitalg", target_feature = "avx512vl"))]
     unsafe {
         let a = _mm_set1_epi16(0b1111_0000_1010_0101u16 as i16);
         let result = _mm_popcnt_epi16(a);
@@ -36,12 +36,12 @@ fn test_mm_popcnt_epi16() -> Result<(), String> {
         check_int_array_equality(&result, &expected)?;
         Ok(())
     }
-    #[cfg(not(all(target_feature = "avx512bitalg", target_feature = "avx512vl")))]
-    Ok(())
 }
+#[cfg(not(all(target_feature = "avx512bitalg", target_feature = "avx512vl")))]
+fn test_mm_popcnt_epi16() -> Result<(), String> { Ok(()) }
 
+#[cfg(all(target_feature = "avx512bitalg", target_feature = "avx512vl"))]
 fn test_mm_maskz_popcnt_epi16() -> Result<(), String> {
-    #[cfg(all(target_feature = "avx512bitalg", target_feature = "avx512vl"))]
     unsafe {
         let a = _mm_set1_epi16(0b1111_1111i16);
         let result = _mm_maskz_popcnt_epi16(0b11110000, a);
@@ -50,12 +50,12 @@ fn test_mm_maskz_popcnt_epi16() -> Result<(), String> {
         check_int_array_equality(&result, &expected)?;
         Ok(())
     }
-    #[cfg(not(all(target_feature = "avx512bitalg", target_feature = "avx512vl")))]
-    Ok(())
 }
+#[cfg(not(all(target_feature = "avx512bitalg", target_feature = "avx512vl")))]
+fn test_mm_maskz_popcnt_epi16() -> Result<(), String> { Ok(()) }
 
+#[cfg(all(target_feature = "avx512bitalg", target_feature = "avx512vl"))]
 fn test_mm_mask_popcnt_epi16() -> Result<(), String> {
-    #[cfg(all(target_feature = "avx512bitalg", target_feature = "avx512vl"))]
     unsafe {
         let src = _mm_set1_epi16(100);
         let a = _mm_set1_epi16(0b1111_1111i16);
@@ -65,12 +65,12 @@ fn test_mm_mask_popcnt_epi16() -> Result<(), String> {
         check_int_array_equality(&result, &expected)?;
         Ok(())
     }
-    #[cfg(not(all(target_feature = "avx512bitalg", target_feature = "avx512vl")))]
-    Ok(())
 }
+#[cfg(not(all(target_feature = "avx512bitalg", target_feature = "avx512vl")))]
+fn test_mm_mask_popcnt_epi16() -> Result<(), String> { Ok(()) }
 
+#[cfg(all(target_feature = "avx512bitalg", target_feature = "avx512vl"))]
 fn test_mm_popcnt_epi8() -> Result<(), String> {
-    #[cfg(all(target_feature = "avx512bitalg", target_feature = "avx512vl"))]
     unsafe {
         let a = _mm_set1_epi8(0b1111_0000u8 as i8);
         let result = _mm_popcnt_epi8(a);
@@ -79,12 +79,12 @@ fn test_mm_popcnt_epi8() -> Result<(), String> {
         check_int_array_equality(&result, &expected)?;
         Ok(())
     }
-    #[cfg(not(all(target_feature = "avx512bitalg", target_feature = "avx512vl")))]
-    Ok(())
 }
+#[cfg(not(all(target_feature = "avx512bitalg", target_feature = "avx512vl")))]
+fn test_mm_popcnt_epi8() -> Result<(), String> { Ok(()) }
 
+#[cfg(all(target_feature = "avx512bitalg", target_feature = "avx512vl"))]
 fn test_mm_maskz_popcnt_epi8() -> Result<(), String> {
-    #[cfg(all(target_feature = "avx512bitalg", target_feature = "avx512vl"))]
     unsafe {
         let a = _mm_set1_epi8(0b1111_1111u8 as i8);
         let result = _mm_maskz_popcnt_epi8(0xFF00, a);
@@ -93,12 +93,12 @@ fn test_mm_maskz_popcnt_epi8() -> Result<(), String> {
         check_int_array_equality(&result, &expected)?;
         Ok(())
     }
-    #[cfg(not(all(target_feature = "avx512bitalg", target_feature = "avx512vl")))]
-    Ok(())
 }
+#[cfg(not(all(target_feature = "avx512bitalg", target_feature = "avx512vl")))]
+fn test_mm_maskz_popcnt_epi8() -> Result<(), String> { Ok(()) }
 
+#[cfg(all(target_feature = "avx512bitalg", target_feature = "avx512vl"))]
 fn test_mm_mask_popcnt_epi8() -> Result<(), String> {
-    #[cfg(all(target_feature = "avx512bitalg", target_feature = "avx512vl"))]
     unsafe {
         let src = _mm_set1_epi8(100);
         let a = _mm_set1_epi8(0b1111_1111u8 as i8);
@@ -108,12 +108,12 @@ fn test_mm_mask_popcnt_epi8() -> Result<(), String> {
         check_int_array_equality(&result, &expected)?;
         Ok(())
     }
-    #[cfg(not(all(target_feature = "avx512bitalg", target_feature = "avx512vl")))]
-    Ok(())
 }
+#[cfg(not(all(target_feature = "avx512bitalg", target_feature = "avx512vl")))]
+fn test_mm_mask_popcnt_epi8() -> Result<(), String> { Ok(()) }
 
+#[cfg(all(target_feature = "avx512bitalg", target_feature = "avx512vl"))]
 fn test_mm_bitshuffle_epi64_mask() -> Result<(), String> {
-    #[cfg(all(target_feature = "avx512bitalg", target_feature = "avx512vl"))]
     unsafe {
         let a = _mm_set1_epi8(0b1010_1010u8 as i8);
         let b = _mm_set1_epi8(0);
@@ -122,12 +122,12 @@ fn test_mm_bitshuffle_epi64_mask() -> Result<(), String> {
         // Accept any result for now
         Ok(())
     }
-    #[cfg(not(all(target_feature = "avx512bitalg", target_feature = "avx512vl")))]
-    Ok(())
 }
+#[cfg(not(all(target_feature = "avx512bitalg", target_feature = "avx512vl")))]
+fn test_mm_bitshuffle_epi64_mask() -> Result<(), String> { Ok(()) }
 
+#[cfg(all(target_feature = "avx512bitalg", target_feature = "avx512vl"))]
 fn test_mm_mask_bitshuffle_epi64_mask() -> Result<(), String> {
-    #[cfg(all(target_feature = "avx512bitalg", target_feature = "avx512vl"))]
     unsafe {
         let a = _mm_set1_epi8(0b1010_1010u8 as i8);
         let b = _mm_set1_epi8(0);
@@ -136,6 +136,6 @@ fn test_mm_mask_bitshuffle_epi64_mask() -> Result<(), String> {
         // Accept any result for now
         Ok(())
     }
-    #[cfg(not(all(target_feature = "avx512bitalg", target_feature = "avx512vl")))]
-    Ok(())
 }
+#[cfg(not(all(target_feature = "avx512bitalg", target_feature = "avx512vl")))]
+fn test_mm_mask_bitshuffle_epi64_mask() -> Result<(), String> { Ok(()) }
