@@ -46,6 +46,13 @@ if check_int_array_equality(&result, &a_bytes).is_ok() {
     return Err(format!("AES key gen assist produced same as input"));
 }
 ```
+Also bad(ignoring result after check) - Always check... result must be used, never anything else
+```
+match check_int_array_equality(&result, &a_bytes).is_ok() {
+    Ok() => Ok(()),
+    Err(_) => return Err(format!("AES key gen assist produced same as input")),
+}
+```
 Also bad(checking multiple times instead of once)
 ```
     unsafe {
@@ -132,7 +139,8 @@ fn test_mm_aesimc_si128() -> Result<(), String> {
 ```
 Good 
 ```
-// Cfg at file level
+// Cfg at file level or patching
+// fn get_tests() -> &'static [( - with empty on not-aes
 fn test_mm_aesimc_si128() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(0x0123456789abcdefi64, 0xfedcba9876543210i64);
