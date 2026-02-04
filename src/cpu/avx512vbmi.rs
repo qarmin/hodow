@@ -37,7 +37,9 @@ fn test_mm_permutex2var_epi8() -> Result<(), String> {
         let a = _mm_set1_epi8(0x1);
         let idx = _mm_set_epi8(7,6,5,4,3,2,1,0,7,6,5,4,3,2,1,0);
         let result = _mm_permutex2var_epi8(a, idx, a);
-        let _ = result;
+        let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
+        let expected: [i8; 16] = [1; 16];
+        check_int_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {

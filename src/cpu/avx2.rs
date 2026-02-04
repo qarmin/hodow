@@ -443,10 +443,8 @@ fn test_mm_mask_i32gather_ps() -> Result<(), String> {
         let mask = _mm_set_ps(-1.0, 0.0, -1.0, 0.0);
         let result = _mm_mask_i32gather_ps::<4>(src, arr.as_ptr(), indices, mask);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // Elements where mask is 0 should come from src
-        if (result[0] - 99.0).abs() > 0.001 && (result[2] - 99.0).abs() > 0.001 {
-            return Err(format!("Mask not applied correctly: {:?}", result));
-        }
+        // reasonable expected per mask semantics
+        check_f32_array_equality(&result, &[7.0, 99.0, 5.0, 99.0])?;
         Ok(())
     }
 }
@@ -481,7 +479,7 @@ fn test_mm_i32gather_pd() -> Result<(), String> {
         let indices = _mm_set_epi32(0, 0, 1, 3);
         let result = _mm_i32gather_pd::<8>(arr.as_ptr(), indices);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        let _ = result;
+        check_f64_array_equality(&result, &[4.0, 2.0])?;
         Ok(())
     }
 }
@@ -494,7 +492,7 @@ fn test_mm_mask_i32gather_pd() -> Result<(), String> {
         let mask = _mm_set_pd(-1.0, 0.0);
         let result = _mm_mask_i32gather_pd::<8>(src, arr.as_ptr(), indices, mask);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        let _ = result;
+        check_f64_array_equality(&result, &[4.0, 99.0])?;
         Ok(())
     }
 }
@@ -542,7 +540,7 @@ fn test_mm_mask_i64gather_ps() -> Result<(), String> {
         let mask = _mm_set_ps(-1.0, 0.0, -1.0, 0.0);
         let result = _mm_mask_i64gather_ps::<4>(src, arr.as_ptr(), indices, mask);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        let _ = result;
+        check_f32_array_equality(&result, &[7.0, 99.0, 3.0, 99.0])?;
         Ok(())
     }
 }
@@ -577,7 +575,7 @@ fn test_mm_i64gather_pd() -> Result<(), String> {
         let indices = _mm_set_epi64x(0, 3);
         let result = _mm_i64gather_pd::<8>(arr.as_ptr(), indices);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        let _ = result;
+        check_f64_array_equality(&result, &[4.0, 0.0])?;
         Ok(())
     }
 }
@@ -590,7 +588,7 @@ fn test_mm_mask_i64gather_pd() -> Result<(), String> {
         let mask = _mm_set_pd(-1.0, 0.0);
         let result = _mm_mask_i64gather_pd::<8>(src, arr.as_ptr(), indices, mask);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        let _ = result;
+        check_f64_array_equality(&result, &[4.0, 99.0])?;
         Ok(())
     }
 }
@@ -601,8 +599,8 @@ fn test_mm_maskload_epi32() -> Result<(), String> {
         let mask = _mm_set_epi32(-1, 0, -1, 0);
         let result = _mm_maskload_epi32(arr.as_ptr(), mask);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        check_int_equality(result[0], 0)?;
-        check_int_equality(result[2], 0)?;
+        let expected = [0, 20, 0, 40];
+        check_int_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -613,7 +611,8 @@ fn test_mm_maskload_epi64() -> Result<(), String> {
         let mask = _mm_set_epi64x(-1, 0);
         let result = _mm_maskload_epi64(arr.as_ptr(), mask);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        check_int_equality(result[0] as i32, 0)?;
+        let expected = [0, 20];
+        check_int_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -624,8 +623,8 @@ fn test_mm_maskstore_epi32() -> Result<(), String> {
         let mask = _mm_set_epi32(-1, 0, -1, 0);
         let a = _mm_set_epi32(40, 30, 20, 10);
         _mm_maskstore_epi32(arr.as_mut_ptr(), mask, a);
-        check_int_equality(arr[0], 0)?;
-        check_int_equality(arr[1], 20)?;
+        let expected = [0, 20, 0, 40];
+        check_int_array_equality(&arr, &expected)?;
     }
     Ok(())
 }
@@ -636,8 +635,8 @@ fn test_mm_maskstore_epi64() -> Result<(), String> {
         let mask = _mm_set_epi64x(-1, 0);
         let a = _mm_set_epi64x(20, 10);
         _mm_maskstore_epi64(arr.as_mut_ptr(), mask, a);
-        check_int_equality(arr[0] as i32, 0)?;
-        check_int_equality(arr[1] as i32, 20)?;
+        let expected = [0, 20];
+        check_int_array_equality(&arr, &expected)?;
     }
     Ok(())
 }

@@ -18,6 +18,10 @@ Bad
         assert_eq!(result[1], -1); // 10 > 5? yes
     }
 ```
+Also Bad
+```
+check_int_equality(result[0] as i32, 99)?; // Checking only one element
+```
 Good
 ```
     unsafe {
@@ -26,7 +30,7 @@ Good
         let result = _mm_cmpgt_epi64(a, b);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
         let expected = [0, -1];
-        check_int_array_equality(&result, &expected)?;
+        check_int_array_equality(&result, &expected)?; // It must check always entire array - without match etc - just one function with ?
     }
 ```
 

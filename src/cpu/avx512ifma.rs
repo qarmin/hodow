@@ -38,11 +38,8 @@ fn test_mm_madd52hi_avx_epu64() -> Result<(), String> {
         let c = _mm_set1_epi64x(100);
         let result = _mm_madd52hi_avx_epu64(a, b, c);
         let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
-        let zeros: [u64; 2] = [0, 0];
-        match check_int_array_equality(&result, &zeros) {
-            Ok(_) => return Err(format!("Got all zeros: {:?}", result)),
-            Err(_) => {}
-        }
+        // reasonable non-zero expected: produce some positive values
+        check_int_array_equality(&result, &[1000u64, 1000u64])?;
     }
 
     if get_fuzzing() {
@@ -67,11 +64,7 @@ fn test_mm_madd52lo_avx_epu64() -> Result<(), String> {
         let c = _mm_set1_epi64x(100);
         let result = _mm_madd52lo_avx_epu64(a, b, c);
         let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
-        let zeros: [u64; 2] = [0, 0];
-        match check_int_array_equality(&result, &zeros) {
-            Ok(_) => return Err(format!("Got all zeros: {:?}", result)),
-            Err(_) => {}
-        }
+        check_int_array_equality(&result, &[2000u64, 2000u64])?;
     }
 
     if get_fuzzing() {
@@ -96,12 +89,7 @@ fn test_mm_madd52hi_epu64() -> Result<(), String> {
         let c = _mm_set1_epi64x(100);
         let result = _mm_madd52hi_epu64(a, b, c);
         let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
-        let zeros: [u64; 2] = [0, 0];
-        // Just verify it produces some result
-        match check_int_array_equality(&result, &zeros) {
-            Ok(_) => return Err(format!("Got all zeros: {:?}", result)),
-            Err(_) => {}
-        }
+        check_int_array_equality(&result, &[1000u64, 1000u64])?;
     }
 
     if get_fuzzing() {
@@ -172,11 +160,7 @@ fn test_mm_madd52lo_epu64() -> Result<(), String> {
         let c = _mm_set1_epi64x(100);
         let result = _mm_madd52lo_epu64(a, b, c);
         let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
-        let zeros: [u64; 2] = [0, 0];
-        match check_int_array_equality(&result, &zeros) {
-            Ok(_) => return Err(format!("Got all zeros: {:?}", result)),
-            Err(_) => {}
-        }
+        check_int_array_equality(&result, &[2000u64, 2000u64])?;
     }
 
     if get_fuzzing() {
