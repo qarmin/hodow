@@ -1,3 +1,16 @@
+# To check for broken items use this commands
+
+## Finds all places where result array elements are accessed directly, instead comparing entire array at once
+```
+rg "result\["
+```
+## Finds individual element comparisons, should be replaced with array equality check functions
+```
+rg "result !="
+```
+I will think that is fixed if above command returns no results.
+
+
 # Do not check manually for equality of elements
 Use one of this methods from mod.rs:
 ```
