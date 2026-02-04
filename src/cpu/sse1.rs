@@ -807,9 +807,8 @@ fn test_mm_rcp_ss() -> Result<(), String> {
         let result = _mm_rcp_ss(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
 
-        if (result[0] - 0.25).abs() > 0.01 {
-            return Err(format!("Expected ~0.25, got {}", result[0]));
-        }
+        // Check whole vector: reciprocal of low lane (4.0 -> ~0.25) and other lanes unchanged
+        check_f32_array_equality(&result, &[0.25, 3.0, 2.0, 1.0])?;
     }
     Ok(())
 }
@@ -831,9 +830,8 @@ fn test_mm_rsqrt_ss() -> Result<(), String> {
         let result = _mm_rsqrt_ss(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
 
-        if (result[0] - 0.25).abs() > 0.01 {
-            return Err(format!("Expected ~0.25, got {}", result[0]));
-        }
+        // Check whole vector: rsqrt of low lane (16.0 -> ~0.25) and other lanes unchanged
+        check_f32_array_equality(&result, &[0.25, 3.0, 2.0, 1.0])?;
     }
     Ok(())
 }
