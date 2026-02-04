@@ -6,39 +6,39 @@ use std::fmt::Debug;
 use log::{error, info};
 use once_cell::sync::OnceCell;
 
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "sse"))]
 mod sse1;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "sse2"))]
 mod sse2;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "sse3"))]
 mod sse3;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "ssse3"))]
 mod ssse3;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "sse4.1"))]
 mod sse4_1;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "sse4.2"))]
 mod sse4_2;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx"))]
 mod avx;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx2"))]
 mod avx2;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "fma"))]
 mod fma;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512f"))]
 mod avx512f;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512bitalg"))]
 mod avx512bitalg;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512bf16"))]
 mod avx512bf16;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512cd"))]
 mod avx512cd;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512ifma"))]
 mod avx512ifma;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512vbmi"))]
 mod avx512vbmi;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "aes"))]
 mod aes;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "kl"))]
 mod kl;
 
 #[cfg(miri)]
@@ -79,64 +79,109 @@ pub trait ExtensionTest {
 pub fn test_all_extensions() -> Result<(), String> {
     #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     {
-        if std::arch::is_x86_feature_detected!("sse") {
-            crate::cpu::sse1::SSE1::test()?;
+        #[cfg(target_feature = "sse")]
+        {
+            if std::arch::is_x86_feature_detected!("sse") {
+                crate::cpu::sse1::SSE1::test()?;
+            }
         }
 
-        if std::arch::is_x86_feature_detected!("sse2") {
-            crate::cpu::sse2::SSE2::test()?;
+        #[cfg(target_feature = "sse2")]
+        {
+            if std::arch::is_x86_feature_detected!("sse2") {
+                crate::cpu::sse2::SSE2::test()?;
+            }
         }
 
-        if std::arch::is_x86_feature_detected!("sse3") {
-            crate::cpu::sse3::SSE3::test()?;
+        #[cfg(target_feature = "sse3")]
+        {
+            if std::arch::is_x86_feature_detected!("sse3") {
+                crate::cpu::sse3::SSE3::test()?;
+            }
         }
 
-        if std::arch::is_x86_feature_detected!("ssse3") {
-            crate::cpu::ssse3::SSSE3::test()?;
+        #[cfg(target_feature = "ssse3")]
+        {
+            if std::arch::is_x86_feature_detected!("ssse3") {
+                crate::cpu::ssse3::SSSE3::test()?;
+            }
         }
 
-        if std::arch::is_x86_feature_detected!("sse4.1") {
-            crate::cpu::sse4_1::SSE41::test()?;
+        #[cfg(target_feature = "sse4.1")]
+        {
+            if std::arch::is_x86_feature_detected!("sse4.1") {
+                crate::cpu::sse4_1::SSE41::test()?;
+            }
         }
 
-        if std::arch::is_x86_feature_detected!("sse4.2") {
-            crate::cpu::sse4_2::SSE42::test()?;
+        #[cfg(target_feature = "sse4.2")]
+        {
+            if std::arch::is_x86_feature_detected!("sse4.2") {
+                crate::cpu::sse4_2::SSE42::test()?;
+            }
         }
 
-        if std::arch::is_x86_feature_detected!("avx") {
-            crate::cpu::avx::AVX::test()?;
+        #[cfg(target_feature = "avx")]
+        {
+            if std::arch::is_x86_feature_detected!("avx") {
+                crate::cpu::avx::AVX::test()?;
+            }
         }
 
-        if std::arch::is_x86_feature_detected!("avx2") {
-            crate::cpu::avx2::AVX2::test()?;
+        #[cfg(target_feature = "avx2")]
+        {
+            if std::arch::is_x86_feature_detected!("avx2") {
+                crate::cpu::avx2::AVX2::test()?;
+            }
         }
 
-        if std::arch::is_x86_feature_detected!("fma") {
-            crate::cpu::fma::FMA::test()?;
+        #[cfg(target_feature = "fma")]
+        {
+            if std::arch::is_x86_feature_detected!("fma") {
+                crate::cpu::fma::FMA::test()?;
+            }
         }
 
-        if std::arch::is_x86_feature_detected!("avx512f") {
-            crate::cpu::avx512f::AVX512F::test()?;
+        #[cfg(target_feature = "avx512f")]
+        {
+            if std::arch::is_x86_feature_detected!("avx512f") {
+                crate::cpu::avx512f::AVX512F::test()?;
+            }
         }
 
-        if std::arch::is_x86_feature_detected!("avx512bitalg") {
-            crate::cpu::avx512bitalg::AVX512BITALG::test()?;
+        #[cfg(target_feature = "avx512bitalg")]
+        {
+            if std::arch::is_x86_feature_detected!("avx512bitalg") {
+                crate::cpu::avx512bitalg::AVX512BITALG::test()?;
+            }
         }
 
-        if std::arch::is_x86_feature_detected!("avx512bf16") {
-            crate::cpu::avx512bf16::AVX512BF16::test()?;
+        #[cfg(target_feature = "avx512bf16")]
+        {
+            if std::arch::is_x86_feature_detected!("avx512bf16") {
+                crate::cpu::avx512bf16::AVX512BF16::test()?;
+            }
         }
 
-        if std::arch::is_x86_feature_detected!("avx512cd") {
-            crate::cpu::avx512cd::AVX512CD::test()?;
+        #[cfg(target_feature = "avx512cd")]
+        {
+            if std::arch::is_x86_feature_detected!("avx512cd") {
+                crate::cpu::avx512cd::AVX512CD::test()?;
+            }
         }
 
-        if std::arch::is_x86_feature_detected!("avx512ifma") {
-            crate::cpu::avx512ifma::AVX512IFMA::test()?;
+        #[cfg(target_feature = "avx512ifma")]
+        {
+            if std::arch::is_x86_feature_detected!("avx512ifma") {
+                crate::cpu::avx512ifma::AVX512IFMA::test()?;
+            }
         }
 
-        if std::arch::is_x86_feature_detected!("avx512vbmi") {
-            crate::cpu::avx512vbmi::AVX512VBMI::test()?;
+        #[cfg(target_feature = "avx512vbmi")]
+        {
+            if std::arch::is_x86_feature_detected!("avx512vbmi") {
+                crate::cpu::avx512vbmi::AVX512VBMI::test()?;
+            }
         }
 
         #[cfg(target_feature = "aes")]
@@ -146,8 +191,11 @@ pub fn test_all_extensions() -> Result<(), String> {
             }
         }
 
-        if std::arch::is_x86_feature_detected!("kl") {
-            crate::cpu::kl::KL::test()?;
+        #[cfg(target_feature = "kl")]
+        {
+            if std::arch::is_x86_feature_detected!("kl") {
+                crate::cpu::kl::KL::test()?;
+            }
         }
     }
 
