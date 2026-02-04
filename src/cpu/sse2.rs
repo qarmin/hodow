@@ -159,7 +159,7 @@ use std::arch::x86::{
 
 use log::info;
 
-use crate::cpu::{check_array_equality, ExtensionTest, get_iterations};
+use crate::cpu::{check_f32_array_equality, ExtensionTest, get_iterations};
 use crate::{get_four_random_floats, get_fuzzing, get_random_float};
 
 pub struct SSE2;
@@ -312,7 +312,7 @@ fn test_mm_set_pd() -> Result<(), String> {
     unsafe {
         let result = _mm_set_pd(1.0, 2.0);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_array_equality(
+        check_f32_array_equality(
             &[result[0] as f32, result[1] as f32],
             &[2.0, 1.0],
         )?;
@@ -326,7 +326,7 @@ fn test_mm_set_pd() -> Result<(), String> {
                 let b = get_random_float() as f64;
                 let result = _mm_set_pd(b, a);
                 let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-                check_array_equality(
+                check_f32_array_equality(
                     &[result[0] as f32, result[1] as f32],
                     &[a as f32, b as f32],
                 )?;
@@ -341,7 +341,7 @@ fn test_mm_set1_pd() -> Result<(), String> {
     unsafe {
         let result = _mm_set1_pd(3.13);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_array_equality(&[result[0] as f32, result[1] as f32], &[3.13, 3.13])?;
+        check_f32_array_equality(&[result[0] as f32, result[1] as f32], &[3.13, 3.13])?;
     }
 
     if get_fuzzing() {
@@ -351,7 +351,7 @@ fn test_mm_set1_pd() -> Result<(), String> {
                 let value = get_random_float() as f64;
                 let result = _mm_set1_pd(value);
                 let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-                check_array_equality(
+                check_f32_array_equality(
                     &[result[0] as f32, result[1] as f32],
                     &[value as f32, value as f32],
                 )?;
@@ -366,7 +366,7 @@ fn test_mm_setzero_pd() -> Result<(), String> {
     unsafe {
         let result = _mm_setzero_pd();
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_array_equality(&[result[0] as f32, result[1] as f32], &[0.0, 0.0])?;
+        check_f32_array_equality(&[result[0] as f32, result[1] as f32], &[0.0, 0.0])?;
     }
     Ok(())
 }
@@ -377,7 +377,7 @@ fn test_mm_add_pd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 4.0);
         let result = _mm_add_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_array_equality(&[result[0] as f32, result[1] as f32], &[6.0, 4.0])?;
+        check_f32_array_equality(&[result[0] as f32, result[1] as f32], &[6.0, 4.0])?;
     }
 
     if get_fuzzing() {
@@ -402,7 +402,7 @@ fn test_mm_sub_pd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 4.0);
         let result = _mm_sub_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_array_equality(&[result[0] as f32, result[1] as f32], &[2.0, 2.0])?;
+        check_f32_array_equality(&[result[0] as f32, result[1] as f32], &[2.0, 2.0])?;
     }
 
     if get_fuzzing() {
@@ -427,7 +427,7 @@ fn test_mm_mul_pd() -> Result<(), String> {
         let b = _mm_set_pd(4.0, 5.0);
         let result = _mm_mul_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_array_equality(&[result[0] as f32, result[1] as f32], &[15.0, 8.0])?;
+        check_f32_array_equality(&[result[0] as f32, result[1] as f32], &[15.0, 8.0])?;
     }
 
     if get_fuzzing() {
@@ -454,7 +454,7 @@ fn test_mm_load_pd() -> Result<(), String> {
         let data = AlignedData([1.0, 2.0]);
         let result = _mm_load_pd(data.0.as_ptr());
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_array_equality(
+        check_f32_array_equality(
             &[result[0] as f32, result[1] as f32],
             &[data.0[0] as f32, data.0[1] as f32],
         )?;
@@ -467,7 +467,7 @@ fn test_mm_load_pd() -> Result<(), String> {
                 let data = AlignedData([get_random_float() as f64, get_random_float() as f64]);
                 let result = _mm_load_pd(data.0.as_ptr());
                 let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-                check_array_equality(
+                check_f32_array_equality(
                     &[result[0] as f32, result[1] as f32],
                     &[data.0[0] as f32, data.0[1] as f32],
                 )?;
@@ -483,7 +483,7 @@ fn test_mm_loadu_pd() -> Result<(), String> {
         let data = [1.0, 2.0];
         let result = _mm_loadu_pd(data.as_ptr());
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_array_equality(
+        check_f32_array_equality(
             &[result[0] as f32, result[1] as f32],
             &[data[0] as f32, data[1] as f32],
         )?;
@@ -496,7 +496,7 @@ fn test_mm_loadu_pd() -> Result<(), String> {
                 let data = [get_random_float() as f64, get_random_float() as f64];
                 let result = _mm_loadu_pd(data.as_ptr());
                 let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-                check_array_equality(
+                check_f32_array_equality(
                     &[result[0] as f32, result[1] as f32],
                     &[data[0] as f32, data[1] as f32],
                 )?;
@@ -516,7 +516,7 @@ fn test_mm_store_pd() -> Result<(), String> {
         let mut result = AlignedData([0.0; 2]);
         let vec = _mm_loadu_pd(data.0.as_ptr());
         _mm_store_pd(result.0.as_mut_ptr(), vec);
-        check_array_equality(
+        check_f32_array_equality(
             &[result.0[0] as f32, result.0[1] as f32],
             &[data.0[0] as f32, data.0[1] as f32],
         )?;
@@ -530,7 +530,7 @@ fn test_mm_store_pd() -> Result<(), String> {
                 let mut result = AlignedData([0.0; 2]);
                 let vec = _mm_loadu_pd(data.0.as_ptr());
                 _mm_store_pd(result.0.as_mut_ptr(), vec);
-                check_array_equality(
+                check_f32_array_equality(
                     &[result.0[0] as f32, result.0[1] as f32],
                     &[data.0[0] as f32, data.0[1] as f32],
                 )?;

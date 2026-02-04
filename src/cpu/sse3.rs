@@ -11,7 +11,7 @@ use std::arch::x86::{
 
 use log::info;
 
-use crate::cpu::{check_array_equality, ExtensionTest, get_iterations};
+use crate::cpu::{check_f32_array_equality, ExtensionTest, get_iterations};
 use crate::{get_four_random_floats, get_fuzzing, get_random_float};
 
 pub struct SSE3;
@@ -43,7 +43,7 @@ fn test_mm_hadd_ps() -> Result<(), String> {
         // hadd: [a0+a1, a2+a3, b0+b1, b2+b3]
         // a = [4, 3, 2, 1], b = [8, 7, 6, 5]
         // result = [4+3, 2+1, 8+7, 6+5] = [7, 3, 15, 11]
-        check_array_equality(&result, &[7.0, 3.0, 15.0, 11.0])?;
+        check_f32_array_equality(&result, &[7.0, 3.0, 15.0, 11.0])?;
     }
 
     if get_fuzzing() {
@@ -72,7 +72,7 @@ fn test_mm_hsub_ps() -> Result<(), String> {
         // hsub: [a0-a1, a2-a3, b0-b1, b2-b3]
         // a = [4, 3, 2, 1], b = [8, 7, 6, 5]
         // result = [4-3, 2-1, 8-7, 6-5] = [1, 1, 1, 1]
-        check_array_equality(&result, &[1.0, 1.0, 1.0, 1.0])?;
+        check_f32_array_equality(&result, &[1.0, 1.0, 1.0, 1.0])?;
     }
 
     if get_fuzzing() {
@@ -101,7 +101,7 @@ fn test_mm_addsub_ps() -> Result<(), String> {
         // addsub: [a0-b0, a1+b1, a2-b2, a3+b3]
         // a = [4, 3, 2, 1], b = [8, 7, 6, 5]
         // result = [4-8, 3+7, 2-6, 1+5] = [-4, 10, -4, 6]
-        check_array_equality(&result, &[-4.0, 10.0, -4.0, 6.0])?;
+        check_f32_array_equality(&result, &[-4.0, 10.0, -4.0, 6.0])?;
     }
 
     if get_fuzzing() {
@@ -129,7 +129,7 @@ fn test_mm_movehdup_ps() -> Result<(), String> {
         // movehdup: duplicates odd-indexed elements [a1, a1, a3, a3]
         // a = [4, 3, 2, 1]
         // result = [3, 3, 1, 1]
-        check_array_equality(&result, &[3.0, 3.0, 1.0, 1.0])?;
+        check_f32_array_equality(&result, &[3.0, 3.0, 1.0, 1.0])?;
     }
 
     if get_fuzzing() {
@@ -153,7 +153,7 @@ fn test_mm_moveldup_ps() -> Result<(), String> {
         // moveldup: duplicates even-indexed elements [a0, a0, a2, a2]
         // a = [4, 3, 2, 1]
         // result = [4, 4, 2, 2]
-        check_array_equality(&result, &[4.0, 4.0, 2.0, 2.0])?;
+        check_f32_array_equality(&result, &[4.0, 4.0, 2.0, 2.0])?;
     }
 
     if get_fuzzing() {
@@ -178,7 +178,7 @@ fn test_mm_hadd_pd() -> Result<(), String> {
         // hadd: [a0+a1, b0+b1]
         // a = [2, 1], b = [4, 3]
         // result = [2+1, 4+3] = [3, 7]
-        check_array_equality(&[result[0] as f32, result[1] as f32], &[3.0, 7.0])?;
+        check_f32_array_equality(&[result[0] as f32, result[1] as f32], &[3.0, 7.0])?;
     }
 
     if get_fuzzing() {
@@ -206,7 +206,7 @@ fn test_mm_hsub_pd() -> Result<(), String> {
         // hsub: [a0-a1, b0-b1]
         // a = [1, 3], b = [5, 7]
         // result = [1-3, 5-7] = [-2, -2]
-        check_array_equality(&[result[0] as f32, result[1] as f32], &[-2.0, -2.0])?;
+        check_f32_array_equality(&[result[0] as f32, result[1] as f32], &[-2.0, -2.0])?;
     }
 
     if get_fuzzing() {
@@ -234,7 +234,7 @@ fn test_mm_addsub_pd() -> Result<(), String> {
         // addsub: [a0-b0, a1+b1]
         // a = [4, 2], b = [2, 1]
         // result = [4-2, 2+1] = [2, 3]
-        check_array_equality(&[result[0] as f32, result[1] as f32], &[2.0, 3.0])?;
+        check_f32_array_equality(&[result[0] as f32, result[1] as f32], &[2.0, 3.0])?;
     }
 
     if get_fuzzing() {

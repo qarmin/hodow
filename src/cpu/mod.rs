@@ -1,3 +1,4 @@
+use std::fmt::Debug;
 use log::{error, info};
 use once_cell::sync::OnceCell;
 
@@ -187,7 +188,7 @@ pub fn test_all_extensions() -> Result<(), String> {
 }
 
 #[allow(dead_code)]
-fn check_array_equality(a: &[f32], b: &[f32]) -> Result<(), String> {
+fn check_f32_array_equality(a: &[f32], b: &[f32]) -> Result<(), String> {
     if a.len() != b.len() {
         return Err(format!("Arrays have different lengths: {} and {}", a.len(), b.len()));
     }
@@ -199,6 +200,20 @@ fn check_array_equality(a: &[f32], b: &[f32]) -> Result<(), String> {
             return Err(format!("Got {a:?}, expected {b:?} (One is NaN, other is not)"));
         } else if (a[i] - b[i]).abs() > 0.001 {
             return Err(format!("Got {a:?}, expected {b:?} (Difference is too big)"));
+        }
+    }
+
+    Ok(())
+}
+
+fn check_int_array_equality<T: PartialEq + Debug>(a: &[T], b: &[T]) -> Result<(), String> {
+    if a.len() != b.len() {
+        return Err(format!("Arrays have different lengths: {} and {}", a.len(), b.len()));
+    }
+
+    for i in 0..a.len() {
+        if a[i] != b[i] {
+            return Err(format!("Got {a:?}, expected {b:?}"));
         }
     }
 
@@ -293,5 +308,4 @@ pub fn available_modes() -> Vec<&'static str> {
 
     modes
 }
-
 

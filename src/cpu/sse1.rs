@@ -10,7 +10,7 @@ use std::arch::x86::{_mm_cvtsi32_ss, _mm_cvtss_f32, _mm_cvtss_si32, _mm_shuffle_
 
 use log::info;
 
-use crate::cpu::{check_array_equality, check_float_equality, ExtensionTest, DEFAULT_FLOAT_DIFF, get_iterations};
+use crate::cpu::{check_f32_array_equality, check_float_equality, ExtensionTest, DEFAULT_FLOAT_DIFF, get_iterations};
 use crate::{get_four_random_floats, get_fuzzing, get_random_float};
 
 pub struct SSE1;
@@ -74,7 +74,7 @@ fn test_mm_set_ps() -> Result<(), String> {
     unsafe {
         let result = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[4.0, 3.0, 2.0, 1.0])?;
+        check_f32_array_equality(&result, &[4.0, 3.0, 2.0, 1.0])?;
     }
 
     if get_fuzzing() {
@@ -89,7 +89,7 @@ fn test_mm_set_ps() -> Result<(), String> {
                 ];
                 let result = _mm_set_ps(arr[3], arr[2], arr[1], arr[0]);
                 let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-                check_array_equality(&result, &arr)?;
+                check_f32_array_equality(&result, &arr)?;
             }
         }
     }
@@ -128,7 +128,7 @@ fn test_mm_add_ps() -> Result<(), String> {
         ),
     ] {
         let result = use_mm_add_ps(*first_input, *second_input);
-        check_array_equality(&result, expected_result)?;
+        check_f32_array_equality(&result, expected_result)?;
     }
 
     if get_fuzzing() {
@@ -168,7 +168,7 @@ fn test_mm_sub_ps() -> Result<(), String> {
         ),
     ] {
         let result = use_mm_sub_ps(*first_input, *second_input);
-        check_array_equality(&result, expected_result)?;
+        check_f32_array_equality(&result, expected_result)?;
     }
 
     if get_fuzzing() {
@@ -187,7 +187,7 @@ fn test_mm_mul_ps() -> Result<(), String> {
         let b = _mm_set_ps(2.0, 2.0, 2.0, 2.0);
         let result = _mm_mul_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[8.0, 6.0, 4.0, 2.0])?;
+        check_f32_array_equality(&result, &[8.0, 6.0, 4.0, 2.0])?;
     }
 
     if get_fuzzing() {
@@ -225,7 +225,7 @@ fn test_mm_div_ps() -> Result<(), String> {
         ([0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0], [f32::NAN, f32::NAN, f32::NAN, f32::NAN]),
     ] {
         let result = use_mm_div_ps(*first_input, *second_input);
-        check_array_equality(&result, expected_result)?;
+        check_f32_array_equality(&result, expected_result)?;
     }
 
     if get_fuzzing() {
@@ -243,7 +243,7 @@ fn test_mm_set1_ps() -> Result<(), String> {
         let value = 3.13;
         let result = _mm_set1_ps(value);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[value, value, value, value])?;
+        check_f32_array_equality(&result, &[value, value, value, value])?;
     }
 
     if get_fuzzing() {
@@ -253,7 +253,7 @@ fn test_mm_set1_ps() -> Result<(), String> {
                 let value = get_random_float();
                 let result = _mm_set1_ps(value);
                 let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-                check_array_equality(&result, &[value, value, value, value])?;
+                check_f32_array_equality(&result, &[value, value, value, value])?;
             }
         }
     }
@@ -264,7 +264,7 @@ fn test_mm_setzero_ps() -> Result<(), String> {
     unsafe {
         let result = _mm_setzero_ps();
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[0.0, 0.0, 0.0, 0.0])?;
+        check_f32_array_equality(&result, &[0.0, 0.0, 0.0, 0.0])?;
     }
 
 
@@ -278,7 +278,7 @@ fn test_mm_load_ps() -> Result<(), String> {
         let data = AlignedData([1.0, 2.0, 3.0, 4.0]);
         let result = _mm_load_ps(data.0.as_ptr());
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &data.0)?;
+        check_f32_array_equality(&result, &data.0)?;
     }
 
     if get_fuzzing() {
@@ -288,7 +288,7 @@ fn test_mm_load_ps() -> Result<(), String> {
                 let arr = AlignedData(get_four_random_floats());
                 let result = _mm_load_ps(arr.0.as_ptr());
                 let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-                check_array_equality(&result, &arr.0)?;
+                check_f32_array_equality(&result, &arr.0)?;
             }
         }
     }
@@ -300,7 +300,7 @@ fn test_mm_loadu_ps() -> Result<(), String> {
         let data = [1.0, 2.0, 3.0, 4.0];
         let result = _mm_loadu_ps(data.as_ptr());
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &data)?;
+        check_f32_array_equality(&result, &data)?;
     }
 
     if get_fuzzing() {
@@ -310,7 +310,7 @@ fn test_mm_loadu_ps() -> Result<(), String> {
                 let arr = get_four_random_floats();
                 let result = _mm_loadu_ps(arr.as_ptr());
                 let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-                check_array_equality(&result, &arr)?;
+                check_f32_array_equality(&result, &arr)?;
             }
         }
     }
@@ -326,7 +326,7 @@ fn test_mm_store_ps() -> Result<(), String> {
         let mut result = AlignedData([0.0; 4]);
         let vec = _mm_loadu_ps(data.0.as_ptr());
         _mm_store_ps(result.0.as_mut_ptr(), vec);
-        check_array_equality(&result.0, &data.0)?;
+        check_f32_array_equality(&result.0, &data.0)?;
     }
 
     if get_fuzzing() {
@@ -337,7 +337,7 @@ fn test_mm_store_ps() -> Result<(), String> {
                 let mut result = AlignedData([0.0; 4]);
                 let vec = _mm_loadu_ps(arr.0.as_ptr());
                 _mm_store_ps(result.0.as_mut_ptr(), vec);
-                check_array_equality(&result.0, &arr.0)?;
+                check_f32_array_equality(&result.0, &arr.0)?;
             }
         }
     }
@@ -372,7 +372,7 @@ fn test_mm_sqrt_ps() -> Result<(), String> {
         let data_128 = _mm_loadu_ps(data.as_ptr());
         let result = _mm_sqrt_ps(data_128);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[2.0, 3.0, 4.0, 5.0])?;
+        check_f32_array_equality(&result, &[2.0, 3.0, 4.0, 5.0])?;
     }
 
     if get_fuzzing() {
@@ -395,7 +395,7 @@ fn test_mm_rsqrt_ps() -> Result<(), String> {
         let data = [4.0, 9.0, 16.0, 25.0];
         let result = _mm_rsqrt_ps(_mm_loadu_ps(data.as_ptr()));
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[0.5, 0.33333334, 0.25, 0.2])?;
+        check_f32_array_equality(&result, &[0.5, 0.33333334, 0.25, 0.2])?;
     }
 
     if get_fuzzing() {
@@ -417,7 +417,7 @@ fn test_mm_and_ps() -> Result<(), String> {
         let b = _mm_set_ps(1.0, 1.0, 0.0, 0.0);
         let result = _mm_and_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[0.0, 0.0, 0.0, 1.0])?;
+        check_f32_array_equality(&result, &[0.0, 0.0, 0.0, 1.0])?;
     }
 
     if get_fuzzing() {
@@ -443,7 +443,7 @@ fn test_mm_andnot_ps() -> Result<(), String> {
         let b = _mm_set_ps(1.0, 1.0, 0.0, 0.0);
         let result = _mm_andnot_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[0.0, 0.0, 1.0, 0.0])?;
+        check_f32_array_equality(&result, &[0.0, 0.0, 1.0, 0.0])?;
     }
 
     if get_fuzzing() {
@@ -468,7 +468,7 @@ fn test_mm_or_ps() -> Result<(), String> {
         let b = _mm_set_ps(1.0, 1.0, 0.0, 0.0);
         let result = _mm_or_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[0.0, -1.0, 1.0, 1.0])?;
+        check_f32_array_equality(&result, &[0.0, -1.0, 1.0, 1.0])?;
     }
 
     if get_fuzzing() {
@@ -494,7 +494,7 @@ fn test_mm_xor_ps() -> Result<(), String> {
         let b = _mm_set_ps(1.0, 1.0, 0.0, 0.0);
         let result = _mm_xor_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[0.0, -1.0, 1.0, 0.0])?;
+        check_f32_array_equality(&result, &[0.0, -1.0, 1.0, 0.0])?;
     }
 
     if get_fuzzing() {
@@ -520,7 +520,7 @@ fn test_mm_min_ps() -> Result<(), String> {
         let b = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let result = _mm_min_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[1.0, 2.0, 2.0, 1.0])?;
+        check_f32_array_equality(&result, &[1.0, 2.0, 2.0, 1.0])?;
     }
 
     if get_fuzzing() {
@@ -546,7 +546,7 @@ fn test_mm_max_ps() -> Result<(), String> {
         let b = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let result = _mm_max_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[4.0, 3.0, 3.0, 4.0])?;
+        check_f32_array_equality(&result, &[4.0, 3.0, 3.0, 4.0])?;
     }
 
     if get_fuzzing() {
@@ -571,7 +571,7 @@ fn test_mm_cmpeq_ps() -> Result<(), String> {
         let b = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let result = _mm_cmpeq_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN])?;
+        check_f32_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN])?;
     }
 
     if get_fuzzing() {
@@ -597,7 +597,7 @@ fn test_mm_cmpgt_ps() -> Result<(), String> {
         let b = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let result = _mm_cmpgt_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[f32::NAN, f32::NAN, 0.0,0.0])?;
+        check_f32_array_equality(&result, &[f32::NAN, f32::NAN, 0.0,0.0])?;
     }
 
     if get_fuzzing() {
@@ -623,7 +623,7 @@ fn test_mm_cmplt_ps() -> Result<(), String> {
         let b = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let result = _mm_cmplt_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[0.0, 0.0,f32::NAN, f32::NAN])?;
+        check_f32_array_equality(&result, &[0.0, 0.0,f32::NAN, f32::NAN])?;
     }
 
     if get_fuzzing() {
@@ -649,7 +649,7 @@ fn test_mm_cmpge_ps() -> Result<(), String> {
         let b = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let result = _mm_cmpge_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[f32::NAN, f32::NAN, 0.0, 0.0])?;
+        check_f32_array_equality(&result, &[f32::NAN, f32::NAN, 0.0, 0.0])?;
     }
 
     if get_fuzzing() {
@@ -675,7 +675,7 @@ fn test_mm_cmple_ps() -> Result<(), String> {
         let b = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let result = _mm_cmple_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[0.0, 0.0, f32::NAN, f32::NAN])?;
+        check_f32_array_equality(&result, &[0.0, 0.0, f32::NAN, f32::NAN])?;
     }
 
     if get_fuzzing() {
@@ -722,7 +722,7 @@ fn test_mm_cvtsi32_ss() -> Result<(), String> {
         let a = _mm_setzero_ps();
         let result = _mm_cvtsi32_ss(a, 42);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[42.0, 0.0, 0.0, 0.0])?;
+        check_f32_array_equality(&result, &[42.0, 0.0, 0.0, 0.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -732,7 +732,7 @@ fn test_mm_cvtsi32_ss() -> Result<(), String> {
                 let vec = _mm_setzero_ps();
                 let result = _mm_cvtsi32_ss(vec, value);
                 let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-                check_array_equality(&result, &[value as f32, 0.0, 0.0, 0.0])?;
+                check_f32_array_equality(&result, &[value as f32, 0.0, 0.0, 0.0])?;
             }
         }
     }
@@ -763,7 +763,7 @@ fn test_mm_set_ss() -> Result<(), String> {
     unsafe {
         let result = _mm_set_ss(3.13);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[3.13, 0.0, 0.0, 0.0])?;
+        check_f32_array_equality(&result, &[3.13, 0.0, 0.0, 0.0])?;
     }
     Ok(())
 }
@@ -775,7 +775,7 @@ fn test_mm_add_ss() -> Result<(), String> {
         let result = _mm_add_ss(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
         // Only lowest element is added, others are from a
-        check_array_equality(&result, &[12.0, 3.0, 2.0, 1.0])?;
+        check_f32_array_equality(&result, &[12.0, 3.0, 2.0, 1.0])?;
     }
     Ok(())
 }
@@ -786,7 +786,7 @@ fn test_mm_sub_ss() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 3.0);
         let result = _mm_sub_ss(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[7.0, 3.0, 2.0, 1.0])?;
+        check_f32_array_equality(&result, &[7.0, 3.0, 2.0, 1.0])?;
     }
     Ok(())
 }
@@ -797,7 +797,7 @@ fn test_mm_mul_ss() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 2.0);
         let result = _mm_mul_ss(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[8.0, 3.0, 2.0, 1.0])?;
+        check_f32_array_equality(&result, &[8.0, 3.0, 2.0, 1.0])?;
     }
     Ok(())
 }
@@ -808,7 +808,7 @@ fn test_mm_div_ss() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 2.0);
         let result = _mm_div_ss(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[4.0, 3.0, 2.0, 1.0])?;
+        check_f32_array_equality(&result, &[4.0, 3.0, 2.0, 1.0])?;
     }
     Ok(())
 }
@@ -818,7 +818,7 @@ fn test_mm_sqrt_ss() -> Result<(), String> {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 16.0);
         let result = _mm_sqrt_ss(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[4.0, 3.0, 2.0, 1.0])?;
+        check_f32_array_equality(&result, &[4.0, 3.0, 2.0, 1.0])?;
     }
     Ok(())
 }
@@ -842,7 +842,7 @@ fn test_mm_rcp_ps() -> Result<(), String> {
         let result = _mm_rcp_ps(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
         // Approximate reciprocal
-        check_array_equality(&result, &[0.125, 0.25, 0.5, 1.0])?;
+        check_f32_array_equality(&result, &[0.125, 0.25, 0.5, 1.0])?;
     }
     Ok(())
 }
@@ -866,7 +866,7 @@ fn test_mm_min_ss() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 2.0);
         let result = _mm_min_ss(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[2.0, 3.0, 2.0, 1.0])?;
+        check_f32_array_equality(&result, &[2.0, 3.0, 2.0, 1.0])?;
     }
     Ok(())
 }
@@ -877,7 +877,7 @@ fn test_mm_max_ss() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 2.0);
         let result = _mm_max_ss(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_array_equality(&result, &[4.0, 3.0, 2.0, 1.0])?;
+        check_f32_array_equality(&result, &[4.0, 3.0, 2.0, 1.0])?;
     }
     Ok(())
 }
@@ -890,7 +890,7 @@ fn test_mm_shuffle_ps() -> Result<(), String> {
         let result = _mm_shuffle_ps::<0x1B>(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
         // result[0] = a[3], result[1] = a[2], result[2] = b[1], result[3] = b[0]
-        check_array_equality(&result, &[1.0, 2.0, 7.0, 8.0])?;
+        check_f32_array_equality(&result, &[1.0, 2.0, 7.0, 8.0])?;
     }
     Ok(())
 }
@@ -904,7 +904,7 @@ fn test_mm_unpackhi_ps() -> Result<(), String> {
         // Interleave high halves: [b[2], a[2], b[3], a[3]]
         // a = [4, 3, 2, 1], b = [8, 7, 6, 5]
         // result = [2, 6, 1, 5]
-        check_array_equality(&result, &[2.0, 6.0, 1.0, 5.0])?;
+        check_f32_array_equality(&result, &[2.0, 6.0, 1.0, 5.0])?;
     }
     Ok(())
 }
@@ -918,7 +918,7 @@ fn test_mm_unpacklo_ps() -> Result<(), String> {
         // Interleave low halves: [b[0], a[0], b[1], a[1]]
         // a = [4, 3, 2, 1], b = [8, 7, 6, 5]
         // result = [4, 8, 3, 7]
-        check_array_equality(&result, &[4.0, 8.0, 3.0, 7.0])?;
+        check_f32_array_equality(&result, &[4.0, 8.0, 3.0, 7.0])?;
     }
     Ok(())
 }
@@ -930,7 +930,7 @@ fn test_mm_movehl_ps() -> Result<(), String> {
         let result = _mm_movehl_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
         // result = [a[3], a[2], b[3], b[2]]
-        check_array_equality(&result, &[6.0, 5.0, 2.0, 1.0])?;
+        check_f32_array_equality(&result, &[6.0, 5.0, 2.0, 1.0])?;
     }
     Ok(())
 }
@@ -944,7 +944,7 @@ fn test_mm_movelh_ps() -> Result<(), String> {
         // result = [a[0], a[1], b[0], b[1]]
         // a = [4, 3, 2, 1], b = [8, 7, 6, 5]
         // result = [4, 3, 8, 7]
-        check_array_equality(&result, &[4.0, 3.0, 8.0, 7.0])?;
+        check_f32_array_equality(&result, &[4.0, 3.0, 8.0, 7.0])?;
     }
     Ok(())
 }
@@ -956,7 +956,7 @@ fn test_mm_move_ss() -> Result<(), String> {
         let result = _mm_move_ss(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
         // result = [b[0], a[1], a[2], a[3]]
-        check_array_equality(&result, &[8.0, 3.0, 2.0, 1.0])?;
+        check_f32_array_equality(&result, &[8.0, 3.0, 2.0, 1.0])?;
     }
     Ok(())
 }

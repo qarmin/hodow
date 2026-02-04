@@ -5,7 +5,7 @@ use std::arch::x86::*;
 
 use log::info;
 
-use crate::cpu::{check_array_equality, ExtensionTest, get_iterations};
+use crate::cpu::{check_f32_array_equality, ExtensionTest, get_iterations};
 use crate::{get_fuzzing, get_random_float};
 
 pub struct AVX512F;
@@ -64,7 +64,7 @@ fn test_mm512_add_ps() -> Result<(), String> {
         let result = _mm512_add_ps(a, b);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
         let expected = [17.0; 16];
-        check_array_equality(&result, &expected)?;
+        check_f32_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -90,7 +90,7 @@ fn test_mm512_sub_ps() -> Result<(), String> {
         let result = _mm512_sub_ps(a, b);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
         let expected = [7.0; 16];
-        check_array_equality(&result, &expected)?;
+        check_f32_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -116,7 +116,7 @@ fn test_mm512_mul_ps() -> Result<(), String> {
         let result = _mm512_mul_ps(a, b);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
         let expected = [6.0; 16];
-        check_array_equality(&result, &expected)?;
+        check_f32_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -142,7 +142,7 @@ fn test_mm512_div_ps() -> Result<(), String> {
         let result = _mm512_div_ps(a, b);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
         let expected = [4.0; 16];
-        check_array_equality(&result, &expected)?;
+        check_f32_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -255,7 +255,7 @@ fn test_mm512_max_ps() -> Result<(), String> {
         let result = _mm512_max_ps(a, b);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
         let expected = [16.0, 15.0, 14.0, 13.0, 12.0, 11.0, 10.0, 9.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0];
-        check_array_equality(&result, &expected)?;
+        check_f32_array_equality(&result, &expected)?;
     }
 
     Ok(())
@@ -274,7 +274,7 @@ fn test_mm512_min_ps() -> Result<(), String> {
         let result = _mm512_min_ps(a, b);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
         let expected = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0];
-        check_array_equality(&result, &expected)?;
+        check_f32_array_equality(&result, &expected)?;
     }
 
     Ok(())
@@ -287,7 +287,7 @@ fn test_mm512_sqrt_ps() -> Result<(), String> {
         let result = _mm512_sqrt_ps(vec);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
         let expected = [2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0];
-        check_array_equality(&result, &expected)?;
+        check_f32_array_equality(&result, &expected)?;
     }
 
     Ok(())
@@ -298,7 +298,7 @@ fn test_mm512_set1_ps() -> Result<(), String> {
         let result = _mm512_set1_ps(3.13);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
         let expected = [3.13; 16];
-        check_array_equality(&result, &expected)?;
+        check_f32_array_equality(&result, &expected)?;
     }
 
     Ok(())
@@ -309,7 +309,7 @@ fn test_mm512_setzero_ps() -> Result<(), String> {
         let result = _mm512_setzero_ps();
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
         let expected = [0.0; 16];
-        check_array_equality(&result, &expected)?;
+        check_f32_array_equality(&result, &expected)?;
     }
 
     Ok(())
