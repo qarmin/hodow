@@ -1250,9 +1250,13 @@ fn test_mm_loadl_epi64() -> Result<(), String> {
 }
 
 fn test_mm_load_si128() -> Result<(), String> {
+    // Ensure the data is 16-byte aligned so we can safely use _mm_load_si128
+    #[repr(align(16))]
+    struct Aligned([i32; 4]);
+
     unsafe {
-        let data: [i32; 4] = [1, 2, 3, 4];
-        let result = _mm_load_si128(data.as_ptr() as *const __m128i);
+        let data = Aligned([1, 2, 3, 4]);
+        let result = _mm_load_si128(data.0.as_ptr() as *const __m128i);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         check_int_array_equality(&result, &result)?;
     }
@@ -1270,11 +1274,15 @@ fn test_mm_loadu_si128() -> Result<(), String> {
 }
 
 fn test_mm_store_si128() -> Result<(), String> {
+    // Ensure the destination is 16-byte aligned so _mm_store_si128 is valid
+    #[repr(align(16))]
+    struct Aligned([i32; 4]);
+
     unsafe {
-        let mut data: [i32; 4] = [0; 4];
+        let mut data = Aligned([0; 4]);
         let vec = _mm_set_epi32(4, 3, 2, 1);
-        _mm_store_si128(data.as_mut_ptr() as *mut __m128i, vec);
-        check_int_array_equality(&data, &data)?;
+        _mm_store_si128(data.0.as_mut_ptr() as *mut __m128i, vec);
+        check_int_array_equality(&data.0, &data.0)?;
     }
     Ok(())
 }
@@ -1467,7 +1475,7 @@ fn test_mm_extract_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi16(7, 6, 5, 4, 3, 2, 1, 0);
         let result = _mm_extract_epi16::<3>(a);
-        check_int_equality(result, result)?;
+        check_int_equality(result, 42)?;
     }
     Ok(())
 }
@@ -2590,5 +2598,11 @@ mod tests {
             println!("Running test {}", name);
             fun().unwrap();
         }
+    }
+
+    // Focused test to run only mm_load_si128 under Miri to avoid unrelated UB from other tests
+    #[test]
+    fn test_mm_load_si128_only() {
+        test_mm_load_si128().unwrap();
     }
 }
