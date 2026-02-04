@@ -712,9 +712,7 @@ fn test_mm_cvtsi128_si32() -> Result<(), String> {
 
 // Memory operations
 fn test_mm_pause() -> Result<(), String> {
-    unsafe {
         _mm_pause();
-    }
     Ok(())
 }
 

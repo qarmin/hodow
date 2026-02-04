@@ -1,4 +1,7 @@
 run +args:
+    RUSTFLAGS="-C target-cpu=native" cargo run {{args}}
+
+run +args:
     cargo run {{args}}
 
 upgrade:
