@@ -5,7 +5,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{check_f32_array_equality, check_int_array_equality, get_iterations, ExtensionTest, TestFunction};
+use crate::cpu::{check_f32_array_equality, check_int_array_equality, check_f64_array_equality, check_int_equality, get_iterations, ExtensionTest, TestFunction};
 use crate::{get_four_random_floats, get_fuzzing, get_random_float};
 
 pub struct SSE2;
@@ -376,9 +376,8 @@ fn test_mm_set_epi32() -> Result<(), String> {
     unsafe {
         let result = _mm_set_epi32(1, 2, 3, 4);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        if result != [4, 3, 2, 1] {
-            return Err(format!("Expected [4, 3, 2, 1], got {:?}", result));
-        }
+        let expected = [4, 3, 2, 1];
+        check_int_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -388,9 +387,7 @@ fn test_mm_set_epi32() -> Result<(), String> {
                 let values = [get_random_float() as i32, get_random_float() as i32, get_random_float() as i32, get_random_float() as i32];
                 let result = _mm_set_epi32(values[3], values[2], values[1], values[0]);
                 let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-                if result != values {
-                    return Err(format!("Expected {:?}, got {:?}", values, result));
-                }
+                check_int_array_equality(&result, &values)?;
             }
         }
     }
@@ -402,9 +399,8 @@ fn test_mm_set1_epi32() -> Result<(), String> {
     unsafe {
         let result = _mm_set1_epi32(42);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        if result != [42, 42, 42, 42] {
-            return Err(format!("Expected [42, 42, 42, 42], got {:?}", result));
-        }
+        let expected = [42, 42, 42, 42];
+        check_int_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -414,9 +410,8 @@ fn test_mm_set1_epi32() -> Result<(), String> {
                 let value = get_random_float() as i32;
                 let result = _mm_set1_epi32(value);
                 let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-                if result != [value, value, value, value] {
-                    return Err(format!("Expected [{}, {}, {}, {}], got {:?}", value, value, value, value, result));
-                }
+                let expected = [value, value, value, value];
+                check_int_array_equality(&result, &expected)?;
             }
         }
     }
@@ -428,9 +423,8 @@ fn test_mm_setzero_si128() -> Result<(), String> {
     unsafe {
         let result = _mm_setzero_si128();
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        if result != [0, 0, 0, 0] {
-            return Err(format!("Expected [0, 0, 0, 0], got {:?}", result));
-        }
+        let expected = [0, 0, 0, 0];
+        check_int_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -441,9 +435,8 @@ fn test_mm_add_epi32() -> Result<(), String> {
         let b = _mm_set_epi32(5, 6, 7, 8);
         let result = _mm_add_epi32(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        if result != [12, 10, 8, 6] {
-            return Err(format!("Expected [12, 10, 8, 6], got {:?}", result));
-        }
+        let expected = [12, 10, 8, 6];
+        check_int_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -466,9 +459,8 @@ fn test_mm_sub_epi32() -> Result<(), String> {
         let b = _mm_set_epi32(5, 6, 7, 8);
         let result = _mm_sub_epi32(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        if result != [32, 23, 14, 5] {
-            return Err(format!("Expected [32, 23, 14, 5], got {:?}", result));
-        }
+        let expected = [32, 23, 14, 5];
+        check_int_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -491,9 +483,8 @@ fn test_mm_and_si128() -> Result<(), String> {
         let b = _mm_set_epi32(0xFF, 0x00, 0xFF, 0x00);
         let result = _mm_and_si128(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        if result != [0x00, 0x00, 0x00, 0xFF] {
-            return Err(format!("Expected [0, 0, 0, 255], got {:?}", result));
-        }
+        let expected = [0x00, 0x00, 0x00, 0xFF];
+        check_int_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -516,9 +507,8 @@ fn test_mm_or_si128() -> Result<(), String> {
         let b = _mm_set_epi32(0x00, 0xFF, 0x00, 0x00);
         let result = _mm_or_si128(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        if result != [0x00, 0x00, 0xFF, 0xFF] {
-            return Err(format!("Expected [0, 0, 255, 255], got {:?}", result));
-        }
+        let expected = [0x00, 0x00, 0xFF, 0xFF];
+        check_int_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -541,9 +531,8 @@ fn test_mm_xor_si128() -> Result<(), String> {
         let b = _mm_set_epi32(0xFF, 0x00, 0xFF, 0x00);
         let result = _mm_xor_si128(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        if result != [0x00, 0xFF, 0xFF, 0x00] {
-            return Err(format!("Expected [0, 255, 255, 0], got {:?}", result));
-        }
+        let expected = [0x00, 0xFF, 0xFF, 0x00];
+        check_int_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -566,9 +555,8 @@ fn test_mm_cmpeq_epi32() -> Result<(), String> {
         let b = _mm_set_epi32(1, 2, 3, 4);
         let result = _mm_cmpeq_epi32(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        if result != [-1, -1, -1, -1] {
-            return Err(format!("Expected [-1, -1, -1, -1], got {:?}", result));
-        }
+        let expected = [-1, -1, -1, -1];
+        check_int_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -610,9 +598,7 @@ fn test_mm_cvtsi128_si32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 42);
         let result = _mm_cvtsi128_si32(a);
-        if result != 42 {
-            return Err(format!("Expected 42, got {}", result));
-        }
+        check_int_equality(result, 42)?;
     }
 
     if get_fuzzing() {
@@ -622,9 +608,7 @@ fn test_mm_cvtsi128_si32() -> Result<(), String> {
                 let value = get_random_float() as i32;
                 let vec = _mm_set_epi32(get_random_float() as i32, get_random_float() as i32, get_random_float() as i32, value);
                 let result = _mm_cvtsi128_si32(vec);
-                if result != value {
-                    return Err(format!("Expected {}, got {}", value, result));
-                }
+                check_int_equality(result, value)?;
             }
         }
     }
@@ -658,9 +642,7 @@ fn test_mm_add_epi8() -> Result<(), String> {
         let result = _mm_add_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
         let expected = [17; 16];
-        if result != expected {
-            return Err(format!("Expected {:?}, got {:?}", expected, result));
-        }
+        check_int_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -672,9 +654,7 @@ fn test_mm_add_epi16() -> Result<(), String> {
         let result = _mm_add_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         let expected = [9; 8];
-        if result != expected {
-            return Err(format!("Expected {:?}, got {:?}", expected, result));
-        }
+        check_int_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1937,8 +1917,9 @@ fn test_mm_sll_epi16() -> Result<(), String> {
         let count = _mm_set_epi64x(0, 2);
         let result = _mm_sll_epi16(a, count);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        if result != [4; 8] {
-            return Err(format!("Expected [4; 8], got {:?}", result));
+        let expected = [4; 8];
+        if result != expected {
+            return Err(format!("Expected {:?}, got {:?}", expected, result));
         }
     }
     Ok(())
@@ -1950,8 +1931,9 @@ fn test_mm_sll_epi32() -> Result<(), String> {
         let count = _mm_set_epi64x(0, 3);
         let result = _mm_sll_epi32(a, count);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        if result != [8; 4] {
-            return Err(format!("Expected [8; 4], got {:?}", result));
+        let expected = [8; 4];
+        if result != expected {
+            return Err(format!("Expected {:?}, got {:?}", expected, result));
         }
     }
     Ok(())
@@ -1963,8 +1945,9 @@ fn test_mm_sll_epi64() -> Result<(), String> {
         let count = _mm_set_epi64x(0, 4);
         let result = _mm_sll_epi64(a, count);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        if result != [16; 2] {
-            return Err(format!("Expected [16; 2], got {:?}", result));
+        let expected = [16; 2];
+        if result != expected {
+            return Err(format!("Expected {:?}, got {:?}", expected, result));
         }
     }
     Ok(())
