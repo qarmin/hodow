@@ -170,6 +170,27 @@ fn test_mm_max_epi8() -> Result<(), String> {
         check_int_array_equality(&result, &[16, 15, 14, 13, 12, 11, 10, 9, 9, 10, 11, 12, 13, 14, 15, 16])?;
     }
 
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set_epi8(
+                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
+                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
+                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
+                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
+                );
+                let b = _mm_set_epi8(
+                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
+                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
+                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
+                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
+                );
+                let _result = _mm_max_epi8(a, b);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -180,6 +201,27 @@ fn test_mm_min_epi8() -> Result<(), String> {
         let result = _mm_min_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
         check_int_array_equality(&result, &[1, 2, 3, 4, 5, 6, 7, 8, 8, 7, 6, 5, 4, 3, 2, 1])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set_epi8(
+                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
+                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
+                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
+                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
+                );
+                let b = _mm_set_epi8(
+                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
+                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
+                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
+                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
+                );
+                let _result = _mm_min_epi8(a, b);
+            }
+        }
     }
 
     Ok(())
@@ -215,6 +257,17 @@ fn test_mm_mul_epi32() -> Result<(), String> {
         let result = _mm_mul_epi32(a, b);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
         check_int_array_equality(&result, &[20, 6])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random());
+                let b = _mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random());
+                let _result = _mm_mul_epi32(a, b);
+            }
+        }
     }
 
     Ok(())
@@ -291,6 +344,16 @@ fn test_mm_extract_ps() -> Result<(), String> {
         check_float_equality(result_float, 2.0, DEFAULT_FLOAT_DIFF)?;
     }
 
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let vals = get_four_random_floats();
+                let _result = _mm_extract_ps::<2>(_mm_set_ps(vals[3], vals[2], vals[1], vals[0]));
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -302,6 +365,17 @@ fn test_mm_insert_ps() -> Result<(), String> {
         let result = _mm_insert_ps::<0b00100000>(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
         check_f32_array_equality(&result, &[4.0, 3.0, 8.0, 1.0])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a_vals = get_four_random_floats();
+                let b_vals = get_four_random_floats();
+                let _result = _mm_insert_ps::<0b00100000>(_mm_set_ps(a_vals[3], a_vals[2], a_vals[1], a_vals[0]), _mm_set_ps(b_vals[3], b_vals[2], b_vals[1], b_vals[0]));
+            }
+        }
     }
 
     Ok(())
@@ -324,6 +398,17 @@ fn test_mm_testz_si128() -> Result<(), String> {
         check_int_equality(result, 1)?;
     }
 
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random());
+                let b = _mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random());
+                let _result = _mm_testz_si128(a, b);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -333,6 +418,17 @@ fn test_mm_testc_si128() -> Result<(), String> {
         let b = _mm_set_epi32(0x00FF0000, 0, 0, 0);
         let result = _mm_testc_si128(a, b);
         check_int_equality(result, 1)?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random());
+                let b = _mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random());
+                let _result = _mm_testc_si128(a, b);
+            }
+        }
     }
 
     Ok(())
