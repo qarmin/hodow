@@ -1,10 +1,12 @@
+#[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::*;
+#[cfg(target_arch = "x86")]
 use std::arch::x86::*;
 
 use log::info;
 
-use crate::cpu::{check_f32_array_equality, ExtensionTest, get_iterations};
-use crate::{get_fuzzing, get_random_float};
+use crate::cpu::{ExtensionTest, get_iterations, check_f32_array_equality};
+use crate::{get_fuzzing, get_four_random_floats, get_random_float};
 
 pub struct AVX;
 

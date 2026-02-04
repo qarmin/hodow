@@ -5,7 +5,7 @@ use std::arch::x86::*;
 
 use log::info;
 
-use crate::cpu::{ExtensionTest, get_iterations, check_int_array_equality};
+use crate::cpu::{ExtensionTest, get_iterations, check_f32_array_equality};
 use crate::{get_fuzzing, get_four_random_floats, get_random_float};
 
 pub struct SSE3;

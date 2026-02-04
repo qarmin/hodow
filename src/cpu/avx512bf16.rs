@@ -32,7 +32,7 @@ impl ExtensionTest for AVX512BF16 {
 }
 
 fn test_mm_cvtne2ps_pbh() -> Result<(), String> {
-    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+   
     unsafe {
         let a = _mm_set1_ps(1.5);
         let b = _mm_set1_ps(2.5);
@@ -44,12 +44,10 @@ fn test_mm_cvtne2ps_pbh() -> Result<(), String> {
         }
         Ok(())
     }
-    #[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
-    Ok(())
 }
 
 fn test_mm_mask_cvtne2ps_pbh() -> Result<(), String> {
-    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+   
     unsafe {
         let src = _mm_set1_epi16(0);
         let a = _mm_set1_ps(1.5);
@@ -59,12 +57,10 @@ fn test_mm_mask_cvtne2ps_pbh() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
-    Ok(())
 }
 
 fn test_mm_maskz_cvtne2ps_pbh() -> Result<(), String> {
-    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+   
     unsafe {
         let a = _mm_set1_ps(1.5);
         let b = _mm_set1_ps(2.5);
@@ -73,12 +69,10 @@ fn test_mm_maskz_cvtne2ps_pbh() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
-    Ok(())
 }
 
 fn test_mm_dpbf16_ps() -> Result<(), String> {
-    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+   
     unsafe {
         let src = _mm_set1_ps(1.0);
         let a = _mm_set1_epi16(0x3f80); // BF16 representation
@@ -90,12 +84,10 @@ fn test_mm_dpbf16_ps() -> Result<(), String> {
         }
         Ok(())
     }
-    #[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
-    Ok(())
 }
 
 fn test_mm_mask_dpbf16_ps() -> Result<(), String> {
-    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+   
     unsafe {
         let src = _mm_set1_ps(1.0);
         let a = _mm_set1_epi16(0x3f80);
@@ -105,12 +97,10 @@ fn test_mm_mask_dpbf16_ps() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
-    Ok(())
 }
 
 fn test_mm_maskz_dpbf16_ps() -> Result<(), String> {
-    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+   
     unsafe {
         let src = _mm_set1_ps(1.0);
         let a = _mm_set1_epi16(0x3f80);
@@ -120,12 +110,10 @@ fn test_mm_maskz_dpbf16_ps() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
-    Ok(())
 }
 
 fn test_mm_cvtpbh_ps() -> Result<(), String> {
-    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+   
     unsafe {
         let a = _mm_set1_epi16(0x3f80);
         let result = _mm_cvtpbh_ps(a);
@@ -135,12 +123,10 @@ fn test_mm_cvtpbh_ps() -> Result<(), String> {
         }
         Ok(())
     }
-    #[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
-    Ok(())
 }
 
 fn test_mm_mask_cvtpbh_ps() -> Result<(), String> {
-    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+   
     unsafe {
         let src = _mm_set1_ps(0.0);
         let a = _mm_set1_epi16(0x3f80);
@@ -149,12 +135,11 @@ fn test_mm_mask_cvtpbh_ps() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
-    Ok(())
+
 }
 
 fn test_mm_maskz_cvtpbh_ps() -> Result<(), String> {
-    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+   
     unsafe {
         let a = _mm_set1_epi16(0x3f80);
         let result = _mm_maskz_cvtpbh_ps(0xF, a);
@@ -162,12 +147,9 @@ fn test_mm_maskz_cvtpbh_ps() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
-    Ok(())
 }
 
 fn test_mm_cvtsbh_ss() -> Result<(), String> {
-    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     unsafe {
         let a = _mm_set_ss(1.5);
         let b = 0x3f80u16;
@@ -176,12 +158,9 @@ fn test_mm_cvtsbh_ss() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
-    Ok(())
 }
 
 fn test_mm_cvtneps_pbh() -> Result<(), String> {
-    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     unsafe {
         let a = _mm_set1_ps(1.5);
         let result = _mm_cvtneps_pbh(a);
@@ -191,12 +170,9 @@ fn test_mm_cvtneps_pbh() -> Result<(), String> {
         }
         Ok(())
     }
-    #[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
-    Ok(())
 }
 
 fn test_mm_mask_cvtneps_pbh() -> Result<(), String> {
-    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     unsafe {
         let src = _mm_set1_epi16(0);
         let a = _mm_set1_ps(1.5);
@@ -205,12 +181,9 @@ fn test_mm_mask_cvtneps_pbh() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
-    Ok(())
 }
 
 fn test_mm_maskz_cvtneps_pbh() -> Result<(), String> {
-    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     unsafe {
         let a = _mm_set1_ps(1.5);
         let result = _mm_maskz_cvtneps_pbh(0xF, a);
@@ -218,12 +191,9 @@ fn test_mm_maskz_cvtneps_pbh() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
-    Ok(())
 }
 
 fn test_mm_cvtness_sbh() -> Result<(), String> {
-    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     unsafe {
         let a = 1.5f32;
         let result = _mm_cvtness_sbh(a);
@@ -233,6 +203,4 @@ fn test_mm_cvtness_sbh() -> Result<(), String> {
         }
         Ok(())
     }
-    #[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
-    Ok(())
 }

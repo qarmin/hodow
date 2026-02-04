@@ -1,10 +1,12 @@
+#[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::*;
+#[cfg(target_arch = "x86")]
 use std::arch::x86::*;
 
 use log::info;
 
 use crate::cpu::{ExtensionTest, get_iterations, check_int_array_equality};
-use crate::{get_fuzzing};
+use crate::{get_four_random_floats, get_fuzzing};
 
 pub struct SSSE3;
 

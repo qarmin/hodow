@@ -697,4 +697,3 @@ fn test_mm_srlv_epi64() -> Result<(), String> {
     Ok(())
 }
 
-

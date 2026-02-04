@@ -3,7 +3,7 @@ use std::arch::x86_64::*;
 #[cfg(target_arch = "x86")]
 use std::arch::x86::*;
 
-use crate::cpu::{ExtensionTest, check_int_array_equality};
+use crate::cpu::{ExtensionTest, check_int_array_equality, check_int_equality};
 
 pub struct AVX512CD;
 
