@@ -3,7 +3,11 @@ use std::arch::x86_64::*;
 #[cfg(target_arch = "x86")]
 use std::arch::x86::*;
 
+use log::info;
+
 use crate::cpu::ExtensionTest;
+use crate::get_fuzzing;
+use crate::get_iterations;
 
 pub struct AVX512IFMA;
 
@@ -36,8 +40,21 @@ fn test_mm_madd52hi_avx_epu64() -> Result<(), String> {
         if result[0] == 0 && result[1] == 0 {
             return Err(format!("Got all zeros: {:?}", result));
         }
-        Ok(())
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set1_epi64x(rand::random());
+                let b = _mm_set1_epi64x(rand::random());
+                let c = _mm_set1_epi64x(rand::random());
+                let _ = _mm_madd52hi_avx_epu64(a, b, c);
+            }
+        }
+    }
+
+    Ok(())
 }
 
 fn test_mm_madd52lo_avx_epu64() -> Result<(), String> {
@@ -50,8 +67,21 @@ fn test_mm_madd52lo_avx_epu64() -> Result<(), String> {
         if result[0] == 0 && result[1] == 0 {
             return Err(format!("Got all zeros: {:?}", result));
         }
-        Ok(())
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set1_epi64x(rand::random());
+                let b = _mm_set1_epi64x(rand::random());
+                let c = _mm_set1_epi64x(rand::random());
+                let _ = _mm_madd52lo_avx_epu64(a, b, c);
+            }
+        }
+    }
+
+    Ok(())
 }
 
 fn test_mm_madd52hi_epu64() -> Result<(), String> {
@@ -65,8 +95,21 @@ fn test_mm_madd52hi_epu64() -> Result<(), String> {
         if result[0] == 0 && result[1] == 0 {
             return Err(format!("Got all zeros: {:?}", result));
         }
-        Ok(())
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set1_epi64x(rand::random());
+                let b = _mm_set1_epi64x(rand::random());
+                let c = _mm_set1_epi64x(rand::random());
+                let _ = _mm_madd52hi_epu64(a, b, c);
+            }
+        }
+    }
+
+    Ok(())
 }
 
 fn test_mm_mask_madd52hi_epu64() -> Result<(), String> {
@@ -75,8 +118,21 @@ fn test_mm_mask_madd52hi_epu64() -> Result<(), String> {
         let b = _mm_set1_epi64x(2000);
         let c = _mm_set1_epi64x(100);
         let _result = _mm_mask_madd52hi_epu64(a, 0x3, b, c);
-        Ok(())
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set1_epi64x(rand::random());
+                let b = _mm_set1_epi64x(rand::random());
+                let c = _mm_set1_epi64x(rand::random());
+                let _ = _mm_mask_madd52hi_epu64(a, 0x3, b, c);
+            }
+        }
+    }
+
+    Ok(())
 }
 
 fn test_mm_maskz_madd52hi_epu64() -> Result<(), String> {
@@ -85,8 +141,21 @@ fn test_mm_maskz_madd52hi_epu64() -> Result<(), String> {
         let b = _mm_set1_epi64x(2000);
         let c = _mm_set1_epi64x(100);
         let _result = _mm_maskz_madd52hi_epu64(0x3, a, b, c);
-        Ok(())
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set1_epi64x(rand::random());
+                let b = _mm_set1_epi64x(rand::random());
+                let c = _mm_set1_epi64x(rand::random());
+                let _ = _mm_maskz_madd52hi_epu64(0x3, a, b, c);
+            }
+        }
+    }
+
+    Ok(())
 }
 
 fn test_mm_madd52lo_epu64() -> Result<(), String> {
@@ -99,8 +168,21 @@ fn test_mm_madd52lo_epu64() -> Result<(), String> {
         if result[0] == 0 && result[1] == 0 {
             return Err(format!("Got all zeros: {:?}", result));
         }
-        Ok(())
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set1_epi64x(rand::random());
+                let b = _mm_set1_epi64x(rand::random());
+                let c = _mm_set1_epi64x(rand::random());
+                let _ = _mm_madd52lo_epu64(a, b, c);
+            }
+        }
+    }
+
+    Ok(())
 }
 
 fn test_mm_mask_madd52lo_epu64() -> Result<(), String> {
@@ -109,8 +191,21 @@ fn test_mm_mask_madd52lo_epu64() -> Result<(), String> {
         let b = _mm_set1_epi64x(2000);
         let c = _mm_set1_epi64x(100);
         let _result = _mm_mask_madd52lo_epu64(a, 0x3, b, c);
-        Ok(())
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set1_epi64x(rand::random());
+                let b = _mm_set1_epi64x(rand::random());
+                let c = _mm_set1_epi64x(rand::random());
+                let _ = _mm_mask_madd52lo_epu64(a, 0x3, b, c);
+            }
+        }
+    }
+
+    Ok(())
 }
 
 fn test_mm_maskz_madd52lo_epu64() -> Result<(), String> {
@@ -119,6 +214,19 @@ fn test_mm_maskz_madd52lo_epu64() -> Result<(), String> {
         let b = _mm_set1_epi64x(2000);
         let c = _mm_set1_epi64x(100);
         let _result = _mm_maskz_madd52lo_epu64(0x3, a, b, c);
-        Ok(())
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set1_epi64x(rand::random());
+                let b = _mm_set1_epi64x(rand::random());
+                let c = _mm_set1_epi64x(rand::random());
+                let _ = _mm_maskz_madd52lo_epu64(0x3, a, b, c);
+            }
+        }
+    }
+
+    Ok(())
 }
