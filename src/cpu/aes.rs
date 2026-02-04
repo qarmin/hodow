@@ -41,7 +41,7 @@ impl ExtensionTest for AES {
             let a = _mm_set_epi64x(rand::random(), rand::random());
             let round_key = _mm_set_epi64x(rand::random(), rand::random());
             let _result = _mm_aesdec_si128(a, round_key);
-            let _ = _result;
+
         }
     }
 
@@ -63,7 +63,7 @@ fn test_mm_aesdeclast_si128() -> Result<(), String> {
             let a = _mm_set_epi64x(rand::random(), rand::random());
             let round_key = _mm_set_epi64x(rand::random(), rand::random());
             let _result = _mm_aesdeclast_si128(a, round_key);
-            let _ = _result;
+
         }
     }
 
@@ -87,7 +87,7 @@ fn test_mm_aesenc_si128() -> Result<(), String> {
             let a = _mm_set_epi64x(rand::random(), rand::random());
             let round_key = _mm_set_epi64x(rand::random(), rand::random());
             let _result = _mm_aesenc_si128(a, round_key);
-            let _ = _result;
+
         }
     }
 
@@ -111,7 +111,7 @@ fn test_mm_aesenclast_si128() -> Result<(), String> {
                 let a = _mm_set_epi64x(rand::random(), rand::random());
                 let round_key = _mm_set_epi64x(rand::random(), rand::random());
                 let _result = _mm_aesenclast_si128(a, round_key);
-                let _ = _result;
+
             }
         }
 
@@ -132,7 +132,7 @@ fn test_mm_aesimc_si128() -> Result<(), String> {
         for _ in 0..get_iterations() {
             let a = _mm_set_epi64x(rand::random(), rand::random());
             let _result = _mm_aesimc_si128(a);
-            let _ = _result;
+
         }
     }
 
@@ -154,7 +154,7 @@ fn test_mm_aeskeygenassist_si128() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let a = _mm_set_epi64x(rand::random(), rand::random());
                 let _result = _mm_aeskeygenassist_si128::<0x01>(a);
-                let _ = _result;
+
             }
         }
 
