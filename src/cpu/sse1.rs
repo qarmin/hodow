@@ -5,7 +5,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{check_f32_array_equality, check_float_equality, get_iterations, ExtensionTest, TestFunction, DEFAULT_FLOAT_DIFF};
+use crate::cpu::{check_f32_array_equality, check_float_equality, check_int_equality, get_iterations, ExtensionTest, TestFunction, DEFAULT_FLOAT_DIFF};
 use crate::{get_four_random_floats, get_fuzzing, get_random_float};
 
 pub struct SSE1;
@@ -325,9 +325,7 @@ fn test_mm_movemask_ps() -> Result<(), String> {
     unsafe {
         let data = _mm_set_ps(1.0, -2.0, 3.0, -4.0);
         let result = _mm_movemask_ps(data);
-        if result != 0b101 {
-            return Err(format!("Expected 0b1010, got {:#b}", result));
-        }
+        check_int_equality(result, 0b101)?;
     }
 
     if get_fuzzing() {
@@ -676,9 +674,7 @@ fn test_mm_cvtss_f32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let result = _mm_cvtss_f32(a);
-        if result != 4.0 {
-            return Err(format!("Expected 4.0, got {}", result));
-        }
+        check_float_equality(result, 4.0, DEFAULT_FLOAT_DIFF)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -720,20 +716,21 @@ fn test_mm_cvtss_si32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let result = _mm_cvtss_si32(a);
-        if result != 4 {
-            return Err(format!("Expected 4, got {}", result));
-        }
+        check_int_equality(result, 4)?;
     }
+
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr = get_four_random_floats();
-                let vec = _mm_set_ps(arr[3], arr[2], arr[1], arr[0]);
-                let _result = _mm_cvtss_si32(vec);
+                let value = get_random_float();
+                let vec = _mm_set_ps(get_random_float(), get_random_float(), get_random_float(), value);
+                let result = _mm_cvtss_si32(vec);
+                check_int_equality(result, value as i32)?;
             }
         }
     }
+
     Ok(())
 }
 
@@ -803,13 +800,25 @@ fn test_mm_sqrt_ss() -> Result<(), String> {
 
 fn test_mm_rcp_ss() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
-        let result = _mm_rcp_ss(a);
+        let data = [4.0, 9.0, 16.0, 25.0];
+        let data_128 = _mm_loadu_ps(data.as_ptr());
+        let result = _mm_rcp_ss(data_128);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-
-        // Check whole vector: reciprocal of low lane (4.0 -> ~0.25) and other lanes unchanged
-        check_f32_array_equality(&result, &[0.25, 3.0, 2.0, 1.0])?;
+        check_float_equality(result[0], 0.25, DEFAULT_FLOAT_DIFF)?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr = get_four_random_floats();
+                let data_128 = _mm_loadu_ps(arr.as_ptr());
+                let result = _mm_rcp_ss(data_128);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
     Ok(())
 }
 

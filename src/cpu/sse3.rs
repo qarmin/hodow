@@ -6,7 +6,7 @@ use std::arch::x86_64::*;
 use log::info;use crate::cpu::TestFunction;
 
 
-use crate::cpu::{check_f32_array_equality, get_iterations, ExtensionTest};
+use crate::cpu::{check_f32_array_equality, check_f64_array_equality, get_iterations, ExtensionTest};
 use crate::{get_four_random_floats, get_fuzzing, get_random_float};
 
 pub struct SSE3;
@@ -151,8 +151,8 @@ fn test_mm_hadd_pd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 4.0);
         let result = _mm_hadd_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-
-        check_f32_array_equality(&[result[0] as f32, result[1] as f32], &[3.0, 7.0])?;
+        let expected = [3.0, 7.0];
+        check_f64_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -177,8 +177,8 @@ fn test_mm_hsub_pd() -> Result<(), String> {
         let b = _mm_set_pd(7.0, 5.0);
         let result = _mm_hsub_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-
-        check_f32_array_equality(&[result[0] as f32, result[1] as f32], &[-2.0, -2.0])?;
+        let expected = [-2.0, -2.0];
+        check_f64_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -203,8 +203,8 @@ fn test_mm_addsub_pd() -> Result<(), String> {
         let b = _mm_set_pd(1.0, 2.0);
         let result = _mm_addsub_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-
-        check_f32_array_equality(&[result[0] as f32, result[1] as f32], &[2.0, 3.0])?;
+        let expected = [2.0, 3.0];
+        check_f64_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
