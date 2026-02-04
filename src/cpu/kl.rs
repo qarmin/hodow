@@ -78,7 +78,7 @@ fn test_mm_encodekey256_u32() -> Result<(), String> {
 }
 
 fn test_mm_aesenc128kl_u8() -> Result<(), String> {
-    #[cfg(target_feature = "kl,aes")]
+    #[cfg(all(target_feature = "kl", target_feature = "aes"))]
     unsafe {
         let mut out = _mm_setzero_si128();
         let data = _mm_set_epi64x(0x0123456789abcdefi64, 0xfedcba9876543210i64);
@@ -94,7 +94,7 @@ fn test_mm_aesenc128kl_u8() -> Result<(), String> {
 }
 
 fn test_mm_aesdec128kl_u8() -> Result<(), String> {
-    #[cfg(target_feature = "kl,aes")]
+    #[cfg(all(target_feature = "kl", target_feature = "aes"))]
     unsafe {
         let mut out = _mm_setzero_si128();
         let data = _mm_set_epi64x(0x0123456789abcdefi64, 0xfedcba9876543210i64);
@@ -109,7 +109,7 @@ fn test_mm_aesdec128kl_u8() -> Result<(), String> {
 }
 
 fn test_mm_aesenc256kl_u8() -> Result<(), String> {
-    #[cfg(target_feature = "kl,aes")]
+    #[cfg(all(target_feature = "kl", target_feature = "aes"))]
     unsafe {
         let mut out = _mm_setzero_si128();
         let data = _mm_set_epi64x(0x0123456789abcdefi64, 0xfedcba9876543210i64);
@@ -124,7 +124,7 @@ fn test_mm_aesenc256kl_u8() -> Result<(), String> {
 }
 
 fn test_mm_aesdec256kl_u8() -> Result<(), String> {
-    #[cfg(target_feature = "kl,aes")]
+    #[cfg(all(target_feature = "kl", target_feature = "aes"))]
     unsafe {
         let mut out = _mm_setzero_si128();
         let data = _mm_set_epi64x(0x0123456789abcdefi64, 0xfedcba9876543210i64);
@@ -139,7 +139,7 @@ fn test_mm_aesdec256kl_u8() -> Result<(), String> {
 }
 
 fn test_mm_aesencwide128kl_u8() -> Result<(), String> {
-    #[cfg(target_feature = "kl,aes")]
+    #[cfg(all(target_feature = "kl", target_feature = "aes"))]
     unsafe {
         let mut odata: [__m128i; 8] = [_mm_setzero_si128(); 8];
         let idata: [__m128i; 8] = [_mm_set1_epi64x(0x0123456789abcdefi64); 8];
@@ -153,7 +153,7 @@ fn test_mm_aesencwide128kl_u8() -> Result<(), String> {
 }
 
 fn test_mm_aesdecwide128kl_u8() -> Result<(), String> {
-    #[cfg(target_feature = "kl,aes")]
+    #[cfg(all(target_feature = "kl", target_feature = "aes"))]
     unsafe {
         let mut odata: [__m128i; 8] = [_mm_setzero_si128(); 8];
         let idata: [__m128i; 8] = [_mm_set1_epi64x(0x0123456789abcdefi64); 8];
@@ -167,7 +167,7 @@ fn test_mm_aesdecwide128kl_u8() -> Result<(), String> {
 }
 
 fn test_mm_aesencwide256kl_u8() -> Result<(), String> {
-    #[cfg(target_feature = "kl,aes")]
+    #[cfg(all(target_feature = "kl", target_feature = "aes"))]
     unsafe {
         let mut odata: [__m128i; 8] = [_mm_setzero_si128(); 8];
         let idata: [__m128i; 8] = [_mm_set1_epi64x(0x0123456789abcdefi64); 8];
@@ -181,7 +181,7 @@ fn test_mm_aesencwide256kl_u8() -> Result<(), String> {
 }
 
 fn test_mm_aesdecwide256kl_u8() -> Result<(), String> {
-    #[cfg(target_feature = "kl,aes")]
+    #[cfg(all(target_feature = "kl", target_feature = "aes"))]
     unsafe {
         let mut odata: [__m128i; 8] = [_mm_setzero_si128(); 8];
         let idata: [__m128i; 8] = [_mm_set1_epi64x(0x0123456789abcdefi64); 8];

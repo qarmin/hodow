@@ -7,41 +7,6 @@ use log::{error, info};
 use once_cell::sync::OnceCell;
 
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-use crate::cpu::sse1::SSE1;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-use crate::cpu::sse2::SSE2;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-use crate::cpu::sse3::SSE3;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-use crate::cpu::ssse3::SSSE3;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-use crate::cpu::sse4_1::SSE41;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-use crate::cpu::sse4_2::SSE42;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-use crate::cpu::avx::AVX;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-use crate::cpu::avx2::AVX2;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-use crate::cpu::fma::FMA;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-use crate::cpu::avx512f::AVX512F;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-use crate::cpu::avx512bitalg::AVX512BITALG;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-use crate::cpu::avx512bf16::AVX512BF16;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-use crate::cpu::avx512cd::AVX512CD;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-use crate::cpu::avx512ifma::AVX512IFMA;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-use crate::cpu::avx512vbmi::AVX512VBMI;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-use crate::cpu::aes::AES;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-use crate::cpu::kl::KL;
-
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 mod sse1;
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 mod sse2;
@@ -71,7 +36,8 @@ mod avx512cd;
 mod avx512ifma;
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 mod avx512vbmi;
-#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+// Gate AES module on the AES target feature so the module and type exist only when enabled.
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "aes"))]
 mod aes;
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 mod kl;
@@ -115,71 +81,76 @@ pub fn test_all_extensions() -> Result<(), String> {
     #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     {
         if std::arch::is_x86_feature_detected!("sse") {
-            SSE1::test()?;
+            crate::cpu::sse1::SSE1::test()?;
         }
 
         if std::arch::is_x86_feature_detected!("sse2") {
-            SSE2::test()?;
+            crate::cpu::sse2::SSE2::test()?;
         }
 
         if std::arch::is_x86_feature_detected!("sse3") {
-            SSE3::test()?;
+            crate::cpu::sse3::SSE3::test()?;
         }
 
         if std::arch::is_x86_feature_detected!("ssse3") {
-            SSSE3::test()?;
+            crate::cpu::ssse3::SSSE3::test()?;
         }
 
         if std::arch::is_x86_feature_detected!("sse4.1") {
-            SSE41::test()?;
+            crate::cpu::sse4_1::SSE41::test()?;
         }
 
         if std::arch::is_x86_feature_detected!("sse4.2") {
-            SSE42::test()?;
+            crate::cpu::sse4_2::SSE42::test()?;
         }
 
         if std::arch::is_x86_feature_detected!("avx") {
-            AVX::test()?;
+            crate::cpu::avx::AVX::test()?;
         }
 
         if std::arch::is_x86_feature_detected!("avx2") {
-            AVX2::test()?;
+            crate::cpu::avx2::AVX2::test()?;
         }
 
         if std::arch::is_x86_feature_detected!("fma") {
-            FMA::test()?;
+            crate::cpu::fma::FMA::test()?;
         }
 
         if std::arch::is_x86_feature_detected!("avx512f") {
-            AVX512F::test()?;
+            crate::cpu::avx512f::AVX512F::test()?;
         }
 
         if std::arch::is_x86_feature_detected!("avx512bitalg") {
-            AVX512BITALG::test()?;
+            crate::cpu::avx512bitalg::AVX512BITALG::test()?;
         }
 
         if std::arch::is_x86_feature_detected!("avx512bf16") {
-            AVX512BF16::test()?;
+            crate::cpu::avx512bf16::AVX512BF16::test()?;
         }
 
         if std::arch::is_x86_feature_detected!("avx512cd") {
-            AVX512CD::test()?;
+            crate::cpu::avx512cd::AVX512CD::test()?;
         }
 
         if std::arch::is_x86_feature_detected!("avx512ifma") {
-            AVX512IFMA::test()?;
+            crate::cpu::avx512ifma::AVX512IFMA::test()?;
         }
 
         if std::arch::is_x86_feature_detected!("avx512vbmi") {
-            AVX512VBMI::test()?;
+            crate::cpu::avx512vbmi::AVX512VBMI::test()?;
         }
 
-        if std::arch::is_x86_feature_detected!("aes") {
-            AES::test()?;
+        // AES: compile-time gate to avoid referencing a module that may be configured out
+        #[cfg(target_feature = "aes")]
+        {
+            if std::arch::is_x86_feature_detected!("aes") {
+                crate::cpu::aes::AES::test()?;
+            }
         }
 
+        // KL depends on AES at runtime; keep runtime detection but avoid referencing AES-only items when AES isn't compiled in.
         if std::arch::is_x86_feature_detected!("kl") && std::arch::is_x86_feature_detected!("aes") {
-            KL::test()?;
+            crate::cpu::kl::KL::test()?;
         }
     }
 

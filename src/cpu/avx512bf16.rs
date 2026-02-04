@@ -33,7 +33,7 @@ impl ExtensionTest for AVX512BF16 {
 }
 
 fn test_mm_cvtne2ps_pbh() -> Result<(), String> {
-    #[cfg(target_feature = "avx512bf16,avx512vl")]
+    #[cfg(all(target_feature = "avx512bf16", target_feature = "avx512vl"))]
     unsafe {
         let a = _mm_set1_ps(1.5);
         let b = _mm_set1_ps(2.5);
@@ -47,12 +47,12 @@ fn test_mm_cvtne2ps_pbh() -> Result<(), String> {
         }
         Ok(())
     }
-    #[cfg(not(target_feature = "avx512bf16,avx512vl"))]
+    #[cfg(not(all(target_feature = "avx512bf16", target_feature = "avx512vl")))]
     Ok(())
 }
 
 fn test_mm_mask_cvtne2ps_pbh() -> Result<(), String> {
-    #[cfg(target_feature = "avx512bf16,avx512vl")]
+    #[cfg(all(target_feature = "avx512bf16", target_feature = "avx512vl"))]
     unsafe {
         let src = _mm_set1_epi16(0);
         let a = _mm_set1_ps(1.5);
@@ -63,12 +63,12 @@ fn test_mm_mask_cvtne2ps_pbh() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(target_feature = "avx512bf16,avx512vl"))]
+    #[cfg(not(all(target_feature = "avx512bf16", target_feature = "avx512vl")))]
     Ok(())
 }
 
 fn test_mm_maskz_cvtne2ps_pbh() -> Result<(), String> {
-    #[cfg(target_feature = "avx512bf16,avx512vl")]
+    #[cfg(all(target_feature = "avx512bf16", target_feature = "avx512vl"))]
     unsafe {
         let a = _mm_set1_ps(1.5);
         let b = _mm_set1_ps(2.5);
@@ -78,12 +78,12 @@ fn test_mm_maskz_cvtne2ps_pbh() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(target_feature = "avx512bf16,avx512vl"))]
+    #[cfg(not(all(target_feature = "avx512bf16", target_feature = "avx512vl")))]
     Ok(())
 }
 
 fn test_mm_dpbf16_ps() -> Result<(), String> {
-    #[cfg(target_feature = "avx512bf16,avx512vl")]
+    #[cfg(all(target_feature = "avx512bf16", target_feature = "avx512vl"))]
     unsafe {
         let src = _mm_set1_ps(1.0);
         let a = _mm_set1_epi16(0x3f80); // BF16 representation
@@ -96,12 +96,12 @@ fn test_mm_dpbf16_ps() -> Result<(), String> {
         }
         Ok(())
     }
-    #[cfg(not(target_feature = "avx512bf16,avx512vl"))]
+    #[cfg(not(all(target_feature = "avx512bf16", target_feature = "avx512vl")))]
     Ok(())
 }
 
 fn test_mm_mask_dpbf16_ps() -> Result<(), String> {
-    #[cfg(target_feature = "avx512bf16,avx512vl")]
+    #[cfg(all(target_feature = "avx512bf16", target_feature = "avx512vl"))]
     unsafe {
         let src = _mm_set1_ps(1.0);
         let a = _mm_set1_epi16(0x3f80);
@@ -112,12 +112,12 @@ fn test_mm_mask_dpbf16_ps() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(target_feature = "avx512bf16,avx512vl"))]
+    #[cfg(not(all(target_feature = "avx512bf16", target_feature = "avx512vl")))]
     Ok(())
 }
 
 fn test_mm_maskz_dpbf16_ps() -> Result<(), String> {
-    #[cfg(target_feature = "avx512bf16,avx512vl")]
+    #[cfg(all(target_feature = "avx512bf16", target_feature = "avx512vl"))]
     unsafe {
         let src = _mm_set1_ps(1.0);
         let a = _mm_set1_epi16(0x3f80);
@@ -127,12 +127,12 @@ fn test_mm_maskz_dpbf16_ps() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(target_feature = "avx512bf16,avx512vl"))]
+    #[cfg(not(all(target_feature = "avx512bf16", target_feature = "avx512vl")))]
     Ok(())
 }
 
 fn test_mm_cvtpbh_ps() -> Result<(), String> {
-    #[cfg(target_feature = "avx512bf16,avx512vl")]
+    #[cfg(all(target_feature = "avx512bf16", target_feature = "avx512vl"))]
     unsafe {
         let a = _mm_set1_epi16(0x3f80);
         let result = _mm_cvtpbh_ps(a);
@@ -143,12 +143,12 @@ fn test_mm_cvtpbh_ps() -> Result<(), String> {
         }
         Ok(())
     }
-    #[cfg(not(target_feature = "avx512bf16,avx512vl"))]
+    #[cfg(not(all(target_feature = "avx512bf16", target_feature = "avx512vl")))]
     Ok(())
 }
 
 fn test_mm_mask_cvtpbh_ps() -> Result<(), String> {
-    #[cfg(target_feature = "avx512bf16,avx512vl")]
+    #[cfg(all(target_feature = "avx512bf16", target_feature = "avx512vl"))]
     unsafe {
         let src = _mm_set1_ps(0.0);
         let a = _mm_set1_epi16(0x3f80);
@@ -157,12 +157,12 @@ fn test_mm_mask_cvtpbh_ps() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(target_feature = "avx512bf16,avx512vl"))]
+    #[cfg(not(all(target_feature = "avx512bf16", target_feature = "avx512vl")))]
     Ok(())
 }
 
 fn test_mm_maskz_cvtpbh_ps() -> Result<(), String> {
-    #[cfg(target_feature = "avx512bf16,avx512vl")]
+    #[cfg(all(target_feature = "avx512bf16", target_feature = "avx512vl"))]
     unsafe {
         let a = _mm_set1_epi16(0x3f80);
         let result = _mm_maskz_cvtpbh_ps(0xF, a);
@@ -170,7 +170,7 @@ fn test_mm_maskz_cvtpbh_ps() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(target_feature = "avx512bf16,avx512vl"))]
+    #[cfg(not(all(target_feature = "avx512bf16", target_feature = "avx512vl")))]
     Ok(())
 }
 
@@ -189,7 +189,7 @@ fn test_mm_cvtsbh_ss() -> Result<(), String> {
 }
 
 fn test_mm_cvtneps_pbh() -> Result<(), String> {
-    #[cfg(target_feature = "avx512bf16,avx512vl")]
+    #[cfg(all(target_feature = "avx512bf16", target_feature = "avx512vl"))]
     unsafe {
         let a = _mm_set1_ps(1.5);
         let result = _mm_cvtneps_pbh(a);
@@ -200,12 +200,12 @@ fn test_mm_cvtneps_pbh() -> Result<(), String> {
         }
         Ok(())
     }
-    #[cfg(not(target_feature = "avx512bf16,avx512vl"))]
+    #[cfg(not(all(target_feature = "avx512bf16", target_feature = "avx512vl")))]
     Ok(())
 }
 
 fn test_mm_mask_cvtneps_pbh() -> Result<(), String> {
-    #[cfg(target_feature = "avx512bf16,avx512vl")]
+    #[cfg(all(target_feature = "avx512bf16", target_feature = "avx512vl"))]
     unsafe {
         let src = _mm_set1_epi16(0);
         let a = _mm_set1_ps(1.5);
@@ -214,12 +214,12 @@ fn test_mm_mask_cvtneps_pbh() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(target_feature = "avx512bf16,avx512vl"))]
+    #[cfg(not(all(target_feature = "avx512bf16", target_feature = "avx512vl")))]
     Ok(())
 }
 
 fn test_mm_maskz_cvtneps_pbh() -> Result<(), String> {
-    #[cfg(target_feature = "avx512bf16,avx512vl")]
+    #[cfg(all(target_feature = "avx512bf16", target_feature = "avx512vl"))]
     unsafe {
         let a = _mm_set1_ps(1.5);
         let result = _mm_maskz_cvtneps_pbh(0xF, a);
@@ -227,7 +227,7 @@ fn test_mm_maskz_cvtneps_pbh() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(target_feature = "avx512bf16,avx512vl"))]
+    #[cfg(not(all(target_feature = "avx512bf16", target_feature = "avx512vl")))]
     Ok(())
 }
 

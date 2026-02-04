@@ -61,7 +61,7 @@ fn test_mm_madd52lo_avx_epu64() -> Result<(), String> {
 }
 
 fn test_mm_madd52hi_epu64() -> Result<(), String> {
-    #[cfg(target_feature = "avx512ifma,avx512vl")]
+    #[cfg(all(target_feature = "avx512ifma", target_feature = "avx512vl"))]
     unsafe {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
@@ -74,12 +74,12 @@ fn test_mm_madd52hi_epu64() -> Result<(), String> {
         }
         Ok(())
     }
-    #[cfg(not(target_feature = "avx512ifma,avx512vl"))]
+    #[cfg(not(all(target_feature = "avx512ifma", target_feature = "avx512vl")))]
     Ok(())
 }
 
 fn test_mm_mask_madd52hi_epu64() -> Result<(), String> {
-    #[cfg(target_feature = "avx512ifma,avx512vl")]
+    #[cfg(all(target_feature = "avx512ifma", target_feature = "avx512vl"))]
     unsafe {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
@@ -89,12 +89,12 @@ fn test_mm_mask_madd52hi_epu64() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(target_feature = "avx512ifma,avx512vl"))]
+    #[cfg(not(all(target_feature = "avx512ifma", target_feature = "avx512vl")))]
     Ok(())
 }
 
 fn test_mm_maskz_madd52hi_epu64() -> Result<(), String> {
-    #[cfg(target_feature = "avx512ifma,avx512vl")]
+    #[cfg(all(target_feature = "avx512ifma", target_feature = "avx512vl"))]
     unsafe {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
@@ -104,12 +104,12 @@ fn test_mm_maskz_madd52hi_epu64() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(target_feature = "avx512ifma,avx512vl"))]
+    #[cfg(not(all(target_feature = "avx512ifma", target_feature = "avx512vl")))]
     Ok(())
 }
 
 fn test_mm_madd52lo_epu64() -> Result<(), String> {
-    #[cfg(target_feature = "avx512ifma,avx512vl")]
+    #[cfg(all(target_feature = "avx512ifma", target_feature = "avx512vl"))]
     unsafe {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
@@ -121,12 +121,12 @@ fn test_mm_madd52lo_epu64() -> Result<(), String> {
         }
         Ok(())
     }
-    #[cfg(not(target_feature = "avx512ifma,avx512vl"))]
+    #[cfg(not(all(target_feature = "avx512ifma", target_feature = "avx512vl")))]
     Ok(())
 }
 
 fn test_mm_mask_madd52lo_epu64() -> Result<(), String> {
-    #[cfg(target_feature = "avx512ifma,avx512vl")]
+    #[cfg(all(target_feature = "avx512ifma", target_feature = "avx512vl"))]
     unsafe {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
@@ -136,12 +136,12 @@ fn test_mm_mask_madd52lo_epu64() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(target_feature = "avx512ifma,avx512vl"))]
+    #[cfg(not(all(target_feature = "avx512ifma", target_feature = "avx512vl")))]
     Ok(())
 }
 
 fn test_mm_maskz_madd52lo_epu64() -> Result<(), String> {
-    #[cfg(target_feature = "avx512ifma,avx512vl")]
+    #[cfg(all(target_feature = "avx512ifma", target_feature = "avx512vl"))]
     unsafe {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
@@ -151,6 +151,6 @@ fn test_mm_maskz_madd52lo_epu64() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(target_feature = "avx512ifma,avx512vl"))]
+    #[cfg(not(all(target_feature = "avx512ifma", target_feature = "avx512vl")))]
     Ok(())
 }
