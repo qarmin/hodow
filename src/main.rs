@@ -47,7 +47,9 @@ struct Args {
 }
 
 fn main() {
-    handsome_logger::init().unwrap();
+    if !cfg!(feature = "no_logging") {
+        handsome_logger::init().unwrap();
+    }
 
     let args = Args::parse();
 
