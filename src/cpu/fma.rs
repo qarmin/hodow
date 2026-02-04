@@ -49,7 +49,7 @@ fn test_mm_fmadd_ps() -> Result<(), String> {
         let c = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let result = _mm_fmadd_ps(a, b, c);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // a*b+c = [4*2+1, 3*2+1, 2*2+1, 1*2+1] = [9, 7, 5, 3]
+        
         check_f32_array_equality(&result, &[9.0, 7.0, 5.0, 3.0])?;
     }
 
@@ -79,7 +79,7 @@ fn test_mm_fmsub_ps() -> Result<(), String> {
         let c = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let result = _mm_fmsub_ps(a, b, c);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // a*b-c = [4*2-1, 3*2-1, 2*2-1, 1*2-1] = [7, 5, 3, 1]
+        
         check_f32_array_equality(&result, &[7.0, 5.0, 3.0, 1.0])?;
     }
 
@@ -109,7 +109,7 @@ fn test_mm_fnmadd_ps() -> Result<(), String> {
         let c = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let result = _mm_fnmadd_ps(a, b, c);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // -(a*b)+c = [-(4*2)+1, -(3*2)+1, -(2*2)+1, -(1*2)+1] = [-7, -5, -3, -1]
+        
         check_f32_array_equality(&result, &[-7.0, -5.0, -3.0, -1.0])?;
     }
 
@@ -139,7 +139,7 @@ fn test_mm_fnmsub_ps() -> Result<(), String> {
         let c = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let result = _mm_fnmsub_ps(a, b, c);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // -(a*b)-c = [-(4*2)-1, -(3*2)-1, -(2*2)-1, -(1*2)-1] = [-9, -7, -5, -3]
+        
         check_f32_array_equality(&result, &[-9.0, -7.0, -5.0, -3.0])?;
     }
 
@@ -169,8 +169,8 @@ fn test_mm_fmaddsub_ps() -> Result<(), String> {
         let c = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let result = _mm_fmaddsub_ps(a, b, c);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // alternating: sub on even indices, add on odd
-        // [4*2-1, 3*2+1, 2*2-1, 1*2+1] = [7, 7, 3, 3]
+        
+        
         check_f32_array_equality(&result, &[7.0, 7.0, 3.0, 3.0])?;
     }
 

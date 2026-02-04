@@ -34,9 +34,9 @@ fn test_mm_hadd_ps() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
         let result = _mm_hadd_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // hadd: [a0+a1, a2+a3, b0+b1, b2+b3]
-        // a = [4, 3, 2, 1], b = [8, 7, 6, 5]
-        // result = [4+3, 2+1, 8+7, 6+5] = [7, 3, 15, 11]
+        
+        
+        
         check_f32_array_equality(&result, &[7.0, 3.0, 15.0, 11.0])?;
     }
 
@@ -63,9 +63,9 @@ fn test_mm_hsub_ps() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
         let result = _mm_hsub_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // hsub: [a0-a1, a2-a3, b0-b1, b2-b3]
-        // a = [4, 3, 2, 1], b = [8, 7, 6, 5]
-        // result = [4-3, 2-1, 8-7, 6-5] = [1, 1, 1, 1]
+        
+        
+        
         check_f32_array_equality(&result, &[1.0, 1.0, 1.0, 1.0])?;
     }
 
@@ -92,9 +92,9 @@ fn test_mm_addsub_ps() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
         let result = _mm_addsub_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // addsub: [a0-b0, a1+b1, a2-b2, a3+b3]
-        // a = [4, 3, 2, 1], b = [8, 7, 6, 5]
-        // result = [4-8, 3+7, 2-6, 1+5] = [-4, 10, -4, 6]
+        
+        
+        
         check_f32_array_equality(&result, &[-4.0, 10.0, -4.0, 6.0])?;
     }
 
@@ -120,9 +120,9 @@ fn test_mm_movehdup_ps() -> Result<(), String> {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let result = _mm_movehdup_ps(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // movehdup: duplicates odd-indexed elements [a1, a1, a3, a3]
-        // a = [4, 3, 2, 1]
-        // result = [3, 3, 1, 1]
+        
+        
+        
         check_f32_array_equality(&result, &[3.0, 3.0, 1.0, 1.0])?;
     }
 
@@ -144,9 +144,9 @@ fn test_mm_moveldup_ps() -> Result<(), String> {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let result = _mm_moveldup_ps(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // moveldup: duplicates even-indexed elements [a0, a0, a2, a2]
-        // a = [4, 3, 2, 1]
-        // result = [4, 4, 2, 2]
+        
+        
+        
         check_f32_array_equality(&result, &[4.0, 4.0, 2.0, 2.0])?;
     }
 
@@ -169,9 +169,9 @@ fn test_mm_hadd_pd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 4.0);
         let result = _mm_hadd_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        // hadd: [a0+a1, b0+b1]
-        // a = [2, 1], b = [4, 3]
-        // result = [2+1, 4+3] = [3, 7]
+        
+        
+        
         check_f32_array_equality(&[result[0] as f32, result[1] as f32], &[3.0, 7.0])?;
     }
 
@@ -197,9 +197,9 @@ fn test_mm_hsub_pd() -> Result<(), String> {
         let b = _mm_set_pd(7.0, 5.0);
         let result = _mm_hsub_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        // hsub: [a0-a1, b0-b1]
-        // a = [1, 3], b = [5, 7]
-        // result = [1-3, 5-7] = [-2, -2]
+        
+        
+        
         check_f32_array_equality(&[result[0] as f32, result[1] as f32], &[-2.0, -2.0])?;
     }
 
@@ -225,9 +225,9 @@ fn test_mm_addsub_pd() -> Result<(), String> {
         let b = _mm_set_pd(1.0, 2.0);
         let result = _mm_addsub_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        // addsub: [a0-b0, a1+b1]
-        // a = [4, 2], b = [2, 1]
-        // result = [4-2, 2+1] = [2, 3]
+        
+        
+        
         check_f32_array_equality(&[result[0] as f32, result[1] as f32], &[2.0, 3.0])?;
     }
 

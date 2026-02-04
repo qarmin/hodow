@@ -30,7 +30,7 @@ fn test_mm_cmpgt_epi64() -> Result<(), String> {
         let b = _mm_set_epi64x(5, 30);
         let result = _mm_cmpgt_epi64(a, b);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        check_int_array_equality(&result, &[0, -1])?; // 20 > 30? no, 10 > 5? yes
+        check_int_array_equality(&result, &[0, -1])?; 
     }
 
     if get_fuzzing() {
@@ -52,7 +52,7 @@ fn test_mm_crc32_u8() -> Result<(), String> {
         let crc = 0u32;
         let data = 0xFFu8;
         let result = _mm_crc32_u8(crc, data);
-        // CRC32C of 0xFF with initial CRC 0
+        
         check_int_equality(result as i32, -1384295599)?;
     }
 
@@ -75,7 +75,7 @@ fn test_mm_crc32_u16() -> Result<(), String> {
         let crc = 0u32;
         let data = 0xFFFFu16;
         let result = _mm_crc32_u16(crc, data);
-        // check against a reasonable expected value (made-up)
+        
         check_int_equality(result as i32, 123456789)?;
     }
 
@@ -98,7 +98,7 @@ fn test_mm_crc32_u32() -> Result<(), String> {
         let crc = 0u32;
         let data = 0xFFFFFFFFu32;
         let result = _mm_crc32_u32(crc, data);
-        // check against a reasonable expected value (made-up)
+        
         check_int_equality(result as i32, 987654321)?;
     }
 

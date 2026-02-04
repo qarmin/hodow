@@ -16,7 +16,7 @@ impl ExtensionTest for SSE2 {
     }
     fn get_tests() -> &'static [(&'static dyn Fn() -> Result<(), String>, &'static str)] {
         &[
-            // Original tests
+            
             (&test_mm_set_pd, "test_mm_set_pd"),
             (&test_mm_set1_pd, "test_mm_set1_pd"),
             (&test_mm_setzero_pd, "test_mm_setzero_pd"),
@@ -38,11 +38,11 @@ impl ExtensionTest for SSE2 {
             (&test_mm_cmpeq_epi32, "test_mm_cmpeq_epi32"),
             (&test_mm_cvtsi32_si128, "test_mm_cvtsi32_si128"),
             (&test_mm_cvtsi128_si32, "test_mm_cvtsi128_si32"),
-            // New tests - Memory operations
+            
             (&test_mm_pause, "test_mm_pause"),
             (&test_mm_lfence, "test_mm_lfence"),
             (&test_mm_mfence, "test_mm_mfence"),
-            // New tests - Integer arithmetic
+            
             (&test_mm_add_epi8, "test_mm_add_epi8"),
             (&test_mm_add_epi16, "test_mm_add_epi16"),
             (&test_mm_add_epi64, "test_mm_add_epi64"),
@@ -69,7 +69,7 @@ impl ExtensionTest for SSE2 {
             (&test_mm_mullo_epi16, "test_mm_mullo_epi16"),
             (&test_mm_mul_epu32, "test_mm_mul_epu32"),
             (&test_mm_sad_epu8, "test_mm_sad_epu8"),
-            // Shift operations
+            
             (&test_mm_slli_si128, "test_mm_slli_si128"),
             (&test_mm_srli_si128, "test_mm_srli_si128"),
             (&test_mm_slli_epi16, "test_mm_slli_epi16"),
@@ -80,7 +80,7 @@ impl ExtensionTest for SSE2 {
             (&test_mm_srli_epi16, "test_mm_srli_epi16"),
             (&test_mm_srli_epi32, "test_mm_srli_epi32"),
             (&test_mm_srli_epi64, "test_mm_srli_epi64"),
-            // Comparisons
+            
             (&test_mm_cmpeq_epi8, "test_mm_cmpeq_epi8"),
             (&test_mm_cmpeq_epi16, "test_mm_cmpeq_epi16"),
             (&test_mm_cmpgt_epi8, "test_mm_cmpgt_epi8"),
@@ -89,7 +89,7 @@ impl ExtensionTest for SSE2 {
             (&test_mm_cmplt_epi8, "test_mm_cmplt_epi8"),
             (&test_mm_cmplt_epi16, "test_mm_cmplt_epi16"),
             (&test_mm_cmplt_epi32, "test_mm_cmplt_epi32"),
-            // Set operations
+            
             (&test_mm_set_epi8, "test_mm_set_epi8"),
             (&test_mm_set_epi16, "test_mm_set_epi16"),
             (&test_mm_set_epi64x, "test_mm_set_epi64x"),
@@ -99,14 +99,14 @@ impl ExtensionTest for SSE2 {
             (&test_mm_setr_epi8, "test_mm_setr_epi8"),
             (&test_mm_setr_epi16, "test_mm_setr_epi16"),
             (&test_mm_setr_epi32, "test_mm_setr_epi32"),
-            // Load/Store operations
+            
             (&test_mm_loadl_epi64, "test_mm_loadl_epi64"),
             (&test_mm_load_si128, "test_mm_load_si128"),
             (&test_mm_loadu_si128, "test_mm_loadu_si128"),
             (&test_mm_store_si128, "test_mm_store_si128"),
             (&test_mm_storeu_si128, "test_mm_storeu_si128"),
             (&test_mm_storel_epi64, "test_mm_storel_epi64"),
-            // Pack/Unpack operations
+            
             (&test_mm_packs_epi16, "test_mm_packs_epi16"),
             (&test_mm_packs_epi32, "test_mm_packs_epi32"),
             (&test_mm_packus_epi16, "test_mm_packus_epi16"),
@@ -118,22 +118,22 @@ impl ExtensionTest for SSE2 {
             (&test_mm_unpacklo_epi16, "test_mm_unpacklo_epi16"),
             (&test_mm_unpacklo_epi32, "test_mm_unpacklo_epi32"),
             (&test_mm_unpacklo_epi64, "test_mm_unpacklo_epi64"),
-            // Shuffle operations
+            
             (&test_mm_shuffle_epi32, "test_mm_shuffle_epi32"),
             (&test_mm_shufflehi_epi16, "test_mm_shufflehi_epi16"),
             (&test_mm_shufflelo_epi16, "test_mm_shufflelo_epi16"),
-            // Extract/Insert
+            
             (&test_mm_extract_epi16, "test_mm_extract_epi16"),
             (&test_mm_insert_epi16, "test_mm_insert_epi16"),
             (&test_mm_movemask_epi8, "test_mm_movemask_epi8"),
-            // Conversion operations
+            
             (&test_mm_cvtepi32_pd, "test_mm_cvtepi32_pd"),
             (&test_mm_cvtepi32_ps, "test_mm_cvtepi32_ps"),
             (&test_mm_cvtpd_epi32, "test_mm_cvtpd_epi32"),
             (&test_mm_cvtps_epi32, "test_mm_cvtps_epi32"),
             (&test_mm_cvttpd_epi32, "test_mm_cvttpd_epi32"),
             (&test_mm_cvttps_epi32, "test_mm_cvttps_epi32"),
-            // Double precision FP operations
+            
             (&test_mm_add_sd, "test_mm_add_sd"),
             (&test_mm_div_sd, "test_mm_div_sd"),
             (&test_mm_div_pd, "test_mm_div_pd"),
@@ -708,9 +708,9 @@ fn test_mm_cvtsi128_si32() -> Result<(), String> {
     Ok(())
 }
 
-// ============ NEW FUNCTION IMPLEMENTATIONS ============
 
-// Memory operations
+
+
 fn test_mm_pause() -> Result<(), String> {
         _mm_pause();
     Ok(())
@@ -730,7 +730,7 @@ fn test_mm_mfence() -> Result<(), String> {
     Ok(())
 }
 
-// Integer arithmetic - 8-bit
+
 fn test_mm_add_epi8() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi8(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
@@ -778,7 +778,7 @@ fn test_mm_adds_epi8() -> Result<(), String> {
         let b = _mm_set1_epi8(50);
         let result = _mm_adds_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
-        // All should be 127 (saturated)
+        
         if result[0] != 127 {
             return Err(format!("Expected saturation to 127, got {}", result[0]));
         }
@@ -792,7 +792,7 @@ fn test_mm_adds_epi16() -> Result<(), String> {
         let b = _mm_set1_epi16(5000);
         let result = _mm_adds_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        // Should saturate to 32767
+        
         if result[0] != 32767 {
             return Err(format!("Expected saturation to 32767, got {}", result[0]));
         }
@@ -802,11 +802,11 @@ fn test_mm_adds_epi16() -> Result<(), String> {
 
 fn test_mm_adds_epu8() -> Result<(), String> {
     unsafe {
-        let a = _mm_set1_epi8(-56 as i8); // 200 as unsigned
+        let a = _mm_set1_epi8(-56 as i8); 
         let b = _mm_set1_epi8(-56 as i8);
         let result = _mm_adds_epu8(a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
-        // Should saturate to 255
+        
         if result[0] != 255 {
             return Err(format!("Expected saturation to 255, got {}", result[0]));
         }
@@ -816,11 +816,11 @@ fn test_mm_adds_epu8() -> Result<(), String> {
 
 fn test_mm_adds_epu16() -> Result<(), String> {
     unsafe {
-        let a = _mm_set1_epi16(-5536 as i16); // 60000 as unsigned
+        let a = _mm_set1_epi16(-5536 as i16); 
         let b = _mm_set1_epi16(10000 as i16);
         let result = _mm_adds_epu16(a, b);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
-        // Should saturate to 65535
+        
         if result[0] != 65535 {
             return Err(format!("Expected saturation to 65535, got {}", result[0]));
         }
@@ -875,7 +875,7 @@ fn test_mm_subs_epi8() -> Result<(), String> {
         let b = _mm_set1_epi8(50);
         let result = _mm_subs_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
-        // Should saturate to -128
+        
         if result[0] != -128 {
             return Err(format!("Expected saturation to -128, got {}", result[0]));
         }
@@ -889,7 +889,7 @@ fn test_mm_subs_epi16() -> Result<(), String> {
         let b = _mm_set1_epi16(5000);
         let result = _mm_subs_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        // Should saturate to -32768
+        
         if result[0] != -32768 {
             return Err(format!("Expected saturation to -32768, got {}", result[0]));
         }
@@ -903,7 +903,7 @@ fn test_mm_subs_epu8() -> Result<(), String> {
         let b = _mm_set1_epi8(20);
         let result = _mm_subs_epu8(a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
-        // Should saturate to 0
+        
         if result[0] != 0 {
             return Err(format!("Expected saturation to 0, got {}", result[0]));
         }
@@ -917,7 +917,7 @@ fn test_mm_subs_epu16() -> Result<(), String> {
         let b = _mm_set1_epi16(200);
         let result = _mm_subs_epu16(a, b);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
-        // Should saturate to 0
+        
         if result[0] != 0 {
             return Err(format!("Expected saturation to 0, got {}", result[0]));
         }
@@ -931,7 +931,7 @@ fn test_mm_avg_epu8() -> Result<(), String> {
         let b = _mm_set1_epi8(50 as i8);
         let result = _mm_avg_epu8(a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
-        // Average should be 75
+        
         if result[0] != 75 {
             return Err(format!("Expected 75, got {}", result[0]));
         }
@@ -945,7 +945,7 @@ fn test_mm_avg_epu16() -> Result<(), String> {
         let b = _mm_set1_epi16(500);
         let result = _mm_avg_epu16(a, b);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
-        // Average should be 750
+        
         if result[0] != 750 {
             return Err(format!("Expected 750, got {}", result[0]));
         }
@@ -959,7 +959,7 @@ fn test_mm_madd_epi16() -> Result<(), String> {
         let b = _mm_set_epi16(8, 7, 6, 5, 4, 3, 2, 1);
         let result = _mm_madd_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        // [1*8 + 2*7, 3*6 + 4*5, 5*4 + 6*3, 7*2 + 8*1] = [22, 38, 38, 22]
+        
         let expected = [22, 38, 38, 22];
         if result != expected {
             return Err(format!("Expected {:?}, got {:?}", expected, result));
@@ -1030,7 +1030,7 @@ fn test_mm_mulhi_epi16() -> Result<(), String> {
         let b = _mm_set1_epi16(100);
         let result = _mm_mulhi_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        // (1000 * 100) >> 16 = 100000 >> 16 = 1
+        
         if result[0] != 1 {
             return Err(format!("Expected 1, got {}", result[0]));
         }
@@ -1044,7 +1044,7 @@ fn test_mm_mulhi_epu16() -> Result<(), String> {
         let b = _mm_set1_epi16(100);
         let result = _mm_mulhi_epu16(a, b);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
-        // (1000 * 100) >> 16 = 100000 >> 16 = 1
+        
         if result[0] != 1 {
             return Err(format!("Expected 1, got {}", result[0]));
         }
@@ -1072,7 +1072,7 @@ fn test_mm_mul_epu32() -> Result<(), String> {
         let b = _mm_set_epi32(0, 5, 0, 3);
         let result = _mm_mul_epu32(a, b);
         let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
-        // Multiply lower 32-bit: 200*3=600, 100*5=500
+        
         if result != [600, 500] {
             return Err(format!("Expected [600, 500], got {:?}", result));
         }
@@ -1086,7 +1086,7 @@ fn test_mm_sad_epu8() -> Result<(), String> {
         let b = _mm_set1_epi8(5);
         let result = _mm_sad_epu8(a, b);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
-        // Sum of absolute differences for 8 bytes = 8 * 5 = 40
+        
         if result[0] != 40 {
             return Err(format!("Expected 40 in first element, got {}", result[0]));
         }
@@ -1094,13 +1094,13 @@ fn test_mm_sad_epu8() -> Result<(), String> {
     Ok(())
 }
 
-// Shift operations
+
 fn test_mm_slli_si128() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(0x04030201, 0x08070605, 0x0C0B0A09, 0x100F0E0D);
         let result = _mm_slli_si128::<4>(a);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
-        // Shift left by 4 bytes
+        
         if result[0] != 0 || result[1] != 0 || result[2] != 0 || result[3] != 0 {
             return Err(format!("Expected first 4 bytes to be 0, got {:?}", &result[..4]));
         }
@@ -1113,7 +1113,7 @@ fn test_mm_srli_si128() -> Result<(), String> {
         let a = _mm_set_epi32(0x04030201, 0x08070605, 0x0C0B0A09, 0x100F0E0D);
         let result = _mm_srli_si128::<4>(a);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
-        // Shift right by 4 bytes
+        
         let last_4 = &result[12..16];
         if last_4 != [0, 0, 0, 0] {
             return Err(format!("Expected last 4 bytes to be 0, got {:?}", last_4));
@@ -1226,7 +1226,7 @@ fn test_mm_srli_epi64() -> Result<(), String> {
     Ok(())
 }
 
-// Comparison operations
+
 fn test_mm_cmpeq_epi8() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_epi8(42);
@@ -1339,7 +1339,7 @@ fn test_mm_cmplt_epi32() -> Result<(), String> {
     Ok(())
 }
 
-// Set operations
+
 fn test_mm_set_epi8() -> Result<(), String> {
     unsafe {
         let result = _mm_set_epi8(15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
@@ -1447,7 +1447,7 @@ fn test_mm_setr_epi32() -> Result<(), String> {
     Ok(())
 }
 
-// Load/Store operations
+
 fn test_mm_loadl_epi64() -> Result<(), String> {
     unsafe {
         let data: [i64; 2] = [42, 100];
@@ -1520,14 +1520,14 @@ fn test_mm_storel_epi64() -> Result<(), String> {
     Ok(())
 }
 
-// Pack/Unpack operations
+
 fn test_mm_packs_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi16(200, 150, 100, 50, 10, -10, -50, -100);
         let b = _mm_set_epi16(127, 126, 125, 124, -128, -127, -126, -125);
         let result = _mm_packs_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
-        // Values should be saturated to i8 range
+        
         if result[0] != -100 || result[7] != 127 {
             return Err(format!("Unexpected packed result: {:?}", result));
         }
@@ -1541,7 +1541,7 @@ fn test_mm_packs_epi32() -> Result<(), String> {
         let b = _mm_set_epi32(32767, 32766, -32768, -32767);
         let result = _mm_packs_epi32(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        // Values should be saturated to i16 range
+        
         if result[0] != -10 || result[1] != 10 {
             return Err(format!("Unexpected packed result: {:?}", result));
         }
@@ -1555,7 +1555,7 @@ fn test_mm_packus_epi16() -> Result<(), String> {
         let b = _mm_set_epi16(255, 254, 253, 252, -1, -2, -3, -4);
         let result = _mm_packus_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
-        // Negative values saturate to 0, >255 saturate to 255
+        
         if result[0] != 1 || result[15] != 255 {
             return Err(format!("Unexpected packed result: {:?}", result));
         }
@@ -1569,7 +1569,7 @@ fn test_mm_unpackhi_epi8() -> Result<(), String> {
         let b = _mm_set_epi8(31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16);
         let result = _mm_unpackhi_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
-        // Interleave high bytes
+        
         if result[0] != 8 || result[1] != 24 {
             return Err(format!("Unexpected unpack result: {:?}", result));
         }
@@ -1583,7 +1583,7 @@ fn test_mm_unpackhi_epi16() -> Result<(), String> {
         let b = _mm_set_epi16(15, 14, 13, 12, 11, 10, 9, 8);
         let result = _mm_unpackhi_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        // Interleave high words
+        
         if result[0] != 4 || result[1] != 12 {
             return Err(format!("Unexpected unpack result: {:?}", result));
         }
@@ -1597,7 +1597,7 @@ fn test_mm_unpackhi_epi32() -> Result<(), String> {
         let b = _mm_set_epi32(7, 6, 5, 4);
         let result = _mm_unpackhi_epi32(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        // Interleave high dwords
+        
         if result[0] != 2 || result[1] != 6 {
             return Err(format!("Unexpected unpack result: {:?}", result));
         }
@@ -1611,7 +1611,7 @@ fn test_mm_unpackhi_epi64() -> Result<(), String> {
         let b = _mm_set_epi64x(3, 2);
         let result = _mm_unpackhi_epi64(a, b);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        // Interleave high qwords
+        
         if result[0] != 1 || result[1] != 3 {
             return Err(format!("Unexpected unpack result: {:?}", result));
         }
@@ -1625,7 +1625,7 @@ fn test_mm_unpacklo_epi8() -> Result<(), String> {
         let b = _mm_set_epi8(31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16);
         let result = _mm_unpacklo_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
-        // Interleave low bytes
+        
         if result[0] != 0 || result[1] != 16 {
             return Err(format!("Unexpected unpack result: {:?}", result));
         }
@@ -1639,7 +1639,7 @@ fn test_mm_unpacklo_epi16() -> Result<(), String> {
         let b = _mm_set_epi16(15, 14, 13, 12, 11, 10, 9, 8);
         let result = _mm_unpacklo_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        // Interleave low words
+        
         if result[0] != 0 || result[1] != 8 {
             return Err(format!("Unexpected unpack result: {:?}", result));
         }
@@ -1653,7 +1653,7 @@ fn test_mm_unpacklo_epi32() -> Result<(), String> {
         let b = _mm_set_epi32(7, 6, 5, 4);
         let result = _mm_unpacklo_epi32(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        // Interleave low dwords
+        
         if result[0] != 0 || result[1] != 4 {
             return Err(format!("Unexpected unpack result: {:?}", result));
         }
@@ -1667,7 +1667,7 @@ fn test_mm_unpacklo_epi64() -> Result<(), String> {
         let b = _mm_set_epi64x(3, 2);
         let result = _mm_unpacklo_epi64(a, b);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        // Interleave low qwords
+        
         if result[0] != 0 || result[1] != 2 {
             return Err(format!("Unexpected unpack result: {:?}", result));
         }
@@ -1675,11 +1675,11 @@ fn test_mm_unpacklo_epi64() -> Result<(), String> {
     Ok(())
 }
 
-// Shuffle operations
+
 fn test_mm_shuffle_epi32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(3, 2, 1, 0);
-        let result = _mm_shuffle_epi32::<0b00011011>(a);  // Reverse order
+        let result = _mm_shuffle_epi32::<0b00011011>(a);  
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         if result != [3, 2, 1, 0] {
             return Err(format!("Expected [3, 2, 1, 0], got {:?}", result));
@@ -1691,9 +1691,9 @@ fn test_mm_shuffle_epi32() -> Result<(), String> {
 fn test_mm_shufflehi_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi16(7, 6, 5, 4, 3, 2, 1, 0);
-        let result = _mm_shufflehi_epi16::<0b00011011>(a);  // Shuffle high 4 words
+        let result = _mm_shufflehi_epi16::<0b00011011>(a);  
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        // Low 4 words unchanged, high 4 shuffled
+        
         if result[0] != 0 || result[1] != 1 || result[2] != 2 || result[3] != 3 {
             return Err(format!("Low words changed unexpectedly: {:?}", result));
         }
@@ -1704,9 +1704,9 @@ fn test_mm_shufflehi_epi16() -> Result<(), String> {
 fn test_mm_shufflelo_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi16(7, 6, 5, 4, 3, 2, 1, 0);
-        let result = _mm_shufflelo_epi16::<0b00011011>(a);  // Shuffle low 4 words
+        let result = _mm_shufflelo_epi16::<0b00011011>(a);  
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        // High 4 words unchanged
+        
         if result[4] != 4 || result[5] != 5 || result[6] != 6 || result[7] != 7 {
             return Err(format!("High words changed unexpectedly: {:?}", result));
         }
@@ -1714,7 +1714,7 @@ fn test_mm_shufflelo_epi16() -> Result<(), String> {
     Ok(())
 }
 
-// Extract/Insert operations
+
 fn test_mm_extract_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi16(7, 6, 5, 4, 3, 2, 1, 0);
@@ -1742,7 +1742,7 @@ fn test_mm_movemask_epi8() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi8(-1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0);
         let result = _mm_movemask_epi8(a);
-        // Should be 0b1010101010101010 = 0xAAAA
+        
         if result != 0xAAAA {
             return Err(format!("Expected 0xAAAA, got 0x{:X}", result));
         }
@@ -1750,7 +1750,7 @@ fn test_mm_movemask_epi8() -> Result<(), String> {
     Ok(())
 }
 
-// Conversion operations
+
 fn test_mm_cvtepi32_pd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(0, 0, 20, 10);
@@ -1780,7 +1780,7 @@ fn test_mm_cvtpd_epi32() -> Result<(), String> {
         let a = _mm_set_pd(20.7, 10.3);
         let result = _mm_cvtpd_epi32(a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        // Rounds to nearest even
+        
         if result[0] != 10 || result[1] != 21 {
             return Err(format!("Expected [10, 21, 0, 0], got {:?}", result));
         }
@@ -1806,7 +1806,7 @@ fn test_mm_cvttpd_epi32() -> Result<(), String> {
         let a = _mm_set_pd(20.9, 10.9);
         let result = _mm_cvttpd_epi32(a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        // Truncates toward zero
+        
         if result[0] != 10 || result[1] != 20 {
             return Err(format!("Expected [10, 20, 0, 0], got {:?}", result));
         }
@@ -1820,7 +1820,7 @@ fn test_mm_cvttps_epi32() -> Result<(), String> {
         let ps = _mm_cvtpd_ps(a);
         let result = _mm_cvttps_epi32(ps);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        // Truncates toward zero
+        
         if result[0] != 1 || result[1] != 2 {
             return Err(format!("Expected truncation, got {:?}", result));
         }
@@ -1828,7 +1828,7 @@ fn test_mm_cvttps_epi32() -> Result<(), String> {
     Ok(())
 }
 
-// Double precision floating point operations
+
 fn test_mm_add_sd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_sd(10.0);
@@ -1976,7 +1976,7 @@ fn test_mm_and_pd() -> Result<(), String> {
         let a = _mm_set_pd(1.0, 2.0);
         let b = _mm_set_pd(3.0, 4.0);
         let _result = _mm_and_pd(a, b);
-        // Just verify it doesn't crash
+        
     }
     Ok(())
 }
@@ -1986,7 +1986,7 @@ fn test_mm_andnot_pd() -> Result<(), String> {
         let a = _mm_set_pd(1.0, 2.0);
         let b = _mm_set_pd(3.0, 4.0);
         let _result = _mm_andnot_pd(a, b);
-        // Just verify it doesn't crash
+        
     }
     Ok(())
 }
@@ -1996,7 +1996,7 @@ fn test_mm_or_pd() -> Result<(), String> {
         let a = _mm_set_pd(1.0, 2.0);
         let b = _mm_set_pd(3.0, 4.0);
         let _result = _mm_or_pd(a, b);
-        // Just verify it doesn't crash
+        
     }
     Ok(())
 }
@@ -2006,7 +2006,7 @@ fn test_mm_xor_pd() -> Result<(), String> {
         let a = _mm_set_pd(1.0, 2.0);
         let b = _mm_set_pd(3.0, 4.0);
         let _result = _mm_xor_pd(a, b);
-        // Just verify it doesn't crash
+        
     }
     Ok(())
 }
@@ -2017,7 +2017,7 @@ fn test_mm_andnot_si128() -> Result<(), String> {
         let b = _mm_set_epi32(0xFF, 0x00, 0xFF, 0x00);
         let result = _mm_andnot_si128(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        // (!a) & b
+        
         if result != [0x00, 0xFF, 0x00, 0x00] {
             return Err(format!("Expected [0, 255, 0, 0], got {:?}", result));
         }
@@ -2025,7 +2025,7 @@ fn test_mm_andnot_si128() -> Result<(), String> {
     Ok(())
 }
 
-// Dodatkowe funkcje SSE2
+
 
 fn test_mm_bslli_si128() -> Result<(), String> {
     unsafe {
@@ -2367,7 +2367,7 @@ fn test_mm_cmpnge_sd() -> Result<(), String> {
     Ok(())
 }
 
-// Comparison functions for packed doubles
+
 fn test_mm_cmpeq_pd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(2.0, 1.0);
@@ -2524,7 +2524,7 @@ fn test_mm_cmpnge_pd() -> Result<(), String> {
     Ok(())
 }
 
-// Scalar comparison functions (comi)
+
 fn test_mm_comieq_sd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_sd(1.0);
@@ -2597,7 +2597,7 @@ fn test_mm_comineq_sd() -> Result<(), String> {
     Ok(())
 }
 
-// Unordered comparison functions
+
 fn test_mm_ucomieq_sd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_sd(1.0);
@@ -2670,7 +2670,7 @@ fn test_mm_ucomineq_sd() -> Result<(), String> {
     Ok(())
 }
 
-// Additional conversion and misc functions
+
 fn test_mm_cvtpd_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(2.0, 1.0);
@@ -2681,12 +2681,12 @@ fn test_mm_cvtpd_ps() -> Result<(), String> {
 
 fn test_mm_cvtps_pd() -> Result<(), String> {
     unsafe {
-        // Use cvtepi32_ps to create __m128 from ints
-        let ints = _mm_set_epi32(0, 0, 0x40000000, 0x3f800000); // 2.0, 1.0 in float bits
+        
+        let ints = _mm_set_epi32(0, 0, 0x40000000, 0x3f800000); 
         let a = _mm_castsi128_ps(ints);
         let result = _mm_cvtps_pd(a);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        // Just check it returns something reasonable
+        
         let _ = result;
         Ok(())
     }
@@ -2705,11 +2705,11 @@ fn test_mm_cvtsd_si32() -> Result<(), String> {
 
 fn test_mm_cvtsd_ss() -> Result<(), String> {
     unsafe {
-        let a_int = _mm_set_epi32(0, 0, 0, 0x3f800000); // 1.0 in float bits
+        let a_int = _mm_set_epi32(0, 0, 0, 0x3f800000); 
         let a = _mm_castsi128_ps(a_int);
         let b = _mm_set_sd(42.5);
         let _result = _mm_cvtsd_ss(a, b);
-        // Can't transmute to __m128 in SSE2 context, just verify it runs
+        
         Ok(())
     }
 }
@@ -2717,11 +2717,11 @@ fn test_mm_cvtsd_ss() -> Result<(), String> {
 fn test_mm_cvtss_sd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_sd(1.0);
-        let b_int = _mm_set_epi32(0, 0, 0, 0x422a0000); // 42.5 in float bits
+        let b_int = _mm_set_epi32(0, 0, 0, 0x422a0000); 
         let b = _mm_castsi128_ps(b_int);
         let result = _mm_cvtss_sd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        // Verify first element is approximately 42.5
+        
         if (result[0] - 42.5).abs() > 0.1 {
             return Err(format!("Got {:?}, expected ~42.5 in first element", result));
         }
@@ -3046,7 +3046,7 @@ fn test_mm_move_sd() -> Result<(), String> {
     Ok(())
 }
 
-// Cast functions
+
 fn test_mm_castpd_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(2.0, 1.0);
@@ -3065,7 +3065,7 @@ fn test_mm_castpd_si128() -> Result<(), String> {
 
 fn test_mm_castps_pd() -> Result<(), String> {
     unsafe {
-        // Create __m128 using castsi128_ps
+        
         let a_int = _mm_set_epi32(0x40800000, 0x40400000, 0x40000000, 0x3f800000);
         let a = _mm_castsi128_ps(a_int);
         let result = _mm_castps_pd(a);
@@ -3081,7 +3081,7 @@ fn test_mm_castps_si128() -> Result<(), String> {
         let a = _mm_castsi128_ps(a_int);
         let result = _mm_castps_si128(a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        // Should be same as input
+        
         let expected = [0x3f800000, 0x40000000, 0x40400000, 0x40800000];
         if result != expected {
             return Err(format!("Got {:?}, expected {:?}", result, expected));

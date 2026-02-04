@@ -40,11 +40,11 @@ fn test_mm_blend_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
-        // Blend with mask 0b0101 (bits 0 and 2 from b, bits 1 and 3 from a)
+        
         let result = _mm_blend_ps::<0b0101>(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // a = [4, 3, 2, 1], b = [8, 7, 6, 5]
-        // result = [8, 3, 6, 1]
+        
+        
         check_f32_array_equality(&result, &[8.0, 3.0, 6.0, 1.0])?;
     }
 
@@ -98,11 +98,11 @@ fn test_mm_dp_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let b = _mm_set_ps(2.0, 3.0, 4.0, 5.0);
-        // Dot product with mask 0xFF (all elements)
+        
         let result = _mm_dp_ps::<0xFF>(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // a = [4, 3, 2, 1], b = [5, 4, 3, 2]
-        // dot = 4*5 + 3*4 + 2*3 + 1*2 = 20 + 12 + 6 + 2 = 40
+        
+        
         check_f32_array_equality(&result, &[40.0, 40.0, 40.0, 40.0])?;
     }
 
@@ -308,7 +308,7 @@ fn test_mm_insert_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
-        // Insert element from b[0] into a[2]
+        
         let result = _mm_insert_ps::<0b00100000>(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
         check_f32_array_equality(&result, &[4.0, 3.0, 8.0, 1.0])?;
@@ -322,8 +322,8 @@ fn test_mm_testz_si128() -> Result<(), String> {
         let a = _mm_set_epi32(0x00FF0000, 0, 0, 0);
         let b = _mm_set_epi32(0xFF00FFFFu32 as i32, -1, -1, -1);
         let result = _mm_testz_si128(a, b);
-        // a AND b = 0x00FF0000 AND 0xFF00FFFF = 0 (no common bits in high word)
-        // testz returns 1 if (a AND b) == 0
+        
+        
         check_int_equality(result, 1)?;
     }
 
@@ -331,7 +331,7 @@ fn test_mm_testz_si128() -> Result<(), String> {
         let a = _mm_set_epi32(0x00FF0000, 0, 0, 0);
         let b = _mm_set_epi32(0xFF00FFFFu32 as i32, 0, 0, 0);
         let result = _mm_testz_si128(a, b);
-        // a AND b = 0x00FF0000 AND 0xFF00FFFF = 0 (no common bits)
+        
         check_int_equality(result, 1)?;
     }
 
@@ -343,7 +343,7 @@ fn test_mm_testc_si128() -> Result<(), String> {
         let a = _mm_set_epi32(-1, -1, -1, -1);
         let b = _mm_set_epi32(0x00FF0000, 0, 0, 0);
         let result = _mm_testc_si128(a, b);
-        check_int_equality(result, 1)?; // All bits in b are set in a
+        check_int_equality(result, 1)?; 
     }
 
     Ok(())

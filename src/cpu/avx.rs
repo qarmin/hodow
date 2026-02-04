@@ -190,9 +190,9 @@ fn test_mm256_div_ps() -> Result<(), String> {
         let b = _mm256_set_ps(2.0, 2.0, 2.0, 2.0, 4.0, 4.0, 4.0, 4.0);
         let result = _mm256_div_ps(a, b);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-        // a = [4, 8, 12, 16, 2, 4, 6, 8]
-        // b = [4, 4, 4, 4, 2, 2, 2, 2]
-        // result = [4/4, 8/4, 12/4, 16/4, 2/2, 4/2, 6/2, 8/2] = [1, 2, 3, 4, 1, 2, 3, 4]
+        
+        
+        
         check_f32_array_equality(&result, &[1.0, 2.0, 3.0, 4.0, 1.0, 2.0, 3.0, 4.0])?;
     }
 

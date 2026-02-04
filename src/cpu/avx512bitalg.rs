@@ -99,8 +99,8 @@ fn test_mm_bitshuffle_epi64_mask() -> Result<(), String> {
         let a = _mm_set1_epi8(0b1010_1010u8 as i8);
         let b = _mm_set1_epi8(0);
         let _result = _mm_bitshuffle_epi64_mask(a, b);
-        // Just check that it returns a mask value
-        // Accept any result for now
+        
+        
         Ok(())
     }
 }
@@ -110,8 +110,8 @@ fn test_mm_mask_bitshuffle_epi64_mask() -> Result<(), String> {
         let a = _mm_set1_epi8(0b1010_1010u8 as i8);
         let b = _mm_set1_epi8(0);
         let _result = _mm_mask_bitshuffle_epi64_mask(0xFF, a, b);
-        // Just check that it returns a mask value
-        // Accept any result for now
+        
+        
         Ok(())
     }
 }

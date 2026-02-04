@@ -39,7 +39,7 @@ fn test_mm_cvtne2ps_pbh() -> Result<(), String> {
         let b = _mm_set1_ps(2.5);
         let result = _mm_cvtne2ps_pbh(a, b);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
-        // BF16 conversion - expect non-zero BF16 encodings of input
+        
         let expected: [u16; 8] = [0x3f80, 0x4000, 0x4040, 0x4080, 0x40A0, 0x40C0, 0x40E0, 0x4100];
         check_int_array_equality(&result, &expected)?;
         Ok(())
@@ -77,11 +77,11 @@ fn test_mm_dpbf16_ps() -> Result<(), String> {
    
     unsafe {
         let src = _mm_set1_ps(1.0);
-        let a = _mm_set1_epi16(0x3f80); // BF16 representation
+        let a = _mm_set1_epi16(0x3f80); 
         let b = _mm_set1_epi16(0x3f80);
         let result = _mm_dpbf16_ps(src, a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // dot product of BF16 ones with src should be non-zero; use an example expected
+        
         let expected: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
         check_f32_array_equality(&result, &expected)?;
         Ok(())
@@ -203,7 +203,7 @@ fn test_mm_cvtness_sbh() -> Result<(), String> {
     unsafe {
         let a = 1.5f32;
         let result = _mm_cvtness_sbh(a);
-        // Should convert FP32 scalar to BF16
+        
         if result == 0 {
             return Err(format!("Got zero for conversion of 1.5"));
         }

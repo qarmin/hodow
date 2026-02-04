@@ -355,7 +355,7 @@ fn test_mm_movemask_ps() -> Result<(), String> {
             unsafe {
                 let arr = get_four_random_floats();
                 let vec = _mm_set_ps(arr[3], arr[2], arr[1], arr[0]);
-                _mm_movemask_ps(vec); // Just to ensure it doesn't panic
+                _mm_movemask_ps(vec); 
             }
         }
     }
@@ -748,7 +748,7 @@ fn test_mm_cvtss_si32() -> Result<(), String> {
             unsafe {
                 let arr = get_four_random_floats();
                 let vec = _mm_set_ps(arr[3], arr[2], arr[1], arr[0]);
-                let _result = _mm_cvtss_si32(vec); // Not sure how to test this
+                let _result = _mm_cvtss_si32(vec); 
             }
         }
     }
@@ -770,7 +770,7 @@ fn test_mm_add_ss() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
         let result = _mm_add_ss(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // Only lowest element is added, others are from a
+        
         check_f32_array_equality(&result, &[12.0, 3.0, 2.0, 1.0])?;
     }
     Ok(())
@@ -824,7 +824,7 @@ fn test_mm_rcp_ss() -> Result<(), String> {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let result = _mm_rcp_ss(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // rcp is approximate reciprocal, check first element is ~0.25
+        
         if (result[0] - 0.25).abs() > 0.01 {
             return Err(format!("Expected ~0.25, got {}", result[0]));
         }
@@ -837,7 +837,7 @@ fn test_mm_rcp_ps() -> Result<(), String> {
         let a = _mm_set_ps(1.0, 2.0, 4.0, 8.0);
         let result = _mm_rcp_ps(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // Approximate reciprocal
+        
         check_f32_array_equality(&result, &[0.125, 0.25, 0.5, 1.0])?;
     }
     Ok(())
@@ -848,7 +848,7 @@ fn test_mm_rsqrt_ss() -> Result<(), String> {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 16.0);
         let result = _mm_rsqrt_ss(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // Approximate 1/sqrt(16) = 0.25
+        
         if (result[0] - 0.25).abs() > 0.01 {
             return Err(format!("Expected ~0.25, got {}", result[0]));
         }
@@ -882,10 +882,10 @@ fn test_mm_shuffle_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
-        // Shuffle with mask 0b00_01_10_11 = 0x1B
+        
         let result = _mm_shuffle_ps::<0x1B>(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // result[0] = a[3], result[1] = a[2], result[2] = b[1], result[3] = b[0]
+        
         check_f32_array_equality(&result, &[1.0, 2.0, 7.0, 8.0])?;
     }
     Ok(())
@@ -897,9 +897,9 @@ fn test_mm_unpackhi_ps() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
         let result = _mm_unpackhi_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // Interleave high halves: [b[2], a[2], b[3], a[3]]
-        // a = [4, 3, 2, 1], b = [8, 7, 6, 5]
-        // result = [2, 6, 1, 5]
+        
+        
+        
         check_f32_array_equality(&result, &[2.0, 6.0, 1.0, 5.0])?;
     }
     Ok(())
@@ -911,9 +911,9 @@ fn test_mm_unpacklo_ps() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
         let result = _mm_unpacklo_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // Interleave low halves: [b[0], a[0], b[1], a[1]]
-        // a = [4, 3, 2, 1], b = [8, 7, 6, 5]
-        // result = [4, 8, 3, 7]
+        
+        
+        
         check_f32_array_equality(&result, &[4.0, 8.0, 3.0, 7.0])?;
     }
     Ok(())
@@ -925,7 +925,7 @@ fn test_mm_movehl_ps() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
         let result = _mm_movehl_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // result = [a[3], a[2], b[3], b[2]]
+        
         check_f32_array_equality(&result, &[6.0, 5.0, 2.0, 1.0])?;
     }
     Ok(())
@@ -937,9 +937,9 @@ fn test_mm_movelh_ps() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
         let result = _mm_movelh_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // result = [a[0], a[1], b[0], b[1]]
-        // a = [4, 3, 2, 1], b = [8, 7, 6, 5]
-        // result = [4, 3, 8, 7]
+        
+        
+        
         check_f32_array_equality(&result, &[4.0, 3.0, 8.0, 7.0])?;
     }
     Ok(())
@@ -951,7 +951,7 @@ fn test_mm_move_ss() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
         let result = _mm_move_ss(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // result = [b[0], a[1], a[2], a[3]]
+        
         check_f32_array_equality(&result, &[8.0, 3.0, 2.0, 1.0])?;
     }
     Ok(())

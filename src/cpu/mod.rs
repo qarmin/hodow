@@ -47,7 +47,7 @@ pub const DEFAULT_TEST_ITERATIONS: usize = 20;
 #[allow(dead_code)]
 pub const DEFAULT_TEST_ITERATIONS: usize = 100;
 
-// runtime-configurable iterations (set from CLI)
+
 static ITERATIONS: OnceCell<usize> = OnceCell::new();
 
 pub fn set_iterations(n: usize) {

@@ -112,7 +112,7 @@ fn test_mm_aesenc128kl_u8() -> Result<(), String> {
         let h_key: [u8; 384] = [0; 384];
         let result = _mm_aesenc128kl_u8(&mut out, data, h_key.as_ptr() as *const u8);
         let out_bytes = std::mem::transmute::<__m128i, [u8; 16]>(out);
-        // check result is a byte value (u8)
+        
         if result == 0 {
             return Err(format!("AESENC128KL returned zero"));
         }

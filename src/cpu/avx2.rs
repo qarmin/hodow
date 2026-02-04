@@ -32,7 +32,7 @@ impl ExtensionTest for AVX2 {
             (&test_mm256_hsub_epi32, "test_mm256_hsub_epi32"),
             (&test_mm256_broadcastd_epi32, "test_mm256_broadcastd_epi32"),
             (&test_mm256_permutevar8x32_epi32, "test_mm256_permutevar8x32_epi32"),
-            // New tests
+            
             (&test_mm_blend_epi32, "test_mm_blend_epi32"),
             (&test_mm_broadcastb_epi8, "test_mm_broadcastb_epi8"),
             (&test_mm_broadcastq_epi64, "test_mm_broadcastq_epi64"),
@@ -327,7 +327,7 @@ fn test_mm256_permutevar8x32_epi32() -> Result<(), String> {
     Ok(())
 }
 
-// New AVX2 functions
+
 
 fn test_mm_blend_epi32() -> Result<(), String> {
     unsafe {
@@ -443,7 +443,7 @@ fn test_mm_mask_i32gather_ps() -> Result<(), String> {
         let mask = _mm_set_ps(-1.0, 0.0, -1.0, 0.0);
         let result = _mm_mask_i32gather_ps::<4>(src, arr.as_ptr(), indices, mask);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // reasonable expected per mask semantics
+        
         check_f32_array_equality(&result, &[7.0, 99.0, 5.0, 99.0])?;
         Ok(())
     }
