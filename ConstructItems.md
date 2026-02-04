@@ -139,8 +139,7 @@ fn test_mm_aesimc_si128() -> Result<(), String> {
 ```
 Good 
 ```
-// Cfg at file level or patching
-// fn get_tests() -> &'static [( - with empty on not-aes
+// Cfg at file level or patching - so remove everything from this functions and 
 fn test_mm_aesimc_si128() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(0x0123456789abcdefi64, 0xfedcba9876543210i64);
@@ -151,4 +150,9 @@ fn test_mm_aesimc_si128() -> Result<(), String> {
         Ok(())
     }
 }
+// And add to e.g.
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+mod aes;
+
+another cfg which checks for aes feature enabled - to avoid checking every single fucking function
 ```
