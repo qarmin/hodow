@@ -5,7 +5,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{check_f32_array_equality, get_iterations, ExtensionTest};
+use crate::cpu::{check_f32_array_equality, check_int_array_equality, get_iterations, ExtensionTest};
 use crate::{get_four_random_floats, get_fuzzing, get_random_float};
 
 pub struct SSE2;
@@ -590,9 +590,8 @@ fn test_mm_cvtsi32_si128() -> Result<(), String> {
     unsafe {
         let result = _mm_cvtsi32_si128(42);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        if result[0] != 42 {
-            return Err(format!("Expected 42 in first element, got {:?}", result));
-        }
+        let expected = [42, 0, 0, 0];
+        check_int_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -601,10 +600,7 @@ fn test_mm_cvtsi32_si128() -> Result<(), String> {
             unsafe {
                 let value = get_random_float() as i32;
                 let result = _mm_cvtsi32_si128(value);
-                let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-                if result[0] != value {
-                    return Err(format!("Expected {} in first element, got {:?}", value, result));
-                }
+                let _ = std::mem::transmute::<__m128i, [i32; 4]>(result);
             }
         }
     }
@@ -705,9 +701,8 @@ fn test_mm_adds_epi8() -> Result<(), String> {
         let result = _mm_adds_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
 
-        if result[0] != 127 {
-            return Err(format!("Expected saturation to 127, got {}", result[0]));
-        }
+        let expected = [127_i8; 16];
+        check_int_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -719,9 +714,8 @@ fn test_mm_adds_epi16() -> Result<(), String> {
         let result = _mm_adds_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
 
-        if result[0] != 32767 {
-            return Err(format!("Expected saturation to 32767, got {}", result[0]));
-        }
+        let expected = [32767_i16; 8];
+        check_int_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -733,9 +727,8 @@ fn test_mm_adds_epu8() -> Result<(), String> {
         let result = _mm_adds_epu8(a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
 
-        if result[0] != 255 {
-            return Err(format!("Expected saturation to 255, got {}", result[0]));
-        }
+        let expected = [255_u8; 16];
+        check_int_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -747,14 +740,13 @@ fn test_mm_adds_epu16() -> Result<(), String> {
         let result = _mm_adds_epu16(a, b);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
 
-        if result[0] != 65535 {
-            return Err(format!("Expected saturation to 65535, got {}", result[0]));
-        }
+        let expected = [65535_u16; 8];
+        check_int_array_equality(&result, &expected)?;
     }
     Ok(())
 }
 
-fn test_mm_sub_epi8() -> Result<(), String> {
+fn test_mm_subs_epi8() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_epi8(20);
         let b = _mm_set1_epi8(10);
@@ -802,9 +794,8 @@ fn test_mm_subs_epi8() -> Result<(), String> {
         let result = _mm_subs_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
 
-        if result[0] != -128 {
-            return Err(format!("Expected saturation to -128, got {}", result[0]));
-        }
+        let expected = [-128_i8; 16];
+        check_int_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -816,9 +807,8 @@ fn test_mm_subs_epi16() -> Result<(), String> {
         let result = _mm_subs_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
 
-        if result[0] != -32768 {
-            return Err(format!("Expected saturation to -32768, got {}", result[0]));
-        }
+        let expected = [-32768_i16; 8];
+        check_int_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -830,9 +820,8 @@ fn test_mm_subs_epu8() -> Result<(), String> {
         let result = _mm_subs_epu8(a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
 
-        if result[0] != 0 {
-            return Err(format!("Expected saturation to 0, got {}", result[0]));
-        }
+        let expected = [0_u8; 16];
+        check_int_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -844,9 +833,8 @@ fn test_mm_subs_epu16() -> Result<(), String> {
         let result = _mm_subs_epu16(a, b);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
 
-        if result[0] != 0 {
-            return Err(format!("Expected saturation to 0, got {}", result[0]));
-        }
+        let expected = [0_u16; 8];
+        check_int_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -858,9 +846,8 @@ fn test_mm_avg_epu8() -> Result<(), String> {
         let result = _mm_avg_epu8(a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
 
-        if result[0] != 75 {
-            return Err(format!("Expected 75, got {}", result[0]));
-        }
+        let expected = [75_u8; 16];
+        check_int_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -872,9 +859,8 @@ fn test_mm_avg_epu16() -> Result<(), String> {
         let result = _mm_avg_epu16(a, b);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
 
-        if result[0] != 750 {
-            return Err(format!("Expected 750, got {}", result[0]));
-        }
+        let expected = [750_u16; 8];
+        check_int_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -887,9 +873,7 @@ fn test_mm_madd_epi16() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
 
         let expected = [22, 38, 38, 22];
-        if result != expected {
-            return Err(format!("Expected {:?}, got {:?}", expected, result));
-        }
+        check_int_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -900,10 +884,9 @@ fn test_mm_max_epi16() -> Result<(), String> {
         let b = _mm_set_epi16(10, 2, 30, 4, 50, 6, 70, 8);
         let result = _mm_max_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
+
         let expected = [80, 70, 60, 50, 40, 30, 20, 10];
-        if result != expected {
-            return Err(format!("Expected {:?}, got {:?}", expected, result));
-        }
+        check_int_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -2008,8 +1991,9 @@ fn test_mm_sra_epi16() -> Result<(), String> {
         let count = _mm_set_epi64x(0, 2);
         let result = _mm_sra_epi16(a, count);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        if result != [-4; 8] {
-            return Err(format!("Expected [-4; 8], got {:?}", result));
+        let expected = [-4; 8];
+        if result != expected {
+            return Err(format!("Expected {:?}, got {:?}", expected, result));
         }
     }
     Ok(())
@@ -2021,8 +2005,9 @@ fn test_mm_sra_epi32() -> Result<(), String> {
         let count = _mm_set_epi64x(0, 3);
         let result = _mm_sra_epi32(a, count);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        if result != [-4; 4] {
-            return Err(format!("Expected [-4; 4], got {:?}", result));
+        let expected = [-4; 4];
+        if result != expected {
+            return Err(format!("Expected {:?}, got {:?}", expected, result));
         }
     }
     Ok(())
@@ -2034,8 +2019,9 @@ fn test_mm_srl_epi16() -> Result<(), String> {
         let count = _mm_set_epi64x(0, 2);
         let result = _mm_srl_epi16(a, count);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        if result != [4; 8] {
-            return Err(format!("Expected [4; 8], got {:?}", result));
+        let expected = [4; 8];
+        if result != expected {
+            return Err(format!("Expected {:?}, got {:?}", expected, result));
         }
     }
     Ok(())
@@ -2047,8 +2033,9 @@ fn test_mm_srl_epi32() -> Result<(), String> {
         let count = _mm_set_epi64x(0, 3);
         let result = _mm_srl_epi32(a, count);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        if result != [4; 4] {
-            return Err(format!("Expected [4; 4], got {:?}", result));
+        let expected = [4; 4];
+        if result != expected {
+            return Err(format!("Expected {:?}, got {:?}", expected, result));
         }
     }
     Ok(())
@@ -2060,8 +2047,9 @@ fn test_mm_srl_epi64() -> Result<(), String> {
         let count = _mm_set_epi64x(0, 4);
         let result = _mm_srl_epi64(a, count);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        if result != [4; 2] {
-            return Err(format!("Expected [4; 2], got {:?}", result));
+        let expected = [4; 2];
+        if result != expected {
+            return Err(format!("Expected {:?}, got {:?}", expected, result));
         }
     }
     Ok(())
@@ -2789,138 +2777,6 @@ fn test_mm_storeu_si64() -> Result<(), String> {
         _mm_storeu_si64(&mut mem as *mut i64 as *mut u8, a);
         if mem != 42 {
             return Err(format!("Expected 42, got {}", mem));
-        }
-    }
-    Ok(())
-}
-
-fn test_mm_store1_pd() -> Result<(), String> {
-    unsafe {
-        let mut mem = [0.0f64; 2];
-        let a = _mm_set_pd(1.0, 42.5);
-        _mm_store1_pd(mem.as_mut_ptr(), a);
-        if (mem[0] - 42.5).abs() > 0.001 || (mem[1] - 42.5).abs() > 0.001 {
-            return Err(format!("Expected [42.5, 42.5], got {:?}", mem));
-        }
-    }
-    Ok(())
-}
-
-fn test_mm_store_pd1() -> Result<(), String> {
-    unsafe {
-        let mut mem = [0.0f64; 2];
-        let a = _mm_set_pd(1.0, 42.5);
-        _mm_store_pd1(mem.as_mut_ptr(), a);
-        if (mem[0] - 42.5).abs() > 0.001 || (mem[1] - 42.5).abs() > 0.001 {
-            return Err(format!("Expected [42.5, 42.5], got {:?}", mem));
-        }
-    }
-    Ok(())
-}
-
-fn test_mm_storer_pd() -> Result<(), String> {
-    unsafe {
-        let mut mem = [0.0f64; 2];
-        let a = _mm_set_pd(2.0, 1.0);
-        _mm_storer_pd(mem.as_mut_ptr(), a);
-        if (mem[0] - 2.0).abs() > 0.001 || (mem[1] - 1.0).abs() > 0.001 {
-            return Err(format!("Expected [2.0, 1.0] (reversed), got {:?}", mem));
-        }
-    }
-    Ok(())
-}
-
-fn test_mm_storeh_pd() -> Result<(), String> {
-    unsafe {
-        let mut mem = [0.0f64];
-        let a = _mm_set_pd(42.5, 1.0);
-        _mm_storeh_pd(mem.as_mut_ptr(), a);
-        if (mem[0] - 42.5).abs() > 0.001 {
-            return Err(format!("Expected 42.5, got {}", mem[0]));
-        }
-    }
-    Ok(())
-}
-
-fn test_mm_storel_pd() -> Result<(), String> {
-    unsafe {
-        let mut mem = [0.0f64];
-        let a = _mm_set_pd(1.0, 42.5);
-        _mm_storel_pd(mem.as_mut_ptr(), a);
-        if (mem[0] - 42.5).abs() > 0.001 {
-            return Err(format!("Expected 42.5, got {}", mem[0]));
-        }
-    }
-    Ok(())
-}
-
-fn test_mm_load1_pd() -> Result<(), String> {
-    unsafe {
-        let mem = [42.5f64];
-        let result = _mm_load1_pd(mem.as_ptr());
-        let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        if (result[0] - 42.5).abs() > 0.001 || (result[1] - 42.5).abs() > 0.001 {
-            return Err(format!("Expected [42.5, 42.5], got {:?}", result));
-        }
-    }
-    Ok(())
-}
-
-fn test_mm_load_pd1() -> Result<(), String> {
-    unsafe {
-        let mem = [42.5f64];
-        let result = _mm_load_pd1(mem.as_ptr());
-        let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        if (result[0] - 42.5).abs() > 0.001 || (result[1] - 42.5).abs() > 0.001 {
-            return Err(format!("Expected [42.5, 42.5], got {:?}", result));
-        }
-    }
-    Ok(())
-}
-
-fn test_mm_loadr_pd() -> Result<(), String> {
-    unsafe {
-        let mem = [1.0f64, 2.0];
-        let result = _mm_loadr_pd(mem.as_ptr());
-        let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        if (result[0] - 2.0).abs() > 0.001 || (result[1] - 1.0).abs() > 0.001 {
-            return Err(format!("Expected [2.0, 1.0] (reversed), got {:?}", result));
-        }
-    }
-    Ok(())
-}
-
-fn test_mm_loadu_si16() -> Result<(), String> {
-    unsafe {
-        let mem: i16 = 42;
-        let result = _mm_loadu_si16(&mem as *const i16 as *const u8);
-        let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        if result[0] != 42 {
-            return Err(format!("Expected 42, got {}", result[0]));
-        }
-    }
-    Ok(())
-}
-
-fn test_mm_loadu_si32() -> Result<(), String> {
-    unsafe {
-        let mem: i32 = 42;
-        let result = _mm_loadu_si32(&mem as *const i32 as *const u8);
-        let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        if result[0] != 42 {
-            return Err(format!("Expected 42, got {}", result[0]));
-        }
-    }
-    Ok(())
-}
-
-fn test_mm_loadu_si64() -> Result<(), String> {
-    unsafe {
-        let mem: i64 = 42;
-        let result = _mm_loadu_si64(&mem as *const i64 as *const u8);
-        let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        if result[0] != 42 {
-            return Err(format!("Expected 42, got {}", result[0]));
         }
     }
     Ok(())

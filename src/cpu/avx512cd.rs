@@ -133,9 +133,9 @@ fn test_mm_maskz_lzcnt_epi32() -> Result<(), String> {
         let a = _mm_set1_epi32(0x0000_00FF);
         let result = _mm_maskz_lzcnt_epi32(0b1100, a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        if result[0] != 0 || result[2] != 24 {
-            return Err(format!("Mask not applied correctly: {:?}", result));
-        }
+        // check whole result array with plausible expected values
+        let expected = [0, 0, 24, 24];
+        check_int_array_equality(&result, &expected)?;
         Ok(())
     }
 }
@@ -145,9 +145,8 @@ fn test_mm_lzcnt_epi64() -> Result<(), String> {
         let a = _mm_set1_epi64x(0x0000_0000_0000_00FF);
         let result = _mm_lzcnt_epi64(a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        if result[0] != 56 {
-            return Err(format!("Expected 56 leading zeros, got {}", result[0]));
-        }
+        let expected = [56, 56];
+        check_int_array_equality(&result, &expected)?;
         Ok(())
     }
 }
@@ -158,9 +157,8 @@ fn test_mm_mask_lzcnt_epi64() -> Result<(), String> {
         let a = _mm_set1_epi64x(0x0000_0000_0000_00FF);
         let result = _mm_mask_lzcnt_epi64(src, 0b10, a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        if result[0] != 100 || result[1] != 56 {
-            return Err(format!("Mask not applied correctly: {:?}", result));
-        }
+        let expected = [100, 56];
+        check_int_array_equality(&result, &expected)?;
         Ok(())
     }
 }
@@ -170,9 +168,8 @@ fn test_mm_maskz_lzcnt_epi64() -> Result<(), String> {
         let a = _mm_set1_epi64x(0x0000_0000_0000_00FF);
         let result = _mm_maskz_lzcnt_epi64(0b10, a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        if result[0] != 0 || result[1] != 56 {
-            return Err(format!("Mask not applied correctly: {:?}", result));
-        }
+        let expected = [0, 56];
+        check_int_array_equality(&result, &expected)?;
         Ok(())
     }
 }
