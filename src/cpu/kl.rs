@@ -6,7 +6,8 @@ use std::arch::x86_64::*;
 use log::info;
 
 use crate::cpu::ExtensionTest;
-use crate::{get_fuzzing, get_iterations};
+use crate::cpu::TestFunction;
+use crate::cpu::{get_fuzzing, get_iterations};
 pub struct KL;
 impl ExtensionTest for KL {
     fn get_name() -> &'static str {

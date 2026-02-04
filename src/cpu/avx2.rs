@@ -495,7 +495,7 @@ fn test_mm_mask_i32gather_ps() -> Result<(), String> {
 
 fn test_mm_i32gather_epi64() -> Result<(), String> {
     unsafe {
-        let arr: [i32; 8] = [10, 20, 30, 40, 50, 60, 70, 80];
+        let arr: [i64; 8] = [10, 20, 30, 40, 50, 60, 70, 80];
         let indices = _mm_set_epi32(0, 0, 1, 3);
         let result = _mm_i32gather_epi64::<8>(arr.as_ptr(), indices);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);

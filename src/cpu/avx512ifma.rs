@@ -5,8 +5,8 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{check_int_array_equality, ExtensionTest};
-use crate::{get_fuzzing, get_iterations};
+use crate::cpu::{check_int_array_equality, ExtensionTest, TestFunction, get_iterations};
+use crate::get_fuzzing;
 
 pub struct AVX512IFMA;
 
