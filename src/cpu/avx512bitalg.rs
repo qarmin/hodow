@@ -3,8 +3,7 @@ use std::arch::x86::*;
 #[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::*;
 
-use crate::cpu::{check_int_array_equality, ExtensionTest};use crate::cpu::TestFunction;
-
+use crate::cpu::{check_int_array_equality, ExtensionTest, TestFunction};
 
 pub struct AVX512BITALG;
 

@@ -3,10 +3,9 @@ use std::arch::x86::*;
 #[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::*;
 
-use log::info;use crate::cpu::TestFunction;
+use log::info;
 
-
-use crate::cpu::{check_f32_array_equality, check_float_equality, check_int_array_equality, check_int_equality, get_iterations, ExtensionTest, DEFAULT_FLOAT_DIFF};
+use crate::cpu::{check_f32_array_equality, check_float_equality, check_int_array_equality, check_int_equality, get_iterations, ExtensionTest, TestFunction, DEFAULT_FLOAT_DIFF};
 use crate::{get_four_random_floats, get_fuzzing};
 
 pub struct SSE41;
@@ -176,16 +175,40 @@ fn test_mm_max_epi8() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let a = _mm_set_epi8(
-                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
-                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
-                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
-                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
                 );
                 let b = _mm_set_epi8(
-                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
-                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
-                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
-                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
                 );
                 let _result = _mm_max_epi8(a, b);
             }
@@ -209,16 +232,40 @@ fn test_mm_min_epi8() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let a = _mm_set_epi8(
-                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
-                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
-                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
-                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
                 );
                 let b = _mm_set_epi8(
-                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
-                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
-                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
-                    rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
+                    rand::random::<i8>(),
                 );
                 let _result = _mm_min_epi8(a, b);
             }
@@ -374,7 +421,10 @@ fn test_mm_insert_ps() -> Result<(), String> {
             unsafe {
                 let a_vals = get_four_random_floats();
                 let b_vals = get_four_random_floats();
-                let _result = _mm_insert_ps::<0b00100000>(_mm_set_ps(a_vals[3], a_vals[2], a_vals[1], a_vals[0]), _mm_set_ps(b_vals[3], b_vals[2], b_vals[1], b_vals[0]));
+                let _result = _mm_insert_ps::<0b00100000>(
+                    _mm_set_ps(a_vals[3], a_vals[2], a_vals[1], a_vals[0]),
+                    _mm_set_ps(b_vals[3], b_vals[2], b_vals[1], b_vals[0]),
+                );
             }
         }
     }

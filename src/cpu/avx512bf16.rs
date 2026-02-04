@@ -11,10 +11,7 @@ impl ExtensionTest for AVX512BF16 {
     }
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
-        &[
-            (&test_placeholder_1, "test_placeholder_1"),
-            (&test_placeholder_2, "test_placeholder_2"),
-        ]
+        &[(&test_placeholder_1, "test_placeholder_1"), (&test_placeholder_2, "test_placeholder_2")]
     }
 }
 

@@ -3,10 +3,9 @@ use std::arch::x86::*;
 #[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::*;
 
-use log::info;use crate::cpu::TestFunction;
+use log::info;
 
-
-use crate::cpu::{check_f32_array_equality, check_f64_array_equality, get_iterations, ExtensionTest};
+use crate::cpu::{check_f32_array_equality, check_f64_array_equality, get_iterations, ExtensionTest, TestFunction};
 use crate::{get_four_random_floats, get_fuzzing, get_random_float};
 
 pub struct SSE3;

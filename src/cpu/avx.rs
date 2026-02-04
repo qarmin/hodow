@@ -5,9 +5,8 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{check_f32_array_equality, check_f64_array_equality, get_iterations, ExtensionTest};
+use crate::cpu::{check_f32_array_equality, check_f64_array_equality, get_iterations, ExtensionTest, TestFunction};
 use crate::{get_four_random_floats, get_fuzzing, get_random_float};
-use crate::cpu::TestFunction;
 
 pub struct AVX;
 

@@ -5,7 +5,9 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{check_f32_array_equality, check_int_array_equality, check_f64_array_equality, check_int_equality, get_iterations, ExtensionTest, TestFunction, check_float_equality};
+use crate::cpu::{
+    check_f32_array_equality, check_f64_array_equality, check_float_equality, check_int_array_equality, check_int_equality, get_iterations, ExtensionTest, TestFunction,
+};
 use crate::{get_four_random_floats, get_fuzzing, get_random_float};
 
 pub struct SSE2;
@@ -300,7 +302,7 @@ fn test_mm_loadu_pd() -> Result<(), String> {
         let data = [1.0, 2.0];
         let result = _mm_loadu_pd(data.as_ptr());
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        
+
         check_f64_array_equality(&result, &[1.0, 2.0])?;
     }
 
@@ -311,8 +313,8 @@ fn test_mm_loadu_pd() -> Result<(), String> {
                 let data = [get_random_float() as f64, get_random_float() as f64];
                 let result = _mm_loadu_pd(data.as_ptr());
                 let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-                
-        check_f64_array_equality(&result, &[1.0, 2.0])?;
+
+                check_f64_array_equality(&result, &[1.0, 2.0])?;
             }
         }
     }
@@ -751,7 +753,6 @@ fn test_mm_sub_epi64() -> Result<(), String> {
         let result = _mm_sub_epi64(a, b);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
         check_int_array_equality(&result, &[])?;
-
     }
     Ok(())
 }
@@ -927,7 +928,6 @@ fn test_mm_mul_epu32() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
 
         check_int_array_equality(&result, &[])?;
-
     }
     Ok(())
 }
@@ -962,7 +962,6 @@ fn test_mm_srli_si128() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
 
         check_int_array_equality(&result, &[])?;
-
     }
     Ok(())
 }
@@ -1256,7 +1255,6 @@ fn test_mm_load_si128() -> Result<(), String> {
         let result = _mm_load_si128(data.as_ptr() as *const __m128i);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         check_int_array_equality(&result, &[]);
-
     }
     Ok(())
 }
@@ -1267,7 +1265,6 @@ fn test_mm_loadu_si128() -> Result<(), String> {
         let result = _mm_loadu_si128(data.as_ptr() as *const __m128i);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         check_int_array_equality(&result, &[]);
-
     }
     Ok(())
 }
@@ -1278,7 +1275,6 @@ fn test_mm_store_si128() -> Result<(), String> {
         let vec = _mm_set_epi32(4, 3, 2, 1);
         _mm_store_si128(data.as_mut_ptr() as *mut __m128i, vec);
         check_int_array_equality(&data, &[])?;
-
     }
     Ok(())
 }
@@ -1289,7 +1285,6 @@ fn test_mm_storeu_si128() -> Result<(), String> {
         let vec = _mm_set_epi32(40, 30, 20, 10);
         _mm_storeu_si128(data.as_mut_ptr() as *mut __m128i, vec);
         check_int_array_equality(&data, &[])?;
-
     }
     Ok(())
 }
@@ -1726,7 +1721,6 @@ fn test_mm_andnot_si128() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
 
         check_int_array_equality(&result, &[])?;
-
     }
     Ok(())
 }
