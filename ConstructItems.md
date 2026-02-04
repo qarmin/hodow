@@ -110,3 +110,37 @@ fn test_mm_cmpgt_epi64() -> Result<(), String> {
     Ok(())
 }
 ```
+# Invalid target feature placement
+It should be outside function - e.g. on entire file, not inside function or block
+Bad
+```
+fn test_mm_aesimc_si128() -> Result<(), String> {
+    #[cfg(target_feature = "aes")]
+    unsafe {
+        let a = _mm_set_epi64x(0x0123456789abcdefi64, 0xfedcba9876543210i64);
+        let result = _mm_aesimc_si128(a);
+        let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
+        let a_bytes = std::mem::transmute::<__m128i, [u8; 16]>(a);
+        if check_int_array_equality(&result, &a_bytes).is_ok() {
+            return Err(format!("AES inverse mix columns produced same as input"));
+        }
+        Ok(())
+    }
+    #[cfg(not(target_feature = "aes"))]
+    Ok(())
+}
+```
+Good 
+```
+// Cfg at file level
+fn test_mm_aesimc_si128() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_epi64x(0x0123456789abcdefi64, 0xfedcba9876543210i64);
+        let result = _mm_aesimc_si128(a);
+        let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
+        let a_bytes = std::mem::transmute::<__m128i, [u8; 16]>(a);
+        check_int_array_equality(&result, &a_bytes)?;
+        Ok(())
+    }
+}
+```
