@@ -1467,7 +1467,7 @@ fn test_mm_extract_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi16(7, 6, 5, 4, 3, 2, 1, 0);
         let result = _mm_extract_epi16::<3>(a);
-        check_int_array_equality(&result, &result)?;
+        check_int_equality(result, result)?;
     }
     Ok(())
 }
@@ -1487,7 +1487,7 @@ fn test_mm_movemask_epi8() -> Result<(), String> {
         let a = _mm_set_epi8(-1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0);
         let result = _mm_movemask_epi8(a);
 
-        check_int_array_equality(&result, &result)?;
+        check_int_equality(result, result)?;
     }
     Ok(())
 }
@@ -1497,7 +1497,7 @@ fn test_mm_cvtepi32_pd() -> Result<(), String> {
         let a = _mm_set_epi32(0, 0, 20, 10);
         let result = _mm_cvtepi32_pd(a);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_f64_array_equality(&result, &result)?;
     }
     Ok(())
 }
@@ -1507,7 +1507,7 @@ fn test_mm_cvtepi32_ps() -> Result<(), String> {
         let a = _mm_set_epi32(4, 3, 2, 1);
         let result = _mm_cvtepi32_ps(a);
         let result = std::mem::transmute::<std::arch::x86_64::__m128, [f32; 4]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_f32_array_equality(&result, &result)?;
     }
     Ok(())
 }
@@ -1847,7 +1847,7 @@ fn test_mm_cvtsi32_sd() -> Result<(), String> {
         let b = 42i32;
         let result = _mm_cvtsi32_sd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_f64_array_equality(&result, &result)?;
     }
     Ok(())
 }
@@ -2161,7 +2161,7 @@ fn test_mm_comieq_sd() -> Result<(), String> {
         let a = _mm_set_sd(1.0);
         let b = _mm_set_sd(1.0);
         let result = _mm_comieq_sd(a, b);
-        check_int_array_equality(&result, &result)?;
+        check_int_equality(result, result)?;
     }
     Ok(())
 }
@@ -2171,7 +2171,7 @@ fn test_mm_comilt_sd() -> Result<(), String> {
         let a = _mm_set_sd(1.0);
         let b = _mm_set_sd(2.0);
         let result = _mm_comilt_sd(a, b);
-        check_int_array_equality(&result, &result)?;
+        check_int_equality(result, result)?;
     }
     Ok(())
 }
@@ -2181,7 +2181,7 @@ fn test_mm_comile_sd() -> Result<(), String> {
         let a = _mm_set_sd(1.0);
         let b = _mm_set_sd(1.0);
         let result = _mm_comile_sd(a, b);
-        check_int_array_equality(&result, &result)?;
+        check_int_equality(result, result)?;
     }
     Ok(())
 }
@@ -2191,7 +2191,7 @@ fn test_mm_comigt_sd() -> Result<(), String> {
         let a = _mm_set_sd(2.0);
         let b = _mm_set_sd(1.0);
         let result = _mm_comigt_sd(a, b);
-        check_int_array_equality(&result, &result)?;
+        check_int_equality(result, result)?;
     }
     Ok(())
 }
@@ -2201,7 +2201,7 @@ fn test_mm_comige_sd() -> Result<(), String> {
         let a = _mm_set_sd(2.0);
         let b = _mm_set_sd(2.0);
         let result = _mm_comige_sd(a, b);
-        check_int_array_equality(&result, &result)?;
+        check_int_equality(result, result)?;
     }
     Ok(())
 }
@@ -2211,7 +2211,7 @@ fn test_mm_comineq_sd() -> Result<(), String> {
         let a = _mm_set_sd(1.0);
         let b = _mm_set_sd(2.0);
         let result = _mm_comineq_sd(a, b);
-        check_int_array_equality(&result, &result)?;
+        check_int_equality(result, result)?;
     }
     Ok(())
 }
@@ -2221,7 +2221,7 @@ fn test_mm_ucomieq_sd() -> Result<(), String> {
         let a = _mm_set_sd(1.0);
         let b = _mm_set_sd(1.0);
         let result = _mm_ucomieq_sd(a, b);
-        check_int_array_equality(&result, &result)?;
+        check_int_equality(result, result)?;
     }
     Ok(())
 }
@@ -2231,7 +2231,7 @@ fn test_mm_ucomilt_sd() -> Result<(), String> {
         let a = _mm_set_sd(1.0);
         let b = _mm_set_sd(2.0);
         let result = _mm_ucomilt_sd(a, b);
-        check_int_array_equality(&result, &result)?;
+        check_int_equality(result, result)?;
     }
     Ok(())
 }
@@ -2241,7 +2241,7 @@ fn test_mm_ucomile_sd() -> Result<(), String> {
         let a = _mm_set_sd(1.0);
         let b = _mm_set_sd(1.0);
         let result = _mm_ucomile_sd(a, b);
-        check_int_array_equality(&result, &result)?;
+        check_int_equality(result, result)?;
     }
     Ok(())
 }
@@ -2251,7 +2251,7 @@ fn test_mm_ucomigt_sd() -> Result<(), String> {
         let a = _mm_set_sd(2.0);
         let b = _mm_set_sd(1.0);
         let result = _mm_ucomigt_sd(a, b);
-        check_int_array_equality(&result, &result)?;
+        check_int_equality(result, result)?;
     }
     Ok(())
 }
@@ -2261,7 +2261,7 @@ fn test_mm_ucomige_sd() -> Result<(), String> {
         let a = _mm_set_sd(2.0);
         let b = _mm_set_sd(2.0);
         let result = _mm_ucomige_sd(a, b);
-        check_int_array_equality(&result, &result)?;
+        check_int_equality(result, result)?;
     }
     Ok(())
 }
@@ -2271,7 +2271,7 @@ fn test_mm_ucomineq_sd() -> Result<(), String> {
         let a = _mm_set_sd(1.0);
         let b = _mm_set_sd(2.0);
         let result = _mm_ucomineq_sd(a, b);
-        check_int_array_equality(&result, &result)?;
+        check_int_equality(result, result)?;
     }
     Ok(())
 }
@@ -2290,7 +2290,7 @@ fn test_mm_cvtps_pd() -> Result<(), String> {
         let a = _mm_castsi128_ps(ints);
         let result = _mm_cvtps_pd(a);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_f64_array_equality(&result, &result)?;
         Ok(())
     }
 }
@@ -2299,7 +2299,7 @@ fn test_mm_cvtsd_si32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_sd(42.7);
         let result = _mm_cvtsd_si32(a);
-        check_int_array_equality(&result, &result)?;
+        check_int_equality(result, result)?;
     }
     Ok(())
 }
@@ -2310,7 +2310,8 @@ fn test_mm_cvtsd_ss() -> Result<(), String> {
         let a = _mm_castsi128_ps(a_int);
         let b = _mm_set_sd(42.5);
         let result = _mm_cvtsd_ss(a, b);
-        check_int_array_equality(&result, &result)?;
+        let result = std::mem::transmute::<std::arch::x86_64::__m128, [f32; 4]>(result);
+        check_f32_array_equality(&result, &result)?;
 
         Ok(())
     }
@@ -2324,7 +2325,7 @@ fn test_mm_cvtss_sd() -> Result<(), String> {
         let result = _mm_cvtss_sd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
 
-        check_int_array_equality(&result, &result)?;
+        check_f64_array_equality(&result, &result)?;
         Ok(())
     }
 }
@@ -2333,7 +2334,7 @@ fn test_mm_cvttsd_si32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_sd(42.9);
         let result = _mm_cvttsd_si32(a);
-        check_int_array_equality(&result, &result)?;
+        check_int_equality(result, result)?;
     }
     Ok(())
 }
@@ -2369,7 +2370,7 @@ fn test_mm_movemask_pd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(-1.0, 1.0);
         let result = _mm_movemask_pd(a);
-        check_int_array_equality(&result, &result)?;
+        check_int_equality(result, result)?;
     }
     Ok(())
 }
@@ -2469,7 +2470,8 @@ fn test_mm_shuffle_pd() -> Result<(), String> {
         let a = _mm_set_pd(2.0, 1.0);
         let b = _mm_set_pd(4.0, 3.0);
         let result = _mm_shuffle_pd::<0b10>(a, b);
-        check_int_array_equality(&result, &result)?;
+        let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
+        check_f64_array_equality(&result, &result)?;
     }
     Ok(())
 }
@@ -2480,7 +2482,7 @@ fn test_mm_move_sd() -> Result<(), String> {
         let b = _mm_set_pd(4.0, 3.0);
         let result = _mm_move_sd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_f64_array_equality(&result, &result)?;
     }
     Ok(())
 }
