@@ -5,7 +5,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{check_int_array_equality, get_iterations, ExtensionTest, TestFunction};
+use crate::cpu::{check_array_equality, get_iterations, ExtensionTest, TestFunction};
 use crate::{get_four_random_floats, get_fuzzing};
 
 pub struct SSSE3;
@@ -40,7 +40,7 @@ fn test_mm_shuffle_epi8() -> Result<(), String> {
         let result = _mm_shuffle_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
 
-        check_int_array_equality(&result, &[15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0])?;
+        check_array_equality(&result, &[15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0])?;
     }
 
     if get_fuzzing() {
@@ -96,7 +96,7 @@ fn test_mm_abs_epi8() -> Result<(), String> {
         let a = _mm_set_epi8(-1, -2, 3, -4, 5, -6, 7, -8, 9, -10, 11, -12, 13, -14, 15, -16);
         let result = _mm_abs_epi8(a);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
-        check_int_array_equality(&result, &[16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1])?;
+        check_array_equality(&result, &[16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1])?;
     }
 
     Ok(())
@@ -107,7 +107,7 @@ fn test_mm_abs_epi16() -> Result<(), String> {
         let a = _mm_set_epi16(-1, -2, 3, -4, 5, -6, 7, -8);
         let result = _mm_abs_epi16(a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        check_int_array_equality(&result, &[8, 7, 6, 5, 4, 3, 2, 1])?;
+        check_array_equality(&result, &[8, 7, 6, 5, 4, 3, 2, 1])?;
     }
 
     Ok(())
@@ -118,7 +118,7 @@ fn test_mm_abs_epi32() -> Result<(), String> {
         let a = _mm_set_epi32(-1, -2, 3, -4);
         let result = _mm_abs_epi32(a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        check_int_array_equality(&result, &[4, 3, 2, 1])?;
+        check_array_equality(&result, &[4, 3, 2, 1])?;
     }
 
     Ok(())
@@ -130,7 +130,7 @@ fn test_mm_sign_epi8() -> Result<(), String> {
         let b = _mm_set_epi8(-1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1);
         let result = _mm_sign_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
-        check_int_array_equality(&result, &[16, -15, 14, -13, 12, -11, 10, -9, 8, -7, 6, -5, 4, -3, 2, -1])?;
+        check_array_equality(&result, &[16, -15, 14, -13, 12, -11, 10, -9, 8, -7, 6, -5, 4, -3, 2, -1])?;
     }
 
     Ok(())
@@ -142,7 +142,7 @@ fn test_mm_sign_epi16() -> Result<(), String> {
         let b = _mm_set_epi16(-1, 1, -1, 1, -1, 1, -1, 1);
         let result = _mm_sign_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        check_int_array_equality(&result, &[8, -7, 6, -5, 4, -3, 2, -1])?;
+        check_array_equality(&result, &[8, -7, 6, -5, 4, -3, 2, -1])?;
     }
 
     Ok(())
@@ -154,7 +154,7 @@ fn test_mm_sign_epi32() -> Result<(), String> {
         let b = _mm_set_epi32(-1, 1, -1, 1);
         let result = _mm_sign_epi32(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        check_int_array_equality(&result, &[4, -3, 2, -1])?;
+        check_array_equality(&result, &[4, -3, 2, -1])?;
     }
 
     Ok(())
@@ -167,7 +167,7 @@ fn test_mm_hadd_epi16() -> Result<(), String> {
         let result = _mm_hadd_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
 
-        check_int_array_equality(&result, &[15, 11, 7, 3, 31, 27, 23, 19])?;
+        check_array_equality(&result, &[15, 11, 7, 3, 31, 27, 23, 19])?;
     }
 
     Ok(())
@@ -180,7 +180,7 @@ fn test_mm_hadd_epi32() -> Result<(), String> {
         let result = _mm_hadd_epi32(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
 
-        check_int_array_equality(&result, &[7, 3, 15, 11])?;
+        check_array_equality(&result, &[7, 3, 15, 11])?;
     }
 
     Ok(())
@@ -193,7 +193,7 @@ fn test_mm_hsub_epi16() -> Result<(), String> {
         let result = _mm_hsub_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
 
-        check_int_array_equality(&result, &[1, 1, 1, 1, 1, 1, 1, 1])?;
+        check_array_equality(&result, &[1, 1, 1, 1, 1, 1, 1, 1])?;
     }
 
     Ok(())
@@ -206,7 +206,7 @@ fn test_mm_hsub_epi32() -> Result<(), String> {
         let result = _mm_hsub_epi32(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
 
-        check_int_array_equality(&result, &[1, 1, 1, 1])?;
+        check_array_equality(&result, &[1, 1, 1, 1])?;
     }
 
     Ok(())
@@ -219,7 +219,7 @@ fn test_mm_maddubs_epi16() -> Result<(), String> {
         let result = _mm_maddubs_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
 
-        check_int_array_equality(&result, &[31, 27, 23, 19, 15, 11, 7, 3])?;
+        check_array_equality(&result, &[31, 27, 23, 19, 15, 11, 7, 3])?;
     }
 
     Ok(())
@@ -232,7 +232,7 @@ fn test_mm_alignr_epi8() -> Result<(), String> {
         let result = _mm_alignr_epi8::<2>(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
 
-        check_int_array_equality(&result, &[18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 0, 1])?;
+        check_array_equality(&result, &[18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 0, 1])?;
     }
 
     Ok(())

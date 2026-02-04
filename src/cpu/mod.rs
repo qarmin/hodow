@@ -246,16 +246,20 @@ fn check_f64_array_equality(a: &[f64], b: &[f64]) -> Result<(), String> {
     Ok(())
 }
 
-fn check_int_array_equality<T: PartialEq + Debug>(a: &[T], b: &[T]) -> Result<(), String> {
-    if a.len() != b.len() {
-        return Err(format!("Arrays have different lengths: {} and {}", a.len(), b.len()));
+fn check_array_equality<T: PartialEq + Debug>(a: &[T], b: &[T]) -> Result<(), String> {
+    if a != b {
+        return Err(format!("Got {a:?}, expected {b:?}"));
     }
 
-    for i in 0..a.len() {
-        if a[i] != b[i] {
-            return Err(format!("Got {a:?}, expected {b:?}"));
-        }
-    }
+    // if a.len() != b.len() {
+    //     return Err(format!("Arrays have different lengths: {} and {}", a.len(), b.len()));
+    // }
+    //
+    // for i in 0..a.len() {
+    //     if a[i] != b[i] {
+    //         return Err(format!("Got {a:?}, expected {b:?}"));
+    //     }
+    // }
 
     Ok(())
 }

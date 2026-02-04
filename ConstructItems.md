@@ -14,7 +14,7 @@ I will think that is fixed if above command returns no results.
 # Do not check manually for equality of elements
 Use one of this methods from mod.rs:
 ```
-fn check_int_array_equality<T: PartialEq + Debug>(a: &[T], b: &[T]) -> Result<(), String> {
+fn check_array_equality<T: PartialEq + Debug>(a: &[T], b: &[T]) -> Result<(), String> {
 fn check_f32_array_equality(a: &[f32], b: &[f32]) -> Result<(), String> { 
 pub fn check_int_equality(a: i32, b: i32) -> Result<(), String> { 
 pub fn check_int_equality_with_error(a: i32, b: i32, error: i32) -> Result<(), String> {
@@ -43,7 +43,7 @@ Good
         let result = _mm_cmpgt_epi64(a, b);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
         let expected = [0, -1];
-        check_int_array_equality(&result, &expected)?; // It must check always entire array - without match etc - just one function with ?
+        check_array_equality(&result, &expected)?; // It must check always entire array - without match etc - just one function with ?
     }
 ```
 
@@ -59,13 +59,13 @@ Bad
 ```
 Also bad(ignoring result after check)
 ```
-if check_int_array_equality(&result, &a_bytes).is_ok() {
+if check_array_equality(&result, &a_bytes).is_ok() {
     return Err(format!("AES key gen assist produced same as input"));
 }
 ```
 Also bad(ignoring result after check) - Always check... result must be used, never anything else
 ```
-match check_int_array_equality(&result, &a_bytes).is_ok() {
+match check_array_equality(&result, &a_bytes).is_ok() {
     Ok() => Ok(()),
     Err(_) => return Err(format!("AES key gen assist produced same as input")),
 }
@@ -89,7 +89,7 @@ Good
         let result = _mm_cmpgt_epi64(a, b);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
         let expected = [0, -1];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
 ```
 # Include fuzzer for each extension test
@@ -102,7 +102,7 @@ fn test_mm_cmpgt_epi64() -> Result<(), String> {
         let result = _mm_cmpgt_epi64(a, b);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
         let expected = [0, -1];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
 
     Ok(())
@@ -117,7 +117,7 @@ fn test_mm_cmpgt_epi64() -> Result<(), String> {
         let result = _mm_cmpgt_epi64(a, b);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
         let expected = [0, -1];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -145,7 +145,7 @@ fn test_mm_aesimc_si128() -> Result<(), String> {
         let result = _mm_aesimc_si128(a);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
         let a_bytes = std::mem::transmute::<__m128i, [u8; 16]>(a);
-        if check_int_array_equality(&result, &a_bytes).is_ok() {
+        if check_array_equality(&result, &a_bytes).is_ok() {
             return Err(format!("AES inverse mix columns produced same as input"));
         }
         Ok(())
@@ -163,7 +163,7 @@ fn test_mm_aesimc_si128() -> Result<(), String> {
         let result = _mm_aesimc_si128(a);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
         let a_bytes = std::mem::transmute::<__m128i, [u8; 16]>(a);
-        check_int_array_equality(&result, &a_bytes)?;
+        check_array_equality(&result, &a_bytes)?;
         Ok(())
     }
 }

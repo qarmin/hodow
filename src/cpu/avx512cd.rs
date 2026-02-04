@@ -3,7 +3,7 @@ use std::arch::x86::*;
 #[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::*;
 
-use crate::cpu::{check_int_array_equality, check_int_equality, ExtensionTest, TestFunction};
+use crate::cpu::{check_array_equality, check_int_equality, ExtensionTest, TestFunction};
 
 pub struct AVX512CD;
 
@@ -38,7 +38,7 @@ fn test_mm_broadcastmw_epi32() -> Result<(), String> {
         let result = _mm_broadcastmw_epi32(k);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         let expected = [0b10101010, 0b10101010, 0b10101010, 0b10101010];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
         Ok(())
     }
 }
@@ -49,7 +49,7 @@ fn test_mm_broadcastmb_epi64() -> Result<(), String> {
         let result = _mm_broadcastmb_epi64(k.try_into().unwrap());
         let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
         let expected = [0xFF, 0xFF];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
         Ok(())
     }
 }
@@ -110,7 +110,7 @@ fn test_mm_lzcnt_epi32() -> Result<(), String> {
         let result = _mm_lzcnt_epi32(a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         let expected = [24, 24, 24, 24];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
         Ok(())
     }
 }
@@ -123,7 +123,7 @@ fn test_mm_mask_lzcnt_epi32() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         // Previously used individual checks; now use array comparison
         let expected = [100, 100, 24, 24];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
         Ok(())
     }
 }
@@ -135,7 +135,7 @@ fn test_mm_maskz_lzcnt_epi32() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         // check whole result array with plausible expected values
         let expected = [0, 0, 24, 24];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
         Ok(())
     }
 }
@@ -146,7 +146,7 @@ fn test_mm_lzcnt_epi64() -> Result<(), String> {
         let result = _mm_lzcnt_epi64(a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
         let expected = [56, 56];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
         Ok(())
     }
 }
@@ -158,7 +158,7 @@ fn test_mm_mask_lzcnt_epi64() -> Result<(), String> {
         let result = _mm_mask_lzcnt_epi64(src, 0b10, a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
         let expected = [100, 56];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
         Ok(())
     }
 }
@@ -169,7 +169,7 @@ fn test_mm_maskz_lzcnt_epi64() -> Result<(), String> {
         let result = _mm_maskz_lzcnt_epi64(0b10, a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
         let expected = [0, 56];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
         Ok(())
     }
 }

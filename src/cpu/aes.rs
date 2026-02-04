@@ -5,7 +5,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{check_int_array_equality, get_iterations, ExtensionTest, TestFunction};
+use crate::cpu::{check_array_equality, get_iterations, ExtensionTest, TestFunction};
 use crate::get_fuzzing;
 
 pub struct AES;
@@ -34,7 +34,7 @@ fn test_mm_aesdec_si128() -> Result<(), String> {
         let result = _mm_aesdec_si128(a, round_key);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
         let a_bytes = std::mem::transmute::<__m128i, [u8; 16]>(a);
-        check_int_array_equality(&result, &a_bytes)?;
+        check_array_equality(&result, &a_bytes)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -56,7 +56,7 @@ fn test_mm_aesdeclast_si128() -> Result<(), String> {
         let result = _mm_aesdeclast_si128(a, round_key);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
         let a_bytes = std::mem::transmute::<__m128i, [u8; 16]>(a);
-        check_int_array_equality(&result, &a_bytes)?;
+        check_array_equality(&result, &a_bytes)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -78,7 +78,7 @@ fn test_mm_aesenc_si128() -> Result<(), String> {
         let result = _mm_aesenc_si128(a, round_key);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
         let a_bytes = std::mem::transmute::<__m128i, [u8; 16]>(a);
-        check_int_array_equality(&result, &a_bytes)?;
+        check_array_equality(&result, &a_bytes)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -100,7 +100,7 @@ fn test_mm_aesenclast_si128() -> Result<(), String> {
         let result = _mm_aesenclast_si128(a, round_key);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
         let a_bytes = std::mem::transmute::<__m128i, [u8; 16]>(a);
-        check_int_array_equality(&result, &a_bytes)?;
+        check_array_equality(&result, &a_bytes)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -121,7 +121,7 @@ fn test_mm_aesimc_si128() -> Result<(), String> {
         let result = _mm_aesimc_si128(a);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
         let a_bytes = std::mem::transmute::<__m128i, [u8; 16]>(a);
-        check_int_array_equality(&result, &a_bytes)?;
+        check_array_equality(&result, &a_bytes)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -141,7 +141,7 @@ fn test_mm_aeskeygenassist_si128() -> Result<(), String> {
         let result = _mm_aeskeygenassist_si128::<0x01>(a);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
         let a_bytes = std::mem::transmute::<__m128i, [u8; 16]>(a);
-        check_int_array_equality(&result, &a_bytes)?;
+        check_array_equality(&result, &a_bytes)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

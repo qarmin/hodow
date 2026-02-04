@@ -6,7 +6,7 @@ use std::arch::x86_64::*;
 use log::info;
 
 use crate::cpu::{
-    check_f32_array_equality, check_f64_array_equality, check_float_equality, check_int_array_equality, check_int_equality, get_iterations, ExtensionTest, TestFunction,
+    check_f32_array_equality, check_f64_array_equality, check_float_equality, check_array_equality, check_int_equality, get_iterations, ExtensionTest, TestFunction,
 };
 use crate::{get_four_random_floats, get_fuzzing, get_random_float};
 
@@ -155,9 +155,7 @@ fn test_mm_set_pd() -> Result<(), String> {
             unsafe {
                 let a = get_random_float() as f64;
                 let b = get_random_float() as f64;
-                let result = _mm_set_pd(b, a);
-                let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-                check_f64_array_equality(&result, &[1.0, 2.0])?;
+                let _result = _mm_set_pd(b, a);
             }
         }
     }
@@ -177,9 +175,7 @@ fn test_mm_set1_pd() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let value = get_random_float() as f64;
-                let result = _mm_set1_pd(value);
-                let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-                check_f64_array_equality(&result, &[1.0, 2.0])?;
+                let _result = _mm_set1_pd(value);
             }
         }
     }
@@ -191,7 +187,7 @@ fn test_mm_setzero_pd() -> Result<(), String> {
     unsafe {
         let result = _mm_setzero_pd();
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[1.0, 2.0])?;
+        check_f64_array_equality(&result, &[0.0, 0.0])?;
     }
     Ok(())
 }
@@ -202,7 +198,7 @@ fn test_mm_add_pd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 4.0);
         let result = _mm_add_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[1.0, 2.0])?;
+        check_f64_array_equality(&result, &[6.0, 4.0])?;
     }
 
     if get_fuzzing() {
@@ -276,7 +272,7 @@ fn test_mm_load_pd() -> Result<(), String> {
     struct AlignedData([f64; 2]);
 
     unsafe {
-        let data = AlignedData([1.0, 2.0]);
+        let data = AlignedData([15.0, 62.0]);
         let result = _mm_load_pd(data.0.as_ptr());
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
         check_f64_array_equality(&result, &[1.0, 2.0])?;
@@ -303,7 +299,7 @@ fn test_mm_loadu_pd() -> Result<(), String> {
         let result = _mm_loadu_pd(data.as_ptr());
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
 
-        check_f64_array_equality(&result, &[1.0, 2.0])?;
+        check_f64_array_equality(&result, &[57649.5546875, 2390435.25])?;
     }
 
     if get_fuzzing() {
@@ -331,7 +327,7 @@ fn test_mm_store_pd() -> Result<(), String> {
         let mut result = AlignedData([0.0; 2]);
         let vec = _mm_loadu_pd(data.0.as_ptr());
         _mm_store_pd(result.0.as_mut_ptr(), vec);
-        check_f64_array_equality(&result.0, &[1.0, 2.0])?;
+        check_f64_array_equality(&result.0, &[10627.1748046875, 4050812.75])?;
     }
 
     if get_fuzzing() {
@@ -377,7 +373,7 @@ fn test_mm_set_epi32() -> Result<(), String> {
         let result = _mm_set_epi32(1, 2, 3, 4);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         let expected = [4, 3, 2, 1];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -387,7 +383,7 @@ fn test_mm_set_epi32() -> Result<(), String> {
                 let values = [get_random_float() as i32, get_random_float() as i32, get_random_float() as i32, get_random_float() as i32];
                 let result = _mm_set_epi32(values[3], values[2], values[1], values[0]);
                 let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-                check_int_array_equality(&result, &values)?;
+                check_array_equality(&result, &values)?;
             }
         }
     }
@@ -400,7 +396,7 @@ fn test_mm_set1_epi32() -> Result<(), String> {
         let result = _mm_set1_epi32(42);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         let expected = [42, 42, 42, 42];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -411,7 +407,7 @@ fn test_mm_set1_epi32() -> Result<(), String> {
                 let result = _mm_set1_epi32(value);
                 let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
                 let expected = [value, value, value, value];
-                check_int_array_equality(&result, &expected)?;
+                check_array_equality(&result, &expected)?;
             }
         }
     }
@@ -424,7 +420,7 @@ fn test_mm_setzero_si128() -> Result<(), String> {
         let result = _mm_setzero_si128();
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         let expected = [0, 0, 0, 0];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -436,7 +432,7 @@ fn test_mm_add_epi32() -> Result<(), String> {
         let result = _mm_add_epi32(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         let expected = [12, 10, 8, 6];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -460,7 +456,7 @@ fn test_mm_sub_epi32() -> Result<(), String> {
         let result = _mm_sub_epi32(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         let expected = [32, 23, 14, 5];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -484,7 +480,7 @@ fn test_mm_and_si128() -> Result<(), String> {
         let result = _mm_and_si128(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         let expected = [0x00, 0x00, 0x00, 0xFF];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -508,7 +504,7 @@ fn test_mm_or_si128() -> Result<(), String> {
         let result = _mm_or_si128(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         let expected = [0x00, 0x00, 0xFF, 0xFF];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -532,7 +528,7 @@ fn test_mm_xor_si128() -> Result<(), String> {
         let result = _mm_xor_si128(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         let expected = [0x00, 0xFF, 0xFF, 0x00];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -556,7 +552,7 @@ fn test_mm_cmpeq_epi32() -> Result<(), String> {
         let result = _mm_cmpeq_epi32(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         let expected = [-1, -1, -1, -1];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -577,7 +573,7 @@ fn test_mm_cvtsi32_si128() -> Result<(), String> {
         let result = _mm_cvtsi32_si128(42);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         let expected = [42, 0, 0, 0];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
 
     if get_fuzzing() {
@@ -642,7 +638,7 @@ fn test_mm_add_epi8() -> Result<(), String> {
         let result = _mm_add_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
         let expected = [17; 16];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -654,7 +650,7 @@ fn test_mm_add_epi16() -> Result<(), String> {
         let result = _mm_add_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         let expected = [9; 8];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -665,7 +661,7 @@ fn test_mm_add_epi64() -> Result<(), String> {
         let b = _mm_set_epi64x(50, 75);
         let result = _mm_add_epi64(a, b);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -678,7 +674,7 @@ fn test_mm_adds_epi8() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
 
         let expected = [127_i8; 16];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -691,7 +687,7 @@ fn test_mm_adds_epi16() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
 
         let expected = [32767_i16; 8];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -704,7 +700,7 @@ fn test_mm_adds_epu8() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
 
         let expected = [255_u8; 16];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -717,7 +713,7 @@ fn test_mm_adds_epu16() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
 
         let expected = [65535_u16; 8];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -729,7 +725,7 @@ fn test_mm_subs_epi8() -> Result<(), String> {
         let result = _mm_sub_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
         let expected = [10; 16];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -741,7 +737,7 @@ fn test_mm_sub_epi16() -> Result<(), String> {
         let result = _mm_sub_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         let expected = [70; 8];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -752,7 +748,7 @@ fn test_mm_sub_epi64() -> Result<(), String> {
         let b = _mm_set_epi64x(30, 50);
         let result = _mm_sub_epi64(a, b);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -765,7 +761,7 @@ fn test_mm_subs_epi16() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
 
         let expected = [-32768_i16; 8];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -778,7 +774,7 @@ fn test_mm_subs_epu8() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
 
         let expected = [0_u8; 16];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -791,7 +787,7 @@ fn test_mm_subs_epu16() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
 
         let expected = [0_u16; 8];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -804,7 +800,7 @@ fn test_mm_avg_epu8() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
 
         let expected = [75_u8; 16];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -817,7 +813,7 @@ fn test_mm_avg_epu16() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
 
         let expected = [750_u16; 8];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -830,7 +826,7 @@ fn test_mm_madd_epi16() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
 
         let expected = [22, 38, 38, 22];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -843,7 +839,7 @@ fn test_mm_max_epi16() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
 
         let expected = [80, 70, 60, 50, 40, 30, 20, 10];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -855,7 +851,7 @@ fn test_mm_max_epu8() -> Result<(), String> {
         let result = _mm_max_epu8(a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
         let expected = [16, 15, 14, 13, 12, 11, 10, 9, 9, 10, 11, 12, 13, 14, 15, 16];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -867,7 +863,7 @@ fn test_mm_min_epi16() -> Result<(), String> {
         let result = _mm_min_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         let expected = [8, 7, 6, 5, 4, 3, 2, 1];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -879,7 +875,7 @@ fn test_mm_min_epu8() -> Result<(), String> {
         let result = _mm_min_epu8(a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
         let expected = [1, 2, 3, 4, 5, 6, 7, 8, 8, 7, 6, 5, 4, 3, 2, 1];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -891,7 +887,7 @@ fn test_mm_mulhi_epi16() -> Result<(), String> {
         let result = _mm_mulhi_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
 
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -903,7 +899,7 @@ fn test_mm_mulhi_epu16() -> Result<(), String> {
         let result = _mm_mulhi_epu16(a, b);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
 
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -915,7 +911,7 @@ fn test_mm_mullo_epi16() -> Result<(), String> {
         let result = _mm_mullo_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         let expected = [50; 8];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -927,7 +923,7 @@ fn test_mm_mul_epu32() -> Result<(), String> {
         let result = _mm_mul_epu32(a, b);
         let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
 
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -939,7 +935,7 @@ fn test_mm_sad_epu8() -> Result<(), String> {
         let result = _mm_sad_epu8(a, b);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
 
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -950,7 +946,7 @@ fn test_mm_slli_si128() -> Result<(), String> {
         let result = _mm_slli_si128::<4>(a);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
 
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -961,7 +957,7 @@ fn test_mm_srli_si128() -> Result<(), String> {
         let result = _mm_srli_si128::<4>(a);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
 
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -972,7 +968,7 @@ fn test_mm_slli_epi16() -> Result<(), String> {
         let result = _mm_slli_epi16::<2>(a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         let expected = [4; 8];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -983,7 +979,7 @@ fn test_mm_slli_epi32() -> Result<(), String> {
         let result = _mm_slli_epi32::<3>(a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         let expected = [8; 4];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -994,7 +990,7 @@ fn test_mm_slli_epi64() -> Result<(), String> {
         let result = _mm_slli_epi64::<4>(a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
         let expected = [16; 2];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1005,7 +1001,7 @@ fn test_mm_srai_epi16() -> Result<(), String> {
         let result = _mm_srai_epi16::<2>(a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         let expected = [-4; 8];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1016,7 +1012,7 @@ fn test_mm_srai_epi32() -> Result<(), String> {
         let result = _mm_srai_epi32::<3>(a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         let expected = [-4; 4];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1027,7 +1023,7 @@ fn test_mm_srli_epi16() -> Result<(), String> {
         let result = _mm_srli_epi16::<2>(a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         let expected = [4; 8];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1038,7 +1034,7 @@ fn test_mm_srli_epi32() -> Result<(), String> {
         let result = _mm_srli_epi32::<3>(a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         let expected = [4; 4];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1049,7 +1045,7 @@ fn test_mm_srli_epi64() -> Result<(), String> {
         let result = _mm_srli_epi64::<4>(a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
         let expected = [4; 2];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1061,7 +1057,7 @@ fn test_mm_cmpeq_epi8() -> Result<(), String> {
         let result = _mm_cmpeq_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
         let expected = [-1; 16];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1073,7 +1069,7 @@ fn test_mm_cmpeq_epi16() -> Result<(), String> {
         let result = _mm_cmpeq_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         let expected = [-1; 8];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1085,7 +1081,7 @@ fn test_mm_cmpgt_epi8() -> Result<(), String> {
         let result = _mm_cmpgt_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
         let expected = [-1; 16];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1097,7 +1093,7 @@ fn test_mm_cmpgt_epi16() -> Result<(), String> {
         let result = _mm_cmpgt_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         let expected = [-1; 8];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1109,7 +1105,7 @@ fn test_mm_cmpgt_epi32() -> Result<(), String> {
         let result = _mm_cmpgt_epi32(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         let expected = [-1; 4];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1121,7 +1117,7 @@ fn test_mm_cmplt_epi8() -> Result<(), String> {
         let result = _mm_cmplt_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
         let expected = [-1; 16];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1133,7 +1129,7 @@ fn test_mm_cmplt_epi16() -> Result<(), String> {
         let result = _mm_cmplt_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         let expected = [-1; 8];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1145,7 +1141,7 @@ fn test_mm_cmplt_epi32() -> Result<(), String> {
         let result = _mm_cmplt_epi32(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         let expected = [-1; 4];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1155,7 +1151,7 @@ fn test_mm_set_epi8() -> Result<(), String> {
         let result = _mm_set_epi8(15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
         let expected = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1165,7 +1161,7 @@ fn test_mm_set_epi16() -> Result<(), String> {
         let result = _mm_set_epi16(7, 6, 5, 4, 3, 2, 1, 0);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         let expected = [0, 1, 2, 3, 4, 5, 6, 7];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1174,7 +1170,7 @@ fn test_mm_set_epi64x() -> Result<(), String> {
     unsafe {
         let result = _mm_set_epi64x(100, 200);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1184,7 +1180,7 @@ fn test_mm_set1_epi8() -> Result<(), String> {
         let result = _mm_set1_epi8(42);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
         let expected = [42; 16];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1194,7 +1190,7 @@ fn test_mm_set1_epi16() -> Result<(), String> {
         let result = _mm_set1_epi16(42);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         let expected = [42; 8];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1204,7 +1200,7 @@ fn test_mm_set1_epi64x() -> Result<(), String> {
         let result = _mm_set1_epi64x(42);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
         let expected = [42; 2];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1214,7 +1210,7 @@ fn test_mm_setr_epi8() -> Result<(), String> {
         let result = _mm_setr_epi8(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
         let expected = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1224,7 +1220,7 @@ fn test_mm_setr_epi16() -> Result<(), String> {
         let result = _mm_setr_epi16(0, 1, 2, 3, 4, 5, 6, 7);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         let expected = [0, 1, 2, 3, 4, 5, 6, 7];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1234,7 +1230,7 @@ fn test_mm_setr_epi32() -> Result<(), String> {
         let result = _mm_setr_epi32(0, 1, 2, 3);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         let expected = [0, 1, 2, 3];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1244,7 +1240,7 @@ fn test_mm_loadl_epi64() -> Result<(), String> {
         let data: [i64; 2] = [42, 100];
         let result = _mm_loadl_epi64(data.as_ptr() as *const __m128i);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1258,7 +1254,7 @@ fn test_mm_load_si128() -> Result<(), String> {
         let data = Aligned([1, 2, 3, 4]);
         let result = _mm_load_si128(data.0.as_ptr() as *const __m128i);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1268,7 +1264,7 @@ fn test_mm_loadu_si128() -> Result<(), String> {
         let data: [i32; 4] = [10, 20, 30, 40];
         let result = _mm_loadu_si128(data.as_ptr() as *const __m128i);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1282,7 +1278,7 @@ fn test_mm_store_si128() -> Result<(), String> {
         let mut data = Aligned([0; 4]);
         let vec = _mm_set_epi32(4, 3, 2, 1);
         _mm_store_si128(data.0.as_mut_ptr() as *mut __m128i, vec);
-        check_int_array_equality(&data.0, &data.0)?;
+        check_array_equality(&data.0, &data.0)?;
     }
     Ok(())
 }
@@ -1292,7 +1288,7 @@ fn test_mm_storeu_si128() -> Result<(), String> {
         let mut data: [i32; 4] = [0; 4];
         let vec = _mm_set_epi32(40, 30, 20, 10);
         _mm_storeu_si128(data.as_mut_ptr() as *mut __m128i, vec);
-        check_int_array_equality(&data, &data)?;
+        check_array_equality(&data, &data)?;
     }
     Ok(())
 }
@@ -1302,7 +1298,7 @@ fn test_mm_storel_epi64() -> Result<(), String> {
         let mut data: [i64; 2] = [0; 2];
         let vec = _mm_set_epi64x(100, 42);
         _mm_storel_epi64(data.as_mut_ptr() as *mut __m128i, vec);
-        check_int_array_equality(&data, &data)?;
+        check_array_equality(&data, &data)?;
     }
     Ok(())
 }
@@ -1314,7 +1310,7 @@ fn test_mm_packs_epi16() -> Result<(), String> {
         let result = _mm_packs_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
 
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1326,7 +1322,7 @@ fn test_mm_packs_epi32() -> Result<(), String> {
         let result = _mm_packs_epi32(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
 
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1338,7 +1334,7 @@ fn test_mm_packus_epi16() -> Result<(), String> {
         let result = _mm_packus_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
 
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1350,7 +1346,7 @@ fn test_mm_unpackhi_epi8() -> Result<(), String> {
         let result = _mm_unpackhi_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
 
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1362,7 +1358,7 @@ fn test_mm_unpackhi_epi16() -> Result<(), String> {
         let result = _mm_unpackhi_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
 
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1374,7 +1370,7 @@ fn test_mm_unpackhi_epi32() -> Result<(), String> {
         let result = _mm_unpackhi_epi32(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
 
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1386,7 +1382,7 @@ fn test_mm_unpackhi_epi64() -> Result<(), String> {
         let result = _mm_unpackhi_epi64(a, b);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
 
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1398,7 +1394,7 @@ fn test_mm_unpacklo_epi8() -> Result<(), String> {
         let result = _mm_unpacklo_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
 
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1410,7 +1406,7 @@ fn test_mm_unpacklo_epi16() -> Result<(), String> {
         let result = _mm_unpacklo_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
 
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1422,7 +1418,7 @@ fn test_mm_unpacklo_epi32() -> Result<(), String> {
         let result = _mm_unpacklo_epi32(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
 
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1434,7 +1430,7 @@ fn test_mm_unpacklo_epi64() -> Result<(), String> {
         let result = _mm_unpacklo_epi64(a, b);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
 
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1444,7 +1440,7 @@ fn test_mm_shuffle_epi32() -> Result<(), String> {
         let a = _mm_set_epi32(3, 2, 1, 0);
         let result = _mm_shuffle_epi32::<0b00011011>(a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1455,7 +1451,7 @@ fn test_mm_shufflehi_epi16() -> Result<(), String> {
         let result = _mm_shufflehi_epi16::<0b00011011>(a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
 
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1466,7 +1462,7 @@ fn test_mm_shufflelo_epi16() -> Result<(), String> {
         let result = _mm_shufflelo_epi16::<0b00011011>(a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
 
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1475,7 +1471,7 @@ fn test_mm_extract_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi16(7, 6, 5, 4, 3, 2, 1, 0);
         let result = _mm_extract_epi16::<3>(a);
-        check_int_equality(result, 42)?;
+        check_int_equality(result, 3)?;
     }
     Ok(())
 }
@@ -1485,7 +1481,7 @@ fn test_mm_insert_epi16() -> Result<(), String> {
         let a = _mm_set_epi16(7, 6, 5, 4, 3, 2, 1, 0);
         let result = _mm_insert_epi16::<3>(a, 99);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1505,7 +1501,7 @@ fn test_mm_cvtepi32_pd() -> Result<(), String> {
         let a = _mm_set_epi32(0, 0, 20, 10);
         let result = _mm_cvtepi32_pd(a);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &result)?;
+        check_f64_array_equality(&result, &[0.0])?;
     }
     Ok(())
 }
@@ -1526,7 +1522,7 @@ fn test_mm_cvtpd_epi32() -> Result<(), String> {
         let result = _mm_cvtpd_epi32(a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
 
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1537,7 +1533,7 @@ fn test_mm_cvtps_epi32() -> Result<(), String> {
         let ps = _mm_cvtpd_ps(a);
         let result = _mm_cvtps_epi32(ps);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1548,7 +1544,7 @@ fn test_mm_cvttpd_epi32() -> Result<(), String> {
         let result = _mm_cvttpd_epi32(a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
 
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1560,7 +1556,7 @@ fn test_mm_cvttps_epi32() -> Result<(), String> {
         let result = _mm_cvttps_epi32(ps);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
 
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1593,7 +1589,7 @@ fn test_mm_div_pd() -> Result<(), String> {
         let b = _mm_set_pd(4.0, 2.0);
         let result = _mm_div_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0.0])?;
     }
     Ok(())
 }
@@ -1615,7 +1611,7 @@ fn test_mm_max_pd() -> Result<(), String> {
         let b = _mm_set_pd(8.0, 7.0);
         let result = _mm_max_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0.0])?;
     }
     Ok(())
 }
@@ -1637,7 +1633,7 @@ fn test_mm_min_pd() -> Result<(), String> {
         let b = _mm_set_pd(8.0, 7.0);
         let result = _mm_min_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0.0])?;
     }
     Ok(())
 }
@@ -1669,7 +1665,7 @@ fn test_mm_sqrt_pd() -> Result<(), String> {
         let a = _mm_set_pd(16.0, 25.0);
         let result = _mm_sqrt_pd(a);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0.0])?;
     }
     Ok(())
 }
@@ -1728,7 +1724,7 @@ fn test_mm_andnot_si128() -> Result<(), String> {
         let result = _mm_andnot_si128(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
 
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1738,7 +1734,7 @@ fn test_mm_bslli_si128() -> Result<(), String> {
         let a = _mm_set_epi32(4, 3, 2, 1);
         let result = _mm_bslli_si128::<4>(a);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1748,7 +1744,7 @@ fn test_mm_bsrli_si128() -> Result<(), String> {
         let a = _mm_set_epi32(4, 3, 2, 1);
         let result = _mm_bsrli_si128::<4>(a);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1760,7 +1756,7 @@ fn test_mm_sll_epi16() -> Result<(), String> {
         let result = _mm_sll_epi16(a, count);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         let expected = [4; 8];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1772,7 +1768,7 @@ fn test_mm_sll_epi32() -> Result<(), String> {
         let result = _mm_sll_epi32(a, count);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         let expected = [8; 4];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1784,7 +1780,7 @@ fn test_mm_sll_epi64() -> Result<(), String> {
         let result = _mm_sll_epi64(a, count);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
         let expected = [16; 2];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1796,7 +1792,7 @@ fn test_mm_sra_epi16() -> Result<(), String> {
         let result = _mm_sra_epi16(a, count);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         let expected = [-4; 8];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1808,7 +1804,7 @@ fn test_mm_sra_epi32() -> Result<(), String> {
         let result = _mm_sra_epi32(a, count);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         let expected = [-4; 4];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1820,7 +1816,7 @@ fn test_mm_srl_epi16() -> Result<(), String> {
         let result = _mm_srl_epi16(a, count);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         let expected = [4; 8];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1832,7 +1828,7 @@ fn test_mm_srl_epi32() -> Result<(), String> {
         let result = _mm_srl_epi32(a, count);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         let expected = [4; 4];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1844,7 +1840,7 @@ fn test_mm_srl_epi64() -> Result<(), String> {
         let result = _mm_srl_epi64(a, count);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
         let expected = [4; 2];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
     }
     Ok(())
 }
@@ -1855,7 +1851,7 @@ fn test_mm_cvtsi32_sd() -> Result<(), String> {
         let b = 42i32;
         let result = _mm_cvtsi32_sd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &result)?;
+        check_f64_array_equality(&result, &[0.0])?;
     }
     Ok(())
 }
@@ -1895,7 +1891,7 @@ fn test_mm_move_epi64() -> Result<(), String> {
         let a = _mm_set_epi64x(100, 42);
         let result = _mm_move_epi64(a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1906,7 +1902,7 @@ fn test_mm_cmpeq_sd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 1.0);
         let result = _mm_cmpeq_sd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1917,7 +1913,7 @@ fn test_mm_cmplt_sd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 2.0);
         let result = _mm_cmplt_sd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1928,7 +1924,7 @@ fn test_mm_cmple_sd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 1.0);
         let result = _mm_cmple_sd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1939,7 +1935,7 @@ fn test_mm_cmpgt_sd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 2.0);
         let result = _mm_cmpgt_sd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1950,7 +1946,7 @@ fn test_mm_cmpge_sd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 2.0);
         let result = _mm_cmpge_sd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1961,7 +1957,7 @@ fn test_mm_cmpord_sd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 2.0);
         let result = _mm_cmpord_sd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1972,7 +1968,7 @@ fn test_mm_cmpunord_sd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 2.0);
         let result = _mm_cmpunord_sd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1983,7 +1979,7 @@ fn test_mm_cmpneq_sd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 2.0);
         let result = _mm_cmpneq_sd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -1994,7 +1990,7 @@ fn test_mm_cmpnlt_sd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 1.0);
         let result = _mm_cmpnlt_sd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -2005,7 +2001,7 @@ fn test_mm_cmpnle_sd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 1.0);
         let result = _mm_cmpnle_sd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -2016,7 +2012,7 @@ fn test_mm_cmpngt_sd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 2.0);
         let result = _mm_cmpngt_sd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -2027,7 +2023,7 @@ fn test_mm_cmpnge_sd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 2.0);
         let result = _mm_cmpnge_sd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -2038,7 +2034,7 @@ fn test_mm_cmpeq_pd() -> Result<(), String> {
         let b = _mm_set_pd(2.0, 1.0);
         let result = _mm_cmpeq_pd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -2049,7 +2045,7 @@ fn test_mm_cmplt_pd() -> Result<(), String> {
         let b = _mm_set_pd(2.0, 2.0);
         let result = _mm_cmplt_pd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -2060,7 +2056,7 @@ fn test_mm_cmple_pd() -> Result<(), String> {
         let b = _mm_set_pd(2.0, 1.0);
         let result = _mm_cmple_pd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -2071,7 +2067,7 @@ fn test_mm_cmpgt_pd() -> Result<(), String> {
         let b = _mm_set_pd(2.0, 2.0);
         let result = _mm_cmpgt_pd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -2082,7 +2078,7 @@ fn test_mm_cmpge_pd() -> Result<(), String> {
         let b = _mm_set_pd(2.0, 2.0);
         let result = _mm_cmpge_pd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -2093,7 +2089,7 @@ fn test_mm_cmpord_pd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 4.0);
         let result = _mm_cmpord_pd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -2104,7 +2100,7 @@ fn test_mm_cmpunord_pd() -> Result<(), String> {
         let b = _mm_set_pd(1.0, 2.0);
         let result = _mm_cmpunord_pd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -2115,7 +2111,7 @@ fn test_mm_cmpneq_pd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 4.0);
         let result = _mm_cmpneq_pd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -2126,7 +2122,7 @@ fn test_mm_cmpnlt_pd() -> Result<(), String> {
         let b = _mm_set_pd(1.0, 2.0);
         let result = _mm_cmpnlt_pd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -2137,7 +2133,7 @@ fn test_mm_cmpnle_pd() -> Result<(), String> {
         let b = _mm_set_pd(2.0, 2.0);
         let result = _mm_cmpnle_pd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -2148,7 +2144,7 @@ fn test_mm_cmpngt_pd() -> Result<(), String> {
         let b = _mm_set_pd(2.0, 3.0);
         let result = _mm_cmpngt_pd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -2159,7 +2155,7 @@ fn test_mm_cmpnge_pd() -> Result<(), String> {
         let b = _mm_set_pd(2.0, 2.0);
         let result = _mm_cmpnge_pd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0])?;
     }
     Ok(())
 }
@@ -2298,7 +2294,7 @@ fn test_mm_cvtps_pd() -> Result<(), String> {
         let a = _mm_castsi128_ps(ints);
         let result = _mm_cvtps_pd(a);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &result)?;
+        check_f64_array_equality(&result, &[0.0])?;
         Ok(())
     }
 }
@@ -2333,7 +2329,7 @@ fn test_mm_cvtss_sd() -> Result<(), String> {
         let result = _mm_cvtss_sd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
 
-        check_f64_array_equality(&result, &result)?;
+        check_f64_array_equality(&result, &[0.0])?;
         Ok(())
     }
 }
@@ -2351,7 +2347,7 @@ fn test_mm_set_sd() -> Result<(), String> {
     unsafe {
         let result = _mm_set_sd(42.5);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &result)?;
+        check_f64_array_equality(&result, &[0.0])?;
     }
     Ok(())
 }
@@ -2360,7 +2356,7 @@ fn test_mm_set_pd1() -> Result<(), String> {
     unsafe {
         let result = _mm_set_pd1(42.5);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &result)?;
+        check_f64_array_equality(&result, &[1.0, 2.0])?;
     }
     Ok(())
 }
@@ -2369,7 +2365,7 @@ fn test_mm_setr_pd() -> Result<(), String> {
     unsafe {
         let result = _mm_setr_pd(1.0, 2.0);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &result)?;
+        check_f64_array_equality(&result, &[0.0])?;
     }
     Ok(())
 }
@@ -2388,7 +2384,7 @@ fn test_mm_load_sd() -> Result<(), String> {
         let mem = [42.5f64, 1.0];
         let result = _mm_load_sd(mem.as_ptr());
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &result)?;
+        check_f64_array_equality(&result, &[0.0])?;
     }
     Ok(())
 }
@@ -2399,7 +2395,7 @@ fn test_mm_loadh_pd() -> Result<(), String> {
         let mem = [42.5f64];
         let result = _mm_loadh_pd(a, mem.as_ptr());
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &result)?;
+        check_f64_array_equality(&result, &[0.0])?;
     }
     Ok(())
 }
@@ -2410,7 +2406,7 @@ fn test_mm_loadl_pd() -> Result<(), String> {
         let mem = [42.5f64];
         let result = _mm_loadl_pd(a, mem.as_ptr());
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &result)?;
+        check_f64_array_equality(&result, &[0.0])?;
     }
     Ok(())
 }
@@ -2426,10 +2422,10 @@ fn test_mm_stream_pd() -> Result<(), String> {
 
 fn test_mm_store_sd() -> Result<(), String> {
     unsafe {
-        let mut mem = [0.0f64];
+        let mut mem = [20.0f64];
         let a = _mm_set_sd(42.5);
         _mm_store_sd(mem.as_mut_ptr(), a);
-        check_f64_array_equality(&mem, &mem)?;
+        check_f64_array_equality(&mem, &[20.0])?;
     }
     Ok(())
 }
@@ -2479,7 +2475,7 @@ fn test_mm_shuffle_pd() -> Result<(), String> {
         let b = _mm_set_pd(4.0, 3.0);
         let result = _mm_shuffle_pd::<0b10>(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &result)?;
+        check_f64_array_equality(&result, &[0.0])?;
     }
     Ok(())
 }
@@ -2490,7 +2486,7 @@ fn test_mm_move_sd() -> Result<(), String> {
         let b = _mm_set_pd(4.0, 3.0);
         let result = _mm_move_sd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &result)?;
+        check_f64_array_equality(&result, &[0.0])?;
     }
     Ok(())
 }
@@ -2530,7 +2526,7 @@ fn test_mm_castps_si128() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
 
         let expected = [0x3f800000, 0x40000000, 0x40400000, 0x40800000];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
         Ok(())
     }
 }
@@ -2571,7 +2567,7 @@ fn test_mm_unpackhi_pd() -> Result<(), String> {
         let b = _mm_set_pd(4.0, 3.0);
         let result = _mm_unpackhi_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0.0])?;
     }
     Ok(())
 }
@@ -2582,7 +2578,7 @@ fn test_mm_unpacklo_pd() -> Result<(), String> {
         let b = _mm_set_pd(4.0, 3.0);
         let result = _mm_unpacklo_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_int_array_equality(&result, &result)?;
+        check_array_equality(&result, &[0.0])?;
     }
     Ok(())
 }

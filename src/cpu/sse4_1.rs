@@ -5,7 +5,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{check_f32_array_equality, check_float_equality, check_int_array_equality, check_int_equality, get_iterations, ExtensionTest, TestFunction, DEFAULT_FLOAT_DIFF};
+use crate::cpu::{check_f32_array_equality, check_float_equality, check_array_equality, check_int_equality, get_iterations, ExtensionTest, TestFunction, DEFAULT_FLOAT_DIFF};
 use crate::{get_four_random_floats, get_fuzzing};
 
 pub struct SSE41;
@@ -121,7 +121,7 @@ fn test_mm_max_epi32() -> Result<(), String> {
         let b = _mm_set_epi32(2, 3, -4, 5);
         let result = _mm_max_epi32(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        check_int_array_equality(&result, &[5, 3, 3, 2])?;
+        check_array_equality(&result, &[5, 3, 3, 2])?;
     }
 
     if get_fuzzing() {
@@ -144,7 +144,7 @@ fn test_mm_min_epi32() -> Result<(), String> {
         let b = _mm_set_epi32(2, 3, -4, 5);
         let result = _mm_min_epi32(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        check_int_array_equality(&result, &[4, -4, -2, 1])?;
+        check_array_equality(&result, &[4, -4, -2, 1])?;
     }
 
     if get_fuzzing() {
@@ -167,7 +167,7 @@ fn test_mm_max_epi8() -> Result<(), String> {
         let b = _mm_set_epi8(16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1);
         let result = _mm_max_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
-        check_int_array_equality(&result, &[16, 15, 14, 13, 12, 11, 10, 9, 9, 10, 11, 12, 13, 14, 15, 16])?;
+        check_array_equality(&result, &[16, 15, 14, 13, 12, 11, 10, 9, 9, 10, 11, 12, 13, 14, 15, 16])?;
     }
 
     if get_fuzzing() {
@@ -224,7 +224,7 @@ fn test_mm_min_epi8() -> Result<(), String> {
         let b = _mm_set_epi8(16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1);
         let result = _mm_min_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
-        check_int_array_equality(&result, &[1, 2, 3, 4, 5, 6, 7, 8, 8, 7, 6, 5, 4, 3, 2, 1])?;
+        check_array_equality(&result, &[1, 2, 3, 4, 5, 6, 7, 8, 8, 7, 6, 5, 4, 3, 2, 1])?;
     }
 
     if get_fuzzing() {
@@ -281,7 +281,7 @@ fn test_mm_mullo_epi32() -> Result<(), String> {
         let b = _mm_set_epi32(5, 6, 7, 8);
         let result = _mm_mullo_epi32(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        check_int_array_equality(&result, &[32, 21, 12, 5])?;
+        check_array_equality(&result, &[32, 21, 12, 5])?;
     }
 
     if get_fuzzing() {
@@ -304,7 +304,7 @@ fn test_mm_mul_epi32() -> Result<(), String> {
         let b = _mm_set_epi32(0, 3, 0, 5);
         let result = _mm_mul_epi32(a, b);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        check_int_array_equality(&result, &[20, 6])?;
+        check_array_equality(&result, &[20, 6])?;
     }
 
     if get_fuzzing() {

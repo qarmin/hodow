@@ -1,7 +1,7 @@
 // Simple placeholder implementation for AVX-512 BF16 tests.
 // This module purposely avoids calling unstable stdarch intrinsics so the
 // project can compile with stable toolchains when features are enabled.
-use crate::cpu::{check_f32_array_equality, check_int_array_equality, ExtensionTest, TestFunction};
+use crate::cpu::{check_f32_array_equality, check_array_equality, ExtensionTest, TestFunction};
 
 pub struct AVX512BF16;
 
@@ -19,7 +19,7 @@ fn test_placeholder_1() -> Result<(), String> {
     // mimic a packed-u16 result check
     let got: [u16; 8] = [0x3fc0, 0x4000, 0x4040, 0x4080, 0x40a0, 0x40c0, 0x40e0, 0x4100];
     let expected = got;
-    check_int_array_equality(&got, &expected)?;
+    check_array_equality(&got, &expected)?;
     Ok(())
 }
 

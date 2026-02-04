@@ -3,7 +3,7 @@ use std::arch::x86::*;
 #[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::*;
 
-use crate::cpu::{check_int_array_equality, ExtensionTest, TestFunction};
+use crate::cpu::{check_array_equality, ExtensionTest, TestFunction};
 
 pub struct AVX512BITALG;
 
@@ -32,7 +32,7 @@ fn test_mm_popcnt_epi16() -> Result<(), String> {
         let result = _mm_popcnt_epi16(a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         let expected = [8; 8];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
         Ok(())
     }
 }
@@ -43,7 +43,7 @@ fn test_mm_maskz_popcnt_epi16() -> Result<(), String> {
         let result = _mm_maskz_popcnt_epi16(0b11110000, a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         let expected = [0, 0, 0, 0, 8, 8, 8, 8];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
         Ok(())
     }
 }
@@ -55,7 +55,7 @@ fn test_mm_mask_popcnt_epi16() -> Result<(), String> {
         let result = _mm_mask_popcnt_epi16(src, 0b11110000, a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         let expected = [100, 100, 100, 100, 8, 8, 8, 8];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
         Ok(())
     }
 }
@@ -66,7 +66,7 @@ fn test_mm_popcnt_epi8() -> Result<(), String> {
         let result = _mm_popcnt_epi8(a);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
         let expected = [4; 16];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
         Ok(())
     }
 }
@@ -77,7 +77,7 @@ fn test_mm_maskz_popcnt_epi8() -> Result<(), String> {
         let result = _mm_maskz_popcnt_epi8(0xFF00, a);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
         let expected = [0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 8, 8, 8, 8];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
         Ok(())
     }
 }
@@ -89,7 +89,7 @@ fn test_mm_mask_popcnt_epi8() -> Result<(), String> {
         let result = _mm_mask_popcnt_epi8(src, 0xFF00, a);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
         let expected = [100, 100, 100, 100, 100, 100, 100, 100, 8, 8, 8, 8, 8, 8, 8, 8];
-        check_int_array_equality(&result, &expected)?;
+        check_array_equality(&result, &expected)?;
         Ok(())
     }
 }
