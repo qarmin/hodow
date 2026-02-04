@@ -4,6 +4,7 @@ use std::arch::x86_64::*;
 use std::arch::x86::*;
 
 use crate::cpu::ExtensionTest;
+use crate::cpu::{check_int_array_equality, check_f32_array_equality};
 
 pub struct AVX512BF16;
 
@@ -39,8 +40,10 @@ fn test_mm_cvtne2ps_pbh() -> Result<(), String> {
         let result = _mm_cvtne2ps_pbh(a, b);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
         // BF16 conversion - just check it doesn't crash and produces non-zero
-        if result[0] == 0 && result[7] == 0 {
-            return Err(format!("Got all zeros: {:?}", result));
+        let zeros: [u16; 8] = [0; 8];
+        match check_int_array_equality(&result, &zeros) {
+            Ok(_) => return Err(format!("Got all zeros: {:?}", result)),
+            Err(_) => {}
         }
         Ok(())
     }
@@ -79,8 +82,10 @@ fn test_mm_dpbf16_ps() -> Result<(), String> {
         let b = _mm_set1_epi16(0x3f80);
         let result = _mm_dpbf16_ps(src, a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        if result[0] == 0.0 && result[3] == 0.0 {
-            return Err(format!("Got all zeros: {:?}", result));
+        let zeros_f: [f32; 4] = [0.0; 4];
+        match check_f32_array_equality(&result, &zeros_f) {
+            Ok(_) => return Err(format!("Got all zeros: {:?}", result)),
+            Err(_) => {}
         }
         Ok(())
     }
@@ -118,8 +123,10 @@ fn test_mm_cvtpbh_ps() -> Result<(), String> {
         let a = _mm_set1_epi16(0x3f80);
         let result = _mm_cvtpbh_ps(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        if result[0] == 0.0 && result[3] == 0.0 {
-            return Err(format!("Got all zeros: {:?}", result));
+        let zeros_f: [f32; 4] = [0.0; 4];
+        match check_f32_array_equality(&result, &zeros_f) {
+            Ok(_) => return Err(format!("Got all zeros: {:?}", result)),
+            Err(_) => {}
         }
         Ok(())
     }
@@ -165,8 +172,10 @@ fn test_mm_cvtneps_pbh() -> Result<(), String> {
         let a = _mm_set1_ps(1.5);
         let result = _mm_cvtneps_pbh(a);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
-        if result[0] == 0 && result[7] == 0 {
-            return Err(format!("Got all zeros: {:?}", result));
+        let zeros: [u16;8] = [0;8];
+        match check_int_array_equality(&result, &zeros) {
+            Ok(_) => return Err(format!("Got all zeros: {:?}", result)),
+            Err(_) => {}
         }
         Ok(())
     }
