@@ -1,12 +1,11 @@
-#[cfg(target_arch = "x86_64")]
-use std::arch::x86_64::*;
 #[cfg(target_arch = "x86")]
 use std::arch::x86::*;
-
+#[cfg(target_arch = "x86_64")]
+use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{check_f32_array_equality, check_float_equality, ExtensionTest, DEFAULT_FLOAT_DIFF, get_iterations};
+use crate::cpu::{check_f32_array_equality, check_float_equality, get_iterations, ExtensionTest, DEFAULT_FLOAT_DIFF};
 use crate::{get_four_random_floats, get_fuzzing, get_random_float};
 
 pub struct SSE1;
@@ -62,7 +61,6 @@ impl ExtensionTest for SSE1 {
             (&test_mm_cvtss_si32, "test_mm_cvtss_si32"),
             (&test_mm_cvtsi32_ss, "test_mm_cvtsi32_ss"),
         ]
-
     }
 }
 
@@ -77,12 +75,7 @@ fn test_mm_set_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr = [
-                    get_random_float(),
-                    get_random_float(),
-                    get_random_float(),
-                    get_random_float(),
-                ];
+                let arr = [get_random_float(), get_random_float(), get_random_float(), get_random_float()];
                 let result = _mm_set_ps(arr[3], arr[2], arr[1], arr[0]);
                 let result = std::mem::transmute::<__m128, [f32; 4]>(result);
                 check_f32_array_equality(&result, &arr)?;
@@ -107,16 +100,8 @@ fn test_mm_add_ps() -> Result<(), String> {
     for (first_input, second_input, expected_result) in &[
         ([1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0], [12.0, 10.0, 8.0, 6.0]),
         ([0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0]),
-        (
-            [-1.0, -2.0, -3.0, -4.0],
-            [-5.0, -6.0, -7.0, -8.0],
-            [-12.0, -10.0, -8.0, -6.0],
-        ),
-        (
-            [f32::MAX, f32::MIN, 1.0, -1.0],
-            [1.0, -1.0, f32::MAX, f32::MIN],
-            [f32::MIN, f32::MAX, f32::MIN, f32::MAX],
-        ),
+        ([-1.0, -2.0, -3.0, -4.0], [-5.0, -6.0, -7.0, -8.0], [-12.0, -10.0, -8.0, -6.0]),
+        ([f32::MAX, f32::MIN, 1.0, -1.0], [1.0, -1.0, f32::MAX, f32::MIN], [f32::MIN, f32::MAX, f32::MIN, f32::MAX]),
         (
             [f32::INFINITY, f32::NEG_INFINITY, f32::NAN, 0.0],
             [0.0, 0.0, 0.0, f32::NAN],
@@ -192,10 +177,7 @@ fn test_mm_mul_ps() -> Result<(), String> {
             unsafe {
                 let a = get_four_random_floats();
                 let b = get_four_random_floats();
-                let _result = _mm_mul_ps(
-                    _mm_set_ps(a[3], a[2], a[1], a[0]),
-                    _mm_set_ps(b[3], b[2], b[1], b[0]),
-                );
+                let _result = _mm_mul_ps(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]));
             }
         }
     }
@@ -262,7 +244,6 @@ fn test_mm_setzero_ps() -> Result<(), String> {
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
         check_f32_array_equality(&result, &[0.0, 0.0, 0.0, 0.0])?;
     }
-
 
     Ok(())
 }
@@ -355,7 +336,7 @@ fn test_mm_movemask_ps() -> Result<(), String> {
             unsafe {
                 let arr = get_four_random_floats();
                 let vec = _mm_set_ps(arr[3], arr[2], arr[1], arr[0]);
-                _mm_movemask_ps(vec); 
+                _mm_movemask_ps(vec);
             }
         }
     }
@@ -593,7 +574,7 @@ fn test_mm_cmpgt_ps() -> Result<(), String> {
         let b = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let result = _mm_cmpgt_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_f32_array_equality(&result, &[f32::NAN, f32::NAN, 0.0,0.0])?;
+        check_f32_array_equality(&result, &[f32::NAN, f32::NAN, 0.0, 0.0])?;
     }
 
     if get_fuzzing() {
@@ -619,7 +600,7 @@ fn test_mm_cmplt_ps() -> Result<(), String> {
         let b = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let result = _mm_cmplt_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_f32_array_equality(&result, &[0.0, 0.0,f32::NAN, f32::NAN])?;
+        check_f32_array_equality(&result, &[0.0, 0.0, f32::NAN, f32::NAN])?;
     }
 
     if get_fuzzing() {
@@ -698,7 +679,8 @@ fn test_mm_cvtss_f32() -> Result<(), String> {
         if result != 4.0 {
             return Err(format!("Expected 4.0, got {}", result));
         }
-    }if get_fuzzing() {
+    }
+    if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
@@ -711,7 +693,6 @@ fn test_mm_cvtss_f32() -> Result<(), String> {
     }
     Ok(())
 }
-
 
 fn test_mm_cvtsi32_ss() -> Result<(), String> {
     unsafe {
@@ -742,13 +723,14 @@ fn test_mm_cvtss_si32() -> Result<(), String> {
         if result != 4 {
             return Err(format!("Expected 4, got {}", result));
         }
-    }if get_fuzzing() {
+    }
+    if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
                 let arr = get_four_random_floats();
                 let vec = _mm_set_ps(arr[3], arr[2], arr[1], arr[0]);
-                let _result = _mm_cvtss_si32(vec); 
+                let _result = _mm_cvtss_si32(vec);
             }
         }
     }
@@ -770,7 +752,7 @@ fn test_mm_add_ss() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
         let result = _mm_add_ss(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        
+
         check_f32_array_equality(&result, &[12.0, 3.0, 2.0, 1.0])?;
     }
     Ok(())
@@ -824,7 +806,7 @@ fn test_mm_rcp_ss() -> Result<(), String> {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let result = _mm_rcp_ss(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        
+
         if (result[0] - 0.25).abs() > 0.01 {
             return Err(format!("Expected ~0.25, got {}", result[0]));
         }
@@ -837,7 +819,7 @@ fn test_mm_rcp_ps() -> Result<(), String> {
         let a = _mm_set_ps(1.0, 2.0, 4.0, 8.0);
         let result = _mm_rcp_ps(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        
+
         check_f32_array_equality(&result, &[0.125, 0.25, 0.5, 1.0])?;
     }
     Ok(())
@@ -848,7 +830,7 @@ fn test_mm_rsqrt_ss() -> Result<(), String> {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 16.0);
         let result = _mm_rsqrt_ss(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        
+
         if (result[0] - 0.25).abs() > 0.01 {
             return Err(format!("Expected ~0.25, got {}", result[0]));
         }
@@ -882,10 +864,10 @@ fn test_mm_shuffle_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
-        
+
         let result = _mm_shuffle_ps::<0x1B>(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        
+
         check_f32_array_equality(&result, &[1.0, 2.0, 7.0, 8.0])?;
     }
     Ok(())
@@ -897,9 +879,7 @@ fn test_mm_unpackhi_ps() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
         let result = _mm_unpackhi_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        
-        
-        
+
         check_f32_array_equality(&result, &[2.0, 6.0, 1.0, 5.0])?;
     }
     Ok(())
@@ -911,9 +891,7 @@ fn test_mm_unpacklo_ps() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
         let result = _mm_unpacklo_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        
-        
-        
+
         check_f32_array_equality(&result, &[4.0, 8.0, 3.0, 7.0])?;
     }
     Ok(())
@@ -925,7 +903,7 @@ fn test_mm_movehl_ps() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
         let result = _mm_movehl_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        
+
         check_f32_array_equality(&result, &[6.0, 5.0, 2.0, 1.0])?;
     }
     Ok(())
@@ -937,9 +915,7 @@ fn test_mm_movelh_ps() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
         let result = _mm_movelh_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        
-        
-        
+
         check_f32_array_equality(&result, &[4.0, 3.0, 8.0, 7.0])?;
     }
     Ok(())
@@ -951,7 +927,7 @@ fn test_mm_move_ss() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
         let result = _mm_move_ss(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        
+
         check_f32_array_equality(&result, &[8.0, 3.0, 2.0, 1.0])?;
     }
     Ok(())
@@ -969,5 +945,4 @@ mod tests {
             fun().unwrap();
         }
     }
-
 }

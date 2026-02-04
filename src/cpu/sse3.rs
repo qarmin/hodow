@@ -1,12 +1,12 @@
-#[cfg(target_arch = "x86_64")]
-use std::arch::x86_64::*;
 #[cfg(target_arch = "x86")]
 use std::arch::x86::*;
+#[cfg(target_arch = "x86_64")]
+use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{ExtensionTest, get_iterations, check_f32_array_equality};
-use crate::{get_fuzzing, get_four_random_floats, get_random_float};
+use crate::cpu::{check_f32_array_equality, get_iterations, ExtensionTest};
+use crate::{get_four_random_floats, get_fuzzing, get_random_float};
 
 pub struct SSE3;
 
@@ -34,9 +34,7 @@ fn test_mm_hadd_ps() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
         let result = _mm_hadd_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        
-        
-        
+
         check_f32_array_equality(&result, &[7.0, 3.0, 15.0, 11.0])?;
     }
 
@@ -46,10 +44,7 @@ fn test_mm_hadd_ps() -> Result<(), String> {
             unsafe {
                 let a = get_four_random_floats();
                 let b = get_four_random_floats();
-                let _result = _mm_hadd_ps(
-                    _mm_set_ps(a[3], a[2], a[1], a[0]),
-                    _mm_set_ps(b[3], b[2], b[1], b[0]),
-                );
+                let _result = _mm_hadd_ps(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]));
             }
         }
     }
@@ -63,9 +58,7 @@ fn test_mm_hsub_ps() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
         let result = _mm_hsub_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        
-        
-        
+
         check_f32_array_equality(&result, &[1.0, 1.0, 1.0, 1.0])?;
     }
 
@@ -75,10 +68,7 @@ fn test_mm_hsub_ps() -> Result<(), String> {
             unsafe {
                 let a = get_four_random_floats();
                 let b = get_four_random_floats();
-                let _result = _mm_hsub_ps(
-                    _mm_set_ps(a[3], a[2], a[1], a[0]),
-                    _mm_set_ps(b[3], b[2], b[1], b[0]),
-                );
+                let _result = _mm_hsub_ps(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]));
             }
         }
     }
@@ -92,9 +82,7 @@ fn test_mm_addsub_ps() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
         let result = _mm_addsub_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        
-        
-        
+
         check_f32_array_equality(&result, &[-4.0, 10.0, -4.0, 6.0])?;
     }
 
@@ -104,10 +92,7 @@ fn test_mm_addsub_ps() -> Result<(), String> {
             unsafe {
                 let a = get_four_random_floats();
                 let b = get_four_random_floats();
-                let _result = _mm_addsub_ps(
-                    _mm_set_ps(a[3], a[2], a[1], a[0]),
-                    _mm_set_ps(b[3], b[2], b[1], b[0]),
-                );
+                let _result = _mm_addsub_ps(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]));
             }
         }
     }
@@ -120,9 +105,7 @@ fn test_mm_movehdup_ps() -> Result<(), String> {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let result = _mm_movehdup_ps(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        
-        
-        
+
         check_f32_array_equality(&result, &[3.0, 3.0, 1.0, 1.0])?;
     }
 
@@ -144,9 +127,7 @@ fn test_mm_moveldup_ps() -> Result<(), String> {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let result = _mm_moveldup_ps(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        
-        
-        
+
         check_f32_array_equality(&result, &[4.0, 4.0, 2.0, 2.0])?;
     }
 
@@ -169,9 +150,7 @@ fn test_mm_hadd_pd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 4.0);
         let result = _mm_hadd_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        
-        
-        
+
         check_f32_array_equality(&[result[0] as f32, result[1] as f32], &[3.0, 7.0])?;
     }
 
@@ -197,9 +176,7 @@ fn test_mm_hsub_pd() -> Result<(), String> {
         let b = _mm_set_pd(7.0, 5.0);
         let result = _mm_hsub_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        
-        
-        
+
         check_f32_array_equality(&[result[0] as f32, result[1] as f32], &[-2.0, -2.0])?;
     }
 
@@ -225,9 +202,7 @@ fn test_mm_addsub_pd() -> Result<(), String> {
         let b = _mm_set_pd(1.0, 2.0);
         let result = _mm_addsub_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        
-        
-        
+
         check_f32_array_equality(&[result[0] as f32, result[1] as f32], &[2.0, 3.0])?;
     }
 

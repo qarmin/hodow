@@ -1,12 +1,12 @@
-use once_cell::sync::OnceCell;
-use rand::random;
-
-use clap::Parser;
-use log::info;
 use std::env;
 use std::fmt::Write as _;
 
-use crate::cpu::{set_iterations, test_all_extensions, available_modes};
+use clap::Parser;
+use log::info;
+use once_cell::sync::OnceCell;
+use rand::random;
+
+use crate::cpu::{available_modes, set_iterations, test_all_extensions};
 
 mod cpu;
 
@@ -78,10 +78,5 @@ pub fn get_random_float() -> f32 {
     }
 }
 pub fn get_four_random_floats() -> [f32; 4] {
-    [
-        get_random_float(),
-        get_random_float(),
-        get_random_float(),
-        get_random_float(),
-    ]
+    [get_random_float(), get_random_float(), get_random_float(), get_random_float()]
 }

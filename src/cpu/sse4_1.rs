@@ -1,11 +1,11 @@
-#[cfg(target_arch = "x86_64")]
-use std::arch::x86_64::*;
 #[cfg(target_arch = "x86")]
 use std::arch::x86::*;
+#[cfg(target_arch = "x86_64")]
+use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{check_f32_array_equality, check_float_equality, check_int_array_equality, check_int_equality, ExtensionTest, get_iterations, DEFAULT_FLOAT_DIFF};
+use crate::cpu::{check_f32_array_equality, check_float_equality, check_int_array_equality, check_int_equality, get_iterations, ExtensionTest, DEFAULT_FLOAT_DIFF};
 use crate::{get_four_random_floats, get_fuzzing};
 
 pub struct SSE41;
@@ -40,11 +40,10 @@ fn test_mm_blend_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
-        
+
         let result = _mm_blend_ps::<0b0101>(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        
-        
+
         check_f32_array_equality(&result, &[8.0, 3.0, 6.0, 1.0])?;
     }
 
@@ -54,10 +53,7 @@ fn test_mm_blend_ps() -> Result<(), String> {
             unsafe {
                 let a = get_four_random_floats();
                 let b = get_four_random_floats();
-                let _result = _mm_blend_ps::<0b1010>(
-                    _mm_set_ps(a[3], a[2], a[1], a[0]),
-                    _mm_set_ps(b[3], b[2], b[1], b[0]),
-                );
+                let _result = _mm_blend_ps::<0b1010>(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]));
             }
         }
     }
@@ -98,11 +94,10 @@ fn test_mm_dp_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let b = _mm_set_ps(2.0, 3.0, 4.0, 5.0);
-        
+
         let result = _mm_dp_ps::<0xFF>(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        
-        
+
         check_f32_array_equality(&result, &[40.0, 40.0, 40.0, 40.0])?;
     }
 
@@ -112,10 +107,7 @@ fn test_mm_dp_ps() -> Result<(), String> {
             unsafe {
                 let a = get_four_random_floats();
                 let b = get_four_random_floats();
-                let _result = _mm_dp_ps::<0xFF>(
-                    _mm_set_ps(a[3], a[2], a[1], a[0]),
-                    _mm_set_ps(b[3], b[2], b[1], b[0]),
-                );
+                let _result = _mm_dp_ps::<0xFF>(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]));
             }
         }
     }
@@ -241,9 +233,7 @@ fn test_mm_round_ps() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let a = get_four_random_floats();
-                let _result = _mm_round_ps::<_MM_FROUND_TO_NEAREST_INT>(
-                    _mm_set_ps(a[3], a[2], a[1], a[0]),
-                );
+                let _result = _mm_round_ps::<_MM_FROUND_TO_NEAREST_INT>(_mm_set_ps(a[3], a[2], a[1], a[0]));
             }
         }
     }
@@ -308,7 +298,7 @@ fn test_mm_insert_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
-        
+
         let result = _mm_insert_ps::<0b00100000>(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
         check_f32_array_equality(&result, &[4.0, 3.0, 8.0, 1.0])?;
@@ -322,8 +312,7 @@ fn test_mm_testz_si128() -> Result<(), String> {
         let a = _mm_set_epi32(0x00FF0000, 0, 0, 0);
         let b = _mm_set_epi32(0xFF00FFFFu32 as i32, -1, -1, -1);
         let result = _mm_testz_si128(a, b);
-        
-        
+
         check_int_equality(result, 1)?;
     }
 
@@ -331,7 +320,7 @@ fn test_mm_testz_si128() -> Result<(), String> {
         let a = _mm_set_epi32(0x00FF0000, 0, 0, 0);
         let b = _mm_set_epi32(0xFF00FFFFu32 as i32, 0, 0, 0);
         let result = _mm_testz_si128(a, b);
-        
+
         check_int_equality(result, 1)?;
     }
 
@@ -343,7 +332,7 @@ fn test_mm_testc_si128() -> Result<(), String> {
         let a = _mm_set_epi32(-1, -1, -1, -1);
         let b = _mm_set_epi32(0x00FF0000, 0, 0, 0);
         let result = _mm_testc_si128(a, b);
-        check_int_equality(result, 1)?; 
+        check_int_equality(result, 1)?;
     }
 
     Ok(())

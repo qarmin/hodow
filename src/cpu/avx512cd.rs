@@ -1,9 +1,9 @@
-#[cfg(target_arch = "x86_64")]
-use std::arch::x86_64::*;
 #[cfg(target_arch = "x86")]
 use std::arch::x86::*;
+#[cfg(target_arch = "x86_64")]
+use std::arch::x86_64::*;
 
-use crate::cpu::{ExtensionTest, check_int_array_equality, check_int_equality};
+use crate::cpu::{check_int_array_equality, check_int_equality, ExtensionTest};
 
 pub struct AVX512CD;
 

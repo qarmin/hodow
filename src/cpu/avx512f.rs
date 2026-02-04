@@ -1,11 +1,11 @@
-#[cfg(target_arch = "x86_64")]
-use std::arch::x86_64::*;
 #[cfg(target_arch = "x86")]
 use std::arch::x86::*;
+#[cfg(target_arch = "x86_64")]
+use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{check_f32_array_equality, check_f64_array_equality, ExtensionTest, get_iterations};
+use crate::cpu::{check_f32_array_equality, check_f64_array_equality, get_iterations, ExtensionTest};
 use crate::{get_fuzzing, get_random_float};
 
 pub struct AVX512F;
@@ -35,32 +35,42 @@ impl ExtensionTest for AVX512F {
 
 fn get_sixteen_random_floats() -> [f32; 16] {
     [
-        get_random_float(), get_random_float(), get_random_float(), get_random_float(),
-        get_random_float(), get_random_float(), get_random_float(), get_random_float(),
-        get_random_float(), get_random_float(), get_random_float(), get_random_float(),
-        get_random_float(), get_random_float(), get_random_float(), get_random_float(),
+        get_random_float(),
+        get_random_float(),
+        get_random_float(),
+        get_random_float(),
+        get_random_float(),
+        get_random_float(),
+        get_random_float(),
+        get_random_float(),
+        get_random_float(),
+        get_random_float(),
+        get_random_float(),
+        get_random_float(),
+        get_random_float(),
+        get_random_float(),
+        get_random_float(),
+        get_random_float(),
     ]
 }
 
 fn get_eight_random_f64() -> [f64; 8] {
     [
-        get_random_float() as f64, get_random_float() as f64,
-        get_random_float() as f64, get_random_float() as f64,
-        get_random_float() as f64, get_random_float() as f64,
-        get_random_float() as f64, get_random_float() as f64,
+        get_random_float() as f64,
+        get_random_float() as f64,
+        get_random_float() as f64,
+        get_random_float() as f64,
+        get_random_float() as f64,
+        get_random_float() as f64,
+        get_random_float() as f64,
+        get_random_float() as f64,
     ]
 }
 
 fn test_mm512_add_ps() -> Result<(), String> {
     unsafe {
-        let a = _mm512_set_ps(
-            1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0,
-            9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0
-        );
-        let b = _mm512_set_ps(
-            16.0, 15.0, 14.0, 13.0, 12.0, 11.0, 10.0, 9.0,
-            8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0
-        );
+        let a = _mm512_set_ps(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0);
+        let b = _mm512_set_ps(16.0, 15.0, 14.0, 13.0, 12.0, 11.0, 10.0, 9.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0);
         let result = _mm512_add_ps(a, b);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
         let expected = [17.0; 16];
@@ -228,14 +238,8 @@ fn test_mm512_div_pd() -> Result<(), String> {
 
 fn test_mm512_max_ps() -> Result<(), String> {
     unsafe {
-        let a = _mm512_set_ps(
-            1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0,
-            9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0
-        );
-        let b = _mm512_set_ps(
-            16.0, 15.0, 14.0, 13.0, 12.0, 11.0, 10.0, 9.0,
-            8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0
-        );
+        let a = _mm512_set_ps(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0);
+        let b = _mm512_set_ps(16.0, 15.0, 14.0, 13.0, 12.0, 11.0, 10.0, 9.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0);
         let result = _mm512_max_ps(a, b);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
         let expected = [16.0, 15.0, 14.0, 13.0, 12.0, 11.0, 10.0, 9.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0];
@@ -247,14 +251,8 @@ fn test_mm512_max_ps() -> Result<(), String> {
 
 fn test_mm512_min_ps() -> Result<(), String> {
     unsafe {
-        let a = _mm512_set_ps(
-            1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0,
-            9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0
-        );
-        let b = _mm512_set_ps(
-            16.0, 15.0, 14.0, 13.0, 12.0, 11.0, 10.0, 9.0,
-            8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0
-        );
+        let a = _mm512_set_ps(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0);
+        let b = _mm512_set_ps(16.0, 15.0, 14.0, 13.0, 12.0, 11.0, 10.0, 9.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0);
         let result = _mm512_min_ps(a, b);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
         let expected = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0];

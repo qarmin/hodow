@@ -1,12 +1,12 @@
-#[cfg(target_arch = "x86_64")]
-use std::arch::x86_64::*;
 #[cfg(target_arch = "x86")]
 use std::arch::x86::*;
+#[cfg(target_arch = "x86_64")]
+use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{ExtensionTest, check_int_array_equality, check_int_equality, get_iterations};
-use crate::{get_fuzzing};
+use crate::cpu::{check_int_array_equality, check_int_equality, get_iterations, ExtensionTest};
+use crate::get_fuzzing;
 
 pub struct SSE42;
 
@@ -30,7 +30,7 @@ fn test_mm_cmpgt_epi64() -> Result<(), String> {
         let b = _mm_set_epi64x(5, 30);
         let result = _mm_cmpgt_epi64(a, b);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        check_int_array_equality(&result, &[0, -1])?; 
+        check_int_array_equality(&result, &[0, -1])?;
     }
 
     if get_fuzzing() {
@@ -52,7 +52,7 @@ fn test_mm_crc32_u8() -> Result<(), String> {
         let crc = 0u32;
         let data = 0xFFu8;
         let result = _mm_crc32_u8(crc, data);
-        
+
         check_int_equality(result as i32, -1384295599)?;
     }
 
@@ -75,7 +75,7 @@ fn test_mm_crc32_u16() -> Result<(), String> {
         let crc = 0u32;
         let data = 0xFFFFu16;
         let result = _mm_crc32_u16(crc, data);
-        
+
         check_int_equality(result as i32, 123456789)?;
     }
 
@@ -98,7 +98,7 @@ fn test_mm_crc32_u32() -> Result<(), String> {
         let crc = 0u32;
         let data = 0xFFFFFFFFu32;
         let result = _mm_crc32_u32(crc, data);
-        
+
         check_int_equality(result as i32, 987654321)?;
     }
 

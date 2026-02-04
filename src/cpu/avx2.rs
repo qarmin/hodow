@@ -1,11 +1,11 @@
-#[cfg(target_arch = "x86_64")]
-use std::arch::x86_64::*;
 #[cfg(target_arch = "x86")]
 use std::arch::x86::*;
+#[cfg(target_arch = "x86_64")]
+use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{ExtensionTest, get_iterations, check_int_array_equality, check_f32_array_equality, check_f64_array_equality, check_int_equality};
+use crate::cpu::{check_f32_array_equality, check_f64_array_equality, check_int_array_equality, check_int_equality, get_iterations, ExtensionTest};
 use crate::get_fuzzing;
 
 pub struct AVX2;
@@ -32,7 +32,6 @@ impl ExtensionTest for AVX2 {
             (&test_mm256_hsub_epi32, "test_mm256_hsub_epi32"),
             (&test_mm256_broadcastd_epi32, "test_mm256_broadcastd_epi32"),
             (&test_mm256_permutevar8x32_epi32, "test_mm256_permutevar8x32_epi32"),
-            
             (&test_mm_blend_epi32, "test_mm_blend_epi32"),
             (&test_mm_broadcastb_epi8, "test_mm_broadcastb_epi8"),
             (&test_mm_broadcastq_epi64, "test_mm_broadcastq_epi64"),
@@ -162,10 +161,26 @@ fn test_mm256_mullo_epi32() -> Result<(), String> {
 
 fn test_mm256_and_si256() -> Result<(), String> {
     unsafe {
-        let a = _mm256_set_epi32(0xFF00FF00u32 as i32, 0xFF00FF00u32 as i32, 0xFF00FF00u32 as i32, 0xFF00FF00u32 as i32,
-                                  0xFF00FF00u32 as i32, 0xFF00FF00u32 as i32, 0xFF00FF00u32 as i32, 0xFF00FF00u32 as i32);
-        let b = _mm256_set_epi32(0xFFFF0000u32 as i32, 0xFFFF0000u32 as i32, 0xFFFF0000u32 as i32, 0xFFFF0000u32 as i32,
-                                  0xFFFF0000u32 as i32, 0xFFFF0000u32 as i32, 0xFFFF0000u32 as i32, 0xFFFF0000u32 as i32);
+        let a = _mm256_set_epi32(
+            0xFF00FF00u32 as i32,
+            0xFF00FF00u32 as i32,
+            0xFF00FF00u32 as i32,
+            0xFF00FF00u32 as i32,
+            0xFF00FF00u32 as i32,
+            0xFF00FF00u32 as i32,
+            0xFF00FF00u32 as i32,
+            0xFF00FF00u32 as i32,
+        );
+        let b = _mm256_set_epi32(
+            0xFFFF0000u32 as i32,
+            0xFFFF0000u32 as i32,
+            0xFFFF0000u32 as i32,
+            0xFFFF0000u32 as i32,
+            0xFFFF0000u32 as i32,
+            0xFFFF0000u32 as i32,
+            0xFFFF0000u32 as i32,
+            0xFFFF0000u32 as i32,
+        );
         let result = _mm256_and_si256(a, b);
         let result = std::mem::transmute::<__m256i, [u32; 8]>(result);
         check_int_array_equality(&result, &[0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000])?;
@@ -176,10 +191,26 @@ fn test_mm256_and_si256() -> Result<(), String> {
 
 fn test_mm256_or_si256() -> Result<(), String> {
     unsafe {
-        let a = _mm256_set_epi32(0xFF00FF00u32 as i32, 0xFF00FF00u32 as i32, 0xFF00FF00u32 as i32, 0xFF00FF00u32 as i32,
-                                  0xFF00FF00u32 as i32, 0xFF00FF00u32 as i32, 0xFF00FF00u32 as i32, 0xFF00FF00u32 as i32);
-        let b = _mm256_set_epi32(0x00FF00FFu32 as i32, 0x00FF00FFu32 as i32, 0x00FF00FFu32 as i32, 0x00FF00FFu32 as i32,
-                                  0x00FF00FFu32 as i32, 0x00FF00FFu32 as i32, 0x00FF00FFu32 as i32, 0x00FF00FFu32 as i32);
+        let a = _mm256_set_epi32(
+            0xFF00FF00u32 as i32,
+            0xFF00FF00u32 as i32,
+            0xFF00FF00u32 as i32,
+            0xFF00FF00u32 as i32,
+            0xFF00FF00u32 as i32,
+            0xFF00FF00u32 as i32,
+            0xFF00FF00u32 as i32,
+            0xFF00FF00u32 as i32,
+        );
+        let b = _mm256_set_epi32(
+            0x00FF00FFu32 as i32,
+            0x00FF00FFu32 as i32,
+            0x00FF00FFu32 as i32,
+            0x00FF00FFu32 as i32,
+            0x00FF00FFu32 as i32,
+            0x00FF00FFu32 as i32,
+            0x00FF00FFu32 as i32,
+            0x00FF00FFu32 as i32,
+        );
         let result = _mm256_or_si256(a, b);
         let result = std::mem::transmute::<__m256i, [u32; 8]>(result);
         check_int_array_equality(&result, &[0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF])?;
@@ -190,10 +221,26 @@ fn test_mm256_or_si256() -> Result<(), String> {
 
 fn test_mm256_xor_si256() -> Result<(), String> {
     unsafe {
-        let a = _mm256_set_epi32(0xFF00FF00u32 as i32, 0xFF00FF00u32 as i32, 0xFF00FF00u32 as i32, 0xFF00FF00u32 as i32,
-                                  0xFF00FF00u32 as i32, 0xFF00FF00u32 as i32, 0xFF00FF00u32 as i32, 0xFF00FF00u32 as i32);
-        let b = _mm256_set_epi32(0xFFFF0000u32 as i32, 0xFFFF0000u32 as i32, 0xFFFF0000u32 as i32, 0xFFFF0000u32 as i32,
-                                  0xFFFF0000u32 as i32, 0xFFFF0000u32 as i32, 0xFFFF0000u32 as i32, 0xFFFF0000u32 as i32);
+        let a = _mm256_set_epi32(
+            0xFF00FF00u32 as i32,
+            0xFF00FF00u32 as i32,
+            0xFF00FF00u32 as i32,
+            0xFF00FF00u32 as i32,
+            0xFF00FF00u32 as i32,
+            0xFF00FF00u32 as i32,
+            0xFF00FF00u32 as i32,
+            0xFF00FF00u32 as i32,
+        );
+        let b = _mm256_set_epi32(
+            0xFFFF0000u32 as i32,
+            0xFFFF0000u32 as i32,
+            0xFFFF0000u32 as i32,
+            0xFFFF0000u32 as i32,
+            0xFFFF0000u32 as i32,
+            0xFFFF0000u32 as i32,
+            0xFFFF0000u32 as i32,
+            0xFFFF0000u32 as i32,
+        );
         let result = _mm256_xor_si256(a, b);
         let result = std::mem::transmute::<__m256i, [u32; 8]>(result);
         check_int_array_equality(&result, &[0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00])?;
@@ -262,19 +309,17 @@ fn test_mm256_min_epi32() -> Result<(), String> {
 fn test_mm256_shuffle_epi8() -> Result<(), String> {
     unsafe {
         let a = _mm256_set_epi8(
-            31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16,
-            15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
+            31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
         );
-        let b = _mm256_set_epi8(
-            0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-            0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
-        );
+        let b = _mm256_set_epi8(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
         let result = _mm256_shuffle_epi8(a, b);
         let result = std::mem::transmute::<__m256i, [i8; 32]>(result);
-        check_int_array_equality(&result, &[
-             15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
-             31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16
-        ])?;
+        check_int_array_equality(
+            &result,
+            &[
+                15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16,
+            ],
+        )?;
     }
 
     Ok(())
@@ -326,8 +371,6 @@ fn test_mm256_permutevar8x32_epi32() -> Result<(), String> {
 
     Ok(())
 }
-
-
 
 fn test_mm_blend_epi32() -> Result<(), String> {
     unsafe {
@@ -443,7 +486,7 @@ fn test_mm_mask_i32gather_ps() -> Result<(), String> {
         let mask = _mm_set_ps(-1.0, 0.0, -1.0, 0.0);
         let result = _mm_mask_i32gather_ps::<4>(src, arr.as_ptr(), indices, mask);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        
+
         check_f32_array_equality(&result, &[7.0, 99.0, 5.0, 99.0])?;
         Ok(())
     }
@@ -695,4 +738,3 @@ fn test_mm_srlv_epi64() -> Result<(), String> {
     }
     Ok(())
 }
-

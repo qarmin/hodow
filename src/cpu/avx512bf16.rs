@@ -1,10 +1,9 @@
-#[cfg(target_arch = "x86_64")]
-use std::arch::x86_64::*;
 #[cfg(target_arch = "x86")]
 use std::arch::x86::*;
+#[cfg(target_arch = "x86_64")]
+use std::arch::x86_64::*;
 
-use crate::cpu::ExtensionTest;
-use crate::cpu::{check_int_array_equality, check_f32_array_equality};
+use crate::cpu::{check_f32_array_equality, check_int_array_equality, ExtensionTest};
 
 pub struct AVX512BF16;
 
@@ -33,13 +32,12 @@ impl ExtensionTest for AVX512BF16 {
 }
 
 fn test_mm_cvtne2ps_pbh() -> Result<(), String> {
-   
     unsafe {
         let a = _mm_set1_ps(1.5);
         let b = _mm_set1_ps(2.5);
         let result = _mm_cvtne2ps_pbh(a, b);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
-        
+
         let expected: [u16; 8] = [0x3f80, 0x4000, 0x4040, 0x4080, 0x40A0, 0x40C0, 0x40E0, 0x4100];
         check_int_array_equality(&result, &expected)?;
         Ok(())
@@ -47,7 +45,6 @@ fn test_mm_cvtne2ps_pbh() -> Result<(), String> {
 }
 
 fn test_mm_mask_cvtne2ps_pbh() -> Result<(), String> {
-   
     unsafe {
         let src = _mm_set1_epi16(0);
         let a = _mm_set1_ps(1.5);
@@ -61,7 +58,6 @@ fn test_mm_mask_cvtne2ps_pbh() -> Result<(), String> {
 }
 
 fn test_mm_maskz_cvtne2ps_pbh() -> Result<(), String> {
-   
     unsafe {
         let a = _mm_set1_ps(1.5);
         let b = _mm_set1_ps(2.5);
@@ -74,14 +70,13 @@ fn test_mm_maskz_cvtne2ps_pbh() -> Result<(), String> {
 }
 
 fn test_mm_dpbf16_ps() -> Result<(), String> {
-   
     unsafe {
         let src = _mm_set1_ps(1.0);
-        let a = _mm_set1_epi16(0x3f80); 
+        let a = _mm_set1_epi16(0x3f80);
         let b = _mm_set1_epi16(0x3f80);
         let result = _mm_dpbf16_ps(src, a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        
+
         let expected: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
         check_f32_array_equality(&result, &expected)?;
         Ok(())
@@ -89,7 +84,6 @@ fn test_mm_dpbf16_ps() -> Result<(), String> {
 }
 
 fn test_mm_mask_dpbf16_ps() -> Result<(), String> {
-   
     unsafe {
         let src = _mm_set1_ps(1.0);
         let a = _mm_set1_epi16(0x3f80);
@@ -103,7 +97,6 @@ fn test_mm_mask_dpbf16_ps() -> Result<(), String> {
 }
 
 fn test_mm_maskz_dpbf16_ps() -> Result<(), String> {
-   
     unsafe {
         let src = _mm_set1_ps(1.0);
         let a = _mm_set1_epi16(0x3f80);
@@ -117,7 +110,6 @@ fn test_mm_maskz_dpbf16_ps() -> Result<(), String> {
 }
 
 fn test_mm_cvtpbh_ps() -> Result<(), String> {
-   
     unsafe {
         let a = _mm_set1_epi16(0x3f80);
         let result = _mm_cvtpbh_ps(a);
@@ -129,7 +121,6 @@ fn test_mm_cvtpbh_ps() -> Result<(), String> {
 }
 
 fn test_mm_mask_cvtpbh_ps() -> Result<(), String> {
-   
     unsafe {
         let src = _mm_set1_ps(0.0);
         let a = _mm_set1_epi16(0x3f80);
@@ -139,11 +130,9 @@ fn test_mm_mask_cvtpbh_ps() -> Result<(), String> {
         check_f32_array_equality(&result, &expected)?;
         Ok(())
     }
-
 }
 
 fn test_mm_maskz_cvtpbh_ps() -> Result<(), String> {
-   
     unsafe {
         let a = _mm_set1_epi16(0x3f80);
         let result = _mm_maskz_cvtpbh_ps(0xF, a);
@@ -170,7 +159,7 @@ fn test_mm_cvtneps_pbh() -> Result<(), String> {
         let a = _mm_set1_ps(1.5);
         let result = _mm_cvtneps_pbh(a);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
-        let expected: [u16;8] = [0x3fC0, 0x4000, 0x4040, 0x4080, 0x40A0, 0x40C0, 0x40E0, 0x4100];
+        let expected: [u16; 8] = [0x3fC0, 0x4000, 0x4040, 0x4080, 0x40A0, 0x40C0, 0x40E0, 0x4100];
         check_int_array_equality(&result, &expected)?;
         Ok(())
     }
@@ -182,7 +171,7 @@ fn test_mm_mask_cvtneps_pbh() -> Result<(), String> {
         let a = _mm_set1_ps(1.5);
         let result = _mm_mask_cvtneps_pbh(src, 0xF, a);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
-        let expected: [u16;8] = [0x3fC0, 0x4000, 0x4040, 0x4080, 0x40A0, 0x40C0, 0x40E0, 0x4100];
+        let expected: [u16; 8] = [0x3fC0, 0x4000, 0x4040, 0x4080, 0x40A0, 0x40C0, 0x40E0, 0x4100];
         check_int_array_equality(&result, &expected)?;
         Ok(())
     }
@@ -193,7 +182,7 @@ fn test_mm_maskz_cvtneps_pbh() -> Result<(), String> {
         let a = _mm_set1_ps(1.5);
         let result = _mm_maskz_cvtneps_pbh(0xF, a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        let expected: [f32;4] = [1.5, 1.5, 1.5, 1.5];
+        let expected: [f32; 4] = [1.5, 1.5, 1.5, 1.5];
         check_f32_array_equality(&result, &expected)?;
         Ok(())
     }
@@ -203,7 +192,7 @@ fn test_mm_cvtness_sbh() -> Result<(), String> {
     unsafe {
         let a = 1.5f32;
         let result = _mm_cvtness_sbh(a);
-        
+
         if result == 0 {
             return Err(format!("Got zero for conversion of 1.5"));
         }

@@ -1,11 +1,12 @@
-#[cfg(target_arch = "x86_64")]
-use std::arch::x86_64::*;
 #[cfg(target_arch = "x86")]
 use std::arch::x86::*;
+#[cfg(target_arch = "x86_64")]
+use std::arch::x86_64::*;
 
 use log::info;
-use crate::cpu::{ExtensionTest, get_iterations, check_f32_array_equality};
-use crate::{get_fuzzing, get_four_random_floats};
+
+use crate::cpu::{check_f32_array_equality, get_iterations, ExtensionTest};
+use crate::{get_four_random_floats, get_fuzzing};
 
 pub struct FMA;
 
@@ -49,7 +50,7 @@ fn test_mm_fmadd_ps() -> Result<(), String> {
         let c = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let result = _mm_fmadd_ps(a, b, c);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        
+
         check_f32_array_equality(&result, &[9.0, 7.0, 5.0, 3.0])?;
     }
 
@@ -60,11 +61,7 @@ fn test_mm_fmadd_ps() -> Result<(), String> {
                 let a = get_four_random_floats();
                 let b = get_four_random_floats();
                 let c = get_four_random_floats();
-                let _result = _mm_fmadd_ps(
-                    _mm_set_ps(a[3], a[2], a[1], a[0]),
-                    _mm_set_ps(b[3], b[2], b[1], b[0]),
-                    _mm_set_ps(c[3], c[2], c[1], c[0]),
-                );
+                let _result = _mm_fmadd_ps(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]), _mm_set_ps(c[3], c[2], c[1], c[0]));
             }
         }
     }
@@ -79,7 +76,7 @@ fn test_mm_fmsub_ps() -> Result<(), String> {
         let c = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let result = _mm_fmsub_ps(a, b, c);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        
+
         check_f32_array_equality(&result, &[7.0, 5.0, 3.0, 1.0])?;
     }
 
@@ -90,11 +87,7 @@ fn test_mm_fmsub_ps() -> Result<(), String> {
                 let a = get_four_random_floats();
                 let b = get_four_random_floats();
                 let c = get_four_random_floats();
-                let _result = _mm_fmsub_ps(
-                    _mm_set_ps(a[3], a[2], a[1], a[0]),
-                    _mm_set_ps(b[3], b[2], b[1], b[0]),
-                    _mm_set_ps(c[3], c[2], c[1], c[0]),
-                );
+                let _result = _mm_fmsub_ps(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]), _mm_set_ps(c[3], c[2], c[1], c[0]));
             }
         }
     }
@@ -109,7 +102,7 @@ fn test_mm_fnmadd_ps() -> Result<(), String> {
         let c = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let result = _mm_fnmadd_ps(a, b, c);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        
+
         check_f32_array_equality(&result, &[-7.0, -5.0, -3.0, -1.0])?;
     }
 
@@ -120,11 +113,7 @@ fn test_mm_fnmadd_ps() -> Result<(), String> {
                 let a = get_four_random_floats();
                 let b = get_four_random_floats();
                 let c = get_four_random_floats();
-                let _result = _mm_fnmadd_ps(
-                    _mm_set_ps(a[3], a[2], a[1], a[0]),
-                    _mm_set_ps(b[3], b[2], b[1], b[0]),
-                    _mm_set_ps(c[3], c[2], c[1], c[0]),
-                );
+                let _result = _mm_fnmadd_ps(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]), _mm_set_ps(c[3], c[2], c[1], c[0]));
             }
         }
     }
@@ -139,7 +128,7 @@ fn test_mm_fnmsub_ps() -> Result<(), String> {
         let c = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let result = _mm_fnmsub_ps(a, b, c);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        
+
         check_f32_array_equality(&result, &[-9.0, -7.0, -5.0, -3.0])?;
     }
 
@@ -150,11 +139,7 @@ fn test_mm_fnmsub_ps() -> Result<(), String> {
                 let a = get_four_random_floats();
                 let b = get_four_random_floats();
                 let c = get_four_random_floats();
-                let _result = _mm_fnmsub_ps(
-                    _mm_set_ps(a[3], a[2], a[1], a[0]),
-                    _mm_set_ps(b[3], b[2], b[1], b[0]),
-                    _mm_set_ps(c[3], c[2], c[1], c[0]),
-                );
+                let _result = _mm_fnmsub_ps(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]), _mm_set_ps(c[3], c[2], c[1], c[0]));
             }
         }
     }
@@ -169,8 +154,7 @@ fn test_mm_fmaddsub_ps() -> Result<(), String> {
         let c = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let result = _mm_fmaddsub_ps(a, b, c);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        
-        
+
         check_f32_array_equality(&result, &[7.0, 7.0, 3.0, 3.0])?;
     }
 
@@ -181,11 +165,7 @@ fn test_mm_fmaddsub_ps() -> Result<(), String> {
                 let a = get_four_random_floats();
                 let b = get_four_random_floats();
                 let c = get_four_random_floats();
-                let _result = _mm_fmaddsub_ps(
-                    _mm_set_ps(a[3], a[2], a[1], a[0]),
-                    _mm_set_ps(b[3], b[2], b[1], b[0]),
-                    _mm_set_ps(c[3], c[2], c[1], c[0]),
-                );
+                let _result = _mm_fmaddsub_ps(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]), _mm_set_ps(c[3], c[2], c[1], c[0]));
             }
         }
     }

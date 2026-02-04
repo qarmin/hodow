@@ -1,52 +1,51 @@
 #![allow(dead_code)]
 #![allow(unused_imports)]
 
-
 use std::fmt::Debug;
+
 use log::{error, info};
 use once_cell::sync::OnceCell;
 
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "aes"))]
+mod aes;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx"))]
+mod avx;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx2"))]
+mod avx2;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512bf16"))]
+mod avx512bf16;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512bitalg"))]
+mod avx512bitalg;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512cd"))]
+mod avx512cd;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512f"))]
+mod avx512f;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512ifma"))]
+mod avx512ifma;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512vbmi"))]
+mod avx512vbmi;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "fma"))]
+mod fma;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "kl"))]
+mod kl;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "sse"))]
 mod sse1;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "sse2"))]
 mod sse2;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "sse3"))]
 mod sse3;
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "ssse3"))]
-mod ssse3;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "sse4.1"))]
 mod sse4_1;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "sse4.2"))]
 mod sse4_2;
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx"))]
-mod avx;
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx2"))]
-mod avx2;
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "fma"))]
-mod fma;
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512f"))]
-mod avx512f;
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512bitalg"))]
-mod avx512bitalg;
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512bf16"))]
-mod avx512bf16;
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512cd"))]
-mod avx512cd;
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512ifma"))]
-mod avx512ifma;
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512vbmi"))]
-mod avx512vbmi;
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "aes"))]
-mod aes;
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "kl"))]
-mod kl;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "ssse3"))]
+mod ssse3;
 
 #[cfg(miri)]
 pub const DEFAULT_TEST_ITERATIONS: usize = 20;
 #[cfg(not(miri))]
 #[allow(dead_code)]
 pub const DEFAULT_TEST_ITERATIONS: usize = 100;
-
 
 static ITERATIONS: OnceCell<usize> = OnceCell::new();
 

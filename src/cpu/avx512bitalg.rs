@@ -1,9 +1,9 @@
-#[cfg(target_arch = "x86_64")]
-use std::arch::x86_64::*;
 #[cfg(target_arch = "x86")]
 use std::arch::x86::*;
+#[cfg(target_arch = "x86_64")]
+use std::arch::x86_64::*;
 
-use crate::cpu::{ExtensionTest, check_int_array_equality};
+use crate::cpu::{check_int_array_equality, ExtensionTest};
 
 pub struct AVX512BITALG;
 
@@ -11,7 +11,7 @@ impl ExtensionTest for AVX512BITALG {
     fn get_name() -> &'static str {
         "AVX-512 BITALG"
     }
-    
+
     fn get_tests() -> &'static [(&'static dyn Fn() -> Result<(), String>, &'static str)] {
         &[
             (&test_mm_popcnt_epi16, "test_mm_popcnt_epi16"),
@@ -99,8 +99,7 @@ fn test_mm_bitshuffle_epi64_mask() -> Result<(), String> {
         let a = _mm_set1_epi8(0b1010_1010u8 as i8);
         let b = _mm_set1_epi8(0);
         let _result = _mm_bitshuffle_epi64_mask(a, b);
-        
-        
+
         Ok(())
     }
 }
@@ -110,8 +109,7 @@ fn test_mm_mask_bitshuffle_epi64_mask() -> Result<(), String> {
         let a = _mm_set1_epi8(0b1010_1010u8 as i8);
         let b = _mm_set1_epi8(0);
         let _result = _mm_mask_bitshuffle_epi64_mask(0xFF, a, b);
-        
-        
+
         Ok(())
     }
 }

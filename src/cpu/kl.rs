@@ -1,13 +1,12 @@
-#[cfg(target_arch = "x86_64")]
-use std::arch::x86_64::*;
 #[cfg(target_arch = "x86")]
 use std::arch::x86::*;
+#[cfg(target_arch = "x86_64")]
+use std::arch::x86_64::*;
 
 use log::info;
 
 use crate::cpu::ExtensionTest;
-use crate::get_fuzzing;
-use crate::get_iterations;
+use crate::{get_fuzzing, get_iterations};
 pub struct KL;
 impl ExtensionTest for KL {
     fn get_name() -> &'static str {
@@ -112,7 +111,7 @@ fn test_mm_aesenc128kl_u8() -> Result<(), String> {
         let h_key: [u8; 384] = [0; 384];
         let result = _mm_aesenc128kl_u8(&mut out, data, h_key.as_ptr() as *const u8);
         let out_bytes = std::mem::transmute::<__m128i, [u8; 16]>(out);
-        
+
         if result == 0 {
             return Err(format!("AESENC128KL returned zero"));
         }
@@ -190,16 +189,16 @@ fn test_mm_aesenc256kl_u8() -> Result<(), String> {
 fn test_mm_aesdec256kl_u8() -> Result<(), String> {
     unsafe {
         let mut out = _mm_setzero_si128();
-                unsafe {
-                    let mut out = _mm_setzero_si128();
-                    let data = _mm_set_epi64x(0x0123456789abcdefi64, 0xfedcba9876543210u64 as i64);
-                    let h_key: [u8; 512] = [0; 512];
-                    let result = _mm_aesdec256kl_u8(&mut out, data, h_key.as_ptr() as *const u8);
-                    if result == 0 {
-                        return Err(format!("AESDEC256KL returned zero"));
-                    }
-                    let _ = std::mem::transmute::<__m128i, [u8; 16]>(out);
-                }
+        unsafe {
+            let mut out = _mm_setzero_si128();
+            let data = _mm_set_epi64x(0x0123456789abcdefi64, 0xfedcba9876543210u64 as i64);
+            let h_key: [u8; 512] = [0; 512];
+            let result = _mm_aesdec256kl_u8(&mut out, data, h_key.as_ptr() as *const u8);
+            if result == 0 {
+                return Err(format!("AESDEC256KL returned zero"));
+            }
+            let _ = std::mem::transmute::<__m128i, [u8; 16]>(out);
+        }
     }
 
     if get_fuzzing() {
