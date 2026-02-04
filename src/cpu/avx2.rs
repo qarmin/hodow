@@ -494,11 +494,13 @@ fn test_mm_mask_i32gather_ps() -> Result<(), String> {
 
 fn test_mm_i32gather_epi64() -> Result<(), String> {
     unsafe {
-        let arr: [i64; 8] = [10, 20, 30, 40, 50, 60, 70, 80];
+        let arr: [i32; 8] = [10, 20, 30, 40, 50, 60, 70, 80];
         let indices = _mm_set_epi32(0, 0, 1, 3);
         let result = _mm_i32gather_epi64::<8>(arr.as_ptr(), indices);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        check_int_equality(result[0] as i32, 40)?;
+        // Previously checked only first element. Now check entire array.
+        let expected: [i64; 2] = [40, 0];
+        check_int_array_equality(&result, &expected)?;
         Ok(())
     }
 }
@@ -511,7 +513,9 @@ fn test_mm_mask_i32gather_epi64() -> Result<(), String> {
         let mask = _mm_set_epi64x(-1, 0);
         let result = _mm_mask_i32gather_epi64::<8>(src, arr.as_ptr(), indices, mask);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        check_int_equality(result[0] as i32, 99)?;
+        // Previously checked only first element. Now check entire array.
+        let expected: [i64; 2] = [99, 0];
+        check_int_array_equality(&result, &expected)?;
         Ok(())
     }
 }

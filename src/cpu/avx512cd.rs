@@ -37,7 +37,8 @@ fn test_mm_broadcastmw_epi32() -> Result<(), String> {
         let k = 0b10101010u16;
         let result = _mm_broadcastmw_epi32(k);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        check_int_equality(result[0], 0b10101010)?;
+        let expected = [0b10101010, 0b10101010, 0b10101010, 0b10101010];
+        check_int_array_equality(&result, &expected)?;
         Ok(())
     }
 }
@@ -108,7 +109,8 @@ fn test_mm_lzcnt_epi32() -> Result<(), String> {
         let a = _mm_set1_epi32(0x0000_00FF);
         let result = _mm_lzcnt_epi32(a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        check_int_equality(result[0], 24)?;
+        let expected = [24, 24, 24, 24];
+        check_int_array_equality(&result, &expected)?;
         Ok(())
     }
 }
@@ -119,8 +121,9 @@ fn test_mm_mask_lzcnt_epi32() -> Result<(), String> {
         let a = _mm_set1_epi32(0x0000_00FF);
         let result = _mm_mask_lzcnt_epi32(src, 0b1100, a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        check_int_equality(result[0], 100)?;
-        check_int_equality(result[2], 24)?;
+        // Previously used individual checks; now use array comparison
+        let expected = [100, 100, 24, 24];
+        check_int_array_equality(&result, &expected)?;
         Ok(())
     }
 }
