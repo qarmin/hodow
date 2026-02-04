@@ -36,7 +36,7 @@ mod avx512cd;
 mod avx512ifma;
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 mod avx512vbmi;
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "aes"))]
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 mod aes;
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 mod kl;

@@ -27,7 +27,7 @@ impl ExtensionTest for AVX512IFMA {
 }
 
 fn test_mm_madd52hi_avx_epu64() -> Result<(), String> {
-    #[cfg(target_feature = "avx512ifma")]
+    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     unsafe {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
@@ -39,12 +39,12 @@ fn test_mm_madd52hi_avx_epu64() -> Result<(), String> {
         }
         Ok(())
     }
-    #[cfg(not(target_feature = "avx512ifma"))]
+    #[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
     Ok(())
 }
 
 fn test_mm_madd52lo_avx_epu64() -> Result<(), String> {
-    #[cfg(target_feature = "avx512ifma")]
+    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     unsafe {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
@@ -56,12 +56,12 @@ fn test_mm_madd52lo_avx_epu64() -> Result<(), String> {
         }
         Ok(())
     }
-    #[cfg(not(target_feature = "avx512ifma"))]
+    #[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
     Ok(())
 }
 
 fn test_mm_madd52hi_epu64() -> Result<(), String> {
-    #[cfg(all(target_feature = "avx512ifma", target_feature = "avx512vl"))]
+    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     unsafe {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
@@ -74,12 +74,12 @@ fn test_mm_madd52hi_epu64() -> Result<(), String> {
         }
         Ok(())
     }
-    #[cfg(not(all(target_feature = "avx512ifma", target_feature = "avx512vl")))]
+    #[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
     Ok(())
 }
 
 fn test_mm_mask_madd52hi_epu64() -> Result<(), String> {
-    #[cfg(all(target_feature = "avx512ifma", target_feature = "avx512vl"))]
+    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     unsafe {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
@@ -89,12 +89,12 @@ fn test_mm_mask_madd52hi_epu64() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(all(target_feature = "avx512ifma", target_feature = "avx512vl")))]
+    #[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
     Ok(())
 }
 
 fn test_mm_maskz_madd52hi_epu64() -> Result<(), String> {
-    #[cfg(all(target_feature = "avx512ifma", target_feature = "avx512vl"))]
+    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     unsafe {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
@@ -104,12 +104,12 @@ fn test_mm_maskz_madd52hi_epu64() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(all(target_feature = "avx512ifma", target_feature = "avx512vl")))]
+    #[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
     Ok(())
 }
 
 fn test_mm_madd52lo_epu64() -> Result<(), String> {
-    #[cfg(all(target_feature = "avx512ifma", target_feature = "avx512vl"))]
+    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     unsafe {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
@@ -121,12 +121,12 @@ fn test_mm_madd52lo_epu64() -> Result<(), String> {
         }
         Ok(())
     }
-    #[cfg(not(all(target_feature = "avx512ifma", target_feature = "avx512vl")))]
+    #[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
     Ok(())
 }
 
 fn test_mm_mask_madd52lo_epu64() -> Result<(), String> {
-    #[cfg(all(target_feature = "avx512ifma", target_feature = "avx512vl"))]
+    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     unsafe {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
@@ -136,12 +136,12 @@ fn test_mm_mask_madd52lo_epu64() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(all(target_feature = "avx512ifma", target_feature = "avx512vl")))]
+    #[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
     Ok(())
 }
 
 fn test_mm_maskz_madd52lo_epu64() -> Result<(), String> {
-    #[cfg(all(target_feature = "avx512ifma", target_feature = "avx512vl"))]
+    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     unsafe {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
@@ -151,6 +151,6 @@ fn test_mm_maskz_madd52lo_epu64() -> Result<(), String> {
         let _ = result;
         Ok(())
     }
-    #[cfg(not(all(target_feature = "avx512ifma", target_feature = "avx512vl")))]
+    #[cfg(not(any(target_arch = "x86", target_arch = "x86_64")))]
     Ok(())
 }
