@@ -5,7 +5,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{check_array_equality, check_f32_array_equality, check_f64_array_equality, check_int_equality, get_iterations, ExtensionTest, TestFunction};
+use crate::cpu::{check_array_equality, check_float_array_equality_with_error, check_float_array_equality_with_error, check_int_equality, get_iterations, ExtensionTest, TestFunction};
 use crate::get_fuzzing;
 
 pub struct AVX2;
@@ -408,7 +408,7 @@ fn test_mm_broadcastsd_pd() -> Result<(), String> {
         let a = _mm_set_pd(0.0, 42.5);
         let result = _mm_broadcastsd_pd(a);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[42.5, 42.5])?;
+        check_float_array_equality_with_error(&result, &[42.5, 42.5])?;
     }
     Ok(())
 }
@@ -428,7 +428,7 @@ fn test_mm_broadcastss_ps() -> Result<(), String> {
         let a = _mm_set_ps(0.0, 0.0, 0.0, 42.5);
         let result = _mm_broadcastss_ps(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_f32_array_equality(&result, &[42.5, 42.5, 42.5, 42.5])?;
+        check_float_array_equality_with_error(&result, &[42.5, 42.5, 42.5, 42.5])?;
     }
     Ok(())
 }
@@ -473,7 +473,7 @@ fn test_mm_i32gather_ps() -> Result<(), String> {
         let indices = _mm_set_epi32(0, 2, 4, 6);
         let result = _mm_i32gather_ps::<4>(arr.as_ptr(), indices);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_f32_array_equality(&result, &[7.0, 0.0, 0.0, 0.0])?;
+        check_float_array_equality_with_error(&result, &[7.0, 5.0, 3.0, 1.0])?;
     }
     Ok(())
 }
@@ -487,7 +487,7 @@ fn test_mm_mask_i32gather_ps() -> Result<(), String> {
         let result = _mm_mask_i32gather_ps::<4>(src, arr.as_ptr(), indices, mask);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
 
-        check_f32_array_equality(&result, &[7.0, 99.0, 5.0, 99.0])?;
+        check_float_array_equality_with_error(&result, &[99.0, 5.0, 99.0, 1.0])?;
         Ok(())
     }
 }
@@ -498,9 +498,7 @@ fn test_mm_i32gather_epi64() -> Result<(), String> {
         let indices = _mm_set_epi32(0, 0, 1, 3);
         let result = _mm_i32gather_epi64::<8>(arr.as_ptr(), indices);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        // Previously checked only first element. Now check entire array.
-        let expected: [i64; 2] = [40, 0];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[40, 20])?;
         Ok(())
     }
 }
@@ -513,9 +511,7 @@ fn test_mm_mask_i32gather_epi64() -> Result<(), String> {
         let mask = _mm_set_epi64x(-1, 0);
         let result = _mm_mask_i32gather_epi64::<8>(src, arr.as_ptr(), indices, mask);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        // Previously checked only first element. Now check entire array.
-        let expected: [i64; 2] = [99, 0];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[99, 20])?;
         Ok(())
     }
 }
@@ -526,7 +522,7 @@ fn test_mm_i32gather_pd() -> Result<(), String> {
         let indices = _mm_set_epi32(0, 0, 1, 3);
         let result = _mm_i32gather_pd::<8>(arr.as_ptr(), indices);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[4.0, 2.0])?;
+        check_float_array_equality_with_error(&result, &[4.0, 2.0])?;
         Ok(())
     }
 }
@@ -539,7 +535,7 @@ fn test_mm_mask_i32gather_pd() -> Result<(), String> {
         let mask = _mm_set_pd(-1.0, 0.0);
         let result = _mm_mask_i32gather_pd::<8>(src, arr.as_ptr(), indices, mask);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[4.0, 99.0])?;
+        check_float_array_equality_with_error(&result, &[99.0, 2.0])?;
         Ok(())
     }
 }
@@ -550,7 +546,7 @@ fn test_mm_i64gather_epi32() -> Result<(), String> {
         let indices = _mm_set_epi64x(0, 2);
         let result = _mm_i64gather_epi32::<4>(arr.as_ptr(), indices);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        check_array_equality(&result, &[30, 0])?;
+        check_array_equality(&result, &[30, 10, 0, 0])?;
     }
     Ok(())
 }
@@ -563,7 +559,7 @@ fn test_mm_mask_i64gather_epi32() -> Result<(), String> {
         let mask = _mm_set_epi32(-1, 0, -1, 0);
         let result = _mm_mask_i64gather_epi32::<4>(src, arr.as_ptr(), indices, mask);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        check_array_equality(&result, &[99, 0])?;
+        check_array_equality(&result, &[99, 10, 0, 0])?;
     }
     Ok(())
 }
@@ -574,7 +570,7 @@ fn test_mm_i64gather_ps() -> Result<(), String> {
         let indices = _mm_set_epi64x(0, 2);
         let result = _mm_i64gather_ps::<4>(arr.as_ptr(), indices);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_f32_array_equality(&result, &[3.0, 0.0, 0.0, 0.0])?;
+        check_float_array_equality_with_error(&result, &[3.0, 1.0, 0.0, 0.0])?;
     }
     Ok(())
 }
@@ -587,7 +583,7 @@ fn test_mm_mask_i64gather_ps() -> Result<(), String> {
         let mask = _mm_set_ps(-1.0, 0.0, -1.0, 0.0);
         let result = _mm_mask_i64gather_ps::<4>(src, arr.as_ptr(), indices, mask);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_f32_array_equality(&result, &[7.0, 99.0, 3.0, 99.0])?;
+        check_float_array_equality_with_error(&result, &[99.0, 1.0, 0.0, 0.0])?;
         Ok(())
     }
 }
@@ -598,7 +594,7 @@ fn test_mm_i64gather_epi64() -> Result<(), String> {
         let indices = _mm_set_epi64x(0, 3);
         let result = _mm_i64gather_epi64::<8>(arr.as_ptr(), indices);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        check_array_equality(&result, &[40, 0])?;
+        check_array_equality(&result, &[40, 10])?;
         Ok(())
     }
 }
@@ -611,7 +607,7 @@ fn test_mm_mask_i64gather_epi64() -> Result<(), String> {
         let mask = _mm_set_epi64x(-1, 0);
         let result = _mm_mask_i64gather_epi64::<8>(src, arr.as_ptr(), indices, mask);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        check_array_equality(&result, &[99, 0])?;
+        check_array_equality(&result, &[99, 10])?;
         Ok(())
     }
 }
@@ -622,7 +618,7 @@ fn test_mm_i64gather_pd() -> Result<(), String> {
         let indices = _mm_set_epi64x(0, 3);
         let result = _mm_i64gather_pd::<8>(arr.as_ptr(), indices);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[4.0, 0.0])?;
+        check_float_array_equality_with_error(&result, &[4.0, 1.0])?;
         Ok(())
     }
 }
@@ -635,7 +631,7 @@ fn test_mm_mask_i64gather_pd() -> Result<(), String> {
         let mask = _mm_set_pd(-1.0, 0.0);
         let result = _mm_mask_i64gather_pd::<8>(src, arr.as_ptr(), indices, mask);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[4.0, 99.0])?;
+        check_float_array_equality_with_error(&result, &[99.0, 1.0])?;
         Ok(())
     }
 }

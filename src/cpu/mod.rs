@@ -208,29 +208,13 @@ pub fn test_all_extensions() -> Result<(), String> {
     Ok(())
 }
 
-#[allow(dead_code)]
-fn check_f32_array_equality(a: &[f32], b: &[f32]) -> Result<(), String> {
-    if a.len() != b.len() {
-        return Err(format!("Arrays have different lengths: {} and {}", a.len(), b.len()));
+
+fn check_float_array_equality_with_error<T: PartialEq + Debug  + std::ops::Sub>(a: &[T], b: &[T]) -> Result<(), String> {
+    if a == b {
+        return Ok(());
     }
-
-    for i in 0..a.len() {
-        if a[i].is_infinite() && !b[i].is_infinite() {
-            return Err(format!("Got {a:?}, expected {b:?} (One is infinite, other is not)"));
-        } else if a[i].is_nan() && !b[i].is_nan() {
-            return Err(format!("Got {a:?}, expected {b:?} (One is NaN, other is not)"));
-        } else if (a[i] - b[i]).abs() > 0.001 {
-            return Err(format!("Got {a:?}, expected {b:?} (Difference is too big)"));
-        }
-    }
-
-    Ok(())
-}
-
-#[allow(dead_code)]
-fn check_f64_array_equality(a: &[f64], b: &[f64]) -> Result<(), String> {
     if a.len() != b.len() {
-        return Err(format!("Arrays have different lengths: {} and {}", a.len(), b.len()));
+        return Err(format!("Got {a:?}, expected {b:?} (Arrays have different lengths: {} and {})", a.len(), b.len()));
     }
 
     for i in 0..a.len() {

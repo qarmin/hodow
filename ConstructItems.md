@@ -15,7 +15,7 @@ I will think that is fixed if above command returns no results.
 Use one of this methods from mod.rs:
 ```
 fn check_array_equality<T: PartialEq + Debug>(a: &[T], b: &[T]) -> Result<(), String> {
-fn check_f32_array_equality(a: &[f32], b: &[f32]) -> Result<(), String> { 
+fn check_float_array_equality_with_error(a: &[f32], b: &[f32]) -> Result<(), String> { 
 pub fn check_int_equality(a: i32, b: i32) -> Result<(), String> { 
 pub fn check_int_equality_with_error(a: i32, b: i32, error: i32) -> Result<(), String> {
 ```

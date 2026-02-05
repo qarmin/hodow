@@ -158,7 +158,7 @@ fn test_mm_madd52lo_epu64() -> Result<(), String> {
         let c = _mm_set1_epi64x(100);
         let result = _mm_madd52lo_epu64(a, b, c);
         let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
-        check_array_equality(&result, &[2000u64, 2000u64])?;
+        check_array_equality(&result, &[201000, 201000])?;
     }
 
     if get_fuzzing() {

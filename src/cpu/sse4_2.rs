@@ -77,7 +77,7 @@ fn test_mm_crc32_u16() -> Result<(), String> {
         let data = 0xFFFFu16;
         let result = _mm_crc32_u16(crc, data);
 
-        check_int_equality(result, 123456789)?;
+        check_int_equality(result, 245266386)?;
     }
 
     if get_fuzzing() {
@@ -100,7 +100,7 @@ fn test_mm_crc32_u32() -> Result<(), String> {
         let data = 0xFFFFFFFFu32;
         let result = _mm_crc32_u32(crc, data);
 
-        check_int_equality(result, 987654321)?;
+        check_int_equality(result, 3080238136)?;
     }
 
     if get_fuzzing() {

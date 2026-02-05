@@ -5,7 +5,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{check_array_equality, check_f32_array_equality, check_f64_array_equality, check_float_equality, check_int_equality, get_iterations, ExtensionTest, TestFunction};
+use crate::cpu::{check_array_equality, check_float_array_equality_with_error, check_float_array_equality_with_error, check_float_equality, check_int_equality, get_iterations, ExtensionTest, TestFunction};
 use crate::{get_four_random_floats, get_fuzzing, get_random_float};
 
 pub struct SSE2;
@@ -144,7 +144,7 @@ fn test_mm_set_pd() -> Result<(), String> {
     unsafe {
         let result = _mm_set_pd(1.0, 2.0);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[2.0, 1.0])?;
+        check_float_array_equality_with_error(&result, &[2.0, 1.0])?;
     }
 
     if get_fuzzing() {
@@ -165,7 +165,7 @@ fn test_mm_set1_pd() -> Result<(), String> {
     unsafe {
         let result = _mm_set1_pd(3.13);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[3.13, 3.13])?;
+        check_float_array_equality_with_error(&result, &[3.13, 3.13])?;
     }
 
     if get_fuzzing() {
@@ -185,7 +185,7 @@ fn test_mm_setzero_pd() -> Result<(), String> {
     unsafe {
         let result = _mm_setzero_pd();
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[0.0, 0.0])?;
+        check_float_array_equality_with_error(&result, &[0.0, 0.0])?;
     }
     Ok(())
 }
@@ -196,7 +196,7 @@ fn test_mm_add_pd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 4.0);
         let result = _mm_add_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[6.0, 4.0])?;
+        check_float_array_equality_with_error(&result, &[6.0, 4.0])?;
     }
 
     if get_fuzzing() {
@@ -221,7 +221,7 @@ fn test_mm_sub_pd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 4.0);
         let result = _mm_sub_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[2.0, 2.0])?;
+        check_float_array_equality_with_error(&result, &[2.0, 2.0])?;
     }
 
     if get_fuzzing() {
@@ -246,7 +246,7 @@ fn test_mm_mul_pd() -> Result<(), String> {
         let b = _mm_set_pd(4.0, 5.0);
         let result = _mm_mul_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[15.0, 8.0])?;
+        check_float_array_equality_with_error(&result, &[15.0, 8.0])?;
     }
 
     if get_fuzzing() {
@@ -273,7 +273,7 @@ fn test_mm_load_pd() -> Result<(), String> {
         let data = AlignedData([15.0, 62.0]);
         let result = _mm_load_pd(data.0.as_ptr());
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[15.0, 62.0])?;
+        check_float_array_equality_with_error(&result, &[15.0, 62.0])?;
     }
 
     if get_fuzzing() {
@@ -296,7 +296,7 @@ fn test_mm_loadu_pd() -> Result<(), String> {
         let result = _mm_loadu_pd(data.as_ptr());
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
 
-        check_f64_array_equality(&result, &[1.0, 2.0])?;
+        check_float_array_equality_with_error(&result, &[1.0, 2.0])?;
     }
 
     if get_fuzzing() {
@@ -322,7 +322,7 @@ fn test_mm_store_pd() -> Result<(), String> {
         let mut result = AlignedData([0.0; 2]);
         let vec = _mm_loadu_pd(data.0.as_ptr());
         _mm_store_pd(result.0.as_mut_ptr(), vec);
-        check_f64_array_equality(&result.0, &[1.0, 2.0])?;
+        check_float_array_equality_with_error(&result.0, &[1.0, 2.0])?;
     }
 
     if get_fuzzing() {
@@ -344,7 +344,7 @@ fn test_mm_cvtsd_f64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(1.0, 2.0);
         let result = _mm_cvtsd_f64(a);
-        check_f64_array_equality(&[result], &[2.0])?;
+        check_float_array_equality_with_error(&[result], &[2.0])?;
     }
 
     if get_fuzzing() {
@@ -1456,7 +1456,7 @@ fn test_mm_shufflelo_epi16() -> Result<(), String> {
         let result = _mm_shufflelo_epi16::<0b00011011>(a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
 
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[3, 2, 1, 0, 4, 5, 6, 7])?;
     }
     Ok(())
 }
@@ -1475,7 +1475,7 @@ fn test_mm_insert_epi16() -> Result<(), String> {
         let a = _mm_set_epi16(7, 6, 5, 4, 3, 2, 1, 0);
         let result = _mm_insert_epi16::<3>(a, 99);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[0, 1, 2, 99, 4, 5, 6, 7])?;
     }
     Ok(())
 }
@@ -1495,7 +1495,7 @@ fn test_mm_cvtepi32_pd() -> Result<(), String> {
         let a = _mm_set_epi32(0, 0, 20, 10);
         let result = _mm_cvtepi32_pd(a);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[0.0])?;
+        check_float_array_equality_with_error(&result, &[0.0])?;
     }
     Ok(())
 }
@@ -1505,7 +1505,7 @@ fn test_mm_cvtepi32_ps() -> Result<(), String> {
         let a = _mm_set_epi32(4, 3, 2, 1);
         let result = _mm_cvtepi32_ps(a);
         let result = std::mem::transmute::<std::arch::x86_64::__m128, [f32; 4]>(result);
-        check_f32_array_equality(&result, &result)?;
+        check_float_array_equality_with_error(&result, &result)?;
     }
     Ok(())
 }
@@ -1516,7 +1516,7 @@ fn test_mm_cvtpd_epi32() -> Result<(), String> {
         let result = _mm_cvtpd_epi32(a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
 
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[10, 21, 0, 0])?;
     }
     Ok(())
 }
@@ -1527,7 +1527,7 @@ fn test_mm_cvtps_epi32() -> Result<(), String> {
         let ps = _mm_cvtpd_ps(a);
         let result = _mm_cvtps_epi32(ps);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[1, 2, 0, 0])?;
     }
     Ok(())
 }
@@ -1538,7 +1538,7 @@ fn test_mm_cvttpd_epi32() -> Result<(), String> {
         let result = _mm_cvttpd_epi32(a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
 
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[10, 20, 0, 0])?;
     }
     Ok(())
 }
@@ -1561,7 +1561,7 @@ fn test_mm_add_sd() -> Result<(), String> {
         let b = _mm_set_sd(5.0);
         let result = _mm_add_sd(a, b);
         let result_f64 = _mm_cvtsd_f64(result);
-        check_f64_array_equality(&[result_f64], &[result_f64])?;
+        check_float_array_equality_with_error(&[result_f64], &[result_f64])?;
     }
     Ok(())
 }
@@ -1572,7 +1572,7 @@ fn test_mm_div_sd() -> Result<(), String> {
         let b = _mm_set_sd(4.0);
         let result = _mm_div_sd(a, b);
         let result_f64 = _mm_cvtsd_f64(result);
-        check_f64_array_equality(&[result_f64], &[result_f64])?;
+        check_float_array_equality_with_error(&[result_f64], &[result_f64])?;
     }
     Ok(())
 }
@@ -1594,7 +1594,7 @@ fn test_mm_max_sd() -> Result<(), String> {
         let b = _mm_set_sd(5.0);
         let result = _mm_max_sd(a, b);
         let result_f64 = _mm_cvtsd_f64(result);
-        check_f64_array_equality(&[result_f64], &[result_f64])?;
+        check_float_array_equality_with_error(&[result_f64], &[result_f64])?;
     }
     Ok(())
 }
@@ -1616,7 +1616,7 @@ fn test_mm_min_sd() -> Result<(), String> {
         let b = _mm_set_sd(5.0);
         let result = _mm_min_sd(a, b);
         let result_f64 = _mm_cvtsd_f64(result);
-        check_f64_array_equality(&[result_f64], &[result_f64])?;
+        check_float_array_equality_with_error(&[result_f64], &[result_f64])?;
     }
     Ok(())
 }
@@ -1638,7 +1638,7 @@ fn test_mm_mul_sd() -> Result<(), String> {
         let b = _mm_set_sd(5.0);
         let result = _mm_mul_sd(a, b);
         let result_f64 = _mm_cvtsd_f64(result);
-        check_f64_array_equality(&[result_f64], &[result_f64])?;
+        check_float_array_equality_with_error(&[result_f64], &[result_f64])?;
     }
     Ok(())
 }
@@ -1649,7 +1649,7 @@ fn test_mm_sqrt_sd() -> Result<(), String> {
         let b = _mm_set_sd(0.0);
         let result = _mm_sqrt_sd(b, a);
         let result_f64 = _mm_cvtsd_f64(result);
-        check_f64_array_equality(&[result_f64], &[result_f64])?;
+        check_float_array_equality_with_error(&[result_f64], &[result_f64])?;
     }
     Ok(())
 }
@@ -1670,7 +1670,7 @@ fn test_mm_sub_sd() -> Result<(), String> {
         let b = _mm_set_sd(3.0);
         let result = _mm_sub_sd(a, b);
         let expected = _mm_cvtsd_f64(result);
-        check_f64_array_equality(&[expected], &[expected])?;
+        check_float_array_equality_with_error(&[expected], &[expected])?;
     }
     Ok(())
 }
@@ -1845,7 +1845,7 @@ fn test_mm_cvtsi32_sd() -> Result<(), String> {
         let b = 42i32;
         let result = _mm_cvtsi32_sd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[0.0])?;
+        check_float_array_equality_with_error(&result, &[0.0])?;
     }
     Ok(())
 }
@@ -2288,7 +2288,7 @@ fn test_mm_cvtps_pd() -> Result<(), String> {
         let a = _mm_castsi128_ps(ints);
         let result = _mm_cvtps_pd(a);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[0.0])?;
+        check_float_array_equality_with_error(&result, &[0.0])?;
         Ok(())
     }
 }
@@ -2309,7 +2309,7 @@ fn test_mm_cvtsd_ss() -> Result<(), String> {
         let b = _mm_set_sd(42.5);
         let result = _mm_cvtsd_ss(a, b);
         let result = std::mem::transmute::<std::arch::x86_64::__m128, [f32; 4]>(result);
-        check_f32_array_equality(&result, &result)?;
+        check_float_array_equality_with_error(&result, &result)?;
 
         Ok(())
     }
@@ -2323,7 +2323,7 @@ fn test_mm_cvtss_sd() -> Result<(), String> {
         let result = _mm_cvtss_sd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
 
-        check_f64_array_equality(&result, &[0.0])?;
+        check_float_array_equality_with_error(&result, &[0.0])?;
         Ok(())
     }
 }
@@ -2341,7 +2341,7 @@ fn test_mm_set_sd() -> Result<(), String> {
     unsafe {
         let result = _mm_set_sd(42.5);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[0.0])?;
+        check_float_array_equality_with_error(&result, &[0.0])?;
     }
     Ok(())
 }
@@ -2350,7 +2350,7 @@ fn test_mm_set_pd1() -> Result<(), String> {
     unsafe {
         let result = _mm_set_pd1(42.5);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[1.0, 2.0])?;
+        check_float_array_equality_with_error(&result, &[1.0, 2.0])?;
     }
     Ok(())
 }
@@ -2359,7 +2359,7 @@ fn test_mm_setr_pd() -> Result<(), String> {
     unsafe {
         let result = _mm_setr_pd(1.0, 2.0);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[0.0])?;
+        check_float_array_equality_with_error(&result, &[0.0])?;
     }
     Ok(())
 }
@@ -2378,7 +2378,7 @@ fn test_mm_load_sd() -> Result<(), String> {
         let mem = [42.5f64, 1.0];
         let result = _mm_load_sd(mem.as_ptr());
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[0.0])?;
+        check_float_array_equality_with_error(&result, &[0.0])?;
     }
     Ok(())
 }
@@ -2389,7 +2389,7 @@ fn test_mm_loadh_pd() -> Result<(), String> {
         let mem = [42.5f64];
         let result = _mm_loadh_pd(a, mem.as_ptr());
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[0.0])?;
+        check_float_array_equality_with_error(&result, &[0.0])?;
     }
     Ok(())
 }
@@ -2400,7 +2400,7 @@ fn test_mm_loadl_pd() -> Result<(), String> {
         let mem = [42.5f64];
         let result = _mm_loadl_pd(a, mem.as_ptr());
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[0.0])?;
+        check_float_array_equality_with_error(&result, &[0.0])?;
     }
     Ok(())
 }
@@ -2419,7 +2419,7 @@ fn test_mm_store_sd() -> Result<(), String> {
         let mut mem = [20.0f64];
         let a = _mm_set_sd(42.5);
         _mm_store_sd(mem.as_mut_ptr(), a);
-        check_f64_array_equality(&mem, &[20.0])?;
+        check_float_array_equality_with_error(&mem, &[20.0])?;
     }
     Ok(())
 }
@@ -2469,7 +2469,7 @@ fn test_mm_shuffle_pd() -> Result<(), String> {
         let b = _mm_set_pd(4.0, 3.0);
         let result = _mm_shuffle_pd::<0b10>(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[0.0])?;
+        check_float_array_equality_with_error(&result, &[0.0])?;
     }
     Ok(())
 }
@@ -2480,7 +2480,7 @@ fn test_mm_move_sd() -> Result<(), String> {
         let b = _mm_set_pd(4.0, 3.0);
         let result = _mm_move_sd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_f64_array_equality(&result, &[0.0])?;
+        check_float_array_equality_with_error(&result, &[0.0])?;
     }
     Ok(())
 }
