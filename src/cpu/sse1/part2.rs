@@ -34,15 +34,14 @@ pub(super) fn test_mm_set_ps() -> Result<(), String> {
 pub(super) fn test_mm_add_ps() -> Result<(), String> {
     pub(super) fn use_mm_add_ps(a: [f32; 4], b: [f32; 4]) -> [f32; 4] {
         unsafe {
-            let a = _mm_set_ps(a[0], a[1], a[2], a[3]);
-            let b = _mm_set_ps(b[0], b[1], b[2], b[3]);
-
-            let result = _mm_add_ps(a, b);
+            let va = _mm_set_ps(a[0], a[1], a[2], a[3]);
+            let vb = _mm_set_ps(b[0], b[1], b[2], b[3]);
+            let result = _mm_add_ps(va, vb);
             std::mem::transmute(result)
         }
     }
 
-    for (first_input, second_input, _expected_result) in &[
+    for (first_input, second_input, expected) in &[
         ([1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0], [12.0, 10.0, 8.0, 6.0]),
         ([0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0]),
         ([-1.0, -2.0, -3.0, -4.0], [-5.0, -6.0, -7.0, -8.0], [-12.0, -10.0, -8.0, -6.0]),
@@ -54,10 +53,10 @@ pub(super) fn test_mm_add_ps() -> Result<(), String> {
         ),
     ] {
         let result = use_mm_add_ps(*first_input, *second_input);
-        check_float_array_equality_with_error(&result, &[12.0, 10.0, 8.0, 6.0])?;
+        check_float_array_equality_with_error(&result, expected)?;
     }
 
-    for (first_input, second_input, _expected_result) in &[
+    for (first_input, second_input, expected) in &[
         ([1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0], [12.0, 10.0, 8.0, 6.0]),
         ([0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0]),
         ([-1.0, -2.0, -3.0, -4.0], [-5.0, -6.0, -7.0, -8.0], [-12.0, -10.0, -8.0, -6.0]),
@@ -69,7 +68,7 @@ pub(super) fn test_mm_add_ps() -> Result<(), String> {
         ),
     ] {
         let result = use_mm_add_ps(*first_input, *second_input);
-        check_float_array_equality_with_error(&result, &[f32::NAN, f32::NAN, f32::NEG_INFINITY, f32::INFINITY])?;
+        check_float_array_equality_with_error(&result, expected)?;
     }
 
     if get_fuzzing() {
@@ -85,15 +84,14 @@ pub(super) fn test_mm_add_ps() -> Result<(), String> {
 pub(super) fn test_mm_sub_ps() -> Result<(), String> {
     pub(super) fn use_mm_sub_ps(a: [f32; 4], b: [f32; 4]) -> [f32; 4] {
         unsafe {
-            let a = _mm_set_ps(a[0], a[1], a[2], a[3]);
-            let b = _mm_set_ps(b[0], b[1], b[2], b[3]);
-
-            let result = _mm_sub_ps(a, b);
+            let va = _mm_set_ps(a[0], a[1], a[2], a[3]);
+            let vb = _mm_set_ps(b[0], b[1], b[2], b[3]);
+            let result = _mm_sub_ps(va, vb);
             std::mem::transmute(result)
         }
     }
 
-    for (first_input, second_input, _expected_result) in &[
+    for (first_input, second_input, expected) in &[
         ([1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0], [-4.0, -4.0, -4.0, -4.0]),
         ([0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0]),
         ([-1.0, -2.0, -3.0, -4.0], [-5.0, -6.0, -7.0, -8.0], [4.0, 4.0, 4.0, 4.0]),
@@ -109,10 +107,10 @@ pub(super) fn test_mm_sub_ps() -> Result<(), String> {
         ),
     ] {
         let result = use_mm_sub_ps(*first_input, *second_input);
-        check_float_array_equality_with_error(&result, &[-4.0, -4.0, -4.0, -4.0])?;
+        check_float_array_equality_with_error(&result, expected)?;
     }
 
-    for (first_input, second_input, _expected_result) in &[
+    for (first_input, second_input, expected) in &[
         ([1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0], [-4.0, -4.0, -4.0, -4.0]),
         ([0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0]),
         ([-1.0, -2.0, -3.0, -4.0], [-5.0, -6.0, -7.0, -8.0], [4.0, 4.0, 4.0, 4.0]),
@@ -128,7 +126,7 @@ pub(super) fn test_mm_sub_ps() -> Result<(), String> {
         ),
     ] {
         let result = use_mm_sub_ps(*first_input, *second_input);
-        check_float_array_equality_with_error(&result, &[f32::NAN, f32::NAN, f32::NEG_INFINITY, f32::INFINITY])?;
+        check_float_array_equality_with_error(&result, expected)?;
     }
 
     if get_fuzzing() {
@@ -167,32 +165,31 @@ pub(super) fn test_mm_mul_ps() -> Result<(), String> {
 pub(super) fn test_mm_div_ps() -> Result<(), String> {
     pub(super) fn use_mm_div_ps(a: [f32; 4], b: [f32; 4]) -> [f32; 4] {
         unsafe {
-            let a = _mm_set_ps(a[0], a[1], a[2], a[3]);
-            let b = _mm_set_ps(b[0], b[1], b[2], b[3]);
-
-            let result = _mm_div_ps(a, b);
+            let va = _mm_set_ps(a[0], a[1], a[2], a[3]);
+            let vb = _mm_set_ps(b[0], b[1], b[2], b[3]);
+            let result = _mm_div_ps(va, vb);
             std::mem::transmute(result)
         }
     }
 
-    for (first_input, second_input, _expected_result) in &[
+    for (first_input, second_input, expected) in &[
         ([4.0, 9.0, 16.0, 25.0], [2.0, 3.0, 4.0, 5.0], [5.0, 4.0, 3.0, 2.0]),
         ([1.0, 1.0, 1.0, 1.0], [1.0, 1.0, 1.0, 1.0], [1.0, 1.0, 1.0, 1.0]),
         ([0.0, 0.0, 0.0, 0.0], [1.0, 1.0, 1.0, 1.0], [0.0, 0.0, 0.0, 0.0]),
         ([0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0], [f32::NAN, f32::NAN, f32::NAN, f32::NAN]),
     ] {
         let result = use_mm_div_ps(*first_input, *second_input);
-        check_float_array_equality_with_error(&result, &[5.0, 4.0, 3.0, 2.0])?;
+        check_float_array_equality_with_error(&result, expected)?;
     }
 
-    for (first_input, second_input, _expected_result) in &[
+    for (first_input, second_input, expected) in &[
         ([4.0, 9.0, 16.0, 25.0], [2.0, 3.0, 4.0, 5.0], [5.0, 4.0, 3.0, 2.0]),
         ([1.0, 1.0, 1.0, 1.0], [1.0, 1.0, 1.0, 1.0], [1.0, 1.0, 1.0, 1.0]),
         ([0.0, 0.0, 0.0, 0.0], [1.0, 1.0, 1.0, 1.0], [0.0, 0.0, 0.0, 0.0]),
         ([0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0], [f32::NAN, f32::NAN, f32::NAN, f32::NAN]),
     ] {
         let result = use_mm_div_ps(*first_input, *second_input);
-        check_float_array_equality_with_error(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN])?;
+        check_float_array_equality_with_error(&result, expected)?;
     }
 
     if get_fuzzing() {
