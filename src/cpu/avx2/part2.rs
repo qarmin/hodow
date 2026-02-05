@@ -343,7 +343,7 @@ pub(super) fn test_mm_i32gather_epi64() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let base: [i64; 8] = [rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random()];
-                let idx = _mm_set_epi32((rand::random::<u32>() % 8) as i64, (rand::random::<u32>() % 8) as i64);
+                let idx = _mm_set_epi32((rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32);
                 let _ = _mm_i32gather_epi64::<8>(base.as_ptr(), idx);
             }
         }
@@ -369,7 +369,7 @@ pub(super) fn test_mm_mask_i32gather_epi64() -> Result<(), String> {
             unsafe {
                 let base: [i64; 8] = [rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random()];
                 let src = _mm_set1_epi64x(rand::random());
-                let idx = _mm_set_epi32((rand::random::<u32>() % 8) as i64, (rand::random::<u32>() % 8) as i64);
+                let idx = _mm_set_epi32((rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32);
                 let mask = _mm_set_epi64x(rand::random(), rand::random());
                 let _ = _mm_mask_i32gather_epi64::<8>(src, base.as_ptr(), idx, mask);
             }
@@ -393,7 +393,7 @@ pub(super) fn test_mm_i32gather_pd() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let base: [f64; 8] = [rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random()];
-                let idx = _mm_set_epi32((rand::random::<u32>() % 8) as i64, (rand::random::<u32>() % 8) as i64);
+                let idx = _mm_set_epi32((rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32);
                 let _ = _mm_i32gather_pd::<8>(base.as_ptr(), idx);
             }
         }
@@ -419,7 +419,7 @@ pub(super) fn test_mm_mask_i32gather_pd() -> Result<(), String> {
             unsafe {
                 let base: [f64; 8] = [rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random()];
                 let src = _mm_set1_pd(rand::random());
-                let idx = _mm_set_epi32((rand::random::<u32>() % 8) as i64, (rand::random::<u32>() % 8) as i64);
+                let idx = _mm_set_epi32((rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32);
                 let mask = _mm_set_pd(rand::random(), rand::random());
                 let _ = _mm_mask_i32gather_pd::<8>(src, base.as_ptr(), idx, mask);
             }
