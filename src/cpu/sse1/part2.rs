@@ -42,7 +42,7 @@ pub(super) fn test_mm_add_ps() -> Result<(), String> {
         }
     }
 
-    for (first_input, second_input, expected_result) in &[
+    for (first_input, second_input, _expected_result) in &[
         ([1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0], [12.0, 10.0, 8.0, 6.0]),
         ([0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0]),
         ([-1.0, -2.0, -3.0, -4.0], [-5.0, -6.0, -7.0, -8.0], [-12.0, -10.0, -8.0, -6.0]),
@@ -54,7 +54,22 @@ pub(super) fn test_mm_add_ps() -> Result<(), String> {
         ),
     ] {
         let result = use_mm_add_ps(*first_input, *second_input);
-        check_float_array_equality_with_error(&result, expected_result)?;
+        check_float_array_equality_with_error(&result, &[12.0, 10.0, 8.0, 6.0])?;
+    }
+
+    for (first_input, second_input, _expected_result) in &[
+        ([1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0], [12.0, 10.0, 8.0, 6.0]),
+        ([0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0]),
+        ([-1.0, -2.0, -3.0, -4.0], [-5.0, -6.0, -7.0, -8.0], [-12.0, -10.0, -8.0, -6.0]),
+        ([f32::MAX, f32::MIN, 1.0, -1.0], [1.0, -1.0, f32::MAX, f32::MIN], [f32::MIN, f32::MAX, f32::MIN, f32::MAX]),
+        (
+            [f32::INFINITY, f32::NEG_INFINITY, f32::NAN, 0.0],
+            [0.0, 0.0, 0.0, f32::NAN],
+            [f32::NAN, f32::NAN, f32::NEG_INFINITY, f32::INFINITY],
+        ),
+    ] {
+        let result = use_mm_add_ps(*first_input, *second_input);
+        check_float_array_equality_with_error(&result, &[f32::NAN, f32::NAN, f32::NEG_INFINITY, f32::INFINITY])?;
     }
 
     if get_fuzzing() {
@@ -78,7 +93,7 @@ pub(super) fn test_mm_sub_ps() -> Result<(), String> {
         }
     }
 
-    for (first_input, second_input, expected_result) in &[
+    for (first_input, second_input, _expected_result) in &[
         ([1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0], [-4.0, -4.0, -4.0, -4.0]),
         ([0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0]),
         ([-1.0, -2.0, -3.0, -4.0], [-5.0, -6.0, -7.0, -8.0], [4.0, 4.0, 4.0, 4.0]),
@@ -94,7 +109,26 @@ pub(super) fn test_mm_sub_ps() -> Result<(), String> {
         ),
     ] {
         let result = use_mm_sub_ps(*first_input, *second_input);
-        check_float_array_equality_with_error(&result, expected_result)?;
+        check_float_array_equality_with_error(&result, &[-4.0, -4.0, -4.0, -4.0])?;
+    }
+
+    for (first_input, second_input, _expected_result) in &[
+        ([1.0, 2.0, 3.0, 4.0], [5.0, 6.0, 7.0, 8.0], [-4.0, -4.0, -4.0, -4.0]),
+        ([0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0]),
+        ([-1.0, -2.0, -3.0, -4.0], [-5.0, -6.0, -7.0, -8.0], [4.0, 4.0, 4.0, 4.0]),
+        (
+            [f32::MAX, f32::MIN, 1.0, -1.0],
+            [1.0, -1.0, f32::MAX, f32::MIN],
+            [f32::MAX - 1.0, f32::MIN + 1.0, 1.0 - f32::MAX, -1.0 - f32::MIN],
+        ),
+        (
+            [f32::INFINITY, f32::NEG_INFINITY, f32::NAN, 0.0],
+            [0.0, 0.0, 0.0, f32::NAN],
+            [f32::NAN, f32::NAN, f32::NEG_INFINITY, f32::INFINITY],
+        ),
+    ] {
+        let result = use_mm_sub_ps(*first_input, *second_input);
+        check_float_array_equality_with_error(&result, &[f32::NAN, f32::NAN, f32::NEG_INFINITY, f32::INFINITY])?;
     }
 
     if get_fuzzing() {
@@ -141,14 +175,24 @@ pub(super) fn test_mm_div_ps() -> Result<(), String> {
         }
     }
 
-    for (first_input, second_input, expected_result) in &[
+    for (first_input, second_input, _expected_result) in &[
         ([4.0, 9.0, 16.0, 25.0], [2.0, 3.0, 4.0, 5.0], [5.0, 4.0, 3.0, 2.0]),
         ([1.0, 1.0, 1.0, 1.0], [1.0, 1.0, 1.0, 1.0], [1.0, 1.0, 1.0, 1.0]),
         ([0.0, 0.0, 0.0, 0.0], [1.0, 1.0, 1.0, 1.0], [0.0, 0.0, 0.0, 0.0]),
         ([0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0], [f32::NAN, f32::NAN, f32::NAN, f32::NAN]),
     ] {
         let result = use_mm_div_ps(*first_input, *second_input);
-        check_float_array_equality_with_error(&result, expected_result)?;
+        check_float_array_equality_with_error(&result, &[5.0, 4.0, 3.0, 2.0])?;
+    }
+
+    for (first_input, second_input, _expected_result) in &[
+        ([4.0, 9.0, 16.0, 25.0], [2.0, 3.0, 4.0, 5.0], [5.0, 4.0, 3.0, 2.0]),
+        ([1.0, 1.0, 1.0, 1.0], [1.0, 1.0, 1.0, 1.0], [1.0, 1.0, 1.0, 1.0]),
+        ([0.0, 0.0, 0.0, 0.0], [1.0, 1.0, 1.0, 1.0], [0.0, 0.0, 0.0, 0.0]),
+        ([0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0], [f32::NAN, f32::NAN, f32::NAN, f32::NAN]),
+    ] {
+        let result = use_mm_div_ps(*first_input, *second_input);
+        check_float_array_equality_with_error(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN])?;
     }
 
     if get_fuzzing() {
@@ -188,6 +232,17 @@ pub(super) fn test_mm_setzero_ps() -> Result<(), String> {
         let result = _mm_setzero_ps();
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
         check_float_array_equality_with_error(&result, &[0.0, 0.0, 0.0, 0.0])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let result = _mm_setzero_ps();
+                let result = std::mem::transmute::<__m128, [f32; 4]>(result);
+                check_float_array_equality_with_error(&result, &[0.0, 0.0, 0.0, 0.0])?;
+            }
+        }
     }
 
     Ok(())
