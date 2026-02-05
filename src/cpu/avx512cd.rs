@@ -48,8 +48,7 @@ fn test_mm_broadcastmb_epi64() -> Result<(), String> {
         let k: u16 = 0xFF;
         let result = _mm_broadcastmb_epi64(k.try_into().unwrap());
         let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
-        let expected = [0xFF, 0xFF];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[0xFF, 0xFF])?;
         Ok(())
     }
 }
