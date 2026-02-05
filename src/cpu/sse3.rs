@@ -5,8 +5,9 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{check_float_array_equality_with_error, get_iterations, ExtensionTest, TestFunction};
+use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
 use crate::{get_four_random_floats, get_fuzzing, get_random_float};
+use crate::cpu::common::check_float_array_equality_with_error;
 
 pub struct SSE3;
 
@@ -224,8 +225,6 @@ fn test_mm_addsub_pd() -> Result<(), String> {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     #[test]
     fn test_sse3() {
         let tests = SSE3::get_tests();

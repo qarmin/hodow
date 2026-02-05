@@ -5,8 +5,9 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{check_float_array_equality_with_error, get_iterations, ExtensionTest};
+use crate::cpu::{get_iterations, ExtensionTest};
 use crate::{get_four_random_floats, get_fuzzing};
+use crate::cpu::common::check_float_array_equality_with_error;
 
 pub struct FMA;
 use crate::cpu::TestFunction;

@@ -5,7 +5,8 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{check_array_equality, get_iterations, ExtensionTest, TestFunction};
+use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
+use crate::cpu::common::check_array_equality;
 use crate::get_fuzzing;
 
 pub struct AES;
