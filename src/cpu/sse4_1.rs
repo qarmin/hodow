@@ -5,7 +5,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{check_f32_array_equality, check_float_equality, check_array_equality, check_int_equality, get_iterations, ExtensionTest, TestFunction, DEFAULT_FLOAT_DIFF};
+use crate::cpu::{check_array_equality, check_f32_array_equality, check_float_equality, check_int_equality, get_iterations, ExtensionTest, TestFunction, DEFAULT_FLOAT_DIFF};
 use crate::{get_four_random_floats, get_fuzzing};
 
 pub struct SSE41;
