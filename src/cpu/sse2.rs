@@ -7,7 +7,7 @@ use log::info;
 
 use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, check_float_equality, check_int_equality};
 use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
-use crate::{get_four_random_floats, get_fuzzing, get_random_float};
+use crate::{get_four_random_floats, get_fuzzing, get_random_float, get_random_float64_array};
 
 pub struct SSE2;
 
@@ -204,11 +204,8 @@ fn test_mm_add_pd() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a1 = get_random_float() as f64;
-                let a2 = get_random_float() as f64;
-                let b1 = get_random_float() as f64;
-                let b2 = get_random_float() as f64;
-                let _result = _mm_add_pd(_mm_set_pd(a2, a1), _mm_set_pd(b2, b1));
+                let arr = get_random_float64_array::<4>();
+                let _result = _mm_add_pd(_mm_set_pd(arr[1], arr[0]), _mm_set_pd(arr[3], arr[2]));
             }
         }
     }
@@ -1486,7 +1483,7 @@ fn test_mm_movemask_epi8() -> Result<(), String> {
         let a = _mm_set_epi8(-1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0);
         let result = _mm_movemask_epi8(a);
 
-        check_int_equality(result, result)?;
+        check_int_equality(result, 0)?;
     }
     Ok(())
 }
@@ -2160,7 +2157,7 @@ fn test_mm_comieq_sd() -> Result<(), String> {
         let a = _mm_set_sd(1.0);
         let b = _mm_set_sd(1.0);
         let result = _mm_comieq_sd(a, b);
-        check_int_equality(result, result)?;
+        check_int_equality(result, 0)?;
     }
     Ok(())
 }
@@ -2170,7 +2167,7 @@ fn test_mm_comilt_sd() -> Result<(), String> {
         let a = _mm_set_sd(1.0);
         let b = _mm_set_sd(2.0);
         let result = _mm_comilt_sd(a, b);
-        check_int_equality(result, result)?;
+        check_int_equality(result, 0)?;
     }
     Ok(())
 }
@@ -2180,7 +2177,7 @@ fn test_mm_comile_sd() -> Result<(), String> {
         let a = _mm_set_sd(1.0);
         let b = _mm_set_sd(1.0);
         let result = _mm_comile_sd(a, b);
-        check_int_equality(result, result)?;
+        check_int_equality(result, 0)?;
     }
     Ok(())
 }
@@ -2190,7 +2187,7 @@ fn test_mm_comigt_sd() -> Result<(), String> {
         let a = _mm_set_sd(2.0);
         let b = _mm_set_sd(1.0);
         let result = _mm_comigt_sd(a, b);
-        check_int_equality(result, result)?;
+        check_int_equality(result, 0)?;
     }
     Ok(())
 }
@@ -2200,7 +2197,7 @@ fn test_mm_comige_sd() -> Result<(), String> {
         let a = _mm_set_sd(2.0);
         let b = _mm_set_sd(2.0);
         let result = _mm_comige_sd(a, b);
-        check_int_equality(result, result)?;
+        check_int_equality(result, 0)?;
     }
     Ok(())
 }
@@ -2210,7 +2207,7 @@ fn test_mm_comineq_sd() -> Result<(), String> {
         let a = _mm_set_sd(1.0);
         let b = _mm_set_sd(2.0);
         let result = _mm_comineq_sd(a, b);
-        check_int_equality(result, result)?;
+        check_int_equality(result, 0)?;
     }
     Ok(())
 }
@@ -2220,7 +2217,7 @@ fn test_mm_ucomieq_sd() -> Result<(), String> {
         let a = _mm_set_sd(1.0);
         let b = _mm_set_sd(1.0);
         let result = _mm_ucomieq_sd(a, b);
-        check_int_equality(result, result)?;
+        check_int_equality(result, 0)?;
     }
     Ok(())
 }
@@ -2230,7 +2227,7 @@ fn test_mm_ucomilt_sd() -> Result<(), String> {
         let a = _mm_set_sd(1.0);
         let b = _mm_set_sd(2.0);
         let result = _mm_ucomilt_sd(a, b);
-        check_int_equality(result, result)?;
+        check_int_equality(result, 0)?;
     }
     Ok(())
 }
@@ -2240,7 +2237,7 @@ fn test_mm_ucomile_sd() -> Result<(), String> {
         let a = _mm_set_sd(1.0);
         let b = _mm_set_sd(1.0);
         let result = _mm_ucomile_sd(a, b);
-        check_int_equality(result, result)?;
+        check_int_equality(result, 0)?;
     }
     Ok(())
 }
@@ -2250,7 +2247,7 @@ fn test_mm_ucomigt_sd() -> Result<(), String> {
         let a = _mm_set_sd(2.0);
         let b = _mm_set_sd(1.0);
         let result = _mm_ucomigt_sd(a, b);
-        check_int_equality(result, result)?;
+        check_int_equality(result, 0)?;
     }
     Ok(())
 }
@@ -2260,7 +2257,7 @@ fn test_mm_ucomige_sd() -> Result<(), String> {
         let a = _mm_set_sd(2.0);
         let b = _mm_set_sd(2.0);
         let result = _mm_ucomige_sd(a, b);
-        check_int_equality(result, result)?;
+        check_int_equality(result, 0)?;
     }
     Ok(())
 }
@@ -2270,7 +2267,7 @@ fn test_mm_ucomineq_sd() -> Result<(), String> {
         let a = _mm_set_sd(1.0);
         let b = _mm_set_sd(2.0);
         let result = _mm_ucomineq_sd(a, b);
-        check_int_equality(result, result)?;
+        check_int_equality(result, 0)?;
     }
     Ok(())
 }
@@ -2298,7 +2295,7 @@ fn test_mm_cvtsd_si32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_sd(42.7);
         let result = _mm_cvtsd_si32(a);
-        check_int_equality(result, result)?;
+        check_int_equality(result, 0)?;
     }
     Ok(())
 }
@@ -2333,7 +2330,7 @@ fn test_mm_cvttsd_si32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_sd(42.9);
         let result = _mm_cvttsd_si32(a);
-        check_int_equality(result, result)?;
+        check_int_equality(result, 0)?;
     }
     Ok(())
 }
@@ -2369,7 +2366,7 @@ fn test_mm_movemask_pd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(-1.0, 1.0);
         let result = _mm_movemask_pd(a);
-        check_int_equality(result, result)?;
+        check_int_equality(result, 0)?;
     }
     Ok(())
 }
