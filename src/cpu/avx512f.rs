@@ -5,7 +5,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{check_float_array_equality_with_error, check_float_array_equality_with_error, get_iterations, ExtensionTest, TestFunction};
+use crate::cpu::{check_float_array_equality_with_error, get_iterations, ExtensionTest, TestFunction};
 use crate::{get_fuzzing, get_random_float};
 
 pub struct AVX512F;

@@ -5,7 +5,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{check_array_equality, check_float_array_equality_with_error, check_float_array_equality_with_error, check_int_equality, get_iterations, ExtensionTest, TestFunction};
+use crate::cpu::{check_array_equality, check_float_array_equality_with_error, check_int_equality, get_iterations, ExtensionTest, TestFunction};
 use crate::get_fuzzing;
 
 pub struct AVX2;

@@ -4,7 +4,7 @@ run *args:
 runn *args:
     cargo run {{args}}
 
-sanitize *args:
+sanitizer *args:
     RUSTFLAGS="-Zsanitizer=address" cargo +nightly run --target x86_64-unknown-linux-gnu {{args}}
 
 miri *args:

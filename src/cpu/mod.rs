@@ -208,22 +208,71 @@ pub fn test_all_extensions() -> Result<(), String> {
     Ok(())
 }
 
+// Add a small trait that captures the float operations we need and implement it for f32/f64.
+trait FloatLike: PartialEq + Debug + std::ops::Sub<Output = Self> + PartialOrd + Copy {
+    fn is_infinite(self) -> bool;
+    fn is_nan(self) -> bool;
+    fn abs(self) -> Self;
+    fn from_f64(f: f64) -> Self;
+}
 
-fn check_float_array_equality_with_error<T: PartialEq + Debug  + std::ops::Sub>(a: &[T], b: &[T]) -> Result<(), String> {
+impl FloatLike for f32 {
+    fn is_infinite(self) -> bool {
+        f32::is_infinite(self)
+    }
+    fn is_nan(self) -> bool {
+        f32::is_nan(self)
+    }
+    fn abs(self) -> Self {
+        f32::abs(self)
+    }
+    fn from_f64(f: f64) -> Self {
+        f as f32
+    }
+}
+
+impl FloatLike for f64 {
+    fn is_infinite(self) -> bool {
+        f64::is_infinite(self)
+    }
+    fn is_nan(self) -> bool {
+        f64::is_nan(self)
+    }
+    fn abs(self) -> Self {
+        f64::abs(self)
+    }
+    fn from_f64(f: f64) -> Self {
+        f
+    }
+}
+
+fn check_float_array_equality_with_error<T: FloatLike + Debug>(a: &[T], b: &[T]) -> Result<(), String> {
     if a == b {
         return Ok(());
     }
     if a.len() != b.len() {
-        return Err(format!("Got {a:?}, expected {b:?} (Arrays have different lengths: {} and {})", a.len(), b.len()));
+        return Err(format!(
+            "Got {a:?}, expected {b:?} (Arrays have different lengths: {} and {})",
+            a.len(),
+            b.len()
+        ));
     }
+
+    let eps = T::from_f64(0.001);
 
     for i in 0..a.len() {
         if a[i].is_infinite() && !b[i].is_infinite() {
-            return Err(format!("Got {a:?}, expected {b:?} (One is infinite, other is not)"));
+            return Err(format!(
+                "Got {a:?}, expected {b:?} (One is infinite, other is not)"
+            ));
         } else if a[i].is_nan() && !b[i].is_nan() {
-            return Err(format!("Got {a:?}, expected {b:?} (One is NaN, other is not)"));
-        } else if (a[i] - b[i]).abs() > 0.001 {
-            return Err(format!("Got {a:?}, expected {b:?} (Difference is too big)"));
+            return Err(format!(
+                "Got {a:?}, expected {b:?} (One is NaN, other is not)"
+            ));
+        } else if (a[i] - b[i]).abs() > eps {
+            return Err(format!(
+                "Got {a:?}, expected {b:?} (Difference is too big)"
+            ));
         }
     }
 

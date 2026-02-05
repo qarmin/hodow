@@ -5,7 +5,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{check_array_equality, check_float_array_equality_with_error, check_float_array_equality_with_error, check_float_equality, check_int_equality, get_iterations, ExtensionTest, TestFunction};
+use crate::cpu::{check_array_equality, check_float_array_equality_with_error, check_float_equality, check_int_equality, get_iterations, ExtensionTest, TestFunction};
 use crate::{get_four_random_floats, get_fuzzing, get_random_float};
 
 pub struct SSE2;
@@ -1495,7 +1495,7 @@ fn test_mm_cvtepi32_pd() -> Result<(), String> {
         let a = _mm_set_epi32(0, 0, 20, 10);
         let result = _mm_cvtepi32_pd(a);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_float_array_equality_with_error(&result, &[0.0])?;
+        check_float_array_equality_with_error(&result, &[10.0, 20.0])?;
     }
     Ok(())
 }
@@ -2588,11 +2588,5 @@ mod tests {
             println!("Running test {}", name);
             fun().unwrap();
         }
-    }
-
-    // Focused test to run only mm_load_si128 under Miri to avoid unrelated UB from other tests
-    #[test]
-    fn test_mm_load_si128_only() {
-        test_mm_load_si128().unwrap();
     }
 }
