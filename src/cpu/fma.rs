@@ -8,7 +8,7 @@ use log::info;
 use crate::cpu::common::check_float_array_equality_with_error;
 use crate::cpu::{get_iterations, ExtensionTest};
 use crate::{get_four_random_floats, get_fuzzing};
-
+use crate::get_random_float32_array;
 pub struct FMA;
 use crate::cpu::TestFunction;
 
@@ -189,9 +189,9 @@ fn test_mm256_fmadd_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_eight_random_floats();
-                let b = get_eight_random_floats();
-                let c = get_eight_random_floats();
+                let a = get_random_float32_array::<8>();
+                let b = get_random_float32_array::<8>();
+                let c = get_random_float32_array::<8>();
                 let _result = _mm256_fmadd_ps(
                     _mm256_set_ps(a[7], a[6], a[5], a[4], a[3], a[2], a[1], a[0]),
                     _mm256_set_ps(b[7], b[6], b[5], b[4], b[3], b[2], b[1], b[0]),
@@ -218,9 +218,9 @@ fn test_mm256_fmsub_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_eight_random_floats();
-                let b = get_eight_random_floats();
-                let c = get_eight_random_floats();
+                let a = get_random_float32_array::<8>();
+                let b = get_random_float32_array::<8>();
+                let c = get_random_float32_array::<8>();
                 let _result = _mm256_fmsub_ps(
                     _mm256_set_ps(a[7], a[6], a[5], a[4], a[3], a[2], a[1], a[0]),
                     _mm256_set_ps(b[7], b[6], b[5], b[4], b[3], b[2], b[1], b[0]),
@@ -247,9 +247,9 @@ fn test_mm256_fnmadd_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_eight_random_floats();
-                let b = get_eight_random_floats();
-                let c = get_eight_random_floats();
+                let a = get_random_float32_array::<8>();
+                let b = get_random_float32_array::<8>();
+                let c = get_random_float32_array::<8>();
                 let _result = _mm256_fnmadd_ps(
                     _mm256_set_ps(a[7], a[6], a[5], a[4], a[3], a[2], a[1], a[0]),
                     _mm256_set_ps(b[7], b[6], b[5], b[4], b[3], b[2], b[1], b[0]),
@@ -276,9 +276,9 @@ fn test_mm256_fnmsub_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_eight_random_floats();
-                let b = get_eight_random_floats();
-                let c = get_eight_random_floats();
+                let a = get_random_float32_array::<8>();
+                let b = get_random_float32_array::<8>();
+                let c = get_random_float32_array::<8>();
                 let _result = _mm256_fnmsub_ps(
                     _mm256_set_ps(a[7], a[6], a[5], a[4], a[3], a[2], a[1], a[0]),
                     _mm256_set_ps(b[7], b[6], b[5], b[4], b[3], b[2], b[1], b[0]),
@@ -305,9 +305,9 @@ fn test_mm256_fmaddsub_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_eight_random_floats();
-                let b = get_eight_random_floats();
-                let c = get_eight_random_floats();
+                let a = get_random_float32_array::<8>();
+                let b = get_random_float32_array::<8>();
+                let c = get_random_float32_array::<8>();
                 let _result = _mm256_fmaddsub_ps(
                     _mm256_set_ps(a[7], a[6], a[5], a[4], a[3], a[2], a[1], a[0]),
                     _mm256_set_ps(b[7], b[6], b[5], b[4], b[3], b[2], b[1], b[0]),

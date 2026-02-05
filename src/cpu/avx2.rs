@@ -11,7 +11,8 @@ use log::info;
 use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, check_int_equality};
 use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
 use crate::get_fuzzing;
-
+use crate::cpu::avx2::part1::*;
+use crate::cpu::avx2::part2::*;
 pub struct AVX2;
 
 impl ExtensionTest for AVX2 {

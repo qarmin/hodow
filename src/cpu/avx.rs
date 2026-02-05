@@ -214,7 +214,7 @@ fn test_mm256_load_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let data = AlignedData(get_eight_random_floats());
+                let data = AlignedData(get_random_float32_array::<8>());
                 let result = _mm256_load_ps(data.0.as_ptr());
                 let result = std::mem::transmute::<__m256, [f32; 8]>(result);
                 check_float_array_equality_with_error(&result, &data.0)?;
@@ -264,7 +264,7 @@ fn test_mm256_store_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let data = AlignedData(get_eight_random_floats());
+                let data = AlignedData(get_random_float32_array::<8>());
                 let mut result = AlignedData([0.0; 8]);
                 let vec = _mm256_loadu_ps(data.0.as_ptr());
                 _mm256_store_ps(result.0.as_mut_ptr(), vec);
@@ -468,7 +468,7 @@ fn test_mm256_add_pd() -> Result<(), String> {
             unsafe {
                 let a = get_random_float64_array::<4>();
                 let b = get_random_float64_array::<4>();
-                let _result = _mm256_add_pd(_mm256_set_pd(a[1], a[2], a[3], a[4]), _mm256_set_pd(b[1], b[2], b[3], b[4]));
+                let _result = _mm256_add_pd(_mm256_set_pd(a[0], a[1], a[2], a[3]), _mm256_set_pd(b[0], b[1], b[2], b[3]));
             }
         }
     }
@@ -492,7 +492,7 @@ fn test_mm256_sub_pd() -> Result<(), String> {
             unsafe {
                 let a = get_random_float64_array::<4>();
                 let b = get_random_float64_array::<4>();
-                let _result = _mm256_sub_pd(_mm256_set_pd(a[1], a[2], a[3], a[4]), _mm256_set_pd(b[1], b[2], b[3], b[4]));
+                let _result = _mm256_sub_pd(_mm256_set_pd(a[0], a[1], a[2], a[3]), _mm256_set_pd(b[0], b[1], b[2], b[3]));
             }
         }
     }
@@ -516,7 +516,7 @@ fn test_mm256_mul_pd() -> Result<(), String> {
             unsafe {
                 let a = get_random_float64_array::<4>();
                 let b = get_random_float64_array::<4>();
-                let _result = _mm256_mul_pd(_mm256_set_pd(a[1], a[2], a[3], a[4]), _mm256_set_pd(b[1], b[2], b[3], b[4]));
+                let _result = _mm256_mul_pd(_mm256_set_pd(a[0], a[1], a[2], a[3]), _mm256_set_pd(b[0], b[1], b[2], b[3]));
             }
         }
     }

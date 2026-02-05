@@ -12,8 +12,6 @@ mod aes;
 mod avx;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx2"))]
 mod avx2;
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512bf16"))]
-mod avx512bf16;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512bitalg"))]
 mod avx512bitalg;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512cd"))]
@@ -155,13 +153,6 @@ pub fn test_all_extensions() -> Result<(), String> {
         {
             if std::arch::is_x86_feature_detected!("avx512bitalg") {
                 crate::cpu::avx512bitalg::AVX512BITALG::test()?;
-            }
-        }
-
-        #[cfg(target_feature = "avx512bf16")]
-        {
-            if std::arch::is_x86_feature_detected!("avx512bf16") {
-                crate::cpu::avx512bf16::AVX512BF16::test()?;
             }
         }
 

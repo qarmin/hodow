@@ -165,7 +165,7 @@ pub(super) fn test_mm_movemask_epi8() -> Result<(), String> {
         let a = _mm_set_epi8(-1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0);
         let result = _mm_movemask_epi8(a);
 
-        check_int_equality(result, 0)?;
+        check_int_equality(result, 43690)?;
     }
     Ok(())
 }
