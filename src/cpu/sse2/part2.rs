@@ -17,8 +17,7 @@ pub(super) fn test_mm_or_si128() -> Result<(), String> {
         let b = _mm_set_epi32(0x00, 0xFF, 0x00, 0x00);
         let result = _mm_or_si128(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        let expected = [0x00, 0x00, 0xFF, 0xFF];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[0x00, 0x00, 0xFF, 0xFF])?;
     }
 
     if get_fuzzing() {
@@ -41,8 +40,7 @@ pub(super) fn test_mm_xor_si128() -> Result<(), String> {
         let b = _mm_set_epi32(0xFF, 0x00, 0xFF, 0x00);
         let result = _mm_xor_si128(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        let expected = [0x00, 0xFF, 0xFF, 0x00];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[0x00, 0xFF, 0xFF, 0x00])?;
     }
 
     if get_fuzzing() {
@@ -65,8 +63,7 @@ pub(super) fn test_mm_cmpeq_epi32() -> Result<(), String> {
         let b = _mm_set_epi32(1, 2, 3, 4);
         let result = _mm_cmpeq_epi32(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        let expected = [-1, -1, -1, -1];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[-1, -1, -1, -1])?;
     }
 
     if get_fuzzing() {
@@ -86,8 +83,7 @@ pub(super) fn test_mm_cvtsi32_si128() -> Result<(), String> {
     unsafe {
         let result = _mm_cvtsi32_si128(42);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        let expected = [42, 0, 0, 0];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[42, 0, 0, 0])?;
     }
 
     if get_fuzzing() {
@@ -132,16 +128,10 @@ pub(super) fn test_mm_pause() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_lfence() -> Result<(), String> {
-    // unsafe {
-    //     _mm_lfence();
-    // }
     Ok(())
 }
 
 pub(super) fn test_mm_mfence() -> Result<(), String> {
-    // unsafe {
-    //     _mm_mfence();
-    // }
     Ok(())
 }
 
@@ -151,9 +141,23 @@ pub(super) fn test_mm_add_epi8() -> Result<(), String> {
         let b = _mm_set_epi8(16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1);
         let result = _mm_add_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
-        let expected = [17; 16];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[17; 16])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let vals = get_random_i32_array::<4>();
+                let _result = _mm_add_epi8(
+                    _mm_set_epi8(vals[3] as i8, vals[2] as i8, vals[1] as i8, vals[0] as i8, vals[3] as i8, vals[2] as i8, vals[1] as i8, vals[0] as i8,
+                    vals[3] as i8, vals[2] as i8, vals[1] as i8, vals[0] as i8, vals[3] as i8, vals[2] as i8, vals[1] as i8, vals[0] as i8),
+                    _mm_set_epi8(vals[0] as i8, vals[1] as i8, vals[2] as i8, vals[3] as i8, vals[0] as i8, vals[1] as i8, vals[2] as i8, vals[3] as i8,
+                    vals[0] as i8, vals[1] as i8, vals[2] as i8, vals[3] as i8, vals[0] as i8, vals[1] as i8, vals[2] as i8, vals[3] as i8));
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -163,9 +167,20 @@ pub(super) fn test_mm_add_epi16() -> Result<(), String> {
         let b = _mm_set_epi16(8, 7, 6, 5, 4, 3, 2, 1);
         let result = _mm_add_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        let expected = [9; 8];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[9; 8])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let vals = get_random_i32_array::<4>();
+                let _result = _mm_add_epi16(_mm_set_epi16(vals[3] as i16, vals[2] as i16, vals[1] as i16, vals[0] as i16, vals[3] as i16, vals[2] as i16, vals[1] as i16, vals[0] as i16),
+                    _mm_set_epi16(vals[0] as i16, vals[1] as i16, vals[2] as i16, vals[3] as i16, vals[0] as i16, vals[1] as i16, vals[2] as i16, vals[3] as i16));
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -177,6 +192,19 @@ pub(super) fn test_mm_add_epi64() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
         check_array_equality(&result, &[275, 150])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let vals = get_random_i32_array::<4>();
+                let a = _mm_set_epi64x(vals[0] as i64, vals[1] as i64);
+                let b = _mm_set_epi64x(vals[2] as i64, vals[3] as i64);
+                let _result = _mm_add_epi64(a, b);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -186,10 +214,19 @@ pub(super) fn test_mm_adds_epi8() -> Result<(), String> {
         let b = _mm_set1_epi8(50);
         let result = _mm_adds_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
-
-        let expected = [127_i8; 16];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[127_i8; 16])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let v = get_random_i32_array::<1>();
+                let _result = _mm_adds_epi8(_mm_set1_epi8(v[0] as i8), _mm_set1_epi8((v[0] as i8).wrapping_neg()));
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -199,10 +236,19 @@ pub(super) fn test_mm_adds_epi16() -> Result<(), String> {
         let b = _mm_set1_epi16(5000);
         let result = _mm_adds_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-
-        let expected = [32767_i16; 8];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[32767_i16; 8])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let v = get_random_i32_array::<1>();
+                let _result = _mm_adds_epi16(_mm_set1_epi16(v[0] as i16), _mm_set1_epi16((v[0] as i16).wrapping_neg()));
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -212,10 +258,19 @@ pub(super) fn test_mm_adds_epu8() -> Result<(), String> {
         let b = _mm_set1_epi8(-56_i8);
         let result = _mm_adds_epu8(a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
-
-        let expected = [255_u8; 16];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[255_u8; 16])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let v = get_random_i32_array::<1>();
+                let _result = _mm_adds_epu8(_mm_set1_epi8(v[0] as i8), _mm_set1_epi8((v[0] as i8).wrapping_neg()));
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -225,10 +280,19 @@ pub(super) fn test_mm_adds_epu16() -> Result<(), String> {
         let b = _mm_set1_epi16(10000_i16);
         let result = _mm_adds_epu16(a, b);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
-
-        let expected = [65535_u16; 8];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[65535_u16; 8])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let v = get_random_i32_array::<1>();
+                let _result = _mm_adds_epu16(_mm_set1_epi16(v[0] as i16), _mm_set1_epi16((v[0] as i16).wrapping_neg()));
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -238,9 +302,19 @@ pub(super) fn test_mm_subs_epi8() -> Result<(), String> {
         let b = _mm_set1_epi8(10);
         let result = _mm_sub_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
-        let expected = [10; 16];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[10; 16])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let v = get_random_i32_array::<1>();
+                let _result = _mm_sub_epi8(_mm_set1_epi8(v[0] as i8), _mm_set1_epi8((v[0] as i8).wrapping_abs() as i8));
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -250,9 +324,19 @@ pub(super) fn test_mm_sub_epi16() -> Result<(), String> {
         let b = _mm_set1_epi16(30);
         let result = _mm_sub_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        let expected = [70; 8];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[70; 8])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let v = get_random_i32_array::<1>();
+                let _result = _mm_sub_epi16(_mm_set1_epi16(v[0] as i16), _mm_set1_epi16((v[0] as i16).wrapping_abs() as i16));
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -264,6 +348,19 @@ pub(super) fn test_mm_sub_epi64() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
         check_array_equality(&result, &[150, 70])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let vals = get_random_i32_array::<4>();
+                let a = _mm_set_epi64x(vals[0] as i64, vals[1] as i64);
+                let b = _mm_set_epi64x(vals[2] as i64, vals[3] as i64);
+                let _result = _mm_sub_epi64(a, b);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -273,10 +370,19 @@ pub(super) fn test_mm_subs_epi16() -> Result<(), String> {
         let b = _mm_set1_epi16(5000);
         let result = _mm_subs_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-
-        let expected = [-32768_i16; 8];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[-32768_i16; 8])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let v = get_random_i32_array::<1>();
+                let _result = _mm_subs_epi16(_mm_set1_epi16(v[0] as i16), _mm_set1_epi16((v[0] as i16).wrapping_abs() as i16));
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -286,10 +392,19 @@ pub(super) fn test_mm_subs_epu8() -> Result<(), String> {
         let b = _mm_set1_epi8(20);
         let result = _mm_subs_epu8(a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
-
-        let expected = [0_u8; 16];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[0_u8; 16])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let v = get_random_i32_array::<1>();
+                let _result = _mm_subs_epu8(_mm_set1_epi8(v[0] as i8), _mm_set1_epi8((v[0] as i8).wrapping_abs() as i8));
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -299,10 +414,19 @@ pub(super) fn test_mm_subs_epu16() -> Result<(), String> {
         let b = _mm_set1_epi16(200);
         let result = _mm_subs_epu16(a, b);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
-
-        let expected = [0_u16; 8];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[0_u16; 8])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let v = get_random_i32_array::<1>();
+                let _result = _mm_subs_epu16(_mm_set1_epi16(v[0] as i16), _mm_set1_epi16((v[0] as i16).wrapping_abs() as i16));
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -312,10 +436,19 @@ pub(super) fn test_mm_avg_epu8() -> Result<(), String> {
         let b = _mm_set1_epi8(50_i8);
         let result = _mm_avg_epu8(a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
-
-        let expected = [75_u8; 16];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[75_u8; 16])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let v = get_random_i32_array::<1>();
+                let _result = _mm_avg_epu8(_mm_set1_epi8(v[0] as i8), _mm_set1_epi8((v[0] as i8).wrapping_abs() as i8));
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -325,10 +458,19 @@ pub(super) fn test_mm_avg_epu16() -> Result<(), String> {
         let b = _mm_set1_epi16(500);
         let result = _mm_avg_epu16(a, b);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
-
-        let expected = [750_u16; 8];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[750_u16; 8])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let v = get_random_i32_array::<1>();
+                let _result = _mm_avg_epu16(_mm_set1_epi16(v[0] as i16), _mm_set1_epi16((v[0] as i16).wrapping_abs() as i16));
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -338,10 +480,20 @@ pub(super) fn test_mm_madd_epi16() -> Result<(), String> {
         let b = _mm_set_epi16(8, 7, 6, 5, 4, 3, 2, 1);
         let result = _mm_madd_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-
-        let expected = [22, 38, 38, 22];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[22, 38, 38, 22])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let vals = get_random_i32_array::<4>();
+                let _result = _mm_madd_epi16(_mm_set_epi16(vals[3] as i16, vals[2] as i16, vals[1] as i16, vals[0] as i16, vals[3] as i16, vals[2] as i16, vals[1] as i16, vals[0] as i16),
+                    _mm_set_epi16(vals[0] as i16, vals[1] as i16, vals[2] as i16, vals[3] as i16, vals[0] as i16, vals[1] as i16, vals[2] as i16, vals[3] as i16));
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -351,10 +503,20 @@ pub(super) fn test_mm_max_epi16() -> Result<(), String> {
         let b = _mm_set_epi16(10, 2, 30, 4, 50, 6, 70, 8);
         let result = _mm_max_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-
-        let expected = [80, 70, 60, 50, 40, 30, 20, 10];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[80, 70, 60, 50, 40, 30, 20, 10])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let vals = get_random_i32_array::<4>();
+                let _result = _mm_max_epi16(_mm_set_epi16(vals[3] as i16, vals[2] as i16, vals[1] as i16, vals[0] as i16, vals[3] as i16, vals[2] as i16, vals[1] as i16, vals[0] as i16),
+                    _mm_set_epi16(vals[0] as i16, vals[1] as i16, vals[2] as i16, vals[3] as i16, vals[0] as i16, vals[1] as i16, vals[2] as i16, vals[3] as i16));
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -364,9 +526,22 @@ pub(super) fn test_mm_max_epu8() -> Result<(), String> {
         let b = _mm_set_epi8(16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1);
         let result = _mm_max_epu8(a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
-        let expected = [16, 15, 14, 13, 12, 11, 10, 9, 9, 10, 11, 12, 13, 14, 15, 16];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[16, 15, 14, 13, 12, 11, 10, 9, 9, 10, 11, 12, 13, 14, 15, 16])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let vals = get_random_i32_array::<4>();
+                let _result = _mm_max_epu8(_mm_set_epi8(vals[3] as i8, vals[2] as i8, vals[1] as i8, vals[0] as i8, vals[3] as i8, vals[2] as i8, vals[1] as i8, vals[0] as i8,
+                    vals[3] as i8, vals[2] as i8, vals[1] as i8, vals[0] as i8, vals[3] as i8, vals[2] as i8, vals[1] as i8, vals[0] as i8),
+                    _mm_set_epi8(vals[0] as i8, vals[1] as i8, vals[2] as i8, vals[3] as i8, vals[0] as i8, vals[1] as i8, vals[2] as i8, vals[3] as i8,
+                    vals[0] as i8, vals[1] as i8, vals[2] as i8, vals[3] as i8, vals[0] as i8, vals[1] as i8, vals[2] as i8, vals[3] as i8));
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -376,9 +551,20 @@ pub(super) fn test_mm_min_epi16() -> Result<(), String> {
         let b = _mm_set_epi16(10, 2, 30, 4, 50, 6, 70, 8);
         let result = _mm_min_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        let expected = [8, 7, 6, 5, 4, 3, 2, 1];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[8, 7, 6, 5, 4, 3, 2, 1])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let vals = get_random_i32_array::<4>();
+                let _result = _mm_min_epi16(_mm_set_epi16(vals[3] as i16, vals[2] as i16, vals[1] as i16, vals[0] as i16, vals[3] as i16, vals[2] as i16, vals[1] as i16, vals[0] as i16),
+                    _mm_set_epi16(vals[0] as i16, vals[1] as i16, vals[2] as i16, vals[3] as i16, vals[0] as i16, vals[1] as i16, vals[2] as i16, vals[3] as i16));
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -388,9 +574,22 @@ pub(super) fn test_mm_min_epu8() -> Result<(), String> {
         let b = _mm_set_epi8(16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1);
         let result = _mm_min_epu8(a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
-        let expected = [1, 2, 3, 4, 5, 6, 7, 8, 8, 7, 6, 5, 4, 3, 2, 1];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[1, 2, 3, 4, 5, 6, 7, 8, 8, 7, 6, 5, 4, 3, 2, 1])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let vals = get_random_i32_array::<4>();
+                let _result = _mm_min_epu8(_mm_set_epi8(vals[3] as i8, vals[2] as i8, vals[1] as i8, vals[0] as i8, vals[3] as i8, vals[2] as i8, vals[1] as i8, vals[0] as i8,
+                    vals[3] as i8, vals[2] as i8, vals[1] as i8, vals[0] as i8, vals[3] as i8, vals[2] as i8, vals[1] as i8, vals[0] as i8),
+                    _mm_set_epi8(vals[0] as i8, vals[1] as i8, vals[2] as i8, vals[3] as i8, vals[0] as i8, vals[1] as i8, vals[2] as i8, vals[3] as i8,
+                    vals[0] as i8, vals[1] as i8, vals[2] as i8, vals[3] as i8, vals[0] as i8, vals[1] as i8, vals[2] as i8, vals[3] as i8));
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -400,9 +599,19 @@ pub(super) fn test_mm_mulhi_epi16() -> Result<(), String> {
         let b = _mm_set1_epi16(100);
         let result = _mm_mulhi_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-
         check_array_equality(&result, &[1, 1, 1, 1, 1, 1, 1, 1])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let v = get_random_i32_array::<1>();
+                let _result = _mm_mulhi_epi16(_mm_set1_epi16(v[0] as i16), _mm_set1_epi16((v[0] as i16).wrapping_abs()));
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -412,9 +621,19 @@ pub(super) fn test_mm_mulhi_epu16() -> Result<(), String> {
         let b = _mm_set1_epi16(100);
         let result = _mm_mulhi_epu16(a, b);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
-
         check_array_equality(&result, &[1, 1, 1, 1, 1, 1, 1, 1])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let v = get_random_i32_array::<1>();
+                let _result = _mm_mulhi_epu16(_mm_set1_epi16(v[0] as i16), _mm_set1_epi16((v[0] as i16).wrapping_abs()));
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -424,9 +643,19 @@ pub(super) fn test_mm_mullo_epi16() -> Result<(), String> {
         let b = _mm_set1_epi16(5);
         let result = _mm_mullo_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        let expected = [50; 8];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[50; 8])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let v = get_random_i32_array::<1>();
+                let _result = _mm_mullo_epi16(_mm_set1_epi16(v[0] as i16), _mm_set1_epi16((v[0] as i16).wrapping_abs()));
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -436,8 +665,18 @@ pub(super) fn test_mm_mul_epu32() -> Result<(), String> {
         let b = _mm_set_epi32(0, 5, 0, 3);
         let result = _mm_mul_epu32(a, b);
         let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
-
         check_array_equality(&result, &[600, 500])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let vals = get_random_i32_array::<4>();
+                let _result = _mm_mul_epu32(_mm_set_epi32(vals[3], vals[2], vals[1], vals[0]), _mm_set_epi32(vals[0], vals[1], vals[2], vals[3]));
+            }
+        }
+    }
+
     Ok(())
 }
