@@ -5,9 +5,9 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
-use crate::{get_four_random_floats, get_fuzzing, get_random_float};
 use crate::cpu::common::check_float_array_equality_with_error;
+use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
+use crate::{get_four_random_floats, get_fuzzing, get_random_float, get_random_float32_array, get_random_float64_array};
 
 pub struct AVX;
 
@@ -41,19 +41,6 @@ impl ExtensionTest for AVX {
     }
 }
 
-fn get_eight_random_floats() -> [f32; 8] {
-    [
-        get_random_float(),
-        get_random_float(),
-        get_random_float(),
-        get_random_float(),
-        get_random_float(),
-        get_random_float(),
-        get_random_float(),
-        get_random_float(),
-    ]
-}
-
 fn test_mm256_set_ps() -> Result<(), String> {
     unsafe {
         let result = _mm256_set_ps(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0);
@@ -65,7 +52,7 @@ fn test_mm256_set_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr = get_eight_random_floats();
+                let arr = get_random_float32_array::<8>();
                 let result = _mm256_set_ps(arr[7], arr[6], arr[5], arr[4], arr[3], arr[2], arr[1], arr[0]);
                 let result = std::mem::transmute::<__m256, [f32; 8]>(result);
                 check_float_array_equality_with_error(&result, &arr)?;
@@ -120,8 +107,8 @@ fn test_mm256_add_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_eight_random_floats();
-                let arr2 = get_eight_random_floats();
+                let arr1 = get_random_float32_array::<8>();
+                let arr2 = get_random_float32_array::<8>();
                 let _result = _mm256_add_ps(
                     _mm256_set_ps(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
                     _mm256_set_ps(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
@@ -146,8 +133,8 @@ fn test_mm256_sub_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_eight_random_floats();
-                let arr2 = get_eight_random_floats();
+                let arr1 = get_random_float32_array::<8>();
+                let arr2 = get_random_float32_array::<8>();
                 let _result = _mm256_sub_ps(
                     _mm256_set_ps(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
                     _mm256_set_ps(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
@@ -172,8 +159,8 @@ fn test_mm256_mul_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_eight_random_floats();
-                let arr2 = get_eight_random_floats();
+                let arr1 = get_random_float32_array::<8>();
+                let arr2 = get_random_float32_array::<8>();
                 let _result = _mm256_mul_ps(
                     _mm256_set_ps(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
                     _mm256_set_ps(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
@@ -199,8 +186,8 @@ fn test_mm256_div_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_eight_random_floats();
-                let arr2 = get_eight_random_floats();
+                let arr1 = get_random_float32_array::<8>();
+                let arr2 = get_random_float32_array::<8>();
                 let _result = _mm256_div_ps(
                     _mm256_set_ps(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
                     _mm256_set_ps(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
@@ -250,7 +237,7 @@ fn test_mm256_loadu_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let data = get_eight_random_floats();
+                let data = get_random_float32_array::<8>();
                 let result = _mm256_loadu_ps(data.as_ptr());
                 let result = std::mem::transmute::<__m256, [f32; 8]>(result);
                 check_float_array_equality_with_error(&result, &data)?;
@@ -302,8 +289,8 @@ fn test_mm256_max_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_eight_random_floats();
-                let arr2 = get_eight_random_floats();
+                let arr1 = get_random_float32_array::<8>();
+                let arr2 = get_random_float32_array::<8>();
                 let _result = _mm256_max_ps(
                     _mm256_set_ps(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
                     _mm256_set_ps(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
@@ -328,8 +315,8 @@ fn test_mm256_min_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_eight_random_floats();
-                let arr2 = get_eight_random_floats();
+                let arr1 = get_random_float32_array::<8>();
+                let arr2 = get_random_float32_array::<8>();
                 let _result = _mm256_min_ps(
                     _mm256_set_ps(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
                     _mm256_set_ps(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
@@ -354,7 +341,7 @@ fn test_mm256_sqrt_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let data = get_eight_random_floats();
+                let data = get_random_float32_array::<8>();
                 let vec = _mm256_loadu_ps(data.as_ptr());
                 let _result = _mm256_sqrt_ps(vec);
             }
@@ -377,8 +364,8 @@ fn test_mm256_and_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_eight_random_floats();
-                let arr2 = get_eight_random_floats();
+                let arr1 = get_random_float32_array::<8>();
+                let arr2 = get_random_float32_array::<8>();
                 let _result = _mm256_and_ps(
                     _mm256_set_ps(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
                     _mm256_set_ps(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
@@ -403,8 +390,8 @@ fn test_mm256_or_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_eight_random_floats();
-                let arr2 = get_eight_random_floats();
+                let arr1 = get_random_float32_array::<8>();
+                let arr2 = get_random_float32_array::<8>();
                 let _result = _mm256_or_ps(
                     _mm256_set_ps(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
                     _mm256_set_ps(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
@@ -429,8 +416,8 @@ fn test_mm256_xor_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_eight_random_floats();
-                let arr2 = get_eight_random_floats();
+                let arr1 = get_random_float32_array::<8>();
+                let arr2 = get_random_float32_array::<8>();
                 let _result = _mm256_xor_ps(
                     _mm256_set_ps(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
                     _mm256_set_ps(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
@@ -479,15 +466,9 @@ fn test_mm256_add_pd() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a1 = get_random_float() as f64;
-                let a2 = get_random_float() as f64;
-                let a3 = get_random_float() as f64;
-                let a4 = get_random_float() as f64;
-                let b1 = get_random_float() as f64;
-                let b2 = get_random_float() as f64;
-                let b3 = get_random_float() as f64;
-                let b4 = get_random_float() as f64;
-                let _result = _mm256_add_pd(_mm256_set_pd(a4, a3, a2, a1), _mm256_set_pd(b4, b3, b2, b1));
+                let a = get_random_float64_array::<4>();
+                let b = get_random_float64_array::<4>();
+                let _result = _mm256_add_pd(_mm256_set_pd(a[1], a[2], a[3], a[4]), _mm256_set_pd(b[1], b[2], b[3], b[4]));
             }
         }
     }
@@ -509,15 +490,9 @@ fn test_mm256_sub_pd() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a1 = get_random_float() as f64;
-                let a2 = get_random_float() as f64;
-                let a3 = get_random_float() as f64;
-                let a4 = get_random_float() as f64;
-                let b1 = get_random_float() as f64;
-                let b2 = get_random_float() as f64;
-                let b3 = get_random_float() as f64;
-                let b4 = get_random_float() as f64;
-                let _result = _mm256_sub_pd(_mm256_set_pd(a4, a3, a2, a1), _mm256_set_pd(b4, b3, b2, b1));
+                let a = get_random_float64_array::<4>();
+                let b = get_random_float64_array::<4>();
+                let _result = _mm256_sub_pd(_mm256_set_pd(a[1], a[2], a[3], a[4]), _mm256_set_pd(b[1], b[2], b[3], b[4]));
             }
         }
     }
@@ -539,15 +514,9 @@ fn test_mm256_mul_pd() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a1 = get_random_float() as f64;
-                let a2 = get_random_float() as f64;
-                let a3 = get_random_float() as f64;
-                let a4 = get_random_float() as f64;
-                let b1 = get_random_float() as f64;
-                let b2 = get_random_float() as f64;
-                let b3 = get_random_float() as f64;
-                let b4 = get_random_float() as f64;
-                let _result = _mm256_mul_pd(_mm256_set_pd(a4, a3, a2, a1), _mm256_set_pd(b4, b3, b2, b1));
+                let a = get_random_float64_array::<4>();
+                let b = get_random_float64_array::<4>();
+                let _result = _mm256_mul_pd(_mm256_set_pd(a[1], a[2], a[3], a[4]), _mm256_set_pd(b[1], b[2], b[3], b[4]));
             }
         }
     }

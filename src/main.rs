@@ -79,6 +79,22 @@ pub fn get_random_float() -> f32 {
         _ => random::<f32>() * 100000.0,
     }
 }
+
+pub fn get_random_float32_array<const N: usize>() -> [f32; N] {
+    let mut arr = [0.0; N];
+    for item in arr.iter_mut() {
+        *item = get_random_float();
+    }
+    arr
+}
+pub fn get_random_float64_array<const N: usize>() -> [f64; N] {
+    let mut arr = [0.0; N];
+    for item in arr.iter_mut() {
+        *item = get_random_float() as f64;
+    }
+    arr
+}
+
 pub fn get_four_random_floats() -> [f32; 4] {
     [get_random_float(), get_random_float(), get_random_float(), get_random_float()]
 }

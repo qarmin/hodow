@@ -24,6 +24,7 @@ mod avx512f;
 mod avx512ifma;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512vbmi"))]
 mod avx512vbmi;
+mod common;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "fma"))]
 mod fma;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "kl"))]
@@ -40,7 +41,6 @@ mod sse4_1;
 mod sse4_2;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "ssse3"))]
 mod ssse3;
-mod common;
 
 #[cfg(miri)]
 pub const DEFAULT_TEST_ITERATIONS: usize = 20;

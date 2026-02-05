@@ -5,9 +5,9 @@ use std::arch::x86_64::*;
 
 use log::info;
 
+use crate::cpu::common::check_array_equality;
 use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
 use crate::{get_four_random_floats, get_fuzzing};
-use crate::cpu::common::check_array_equality;
 
 pub struct SSSE3;
 
