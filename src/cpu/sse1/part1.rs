@@ -209,6 +209,18 @@ pub(super) fn test_mm_set_ss() -> Result<(), String> {
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
         check_float_array_equality_with_error(&result, &[3.13, 0.0, 0.0, 0.0])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let value = get_random_float();
+                let result = _mm_set_ss(value);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -221,6 +233,21 @@ pub(super) fn test_mm_add_ss() -> Result<(), String> {
 
         check_float_array_equality_with_error(&result, &[12.0, 3.0, 2.0, 1.0])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
+                let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
+                let vec2 = _mm_set_ps(arr2[3], arr2[2], arr2[1], arr2[0]);
+                let result = _mm_add_ss(vec1, vec2);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -232,6 +259,21 @@ pub(super) fn test_mm_sub_ss() -> Result<(), String> {
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
         check_float_array_equality_with_error(&result, &[7.0, 3.0, 2.0, 1.0])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
+                let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
+                let vec2 = _mm_set_ps(arr2[3], arr2[2], arr2[1], arr2[0]);
+                let result = _mm_sub_ss(vec1, vec2);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -243,6 +285,21 @@ pub(super) fn test_mm_mul_ss() -> Result<(), String> {
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
         check_float_array_equality_with_error(&result, &[8.0, 3.0, 2.0, 1.0])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
+                let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
+                let vec2 = _mm_set_ps(arr2[3], arr2[2], arr2[1], arr2[0]);
+                let result = _mm_mul_ss(vec1, vec2);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -254,6 +311,21 @@ pub(super) fn test_mm_div_ss() -> Result<(), String> {
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
         check_float_array_equality_with_error(&result, &[4.0, 3.0, 2.0, 1.0])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
+                let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
+                let vec2 = _mm_set_ps(arr2[3], arr2[2], arr2[1], arr2[0]);
+                let result = _mm_div_ss(vec1, vec2);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -263,6 +335,18 @@ pub(super) fn test_mm_sqrt_ss() -> Result<(), String> {
         let result = _mm_sqrt_ss(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
         check_float_array_equality_with_error(&result, &[4.0, 3.0, 2.0, 1.0])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr = get_random_float32_array::<4>();
+                let vec = _mm_set_ps(arr[3], arr[2], arr[1], arr[0]);
+                let result = _mm_sqrt_ss(vec);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
     }
     Ok(())
 }
@@ -299,6 +383,19 @@ pub(super) fn test_mm_rcp_ps() -> Result<(), String> {
 
         check_float_array_equality_with_error(&result, &[0.125, 0.25, 0.5, 1.0])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr = get_random_float32_array::<4>();
+                let vec = _mm_set_ps(arr[3], arr[2], arr[1], arr[0]);
+                let result = _mm_rcp_ps(vec);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -307,10 +404,21 @@ pub(super) fn test_mm_rsqrt_ss() -> Result<(), String> {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 16.0);
         let result = _mm_rsqrt_ss(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-
-        // Check whole vector: rsqrt of low lane (16.0 -> ~0.25) and other lanes unchanged
         check_float_array_equality_with_error(&result, &[0.25, 3.0, 2.0, 1.0])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr = get_random_float32_array::<4>();
+                let vec = _mm_set_ps(arr[3], arr[2], arr[1], arr[0]);
+                let result = _mm_rsqrt_ss(vec);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -322,6 +430,21 @@ pub(super) fn test_mm_min_ss() -> Result<(), String> {
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
         check_float_array_equality_with_error(&result, &[2.0, 3.0, 2.0, 1.0])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
+                let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
+                let vec2 = _mm_set_ps(arr2[3], arr2[2], arr2[1], arr2[0]);
+                let result = _mm_min_ss(vec1, vec2);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -333,6 +456,21 @@ pub(super) fn test_mm_max_ss() -> Result<(), String> {
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
         check_float_array_equality_with_error(&result, &[4.0, 3.0, 2.0, 1.0])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
+                let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
+                let vec2 = _mm_set_ps(arr2[3], arr2[2], arr2[1], arr2[0]);
+                let result = _mm_max_ss(vec1, vec2);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -346,6 +484,21 @@ pub(super) fn test_mm_shuffle_ps() -> Result<(), String> {
 
         check_float_array_equality_with_error(&result, &[1.0, 2.0, 7.0, 8.0])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
+                let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
+                let vec2 = _mm_set_ps(arr2[3], arr2[2], arr2[1], arr2[0]);
+                let result = _mm_shuffle_ps::<0x1B>(vec1, vec2);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -358,6 +511,21 @@ pub(super) fn test_mm_unpackhi_ps() -> Result<(), String> {
 
         check_float_array_equality_with_error(&result, &[2.0, 6.0, 1.0, 5.0])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
+                let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
+                let vec2 = _mm_set_ps(arr2[3], arr2[2], arr2[1], arr2[0]);
+                let result = _mm_unpackhi_ps(vec1, vec2);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -370,6 +538,21 @@ pub(super) fn test_mm_unpacklo_ps() -> Result<(), String> {
 
         check_float_array_equality_with_error(&result, &[4.0, 8.0, 3.0, 7.0])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
+                let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
+                let vec2 = _mm_set_ps(arr2[3], arr2[2], arr2[1], arr2[0]);
+                let result = _mm_unpacklo_ps(vec1, vec2);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -382,6 +565,21 @@ pub(super) fn test_mm_movehl_ps() -> Result<(), String> {
 
         check_float_array_equality_with_error(&result, &[6.0, 5.0, 2.0, 1.0])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
+                let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
+                let vec2 = _mm_set_ps(arr2[3], arr2[2], arr2[1], arr2[0]);
+                let result = _mm_movehl_ps(vec1, vec2);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -394,6 +592,21 @@ pub(super) fn test_mm_movelh_ps() -> Result<(), String> {
 
         check_float_array_equality_with_error(&result, &[4.0, 3.0, 8.0, 7.0])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
+                let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
+                let vec2 = _mm_set_ps(arr2[3], arr2[2], arr2[1], arr2[0]);
+                let result = _mm_movelh_ps(vec1, vec2);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -406,5 +619,20 @@ pub(super) fn test_mm_move_ss() -> Result<(), String> {
 
         check_float_array_equality_with_error(&result, &[8.0, 3.0, 2.0, 1.0])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
+                let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
+                let vec2 = _mm_set_ps(arr2[3], arr2[2], arr2[1], arr2[0]);
+                let result = _mm_move_ss(vec1, vec2);
+                let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
+            }
+        }
+    }
+
     Ok(())
 }
