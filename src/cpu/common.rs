@@ -136,3 +136,11 @@ pub fn get_random_i32_array<const N: usize>() -> [i32; N] {
     }
     arr
 }
+
+pub fn get_random_i64_array<const N: usize>() -> [i64; N] {
+    let mut arr = [0; N];
+    for item in arr.iter_mut() {
+        *item = random::<i64>();
+    }
+    arr
+}

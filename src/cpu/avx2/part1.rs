@@ -24,7 +24,7 @@ pub(super) fn test_mm256_add_epi32() -> Result<(), String> {
             unsafe {
                 let arr1 = crate::cpu::avx2::get_eight_random_i32();
                 let arr2 = crate::cpu::avx2::get_eight_random_i32();
-                let _result = _mm256_add_epi32(
+                let _ = _mm256_add_epi32(
                     _mm256_set_epi32(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
                     _mm256_set_epi32(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
                 );
@@ -50,7 +50,7 @@ pub(super) fn test_mm256_sub_epi32() -> Result<(), String> {
             unsafe {
                 let arr1 = crate::cpu::avx2::get_eight_random_i32();
                 let arr2 = crate::cpu::avx2::get_eight_random_i32();
-                let _result = _mm256_sub_epi32(
+                let _ = _mm256_sub_epi32(
                     _mm256_set_epi32(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
                     _mm256_set_epi32(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
                 );
@@ -76,7 +76,7 @@ pub(super) fn test_mm256_mullo_epi32() -> Result<(), String> {
             unsafe {
                 let arr1 = crate::cpu::avx2::get_eight_random_i32();
                 let arr2 = crate::cpu::avx2::get_eight_random_i32();
-                let _result = _mm256_mullo_epi32(
+                let _ = _mm256_mullo_epi32(
                     _mm256_set_epi32(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
                     _mm256_set_epi32(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
                 );
@@ -114,6 +114,20 @@ pub(super) fn test_mm256_and_si256() -> Result<(), String> {
         check_array_equality(&result, &[0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000])?;
     }
 
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr1 = crate::cpu::avx2::get_eight_random_i32();
+                let arr2 = crate::cpu::avx2::get_eight_random_i32();
+                let _ = _mm256_and_si256(
+                    _mm256_set_epi32(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
+                    _mm256_set_epi32(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
+                );
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -142,6 +156,20 @@ pub(super) fn test_mm256_or_si256() -> Result<(), String> {
         let result = _mm256_or_si256(a, b);
         let result = std::mem::transmute::<__m256i, [u32; 8]>(result);
         check_array_equality(&result, &[0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr1 = crate::cpu::avx2::get_eight_random_i32();
+                let arr2 = crate::cpu::avx2::get_eight_random_i32();
+                let _ = _mm256_or_si256(
+                    _mm256_set_epi32(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
+                    _mm256_set_epi32(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
+                );
+            }
+        }
     }
 
     Ok(())
@@ -174,6 +202,20 @@ pub(super) fn test_mm256_xor_si256() -> Result<(), String> {
         check_array_equality(&result, &[0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00])?;
     }
 
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr1 = crate::cpu::avx2::get_eight_random_i32();
+                let arr2 = crate::cpu::avx2::get_eight_random_i32();
+                let _ = _mm256_xor_si256(
+                    _mm256_set_epi32(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
+                    _mm256_set_epi32(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
+                );
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -183,6 +225,16 @@ pub(super) fn test_mm256_slli_epi32() -> Result<(), String> {
         let result = _mm256_slli_epi32::<2>(a);
         let result = std::mem::transmute::<__m256i, [i32; 8]>(result);
         check_array_equality(&result, &[32, 28, 24, 20, 16, 12, 8, 4])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr = crate::cpu::avx2::get_eight_random_i32();
+                let _ = _mm256_slli_epi32::<2>(_mm256_set_epi32(arr[7], arr[6], arr[5], arr[4], arr[3], arr[2], arr[1], arr[0]));
+            }
+        }
     }
 
     Ok(())
@@ -196,6 +248,16 @@ pub(super) fn test_mm256_srli_epi32() -> Result<(), String> {
         check_array_equality(&result, &[16, 14, 12, 10, 8, 6, 4, 2])?;
     }
 
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr = crate::cpu::avx2::get_eight_random_i32();
+                let _ = _mm256_srli_epi32::<2>(_mm256_set_epi32(arr[7], arr[6], arr[5], arr[4], arr[3], arr[2], arr[1], arr[0]));
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -205,6 +267,16 @@ pub(super) fn test_mm256_abs_epi32() -> Result<(), String> {
         let result = _mm256_abs_epi32(a);
         let result = std::mem::transmute::<__m256i, [i32; 8]>(result);
         check_array_equality(&result, &[8, 7, 6, 5, 4, 3, 2, 1])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr = crate::cpu::avx2::get_eight_random_i32();
+                let _ = _mm256_abs_epi32(_mm256_set_epi32(arr[7], arr[6], arr[5], arr[4], arr[3], arr[2], arr[1], arr[0]));
+            }
+        }
     }
 
     Ok(())
@@ -219,6 +291,20 @@ pub(super) fn test_mm256_max_epi32() -> Result<(), String> {
         check_array_equality(&result, &[8, 7, 6, 5, 5, 6, 7, 8])?;
     }
 
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr1 = crate::cpu::avx2::get_eight_random_i32();
+                let arr2 = crate::cpu::avx2::get_eight_random_i32();
+                let _ = _mm256_max_epi32(
+                    _mm256_set_epi32(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
+                    _mm256_set_epi32(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
+                );
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -229,6 +315,20 @@ pub(super) fn test_mm256_min_epi32() -> Result<(), String> {
         let result = _mm256_min_epi32(a, b);
         let result = std::mem::transmute::<__m256i, [i32; 8]>(result);
         check_array_equality(&result, &[1, 2, 3, 4, 4, 3, 2, 1])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr1 = crate::cpu::avx2::get_eight_random_i32();
+                let arr2 = crate::cpu::avx2::get_eight_random_i32();
+                let _ = _mm256_min_epi32(
+                    _mm256_set_epi32(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
+                    _mm256_set_epi32(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
+                );
+            }
+        }
     }
 
     Ok(())
@@ -250,6 +350,27 @@ pub(super) fn test_mm256_shuffle_epi8() -> Result<(), String> {
         )?;
     }
 
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let idx = _mm256_set_epi8(
+                    rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(),
+                );
+                let a = _mm256_set_epi8(
+                    rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(),
+                );
+                let _ = _mm256_shuffle_epi8(a, idx);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -260,6 +381,20 @@ pub(super) fn test_mm256_hadd_epi32() -> Result<(), String> {
         let result = _mm256_hadd_epi32(a, b);
         let result = std::mem::transmute::<__m256i, [i32; 8]>(result);
         check_array_equality(&result, &[15, 11, 31, 27, 7, 3, 23, 19])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr1 = crate::cpu::avx2::get_eight_random_i32();
+                let arr2 = crate::cpu::avx2::get_eight_random_i32();
+                let _ = _mm256_hadd_epi32(
+                    _mm256_set_epi32(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
+                    _mm256_set_epi32(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
+                );
+            }
+        }
     }
 
     Ok(())
