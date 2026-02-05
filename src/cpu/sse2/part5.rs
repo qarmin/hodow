@@ -7,7 +7,8 @@ use std::arch::x86_64::{
 };
 
 use log::info;
-use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, check_int_equality, get_random_i32_array, get_random_float64_array};
+
+use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, check_int_equality, get_random_float64_array, get_random_i32_array};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -164,8 +165,13 @@ pub(super) fn test_mm_maskmoveu_si128() -> Result<(), String> {
         let mut ok = false;
         let mut any42 = false;
         for &v in &mem {
-            if v == 42 { any42 = true; }
-            if v != 0 && v != 42 { ok = false; break; }
+            if v == 42 {
+                any42 = true;
+            }
+            if v != 0 && v != 42 {
+                ok = false;
+                break;
+            }
             ok = true;
         }
         if !ok || !any42 {
@@ -181,10 +187,24 @@ pub(super) fn test_mm_maskmoveu_si128() -> Result<(), String> {
                 let a_vals = get_random_i32_array::<1>();
                 let a = _mm_set1_epi8(a_vals[0] as i8);
                 let mask_vals = get_random_i32_array::<16>();
-                let mask = _mm_set_epi8(mask_vals[15] as i8, mask_vals[14] as i8, mask_vals[13] as i8, mask_vals[12] as i8,
-                    mask_vals[11] as i8, mask_vals[10] as i8, mask_vals[9] as i8, mask_vals[8] as i8,
-                    mask_vals[7] as i8, mask_vals[6] as i8, mask_vals[5] as i8, mask_vals[4] as i8,
-                    mask_vals[3] as i8, mask_vals[2] as i8, mask_vals[1] as i8, mask_vals[0] as i8);
+                let mask = _mm_set_epi8(
+                    mask_vals[15] as i8,
+                    mask_vals[14] as i8,
+                    mask_vals[13] as i8,
+                    mask_vals[12] as i8,
+                    mask_vals[11] as i8,
+                    mask_vals[10] as i8,
+                    mask_vals[9] as i8,
+                    mask_vals[8] as i8,
+                    mask_vals[7] as i8,
+                    mask_vals[6] as i8,
+                    mask_vals[5] as i8,
+                    mask_vals[4] as i8,
+                    mask_vals[3] as i8,
+                    mask_vals[2] as i8,
+                    mask_vals[1] as i8,
+                    mask_vals[0] as i8,
+                );
                 _mm_maskmoveu_si128(a, mask, mem.as_mut_ptr());
             }
         }

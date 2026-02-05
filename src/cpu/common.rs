@@ -113,6 +113,16 @@ pub fn get_random_float() -> f32 {
     }
 }
 
+pub fn get_random_float64() -> f64 {
+    match random::<u8>() % 12 {
+        0 => f64::INFINITY,
+        1 => f64::NEG_INFINITY,
+        2 => f64::NAN,
+        3..8 => random::<f64>() * 10000000.0,
+        _ => random::<f64>() * 100000.0,
+    }
+}
+
 pub fn get_random_float32_array<const N: usize>() -> [f32; N] {
     let mut arr = [0.0; N];
     for item in arr.iter_mut() {

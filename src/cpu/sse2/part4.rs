@@ -8,7 +8,10 @@ use std::arch::x86_64::{
 };
 
 use log::info;
-use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, check_int_equality, get_random_i32_array, get_random_float64_array, get_random_float32_array, get_random_float};
+
+use crate::cpu::common::{
+    check_array_equality, check_float_array_equality_with_error, check_int_equality, get_random_float, get_random_float32_array, get_random_float64_array, get_random_i32_array,
+};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -27,8 +30,26 @@ pub(super) fn test_mm_packus_epi16() -> Result<(), String> {
             unsafe {
                 let a_vals = get_random_i32_array::<8>();
                 let b_vals = get_random_i32_array::<8>();
-                let a = _mm_set_epi16(a_vals[7] as i16, a_vals[6] as i16, a_vals[5] as i16, a_vals[4] as i16, a_vals[3] as i16, a_vals[2] as i16, a_vals[1] as i16, a_vals[0] as i16);
-                let b = _mm_set_epi16(b_vals[7] as i16, b_vals[6] as i16, b_vals[5] as i16, b_vals[4] as i16, b_vals[3] as i16, b_vals[2] as i16, b_vals[1] as i16, b_vals[0] as i16);
+                let a = _mm_set_epi16(
+                    a_vals[7] as i16,
+                    a_vals[6] as i16,
+                    a_vals[5] as i16,
+                    a_vals[4] as i16,
+                    a_vals[3] as i16,
+                    a_vals[2] as i16,
+                    a_vals[1] as i16,
+                    a_vals[0] as i16,
+                );
+                let b = _mm_set_epi16(
+                    b_vals[7] as i16,
+                    b_vals[6] as i16,
+                    b_vals[5] as i16,
+                    b_vals[4] as i16,
+                    b_vals[3] as i16,
+                    b_vals[2] as i16,
+                    b_vals[1] as i16,
+                    b_vals[0] as i16,
+                );
                 let _ = _mm_packus_epi16(a, b);
             }
         }
@@ -52,10 +73,42 @@ pub(super) fn test_mm_unpackhi_epi8() -> Result<(), String> {
             unsafe {
                 let a_vals = get_random_i32_array::<16>();
                 let b_vals = get_random_i32_array::<16>();
-                let a = _mm_set_epi8(a_vals[15] as i8, a_vals[14] as i8, a_vals[13] as i8, a_vals[12] as i8, a_vals[11] as i8, a_vals[10] as i8, a_vals[9] as i8, a_vals[8] as i8,
-                    a_vals[7] as i8, a_vals[6] as i8, a_vals[5] as i8, a_vals[4] as i8, a_vals[3] as i8, a_vals[2] as i8, a_vals[1] as i8, a_vals[0] as i8);
-                let b = _mm_set_epi8(b_vals[15] as i8, b_vals[14] as i8, b_vals[13] as i8, b_vals[12] as i8, b_vals[11] as i8, b_vals[10] as i8, b_vals[9] as i8, b_vals[8] as i8,
-                    b_vals[7] as i8, b_vals[6] as i8, b_vals[5] as i8, b_vals[4] as i8, b_vals[3] as i8, b_vals[2] as i8, b_vals[1] as i8, b_vals[0] as i8);
+                let a = _mm_set_epi8(
+                    a_vals[15] as i8,
+                    a_vals[14] as i8,
+                    a_vals[13] as i8,
+                    a_vals[12] as i8,
+                    a_vals[11] as i8,
+                    a_vals[10] as i8,
+                    a_vals[9] as i8,
+                    a_vals[8] as i8,
+                    a_vals[7] as i8,
+                    a_vals[6] as i8,
+                    a_vals[5] as i8,
+                    a_vals[4] as i8,
+                    a_vals[3] as i8,
+                    a_vals[2] as i8,
+                    a_vals[1] as i8,
+                    a_vals[0] as i8,
+                );
+                let b = _mm_set_epi8(
+                    b_vals[15] as i8,
+                    b_vals[14] as i8,
+                    b_vals[13] as i8,
+                    b_vals[12] as i8,
+                    b_vals[11] as i8,
+                    b_vals[10] as i8,
+                    b_vals[9] as i8,
+                    b_vals[8] as i8,
+                    b_vals[7] as i8,
+                    b_vals[6] as i8,
+                    b_vals[5] as i8,
+                    b_vals[4] as i8,
+                    b_vals[3] as i8,
+                    b_vals[2] as i8,
+                    b_vals[1] as i8,
+                    b_vals[0] as i8,
+                );
                 let _ = _mm_unpackhi_epi8(a, b);
             }
         }
@@ -79,8 +132,26 @@ pub(super) fn test_mm_unpackhi_epi16() -> Result<(), String> {
             unsafe {
                 let a_vals = get_random_i32_array::<8>();
                 let b_vals = get_random_i32_array::<8>();
-                let a = _mm_set_epi16(a_vals[7] as i16, a_vals[6] as i16, a_vals[5] as i16, a_vals[4] as i16, a_vals[3] as i16, a_vals[2] as i16, a_vals[1] as i16, a_vals[0] as i16);
-                let b = _mm_set_epi16(b_vals[7] as i16, b_vals[6] as i16, b_vals[5] as i16, b_vals[4] as i16, b_vals[3] as i16, b_vals[2] as i16, b_vals[1] as i16, b_vals[0] as i16);
+                let a = _mm_set_epi16(
+                    a_vals[7] as i16,
+                    a_vals[6] as i16,
+                    a_vals[5] as i16,
+                    a_vals[4] as i16,
+                    a_vals[3] as i16,
+                    a_vals[2] as i16,
+                    a_vals[1] as i16,
+                    a_vals[0] as i16,
+                );
+                let b = _mm_set_epi16(
+                    b_vals[7] as i16,
+                    b_vals[6] as i16,
+                    b_vals[5] as i16,
+                    b_vals[4] as i16,
+                    b_vals[3] as i16,
+                    b_vals[2] as i16,
+                    b_vals[1] as i16,
+                    b_vals[0] as i16,
+                );
                 let _ = _mm_unpackhi_epi16(a, b);
             }
         }
@@ -154,10 +225,42 @@ pub(super) fn test_mm_unpacklo_epi8() -> Result<(), String> {
             unsafe {
                 let a_vals = get_random_i32_array::<16>();
                 let b_vals = get_random_i32_array::<16>();
-                let a = _mm_set_epi8(a_vals[15] as i8, a_vals[14] as i8, a_vals[13] as i8, a_vals[12] as i8, a_vals[11] as i8, a_vals[10] as i8, a_vals[9] as i8, a_vals[8] as i8,
-                    a_vals[7] as i8, a_vals[6] as i8, a_vals[5] as i8, a_vals[4] as i8, a_vals[3] as i8, a_vals[2] as i8, a_vals[1] as i8, a_vals[0] as i8);
-                let b = _mm_set_epi8(b_vals[15] as i8, b_vals[14] as i8, b_vals[13] as i8, b_vals[12] as i8, b_vals[11] as i8, b_vals[10] as i8, b_vals[9] as i8, b_vals[8] as i8,
-                    b_vals[7] as i8, b_vals[6] as i8, b_vals[5] as i8, b_vals[4] as i8, b_vals[3] as i8, b_vals[2] as i8, b_vals[1] as i8, b_vals[0] as i8);
+                let a = _mm_set_epi8(
+                    a_vals[15] as i8,
+                    a_vals[14] as i8,
+                    a_vals[13] as i8,
+                    a_vals[12] as i8,
+                    a_vals[11] as i8,
+                    a_vals[10] as i8,
+                    a_vals[9] as i8,
+                    a_vals[8] as i8,
+                    a_vals[7] as i8,
+                    a_vals[6] as i8,
+                    a_vals[5] as i8,
+                    a_vals[4] as i8,
+                    a_vals[3] as i8,
+                    a_vals[2] as i8,
+                    a_vals[1] as i8,
+                    a_vals[0] as i8,
+                );
+                let b = _mm_set_epi8(
+                    b_vals[15] as i8,
+                    b_vals[14] as i8,
+                    b_vals[13] as i8,
+                    b_vals[12] as i8,
+                    b_vals[11] as i8,
+                    b_vals[10] as i8,
+                    b_vals[9] as i8,
+                    b_vals[8] as i8,
+                    b_vals[7] as i8,
+                    b_vals[6] as i8,
+                    b_vals[5] as i8,
+                    b_vals[4] as i8,
+                    b_vals[3] as i8,
+                    b_vals[2] as i8,
+                    b_vals[1] as i8,
+                    b_vals[0] as i8,
+                );
                 let _ = _mm_unpacklo_epi8(a, b);
             }
         }
@@ -181,8 +284,26 @@ pub(super) fn test_mm_unpacklo_epi16() -> Result<(), String> {
             unsafe {
                 let a_vals = get_random_i32_array::<8>();
                 let b_vals = get_random_i32_array::<8>();
-                let a = _mm_set_epi16(a_vals[7] as i16, a_vals[6] as i16, a_vals[5] as i16, a_vals[4] as i16, a_vals[3] as i16, a_vals[2] as i16, a_vals[1] as i16, a_vals[0] as i16);
-                let b = _mm_set_epi16(b_vals[7] as i16, b_vals[6] as i16, b_vals[5] as i16, b_vals[4] as i16, b_vals[3] as i16, b_vals[2] as i16, b_vals[1] as i16, b_vals[0] as i16);
+                let a = _mm_set_epi16(
+                    a_vals[7] as i16,
+                    a_vals[6] as i16,
+                    a_vals[5] as i16,
+                    a_vals[4] as i16,
+                    a_vals[3] as i16,
+                    a_vals[2] as i16,
+                    a_vals[1] as i16,
+                    a_vals[0] as i16,
+                );
+                let b = _mm_set_epi16(
+                    b_vals[7] as i16,
+                    b_vals[6] as i16,
+                    b_vals[5] as i16,
+                    b_vals[4] as i16,
+                    b_vals[3] as i16,
+                    b_vals[2] as i16,
+                    b_vals[1] as i16,
+                    b_vals[0] as i16,
+                );
                 let _ = _mm_unpacklo_epi16(a, b);
             }
         }
@@ -276,7 +397,16 @@ pub(super) fn test_mm_shufflehi_epi16() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let vals = get_random_i32_array::<8>();
-                let a = _mm_set_epi16(vals[7] as i16, vals[6] as i16, vals[5] as i16, vals[4] as i16, vals[3] as i16, vals[2] as i16, vals[1] as i16, vals[0] as i16);
+                let a = _mm_set_epi16(
+                    vals[7] as i16,
+                    vals[6] as i16,
+                    vals[5] as i16,
+                    vals[4] as i16,
+                    vals[3] as i16,
+                    vals[2] as i16,
+                    vals[1] as i16,
+                    vals[0] as i16,
+                );
                 let _ = _mm_shufflehi_epi16::<0b00011011>(a);
             }
         }
@@ -298,7 +428,16 @@ pub(super) fn test_mm_shufflelo_epi16() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let vals = get_random_i32_array::<8>();
-                let a = _mm_set_epi16(vals[7] as i16, vals[6] as i16, vals[5] as i16, vals[4] as i16, vals[3] as i16, vals[2] as i16, vals[1] as i16, vals[0] as i16);
+                let a = _mm_set_epi16(
+                    vals[7] as i16,
+                    vals[6] as i16,
+                    vals[5] as i16,
+                    vals[4] as i16,
+                    vals[3] as i16,
+                    vals[2] as i16,
+                    vals[1] as i16,
+                    vals[0] as i16,
+                );
                 let _ = _mm_shufflelo_epi16::<0b00011011>(a);
             }
         }
@@ -319,7 +458,16 @@ pub(super) fn test_mm_extract_epi16() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let vals = get_random_i32_array::<8>();
-                let a = _mm_set_epi16(vals[7] as i16, vals[6] as i16, vals[5] as i16, vals[4] as i16, vals[3] as i16, vals[2] as i16, vals[1] as i16, vals[0] as i16);
+                let a = _mm_set_epi16(
+                    vals[7] as i16,
+                    vals[6] as i16,
+                    vals[5] as i16,
+                    vals[4] as i16,
+                    vals[3] as i16,
+                    vals[2] as i16,
+                    vals[1] as i16,
+                    vals[0] as i16,
+                );
                 let _ = _mm_extract_epi16::<3>(a);
             }
         }
@@ -341,7 +489,16 @@ pub(super) fn test_mm_insert_epi16() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let vals = get_random_i32_array::<8>();
-                let a = _mm_set_epi16(vals[7] as i16, vals[6] as i16, vals[5] as i16, vals[4] as i16, vals[3] as i16, vals[2] as i16, vals[1] as i16, vals[0] as i16);
+                let a = _mm_set_epi16(
+                    vals[7] as i16,
+                    vals[6] as i16,
+                    vals[5] as i16,
+                    vals[4] as i16,
+                    vals[3] as i16,
+                    vals[2] as i16,
+                    vals[1] as i16,
+                    vals[0] as i16,
+                );
                 let _ = _mm_insert_epi16::<3>(a, vals[0]);
             }
         }
@@ -362,8 +519,24 @@ pub(super) fn test_mm_movemask_epi8() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let vals = get_random_i32_array::<16>();
-                let a = _mm_set_epi8(vals[15] as i8, vals[14] as i8, vals[13] as i8, vals[12] as i8, vals[11] as i8, vals[10] as i8, vals[9] as i8, vals[8] as i8,
-                    vals[7] as i8, vals[6] as i8, vals[5] as i8, vals[4] as i8, vals[3] as i8, vals[2] as i8, vals[1] as i8, vals[0] as i8);
+                let a = _mm_set_epi8(
+                    vals[15] as i8,
+                    vals[14] as i8,
+                    vals[13] as i8,
+                    vals[12] as i8,
+                    vals[11] as i8,
+                    vals[10] as i8,
+                    vals[9] as i8,
+                    vals[8] as i8,
+                    vals[7] as i8,
+                    vals[6] as i8,
+                    vals[5] as i8,
+                    vals[4] as i8,
+                    vals[3] as i8,
+                    vals[2] as i8,
+                    vals[1] as i8,
+                    vals[0] as i8,
+                );
                 let _ = _mm_movemask_epi8(a);
             }
         }
@@ -964,7 +1137,7 @@ pub(super) fn test_mm_sll_epi16() -> Result<(), String> {
             unsafe {
                 let v = get_random_i32_array::<1>();
                 let a = _mm_set1_epi16(v[0] as i16);
-                let count = _mm_set_epi64x(0,  (v[0] as i64 & 0x3F) as i64);
+                let count = _mm_set_epi64x(0, (v[0] as i64 & 0x3F) as i64);
                 let _ = _mm_sll_epi16(a, count);
             }
         }

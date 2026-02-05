@@ -7,7 +7,11 @@ use std::arch::x86_64::{
 };
 
 use log::info;
-use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, check_int_equality, get_random_i32_array, get_random_float64_array, get_random_float32_array, get_random_float};
+
+use crate::cpu::common::{
+    check_array_equality, check_float_array_equality_with_error, check_int_equality, get_random_float, get_random_float32_array, get_random_float64, get_random_float64_array,
+    get_random_i32_array,
+};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -276,7 +280,7 @@ pub(super) fn test_mm_cvtps_pd() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let vals = get_random_float32_array::<4>();
+                let vals = get_random_i32_array::<4>();
                 let a = _mm_castsi128_ps(_mm_set_epi32(vals[3], vals[2], vals[1], vals[0]));
                 let _ = _mm_cvtps_pd(a);
             }
@@ -321,9 +325,9 @@ pub(super) fn test_mm_cvtsd_ss() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let vals = get_random_float32_array::<4>();
+                let vals = get_random_i32_array::<4>();
                 let a = _mm_castsi128_ps(_mm_set_epi32(vals[3], vals[2], vals[1], vals[0]));
-                let b = _mm_set_sd(get_random_float());
+                let b = _mm_set_sd(get_random_float64());
                 let _ = _mm_cvtsd_ss(a, b);
             }
         }
@@ -347,8 +351,8 @@ pub(super) fn test_mm_cvtss_sd() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let vals = get_random_float32_array::<4>();
-                let a = _mm_set_sd(get_random_float());
+                let vals = get_random_i32_array::<4>();
+                let a = _mm_set_sd(get_random_float64());
                 let b = _mm_castsi128_ps(_mm_set_epi32(vals[3], vals[2], vals[1], vals[0]));
                 let _ = _mm_cvtss_sd(a, b);
             }
@@ -609,7 +613,16 @@ pub(super) fn test_mm_storeu_si16() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let vals = get_random_i32_array::<8>();
-                let a = _mm_set_epi16(vals[7] as i16, vals[6] as i16, vals[5] as i16, vals[4] as i16, vals[3] as i16, vals[2] as i16, vals[1] as i16, vals[0] as i16);
+                let a = _mm_set_epi16(
+                    vals[7] as i16,
+                    vals[6] as i16,
+                    vals[5] as i16,
+                    vals[4] as i16,
+                    vals[3] as i16,
+                    vals[2] as i16,
+                    vals[1] as i16,
+                    vals[0] as i16,
+                );
                 let mut mem: i16 = 0;
                 _mm_storeu_si16(&mut mem as *mut i16 as *mut u8, a);
             }
@@ -828,8 +841,8 @@ pub(super) fn test_mm_castsi128_pd() -> Result<(), String> {
 pub(super) fn test_mm_castsi128_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(4, 3, 2, 1);
-                let result = _mm_castsi128_ps(a);
-                let _ = std::mem::transmute::<std::arch::x86_64::__m128, [f32; 4]>(result);
+        let result = _mm_castsi128_ps(a);
+        let _ = std::mem::transmute::<std::arch::x86_64::__m128, [f32; 4]>(result);
     }
 
     if get_fuzzing() {

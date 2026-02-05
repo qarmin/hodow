@@ -6,6 +6,7 @@ use std::arch::x86_64::{
 };
 
 use log::info;
+
 use crate::cpu::common::{check_array_equality, get_random_i32_array};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
@@ -435,8 +436,23 @@ pub(super) fn test_mm_set_epi8() -> Result<(), String> {
             unsafe {
                 let vals = get_random_i32_array::<16>();
                 let _result = _mm_set_epi8(
-                    vals[15] as i8, vals[14] as i8, vals[13] as i8, vals[12] as i8, vals[11] as i8, vals[10] as i8, vals[9] as i8, vals[8] as i8,
-                    vals[7] as i8, vals[6] as i8, vals[5] as i8, vals[4] as i8, vals[3] as i8, vals[2] as i8, vals[1] as i8, vals[0] as i8);
+                    vals[15] as i8,
+                    vals[14] as i8,
+                    vals[13] as i8,
+                    vals[12] as i8,
+                    vals[11] as i8,
+                    vals[10] as i8,
+                    vals[9] as i8,
+                    vals[8] as i8,
+                    vals[7] as i8,
+                    vals[6] as i8,
+                    vals[5] as i8,
+                    vals[4] as i8,
+                    vals[3] as i8,
+                    vals[2] as i8,
+                    vals[1] as i8,
+                    vals[0] as i8,
+                );
             }
         }
     }
@@ -456,7 +472,16 @@ pub(super) fn test_mm_set_epi16() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let vals = get_random_i32_array::<8>();
-                let _result = _mm_set_epi16(vals[7] as i16, vals[6] as i16, vals[5] as i16, vals[4] as i16, vals[3] as i16, vals[2] as i16, vals[1] as i16, vals[0] as i16);
+                let _result = _mm_set_epi16(
+                    vals[7] as i16,
+                    vals[6] as i16,
+                    vals[5] as i16,
+                    vals[4] as i16,
+                    vals[3] as i16,
+                    vals[2] as i16,
+                    vals[1] as i16,
+                    vals[0] as i16,
+                );
             }
         }
     }
@@ -557,8 +582,23 @@ pub(super) fn test_mm_setr_epi8() -> Result<(), String> {
             unsafe {
                 let vals = get_random_i32_array::<16>();
                 let _result = _mm_setr_epi8(
-                    vals[0] as i8, vals[1] as i8, vals[2] as i8, vals[3] as i8, vals[4] as i8, vals[5] as i8, vals[6] as i8, vals[7] as i8,
-                    vals[8] as i8, vals[9] as i8, vals[10] as i8, vals[11] as i8, vals[12] as i8, vals[13] as i8, vals[14] as i8, vals[15] as i8);
+                    vals[0] as i8,
+                    vals[1] as i8,
+                    vals[2] as i8,
+                    vals[3] as i8,
+                    vals[4] as i8,
+                    vals[5] as i8,
+                    vals[6] as i8,
+                    vals[7] as i8,
+                    vals[8] as i8,
+                    vals[9] as i8,
+                    vals[10] as i8,
+                    vals[11] as i8,
+                    vals[12] as i8,
+                    vals[13] as i8,
+                    vals[14] as i8,
+                    vals[15] as i8,
+                );
             }
         }
     }
@@ -578,7 +618,16 @@ pub(super) fn test_mm_setr_epi16() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let vals = get_random_i32_array::<8>();
-                let _result = _mm_setr_epi16(vals[0] as i16, vals[1] as i16, vals[2] as i16, vals[3] as i16, vals[4] as i16, vals[5] as i16, vals[6] as i16, vals[7] as i16);
+                let _result = _mm_setr_epi16(
+                    vals[0] as i16,
+                    vals[1] as i16,
+                    vals[2] as i16,
+                    vals[3] as i16,
+                    vals[4] as i16,
+                    vals[5] as i16,
+                    vals[6] as i16,
+                    vals[7] as i16,
+                );
             }
         }
     }
@@ -760,8 +809,26 @@ pub(super) fn test_mm_packs_epi16() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let vals = get_random_i32_array::<8>();
-                let a = _mm_set_epi16(vals[7] as i16, vals[6] as i16, vals[5] as i16, vals[4] as i16, vals[3] as i16, vals[2] as i16, vals[1] as i16, vals[0] as i16);
-                let b = _mm_set_epi16(vals[0] as i16, vals[1] as i16, vals[2] as i16, vals[3] as i16, vals[4] as i16, vals[5] as i16, vals[6] as i16, vals[7] as i16);
+                let a = _mm_set_epi16(
+                    vals[7] as i16,
+                    vals[6] as i16,
+                    vals[5] as i16,
+                    vals[4] as i16,
+                    vals[3] as i16,
+                    vals[2] as i16,
+                    vals[1] as i16,
+                    vals[0] as i16,
+                );
+                let b = _mm_set_epi16(
+                    vals[0] as i16,
+                    vals[1] as i16,
+                    vals[2] as i16,
+                    vals[3] as i16,
+                    vals[4] as i16,
+                    vals[5] as i16,
+                    vals[6] as i16,
+                    vals[7] as i16,
+                );
                 let _result = _mm_packs_epi16(a, b);
             }
         }

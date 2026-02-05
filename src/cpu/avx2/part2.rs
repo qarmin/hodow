@@ -8,6 +8,7 @@ use std::arch::x86_64::{
 };
 
 use log::info;
+
 use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
@@ -25,8 +26,26 @@ pub(super) fn test_mm256_hsub_epi32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = _mm256_set_epi32(rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random());
-                let b = _mm256_set_epi32(rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random());
+                let a = _mm256_set_epi32(
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                );
+                let b = _mm256_set_epi32(
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                );
                 let _ = _mm256_hsub_epi32(a, b);
             }
         }
@@ -69,8 +88,26 @@ pub(super) fn test_mm256_permutevar8x32_epi32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = _mm256_set_epi32(rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random());
-                let b = _mm256_set_epi32(rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random());
+                let a = _mm256_set_epi32(
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                );
+                let b = _mm256_set_epi32(
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                );
                 let _ = _mm256_permutevar8x32_epi32(a, b);
             }
         }
@@ -114,7 +151,24 @@ pub(super) fn test_mm_broadcastb_epi8() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = _mm_set_epi8(rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random());
+                let a = _mm_set_epi8(
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                );
                 let _ = _mm_broadcastb_epi8(a);
             }
         }
@@ -219,7 +273,16 @@ pub(super) fn test_mm_broadcastw_epi16() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = _mm_set_epi16(rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random());
+                let a = _mm_set_epi16(
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                );
                 let _ = _mm_broadcastw_epi16(a);
             }
         }
@@ -241,8 +304,22 @@ pub(super) fn test_mm_i32gather_epi32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let base: [i32; 8] = [rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random()];
-                let idx = _mm_set_epi32((rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32);
+                let base: [i32; 8] = [
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                ];
+                let idx = _mm_set_epi32(
+                    (rand::random::<u32>() % 8) as i32,
+                    (rand::random::<u32>() % 8) as i32,
+                    (rand::random::<u32>() % 8) as i32,
+                    (rand::random::<u32>() % 8) as i32,
+                );
                 let _ = _mm_i32gather_epi32::<4>(base.as_ptr(), idx);
             }
         }
@@ -266,9 +343,23 @@ pub(super) fn test_mm_mask_i32gather_epi32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let base: [i32; 8] = [rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random()];
+                let base: [i32; 8] = [
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                ];
                 let src = _mm_set1_epi32(rand::random());
-                let idx = _mm_set_epi32((rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32);
+                let idx = _mm_set_epi32(
+                    (rand::random::<u32>() % 8) as i32,
+                    (rand::random::<u32>() % 8) as i32,
+                    (rand::random::<u32>() % 8) as i32,
+                    (rand::random::<u32>() % 8) as i32,
+                );
                 let mask = _mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random());
                 let _ = _mm_mask_i32gather_epi32::<4>(src, base.as_ptr(), idx, mask);
             }
@@ -291,8 +382,22 @@ pub(super) fn test_mm_i32gather_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let base: [f32; 8] = [rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random()];
-                let idx = _mm_set_epi32((rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32);
+                let base: [f32; 8] = [
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                ];
+                let idx = _mm_set_epi32(
+                    (rand::random::<u32>() % 8) as i32,
+                    (rand::random::<u32>() % 8) as i32,
+                    (rand::random::<u32>() % 8) as i32,
+                    (rand::random::<u32>() % 8) as i32,
+                );
                 let _ = _mm_i32gather_ps::<4>(base.as_ptr(), idx);
             }
         }
@@ -317,9 +422,23 @@ pub(super) fn test_mm_mask_i32gather_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let base: [f32; 8] = [rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random()];
+                let base: [f32; 8] = [
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                ];
                 let src = _mm_set1_ps(rand::random());
-                let idx = _mm_set_epi32((rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32);
+                let idx = _mm_set_epi32(
+                    (rand::random::<u32>() % 8) as i32,
+                    (rand::random::<u32>() % 8) as i32,
+                    (rand::random::<u32>() % 8) as i32,
+                    (rand::random::<u32>() % 8) as i32,
+                );
                 let mask = _mm_set_ps(rand::random(), rand::random(), rand::random(), rand::random());
                 let _ = _mm_mask_i32gather_ps::<4>(src, base.as_ptr(), idx, mask);
             }
@@ -342,8 +461,22 @@ pub(super) fn test_mm_i32gather_epi64() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let base: [i64; 8] = [rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random()];
-                let idx = _mm_set_epi32((rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32);
+                let base: [i64; 8] = [
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                ];
+                let idx = _mm_set_epi32(
+                    (rand::random::<u32>() % 8) as i32,
+                    (rand::random::<u32>() % 8) as i32,
+                    (rand::random::<u32>() % 8) as i32,
+                    (rand::random::<u32>() % 8) as i32,
+                );
                 let _ = _mm_i32gather_epi64::<8>(base.as_ptr(), idx);
             }
         }
@@ -367,9 +500,23 @@ pub(super) fn test_mm_mask_i32gather_epi64() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let base: [i64; 8] = [rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random()];
+                let base: [i64; 8] = [
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                ];
                 let src = _mm_set1_epi64x(rand::random());
-                let idx = _mm_set_epi32((rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32);
+                let idx = _mm_set_epi32(
+                    (rand::random::<u32>() % 8) as i32,
+                    (rand::random::<u32>() % 8) as i32,
+                    (rand::random::<u32>() % 8) as i32,
+                    (rand::random::<u32>() % 8) as i32,
+                );
                 let mask = _mm_set_epi64x(rand::random(), rand::random());
                 let _ = _mm_mask_i32gather_epi64::<8>(src, base.as_ptr(), idx, mask);
             }
@@ -392,8 +539,22 @@ pub(super) fn test_mm_i32gather_pd() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let base: [f64; 8] = [rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random()];
-                let idx = _mm_set_epi32((rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32);
+                let base: [f64; 8] = [
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                ];
+                let idx = _mm_set_epi32(
+                    (rand::random::<u32>() % 8) as i32,
+                    (rand::random::<u32>() % 8) as i32,
+                    (rand::random::<u32>() % 8) as i32,
+                    (rand::random::<u32>() % 8) as i32,
+                );
                 let _ = _mm_i32gather_pd::<8>(base.as_ptr(), idx);
             }
         }
@@ -417,9 +578,23 @@ pub(super) fn test_mm_mask_i32gather_pd() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let base: [f64; 8] = [rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random()];
+                let base: [f64; 8] = [
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                ];
                 let src = _mm_set1_pd(rand::random());
-                let idx = _mm_set_epi32((rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32, (rand::random::<u32>() % 8) as i32);
+                let idx = _mm_set_epi32(
+                    (rand::random::<u32>() % 8) as i32,
+                    (rand::random::<u32>() % 8) as i32,
+                    (rand::random::<u32>() % 8) as i32,
+                    (rand::random::<u32>() % 8) as i32,
+                );
                 let mask = _mm_set_pd(rand::random(), rand::random());
                 let _ = _mm_mask_i32gather_pd::<8>(src, base.as_ptr(), idx, mask);
             }
@@ -442,7 +617,16 @@ pub(super) fn test_mm_i64gather_epi32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let base: [i32; 8] = [rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random()];
+                let base: [i32; 8] = [
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                ];
                 let idx = _mm_set_epi64x((rand::random::<u32>() % 8) as i64, (rand::random::<u32>() % 8) as i64);
                 let _ = _mm_i64gather_epi32::<4>(base.as_ptr(), idx);
             }
@@ -467,7 +651,16 @@ pub(super) fn test_mm_mask_i64gather_epi32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let base: [i32; 8] = [rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random()];
+                let base: [i32; 8] = [
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                ];
                 let src = _mm_set1_epi32(rand::random());
                 let idx = _mm_set_epi64x((rand::random::<u32>() % 8) as i64, (rand::random::<u32>() % 8) as i64);
                 let mask = _mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random());
@@ -492,7 +685,16 @@ pub(super) fn test_mm_i64gather_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let base: [f32; 8] = [rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random()];
+                let base: [f32; 8] = [
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                ];
                 let idx = _mm_set_epi64x((rand::random::<u32>() % 8) as i64, (rand::random::<u32>() % 8) as i64);
                 let _ = _mm_i64gather_ps::<4>(base.as_ptr(), idx);
             }
@@ -517,7 +719,16 @@ pub(super) fn test_mm_mask_i64gather_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let base: [f32; 8] = [rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random()];
+                let base: [f32; 8] = [
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                ];
                 let src = _mm_set1_ps(rand::random());
                 let idx = _mm_set_epi64x((rand::random::<u32>() % 8) as i64, (rand::random::<u32>() % 8) as i64);
                 let mask = _mm_set_ps(rand::random(), rand::random(), rand::random(), rand::random());
@@ -542,7 +753,16 @@ pub(super) fn test_mm_i64gather_epi64() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let base: [i64; 8] = [rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random()];
+                let base: [i64; 8] = [
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                ];
                 let idx = _mm_set_epi64x((rand::random::<u32>() % 8) as i64, (rand::random::<u32>() % 8) as i64);
                 let _ = _mm_i64gather_epi64::<8>(base.as_ptr(), idx);
             }
@@ -567,7 +787,16 @@ pub(super) fn test_mm_mask_i64gather_epi64() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let base: [i64; 8] = [rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random()];
+                let base: [i64; 8] = [
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                ];
                 let src = _mm_set1_epi64x(rand::random());
                 let idx = _mm_set_epi64x((rand::random::<u32>() % 8) as i64, (rand::random::<u32>() % 8) as i64);
                 let mask = _mm_set_epi64x(rand::random(), rand::random());
@@ -592,7 +821,16 @@ pub(super) fn test_mm_i64gather_pd() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let base: [f64; 8] = [rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random()];
+                let base: [f64; 8] = [
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                ];
                 let idx = _mm_set_epi64x((rand::random::<u32>() % 8) as i64, (rand::random::<u32>() % 8) as i64);
                 let _ = _mm_i64gather_pd::<8>(base.as_ptr(), idx);
             }
@@ -617,7 +855,16 @@ pub(super) fn test_mm_mask_i64gather_pd() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let base: [f64; 8] = [rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random(), rand::random()];
+                let base: [f64; 8] = [
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                ];
                 let src = _mm_set1_pd(rand::random());
                 let idx = _mm_set_epi64x((rand::random::<u32>() % 8) as i64, (rand::random::<u32>() % 8) as i64);
                 let mask = _mm_set_pd(rand::random(), rand::random());
