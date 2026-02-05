@@ -70,27 +70,3 @@ fn main() {
     }
 }
 
-pub fn get_random_float() -> f32 {
-    match random::<u8>() % 12 {
-        0 => f32::INFINITY,
-        1 => f32::NEG_INFINITY,
-        2 => f32::NAN,
-        3..8 => random::<f32>() * 10000000.0,
-        _ => random::<f32>() * 100000.0,
-    }
-}
-
-pub fn get_random_float32_array<const N: usize>() -> [f32; N] {
-    let mut arr = [0.0; N];
-    for item in arr.iter_mut() {
-        *item = get_random_float();
-    }
-    arr
-}
-pub fn get_random_float64_array<const N: usize>() -> [f64; N] {
-    let mut arr = [0.0; N];
-    for item in arr.iter_mut() {
-        *item = get_random_float() as f64;
-    }
-    arr
-}

@@ -6,9 +6,9 @@ use std::arch::x86_64::{
 
 use log::info;
 
-use crate::cpu::common::{check_float_array_equality_with_error, check_float_equality, check_int_equality, DEFAULT_FLOAT_DIFF};
+use crate::cpu::common::{check_float_array_equality_with_error, check_float_equality, check_int_equality, get_random_float, get_random_float32_array, DEFAULT_FLOAT_DIFF};
 use crate::cpu::get_iterations;
-use crate::{get_fuzzing, get_random_float, get_random_float32_array};
+use crate::get_fuzzing;
 
 pub(super) fn test_mm_cmpeq_ps() -> Result<(), String> {
     unsafe {

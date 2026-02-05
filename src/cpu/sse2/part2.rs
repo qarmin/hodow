@@ -7,9 +7,9 @@ use std::arch::x86_64::{
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, check_int_equality};
+use crate::cpu::common::{check_array_equality, check_int_equality, get_random_float};
 use crate::cpu::get_iterations;
-use crate::{ get_fuzzing, get_random_float};
+use crate::get_fuzzing;
 
 pub(super) fn test_mm_or_si128() -> Result<(), String> {
     unsafe {

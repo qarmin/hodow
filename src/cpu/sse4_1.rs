@@ -8,7 +8,7 @@ use log::info;
 use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, check_float_equality, check_int_equality, DEFAULT_FLOAT_DIFF};
 use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
 use crate::{ get_fuzzing};
-use crate::get_random_float32_array;
+use crate::cpu::common::get_random_float32_array;
 pub struct SSE41;
 
 impl ExtensionTest for SSE41 {
