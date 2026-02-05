@@ -60,7 +60,7 @@ pub(super) fn test_mm_add_ps() -> Result<(), String> {
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
-            use_mm_add_ps(get_four_random_floats(), get_four_random_floats());
+            use_mm_add_ps(get_random_float32_array::<4>(), get_random_float32_array::<4>());
         }
     }
 
@@ -100,7 +100,7 @@ pub(super) fn test_mm_sub_ps() -> Result<(), String> {
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
-            use_mm_sub_ps(get_four_random_floats(), get_four_random_floats());
+            use_mm_sub_ps(get_random_float32_array::<4>(), get_random_float32_array::<4>());
         }
     }
 
@@ -154,7 +154,7 @@ pub(super) fn test_mm_div_ps() -> Result<(), String> {
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
-            use_mm_div_ps(get_four_random_floats(), get_four_random_floats());
+            use_mm_div_ps(get_random_float32_array::<4>(), get_random_float32_array::<4>());
         }
     }
 
@@ -207,7 +207,7 @@ pub(super) fn test_mm_load_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr = AlignedData(get_four_random_floats());
+                let arr = AlignedData(get_random_float32_array::<4>());
                 let result = _mm_load_ps(arr.0.as_ptr());
                 let result = std::mem::transmute::<__m128, [f32; 4]>(result);
                 check_float_array_equality_with_error(&result, &arr.0)?;
@@ -255,7 +255,7 @@ pub(super) fn test_mm_store_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr = AlignedData(get_four_random_floats());
+                let arr = AlignedData(get_random_float32_array::<4>());
                 let mut result = AlignedData([0.0; 4]);
                 let vec = _mm_loadu_ps(arr.0.as_ptr());
                 _mm_store_ps(result.0.as_mut_ptr(), vec);

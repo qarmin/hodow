@@ -7,6 +7,7 @@ mod part6;
 
 #[cfg(target_arch = "x86")]
 use std::arch::x86::*;
+
 use crate::cpu::sse2::part1::*;
 use crate::cpu::sse2::part2::*;
 use crate::cpu::sse2::part3::*;

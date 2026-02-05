@@ -5,10 +5,9 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, check_float_equality, check_int_equality, DEFAULT_FLOAT_DIFF};
+use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, check_float_equality, check_int_equality, get_random_float32_array, DEFAULT_FLOAT_DIFF};
 use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
-use crate::{ get_fuzzing};
-use crate::cpu::common::get_random_float32_array;
+use crate::get_fuzzing;
 pub struct SSE41;
 
 impl ExtensionTest for SSE41 {

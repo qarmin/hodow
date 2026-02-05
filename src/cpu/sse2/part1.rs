@@ -5,7 +5,7 @@ use std::arch::x86_64::{
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, check_float_equality, get_random_float, get_random_float64_array};
+use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, check_float_equality, get_random_float, get_random_float64_array, get_random_i32_array};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -299,8 +299,8 @@ pub(super) fn test_mm_add_epi32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_four_random_floats().map(|x| x as i32);
-                let b = get_four_random_floats().map(|x| x as i32);
+                let a = get_random_i32_array::<4>();
+                let b = get_random_i32_array::<4>();
                 let _result = _mm_add_epi32(_mm_set_epi32(a[3], a[2], a[1], a[0]), _mm_set_epi32(b[3], b[2], b[1], b[0]));
             }
         }
@@ -323,8 +323,8 @@ pub(super) fn test_mm_sub_epi32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_four_random_floats().map(|x| x as i32);
-                let b = get_four_random_floats().map(|x| x as i32);
+                let a = get_random_i32_array::<4>();
+                let b = get_random_i32_array::<4>();
                 let _result = _mm_sub_epi32(_mm_set_epi32(a[3], a[2], a[1], a[0]), _mm_set_epi32(b[3], b[2], b[1], b[0]));
             }
         }
@@ -347,8 +347,8 @@ pub(super) fn test_mm_and_si128() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_four_random_floats().map(|x| x as i32);
-                let b = get_four_random_floats().map(|x| x as i32);
+                let a = get_random_i32_array::<4>();
+                let b = get_random_i32_array::<4>();
                 let _result = _mm_and_si128(_mm_set_epi32(a[3], a[2], a[1], a[0]), _mm_set_epi32(b[3], b[2], b[1], b[0]));
             }
         }

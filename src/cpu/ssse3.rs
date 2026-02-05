@@ -7,7 +7,7 @@ use log::info;
 
 use crate::cpu::common::check_array_equality;
 use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
-use crate::{ get_fuzzing};
+use crate::get_fuzzing;
 
 pub struct SSSE3;
 

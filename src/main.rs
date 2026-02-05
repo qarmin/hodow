@@ -4,7 +4,6 @@ use std::fmt::Write as _;
 use clap::Parser;
 use log::info;
 use once_cell::sync::OnceCell;
-use rand::random;
 
 use crate::cpu::{available_modes, set_iterations, test_all_extensions};
 
@@ -69,4 +68,3 @@ fn main() {
         log::error!("Running tests failed: {}", e);
     }
 }
-

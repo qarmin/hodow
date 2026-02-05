@@ -1,4 +1,5 @@
 use std::fmt::Debug;
+
 use rand::random;
 
 pub trait FloatLike: PartialEq + Debug + std::ops::Sub<Output = Self> + PartialOrd + Copy {
@@ -124,6 +125,14 @@ pub fn get_random_float64_array<const N: usize>() -> [f64; N] {
     let mut arr = [0.0; N];
     for item in arr.iter_mut() {
         *item = get_random_float() as f64;
+    }
+    arr
+}
+
+pub fn get_random_i32_array<const N: usize>() -> [i32; N] {
+    let mut arr = [0; N];
+    for item in arr.iter_mut() {
+        *item = random::<i32>();
     }
     arr
 }
