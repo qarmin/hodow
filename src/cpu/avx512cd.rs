@@ -38,8 +38,7 @@ fn test_mm_broadcastmw_epi32() -> Result<(), String> {
         let k = 0b10101010u16;
         let result = _mm_broadcastmw_epi32(k);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        let expected = [0b10101010, 0b10101010, 0b10101010, 0b10101010];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[0b10101010, 0b10101010, 0b10101010, 0b10101010])?;
         Ok(())
     }
 }

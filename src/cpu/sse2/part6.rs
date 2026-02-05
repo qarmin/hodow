@@ -143,7 +143,7 @@ pub(super) fn test_mm_cvtsd_ss() -> Result<(), String> {
         let b = _mm_set_sd(42.5);
         let result = _mm_cvtsd_ss(a, b);
         let result = std::mem::transmute::<std::arch::x86_64::__m128, [f32; 4]>(result);
-        check_float_array_equality_with_error(&result, &result)?;
+        check_float_array_equality_with_error(&result, &[0.0])?;
 
         Ok(())
     }
