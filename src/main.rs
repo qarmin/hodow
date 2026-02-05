@@ -94,7 +94,3 @@ pub fn get_random_float64_array<const N: usize>() -> [f64; N] {
     }
     arr
 }
-
-pub fn get_four_random_floats() -> [f32; 4] {
-    [get_random_float(), get_random_float(), get_random_float(), get_random_float()]
-}

@@ -1,8 +1,15 @@
-use std::arch::x86_64::{__m128i, _mm_add_epi16, _mm_add_epi64, _mm_add_epi8, _mm_adds_epi16, _mm_adds_epi8, _mm_adds_epu16, _mm_adds_epu8, _mm_avg_epu16, _mm_avg_epu8, _mm_cmpeq_epi32, _mm_cvtsi128_si32, _mm_cvtsi32_si128, _mm_madd_epi16, _mm_max_epi16, _mm_max_epu8, _mm_min_epi16, _mm_min_epu8, _mm_mul_epu32, _mm_mulhi_epi16, _mm_mulhi_epu16, _mm_mullo_epi16, _mm_or_si128, _mm_pause, _mm_set1_epi16, _mm_set1_epi8, _mm_set_epi16, _mm_set_epi32, _mm_set_epi64x, _mm_set_epi8, _mm_sub_epi16, _mm_sub_epi64, _mm_sub_epi8, _mm_subs_epi16, _mm_subs_epu16, _mm_subs_epu8, _mm_xor_si128};
+use std::arch::x86_64::{
+    __m128i, _mm_add_epi16, _mm_add_epi64, _mm_add_epi8, _mm_adds_epi16, _mm_adds_epi8, _mm_adds_epu16, _mm_adds_epu8, _mm_avg_epu16, _mm_avg_epu8, _mm_cmpeq_epi32,
+    _mm_cvtsi128_si32, _mm_cvtsi32_si128, _mm_madd_epi16, _mm_max_epi16, _mm_max_epu8, _mm_min_epi16, _mm_min_epu8, _mm_mul_epu32, _mm_mulhi_epi16, _mm_mulhi_epu16,
+    _mm_mullo_epi16, _mm_or_si128, _mm_pause, _mm_set1_epi16, _mm_set1_epi8, _mm_set_epi16, _mm_set_epi32, _mm_set_epi64x, _mm_set_epi8, _mm_sub_epi16, _mm_sub_epi64,
+    _mm_sub_epi8, _mm_subs_epi16, _mm_subs_epu16, _mm_subs_epu8, _mm_xor_si128,
+};
+
 use log::info;
+
 use crate::cpu::common::{check_array_equality, check_int_equality};
 use crate::cpu::get_iterations;
-use crate::{get_four_random_floats, get_fuzzing, get_random_float};
+use crate::{ get_fuzzing, get_random_float};
 
 pub(super) fn test_mm_or_si128() -> Result<(), String> {
     unsafe {

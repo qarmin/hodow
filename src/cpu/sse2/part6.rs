@@ -1,4 +1,11 @@
-use std::arch::x86_64::{__m128d, __m128i, _mm_castpd_ps, _mm_castpd_si128, _mm_castps_pd, _mm_castps_si128, _mm_castsi128_pd, _mm_castsi128_ps, _mm_comige_sd, _mm_comigt_sd, _mm_comile_sd, _mm_comineq_sd, _mm_cvtpd_ps, _mm_cvtps_pd, _mm_cvtsd_si32, _mm_cvtsd_ss, _mm_cvtss_sd, _mm_cvttsd_si32, _mm_load_sd, _mm_loadh_pd, _mm_loadl_pd, _mm_move_sd, _mm_movemask_pd, _mm_set_epi16, _mm_set_epi32, _mm_set_epi64x, _mm_set_pd, _mm_set_pd1, _mm_set_sd, _mm_setr_pd, _mm_shuffle_pd, _mm_store_sd, _mm_storeu_pd, _mm_storeu_si16, _mm_storeu_si32, _mm_storeu_si64, _mm_stream_pd, _mm_ucomieq_sd, _mm_ucomige_sd, _mm_ucomigt_sd, _mm_ucomile_sd, _mm_ucomilt_sd, _mm_ucomineq_sd, _mm_undefined_pd, _mm_undefined_si128, _mm_unpackhi_pd, _mm_unpacklo_pd};
+use std::arch::x86_64::{
+    __m128d, __m128i, _mm_castpd_ps, _mm_castpd_si128, _mm_castps_pd, _mm_castps_si128, _mm_castsi128_pd, _mm_castsi128_ps, _mm_comige_sd, _mm_comigt_sd, _mm_comile_sd,
+    _mm_comineq_sd, _mm_cvtpd_ps, _mm_cvtps_pd, _mm_cvtsd_si32, _mm_cvtsd_ss, _mm_cvtss_sd, _mm_cvttsd_si32, _mm_load_sd, _mm_loadh_pd, _mm_loadl_pd, _mm_move_sd, _mm_movemask_pd,
+    _mm_set_epi16, _mm_set_epi32, _mm_set_epi64x, _mm_set_pd, _mm_set_pd1, _mm_set_sd, _mm_setr_pd, _mm_shuffle_pd, _mm_store_sd, _mm_storeu_pd, _mm_storeu_si16, _mm_storeu_si32,
+    _mm_storeu_si64, _mm_stream_pd, _mm_ucomieq_sd, _mm_ucomige_sd, _mm_ucomigt_sd, _mm_ucomile_sd, _mm_ucomilt_sd, _mm_ucomineq_sd, _mm_undefined_pd, _mm_undefined_si128,
+    _mm_unpackhi_pd, _mm_unpacklo_pd,
+};
+
 use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, check_int_equality};
 
 pub(super) fn test_mm_comile_sd() -> Result<(), String> {

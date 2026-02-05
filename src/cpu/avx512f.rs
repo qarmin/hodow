@@ -7,8 +7,7 @@ use log::info;
 
 use crate::cpu::common::check_float_array_equality_with_error;
 use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
-use crate::{get_fuzzing, get_random_float};
-
+use crate::{get_fuzzing, get_random_float, get_random_float32_array, get_random_float64_array};
 pub struct AVX512F;
 
 impl ExtensionTest for AVX512F {
@@ -34,40 +33,6 @@ impl ExtensionTest for AVX512F {
     }
 }
 
-fn get_sixteen_random_floats() -> [f32; 16] {
-    [
-        get_random_float(),
-        get_random_float(),
-        get_random_float(),
-        get_random_float(),
-        get_random_float(),
-        get_random_float(),
-        get_random_float(),
-        get_random_float(),
-        get_random_float(),
-        get_random_float(),
-        get_random_float(),
-        get_random_float(),
-        get_random_float(),
-        get_random_float(),
-        get_random_float(),
-        get_random_float(),
-    ]
-}
-
-fn get_eight_random_f64() -> [f64; 8] {
-    [
-        get_random_float() as f64,
-        get_random_float() as f64,
-        get_random_float() as f64,
-        get_random_float() as f64,
-        get_random_float() as f64,
-        get_random_float() as f64,
-        get_random_float() as f64,
-        get_random_float() as f64,
-    ]
-}
-
 fn test_mm512_add_ps() -> Result<(), String> {
     unsafe {
         let a = _mm512_set_ps(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0);
@@ -82,8 +47,8 @@ fn test_mm512_add_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_sixteen_random_floats();
-                let arr2 = get_sixteen_random_floats();
+                let arr1 = get_random_float32_array::<16>();
+                let arr2 = get_random_float32_array::<16>();
                 let a = _mm512_loadu_ps(arr1.as_ptr());
                 let b = _mm512_loadu_ps(arr2.as_ptr());
                 let _result = _mm512_add_ps(a, b);
@@ -108,8 +73,8 @@ fn test_mm512_sub_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_sixteen_random_floats();
-                let arr2 = get_sixteen_random_floats();
+                let arr1 = get_random_float32_array::<16>();
+                let arr2 = get_random_float32_array::<16>();
                 let a = _mm512_loadu_ps(arr1.as_ptr());
                 let b = _mm512_loadu_ps(arr2.as_ptr());
                 let _result = _mm512_sub_ps(a, b);
@@ -134,8 +99,8 @@ fn test_mm512_mul_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_sixteen_random_floats();
-                let arr2 = get_sixteen_random_floats();
+                let arr1 = get_random_float32_array::<16>();
+                let arr2 = get_random_float32_array::<16>();
                 let a = _mm512_loadu_ps(arr1.as_ptr());
                 let b = _mm512_loadu_ps(arr2.as_ptr());
                 let _result = _mm512_mul_ps(a, b);
@@ -160,8 +125,8 @@ fn test_mm512_div_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_sixteen_random_floats();
-                let arr2 = get_sixteen_random_floats();
+                let arr1 = get_random_float32_array::<16>();
+                let arr2 = get_random_float32_array::<16>();
                 let a = _mm512_loadu_ps(arr1.as_ptr());
                 let b = _mm512_loadu_ps(arr2.as_ptr());
                 let _result = _mm512_div_ps(a, b);
@@ -186,8 +151,10 @@ fn test_mm512_add_pd() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_eight_random_f64();
-                let arr2 = get_eight_random_f64();
+                let arr1 = get_random_float64_array::<8>();
+                ();
+                let arr2 = get_random_float64_array::<8>();
+                ();
                 let a = _mm512_loadu_pd(arr1.as_ptr());
                 let b = _mm512_loadu_pd(arr2.as_ptr());
                 let _result = _mm512_add_pd(a, b);

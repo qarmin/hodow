@@ -13,16 +13,14 @@ use std::arch::x86_64::*;
 use log::info;
 
 use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, check_float_equality, check_int_equality};
-use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
-use crate::{get_four_random_floats, get_fuzzing, get_random_float, get_random_float64_array};
-
 use crate::cpu::sse2::part1::*;
 use crate::cpu::sse2::part2::*;
 use crate::cpu::sse2::part3::*;
 use crate::cpu::sse2::part4::*;
 use crate::cpu::sse2::part5::*;
 use crate::cpu::sse2::part6::*;
-
+use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
+use crate::{ get_fuzzing, get_random_float, get_random_float64_array};
 
 pub struct SSE2;
 
@@ -155,11 +153,6 @@ impl ExtensionTest for SSE2 {
         ]
     }
 }
-
-
-
-
-
 
 #[cfg(test)]
 mod tests {

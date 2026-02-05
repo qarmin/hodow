@@ -1,8 +1,13 @@
-use std::arch::x86_64::{__m128, _mm_add_ps, _mm_and_ps, _mm_andnot_ps, _mm_div_ps, _mm_load_ps, _mm_loadu_ps, _mm_max_ps, _mm_min_ps, _mm_movemask_ps, _mm_mul_ps, _mm_or_ps, _mm_rsqrt_ps, _mm_set1_ps, _mm_set_ps, _mm_setzero_ps, _mm_sqrt_ps, _mm_store_ps, _mm_sub_ps, _mm_xor_ps};
+use std::arch::x86_64::{
+    __m128, _mm_add_ps, _mm_and_ps, _mm_andnot_ps, _mm_div_ps, _mm_load_ps, _mm_loadu_ps, _mm_max_ps, _mm_min_ps, _mm_movemask_ps, _mm_mul_ps, _mm_or_ps, _mm_rsqrt_ps,
+    _mm_set1_ps, _mm_set_ps, _mm_setzero_ps, _mm_sqrt_ps, _mm_store_ps, _mm_sub_ps, _mm_xor_ps,
+};
+
 use log::info;
+
 use crate::cpu::common::{check_float_array_equality_with_error, check_int_equality};
 use crate::cpu::get_iterations;
-use crate::{get_four_random_floats, get_fuzzing, get_random_float};
+use crate::{get_fuzzing, get_random_float, get_random_float32_array};
 
 pub(super) fn test_mm_set_ps() -> Result<(), String> {
     unsafe {
@@ -115,8 +120,8 @@ pub(super) fn test_mm_mul_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_four_random_floats();
-                let b = get_four_random_floats();
+                let a = get_random_float32_array::<4>();
+                let b = get_random_float32_array::<4>();
                 let _result = _mm_mul_ps(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]));
             }
         }
@@ -224,7 +229,7 @@ pub(super) fn test_mm_loadu_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr = get_four_random_floats();
+                let arr = get_random_float32_array::<4>();
                 let result = _mm_loadu_ps(arr.as_ptr());
                 let result = std::mem::transmute::<__m128, [f32; 4]>(result);
                 check_float_array_equality_with_error(&result, &arr)?;
@@ -272,7 +277,7 @@ pub(super) fn test_mm_movemask_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr = get_four_random_floats();
+                let arr = get_random_float32_array::<4>();
                 let vec = _mm_set_ps(arr[3], arr[2], arr[1], arr[0]);
                 _mm_movemask_ps(vec);
             }
@@ -294,7 +299,7 @@ pub(super) fn test_mm_sqrt_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr = get_four_random_floats();
+                let arr = get_random_float32_array::<4>();
                 let data_128 = _mm_loadu_ps(arr.as_ptr());
                 let result = _mm_sqrt_ps(data_128);
                 let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
@@ -317,7 +322,7 @@ pub(super) fn test_mm_rsqrt_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr = get_four_random_floats();
+                let arr = get_random_float32_array::<4>();
                 let result = _mm_rsqrt_ps(_mm_loadu_ps(arr.as_ptr()));
                 let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
             }
@@ -339,8 +344,8 @@ pub(super) fn test_mm_and_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_four_random_floats();
-                let arr2 = get_four_random_floats();
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
                 let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
                 let vec2 = _mm_set_ps(arr2[0], arr2[1], arr2[2], arr2[3]);
                 let result = _mm_and_ps(vec1, vec2);
@@ -365,8 +370,8 @@ pub(super) fn test_mm_andnot_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_four_random_floats();
-                let arr2 = get_four_random_floats();
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
                 let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
                 let vec2 = _mm_set_ps(arr2[0], arr2[1], arr2[2], arr2[0]);
                 let result = _mm_andnot_ps(vec1, vec2);
@@ -390,8 +395,8 @@ pub(super) fn test_mm_or_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_four_random_floats();
-                let arr2 = get_four_random_floats();
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
                 let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
                 let vec2 = _mm_set_ps(arr2[0], arr2[1], arr2[2], arr2[3]);
                 let result = _mm_or_ps(vec1, vec2);
@@ -416,8 +421,8 @@ pub(super) fn test_mm_xor_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_four_random_floats();
-                let arr2 = get_four_random_floats();
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
                 let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
                 let vec2 = _mm_set_ps(arr2[0], arr2[1], arr2[2], arr2[3]);
                 let result = _mm_xor_ps(vec1, vec2);
@@ -442,8 +447,8 @@ pub(super) fn test_mm_min_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_four_random_floats();
-                let arr2 = get_four_random_floats();
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
                 let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
                 let vec2 = _mm_set_ps(arr2[0], arr2[1], arr2[2], arr2[3]);
                 let result = _mm_min_ps(vec1, vec2);
@@ -468,8 +473,8 @@ pub(super) fn test_mm_max_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_four_random_floats();
-                let arr2 = get_four_random_floats();
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
                 let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
                 let vec2 = _mm_set_ps(arr2[0], arr2[1], arr2[2], arr2[3]);
                 let result = _mm_max_ps(vec1, vec2);

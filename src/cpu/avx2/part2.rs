@@ -1,4 +1,12 @@
-use std::arch::x86_64::{__m128, __m128d, __m128i, __m256i, _mm256_broadcastd_epi32, _mm256_hsub_epi32, _mm256_permutevar8x32_epi32, _mm256_set_epi32, _mm_blend_epi32, _mm_broadcastb_epi8, _mm_broadcastq_epi64, _mm_broadcastsd_pd, _mm_broadcastsi128_si256, _mm_broadcastss_ps, _mm_broadcastw_epi16, _mm_i32gather_epi32, _mm_i32gather_epi64, _mm_i32gather_pd, _mm_i32gather_ps, _mm_i64gather_epi32, _mm_i64gather_epi64, _mm_i64gather_pd, _mm_i64gather_ps, _mm_mask_i32gather_epi32, _mm_mask_i32gather_epi64, _mm_mask_i32gather_pd, _mm_mask_i32gather_ps, _mm_mask_i64gather_epi32, _mm_mask_i64gather_epi64, _mm_mask_i64gather_pd, _mm_mask_i64gather_ps, _mm_maskload_epi32, _mm_maskload_epi64, _mm_maskstore_epi32, _mm_maskstore_epi64, _mm_set1_epi32, _mm_set1_epi64x, _mm_set1_pd, _mm_set1_ps, _mm_set_epi16, _mm_set_epi32, _mm_set_epi64x, _mm_set_epi8, _mm_set_pd, _mm_set_ps, _mm_sllv_epi32, _mm_sllv_epi64, _mm_srav_epi32, _mm_srlv_epi32, _mm_srlv_epi64};
+use std::arch::x86_64::{
+    __m128, __m128d, __m128i, __m256i, _mm256_broadcastd_epi32, _mm256_hsub_epi32, _mm256_permutevar8x32_epi32, _mm256_set_epi32, _mm_blend_epi32, _mm_broadcastb_epi8,
+    _mm_broadcastq_epi64, _mm_broadcastsd_pd, _mm_broadcastsi128_si256, _mm_broadcastss_ps, _mm_broadcastw_epi16, _mm_i32gather_epi32, _mm_i32gather_epi64, _mm_i32gather_pd,
+    _mm_i32gather_ps, _mm_i64gather_epi32, _mm_i64gather_epi64, _mm_i64gather_pd, _mm_i64gather_ps, _mm_mask_i32gather_epi32, _mm_mask_i32gather_epi64, _mm_mask_i32gather_pd,
+    _mm_mask_i32gather_ps, _mm_mask_i64gather_epi32, _mm_mask_i64gather_epi64, _mm_mask_i64gather_pd, _mm_mask_i64gather_ps, _mm_maskload_epi32, _mm_maskload_epi64,
+    _mm_maskstore_epi32, _mm_maskstore_epi64, _mm_set1_epi32, _mm_set1_epi64x, _mm_set1_pd, _mm_set1_ps, _mm_set_epi16, _mm_set_epi32, _mm_set_epi64x, _mm_set_epi8, _mm_set_pd,
+    _mm_set_ps, _mm_sllv_epi32, _mm_sllv_epi64, _mm_srav_epi32, _mm_srlv_epi32, _mm_srlv_epi64,
+};
+
 use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error};
 
 pub(super) fn test_mm256_hsub_epi32() -> Result<(), String> {

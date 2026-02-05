@@ -1,4 +1,12 @@
-use std::arch::x86_64::{__m128d, __m128i, _mm_add_sd, _mm_and_pd, _mm_andnot_pd, _mm_andnot_si128, _mm_bslli_si128, _mm_bsrli_si128, _mm_cvtepi32_pd, _mm_cvtepi32_ps, _mm_cvtpd_epi32, _mm_cvtpd_ps, _mm_cvtps_epi32, _mm_cvtsd_f64, _mm_cvttpd_epi32, _mm_cvttps_epi32, _mm_div_pd, _mm_div_sd, _mm_extract_epi16, _mm_insert_epi16, _mm_max_pd, _mm_max_sd, _mm_min_pd, _mm_min_sd, _mm_movemask_epi8, _mm_mul_sd, _mm_or_pd, _mm_packus_epi16, _mm_set1_epi16, _mm_set1_epi32, _mm_set1_epi64x, _mm_set_epi16, _mm_set_epi32, _mm_set_epi64x, _mm_set_epi8, _mm_set_pd, _mm_set_sd, _mm_shuffle_epi32, _mm_shufflehi_epi16, _mm_shufflelo_epi16, _mm_sll_epi16, _mm_sll_epi32, _mm_sll_epi64, _mm_sqrt_pd, _mm_sqrt_sd, _mm_sub_sd, _mm_unpackhi_epi16, _mm_unpackhi_epi32, _mm_unpackhi_epi64, _mm_unpackhi_epi8, _mm_unpacklo_epi16, _mm_unpacklo_epi32, _mm_unpacklo_epi64, _mm_unpacklo_epi8, _mm_xor_pd};
+use std::arch::x86_64::{
+    __m128d, __m128i, _mm_add_sd, _mm_and_pd, _mm_andnot_pd, _mm_andnot_si128, _mm_bslli_si128, _mm_bsrli_si128, _mm_cvtepi32_pd, _mm_cvtepi32_ps, _mm_cvtpd_epi32, _mm_cvtpd_ps,
+    _mm_cvtps_epi32, _mm_cvtsd_f64, _mm_cvttpd_epi32, _mm_cvttps_epi32, _mm_div_pd, _mm_div_sd, _mm_extract_epi16, _mm_insert_epi16, _mm_max_pd, _mm_max_sd, _mm_min_pd,
+    _mm_min_sd, _mm_movemask_epi8, _mm_mul_sd, _mm_or_pd, _mm_packus_epi16, _mm_set1_epi16, _mm_set1_epi32, _mm_set1_epi64x, _mm_set_epi16, _mm_set_epi32, _mm_set_epi64x,
+    _mm_set_epi8, _mm_set_pd, _mm_set_sd, _mm_shuffle_epi32, _mm_shufflehi_epi16, _mm_shufflelo_epi16, _mm_sll_epi16, _mm_sll_epi32, _mm_sll_epi64, _mm_sqrt_pd, _mm_sqrt_sd,
+    _mm_sub_sd, _mm_unpackhi_epi16, _mm_unpackhi_epi32, _mm_unpackhi_epi64, _mm_unpackhi_epi8, _mm_unpacklo_epi16, _mm_unpacklo_epi32, _mm_unpacklo_epi64, _mm_unpacklo_epi8,
+    _mm_xor_pd,
+};
+
 use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, check_int_equality};
 
 pub(super) fn test_mm_packus_epi16() -> Result<(), String> {

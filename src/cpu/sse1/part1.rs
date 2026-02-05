@@ -1,8 +1,14 @@
-use std::arch::x86_64::{__m128, _mm_add_ss, _mm_cmpeq_ps, _mm_cmpge_ps, _mm_cmpgt_ps, _mm_cmple_ps, _mm_cmplt_ps, _mm_cvtsi32_ss, _mm_cvtss_f32, _mm_cvtss_si32, _mm_div_ss, _mm_loadu_ps, _mm_max_ss, _mm_min_ss, _mm_move_ss, _mm_movehl_ps, _mm_movelh_ps, _mm_mul_ss, _mm_rcp_ps, _mm_rcp_ss, _mm_rsqrt_ss, _mm_set_ps, _mm_set_ss, _mm_setzero_ps, _mm_shuffle_ps, _mm_sqrt_ss, _mm_sub_ss, _mm_unpackhi_ps, _mm_unpacklo_ps};
+use std::arch::x86_64::{
+    __m128, _mm_add_ss, _mm_cmpeq_ps, _mm_cmpge_ps, _mm_cmpgt_ps, _mm_cmple_ps, _mm_cmplt_ps, _mm_cvtsi32_ss, _mm_cvtss_f32, _mm_cvtss_si32, _mm_div_ss, _mm_loadu_ps, _mm_max_ss,
+    _mm_min_ss, _mm_move_ss, _mm_movehl_ps, _mm_movelh_ps, _mm_mul_ss, _mm_rcp_ps, _mm_rcp_ss, _mm_rsqrt_ss, _mm_set_ps, _mm_set_ss, _mm_setzero_ps, _mm_shuffle_ps, _mm_sqrt_ss,
+    _mm_sub_ss, _mm_unpackhi_ps, _mm_unpacklo_ps,
+};
+
 use log::info;
+
 use crate::cpu::common::{check_float_array_equality_with_error, check_float_equality, check_int_equality, DEFAULT_FLOAT_DIFF};
 use crate::cpu::get_iterations;
-use crate::{get_four_random_floats, get_fuzzing, get_random_float};
+use crate::{get_fuzzing, get_random_float, get_random_float32_array};
 
 pub(super) fn test_mm_cmpeq_ps() -> Result<(), String> {
     unsafe {
@@ -17,7 +23,7 @@ pub(super) fn test_mm_cmpeq_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_four_random_floats();
+                let arr1 = get_random_float32_array::<4>();
                 let arr2 = arr1;
                 let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
                 let vec2 = _mm_set_ps(arr2[3], arr2[2], arr2[1], arr2[0]);
@@ -43,8 +49,8 @@ pub(super) fn test_mm_cmpgt_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_four_random_floats();
-                let arr2 = get_four_random_floats();
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
                 let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
                 let vec2 = _mm_set_ps(arr2[3], arr2[2], arr2[1], arr2[0]);
                 let result = _mm_cmpgt_ps(vec1, vec2);
@@ -69,8 +75,8 @@ pub(super) fn test_mm_cmplt_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_four_random_floats();
-                let arr2 = get_four_random_floats();
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
                 let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
                 let vec2 = _mm_set_ps(arr2[3], arr2[2], arr2[1], arr2[0]);
                 let result = _mm_cmplt_ps(vec1, vec2);
@@ -95,8 +101,8 @@ pub(super) fn test_mm_cmpge_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_four_random_floats();
-                let arr2 = get_four_random_floats();
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
                 let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
                 let vec2 = _mm_set_ps(arr2[3], arr2[2], arr2[1], arr2[0]);
                 let result = _mm_cmpge_ps(vec1, vec2);
@@ -121,8 +127,8 @@ pub(super) fn test_mm_cmple_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = get_four_random_floats();
-                let arr2 = get_four_random_floats();
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
                 let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
                 let vec2 = _mm_set_ps(arr2[3], arr2[2], arr2[1], arr2[0]);
                 let result = _mm_cmple_ps(vec1, vec2);
@@ -144,7 +150,7 @@ pub(super) fn test_mm_cvtss_f32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr = get_four_random_floats();
+                let arr = get_random_float32_array::<4>();
                 let vec = _mm_set_ps(arr[3], arr[2], arr[1], arr[0]);
                 let result = _mm_cvtss_f32(vec);
                 check_float_equality(result, arr[0], DEFAULT_FLOAT_DIFF)?;
@@ -274,7 +280,7 @@ pub(super) fn test_mm_rcp_ss() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr = get_four_random_floats();
+                let arr = get_random_float32_array::<4>();
                 let data_128 = _mm_loadu_ps(arr.as_ptr());
                 let result = _mm_rcp_ss(data_128);
                 let _result = std::mem::transmute::<__m128, [f32; 4]>(result);

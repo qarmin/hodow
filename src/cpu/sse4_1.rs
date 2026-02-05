@@ -7,8 +7,8 @@ use log::info;
 
 use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, check_float_equality, check_int_equality, DEFAULT_FLOAT_DIFF};
 use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
-use crate::{get_four_random_floats, get_fuzzing};
-
+use crate::{ get_fuzzing};
+use crate::get_random_float32_array;
 pub struct SSE41;
 
 impl ExtensionTest for SSE41 {
@@ -52,8 +52,8 @@ fn test_mm_blend_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_four_random_floats();
-                let b = get_four_random_floats();
+                let a = get_random_float32_array::<4>();
+                let b = get_random_float32_array::<4>();
                 let _result = _mm_blend_ps::<0b1010>(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]));
             }
         }
@@ -76,9 +76,9 @@ fn test_mm_blendv_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_four_random_floats();
-                let b = get_four_random_floats();
-                let mask = get_four_random_floats();
+                let a = get_random_float32_array::<4>();
+                let b = get_random_float32_array::<4>();
+                let mask = get_random_float32_array::<4>();
                 let _result = _mm_blendv_ps(
                     _mm_set_ps(a[3], a[2], a[1], a[0]),
                     _mm_set_ps(b[3], b[2], b[1], b[0]),
@@ -106,8 +106,8 @@ fn test_mm_dp_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_four_random_floats();
-                let b = get_four_random_floats();
+                let a = get_random_float32_array::<4>();
+                let b = get_random_float32_array::<4>();
                 let _result = _mm_dp_ps::<0xFF>(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]));
             }
         }
@@ -334,7 +334,7 @@ fn test_mm_round_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_four_random_floats();
+                let a = get_random_float32_array::<4>();
                 let _result = _mm_round_ps::<_MM_FROUND_TO_NEAREST_INT>(_mm_set_ps(a[3], a[2], a[1], a[0]));
             }
         }
@@ -355,7 +355,7 @@ fn test_mm_ceil_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_four_random_floats();
+                let a = get_random_float32_array::<4>();
                 let _result = _mm_ceil_ps(_mm_set_ps(a[3], a[2], a[1], a[0]));
             }
         }
@@ -376,7 +376,7 @@ fn test_mm_floor_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_four_random_floats();
+                let a = get_random_float32_array::<4>();
                 let _result = _mm_floor_ps(_mm_set_ps(a[3], a[2], a[1], a[0]));
             }
         }
@@ -397,7 +397,7 @@ fn test_mm_extract_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let vals = get_four_random_floats();
+                let vals = get_random_float32_array::<4>();
                 let _result = _mm_extract_ps::<2>(_mm_set_ps(vals[3], vals[2], vals[1], vals[0]));
             }
         }
@@ -420,8 +420,8 @@ fn test_mm_insert_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a_vals = get_four_random_floats();
-                let b_vals = get_four_random_floats();
+                let a_vals = get_random_float32_array::<4>();
+                let b_vals = get_random_float32_array::<4>();
                 let _result = _mm_insert_ps::<0b00100000>(
                     _mm_set_ps(a_vals[3], a_vals[2], a_vals[1], a_vals[0]),
                     _mm_set_ps(b_vals[3], b_vals[2], b_vals[1], b_vals[0]),

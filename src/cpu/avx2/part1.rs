@@ -1,5 +1,10 @@
-use std::arch::x86_64::{__m256i, _mm256_abs_epi32, _mm256_add_epi32, _mm256_and_si256, _mm256_hadd_epi32, _mm256_max_epi32, _mm256_min_epi32, _mm256_mullo_epi32, _mm256_or_si256, _mm256_set_epi32, _mm256_set_epi8, _mm256_shuffle_epi8, _mm256_slli_epi32, _mm256_srli_epi32, _mm256_sub_epi32, _mm256_xor_si256};
+use std::arch::x86_64::{
+    __m256i, _mm256_abs_epi32, _mm256_add_epi32, _mm256_and_si256, _mm256_hadd_epi32, _mm256_max_epi32, _mm256_min_epi32, _mm256_mullo_epi32, _mm256_or_si256, _mm256_set_epi32,
+    _mm256_set_epi8, _mm256_shuffle_epi8, _mm256_slli_epi32, _mm256_srli_epi32, _mm256_sub_epi32, _mm256_xor_si256,
+};
+
 use log::info;
+
 use crate::cpu::common::check_array_equality;
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;

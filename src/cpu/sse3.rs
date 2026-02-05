@@ -7,8 +7,8 @@ use log::info;
 
 use crate::cpu::common::check_float_array_equality_with_error;
 use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
-use crate::{get_four_random_floats, get_fuzzing, get_random_float};
-
+use crate::{ get_fuzzing, get_random_float};
+use crate::get_random_float32_array;
 pub struct SSE3;
 
 impl ExtensionTest for SSE3 {
@@ -43,8 +43,8 @@ fn test_mm_hadd_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_four_random_floats();
-                let b = get_four_random_floats();
+                let a = get_random_float32_array::<4>();
+                let b = get_random_float32_array::<4>();
                 let _result = _mm_hadd_ps(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]));
             }
         }
@@ -67,8 +67,8 @@ fn test_mm_hsub_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_four_random_floats();
-                let b = get_four_random_floats();
+                let a = get_random_float32_array::<4>();
+                let b = get_random_float32_array::<4>();
                 let _result = _mm_hsub_ps(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]));
             }
         }
@@ -91,8 +91,8 @@ fn test_mm_addsub_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_four_random_floats();
-                let b = get_four_random_floats();
+                let a = get_random_float32_array::<4>();
+                let b = get_random_float32_array::<4>();
                 let _result = _mm_addsub_ps(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]));
             }
         }
@@ -114,7 +114,7 @@ fn test_mm_movehdup_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_four_random_floats();
+                let a = get_random_float32_array::<4>();
                 let _result = _mm_movehdup_ps(_mm_set_ps(a[3], a[2], a[1], a[0]));
             }
         }
@@ -136,7 +136,7 @@ fn test_mm_moveldup_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_four_random_floats();
+                let a = get_random_float32_array::<4>();
                 let _result = _mm_moveldup_ps(_mm_set_ps(a[3], a[2], a[1], a[0]));
             }
         }

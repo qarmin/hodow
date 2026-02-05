@@ -9,10 +9,10 @@ use std::arch::x86_64::*;
 use log::info;
 
 use crate::cpu::common::{check_float_array_equality_with_error, check_float_equality, check_int_equality, DEFAULT_FLOAT_DIFF};
-use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
-use crate::{get_four_random_floats, get_fuzzing, get_random_float};
 use crate::cpu::sse1::part1::*;
 use crate::cpu::sse1::part2::*;
+use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
+use crate::{ get_fuzzing, get_random_float};
 
 pub struct SSE1;
 
@@ -69,7 +69,6 @@ impl ExtensionTest for SSE1 {
         ]
     }
 }
-
 
 #[cfg(test)]
 mod tests {

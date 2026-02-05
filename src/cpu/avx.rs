@@ -7,7 +7,7 @@ use log::info;
 
 use crate::cpu::common::check_float_array_equality_with_error;
 use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
-use crate::{get_four_random_floats, get_fuzzing, get_random_float, get_random_float32_array, get_random_float64_array};
+use crate::{ get_fuzzing, get_random_float, get_random_float32_array, get_random_float64_array};
 
 pub struct AVX;
 

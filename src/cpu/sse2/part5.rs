@@ -1,4 +1,11 @@
-use std::arch::x86_64::{__m128d, __m128i, _mm_cmpeq_pd, _mm_cmpeq_sd, _mm_cmpge_pd, _mm_cmpge_sd, _mm_cmpgt_pd, _mm_cmpgt_sd, _mm_cmple_pd, _mm_cmple_sd, _mm_cmplt_pd, _mm_cmplt_sd, _mm_cmpneq_pd, _mm_cmpneq_sd, _mm_cmpnge_pd, _mm_cmpnge_sd, _mm_cmpngt_pd, _mm_cmpngt_sd, _mm_cmpnle_pd, _mm_cmpnle_sd, _mm_cmpnlt_pd, _mm_cmpnlt_sd, _mm_cmpord_pd, _mm_cmpord_sd, _mm_cmpunord_pd, _mm_cmpunord_sd, _mm_comieq_sd, _mm_comilt_sd, _mm_cvtsi32_sd, _mm_maskmoveu_si128, _mm_move_epi64, _mm_set1_epi16, _mm_set1_epi32, _mm_set1_epi64x, _mm_set1_epi8, _mm_set_epi32, _mm_set_epi64x, _mm_set_epi8, _mm_set_pd, _mm_set_sd, _mm_setzero_si128, _mm_sra_epi16, _mm_sra_epi32, _mm_srl_epi16, _mm_srl_epi32, _mm_srl_epi64, _mm_stream_si128, _mm_stream_si32};
+use std::arch::x86_64::{
+    __m128d, __m128i, _mm_cmpeq_pd, _mm_cmpeq_sd, _mm_cmpge_pd, _mm_cmpge_sd, _mm_cmpgt_pd, _mm_cmpgt_sd, _mm_cmple_pd, _mm_cmple_sd, _mm_cmplt_pd, _mm_cmplt_sd, _mm_cmpneq_pd,
+    _mm_cmpneq_sd, _mm_cmpnge_pd, _mm_cmpnge_sd, _mm_cmpngt_pd, _mm_cmpngt_sd, _mm_cmpnle_pd, _mm_cmpnle_sd, _mm_cmpnlt_pd, _mm_cmpnlt_sd, _mm_cmpord_pd, _mm_cmpord_sd,
+    _mm_cmpunord_pd, _mm_cmpunord_sd, _mm_comieq_sd, _mm_comilt_sd, _mm_cvtsi32_sd, _mm_maskmoveu_si128, _mm_move_epi64, _mm_set1_epi16, _mm_set1_epi32, _mm_set1_epi64x,
+    _mm_set1_epi8, _mm_set_epi32, _mm_set_epi64x, _mm_set_epi8, _mm_set_pd, _mm_set_sd, _mm_setzero_si128, _mm_sra_epi16, _mm_sra_epi32, _mm_srl_epi16, _mm_srl_epi32,
+    _mm_srl_epi64, _mm_stream_si128, _mm_stream_si32,
+};
+
 use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, check_int_equality};
 
 pub(super) fn test_mm_sra_epi16() -> Result<(), String> {

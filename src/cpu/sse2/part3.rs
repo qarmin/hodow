@@ -1,4 +1,10 @@
-use std::arch::x86_64::{__m128i, _mm_cmpeq_epi16, _mm_cmpeq_epi8, _mm_cmpgt_epi16, _mm_cmpgt_epi32, _mm_cmpgt_epi8, _mm_cmplt_epi16, _mm_cmplt_epi32, _mm_cmplt_epi8, _mm_load_si128, _mm_loadl_epi64, _mm_loadu_si128, _mm_packs_epi16, _mm_packs_epi32, _mm_sad_epu8, _mm_set1_epi16, _mm_set1_epi32, _mm_set1_epi64x, _mm_set1_epi8, _mm_set_epi16, _mm_set_epi32, _mm_set_epi64x, _mm_set_epi8, _mm_setr_epi16, _mm_setr_epi32, _mm_setr_epi8, _mm_slli_epi16, _mm_slli_epi32, _mm_slli_epi64, _mm_slli_si128, _mm_srai_epi16, _mm_srai_epi32, _mm_srli_epi16, _mm_srli_epi32, _mm_srli_epi64, _mm_srli_si128, _mm_store_si128, _mm_storel_epi64, _mm_storeu_si128};
+use std::arch::x86_64::{
+    __m128i, _mm_cmpeq_epi16, _mm_cmpeq_epi8, _mm_cmpgt_epi16, _mm_cmpgt_epi32, _mm_cmpgt_epi8, _mm_cmplt_epi16, _mm_cmplt_epi32, _mm_cmplt_epi8, _mm_load_si128, _mm_loadl_epi64,
+    _mm_loadu_si128, _mm_packs_epi16, _mm_packs_epi32, _mm_sad_epu8, _mm_set1_epi16, _mm_set1_epi32, _mm_set1_epi64x, _mm_set1_epi8, _mm_set_epi16, _mm_set_epi32, _mm_set_epi64x,
+    _mm_set_epi8, _mm_setr_epi16, _mm_setr_epi32, _mm_setr_epi8, _mm_slli_epi16, _mm_slli_epi32, _mm_slli_epi64, _mm_slli_si128, _mm_srai_epi16, _mm_srai_epi32, _mm_srli_epi16,
+    _mm_srli_epi32, _mm_srli_epi64, _mm_srli_si128, _mm_store_si128, _mm_storel_epi64, _mm_storeu_si128,
+};
+
 use crate::cpu::common::check_array_equality;
 
 pub(super) fn test_mm_sad_epu8() -> Result<(), String> {

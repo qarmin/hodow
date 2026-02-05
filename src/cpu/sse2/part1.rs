@@ -1,8 +1,13 @@
-use std::arch::x86_64::{__m128d, __m128i, _mm_add_epi32, _mm_add_pd, _mm_and_si128, _mm_cvtsd_f64, _mm_load_pd, _mm_loadu_pd, _mm_mul_pd, _mm_set1_epi32, _mm_set1_pd, _mm_set_epi32, _mm_set_pd, _mm_setzero_pd, _mm_setzero_si128, _mm_store_pd, _mm_sub_epi32, _mm_sub_pd};
+use std::arch::x86_64::{
+    __m128d, __m128i, _mm_add_epi32, _mm_add_pd, _mm_and_si128, _mm_cvtsd_f64, _mm_load_pd, _mm_loadu_pd, _mm_mul_pd, _mm_set1_epi32, _mm_set1_pd, _mm_set_epi32, _mm_set_pd,
+    _mm_setzero_pd, _mm_setzero_si128, _mm_store_pd, _mm_sub_epi32, _mm_sub_pd,
+};
+
 use log::info;
+
 use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, check_float_equality};
 use crate::cpu::get_iterations;
-use crate::{get_four_random_floats, get_fuzzing, get_random_float, get_random_float64_array};
+use crate::{ get_fuzzing, get_random_float, get_random_float64_array};
 
 pub(super) fn test_mm_set_pd() -> Result<(), String> {
     unsafe {

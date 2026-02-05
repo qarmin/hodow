@@ -7,8 +7,7 @@ use log::info;
 
 use crate::cpu::common::check_float_array_equality_with_error;
 use crate::cpu::{get_iterations, ExtensionTest};
-use crate::{get_four_random_floats, get_fuzzing};
-use crate::get_random_float32_array;
+use crate::{ get_fuzzing, get_random_float32_array};
 pub struct FMA;
 use crate::cpu::TestFunction;
 
@@ -32,19 +31,6 @@ impl ExtensionTest for FMA {
     }
 }
 
-fn get_eight_random_floats() -> [f32; 8] {
-    [
-        crate::get_random_float(),
-        crate::get_random_float(),
-        crate::get_random_float(),
-        crate::get_random_float(),
-        crate::get_random_float(),
-        crate::get_random_float(),
-        crate::get_random_float(),
-        crate::get_random_float(),
-    ]
-}
-
 fn test_mm_fmadd_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
@@ -60,9 +46,9 @@ fn test_mm_fmadd_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_four_random_floats();
-                let b = get_four_random_floats();
-                let c = get_four_random_floats();
+                let a = get_random_float32_array::<4>();
+                let b = get_random_float32_array::<4>();
+                let c = get_random_float32_array::<4>();
                 let _result = _mm_fmadd_ps(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]), _mm_set_ps(c[3], c[2], c[1], c[0]));
             }
         }
@@ -86,9 +72,9 @@ fn test_mm_fmsub_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_four_random_floats();
-                let b = get_four_random_floats();
-                let c = get_four_random_floats();
+                let a = get_random_float32_array::<4>();
+                let b = get_random_float32_array::<4>();
+                let c = get_random_float32_array::<4>();
                 let _result = _mm_fmsub_ps(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]), _mm_set_ps(c[3], c[2], c[1], c[0]));
             }
         }
@@ -112,9 +98,9 @@ fn test_mm_fnmadd_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_four_random_floats();
-                let b = get_four_random_floats();
-                let c = get_four_random_floats();
+                let a = get_random_float32_array::<4>();
+                let b = get_random_float32_array::<4>();
+                let c = get_random_float32_array::<4>();
                 let _result = _mm_fnmadd_ps(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]), _mm_set_ps(c[3], c[2], c[1], c[0]));
             }
         }
@@ -138,9 +124,9 @@ fn test_mm_fnmsub_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_four_random_floats();
-                let b = get_four_random_floats();
-                let c = get_four_random_floats();
+                let a = get_random_float32_array::<4>();
+                let b = get_random_float32_array::<4>();
+                let c = get_random_float32_array::<4>();
                 let _result = _mm_fnmsub_ps(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]), _mm_set_ps(c[3], c[2], c[1], c[0]));
             }
         }
@@ -164,9 +150,9 @@ fn test_mm_fmaddsub_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = get_four_random_floats();
-                let b = get_four_random_floats();
-                let c = get_four_random_floats();
+                let a = get_random_float32_array::<4>();
+                let b = get_random_float32_array::<4>();
+                let c = get_random_float32_array::<4>();
                 let _result = _mm_fmaddsub_ps(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]), _mm_set_ps(c[3], c[2], c[1], c[0]));
             }
         }
