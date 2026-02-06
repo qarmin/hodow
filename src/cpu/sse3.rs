@@ -150,8 +150,7 @@ fn test_mm_hadd_pd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 4.0);
         let result = _mm_hadd_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        let expected = [3.0, 7.0];
-        check_float_array_equality_with_error(&result, &expected)?;
+        check_float_array_equality_with_error(&result, &[3.0, 7.0])?;
     }
 
     if get_fuzzing() {
@@ -176,8 +175,7 @@ fn test_mm_hsub_pd() -> Result<(), String> {
         let b = _mm_set_pd(7.0, 5.0);
         let result = _mm_hsub_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        let expected = [-2.0, -2.0];
-        check_float_array_equality_with_error(&result, &expected)?;
+        check_float_array_equality_with_error(&result, &[-2.0, -2.0])?;
     }
 
     if get_fuzzing() {
@@ -202,8 +200,7 @@ fn test_mm_addsub_pd() -> Result<(), String> {
         let b = _mm_set_pd(1.0, 2.0);
         let result = _mm_addsub_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        let expected = [2.0, 3.0];
-        check_float_array_equality_with_error(&result, &expected)?;
+        check_float_array_equality_with_error(&result, &[2.0, 3.0])?;
     }
 
     if get_fuzzing() {

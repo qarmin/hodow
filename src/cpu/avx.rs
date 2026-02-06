@@ -91,6 +91,16 @@ fn test_mm256_setzero_ps() -> Result<(), String> {
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
         check_float_array_equality_with_error(&result, &[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])?;
     }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let _result = _mm256_setzero_ps();
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -433,8 +443,7 @@ fn test_mm256_set_pd() -> Result<(), String> {
     unsafe {
         let result = _mm256_set_pd(1.0, 2.0, 3.0, 4.0);
         let result = std::mem::transmute::<__m256d, [f64; 4]>(result);
-        let expected = [4.0, 3.0, 2.0, 1.0];
-        check_float_array_equality_with_error(&result, &expected)?;
+        check_float_array_equality_with_error(&result, &[4.0, 3.0, 2.0, 1.0])?;
     }
 
     if get_fuzzing() {
@@ -458,8 +467,7 @@ fn test_mm256_add_pd() -> Result<(), String> {
         let b = _mm256_set_pd(5.0, 6.0, 7.0, 8.0);
         let result = _mm256_add_pd(a, b);
         let result = std::mem::transmute::<__m256d, [f64; 4]>(result);
-        let expected = [12.0, 10.0, 8.0, 6.0];
-        check_float_array_equality_with_error(&result, &expected)?;
+        check_float_array_equality_with_error(&result, &[12.0, 10.0, 8.0, 6.0])?;
     }
 
     if get_fuzzing() {
@@ -482,8 +490,7 @@ fn test_mm256_sub_pd() -> Result<(), String> {
         let b = _mm256_set_pd(1.0, 2.0, 3.0, 4.0);
         let result = _mm256_sub_pd(a, b);
         let result = std::mem::transmute::<__m256d, [f64; 4]>(result);
-        let expected = [4.0, 4.0, 4.0, 4.0];
-        check_float_array_equality_with_error(&result, &expected)?;
+        check_float_array_equality_with_error(&result, &[4.0, 4.0, 4.0, 4.0])?;
     }
 
     if get_fuzzing() {
@@ -506,8 +513,7 @@ fn test_mm256_mul_pd() -> Result<(), String> {
         let b = _mm256_set_pd(2.0, 2.0, 2.0, 2.0);
         let result = _mm256_mul_pd(a, b);
         let result = std::mem::transmute::<__m256d, [f64; 4]>(result);
-        let expected = [8.0, 6.0, 4.0, 2.0];
-        check_float_array_equality_with_error(&result, &expected)?;
+        check_float_array_equality_with_error(&result, &[8.0, 6.0, 4.0, 2.0])?;
     }
 
     if get_fuzzing() {

@@ -39,8 +39,7 @@ fn test_mm512_add_ps() -> Result<(), String> {
         let b = _mm512_set_ps(16.0, 15.0, 14.0, 13.0, 12.0, 11.0, 10.0, 9.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0);
         let result = _mm512_add_ps(a, b);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
-        let expected = [17.0; 16];
-        check_float_array_equality_with_error(&result, &expected)?;
+        check_float_array_equality_with_error(&result, &[17.0; 16])?;
     }
 
     if get_fuzzing() {
@@ -51,7 +50,7 @@ fn test_mm512_add_ps() -> Result<(), String> {
                 let arr2 = get_random_float32_array::<16>();
                 let a = _mm512_loadu_ps(arr1.as_ptr());
                 let b = _mm512_loadu_ps(arr2.as_ptr());
-                let _result = _mm512_add_ps(a, b);
+                let _ = _mm512_add_ps(a, b);
             }
         }
     }
@@ -65,8 +64,7 @@ fn test_mm512_sub_ps() -> Result<(), String> {
         let b = _mm512_set1_ps(3.0);
         let result = _mm512_sub_ps(a, b);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
-        let expected = [7.0; 16];
-        check_float_array_equality_with_error(&result, &expected)?;
+        check_float_array_equality_with_error(&result, &[7.0; 16])?;
     }
 
     if get_fuzzing() {
@@ -77,7 +75,7 @@ fn test_mm512_sub_ps() -> Result<(), String> {
                 let arr2 = get_random_float32_array::<16>();
                 let a = _mm512_loadu_ps(arr1.as_ptr());
                 let b = _mm512_loadu_ps(arr2.as_ptr());
-                let _result = _mm512_sub_ps(a, b);
+                let _ = _mm512_sub_ps(a, b);
             }
         }
     }
@@ -91,8 +89,7 @@ fn test_mm512_mul_ps() -> Result<(), String> {
         let b = _mm512_set1_ps(3.0);
         let result = _mm512_mul_ps(a, b);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
-        let expected = [6.0; 16];
-        check_float_array_equality_with_error(&result, &expected)?;
+        check_float_array_equality_with_error(&result, &[6.0; 16])?;
     }
 
     if get_fuzzing() {
@@ -103,7 +100,7 @@ fn test_mm512_mul_ps() -> Result<(), String> {
                 let arr2 = get_random_float32_array::<16>();
                 let a = _mm512_loadu_ps(arr1.as_ptr());
                 let b = _mm512_loadu_ps(arr2.as_ptr());
-                let _result = _mm512_mul_ps(a, b);
+                let _ = _mm512_mul_ps(a, b);
             }
         }
     }
@@ -117,8 +114,7 @@ fn test_mm512_div_ps() -> Result<(), String> {
         let b = _mm512_set1_ps(3.0);
         let result = _mm512_div_ps(a, b);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
-        let expected = [4.0; 16];
-        check_float_array_equality_with_error(&result, &expected)?;
+        check_float_array_equality_with_error(&result, &[4.0; 16])?;
     }
 
     if get_fuzzing() {
@@ -129,7 +125,7 @@ fn test_mm512_div_ps() -> Result<(), String> {
                 let arr2 = get_random_float32_array::<16>();
                 let a = _mm512_loadu_ps(arr1.as_ptr());
                 let b = _mm512_loadu_ps(arr2.as_ptr());
-                let _result = _mm512_div_ps(a, b);
+                let _ = _mm512_div_ps(a, b);
             }
         }
     }
@@ -143,8 +139,7 @@ fn test_mm512_add_pd() -> Result<(), String> {
         let b = _mm512_set1_pd(3.0);
         let result = _mm512_add_pd(a, b);
         let result = std::mem::transmute::<__m512d, [f64; 8]>(result);
-        let expected = [8.0; 8];
-        check_float_array_equality_with_error(&result, &expected)?;
+        check_float_array_equality_with_error(&result, &[8.0; 8])?;
     }
 
     if get_fuzzing() {
@@ -152,12 +147,10 @@ fn test_mm512_add_pd() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let arr1 = get_random_float64_array::<8>();
-                ();
                 let arr2 = get_random_float64_array::<8>();
-                ();
                 let a = _mm512_loadu_pd(arr1.as_ptr());
                 let b = _mm512_loadu_pd(arr2.as_ptr());
-                let _result = _mm512_add_pd(a, b);
+                let _ = _mm512_add_pd(a, b);
             }
         }
     }
@@ -171,8 +164,20 @@ fn test_mm512_sub_pd() -> Result<(), String> {
         let b = _mm512_set1_pd(3.0);
         let result = _mm512_sub_pd(a, b);
         let result = std::mem::transmute::<__m512d, [f64; 8]>(result);
-        let expected = [7.0; 8];
-        check_float_array_equality_with_error(&result, &expected)?;
+        check_float_array_equality_with_error(&result, &[7.0; 8])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr1 = get_random_float64_array::<8>();
+                let arr2 = get_random_float64_array::<8>();
+                let a = _mm512_loadu_pd(arr1.as_ptr());
+                let b = _mm512_loadu_pd(arr2.as_ptr());
+                let _ = _mm512_sub_pd(a, b);
+            }
+        }
     }
 
     Ok(())
@@ -184,8 +189,20 @@ fn test_mm512_mul_pd() -> Result<(), String> {
         let b = _mm512_set1_pd(3.0);
         let result = _mm512_mul_pd(a, b);
         let result = std::mem::transmute::<__m512d, [f64; 8]>(result);
-        let expected = [6.0; 8];
-        check_float_array_equality_with_error(&result, &expected)?;
+        check_float_array_equality_with_error(&result, &[6.0; 8])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr1 = get_random_float64_array::<8>();
+                let arr2 = get_random_float64_array::<8>();
+                let a = _mm512_loadu_pd(arr1.as_ptr());
+                let b = _mm512_loadu_pd(arr2.as_ptr());
+                let _ = _mm512_mul_pd(a, b);
+            }
+        }
     }
 
     Ok(())
@@ -197,8 +214,20 @@ fn test_mm512_div_pd() -> Result<(), String> {
         let b = _mm512_set1_pd(3.0);
         let result = _mm512_div_pd(a, b);
         let result = std::mem::transmute::<__m512d, [f64; 8]>(result);
-        let expected = [4.0; 8];
-        check_float_array_equality_with_error(&result, &expected)?;
+        check_float_array_equality_with_error(&result, &[4.0; 8])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr1 = get_random_float64_array::<8>();
+                let arr2 = get_random_float64_array::<8>();
+                let a = _mm512_loadu_pd(arr1.as_ptr());
+                let b = _mm512_loadu_pd(arr2.as_ptr());
+                let _ = _mm512_div_pd(a, b);
+            }
+        }
     }
 
     Ok(())
@@ -210,8 +239,20 @@ fn test_mm512_max_ps() -> Result<(), String> {
         let b = _mm512_set_ps(16.0, 15.0, 14.0, 13.0, 12.0, 11.0, 10.0, 9.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0);
         let result = _mm512_max_ps(a, b);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
-        let expected = [16.0, 15.0, 14.0, 13.0, 12.0, 11.0, 10.0, 9.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0];
-        check_float_array_equality_with_error(&result, &expected)?;
+        check_float_array_equality_with_error(&result, &[16.0, 15.0, 14.0, 13.0, 12.0, 11.0, 10.0, 9.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr1 = get_random_float32_array::<16>();
+                let arr2 = get_random_float32_array::<16>();
+                let a = _mm512_loadu_ps(arr1.as_ptr());
+                let b = _mm512_loadu_ps(arr2.as_ptr());
+                let _ = _mm512_max_ps(a, b);
+            }
+        }
     }
 
     Ok(())
@@ -223,8 +264,20 @@ fn test_mm512_min_ps() -> Result<(), String> {
         let b = _mm512_set_ps(16.0, 15.0, 14.0, 13.0, 12.0, 11.0, 10.0, 9.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0);
         let result = _mm512_min_ps(a, b);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
-        let expected = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0];
-        check_float_array_equality_with_error(&result, &expected)?;
+        check_float_array_equality_with_error(&result, &[1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr1 = get_random_float32_array::<16>();
+                let arr2 = get_random_float32_array::<16>();
+                let a = _mm512_loadu_ps(arr1.as_ptr());
+                let b = _mm512_loadu_ps(arr2.as_ptr());
+                let _ = _mm512_min_ps(a, b);
+            }
+        }
     }
 
     Ok(())
@@ -236,8 +289,18 @@ fn test_mm512_sqrt_ps() -> Result<(), String> {
         let vec = _mm512_loadu_ps(data.as_ptr());
         let result = _mm512_sqrt_ps(vec);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
-        let expected = [2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0];
-        check_float_array_equality_with_error(&result, &expected)?;
+        check_float_array_equality_with_error(&result, &[2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let arr = get_random_float32_array::<16>();
+                let vec = _mm512_loadu_ps(arr.as_ptr());
+                let _ = _mm512_sqrt_ps(vec);
+            }
+        }
     }
 
     Ok(())
@@ -247,8 +310,17 @@ fn test_mm512_set1_ps() -> Result<(), String> {
     unsafe {
         let result = _mm512_set1_ps(3.13);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
-        let expected = [3.13; 16];
-        check_float_array_equality_with_error(&result, &expected)?;
+        check_float_array_equality_with_error(&result, &[3.13; 16])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let value = get_random_float();
+                let _ = _mm512_set1_ps(value);
+            }
+        }
     }
 
     Ok(())
@@ -258,8 +330,16 @@ fn test_mm512_setzero_ps() -> Result<(), String> {
     unsafe {
         let result = _mm512_setzero_ps();
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
-        let expected = [0.0; 16];
-        check_float_array_equality_with_error(&result, &expected)?;
+        check_float_array_equality_with_error(&result, &[0.0; 16])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let _ = _mm512_setzero_ps();
+            }
+        }
     }
 
     Ok(())

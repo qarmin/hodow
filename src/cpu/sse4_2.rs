@@ -54,7 +54,6 @@ fn test_mm_crc32_u8() -> Result<(), String> {
         let data = 0xFFu8;
         let result = _mm_crc32_u8(crc, data);
 
-        // _mm_crc32_u8 returns u32 — use unsigned literal with same bit pattern as the original negative value
         check_int_equality(result, 2910671697u32)?;
     }
 

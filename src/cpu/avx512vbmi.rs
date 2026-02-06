@@ -38,8 +38,7 @@ fn test_mm_permutex2var_epi8() -> Result<(), String> {
         let idx = _mm_set_epi8(7, 6, 5, 4, 3, 2, 1, 0, 7, 6, 5, 4, 3, 2, 1, 0);
         let result = _mm_permutex2var_epi8(a, idx, a);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
-        let expected: [i8; 16] = [1; 16];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[1; 16])?;
     }
 
     if get_fuzzing() {
@@ -80,8 +79,7 @@ fn test_mm_mask_permutex2var_epi8() -> Result<(), String> {
         let b = _mm_set1_epi8(2);
         let result = _mm_mask_permutex2var_epi8(a, 0xFFFF, idx, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
-        let expected = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])?;
     }
 
     if get_fuzzing() {
@@ -124,8 +122,7 @@ fn test_mm_maskz_permutex2var_epi8() -> Result<(), String> {
         let result = _mm_maskz_permutex2var_epi8(0xFF00, a, idx, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
 
-        let expected = [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1])?;
     }
 
     if get_fuzzing() {
@@ -167,8 +164,7 @@ fn test_mm_mask2_permutex2var_epi8() -> Result<(), String> {
         let b = _mm_set1_epi8(2);
         let result = _mm_mask2_permutex2var_epi8(a, idx, 0xFFFF, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
-        let expected = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])?;
     }
 
     if get_fuzzing() {

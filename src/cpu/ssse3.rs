@@ -49,40 +49,16 @@ fn test_mm_shuffle_epi8() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let a = _mm_set_epi8(
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
                 );
                 let b = _mm_set_epi8(
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
                 );
                 let _result = _mm_shuffle_epi8(a, b);
             }
@@ -100,6 +76,21 @@ fn test_mm_abs_epi8() -> Result<(), String> {
         check_array_equality(&result, &[16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1])?;
     }
 
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set_epi8(
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                );
+                let _ = _mm_abs_epi8(a);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -111,6 +102,19 @@ fn test_mm_abs_epi16() -> Result<(), String> {
         check_array_equality(&result, &[8, 7, 6, 5, 4, 3, 2, 1])?;
     }
 
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set_epi16(
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                );
+                let _ = _mm_abs_epi16(a);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -120,6 +124,16 @@ fn test_mm_abs_epi32() -> Result<(), String> {
         let result = _mm_abs_epi32(a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         check_array_equality(&result, &[4, 3, 2, 1])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random());
+                let _ = _mm_abs_epi32(a);
+            }
+        }
     }
 
     Ok(())
@@ -134,6 +148,27 @@ fn test_mm_sign_epi8() -> Result<(), String> {
         check_array_equality(&result, &[16, -15, 14, -13, 12, -11, 10, -9, 8, -7, 6, -5, 4, -3, 2, -1])?;
     }
 
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set_epi8(
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                );
+                let b = _mm_set_epi8(
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                );
+                let _ = _mm_sign_epi8(a, b);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -146,6 +181,23 @@ fn test_mm_sign_epi16() -> Result<(), String> {
         check_array_equality(&result, &[8, -7, 6, -5, 4, -3, 2, -1])?;
     }
 
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set_epi16(
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                );
+                let b = _mm_set_epi16(
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                );
+                let _ = _mm_sign_epi16(a, b);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -156,6 +208,17 @@ fn test_mm_sign_epi32() -> Result<(), String> {
         let result = _mm_sign_epi32(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         check_array_equality(&result, &[4, -3, 2, -1])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random());
+                let b = _mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random());
+                let _ = _mm_sign_epi32(a, b);
+            }
+        }
     }
 
     Ok(())
@@ -171,6 +234,23 @@ fn test_mm_hadd_epi16() -> Result<(), String> {
         check_array_equality(&result, &[15, 11, 7, 3, 31, 27, 23, 19])?;
     }
 
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set_epi16(
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                );
+                let b = _mm_set_epi16(
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                );
+                let _ = _mm_hadd_epi16(a, b);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -182,6 +262,21 @@ fn test_mm_hadd_epi32() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
 
         check_array_equality(&result, &[7, 3, 15, 11])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set_epi32(
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                );
+                let b = _mm_set_epi32(
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                );
+                let _ = _mm_hadd_epi32(a, b);
+            }
+        }
     }
 
     Ok(())
@@ -197,6 +292,23 @@ fn test_mm_hsub_epi16() -> Result<(), String> {
         check_array_equality(&result, &[1, 1, 1, 1, 1, 1, 1, 1])?;
     }
 
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set_epi16(
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                );
+                let b = _mm_set_epi16(
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                );
+                let _ = _mm_hsub_epi16(a, b);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -208,6 +320,21 @@ fn test_mm_hsub_epi32() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
 
         check_array_equality(&result, &[1, 1, 1, 1])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set_epi32(
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                );
+                let b = _mm_set_epi32(
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                );
+                let _ = _mm_hsub_epi32(a, b);
+            }
+        }
     }
 
     Ok(())
@@ -223,6 +350,27 @@ fn test_mm_maddubs_epi16() -> Result<(), String> {
         check_array_equality(&result, &[31, 27, 23, 19, 15, 11, 7, 3])?;
     }
 
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set_epi8(
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                );
+                let b = _mm_set_epi8(
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                );
+                let _ = _mm_maddubs_epi16(a, b);
+            }
+        }
+    }
+
     Ok(())
 }
 
@@ -234,6 +382,27 @@ fn test_mm_alignr_epi8() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
 
         check_array_equality(&result, &[18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 0, 1])?;
+    }
+
+    if get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..get_iterations() {
+            unsafe {
+                let a = _mm_set_epi8(
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                );
+                let b = _mm_set_epi8(
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(), rand::random(), rand::random(), rand::random(),
+                );
+                let _ = _mm_alignr_epi8::<2>(a, b);
+            }
+        }
     }
 
     Ok(())

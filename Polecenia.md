@@ -1,4 +1,4 @@
-- Upewnij się, że każdy test ma uruchomienie fuzzera przez - get_fuzzer
+- Upewnij się, że każdy test ma uruchomienie fuzzera przez - get_fuzzing
 - Przy sprawdzaniu wyników używaj bezpośrednio expected w funkcji zamiast w zmiennej, czyli zamiast `check_array_equality(&result, &expected)?` użyj np. `check_array_equality(&result, &[1.0, 2.0, 3.0, 4.0])?`
 - Posprawdzaj dokładnie, że nie ignorujesz rezultatu testów(nie dotyczy fuzzingu) np. `let _result = ...`
 - Usuń wszystkie komentarze jeśli istnieją

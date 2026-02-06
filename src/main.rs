@@ -19,14 +19,16 @@ pub fn get_fuzzing() -> bool {
     *FUZZING.get().expect("FUZZING not initialized")
 }
 
+pub fn get_fuzzer() -> bool {
+    get_fuzzing()
+}
+
 fn print_build_info() {
-    // CPU arch
     let arch = env::consts::ARCH;
     let os = env::consts::OS;
     let mut info = String::new();
     let _ = write!(&mut info, "arch={}, os={}", arch, os);
 
-    // rustc envs
     if let Ok(profile) = env::var("PROFILE") {
         let _ = write!(&mut info, ", profile={}", profile);
     }

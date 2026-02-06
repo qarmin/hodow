@@ -83,8 +83,7 @@ fn test_mm_conflict_epi32() -> Result<(), String> {
         let a = _mm_set_epi32(1, 2, 1, 3);
         let result = _mm_conflict_epi32(a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        let expected = [0, 0, 0, 2];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[0, 0, 0, 2])?;
     }
 
     if get_fuzzing() {
@@ -106,8 +105,7 @@ fn test_mm_mask_conflict_epi32() -> Result<(), String> {
         let a = _mm_set_epi32(1, 2, 1, 3);
         let result = _mm_mask_conflict_epi32(src, 0xF, a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        let expected = [0, 0, 0, 2];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[0, 0, 0, 2])?;
     }
 
     if get_fuzzing() {
@@ -129,8 +127,7 @@ fn test_mm_maskz_conflict_epi32() -> Result<(), String> {
         let a = _mm_set_epi32(1, 2, 1, 3);
         let result = _mm_maskz_conflict_epi32(0xF, a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        let expected = [0, 0, 0, 2];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[0, 0, 0, 2])?;
     }
 
     if get_fuzzing() {
@@ -151,8 +148,7 @@ fn test_mm_conflict_epi64() -> Result<(), String> {
         let a = _mm_set_epi64x(1, 2);
         let result = _mm_conflict_epi64(a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        let expected = [0, 0];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[0, 0])?;
     }
 
     if get_fuzzing() {
@@ -174,8 +170,7 @@ fn test_mm_mask_conflict_epi64() -> Result<(), String> {
         let a = _mm_set_epi64x(1, 2);
         let result = _mm_mask_conflict_epi64(src, 0x3, a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        let expected = [0, 0];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[0, 0])?;
     }
 
     if get_fuzzing() {
@@ -197,8 +192,7 @@ fn test_mm_maskz_conflict_epi64() -> Result<(), String> {
         let a = _mm_set_epi64x(1, 2);
         let result = _mm_maskz_conflict_epi64(0x3, a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        let expected = [0, 0];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[0, 0])?;
     }
 
     if get_fuzzing() {
@@ -219,8 +213,7 @@ fn test_mm_lzcnt_epi32() -> Result<(), String> {
         let a = _mm_set1_epi32(0x0000_00FF);
         let result = _mm_lzcnt_epi32(a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        let expected = [24, 24, 24, 24];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[24, 24, 24, 24])?;
     }
 
     if get_fuzzing() {
@@ -242,8 +235,7 @@ fn test_mm_mask_lzcnt_epi32() -> Result<(), String> {
         let a = _mm_set1_epi32(0x0000_00FF);
         let result = _mm_mask_lzcnt_epi32(src, 0b1100, a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        let expected = [100, 100, 24, 24];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[100, 100, 24, 24])?;
     }
 
     if get_fuzzing() {
@@ -265,8 +257,7 @@ fn test_mm_maskz_lzcnt_epi32() -> Result<(), String> {
         let a = _mm_set1_epi32(0x0000_00FF);
         let result = _mm_maskz_lzcnt_epi32(0b1100, a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        let expected = [0, 0, 24, 24];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[0, 0, 24, 24])?;
     }
 
     if get_fuzzing() {
@@ -287,8 +278,7 @@ fn test_mm_lzcnt_epi64() -> Result<(), String> {
         let a = _mm_set1_epi64x(0x0000_0000_0000_00FF);
         let result = _mm_lzcnt_epi64(a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        let expected = [56, 56];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[56, 56])?;
     }
 
     if get_fuzzing() {
@@ -310,8 +300,7 @@ fn test_mm_mask_lzcnt_epi64() -> Result<(), String> {
         let a = _mm_set1_epi64x(0x0000_0000_0000_00FF);
         let result = _mm_mask_lzcnt_epi64(src, 0b10, a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        let expected = [100, 56];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[100, 56])?;
     }
 
     if get_fuzzing() {
@@ -333,8 +322,7 @@ fn test_mm_maskz_lzcnt_epi64() -> Result<(), String> {
         let a = _mm_set1_epi64x(0x0000_0000_0000_00FF);
         let result = _mm_maskz_lzcnt_epi64(0b10, a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        let expected = [0, 56];
-        check_array_equality(&result, &expected)?;
+        check_array_equality(&result, &[0, 56])?;
     }
 
     if get_fuzzing() {
