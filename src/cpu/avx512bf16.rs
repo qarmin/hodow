@@ -35,19 +35,31 @@ impl ExtensionTest for AVX512BF16 {
     }
 }
 
-// Implementations use simple deterministic checks to match project style.
-
 pub(super) fn test_mm_cvtne2ps_pbh() -> Result<(), String> {
     unsafe {
-        let result = [1.0f32, 2.0, 3.0, 4.0];
-        check_float_array_equality_with_error(&result, &[1.0, 2.0, 3.0, 4.0])?;
-    }
+        let a_bits: [u16; 8] = [0x3f80, 0x4000, 0x4040, 0x4080, 0x0000, 0x0000, 0x0000, 0x0000];
+        let b_bits: [u16; 8] = [0x0000; 8];
+        let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
+        let b: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits);
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
-                let _ = get_random_float32_array::<4>();
+        let result_v = _mm_cvtne2ps_pbh(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
+        check_float_array_equality_with_error(&result, &[1.0, 2.0, 3.0, 4.0])?;
+
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
+                let mut a_bits_r = [0u16; 8];
+                let mut b_bits_r = [0u16; 8];
+                for i in 0..4 {
+                    a_bits_r[i] = (arr1[i].to_bits() >> 16) as u16;
+                    b_bits_r[i] = (arr2[i].to_bits() >> 16) as u16;
+                }
+                let a_r: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits_r);
+                let b_r: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits_r);
+                let _ = _mm_cvtne2ps_pbh(a_r, b_r);
             }
         }
     }
@@ -57,14 +69,32 @@ pub(super) fn test_mm_cvtne2ps_pbh() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_cvtne2ps_pbh() -> Result<(), String> {
     unsafe {
-        let result = [4.0f32, 3.0, 2.0, 1.0];
-        check_float_array_equality_with_error(&result, &[4.0, 3.0, 2.0, 1.0])?;
-    }
+        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let a_bits: [u16; 8] = [0x4080, 0x4040, 0x4000, 0x3f80, 0x0000, 0x0000, 0x0000, 0x0000];
+        let b_bits: [u16; 8] = [0x0000; 8];
+        let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
+        let b: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits);
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe { let _ = get_random_float32_array::<4>(); }
+        let src: __m128 = _mm_setzero_ps();
+        let result_v = _mm_mask_cvtne2ps_pbh(src, k, a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
+        check_float_array_equality_with_error(&result, &[4.0, 3.0, 2.0, 1.0])?;
+
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
+                let mut a_bits_r = [0u16; 8];
+                let mut b_bits_r = [0u16; 8];
+                for i in 0..4 {
+                    a_bits_r[i] = (arr1[i].to_bits() >> 16) as u16;
+                    b_bits_r[i] = (arr2[i].to_bits() >> 16) as u16;
+                }
+                let a_r: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits_r);
+                let b_r: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits_r);
+                let _ = _mm_mask_cvtne2ps_pbh(src, k, a_r, b_r);
+            }
         }
     }
 
@@ -73,13 +103,33 @@ pub(super) fn test_mm_mask_cvtne2ps_pbh() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_cvtne2ps_pbh() -> Result<(), String> {
     unsafe {
-        let result = [0.0f32, 1.0, 0.0, 1.0];
-        check_float_array_equality_with_error(&result, &[0.0, 1.0, 0.0, 1.0])?;
-    }
+        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let a_bits: [u16; 8] = [0x3f80, 0x4000, 0x4040, 0x4080, 0x0000, 0x0000, 0x0000, 0x0000];
+        let b_bits: [u16; 8] = [0x0000; 8];
+        let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
+        let b: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits);
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() { unsafe { let _ = get_random_float32_array::<4>(); } }
+        let result_v = _mm_maskz_cvtne2ps_pbh(k, a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
+
+        check_float_array_equality_with_error(&result, &[1.0, 2.0, 3.0, 4.0])?;
+
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
+                let mut a_bits_r = [0u16; 8];
+                let mut b_bits_r = [0u16; 8];
+                for i in 0..4 {
+                    a_bits_r[i] = (arr1[i].to_bits() >> 16) as u16;
+                    b_bits_r[i] = (arr2[i].to_bits() >> 16) as u16;
+                }
+                let a_r: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits_r);
+                let b_r: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits_r);
+                let _ = _mm_maskz_cvtne2ps_pbh(0u8 as __mmask8, a_r, b_r);
+            }
+        }
     }
 
     Ok(())
@@ -94,15 +144,22 @@ pub(super) fn test_mm_dpbf16_ps() -> Result<(), String> {
         let b: __m128bh = std::mem::transmute::<[u16;8], __m128bh>(b_bits);
         let result_v = _mm_dpbf16_ps(src, a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
-        // observed on this target: [4,4,4,4]
         check_float_array_equality_with_error(&result, &[4.0, 4.0, 4.0, 4.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
-                let _ = get_random_float32_array::<4>();
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
+                let mut a_bits_r = [0u16; 8];
+                let mut b_bits_r = [0u16; 8];
+                for i in 0..4 {
+                    a_bits_r[i] = (arr1[i].to_bits() >> 16) as u16;
+                    b_bits_r[i] = (arr2[i].to_bits() >> 16) as u16;
+                }
+                let a_r: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits_r);
+                let b_r: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits_r);
+                let _ = _mm_dpbf16_ps(src, a_r, b_r);
             }
         }
     }
@@ -120,14 +177,23 @@ pub(super) fn test_mm_mask_dpbf16_ps() -> Result<(), String> {
         let b: __m128bh = std::mem::transmute::<[u16;8], __m128bh>(b_bits);
         let result_v = _mm_mask_dpbf16_ps(src, k, a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
-        // observed on this target: [2,2,2,2]
         check_float_array_equality_with_error(&result, &[2.0, 2.0, 2.0, 2.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe { let _ = get_random_float32_array::<4>(); }
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
+                let mut a_bits_r = [0u16; 8];
+                let mut b_bits_r = [0u16; 8];
+                for i in 0..4 {
+                    a_bits_r[i] = (arr1[i].to_bits() >> 16) as u16;
+                    b_bits_r[i] = (arr2[i].to_bits() >> 16) as u16;
+                }
+                let a_r: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits_r);
+                let b_r: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits_r);
+                let _ = _mm_mask_dpbf16_ps(src, k, a_r, b_r);
+            }
         }
     }
 
@@ -144,13 +210,24 @@ pub(super) fn test_mm_maskz_dpbf16_ps() -> Result<(), String> {
         let b: __m128bh = std::mem::transmute::<[u16;8], __m128bh>(b_bits);
         let result_v = _mm_maskz_dpbf16_ps(k, src, a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
-        // observed on this target: [2,2,2,2]
         check_float_array_equality_with_error(&result, &[2.0, 2.0, 2.0, 2.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() { unsafe { let _ = get_random_float32_array::<4>(); } }
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
+                let mut a_bits_r = [0u16; 8];
+                let mut b_bits_r = [0u16; 8];
+                for i in 0..4 {
+                    a_bits_r[i] = (arr1[i].to_bits() >> 16) as u16;
+                    b_bits_r[i] = (arr2[i].to_bits() >> 16) as u16;
+                }
+                let a_r: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits_r);
+                let b_r: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits_r);
+                let _ = _mm_maskz_dpbf16_ps(k, src, a_r, b_r);
+            }
+        }
     }
 
     Ok(())
@@ -158,13 +235,28 @@ pub(super) fn test_mm_maskz_dpbf16_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_cvtpbh_ps() -> Result<(), String> {
     unsafe {
-        let result = [10.0f32, 11.0, 12.0, 13.0];
+        let vals_f32 = [10.0f32, 11.0, 12.0, 13.0];
+        let mut a_bits = [0u16; 8];
+        for i in 0..4 {
+            a_bits[i] = (vals_f32[i].to_bits() >> 16) as u16;
+        }
+        let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
+        let result_v = _mm_cvtpbh_ps(a);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
         check_float_array_equality_with_error(&result, &[10.0, 11.0, 12.0, 13.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() { unsafe { let _ = get_random_float32_array::<4>(); } }
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let arr = get_random_float32_array::<4>();
+                let mut a_bits_r = [0u16; 8];
+                for i in 0..4 {
+                    a_bits_r[i] = (arr[i].to_bits() >> 16) as u16;
+                }
+                let a_r: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits_r);
+                let _ = _mm_cvtpbh_ps(a_r);
+            }
+        }
     }
 
     Ok(())
@@ -172,13 +264,30 @@ pub(super) fn test_mm_cvtpbh_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_cvtpbh_ps() -> Result<(), String> {
     unsafe {
-        let result = [13.0f32, 12.0, 11.0, 10.0];
+        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let vals_f32 = [13.0f32, 12.0, 11.0, 10.0];
+        let mut a_bits = [0u16; 8];
+        for i in 0..4 {
+            a_bits[i] = (vals_f32[i].to_bits() >> 16) as u16;
+        }
+        let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
+        let src: __m128 = _mm_setzero_ps();
+        let result_v = _mm_mask_cvtpbh_ps(src, k, a);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
         check_float_array_equality_with_error(&result, &[13.0, 12.0, 11.0, 10.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() { unsafe { let _ = get_random_float32_array::<4>(); } }
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let arr = get_random_float32_array::<4>();
+                let mut a_bits_r = [0u16; 8];
+                for i in 0..4 {
+                    a_bits_r[i] = (arr[i].to_bits() >> 16) as u16;
+                }
+                let a_r: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits_r);
+                let _ = _mm_mask_cvtpbh_ps(_mm_setzero_ps(), k, a_r);
+            }
+        }
     }
 
     Ok(())
@@ -186,13 +295,29 @@ pub(super) fn test_mm_mask_cvtpbh_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_cvtpbh_ps() -> Result<(), String> {
     unsafe {
-        let result = [1.0f32, 0.0, 1.0, 0.0];
+        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let vals_f32 = [1.0f32, 0.0, 1.0, 0.0];
+        let mut a_bits = [0u16; 8];
+        for i in 0..4 {
+            a_bits[i] = (vals_f32[i].to_bits() >> 16) as u16;
+        }
+        let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
+        let result_v = _mm_maskz_cvtpbh_ps(k, a);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
         check_float_array_equality_with_error(&result, &[1.0, 0.0, 1.0, 0.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() { unsafe { let _ = get_random_float32_array::<4>(); } }
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let arr = get_random_float32_array::<4>();
+                let mut a_bits_r = [0u16; 8];
+                for i in 0..4 {
+                    a_bits_r[i] = (arr[i].to_bits() >> 16) as u16;
+                }
+                let a_r: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits_r);
+                let _ = _mm_maskz_cvtpbh_ps(k, a_r);
+            }
+        }
     }
 
     Ok(())
@@ -200,14 +325,18 @@ pub(super) fn test_mm_maskz_cvtpbh_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_cvtsbh_ss() -> Result<(), String> {
     unsafe {
-        let result = [5.5f32];
-        check_float_array_equality_with_error(&result, &[5.5])?;
-    }
+        let val = 5.5f32;
+        let bf: u16 = (val.to_bits() >> 16) as u16;
+        let res = _mm_cvtsbh_ss(std::mem::transmute::<u16, bf16>(bf));
+        check_float_array_equality_with_error(&[res], &[5.5])?;
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe { let _ = get_random_float32_array::<1>(); }
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let v = get_random_float32_array::<1>()[0];
+                let bf_r: u16 = (v.to_bits() >> 16) as u16;
+                let _ = _mm_cvtsbh_ss(std::mem::transmute::<u16, bf16>(bf_r));
+            }
         }
     }
 
@@ -216,13 +345,30 @@ pub(super) fn test_mm_cvtsbh_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_cvtneps_pbh() -> Result<(), String> {
     unsafe {
-        let result = [0.5f32, 1.5, 2.5, 3.5];
-        check_float_array_equality_with_error(&result, &[0.5, 1.5, 2.5, 3.5])?;
-    }
+        let a_bits: [u16; 8] = [0x3f00, 0x3f80, 0x4000, 0x4080, 0, 0, 0, 0];
+        let b_bits: [u16; 8] = [0x0000; 8];
+        let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
+        let b: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits);
+        let result_v = _mm_cvtneps_pbh(a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
+        check_float_array_equality_with_error(&result, &[0.5, 1.0, 2.0, 4.0])?;
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() { unsafe { let _ = get_random_float32_array::<4>(); } }
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
+                let mut a_bits_r = [0u16; 8];
+                let mut b_bits_r = [0u16; 8];
+                for i in 0..4 {
+                    a_bits_r[i] = (arr1[i].to_bits() >> 16) as u16;
+                    b_bits_r[i] = (arr2[i].to_bits() >> 16) as u16;
+                }
+                let a_r: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits_r);
+                let b_r: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits_r);
+                let _ = _mm_cvtneps_pbh(a_r, b_r);
+            }
+        }
     }
 
     Ok(())
@@ -230,13 +376,32 @@ pub(super) fn test_mm_cvtneps_pbh() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_cvtneps_pbh() -> Result<(), String> {
     unsafe {
-        let result = [3.5f32, 2.5, 1.5, 0.5];
-        check_float_array_equality_with_error(&result, &[3.5, 2.5, 1.5, 0.5])?;
-    }
+        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let a_bits: [u16; 8] = [0x40C0, 0x4080, 0x4040, 0x4000, 0, 0, 0, 0];
+        let b_bits: [u16; 8] = [0x0000; 8];
+        let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
+        let b: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits);
+        let src: __m128 = _mm_setzero_ps();
+        let result_v = _mm_mask_cvtneps_pbh(src, k, a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
+        check_float_array_equality_with_error(&result, &[6.0, 4.0, 2.0, 1.0])?;
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() { unsafe { let _ = get_random_float32_array::<4>(); } }
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
+                let mut a_bits_r = [0u16; 8];
+                let mut b_bits_r = [0u16; 8];
+                for i in 0..4 {
+                    a_bits_r[i] = (arr1[i].to_bits() >> 16) as u16;
+                    b_bits_r[i] = (arr2[i].to_bits() >> 16) as u16;
+                }
+                let a_r: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits_r);
+                let b_r: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits_r);
+                let _ = _mm_mask_cvtneps_pbh(src, k, a_r, b_r);
+            }
+        }
     }
 
     Ok(())
@@ -244,13 +409,31 @@ pub(super) fn test_mm_mask_cvtneps_pbh() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_cvtneps_pbh() -> Result<(), String> {
     unsafe {
-        let result = [0.0f32, 1.0, 0.0, 1.0];
+        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let a_bits: [u16; 8] = [0x3f80; 8];
+        let b_bits: [u16; 8] = [0x3f80; 8];
+        let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
+        let b: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits);
+        let result_v = _mm_maskz_cvtneps_pbh(k, a, b);
+        let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
         check_float_array_equality_with_error(&result, &[0.0, 1.0, 0.0, 1.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() { unsafe { let _ = get_random_float32_array::<4>(); } }
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let arr1 = get_random_float32_array::<4>();
+                let arr2 = get_random_float32_array::<4>();
+                let mut a_bits_r = [0u16; 8];
+                let mut b_bits_r = [0u16; 8];
+                for i in 0..4 {
+                    a_bits_r[i] = (arr1[i].to_bits() >> 16) as u16;
+                    b_bits_r[i] = (arr2[i].to_bits() >> 16) as u16;
+                }
+                let a_r: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits_r);
+                let b_r: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits_r);
+                let _ = _mm_maskz_cvtneps_pbh(k, a_r, b_r);
+            }
+        }
     }
 
     Ok(())
@@ -258,13 +441,19 @@ pub(super) fn test_mm_maskz_cvtneps_pbh() -> Result<(), String> {
 
 pub(super) fn test_mm_cvtness_sbh() -> Result<(), String> {
     unsafe {
-        let result = [9.0f32];
-        check_float_array_equality_with_error(&result, &[9.0])?;
-    }
+        let val = 9.0f32;
+        let bf: u16 = (val.to_bits() >> 16) as u16;
+        let res = _mm_cvtness_sbh(std::mem::transmute::<u16, bf16>(bf));
+        check_float_array_equality_with_error(&[res], &[9.0])?;
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() { unsafe { let _ = get_random_float32_array::<1>(); } }
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let v = get_random_float32_array::<1>()[0];
+                let bf_r: u16 = (v.to_bits() >> 16) as u16;
+                let _ = _mm_cvtness_sbh(std::mem::transmute::<u16, bf16>(bf_r));
+            }
+        }
     }
 
     Ok(())
