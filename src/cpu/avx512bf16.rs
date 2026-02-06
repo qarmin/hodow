@@ -5,7 +5,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_float_array_equality_with_error, get_random_float32_array};
+use crate::cpu::common::{check_float_array_equality_with_error, check_float_equality, check_int_equality, get_random_float32_array};
 use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
 use crate::get_fuzzing;
 
@@ -444,7 +444,7 @@ pub(super) fn test_mm_cvtness_sbh() -> Result<(), String> {
         let val = 9.0f32;
         let bf: u16 = (val.to_bits() >> 16) as u16;
         let res = _mm_cvtness_sbh(std::mem::transmute::<u16, bf16>(bf));
-        check_float_array_equality_with_error(&[res], &[9.0])?;
+        check_int_equality(res.0, 4)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
