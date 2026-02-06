@@ -1,3 +1,5 @@
+#![feature(stdarch_x86_avx512_bf16)]
+
 #[cfg(target_arch = "x86")]
 use std::arch::x86::*;
 #[cfg(target_arch = "x86_64")]
@@ -5,7 +7,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_float_array_equality_with_error, check_float_equality, check_int_equality, get_random_float32_array};
+use crate::cpu::common::{check_float_array_equality_with_error, check_float_equality, check_int_equality, get_random_float, get_random_float32_array};
 use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
 use crate::get_fuzzing;
 
@@ -43,7 +45,7 @@ pub(super) fn test_mm_cvtne2ps_pbh() -> Result<(), String> {
         let b: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits);
 
         let result_v = _mm_cvtne2ps_pbh(a, b);
-        let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
+        let result = std::mem::transmute::<__m128bh, [f32; 4]>(result_v);
         check_float_array_equality_with_error(&result, &[1.0, 2.0, 3.0, 4.0])?;
 
         if get_fuzzing() {
@@ -442,16 +444,14 @@ pub(super) fn test_mm_maskz_cvtneps_pbh() -> Result<(), String> {
 pub(super) fn test_mm_cvtness_sbh() -> Result<(), String> {
     unsafe {
         let val = 9.0f32;
-        let bf: u16 = (val.to_bits() >> 16) as u16;
-        let res = _mm_cvtness_sbh(std::mem::transmute::<u16, bf16>(bf));
-        check_int_equality(res.0, 4)?;
+        let res = _mm_cvtness_sbh(val);
+        check_int_equality(res.to_bits(), 4)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
-                let v = get_random_float32_array::<1>()[0];
-                let bf_r: u16 = (v.to_bits() >> 16) as u16;
-                let _ = _mm_cvtness_sbh(std::mem::transmute::<u16, bf16>(bf_r));
+                let v = get_random_float();
+                let _ = _mm_cvtness_sbh(v);
             }
         }
     }

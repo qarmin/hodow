@@ -1,8 +1,8 @@
 run *args:
-    RUSTFLAGS="-C target-cpu=native" cargo run {{args}}
+    RUSTFLAGS="-C target-cpu=native" cargo +nightly run {{args}}
 
 runn *args:
-    cargo run {{args}}
+    cargo +nightly run {{args}}
 
 sanitizer *args:
     RUSTFLAGS="-Zsanitizer=address" cargo +nightly run --target x86_64-unknown-linux-gnu {{args}}

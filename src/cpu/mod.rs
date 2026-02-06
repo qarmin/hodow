@@ -158,12 +158,13 @@ pub fn test_all_extensions() -> Result<(), String> {
             }
         }
 
-        #[cfg(target_feature = "avx512bf16")]
-        {
-            if std::arch::is_x86_feature_detected!("avx512bf16") {
-                crate::cpu::avx512bf16::AVX512BF16::test()?;
-            }
-        }
+        // TODO, unstable - https://github.com/rust-lang/rust/issues/127356
+        // #[cfg(target_feature = "avx512bf16")]
+        // {
+        //     if std::arch::is_x86_feature_detected!("avx512bf16") {
+        //         crate::cpu::avx512bf16::AVX512BF16::test()?;
+        //     }
+        // }
 
         #[cfg(target_feature = "avx512cd")]
         {
