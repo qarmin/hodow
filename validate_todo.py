@@ -1,5 +1,4 @@
 import re
-import os
 import sys
 from pathlib import Path
 from dataclasses import dataclass
@@ -29,13 +28,10 @@ class TODOValidator:
         self.todo_files = ['TODO.txt', 'TODO_AVX.txt']
         self.src_dir = project_root / 'src' / 'cpu'
 
-        # Instrukcje znalezione w plikach TODO
         self.todo_instructions: Dict[str, List[Instruction]] = {}
 
-        # Zaimplementowane testy
         self.implemented_tests: Set[str] = set()
 
-        # Statystyki
         self.stats = {
             'total_instructions': 0,
             'implemented': 0,
@@ -44,7 +40,6 @@ class TODOValidator:
         }
 
     def parse_todo_file(self, todo_path: Path) -> List[Instruction]:
-        """Parsuje plik TODO i wyciąga nazwy instrukcji."""
         instructions = []
         current_source = None
 
@@ -56,12 +51,10 @@ class TODOValidator:
             for line_num, line in enumerate(f, 1):
                 line = line.strip()
 
-                # Wykryj źródłowy plik Rust
                 if line.startswith('src/rust/library/stdarch'):
                     current_source = line
                     continue
 
-                # Wykryj definicję funkcji
                 match = re.match(r'^\d+:pub\s+(?:unsafe\s+)?fn\s+(_mm\w+)', line)
                 if match:
                     func_name = match.group(1)
@@ -74,37 +67,32 @@ class TODOValidator:
         return instructions
 
     def scan_rust_tests(self) -> Set[str]:
-        """Skanuje pliki Rust w poszukiwaniu zaimplementowanych testów."""
         implemented = set()
 
         if not self.src_dir.exists():
             print(f"⚠️  Katalog źródłowy {self.src_dir} nie istnieje")
             return implemented
 
-        # Skanuj wszystkie pliki .rs w katalogu src/cpu
-        for rs_file in self.src_dir.glob('*.rs'):
-            with open(rs_file, 'r', encoding='utf-8') as f:
-                content = f.read()
+        for rs_file in self.src_dir.rglob('*.rs'):
+            try:
+                with open(rs_file, 'r', encoding='utf-8') as f:
+                    content = f.read()
+            except Exception:
+                continue
 
-                # Szukaj definicji funkcji testowych
-                # Wzorce: fn test_mm_xxx, test_mm512_xxx, itp.
-                test_pattern = r'fn\s+(test_mm\w+)\s*\('
-                for match in re.finditer(test_pattern, content):
-                    test_name = match.group(1)
-                    # Wyciągnij nazwę instrukcji z nazwy testu
-                    # test_mm_add_ps -> _mm_add_ps
-                    if test_name.startswith('test_mm'):
-                        instr_name = '_' + test_name.replace('test_', '')
-                        implemented.add(instr_name)
+            test_pattern = r'fn\s+(test_mm\w+)\s*\('
+            for match in re.finditer(test_pattern, content):
+                test_name = match.group(1)
+                if test_name.startswith('test_mm'):
+                    instr_name = '_' + test_name.replace('test_', '')
+                    implemented.add(instr_name)
 
         return implemented
 
     def categorize_instruction(self, instr: Instruction) -> str:
-        """Kategoryzuje instrukcję na podstawie nazwy i pliku źródłowego."""
         name = instr.name
         source = instr.source_file
 
-        # Kategorie na podstawie pliku źródłowego
         if 'avx512fp16' in source:
             return 'AVX-512 FP16'
         elif 'avx512bf16' in source:
@@ -136,7 +124,6 @@ class TODOValidator:
         elif 'sse' in source:
             return 'SSE'
 
-        # Kategorie na podstawie prefixu nazwy
         if name.startswith('_mm512_'):
             return 'AVX-512'
         elif name.startswith('_mm256_'):
@@ -147,22 +134,18 @@ class TODOValidator:
         return 'Inne'
 
     def analyze(self):
-        """Główna analiza - parsowanie i porównanie."""
         print("🔍 Analizuję pliki TODO...")
 
-        # Parsuj pliki TODO
         for todo_file in self.todo_files:
             todo_path = self.project_root / todo_file
             instructions = self.parse_todo_file(todo_path)
             self.todo_instructions[todo_file] = instructions
             print(f"   Znaleziono {len(instructions)} instrukcji w {todo_file}")
 
-        # Skanuj implementacje
         print("\n🔍 Skanuję pliki źródłowe...")
         self.implemented_tests = self.scan_rust_tests()
         print(f"   Znaleziono {len(self.implemented_tests)} zaimplementowanych testów")
 
-        # Analizuj implementacje
         print("\n📊 Analizuję implementacje...")
 
         all_instructions = []
@@ -175,7 +158,6 @@ class TODOValidator:
             category = self.categorize_instruction(instr)
             self.stats['by_category'][category]['total'] += 1
 
-            # Sprawdź czy zaimplementowane
             if instr.name in self.implemented_tests:
                 self.stats['implemented'] += 1
                 self.stats['by_category'][category]['implemented'] += 1
@@ -185,12 +167,10 @@ class TODOValidator:
         )
 
     def print_report(self):
-        """Wyświetla raport z wynikami analizy."""
         print("\n" + "="*80)
         print("📋 RAPORT WALIDACJI TODO")
         print("="*80)
 
-        # Podsumowanie ogólne
         total = self.stats['total_instructions']
         implemented = self.stats['implemented']
         not_impl = self.stats['not_implemented']
@@ -205,7 +185,6 @@ class TODOValidator:
         print(f"   ✅ Zaimplementowane:           {implemented} ({impl_percent:.1f}%)")
         print(f"   ❌ Niezaimplementowane:        {not_impl} ({100-impl_percent:.1f}%)")
 
-        # Statystyki według kategorii
         print(f"\n📊 STATYSTYKI WEDŁUG KATEGORII:")
         print(f"{'Kategoria':<30} {'Razem':>8} {'Impl.':>8} {'Procent':>10}")
         print("-" * 60)
@@ -221,7 +200,6 @@ class TODOValidator:
             status = "✅" if percent == 100 else "🔶" if percent >= 50 else "❌"
             print(f"{status} {category:<27} {total_cat:>8} {impl_cat:>8} {percent:>9.1f}%")
 
-        # Przykłady niezaimplementowanych
         print(f"\n🔍 PRZYKŁADY NIEZAIMPLEMENTOWANYCH INSTRUKCJI:")
 
         not_implemented = []
@@ -230,7 +208,6 @@ class TODOValidator:
                 if instr.name not in self.implemented_tests:
                     not_implemented.append(instr)
 
-        # Pokaż do 20 przykładów, pogrupowanych po kategorii
         examples_by_cat = defaultdict(list)
         for instr in not_implemented[:100]:
             cat = self.categorize_instruction(instr)
@@ -247,7 +224,6 @@ class TODOValidator:
             remaining = len(not_implemented) - sum(len(v) for v in examples_by_cat.values())
             print(f"\n   ... i {remaining} więcej")
 
-        # Podsumowanie końcowe
         print("\n" + "="*80)
         if impl_percent == 100:
             print("🎉 GRATULACJE! Wszystkie instrukcje zostały zaimplementowane!")
@@ -262,14 +238,13 @@ class TODOValidator:
         print("="*80 + "\n")
 
     def export_csv(self, output_path: Path):
-        """Eksportuje wyniki do pliku CSV."""
         with open(output_path, 'w', encoding='utf-8') as f:
             f.write("Kategoria,Instrukcja,Źródło,Zaimplementowana\n")
 
             for instructions in self.todo_instructions.values():
                 for instr in instructions:
                     if instr.name in self.implemented_tests:
-                        continue # Eksportujemy tylko niezaimplementowane
+                        continue
                     category = self.categorize_instruction(instr)
                     implemented = "TAK" if instr.name in self.implemented_tests else "NIE"
                     source_short = instr.source_file.split('/')[-1] if instr.source_file else 'unknown'
@@ -280,28 +255,22 @@ class TODOValidator:
 
 
 def main():
-    """Funkcja główna."""
-    # Ustal ścieżkę do projektu
     script_dir = Path(__file__).parent
     project_root = script_dir
 
-    # Jeśli skrypt jest w podkatalogu, idź poziom wyżej
     if script_dir.name == 'scripts':
         project_root = script_dir.parent
 
     print("🚀 Walidator TODO - WorkTester")
     print(f"📁 Katalog projektu: {project_root}\n")
 
-    # Utwórz walidator i uruchom analizę
     validator = TODOValidator(project_root)
     validator.analyze()
     validator.print_report()
 
-    # Eksportuj do CSV jeśli potrzebne
     csv_path = project_root / 'todo_analysis.csv'
     validator.export_csv(csv_path)
 
-    # Zwróć kod wyjścia na podstawie pokrycia
     impl_percent = (validator.stats['implemented'] /
                    validator.stats['total_instructions'] * 100
                    if validator.stats['total_instructions'] > 0 else 0)

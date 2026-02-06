@@ -22,6 +22,8 @@ mod avx512f;
 mod avx512ifma;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512vbmi"))]
 mod avx512vbmi;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512bf16"))]
+mod avx512bf16;
 mod common;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "fma"))]
 mod fma;
@@ -153,6 +155,13 @@ pub fn test_all_extensions() -> Result<(), String> {
         {
             if std::arch::is_x86_feature_detected!("avx512bitalg") {
                 crate::cpu::avx512bitalg::AVX512BITALG::test()?;
+            }
+        }
+
+        #[cfg(target_feature = "avx512bf16")]
+        {
+            if std::arch::is_x86_feature_detected!("avx512bf16") {
+                crate::cpu::avx512bf16::AVX512BF16::test()?;
             }
         }
 

@@ -4,6 +4,7 @@ mod part3;
 mod part4;
 mod part5;
 mod part6;
+mod part7;
 
 #[cfg(target_arch = "x86")]
 use std::arch::x86::*;
@@ -12,6 +13,9 @@ use crate::cpu::sse2::part1::*;
 use crate::cpu::sse2::part2::*;
 use crate::cpu::sse2::part3::*;
 use crate::cpu::sse2::part4::*;
+use crate::cpu::sse2::part5::*;
+use crate::cpu::sse2::part6::*;
+use crate::cpu::sse2::part7::*;
 use crate::cpu::{ExtensionTest, TestFunction};
 pub struct SSE2;
 
@@ -141,6 +145,19 @@ impl ExtensionTest for SSE2 {
             (&test_mm_or_pd, "test_mm_or_pd"),
             (&test_mm_xor_pd, "test_mm_xor_pd"),
             (&test_mm_andnot_si128, "test_mm_andnot_si128"),
+            (&test_mm_clflush, "test_mm_clflush"),
+            (&test_mm_sub_epi8, "test_mm_sub_epi8"),
+            (&test_mm_store1_pd, "test_mm_store1_pd"),
+            (&test_mm_store_pd1, "test_mm_store_pd1"),
+            (&test_mm_storer_pd, "test_mm_storer_pd"),
+            (&test_mm_storeh_pd, "test_mm_storeh_pd"),
+            (&test_mm_storel_pd, "test_mm_storel_pd"),
+            (&test_mm_load1_pd, "test_mm_load1_pd"),
+            (&test_mm_load_pd1, "test_mm_load_pd1"),
+            (&test_mm_loadr_pd, "test_mm_loadr_pd"),
+            (&test_mm_loadu_si16, "test_mm_loadu_si16"),
+            (&test_mm_loadu_si32, "test_mm_loadu_si32"),
+            (&test_mm_loadu_si64, "test_mm_loadu_si64"),
         ]
     }
 }
