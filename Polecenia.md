@@ -3,3 +3,4 @@
 - Posprawdzaj dokładnie, że nie ignorujesz rezultatu testów(nie dotyczy fuzzingu) np. `let _result = ...`
 - Usuń wszystkie komentarze jeśli istnieją
 - Zamiast kilku małych bloków unsafe zrób jeden duży na całą funkcję(lecz by funkcja nie była unsafe) Czyli `fn test_mm_cmpgt_epi64() -> Result<(), String> { unsafe { ... } Ok(()) }` zamiast `fn test_mm_cmpgt_epi64() -> Result<(), String> { unsafe { ... } } if ... unsafe {} Ok(()) }`
+- Staraj się mieć po max 15 funkcji na plik, jeśli jest ich więcej rozdziel je na kilka plików part1, part2 etc. tak jak to jest zrobione w innych modułach

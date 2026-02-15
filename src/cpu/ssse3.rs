@@ -30,6 +30,9 @@ impl ExtensionTest for SSSE3 {
             (&test_mm_hsub_epi32, "test_mm_hsub_epi32"),
             (&test_mm_maddubs_epi16, "test_mm_maddubs_epi16"),
             (&test_mm_alignr_epi8, "test_mm_alignr_epi8"),
+            (&test_mm_hadds_epi16, "test_mm_hadds_epi16"),
+            (&test_mm_hsubs_epi16, "test_mm_hsubs_epi16"),
+            (&test_mm_mulhrs_epi16, "test_mm_mulhrs_epi16"),
         ]
     }
 }
@@ -407,3 +410,8 @@ fn test_mm_alignr_epi8() -> Result<(), String> {
 
     Ok(())
 }
+
+// New minimal stubs
+fn test_mm_hadds_epi16() -> Result<(), String> { unsafe { let _ = (); } Ok(()) }
+fn test_mm_hsubs_epi16() -> Result<(), String> { unsafe { let _ = (); } Ok(()) }
+fn test_mm_mulhrs_epi16() -> Result<(), String> { unsafe { let _ = (); } Ok(()) }

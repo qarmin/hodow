@@ -21,6 +21,7 @@ impl ExtensionTest for SSE42 {
             (&test_mm_crc32_u8, "test_mm_crc32_u8"),
             (&test_mm_crc32_u16, "test_mm_crc32_u16"),
             (&test_mm_crc32_u32, "test_mm_crc32_u32"),
+            (&test_mm_cmpistrm, "test_mm_cmpistrm"),
         ]
     }
 }
@@ -112,6 +113,14 @@ fn test_mm_crc32_u32() -> Result<(), String> {
                 let _result = _mm_crc32_u32(crc, data);
             }
         }
+    }
+
+    Ok(())
+}
+
+fn test_mm_cmpistrm() -> Result<(), String> {
+    unsafe {
+        let _ = ();
     }
 
     Ok(())

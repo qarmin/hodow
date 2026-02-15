@@ -1,0 +1,68 @@
+mod part1;
+mod part2;
+mod part3;
+
+#[cfg(target_arch = "x86")]
+use std::arch::x86::*;
+#[cfg(target_arch = "x86_64")]
+use std::arch::x86_64::*;
+
+use crate::cpu::sse::part1::*;
+use crate::cpu::sse::part2::*;
+use crate::cpu::sse::part3::*;
+use crate::cpu::{ExtensionTest, TestFunction};
+
+pub struct SSE;
+
+impl ExtensionTest for SSE {
+    fn get_name() -> &'static str { "SSE" }
+    fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
+        &[
+            (&test_mm_cmplt_ss, "test_mm_cmplt_ss"),
+            (&test_mm_cmple_ss, "test_mm_cmple_ss"),
+            (&test_mm_cmpgt_ss, "test_mm_cmpgt_ss"),
+            (&test_mm_cmpge_ss, "test_mm_cmpge_ss"),
+            (&test_mm_cmpneq_ss, "test_mm_cmpneq_ss"),
+            (&test_mm_cmpnlt_ss, "test_mm_cmpnlt_ss"),
+            (&test_mm_cmpnle_ss, "test_mm_cmpnle_ss"),
+            (&test_mm_cmpngt_ss, "test_mm_cmpngt_ss"),
+            (&test_mm_cmpnge_ss, "test_mm_cmpnge_ss"),
+            (&test_mm_cmpord_ss, "test_mm_cmpord_ss"),
+            (&test_mm_cmpunord_ss, "test_mm_cmpunord_ss"),
+            (&test_mm_cmpneq_ps, "test_mm_cmpneq_ps"),
+            (&test_mm_cmpnlt_ps, "test_mm_cmpnlt_ps"),
+            (&test_mm_cmpnle_ps, "test_mm_cmpnle_ps"),
+            (&test_mm_cmpngt_ps, "test_mm_cmpngt_ps"),
+            (&test_mm_cmpnge_ps, "test_mm_cmpnge_ps"),
+            (&test_mm_cmpord_ps, "test_mm_cmpord_ps"),
+            (&test_mm_cmpunord_ps, "test_mm_cmpunord_ps"),
+            (&test_mm_comieq_ss, "test_mm_comieq_ss"),
+            (&test_mm_comilt_ss, "test_mm_comilt_ss"),
+            (&test_mm_comile_ss, "test_mm_comile_ss"),
+            (&test_mm_comigt_ss, "test_mm_comigt_ss"),
+            (&test_mm_comige_ss, "test_mm_comige_ss"),
+            (&test_mm_comineq_ss, "test_mm_comineq_ss"),
+            (&test_mm_ucomieq_ss, "test_mm_ucomieq_ss"),
+            (&test_mm_ucomilt_ss, "test_mm_ucomilt_ss"),
+            (&test_mm_ucomile_ss, "test_mm_ucomile_ss"),
+            (&test_mm_ucomigt_ss, "test_mm_ucomigt_ss"),
+            (&test_mm_ucomige_ss, "test_mm_ucomige_ss"),
+            (&test_mm_ucomineq_ss, "test_mm_ucomineq_ss"),
+            (&test_mm_cvt_ss2si, "test_mm_cvt_ss2si"),
+            (&test_mm_cvttss_si32, "test_mm_cvttss_si32"),
+            (&test_mm_cvtt_ss2si, "test_mm_cvtt_ss2si"),
+            (&test_mm_cvt_si2ss, "test_mm_cvt_si2ss"),
+            (&test_mm_set_ps1, "test_mm_set_ps1"),
+            (&test_mm_setr_ps, "test_mm_setr_ps"),
+            (&test_mm_load_ss, "test_mm_load_ss"),
+            (&test_mm_load1_ps, "test_mm_load1_ps"),
+            (&test_mm_load_ps1, "test_mm_load_ps1"),
+            (&test_mm_loadr_ps, "test_mm_loadr_ps"),
+            (&test_mm_store_ss, "test_mm_store_ss"),
+            (&test_mm_store1_ps, "test_mm_store1_ps"),
+            (&test_mm_store_ps1, "test_mm_store_ps1"),
+            (&test_mm_storeu_ps, "test_mm_storeu_ps"),
+            (&test_mm_storer_ps, "test_mm_storer_ps"),
+        ]
+    }
+}
