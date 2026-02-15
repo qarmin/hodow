@@ -1,9 +1,10 @@
 use std::arch::x86_64::*;
-use crate::get_fuzzing;
-use crate::cpu::get_iterations;
+
 use log::info;
 
 use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, check_int_equality, get_random_float, get_random_float32_array};
+use crate::cpu::get_iterations;
+use crate::get_fuzzing;
 
 pub(super) fn test_mm_cvt_ss2si() -> Result<(), String> {
     unsafe {

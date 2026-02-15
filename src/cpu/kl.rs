@@ -5,8 +5,8 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{get_fuzzing, get_iterations, ExtensionTest, TestFunction};
 use crate::cpu::common::{check_array_equality, check_int_equality};
+use crate::cpu::{get_fuzzing, get_iterations, ExtensionTest, TestFunction};
 pub struct KL;
 impl ExtensionTest for KL {
     fn get_name() -> &'static str {

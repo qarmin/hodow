@@ -1,8 +1,8 @@
-use std::arch::x86_64::{__m128i, _mm_set_epi32, _mm_broadcastd_epi32};
+use std::arch::x86_64::{__m128i, _mm_broadcastd_epi32, _mm_set_epi32};
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality};
+use crate::cpu::common::check_array_equality;
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -17,7 +17,9 @@ pub(super) fn test_mm_broadcastd_epi32() -> Result<(), String> {
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
-            unsafe { let _ = _mm_broadcastd_epi32(_mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random())); }
+            unsafe {
+                let _ = _mm_broadcastd_epi32(_mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random()));
+            }
         }
     }
 

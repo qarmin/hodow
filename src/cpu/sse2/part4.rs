@@ -975,7 +975,7 @@ pub(super) fn test_mm_andnot_pd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 4.0);
         let result = _mm_andnot_pd(a, b);
         let res_bits = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&res_bits, & [4503599627370496, 4613937818241073152])?;
+        check_array_equality(&res_bits, &[4503599627370496, 4613937818241073152])?;
     }
 
     if get_fuzzing() {
@@ -1023,7 +1023,7 @@ pub(super) fn test_mm_xor_pd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 4.0);
         let result = _mm_xor_pd(a, b);
         let res_bits = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&res_bits, & [4503599627370496, 9221120237041090560])?;
+        check_array_equality(&res_bits, &[4503599627370496, 9221120237041090560])?;
     }
 
     if get_fuzzing() {

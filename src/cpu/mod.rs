@@ -64,13 +64,13 @@ mod sse2;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "sse3"))]
 mod sse3;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "sse4.1"))]
-mod sse4_1;
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "sse4.2"))]
-mod sse4_2;
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "sse4.1"))]
 mod sse41;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "sse4.2"))]
 mod sse42;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "sse4.1"))]
+mod sse4_1;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "sse4.2"))]
+mod sse4_2;
 
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "f16c"))]
 mod f16c;
@@ -84,12 +84,12 @@ mod bmi;
 mod bmi1;
 
 // new avx512 family modules
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512f"))]
-mod avx512fp16;
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512f"))]
-mod avx512dq;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512bw"))]
 mod avx512bw;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512f"))]
+mod avx512dq;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512f"))]
+mod avx512fp16;
 
 // small utility test module
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64")))]

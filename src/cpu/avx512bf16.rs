@@ -142,8 +142,8 @@ pub(super) fn test_mm_dpbf16_ps() -> Result<(), String> {
         let src: __m128 = _mm_setzero_ps();
         let a_bits: [u16; 8] = [0x3f80; 8];
         let b_bits: [u16; 8] = [0x4000; 8];
-        let a: __m128bh = std::mem::transmute::<[u16;8], __m128bh>(a_bits);
-        let b: __m128bh = std::mem::transmute::<[u16;8], __m128bh>(b_bits);
+        let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
+        let b: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits);
         let result_v = _mm_dpbf16_ps(src, a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
         check_float_array_equality_with_error(&result, &[4.0, 4.0, 4.0, 4.0])?;
@@ -175,8 +175,8 @@ pub(super) fn test_mm_mask_dpbf16_ps() -> Result<(), String> {
         let k: __mmask8 = 0xFFu8 as __mmask8;
         let a_bits: [u16; 8] = [0x3f80; 8];
         let b_bits: [u16; 8] = [0x3f80; 8];
-        let a: __m128bh = std::mem::transmute::<[u16;8], __m128bh>(a_bits);
-        let b: __m128bh = std::mem::transmute::<[u16;8], __m128bh>(b_bits);
+        let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
+        let b: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits);
         let result_v = _mm_mask_dpbf16_ps(src, k, a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
         check_float_array_equality_with_error(&result, &[2.0, 2.0, 2.0, 2.0])?;
@@ -208,8 +208,8 @@ pub(super) fn test_mm_maskz_dpbf16_ps() -> Result<(), String> {
         let src: __m128 = _mm_setzero_ps();
         let a_bits: [u16; 8] = [0x3f80; 8];
         let b_bits: [u16; 8] = [0x3f80; 8];
-        let a: __m128bh = std::mem::transmute::<[u16;8], __m128bh>(a_bits);
-        let b: __m128bh = std::mem::transmute::<[u16;8], __m128bh>(b_bits);
+        let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
+        let b: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits);
         let result_v = _mm_maskz_dpbf16_ps(k, src, a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
         check_float_array_equality_with_error(&result, &[2.0, 2.0, 2.0, 2.0])?;

@@ -33,7 +33,6 @@ impl ExtensionTest for AVX512F {
     }
 }
 
-
 fn test_mm512_add_ps() -> Result<(), String> {
     unsafe {
         let a = _mm512_set_ps(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0);
@@ -58,7 +57,6 @@ fn test_mm512_add_ps() -> Result<(), String> {
 
     Ok(())
 }
-
 
 fn test_mm512_sub_ps() -> Result<(), String> {
     unsafe {
@@ -85,7 +83,6 @@ fn test_mm512_sub_ps() -> Result<(), String> {
     Ok(())
 }
 
-
 fn test_mm512_mul_ps() -> Result<(), String> {
     unsafe {
         let a = _mm512_set1_ps(2.0);
@@ -110,7 +107,6 @@ fn test_mm512_mul_ps() -> Result<(), String> {
 
     Ok(())
 }
-
 
 fn test_mm512_div_ps() -> Result<(), String> {
     unsafe {
@@ -137,7 +133,6 @@ fn test_mm512_div_ps() -> Result<(), String> {
     Ok(())
 }
 
-
 fn test_mm512_add_pd() -> Result<(), String> {
     unsafe {
         let a = _mm512_set1_pd(5.0);
@@ -162,7 +157,6 @@ fn test_mm512_add_pd() -> Result<(), String> {
 
     Ok(())
 }
-
 
 fn test_mm512_sub_pd() -> Result<(), String> {
     unsafe {
@@ -189,7 +183,6 @@ fn test_mm512_sub_pd() -> Result<(), String> {
     Ok(())
 }
 
-
 fn test_mm512_mul_pd() -> Result<(), String> {
     unsafe {
         let a = _mm512_set1_pd(2.0);
@@ -214,7 +207,6 @@ fn test_mm512_mul_pd() -> Result<(), String> {
 
     Ok(())
 }
-
 
 fn test_mm512_div_pd() -> Result<(), String> {
     unsafe {
@@ -241,7 +233,6 @@ fn test_mm512_div_pd() -> Result<(), String> {
     Ok(())
 }
 
-
 fn test_mm512_max_ps() -> Result<(), String> {
     unsafe {
         let a = _mm512_set_ps(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0);
@@ -266,7 +257,6 @@ fn test_mm512_max_ps() -> Result<(), String> {
 
     Ok(())
 }
-
 
 fn test_mm512_min_ps() -> Result<(), String> {
     unsafe {
@@ -293,7 +283,6 @@ fn test_mm512_min_ps() -> Result<(), String> {
     Ok(())
 }
 
-
 fn test_mm512_sqrt_ps() -> Result<(), String> {
     unsafe {
         let data = [4.0, 9.0, 16.0, 25.0, 36.0, 49.0, 64.0, 81.0, 100.0, 121.0, 144.0, 169.0, 196.0, 225.0, 256.0, 289.0];
@@ -317,7 +306,6 @@ fn test_mm512_sqrt_ps() -> Result<(), String> {
     Ok(())
 }
 
-
 fn test_mm512_set1_ps() -> Result<(), String> {
     unsafe {
         let result = _mm512_set1_ps(3.13);
@@ -338,7 +326,6 @@ fn test_mm512_set1_ps() -> Result<(), String> {
     Ok(())
 }
 
-
 fn test_mm512_setzero_ps() -> Result<(), String> {
     unsafe {
         let result = _mm512_setzero_ps();
@@ -358,14 +345,16 @@ fn test_mm512_setzero_ps() -> Result<(), String> {
     Ok(())
 }
 
-
 fn test_mm_cvtsd_i64() -> Result<(), String> {
-    unsafe { let _ = (); }
+    unsafe {
+        let _ = ();
+    }
     Ok(())
 }
 
-
 fn test_mm_cvtss_i64() -> Result<(), String> {
-    unsafe { let _ = (); }
+    unsafe {
+        let _ = ();
+    }
     Ok(())
 }

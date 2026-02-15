@@ -1,10 +1,10 @@
 use std::arch::x86_64::*;
 
 use log::info;
+
+use crate::cpu::common::{get_random_i32_array, get_random_i64_array};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
-
-use crate::cpu::common::{get_random_i64_array, get_random_i32_array};
 
 // New minimal implementations for additional SSE2 tests
 pub(super) fn test_mm_cvtsd_si64() -> Result<(), String> {
@@ -12,7 +12,9 @@ pub(super) fn test_mm_cvtsd_si64() -> Result<(), String> {
         let a = _mm_set_pd(0.0, 42.0);
         let r = _mm_cvtsd_si64(a);
         // expect lower double (42.0) converted to 42
-        if r != 42 { return Err(format!("Got {r:?}, expected 42")); }
+        if r != 42 {
+            return Err(format!("Got {r:?}, expected 42"));
+        }
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -30,7 +32,9 @@ pub(super) fn test_mm_cvtsd_si64x() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(0.0, 7.0);
         let r = _mm_cvtsd_si64x(a);
-        if r != 7 { return Err(format!("Got {r:?}, expected 7")); }
+        if r != 7 {
+            return Err(format!("Got {r:?}, expected 7"));
+        }
     }
 
     Ok(())
@@ -40,7 +44,9 @@ pub(super) fn test_mm_cvttsd_si64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(0.0, 3.9);
         let r = _mm_cvttsd_si64(a);
-        if r != 3 { return Err(format!("Got {r:?}, expected 3")); }
+        if r != 3 {
+            return Err(format!("Got {r:?}, expected 3"));
+        }
     }
 
     Ok(())
@@ -50,7 +56,9 @@ pub(super) fn test_mm_cvttsd_si64x() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(0.0, -2.7);
         let r = _mm_cvttsd_si64x(a);
-        if r != -2 { return Err(format!("Got {r:?}, expected -2")); }
+        if r != -2 {
+            return Err(format!("Got {r:?}, expected -2"));
+        }
     }
 
     Ok(())
@@ -70,7 +78,9 @@ pub(super) fn test_mm_cvtsi64_si128() -> Result<(), String> {
         let v = _mm_cvtsi64_si128(42);
         let arr = std::mem::transmute::<__m128i, [i64; 2]>(v);
         // check that lowest 64-bit lane contains 42
-        if arr[0] != 42 { return Err(format!("Got {arr:?}, expected [42,..]")); }
+        if arr[0] != 42 {
+            return Err(format!("Got {arr:?}, expected [42,..]"));
+        }
     }
     Ok(())
 }
@@ -79,7 +89,9 @@ pub(super) fn test_mm_cvtsi64x_si128() -> Result<(), String> {
     unsafe {
         let v = _mm_cvtsi64x_si128(99);
         let arr = std::mem::transmute::<__m128i, [i64; 2]>(v);
-        if arr[0] != 99 { return Err(format!("Got {arr:?}, expected [99,..]")); }
+        if arr[0] != 99 {
+            return Err(format!("Got {arr:?}, expected [99,..]"));
+        }
     }
     Ok(())
 }

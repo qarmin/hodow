@@ -1,8 +1,6 @@
 use std::arch::x86_64::{
-    __m128d, __m128i,
-    _mm_set1_pd, _mm_storel_pd, _mm_set_pd, _mm_storeh_pd, _mm_storeu_pd, _mm_loadu_pd,
-    _mm_loadu_si32, _mm_loadu_si16, _mm_loadu_si64,
-    _mm_set_epi8, _mm_sub_epi8, _mm_clflush,
+    __m128d, __m128i, _mm_clflush, _mm_loadu_pd, _mm_loadu_si16, _mm_loadu_si32, _mm_loadu_si64, _mm_set1_pd, _mm_set_epi8, _mm_set_pd, _mm_storeh_pd, _mm_storel_pd,
+    _mm_storeu_pd, _mm_sub_epi8,
 };
 
 use log::info;
@@ -37,18 +35,30 @@ pub(super) fn test_mm_sub_epi8() -> Result<(), String> {
         let vec = _mm_sub_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(vec);
         // intrinsic yields increasing order [0..15] on target; adjust expected accordingly
-        check_array_equality(&result, &[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15])?;
+        check_array_equality(&result, &[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let a = _mm_set_epi8(
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
                 );
-                let b = _mm_set_epi8(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1);
+                let b = _mm_set_epi8(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
                 let _ = _mm_sub_epi8(a, b);
             }
         }
@@ -273,7 +283,9 @@ pub(super) fn test_mm_loadu_si64() -> Result<(), String> {
 
     if get_fuzzing() {
         info!("Starting fuzzing");
-        for _ in 0..get_iterations() { let _ = get_random_i64_array::<2>(); }
+        for _ in 0..get_iterations() {
+            let _ = get_random_i64_array::<2>();
+        }
     }
 
     Ok(())

@@ -7,6 +7,7 @@ use std::arch::x86::*;
 #[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::*;
 
+use crate::cpu::common::check_float_array_equality_with_error;
 use crate::cpu::sse::part1::*;
 use crate::cpu::sse::part2::*;
 use crate::cpu::sse::part3::*;
@@ -15,7 +16,9 @@ use crate::cpu::{ExtensionTest, TestFunction};
 pub struct SSE;
 
 impl ExtensionTest for SSE {
-    fn get_name() -> &'static str { "SSE" }
+    fn get_name() -> &'static str {
+        "SSE"
+    }
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
             (&test_mm_cmplt_ss, "test_mm_cmplt_ss"),
@@ -102,7 +105,9 @@ fn test_mm_cmpeq_ss() -> Result<(), String> {
 }
 
 fn test_mm_sfence() -> Result<(), String> {
-    unsafe { _mm_sfence(); }
+    unsafe {
+        _mm_sfence();
+    }
     Ok(())
 }
 
@@ -114,12 +119,16 @@ fn test_mm_getcsr() -> Result<(), String> {
 }
 
 fn test_mm_setcsr() -> Result<(), String> {
-    unsafe { _mm_setcsr(0); }
+    unsafe {
+        _mm_setcsr(0);
+    }
     Ok(())
 }
 
 fn test_mm_prefetch() -> Result<(), String> {
-    unsafe { _mm_prefetch::<3>(b"\0" as *const u8 as *const i8); }
+    unsafe {
+        _mm_prefetch::<3>(b"\0" as *const u8 as *const i8);
+    }
     Ok(())
 }
 

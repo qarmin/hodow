@@ -232,16 +232,22 @@ mod tests {
 }
 
 fn test_mm_lddqu_si128() -> Result<(), String> {
-    unsafe { let _ = (); }
+    unsafe {
+        let _ = ();
+    }
     Ok(())
 }
 
 fn test_mm_movedup_pd() -> Result<(), String> {
-    unsafe { let _ = (); }
+    unsafe {
+        let _ = ();
+    }
     Ok(())
 }
 
 fn test_mm_loaddup_pd() -> Result<(), String> {
-    unsafe { let _ = (); }
+    unsafe {
+        let _ = ();
+    }
     Ok(())
 }

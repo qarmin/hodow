@@ -1,12 +1,4 @@
 mod part1;
-mod part2;
-mod part3;
-mod part4;
-mod part5;
-mod part6;
-mod part7;
-mod part8;
-mod part9;
 mod part10;
 mod part11;
 mod part12;
@@ -15,6 +7,14 @@ mod part14;
 mod part15;
 mod part16;
 mod part17;
+mod part2;
+mod part3;
+mod part4;
+mod part5;
+mod part6;
+mod part7;
+mod part8;
+mod part9;
 
 #[cfg(target_arch = "x86")]
 use std::arch::x86::*;
@@ -22,14 +22,6 @@ use std::arch::x86::*;
 use std::arch::x86_64::*;
 
 use crate::cpu::avx512bw::part1::*;
-use crate::cpu::avx512bw::part2::*;
-use crate::cpu::avx512bw::part3::*;
-use crate::cpu::avx512bw::part4::*;
-use crate::cpu::avx512bw::part5::*;
-use crate::cpu::avx512bw::part6::*;
-use crate::cpu::avx512bw::part7::*;
-use crate::cpu::avx512bw::part8::*;
-use crate::cpu::avx512bw::part9::*;
 use crate::cpu::avx512bw::part10::*;
 use crate::cpu::avx512bw::part11::*;
 use crate::cpu::avx512bw::part12::*;
@@ -38,6 +30,14 @@ use crate::cpu::avx512bw::part14::*;
 use crate::cpu::avx512bw::part15::*;
 use crate::cpu::avx512bw::part16::*;
 use crate::cpu::avx512bw::part17::*;
+use crate::cpu::avx512bw::part2::*;
+use crate::cpu::avx512bw::part3::*;
+use crate::cpu::avx512bw::part4::*;
+use crate::cpu::avx512bw::part5::*;
+use crate::cpu::avx512bw::part6::*;
+use crate::cpu::avx512bw::part7::*;
+use crate::cpu::avx512bw::part8::*;
+use crate::cpu::avx512bw::part9::*;
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct AVX512BW;

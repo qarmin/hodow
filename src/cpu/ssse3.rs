@@ -52,16 +52,40 @@ fn test_mm_shuffle_epi8() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let a = _mm_set_epi8(
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
                 );
                 let b = _mm_set_epi8(
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
                 );
                 let _result = _mm_shuffle_epi8(a, b);
             }
@@ -84,10 +108,22 @@ fn test_mm_abs_epi8() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let a = _mm_set_epi8(
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
                 );
                 let _ = _mm_abs_epi8(a);
             }
@@ -110,8 +146,14 @@ fn test_mm_abs_epi16() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let a = _mm_set_epi16(
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
                 );
                 let _ = _mm_abs_epi16(a);
             }
@@ -156,16 +198,40 @@ fn test_mm_sign_epi8() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let a = _mm_set_epi8(
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
                 );
                 let b = _mm_set_epi8(
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
                 );
                 let _ = _mm_sign_epi8(a, b);
             }
@@ -189,12 +255,24 @@ fn test_mm_sign_epi16() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let a = _mm_set_epi16(
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
                 );
                 let b = _mm_set_epi16(
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
                 );
                 let _ = _mm_sign_epi16(a, b);
             }
@@ -242,12 +320,24 @@ fn test_mm_hadd_epi16() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let a = _mm_set_epi16(
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
                 );
                 let b = _mm_set_epi16(
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
                 );
                 let _ = _mm_hadd_epi16(a, b);
             }
@@ -271,12 +361,8 @@ fn test_mm_hadd_epi32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = _mm_set_epi32(
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                );
-                let b = _mm_set_epi32(
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                );
+                let a = _mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random());
+                let b = _mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random());
                 let _ = _mm_hadd_epi32(a, b);
             }
         }
@@ -300,12 +386,24 @@ fn test_mm_hsub_epi16() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let a = _mm_set_epi16(
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
                 );
                 let b = _mm_set_epi16(
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
                 );
                 let _ = _mm_hsub_epi16(a, b);
             }
@@ -329,12 +427,8 @@ fn test_mm_hsub_epi32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let a = _mm_set_epi32(
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                );
-                let b = _mm_set_epi32(
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                );
+                let a = _mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random());
+                let b = _mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random());
                 let _ = _mm_hsub_epi32(a, b);
             }
         }
@@ -358,16 +452,40 @@ fn test_mm_maddubs_epi16() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let a = _mm_set_epi8(
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
                 );
                 let b = _mm_set_epi8(
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
                 );
                 let _ = _mm_maddubs_epi16(a, b);
             }
@@ -392,16 +510,40 @@ fn test_mm_alignr_epi8() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let a = _mm_set_epi8(
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
                 );
                 let b = _mm_set_epi8(
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
-                    rand::random(), rand::random(), rand::random(), rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
+                    rand::random(),
                 );
                 let _ = _mm_alignr_epi8::<2>(a, b);
             }
@@ -411,7 +553,57 @@ fn test_mm_alignr_epi8() -> Result<(), String> {
     Ok(())
 }
 
-// New minimal stubs
-fn test_mm_hadds_epi16() -> Result<(), String> { unsafe { let _ = (); } Ok(()) }
-fn test_mm_hsubs_epi16() -> Result<(), String> { unsafe { let _ = (); } Ok(()) }
-fn test_mm_mulhrs_epi16() -> Result<(), String> { unsafe { let _ = (); } Ok(()) }
+fn test_mm_hadds_epi16() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_epi16(1, 2, 3, 4, 5, 6, 7, 8);
+        let b = _mm_set_epi16(8, 7, 6, 5, 4, 3, 2, 1);
+        let r = _mm_hadds_epi16(a, b);
+        let out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(r);
+        crate::cpu::common::check_array_equality(&out, &[9, 9, 9, 9, 9, 9, 9, 9])?;
+    }
+    if crate::get_fuzzing() {
+        crate::log::info!("Starting fuzzing");
+        for _ in 0..crate::cpu::get_iterations() {
+            unsafe {
+                let _ = _mm_hadds_epi16(_mm_set1_epi16(1), _mm_set1_epi16(1));
+            }
+        }
+    }
+    Ok(())
+}
+fn test_mm_hsubs_epi16() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_epi16(10, 9, 8, 7, 6, 5, 4, 3);
+        let b = _mm_set_epi16(1, 2, 3, 4, 5, 6, 7, 8);
+        let r = _mm_hsubs_epi16(a, b);
+        let out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(r);
+        crate::cpu::common::check_array_equality(&out, &[4, 3, 2, 1, 0, -1, -2, -3])?;
+    }
+    if crate::get_fuzzing() {
+        crate::log::info!("Starting fuzzing");
+        for _ in 0..crate::cpu::get_iterations() {
+            unsafe {
+                let _ = _mm_hsubs_epi16(_mm_set1_epi16(1), _mm_set1_epi16(1));
+            }
+        }
+    }
+    Ok(())
+}
+fn test_mm_mulhrs_epi16() -> Result<(), String> {
+    unsafe {
+        let a = _mm_set_epi16(1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000);
+        let b = _mm_set_epi16(2, 2, 2, 2, 2, 2, 2, 2);
+        let r = _mm_mulhrs_epi16(a, b);
+        let out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(r);
+        crate::cpu::common::check_array_equality(&out, &[62, 62, 62, 62, 62, 62, 62, 62])?;
+    }
+    if crate::get_fuzzing() {
+        crate::log::info!("Starting fuzzing");
+        for _ in 0..crate::cpu::get_iterations() {
+            unsafe {
+                let _ = _mm_mulhrs_epi16(_mm_set1_epi16(100), _mm_set1_epi16(2));
+            }
+        }
+    }
+    Ok(())
+}

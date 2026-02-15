@@ -4,6 +4,7 @@ use std::arch::x86::*;
 use std::arch::x86_64::*;
 
 use log::info;
+
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct PCLMULQDQ;
@@ -13,13 +14,13 @@ impl ExtensionTest for PCLMULQDQ {
         "PCLMULQDQ"
     }
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
-        &[
-            (&test_mm_clmulepi64_si128, "test_mm_clmulepi64_si128"),
-        ]
+        &[(&test_mm_clmulepi64_si128, "test_mm_clmulepi64_si128")]
     }
 }
 
 fn test_mm_clmulepi64_si128() -> Result<(), String> {
-    unsafe { let _ = (); }
+    unsafe {
+        let _ = ();
+    }
     Ok(())
 }
