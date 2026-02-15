@@ -22,8 +22,9 @@ mod avx512f;
 mod avx512ifma;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512vbmi"))]
 mod avx512vbmi;
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512bf16"))]
-mod avx512bf16;
+// TODO - unstable
+// #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512bf16"))]
+// mod avx512bf16;
 mod common;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "fma"))]
 mod fma;
