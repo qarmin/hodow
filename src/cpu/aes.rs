@@ -44,9 +44,8 @@ fn test_mm_aesdec_si128() -> Result<(), String> {
                 let _result = _mm_aesdec_si128(a, round_key);
             }
         }
-
-        Ok(())
     }
+    Ok(())
 }
 
 fn test_mm_aesdeclast_si128() -> Result<(), String> {
@@ -65,9 +64,8 @@ fn test_mm_aesdeclast_si128() -> Result<(), String> {
                 let _result = _mm_aesdeclast_si128(a, round_key);
             }
         }
-
-        Ok(())
     }
+    Ok(())
 }
 
 fn test_mm_aesenc_si128() -> Result<(), String> {
@@ -86,9 +84,8 @@ fn test_mm_aesenc_si128() -> Result<(), String> {
                 let _result = _mm_aesenc_si128(a, round_key);
             }
         }
-
-        Ok(())
     }
+    Ok(())
 }
 
 fn test_mm_aesenclast_si128() -> Result<(), String> {
@@ -107,9 +104,8 @@ fn test_mm_aesenclast_si128() -> Result<(), String> {
                 let _result = _mm_aesenclast_si128(a, round_key);
             }
         }
-
-        Ok(())
     }
+    Ok(())
 }
 
 fn test_mm_aesimc_si128() -> Result<(), String> {
@@ -126,9 +122,8 @@ fn test_mm_aesimc_si128() -> Result<(), String> {
                 let _result = _mm_aesimc_si128(a);
             }
         }
-
-        Ok(())
     }
+    Ok(())
 }
 
 fn test_mm_aeskeygenassist_si128() -> Result<(), String> {
@@ -145,7 +140,6 @@ fn test_mm_aeskeygenassist_si128() -> Result<(), String> {
                 let _result = _mm_aeskeygenassist_si128::<0x01>(a);
             }
         }
-
-        Ok(())
     }
+    Ok(())
 }

@@ -562,7 +562,7 @@ fn test_mm_hadds_epi16() -> Result<(), String> {
         crate::cpu::common::check_array_equality(&out, &[9, 9, 9, 9, 9, 9, 9, 9])?;
     }
     if crate::get_fuzzing() {
-        crate::log::info!("Starting fuzzing");
+        info!("Starting fuzzing");
         for _ in 0..crate::cpu::get_iterations() {
             unsafe {
                 let _ = _mm_hadds_epi16(_mm_set1_epi16(1), _mm_set1_epi16(1));
@@ -580,7 +580,7 @@ fn test_mm_hsubs_epi16() -> Result<(), String> {
         crate::cpu::common::check_array_equality(&out, &[4, 3, 2, 1, 0, -1, -2, -3])?;
     }
     if crate::get_fuzzing() {
-        crate::log::info!("Starting fuzzing");
+        info!("Starting fuzzing");
         for _ in 0..crate::cpu::get_iterations() {
             unsafe {
                 let _ = _mm_hsubs_epi16(_mm_set1_epi16(1), _mm_set1_epi16(1));
@@ -598,7 +598,7 @@ fn test_mm_mulhrs_epi16() -> Result<(), String> {
         crate::cpu::common::check_array_equality(&out, &[62, 62, 62, 62, 62, 62, 62, 62])?;
     }
     if crate::get_fuzzing() {
-        crate::log::info!("Starting fuzzing");
+        info!("Starting fuzzing");
         for _ in 0..crate::cpu::get_iterations() {
             unsafe {
                 let _ = _mm_mulhrs_epi16(_mm_set1_epi16(100), _mm_set1_epi16(2));
