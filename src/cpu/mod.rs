@@ -25,6 +25,33 @@ mod avx512vbmi;
 // TODO - unstable
 // #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512bf16"))]
 // mod avx512bf16;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512bf16"))]
+mod avx512bf16;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512vbmi2"))]
+mod avx512vbmi2;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512vnni"))]
+mod avx512vnni;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512vpopcntdq"))]
+mod avx512vpopcntdq;
+
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avxneconvert"))]
+mod avxneconvert;
+
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "gfni"))]
+mod gfni;
+
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "sha"))]
+mod sha;
+
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "sse"))]
+mod sse;
+
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "sse4a"))]
+mod sse4a;
+
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "ssse3"))]
+mod ssse3;
+
 mod common;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "fma"))]
 mod fma;
@@ -40,8 +67,33 @@ mod sse3;
 mod sse4_1;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "sse4.2"))]
 mod sse4_2;
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "ssse3"))]
-mod ssse3;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "sse4.1"))]
+mod sse41;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "sse4.2"))]
+mod sse42;
+
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "f16c"))]
+mod f16c;
+
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "pclmul"))]
+mod pclmulqdq;
+
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "bmi"))]
+mod bmi;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "bmi1"))]
+mod bmi1;
+
+// new avx512 family modules
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512f"))]
+mod avx512fp16;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512f"))]
+mod avx512dq;
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512bw"))]
+mod avx512bw;
+
+// small utility test module
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64")))]
+mod test;
 
 #[cfg(miri)]
 pub const DEFAULT_TEST_ITERATIONS: usize = 20;
@@ -192,13 +244,6 @@ pub fn test_all_extensions() -> Result<(), String> {
         {
             if std::arch::is_x86_feature_detected!("aes") {
                 crate::cpu::aes::AES::test()?;
-            }
-        }
-
-        #[cfg(target_feature = "kl")]
-        {
-            if std::arch::is_x86_feature_detected!("kl") {
-                crate::cpu::kl::KL::test()?;
             }
         }
     }
