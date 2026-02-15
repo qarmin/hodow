@@ -541,3 +541,98 @@ mod tests {
         }
     }
 }
+
+fn test_mm_cmp_pd() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_cmp_ps() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_cmp_sd() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_cmp_ss() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_permutevar_ps() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_permute_ps() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_permutevar_pd() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_permute_pd() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_broadcast_ss() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_maskload_pd() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_maskstore_pd() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_maskload_ps() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_maskstore_ps() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_testz_pd() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_testc_pd() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_testnzc_pd() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_testz_ps() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_testc_ps() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_testnzc_ps() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}

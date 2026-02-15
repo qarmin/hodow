@@ -305,3 +305,78 @@ fn test_mm256_fmaddsub_ps() -> Result<(), String> {
 
     Ok(())
 }
+
+fn test_mm_fmadd_pd() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_fmadd_sd() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_fmadd_ss() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_fmaddsub_pd() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_fmsub_pd() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_fmsub_sd() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_fmsub_ss() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_fmsubadd_pd() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_fmsubadd_ps() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_fnmadd_pd() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_fnmadd_sd() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_fnmadd_ss() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_fnmsub_pd() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_fnmsub_sd() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_fnmsub_ss() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}

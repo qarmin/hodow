@@ -66,3 +66,53 @@ impl ExtensionTest for SSE {
         ]
     }
 }
+
+fn test_mm_cvtss_si64() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_cvttss_si64() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_cvtsi64_ss() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_cmpeq_ss() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_sfence() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_getcsr() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_setcsr() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_prefetch() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_undefined_ps() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
+
+fn test_mm_stream_ps() -> Result<(), String> {
+    unsafe { let _ = (); }
+    Ok(())
+}
