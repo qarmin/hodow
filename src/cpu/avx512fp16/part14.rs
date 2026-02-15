@@ -88,4 +88,3 @@ pub(super) fn test_mm_mask_fmsubadd_ph() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_fmsubadd_ph() -> Result<(), String> { test_mm_mask_fmsubadd_ph() }

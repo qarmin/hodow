@@ -5,107 +5,122 @@ use log::info;
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
+use crate::cpu::common::{check_array_equality, get_random_i32_array};
+
 pub(super) fn test_mm_mask_reduce_mul_epi8() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_epi8(1,2,3,4,5,6,7,8,1,1,1,1,1,1,1,1);
+        let r = _mm_reduce_mul_epi8(a);
+        let _ = r;
     }
+    if get_fuzzing() { info!("Starting fuzzing"); for _ in 0..get_iterations() { unsafe { let _ = _mm_reduce_mul_epi8(_mm_set1_epi8(get_random_i32_array::<4>()[0] as i8)); } } }
     Ok(())
 }
 
 pub(super) fn test_mm_reduce_or_epi16() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_epi16(0x1,0x2,0x4,0x8,0x10,0x20,0x40,0x80);
+        let r = _mm_reduce_or_epi16(a);
+        let _ = r;
     }
+    if get_fuzzing() { info!("Starting fuzzing"); for _ in 0..get_iterations() { unsafe { let _ = _mm_reduce_or_epi16(_mm_set1_epi16(get_random_i32_array::<4>()[0] as i16)); } } }
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_or_epi16() -> Result<(), String> {
-    unsafe {
-        let _ = ();
-    }
-    Ok(())
-}
+pub(super) fn test_mm_mask_reduce_or_epi16() -> Result<(), String> { test_mm_reduce_or_epi16() }
 
 pub(super) fn test_mm_reduce_or_epi8() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_epi8(1,2,4,8,16,32,64,127,1,2,4,8,16,32,64,127);
+        let r = _mm_reduce_or_epi8(a);
+        let _ = r;
     }
+    if get_fuzzing() { info!("Starting fuzzing"); for _ in 0..get_iterations() { unsafe { let _ = _mm_reduce_or_epi8(_mm_set1_epi8(get_random_i32_array::<4>()[0] as i8)); } } }
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_or_epi8() -> Result<(), String> {
-    unsafe {
-        let _ = ();
-    }
-    Ok(())
-}
+pub(super) fn test_mm_mask_reduce_or_epi8() -> Result<(), String> { test_mm_reduce_or_epi8() }
 
 pub(super) fn test_mm_loadu_epi16() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let data = [1i16,2,3,4,5,6,7,8];
+        let r = _mm_loadu_epi16(data.as_ptr());
+        let _out: [i16;8] = std::mem::transmute::<__m128i, [i16;8]>(r);
     }
+    if get_fuzzing() { info!("Starting fuzzing"); for _ in 0..get_iterations() { unsafe { let _ = _mm_loadu_epi16(get_random_i32_array::<4>().as_ptr() as *const i16); } } }
     Ok(())
 }
 
 pub(super) fn test_mm_loadu_epi8() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let data = [1i8,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
+        let r = _mm_loadu_epi8(data.as_ptr());
+        let _out: [i8;16] = std::mem::transmute::<__m128i, [i8;16]>(r);
     }
+    if get_fuzzing() { info!("Starting fuzzing"); for _ in 0..get_iterations() { unsafe { let _ = _mm_loadu_epi8(get_random_i32_array::<4>().as_ptr() as *const i8); } } }
     Ok(())
 }
 
 pub(super) fn test_mm_storeu_epi16() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_epi16(1,2,3,4,5,6,7,8);
+        let mut buf = [0i16;8];
+        _mm_storeu_epi16(buf.as_mut_ptr(), a);
     }
+    if get_fuzzing() { info!("Starting fuzzing"); for _ in 0..get_iterations() { unsafe { let _ = _mm_storeu_epi16(get_random_i32_array::<4>().as_ptr() as *mut i16, _mm_set1_epi16(get_random_i32_array::<4>()[0] as i16)); } } }
     Ok(())
 }
 
 pub(super) fn test_mm_storeu_epi8() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_epi8(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16);
+        let mut buf = [0i8;16];
+        _mm_storeu_epi8(buf.as_mut_ptr(), a);
     }
+    if get_fuzzing() { info!("Starting fuzzing"); for _ in 0..get_iterations() { unsafe { let _ = _mm_storeu_epi8(get_random_i32_array::<4>().as_ptr() as *mut i8, _mm_set1_epi8(get_random_i32_array::<4>()[0] as i8)); } } }
     Ok(())
 }
 
 pub(super) fn test_mm_mask_loadu_epi16() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let data = [1i16,2,3,4,5,6,7,8];
+        let r = _mm_mask_loadu_epi16(_mm_set1_epi16(0), 0b1111u32, data.as_ptr());
+        let _out: [i16;8] = std::mem::transmute::<__m128i, [i16;8]>(r);
     }
+    if get_fuzzing() { info!("Starting fuzzing"); for _ in 0..get_iterations() { unsafe { let _ = _mm_mask_loadu_epi16(_mm_set1_epi16(0), 0, get_random_i32_array::<4>().as_ptr() as *const i16); } } }
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_loadu_epi16() -> Result<(), String> {
-    unsafe {
-        let _ = ();
-    }
-    Ok(())
-}
+pub(super) fn test_mm_maskz_loadu_epi16() -> Result<(), String> { test_mm_mask_loadu_epi16() }
 
 pub(super) fn test_mm_mask_loadu_epi8() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let data = [1i8,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16];
+        let r = _mm_mask_loadu_epi8(_mm_set1_epi8(0), 0b1111u32, data.as_ptr());
+        let _out: [i8;16] = std::mem::transmute::<__m128i, [i8;16]>(r);
     }
+    if get_fuzzing() { info!("Starting fuzzing"); for _ in 0..get_iterations() { unsafe { let _ = _mm_mask_loadu_epi8(_mm_set1_epi8(0), 0, get_random_i32_array::<4>().as_ptr() as *const i8); } } }
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_loadu_epi8() -> Result<(), String> {
-    unsafe {
-        let _ = ();
-    }
-    Ok(())
-}
+pub(super) fn test_mm_maskz_loadu_epi8() -> Result<(), String> { test_mm_mask_loadu_epi8() }
 
 pub(super) fn test_mm_mask_storeu_epi16() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_epi16(1,2,3,4,5,6,7,8);
+        let mut buf = [0i16;8];
+        _mm_mask_storeu_epi16(buf.as_mut_ptr(), 0b1111u32, a);
     }
+    if get_fuzzing() { info!("Starting fuzzing"); for _ in 0..get_iterations() { unsafe { let mut buf = [0i16;8]; _mm_mask_storeu_epi16(buf.as_mut_ptr(), 0, _mm_set1_epi16(get_random_i32_array::<4>()[0] as i16)); } } }
     Ok(())
 }
 
 pub(super) fn test_mm_mask_storeu_epi8() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_epi8(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16);
+        let mut buf = [0i8;16];
+        _mm_mask_storeu_epi8(buf.as_mut_ptr(), 0b1111u32, a);
     }
+    if get_fuzzing() { info!("Starting fuzzing"); for _ in 0..get_iterations() { unsafe { let mut buf = [0i8;16]; _mm_mask_storeu_epi8(buf.as_mut_ptr(), 0, _mm_set1_epi8(get_random_i32_array::<4>()[0] as i8)); } } }
     Ok(())
 }

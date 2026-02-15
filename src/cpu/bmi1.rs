@@ -7,6 +7,8 @@ use log::info;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
+use crate::cpu::common::get_random_i32_array;
+
 pub struct BMI1;
 
 impl ExtensionTest for BMI1 {
@@ -20,7 +22,10 @@ impl ExtensionTest for BMI1 {
 
 fn test_mm_tzcnt_32() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = 0b0010u32;
+        let r = _tzcnt_u32(a);
+        let _ = r;
     }
+    if crate::get_fuzzing() { info!("Starting fuzzing"); for _ in 0..crate::cpu::get_iterations() { unsafe { let _ = _tzcnt_u32(get_random_i32_array::<4>()[0] as u32); } } }
     Ok(())
 }
