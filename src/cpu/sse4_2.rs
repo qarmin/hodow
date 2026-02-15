@@ -33,14 +33,12 @@ fn test_mm_cmpgt_epi64() -> Result<(), String> {
         let result = _mm_cmpgt_epi64(a, b);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
         check_array_equality(&result, &[0, -1])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
-                let a = _mm_set_epi64x(rand::random(), rand::random());
-                let b = _mm_set_epi64x(rand::random(), rand::random());
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let a = _mm_set_epi64x(get_random_i32_array::<4>()[0] as i64, get_random_i32_array::<4>()[1] as i64);
+                let b = _mm_set_epi64x(get_random_i32_array::<4>()[2] as i64, get_random_i32_array::<4>()[3] as i64);
                 let _result = _mm_cmpgt_epi64(a, b);
             }
         }
@@ -56,14 +54,12 @@ fn test_mm_crc32_u8() -> Result<(), String> {
         let result = _mm_crc32_u8(crc, data);
 
         check_int_equality(result, 2910671697u32)?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
-                let crc: u32 = rand::random();
-                let data: u8 = rand::random();
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let crc: u32 = get_random_i32_array::<4>()[0] as u32;
+                let data: u8 = (get_random_i32_array::<4>()[1] & 0xFF) as u8;
                 let _result = _mm_crc32_u8(crc, data);
             }
         }
@@ -79,14 +75,12 @@ fn test_mm_crc32_u16() -> Result<(), String> {
         let result = _mm_crc32_u16(crc, data);
 
         check_int_equality(result, 245266386)?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
-                let crc: u32 = rand::random();
-                let data: u16 = rand::random();
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let crc: u32 = get_random_i32_array::<4>()[0] as u32;
+                let data: u16 = get_random_i32_array::<4>()[1] as u16;
                 let _result = _mm_crc32_u16(crc, data);
             }
         }
@@ -102,14 +96,12 @@ fn test_mm_crc32_u32() -> Result<(), String> {
         let result = _mm_crc32_u32(crc, data);
 
         check_int_equality(result, 3080238136)?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
-                let crc: u32 = rand::random();
-                let data: u32 = rand::random();
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let crc: u32 = get_random_i32_array::<4>()[0] as u32;
+                let data: u32 = get_random_i32_array::<4>()[1] as u32;
                 let _result = _mm_crc32_u32(crc, data);
             }
         }
@@ -120,7 +112,15 @@ fn test_mm_crc32_u32() -> Result<(), String> {
 
 fn test_mm_cmpistrm() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set1_epi8(0);
+        let b = _mm_set1_epi8(0);
+        let _res = _mm_cmpistrm(a, b, 0);
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let _ = _mm_cmpistrm(a, b, 0);
+            }
+        }
     }
 
     Ok(())

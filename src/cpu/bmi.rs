@@ -25,13 +25,12 @@ fn test_mm_tzcnt_64() -> Result<(), String> {
         let x: u64 = 8;
         let c = x.trailing_zeros();
         check_int_equality(c, 3)?;
-    }
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let r = get_random_i32_array::<4>()[0] as u64;
-                let _ = r.trailing_zeros();
+                let _tz = r.trailing_zeros();
             }
         }
     }

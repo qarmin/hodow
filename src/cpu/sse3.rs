@@ -36,12 +36,10 @@ fn test_mm_hadd_ps() -> Result<(), String> {
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
 
         check_float_array_equality_with_error(&result, &[7.0, 3.0, 15.0, 11.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let a = get_random_float32_array::<4>();
                 let b = get_random_float32_array::<4>();
                 let _result = _mm_hadd_ps(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]));
@@ -60,12 +58,10 @@ fn test_mm_hsub_ps() -> Result<(), String> {
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
 
         check_float_array_equality_with_error(&result, &[1.0, 1.0, 1.0, 1.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let a = get_random_float32_array::<4>();
                 let b = get_random_float32_array::<4>();
                 let _result = _mm_hsub_ps(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]));
@@ -84,12 +80,10 @@ fn test_mm_addsub_ps() -> Result<(), String> {
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
 
         check_float_array_equality_with_error(&result, &[-4.0, 10.0, -4.0, 6.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let a = get_random_float32_array::<4>();
                 let b = get_random_float32_array::<4>();
                 let _result = _mm_addsub_ps(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]));
@@ -107,12 +101,10 @@ fn test_mm_movehdup_ps() -> Result<(), String> {
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
 
         check_float_array_equality_with_error(&result, &[3.0, 3.0, 1.0, 1.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let a = get_random_float32_array::<4>();
                 let _result = _mm_movehdup_ps(_mm_set_ps(a[3], a[2], a[1], a[0]));
             }
@@ -129,12 +121,10 @@ fn test_mm_moveldup_ps() -> Result<(), String> {
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
 
         check_float_array_equality_with_error(&result, &[4.0, 4.0, 2.0, 2.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let a = get_random_float32_array::<4>();
                 let _result = _mm_moveldup_ps(_mm_set_ps(a[3], a[2], a[1], a[0]));
             }
@@ -151,12 +141,10 @@ fn test_mm_hadd_pd() -> Result<(), String> {
         let result = _mm_hadd_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
         check_float_array_equality_with_error(&result, &[3.0, 7.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let a1 = get_random_float() as f64;
                 let a2 = get_random_float() as f64;
                 let b1 = get_random_float() as f64;
@@ -176,12 +164,10 @@ fn test_mm_hsub_pd() -> Result<(), String> {
         let result = _mm_hsub_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
         check_float_array_equality_with_error(&result, &[-2.0, -2.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let a1 = get_random_float() as f64;
                 let a2 = get_random_float() as f64;
                 let b1 = get_random_float() as f64;
@@ -201,12 +187,10 @@ fn test_mm_addsub_pd() -> Result<(), String> {
         let result = _mm_addsub_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
         check_float_array_equality_with_error(&result, &[2.0, 3.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let a1 = get_random_float() as f64;
                 let a2 = get_random_float() as f64;
                 let b1 = get_random_float() as f64;
@@ -233,21 +217,42 @@ mod tests {
 
 fn test_mm_lddqu_si128() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let _zero = _mm_setzero_si128();
+        let _ = _zero;
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let _ = _mm_setzero_si128();
+            }
+        }
     }
     Ok(())
 }
 
 fn test_mm_movedup_pd() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_pd(1.0, 2.0);
+        let _res = _mm_movedup_pd(a);
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let _ = _mm_movedup_pd(_mm_set_pd(1.0, 2.0));
+            }
+        }
     }
     Ok(())
 }
 
 fn test_mm_loaddup_pd() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let _a = _mm_set_pd(1.0, 2.0);
+        let _res = _mm_loaddup_pd(&1.0);
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let _ = _mm_loaddup_pd(&1.0);
+            }
+        }
     }
     Ok(())
 }
