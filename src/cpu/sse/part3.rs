@@ -5,7 +5,6 @@ use log::info;
 
 use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, check_int_equality, get_random_float, get_random_float32_array};
 
-// next 15 SSE tests
 pub(super) fn test_mm_cvt_ss2si() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ss(3.13);
@@ -44,7 +43,6 @@ pub(super) fn test_mm_cvttss_si32() -> Result<(), String> {
     Ok(())
 }
 
-// alias-like variant (some naming differences in intrinsics headers)
 pub(super) fn test_mm_cvtt_ss2si() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ss(-2.7);
@@ -73,7 +71,7 @@ pub(super) fn test_mm_cvt_si2ss() -> Result<(), String> {
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
-                let v = (get_random_float() as i32);
+                let v = get_random_float() as i32;
                 let _ = _mm_cvt_si2ss(_mm_setzero_ps(), v);
             }
         }
@@ -181,7 +179,6 @@ pub(super) fn test_mm_loadr_ps() -> Result<(), String> {
         let data = [1.0f32, 2.0f32, 3.0f32, 4.0f32];
         let a = _mm_loadr_ps(data.as_ptr());
         let arr = std::mem::transmute::<__m128, [f32; 4]>(a);
-        // _mm_loadr_ps loads in reverse order compared to memory: expect [4,3,2,1]
         check_float_array_equality_with_error(&arr, &[4.0, 3.0, 2.0, 1.0])?;
 
         if get_fuzzing() {
@@ -201,7 +198,7 @@ pub(super) fn test_mm_store_ss() -> Result<(), String> {
         let vec = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let mut mem = [0.0f32];
         _mm_store_ss(mem.as_mut_ptr(), vec);
-        check_float_array_equality_with_error(&mem, &[4.0])?; // lower element was 4.0
+        check_float_array_equality_with_error(&mem, &[4.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -280,10 +277,9 @@ pub(super) fn test_mm_storeu_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_storer_ps() -> Result<(), String> {
     unsafe {
-        let vec = _mm_set_ps(1.0, 2.0, 3.0, 4.0); // reg holds [4,3,2,1]
+        let vec = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let mut mem = [0.0f32; 4];
         _mm_storer_ps(mem.as_mut_ptr(), vec);
-        // _mm_storer_ps stores in reverse order, so expect [1,2,3,4]
         check_float_array_equality_with_error(&mem, &[1.0, 2.0, 3.0, 4.0])?;
 
         if get_fuzzing() {

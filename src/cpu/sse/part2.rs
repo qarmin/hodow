@@ -5,15 +5,13 @@ use log::info;
 
 use crate::cpu::common::{check_float_array_equality_with_error, check_int_equality, get_random_float32_array};
 
-// next 15 SSE tests (vector comparisons and scalar ordered/unordered checks)
 pub(super) fn test_mm_cmpnge_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let b = _mm_set_ps(1.0, 2.0, 3.0, 5.0);
         let result = _mm_cmpnge_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // cmpnge checks !(a >= b) element-wise, here last element a< b -> true mask
-        if result[0] == 0.0 && result[1] == 0.0 && result[2] == 0.0 && result[3] == 0.0 { return Err(format!("Got {result:?}, expected some non-zero mask")); }
+        check_float_array_equality_with_error(&result, &[0.0, 0.0, 0.0, f32::NAN])?;
     }
 
     if get_fuzzing() {
@@ -38,8 +36,7 @@ pub(super) fn test_mm_cmpord_ps() -> Result<(), String> {
         let b = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let result = _mm_cmpord_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // ord is true when neither is NaN; expect all ones (non-zero). Check at least one is non-zero
-        if result[0] == 0.0 && result[1] == 0.0 && result[2] == 0.0 && result[3] == 0.0 { return Err(format!("Got {result:?}, expected non-zero mask")); }
+        check_float_array_equality_with_error(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN])?;
     }
 
     if get_fuzzing() {
@@ -64,8 +61,7 @@ pub(super) fn test_mm_cmpunord_ps() -> Result<(), String> {
         let b = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let result = _mm_cmpunord_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        // unord is true when either is NaN: expect non-zero in at least one position
-        if result.iter().all(|&x| x == 0.0) { return Err(format!("Got {result:?}, expected non-zero mask")); }
+        check_float_array_equality_with_error(&result, &[f32::NAN, 0.0, 0.0, 0.0])?;
     }
 
     if get_fuzzing() {
@@ -89,7 +85,7 @@ pub(super) fn test_mm_comieq_ss() -> Result<(), String> {
         let a = _mm_set_ss(1.0);
         let b = _mm_set_ss(1.0);
         let result = _mm_comieq_ss(a, b);
-        check_int_equality(result, 0)?; // COMI returns 0 for true per stdarch mapping
+        check_int_equality(result, 0)?;
     }
 
     Ok(())

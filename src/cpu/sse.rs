@@ -85,8 +85,7 @@ fn test_mm_cvttss_si64() -> Result<(), String> {
 
 fn test_mm_cvtsi64_ss() -> Result<(), String> {
     unsafe {
-        let a = _mm_cvtsi64_ss(_mm_setzero_ps(), 42);
-        let _ = std::mem::transmute::<__m128, [f32; 4]>(a);
+        let _ = _mm_cvtsi64_ss(_mm_setzero_ps(), 42);
     }
     Ok(())
 }
@@ -97,7 +96,7 @@ fn test_mm_cmpeq_ss() -> Result<(), String> {
         let b = _mm_set_ss(1.0);
         let r = _mm_cmpeq_ss(a, b);
         let r = std::mem::transmute::<__m128, [f32; 4]>(r);
-        if r[0] == 0.0 { return Err(format!("Got {r:?}, expected non-zero mask")); }
+        check_float_array_equality_with_error(&r, &[f32::NAN, 0.0, 0.0, 0.0])?;
     }
     Ok(())
 }
@@ -120,7 +119,7 @@ fn test_mm_setcsr() -> Result<(), String> {
 }
 
 fn test_mm_prefetch() -> Result<(), String> {
-    unsafe { _mm_prefetch(b"\0" as *const u8 as *const i8); }
+    unsafe { _mm_prefetch::<3>(b"\0" as *const u8 as *const i8); }
     Ok(())
 }
 
@@ -132,7 +131,6 @@ fn test_mm_undefined_ps() -> Result<(), String> {
 }
 
 fn test_mm_stream_ps() -> Result<(), String> {
-    // stream_ps is non-fatal; just call it on an aligned buffer
     unsafe {
         #[repr(align(16))]
         struct Al([f32; 4]);
