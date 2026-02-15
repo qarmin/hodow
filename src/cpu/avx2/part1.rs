@@ -22,8 +22,8 @@ pub(super) fn test_mm256_add_epi32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = crate::cpu::avx2::get_eight_random_i32();
-                let arr2 = crate::cpu::avx2::get_eight_random_i32();
+                let arr1 = crate::cpu::common::get_random_i32_array::<8>();
+                let arr2 = crate::cpu::common::get_random_i32_array::<8>();
                 let _ = _mm256_add_epi32(
                     _mm256_set_epi32(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
                     _mm256_set_epi32(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
@@ -48,8 +48,8 @@ pub(super) fn test_mm256_sub_epi32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = crate::cpu::avx2::get_eight_random_i32();
-                let arr2 = crate::cpu::avx2::get_eight_random_i32();
+                let arr1 = crate::cpu::common::get_random_i32_array::<8>();
+                let arr2 = crate::cpu::common::get_random_i32_array::<8>();
                 let _ = _mm256_sub_epi32(
                     _mm256_set_epi32(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
                     _mm256_set_epi32(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
@@ -74,8 +74,8 @@ pub(super) fn test_mm256_mullo_epi32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = crate::cpu::avx2::get_eight_random_i32();
-                let arr2 = crate::cpu::avx2::get_eight_random_i32();
+                let arr1 = crate::cpu::common::get_random_i32_array::<8>();
+                let arr2 = crate::cpu::common::get_random_i32_array::<8>();
                 let _ = _mm256_mullo_epi32(
                     _mm256_set_epi32(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
                     _mm256_set_epi32(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
@@ -118,8 +118,8 @@ pub(super) fn test_mm256_and_si256() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = crate::cpu::avx2::get_eight_random_i32();
-                let arr2 = crate::cpu::avx2::get_eight_random_i32();
+                let arr1 = crate::cpu::common::get_random_i32_array::<8>();
+                let arr2 = crate::cpu::common::get_random_i32_array::<8>();
                 let _ = _mm256_and_si256(
                     _mm256_set_epi32(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
                     _mm256_set_epi32(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
@@ -162,8 +162,8 @@ pub(super) fn test_mm256_or_si256() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = crate::cpu::avx2::get_eight_random_i32();
-                let arr2 = crate::cpu::avx2::get_eight_random_i32();
+                let arr1 = crate::cpu::common::get_random_i32_array::<8>();
+                let arr2 = crate::cpu::common::get_random_i32_array::<8>();
                 let _ = _mm256_or_si256(
                     _mm256_set_epi32(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
                     _mm256_set_epi32(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
@@ -206,8 +206,8 @@ pub(super) fn test_mm256_xor_si256() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = crate::cpu::avx2::get_eight_random_i32();
-                let arr2 = crate::cpu::avx2::get_eight_random_i32();
+                let arr1 = crate::cpu::common::get_random_i32_array::<8>();
+                let arr2 = crate::cpu::common::get_random_i32_array::<8>();
                 let _ = _mm256_xor_si256(
                     _mm256_set_epi32(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
                     _mm256_set_epi32(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
@@ -231,7 +231,7 @@ pub(super) fn test_mm256_slli_epi32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr = crate::cpu::avx2::get_eight_random_i32();
+                let arr = crate::cpu::common::get_random_i32_array::<8>();
                 let _ = _mm256_slli_epi32::<2>(_mm256_set_epi32(arr[7], arr[6], arr[5], arr[4], arr[3], arr[2], arr[1], arr[0]));
             }
         }
@@ -252,7 +252,7 @@ pub(super) fn test_mm256_srli_epi32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr = crate::cpu::avx2::get_eight_random_i32();
+                let arr = crate::cpu::common::get_random_i32_array::<8>();
                 let _ = _mm256_srli_epi32::<2>(_mm256_set_epi32(arr[7], arr[6], arr[5], arr[4], arr[3], arr[2], arr[1], arr[0]));
             }
         }
@@ -273,7 +273,7 @@ pub(super) fn test_mm256_abs_epi32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr = crate::cpu::avx2::get_eight_random_i32();
+                let arr = crate::cpu::common::get_random_i32_array::<8>();
                 let _ = _mm256_abs_epi32(_mm256_set_epi32(arr[7], arr[6], arr[5], arr[4], arr[3], arr[2], arr[1], arr[0]));
             }
         }
@@ -295,8 +295,8 @@ pub(super) fn test_mm256_max_epi32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = crate::cpu::avx2::get_eight_random_i32();
-                let arr2 = crate::cpu::avx2::get_eight_random_i32();
+                let arr1 = crate::cpu::common::get_random_i32_array::<8>();
+                let arr2 = crate::cpu::common::get_random_i32_array::<8>();
                 let _ = _mm256_max_epi32(
                     _mm256_set_epi32(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
                     _mm256_set_epi32(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
@@ -321,8 +321,8 @@ pub(super) fn test_mm256_min_epi32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = crate::cpu::avx2::get_eight_random_i32();
-                let arr2 = crate::cpu::avx2::get_eight_random_i32();
+                let arr1 = crate::cpu::common::get_random_i32_array::<8>();
+                let arr2 = crate::cpu::common::get_random_i32_array::<8>();
                 let _ = _mm256_min_epi32(
                     _mm256_set_epi32(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
                     _mm256_set_epi32(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),
@@ -443,8 +443,8 @@ pub(super) fn test_mm256_hadd_epi32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let arr1 = crate::cpu::avx2::get_eight_random_i32();
-                let arr2 = crate::cpu::avx2::get_eight_random_i32();
+                let arr1 = crate::cpu::common::get_random_i32_array::<8>();
+                let arr2 = crate::cpu::common::get_random_i32_array::<8>();
                 let _ = _mm256_hadd_epi32(
                     _mm256_set_epi32(arr1[7], arr1[6], arr1[5], arr1[4], arr1[3], arr1[2], arr1[1], arr1[0]),
                     _mm256_set_epi32(arr2[7], arr2[6], arr2[5], arr2[4], arr2[3], arr2[2], arr2[1], arr2[0]),

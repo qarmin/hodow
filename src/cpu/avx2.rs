@@ -75,16 +75,3 @@ impl ExtensionTest for AVX2 {
         ]
     }
 }
-
-fn get_eight_random_i32() -> [i32; 8] {
-    [
-        rand::random(),
-        rand::random(),
-        rand::random(),
-        rand::random(),
-        rand::random(),
-        rand::random(),
-        rand::random(),
-        rand::random(),
-    ]
-}
