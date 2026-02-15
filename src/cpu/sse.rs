@@ -68,51 +68,76 @@ impl ExtensionTest for SSE {
 }
 
 fn test_mm_cvtss_si64() -> Result<(), String> {
-    unsafe { let _ = (); }
+    unsafe {
+        let a = _mm_set_ss(3.0);
+        let _ = _mm_cvtss_si64(a);
+    }
     Ok(())
 }
 
 fn test_mm_cvttss_si64() -> Result<(), String> {
-    unsafe { let _ = (); }
+    unsafe {
+        let a = _mm_set_ss(3.9);
+        let _ = _mm_cvttss_si64(a);
+    }
     Ok(())
 }
 
 fn test_mm_cvtsi64_ss() -> Result<(), String> {
-    unsafe { let _ = (); }
+    unsafe {
+        let a = _mm_cvtsi64_ss(_mm_setzero_ps(), 42);
+        let _ = std::mem::transmute::<__m128, [f32; 4]>(a);
+    }
     Ok(())
 }
 
 fn test_mm_cmpeq_ss() -> Result<(), String> {
-    unsafe { let _ = (); }
+    unsafe {
+        let a = _mm_set_ss(1.0);
+        let b = _mm_set_ss(1.0);
+        let r = _mm_cmpeq_ss(a, b);
+        let r = std::mem::transmute::<__m128, [f32; 4]>(r);
+        if r[0] == 0.0 { return Err(format!("Got {r:?}, expected non-zero mask")); }
+    }
     Ok(())
 }
 
 fn test_mm_sfence() -> Result<(), String> {
-    unsafe { let _ = (); }
+    unsafe { _mm_sfence(); }
     Ok(())
 }
 
 fn test_mm_getcsr() -> Result<(), String> {
-    unsafe { let _ = (); }
+    unsafe {
+        let _ = _mm_getcsr();
+    }
     Ok(())
 }
 
 fn test_mm_setcsr() -> Result<(), String> {
-    unsafe { let _ = (); }
+    unsafe { _mm_setcsr(0); }
     Ok(())
 }
 
 fn test_mm_prefetch() -> Result<(), String> {
-    unsafe { let _ = (); }
+    unsafe { _mm_prefetch(b"\0" as *const u8 as *const i8); }
     Ok(())
 }
 
 fn test_mm_undefined_ps() -> Result<(), String> {
-    unsafe { let _ = (); }
+    unsafe {
+        let _ = _mm_undefined_ps();
+    }
     Ok(())
 }
 
 fn test_mm_stream_ps() -> Result<(), String> {
-    unsafe { let _ = (); }
+    // stream_ps is non-fatal; just call it on an aligned buffer
+    unsafe {
+        #[repr(align(16))]
+        struct Al([f32; 4]);
+        let mut v = Al([1.0, 2.0, 3.0, 4.0]);
+        _mm_stream_ps(v.0.as_mut_ptr(), _mm_set_ps(4.0, 3.0, 2.0, 1.0));
+    }
     Ok(())
 }

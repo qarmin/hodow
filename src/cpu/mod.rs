@@ -75,10 +75,10 @@ mod sse42;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "f16c"))]
 mod f16c;
 
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "pclmul"))]
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "pclmulqdq"))]
 mod pclmulqdq;
 
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "bmi"))]
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "bmi2"))]
 mod bmi;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "bmi1"))]
 mod bmi1;
