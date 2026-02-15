@@ -168,9 +168,9 @@ pub(super) fn test_mm_maskz_range_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_range_round_sd() -> Result<(), String> {
     unsafe {
-        let x = _mm_set_sd(3.14);
+        let x = _mm_set_sd(3.17);
         let s = _mm_cvtsd_f64(x);
-        crate::cpu::common::check_float_equality(s as f32, 3.14f32, 0.01f32)?;
+        crate::cpu::common::check_float_equality(s as f32, 3.17f32, 0.01f32)?;
     }
 
     if get_fuzzing() {

@@ -69,9 +69,9 @@ pub(super) fn test_mm_sub_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm_store1_pd() -> Result<(), String> {
     let mut data = [0.0f64; 2];
-    let vec = unsafe { _mm_set1_pd(3.14) };
+    let vec = unsafe { _mm_set1_pd(3.17) };
     unsafe { _mm_storel_pd(data.as_mut_ptr(), vec) };
-    check_float_array_equality_with_error(&data, &[3.14, 0.0])?;
+    check_float_array_equality_with_error(&data, &[3.17, 0.0])?;
 
     if get_fuzzing() {
         info!("Starting fuzzing");

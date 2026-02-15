@@ -91,10 +91,6 @@ mod avx512dq;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512f"))]
 mod avx512fp16;
 
-// small utility test module
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64")))]
-mod test;
-
 #[cfg(miri)]
 pub const DEFAULT_TEST_ITERATIONS: usize = 20;
 #[cfg(not(miri))]
