@@ -1,3 +1,6 @@
+
+use log::info;
+
 fn test_mm_mask3_fmadd_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_ps(1.0);

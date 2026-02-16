@@ -1,3 +1,6 @@
+check:
+   RUSTFLAGS="-C target-cpu=native" cargo +nightly check --message-format short
+
 run *args:
     RUSTFLAGS="-C target-cpu=native" cargo +nightly run {{args}}
 
