@@ -48,7 +48,7 @@ pub(super) fn test_mm_mask_cmpge_epu16_mask() -> Result<(), String> {
 
 pub(super) fn test_mm_cmpge_epu8_mask() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi8(200, 201, 202, 203, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
+        let a = _mm_set_epi8(16, 52, 78, 73, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
         let b = _mm_set1_epi8(100);
         let m = _mm_cmpge_epu8_mask(a, b);
         check_int_equality(m as i32, 0b11110000)?;

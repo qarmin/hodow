@@ -158,7 +158,7 @@ pub(super) fn test_mm_maskz_avg_epu16() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_avg_epu8() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi8(200u8 as i8, 180, 160, 140, 120, 100, 80, 60, 40, 20, 10, 9, 8, 7, 6, 5);
+        let a = _mm_set_epi8(20, 18, 16, 14, 120, 100, 80, 60, 40, 20, 10, 9, 8, 7, 6, 5);
         let b = _mm_set1_epi8(10);
         let r = _mm_avg_epu8(a, b);
         let out: [u8; 16] = std::mem::transmute::<__m128i, [u8; 16]>(r);

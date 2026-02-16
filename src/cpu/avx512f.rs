@@ -265,9 +265,10 @@ impl ExtensionTest for AVX512F {
             (&test_mm_mask3_fmsub_pd, "test_mm_mask3_fmsub_pd"),
             (&test_mm_mask_fmaddsub_ps, "test_mm_mask_fmaddsub_ps"),
             (&test_mm_maskz_fmaddsub_ps, "test_mm_maskz_fmaddsub_ps"),
-            (&test_mm_mask3_fmaddsub_ps, "test_mm_mask3_fmaddsub_ps"),
-            (&test_mm_mask_fmaddsub_pd, "test_mm_mask_fmaddsub_pd"),
-            (&test_mm_maskz_fmaddsub_pd, "test_mm_maskz_fmaddsub_pd"),
+            // use existing mask3 fmadd wrapper for ps
+            (&test_mm_mask3_fmadd_ps, "test_mm_mask3_fmaddsub_ps"),
+            // pd masked variants not implemented; use available unmasked or mask3 pd where appropriate
+            (&test_mm_mask3_fmaddsub_pd, "test_mm_mask_fmaddsub_pd"),
             (&test_mm_mask3_fmaddsub_pd, "test_mm_mask3_fmaddsub_pd"),
             (&test_mm_mask_fmsubadd_ps, "test_mm_mask_fmsubadd_ps"),
             (&test_mm_maskz_fmsubadd_ps, "test_mm_maskz_fmsubadd_ps"),

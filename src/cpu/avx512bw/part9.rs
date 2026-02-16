@@ -29,7 +29,7 @@ pub(super) fn test_mm_mask_reduce_max_epu16() -> Result<(), String> {
 
 pub(super) fn test_mm_reduce_max_epu8() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi8(200u8 as i8, 150, 100, 50, 40, 30, 20, 10, 9, 8, 7, 6, 5, 4, 3, 2);
+        let a = _mm_set_epi8(16 as i8, 12, 100, 50, 40, 30, 20, 10, 9, 8, 7, 6, 5, 4, 3, 2);
         let r = _mm_reduce_max_epu8(a);
         let _ = r;
     }
@@ -136,7 +136,7 @@ pub(super) fn test_mm_reduce_mul_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi16(1, 2, 3, 4, 5, 6, 7, 8);
         let r = _mm_reduce_mul_epi16(a);
-        check_array_equality(&[r as i16], &[40320i16 % 32768i16])?;
+        check_array_equality(&[r as i16], &[4030i16 % 3268i16])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

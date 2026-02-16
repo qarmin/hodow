@@ -366,7 +366,7 @@ fn test_mm_fmadd_ss() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_fmaddsub_pd() -> Result<(), String> {
+pub(super) fn test_mm_fmaddsub_pd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(1.0, 2.0);
         let b = _mm_set_pd(2.0, 3.0);
