@@ -25,8 +25,6 @@ mod avx512vbmi;
 // TODO - unstable
 // #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512bf16"))]
 // mod avx512bf16;
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512bf16"))]
-mod avx512bf16;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512vbmi2"))]
 mod avx512vbmi2;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512vnni"))]
@@ -88,8 +86,9 @@ mod bmi1;
 mod avx512bw;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512f"))]
 mod avx512dq;
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512f"))]
-mod avx512fp16;
+// Unstable
+// #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512f"))]
+// mod avx512fp16;
 
 #[cfg(miri)]
 pub const DEFAULT_TEST_ITERATIONS: usize = 20;
@@ -290,9 +289,10 @@ pub fn available_modes() -> Vec<&'static str> {
         if std::arch::is_x86_feature_detected!("avx512bitalg") {
             modes.push("avx512bitalg");
         }
-        if std::arch::is_x86_feature_detected!("avx512bf16") {
-            modes.push("avx512bf16");
-        }
+        // unstable
+        // if std::arch::is_x86_feature_detected!("avx512bf16") {
+        //     modes.push("avx512bf16");
+        // }
         if std::arch::is_x86_feature_detected!("avx512cd") {
             modes.push("avx512cd");
         }
