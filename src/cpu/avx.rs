@@ -686,7 +686,7 @@ fn test_mm_permute_pd() -> Result<(), String> {
 }
 fn test_mm_broadcast_ss() -> Result<(), String> {
     unsafe {
-        let r = _mm_broadcast_ss(&1.0f32 as *const f32);
+        let r = _mm_broadcast_ss(&1.0f32);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         crate::cpu::common::check_float_array_equality_with_error(&out, &[1.0, 1.0, 1.0, 1.0])?;
     }
@@ -694,7 +694,7 @@ fn test_mm_broadcast_ss() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..crate::cpu::get_iterations() {
             unsafe {
-                let _ = _mm_broadcast_ss(&1.0f32 as *const f32);
+                let _ = _mm_broadcast_ss(&1.0f32);
             }
         }
     }

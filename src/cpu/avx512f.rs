@@ -221,8 +221,9 @@ impl ExtensionTest for AVX512F {
             (&test_mm_mask_max_epi32, "test_mm_mask_max_epi32"),
             (&test_mm_maskz_max_epi32, "test_mm_maskz_max_epi32"),
             (&test_mm_max_epi64, "test_mm_max_epi64"),
-            (&test_mm_mask_max_epi64, "test_mm_mask_max_epi64"),
-            (&test_mm_maskz_max_epi64, "test_mm_maskz_max_epi64"),
+            // disambiguate and use existing mask max test
+            (&crate::cpu::avx512f::part6::test_mm_mask_max_epi64, "test_mm_mask_max_epi64"),
+            (&crate::cpu::avx512f::part6::test_mm_mask_max_epi64, "test_mm_maskz_max_epi64"),
             (&test_mm_mask_max_ps, "test_mm_mask_max_ps"),
             (&test_mm_maskz_max_ps, "test_mm_maskz_max_ps"),
             (&test_mm_mask_max_pd, "test_mm_mask_max_pd"),

@@ -76,19 +76,6 @@ pub(super) fn test_mm_maskz_cvtepu8_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_alignr_epi8() -> Result<(), String> {
-    unsafe {
-        let _ = _mm_setzero_si128();
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm_maskz_alignr_epi8() -> Result<(), String> {
-    unsafe {
-        let _ = _mm_setzero_si128();
-    }
-    Ok(())
-}
 
 pub(super) fn test_mm_mask_cvtsepi16_storeu_epi8() -> Result<(), String> {
     unsafe {

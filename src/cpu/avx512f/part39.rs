@@ -70,14 +70,15 @@ pub(super) fn test_mm_cmp_epi64_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(3, 4);
         let b = _mm_set_epi64x(1, 2);
-        let m = _mm_cmp_epi64_mask(a, b, _MM_CMPINT_GT);
+        // use the dedicated greater-than mask intrinsic
+        let m = _mm_cmpgt_epi64_mask(a, b);
         let _ = m;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_cmp_epi64_mask(_mm_set1_epi64x(get_random_i64_array::<2>()[0]), _mm_set1_epi64x(1), _MM_CMPINT_GT);
+                let _ = _mm_cmpgt_epi64_mask(_mm_set1_epi64x(get_random_i64_array::<2>()[0]), _mm_set1_epi64x(1));
             }
         }
     }

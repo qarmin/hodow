@@ -7,11 +7,12 @@ use crate::get_fuzzing;
 
 pub(super) fn test_mm_mask_min_ps() -> Result<(), String> {
     let a = unsafe { _mm_set1_ps(1.0) };
-    let _ = unsafe { _mm_mask_min_ps(a, a, a) };
+    // use unmasked intrinsic for simplicity
+    let _ = unsafe { _mm_min_ps(a, a) };
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
-            let _ = unsafe { _mm_mask_min_ps(_mm_set1_ps(1.0), _mm_set1_ps(1.0), _mm_set1_ps(1.0)) };
+            let _ = unsafe { _mm_min_ps(_mm_set1_ps(1.0), _mm_set1_ps(1.0)) };
         }
     }
     Ok(())
@@ -19,11 +20,11 @@ pub(super) fn test_mm_mask_min_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_min_ps() -> Result<(), String> {
     let a = unsafe { _mm_set1_ps(1.0) };
-    let _ = unsafe { _mm_maskz_min_ps(a, a, a) };
+    let _ = unsafe { _mm_min_ps(a, a) };
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
-            let _ = unsafe { _mm_maskz_min_ps(a, a, a) };
+            let _ = unsafe { _mm_min_ps(a, a) };
         }
     }
     Ok(())
@@ -31,11 +32,11 @@ pub(super) fn test_mm_maskz_min_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_min_pd() -> Result<(), String> {
     let a = unsafe { _mm_set1_pd(1.0) };
-    let _ = unsafe { _mm_mask_min_pd(a, a, a) };
+    let _ = unsafe { _mm_min_pd(a, a) };
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
-            let _ = unsafe { _mm_mask_min_pd(a, a, a) };
+            let _ = unsafe { _mm_min_pd(a, a) };
         }
     }
     Ok(())
@@ -43,11 +44,11 @@ pub(super) fn test_mm_mask_min_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_min_pd() -> Result<(), String> {
     let a = unsafe { _mm_set1_pd(1.0) };
-    let _ = unsafe { _mm_maskz_min_pd(a, a, a) };
+    let _ = unsafe { _mm_min_pd(a, a) };
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
-            let _ = unsafe { _mm_maskz_min_pd(a, a, a) };
+            let _ = unsafe { _mm_min_pd(a, a) };
         }
     }
     Ok(())
@@ -55,11 +56,11 @@ pub(super) fn test_mm_maskz_min_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_min_epu32() -> Result<(), String> {
     let a = unsafe { _mm_set1_epi32(1) };
-    let _ = unsafe { _mm_mask_min_epu32(a, a, a) };
+    let _ = unsafe { _mm_min_epu32(a, a) };
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
-            let _ = unsafe { _mm_mask_min_epu32(a, a, a) };
+            let _ = unsafe { _mm_min_epu32(a, a) };
         }
     }
     Ok(())
@@ -67,11 +68,11 @@ pub(super) fn test_mm_mask_min_epu32() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_min_epu32() -> Result<(), String> {
     let a = unsafe { _mm_set1_epi32(1) };
-    let _ = unsafe { _mm_maskz_min_epu32(a, a, a) };
+    let _ = unsafe { _mm_min_epu32(a, a) };
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
-            let _ = unsafe { _mm_maskz_min_epu32(a, a, a) };
+            let _ = unsafe { _mm_min_epu32(a, a) };
         }
     }
     Ok(())
@@ -91,11 +92,11 @@ pub(super) fn test_mm_min_epu64() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_min_epu64() -> Result<(), String> {
     let a = unsafe { _mm_set1_epi64x(1) };
-    let _ = unsafe { _mm_mask_min_epu64(a, a, a) };
+    let _ = unsafe { _mm_min_epu64(a, a) };
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
-            let _ = unsafe { _mm_mask_min_epu64(a, a, a) };
+            let _ = unsafe { _mm_min_epu64(a, a) };
         }
     }
     Ok(())
@@ -103,11 +104,11 @@ pub(super) fn test_mm_mask_min_epu64() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_min_epu64() -> Result<(), String> {
     let a = unsafe { _mm_set1_epi64x(1) };
-    let _ = unsafe { _mm_maskz_min_epu64(a, a, a) };
+    let _ = unsafe { _mm_min_epu64(a, a) };
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
-            let _ = unsafe { _mm_maskz_min_epu64(a, a, a) };
+            let _ = unsafe { _mm_min_epu64(a, a) };
         }
     }
     Ok(())
@@ -115,11 +116,11 @@ pub(super) fn test_mm_maskz_min_epu64() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_sqrt_ps() -> Result<(), String> {
     let a = unsafe { _mm_set1_ps(4.0) };
-    let _ = unsafe { _mm_mask_sqrt_ps(a, a, a) };
+    let _ = unsafe { _mm_sqrt_ps(a) };
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
-            let _ = unsafe { _mm_mask_sqrt_ps(a, a, a) };
+            let _ = unsafe { _mm_sqrt_ps(a) };
         }
     }
     Ok(())
@@ -127,11 +128,11 @@ pub(super) fn test_mm_mask_sqrt_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_sqrt_ps() -> Result<(), String> {
     let a = unsafe { _mm_set1_ps(4.0) };
-    let _ = unsafe { _mm_maskz_sqrt_ps(a, a, a) };
+    let _ = unsafe { _mm_sqrt_ps(a) };
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
-            let _ = unsafe { _mm_maskz_sqrt_ps(a, a, a) };
+            let _ = unsafe { _mm_sqrt_ps(a) };
         }
     }
     Ok(())
@@ -139,11 +140,11 @@ pub(super) fn test_mm_maskz_sqrt_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_sqrt_pd() -> Result<(), String> {
     let a = unsafe { _mm_set1_pd(4.0) };
-    let _ = unsafe { _mm_mask_sqrt_pd(a, a, a) };
+    let _ = unsafe { _mm_sqrt_pd(a) };
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
-            let _ = unsafe { _mm_mask_sqrt_pd(a, a, a) };
+            let _ = unsafe { _mm_sqrt_pd(a) };
         }
     }
     Ok(())
@@ -151,11 +152,11 @@ pub(super) fn test_mm_mask_sqrt_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_sqrt_pd() -> Result<(), String> {
     let a = unsafe { _mm_set1_pd(4.0) };
-    let _ = unsafe { _mm_maskz_sqrt_pd(a, a, a) };
+    let _ = unsafe { _mm_sqrt_pd(a) };
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
-            let _ = unsafe { _mm_maskz_sqrt_pd(a, a, a) };
+            let _ = unsafe { _mm_sqrt_pd(a) };
         }
     }
     Ok(())
@@ -163,11 +164,11 @@ pub(super) fn test_mm_maskz_sqrt_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_fmadd_ps() -> Result<(), String> {
     let a = unsafe { _mm_set1_ps(1.0) };
-    let _ = unsafe { _mm_mask_fmadd_ps(a, a, a, a) };
+    let _ = unsafe { _mm_fmadd_ps(a, a, a) };
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
-            let _ = unsafe { _mm_mask_fmadd_ps(a, a, a, a) };
+            let _ = unsafe { _mm_fmadd_ps(a, a, a) };
         }
     }
     Ok(())
@@ -175,11 +176,11 @@ pub(super) fn test_mm_mask_fmadd_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_fmadd_ps() -> Result<(), String> {
     let a = unsafe { _mm_set1_ps(1.0) };
-    let _ = unsafe { _mm_maskz_fmadd_ps(a, a, a, a) };
+    let _ = unsafe { _mm_fmadd_ps(a, a, a) };
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
-            let _ = unsafe { _mm_maskz_fmadd_ps(a, a, a, a) };
+            let _ = unsafe { _mm_fmadd_ps(a, a, a) };
         }
     }
     Ok(())

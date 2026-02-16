@@ -23,6 +23,7 @@ pub(super) fn test_mm_ceil_pd() -> Result<(), String> {
 pub(super) fn test_mm_ceil_sd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_sd(1.5);
+        // scalar variant takes two __m128d arguments (dest, src)
         let _res = _mm_ceil_sd(a, a);
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -37,6 +38,7 @@ pub(super) fn test_mm_ceil_sd() -> Result<(), String> {
 pub(super) fn test_mm_ceil_ss() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ss(1.5);
+        // scalar variant takes two __m128 arguments (dest, src)
         let _res = _mm_ceil_ss(a, a);
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -150,11 +152,12 @@ pub(super) fn test_mm_test_all_zeros() -> Result<(), String> {
 pub(super) fn test_mm_test_all_ones() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_epi8(-1);
-        let _res = _mm_test_all_ones(a, a);
+        // intrinsic takes single argument
+        let _res = _mm_test_all_ones(a);
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
-                let _ = _mm_test_all_ones(_mm_set1_epi8(-1), _mm_set1_epi8(-1));
+                let _ = _mm_test_all_ones(_mm_set1_epi8(-1));
             }
         }
     }

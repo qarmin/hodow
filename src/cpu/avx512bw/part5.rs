@@ -178,6 +178,3 @@ pub(super) fn test_mm_cmple_epi8_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmple_epi8_mask() -> Result<(), String> {
-    test_mm_cmple_epi8_mask()
-}
