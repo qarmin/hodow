@@ -174,6 +174,3 @@ pub(super) fn test_mm_mask_avg_epu8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_avg_epu8() -> Result<(), String> {
-    test_mm_mask_avg_epu8()
-}

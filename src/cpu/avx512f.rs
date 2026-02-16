@@ -63,6 +63,68 @@ use std::arch::x86::*;
 #[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::*;
 
+use crate::cpu::avx512f::part1::*;
+use crate::cpu::avx512f::part2::*;
+use crate::cpu::avx512f::part3::*;
+use crate::cpu::avx512f::part4::*;
+use crate::cpu::avx512f::part5::*;
+use crate::cpu::avx512f::part6::*;
+use crate::cpu::avx512f::part7::*;
+use crate::cpu::avx512f::part8::*;
+use crate::cpu::avx512f::part9::*;
+use crate::cpu::avx512f::part10::*;
+use crate::cpu::avx512f::part11::*;
+use crate::cpu::avx512f::part12::*;
+use crate::cpu::avx512f::part13::*;
+use crate::cpu::avx512f::part14::*;
+use crate::cpu::avx512f::part15::*;
+use crate::cpu::avx512f::part16::*;
+use crate::cpu::avx512f::part17::*;
+use crate::cpu::avx512f::part18::*;
+use crate::cpu::avx512f::part19::*;
+use crate::cpu::avx512f::part20::*;
+use crate::cpu::avx512f::part21::*;
+use crate::cpu::avx512f::part22::*;
+use crate::cpu::avx512f::part23::*;
+use crate::cpu::avx512f::part24::*;
+use crate::cpu::avx512f::part25::*;
+use crate::cpu::avx512f::part26::*;
+use crate::cpu::avx512f::part27::*;
+use crate::cpu::avx512f::part28::*;
+use crate::cpu::avx512f::part29::*;
+use crate::cpu::avx512f::part30::*;
+use crate::cpu::avx512f::part31::*;
+use crate::cpu::avx512f::part32::*;
+use crate::cpu::avx512f::part33::*;
+use crate::cpu::avx512f::part34::*;
+use crate::cpu::avx512f::part35::*;
+use crate::cpu::avx512f::part36::*;
+use crate::cpu::avx512f::part37::*;
+use crate::cpu::avx512f::part38::*;
+use crate::cpu::avx512f::part39::*;
+use crate::cpu::avx512f::part40::*;
+use crate::cpu::avx512f::part41::*;
+use crate::cpu::avx512f::part42::*;
+use crate::cpu::avx512f::part43::*;
+use crate::cpu::avx512f::part44::*;
+use crate::cpu::avx512f::part45::*;
+use crate::cpu::avx512f::part46::*;
+use crate::cpu::avx512f::part47::*;
+use crate::cpu::avx512f::part48::*;
+use crate::cpu::avx512f::part49::*;
+use crate::cpu::avx512f::part50::*;
+use crate::cpu::avx512f::part51::*;
+use crate::cpu::avx512f::part52::*;
+use crate::cpu::avx512f::part53::*;
+use crate::cpu::avx512f::part54::*;
+use crate::cpu::avx512f::part55::*;
+use crate::cpu::avx512f::part56::*;
+use crate::cpu::avx512f::part57::*;
+use crate::cpu::avx512f::part58::*;
+use crate::cpu::avx512f::part59::*;
+
+
+
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct AVX512F;
