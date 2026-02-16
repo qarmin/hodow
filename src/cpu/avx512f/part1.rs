@@ -10,29 +10,6 @@ use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
 use crate::get_fuzzing;
 pub struct AVX512F;
 
-impl ExtensionTest for AVX512F {
-    fn get_name() -> &'static str {
-        "AVX-512F"
-    }
-    fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
-        &[
-            (&test_mm512_add_ps, "test_mm512_add_ps"),
-            (&test_mm512_sub_ps, "test_mm512_sub_ps"),
-            (&test_mm512_mul_ps, "test_mm512_mul_ps"),
-            (&test_mm512_div_ps, "test_mm512_div_ps"),
-            (&test_mm512_add_pd, "test_mm512_add_pd"),
-            (&test_mm512_sub_pd, "test_mm512_sub_pd"),
-            (&test_mm512_mul_pd, "test_mm512_mul_pd"),
-            (&test_mm512_div_pd, "test_mm512_div_pd"),
-            (&test_mm512_max_ps, "test_mm512_max_ps"),
-            (&test_mm512_min_ps, "test_mm512_min_ps"),
-            (&test_mm512_sqrt_ps, "test_mm512_sqrt_ps"),
-            (&test_mm512_set1_ps, "test_mm512_set1_ps"),
-            (&test_mm512_setzero_ps, "test_mm512_setzero_ps"),
-        ]
-    }
-}
-
 fn test_mm512_add_ps() -> Result<(), String> {
     unsafe {
         let a = _mm512_set_ps(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0);
