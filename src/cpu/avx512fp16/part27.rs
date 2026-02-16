@@ -74,14 +74,14 @@ pub(super) fn test_mm_maskz_cvtsh_ss() -> Result<(), String> {
 pub(super) fn test_mm_cvt_roundsh_ss() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_ps(4.25);
-        let r = _mm_cvt_roundsh_ss::<0>(a);
+        let r = _mm_cvt_roundsh_ss(a);
         let _ = r;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_cvt_roundsh_ss::<0>(_mm_set1_ps(get_random_float32_array::<1>()[0]));
+                let _ = _mm_cvt_roundsh_ss(_mm_set1_ps(get_random_float32_array::<1>()[0]));
             }
         }
     }

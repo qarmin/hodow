@@ -28,14 +28,14 @@ pub(super) fn test_mm_cmp_epi8_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_epi8(5);
         let b = _mm_set1_epi8(3);
-        let m = _mm_cmp_epi8_mask(a, b, _MM_CMPINT_GT);
+        let m = _mm_cmp_epi8_mask(a, b, _MM_CMPINT_LT);
         let _ = m;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_cmp_epi8_mask(_mm_set1_epi8(get_random_i32_array::<4>()[0] as i8), _mm_set1_epi8(1), _MM_CMPINT_GT);
+                let _ = _mm_cmp_epi8_mask(_mm_set1_epi8(get_random_i32_array::<4>()[0] as i8), _mm_set1_epi8(1), _MM_CMPINT_LT);
             }
         }
     }

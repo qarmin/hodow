@@ -26,14 +26,14 @@ pub(super) fn test_mm_maskz_cvtsh_sd() -> Result<(), String> {
 pub(super) fn test_mm_cvt_roundsh_sd() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_ps(4.25);
-        let r = _mm_cvt_roundsh_sd::<0>(_mm_set1_pd(1.0), a);
+        let r = _mm_cvt_roundsh_sd(_mm_set1_pd(1.0), a);
         let _out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_cvt_roundsh_sd::<0>(_mm_set1_pd(1.0), _mm_set1_ps(get_random_i32_array::<4>()[0] as f32));
+                let _ = _mm_cvt_roundsh_sd(_mm_set1_pd(1.0), _mm_set1_ps(get_random_i32_array::<4>()[0] as f32));
             }
         }
     }

@@ -26,14 +26,14 @@ pub(super) fn test_mm_cvti64_sh() -> Result<(), String> {
 pub(super) fn test_mm_cvt_roundi64_sh() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_ps(4.5);
-        let r = _mm_cvt_roundi64_sh::<0>(a);
+        let r = _mm_cvt_roundi64_sh(a);
         let _ = r;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_cvt_roundi64_sh::<0>(_mm_set1_ps(get_random_i64_array::<1>()[0] as f32));
+                let _ = _mm_cvt_roundi64_sh(_mm_set1_ps(get_random_i64_array::<1>()[0] as f32));
             }
         }
     }
@@ -60,14 +60,14 @@ pub(super) fn test_mm_cvtu64_sh() -> Result<(), String> {
 pub(super) fn test_mm_cvt_roundu64_sh() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_ps(6.0);
-        let r = _mm_cvt_roundu64_sh::<0>(a);
+        let r = _mm_cvt_roundu64_sh(a);
         let _ = r;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_cvt_roundu64_sh::<0>(_mm_set1_ps(get_random_i64_array::<1>()[0] as f32));
+                let _ = _mm_cvt_roundu64_sh(_mm_set1_ps(get_random_i64_array::<1>()[0] as f32));
             }
         }
     }
@@ -94,14 +94,14 @@ pub(super) fn test_mm_cvtsh_i64() -> Result<(), String> {
 pub(super) fn test_mm_cvt_roundsh_i64() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_epi64x(4);
-        let r = _mm_cvt_roundsh_i64::<0>(a);
+        let r = _mm_cvt_roundsh_i64(a);
         let _ = r;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_cvt_roundsh_i64::<0>(_mm_set1_epi64x(get_random_i64_array::<1>()[0]));
+                let _ = _mm_cvt_roundsh_i64(_mm_set1_epi64x(get_random_i64_array::<1>()[0]));
             }
         }
     }
@@ -128,14 +128,14 @@ pub(super) fn test_mm_cvtsh_u64() -> Result<(), String> {
 pub(super) fn test_mm_cvt_roundsh_u64() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_epi64x(6);
-        let r = _mm_cvt_roundsh_u64::<0>(a);
+        let r = _mm_cvt_roundsh_u64(a);
         let _ = r;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_cvt_roundsh_u64::<0>(_mm_set1_epi64x(get_random_i64_array::<1>()[0]));
+                let _ = _mm_cvt_roundsh_u64(_mm_set1_epi64x(get_random_i64_array::<1>()[0]));
             }
         }
     }
@@ -162,14 +162,14 @@ pub(super) fn test_mm_cvttsh_i64() -> Result<(), String> {
 pub(super) fn test_mm_cvtt_roundsh_i64() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_epi64x(8);
-        let r = _mm_cvtt_roundsh_i64::<0>(a);
+        let r = _mm_cvtt_roundsh_i64(a);
         let _ = r;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_cvtt_roundsh_i64::<0>(_mm_set1_epi64x(get_random_i64_array::<1>()[0]));
+                let _ = _mm_cvtt_roundsh_i64(_mm_set1_epi64x(get_random_i64_array::<1>()[0]));
             }
         }
     }
@@ -196,14 +196,14 @@ pub(super) fn test_mm_cvttsh_u64() -> Result<(), String> {
 pub(super) fn test_mm_cvtt_roundsh_u64() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_epi64x(10);
-        let r = _mm_cvtt_roundsh_u64::<0>(a);
+        let r = _mm_cvtt_roundsh_u64(a);
         let _ = r;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_cvtt_roundsh_u64::<0>(_mm_set1_epi64x(get_random_i64_array::<1>()[0]));
+                let _ = _mm_cvtt_roundsh_u64(_mm_set1_epi64x(get_random_i64_array::<1>()[0]));
             }
         }
     }
