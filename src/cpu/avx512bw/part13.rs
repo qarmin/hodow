@@ -137,14 +137,14 @@ pub(super) fn test_mm_mask_blend_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi16(1, 2, 3, 4, 5, 6, 7, 8);
         let b = _mm_set_epi16(8, 7, 6, 5, 4, 3, 2, 1);
-        let r = _mm_mask_blend_epi16(0b10101010u32, a, b);
+        let r = _mm_mask_blend_epi16(123, a, b);
         let _out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(r);
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_mask_blend_epi16(0b10101010u32, _mm_set1_epi16(get_random_i32_array::<4>()[0] as i16), _mm_set1_epi16(1));
+                let _ = _mm_mask_blend_epi16(123, _mm_set1_epi16(get_random_i32_array::<4>()[0] as i16), _mm_set1_epi16(1));
             }
         }
     }

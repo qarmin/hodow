@@ -10,14 +10,16 @@ pub(super) fn test_mm_mask_blend_epi8() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi8(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
         let b = _mm_set_epi8(16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1);
-        let r = _mm_mask_blend_epi8(0b10101010u32, a, b);
+        // mask is __mmask16 -> use u16 literal
+        let r = _mm_mask_blend_epi8(0b10101010u16, a, b);
         let _out: [i8; 16] = std::mem::transmute::<__m128i, [i8; 16]>(r);
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_mask_blend_epi8(0b10101010u32, _mm_set1_epi8(get_random_i32_array::<4>()[0] as i8), _mm_set1_epi8(1));
+                // mask is __mmask16 -> use u16 literal
+                let _ = _mm_mask_blend_epi8(0b10101010u16, _mm_set1_epi8(get_random_i32_array::<4>()[0] as i8), _mm_set1_epi8(1));
             }
         }
     }
@@ -159,7 +161,8 @@ pub(super) fn test_mm_maskz_unpacklo_epi8() -> Result<(), String> {
 pub(super) fn test_mm_mask_mov_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi16(1, 2, 3, 4, 5, 6, 7, 8);
-        let r = _mm_mask_mov_epi16(a, _mm_set1_epi16(0), a);
+        // second argument is a mask (__mmask8), pass scalar u8 instead of __m128i
+        let r = _mm_mask_mov_epi16(a, 0u8, a);
         let out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(r);
         check_array_equality(&out, &[1i16, 2, 3, 4, 5, 6, 7, 8])?;
     }
@@ -167,7 +170,8 @@ pub(super) fn test_mm_mask_mov_epi16() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_mask_mov_epi16(_mm_set1_epi16(get_random_i32_array::<4>()[0] as i16), _mm_set1_epi16(1), _mm_set1_epi16(1));
+                // mask is __mmask8 -> use scalar u8
+                let _ = _mm_mask_mov_epi16(_mm_set1_epi16(get_random_i32_array::<4>()[0] as i16), 1u8, _mm_set1_epi16(1));
             }
         }
     }
