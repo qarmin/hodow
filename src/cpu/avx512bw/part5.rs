@@ -177,4 +177,3 @@ pub(super) fn test_mm_cmple_epi8_mask() -> Result<(), String> {
     }
     Ok(())
 }
-
