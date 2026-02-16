@@ -173,4 +173,3 @@ pub(super) fn test_mm_mask_avg_epu8() -> Result<(), String> {
     }
     Ok(())
 }
-
