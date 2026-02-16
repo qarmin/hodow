@@ -1,4 +1,4 @@
-fn test_mm_maskz_cvtpd_epi32() -> Result<(), String> {
+pub(super) fn test_mm_maskz_cvtpd_epi32() -> Result<(), String> {
     unsafe {
         let _ = ();
     }

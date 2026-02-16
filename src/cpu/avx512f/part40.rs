@@ -1,4 +1,4 @@
-fn test_mm_mask_cvtsepi64_storeu_epi16() -> Result<(), String> {
+pub(super) fn test_mm_mask_cvtsepi64_storeu_epi16() -> Result<(), String> {
     unsafe {
         let _ = ();
     }

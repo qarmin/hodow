@@ -136,7 +136,7 @@ pub(super) fn test_mm_movepi32_mask() -> Result<(), String> {
     unsafe {
         let v = _mm_set_epi32(1, 1, 1, 1);
         let m = _mm_movepi32_mask(v);
-        check_array_equality(&[m], &[15i32])?;
+        check_array_equality(&[m], &[15u8])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -153,7 +153,7 @@ pub(super) fn test_mm_movepi64_mask() -> Result<(), String> {
     unsafe {
         let v = _mm_set_epi64x(1, 1);
         let m = _mm_movepi64_mask(v);
-        check_array_equality(&[m], &[3i32])?;
+        check_array_equality(&[m], &[3u8])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

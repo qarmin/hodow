@@ -1,4 +1,4 @@
-fn test_mm_mask_shuffle_ps() -> Result<(), String> {
+pub(super) fn test_mm_mask_shuffle_ps() -> Result<(), String> {
     unsafe {
         let _ = ();
     }

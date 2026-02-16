@@ -1,4 +1,4 @@
-fn test_mm_cmple_epu32_mask() -> Result<(), String> {
+pub(super) fn test_mm_cmple_epu32_mask() -> Result<(), String> {
     unsafe {
         let _ = ();
     }

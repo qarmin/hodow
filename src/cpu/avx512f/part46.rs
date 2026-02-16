@@ -1,4 +1,4 @@
-fn test_mm_maskz_rsqrt14_sd() -> Result<(), String> {
+pub(super) fn test_mm_maskz_rsqrt14_sd() -> Result<(), String> {
     unsafe {
         let _ = ();
     }

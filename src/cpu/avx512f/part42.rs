@@ -1,4 +1,4 @@
-fn test_mm_maskz_load_pd() -> Result<(), String> {
+pub(super) fn test_mm_maskz_load_pd() -> Result<(), String> {
     unsafe {
         let _ = ();
     }

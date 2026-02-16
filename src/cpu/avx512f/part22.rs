@@ -1,4 +1,4 @@
-fn test_mm_mask_i64scatter_pd() -> Result<(), String> {
+pub(super) fn test_mm_mask_i64scatter_pd() -> Result<(), String> {
     unsafe {
         let _ = ();
     }

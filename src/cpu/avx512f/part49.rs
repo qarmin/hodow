@@ -1,4 +1,4 @@
-fn test_mm_mask3_fnmadd_ss() -> Result<(), String> {
+pub(super) fn test_mm_mask3_fnmadd_ss() -> Result<(), String> {
     unsafe {
         let _ = ();
     }

@@ -120,14 +120,14 @@ pub(super) fn test_mm_cmp_epu16_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi16(1, 2, 3, 4, 5, 6, 7, 8);
         let b = _mm_set1_epi16(4);
-        let m = _mm_cmp_epu16_mask(a, b);
+        let m = _mm_cmp_epu16_mask::<0>(a, b);
         check_int_equality(m as i32, 0b00010000)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_cmp_epu16_mask(_mm_set1_epi16(get_random_i32_array::<4>()[0] as i16), _mm_set1_epi16(1));
+                let _ = _mm_cmp_epu16_mask::<0>(_mm_set1_epi16(get_random_i32_array::<4>()[0] as i16), _mm_set1_epi16(1));
             }
         }
     }
@@ -142,14 +142,14 @@ pub(super) fn test_mm_cmp_epu8_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi8(1, 2, 3, 4, 5, 6, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8);
         let b = _mm_set1_epi8(8);
-        let m = _mm_cmp_epu8_mask(a, b);
+        let m = _mm_cmp_epu8_mask::<0>(a, b);
         check_int_equality(m as i32, 0b11111111)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_cmp_epu8_mask(_mm_set1_epi8(get_random_i32_array::<4>()[0] as i8), _mm_set1_epi8(1));
+                let _ = _mm_cmp_epu8_mask::<0>(_mm_set1_epi8(get_random_i32_array::<4>()[0] as i8), _mm_set1_epi8(1));
             }
         }
     }
@@ -164,14 +164,14 @@ pub(super) fn test_mm_cmp_epi16_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi16(1, 2, 3, 4, 5, 6, 7, 8);
         let b = _mm_set1_epi16(4);
-        let m = _mm_cmp_epi16_mask(a, b);
+        let m = _mm_cmp_epi16_mask::<0>(a, b);
         check_int_equality(m as i32, 0b00010000)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_cmp_epi16_mask(_mm_set1_epi16(get_random_i32_array::<4>()[0] as i16), _mm_set1_epi16(1));
+                let _ = _mm_cmp_epi16_mask::<0>(_mm_set1_epi16(get_random_i32_array::<4>()[0] as i16), _mm_set1_epi16(1));
             }
         }
     }

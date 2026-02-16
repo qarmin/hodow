@@ -1,4 +1,4 @@
-fn test_mm_mask_sllv_epi64() -> Result<(), String> {
+pub(super) fn test_mm_mask_sllv_epi64() -> Result<(), String> {
     unsafe {
         let _ = ();
     }
