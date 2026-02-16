@@ -1,3 +1,4 @@
+#![allow(unused)]
 use std::env;
 use std::fmt::Write as _;
 

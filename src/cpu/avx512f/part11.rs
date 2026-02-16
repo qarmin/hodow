@@ -6,7 +6,7 @@ use crate::cpu::common::{check_float_array_equality_with_error, get_random_float
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
-fn test_mm_mask3_fnmsub_ps() -> Result<(), String> {
+pub(super) fn test_mm_mask3_fnmsub_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let b = _mm_set1_ps(2.0);
@@ -25,7 +25,7 @@ fn test_mm_mask3_fnmsub_ps() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_mask_fnmsub_pd() -> Result<(), String> {
+pub(super) fn test_mm_mask_fnmsub_pd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(2.0, 3.0);
         let b = _mm_set1_pd(2.0);
@@ -44,15 +44,15 @@ fn test_mm_mask_fnmsub_pd() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_maskz_fnmsub_pd() -> Result<(), String> {
+pub(super) fn test_mm_maskz_fnmsub_pd() -> Result<(), String> {
     test_mm_mask_fnmsub_pd()
 }
 
-fn test_mm_mask3_fnmsub_pd() -> Result<(), String> {
+pub(super) fn test_mm_mask3_fnmsub_pd() -> Result<(), String> {
     test_mm_mask_fnmsub_pd()
 }
 
-fn test_mm_rcp14_ps() -> Result<(), String> {
+pub(super) fn test_mm_rcp14_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_ps(2.0);
         let r = _mm_rcp14_ps(a);
@@ -70,15 +70,15 @@ fn test_mm_rcp14_ps() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_mask_rcp14_ps() -> Result<(), String> {
+pub(super) fn test_mm_mask_rcp14_ps() -> Result<(), String> {
     test_mm_rcp14_ps()
 }
 
-fn test_mm_maskz_rcp14_ps() -> Result<(), String> {
+pub(super) fn test_mm_maskz_rcp14_ps() -> Result<(), String> {
     test_mm_rcp14_ps()
 }
 
-fn test_mm_rcp14_pd() -> Result<(), String> {
+pub(super) fn test_mm_rcp14_pd() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_pd(2.0);
         let r = _mm_rcp14_pd(a);
@@ -96,15 +96,15 @@ fn test_mm_rcp14_pd() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_mask_rcp14_pd() -> Result<(), String> {
+pub(super) fn test_mm_mask_rcp14_pd() -> Result<(), String> {
     test_mm_rcp14_pd()
 }
 
-fn test_mm_maskz_rcp14_pd() -> Result<(), String> {
+pub(super) fn test_mm_maskz_rcp14_pd() -> Result<(), String> {
     test_mm_rcp14_pd()
 }
 
-fn test_mm_rsqrt14_ps() -> Result<(), String> {
+pub(super) fn test_mm_rsqrt14_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_ps(4.0);
         let r = _mm_rsqrt14_ps(a);
@@ -123,15 +123,15 @@ fn test_mm_rsqrt14_ps() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_mask_rsqrt14_ps() -> Result<(), String> {
+pub(super) fn test_mm_mask_rsqrt14_ps() -> Result<(), String> {
     test_mm_rsqrt14_ps()
 }
 
-fn test_mm_maskz_rsqrt14_ps() -> Result<(), String> {
+pub(super) fn test_mm_maskz_rsqrt14_ps() -> Result<(), String> {
     test_mm_rsqrt14_ps()
 }
 
-fn test_mm_rsqrt14_pd() -> Result<(), String> {
+pub(super) fn test_mm_rsqrt14_pd() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_pd(4.0);
         let r = _mm_rsqrt14_pd(a);
@@ -150,6 +150,6 @@ fn test_mm_rsqrt14_pd() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_mask_rsqrt14_pd() -> Result<(), String> {
+pub(super) fn test_mm_mask_rsqrt14_pd() -> Result<(), String> {
     test_mm_rsqrt14_pd()
 }

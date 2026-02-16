@@ -10,7 +10,7 @@ pub(super) fn test_mm_maskz_fmadd_pch() -> Result<(), String> {
     test_mm_maskz_fmadd_pch_impl()
 }
 
-fn test_mm_maskz_fmadd_pch_impl() -> Result<(), String> {
+pub(super) fn test_mm_maskz_fmadd_pch_impl() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let b = _mm_set_ps(1.0, 1.0, 1.0, 1.0);

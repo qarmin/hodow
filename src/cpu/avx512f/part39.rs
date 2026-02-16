@@ -6,7 +6,7 @@ use crate::cpu::common::{get_random_i32_array, get_random_i64_array};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
-fn test_mm_mask_cmpge_epi64_mask() -> Result<(), String> {
+pub(super) fn test_mm_mask_cmpge_epi64_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(2, 1);
         let b = _mm_set1_epi64x(1);
@@ -24,7 +24,7 @@ fn test_mm_mask_cmpge_epi64_mask() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_cmpeq_epi64_mask() -> Result<(), String> {
+pub(super) fn test_mm_cmpeq_epi64_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(1, 1);
         let m = _mm_cmpeq_epi64_mask(a, a);
@@ -41,11 +41,11 @@ fn test_mm_cmpeq_epi64_mask() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_mask_cmpeq_epi64_mask() -> Result<(), String> {
+pub(super) fn test_mm_mask_cmpeq_epi64_mask() -> Result<(), String> {
     test_mm_cmpeq_epi64_mask()
 }
 
-fn test_mm_cmpneq_epi64_mask() -> Result<(), String> {
+pub(super) fn test_mm_cmpneq_epi64_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(1, 2);
         let m = _mm_cmpneq_epi64_mask(a, a);
@@ -62,11 +62,11 @@ fn test_mm_cmpneq_epi64_mask() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_mask_cmpneq_epi64_mask() -> Result<(), String> {
+pub(super) fn test_mm_mask_cmpneq_epi64_mask() -> Result<(), String> {
     test_mm_cmpneq_epi64_mask()
 }
 
-fn test_mm_cmp_epi64_mask() -> Result<(), String> {
+pub(super) fn test_mm_cmp_epi64_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(3, 4);
         let b = _mm_set_epi64x(1, 2);
@@ -84,11 +84,11 @@ fn test_mm_cmp_epi64_mask() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_mask_cmp_epi64_mask() -> Result<(), String> {
+pub(super) fn test_mm_mask_cmp_epi64_mask() -> Result<(), String> {
     test_mm_cmp_epi64_mask()
 }
 
-fn test_mm_loadu_epi32() -> Result<(), String> {
+pub(super) fn test_mm_loadu_epi32() -> Result<(), String> {
     unsafe {
         let data = [1i32, 2, 3, 4];
         let r = _mm_loadu_epi32(data.as_ptr());
@@ -105,7 +105,7 @@ fn test_mm_loadu_epi32() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_mask_cvtepi32_storeu_epi16() -> Result<(), String> {
+pub(super) fn test_mm_mask_cvtepi32_storeu_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let mut buf = [0i16; 4];
@@ -124,7 +124,7 @@ fn test_mm_mask_cvtepi32_storeu_epi16() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_mask_cvtsepi32_storeu_epi16() -> Result<(), String> {
+pub(super) fn test_mm_mask_cvtsepi32_storeu_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(-1, -2, -3, -4);
         let mut buf = [0i16; 4];
@@ -143,7 +143,7 @@ fn test_mm_mask_cvtsepi32_storeu_epi16() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_mask_cvtusepi32_storeu_epi16() -> Result<(), String> {
+pub(super) fn test_mm_mask_cvtusepi32_storeu_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let mut buf = [0u16; 4];
@@ -162,7 +162,7 @@ fn test_mm_mask_cvtusepi32_storeu_epi16() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_mask_cvtepi32_storeu_epi8() -> Result<(), String> {
+pub(super) fn test_mm_mask_cvtepi32_storeu_epi8() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let mut buf = [0i8; 4];
@@ -181,7 +181,7 @@ fn test_mm_mask_cvtepi32_storeu_epi8() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_mask_cvtsepi32_storeu_epi8() -> Result<(), String> {
+pub(super) fn test_mm_mask_cvtsepi32_storeu_epi8() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(-1, -2, -3, -4);
         let mut buf = [0i8; 4];
@@ -200,7 +200,7 @@ fn test_mm_mask_cvtsepi32_storeu_epi8() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_mask_cvtusepi32_storeu_epi8() -> Result<(), String> {
+pub(super) fn test_mm_mask_cvtusepi32_storeu_epi8() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let mut buf = [0u8; 4];
@@ -219,7 +219,7 @@ fn test_mm_mask_cvtusepi32_storeu_epi8() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_mask_cvtepi64_storeu_epi16() -> Result<(), String> {
+pub(super) fn test_mm_mask_cvtepi64_storeu_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(1, 2);
         let mut buf = [0i16; 2];

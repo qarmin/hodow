@@ -6,7 +6,7 @@ use crate::cpu::common::get_random_i32_array;
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
-fn test_mm_mask_compress_ps() -> Result<(), String> {
+pub(super) fn test_mm_mask_compress_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(1.0, 0.0, 2.0, 0.0);
         let m = 0b0101u32;
@@ -24,11 +24,11 @@ fn test_mm_mask_compress_ps() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_maskz_compress_ps() -> Result<(), String> {
+pub(super) fn test_mm_maskz_compress_ps() -> Result<(), String> {
     test_mm_mask_compress_ps()
 }
 
-fn test_mm_mask_compress_pd() -> Result<(), String> {
+pub(super) fn test_mm_mask_compress_pd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(1.0, 0.0);
         let m = 0b01u32;
@@ -46,11 +46,11 @@ fn test_mm_mask_compress_pd() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_maskz_compress_pd() -> Result<(), String> {
+pub(super) fn test_mm_maskz_compress_pd() -> Result<(), String> {
     test_mm_mask_compress_pd()
 }
 
-fn test_mm_mask_compressstoreu_epi32() -> Result<(), String> {
+pub(super) fn test_mm_mask_compressstoreu_epi32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 0, 2, 0);
         let mut buf = [0i32; 4];
@@ -69,7 +69,7 @@ fn test_mm_mask_compressstoreu_epi32() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_mask_compressstoreu_epi64() -> Result<(), String> {
+pub(super) fn test_mm_mask_compressstoreu_epi64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(1, 0);
         let mut buf = [0i64; 2];
@@ -88,7 +88,7 @@ fn test_mm_mask_compressstoreu_epi64() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_mask_compressstoreu_ps() -> Result<(), String> {
+pub(super) fn test_mm_mask_compressstoreu_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(1.0, 0.0, 2.0, 0.0);
         let mut buf = [0f32; 4];
@@ -106,7 +106,7 @@ fn test_mm_mask_compressstoreu_ps() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_mask_compressstoreu_pd() -> Result<(), String> {
+pub(super) fn test_mm_mask_compressstoreu_pd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(1.0, 0.0);
         let mut buf = [0f64; 2];
@@ -124,7 +124,7 @@ fn test_mm_mask_compressstoreu_pd() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_mask_expand_epi32() -> Result<(), String> {
+pub(super) fn test_mm_mask_expand_epi32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let r = _mm_mask_expand_epi32(_mm_setzero_si128(), 0b1010u32, a);
@@ -141,11 +141,11 @@ fn test_mm_mask_expand_epi32() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_maskz_expand_epi32() -> Result<(), String> {
+pub(super) fn test_mm_maskz_expand_epi32() -> Result<(), String> {
     test_mm_mask_expand_epi32()
 }
 
-fn test_mm_mask_expand_epi64() -> Result<(), String> {
+pub(super) fn test_mm_mask_expand_epi64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(1, 2);
         let r = _mm_mask_expand_epi64(_mm_setzero_si128(), 0b01u32, a);
@@ -162,11 +162,11 @@ fn test_mm_mask_expand_epi64() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_maskz_expand_epi64() -> Result<(), String> {
+pub(super) fn test_mm_maskz_expand_epi64() -> Result<(), String> {
     test_mm_mask_expand_epi64()
 }
 
-fn test_mm_mask_expand_ps() -> Result<(), String> {
+pub(super) fn test_mm_mask_expand_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let r = _mm_mask_expand_ps(_mm_setzero_ps(), 0b1010u32, a);
@@ -183,11 +183,11 @@ fn test_mm_mask_expand_ps() -> Result<(), String> {
     Ok(())
 }
 
-fn test_mm_maskz_expand_ps() -> Result<(), String> {
+pub(super) fn test_mm_maskz_expand_ps() -> Result<(), String> {
     test_mm_mask_expand_ps()
 }
 
-fn test_mm_mask_expand_pd() -> Result<(), String> {
+pub(super) fn test_mm_mask_expand_pd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(1.0, 2.0);
         let r = _mm_mask_expand_pd(_mm_setzero_pd(), 0b01u32, a);
