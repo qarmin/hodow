@@ -15,7 +15,7 @@ pub(super) fn test_mm_cvt_ss2si() -> Result<(), String> {
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
-                let value = get_random_float() as i32; // use random i32 range by casting
+                let value = get_random_float() as i32;
                 let vec = _mm_set_ss(value as f32);
                 let _ = _mm_cvt_ss2si(vec);
             }
@@ -83,10 +83,9 @@ pub(super) fn test_mm_cvt_si2ss() -> Result<(), String> {
 
 pub(super) fn test_mm_set_ps1() -> Result<(), String> {
     unsafe {
-        let val = 3.13f32;
-        let result = _mm_set_ps1(val);
+        let result = _mm_set_ps1(3.13f32);
         let arr = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_float_array_equality_with_error(&arr, &[val, val, val, val])?;
+        check_float_array_equality_with_error(&arr, &[3.13, 3.13, 3.13, 3.13])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

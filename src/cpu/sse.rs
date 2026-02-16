@@ -7,12 +7,13 @@ use std::arch::x86::*;
 #[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::*;
 
+use log::info;
+
 use crate::cpu::common::check_float_array_equality_with_error;
 use crate::cpu::sse::part1::*;
 use crate::cpu::sse::part2::*;
 use crate::cpu::sse::part3::*;
 use crate::cpu::{ExtensionTest, TestFunction};
-use log::info;
 
 pub struct SSE;
 

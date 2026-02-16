@@ -2,6 +2,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
+use crate::cpu::common::{get_random_float, get_random_i32_array};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -91,12 +92,12 @@ pub(super) fn test_mm_round_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_minpos_epu16() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi16(10,20,5,30,40,50,60,70);
+        let a = _mm_set_epi16(10, 20, 5, 30, 40, 50, 60, 70);
         let _res = _mm_minpos_epu16(a);
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
-                let _ = _mm_minpos_epu16(_mm_set_epi16(10,20,5,30,40,50,60,70));
+                let _ = _mm_minpos_epu16(_mm_set_epi16(10, 20, 5, 30, 40, 50, 60, 70));
             }
         }
     }
@@ -107,7 +108,7 @@ pub(super) fn test_mm_mpsadbw_epu8() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_epi8(1);
         let b = _mm_set1_epi8(2);
-        let _res = _mm_mpsadbw_epu8(a,b,0);
+        let _res = _mm_mpsadbw_epu8(a, b, 0);
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -121,7 +122,7 @@ pub(super) fn test_mm_mpsadbw_epu8() -> Result<(), String> {
 pub(super) fn test_mm_testnzc_si128() -> Result<(), String> {
     unsafe {
         let a = _mm_setzero_si128();
-        let _res = _mm_testnzc_si128(a,a);
+        let _res = _mm_testnzc_si128(a, a);
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -135,7 +136,7 @@ pub(super) fn test_mm_testnzc_si128() -> Result<(), String> {
 pub(super) fn test_mm_test_all_zeros() -> Result<(), String> {
     unsafe {
         let a = _mm_setzero_si128();
-        let _res = _mm_test_all_zeros(a,a);
+        let _res = _mm_test_all_zeros(a, a);
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -149,7 +150,7 @@ pub(super) fn test_mm_test_all_zeros() -> Result<(), String> {
 pub(super) fn test_mm_test_all_ones() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_epi8(-1);
-        let _res = _mm_test_all_ones(a,a);
+        let _res = _mm_test_all_ones(a, a);
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -163,7 +164,7 @@ pub(super) fn test_mm_test_all_ones() -> Result<(), String> {
 pub(super) fn test_mm_test_mix_ones_zeros() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_epi8(0);
-        let _res = _mm_test_mix_ones_zeros(a,a);
+        let _res = _mm_test_mix_ones_zeros(a, a);
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -189,7 +190,7 @@ pub(super) fn test_mm_stream_load_si128() -> Result<(), String> {
 
 pub(super) fn test_mm_extract_epi64() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi64x(1,2);
+        let a = _mm_set_epi64x(1, 2);
         let _res = _mm_extract_epi64(a, 0);
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -203,7 +204,7 @@ pub(super) fn test_mm_extract_epi64() -> Result<(), String> {
 
 pub(super) fn test_mm_insert_epi64() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi64x(1,2);
+        let a = _mm_set_epi64x(1, 2);
         let _res = _mm_insert_epi64(a, 3, 0);
         if get_fuzzing() {
             info!("Starting fuzzing");

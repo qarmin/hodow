@@ -1,6 +1,6 @@
 Mając na uwadze plik Polecenia.md, popraw kod, zaimplemetuj brakujące funkcje etc. zgodnie z poniższymi wskazówkami:
 
-- Celem jest zrobienie, by `just check` nie wyświetlał żadnych błędów ani warningów
+- Celem jest zrobienie, by `just check` nie wyświetlał żadnych błędów ani warningów - nie przez ich ignorowanie, lecz zaimplementowanie odpowiedniego kodu, testów, fuzzingu etc. - bierz przyłkad np. z pliku `src/cpu/aes.rs` gdzie wszytsko ładnie i poprawnie jest zrobione
 
 - Upewnij się, że każdy test ma uruchomienie fuzzera przez - get_fuzzing
 - Przy sprawdzaniu wyników używaj bezpośrednio expected w funkcji zamiast w zmiennej, czyli zamiast `check_array_equality(&result, &expected)?` użyj np. `check_array_equality(&result, &[1.0, 2.0, 3.0, 4.0])?` - expected value muszą być zwykłymi liczbami - nie reużywaj żadnych zmiennych typu `check_array_equality(&result, &[a[1], a[2]])?`

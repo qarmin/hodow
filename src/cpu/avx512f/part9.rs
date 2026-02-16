@@ -1,4 +1,3 @@
-
 use log::info;
 
 fn test_mm_mask3_fmadd_ps() -> Result<(), String> {

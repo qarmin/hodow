@@ -1,5 +1,7 @@
 use std::arch::x86_64::*;
+
 use log::info;
+
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 

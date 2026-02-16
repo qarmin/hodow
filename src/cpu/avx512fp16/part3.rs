@@ -2,10 +2,9 @@ use std::arch::x86_64::*;
 
 use log::info;
 
+use crate::cpu::common::{check_int_equality, get_random_float32_array};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
-
-use crate::cpu::common::{check_int_equality, get_random_float32_array};
 
 pub(super) fn test_mm_comi_round_sh() -> Result<(), String> {
     unsafe {
@@ -43,10 +42,7 @@ pub(super) fn test_mm_comieq_sh() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_comieq_sh(
-                    _mm_set1_ps(get_random_float32_array::<1>()[0]),
-                    _mm_set1_ps(1.0),
-                );
+                let _ = _mm_comieq_sh(_mm_set1_ps(get_random_float32_array::<1>()[0]), _mm_set1_ps(1.0));
             }
         }
     }

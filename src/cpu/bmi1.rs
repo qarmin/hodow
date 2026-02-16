@@ -5,9 +5,8 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::{ExtensionTest, TestFunction};
-
 use crate::cpu::common::get_random_i32_array;
+use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct BMI1;
 
@@ -26,6 +25,13 @@ fn test_mm_tzcnt_32() -> Result<(), String> {
         let r = _tzcnt_u32(a);
         let _ = r;
     }
-    if crate::get_fuzzing() { info!("Starting fuzzing"); for _ in 0..crate::cpu::get_iterations() { unsafe { let _ = _tzcnt_u32(get_random_i32_array::<4>()[0] as u32); } } }
+    if crate::get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..crate::cpu::get_iterations() {
+            unsafe {
+                let _ = _tzcnt_u32(get_random_i32_array::<4>()[0] as u32);
+            }
+        }
+    }
     Ok(())
 }

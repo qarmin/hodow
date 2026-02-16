@@ -5,7 +5,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error};
+use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, get_random_i32_array, get_random_i64_array};
 use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
 use crate::get_fuzzing;
 
@@ -39,30 +39,29 @@ fn test_mm_permutex2var_epi8() -> Result<(), String> {
         let result = _mm_permutex2var_epi8(a, idx, a);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
         check_array_equality(&result, &[1; 16])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
-                let a = _mm_set1_epi8(rand::random());
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let vals = get_random_i32_array::<16>();
+                let a = _mm_set1_epi8(vals[0] as i8);
                 let idx = _mm_set_epi8(
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
+                    vals[15] as i8,
+                    vals[14] as i8,
+                    vals[13] as i8,
+                    vals[12] as i8,
+                    vals[11] as i8,
+                    vals[10] as i8,
+                    vals[9] as i8,
+                    vals[8] as i8,
+                    vals[7] as i8,
+                    vals[6] as i8,
+                    vals[5] as i8,
+                    vals[4] as i8,
+                    vals[3] as i8,
+                    vals[2] as i8,
+                    vals[1] as i8,
+                    vals[0] as i8,
                 );
                 let _ = _mm_permutex2var_epi8(a, idx, a);
             }
@@ -80,32 +79,33 @@ fn test_mm_mask_permutex2var_epi8() -> Result<(), String> {
         let result = _mm_mask_permutex2var_epi8(a, 0xFFFF, idx, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
         check_array_equality(&result, &[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
-                let a = _mm_set1_epi8(rand::random());
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let a_vals = get_random_i32_array::<1>();
+                let idx_vals = get_random_i32_array::<16>();
+                let b_vals = get_random_i32_array::<1>();
+                let a = _mm_set1_epi8(a_vals[0] as i8);
                 let idx = _mm_set_epi8(
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
+                    idx_vals[15] as i8,
+                    idx_vals[14] as i8,
+                    idx_vals[13] as i8,
+                    idx_vals[12] as i8,
+                    idx_vals[11] as i8,
+                    idx_vals[10] as i8,
+                    idx_vals[9] as i8,
+                    idx_vals[8] as i8,
+                    idx_vals[7] as i8,
+                    idx_vals[6] as i8,
+                    idx_vals[5] as i8,
+                    idx_vals[4] as i8,
+                    idx_vals[3] as i8,
+                    idx_vals[2] as i8,
+                    idx_vals[1] as i8,
+                    idx_vals[0] as i8,
                 );
-                let b = _mm_set1_epi8(rand::random());
+                let b = _mm_set1_epi8(b_vals[0] as i8);
                 let _ = _mm_mask_permutex2var_epi8(a, 0xFFFF, idx, b);
             }
         }
@@ -123,32 +123,33 @@ fn test_mm_maskz_permutex2var_epi8() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
 
         check_array_equality(&result, &[0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
-                let a = _mm_set1_epi8(rand::random());
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let a_vals = get_random_i32_array::<1>();
+                let idx_vals = get_random_i32_array::<16>();
+                let b_vals = get_random_i32_array::<1>();
+                let a = _mm_set1_epi8(a_vals[0] as i8);
                 let idx = _mm_set_epi8(
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
+                    idx_vals[15] as i8,
+                    idx_vals[14] as i8,
+                    idx_vals[13] as i8,
+                    idx_vals[12] as i8,
+                    idx_vals[11] as i8,
+                    idx_vals[10] as i8,
+                    idx_vals[9] as i8,
+                    idx_vals[8] as i8,
+                    idx_vals[7] as i8,
+                    idx_vals[6] as i8,
+                    idx_vals[5] as i8,
+                    idx_vals[4] as i8,
+                    idx_vals[3] as i8,
+                    idx_vals[2] as i8,
+                    idx_vals[1] as i8,
+                    idx_vals[0] as i8,
                 );
-                let b = _mm_set1_epi8(rand::random());
+                let b = _mm_set1_epi8(b_vals[0] as i8);
                 let _ = _mm_maskz_permutex2var_epi8(0xFF00, a, idx, b);
             }
         }
@@ -165,32 +166,33 @@ fn test_mm_mask2_permutex2var_epi8() -> Result<(), String> {
         let result = _mm_mask2_permutex2var_epi8(a, idx, 0xFFFF, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
         check_array_equality(&result, &[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
-                let a = _mm_set1_epi8(rand::random());
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let a_vals = get_random_i32_array::<1>();
+                let idx_vals = get_random_i32_array::<16>();
+                let b_vals = get_random_i32_array::<1>();
+                let a = _mm_set1_epi8(a_vals[0] as i8);
                 let idx = _mm_set_epi8(
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
+                    idx_vals[15] as i8,
+                    idx_vals[14] as i8,
+                    idx_vals[13] as i8,
+                    idx_vals[12] as i8,
+                    idx_vals[11] as i8,
+                    idx_vals[10] as i8,
+                    idx_vals[9] as i8,
+                    idx_vals[8] as i8,
+                    idx_vals[7] as i8,
+                    idx_vals[6] as i8,
+                    idx_vals[5] as i8,
+                    idx_vals[4] as i8,
+                    idx_vals[3] as i8,
+                    idx_vals[2] as i8,
+                    idx_vals[1] as i8,
+                    idx_vals[0] as i8,
                 );
-                let b = _mm_set1_epi8(rand::random());
+                let b = _mm_set1_epi8(b_vals[0] as i8);
                 let _ = _mm_mask2_permutex2var_epi8(a, idx, 0xFFFF, b);
             }
         }
@@ -207,47 +209,47 @@ fn test_mm_permutexvar_epi8() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
 
         check_array_equality(&result, &[15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let idx_vals = get_random_i32_array::<16>();
+                let a_vals = get_random_i32_array::<16>();
                 let idx = _mm_set_epi8(
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
+                    idx_vals[15] as i8,
+                    idx_vals[14] as i8,
+                    idx_vals[13] as i8,
+                    idx_vals[12] as i8,
+                    idx_vals[11] as i8,
+                    idx_vals[10] as i8,
+                    idx_vals[9] as i8,
+                    idx_vals[8] as i8,
+                    idx_vals[7] as i8,
+                    idx_vals[6] as i8,
+                    idx_vals[5] as i8,
+                    idx_vals[4] as i8,
+                    idx_vals[3] as i8,
+                    idx_vals[2] as i8,
+                    idx_vals[1] as i8,
+                    idx_vals[0] as i8,
                 );
                 let a = _mm_set_epi8(
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
+                    a_vals[15] as i8,
+                    a_vals[14] as i8,
+                    a_vals[13] as i8,
+                    a_vals[12] as i8,
+                    a_vals[11] as i8,
+                    a_vals[10] as i8,
+                    a_vals[9] as i8,
+                    a_vals[8] as i8,
+                    a_vals[7] as i8,
+                    a_vals[6] as i8,
+                    a_vals[5] as i8,
+                    a_vals[4] as i8,
+                    a_vals[3] as i8,
+                    a_vals[2] as i8,
+                    a_vals[1] as i8,
+                    a_vals[0] as i8,
                 );
                 let _ = _mm_permutexvar_epi8(idx, a);
             }
@@ -266,49 +268,16 @@ fn test_mm_mask_permutexvar_epi8() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
 
         check_array_equality(&result, &[99, 99, 99, 99, 99, 99, 99, 99, 7, 6, 5, 4, 3, 2, 1, 0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
-                let src = _mm_set1_epi8(rand::random());
-                let idx = _mm_set_epi8(
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                );
-                let a = _mm_set_epi8(
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                );
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let src_vals = get_random_i32_array::<1>();
+                let a_vals = get_random_i32_array::<1>();
+                let b_vals = get_random_i64_array::<2>();
+                let src = _mm_set1_epi8(src_vals[0] as i8);
+                let a = _mm_set1_epi8(a_vals[0] as i8);
+                let b = _mm_set_epi64x(b_vals[0] as i64, b_vals[1] as i64);
                 let _ = _mm_mask_permutexvar_epi8(src, 0xFF00, idx, a);
             }
         }
@@ -325,47 +294,47 @@ fn test_mm_maskz_permutexvar_epi8() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
 
         check_array_equality(&result, &[0, 0, 0, 0, 0, 0, 0, 0, 7, 6, 5, 4, 3, 2, 1, 0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let idx_vals = get_random_i32_array::<16>();
+                let a_vals = get_random_i32_array::<16>();
                 let idx = _mm_set_epi8(
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
+                    idx_vals[15] as i8,
+                    idx_vals[14] as i8,
+                    idx_vals[13] as i8,
+                    idx_vals[12] as i8,
+                    idx_vals[11] as i8,
+                    idx_vals[10] as i8,
+                    idx_vals[9] as i8,
+                    idx_vals[8] as i8,
+                    idx_vals[7] as i8,
+                    idx_vals[6] as i8,
+                    idx_vals[5] as i8,
+                    idx_vals[4] as i8,
+                    idx_vals[3] as i8,
+                    idx_vals[2] as i8,
+                    idx_vals[1] as i8,
+                    idx_vals[0] as i8,
                 );
                 let a = _mm_set_epi8(
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
-                    rand::random(),
+                    a_vals[15] as i8,
+                    a_vals[14] as i8,
+                    a_vals[13] as i8,
+                    a_vals[12] as i8,
+                    a_vals[11] as i8,
+                    a_vals[10] as i8,
+                    a_vals[9] as i8,
+                    a_vals[8] as i8,
+                    a_vals[7] as i8,
+                    a_vals[6] as i8,
+                    a_vals[5] as i8,
+                    a_vals[4] as i8,
+                    a_vals[3] as i8,
+                    a_vals[2] as i8,
+                    a_vals[1] as i8,
+                    a_vals[0] as i8,
                 );
                 let _ = _mm_maskz_permutexvar_epi8(0xFF00, idx, a);
             }
@@ -383,14 +352,14 @@ fn test_mm_multishift_epi64_epi8() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
 
         check_array_equality(&result, &[16, 16, 16, 16, 16, 16, 16, 16, 8, 8, 8, 8, 8, 8, 8, 8])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
-                let a = _mm_set1_epi8(rand::random());
-                let b = _mm_set_epi64x(rand::random(), rand::random());
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let a_vals = get_random_i32_array::<1>();
+                let b_vals = get_random_i64_array::<2>();
+                let a = _mm_set1_epi8(a_vals[0] as i8);
+                let b = _mm_set_epi64x(b_vals[0] as i64, b_vals[1] as i64);
                 let _ = _mm_multishift_epi64_epi8(a, b);
             }
         }
@@ -408,15 +377,16 @@ fn test_mm_mask_multishift_epi64_epi8() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
 
         check_array_equality(&result, &[99, 99, 99, 99, 99, 99, 99, 99, 8, 8, 8, 8, 8, 8, 8, 8])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
-                let src = _mm_set1_epi8(rand::random());
-                let a = _mm_set1_epi8(rand::random());
-                let b = _mm_set_epi64x(rand::random(), rand::random());
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let src_vals = get_random_i32_array::<1>();
+                let a_vals = get_random_i32_array::<1>();
+                let b_vals = get_random_i64_array::<2>();
+                let src = _mm_set1_epi8(src_vals[0] as i8);
+                let a = _mm_set1_epi8(a_vals[0] as i8);
+                let b = _mm_set_epi64x(b_vals[0] as i64, b_vals[1] as i64);
                 let _ = _mm_mask_multishift_epi64_epi8(src, 0xFF00, a, b);
             }
         }
@@ -433,14 +403,14 @@ fn test_mm_maskz_multishift_epi64_epi8() -> Result<(), String> {
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
 
         check_array_equality(&result, &[0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 8, 8, 8, 8])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
-                let a = _mm_set1_epi8(rand::random());
-                let b = _mm_set_epi64x(rand::random(), rand::random());
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let a_vals = get_random_i32_array::<1>();
+                let b_vals = get_random_i64_array::<2>();
+                let a = _mm_set1_epi8(a_vals[0] as i8);
+                let b = _mm_set_epi64x(b_vals[0] as i64, b_vals[1] as i64);
                 let _ = _mm_maskz_multishift_epi64_epi8(0xFF00, a, b);
             }
         }

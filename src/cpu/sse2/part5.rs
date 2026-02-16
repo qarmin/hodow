@@ -161,7 +161,6 @@ pub(super) fn test_mm_maskmoveu_si128() -> Result<(), String> {
         let a = _mm_set1_epi8(42);
         let mask = _mm_set_epi8(-1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0);
         _mm_maskmoveu_si128(a, mask, mem.as_mut_ptr());
-        // validate mem contains only 0 or 42 and at least one 42
         let mut ok = false;
         let mut any42 = false;
         for &v in &mem {
@@ -177,12 +176,10 @@ pub(super) fn test_mm_maskmoveu_si128() -> Result<(), String> {
         if !ok || !any42 {
             return Err(format!("Unexpected mem after maskmove: {:?}", mem));
         }
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let mut mem: [i8; 16] = [0; 16];
                 let a_vals = get_random_i32_array::<1>();
                 let a = _mm_set1_epi8(a_vals[0] as i8);
