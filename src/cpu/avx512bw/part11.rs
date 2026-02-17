@@ -97,12 +97,13 @@ pub(super) fn test_mm_mask_packus_epi32() -> Result<(), String> {
         let a = _mm_set_epi32(70000, 60000, 50000, 40000);
         let r = _mm_packus_epi32(a, a);
         let out: [u16; 8] = std::mem::transmute::<__m128i, [u16; 8]>(r);
-        let _out = out;
+        check_array_equality(&out, &[65535u16, 65535, 65535, 65535, 40000u16 as u16, 40000u16 as u16, 40000u16 as u16, 40000u16 as u16])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
-                let _ = _mm_packus_epi32(_mm_set1_epi32(get_random_i32_array::<4>()[0]), _mm_set1_epi32(0));
+                let _vals = get_random_i32_array::<4>();
+                let _ = _mm_packus_epi32(_mm_set1_epi32(_vals[0]), _mm_set1_epi32(0));
             }
         }
     }

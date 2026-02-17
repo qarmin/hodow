@@ -9,11 +9,12 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::check_float_array_equality_with_error;
+use crate::cpu::common::{check_float_array_equality_with_error, get_random_float};
 use crate::cpu::sse::part1::*;
 use crate::cpu::sse::part2::*;
 use crate::cpu::sse::part3::*;
 use crate::cpu::{ExtensionTest, TestFunction};
+use crate::get_fuzzing;
 
 pub struct SSE;
 
@@ -86,6 +87,13 @@ fn test_mm_cvtss_si64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ss(3.0);
         let _ = _mm_cvtss_si64(a);
+
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm_cvtss_si64(_mm_set_ss(get_random_float() as f32));
+            }
+        }
     }
     Ok(())
 }
@@ -94,6 +102,13 @@ fn test_mm_cvttss_si64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ss(3.9);
         let _ = _mm_cvttss_si64(a);
+
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm_cvttss_si64(_mm_set_ss(get_random_float() as f32));
+            }
+        }
     }
     Ok(())
 }
@@ -101,6 +116,14 @@ fn test_mm_cvttss_si64() -> Result<(), String> {
 fn test_mm_cvtsi64_ss() -> Result<(), String> {
     unsafe {
         let _ = _mm_cvtsi64_ss(_mm_setzero_ps(), 42);
+
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let r = crate::cpu::common::get_random_i64_array::<2>();
+                let _ = _mm_cvtsi64_ss(_mm_setzero_ps(), r[0]);
+            }
+        }
     }
     Ok(())
 }
@@ -112,6 +135,15 @@ fn test_mm_cmpeq_ss() -> Result<(), String> {
         let r = _mm_cmpeq_ss(a, b);
         let r = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality_with_error(&r, &[f32::NAN, 0.0, 0.0, 0.0])?;
+
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let v1 = get_random_float32_array::<4>();
+                let v2 = get_random_float32_array::<4>();
+                let _ = _mm_cmpeq_ss(_mm_set_ps(v1[3], v1[2], v1[1], v1[0]), _mm_set_ps(v2[3], v2[2], v2[1], v2[0]));
+            }
+        }
     }
     Ok(())
 }
@@ -119,6 +151,13 @@ fn test_mm_cmpeq_ss() -> Result<(), String> {
 fn test_mm_sfence() -> Result<(), String> {
     unsafe {
         _mm_sfence();
+
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                _mm_sfence();
+            }
+        }
     }
     Ok(())
 }
@@ -157,6 +196,13 @@ fn test_mm_setcsr() -> Result<(), String> {
 fn test_mm_prefetch() -> Result<(), String> {
     unsafe {
         _mm_prefetch::<3>(b"\0" as *const u8 as *const i8);
+
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                _mm_prefetch::<3>(b"\0" as *const u8 as *const i8);
+            }
+        }
     }
     Ok(())
 }
@@ -164,6 +210,13 @@ fn test_mm_prefetch() -> Result<(), String> {
 fn test_mm_undefined_ps() -> Result<(), String> {
     unsafe {
         let _ = _mm_undefined_ps();
+
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm_undefined_ps();
+            }
+        }
     }
     Ok(())
 }
@@ -174,6 +227,14 @@ fn test_mm_stream_ps() -> Result<(), String> {
         struct Al([f32; 4]);
         let mut v = Al([1.0, 2.0, 3.0, 4.0]);
         _mm_stream_ps(v.0.as_mut_ptr(), _mm_set_ps(4.0, 3.0, 2.0, 1.0));
+
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let mut v = Al(get_random_float32_array::<4>());
+                _mm_stream_ps(v.0.as_mut_ptr(), _mm_set_ps(4.0, 3.0, 2.0, 1.0));
+            }
+        }
     }
     Ok(())
 }

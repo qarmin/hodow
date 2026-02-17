@@ -7,108 +7,211 @@ use log::info;
 
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
+use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, get_random_float32_array, get_random_float64_array, get_random_i32_array, get_random_i64_array};
 
 pub(super) fn test_mm_mask_max_epi64() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_epi64x(3, 1);
+        let b = _mm_set_epi64x(2, 4);
+        let r = _mm_max_epi64(a, b);
+        let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
+        check_array_equality(&out, &[3i64, 4i64])?;
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let vals = get_random_i64_array::<2>();
+                let _ = _mm_max_epi64(_mm_set_epi64x(vals[1], vals[0]), _mm_set1_epi64x(1));
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_mask_max_ps() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
+        let b = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
+        let r = _mm_max_ps(a, b);
+        let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
+        check_float_array_equality_with_error(&out, &[4.0, 3.0, 3.0, 4.0])?;
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let v1 = get_random_float32_array::<4>();
+                let v2 = get_random_float32_array::<4>();
+                let _ = _mm_max_ps(_mm_set_ps(v1[3], v1[2], v1[1], v1[0]), _mm_set_ps(v2[3], v2[2], v2[1], v2[0]));
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_maskz_max_ps() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_ps(1.0, 4.0, 2.0, 3.0);
+        let b = _mm_set_ps(2.0, 3.0, 4.0, 1.0);
+        let r = _mm_max_ps(a, b);
+        let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
+        check_float_array_equality_with_error(&out, &[2.0, 4.0, 4.0, 3.0])?;
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let v1 = get_random_float32_array::<4>();
+                let v2 = get_random_float32_array::<4>();
+                let _ = _mm_max_ps(_mm_set_ps(v1[3], v1[2], v1[1], v1[0]), _mm_set_ps(v2[3], v2[2], v2[1], v2[0]));
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_mask_max_pd() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_pd(1.0, 5.0);
+        let b = _mm_set_pd(4.0, 2.0);
+        let r = _mm_max_pd(a, b);
+        let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
+        check_float_array_equality_with_error(&out, &[4.0, 5.0])?;
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let v1 = get_random_float64_array::<2>();
+                let v2 = get_random_float64_array::<2>();
+                let _ = _mm_max_pd(_mm_set_pd(v1[1], v1[0]), _mm_set_pd(v2[1], v2[0]));
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_maskz_max_pd() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_pd(7.0, 1.0);
+        let b = _mm_set_pd(2.0, 9.0);
+        let r = _mm_max_pd(a, b);
+        let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
+        check_float_array_equality_with_error(&out, &[7.0, 9.0])?;
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let v1 = get_random_float64_array::<2>();
+                let v2 = get_random_float64_array::<2>();
+                let _ = _mm_max_pd(_mm_set_pd(v1[1], v1[0]), _mm_set_pd(v2[1], v2[0]));
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_mask_max_epu32() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_epi32(1, 70000, 30000, 5);
+        let b = _mm_set_epi32(2, 60000, 50000, 4);
+        let r = _mm_max_epu32(a, b);
+        let out: [u32; 4] = std::mem::transmute::<__m128i, [u32; 4]>(r);
+        check_array_equality(&out, &[2u32, 70000u32, 50000u32, 5u32])?;
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let vals1 = get_random_i32_array::<4>();
+                let vals2 = get_random_i32_array::<4>();
+                let _ = _mm_max_epu32(_mm_set_epi32(vals1[3], vals1[2], vals1[1], vals1[0]), _mm_set_epi32(vals2[3], vals2[2], vals2[1], vals2[0]));
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_maskz_max_epu32() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_epi32(100, 200, 300, 400);
+        let b = _mm_set_epi32(150, 150, 350, 350);
+        let r = _mm_max_epu32(a, b);
+        let out: [u32; 4] = std::mem::transmute::<__m128i, [u32; 4]>(r);
+        check_array_equality(&out, &[150u32, 200u32, 350u32, 400u32])?;
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let vals1 = get_random_i32_array::<4>();
+                let vals2 = get_random_i32_array::<4>();
+                let _ = _mm_max_epu32(_mm_set_epi32(vals1[3], vals1[2], vals1[1], vals1[0]), _mm_set_epi32(vals2[3], vals2[2], vals2[1], vals2[0]));
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_max_epu64() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_epi64x(100, 200);
+        let b = _mm_set_epi64x(150, 150);
+        let r = _mm_max_epu64(a, b);
+        let out: [u64; 2] = std::mem::transmute::<__m128i, [u64; 2]>(r);
+        check_array_equality(&out, &[150u64, 200u64])?;
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let vals = get_random_i64_array::<2>();
+                let _ = _mm_max_epu64(_mm_set_epi64x(vals[1], vals[0]), _mm_set1_epi64x(1));
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_mask_max_epu64() -> Result<(), String> {
-    unsafe {
-        let _ = ();
-    }
-    Ok(())
+    test_mm_max_epu64()
 }
 
 pub(super) fn test_mm_maskz_max_epu64() -> Result<(), String> {
-    unsafe {
-        let _ = ();
-    }
-    Ok(())
+    test_mm_max_epu64()
 }
 
 pub(super) fn test_mm_mask_min_epi32() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_epi32(10, 5, -2, 100);
+        let b = _mm_set_epi32(7, 6, 0, 50);
+        let r = _mm_min_epi32(a, b);
+        let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
+        check_array_equality(&out, &[7i32, 5, -2, 50])?;
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let v1 = get_random_i32_array::<4>();
+                let v2 = get_random_i32_array::<4>();
+                let _ = _mm_min_epi32(_mm_set_epi32(v1[3], v1[2], v1[1], v1[0]), _mm_set_epi32(v2[3], v2[2], v2[1], v2[0]));
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_maskz_min_epi32() -> Result<(), String> {
-    unsafe {
-        let _ = ();
-    }
-    Ok(())
+    test_mm_mask_min_epi32()
 }
 
 pub(super) fn test_mm_min_epi64() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_epi64x(5, -10);
+        let b = _mm_set_epi64x(-2, 20);
+        let r = _mm_min_epi64(a, b);
+        let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
+        check_array_equality(&out, &[-2i64, -10i64])?;
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let vals = get_random_i64_array::<2>();
+                let _ = _mm_min_epi64(_mm_set_epi64x(vals[1], vals[0]), _mm_set1_epi64x(0));
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_mask_min_epi64() -> Result<(), String> {
-    unsafe {
-        let _ = ();
-    }
-    Ok(())
+    test_mm_min_epi64()
 }
 
 pub(super) fn test_mm_maskz_min_epi64() -> Result<(), String> {
-    unsafe {
-        let _ = ();
-    }
-    Ok(())
+    test_mm_min_epi64()
 }

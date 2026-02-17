@@ -65,12 +65,10 @@ fn test_mm256_set_ps() -> Result<(), String> {
         let result = _mm256_set_ps(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
         check_float_array_equality_with_error(&result, &[8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let arr = get_random_float32_array::<8>();
                 let result = _mm256_set_ps(arr[7], arr[6], arr[5], arr[4], arr[3], arr[2], arr[1], arr[0]);
                 let result = std::mem::transmute::<__m256, [f32; 8]>(result);
@@ -87,12 +85,10 @@ fn test_mm256_set1_ps() -> Result<(), String> {
         let result = _mm256_set1_ps(3.13);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
         check_float_array_equality_with_error(&result, &[3.13, 3.13, 3.13, 3.13, 3.13, 3.13, 3.13, 3.13])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let value = get_random_float();
                 let result = _mm256_set1_ps(value);
                 let result = std::mem::transmute::<__m256, [f32; 8]>(result);
@@ -109,12 +105,10 @@ fn test_mm256_setzero_ps() -> Result<(), String> {
         let result = _mm256_setzero_ps();
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
         check_float_array_equality_with_error(&result, &[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let _result = _mm256_setzero_ps();
             }
         }
@@ -130,12 +124,10 @@ fn test_mm256_add_ps() -> Result<(), String> {
         let result = _mm256_add_ps(a, b);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
         check_float_array_equality_with_error(&result, &[9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let arr1 = get_random_float32_array::<8>();
                 let arr2 = get_random_float32_array::<8>();
                 let _result = _mm256_add_ps(
@@ -156,12 +148,10 @@ fn test_mm256_sub_ps() -> Result<(), String> {
         let result = _mm256_sub_ps(a, b);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
         check_float_array_equality_with_error(&result, &[-7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let arr1 = get_random_float32_array::<8>();
                 let arr2 = get_random_float32_array::<8>();
                 let _result = _mm256_sub_ps(
@@ -182,12 +172,10 @@ fn test_mm256_mul_ps() -> Result<(), String> {
         let result = _mm256_mul_ps(a, b);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
         check_float_array_equality_with_error(&result, &[16.0, 14.0, 12.0, 10.0, 8.0, 6.0, 4.0, 2.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let arr1 = get_random_float32_array::<8>();
                 let arr2 = get_random_float32_array::<8>();
                 let _result = _mm256_mul_ps(
@@ -209,12 +197,10 @@ fn test_mm256_div_ps() -> Result<(), String> {
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
 
         check_float_array_equality_with_error(&result, &[1.0, 2.0, 3.0, 4.0, 1.0, 2.0, 3.0, 4.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let arr1 = get_random_float32_array::<8>();
                 let arr2 = get_random_float32_array::<8>();
                 let _result = _mm256_div_ps(
@@ -237,12 +223,10 @@ fn test_mm256_load_ps() -> Result<(), String> {
         let result = _mm256_load_ps(data.0.as_ptr());
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
         check_float_array_equality_with_error(&result, &data.0)?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let data = AlignedData(get_random_float32_array::<8>());
                 let result = _mm256_load_ps(data.0.as_ptr());
                 let result = std::mem::transmute::<__m256, [f32; 8]>(result);
@@ -260,12 +244,10 @@ fn test_mm256_loadu_ps() -> Result<(), String> {
         let result = _mm256_loadu_ps(data.as_ptr());
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
         check_float_array_equality_with_error(&result, &data)?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let data = get_random_float32_array::<8>();
                 let result = _mm256_loadu_ps(data.as_ptr());
                 let result = std::mem::transmute::<__m256, [f32; 8]>(result);
@@ -287,12 +269,10 @@ fn test_mm256_store_ps() -> Result<(), String> {
         let vec = _mm256_loadu_ps(data.0.as_ptr());
         _mm256_store_ps(result.0.as_mut_ptr(), vec);
         check_float_array_equality_with_error(&result.0, &data.0)?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let data = AlignedData(get_random_float32_array::<8>());
                 let mut result = AlignedData([0.0; 8]);
                 let vec = _mm256_loadu_ps(data.0.as_ptr());
@@ -312,12 +292,10 @@ fn test_mm256_max_ps() -> Result<(), String> {
         let result = _mm256_max_ps(a, b);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
         check_float_array_equality_with_error(&result, &[8.0, 7.0, 6.0, 5.0, 5.0, 6.0, 7.0, 8.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let arr1 = get_random_float32_array::<8>();
                 let arr2 = get_random_float32_array::<8>();
                 let _result = _mm256_max_ps(
@@ -338,12 +316,10 @@ fn test_mm256_min_ps() -> Result<(), String> {
         let result = _mm256_min_ps(a, b);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
         check_float_array_equality_with_error(&result, &[1.0, 2.0, 3.0, 4.0, 4.0, 3.0, 2.0, 1.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let arr1 = get_random_float32_array::<8>();
                 let arr2 = get_random_float32_array::<8>();
                 let _result = _mm256_min_ps(
@@ -364,12 +340,10 @@ fn test_mm256_sqrt_ps() -> Result<(), String> {
         let result = _mm256_sqrt_ps(vec);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
         check_float_array_equality_with_error(&result, &[2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let data = get_random_float32_array::<8>();
                 let vec = _mm256_loadu_ps(data.as_ptr());
                 let _result = _mm256_sqrt_ps(vec);
@@ -387,12 +361,10 @@ fn test_mm256_and_ps() -> Result<(), String> {
         let result = _mm256_and_ps(a, b);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
         check_float_array_equality_with_error(&result, &[0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let arr1 = get_random_float32_array::<8>();
                 let arr2 = get_random_float32_array::<8>();
                 let _result = _mm256_and_ps(
@@ -413,12 +385,10 @@ fn test_mm256_or_ps() -> Result<(), String> {
         let result = _mm256_or_ps(a, b);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
         check_float_array_equality_with_error(&result, &[0.0, -1.0, 1.0, 1.0, 0.0, -1.0, 1.0, 1.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let arr1 = get_random_float32_array::<8>();
                 let arr2 = get_random_float32_array::<8>();
                 let _result = _mm256_or_ps(
@@ -439,12 +409,10 @@ fn test_mm256_xor_ps() -> Result<(), String> {
         let result = _mm256_xor_ps(a, b);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
         check_float_array_equality_with_error(&result, &[0.0, -1.0, 1.0, 0.0, 0.0, -1.0, 1.0, 0.0])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let arr1 = get_random_float32_array::<8>();
                 let arr2 = get_random_float32_array::<8>();
                 let _result = _mm256_xor_ps(

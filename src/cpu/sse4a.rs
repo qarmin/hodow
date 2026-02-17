@@ -21,14 +21,12 @@ impl ExtensionTest for SSE4A {
 }
 
 fn test_mm_extract_si64() -> Result<(), String> {
-    unsafe {
-        let x: i64 = 0x1234_5678_9ABC_DEF0;
-        let _ = x as i64;
-        if crate::get_fuzzing() {
-            info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = x as i64;
-            }
+    let x: i64 = 0x1234_5678_9ABC_DEF0;
+    let _ = x as i64;
+    if crate::get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..crate::cpu::get_iterations() {
+            let _ = x as i64;
         }
     }
     Ok(())
@@ -43,25 +41,21 @@ fn test_mm_inserti_si64() -> Result<(), String> {
     test_mm_extract_si64()
 }
 fn test_mm_stream_sd() -> Result<(), String> {
-    unsafe {
-        let _x = 1.23f64;
-        if crate::get_fuzzing() {
-            info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _x;
-            }
+    let _x = 1.23f64;
+    if crate::get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..crate::cpu::get_iterations() {
+            let _ = _x;
         }
     }
     Ok(())
 }
 fn test_mm_stream_ss() -> Result<(), String> {
-    unsafe {
-        let _x = 4.56f32;
-        if crate::get_fuzzing() {
-            info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _x;
-            }
+    let _x = 4.56f32;
+    if crate::get_fuzzing() {
+        info!("Starting fuzzing");
+        for _ in 0..crate::cpu::get_iterations() {
+            let _ = _x;
         }
     }
     Ok(())
