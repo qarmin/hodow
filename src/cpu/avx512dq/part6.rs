@@ -10,7 +10,7 @@ pub(super) fn test_mm_maskz_range_round_ss() -> Result<(), String> {
     unsafe {
         let x = _mm_set_ss(3.25);
         let s = _mm_cvtss_f32(x);
-        crate::cpu::common::check_float_equality(s, 3.25f32, 0.01f32)?;
+        crate::cpu::common::check_float_equality(s, 3.25f32)?;
     }
 
     if get_fuzzing() {
@@ -190,7 +190,7 @@ pub(super) fn test_mm_reduce_round_sd() -> Result<(), String> {
     unsafe {
         let x = _mm_set_sd(2.5);
         let s = _mm_cvtsd_f64(x);
-        crate::cpu::common::check_float_equality(s as f32, 2.5f32, 0.01f32)?;
+        crate::cpu::common::check_float_equality(s as f32, 2.5f32)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -207,7 +207,7 @@ pub(super) fn test_mm_mask_reduce_round_sd() -> Result<(), String> {
     unsafe {
         let x = _mm_set_sd(6.5);
         let s = _mm_cvtsd_f64(x);
-        crate::cpu::common::check_float_equality(s as f32, 6.5f32, 0.01f32)?;
+        crate::cpu::common::check_float_equality(s as f32, 6.5f32)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -224,7 +224,7 @@ pub(super) fn test_mm_maskz_reduce_round_sd() -> Result<(), String> {
     unsafe {
         let x = _mm_set_sd(4.25);
         let s = _mm_cvtsd_f64(x);
-        crate::cpu::common::check_float_equality(s as f32, 4.25f32, 0.01f32)?;
+        crate::cpu::common::check_float_equality(s as f32, 4.25f32)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -241,7 +241,7 @@ pub(super) fn test_mm_reduce_sd() -> Result<(), String> {
     unsafe {
         let x = _mm_set_sd(11.0);
         let s = _mm_cvtsd_f64(x);
-        crate::cpu::common::check_float_equality(s as f32, 11.0f32, 0.01f32)?;
+        crate::cpu::common::check_float_equality(s as f32, 11.0f32)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -258,7 +258,7 @@ pub(super) fn test_mm_mask_reduce_sd() -> Result<(), String> {
     unsafe {
         let x = _mm_set_sd(12.0);
         let s = _mm_cvtsd_f64(x);
-        crate::cpu::common::check_float_equality(s as f32, 12.0f32, 0.01f32)?;
+        crate::cpu::common::check_float_equality(s as f32, 12.0f32)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -275,7 +275,7 @@ pub(super) fn test_mm_maskz_reduce_sd() -> Result<(), String> {
     unsafe {
         let x = _mm_set_sd(13.0);
         let s = _mm_cvtsd_f64(x);
-        crate::cpu::common::check_float_equality(s as f32, 13.0f32, 0.01f32)?;
+        crate::cpu::common::check_float_equality(s as f32, 13.0f32)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

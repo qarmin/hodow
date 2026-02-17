@@ -156,14 +156,14 @@ pub(super) fn test_mm_cvtt_roundsd_si64() -> Result<(), String> {
 pub(super) fn test_mm_cvtt_roundsd_i64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(0.0, 3.9);
-        let r = _mm_cvtt_roundsd_i64(a);
+        let r = _mm_cvtt_roundsd_i64<12>(a);
         check_int_equality(r, 3i64)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let vals = get_random_float64_array::<1>();
-                let _ = _mm_cvtt_roundsd_i64(_mm_set_pd(0.0, vals[0]));
+                let _ = _mm_cvtt_roundsd_i64<12>(_mm_set_pd(0.0, vals[0]));
             }
         }
     }

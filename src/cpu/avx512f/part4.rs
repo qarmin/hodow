@@ -5,7 +5,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, check_float_equality, check_int_equality, get_random_float32_array, get_random_float64_array, get_random_i32_array, get_random_i64_array};
+use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality, get_random_float32_array, get_random_float64_array, get_random_i32_array, get_random_i64_array};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -157,10 +157,7 @@ pub(super) fn test_mm_mask_mov_ps() -> Result<(), String> {
         let k: __mmask8 = 0xFFu8 as __mmask8;
         let result_v = _mm_mask_mov_ps(src, k, a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
-        check_float_equality(result[0], 1.0, 0.0001)?;
-        check_float_equality(result[1], 2.0, 0.0001)?;
-        check_float_equality(result[2], 3.0, 0.0001)?;
-        check_float_equality(result[3], 4.0, 0.0001)?;
+        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -180,10 +177,7 @@ pub(super) fn test_mm_maskz_mov_ps() -> Result<(), String> {
         let a = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let result_v = _mm_maskz_mov_ps(k, a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
-        check_float_equality(result[0], 1.0, 0.0001)?;
-        check_float_equality(result[1], 2.0, 0.0001)?;
-        check_float_equality(result[2], 3.0, 0.0001)?;
-        check_float_equality(result[3], 4.0, 0.0001)?;
+        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -204,8 +198,7 @@ pub(super) fn test_mm_mask_mov_pd() -> Result<(), String> {
         let k: __mmask8 = 0xFFu8 as __mmask8;
         let result_v = _mm_mask_mov_pd(src, k, a);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result_v);
-        check_float_equality(result[0] as f32, 1.0, 0.0001)?;
-        check_float_equality(result[1] as f32, 2.0, 0.0001)?;
+        check_float_array_equality(&result, &[1.0, 2.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -225,8 +218,7 @@ pub(super) fn test_mm_maskz_mov_pd() -> Result<(), String> {
         let a = _mm_set_pd(2.0, 1.0);
         let result_v = _mm_maskz_mov_pd(k, a);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result_v);
-        check_float_equality(result[0] as f32, 1.0, 0.0001)?;
-        check_float_equality(result[1] as f32, 2.0, 0.0001)?;
+        check_float_array_equality(&result, &[1.0, 2.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

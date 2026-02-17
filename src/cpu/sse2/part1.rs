@@ -211,7 +211,7 @@ pub(super) fn test_mm_cvtsd_f64() -> Result<(), String> {
                 let value = get_random_float() as f64;
                 let vec = _mm_set_pd(get_random_float() as f64, value);
                 let result = _mm_cvtsd_f64(vec);
-                check_float_equality(result as f32, value as f32, 0.001)?;
+                check_float_equality(result as f32, value as f32)?;
             }
         }
     }

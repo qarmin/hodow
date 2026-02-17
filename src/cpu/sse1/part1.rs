@@ -144,7 +144,7 @@ pub(super) fn test_mm_cvtss_f32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let result = _mm_cvtss_f32(a);
-        check_float_equality(result, 4.0, DEFAULT_FLOAT_DIFF)?;
+        check_float_equality(result, 4.0)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -153,7 +153,7 @@ pub(super) fn test_mm_cvtss_f32() -> Result<(), String> {
                 let arr = get_random_float32_array::<4>();
                 let vec = _mm_set_ps(arr[3], arr[2], arr[1], arr[0]);
                 let result = _mm_cvtss_f32(vec);
-                check_float_equality(result, arr[0], DEFAULT_FLOAT_DIFF)?;
+                check_float_equality(result, arr[0])?;
             }
         }
     }

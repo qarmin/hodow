@@ -559,7 +559,7 @@ fn test_mm_cmp_sd() -> Result<(), String> {
         let b = _mm_set_sd(1.0);
         let r = _mm_cmp_sd(a, b, _CMP_GT_OQ);
         let s = _mm_cvtsd_f64(r);
-        crate::cpu::common::check_float_equality(s as f32, 1.0f32, 0.0001f32)?;
+        crate::cpu::common::check_float_equality(s as f32, 1.0f32)?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -577,7 +577,7 @@ fn test_mm_cmp_ss() -> Result<(), String> {
         let b = _mm_set_ss(1.0);
         let r = _mm_cmp_ss(a, b, _CMP_GT_OQ);
         let s = _mm_cvtss_f32(r);
-        crate::cpu::common::check_float_equality(s, 1.0f32, 0.0001f32)?;
+        crate::cpu::common::check_float_equality(s, 1.0f32)?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");

@@ -389,7 +389,7 @@ fn test_mm_extract_ps() -> Result<(), String> {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let result = _mm_extract_ps::<2>(a);
         let result_float = f32::from_bits(result as u32);
-        check_float_equality(result_float, 2.0, DEFAULT_FLOAT_DIFF)?;
+        check_float_equality(result_float, 2.0)?;
     }
 
     if get_fuzzing() {
