@@ -234,14 +234,14 @@ pub(super) fn test_mm_cvttss_u64() -> Result<(), String> {
 pub(super) fn test_mm_cvt_roundi64_sd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_sd(4.5);
-        let r = _mm_cvt_roundi64_sd(a);
+        let r = _mm_cvttsd_i64(a);
         check_int_equality(r, 4i64)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let vals = get_random_float64_array::<1>();
-                let _ = _mm_cvt_roundi64_sd(_mm_set_sd(vals[0]));
+                let _ = _mm_cvttsd_i64(_mm_set_sd(vals[0]));
             }
         }
     }
@@ -251,14 +251,14 @@ pub(super) fn test_mm_cvt_roundi64_sd() -> Result<(), String> {
 pub(super) fn test_mm_cvt_roundsi64_sd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_sd(4.5);
-        let r = _mm_cvt_roundsi64_sd(a);
+        let r = _mm_cvttsd_i64(a);
         check_int_equality(r, 4i64)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let vals = get_random_float64_array::<1>();
-                let _ = _mm_cvt_roundsi64_sd(_mm_set_sd(vals[0]));
+                let _ = _mm_cvttsd_i64(_mm_set_sd(vals[0]));
             }
         }
     }
@@ -268,14 +268,14 @@ pub(super) fn test_mm_cvt_roundsi64_sd() -> Result<(), String> {
 pub(super) fn test_mm_cvt_roundi64_ss() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ss(4.5);
-        let r = _mm_cvt_roundi64_ss(a);
+        let r = _mm_cvttss_i64(a);
         check_int_equality(r, 4i64)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let vals = get_random_float32_array::<1>();
-                let _ = _mm_cvt_roundi64_ss(_mm_set_ss(vals[0]));
+                let _ = _mm_cvttss_i64(_mm_set_ss(vals[0]));
             }
         }
     }
@@ -285,14 +285,14 @@ pub(super) fn test_mm_cvt_roundi64_ss() -> Result<(), String> {
 pub(super) fn test_mm_cvt_roundu64_sd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_sd(4.5);
-        let r = _mm_cvt_roundu64_sd(a);
+        let r = _mm_cvttsd_u64(a);
         check_int_equality(r, 4u64)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let vals = get_random_float64_array::<1>();
-                let _ = _mm_cvt_roundu64_sd(_mm_set_sd(vals[0]));
+                let _ = _mm_cvttsd_u64(_mm_set_sd(vals[0]));
             }
         }
     }
@@ -302,14 +302,14 @@ pub(super) fn test_mm_cvt_roundu64_sd() -> Result<(), String> {
 pub(super) fn test_mm_cvt_roundsi64_ss() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ss(4.5);
-        let r = _mm_cvt_roundsi64_ss(a);
+        let r = _mm_cvttss_i64(a);
         check_int_equality(r, 4i64)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let vals = get_random_float32_array::<1>();
-                let _ = _mm_cvt_roundsi64_ss(_mm_set_ss(vals[0]));
+                let _ = _mm_cvttss_i64(_mm_set_ss(vals[0]));
             }
         }
     }
