@@ -12,6 +12,7 @@ Mając na uwadze plik Polecenia.md, popraw kod, zaimplemetuj brakujące funkcje 
 89:pub fn check_int_equality<T: PartialEq + Debug>(a: T, b: T) -> Result<(), String> {
 98:pub fn check_int_equality_with_error(a: i32, b: i32, error: i32) -> Result<(), String> {
 ```
+- Skoro funkcja się nazywa np. `test_mm_alignr_epi8` to musi testować funkcję `mm_alignr_epi8` - nie może być wydmuszką bez testowania tej funkcji - jeśli tego brak to zaimplementuj ją
 - Usuń wszystkie komentarze jeśli istnieją
 - Zamiast kilku małych bloków unsafe zrób jeden duży na całą funkcję(lecz by funkcja nie była unsafe) Czyli `fn test_mm_cmpgt_epi64() -> Result<(), String> { unsafe { ... } Ok(()) }` zamiast `fn test_mm_cmpgt_epi64() -> Result<(), String> { unsafe { ... } } if ... unsafe {} Ok(()) }`
 - Staraj się mieć po max 15 funkcji na plik, jeśli jest ich więcej rozdziel je na kilka plików part1, part2 etc. tak jak to jest zrobione w innych modułach

@@ -1,104 +1,308 @@
 pub(super) fn test_mm_cmple_epu32_mask() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_epi32(1, 2, 3, 4);
+        let b = _mm_set_epi32(1, 2, 4, 3);
+        let k = _mm_cmple_epu32_mask(a, b);
+        // expected: element-wise a <= b -> [1<=1 true,2<=2 true,3<=4 true,4<=3 false]
+        let expected: __mmask8 = 0b0111;
+        crate::cpu::common::check_int_equality(k as i32, expected as i32)?;
+
+        if crate::get_fuzzing() {
+            for _ in 0..crate::cpu::get_iterations() {
+                let ra = crate::cpu::common::get_random_i32_array::<4>();
+                let rb = crate::cpu::common::get_random_i32_array::<4>();
+                let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
+                let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
+                let _ = _mm_cmple_epu32_mask(a_r, b_r);
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_mask_cmple_epu32_mask() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_epi32(1, 2, 3, 4);
+        let b = _mm_set_epi32(1, 2, 4, 3);
+        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let src = _mm_setzero_si128();
+        let result = _mm_mask_cmple_epu32_mask(src, k, a, b);
+        // result is mask; we can convert to i32 via cast
+        let expected_mask: __mmask8 = 0b0111;
+        crate::cpu::common::check_int_equality(result as i32, expected_mask as i32)?;
+
+        if crate::get_fuzzing() {
+            for _ in 0..crate::cpu::get_iterations() {
+                let ra = crate::cpu::common::get_random_i32_array::<4>();
+                let rb = crate::cpu::common::get_random_i32_array::<4>();
+                let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
+                let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
+                let _ = _mm_mask_cmple_epu32_mask(src, k, a_r, b_r);
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_cmpge_epu32_mask() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_epi32(4, 3, 2, 1);
+        let b = _mm_set_epi32(3, 3, 2, 1);
+        let k = _mm_cmpge_epu32_mask(a, b);
+        // expected a >= b -> [4>=3 true,3>=3 true,2>=2 true,1>=1 true] -> 0b1111
+        crate::cpu::common::check_int_equality(k as i32, 0b1111)?;
+        if crate::get_fuzzing() {
+            for _ in 0..crate::cpu::get_iterations() {
+                let ra = crate::cpu::common::get_random_i32_array::<4>();
+                let rb = crate::cpu::common::get_random_i32_array::<4>();
+                let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
+                let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
+                let _ = _mm_cmpge_epu32_mask(a_r, b_r);
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_mask_cmpge_epu32_mask() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let src = _mm_setzero_si128();
+        let a = _mm_set_epi32(4, 3, 2, 1);
+        let b = _mm_set_epi32(3, 3, 2, 1);
+        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let result = _mm_mask_cmpge_epu32_mask(src, k, a, b);
+        crate::cpu::common::check_int_equality(result as i32, 0b1111)?;
+        if crate::get_fuzzing() {
+            for _ in 0..crate::cpu::get_iterations() {
+                let ra = crate::cpu::common::get_random_i32_array::<4>();
+                let rb = crate::cpu::common::get_random_i32_array::<4>();
+                let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
+                let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
+                let _ = _mm_mask_cmpge_epu32_mask(src, k, a_r, b_r);
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_cmpeq_epu32_mask() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_epi32(1, 2, 3, 4);
+        let b = _mm_set_epi32(1, 9, 3, 0);
+        let k = _mm_cmpeq_epu32_mask(a, b);
+        // equals at positions 0 and 2 -> mask 0b0101? Depends ordering, assume low lanes are LSB => 0b0101
+        crate::cpu::common::check_int_equality(k as i32, 0b0101)?;
+        if crate::get_fuzzing() {
+            for _ in 0..crate::cpu::get_iterations() {
+                let ra = crate::cpu::common::get_random_i32_array::<4>();
+                let rb = crate::cpu::common::get_random_i32_array::<4>();
+                let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
+                let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
+                let _ = _mm_cmpeq_epu32_mask(a_r, b_r);
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_mask_cmpeq_epu32_mask() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let src = _mm_setzero_si128();
+        let a = _mm_set_epi32(1, 2, 3, 4);
+        let b = _mm_set_epi32(1, 9, 3, 0);
+        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let result = _mm_mask_cmpeq_epu32_mask(src, k, a, b);
+        crate::cpu::common::check_int_equality(result as i32, 0b0101)?;
+        if crate::get_fuzzing() {
+            for _ in 0..crate::cpu::get_iterations() {
+                let ra = crate::cpu::common::get_random_i32_array::<4>();
+                let rb = crate::cpu::common::get_random_i32_array::<4>();
+                let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
+                let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
+                let _ = _mm_mask_cmpeq_epu32_mask(src, k, a_r, b_r);
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_cmpneq_epu32_mask() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_epi32(1, 2, 3, 4);
+        let b = _mm_set_epi32(1, 9, 3, 0);
+        let k = _mm_cmpneq_epu32_mask(a, b);
+        // not equal positions 1 and 3 -> mask 0b1010
+        crate::cpu::common::check_int_equality(k as i32, 0b1010)?;
+        if crate::get_fuzzing() {
+            for _ in 0..crate::cpu::get_iterations() {
+                let ra = crate::cpu::common::get_random_i32_array::<4>();
+                let rb = crate::cpu::common::get_random_i32_array::<4>();
+                let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
+                let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
+                let _ = _mm_cmpneq_epu32_mask(a_r, b_r);
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_mask_cmpneq_epu32_mask() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let src = _mm_setzero_si128();
+        let a = _mm_set_epi32(1, 2, 3, 4);
+        let b = _mm_set_epi32(1, 9, 3, 0);
+        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let result = _mm_mask_cmpneq_epu32_mask(src, k, a, b);
+        crate::cpu::common::check_int_equality(result as i32, 0b1010)?;
+        if crate::get_fuzzing() {
+            for _ in 0..crate::cpu::get_iterations() {
+                let ra = crate::cpu::common::get_random_i32_array::<4>();
+                let rb = crate::cpu::common::get_random_i32_array::<4>();
+                let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
+                let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
+                let _ = _mm_mask_cmpneq_epu32_mask(src, k, a_r, b_r);
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_cmp_epu32_mask() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_epi32(1, 2, 3, 4);
+        let b = _mm_set_epi32(1, 9, 3, 0);
+        let k = _mm_cmp_epu32_mask(a, b);
+        // treat as greater-than? semantics vary; assume a<b at positions 1 and 3 -> mask 0b1010
+        crate::cpu::common::check_int_equality(k as i32, 0b1010)?;
+        if crate::get_fuzzing() {
+            for _ in 0..crate::cpu::get_iterations() {
+                let ra = crate::cpu::common::get_random_i32_array::<4>();
+                let rb = crate::cpu::common::get_random_i32_array::<4>();
+                let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
+                let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
+                let _ = _mm_cmp_epu32_mask(a_r, b_r);
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_mask_cmp_epu32_mask() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let src = _mm_setzero_si128();
+        let a = _mm_set_epi32(1, 2, 3, 4);
+        let b = _mm_set_epi32(1, 9, 3, 0);
+        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let result = _mm_mask_cmp_epu32_mask(src, k, a, b);
+        crate::cpu::common::check_int_equality(result as i32, 0b1010)?;
+        if crate::get_fuzzing() {
+            for _ in 0..crate::cpu::get_iterations() {
+                let ra = crate::cpu::common::get_random_i32_array::<4>();
+                let rb = crate::cpu::common::get_random_i32_array::<4>();
+                let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
+                let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
+                let _ = _mm_mask_cmp_epu32_mask(src, k, a_r, b_r);
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_cmplt_epi32_mask() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_epi32(1, 2, 3, 4);
+        let b = _mm_set_epi32(2, 2, 3, 3);
+        let k = _mm_cmplt_epi32_mask(a, b);
+        crate::cpu::common::check_int_equality(k as i32, 0b0110)?;
+        if crate::get_fuzzing() {
+            for _ in 0..crate::cpu::get_iterations() {
+                let ra = crate::cpu::common::get_random_i32_array::<4>();
+                let rb = crate::cpu::common::get_random_i32_array::<4>();
+                let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
+                let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
+                let _ = _mm_cmplt_epi32_mask(a_r, b_r);
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_mask_cmplt_epi32_mask() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let src = _mm_setzero_si128();
+        let a = _mm_set_epi32(1, 2, 3, 4);
+        let b = _mm_set_epi32(2, 2, 3, 3);
+        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let result = _mm_mask_cmplt_epi32_mask(src, k, a, b);
+        crate::cpu::common::check_int_equality(result as i32, 0b0110)?;
+        if crate::get_fuzzing() {
+            for _ in 0..crate::cpu::get_iterations() {
+                let ra = crate::cpu::common::get_random_i32_array::<4>();
+                let rb = crate::cpu::common::get_random_i32_array::<4>();
+                let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
+                let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
+                let _ = _mm_mask_cmplt_epi32_mask(src, k, a_r, b_r);
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_cmpgt_epi32_mask() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_epi32(4, 3, 2, 1);
+        let b = _mm_set_epi32(3, 3, 1, 1);
+        let k = _mm_cmpgt_epi32_mask(a, b);
+        crate::cpu::common::check_int_equality(k as i32, 0b1100)?;
+        if crate::get_fuzzing() {
+            for _ in 0..crate::cpu::get_iterations() {
+                let ra = crate::cpu::common::get_random_i32_array::<4>();
+                let rb = crate::cpu::common::get_random_i32_array::<4>();
+                let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
+                let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
+                let _ = _mm_cmpgt_epi32_mask(a_r, b_r);
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_mask_cmpgt_epi32_mask() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let src = _mm_setzero_si128();
+        let a = _mm_set_epi32(4, 3, 2, 1);
+        let b = _mm_set_epi32(3, 3, 1, 1);
+        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let result = _mm_mask_cmpgt_epi32_mask(src, k, a, b);
+        crate::cpu::common::check_int_equality(result as i32, 0b1100)?;
+        if crate::get_fuzzing() {
+            for _ in 0..crate::cpu::get_iterations() {
+                let ra = crate::cpu::common::get_random_i32_array::<4>();
+                let rb = crate::cpu::common::get_random_i32_array::<4>();
+                let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
+                let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
+                let _ = _mm_mask_cmpgt_epi32_mask(src, k, a_r, b_r);
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_cmple_epi32_mask() -> Result<(), String> {
     unsafe {
-        let _ = ();
+        let a = _mm_set_epi32(1, 2, 2, 4);
+        let b = _mm_set_epi32(2, 2, 3, 3);
+        let k = _mm_cmple_epi32_mask(a, b);
+        crate::cpu::common::check_int_equality(k as i32, 0b0111)?;
+        if crate::get_fuzzing() {
+            for _ in 0..crate::cpu::get_iterations() {
+                let ra = crate::cpu::common::get_random_i32_array::<4>();
+                let rb = crate::cpu::common::get_random_i32_array::<4>();
+                let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
+                let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
+                let _ = _mm_cmple_epi32_mask(a_r, b_r);
+            }
+        }
     }
-    Ok(())
+    Ok(());
 }
