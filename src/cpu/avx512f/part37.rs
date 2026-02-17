@@ -67,7 +67,7 @@ pub(super) fn test_mm_mask_cmpge_epi32_mask() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let ra = get_random_i32_array::<4>();
-                let rb = get_random_i32_array::<4>;
+                let rb = get_random_i32_array::<4>();
                 let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
                 let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
                 let _ = _mm_mask_cmpge_epi32_mask(src, k, a_r, b_r);
@@ -116,7 +116,7 @@ pub(super) fn test_mm_mask_cmpeq_epi32_mask() -> Result<(), String> {
                 let rb = get_random_i32_array::<4>();
                 let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
                 let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
-                let _ = _mm_mask_cmpeq_epi32_mask(src, k, a_r, b_r);
+                let _ = _mm_mask_cmpeq_epi32_mask(k, a_r, b_r);
             }
         }
     }
@@ -151,7 +151,7 @@ pub(super) fn test_mm_mask_cmpneq_epi32_mask() -> Result<(), String> {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let b = _mm_set_epi32(1, 9, 3, 0);
         let k: __mmask8 = 0xFFu8 as __mmask8;
-        let result = _mm_mask_cmpneq_epi32_mask(src, k, a, b);
+        let result = _mm_mask_cmpneq_epi32_mask(k, a, b);
         check_int_equality(result as i32, 0b1010)?;
     }
     if get_fuzzing() {
@@ -162,7 +162,7 @@ pub(super) fn test_mm_mask_cmpneq_epi32_mask() -> Result<(), String> {
                 let rb = get_random_i32_array::<4>();
                 let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
                 let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
-                let _ = _mm_mask_cmpneq_epi32_mask(src, k, a_r, b_r);
+                let _ = _mm_mask_cmpneq_epi32_mask(k, a_r, b_r);
             }
         }
     }
@@ -338,7 +338,7 @@ pub(super) fn test_mm_mask_cmple_epu64_mask() -> Result<(), String> {
             unsafe {
                 let rv = get_random_i64_array::<2>();
                 let a_r = _mm_set_epi64x(rv[1], rv[0]);
-                let _ = _mm_mask_cmple_epu64_mask(_mm_setzero_si128(), 0xFFu8 as __mmask8, a_r, a_r);
+                let _ = _mm_mask_cmple_epu64_mask(0xFFu8 as __mmask8, a_r, a_r);
             }
         }
     }
