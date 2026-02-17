@@ -12,7 +12,7 @@ pub(super) fn test_mm_maskz_cvtepi16_epi64() -> Result<(), String> {
         // use full mask to behave like unmasked
         let r = _mm_maskz_cvtepi16_epi64(15, a);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
-        check_array_equality(&out, &[1i64, 2i64])?;
+        check_array_equality(&out, &[1, 2])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -68,7 +68,7 @@ pub(super) fn test_mm_mask_cvtepu16_epi64() -> Result<(), String> {
         let src = _mm_setzero_si128();
         let r = _mm_mask_cvtepu16_epi64(src, 15, a);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
-        check_array_equality(&out, &[1i64, 2i64])?;
+        check_array_equality(&out, &[1, 2])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -86,7 +86,7 @@ pub(super) fn test_mm_maskz_cvtepu16_epi64() -> Result<(), String> {
         let a = _mm_set_epi16(0, 0, 0, 0, 4, 3, 2, 1);
         let r = _mm_maskz_cvtepu16_epi64(15, a);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
-        check_array_equality(&out, &[1i64, 2i64])?;
+        check_array_equality(&out, &[1, 2])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -105,7 +105,7 @@ pub(super) fn test_mm_mask_cvtepi32_epi64() -> Result<(), String> {
         let src = _mm_setzero_si128();
         let r = _mm_mask_cvtepi32_epi64(src, 3, a);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
-        check_array_equality(&out, &[1i64, 2i64])?;
+        check_array_equality(&out, &[1, 2])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -123,7 +123,7 @@ pub(super) fn test_mm_maskz_cvtepi32_epi64() -> Result<(), String> {
         let a = _mm_set_epi32(4, 3, 2, 1);
         let r = _mm_maskz_cvtepi32_epi64(3, a);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
-        check_array_equality(&out, &[1i64, 2i64])?;
+        check_array_equality(&out, &[1, 2])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -142,7 +142,7 @@ pub(super) fn test_mm_mask_cvtepu32_epi64() -> Result<(), String> {
         let src = _mm_setzero_si128();
         let r = _mm_mask_cvtepu32_epi64(src, 3, a);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
-        check_array_equality(&out, &[1i64, 2i64])?;
+        check_array_equality(&out, &[1, 2])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -160,7 +160,7 @@ pub(super) fn test_mm_maskz_cvtepu32_epi64() -> Result<(), String> {
         let a = _mm_set_epi32(4, 3, 2, 1);
         let r = _mm_maskz_cvtepu32_epi64(3, a);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
-        check_array_equality(&out, &[1i64, 2i64])?;
+        check_array_equality(&out, &[1, 2])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

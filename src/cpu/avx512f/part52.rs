@@ -297,10 +297,10 @@ pub(super) fn test_mm_maskz_getexp_round_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_getmant_round_ss() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_ss(1.5f32);
+        let a = _mm_set_ss(1.5);
         let r = _mm_getmant_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }, 0, 0>(a, a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[2.0f32, 0.0f32, 0.0f32, 0.0f32])?;
+        check_float_array_equality(&out, &[2.0, 0.0, 0.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -317,11 +317,11 @@ pub(super) fn test_mm_getmant_round_ss() -> Result<(), String> {
 pub(super) fn test_mm_mask_getmant_round_ss() -> Result<(), String> {
     unsafe {
         let src = _mm_setzero_ps();
-        let a = _mm_set_ss(1.5f32);
+        let a = _mm_set_ss(1.5);
         let k: __mmask8 = 255;
         let r = _mm_mask_getmant_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }, 0, 0>(src, k, a, a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[2.0f32, 0.0f32, 0.0f32, 0.0f32])?;
+        check_float_array_equality(&out, &[2.0, 0.0, 0.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

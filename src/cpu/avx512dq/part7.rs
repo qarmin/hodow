@@ -10,7 +10,7 @@ pub(super) fn test_mm_reduce_round_ss() -> Result<(), String> {
     unsafe {
         let x = _mm_set_ss(3.5);
         let s = _mm_cvtss_f32(x);
-        crate::cpu::common::check_float_equality(s, 3.5f32)?;
+        crate::cpu::common::check_float_equality(s, 3.5)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -27,7 +27,7 @@ pub(super) fn test_mm_mask_reduce_round_ss() -> Result<(), String> {
     unsafe {
         let x = _mm_set_ss(2.25);
         let s = _mm_cvtss_f32(x);
-        crate::cpu::common::check_float_equality(s, 2.25f32)?;
+        crate::cpu::common::check_float_equality(s, 2.25)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -44,7 +44,7 @@ pub(super) fn test_mm_maskz_reduce_round_ss() -> Result<(), String> {
     unsafe {
         let x = _mm_set_ss(1.75);
         let s = _mm_cvtss_f32(x);
-        crate::cpu::common::check_float_equality(s, 1.75f32)?;
+        crate::cpu::common::check_float_equality(s, 1.75)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -61,7 +61,7 @@ pub(super) fn test_mm_reduce_ss() -> Result<(), String> {
     unsafe {
         let x = _mm_set_ss(9.0);
         let s = _mm_cvtss_f32(x);
-        crate::cpu::common::check_float_equality(s, 9.0f32)?;
+        crate::cpu::common::check_float_equality(s, 9.0)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -217,7 +217,7 @@ pub(super) fn test_mm_mask_fpclass_sd_mask() -> Result<(), String> {
     unsafe {
         let x = _mm_set_sd(1.0);
         let s = _mm_cvtsd_f64(x);
-        crate::cpu::common::check_float_equality(s as f32, 1.0f32)?;
+        crate::cpu::common::check_float_equality(s as f32, 1.0)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -251,7 +251,7 @@ pub(super) fn test_mm_mask_fpclass_ss_mask() -> Result<(), String> {
     unsafe {
         let x = _mm_set_ss(2.5);
         let s = _mm_cvtss_f32(x);
-        crate::cpu::common::check_float_equality(s, 2.5f32)?;
+        crate::cpu::common::check_float_equality(s, 2.5)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

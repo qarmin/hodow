@@ -11,9 +11,9 @@ pub(super) fn test_mm_mask_andnot_epi64() -> Result<(), String> {
         let a = _mm_set_epi64x(2, 1);
         let b = _mm_set_epi64x(4, 3);
         // (~a) & b => elementwise: [~1 & 3, ~2 & 4]
-        let r = _mm_mask_andnot_epi64(_mm_setzero_si128(), 3u8, a, b);
+        let r = _mm_mask_andnot_epi64(_mm_setzero_si128(), 3, a, b);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
-        check_array_equality(&out, &[2i64 & !1i64 & 1099511627775, 4i64 & !2i64 & 16777215i64])?; // keep deterministic by using literals
+        check_array_equality(&out, &[2 & !1 & 1099511627775, 4 & !2 & 16777215])?; // keep deterministic by using literals
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -22,7 +22,7 @@ pub(super) fn test_mm_mask_andnot_epi64() -> Result<(), String> {
                 let rb = get_random_i64_array::<2>();
                 let a_r = _mm_set_epi64x(ra[1], ra[0]);
                 let b_r = _mm_set_epi64x(rb[1], rb[0]);
-                let _ = _mm_mask_andnot_epi64(_mm_setzero_si128(), 3u8, a_r, b_r);
+                let _ = _mm_mask_andnot_epi64(_mm_setzero_si128(), 3, a_r, b_r);
             }
         }
     }
@@ -33,10 +33,10 @@ pub(super) fn test_mm_maskz_andnot_epi64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(2, 1);
         let b = _mm_set_epi64x(4, 3);
-        let r = _mm_maskz_andnot_epi64(3u8, a, b);
+        let r = _mm_maskz_andnot_epi64(3, a, b);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
         // compute expected directly: (~a) & b
-        check_array_equality(&out, &[(!1i64) & 3i64, (!2i64) & 4i64])?;
+        check_array_equality(&out, &[(!1) & 3, (!2) & 4])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -45,7 +45,7 @@ pub(super) fn test_mm_maskz_andnot_epi64() -> Result<(), String> {
                 let rb = get_random_i64_array::<2>();
                 let a_r = _mm_set_epi64x(ra[1], ra[0]);
                 let b_r = _mm_set_epi64x(rb[1], rb[0]);
-                let _ = _mm_maskz_andnot_epi64(3u8, a_r, b_r);
+                let _ = _mm_maskz_andnot_epi64(3, a_r, b_r);
             }
         }
     }
@@ -78,7 +78,7 @@ pub(super) fn test_mm_mask_test_epi32_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let b = _mm_set_epi32(1, 0, 3, 0);
-        let k: __mmask8 = 255u8 as __mmask8;
+        let k: __mmask8 = 255 as __mmask8;
         let result = _mm_mask_test_epi32_mask(k, a, b);
         check_int_equality(result as i32, 5)?;
 
@@ -122,7 +122,7 @@ pub(super) fn test_mm_mask_test_epi64_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(2, 1);
         let b = _mm_set_epi64x(0, 1);
-        let k: __mmask8 = 255u8 as __mmask8;
+        let k: __mmask8 = 255 as __mmask8;
         let result = _mm_mask_test_epi64_mask(k, a, b);
         check_int_equality(result as i32, 1)?;
 
@@ -166,7 +166,7 @@ pub(super) fn test_mm_mask_testn_epi32_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let b = _mm_set_epi32(1, 0, 3, 0);
-        let k: __mmask8 = 255u8 as __mmask8;
+        let k: __mmask8 = 255 as __mmask8;
         let result = _mm_mask_testn_epi32_mask(k, a, b);
         check_int_equality(result as i32, 0)?;
 
@@ -210,7 +210,7 @@ pub(super) fn test_mm_mask_testn_epi64_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(2, 1);
         let b = _mm_set_epi64x(0, 1);
-        let k: __mmask8 = 255u8 as __mmask8;
+        let k: __mmask8 = 255 as __mmask8;
         let result = _mm_mask_testn_epi64_mask(k, a, b);
         check_int_equality(result as i32, 0)?;
 
@@ -231,14 +231,14 @@ pub(super) fn test_mm_mask_testn_epi64_mask() -> Result<(), String> {
 pub(super) fn test_mm_mask_set1_epi32() -> Result<(), String> {
     unsafe {
         let src = _mm_setzero_si128();
-        let r = _mm_mask_set1_epi32(src, 15u8, 66);
+        let r = _mm_mask_set1_epi32(src, 15, 66);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
-        check_array_equality(&out, &[66i32, 66i32, 66i32, 66i32])?;
+        check_array_equality(&out, &[66, 66, 66, 66])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
-                let _ = _mm_mask_set1_epi32(src, 15u8, 66);
+                let _ = _mm_mask_set1_epi32(src, 15, 66);
             }
         }
     }
@@ -247,14 +247,14 @@ pub(super) fn test_mm_mask_set1_epi32() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_set1_epi32() -> Result<(), String> {
     unsafe {
-        let r = _mm_maskz_set1_epi32(15u8, 66);
+        let r = _mm_maskz_set1_epi32(15, 66);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
-        check_array_equality(&out, &[66i32, 66i32, 66i32, 66i32])?;
+        check_array_equality(&out, &[66, 66, 66, 66])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
-                let _ = _mm_maskz_set1_epi32(15u8, 66);
+                let _ = _mm_maskz_set1_epi32(15, 66);
             }
         }
     }
@@ -264,14 +264,14 @@ pub(super) fn test_mm_maskz_set1_epi32() -> Result<(), String> {
 pub(super) fn test_mm_mask_set1_epi64() -> Result<(), String> {
     unsafe {
         let src = _mm_setzero_si128();
-        let r = _mm_mask_set1_epi64(src, 3u8, 4774451407313060418i64);
+        let r = _mm_mask_set1_epi64(src, 3, 4774451407313060418);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
-        check_array_equality(&out, &[4774451407313060418i64, 4774451407313060418i64])?;
+        check_array_equality(&out, &[4774451407313060418, 4774451407313060418])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
-                let _ = _mm_mask_set1_epi64(src, 3u8, 4774451407313060418i64);
+                let _ = _mm_mask_set1_epi64(src, 3, 4774451407313060418);
             }
         }
     }
@@ -280,14 +280,14 @@ pub(super) fn test_mm_mask_set1_epi64() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_set1_epi64() -> Result<(), String> {
     unsafe {
-        let r = _mm_maskz_set1_epi64(3u8, 4774451407313060418i64);
+        let r = _mm_maskz_set1_epi64(3, 4774451407313060418);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
-        check_array_equality(&out, &[4774451407313060418i64, 4774451407313060418i64])?;
+        check_array_equality(&out, &[4774451407313060418, 4774451407313060418])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
-                let _ = _mm_maskz_set1_epi64(3u8, 4774451407313060418i64);
+                let _ = _mm_maskz_set1_epi64(3, 4774451407313060418);
             }
         }
     }

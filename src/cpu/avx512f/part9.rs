@@ -8,11 +8,11 @@ use crate::get_fuzzing;
 pub(super) fn test_mm_mask_fmaddsub_ps() -> Result<(), String> {
     let a = unsafe { _mm_set1_ps(1.0) };
     // mask is __mmask8 -> pass scalar u8
-    let _ = unsafe { _mm_mask_fmaddsub_ps(a, 255u8, a, a) };
+    let _ = unsafe { _mm_mask_fmaddsub_ps(a, 255, a, a) };
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
-            let _ = unsafe { _mm_mask_fmaddsub_ps(a, 255u8, a, a) };
+            let _ = unsafe { _mm_mask_fmaddsub_ps(a, 255, a, a) };
         }
     }
     Ok(())
@@ -21,11 +21,11 @@ pub(super) fn test_mm_mask_fmaddsub_ps() -> Result<(), String> {
 pub(super) fn test_mm_maskz_fmaddsub_ps() -> Result<(), String> {
     let a = unsafe { _mm_set1_ps(1.0) };
     // mask is __mmask8 -> pass scalar u8
-    let _ = unsafe { _mm_maskz_fmaddsub_ps(255u8, a, a, a) };
+    let _ = unsafe { _mm_maskz_fmaddsub_ps(255, a, a, a) };
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
-            let _ = unsafe { _mm_maskz_fmaddsub_ps(255u8, a, a, a) };
+            let _ = unsafe { _mm_maskz_fmaddsub_ps(255, a, a, a) };
         }
     }
     Ok(())

@@ -139,11 +139,11 @@ pub(super) fn test_mm_mask2_permutex2var_epi64() -> Result<(), String> {
 
 pub(super) fn test_mm_permutex2var_ps() -> Result<(), String> {
     unsafe {
-        let a = _mm_set1_ps(1.0f32);
+        let a = _mm_set1_ps(1.0);
         let idx = _mm_set_epi32(3, 2, 1, 0);
         let result = _mm_permutex2var_ps(a, idx, a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_float_array_equality(&out, &[1.0f32, 1.0f32, 1.0f32, 1.0f32])?;
+        check_float_array_equality(&out, &[1.0, 1.0, 1.0, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -162,13 +162,13 @@ pub(super) fn test_mm_permutex2var_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_permutex2var_ps() -> Result<(), String> {
     unsafe {
-        let a = _mm_set1_ps(1.0f32);
+        let a = _mm_set1_ps(1.0);
         let idx = _mm_set_epi32(3, 2, 1, 0);
-        let b = _mm_set1_ps(2.0f32);
+        let b = _mm_set1_ps(2.0);
         let k: __mmask8 = 255;
         let result = _mm_mask_permutex2var_ps(a, k, idx, b);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_float_array_equality(&out, &[1.0f32, 1.0f32, 1.0f32, 1.0f32])?;
+        check_float_array_equality(&out, &[1.0, 1.0, 1.0, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -189,13 +189,13 @@ pub(super) fn test_mm_mask_permutex2var_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_permutex2var_ps() -> Result<(), String> {
     unsafe {
-        let a = _mm_set1_ps(1.0f32);
+        let a = _mm_set1_ps(1.0);
         let idx = _mm_set_epi32(3, 2, 1, 0);
-        let b = _mm_set1_ps(2.0f32);
+        let b = _mm_set1_ps(2.0);
         let k: __mmask8 = 255;
         let result = _mm_maskz_permutex2var_ps(k, a, idx, b);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_float_array_equality(&out, &[1.0f32, 1.0f32, 1.0f32, 1.0f32])?;
+        check_float_array_equality(&out, &[1.0, 1.0, 1.0, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -216,13 +216,13 @@ pub(super) fn test_mm_maskz_permutex2var_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_mask2_permutex2var_ps() -> Result<(), String> {
     unsafe {
-        let a = _mm_set1_ps(1.0f32);
+        let a = _mm_set1_ps(1.0);
         let idx = _mm_set_epi32(3, 2, 1, 0);
-        let b = _mm_set1_ps(2.0f32);
+        let b = _mm_set1_ps(2.0);
         let k: __mmask8 = 255;
         let result = _mm_mask2_permutex2var_ps(a, idx, k, b);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_float_array_equality(&out, &[1.0f32, 1.0f32, 1.0f32, 1.0f32])?;
+        check_float_array_equality(&out, &[1.0, 1.0, 1.0, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -243,11 +243,11 @@ pub(super) fn test_mm_mask2_permutex2var_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_permutex2var_pd() -> Result<(), String> {
     unsafe {
-        let a = _mm_set1_pd(1.0f64);
+        let a = _mm_set1_pd(1.0);
         let idx = _mm_set_epi32(1, 0, 0, 1);
         let result = _mm_permutex2var_pd(a, idx, a);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_float_array_equality(&out, &[1.0f64, 1.0f64])?;
+        check_float_array_equality(&out, &[1.0, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -265,13 +265,13 @@ pub(super) fn test_mm_permutex2var_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_permutex2var_pd() -> Result<(), String> {
     unsafe {
-        let a = _mm_set1_pd(1.0f64);
+        let a = _mm_set1_pd(1.0);
         let idx = _mm_set_epi32(1, 0, 0, 1);
-        let b = _mm_set1_pd(2.0f64);
+        let b = _mm_set1_pd(2.0);
         let k: __mmask8 = 255;
         let result = _mm_mask_permutex2var_pd(a, k, idx, b);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_float_array_equality(&out, &[1.0f64, 1.0f64])?;
+        check_float_array_equality(&out, &[1.0, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -292,13 +292,13 @@ pub(super) fn test_mm_mask_permutex2var_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_permutex2var_pd() -> Result<(), String> {
     unsafe {
-        let a = _mm_set1_pd(1.0f64);
+        let a = _mm_set1_pd(1.0);
         let idx = _mm_set_epi32(1, 0, 0, 1);
-        let b = _mm_set1_pd(2.0f64);
+        let b = _mm_set1_pd(2.0);
         let k: __mmask8 = 255;
         let result = _mm_maskz_permutex2var_pd(k, a, idx, b);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_float_array_equality(&out, &[1.0f64, 1.0f64])?;
+        check_float_array_equality(&out, &[1.0, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -319,13 +319,13 @@ pub(super) fn test_mm_maskz_permutex2var_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_mask2_permutex2var_pd() -> Result<(), String> {
     unsafe {
-        let a = _mm_set1_pd(1.0f64);
+        let a = _mm_set1_pd(1.0);
         let idx = _mm_set_epi32(1, 0, 0, 1);
-        let b = _mm_set1_pd(2.0f64);
+        let b = _mm_set1_pd(2.0);
         let k: __mmask8 = 255;
         let result = _mm_mask2_permutex2var_pd(a, idx, k, b);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_float_array_equality(&out, &[1.0f64, 1.0f64])?;
+        check_float_array_equality(&out, &[1.0, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

@@ -13,7 +13,7 @@ pub(super) fn test_mm_blendv_epi8() -> Result<(), String> {
         let mask = _mm_set1_epi8(-1);
         let r = _mm_blendv_epi8(a, b, mask);
         let out: [i8; 16] = std::mem::transmute::<__m128i, [i8; 16]>(r);
-        check_array_equality(&out, &[1i8, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])?;
+        check_array_equality(&out, &[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -30,7 +30,7 @@ pub(super) fn test_mm_blend_epi16() -> Result<(), String> {
         let b = _mm_set1_epi16(0);
         let r = _mm_blend_epi16(a, b, 170);
         let out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(r);
-        check_array_equality(&out, &[1i16, 0, 3, 0, 5, 0, 7, 0])?;
+        check_array_equality(&out, &[1, 0, 3, 0, 5, 0, 7, 0])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -48,7 +48,7 @@ pub(super) fn test_mm_blendv_pd() -> Result<(), String> {
         let mask = _mm_castsi128_pd(_mm_set1_epi64x(-1));
         let r = _mm_blendv_pd(a, b, mask);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_array_equality(&[out[0] as i64, out[1] as i64], &[1i64, 2i64])?;
+        check_array_equality(&[out[0] as i64, out[1] as i64], &[1, 2])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -80,7 +80,7 @@ pub(super) fn test_mm_extract_epi8() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi8(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
         let v = _mm_extract_epi8(a, 0);
-        check_array_equality(&[v as i8], &[16i8])?;
+        check_array_equality(&[v as i8], &[16])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -95,7 +95,7 @@ pub(super) fn test_mm_extract_epi32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let v = _mm_extract_epi32(a, 0);
-        check_array_equality(&[v as i32], &[4i32])?;
+        check_array_equality(&[v as i32], &[4])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -111,7 +111,7 @@ pub(super) fn test_mm_insert_epi8() -> Result<(), String> {
         let a = _mm_set1_epi8(1);
         let r = _mm_insert_epi8(a, 5, 0);
         let out: [i8; 16] = std::mem::transmute::<__m128i, [i8; 16]>(r);
-        check_array_equality(&out, &[5i8, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])?;
+        check_array_equality(&out, &[5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -127,7 +127,7 @@ pub(super) fn test_mm_insert_epi32() -> Result<(), String> {
         let a = _mm_set1_epi32(1);
         let r = _mm_insert_epi32(a, 5, 0);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
-        check_array_equality(&out, &[5i32, 1, 1, 1])?;
+        check_array_equality(&out, &[5, 1, 1, 1])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -140,7 +140,7 @@ pub(super) fn test_mm_insert_epi32() -> Result<(), String> {
 
 pub(super) fn test_mm_max_epu16() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi16(100u16 as i16, 50, 10, 5, 4, 3, 2, 1);
+        let a = _mm_set_epi16(100_i16, 50, 10, 5, 4, 3, 2, 1);
         let b = _mm_set1_epi16(20);
         let r = _mm_max_epu16(a, b);
         let out: [u16; 8] = std::mem::transmute::<__m128i, [u16; 8]>(r);
@@ -157,7 +157,7 @@ pub(super) fn test_mm_max_epu16() -> Result<(), String> {
 
 pub(super) fn test_mm_max_epu32() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi32(100u32 as i32, 50, 10, 5);
+        let a = _mm_set_epi32(100_i32, 50, 10, 5);
         let b = _mm_set1_epi32(20);
         let r = _mm_max_epu32(a, b);
         let out: [u32; 4] = std::mem::transmute::<__m128i, [u32; 4]>(r);
@@ -174,7 +174,7 @@ pub(super) fn test_mm_max_epu32() -> Result<(), String> {
 
 pub(super) fn test_mm_min_epu16() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi16(100u16 as i16, 50, 10, 5, 4, 3, 2, 1);
+        let a = _mm_set_epi16(100_i16, 50, 10, 5, 4, 3, 2, 1);
         let b = _mm_set1_epi16(20);
         let r = _mm_min_epu16(a, b);
         let out: [u16; 8] = std::mem::transmute::<__m128i, [u16; 8]>(r);
@@ -191,7 +191,7 @@ pub(super) fn test_mm_min_epu16() -> Result<(), String> {
 
 pub(super) fn test_mm_min_epu32() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi32(100u32 as i32, 50, 10, 5);
+        let a = _mm_set_epi32(100_i32, 50, 10, 5);
         let b = _mm_set1_epi32(20);
         let r = _mm_min_epu32(a, b);
         let out: [u32; 4] = std::mem::transmute::<__m128i, [u32; 4]>(r);

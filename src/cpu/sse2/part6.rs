@@ -463,7 +463,7 @@ pub(super) fn test_mm_movemask_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_load_sd() -> Result<(), String> {
     unsafe {
-        let mem = [42.5f64, 1.0];
+        let mem = [42.5, 1.0];
         let result = _mm_load_sd(mem.as_ptr());
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
         check_float_array_equality(&result, &[0.0])?;
@@ -485,7 +485,7 @@ pub(super) fn test_mm_load_sd() -> Result<(), String> {
 pub(super) fn test_mm_loadh_pd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(0.0, 1.0);
-        let mem = [42.5f64];
+        let mem = [42.5];
         let result = _mm_loadh_pd(a, mem.as_ptr());
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
         check_float_array_equality(&result, &[0.0])?;
@@ -509,7 +509,7 @@ pub(super) fn test_mm_loadh_pd() -> Result<(), String> {
 pub(super) fn test_mm_loadl_pd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(1.0, 0.0);
-        let mem = [42.5f64];
+        let mem = [42.5];
         let result = _mm_loadl_pd(a, mem.as_ptr());
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
         check_float_array_equality(&result, &[0.0])?;
@@ -532,7 +532,7 @@ pub(super) fn test_mm_loadl_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_stream_pd() -> Result<(), String> {
     unsafe {
-        let mut mem = [0.0f64; 2];
+        let mut mem = [0.0; 2];
         let a = _mm_set_pd(2.0, 1.0);
         _mm_stream_pd(mem.as_mut_ptr(), a);
     }
@@ -543,7 +543,7 @@ pub(super) fn test_mm_stream_pd() -> Result<(), String> {
             unsafe {
                 let vals = get_random_float64_array::<2>();
                 let a = _mm_set_pd(vals[1], vals[0]);
-                let mut mem = [0.0f64; 2];
+                let mut mem = [0.0; 2];
                 _mm_stream_pd(mem.as_mut_ptr(), a);
             }
         }
@@ -554,7 +554,7 @@ pub(super) fn test_mm_stream_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_store_sd() -> Result<(), String> {
     unsafe {
-        let mut mem = [20.0f64];
+        let mut mem = [20.0];
         let a = _mm_set_sd(42.5);
         _mm_store_sd(mem.as_mut_ptr(), a);
         check_float_array_equality(&mem, &[20.0])?;
@@ -566,7 +566,7 @@ pub(super) fn test_mm_store_sd() -> Result<(), String> {
             unsafe {
                 let vals = get_random_float64_array::<1>();
                 let a = _mm_set_sd(vals[0]);
-                let mut mem = [0.0f64];
+                let mut mem = [0.0];
                 _mm_store_sd(mem.as_mut_ptr(), a);
             }
         }
@@ -577,7 +577,7 @@ pub(super) fn test_mm_store_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_storeu_pd() -> Result<(), String> {
     unsafe {
-        let mut mem = [0.0f64; 2];
+        let mut mem = [0.0; 2];
         let a = _mm_set_pd(2.0, 1.0);
         _mm_storeu_pd(mem.as_mut_ptr(), a);
     }
@@ -588,7 +588,7 @@ pub(super) fn test_mm_storeu_pd() -> Result<(), String> {
             unsafe {
                 let vals = get_random_float64_array::<2>();
                 let a = _mm_set_pd(vals[1], vals[0]);
-                let mut mem = [0.0f64; 2];
+                let mut mem = [0.0; 2];
                 _mm_storeu_pd(mem.as_mut_ptr(), a);
             }
         }

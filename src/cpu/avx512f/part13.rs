@@ -8,11 +8,11 @@ use crate::get_fuzzing;
 
 pub(super) fn test_mm_maskz_scalef_ps() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_ps(4.0f32, 3.0f32, 2.0f32, 1.0f32);
-        let b = _mm_set1_ps(0.5f32);
+        let a = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
+        let b = _mm_set1_ps(0.5);
         let r = _mm_mul_ps(a, b);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[0.5f32, 1.0f32, 1.5f32, 2.0f32])?;
+        check_float_array_equality(&out, &[0.5, 1.0, 1.5, 2.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -30,11 +30,11 @@ pub(super) fn test_mm_maskz_scalef_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_scalef_pd() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_pd(2.0f64, 1.0f64);
-        let b = _mm_set1_pd(0.5f64);
+        let a = _mm_set_pd(2.0, 1.0);
+        let b = _mm_set1_pd(0.5);
         let r = _mm_mul_pd(a, b);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality(&out, &[0.5f64, 1.0f64])?;
+        check_float_array_equality(&out, &[0.5, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -52,11 +52,11 @@ pub(super) fn test_mm_scalef_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_scalef_pd() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_pd(2.0f64, 1.0f64);
-        let b = _mm_set1_pd(0.5f64);
+        let a = _mm_set_pd(2.0, 1.0);
+        let b = _mm_set1_pd(0.5);
         let r = _mm_mul_pd(a, b);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality(&out, &[0.5f64, 1.0f64])?;
+        check_float_array_equality(&out, &[0.5, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -74,11 +74,11 @@ pub(super) fn test_mm_mask_scalef_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_scalef_pd() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_pd(2.0f64, 1.0f64);
-        let b = _mm_set1_pd(0.5f64);
+        let a = _mm_set_pd(2.0, 1.0);
+        let b = _mm_set1_pd(0.5);
         let r = _mm_mul_pd(a, b);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality(&out, &[0.5f64, 1.0f64])?;
+        check_float_array_equality(&out, &[0.5, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -96,11 +96,11 @@ pub(super) fn test_mm_maskz_scalef_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_fixupimm_ps() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_ps(4.0f32, 3.0f32, 2.0f32, 1.0f32);
-        let b = _mm_set_ps(1.0f32, 1.0f32, 1.0f32, 1.0f32);
+        let a = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
+        let b = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let r = _mm_add_ps(a, b);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[2.0f32, 3.0f32, 4.0f32, 5.0f32])?;
+        check_float_array_equality(&out, &[2.0, 3.0, 4.0, 5.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -118,11 +118,11 @@ pub(super) fn test_mm_fixupimm_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_fixupimm_ps() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_ps(4.0f32, 3.0f32, 2.0f32, 1.0f32);
-        let b = _mm_set_ps(1.0f32, 1.0f32, 1.0f32, 1.0f32);
+        let a = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
+        let b = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let r = _mm_add_ps(a, b);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[2.0f32, 3.0f32, 4.0f32, 5.0f32])?;
+        check_float_array_equality(&out, &[2.0, 3.0, 4.0, 5.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -140,11 +140,11 @@ pub(super) fn test_mm_mask_fixupimm_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_fixupimm_ps() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_ps(4.0f32, 3.0f32, 2.0f32, 1.0f32);
-        let b = _mm_set_ps(1.0f32, 1.0f32, 1.0f32, 1.0f32);
+        let a = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
+        let b = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let r = _mm_add_ps(a, b);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[2.0f32, 3.0f32, 4.0f32, 5.0f32])?;
+        check_float_array_equality(&out, &[2.0, 3.0, 4.0, 5.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -162,11 +162,11 @@ pub(super) fn test_mm_maskz_fixupimm_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_fixupimm_pd() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_pd(2.0f64, 1.0f64);
-        let b = _mm_set_pd(1.0f64, 1.0f64);
+        let a = _mm_set_pd(2.0, 1.0);
+        let b = _mm_set_pd(1.0, 1.0);
         let r = _mm_add_pd(a, b);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality(&out, &[2.0f64, 3.0f64])?;
+        check_float_array_equality(&out, &[2.0, 3.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -184,11 +184,11 @@ pub(super) fn test_mm_fixupimm_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_fixupimm_pd() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_pd(2.0f64, 1.0f64);
-        let b = _mm_set_pd(1.0f64, 1.0f64);
+        let a = _mm_set_pd(2.0, 1.0);
+        let b = _mm_set_pd(1.0, 1.0);
         let r = _mm_add_pd(a, b);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality(&out, &[2.0f64, 3.0f64])?;
+        check_float_array_equality(&out, &[2.0, 3.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -206,11 +206,11 @@ pub(super) fn test_mm_mask_fixupimm_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_fixupimm_pd() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_pd(2.0f64, 1.0f64);
-        let b = _mm_set_pd(1.0f64, 1.0f64);
+        let a = _mm_set_pd(2.0, 1.0);
+        let b = _mm_set_pd(1.0, 1.0);
         let r = _mm_add_pd(a, b);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality(&out, &[2.0f64, 3.0f64])?;
+        check_float_array_equality(&out, &[2.0, 3.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

@@ -264,7 +264,7 @@ pub(super) fn test_mm_mask_cmplt_epu32_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let b = _mm_set_epi32(2, 2, 3, 3);
-        let k: __mmask8 = 255u8 as __mmask8;
+        let k: __mmask8 = 255 as __mmask8;
         let result = _mm_mask_cmplt_epu32_mask(k, a, b);
         crate::cpu::common::check_int_equality(result as i32, 6)?;
         if crate::get_fuzzing() {
@@ -303,7 +303,7 @@ pub(super) fn test_mm_mask_cmpgt_epu32_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(4, 3, 2, 1);
         let b = _mm_set_epi32(3, 3, 2, 1);
-        let k: __mmask8 = 255u8 as __mmask8;
+        let k: __mmask8 = 255 as __mmask8;
         let result = _mm_mask_cmpgt_epu32_mask(k, a, b);
         crate::cpu::common::check_int_equality(result as i32, 12)?;
         if crate::get_fuzzing() {

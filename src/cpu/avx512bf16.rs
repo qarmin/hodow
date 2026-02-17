@@ -51,8 +51,8 @@ pub(super) fn test_mm_cvtne2ps_pbh() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let arr1 = get_random_float32_array::<4>();
                 let arr2 = get_random_float32_array::<4>();
-                let mut a_bits_r = [0u16; 8];
-                let mut b_bits_r = [0u16; 8];
+                let mut a_bits_r = [0; 8];
+                let mut b_bits_r = [0; 8];
                 for i in 0..4 {
                     a_bits_r[i] = (arr1[i].to_bits() >> 16) as u16;
                     b_bits_r[i] = (arr2[i].to_bits() >> 16) as u16;
@@ -69,7 +69,7 @@ pub(super) fn test_mm_cvtne2ps_pbh() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_cvtne2ps_pbh() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 255u8 as __mmask8;
+        let k: __mmask8 = 255 as __mmask8;
         let a_bits: [u16; 8] = [16512, 16448, 16384, 16256, 0, 0, 0, 0];
         let b_bits: [u16; 8] = [0; 8];
         let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
@@ -85,8 +85,8 @@ pub(super) fn test_mm_mask_cvtne2ps_pbh() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let arr1 = get_random_float32_array::<4>();
                 let arr2 = get_random_float32_array::<4>();
-                let mut a_bits_r = [0u16; 8];
-                let mut b_bits_r = [0u16; 8];
+                let mut a_bits_r = [0; 8];
+                let mut b_bits_r = [0; 8];
                 for i in 0..4 {
                     a_bits_r[i] = (arr1[i].to_bits() >> 16) as u16;
                     b_bits_r[i] = (arr2[i].to_bits() >> 16) as u16;
@@ -103,7 +103,7 @@ pub(super) fn test_mm_mask_cvtne2ps_pbh() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_cvtne2ps_pbh() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 255u8 as __mmask8;
+        let k: __mmask8 = 255 as __mmask8;
         let a_bits: [u16; 8] = [16256, 16384, 16448, 16512, 0, 0, 0, 0];
         let b_bits: [u16; 8] = [0; 8];
         let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
@@ -119,15 +119,15 @@ pub(super) fn test_mm_maskz_cvtne2ps_pbh() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let arr1 = get_random_float32_array::<4>();
                 let arr2 = get_random_float32_array::<4>();
-                let mut a_bits_r = [0u16; 8];
-                let mut b_bits_r = [0u16; 8];
+                let mut a_bits_r = [0; 8];
+                let mut b_bits_r = [0; 8];
                 for i in 0..4 {
                     a_bits_r[i] = (arr1[i].to_bits() >> 16) as u16;
                     b_bits_r[i] = (arr2[i].to_bits() >> 16) as u16;
                 }
                 let a_r: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits_r);
                 let b_r: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits_r);
-                let _ = _mm_maskz_cvtne2ps_pbh(0u8 as __mmask8, a_r, b_r);
+                let _ = _mm_maskz_cvtne2ps_pbh(0 as __mmask8, a_r, b_r);
             }
         }
     }
@@ -151,8 +151,8 @@ pub(super) fn test_mm_dpbf16_ps() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let arr1 = get_random_float32_array::<4>();
                 let arr2 = get_random_float32_array::<4>();
-                let mut a_bits_r = [0u16; 8];
-                let mut b_bits_r = [0u16; 8];
+                let mut a_bits_r = [0; 8];
+                let mut b_bits_r = [0; 8];
                 for i in 0..4 {
                     a_bits_r[i] = (arr1[i].to_bits() >> 16) as u16;
                     b_bits_r[i] = (arr2[i].to_bits() >> 16) as u16;
@@ -170,7 +170,7 @@ pub(super) fn test_mm_dpbf16_ps() -> Result<(), String> {
 pub(super) fn test_mm_mask_dpbf16_ps() -> Result<(), String> {
     unsafe {
         let src: __m128 = _mm_setzero_ps();
-        let k: __mmask8 = 255u8 as __mmask8;
+        let k: __mmask8 = 255 as __mmask8;
         let a_bits: [u16; 8] = [16256; 8];
         let b_bits: [u16; 8] = [16256; 8];
         let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
@@ -184,8 +184,8 @@ pub(super) fn test_mm_mask_dpbf16_ps() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let arr1 = get_random_float32_array::<4>();
                 let arr2 = get_random_float32_array::<4>();
-                let mut a_bits_r = [0u16; 8];
-                let mut b_bits_r = [0u16; 8];
+                let mut a_bits_r = [0; 8];
+                let mut b_bits_r = [0; 8];
                 for i in 0..4 {
                     a_bits_r[i] = (arr1[i].to_bits() >> 16) as u16;
                     b_bits_r[i] = (arr2[i].to_bits() >> 16) as u16;
@@ -202,7 +202,7 @@ pub(super) fn test_mm_mask_dpbf16_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_dpbf16_ps() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 255u8 as __mmask8;
+        let k: __mmask8 = 255 as __mmask8;
         let src: __m128 = _mm_setzero_ps();
         let a_bits: [u16; 8] = [16256; 8];
         let b_bits: [u16; 8] = [16256; 8];
@@ -217,8 +217,8 @@ pub(super) fn test_mm_maskz_dpbf16_ps() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let arr1 = get_random_float32_array::<4>();
                 let arr2 = get_random_float32_array::<4>();
-                let mut a_bits_r = [0u16; 8];
-                let mut b_bits_r = [0u16; 8];
+                let mut a_bits_r = [0; 8];
+                let mut b_bits_r = [0; 8];
                 for i in 0..4 {
                     a_bits_r[i] = (arr1[i].to_bits() >> 16) as u16;
                     b_bits_r[i] = (arr2[i].to_bits() >> 16) as u16;
@@ -235,8 +235,8 @@ pub(super) fn test_mm_maskz_dpbf16_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_cvtpbh_ps() -> Result<(), String> {
     unsafe {
-        let vals_f32 = [10.0f32, 11.0, 12.0, 13.0];
-        let mut a_bits = [0u16; 8];
+        let vals_f32 = [10.0, 11.0, 12.0, 13.0];
+        let mut a_bits = [0; 8];
         for i in 0..4 {
             a_bits[i] = (vals_f32[i].to_bits() >> 16) as u16;
         }
@@ -249,7 +249,7 @@ pub(super) fn test_mm_cvtpbh_ps() -> Result<(), String> {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let arr = get_random_float32_array::<4>();
-                let mut a_bits_r = [0u16; 8];
+                let mut a_bits_r = [0; 8];
                 for i in 0..4 {
                     a_bits_r[i] = (arr[i].to_bits() >> 16) as u16;
                 }
@@ -264,9 +264,9 @@ pub(super) fn test_mm_cvtpbh_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_cvtpbh_ps() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 255u8 as __mmask8;
-        let vals_f32 = [13.0f32, 12.0, 11.0, 10.0];
-        let mut a_bits = [0u16; 8];
+        let k: __mmask8 = 255 as __mmask8;
+        let vals_f32 = [13.0, 12.0, 11.0, 10.0];
+        let mut a_bits = [0; 8];
         for i in 0..4 {
             a_bits[i] = (vals_f32[i].to_bits() >> 16) as u16;
         }
@@ -280,7 +280,7 @@ pub(super) fn test_mm_mask_cvtpbh_ps() -> Result<(), String> {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let arr = get_random_float32_array::<4>();
-                let mut a_bits_r = [0u16; 8];
+                let mut a_bits_r = [0; 8];
                 for i in 0..4 {
                     a_bits_r[i] = (arr[i].to_bits() >> 16) as u16;
                 }
@@ -295,9 +295,9 @@ pub(super) fn test_mm_mask_cvtpbh_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_cvtpbh_ps() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 255u8 as __mmask8;
-        let vals_f32 = [1.0f32, 0.0, 1.0, 0.0];
-        let mut a_bits = [0u16; 8];
+        let k: __mmask8 = 255 as __mmask8;
+        let vals_f32 = [1.0, 0.0, 1.0, 0.0];
+        let mut a_bits = [0; 8];
         for i in 0..4 {
             a_bits[i] = (vals_f32[i].to_bits() >> 16) as u16;
         }
@@ -310,7 +310,7 @@ pub(super) fn test_mm_maskz_cvtpbh_ps() -> Result<(), String> {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let arr = get_random_float32_array::<4>();
-                let mut a_bits_r = [0u16; 8];
+                let mut a_bits_r = [0; 8];
                 for i in 0..4 {
                     a_bits_r[i] = (arr[i].to_bits() >> 16) as u16;
                 }
@@ -325,7 +325,7 @@ pub(super) fn test_mm_maskz_cvtpbh_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_cvtsbh_ss() -> Result<(), String> {
     unsafe {
-        let val = 5.5f32;
+        let val = 5.5;
         let bf: u16 = (val.to_bits() >> 16) as u16;
         let res = _mm_cvtsbh_ss(std::mem::transmute::<u16, bf16>(bf));
         check_float_array_equality(&[res], &[5.5])?;
@@ -358,8 +358,8 @@ pub(super) fn test_mm_cvtneps_pbh() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let arr1 = get_random_float32_array::<4>();
                 let arr2 = get_random_float32_array::<4>();
-                let mut a_bits_r = [0u16; 8];
-                let mut b_bits_r = [0u16; 8];
+                let mut a_bits_r = [0; 8];
+                let mut b_bits_r = [0; 8];
                 for i in 0..4 {
                     a_bits_r[i] = (arr1[i].to_bits() >> 16) as u16;
                     b_bits_r[i] = (arr2[i].to_bits() >> 16) as u16;
@@ -376,7 +376,7 @@ pub(super) fn test_mm_cvtneps_pbh() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_cvtneps_pbh() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 255u8 as __mmask8;
+        let k: __mmask8 = 255 as __mmask8;
         let a_bits: [u16; 8] = [16576, 16512, 16448, 16384, 0, 0, 0, 0];
         let b_bits: [u16; 8] = [0; 8];
         let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
@@ -391,8 +391,8 @@ pub(super) fn test_mm_mask_cvtneps_pbh() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let arr1 = get_random_float32_array::<4>();
                 let arr2 = get_random_float32_array::<4>();
-                let mut a_bits_r = [0u16; 8];
-                let mut b_bits_r = [0u16; 8];
+                let mut a_bits_r = [0; 8];
+                let mut b_bits_r = [0; 8];
                 for i in 0..4 {
                     a_bits_r[i] = (arr1[i].to_bits() >> 16) as u16;
                     b_bits_r[i] = (arr2[i].to_bits() >> 16) as u16;
@@ -409,7 +409,7 @@ pub(super) fn test_mm_mask_cvtneps_pbh() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_cvtneps_pbh() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 255u8 as __mmask8;
+        let k: __mmask8 = 255 as __mmask8;
         let a_bits: [u16; 8] = [16256; 8];
         let b_bits: [u16; 8] = [16256; 8];
         let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
@@ -423,8 +423,8 @@ pub(super) fn test_mm_maskz_cvtneps_pbh() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let arr1 = get_random_float32_array::<4>();
                 let arr2 = get_random_float32_array::<4>();
-                let mut a_bits_r = [0u16; 8];
-                let mut b_bits_r = [0u16; 8];
+                let mut a_bits_r = [0; 8];
+                let mut b_bits_r = [0; 8];
                 for i in 0..4 {
                     a_bits_r[i] = (arr1[i].to_bits() >> 16) as u16;
                     b_bits_r[i] = (arr2[i].to_bits() >> 16) as u16;
@@ -441,7 +441,7 @@ pub(super) fn test_mm_maskz_cvtneps_pbh() -> Result<(), String> {
 
 pub(super) fn test_mm_cvtness_sbh() -> Result<(), String> {
     unsafe {
-        let val = 9.0f32;
+        let val = 9.0;
         let res = _mm_cvtness_sbh(val);
         check_int_equality(res.to_bits(), 4)?;
 

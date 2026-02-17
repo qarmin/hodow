@@ -35,7 +35,7 @@ impl ExtensionTest for AVX512CD {
 
 fn test_mm_broadcastmw_epi32() -> Result<(), String> {
     unsafe {
-        let k = 170u16;
+        let k = 170;
         let result = _mm_broadcastmw_epi32(k);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         check_array_equality(&result, &[170, 170, 170, 170])?;

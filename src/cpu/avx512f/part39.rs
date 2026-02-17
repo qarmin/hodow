@@ -91,7 +91,7 @@ pub(super) fn test_mm_mask_cmp_epi64_mask() -> Result<(), String> {
 
 pub(super) fn test_mm_loadu_epi32() -> Result<(), String> {
     unsafe {
-        let data = [1i32, 2, 3, 4];
+        let data = [1, 2, 3, 4];
         let r = _mm_loadu_epi32(data.as_ptr());
         let _out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
     }
@@ -109,7 +109,7 @@ pub(super) fn test_mm_loadu_epi32() -> Result<(), String> {
 pub(super) fn test_mm_mask_cvtepi32_storeu_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
-        let mut buf = [0i16; 4];
+        let mut buf = [0; 4];
         _mm_mask_cvtepi32_storeu_epi16(buf.as_mut_ptr(), 0, a);
     }
     if get_fuzzing() {
@@ -117,7 +117,7 @@ pub(super) fn test_mm_mask_cvtepi32_storeu_epi16() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let rnd = get_random_i32_array::<4>();
-                let mut buf = [0i16; 4];
+                let mut buf = [0; 4];
                 _mm_mask_cvtepi32_storeu_epi16(buf.as_mut_ptr(), 0, _mm_set_epi32(rnd[0], rnd[1], rnd[2], rnd[3]));
             }
         }
@@ -128,7 +128,7 @@ pub(super) fn test_mm_mask_cvtepi32_storeu_epi16() -> Result<(), String> {
 pub(super) fn test_mm_mask_cvtsepi32_storeu_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(-1, -2, -3, -4);
-        let mut buf = [0i16; 4];
+        let mut buf = [0; 4];
         _mm_mask_cvtsepi32_storeu_epi16(buf.as_mut_ptr(), 0, a);
     }
     if get_fuzzing() {
@@ -136,7 +136,7 @@ pub(super) fn test_mm_mask_cvtsepi32_storeu_epi16() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let rnd = get_random_i32_array::<4>();
-                let mut buf = [0i16; 4];
+                let mut buf = [0; 4];
                 _mm_mask_cvtsepi32_storeu_epi16(buf.as_mut_ptr(), 0, _mm_set_epi32(rnd[0], rnd[1], rnd[2], rnd[3]));
             }
         }
@@ -147,7 +147,7 @@ pub(super) fn test_mm_mask_cvtsepi32_storeu_epi16() -> Result<(), String> {
 pub(super) fn test_mm_mask_cvtusepi32_storeu_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
-        let mut buf = [0u16; 4];
+        let mut buf = [0; 4];
         _mm_mask_cvtusepi32_storeu_epi16(buf.as_mut_ptr() as *mut i16, 0, a);
     }
     if get_fuzzing() {
@@ -155,7 +155,7 @@ pub(super) fn test_mm_mask_cvtusepi32_storeu_epi16() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let rnd = get_random_i32_array::<4>();
-                let mut buf = [0u16; 4];
+                let mut buf = [0; 4];
                 _mm_mask_cvtusepi32_storeu_epi16(buf.as_mut_ptr() as *mut i16, 0, _mm_set_epi32(rnd[0], rnd[1], rnd[2], rnd[3]));
             }
         }
@@ -166,7 +166,7 @@ pub(super) fn test_mm_mask_cvtusepi32_storeu_epi16() -> Result<(), String> {
 pub(super) fn test_mm_mask_cvtepi32_storeu_epi8() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
-        let mut buf = [0i8; 4];
+        let mut buf = [0; 4];
         _mm_mask_cvtepi32_storeu_epi8(buf.as_mut_ptr(), 0, a);
     }
     if get_fuzzing() {
@@ -174,7 +174,7 @@ pub(super) fn test_mm_mask_cvtepi32_storeu_epi8() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let rnd = get_random_i32_array::<4>();
-                let mut buf = [0i8; 4];
+                let mut buf = [0; 4];
                 _mm_mask_cvtepi32_storeu_epi8(buf.as_mut_ptr(), 0, _mm_set_epi32(rnd[0], rnd[1], rnd[2], rnd[3]));
             }
         }
@@ -185,7 +185,7 @@ pub(super) fn test_mm_mask_cvtepi32_storeu_epi8() -> Result<(), String> {
 pub(super) fn test_mm_mask_cvtsepi32_storeu_epi8() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(-1, -2, -3, -4);
-        let mut buf = [0i8; 4];
+        let mut buf = [0; 4];
         _mm_mask_cvtsepi32_storeu_epi8(buf.as_mut_ptr(), 0, a);
     }
     if get_fuzzing() {
@@ -193,7 +193,7 @@ pub(super) fn test_mm_mask_cvtsepi32_storeu_epi8() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let rnd = get_random_i32_array::<4>();
-                let mut buf = [0i8; 4];
+                let mut buf = [0; 4];
                 _mm_mask_cvtsepi32_storeu_epi8(buf.as_mut_ptr(), 0, _mm_set_epi32(rnd[0], rnd[1], rnd[2], rnd[3]));
             }
         }
@@ -204,7 +204,7 @@ pub(super) fn test_mm_mask_cvtsepi32_storeu_epi8() -> Result<(), String> {
 pub(super) fn test_mm_mask_cvtusepi32_storeu_epi8() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
-        let mut buf = [0u8; 4];
+        let mut buf = [0; 4];
         _mm_mask_cvtusepi32_storeu_epi8(buf.as_mut_ptr() as *mut i8, 0, a);
     }
     if get_fuzzing() {
@@ -212,7 +212,7 @@ pub(super) fn test_mm_mask_cvtusepi32_storeu_epi8() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let rnd = get_random_i32_array::<4>();
-                let mut buf = [0u8; 4];
+                let mut buf = [0; 4];
                 _mm_mask_cvtusepi32_storeu_epi8(buf.as_mut_ptr() as *mut i8, 0, _mm_set_epi32(rnd[0], rnd[1], rnd[2], rnd[3]));
             }
         }
@@ -223,7 +223,7 @@ pub(super) fn test_mm_mask_cvtusepi32_storeu_epi8() -> Result<(), String> {
 pub(super) fn test_mm_mask_cvtepi64_storeu_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(1, 2);
-        let mut buf = [0i16; 2];
+        let mut buf = [0; 2];
         _mm_mask_cvtepi64_storeu_epi16(buf.as_mut_ptr(), 0, a);
     }
     if get_fuzzing() {
@@ -231,7 +231,7 @@ pub(super) fn test_mm_mask_cvtepi64_storeu_epi16() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let rnd = get_random_i64_array::<2>();
-                let mut buf = [0i16; 2];
+                let mut buf = [0; 2];
                 _mm_mask_cvtepi64_storeu_epi16(buf.as_mut_ptr(), 0, _mm_set_epi64x(rnd[0], rnd[1]));
             }
         }

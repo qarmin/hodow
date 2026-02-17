@@ -31,7 +31,7 @@ fn test_mm_gf2p8affine_epi64_epi8() -> Result<(), String> {
     unsafe {
         let v = _mm_set_epi8(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
         let out: [i8; 16] = std::mem::transmute::<__m128i, [i8; 16]>(v);
-        check_array_equality(&out, &[1i8, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])?;
+        check_array_equality(&out, &[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -66,7 +66,7 @@ fn test_mm_gf2p8mul_epi8() -> Result<(), String> {
     unsafe {
         let v = _mm_set1_epi8(3);
         let out: [i8; 16] = std::mem::transmute::<__m128i, [i8; 16]>(v);
-        check_array_equality(&out, &[3i8; 16])?;
+        check_array_equality(&out, &[3; 16])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

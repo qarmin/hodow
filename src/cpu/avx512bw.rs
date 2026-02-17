@@ -55,7 +55,7 @@ pub(super) fn test_mm_mask_shuffle_epi8() -> Result<(), String> {
         let a = _mm_set1_epi8(1);
         let b = _mm_set1_epi8(0);
         // __mmask16 expected for k -> pass 0
-        let _ = _mm_mask_shuffle_epi8(a, 0u16, a, b);
+        let _ = _mm_mask_shuffle_epi8(a, 0, a, b);
     }
     Ok(())
 }
@@ -64,7 +64,7 @@ pub(super) fn test_mm_maskz_shuffle_epi8() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_epi8(1);
         let b = _mm_set1_epi8(0);
-        let _ = _mm_maskz_shuffle_epi8(0u16, a, b);
+        let _ = _mm_maskz_shuffle_epi8(0, a, b);
     }
     Ok(())
 }

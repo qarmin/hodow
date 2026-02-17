@@ -135,7 +135,7 @@ pub(super) fn test_mm_srl_epi64() -> Result<(), String> {
 pub(super) fn test_mm_cvtsi32_sd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(2.0, 1.0);
-        let b = 42i32;
+        let b = 42;
         let result = _mm_cvtsi32_sd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
         check_float_array_equality(&result, &[0.0])?;

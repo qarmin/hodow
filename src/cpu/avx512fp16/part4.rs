@@ -8,7 +8,7 @@ use crate::get_fuzzing;
 
 pub(super) fn test_mm_load_sh() -> Result<(), String> {
     unsafe {
-        let data = [1.0f32, 2.0, 3.0, 4.0];
+        let data = [1.0, 2.0, 3.0, 4.0];
         let r = _mm_load_sh(data.as_ptr());
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[1.0, 2.0, 3.0, 4.0])?;
@@ -34,7 +34,7 @@ pub(super) fn test_mm_maskz_load_sh() -> Result<(), String> {
 
 pub(super) fn test_mm_loadu_ph() -> Result<(), String> {
     unsafe {
-        let data = [1.0f32, 2.0, 3.0, 4.0];
+        let data = [1.0, 2.0, 3.0, 4.0];
         let r = _mm_loadu_ph(data.as_ptr());
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[1.0, 2.0, 3.0, 4.0])?;
@@ -64,7 +64,7 @@ pub(super) fn test_mm_move_sh() -> Result<(), String> {
 
 pub(super) fn test_mm_store_ph() -> Result<(), String> {
     unsafe {
-        let mut buf = [0.0f32; 4];
+        let mut buf = [0.0; 4];
         let v = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         _mm_store_ph(buf.as_mut_ptr(), v);
         check_float_array_equality(&buf, &[1.0, 2.0, 3.0, 4.0])?;
@@ -73,7 +73,7 @@ pub(super) fn test_mm_store_ph() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let mut buf = [0.0f32; 4];
+                let mut buf = [0.0; 4];
                 _mm_store_ph(buf.as_mut_ptr(), _mm_set1_ps(get_random_float32_array::<1>()[0]));
             }
         }
@@ -91,7 +91,7 @@ pub(super) fn test_mm_mask_store_sh() -> Result<(), String> {
 
 pub(super) fn test_mm_storeu_ph() -> Result<(), String> {
     unsafe {
-        let mut buf = [0.0f32; 4];
+        let mut buf = [0.0; 4];
         let v = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         _mm_storeu_ph(buf.as_mut_ptr(), v);
         check_float_array_equality(&buf, &[1.0, 2.0, 3.0, 4.0])?;
@@ -100,7 +100,7 @@ pub(super) fn test_mm_storeu_ph() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let mut buf = [0.0f32; 4];
+                let mut buf = [0.0; 4];
                 _mm_storeu_ph(buf.as_mut_ptr(), _mm_set1_ps(get_random_float32_array::<1>()[0]));
             }
         }

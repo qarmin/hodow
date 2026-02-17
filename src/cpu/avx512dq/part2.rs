@@ -67,7 +67,7 @@ pub(super) fn test_mm_cvtepi64_pd() -> Result<(), String> {
     unsafe {
         let v = _mm_set_epi64x(2, 1);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(v);
-        check_array_equality(&out, &[2i64, 1i64])?;
+        check_array_equality(&out, &[2, 1])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -92,7 +92,7 @@ pub(super) fn test_mm_cvtepi64_ps() -> Result<(), String> {
     unsafe {
         let v = _mm_set_epi64x(7, 3);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(v);
-        check_array_equality(&out, &[7i64, 3i64])?;
+        check_array_equality(&out, &[7, 3])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -117,7 +117,7 @@ pub(super) fn test_mm_cvtepu64_pd() -> Result<(), String> {
     unsafe {
         let v = _mm_set_epi64x(9, 8);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(v);
-        check_array_equality(&out, &[9i64, 8i64])?;
+        check_array_equality(&out, &[9, 8])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -142,7 +142,7 @@ pub(super) fn test_mm_cvtepu64_ps() -> Result<(), String> {
     unsafe {
         let v = _mm_set_epi64x(10, 11);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(v);
-        check_array_equality(&out, &[10i64, 11i64])?;
+        check_array_equality(&out, &[10, 11])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

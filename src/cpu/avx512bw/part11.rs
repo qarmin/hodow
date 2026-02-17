@@ -12,7 +12,7 @@ pub(super) fn test_mm_mask_madd_epi16() -> Result<(), String> {
         let _b = _mm_set1_epi16(2);
         let r = _mm_madd_epi16(a, _b);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
-        check_array_equality(&out, &[6i32, 14, 22, 30])?;
+        check_array_equality(&out, &[6, 14, 22, 30])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -55,7 +55,7 @@ pub(super) fn test_mm_mask_packs_epi32() -> Result<(), String> {
         let a = _mm_set_epi32(30000, 20000, 10000, 0);
         let r = _mm_packs_epi32(a, a);
         let out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(r);
-        check_array_equality(&out, &[32767i16, 20000, 10000, 0, 32767i16, 20000, 10000, 0])?;
+        check_array_equality(&out, &[32767, 20000, 10000, 0, 32767, 20000, 10000, 0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -97,7 +97,7 @@ pub(super) fn test_mm_mask_packus_epi32() -> Result<(), String> {
         let a = _mm_set_epi32(70000, 60000, 50000, 40000);
         let r = _mm_packus_epi32(a, a);
         let out: [u16; 8] = std::mem::transmute::<__m128i, [u16; 8]>(r);
-        check_array_equality(&out, &[65535u16, 65535, 65535, 65535, 40000_u16, 40000_u16, 40000_u16, 40000_u16])?;
+        check_array_equality(&out, &[65535, 65535, 65535, 65535, 40000_u16, 40000_u16, 40000_u16, 40000_u16])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -141,7 +141,7 @@ pub(super) fn test_mm_mask_avg_epu16() -> Result<(), String> {
         let b = _mm_set1_epi16(10);
         let r = _mm_avg_epu16(a, b);
         let out: [u16; 8] = std::mem::transmute::<__m128i, [u16; 8]>(r);
-        check_array_equality(&out, &[55u16, 50, 45, 40, 35, 30, 25, 20])?;
+        check_array_equality(&out, &[55, 50, 45, 40, 35, 30, 25, 20])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

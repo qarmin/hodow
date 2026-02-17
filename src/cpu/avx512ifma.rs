@@ -35,7 +35,7 @@ fn test_mm_madd52hi_avx_epu64() -> Result<(), String> {
         let result = _mm_madd52hi_avx_epu64(a, b, c);
         let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
 
-        check_array_equality(&result, &[1000u64, 1000u64])?;
+        check_array_equality(&result, &[1000, 1000])?;
     }
 
     if get_fuzzing() {
@@ -60,7 +60,7 @@ fn test_mm_madd52lo_avx_epu64() -> Result<(), String> {
         let c = _mm_set1_epi64x(100);
         let result = _mm_madd52lo_avx_epu64(a, b, c);
         let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
-        check_array_equality(&result, &[2000u64, 2000u64])?;
+        check_array_equality(&result, &[2000, 2000])?;
     }
 
     if get_fuzzing() {
@@ -85,7 +85,7 @@ fn test_mm_madd52hi_epu64() -> Result<(), String> {
         let c = _mm_set1_epi64x(100);
         let result = _mm_madd52hi_epu64(a, b, c);
         let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
-        check_array_equality(&result, &[1000u64, 1000u64])?;
+        check_array_equality(&result, &[1000, 1000])?;
     }
 
     if get_fuzzing() {
@@ -110,7 +110,7 @@ fn test_mm_mask_madd52hi_epu64() -> Result<(), String> {
         let c = _mm_set1_epi64x(100);
         let result = _mm_mask_madd52hi_epu64(a, 3, b, c);
         let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
-        check_array_equality(&result, &[1000u64, 1000u64])?;
+        check_array_equality(&result, &[1000, 1000])?;
     }
 
     if get_fuzzing() {
@@ -135,7 +135,7 @@ fn test_mm_maskz_madd52hi_epu64() -> Result<(), String> {
         let c = _mm_set1_epi64x(100);
         let result = _mm_maskz_madd52hi_epu64(3, a, b, c);
         let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
-        check_array_equality(&result, &[1000u64, 1000u64])?;
+        check_array_equality(&result, &[1000, 1000])?;
     }
 
     if get_fuzzing() {

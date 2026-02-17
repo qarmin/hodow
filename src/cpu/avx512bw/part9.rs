@@ -8,9 +8,9 @@ use crate::get_fuzzing;
 
 pub(super) fn test_mm_reduce_max_epu16() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi16(100u16 as i16, 90, 80, 70, 60, 50, 40, 30);
+        let a = _mm_set_epi16(100_i16, 90, 80, 70, 60, 50, 40, 30);
         let r = _mm_reduce_max_epu16(a);
-        check_array_equality(&[r as u16], &[100u16])?;
+        check_array_equality(&[r as u16], &[100])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -52,7 +52,7 @@ pub(super) fn test_mm_reduce_min_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi16(100, 90, 80, 70, 60, 50, 40, 30);
         let r = _mm_reduce_min_epi16(a);
-        check_array_equality(&[r as i16], &[30i16])?;
+        check_array_equality(&[r as i16], &[30])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -92,7 +92,7 @@ pub(super) fn test_mm_mask_reduce_min_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm_reduce_min_epu16() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi16(100u16 as i16, 90, 80, 70, 60, 50, 40, 30);
+        let a = _mm_set_epi16(100_i16, 90, 80, 70, 60, 50, 40, 30);
         let r = _mm_reduce_min_epu16(a);
         let _ = r;
     }
@@ -136,7 +136,7 @@ pub(super) fn test_mm_reduce_mul_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi16(1, 2, 3, 4, 5, 6, 7, 8);
         let r = _mm_reduce_mul_epi16(a);
-        check_array_equality(&[r as i16], &[4030i16 % 3268i16])?;
+        check_array_equality(&[r as i16], &[4030 % 3268])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

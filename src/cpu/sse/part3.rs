@@ -83,7 +83,7 @@ pub(super) fn test_mm_cvt_si2ss() -> Result<(), String> {
 
 pub(super) fn test_mm_set_ps1() -> Result<(), String> {
     unsafe {
-        let result = _mm_set_ps1(3.13f32);
+        let result = _mm_set_ps1(3.13);
         let arr = std::mem::transmute::<__m128, [f32; 4]>(result);
         check_float_array_equality(&arr, &[3.13, 3.13, 3.13, 3.13])?;
 
@@ -119,7 +119,7 @@ pub(super) fn test_mm_setr_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_load_ss() -> Result<(), String> {
     unsafe {
-        let mem = [42.5f32];
+        let mem = [42.5];
         let a = _mm_load_ss(mem.as_ptr());
         let arr = std::mem::transmute::<__m128, [f32; 4]>(a);
         check_float_array_equality(&arr, &[42.5, 0.0, 0.0, 0.0])?;
@@ -138,7 +138,7 @@ pub(super) fn test_mm_load_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_load1_ps() -> Result<(), String> {
     unsafe {
-        let mem = [2.0f32];
+        let mem = [2.0];
         let a = _mm_load1_ps(mem.as_ptr());
         let arr = std::mem::transmute::<__m128, [f32; 4]>(a);
         check_float_array_equality(&arr, &[2.0, 2.0, 2.0, 2.0])?;
@@ -157,7 +157,7 @@ pub(super) fn test_mm_load1_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_load_ps1() -> Result<(), String> {
     unsafe {
-        let mem = [3.0f32];
+        let mem = [3.0];
         let a = _mm_load_ps1(mem.as_ptr());
         let arr = std::mem::transmute::<__m128, [f32; 4]>(a);
         check_float_array_equality(&arr, &[3.0, 3.0, 3.0, 3.0])?;
@@ -176,7 +176,7 @@ pub(super) fn test_mm_load_ps1() -> Result<(), String> {
 
 pub(super) fn test_mm_loadr_ps() -> Result<(), String> {
     unsafe {
-        let data = [1.0f32, 2.0f32, 3.0f32, 4.0f32];
+        let data = [1.0, 2.0, 3.0, 4.0];
         let a = _mm_loadr_ps(data.as_ptr());
         let arr = std::mem::transmute::<__m128, [f32; 4]>(a);
         check_float_array_equality(&arr, &[4.0, 3.0, 2.0, 1.0])?;
@@ -196,7 +196,7 @@ pub(super) fn test_mm_loadr_ps() -> Result<(), String> {
 pub(super) fn test_mm_store_ss() -> Result<(), String> {
     unsafe {
         let vec = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
-        let mut mem = [0.0f32];
+        let mut mem = [0.0];
         _mm_store_ss(mem.as_mut_ptr(), vec);
         check_float_array_equality(&mem, &[4.0])?;
 
@@ -204,7 +204,7 @@ pub(super) fn test_mm_store_ss() -> Result<(), String> {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let v = _mm_set_ss(get_random_float());
-                let mut m = [0.0f32];
+                let mut m = [0.0];
                 _mm_store_ss(m.as_mut_ptr(), v);
             }
         }
@@ -216,7 +216,7 @@ pub(super) fn test_mm_store_ss() -> Result<(), String> {
 pub(super) fn test_mm_store1_ps() -> Result<(), String> {
     unsafe {
         let vec = _mm_set1_ps(7.0);
-        let mut mem = [0.0f32; 4];
+        let mut mem = [0.0; 4];
         _mm_store1_ps(mem.as_mut_ptr(), vec);
         check_float_array_equality(&mem, &[7.0, 7.0, 7.0, 7.0])?;
 
@@ -224,7 +224,7 @@ pub(super) fn test_mm_store1_ps() -> Result<(), String> {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let v = _mm_set1_ps(get_random_float());
-                let mut m = [0.0f32; 4];
+                let mut m = [0.0; 4];
                 _mm_store1_ps(m.as_mut_ptr(), v);
             }
         }
@@ -236,7 +236,7 @@ pub(super) fn test_mm_store1_ps() -> Result<(), String> {
 pub(super) fn test_mm_store_ps1() -> Result<(), String> {
     unsafe {
         let vec = _mm_set1_ps(5.0);
-        let mut mem = [0.0f32; 4];
+        let mut mem = [0.0; 4];
         _mm_store_ps1(mem.as_mut_ptr(), vec);
         check_float_array_equality(&mem, &[5.0, 5.0, 5.0, 5.0])?;
 
@@ -244,7 +244,7 @@ pub(super) fn test_mm_store_ps1() -> Result<(), String> {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let v = _mm_set1_ps(get_random_float());
-                let mut m = [0.0f32; 4];
+                let mut m = [0.0; 4];
                 _mm_store_ps1(m.as_mut_ptr(), v);
             }
         }
@@ -255,9 +255,9 @@ pub(super) fn test_mm_store_ps1() -> Result<(), String> {
 
 pub(super) fn test_mm_storeu_ps() -> Result<(), String> {
     unsafe {
-        let data = [1.0f32, 2.0f32, 3.0f32, 4.0f32];
+        let data = [1.0, 2.0, 3.0, 4.0];
         let vec = _mm_loadu_ps(data.as_ptr());
-        let mut result = [0.0f32; 4];
+        let mut result = [0.0; 4];
         _mm_storeu_ps(result.as_mut_ptr(), vec);
         check_float_array_equality(&result, &data)?;
 
@@ -266,7 +266,7 @@ pub(super) fn test_mm_storeu_ps() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let arr = get_random_float32_array::<4>();
                 let v = _mm_loadu_ps(arr.as_ptr());
-                let mut r = [0.0f32; 4];
+                let mut r = [0.0; 4];
                 _mm_storeu_ps(r.as_mut_ptr(), v);
             }
         }
@@ -278,7 +278,7 @@ pub(super) fn test_mm_storeu_ps() -> Result<(), String> {
 pub(super) fn test_mm_storer_ps() -> Result<(), String> {
     unsafe {
         let vec = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
-        let mut mem = [0.0f32; 4];
+        let mut mem = [0.0; 4];
         _mm_storer_ps(mem.as_mut_ptr(), vec);
         check_float_array_equality(&mem, &[1.0, 2.0, 3.0, 4.0])?;
 
@@ -286,7 +286,7 @@ pub(super) fn test_mm_storer_ps() -> Result<(), String> {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let v = _mm_loadu_ps(get_random_float32_array::<4>().as_ptr());
-                let mut m = [0.0f32; 4];
+                let mut m = [0.0; 4];
                 _mm_storer_ps(m.as_mut_ptr(), v);
             }
         }

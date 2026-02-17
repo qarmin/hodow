@@ -10,7 +10,7 @@ pub(super) fn test_mm_maskz_cvtepu64_ps() -> Result<(), String> {
     unsafe {
         let v = _mm_set_epi64x(1, 2);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(v);
-        check_array_equality(&out, &[1i64, 2i64])?;
+        check_array_equality(&out, &[1, 2])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

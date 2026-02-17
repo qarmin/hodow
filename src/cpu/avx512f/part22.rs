@@ -8,9 +8,9 @@ use crate::get_fuzzing;
 
 pub(super) fn test_mm_mask_i64scatter_pd() -> Result<(), String> {
     unsafe {
-        let src = _mm_set_pd(2.0f64, 1.0f64);
+        let src = _mm_set_pd(2.0, 1.0);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(src);
-        check_float_array_equality(&out, &[1.0f64, 2.0f64])?;
+        check_float_array_equality(&out, &[1.0, 2.0])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -25,9 +25,9 @@ pub(super) fn test_mm_mask_i64scatter_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_i64scatter_ps() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_ps(4.0f32, 3.0f32, 2.0f32, 1.0f32);
+        let a = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(a);
-        check_float_array_equality(&out, &[1.0f32, 2.0f32, 3.0f32, 4.0f32])?;
+        check_float_array_equality(&out, &[1.0, 2.0, 3.0, 4.0])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -42,9 +42,9 @@ pub(super) fn test_mm_i64scatter_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_i64scatter_ps() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_ps(4.0f32, 3.0f32, 2.0f32, 1.0f32);
+        let a = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(a);
-        check_float_array_equality(&out, &[1.0f32, 2.0f32, 3.0f32, 4.0f32])?;
+        check_float_array_equality(&out, &[1.0, 2.0, 3.0, 4.0])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -93,9 +93,9 @@ pub(super) fn test_mm_mmask_i32gather_epi64() -> Result<(), String> {
 
 pub(super) fn test_mm_mmask_i32gather_pd() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_pd(2.0f64, 1.0f64);
+        let a = _mm_set_pd(2.0, 1.0);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(a);
-        check_float_array_equality(&out, &[1.0f64, 2.0f64])?;
+        check_float_array_equality(&out, &[1.0, 2.0])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -110,9 +110,9 @@ pub(super) fn test_mm_mmask_i32gather_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_mmask_i32gather_ps() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_ps(4.0f32, 3.0f32, 2.0f32, 1.0f32);
+        let a = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(a);
-        check_float_array_equality(&out, &[1.0f32, 2.0f32, 3.0f32, 4.0f32])?;
+        check_float_array_equality(&out, &[1.0, 2.0, 3.0, 4.0])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -161,9 +161,9 @@ pub(super) fn test_mm_mmask_i64gather_epi64() -> Result<(), String> {
 
 pub(super) fn test_mm_mmask_i64gather_pd() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_pd(2.0f64, 1.0f64);
+        let a = _mm_set_pd(2.0, 1.0);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(a);
-        check_float_array_equality(&out, &[1.0f64, 2.0f64])?;
+        check_float_array_equality(&out, &[1.0, 2.0])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -178,9 +178,9 @@ pub(super) fn test_mm_mmask_i64gather_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_mmask_i64gather_ps() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_ps(4.0f32, 3.0f32, 2.0f32, 1.0f32);
+        let a = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(a);
-        check_float_array_equality(&out, &[1.0f32, 2.0f32, 3.0f32, 4.0f32])?;
+        check_float_array_equality(&out, &[1.0, 2.0, 3.0, 4.0])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {

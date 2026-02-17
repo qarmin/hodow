@@ -8,11 +8,11 @@ use crate::get_fuzzing;
 
 pub(super) fn test_mm_maskz_min_epu16() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi16(100u16 as i16, 50, 10, 5, 4, 3, 2, 1);
+        let a = _mm_set_epi16(100_i16, 50, 10, 5, 4, 3, 2, 1);
         let b = _mm_set1_epi16(20);
         let r = _mm_min_epu16(a, b);
         let out: [u16; 8] = std::mem::transmute::<__m128i, [u16; 8]>(r);
-        check_array_equality(&out, &[20u16, 20, 10, 5, 4, 3, 2, 1])?;
+        check_array_equality(&out, &[20, 20, 10, 5, 4, 3, 2, 1])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -31,7 +31,7 @@ pub(super) fn test_mm_mask_min_epu8() -> Result<(), String> {
         let b = _mm_set1_epi8(20);
         let r = _mm_min_epu8(a, b);
         let out: [u8; 16] = std::mem::transmute::<__m128i, [u8; 16]>(r);
-        check_array_equality(&out, &[20u8, 20, 20, 20, 10, 5, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0])?;
+        check_array_equality(&out, &[20, 20, 20, 20, 10, 5, 4, 3, 2, 1, 0, 0, 0, 0, 0, 0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -54,7 +54,7 @@ pub(super) fn test_mm_mask_min_epi16() -> Result<(), String> {
         let b = _mm_set1_epi16(20);
         let r = _mm_min_epi16(a, b);
         let out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(r);
-        check_array_equality(&out, &[20i16, 20, 10, 5, -1, -2, -3, -4])?;
+        check_array_equality(&out, &[20, 20, 10, 5, -1, -2, -3, -4])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -77,7 +77,7 @@ pub(super) fn test_mm_mask_min_epi8() -> Result<(), String> {
         let b = _mm_set1_epi8(30);
         let r = _mm_min_epi8(a, b);
         let out: [i8; 16] = std::mem::transmute::<__m128i, [i8; 16]>(r);
-        check_array_equality(&out, &[30i8, 30, 30, 30, 20, 10, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4])?;
+        check_array_equality(&out, &[30, 30, 30, 30, 20, 10, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

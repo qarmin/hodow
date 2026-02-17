@@ -8,10 +8,10 @@ use crate::get_fuzzing;
 
 pub(super) fn test_mm_abs_epi64() -> Result<(), String> {
     unsafe {
-        let a: __m128i = _mm_set_epi64x(-2i64, -1i64);
+        let a: __m128i = _mm_set_epi64x(-2, -1);
         let result_v = _mm_abs_epi64(a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result_v);
-        check_array_equality(&result, &[1i64, 2i64])?;
+        check_array_equality(&result, &[1, 2])?;
 
         if get_fuzzing() {
             for _ in 0..get_iterations() {
@@ -27,11 +27,11 @@ pub(super) fn test_mm_abs_epi64() -> Result<(), String> {
 pub(super) fn test_mm_mask_abs_epi64() -> Result<(), String> {
     unsafe {
         let src: __m128i = _mm_setzero_si128();
-        let a = _mm_set_epi64x(-2i64, -1i64);
-        let k: __mmask8 = 255u8 as __mmask8;
+        let a = _mm_set_epi64x(-2, -1);
+        let k: __mmask8 = 255 as __mmask8;
         let result_v = _mm_mask_abs_epi64(src, k, a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result_v);
-        check_array_equality(&result, &[1i64, 2i64])?;
+        check_array_equality(&result, &[1, 2])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -47,11 +47,11 @@ pub(super) fn test_mm_mask_abs_epi64() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_abs_epi64() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 255u8 as __mmask8;
-        let a = _mm_set_epi64x(-3i64, -2i64);
+        let k: __mmask8 = 255 as __mmask8;
+        let a = _mm_set_epi64x(-3, -2);
         let result_v = _mm_maskz_abs_epi64(k, a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result_v);
-        check_array_equality(&result, &[2i64, 3i64])?;
+        check_array_equality(&result, &[2, 3])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -69,7 +69,7 @@ pub(super) fn test_mm_mask_mov_epi32() -> Result<(), String> {
     unsafe {
         let src: __m128i = _mm_setzero_si128();
         let a = _mm_set_epi32(4, 3, 2, 1);
-        let k: __mmask8 = 255u8 as __mmask8;
+        let k: __mmask8 = 255 as __mmask8;
         let result_v = _mm_mask_mov_epi32(src, k, a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result_v);
         check_array_equality(&result, &[1, 2, 3, 4])?;
@@ -88,7 +88,7 @@ pub(super) fn test_mm_mask_mov_epi32() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_mov_epi32() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 255u8 as __mmask8;
+        let k: __mmask8 = 255 as __mmask8;
         let a = _mm_set_epi32(4, 3, 2, 1);
         let result_v = _mm_maskz_mov_epi32(k, a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result_v);
@@ -109,11 +109,11 @@ pub(super) fn test_mm_maskz_mov_epi32() -> Result<(), String> {
 pub(super) fn test_mm_mask_mov_epi64() -> Result<(), String> {
     unsafe {
         let src: __m128i = _mm_setzero_si128();
-        let a = _mm_set_epi64x(2i64, 1i64);
-        let k: __mmask8 = 255u8 as __mmask8;
+        let a = _mm_set_epi64x(2, 1);
+        let k: __mmask8 = 255 as __mmask8;
         let result_v = _mm_mask_mov_epi64(src, k, a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result_v);
-        check_array_equality(&result, &[1i64, 2i64])?;
+        check_array_equality(&result, &[1, 2])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -129,11 +129,11 @@ pub(super) fn test_mm_mask_mov_epi64() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_mov_epi64() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 255u8 as __mmask8;
-        let a = _mm_set_epi64x(2i64, 1i64);
+        let k: __mmask8 = 255 as __mmask8;
+        let a = _mm_set_epi64x(2, 1);
         let result_v = _mm_maskz_mov_epi64(k, a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result_v);
-        check_array_equality(&result, &[1i64, 2i64])?;
+        check_array_equality(&result, &[1, 2])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -151,7 +151,7 @@ pub(super) fn test_mm_mask_mov_ps() -> Result<(), String> {
     unsafe {
         let src: __m128 = _mm_setzero_ps();
         let a = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
-        let k: __mmask8 = 255u8 as __mmask8;
+        let k: __mmask8 = 255 as __mmask8;
         let result_v = _mm_mask_mov_ps(src, k, a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
         check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0])?;
@@ -170,7 +170,7 @@ pub(super) fn test_mm_mask_mov_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_mov_ps() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 255u8 as __mmask8;
+        let k: __mmask8 = 255 as __mmask8;
         let a = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let result_v = _mm_maskz_mov_ps(k, a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
@@ -192,7 +192,7 @@ pub(super) fn test_mm_mask_mov_pd() -> Result<(), String> {
     unsafe {
         let src: __m128d = _mm_setzero_pd();
         let a = _mm_set_pd(2.0, 1.0);
-        let k: __mmask8 = 255u8 as __mmask8;
+        let k: __mmask8 = 255 as __mmask8;
         let result_v = _mm_mask_mov_pd(src, k, a);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result_v);
         check_float_array_equality(&result, &[1.0, 2.0])?;
@@ -211,7 +211,7 @@ pub(super) fn test_mm_mask_mov_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_mov_pd() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 255u8 as __mmask8;
+        let k: __mmask8 = 255 as __mmask8;
         let a = _mm_set_pd(2.0, 1.0);
         let result_v = _mm_maskz_mov_pd(k, a);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result_v);
@@ -234,7 +234,7 @@ pub(super) fn test_mm_mask_add_epi32() -> Result<(), String> {
         let src: __m128i = _mm_setzero_si128();
         let a = _mm_set_epi32(4, 3, 2, 1);
         let b = _mm_set_epi32(40, 30, 20, 10);
-        let k: __mmask8 = 255u8 as __mmask8;
+        let k: __mmask8 = 255 as __mmask8;
         let result_v = _mm_mask_add_epi32(src, k, a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result_v);
         check_array_equality(&result, &[11, 22, 33, 44])?;
@@ -257,7 +257,7 @@ pub(super) fn test_mm_maskz_add_epi32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(4, 3, 2, 1);
         let b = _mm_set_epi32(40, 30, 20, 10);
-        let k: __mmask8 = 255u8 as __mmask8;
+        let k: __mmask8 = 255 as __mmask8;
         let result_v = _mm_maskz_add_epi32(k, a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result_v);
         check_array_equality(&result, &[11, 22, 33, 44])?;
@@ -279,12 +279,12 @@ pub(super) fn test_mm_maskz_add_epi32() -> Result<(), String> {
 pub(super) fn test_mm_mask_add_epi64() -> Result<(), String> {
     unsafe {
         let src: __m128i = _mm_setzero_si128();
-        let a = _mm_set_epi64x(2i64, 1i64);
-        let b = _mm_set_epi64x(20i64, 10i64);
-        let k: __mmask8 = 255u8 as __mmask8;
+        let a = _mm_set_epi64x(2, 1);
+        let b = _mm_set_epi64x(20, 10);
+        let k: __mmask8 = 255 as __mmask8;
         let result_v = _mm_mask_add_epi64(src, k, a, b);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result_v);
-        check_array_equality(&result, &[11i64, 22i64])?;
+        check_array_equality(&result, &[11, 22])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -302,12 +302,12 @@ pub(super) fn test_mm_mask_add_epi64() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_add_epi64() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi64x(2i64, 1i64);
-        let b = _mm_set_epi64x(20i64, 10i64);
-        let k: __mmask8 = 255u8 as __mmask8;
+        let a = _mm_set_epi64x(2, 1);
+        let b = _mm_set_epi64x(20, 10);
+        let k: __mmask8 = 255 as __mmask8;
         let result_v = _mm_maskz_add_epi64(k, a, b);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result_v);
-        check_array_equality(&result, &[11i64, 22i64])?;
+        check_array_equality(&result, &[11, 22])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

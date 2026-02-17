@@ -344,7 +344,7 @@ fn test_mm_maskz_permutexvar_epi8() -> Result<(), String> {
 fn test_mm_multishift_epi64_epi8() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_epi8(0);
-        let b = _mm_set_epi64x(72623859790382856u64 as i64, 651345242494996240u64 as i64);
+        let b = _mm_set_epi64x(72623859790382856_i64, 651345242494996240_i64);
         let result = _mm_multishift_epi64_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
 
@@ -369,7 +369,7 @@ fn test_mm_mask_multishift_epi64_epi8() -> Result<(), String> {
     unsafe {
         let src = _mm_set1_epi8(99);
         let a = _mm_set1_epi8(0);
-        let b = _mm_set_epi64x(72623859790382856u64 as i64, 651345242494996240u64 as i64);
+        let b = _mm_set_epi64x(72623859790382856_i64, 651345242494996240_i64);
         let result = _mm_mask_multishift_epi64_epi8(src, 65280, a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
 
@@ -395,7 +395,7 @@ fn test_mm_mask_multishift_epi64_epi8() -> Result<(), String> {
 fn test_mm_maskz_multishift_epi64_epi8() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_epi8(0);
-        let b = _mm_set_epi64x(72623859790382856u64 as i64, 651345242494996240u64 as i64);
+        let b = _mm_set_epi64x(72623859790382856_i64, 651345242494996240_i64);
         let result = _mm_maskz_multishift_epi64_epi8(65280, a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
 

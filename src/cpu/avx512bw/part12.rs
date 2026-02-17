@@ -12,7 +12,7 @@ pub(super) fn test_mm_maskz_avg_epu8() -> Result<(), String> {
         let b = _mm_set_epi8(16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1);
         let r = _mm_avg_epu8(a, b);
         let out: [u8; 16] = std::mem::transmute::<__m128i, [u8; 16]>(r);
-        check_array_equality(&out, &[9u8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9])?;
+        check_array_equality(&out, &[9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

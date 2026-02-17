@@ -11,7 +11,7 @@ pub(super) fn test_mm_mask_sra_epi16() -> Result<(), String> {
         let a = _mm_set_epi16(-8, -4, -2, -1, 16, 32, 64, 128);
         let r = _mm_sra_epi16(a, _mm_set1_epi16(1));
         let out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(r);
-        check_array_equality(&out, &[-4i16, -2, -1, -1, 8, 16, 32, 64])?;
+        check_array_equality(&out, &[-4, -2, -1, -1, 8, 16, 32, 64])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -33,7 +33,7 @@ pub(super) fn test_mm_mask_srai_epi16() -> Result<(), String> {
         let a = _mm_set_epi16(-16, -8, -4, -2, 1, 2, 3, 4);
         let r = _mm_srai_epi16(a, 1);
         let out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(r);
-        check_array_equality(&out, &[-8i16, -4, -2, -1, 0, 1, 1, 2])?;
+        check_array_equality(&out, &[-8, -4, -2, -1, 0, 1, 1, 2])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -56,7 +56,7 @@ pub(super) fn test_mm_srav_epi16() -> Result<(), String> {
         let b = _mm_set_epi16(1, 1, 1, 1, 1, 1, 1, 1);
         let r = _mm_srav_epi16(a, b);
         let out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(r);
-        check_array_equality(&out, &[8i16, 4, 2, 1, 0, 0, -1, -1])?;
+        check_array_equality(&out, &[8, 4, 2, 1, 0, 0, -1, -1])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

@@ -95,7 +95,7 @@ pub(super) fn test_mm_ucomineq_sh() -> Result<(), String> {
 
 pub(super) fn test_mm_load_ph() -> Result<(), String> {
     unsafe {
-        let data = [1.0f32, 2.0, 3.0, 4.0];
+        let data = [1.0, 2.0, 3.0, 4.0];
         let r = _mm_load_ph(data.as_ptr());
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         crate::cpu::common::check_float_array_equality(&out, &[1.0, 2.0, 3.0, 4.0])?;

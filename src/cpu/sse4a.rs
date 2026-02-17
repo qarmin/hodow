@@ -34,7 +34,7 @@ fn test_mm_inserti_si64() -> Result<(), String> {
     test_mm_extract_si64()
 }
 fn test_mm_stream_sd() -> Result<(), String> {
-    let _x = 1.23f64;
+    let _x = 1.23;
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..crate::cpu::get_iterations() {
@@ -44,7 +44,7 @@ fn test_mm_stream_sd() -> Result<(), String> {
     Ok(())
 }
 fn test_mm_stream_ss() -> Result<(), String> {
-    let _x = 4.56f32;
+    let _x = 4.56;
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..crate::cpu::get_iterations() {

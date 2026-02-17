@@ -18,7 +18,7 @@ impl ExtensionTest for BMI1 {
 
 fn test_mm_tzcnt_32() -> Result<(), String> {
     unsafe {
-        let a = 2u32;
+        let a = 2;
         let r = _tzcnt_u32(a);
         let _ = r;
     }

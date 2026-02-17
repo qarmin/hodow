@@ -10,7 +10,7 @@ pub(super) fn test_mm_cvt_roundu64_ss() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ss(4.5);
         let r = _mm_cvt_roundss_u64::<0>(a);
-        check_int_equality(r, 4u64)?;
+        check_int_equality(r, 4)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -27,7 +27,7 @@ pub(super) fn test_mm_cvt_roundsd_si64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_sd(4.5);
         let r = _mm_cvt_roundsd_si64::<0>(a);
-        check_int_equality(r, 4i64)?;
+        check_int_equality(r, 4)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -44,7 +44,7 @@ pub(super) fn test_mm_cvt_roundsd_i64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_sd(4.5);
         let r = _mm_cvt_roundsd_i64::<0>(a);
-        check_int_equality(r, 4i64)?;
+        check_int_equality(r, 4)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -61,7 +61,7 @@ pub(super) fn test_mm_cvt_roundsd_u64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_sd(4.5);
         let r = _mm_cvt_roundsd_u64::<0>(a);
-        check_int_equality(r, 4u64)?;
+        check_int_equality(r, 4)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -78,7 +78,7 @@ pub(super) fn test_mm_cvt_roundss_si64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ss(4.5);
         let r = _mm_cvt_roundss_si64::<0>(a);
-        check_int_equality(r, 4i64)?;
+        check_int_equality(r, 4)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -95,7 +95,7 @@ pub(super) fn test_mm_cvt_roundss_i64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ss(4.5);
         let r = _mm_cvt_roundss_i64::<0>(a);
-        check_int_equality(r, 4i64)?;
+        check_int_equality(r, 4)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -112,7 +112,7 @@ pub(super) fn test_mm_cvt_roundss_u64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ss(4.5);
         let r = _mm_cvt_roundss_u64::<0>(a);
-        check_int_equality(r, 4u64)?;
+        check_int_equality(r, 4)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -131,7 +131,7 @@ pub(super) fn test_mm_cvtt_roundsd_si64() -> Result<(), String> {
                                   // use explicit value to test truncation
         let a = _mm_set_pd(0.0, 3.9);
         let r = _mm_cvtt_roundsd_si64::<0>(a);
-        check_int_equality(r, 3i64)?;
+        check_int_equality(r, 3)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -148,7 +148,7 @@ pub(super) fn test_mm_cvtt_roundsd_i64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(0.0, 3.9);
         let r = _mm_cvtt_roundsd_i64::<12>(a);
-        check_int_equality(r, 3i64)?;
+        check_int_equality(r, 3)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -165,7 +165,7 @@ pub(super) fn test_mm_cvtt_roundsd_u64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(0.0, 3.9);
         let r = _mm_cvtt_roundsd_u64::<0>(a);
-        check_int_equality(r, 3u64)?;
+        check_int_equality(r, 3)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -182,7 +182,7 @@ pub(super) fn test_mm_cvtt_roundss_i64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ss(3.9);
         let r = _mm_cvtt_roundss_i64::<0>(a);
-        check_int_equality(r, 3i64)?;
+        check_int_equality(r, 3)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -199,7 +199,7 @@ pub(super) fn test_mm_cvtt_roundss_si64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ss(3.9);
         let r = _mm_cvtt_roundss_si64::<0>(a);
-        check_int_equality(r, 3i64)?;
+        check_int_equality(r, 3)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -216,7 +216,7 @@ pub(super) fn test_mm_cvtt_roundss_u64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ss(3.9);
         let r = _mm_cvtt_roundss_u64::<0>(a);
-        check_int_equality(r, 3u64)?;
+        check_int_equality(r, 3)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -233,7 +233,7 @@ pub(super) fn test_mm_mask_abs_epi32() -> Result<(), String> {
     unsafe {
         let src: __m128i = _mm_setzero_si128();
         let a = _mm_set_epi32(-4, -3, -2, -1);
-        let k: __mmask8 = 255u8 as __mmask8;
+        let k: __mmask8 = 255 as __mmask8;
         let result_v = _mm_mask_abs_epi32(src, k, a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result_v);
         check_array_equality(&result, &[1, 2, 3, 4])?;
@@ -252,7 +252,7 @@ pub(super) fn test_mm_mask_abs_epi32() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_abs_epi32() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 255u8 as __mmask8;
+        let k: __mmask8 = 255 as __mmask8;
         let a = _mm_set_epi32(-4, -3, -2, -1);
         let result_v = _mm_maskz_abs_epi32(k, a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result_v);

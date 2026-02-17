@@ -50,7 +50,7 @@ pub(super) fn test_mm_cvtsh_ss() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_ps(3.5);
         let r = _mm_cvtsh_ss(a);
-        check_array_equality(&[r], &[3.5f32])?;
+        check_array_equality(&[r], &[3.5])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

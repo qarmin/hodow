@@ -119,7 +119,7 @@ pub(super) fn test_mm_mask_i32scatter_epi64() -> Result<(), String> {
 
 pub(super) fn test_mm_i32scatter_pd() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_pd(2.0f64, 1.0f64);
+        let a = _mm_set_pd(2.0, 1.0);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(a);
         check_float_array_equality(&out, &[1.0, 2.0])?;
 
@@ -137,7 +137,7 @@ pub(super) fn test_mm_i32scatter_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_i32scatter_pd() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_pd(5.0f64, 6.0f64);
+        let a = _mm_set_pd(5.0, 6.0);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(a);
         check_float_array_equality(&out, &[6.0, 5.0])?;
 
@@ -155,7 +155,7 @@ pub(super) fn test_mm_mask_i32scatter_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_i32scatter_ps() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_ps(4.0f32, 3.0f32, 2.0f32, 1.0f32);
+        let a = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(a);
         check_float_array_equality(&out, &[1.0, 2.0, 3.0, 4.0])?;
 
@@ -173,7 +173,7 @@ pub(super) fn test_mm_i32scatter_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_i32scatter_ps() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_ps(8.0f32, 7.0f32, 6.0f32, 5.0f32);
+        let a = _mm_set_ps(8.0, 7.0, 6.0, 5.0);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(a);
         check_float_array_equality(&out, &[5.0, 6.0, 7.0, 8.0])?;
 
@@ -263,7 +263,7 @@ pub(super) fn test_mm_mask_i64scatter_epi64() -> Result<(), String> {
 
 pub(super) fn test_mm_i64scatter_pd() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_pd(8.0f64, 7.0f64);
+        let a = _mm_set_pd(8.0, 7.0);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(a);
         check_float_array_equality(&out, &[7.0, 8.0])?;
 

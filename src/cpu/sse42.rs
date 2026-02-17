@@ -90,7 +90,7 @@ fn test_mm_cmpestra() -> Result<(), String> {
 fn test_mm_crc32_u64() -> Result<(), String> {
     unsafe {
         let v: u64 = 1311768467463790320;
-        let crc = _mm_crc32_u64(0u64, v);
+        let crc = _mm_crc32_u64(0, v);
         // CRC value is implementation defined; just ensure syscall returns a number
         let _ = crc;
     }
@@ -98,7 +98,7 @@ fn test_mm_crc32_u64() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_crc32_u64(0u64, get_random_i32_array::<4>()[0] as u64);
+                let _ = _mm_crc32_u64(0, get_random_i32_array::<4>()[0] as u64);
             }
         }
     }

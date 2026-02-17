@@ -83,7 +83,7 @@ pub(super) fn test_mm_rcp14_pd() -> Result<(), String> {
         let a = _mm_set1_pd(2.0);
         let r = _mm_rcp14_pd(a);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality(&[out[0] as f32, out[1] as f32], &[0.5f32, 0.5f32])?;
+        check_float_array_equality(&[out[0] as f32, out[1] as f32], &[0.5, 0.5])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

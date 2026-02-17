@@ -10,7 +10,7 @@ pub(super) fn test_mm_setr_ph() -> Result<(), String> {
     unsafe {
         let v = _mm_setr_ps(1.0, 2.0, 3.0, 4.0);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(v);
-        check_array_equality(&out, &[1.0f32, 2.0, 3.0, 4.0])?;
+        check_array_equality(&out, &[1.0, 2.0, 3.0, 4.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -32,7 +32,7 @@ pub(super) fn test_mm_setzero_ph() -> Result<(), String> {
     unsafe {
         let v = _mm_setzero_ps();
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(v);
-        check_array_equality(&out, &[0.0f32, 0.0, 0.0, 0.0])?;
+        check_array_equality(&out, &[0.0, 0.0, 0.0, 0.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

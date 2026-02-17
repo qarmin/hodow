@@ -8,12 +8,12 @@ use crate::get_fuzzing;
 
 pub(super) fn test_mm_mask3_fnmadd_ss() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_ss(1.0f32);
-        let b = _mm_set_ss(2.0f32);
-        let c = _mm_set_ss(1.0f32);
+        let a = _mm_set_ss(1.0);
+        let b = _mm_set_ss(2.0);
+        let c = _mm_set_ss(1.0);
         let r = _mm_fnmadd_ss(a, b, c);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[-1.0f32, 0.0f32, 0.0f32, 0.0f32])?;
+        check_float_array_equality(&out, &[-1.0, 0.0, 0.0, 0.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -34,12 +34,12 @@ pub(super) fn test_mm_mask3_fnmadd_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_fnmadd_sd() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_sd(1.0f64);
-        let b = _mm_set_sd(2.0f64);
-        let c = _mm_set_sd(1.0f64);
+        let a = _mm_set_sd(1.0);
+        let b = _mm_set_sd(2.0);
+        let c = _mm_set_sd(1.0);
         let r = _mm_fnmadd_sd(a, b, c);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality(&out, &[-1.0f64, 0.0f64])?;
+        check_float_array_equality(&out, &[-1.0, 0.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -68,12 +68,12 @@ pub(super) fn test_mm_mask3_fnmadd_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_fnmsub_ss() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_ss(1.0f32);
-        let b = _mm_set_ss(2.0f32);
-        let c = _mm_set_ss(1.0f32);
+        let a = _mm_set_ss(1.0);
+        let b = _mm_set_ss(2.0);
+        let c = _mm_set_ss(1.0);
         let r = _mm_fnmsub_ss(a, b, c);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[-3.0f32, 0.0f32, 0.0f32, 0.0f32])?;
+        check_float_array_equality(&out, &[-3.0, 0.0, 0.0, 0.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -102,12 +102,12 @@ pub(super) fn test_mm_mask3_fnmsub_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_fnmsub_sd() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_sd(2.0f64);
-        let b = _mm_set_sd(2.0f64);
-        let c = _mm_set_sd(1.0f64);
+        let a = _mm_set_sd(2.0);
+        let b = _mm_set_sd(2.0);
+        let c = _mm_set_sd(1.0);
         let r = _mm_fnmsub_sd(a, b, c);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality(&out, &[-3.0f64, 0.0f64])?;
+        check_float_array_equality(&out, &[-3.0, 0.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -136,12 +136,12 @@ pub(super) fn test_mm_mask3_fnmsub_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_add_round_ss() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_ss(1.5f32);
-        let b = _mm_set_ss(2.5f32);
+        let a = _mm_set_ss(1.5);
+        let b = _mm_set_ss(2.5);
         let r = _mm_add_round_ss(a, b, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         // 1.5 + 2.5 = 4.0 -> rounded to 4
-        check_float_array_equality(&out, &[4.0f32, 0.0f32, 0.0f32, 0.0f32])?;
+        check_float_array_equality(&out, &[4.0, 0.0, 0.0, 0.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -168,11 +168,11 @@ pub(super) fn test_mm_maskz_add_round_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_add_round_sd() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_sd(1.5f64);
-        let b = _mm_set_sd(2.5f64);
+        let a = _mm_set_sd(1.5);
+        let b = _mm_set_sd(2.5);
         let r = _mm_add_round_sd(a, b, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality(&out, &[4.0f64, 0.0f64])?;
+        check_float_array_equality(&out, &[4.0, 0.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

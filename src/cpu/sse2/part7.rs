@@ -18,7 +18,7 @@ pub(super) fn test_mm_clflush() -> Result<(), String> {
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
-                let mut buf = [0u8; 16];
+                let mut buf = [0; 16];
                 let ptr = buf.as_mut_ptr() as *const u8;
                 _mm_clflush(ptr);
             }
@@ -68,7 +68,7 @@ pub(super) fn test_mm_sub_epi8() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_store1_pd() -> Result<(), String> {
-    let mut data = [0.0f64; 2];
+    let mut data = [0.0; 2];
     let vec = unsafe { _mm_set1_pd(3.17) };
     unsafe { _mm_storel_pd(data.as_mut_ptr(), vec) };
     check_float_array_equality(&data, &[3.17, 0.0])?;
@@ -77,7 +77,7 @@ pub(super) fn test_mm_store1_pd() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             let arr = get_random_float64_array::<2>();
-            let mut res = [0.0f64; 2];
+            let mut res = [0.0; 2];
             unsafe {
                 let vec = _mm_set1_pd(arr[0]);
                 _mm_storel_pd(res.as_mut_ptr(), vec);
@@ -90,7 +90,7 @@ pub(super) fn test_mm_store1_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_store_pd1() -> Result<(), String> {
     unsafe {
-        let mut data = [0.0f64; 2];
+        let mut data = [0.0; 2];
         let vec = _mm_set_pd(2.0, 1.0);
         _mm_storeh_pd(data.as_mut_ptr(), vec);
         // on this target/storeh stores the high element at data[0]
@@ -100,7 +100,7 @@ pub(super) fn test_mm_store_pd1() -> Result<(), String> {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let arr = get_random_float64_array::<2>();
-                let mut res = [0.0f64; 2];
+                let mut res = [0.0; 2];
                 let vec = _mm_set_pd(arr[1], arr[0]);
                 _mm_storeh_pd(res.as_mut_ptr(), vec);
             }
@@ -111,7 +111,7 @@ pub(super) fn test_mm_store_pd1() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_storer_pd() -> Result<(), String> {
-    let mut data = [0.0f64; 2];
+    let mut data = [0.0; 2];
     let vec = unsafe { _mm_set_pd(9.0, 8.0) };
     unsafe { _mm_storeu_pd(data.as_mut_ptr(), vec) };
     check_float_array_equality(&data, &[8.0, 9.0])?;
@@ -120,7 +120,7 @@ pub(super) fn test_mm_storer_pd() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             let arr = get_random_float64_array::<2>();
-            let mut res = [0.0f64; 2];
+            let mut res = [0.0; 2];
             unsafe {
                 let vec = _mm_set_pd(arr[1], arr[0]);
                 _mm_storeu_pd(res.as_mut_ptr(), vec);
@@ -133,7 +133,7 @@ pub(super) fn test_mm_storer_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_storeh_pd() -> Result<(), String> {
     unsafe {
-        let mut data = [0.0f64; 2];
+        let mut data = [0.0; 2];
         let vec = _mm_set_pd(7.0, 6.0);
         _mm_storeh_pd(data.as_mut_ptr(), vec);
         // storeh writes the high element into data[0] on this target
@@ -143,7 +143,7 @@ pub(super) fn test_mm_storeh_pd() -> Result<(), String> {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let arr = get_random_float64_array::<2>();
-                let mut res = [0.0f64; 2];
+                let mut res = [0.0; 2];
                 let vec = _mm_set_pd(arr[1], arr[0]);
                 _mm_storeh_pd(res.as_mut_ptr(), vec);
             }
@@ -154,7 +154,7 @@ pub(super) fn test_mm_storeh_pd() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_storel_pd() -> Result<(), String> {
-    let mut data = [0.0f64; 2];
+    let mut data = [0.0; 2];
     let vec = unsafe { _mm_set_pd(5.0, 4.0) };
     unsafe { _mm_storel_pd(data.as_mut_ptr(), vec) };
     check_float_array_equality(&data, &[4.0, 0.0])?;
@@ -163,7 +163,7 @@ pub(super) fn test_mm_storel_pd() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             let arr = get_random_float64_array::<2>();
-            let mut res = [0.0f64; 2];
+            let mut res = [0.0; 2];
             unsafe {
                 let vec = _mm_set_pd(arr[1], arr[0]);
                 _mm_storel_pd(res.as_mut_ptr(), vec);
@@ -175,7 +175,7 @@ pub(super) fn test_mm_storel_pd() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_load1_pd() -> Result<(), String> {
-    let data = [2.0f64, 3.0f64];
+    let data = [2.0, 3.0];
     let a = unsafe { _mm_loadu_pd(data.as_ptr()) };
     let result = unsafe { std::mem::transmute::<__m128d, [f64; 2]>(a) };
     check_float_array_equality(&result, &[2.0, 3.0])?;
@@ -195,7 +195,7 @@ pub(super) fn test_mm_load1_pd() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_load_pd1() -> Result<(), String> {
-    let data = [3.0f64, 2.0f64];
+    let data = [3.0, 2.0];
     let a = unsafe { _mm_loadu_pd(data.as_ptr()) };
     let result = unsafe { std::mem::transmute::<__m128d, [f64; 2]>(a) };
     check_float_array_equality(&result, &[3.0, 2.0])?;
@@ -215,7 +215,7 @@ pub(super) fn test_mm_load_pd1() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_loadr_pd() -> Result<(), String> {
-    let data = [1.0f64, 4.0f64];
+    let data = [1.0, 4.0];
     let a = unsafe { _mm_loadu_pd(data.as_ptr()) };
     let result = unsafe { std::mem::transmute::<__m128d, [f64; 2]>(a) };
     check_float_array_equality(&result, &[1.0, 4.0])?;
@@ -239,7 +239,7 @@ pub(super) fn test_mm_loadu_si16() -> Result<(), String> {
     let ptr = data.as_ptr() as *const u8;
     let vec = unsafe { _mm_loadu_si16(ptr) };
     let result = unsafe { std::mem::transmute::<__m128i, [i16; 8]>(vec) };
-    check_array_equality(&[result[0]], &[1i16])?;
+    check_array_equality(&[result[0]], &[1])?;
 
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -279,7 +279,7 @@ pub(super) fn test_mm_loadu_si64() -> Result<(), String> {
     let ptr = data.as_ptr() as *const u8;
     let vec = unsafe { _mm_loadu_si64(ptr) };
     let result = unsafe { std::mem::transmute::<__m128i, [i64; 2]>(vec) };
-    check_array_equality(&result, &[100i64])?;
+    check_array_equality(&result, &[100])?;
 
     if get_fuzzing() {
         info!("Starting fuzzing");

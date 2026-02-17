@@ -72,7 +72,7 @@ fn test_mm_mask_expandloadu_epi16() -> Result<(), String> {
     unsafe {
         let v = _mm_set1_epi16(5);
         let out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(v);
-        check_array_equality(&out, &[5i16; 8])?;
+        check_array_equality(&out, &[5; 8])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -90,7 +90,7 @@ fn test_mm_mask_expandloadu_epi8() -> Result<(), String> {
     unsafe {
         let v = _mm_set1_epi8(7);
         let out: [i8; 16] = std::mem::transmute::<__m128i, [i8; 16]>(v);
-        check_array_equality(&out, &[7i8; 16])?;
+        check_array_equality(&out, &[7; 16])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -138,7 +138,7 @@ fn test_mm_shldv_epi64() -> Result<(), String> {
     unsafe {
         let v = _mm_set_epi64x(2, 1);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(v);
-        check_array_equality(&out, &[2i64, 1i64])?;
+        check_array_equality(&out, &[2, 1])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

@@ -106,7 +106,7 @@ pub(super) fn test_mm_maskz_broadcastb_epi64() -> Result<(), String> {
             _mm_set1_epi64x(b)
         };
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        check_array_equality(&out, &[7i64, 7i64])?;
+        check_array_equality(&out, &[7, 7])?;
     }
 
     if get_fuzzing() {
@@ -134,7 +134,7 @@ pub(super) fn test_mm_mask_broadcastb_epi64() -> Result<(), String> {
             _mm_set1_epi64x(b)
         };
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        check_array_equality(&out, &[9i64, 9i64])?;
+        check_array_equality(&out, &[9, 9])?;
     }
 
     if get_fuzzing() {
@@ -162,7 +162,7 @@ pub(super) fn test_mm_maskz_broadcastw_epi64() -> Result<(), String> {
             _mm_set1_epi64x(w)
         };
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        check_array_equality(&out, &[123i64, 123i64])?;
+        check_array_equality(&out, &[123, 123])?;
     }
 
     if get_fuzzing() {
@@ -190,7 +190,7 @@ pub(super) fn test_mm_mask_broadcastw_epi64() -> Result<(), String> {
             _mm_set1_epi64x(w)
         };
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        check_array_equality(&out, &[77i64, 77i64])?;
+        check_array_equality(&out, &[77, 77])?;
     }
 
     if get_fuzzing() {

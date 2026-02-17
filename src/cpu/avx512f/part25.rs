@@ -8,11 +8,11 @@ use crate::get_fuzzing;
 
 pub(super) fn test_mm_mask_srli_epi32() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi32(-1_i32, 2147483648u32 as i32, 2, 4);
+        let a = _mm_set_epi32(-1_i32, 2147483648_i32, 2, 4);
         let r = _mm_srli_epi32(a, 1);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
         // changed expected order to match observed output [2, 1, 1073741824, 2147483647]
-        check_array_equality(&out, &[2i32, 1i32, 1073741824i32, 2147483647i32])?;
+        check_array_equality(&out, &[2, 1, 1073741824, 2147483647])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -40,11 +40,11 @@ pub(super) fn test_mm_maskz_srli_epi32() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_slli_epi64() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi64x(1, 9223372036854775808u64 as i64);
+        let a = _mm_set_epi64x(1, 9223372036854775808_i64);
         let r = _mm_slli_epi64(a, 1);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
         // changed expected order to match observed output [0, 2]
-        check_array_equality(&out, &[0i64, 2i64])?;
+        check_array_equality(&out, &[0, 2])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -65,11 +65,11 @@ pub(super) fn test_mm_maskz_slli_epi64() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_srli_epi64() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi64x(18446744073709551615u64 as i64, 9223372036854775808u64 as i64);
+        let a = _mm_set_epi64x(18446744073709551615_i64, 9223372036854775808_i64);
         let r = _mm_srli_epi64(a, 1);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
         // swapped order to match observed output [4611686018427387904, 9223372036854775807]
-        check_array_equality(&out, &[4611686018427387904i64, 9223372036854775807i64])?;
+        check_array_equality(&out, &[4611686018427387904, 9223372036854775807])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -94,7 +94,7 @@ pub(super) fn test_mm_mask_sll_epi32() -> Result<(), String> {
         let r = _mm_slli_epi32(a, 1);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
         // changed expected order to match observed output [8, 6, 4, 2]
-        check_array_equality(&out, &[8i32, 6i32, 4i32, 2i32])?;
+        check_array_equality(&out, &[8, 6, 4, 2])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -119,7 +119,7 @@ pub(super) fn test_mm_mask_srl_epi32() -> Result<(), String> {
         let r = _mm_srli_epi32(a, 1);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
         // changed expected order to match observed output [0, 1, 2, 4]
-        check_array_equality(&out, &[0i32, 1i32, 2i32, 4i32])?;
+        check_array_equality(&out, &[0, 1, 2, 4])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -144,7 +144,7 @@ pub(super) fn test_mm_mask_sll_epi64() -> Result<(), String> {
         let r = _mm_slli_epi64(a, 2);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
         // changed expected order to match observed output [12, 8]
-        check_array_equality(&out, &[12i64, 8i64])?;
+        check_array_equality(&out, &[12, 8])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -169,7 +169,7 @@ pub(super) fn test_mm_mask_srl_epi64() -> Result<(), String> {
         let r = _mm_srli_epi64(a, 2);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
         // changed expected order to match observed output [1, 2]
-        check_array_equality(&out, &[1i64, 2i64])?;
+        check_array_equality(&out, &[1, 2])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -194,7 +194,7 @@ pub(super) fn test_mm_mask_sra_epi32() -> Result<(), String> {
         let r = _mm_srai_epi32(a, 1);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
         // changed expected order to match observed output [-1, -1, -2, -4]
-        check_array_equality(&out, &[-1i32, -1i32, -2i32, -4i32])?;
+        check_array_equality(&out, &[-1, -1, -2, -4])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

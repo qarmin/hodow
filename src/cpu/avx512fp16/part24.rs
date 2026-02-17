@@ -32,7 +32,7 @@ pub(super) fn test_mm_cvtph_epi16() -> Result<(), String> {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let r = _mm_cvtph_epi16(a);
         let out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(r);
-        check_array_equality(&out, &[1i16, 0, 2, 0, 3, 0, 4, 0])?;
+        check_array_equality(&out, &[1, 0, 2, 0, 3, 0, 4, 0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -58,7 +58,7 @@ pub(super) fn test_mm_cvtph_epu16() -> Result<(), String> {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let r = _mm_cvtph_epu16(a);
         let out: [u16; 8] = std::mem::transmute::<__m128i, [u16; 8]>(r);
-        check_array_equality(&out, &[1u16, 0, 2, 0, 3, 0, 4, 0])?;
+        check_array_equality(&out, &[1, 0, 2, 0, 3, 0, 4, 0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -84,7 +84,7 @@ pub(super) fn test_mm_cvttph_epi16() -> Result<(), String> {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let r = _mm_cvttph_epi16(a);
         let out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(r);
-        check_array_equality(&out, &[1i16, 0, 2, 0, 3, 0, 4, 0])?;
+        check_array_equality(&out, &[1, 0, 2, 0, 3, 0, 4, 0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -110,7 +110,7 @@ pub(super) fn test_mm_cvttph_epu16() -> Result<(), String> {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let r = _mm_cvttph_epu16(a);
         let out: [u16; 8] = std::mem::transmute::<__m128i, [u16; 8]>(r);
-        check_array_equality(&out, &[1u16, 0, 2, 0, 3, 0, 4, 0])?;
+        check_array_equality(&out, &[1, 0, 2, 0, 3, 0, 4, 0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -136,7 +136,7 @@ pub(super) fn test_mm_cvtph_epi32() -> Result<(), String> {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let r = _mm_cvtph_epi32(a);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
-        check_array_equality(&out, &[1i32, 2, 3, 4])?;
+        check_array_equality(&out, &[1, 2, 3, 4])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

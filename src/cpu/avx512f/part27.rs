@@ -54,7 +54,7 @@ pub(super) fn test_mm_rorv_epi32() -> Result<(), String> {
         let b = _mm_set1_epi32(1);
         let r = _mm_rorv_epi32(a, b);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
-        crate::cpu::common::check_array_equality(&out, &[2147483648u32 as i32, 1, 3, 2])?;
+        crate::cpu::common::check_array_equality(&out, &[2147483648_i32, 1, 3, 2])?;
 
         if crate::get_fuzzing() {
             info!("Starting fuzzing");
@@ -76,7 +76,7 @@ pub(super) fn test_mm_mask_rorv_epi32() -> Result<(), String> {
         let b = _mm_set1_epi32(1);
         let r = _mm_mask_rorv_epi32(_mm_setzero_si128(), 15, a, b);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
-        crate::cpu::common::check_array_equality(&out, &[2147483648u32 as i32, 1, 3, 2])?;
+        crate::cpu::common::check_array_equality(&out, &[2147483648_i32, 1, 3, 2])?;
 
         if crate::get_fuzzing() {
             info!("Starting fuzzing");
@@ -98,7 +98,7 @@ pub(super) fn test_mm_maskz_rorv_epi32() -> Result<(), String> {
         let b = _mm_set1_epi32(1);
         let r = _mm_maskz_rorv_epi32(15, a, b);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
-        crate::cpu::common::check_array_equality(&out, &[2147483648u32 as i32, 1, 3, 2])?;
+        crate::cpu::common::check_array_equality(&out, &[2147483648_i32, 1, 3, 2])?;
 
         if crate::get_fuzzing() {
             info!("Starting fuzzing");
@@ -186,7 +186,7 @@ pub(super) fn test_mm_rorv_epi64() -> Result<(), String> {
         let b = _mm_set1_epi64x(1);
         let r = _mm_rorv_epi64(a, b);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
-        crate::cpu::common::check_array_equality(&out, &[9223372036854775808u64 as i64, 1])?;
+        crate::cpu::common::check_array_equality(&out, &[9223372036854775808_i64, 1])?;
 
         if crate::get_fuzzing() {
             info!("Starting fuzzing");
@@ -208,7 +208,7 @@ pub(super) fn test_mm_mask_rorv_epi64() -> Result<(), String> {
         let b = _mm_set1_epi64x(1);
         let r = _mm_mask_rorv_epi64(_mm_setzero_si128(), 161, a, b);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
-        crate::cpu::common::check_array_equality(&out, &[9223372036854775808u64 as i64, 1])?;
+        crate::cpu::common::check_array_equality(&out, &[9223372036854775808_i64, 1])?;
 
         if crate::get_fuzzing() {
             info!("Starting fuzzing");
@@ -230,7 +230,7 @@ pub(super) fn test_mm_maskz_rorv_epi64() -> Result<(), String> {
         let b = _mm_set1_epi64x(1);
         let r = _mm_maskz_rorv_epi64(161, a, b);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
-        crate::cpu::common::check_array_equality(&out, &[9223372036854775808u64 as i64, 1])?;
+        crate::cpu::common::check_array_equality(&out, &[9223372036854775808_i64, 1])?;
 
         if crate::get_fuzzing() {
             info!("Starting fuzzing");

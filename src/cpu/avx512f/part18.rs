@@ -11,7 +11,7 @@ pub(super) fn test_mm_maskz_cvtepi64_epi8() -> Result<(), String> {
         let a = _mm_set_epi64x(1, -2);
         let r = _mm_cvtepi64_epi8(a);
         let out: [i8; 16] = std::mem::transmute::<__m128i, [i8; 16]>(r);
-        check_array_equality(&[out[0] as i32, out[8] as i32], &[1i32, -2i32])?;
+        check_array_equality(&[out[0] as i32, out[8] as i32], &[1, -2])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {

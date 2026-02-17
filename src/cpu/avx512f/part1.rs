@@ -297,7 +297,7 @@ pub(super) fn test_mm_cvtsd_i64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(0.0, 42.0);
         let r = _mm_cvtsd_i64(a);
-        check_int_equality(r, 42i64)?;
+        check_int_equality(r, 42)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -314,7 +314,7 @@ pub(super) fn test_mm_cvtss_i64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ss(42.0);
         let r = _mm_cvtss_i64(a);
-        check_int_equality(r, 42i64)?;
+        check_int_equality(r, 42)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
