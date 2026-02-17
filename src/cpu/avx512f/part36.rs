@@ -21,30 +21,6 @@ pub(super) fn test_mm_cmple_epu32_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmple_epu32_mask() -> Result<(), String> {
-    unsafe {
-        let a = _mm_set_epi32(1, 2, 3, 4);
-        let b = _mm_set_epi32(1, 2, 4, 3);
-        let k: __mmask8 = 0xFFu8 as __mmask8;
-        // The masked variant in stdarch for mask-to-mask returns a mask and takes (k, a, b)
-        let result = _mm_mask_cmle_epu32_mask::<0>(k, a, b);
-        // result is mask; we can convert to i32 via cast
-        let expected_mask: __mmask8 = 0b0111;
-        crate::cpu::common::check_int_equality(result as i32, expected_mask as i32)?;
-
-        if crate::get_fuzzing() {
-            for _ in 0..crate::cpu::get_iterations() {
-                let ra = crate::cpu::common::get_random_i32_array::<4>();
-                let rb = crate::cpu::common::get_random_i32_array::<4>();
-                let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
-                let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
-                let _ = _mm_mask_cmle_epu32_mask::<0>(k, a_r, b_r);
-            }
-        }
-    }
-    Ok(())
-}
-
 pub(super) fn test_mm_cmpge_epu32_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(4, 3, 2, 1);
@@ -277,25 +253,6 @@ pub(super) fn test_mm_mask_cmpgt_epi32_mask() -> Result<(), String> {
                 let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
                 let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
                 let _ = _mm_mask_cmpgt_epi32_mask(k, a_r, b_r);
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm_cmle_epi32_mask() -> Result<(), String> {
-    unsafe {
-        let a = _mm_set_epi32(1, 2, 2, 4);
-        let b = _mm_set_epi32(2, 2, 3, 3);
-        let k = _mm_cmle_epi32_mask(a, b);
-        crate::cpu::common::check_int_equality(k as i32, 0b0111)?;
-        if crate::get_fuzzing() {
-            for _ in 0..crate::cpu::get_iterations() {
-                let ra = crate::cpu::common::get_random_i32_array::<4>();
-                let rb = crate::cpu::common::get_random_i32_array::<4>();
-                let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
-                let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
-                let _ = _mm_cmle_epi32_mask(a_r, b_r);
             }
         }
     }

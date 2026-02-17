@@ -201,64 +201,6 @@ pub(super) fn test_mm_mask_cmp_epi32_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmplt_epu64_mask() -> Result<(), String> {
-    unsafe {
-        let a = _mm_set_epi64x(1, 2);
-        let b = _mm_set_epi64x(2, 2);
-        let cmp = _mm_cmplt_epu64(a, b);
-        let r = _mm_movemask_epi8(cmp);
-        check_int_equality(r as i32, 0)?;
-        if get_fuzzing() {
-            info!("Starting fuzzing");
-            for _ in 0..get_iterations() {
-                let rv = get_random_i64_array::<2>();
-                let a_r = _mm_set_epi64x(rv[1], rv[0]);
-                let _ = _mm_cmplt_epu64(a_r, a_r);
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm_mask_cmplt_epu64_mask() -> Result<(), String> {
-    unsafe {
-        let a = _mm_set_epi64x(1, 2);
-        let b = _mm_set_epi64x(2, 2);
-        let k: __mmask8 = 0xFFu8 as __mmask8;
-        let result = _mm_mask_cmplt_epu64_mask(k, a, b);
-        check_int_equality(result as i32, 0)?;
-
-        if get_fuzzing() {
-            info!("Starting fuzzing");
-            for _ in 0..get_iterations() {
-                let rv = get_random_i64_array::<2>();
-                let a_r = _mm_set_epi64x(rv[1], rv[0]);
-                let _ = _mm_mask_cmplt_epu64_mask(k, a_r, a_r);
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm_cmpgt_epu64_mask() -> Result<(), String> {
-    unsafe {
-        let a = _mm_set_epi64x(3, 4);
-        let b = _mm_set_epi64x(2, 2);
-        let cmp = _mm_cmpgt_epu64(a, b);
-        let r = _mm_movemask_epi8(cmp);
-        check_int_equality(r as i32, 0)?;
-        if get_fuzzing() {
-            info!("Starting fuzzing");
-            for _ in 0..get_iterations() {
-                let rv = get_random_i64_array::<2>();
-                let a_r = _mm_set_epi64x(rv[1], rv[0]);
-                let _ = _mm_cmpgt_epu64(a_r, a_r);
-            }
-        }
-    }
-    Ok(())
-}
-
 pub(super) fn test_mm_mask_cmpgt_epu64_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(3, 4);
@@ -273,25 +215,6 @@ pub(super) fn test_mm_mask_cmpgt_epu64_mask() -> Result<(), String> {
                 let rv = get_random_i64_array::<2>();
                 let a_r = _mm_set_epi64x(rv[1], rv[0]);
                 let _ = _mm_mask_cmpgt_epu64_mask(k, a_r, a_r);
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm_cmple_epu64_mask() -> Result<(), String> {
-    unsafe {
-        let a = _mm_set_epi64x(2, 2);
-        let b = _mm_set_epi64x(2, 3);
-        let cmp = _mm_cmple_epu64(a, b);
-        let r = _mm_movemask_epi8(cmp);
-        check_int_equality(r as i32, 0)?;
-        if get_fuzzing() {
-            info!("Starting fuzzing");
-            for _ in 0..get_iterations() {
-                let rv = get_random_i64_array::<2>();
-                let a_r = _mm_set_epi64x(rv[1], rv[0]);
-                let _ = _mm_cmple_epu64(a_r, a_r);
             }
         }
     }

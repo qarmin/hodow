@@ -231,7 +231,7 @@ pub(super) fn test_mm_maskz_max_round_sd() -> Result<(), String> {
         let a = _mm_set_sd(1.0);
         let b = _mm_set_sd(2.0);
         let r = _mm_maskz_max_round_sd(k, a, b, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
-        let out: [f64; 2] = std::mem::transmute::<__mm128d, [f64; 2]>(r);
+        let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
         check_float_array_equality(&out, &[2.0, 0.0])?;
 
         if get_fuzzing() {

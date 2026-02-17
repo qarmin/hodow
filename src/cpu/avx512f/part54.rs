@@ -118,7 +118,7 @@ pub(super) fn test_mm_fmadd_round_sd() -> Result<(), String> {
         let b = _mm_set_sd(2.0f64);
         let c = _mm_set_sd(3.0f64);
         let r = _mm_fmadd_sd(a, b, c);
-        let out: [f64; 2] = std::mem::transmute::<__mm128d, [f64; 2]>(r);
+        let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
         check_float_array_equality(&out, &[5.0, 0.0])?;
 
         if get_fuzzing() {
@@ -144,7 +144,7 @@ pub(super) fn test_mm_mask_fmadd_round_sd() -> Result<(), String> {
         let c = _mm_set_sd(3.0f64);
         let k: __mmask8 = 0xFFu8 as __mmask8;
         let r = _mm_mask_fmadd_sd(a, k, b, c);
-        let out: [f64; 2] = std::mem::transmute::<__mm128d, [f64; 2]>(r);
+        let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
         check_float_array_equality(&out, &[5.0, 0.0])?;
 
         if get_fuzzing() {
@@ -170,7 +170,7 @@ pub(super) fn test_mm_maskz_fmadd_round_sd() -> Result<(), String> {
         let c = _mm_set_sd(3.0f64);
         let k: __mmask8 = 0xFFu8 as __mmask8;
         let r = _mm_maskz_fmadd_sd(k, a, b, c);
-        let out: [f64; 2] = std::mem::transmute::<__mm128d, [f64; 2]>(r);
+        let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
         check_float_array_equality(&out, &[5.0, 0.0])?;
 
         if get_fuzzing() {
@@ -196,7 +196,7 @@ pub(super) fn test_mm_mask3_fmadd_round_sd() -> Result<(), String> {
         let c = _mm_set_sd(3.0f64);
         let k: __mmask8 = 0xFFu8 as __mmask8;
         let r = _mm_mask3_fmadd_sd(a, b, c, k);
-        let out: [f64; 2] = std::mem::transmute::<__mm128d, [f64; 2]>(r);
+        let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
         check_float_array_equality(&out, &[5.0, 0.0])?;
 
         if get_fuzzing() {
@@ -325,7 +325,7 @@ pub(super) fn test_mm_fmsub_round_sd() -> Result<(), String> {
         let b = _mm_set_sd(2.0f64);
         let c = _mm_set_sd(3.0f64);
         let r = _mm_fmsub_sd(a, b, c);
-        let out: [f64; 2] = std::mem::transmute::<__mm128d, [f64; 2]>(r);
+        let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
         check_float_array_equality(&out, &[7.0, 0.0])?;
 
         if get_fuzzing() {
@@ -351,7 +351,7 @@ pub(super) fn test_mm_mask_fmsub_round_sd() -> Result<(), String> {
         let c = _mm_set_sd(3.0f64);
         let k: __mmask8 = 0xFFu8 as __mmask8;
         let r = _mm_mask_fmsub_sd(a, k, b, c);
-        let out: [f64; 2] = std::mem::transmute::<__mm128d, [f64; 2]>(r);
+        let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
         check_float_array_equality(&out, &[7.0, 0.0])?;
 
         if get_fuzzing() {

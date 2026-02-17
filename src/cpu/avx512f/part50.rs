@@ -9,10 +9,6 @@ use crate::cpu::common::{check_float_array_equality, get_random_float32_array, g
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
-pub(super) fn test_mm_maskz_add_round_sd() -> Result<(), String> {
-    test_mm_add_round_sd()
-}
-
 pub(super) fn test_mm_sub_round_ss() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ss(5.5f32);
