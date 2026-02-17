@@ -140,7 +140,7 @@ pub(super) fn test_mm_insert_epi32() -> Result<(), String> {
 
 pub(super) fn test_mm_max_epu16() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi16(100_i16, 50, 10, 5, 4, 3, 2, 1);
+        let a = _mm_set_epi16(100, 50, 10, 5, 4, 3, 2, 1);
         let b = _mm_set1_epi16(20);
         let r = _mm_max_epu16(a, b);
         let out: [u16; 8] = std::mem::transmute::<__m128i, [u16; 8]>(r);
@@ -157,7 +157,7 @@ pub(super) fn test_mm_max_epu16() -> Result<(), String> {
 
 pub(super) fn test_mm_max_epu32() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi32(100_i32, 50, 10, 5);
+        let a = _mm_set_epi32(100, 50, 10, 5);
         let b = _mm_set1_epi32(20);
         let r = _mm_max_epu32(a, b);
         let out: [u32; 4] = std::mem::transmute::<__m128i, [u32; 4]>(r);
@@ -174,7 +174,7 @@ pub(super) fn test_mm_max_epu32() -> Result<(), String> {
 
 pub(super) fn test_mm_min_epu16() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi16(100_i16, 50, 10, 5, 4, 3, 2, 1);
+        let a = _mm_set_epi16(100, 50, 10, 5, 4, 3, 2, 1);
         let b = _mm_set1_epi16(20);
         let r = _mm_min_epu16(a, b);
         let out: [u16; 8] = std::mem::transmute::<__m128i, [u16; 8]>(r);
@@ -191,7 +191,7 @@ pub(super) fn test_mm_min_epu16() -> Result<(), String> {
 
 pub(super) fn test_mm_min_epu32() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi32(100_i32, 50, 10, 5);
+        let a = _mm_set_epi32(100, 50, 10, 5);
         let b = _mm_set1_epi32(20);
         let r = _mm_min_epu32(a, b);
         let out: [u32; 4] = std::mem::transmute::<__m128i, [u32; 4]>(r);

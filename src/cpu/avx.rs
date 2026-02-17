@@ -710,7 +710,8 @@ fn test_mm_maskstore_pd() -> Result<(), String> {
 fn test_mm_maskload_ps() -> Result<(), String> {
     unsafe {
         let m = _mm_set_epi32(-1, -1, -1, -1);
-        let r = _mm_maskload_ps(&[1.0_f32, 2.0_f32, 3.0_f32, 4.0_f32] as *const f32, m);
+        let dt: [f32; 4] = [1.0, 2.0, 3.0, 4.0];
+        let r = _mm_maskload_ps(&dt as *const f32, m);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         crate::cpu::common::check_float_array_equality(&out, &[1.0, 2.0, 3.0, 4.0])?;
     }
@@ -718,7 +719,8 @@ fn test_mm_maskload_ps() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..crate::cpu::get_iterations() {
             unsafe {
-                let _ = _mm_maskload_ps(&[1.0_f32, 2.0_f32, 3.0_f32, 4.0_f32] as *const f32, _mm_set_epi32(-1, -1, -1, -1));
+                let dt: [f32; 4] = [1.0, 2.0, 3.0, 4.0];
+                let _ = _mm_maskload_ps(&dt as *const f32, _mm_set_epi32(-1, -1, -1, -1));
             }
         }
     }
@@ -726,8 +728,9 @@ fn test_mm_maskload_ps() -> Result<(), String> {
 }
 fn test_mm_maskstore_ps() -> Result<(), String> {
     unsafe {
+        let mut dt: [f32; 4] = [0.0, 0.0, 0.0, 0.0];
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
-        _mm_maskstore_ps(&mut [0.0_f32, 0.0_f32, 0.0_f32, 0.0_f32] as *mut f32, _mm_set_epi32(-1, -1, -1, -1), a);
+        _mm_maskstore_ps(&mut dt as *mut f32, _mm_set_epi32(-1, -1, -1, -1), a);
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");

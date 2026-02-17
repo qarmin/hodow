@@ -432,7 +432,7 @@ fn test_mm_insert_ps() -> Result<(), String> {
 fn test_mm_testz_si128() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(16711680, 0, 0, 0);
-        let b = _mm_set_epi32(4278255615_i32, -1, -1, -1);
+        let b = _mm_set_epi32(4278255615, -1, -1, -1);
         let result = _mm_testz_si128(a, b);
 
         check_int_equality(result, 1)?;
@@ -440,7 +440,7 @@ fn test_mm_testz_si128() -> Result<(), String> {
 
     unsafe {
         let a = _mm_set_epi32(16711680, 0, 0, 0);
-        let b = _mm_set_epi32(4278255615_i32, 0, 0, 0);
+        let b = _mm_set_epi32(4278255615, 0, 0, 0);
         let result = _mm_testz_si128(a, b);
 
         check_int_equality(result, 1)?;

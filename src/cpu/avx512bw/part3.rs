@@ -8,7 +8,7 @@ use crate::get_fuzzing;
 
 pub(super) fn test_mm_mask_mulhi_epi16() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi16(65535_i16, 5000, 1000, 2, 3, 4, 5, 6);
+        let a = _mm_set_epi16(65535, 5000, 1000, 2, 3, 4, 5, 6);
         let b = _mm_set1_epi16(2);
         let r = _mm_mulhi_epi16(a, b);
         let out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(r);

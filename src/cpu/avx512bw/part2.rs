@@ -73,7 +73,7 @@ pub(super) fn test_mm_maskz_sub_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_subs_epu16() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi16(65535_i16, 6000, 1000, 2, 3, 4, 5, 6);
+        let a = _mm_set_epi16(65535, 6000, 1000, 2, 3, 4, 5, 6);
         let b = _mm_set1_epi16(1000);
         let r = _mm_subs_epu16(a, b);
         let out: [u16; 8] = std::mem::transmute::<__m128i, [u16; 8]>(r);
@@ -96,7 +96,7 @@ pub(super) fn test_mm_maskz_subs_epu16() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_subs_epu8() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi8(121_i8, 111, 73, 52, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0);
+        let a = _mm_set_epi8(121, 111, 73, 52, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0);
         let b = _mm_set1_epi8(10);
         let r = _mm_subs_epu8(a, b);
         let out: [u8; 16] = std::mem::transmute::<__m128i, [u8; 16]>(r);
@@ -165,7 +165,7 @@ pub(super) fn test_mm_maskz_subs_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_mulhi_epu16() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi16(65535_i16, 5000, 1000, 2, 3, 4, 5, 6);
+        let a = _mm_set_epi16(65535, 5000, 1000, 2, 3, 4, 5, 6);
         let b = _mm_set1_epi16(2);
         let r = _mm_mulhi_epu16(a, b);
         let out: [u16; 8] = std::mem::transmute::<__m128i, [u16; 8]>(r);

@@ -267,7 +267,7 @@ pub(super) fn test_mm_adds_epi8() -> Result<(), String> {
         let b = _mm_set1_epi8(50);
         let result = _mm_adds_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
-        check_array_equality(&result, &[127_i8; 16])?;
+        check_array_equality(&result, &[127; 16])?;
     }
 
     if get_fuzzing() {
@@ -289,7 +289,7 @@ pub(super) fn test_mm_adds_epi16() -> Result<(), String> {
         let b = _mm_set1_epi16(5000);
         let result = _mm_adds_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        check_array_equality(&result, &[32767_i16; 8])?;
+        check_array_equality(&result, &[32767; 8])?;
     }
 
     if get_fuzzing() {
@@ -307,11 +307,11 @@ pub(super) fn test_mm_adds_epi16() -> Result<(), String> {
 
 pub(super) fn test_mm_adds_epu8() -> Result<(), String> {
     unsafe {
-        let a = _mm_set1_epi8(-56_i8);
-        let b = _mm_set1_epi8(-56_i8);
+        let a = _mm_set1_epi8(-56);
+        let b = _mm_set1_epi8(-56);
         let result = _mm_adds_epu8(a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
-        check_array_equality(&result, &[255_u8; 16])?;
+        check_array_equality(&result, &[255; 16])?;
     }
 
     if get_fuzzing() {
@@ -329,11 +329,11 @@ pub(super) fn test_mm_adds_epu8() -> Result<(), String> {
 
 pub(super) fn test_mm_adds_epu16() -> Result<(), String> {
     unsafe {
-        let a = _mm_set1_epi16(-5536_i16);
-        let b = _mm_set1_epi16(10000_i16);
+        let a = _mm_set1_epi16(-5536);
+        let b = _mm_set1_epi16(10000);
         let result = _mm_adds_epu16(a, b);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
-        check_array_equality(&result, &[65535_u16; 8])?;
+        check_array_equality(&result, &[65535; 8])?;
     }
 
     if get_fuzzing() {
@@ -423,7 +423,7 @@ pub(super) fn test_mm_subs_epi16() -> Result<(), String> {
         let b = _mm_set1_epi16(5000);
         let result = _mm_subs_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        check_array_equality(&result, &[-32768_i16; 8])?;
+        check_array_equality(&result, &[-32768; 8])?;
     }
 
     if get_fuzzing() {
@@ -445,7 +445,7 @@ pub(super) fn test_mm_subs_epu8() -> Result<(), String> {
         let b = _mm_set1_epi8(20);
         let result = _mm_subs_epu8(a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
-        check_array_equality(&result, &[0_u8; 16])?;
+        check_array_equality(&result, &[0; 16])?;
     }
 
     if get_fuzzing() {
@@ -467,7 +467,7 @@ pub(super) fn test_mm_subs_epu16() -> Result<(), String> {
         let b = _mm_set1_epi16(200);
         let result = _mm_subs_epu16(a, b);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
-        check_array_equality(&result, &[0_u16; 8])?;
+        check_array_equality(&result, &[0; 8])?;
     }
 
     if get_fuzzing() {
@@ -485,11 +485,11 @@ pub(super) fn test_mm_subs_epu16() -> Result<(), String> {
 
 pub(super) fn test_mm_avg_epu8() -> Result<(), String> {
     unsafe {
-        let a = _mm_set1_epi8(100_i8);
-        let b = _mm_set1_epi8(50_i8);
+        let a = _mm_set1_epi8(100);
+        let b = _mm_set1_epi8(50);
         let result = _mm_avg_epu8(a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
-        check_array_equality(&result, &[75_u8; 16])?;
+        check_array_equality(&result, &[75; 16])?;
     }
 
     if get_fuzzing() {
@@ -511,7 +511,7 @@ pub(super) fn test_mm_avg_epu16() -> Result<(), String> {
         let b = _mm_set1_epi16(500);
         let result = _mm_avg_epu16(a, b);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
-        check_array_equality(&result, &[750_u16; 8])?;
+        check_array_equality(&result, &[750; 8])?;
     }
 
     if get_fuzzing() {

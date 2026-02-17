@@ -8,7 +8,7 @@ use crate::get_fuzzing;
 
 pub(super) fn test_mm_maskz_min_epu16() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi16(100_i16, 50, 10, 5, 4, 3, 2, 1);
+        let a = _mm_set_epi16(100, 50, 10, 5, 4, 3, 2, 1);
         let b = _mm_set1_epi16(20);
         let r = _mm_min_epu16(a, b);
         let out: [u16; 8] = std::mem::transmute::<__m128i, [u16; 8]>(r);
