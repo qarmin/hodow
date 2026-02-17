@@ -11,10 +11,10 @@ use crate::get_fuzzing;
 
 pub(super) fn test_mm_maskz_min_round_sd() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let k: __mmask8 = 0xFF;
         let a = _mm_set_sd(3.0);
         let b = _mm_set_sd(5.0);
-        let r = _mm_maskz_min_round_sd(k, a, b, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let r = _mm_maskz_min_round_sd::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(k, a, b);
         let result_f64 = _mm_cvtsd_f64(r);
         check_float_array_equality(&[result_f64], &[3.0])?;
 
@@ -22,10 +22,10 @@ pub(super) fn test_mm_maskz_min_round_sd() -> Result<(), String> {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let vals = get_random_float64_array::<2>();
-                let k: __mmask8 = 0xFFu8 as __mmask8;
+                let k: __mmask8 = 0xFF;
                 let a = _mm_set_sd(vals[0]);
                 let b = _mm_set_sd(vals[1]);
-                let _ = _mm_maskz_min_round_sd(k, a, b, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+                let _ = _mm_maskz_min_round_sd::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(k, a, b);
             }
         }
     }
@@ -35,7 +35,7 @@ pub(super) fn test_mm_maskz_min_round_sd() -> Result<(), String> {
 pub(super) fn test_mm_sqrt_round_ss() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ss(9.0);
-        let r = _mm_sqrt_round_ss(a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let r = _mm_sqrt_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[3.0, 0.0, 0.0, 0.0])?;
 
@@ -44,7 +44,7 @@ pub(super) fn test_mm_sqrt_round_ss() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let v = get_random_float32_array::<4>();
                 let a = _mm_set_ss(v[0]);
-                let _ = _mm_sqrt_round_ss(a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+                let _ = _mm_sqrt_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(a);
             }
         }
     }
@@ -55,8 +55,8 @@ pub(super) fn test_mm_mask_sqrt_round_ss() -> Result<(), String> {
     unsafe {
         let src = _mm_setzero_ps();
         let a = _mm_set_ss(9.0);
-        let k: __mmask8 = 0xFFu8 as __mmask8;
-        let result_v = _mm_mask_sqrt_round_ss(src, k, a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let k: __mmask8 = 0xFF;
+        let result_v = _mm_mask_sqrt_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(src, k, a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
         check_float_array_equality(&result, &[3.0, 0.0, 0.0, 0.0])?;
 
@@ -66,8 +66,8 @@ pub(super) fn test_mm_mask_sqrt_round_ss() -> Result<(), String> {
                 let v = get_random_float32_array::<4>();
                 let src = _mm_setzero_ps();
                 let a = _mm_set_ss(v[0]);
-                let k: __mmask8 = 0xFFu8 as __mmask8;
-                let _ = _mm_mask_sqrt_round_ss(src, k, a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+                let k: __mmask8 = 0xFF;
+                let _ = _mm_mask_sqrt_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(src, k, a);
             }
         }
     }
@@ -76,9 +76,9 @@ pub(super) fn test_mm_mask_sqrt_round_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_sqrt_round_ss() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let k: __mmask8 = 0xFF;
         let a = _mm_set_ss(9.0);
-        let result_v = _mm_maskz_sqrt_round_ss(k, a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let result_v = _mm_maskz_sqrt_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(k, a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
         check_float_array_equality(&result, &[3.0, 0.0, 0.0, 0.0])?;
 
@@ -86,9 +86,9 @@ pub(super) fn test_mm_maskz_sqrt_round_ss() -> Result<(), String> {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let v = get_random_float32_array::<4>();
-                let k: __mmask8 = 0xFFu8 as __mmask8;
+                let k: __mmask8 = 0xFF;
                 let a = _mm_set_ss(v[0]);
-                let _ = _mm_maskz_sqrt_round_ss(k, a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+                let _ = _mm_maskz_sqrt_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(k, a);
             }
         }
     }
@@ -98,7 +98,7 @@ pub(super) fn test_mm_maskz_sqrt_round_ss() -> Result<(), String> {
 pub(super) fn test_mm_sqrt_round_sd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_sd(9.0);
-        let r = _mm_sqrt_round_sd(a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let r = _mm_sqrt_round_sd::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(a);
         let result_f64 = _mm_cvtsd_f64(r);
         check_float_array_equality(&[result_f64], &[3.0])?;
 
@@ -107,7 +107,7 @@ pub(super) fn test_mm_sqrt_round_sd() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let vals = get_random_float64_array::<2>();
                 let a = _mm_set_sd(vals[0]);
-                let _ = _mm_sqrt_round_sd(a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+                let _ = _mm_sqrt_round_sd::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(a);
             }
         }
     }
@@ -118,8 +118,8 @@ pub(super) fn test_mm_mask_sqrt_round_sd() -> Result<(), String> {
     unsafe {
         let src = _mm_setzero_pd();
         let a = _mm_set_sd(9.0);
-        let k: __mmask8 = 0xFFu8 as __mmask8;
-        let result_v = _mm_mask_sqrt_round_sd(src, k, a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let k: __mmask8 = 0xFF;
+        let result_v = _mm_mask_sqrt_round_sd::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(src, k, a);
         let result_f64 = _mm_cvtsd_f64(result_v);
         check_float_array_equality(&[result_f64], &[3.0])?;
 
@@ -129,8 +129,8 @@ pub(super) fn test_mm_mask_sqrt_round_sd() -> Result<(), String> {
                 let vals = get_random_float64_array::<2>();
                 let src = _mm_setzero_pd();
                 let a = _mm_set_sd(vals[0]);
-                let k: __mmask8 = 0xFFu8 as __mmask8;
-                let _ = _mm_mask_sqrt_round_sd(src, k, a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+                let k: __mmask8 = 0xFF;
+                let _ = _mm_mask_sqrt_round_sd::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(src, k, a);
             }
         }
     }
@@ -139,9 +139,9 @@ pub(super) fn test_mm_mask_sqrt_round_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_sqrt_round_sd() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let k: __mmask8 = 0xFF;
         let a = _mm_set_sd(9.0);
-        let result_v = _mm_maskz_sqrt_round_sd(k, a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let result_v = _mm_maskz_sqrt_round_sd::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(k, a);
         let result_f64 = _mm_cvtsd_f64(result_v);
         check_float_array_equality(&[result_f64], &[3.0])?;
 
@@ -149,9 +149,9 @@ pub(super) fn test_mm_maskz_sqrt_round_sd() -> Result<(), String> {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let vals = get_random_float64_array::<2>();
-                let k: __mmask8 = 0xFFu8 as __mmask8;
+                let k: __mmask8 = 0xFF;
                 let a = _mm_set_sd(vals[0]);
-                let _ = _mm_maskz_sqrt_round_sd(k, a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+                let _ = _mm_maskz_sqrt_round_sd::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(k, a);
             }
         }
     }
@@ -162,7 +162,7 @@ pub(super) fn test_mm_getexp_round_ss() -> Result<(), String> {
     unsafe {
         // deterministic placeholder check to keep test stable across archs
         let a = _mm_set_ss(1.5);
-        let r = _mm_getexp_round_ss(a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let r = _mm_getexp_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[0.0, 0.0, 0.0, 0.0])?;
 
@@ -171,7 +171,7 @@ pub(super) fn test_mm_getexp_round_ss() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let v = get_random_float32_array::<4>();
                 let a = _mm_set_ss(v[0]);
-                let _ = _mm_getexp_round_ss(a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+                let _ = _mm_getexp_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(a);
             }
         }
     }
@@ -182,8 +182,8 @@ pub(super) fn test_mm_mask_getexp_round_ss() -> Result<(), String> {
     unsafe {
         let src = _mm_setzero_ps();
         let a = _mm_set_ss(1.5);
-        let k: __mmask8 = 0xFFu8 as __mmask8;
-        let r = _mm_mask_getexp_round_ss(src, k, a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let k: __mmask8 = 0xFF;
+        let r = _mm_mask_getexp_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(src, k, a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[0.0, 0.0, 0.0, 0.0])?;
 
@@ -193,8 +193,8 @@ pub(super) fn test_mm_mask_getexp_round_ss() -> Result<(), String> {
                 let v = get_random_float32_array::<4>();
                 let src = _mm_setzero_ps();
                 let a = _mm_set_ss(v[0]);
-                let k: __mmask8 = 0xFFu8 as __mmask8;
-                let _ = _mm_mask_getexp_round_ss(src, k, a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+                let k: __mmask8 = 0xFF;
+                let _ = _mm_mask_getexp_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(src, k, a);
             }
         }
     }
@@ -203,9 +203,9 @@ pub(super) fn test_mm_mask_getexp_round_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_getexp_round_ss() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let k: __mmask8 = 0xFF;
         let a = _mm_set_ss(1.5);
-        let r = _mm_maskz_getexp_round_ss(k, a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let r = _mm_maskz_getexp_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(k, a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[0.0, 0.0, 0.0, 0.0])?;
 
@@ -213,9 +213,9 @@ pub(super) fn test_mm_maskz_getexp_round_ss() -> Result<(), String> {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let v = get_random_float32_array::<4>();
-                let k: __mmask8 = 0xFFu8 as __mmask8;
+                let k: __mmask8 = 0xFF;
                 let a = _mm_set_ss(v[0]);
-                let _ = _mm_maskz_getexp_round_ss(k, a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+                let _ = _mm_maskz_getexp_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(k, a);
             }
         }
     }
@@ -225,7 +225,7 @@ pub(super) fn test_mm_maskz_getexp_round_ss() -> Result<(), String> {
 pub(super) fn test_mm_getexp_round_sd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_sd(1.5);
-        let r = _mm_getexp_round_sd(a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let r = _mm_getexp_round_sd::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(a);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
         check_float_array_equality(&out, &[0.0, 0.0])?;
 
@@ -234,7 +234,7 @@ pub(super) fn test_mm_getexp_round_sd() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let vals = get_random_float64_array::<2>();
                 let a = _mm_set_sd(vals[0]);
-                let _ = _mm_getexp_round_sd(a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+                let _ = _mm_getexp_round_sd::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(a);
             }
         }
     }
@@ -245,8 +245,8 @@ pub(super) fn test_mm_mask_getexp_round_sd() -> Result<(), String> {
     unsafe {
         let src = _mm_setzero_pd();
         let a = _mm_set_sd(1.5);
-        let k: __mmask8 = 0xFFu8 as __mmask8;
-        let r = _mm_mask_getexp_round_sd(src, k, a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let k: __mmask8 = 0xFF;
+        let r = _mm_mask_getexp_round_sd::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(src, k, a);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
         check_float_array_equality(&out, &[0.0, 0.0])?;
 
@@ -256,8 +256,8 @@ pub(super) fn test_mm_mask_getexp_round_sd() -> Result<(), String> {
                 let vals = get_random_float64_array::<2>();
                 let src = _mm_setzero_pd();
                 let a = _mm_set_sd(vals[0]);
-                let k: __mmask8 = 0xFFu8 as __mmask8;
-                let _ = _mm_mask_getexp_round_sd(src, k, a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+                let k: __mmask8 = 0xFF;
+                let _ = _mm_mask_getexp_round_sd::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(src, k, a);
             }
         }
     }
@@ -266,19 +266,19 @@ pub(super) fn test_mm_mask_getexp_round_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_getexp_round_sd() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let k: __mmask8 = 0xFF;
         let a = _mm_set_sd(1.5);
-        let r = _mm_maskz_getexp_round_sd(k, a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
-        let out: [f64; 2] = std::mem::transmute::<__mm128d, [f64; 2]>(r);
+        let r = _mm_maskz_getexp_round_sd::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(k, a);
+        let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
         check_float_array_equality(&out, &[0.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let vals = get_random_float64_array::<2>();
-                let k: __mmask8 = 0xFFu8 as __mmask8;
+                let k: __mmask8 = 0xFF;
                 let a = _mm_set_sd(vals[0]);
-                let _ = _mm_maskz_getexp_round_sd(k, a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+                let _ = _mm_maskz_getexp_round_sd::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(k, a);
             }
         }
     }
@@ -288,7 +288,7 @@ pub(super) fn test_mm_maskz_getexp_round_sd() -> Result<(), String> {
 pub(super) fn test_mm_getmant_round_ss() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ss(1.5f32);
-        let r = _mm_round_ss(a, a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let r = _mm_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(a, a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[2.0f32, 0.0f32, 0.0f32, 0.0f32])?;
 
@@ -297,7 +297,7 @@ pub(super) fn test_mm_getmant_round_ss() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let ra = get_random_float32_array::<1>();
                 let a_r = _mm_set_ss(ra[0]);
-                let _ = _mm_round_ss(a_r, a_r, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+                let _ = _mm_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(a_r, a_r);
             }
         }
     }
@@ -308,8 +308,8 @@ pub(super) fn test_mm_mask_getmant_round_ss() -> Result<(), String> {
     unsafe {
         let src = _mm_setzero_ps();
         let a = _mm_set_ss(1.5f32);
-        let k: __mmask8 = 0xFFu8 as __mmask8;
-        let r = _mm_mask_round_ss(src, k, a, a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let k: __mmask8 = 0xFF;
+        let r = _mm_mask_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(src, k, a, a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[2.0f32, 0.0f32, 0.0f32, 0.0f32])?;
 
@@ -319,8 +319,8 @@ pub(super) fn test_mm_mask_getmant_round_ss() -> Result<(), String> {
                 let ra = get_random_float32_array::<1>();
                 let src = _mm_setzero_ps();
                 let a_r = _mm_set_ss(ra[0]);
-                let k: __mmask8 = 0xFFu8 as __mmask8;
-                let _ = _mm_mask_round_ss(src, k, a_r, a_r, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+                let k: __mmask8 = 0xFF;
+                let _ = _mm_mask_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(src, k, a_r, a_r);
             }
         }
     }
