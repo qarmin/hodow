@@ -1,3 +1,4 @@
+use std::arch::x86_64::*;
 pub(super) fn test_mm_cmple_epu32_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);

@@ -1,9 +1,4 @@
-use std::arch::x86_64::{
-    __m128i, _mm_cmpeq_epi16, _mm_cmpeq_epi8, _mm_cmpgt_epi16, _mm_cmpgt_epi32, _mm_cmpgt_epi8, _mm_cmplt_epi16, _mm_cmplt_epi32, _mm_cmplt_epi8, _mm_load_si128, _mm_loadl_epi64,
-    _mm_loadu_si128, _mm_packs_epi16, _mm_packs_epi32, _mm_sad_epu8, _mm_set1_epi16, _mm_set1_epi32, _mm_set1_epi64x, _mm_set1_epi8, _mm_set_epi16, _mm_set_epi32, _mm_set_epi64x,
-    _mm_set_epi8, _mm_setr_epi16, _mm_setr_epi32, _mm_setr_epi8, _mm_slli_epi16, _mm_slli_epi32, _mm_slli_epi64, _mm_slli_si128, _mm_srai_epi16, _mm_srai_epi32, _mm_srli_epi16,
-    _mm_srli_epi32, _mm_srli_epi64, _mm_srli_si128, _mm_store_si128, _mm_storel_epi64, _mm_storeu_si128,
-};
+use std::arch::x86_64::*;
 
 use log::info;
 
@@ -686,15 +681,14 @@ pub(super) fn test_mm_load_si128() -> Result<(), String> {
         let result = _mm_load_si128(data.0.as_ptr() as *const __m128i);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         check_array_equality(&result, &[1, 2, 3, 4])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let mut data = Aligned([0; 4]);
                 let vals = get_random_i32_array::<4>();
-                let data = Aligned([vals[0], vals[1], vals[2], vals[3]]);
-                let _result = _mm_load_si128(data.0.as_ptr() as *const __m128i);
+                let vec = _mm_set_epi32(vals[3], vals[2], vals[1], vals[0]);
+                _mm_store_si128(data.0.as_mut_ptr() as *mut __m128i, vec);
             }
         }
     }
@@ -708,14 +702,14 @@ pub(super) fn test_mm_loadu_si128() -> Result<(), String> {
         let result = _mm_loadu_si128(data.as_ptr() as *const __m128i);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         check_array_equality(&result, &[10, 20, 30, 40])?;
-    }
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
+                let mut data: [i32; 4] = [0; 4];
                 let vals = get_random_i32_array::<4>();
-                let _result = _mm_loadu_si128(vals.as_ptr() as *const __m128i);
+                let vec = _mm_set_epi32(vals[3], vals[2], vals[1], vals[0]);
+                _mm_storeu_si128(data.as_mut_ptr() as *mut __m128i, vec);
             }
         }
     }
@@ -731,13 +725,11 @@ pub(super) fn test_mm_store_si128() -> Result<(), String> {
         let mut data = Aligned([0; 4]);
         let vec = _mm_set_epi32(4, 3, 2, 1);
         _mm_store_si128(data.0.as_mut_ptr() as *mut __m128i, vec);
-        check_array_equality(&data.0, &data.0)?;
-    }
+        check_array_equality(&data.0, &[1, 2, 3, 4])?;
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let mut data = Aligned([0; 4]);
                 let vals = get_random_i32_array::<4>();
                 let vec = _mm_set_epi32(vals[3], vals[2], vals[1], vals[0]);
@@ -754,13 +746,11 @@ pub(super) fn test_mm_storeu_si128() -> Result<(), String> {
         let mut data: [i32; 4] = [0; 4];
         let vec = _mm_set_epi32(40, 30, 20, 10);
         _mm_storeu_si128(data.as_mut_ptr() as *mut __m128i, vec);
-        check_array_equality(&data, &data)?;
-    }
+        check_array_equality(&data, &[10, 20, 30, 40])?;
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let mut data: [i32; 4] = [0; 4];
                 let vals = get_random_i32_array::<4>();
                 let vec = _mm_set_epi32(vals[3], vals[2], vals[1], vals[0]);
@@ -777,13 +767,11 @@ pub(super) fn test_mm_storel_epi64() -> Result<(), String> {
         let mut data: [i64; 2] = [0; 2];
         let vec = _mm_set_epi64x(100, 42);
         _mm_storel_epi64(data.as_mut_ptr() as *mut __m128i, vec);
-        check_array_equality(&data, &data)?;
-    }
+        check_array_equality(&data, &[42, 0])?;
 
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let mut data: [i64; 2] = [0; 2];
                 let vals = get_random_i32_array::<2>();
                 let vec = _mm_set_epi64x(vals[1] as i64, vals[0] as i64);

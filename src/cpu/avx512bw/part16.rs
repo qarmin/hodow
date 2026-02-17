@@ -189,12 +189,11 @@ pub(super) fn test_mm_maskz_alignr_epi8() -> Result<(), String> {
         let b = _mm_set_epi8(17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32);
         let r = _mm_alignr_epi8(a, b, 1);
         let out: [i8; 16] = std::mem::transmute::<__m128i, [i8; 16]>(r);
-        check_array_equality(&out, &out)?;
-    }
-    if get_fuzzing() {
-        info!("Starting fuzzing");
-        for _ in 0..get_iterations() {
-            unsafe {
+        check_array_equality(&out, &[18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 1])?;
+
+        if get_fuzzing() {
+            info!("Starting fuzzing");
+            for _ in 0..get_iterations() {
                 let _ = _mm_alignr_epi8(_mm_set1_epi8(get_random_i32_array::<4>()[0] as i8), _mm_set1_epi8(1), 1);
             }
         }

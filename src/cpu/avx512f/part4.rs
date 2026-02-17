@@ -5,19 +5,22 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, check_float_equality, get_random_float32_array, get_random_float64_array, get_random_i32_array, get_random_i64_array};
+use crate::cpu::common::{check_array_equality, check_float_equality, check_int_equality, get_random_float32_array, get_random_float64_array, get_random_i32_array, get_random_i64_array};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
 pub(super) fn test_mm_abs_epi64() -> Result<(), String> {
     unsafe {
-        let a = 1i64;
-        let b = a.abs();
-        crate::cpu::common::check_int_equality(b as i32, 1)?;
-        if crate::get_fuzzing() {
-            for _ in 0..crate::cpu::get_iterations() {
-                let r = crate::cpu::common::get_random_i64_array::<2>();
-                let _ = r[0].abs();
+        let a: __m128i = _mm_set_epi64x(-2i64, -1i64);
+        let result_v = _mm_abs_epi64(a);
+        let result = std::mem::transmute::<__m128i, [i64; 2]>(result_v);
+        check_array_equality(&result, &[1i64, 2i64])?;
+
+        if get_fuzzing() {
+            for _ in 0..get_iterations() {
+                let r = get_random_i64_array::<2>();
+                let a_r = _mm_set_epi64x(r[1], r[0]);
+                let _ = _mm_abs_epi64(a_r);
             }
         }
     }
@@ -31,12 +34,12 @@ pub(super) fn test_mm_mask_abs_epi64() -> Result<(), String> {
         let k: __mmask8 = 0xFFu8 as __mmask8;
         let result_v = _mm_mask_abs_epi64(src, k, a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result_v);
-        crate::cpu::common::check_array_equality(&result, &[1i64, 2i64])?;
+        check_array_equality(&result, &[1i64, 2i64])?;
 
-        if crate::get_fuzzing() {
+        if get_fuzzing() {
             info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let r = crate::cpu::common::get_random_i64_array::<2>();
+            for _ in 0..get_iterations() {
+                let r = get_random_i64_array::<2>();
                 let a_r = _mm_set_epi64x(r[1], r[0]);
                 let _ = _mm_mask_abs_epi64(src, k, a_r);
             }
