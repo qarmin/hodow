@@ -105,7 +105,7 @@ pub(super) fn test_mm_mask_fnmadd_round_ss() -> Result<(), String> {
                 let a_r = _mm_set_ss(ra[0]);
                 let b_r = _mm_set_ss(rb[0]);
                 let c_r = _mm_set_ss(rc[0]);
-                let _ = _mm_mask_fnmadd_ss(_mm_setzero_ps(), k, a_r, b_r, c_r);
+                let _ = _mm_mask_fnmadd_ss(a_r, k, b_r, c_r);
             }
         }
     }
@@ -208,7 +208,7 @@ pub(super) fn test_mm_mask_fnmadd_round_sd() -> Result<(), String> {
                 let a_r = _mm_set_sd(ra[0]);
                 let b_r = _mm_set_sd(rb[0]);
                 let c_r = _mm_set_sd(rc[0]);
-                let _ = _mm_mask_fnmadd_sd(_mm_setzero_pd(), k, a_r, b_r, c_r);
+                let _ = _mm_mask_fnmadd_sd(a_r, k, b_r, c_r);
             }
         }
     }
@@ -311,7 +311,7 @@ pub(super) fn test_mm_mask_fnmsub_round_ss() -> Result<(), String> {
                 let a_r = _mm_set_ss(ra[0]);
                 let b_r = _mm_set_ss(rb[0]);
                 let c_r = _mm_set_ss(rc[0]);
-                let _ = _mm_mask_fnmsub_ss(_mm_setzero_ps(), k, a_r, b_r, c_r);
+                let _ = _mm_mask_fnmsub_ss(a_r, k, b_r, c_r);
             }
         }
     }

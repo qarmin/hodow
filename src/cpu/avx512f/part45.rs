@@ -174,7 +174,8 @@ pub(super) fn test_mm_mask_sqrt_ss() -> Result<(), String> {
         let src = _mm_setzero_ps();
         let a = _mm_set_ss(9.0);
         let k: __mmask8 = 0xFFu8 as __mmask8;
-        let result_v = _mm_mask_sqrt_ss(src, k, a);
+        // signature: _mm_mask_sqrt_ss(src: __m128, k: __mmask8, a: __m128, b: __m128)
+        let result_v = _mm_mask_sqrt_ss(src, k, a, a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
         check_float_array_equality(&result, &[3.0, 0.0, 0.0, 0.0])?;
     }
@@ -187,7 +188,7 @@ pub(super) fn test_mm_mask_sqrt_ss() -> Result<(), String> {
                 let src = _mm_setzero_ps();
                 let a = _mm_set_ss(v[0]);
                 let k: __mmask8 = 0xFFu8 as __mmask8;
-                let _ = _mm_mask_sqrt_ss(src, k, a);
+                let _ = _mm_mask_sqrt_ss(src, k, a, a);
             }
         }
     }
@@ -199,7 +200,8 @@ pub(super) fn test_mm_maskz_sqrt_ss() -> Result<(), String> {
     unsafe {
         let k: __mmask8 = 0xFFu8 as __mmask8;
         let a = _mm_set_ss(9.0);
-        let result_v = _mm_maskz_sqrt_ss(k, a);
+        // signature: _mm_maskz_sqrt_ss(k: __mmask8, a: __m128, b: __m128)
+        let result_v = _mm_maskz_sqrt_ss(k, a, a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
         check_float_array_equality(&result, &[3.0, 0.0, 0.0, 0.0])?;
     }
@@ -211,7 +213,7 @@ pub(super) fn test_mm_maskz_sqrt_ss() -> Result<(), String> {
                 let v = get_random_float32_array::<4>();
                 let k: __mmask8 = 0xFFu8 as __mmask8;
                 let a = _mm_set_ss(v[0]);
-                let _ = _mm_maskz_sqrt_ss(k, a);
+                let _ = _mm_maskz_sqrt_ss(k, a, a);
             }
         }
     }
@@ -224,7 +226,8 @@ pub(super) fn test_mm_mask_sqrt_sd() -> Result<(), String> {
         let src = _mm_setzero_pd();
         let a = _mm_set_sd(9.0);
         let k: __mmask8 = 0xFFu8 as __mmask8;
-        let result_v = _mm_mask_sqrt_sd(src, k, a);
+        // signature: _mm_mask_sqrt_sd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d)
+        let result_v = _mm_mask_sqrt_sd(src, k, a, a);
         let result_f64 = _mm_cvtsd_f64(result_v);
         check_float_array_equality(&[result_f64], &[3.0])?;
     }
@@ -237,7 +240,7 @@ pub(super) fn test_mm_mask_sqrt_sd() -> Result<(), String> {
                 let src = _mm_setzero_pd();
                 let a = _mm_set_sd(vals[0]);
                 let k: __mmask8 = 0xFFu8 as __mmask8;
-                let _ = _mm_mask_sqrt_sd(src, k, a);
+                let _ = _mm_mask_sqrt_sd(src, k, a, a);
             }
         }
     }
@@ -249,7 +252,8 @@ pub(super) fn test_mm_maskz_sqrt_sd() -> Result<(), String> {
     unsafe {
         let k: __mmask8 = 0xFFu8 as __mmask8;
         let a = _mm_set_sd(9.0);
-        let result_v = _mm_maskz_sqrt_sd(k, a);
+        // signature: _mm_maskz_sqrt_sd(k: __mmask8, a: __m128d, b: __m128d)
+        let result_v = _mm_maskz_sqrt_sd(k, a, a);
         let result_f64 = _mm_cvtsd_f64(result_v);
         check_float_array_equality(&[result_f64], &[3.0])?;
     }
@@ -261,7 +265,7 @@ pub(super) fn test_mm_maskz_sqrt_sd() -> Result<(), String> {
                 let vals = get_random_float64_array::<2>();
                 let k: __mmask8 = 0xFFu8 as __mmask8;
                 let a = _mm_set_sd(vals[0]);
-                let _ = _mm_maskz_sqrt_sd(k, a);
+                let _ = _mm_maskz_sqrt_sd(k, a, a);
             }
         }
     }
@@ -272,7 +276,8 @@ pub(super) fn test_mm_maskz_sqrt_sd() -> Result<(), String> {
 pub(super) fn test_mm_rsqrt14_ss() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ss(4.0);
-        let r = _mm_rsqrt14_ss(a);
+        // signature: _mm_rsqrt14_ss(a: __m128, b: __m128)
+        let r = _mm_rsqrt14_ss(a, a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[0.5, 0.0, 0.0, 0.0])?;
     }
@@ -283,7 +288,7 @@ pub(super) fn test_mm_rsqrt14_ss() -> Result<(), String> {
             unsafe {
                 let v = get_random_float32_array::<4>();
                 let a = _mm_set_ss(v[0]);
-                let _ = _mm_rsqrt14_ss(a);
+                let _ = _mm_rsqrt14_ss(a, a);
             }
         }
     }
@@ -302,7 +307,8 @@ pub(super) fn test_mm_maskz_rsqrt14_ss() -> Result<(), String> {
 pub(super) fn test_mm_rsqrt14_sd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_sd(4.0);
-        let r = _mm_rsqrt14_sd(a);
+        // signature: _mm_rsqrt14_sd(a: __m128d, b: __m128d)
+        let r = _mm_rsqrt14_sd(a, a);
         let result_f64 = _mm_cvtsd_f64(r);
         check_float_array_equality(&[result_f64], &[0.5])?;
     }
@@ -313,7 +319,7 @@ pub(super) fn test_mm_rsqrt14_sd() -> Result<(), String> {
             unsafe {
                 let vals = get_random_float64_array::<2>();
                 let a = _mm_set_sd(vals[0]);
-                let _ = _mm_rsqrt14_sd(a);
+                let _ = _mm_rsqrt14_sd(a, a);
             }
         }
     }
