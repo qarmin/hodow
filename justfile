@@ -1,5 +1,5 @@
 check:
-   RUSTFLAGS="-C target-cpu=native" cargo +nightly check --message-format short
+    RUSTFLAGS="-C target-cpu=native" cargo +nightly check --message-format short
 
 run *args:
     RUSTFLAGS="-C target-cpu=native" cargo +nightly run {{args}}
@@ -22,6 +22,6 @@ upgrade:
 
 fix:
     cargo +nightly fmt
-    cargo clippy --fix --allow-dirty --allow-staged --all-features --all-targets
+    RUSTFLAGS="-C target-cpu=native" cargo +nightly clippy --fix --allow-dirty --allow-staged --all-features --all-targets
     cargo +nightly fmt
     cargo fmt

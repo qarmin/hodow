@@ -142,7 +142,7 @@ pub(super) fn test_mm_mask_rolv_epi64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(1, 2);
         let b = _mm_set1_epi64x(1);
-        let r = _mm_mask_rolv_epi64(_mm_setzero_si128(), 0xffff, a, b);
+        let r = _mm_mask_rolv_epi64(_mm_setzero_si128(), 0xa1, a, b);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
         crate::cpu::common::check_array_equality(&out, &[2, 1])?;
 
@@ -153,7 +153,7 @@ pub(super) fn test_mm_mask_rolv_epi64() -> Result<(), String> {
                 let rb = get_random_i64_array::<2>();
                 let a_r = _mm_set_epi64x(ra[1], ra[0]);
                 let b_r = _mm_set_epi64x(rb[1], rb[0]);
-                let _ = _mm_mask_rolv_epi64(_mm_setzero_si128(), 0xffff, a_r, b_r);
+                let _ = _mm_mask_rolv_epi64(_mm_setzero_si128(), 0xa1, a_r, b_r);
             }
         }
     }
@@ -164,7 +164,7 @@ pub(super) fn test_mm_maskz_rolv_epi64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(1, 2);
         let b = _mm_set1_epi64x(1);
-        let r = _mm_maskz_rolv_epi64(0xffff, a, b);
+        let r = _mm_maskz_rolv_epi64(0xa1, a, b);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
         crate::cpu::common::check_array_equality(&out, &[2, 1])?;
 
@@ -175,7 +175,7 @@ pub(super) fn test_mm_maskz_rolv_epi64() -> Result<(), String> {
                 let rb = get_random_i64_array::<2>();
                 let a_r = _mm_set_epi64x(ra[1], ra[0]);
                 let b_r = _mm_set_epi64x(rb[1], rb[0]);
-                let _ = _mm_maskz_rolv_epi64(0xffff, a_r, b_r);
+                let _ = _mm_maskz_rolv_epi64(0xa1, a_r, b_r);
             }
         }
     }
@@ -208,7 +208,7 @@ pub(super) fn test_mm_mask_rorv_epi64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(1, 2);
         let b = _mm_set1_epi64x(1);
-        let r = _mm_mask_rorv_epi64(_mm_setzero_si128(), 0xffff, a, b);
+        let r = _mm_mask_rorv_epi64(_mm_setzero_si128(), 0xa1, a, b);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
         crate::cpu::common::check_array_equality(&out, &[0x8000000000000000u64 as i64, 1])?;
 
@@ -219,7 +219,7 @@ pub(super) fn test_mm_mask_rorv_epi64() -> Result<(), String> {
                 let rb = get_random_i64_array::<2>();
                 let a_r = _mm_set_epi64x(ra[1], ra[0]);
                 let b_r = _mm_set_epi64x(rb[1], rb[0]);
-                let _ = _mm_mask_rorv_epi64(_mm_setzero_si128(), 0xffff, a_r, b_r);
+                let _ = _mm_mask_rorv_epi64(_mm_setzero_si128(), 0xa1, a_r, b_r);
             }
         }
     }
@@ -230,7 +230,7 @@ pub(super) fn test_mm_maskz_rorv_epi64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(1, 2);
         let b = _mm_set1_epi64x(1);
-        let r = _mm_maskz_rorv_epi64(0xffff, a, b);
+        let r = _mm_maskz_rorv_epi64(0xa1, a, b);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
         crate::cpu::common::check_array_equality(&out, &[0x8000000000000000u64 as i64, 1])?;
 
@@ -241,7 +241,7 @@ pub(super) fn test_mm_maskz_rorv_epi64() -> Result<(), String> {
                 let rb = get_random_i64_array::<2>();
                 let a_r = _mm_set_epi64x(ra[1], ra[0]);
                 let b_r = _mm_set_epi64x(rb[1], rb[0]);
-                let _ = _mm_maskz_rorv_epi64(0xffff, a_r, b_r);
+                let _ = _mm_maskz_rorv_epi64(0xa1, a_r, b_r);
             }
         }
     }

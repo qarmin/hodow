@@ -301,7 +301,7 @@ pub(super) fn test_mm_maskz_getexp_round_sd() -> Result<(), String> {
 pub(super) fn test_mm_getmant_round_ss() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ss(1.5f32);
-        let r = _mm_getmant_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(a, a);
+        let r = _mm_getmant_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }, 0, 0>(a, a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[2.0f32, 0.0f32, 0.0f32, 0.0f32])?;
 
@@ -310,7 +310,7 @@ pub(super) fn test_mm_getmant_round_ss() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let ra = get_random_float32_array::<1>();
                 let a_r = _mm_set_ss(ra[0]);
-                let _ = _mm_getmant_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(a_r, a_r);
+                let _ = _mm_getmant_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }, 0, 0>(a_r, a_r);
             }
         }
     }
@@ -322,7 +322,7 @@ pub(super) fn test_mm_mask_getmant_round_ss() -> Result<(), String> {
         let src = _mm_setzero_ps();
         let a = _mm_set_ss(1.5f32);
         let k: __mmask8 = 0xFF;
-        let r = _mm_mask_getmant_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(src, k, a, a);
+        let r = _mm_mask_getmant_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }, 0, 0>(src, k, a, a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[2.0f32, 0.0f32, 0.0f32, 0.0f32])?;
 
@@ -333,7 +333,7 @@ pub(super) fn test_mm_mask_getmant_round_ss() -> Result<(), String> {
                 let src = _mm_setzero_ps();
                 let a_r = _mm_set_ss(ra[0]);
                 let k: __mmask8 = 0xFF;
-                let _ = _mm_mask_getmant_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }>(src, k, a_r, a_r);
+                let _ = _mm_mask_getmant_round_ss::<{ _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC }, 0, 0>(src, k, a_r, a_r);
             }
         }
     }

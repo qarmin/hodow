@@ -16,7 +16,7 @@ pub(super) fn test_mm_mask_andnot_epi64() -> Result<(), String> {
         // (~a) & b => elementwise: [~1 & 3, ~2 & 4]
         let r = _mm_mask_andnot_epi64(_mm_setzero_si128(), 0b11u8, a, b);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
-        check_array_equality(&out, &[2i64 & !1i64 & 0xffffffffffffffffi64, 4i64 & !2i64 & 0xffffffffffffffffi64])?; // keep deterministic by using literals
+        check_array_equality(&out, &[2i64 & !1i64 & 0xffffffffff, 4i64 & !2i64 & 0xffffffi64])?; // keep deterministic by using literals
 
         if get_fuzzing() {
             info!("Starting fuzzing");

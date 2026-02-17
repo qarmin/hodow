@@ -158,7 +158,7 @@ pub(super) fn test_mm_maskz_broadcastw_epi64() -> Result<(), String> {
         let a = _mm_set_epi16(0, 0, 0, 0, 0, 0, 0, 123);
         let result = {
             let words: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(a);
-            let w = words[0] as i64 & 0xffff;
+            let w = words[0] as i64 & 0xa1;
             _mm_set1_epi64x(w)
         };
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(result);
@@ -170,9 +170,9 @@ pub(super) fn test_mm_maskz_broadcastw_epi64() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let vals = get_random_i32_array::<4>();
-                let low = (vals[0] & 0xffff) as i16;
+                let low = (vals[0] & 0xa1) as i16;
                 let a = _mm_set1_epi16(low);
-                let _ = _mm_set1_epi64x((low as i64) & 0xffff);
+                let _ = _mm_set1_epi64x((low as i64) & 0xa1);
                 let _ = a;
             }
         }
@@ -186,7 +186,7 @@ pub(super) fn test_mm_mask_broadcastw_epi64() -> Result<(), String> {
         let a = _mm_set_epi16(0, 0, 0, 0, 0, 0, 0, 77);
         let result = {
             let words: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(a);
-            let w = words[0] as i64 & 0xffff;
+            let w = words[0] as i64 & 0xa1;
             _mm_set1_epi64x(w)
         };
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(result);
@@ -198,9 +198,9 @@ pub(super) fn test_mm_mask_broadcastw_epi64() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let vals = get_random_i32_array::<4>();
-                let low = (vals[0] & 0xffff) as i16;
+                let low = (vals[0] & 0xa1) as i16;
                 let a = _mm_set1_epi16(low);
-                let _ = _mm_set1_epi64x((low as i64) & 0xffff);
+                let _ = _mm_set1_epi64x((low as i64) & 0xa1);
                 let _ = a;
             }
         }
