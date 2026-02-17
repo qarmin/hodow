@@ -49,7 +49,7 @@ pub(super) fn test_mm_mask_fmadd_round_ss() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let ra = get_random_float32_array::<1>();
                 let rb = get_random_float32_array::<1>();
-                let rc = get_random_float32_array::<1>;
+                let rc = get_random_float32_array::<1>();
                 let a_r = _mm_set_ss(ra[0]);
                 let b_r = _mm_set_ss(rb[0]);
                 let c_r = _mm_set_ss(rc[0]);
