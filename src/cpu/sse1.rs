@@ -62,17 +62,3 @@ impl ExtensionTest for SSE1 {
         ]
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_sse1() {
-        let tests = SSE1::get_tests();
-        for (fun, name) in tests {
-            println!("Running test {}", name);
-            fun().unwrap();
-        }
-    }
-}

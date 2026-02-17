@@ -9,7 +9,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_float_array_equality_with_error, get_random_float};
+use crate::cpu::common::{check_float_array_equality_with_error, get_random_float, get_random_float32_array};
 use crate::cpu::sse::part1::*;
 use crate::cpu::sse::part2::*;
 use crate::cpu::sse::part3::*;
@@ -91,7 +91,7 @@ fn test_mm_cvtss_si64() -> Result<(), String> {
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_cvtss_si64(_mm_set_ss(get_random_float() as f32));
+                let _ = _mm_cvtss_si64(_mm_set_ss(get_random_float()));
             }
         }
     }
@@ -106,7 +106,7 @@ fn test_mm_cvttss_si64() -> Result<(), String> {
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_cvttss_si64(_mm_set_ss(get_random_float() as f32));
+                let _ = _mm_cvttss_si64(_mm_set_ss(get_random_float()));
             }
         }
     }

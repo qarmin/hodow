@@ -300,9 +300,9 @@ pub(super) fn test_mm_cmple_epi32_mask() -> Result<(), String> {
                 let rb = crate::cpu::common::get_random_i32_array::<4>();
                 let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
                 let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
-                let _ = _mm_cmple_epi32_mask(a_r, b_r);
+                let _ = _mm_cmle_epi32_mask(a_r, b_r);
             }
         }
     }
-    Ok(());
+    Ok(())
 }

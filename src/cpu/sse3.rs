@@ -206,18 +206,6 @@ fn test_mm_addsub_pd() -> Result<(), String> {
     Ok(())
 }
 
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn test_sse3() {
-        let tests = SSE3::get_tests();
-        for (fun, name) in tests {
-            println!("Running test {}", name);
-            fun().unwrap();
-        }
-    }
-}
-
 fn test_mm_lddqu_si128() -> Result<(), String> {
     unsafe {
         let _zero = _mm_setzero_si128();

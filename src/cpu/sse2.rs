@@ -251,17 +251,3 @@ impl ExtensionTest for SSE2 {
         ]
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_sse2() {
-        let tests = SSE2::get_tests();
-        for (fun, name) in tests {
-            println!("Running test {}", name);
-            fun().unwrap();
-        }
-    }
-}

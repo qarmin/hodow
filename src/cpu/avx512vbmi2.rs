@@ -153,8 +153,12 @@ fn test_mm_shldv_epi64() -> Result<(), String> {
     }
     Ok(())
 }
-fn test_mm_mask_shldv_epi64() -> Result<(), String> { test_mm_shldv_epi64() }
-fn test_mm_maskz_shldv_epi64() -> Result<(), String> { test_mm_shldv_epi64() }
+fn test_mm_mask_shldv_epi64() -> Result<(), String> {
+    test_mm_shldv_epi64()
+}
+fn test_mm_maskz_shldv_epi64() -> Result<(), String> {
+    test_mm_shldv_epi64()
+}
 fn test_mm_shldv_epi32() -> Result<(), String> {
     unsafe {
         let v = _mm_set_epi32(4, 3, 2, 1);
@@ -171,35 +175,99 @@ fn test_mm_shldv_epi32() -> Result<(), String> {
     }
     Ok(())
 }
-fn test_mm_mask_shldv_epi32() -> Result<(), String> { test_mm_shldv_epi32() }
-fn test_mm_maskz_shldv_epi32() -> Result<(), String> { test_mm_shldv_epi32() }
-fn test_mm_shldv_epi16() -> Result<(), String> { test_mm_mask_expandloadu_epi16() }
-fn test_mm_mask_shldv_epi16() -> Result<(), String> { test_mm_mask_expandloadu_epi16() }
-fn test_mm_maskz_shldv_epi16() -> Result<(), String> { test_mm_mask_expandloadu_epi16() }
-fn test_mm_shrdv_epi64() -> Result<(), String> { test_mm_shldv_epi64() }
-fn test_mm_mask_shrdv_epi64() -> Result<(), String> { test_mm_shldv_epi64() }
-fn test_mm_maskz_shrdv_epi64() -> Result<(), String> { test_mm_shldv_epi64() }
-fn test_mm_shrdv_epi32() -> Result<(), String> { test_mm_shldv_epi32() }
-fn test_mm_mask_shrdv_epi32() -> Result<(), String> { test_mm_shldv_epi32() }
-fn test_mm_maskz_shrdv_epi32() -> Result<(), String> { test_mm_shldv_epi32() }
-fn test_mm_shrdv_epi16() -> Result<(), String> { test_mm_mask_expandloadu_epi16() }
-fn test_mm_mask_shrdv_epi16() -> Result<(), String> { test_mm_mask_expandloadu_epi16() }
-fn test_mm_maskz_shrdv_epi16() -> Result<(), String> { test_mm_mask_expandloadu_epi16() }
-fn test_mm_shldi_epi64() -> Result<(), String> { test_mm_shldv_epi64() }
-fn test_mm_mask_shldi_epi64() -> Result<(), String> { test_mm_shldv_epi64() }
-fn test_mm_maskz_shldi_epi64() -> Result<(), String> { test_mm_shldv_epi64() }
-fn test_mm_shldi_epi32() -> Result<(), String> { test_mm_shldv_epi32() }
-fn test_mm_mask_shldi_epi32() -> Result<(), String> { test_mm_shldv_epi32() }
-fn test_mm_maskz_shldi_epi32() -> Result<(), String> { test_mm_shldv_epi32() }
-fn test_mm_shldi_epi16() -> Result<(), String> { test_mm_mask_expandloadu_epi16() }
-fn test_mm_mask_shldi_epi16() -> Result<(), String> { test_mm_mask_expandloadu_epi16() }
-fn test_mm_maskz_shldi_epi16() -> Result<(), String> { test_mm_mask_expandloadu_epi16() }
-fn test_mm_shrdi_epi64() -> Result<(), String> { test_mm_shldv_epi64() }
-fn test_mm_mask_shrdi_epi64() -> Result<(), String> { test_mm_shldv_epi64() }
-fn test_mm_maskz_shrdi_epi64() -> Result<(), String> { test_mm_shldv_epi64() }
-fn test_mm_shrdi_epi32() -> Result<(), String> { test_mm_shldv_epi32() }
-fn test_mm_mask_shrdi_epi32() -> Result<(), String> { test_mm_shldv_epi32() }
-fn test_mm_maskz_shrdi_epi32() -> Result<(), String> { test_mm_shldv_epi32() }
-fn test_mm_shrdi_epi16() -> Result<(), String> { test_mm_mask_expandloadu_epi16() }
-fn test_mm_mask_shrdi_epi16() -> Result<(), String> { test_mm_mask_expandloadu_epi16() }
-fn test_mm_maskz_shrdi_epi16() -> Result<(), String> { test_mm_mask_expandloadu_epi16() }
+fn test_mm_mask_shldv_epi32() -> Result<(), String> {
+    test_mm_shldv_epi32()
+}
+fn test_mm_maskz_shldv_epi32() -> Result<(), String> {
+    test_mm_shldv_epi32()
+}
+fn test_mm_shldv_epi16() -> Result<(), String> {
+    test_mm_mask_expandloadu_epi16()
+}
+fn test_mm_mask_shldv_epi16() -> Result<(), String> {
+    test_mm_mask_expandloadu_epi16()
+}
+fn test_mm_maskz_shldv_epi16() -> Result<(), String> {
+    test_mm_mask_expandloadu_epi16()
+}
+fn test_mm_shrdv_epi64() -> Result<(), String> {
+    test_mm_shldv_epi64()
+}
+fn test_mm_mask_shrdv_epi64() -> Result<(), String> {
+    test_mm_shldv_epi64()
+}
+fn test_mm_maskz_shrdv_epi64() -> Result<(), String> {
+    test_mm_shldv_epi64()
+}
+fn test_mm_shrdv_epi32() -> Result<(), String> {
+    test_mm_shldv_epi32()
+}
+fn test_mm_mask_shrdv_epi32() -> Result<(), String> {
+    test_mm_shldv_epi32()
+}
+fn test_mm_maskz_shrdv_epi32() -> Result<(), String> {
+    test_mm_shldv_epi32()
+}
+fn test_mm_shrdv_epi16() -> Result<(), String> {
+    test_mm_mask_expandloadu_epi16()
+}
+fn test_mm_mask_shrdv_epi16() -> Result<(), String> {
+    test_mm_mask_expandloadu_epi16()
+}
+fn test_mm_maskz_shrdv_epi16() -> Result<(), String> {
+    test_mm_mask_expandloadu_epi16()
+}
+fn test_mm_shldi_epi64() -> Result<(), String> {
+    test_mm_shldv_epi64()
+}
+fn test_mm_mask_shldi_epi64() -> Result<(), String> {
+    test_mm_shldv_epi64()
+}
+fn test_mm_maskz_shldi_epi64() -> Result<(), String> {
+    test_mm_shldv_epi64()
+}
+fn test_mm_shldi_epi32() -> Result<(), String> {
+    test_mm_shldv_epi32()
+}
+fn test_mm_mask_shldi_epi32() -> Result<(), String> {
+    test_mm_shldv_epi32()
+}
+fn test_mm_maskz_shldi_epi32() -> Result<(), String> {
+    test_mm_shldv_epi32()
+}
+fn test_mm_shldi_epi16() -> Result<(), String> {
+    test_mm_mask_expandloadu_epi16()
+}
+fn test_mm_mask_shldi_epi16() -> Result<(), String> {
+    test_mm_mask_expandloadu_epi16()
+}
+fn test_mm_maskz_shldi_epi16() -> Result<(), String> {
+    test_mm_mask_expandloadu_epi16()
+}
+fn test_mm_shrdi_epi64() -> Result<(), String> {
+    test_mm_shldv_epi64()
+}
+fn test_mm_mask_shrdi_epi64() -> Result<(), String> {
+    test_mm_shldv_epi64()
+}
+fn test_mm_maskz_shrdi_epi64() -> Result<(), String> {
+    test_mm_shldv_epi64()
+}
+fn test_mm_shrdi_epi32() -> Result<(), String> {
+    test_mm_shldv_epi32()
+}
+fn test_mm_mask_shrdi_epi32() -> Result<(), String> {
+    test_mm_shldv_epi32()
+}
+fn test_mm_maskz_shrdi_epi32() -> Result<(), String> {
+    test_mm_shldv_epi32()
+}
+fn test_mm_shrdi_epi16() -> Result<(), String> {
+    test_mm_mask_expandloadu_epi16()
+}
+fn test_mm_mask_shrdi_epi16() -> Result<(), String> {
+    test_mm_mask_expandloadu_epi16()
+}
+fn test_mm_maskz_shrdi_epi16() -> Result<(), String> {
+    test_mm_mask_expandloadu_epi16()
+}

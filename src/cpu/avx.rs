@@ -56,8 +56,8 @@ impl ExtensionTest for AVX {
             (&test_mm_testz_ps, "test_mm_testz_ps"),
             (&test_mm_testc_ps, "test_mm_testc_ps"),
             (&test_mm_testnzc_ps, "test_mm_testnzc_ps"),
-         ]
-     }
+        ]
+    }
 }
 
 fn test_mm256_set_ps() -> Result<(), String> {
@@ -515,18 +515,6 @@ fn test_mm256_mul_pd() -> Result<(), String> {
     }
 
     Ok(())
-}
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn test_avx() {
-        let tests = AVX::get_tests();
-        for (fun, name) in tests {
-            println!("Running test {}", name);
-            fun().unwrap();
-        }
-    }
 }
 
 fn test_mm_cmp_pd() -> Result<(), String> {

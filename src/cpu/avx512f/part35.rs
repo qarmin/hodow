@@ -1,3 +1,14 @@
+#[cfg(target_arch = "x86")]
+use std::arch::x86::*;
+#[cfg(target_arch = "x86_64")]
+use std::arch::x86_64::*;
+
+use log::info;
+
+use crate::cpu::common::{check_int_equality, get_random_float32_array, get_random_float64_array, get_random_i32_array};
+use crate::cpu::get_iterations;
+use crate::get_fuzzing;
+
 pub(super) fn test_mm_mask_cmp_ps_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
