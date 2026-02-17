@@ -131,7 +131,7 @@ pub(super) fn test_mm_mask_mul_ss() -> Result<(), String> {
         let k: __mmask8 = 0xFFu8 as __mmask8;
         let result_v = _mm_mask_mul_ss(src, k, a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
-        check_float_array_equality(&[result[0]], &[6.0f64])?;
+        check_float_array_equality(&[result[0]], &[6.0f32])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -154,7 +154,7 @@ pub(super) fn test_mm_maskz_mul_ss() -> Result<(), String> {
         let b = _mm_set_ss(2.0);
         let result_v = _mm_maskz_mul_ss(k, a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
-        check_float_array_equality(&[result[0]], &[6.0f64])?;
+        check_float_array_equality(&[result[0]], &[6.0f32])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

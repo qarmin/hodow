@@ -64,7 +64,7 @@ pub(super) fn test_mm_mask_cmpge_epi32_mask() -> Result<(), String> {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let ra = get_random_i32_array::<4>();
-                let rb = get_random_i32_array::<4>;
+                let rb = get_random_i32_array::<4>();
                 let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
                 let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
                 let _ = _mm_mask_cmpge_epi32_mask(k, a_r, b_r);

@@ -36,7 +36,7 @@ pub(super) fn test_mm_cmp_pd_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(2.0, 1.0);
         let b = _mm_set_pd(2.0, 0.0);
-        let cmpv = _mm_cmp_pd(a, b);
+        let cmpv = _mm_cmp_pd::<0>(a, b);
         let r = _mm_movemask_pd(cmpv) as i32;
         // a >= b -> lanes both true => mask 0b11
         crate::cpu::common::check_int_equality(r, 0b11)?;
@@ -46,7 +46,7 @@ pub(super) fn test_mm_cmp_pd_mask() -> Result<(), String> {
                 let rb = crate::cpu::common::get_random_float64_array::<2>();
                 let a_r = _mm_set_pd(ra[1], ra[0]);
                 let b_r = _mm_set_pd(rb[1], rb[0]);
-                let cmpv = _mm_cmp_pd(a_r, b_r);
+                let cmpv = _mm_cmp_pd::<0>(a_r, b_r);
                 let _ = _mm_movemask_pd(cmpv);
             }
         }
@@ -60,7 +60,7 @@ pub(super) fn test_mm_mask_cmp_pd_mask() -> Result<(), String> {
         let a = _mm_set_pd(2.0, 1.0);
         let b = _mm_set_pd(2.0, 0.0);
         // emulate masked compare by plain compare + movemask
-        let cmpv = _mm_cmp_pd(a, b);
+        let cmpv = _mm_cmp_pd::<0>(a, b);
         let r = _mm_movemask_pd(cmpv) as i32;
         crate::cpu::common::check_int_equality(r, 0b11)?;
         if crate::get_fuzzing() {
@@ -69,7 +69,7 @@ pub(super) fn test_mm_mask_cmp_pd_mask() -> Result<(), String> {
                 let rb = crate::cpu::common::get_random_float64_array::<2>();
                 let a_r = _mm_set_pd(ra[1], ra[0]);
                 let b_r = _mm_set_pd(rb[1], rb[0]);
-                let cmpv = _mm_cmp_pd(a_r, b_r);
+                let cmpv = _mm_cmp_pd::<0>(a_r, b_r);
                 let _ = _mm_movemask_pd(cmpv);
             }
         }

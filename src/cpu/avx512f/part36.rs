@@ -3,7 +3,7 @@ pub(super) fn test_mm_cmple_epu32_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let b = _mm_set_epi32(1, 2, 4, 3);
-        let k = _mm_cmple_epu32_mask(a, b);
+        let k = _mm_cmple_epu32_mask::<0>(a, b);
         // expected: element-wise a <= b -> [1<=1 true,2<=2 true,3<=4 true,4<=3 false]
         let expected: __mmask8 = 0b0111;
         crate::cpu::common::check_int_equality(k as i32, expected as i32)?;
@@ -14,7 +14,7 @@ pub(super) fn test_mm_cmple_epu32_mask() -> Result<(), String> {
                 let rb = crate::cpu::common::get_random_i32_array::<4>();
                 let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
                 let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
-                let _ = _mm_cmple_epu32_mask(a_r, b_r);
+                let _ = _mm_cmple_epu32_mask::<0>(a_r, b_r);
             }
         }
     }
@@ -27,7 +27,7 @@ pub(super) fn test_mm_mask_cmple_epu32_mask() -> Result<(), String> {
         let b = _mm_set_epi32(1, 2, 4, 3);
         let k: __mmask8 = 0xFFu8 as __mmask8;
         // The masked variant in stdarch for mask-to-mask returns a mask and takes (k, a, b)
-        let result = _mm_mask_cmple_epu32_mask(k, a, b);
+        let result = _mm_mask_cmle_epu32_mask::<0>(k, a, b);
         // result is mask; we can convert to i32 via cast
         let expected_mask: __mmask8 = 0b0111;
         crate::cpu::common::check_int_equality(result as i32, expected_mask as i32)?;
@@ -38,7 +38,7 @@ pub(super) fn test_mm_mask_cmple_epu32_mask() -> Result<(), String> {
                 let rb = crate::cpu::common::get_random_i32_array::<4>();
                 let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
                 let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
-                let _ = _mm_mask_cmple_epu32_mask(k, a_r, b_r);
+                let _ = _mm_mask_cmle_epu32_mask::<0>(k, a_r, b_r);
             }
         }
     }
@@ -169,7 +169,7 @@ pub(super) fn test_mm_cmp_epu32_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let b = _mm_set_epi32(1, 9, 3, 0);
-        let k = _mm_cmp_epu32_mask(a, b);
+        let k = _mm_cmp_epu32_mask::<0>(a, b);
         // treat as greater-than? semantics vary; assume a<b at positions 1 and 3 -> mask 0b1010
         crate::cpu::common::check_int_equality(k as i32, 0b1010)?;
         if crate::get_fuzzing() {
@@ -178,7 +178,7 @@ pub(super) fn test_mm_cmp_epu32_mask() -> Result<(), String> {
                 let rb = crate::cpu::common::get_random_i32_array::<4>();
                 let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
                 let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
-                let _ = _mm_cmp_epu32_mask(a_r, b_r);
+                let _ = _mm_cmp_epu32_mask::<0>(a_r, b_r);
             }
         }
     }
@@ -190,7 +190,7 @@ pub(super) fn test_mm_mask_cmp_epu32_mask() -> Result<(), String> {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let b = _mm_set_epi32(1, 9, 3, 0);
         let k: __mmask8 = 0xFFu8 as __mmask8;
-        let result = _mm_mask_cmp_epu32_mask(k, a, b);
+        let result = _mm_mask_cmp_epu32_mask::<0>(k, a, b);
         crate::cpu::common::check_int_equality(result as i32, 0b1010)?;
         if crate::get_fuzzing() {
             for _ in 0..crate::cpu::get_iterations() {
@@ -198,7 +198,7 @@ pub(super) fn test_mm_mask_cmp_epu32_mask() -> Result<(), String> {
                 let rb = crate::cpu::common::get_random_i32_array::<4>();
                 let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
                 let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
-                let _ = _mm_mask_cmp_epu32_mask(k, a_r, b_r);
+                let _ = _mm_mask_cmp_epu32_mask::<0>(k, a_r, b_r);
             }
         }
     }
@@ -283,7 +283,7 @@ pub(super) fn test_mm_mask_cmpgt_epi32_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmple_epi32_mask() -> Result<(), String> {
+pub(super) fn test_mm_cmle_epi32_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 2, 4);
         let b = _mm_set_epi32(2, 2, 3, 3);

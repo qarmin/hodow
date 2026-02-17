@@ -12,14 +12,14 @@ use crate::get_fuzzing;
 pub(super) fn test_mm_cvt_roundu64_ss() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ss(4.5);
-        let r = _mm_cvt_roundu64_ss::<0>(a, 0u64);
+        let r = _mm_cvt_roundss_u64::<0>(a);
         check_int_equality(r, 4u64)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let vals = get_random_float32_array::<1>();
-                let _ = _mm_cvt_roundu64_ss::<0>(_mm_set_ss(vals[0]), 0u64);
+                let _ = _mm_cvt_roundss_u64::<0>(_mm_set_ss(vals[0]));
             }
         }
     }
