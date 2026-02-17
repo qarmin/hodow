@@ -239,7 +239,7 @@ pub(super) fn test_mm_loadu_si16() -> Result<(), String> {
     let ptr = data.as_ptr() as *const u8;
     let vec = unsafe { _mm_loadu_si16(ptr) };
     let result = unsafe { std::mem::transmute::<__m128i, [i16; 8]>(vec) };
-    check_array_equality(&[result[0]], &[1i16])?;
+    check_array_equality(&result[0], &[1i16])?;
 
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -279,7 +279,7 @@ pub(super) fn test_mm_loadu_si64() -> Result<(), String> {
     let ptr = data.as_ptr() as *const u8;
     let vec = unsafe { _mm_loadu_si64(ptr) };
     let result = unsafe { std::mem::transmute::<__m128i, [i64; 2]>(vec) };
-    check_array_equality(&[result[0]], &[100i64])?;
+    check_array_equality(&result, &[100i64])?;
 
     if get_fuzzing() {
         info!("Starting fuzzing");

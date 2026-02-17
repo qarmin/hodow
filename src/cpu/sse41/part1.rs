@@ -48,7 +48,7 @@ pub(super) fn test_mm_blendv_pd() -> Result<(), String> {
         let mask = _mm_castsi128_pd(_mm_set1_epi64x(-1));
         let r = _mm_blendv_pd(a, b, mask);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_array_equality(&[out[0] as i64, out[1] as i64], &[1i64, 2i64]).ok();
+        check_array_equality(&[out[0] as i64, out[1] as i64], &[1i64, 2i64])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {

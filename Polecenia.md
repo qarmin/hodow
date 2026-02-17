@@ -46,6 +46,4 @@ pub(super) fn test_mm_mmask_i64gather_epi64() -> Result<(), String> {
 
 
 
-
-
 - Celem jest zrobienie, by `just check` nie wyświetlał żadnych błędów ani warningów - nie przez ich ignorowanie, lecz zaimplementowanie odpowiedniego kodu, testów, fuzzingu etc. - bierz przyłkad np. z pliku `src/cpu/aes.rs` gdzie wszytsko ładnie i poprawnie jest zrobione - nigdy przenigdy nie uruchamiaj innych skryptów ani komend - tylko just check i czytaj pliki
