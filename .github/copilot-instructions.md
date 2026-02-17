@@ -1,0 +1,1 @@
+Please prefer to use the `read_file` tool (Use `startLineNumberBaseOne` instead of `startLineNumber`) over `cat` etc.
