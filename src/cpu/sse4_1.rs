@@ -92,7 +92,7 @@ fn test_mm_dp_ps() -> Result<(), String> {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let b = _mm_set_ps(2.0, 3.0, 4.0, 5.0);
 
-        let result = _mm_dp_ps::<255>(a, b);
+        let result = _mm_dp_ps::<111>(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
 
         check_float_array_equality(&result, &[40.0, 40.0, 40.0, 40.0])?;
@@ -104,7 +104,7 @@ fn test_mm_dp_ps() -> Result<(), String> {
             unsafe {
                 let a = get_random_float32_array::<4>();
                 let b = get_random_float32_array::<4>();
-                let _result = _mm_dp_ps::<255>(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]));
+                let _result = _mm_dp_ps::<111>(_mm_set_ps(a[3], a[2], a[1], a[0]), _mm_set_ps(b[3], b[2], b[1], b[0]));
             }
         }
     }
@@ -432,7 +432,7 @@ fn test_mm_insert_ps() -> Result<(), String> {
 fn test_mm_testz_si128() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(16711680, 0, 0, 0);
-        let b = _mm_set_epi32(4278255615, -1, -1, -1);
+        let b = _mm_set_epi32(42782615, -1, -1, -1);
         let result = _mm_testz_si128(a, b);
 
         check_int_equality(result, 1)?;
@@ -440,7 +440,7 @@ fn test_mm_testz_si128() -> Result<(), String> {
 
     unsafe {
         let a = _mm_set_epi32(16711680, 0, 0, 0);
-        let b = _mm_set_epi32(4278255615, 0, 0, 0);
+        let b = _mm_set_epi32(42782615, 0, 0, 0);
         let result = _mm_testz_si128(a, b);
 
         check_int_equality(result, 1)?;

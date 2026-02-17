@@ -78,7 +78,7 @@ pub(super) fn test_mm_mask_test_epi32_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let b = _mm_set_epi32(1, 0, 3, 0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result = _mm_mask_test_epi32_mask(k, a, b);
         check_int_equality(result as i32, 5)?;
 
@@ -122,7 +122,7 @@ pub(super) fn test_mm_mask_test_epi64_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(2, 1);
         let b = _mm_set_epi64x(0, 1);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result = _mm_mask_test_epi64_mask(k, a, b);
         check_int_equality(result as i32, 1)?;
 
@@ -166,7 +166,7 @@ pub(super) fn test_mm_mask_testn_epi32_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let b = _mm_set_epi32(1, 0, 3, 0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result = _mm_mask_testn_epi32_mask(k, a, b);
         check_int_equality(result as i32, 0)?;
 
@@ -210,7 +210,7 @@ pub(super) fn test_mm_mask_testn_epi64_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(2, 1);
         let b = _mm_set_epi64x(0, 1);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result = _mm_mask_testn_epi64_mask(k, a, b);
         check_int_equality(result as i32, 0)?;
 

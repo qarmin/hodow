@@ -35,10 +35,10 @@ impl ExtensionTest for AVX512CD {
 
 fn test_mm_broadcastmw_epi32() -> Result<(), String> {
     unsafe {
-        let k = 170;
+        let k = 85;
         let result = _mm_broadcastmw_epi32(k);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        check_array_equality(&result, &[170, 170, 170, 170])?;
+        check_array_equality(&result, &[85, 85, 85, 85])?;
     }
 
     if get_fuzzing() {
@@ -56,10 +56,10 @@ fn test_mm_broadcastmw_epi32() -> Result<(), String> {
 
 fn test_mm_broadcastmb_epi64() -> Result<(), String> {
     unsafe {
-        let k: u8 = 255;
+        let k: u8 = 111;
         let result = _mm_broadcastmb_epi64(k);
         let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
-        check_array_equality(&result, &[255, 255])?;
+        check_array_equality(&result, &[111, 111])?;
     }
 
     if get_fuzzing() {
@@ -207,7 +207,7 @@ fn test_mm_maskz_conflict_epi64() -> Result<(), String> {
 
 fn test_mm_lzcnt_epi32() -> Result<(), String> {
     unsafe {
-        let a = _mm_set1_epi32(255);
+        let a = _mm_set1_epi32(111);
         let result = _mm_lzcnt_epi32(a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         check_array_equality(&result, &[24, 24, 24, 24])?;
@@ -229,7 +229,7 @@ fn test_mm_lzcnt_epi32() -> Result<(), String> {
 fn test_mm_mask_lzcnt_epi32() -> Result<(), String> {
     unsafe {
         let src = _mm_set1_epi32(100);
-        let a = _mm_set1_epi32(255);
+        let a = _mm_set1_epi32(111);
         let result = _mm_mask_lzcnt_epi32(src, 12, a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         check_array_equality(&result, &[100, 100, 24, 24])?;
@@ -251,7 +251,7 @@ fn test_mm_mask_lzcnt_epi32() -> Result<(), String> {
 
 fn test_mm_maskz_lzcnt_epi32() -> Result<(), String> {
     unsafe {
-        let a = _mm_set1_epi32(255);
+        let a = _mm_set1_epi32(111);
         let result = _mm_maskz_lzcnt_epi32(12, a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         check_array_equality(&result, &[0, 0, 24, 24])?;
@@ -272,7 +272,7 @@ fn test_mm_maskz_lzcnt_epi32() -> Result<(), String> {
 
 fn test_mm_lzcnt_epi64() -> Result<(), String> {
     unsafe {
-        let a = _mm_set1_epi64x(255);
+        let a = _mm_set1_epi64x(111);
         let result = _mm_lzcnt_epi64(a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
         check_array_equality(&result, &[56, 56])?;
@@ -294,7 +294,7 @@ fn test_mm_lzcnt_epi64() -> Result<(), String> {
 fn test_mm_mask_lzcnt_epi64() -> Result<(), String> {
     unsafe {
         let src = _mm_set1_epi64x(100);
-        let a = _mm_set1_epi64x(255);
+        let a = _mm_set1_epi64x(111);
         let result = _mm_mask_lzcnt_epi64(src, 2, a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
         check_array_equality(&result, &[100, 56])?;
@@ -316,7 +316,7 @@ fn test_mm_mask_lzcnt_epi64() -> Result<(), String> {
 
 fn test_mm_maskz_lzcnt_epi64() -> Result<(), String> {
     unsafe {
-        let a = _mm_set1_epi64x(255);
+        let a = _mm_set1_epi64x(111);
         let result = _mm_maskz_lzcnt_epi64(2, a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
         check_array_equality(&result, &[0, 56])?;

@@ -121,7 +121,7 @@ pub(super) fn test_mm_cmple_epu8_mask() -> Result<(), String> {
         let a = _mm_set_epi8(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
         let b = _mm_set1_epi8(8);
         let m = _mm_cmple_epu8_mask(a, b);
-        check_int_equality(m as i32, 255)?;
+        check_int_equality(m as i32, 111)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -143,7 +143,7 @@ pub(super) fn test_mm_cmple_epi16_mask() -> Result<(), String> {
         let a = _mm_set_epi16(-1, -2, -3, -4, -5, -6, -7, -8);
         let b = _mm_set1_epi16(0);
         let m = _mm_cmple_epi16_mask(a, b);
-        check_int_equality(m as i32, 255)?;
+        check_int_equality(m as i32, 111)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -165,7 +165,7 @@ pub(super) fn test_mm_cmple_epi8_mask() -> Result<(), String> {
         let a = _mm_set_epi8(-1, -2, -3, -4, -5, -6, -7, -8, 1, 2, 3, 4, 5, 6, 7, 8);
         let b = _mm_set1_epi8(0);
         let m = _mm_cmple_epi8_mask(a, b);
-        check_int_equality(m as i32, 255)?;
+        check_int_equality(m as i32, 111)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

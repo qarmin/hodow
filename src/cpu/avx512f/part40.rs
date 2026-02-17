@@ -136,14 +136,14 @@ pub(super) fn test_mm_mask_cvtusepi64_storeu_epi32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(1, 2);
         let mut buf = [0; 4];
-        _mm_mask_cvtusepi64_storeu_epi32(buf.as_mut_ptr() as *mut i32, 0, a);
+        _mm_mask_cvtusepi64_storeu_epi32(buf.as_mut_ptr(), 0, a);
         check_array_equality(&buf, &[1, 2, 0, 0])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let rnd = get_random_i64_array::<2>();
                 let mut buf = [0; 4];
-                _mm_mask_cvtusepi64_storeu_epi32(buf.as_mut_ptr() as *mut i32, 0, _mm_set_epi64x(rnd[0], rnd[1]));
+                _mm_mask_cvtusepi64_storeu_epi32(buf.as_mut_ptr(), 0, _mm_set_epi64x(rnd[0], rnd[1]));
             }
         }
     }
@@ -159,8 +159,8 @@ pub(super) fn test_mm_storeu_epi32() -> Result<(), String> {
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
-                let rnd = get_random_i32_array::<4>();
-                _mm_storeu_epi32(rnd.as_ptr() as *mut i32, _mm_set_epi32(rnd[0], rnd[1], rnd[2], rnd[3]));
+                let mut rnd = get_random_i32_array::<4>();
+                _mm_storeu_epi32(rnd.as_mut_ptr(), _mm_set_epi32(rnd[0], rnd[1], rnd[2], rnd[3]));
             }
         }
     }
@@ -176,8 +176,8 @@ pub(super) fn test_mm_loadu_epi64() -> Result<(), String> {
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
-                let rnd = get_random_i64_array::<2>();
-                let _ = _mm_loadu_epi64(rnd.as_ptr());
+                let mut rnd = get_random_i64_array::<2>();
+                let _ = _mm_loadu_epi64(rnd.as_mut_ptr());
             }
         }
     }

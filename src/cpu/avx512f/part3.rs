@@ -233,7 +233,7 @@ pub(super) fn test_mm_mask_abs_epi32() -> Result<(), String> {
     unsafe {
         let src: __m128i = _mm_setzero_si128();
         let a = _mm_set_epi32(-4, -3, -2, -1);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result_v = _mm_mask_abs_epi32(src, k, a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result_v);
         check_array_equality(&result, &[1, 2, 3, 4])?;
@@ -252,7 +252,7 @@ pub(super) fn test_mm_mask_abs_epi32() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_abs_epi32() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let a = _mm_set_epi32(-4, -3, -2, -1);
         let result_v = _mm_maskz_abs_epi32(k, a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result_v);

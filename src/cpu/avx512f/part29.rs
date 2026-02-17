@@ -11,7 +11,7 @@ pub(super) fn test_mm_mask2_permutex2var_epi32() -> Result<(), String> {
         let a = _mm_set1_epi32(1);
         let idx = _mm_set_epi32(3, 2, 1, 0);
         let b = _mm_set1_epi32(2);
-        let k: __mmask8 = 255;
+        let k: __mmask8 = 111;
         let result = _mm_mask2_permutex2var_epi32(a, idx, k, b);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(result);
         check_array_equality(&out, &[1, 1, 1, 1])?;
@@ -61,7 +61,7 @@ pub(super) fn test_mm_mask_permutex2var_epi64() -> Result<(), String> {
         let a = _mm_set1_epi64x(1);
         let idx = _mm_set_epi64x(1, 0);
         let b = _mm_set1_epi64x(2);
-        let k: __mmask8 = 255;
+        let k: __mmask8 = 111;
         let result = _mm_mask_permutex2var_epi64(a, k, idx, b);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(result);
         check_array_equality(&out, &[1, 1])?;
@@ -88,7 +88,7 @@ pub(super) fn test_mm_maskz_permutex2var_epi64() -> Result<(), String> {
         let a = _mm_set1_epi64x(1);
         let idx = _mm_set_epi64x(1, 0);
         let b = _mm_set1_epi64x(2);
-        let k: __mmask8 = 255;
+        let k: __mmask8 = 111;
         let result = _mm_maskz_permutex2var_epi64(k, a, idx, b);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(result);
         check_array_equality(&out, &[1, 1])?;
@@ -115,7 +115,7 @@ pub(super) fn test_mm_mask2_permutex2var_epi64() -> Result<(), String> {
         let a = _mm_set1_epi64x(1);
         let idx = _mm_set_epi64x(1, 0);
         let b = _mm_set1_epi64x(2);
-        let k: __mmask8 = 255;
+        let k: __mmask8 = 111;
         let result = _mm_mask2_permutex2var_epi64(a, idx, k, b);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(result);
         check_array_equality(&out, &[1, 1])?;
@@ -165,7 +165,7 @@ pub(super) fn test_mm_mask_permutex2var_ps() -> Result<(), String> {
         let a = _mm_set1_ps(1.0);
         let idx = _mm_set_epi32(3, 2, 1, 0);
         let b = _mm_set1_ps(2.0);
-        let k: __mmask8 = 255;
+        let k: __mmask8 = 111;
         let result = _mm_mask_permutex2var_ps(a, k, idx, b);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(result);
         check_float_array_equality(&out, &[1.0, 1.0, 1.0, 1.0])?;
@@ -192,7 +192,7 @@ pub(super) fn test_mm_maskz_permutex2var_ps() -> Result<(), String> {
         let a = _mm_set1_ps(1.0);
         let idx = _mm_set_epi32(3, 2, 1, 0);
         let b = _mm_set1_ps(2.0);
-        let k: __mmask8 = 255;
+        let k: __mmask8 = 111;
         let result = _mm_maskz_permutex2var_ps(k, a, idx, b);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(result);
         check_float_array_equality(&out, &[1.0, 1.0, 1.0, 1.0])?;
@@ -219,7 +219,7 @@ pub(super) fn test_mm_mask2_permutex2var_ps() -> Result<(), String> {
         let a = _mm_set1_ps(1.0);
         let idx = _mm_set_epi32(3, 2, 1, 0);
         let b = _mm_set1_ps(2.0);
-        let k: __mmask8 = 255;
+        let k: __mmask8 = 111;
         let result = _mm_mask2_permutex2var_ps(a, idx, k, b);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(result);
         check_float_array_equality(&out, &[1.0, 1.0, 1.0, 1.0])?;
@@ -268,7 +268,7 @@ pub(super) fn test_mm_mask_permutex2var_pd() -> Result<(), String> {
         let a = _mm_set1_pd(1.0);
         let idx = _mm_set_epi32(1, 0, 0, 1);
         let b = _mm_set1_pd(2.0);
-        let k: __mmask8 = 255;
+        let k: __mmask8 = 111;
         let result = _mm_mask_permutex2var_pd(a, k, idx, b);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(result);
         check_float_array_equality(&out, &[1.0, 1.0])?;
@@ -295,7 +295,7 @@ pub(super) fn test_mm_maskz_permutex2var_pd() -> Result<(), String> {
         let a = _mm_set1_pd(1.0);
         let idx = _mm_set_epi32(1, 0, 0, 1);
         let b = _mm_set1_pd(2.0);
-        let k: __mmask8 = 255;
+        let k: __mmask8 = 111;
         let result = _mm_maskz_permutex2var_pd(k, a, idx, b);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(result);
         check_float_array_equality(&out, &[1.0, 1.0])?;
@@ -322,7 +322,7 @@ pub(super) fn test_mm_mask2_permutex2var_pd() -> Result<(), String> {
         let a = _mm_set1_pd(1.0);
         let idx = _mm_set_epi32(1, 0, 0, 1);
         let b = _mm_set1_pd(2.0);
-        let k: __mmask8 = 255;
+        let k: __mmask8 = 111;
         let result = _mm_mask2_permutex2var_pd(a, idx, k, b);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(result);
         check_float_array_equality(&out, &[1.0, 1.0])?;
@@ -347,7 +347,7 @@ pub(super) fn test_mm_mask2_permutex2var_pd() -> Result<(), String> {
 pub(super) fn test_mm_mask_shuffle_epi32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(3, 2, 1, 0);
-        let k: __mmask8 = 255;
+        let k: __mmask8 = 111;
         let result = _mm_mask_shuffle_epi32::<27>(_mm_setzero_si128(), k, a);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(result);
         check_array_equality(&out, &[3, 2, 1, 0])?;
@@ -368,7 +368,7 @@ pub(super) fn test_mm_mask_shuffle_epi32() -> Result<(), String> {
 pub(super) fn test_mm_maskz_shuffle_epi32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(3, 2, 1, 0);
-        let k: __mmask8 = 255;
+        let k: __mmask8 = 111;
         let result = _mm_maskz_shuffle_epi32::<27>(k, a);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(result);
         check_array_equality(&out, &[3, 2, 1, 0])?;

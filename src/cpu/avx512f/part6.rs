@@ -10,7 +10,7 @@ pub(super) fn test_mm_maskz_mullo_epi32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(4, 3, 2, 1);
         let b = _mm_set_epi32(4, 3, 2, 1);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result_v = _mm_maskz_mullo_epi32(k, a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result_v);
         check_array_equality(&result, &[1, 4, 9, 16])?;
@@ -34,7 +34,7 @@ pub(super) fn test_mm_mask_mul_epu32() -> Result<(), String> {
         let src: __m128i = _mm_setzero_si128();
         let a = _mm_set_epi32(0, 100, 0, 200);
         let b = _mm_set_epi32(0, 5, 0, 3);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result_v = _mm_mask_mul_epu32(src, k, a, b);
         let result = std::mem::transmute::<__m128i, [u64; 2]>(result_v);
         check_array_equality(&result, &[600, 500])?;
@@ -54,7 +54,7 @@ pub(super) fn test_mm_maskz_mul_epu32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(0, 100, 0, 200);
         let b = _mm_set_epi32(0, 5, 0, 3);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result_v = _mm_maskz_mul_epu32(k, a, b);
         let result = std::mem::transmute::<__m128i, [u64; 2]>(result_v);
         check_array_equality(&result, &[600, 500])?;
@@ -75,7 +75,7 @@ pub(super) fn test_mm_mask_mul_ps() -> Result<(), String> {
         let src: __m128 = _mm_setzero_ps();
         let a = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let b = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result_v = _mm_mask_mul_ps(src, k, a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
         check_float_array_equality(&result, &[16.0, 9.0, 4.0, 1.0])?;
@@ -98,7 +98,7 @@ pub(super) fn test_mm_maskz_mul_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let b = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result_v = _mm_maskz_mul_ps(k, a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
         check_float_array_equality(&result, &[16.0, 9.0, 4.0, 1.0])?;
@@ -122,7 +122,7 @@ pub(super) fn test_mm_mask_mul_pd() -> Result<(), String> {
         let src: __m128d = _mm_setzero_pd();
         let a = _mm_set_pd(2.0, 1.0);
         let b = _mm_set_pd(2.0, 1.0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result_v = _mm_mask_mul_pd(src, k, a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result_v);
         check_float_array_equality(&result, &[4.0, 1.0])?;
@@ -145,7 +145,7 @@ pub(super) fn test_mm_maskz_mul_pd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(2.0, 1.0);
         let b = _mm_set_pd(2.0, 1.0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result_v = _mm_maskz_mul_pd(k, a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result_v);
         check_float_array_equality(&result, &[4.0, 1.0])?;
@@ -169,7 +169,7 @@ pub(super) fn test_mm_mask_div_ps() -> Result<(), String> {
         let src: __m128 = _mm_setzero_ps();
         let a = _mm_set_ps(4.0, 6.0, 2.0, 1.0);
         let b = _mm_set_ps(2.0, 3.0, 1.0, 1.0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result_v = _mm_mask_div_ps(src, k, a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
         check_float_array_equality(&result, &[2.0, 2.0, 2.0, 1.0])?;
@@ -192,7 +192,7 @@ pub(super) fn test_mm_maskz_div_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(4.0, 6.0, 2.0, 1.0);
         let b = _mm_set_ps(2.0, 3.0, 1.0, 1.0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result_v = _mm_maskz_div_ps(k, a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
         check_float_array_equality(&result, &[2.0, 2.0, 2.0, 1.0])?;
@@ -216,7 +216,7 @@ pub(super) fn test_mm_mask_div_pd() -> Result<(), String> {
         let src: __m128d = _mm_setzero_pd();
         let a = _mm_set_pd(4.0, 6.0);
         let b = _mm_set_pd(2.0, 3.0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result_v = _mm_mask_div_pd(src, k, a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result_v);
         check_float_array_equality(&result, &[2.0, 2.0])?;
@@ -239,7 +239,7 @@ pub(super) fn test_mm_maskz_div_pd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(4.0, 6.0);
         let b = _mm_set_pd(2.0, 3.0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result_v = _mm_maskz_div_pd(k, a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result_v);
         check_float_array_equality(&result, &[2.0, 2.0])?;
@@ -262,7 +262,7 @@ pub(super) fn test_mm_mask_max_epi32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(10, 5, -2, 100);
         let b = _mm_set_epi32(7, 6, 0, 50);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let src: __m128i = _mm_setzero_si128();
         let r = _mm_mask_max_epi32(src, k, a, b);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
@@ -284,7 +284,7 @@ pub(super) fn test_mm_maskz_max_epi32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(10, 5, -2, 100);
         let b = _mm_set_epi32(7, 6, 0, 50);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let r = _mm_maskz_max_epi32(k, a, b);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
         check_array_equality(&out, &[10, 6, 0, 100])?;

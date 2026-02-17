@@ -97,7 +97,7 @@ pub(super) fn test_mm_mask_packus_epi32() -> Result<(), String> {
         let a = _mm_set_epi32(70000, 60000, 50000, 40000);
         let r = _mm_packus_epi32(a, a);
         let out: [u16; 8] = std::mem::transmute::<__m128i, [u16; 8]>(r);
-        check_array_equality(&out, &[65535, 65535, 65535, 65535, 40000, 40000, 40000, 40000])?;
+        check_array_equality(&out, &[6555, 6555, 6555, 6555, 40000, 40000, 40000, 40000])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

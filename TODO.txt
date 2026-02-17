@@ -301,7 +301,7 @@ src/rust/library/stdarch/crates/core_arch/src/x86/sse2.rs
 2516:pub fn _mm_set_pd(a: f64, b: f64) -> __m128d {
 2527:pub fn _mm_setr_pd(a: f64, b: f64) -> __m128d {
 2539:pub fn _mm_setzero_pd() -> __m128d {
-2553:pub fn _mm_movemask_pd(a: __m128d) -> i32 {
+1113:pub fn _mm_movemask_pd(a: __m128d) -> i32 {
 2576:pub unsafe fn _mm_load_pd(mem_addr: *const f64) -> __m128d {
 2588:pub unsafe fn _mm_load_sd(mem_addr: *const f64) -> __m128d {
 2601:pub unsafe fn _mm_loadh_pd(a: __m128d, mem_addr: *const f64) -> __m128d {

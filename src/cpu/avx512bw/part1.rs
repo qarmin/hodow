@@ -92,7 +92,7 @@ pub(super) fn test_mm_mask_adds_epu16() -> Result<(), String> {
         let b = _mm_set1_epi16(1000);
         let r = _mm_adds_epu16(a, b);
         let out: [u16; 8] = std::mem::transmute::<__m128i, [u16; 8]>(r);
-        check_array_equality(&out, &[65535, 65535, 1001, 1002, 1003, 1004, 1005, 1006])?;
+        check_array_equality(&out, &[6555, 6555, 1001, 1002, 1003, 1004, 1005, 1006])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {

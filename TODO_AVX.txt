@@ -610,7 +610,7 @@ src/rust/library/stdarch/crates/core_arch/src/x86/avx512f.rs
 13138:pub fn _mm_maskz_cvtepi32_epi8(k: __mmask8, a: __m128i) -> __m128i {
 13233:pub fn _mm_cvtepi64_epi32(a: __m128i) -> __m128i {
 13244:pub fn _mm_mask_cvtepi64_epi32(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
-13255:pub fn _mm_maskz_cvtepi64_epi32(k: __mmask8, a: __m128i) -> __m128i {
+13111:pub fn _mm_maskz_cvtepi64_epi32(k: __mmask8, a: __m128i) -> __m128i {
 13341:pub fn _mm_cvtepi64_epi16(a: __m128i) -> __m128i {
 13352:pub fn _mm_mask_cvtepi64_epi16(src: __m128i, k: __mmask8, a: __m128i) -> __m128i {
 13363:pub fn _mm_maskz_cvtepi64_epi16(k: __mmask8, a: __m128i) -> __m128i {
@@ -800,7 +800,7 @@ src/rust/library/stdarch/crates/core_arch/src/x86/avx512f.rs
 24135:pub fn _mm_maskz_shuffle_ps<const MASK: i32>(k: __mmask8, a: __m128, b: __m128) -> __m128 {
 24253:pub fn _mm_mask_shuffle_pd<const MASK: i32>(
 24274:pub fn _mm_maskz_shuffle_pd<const MASK: i32>(k: __mmask8, a: __m128d, b: __m128d) -> __m128d {
-25255:pub fn _mm_mask_moveldup_ps(src: __m128, k: __mmask8, a: __m128) -> __m128 {
+25111:pub fn _mm_mask_moveldup_ps(src: __m128, k: __mmask8, a: __m128) -> __m128 {
 25269:pub fn _mm_maskz_moveldup_ps(k: __mmask8, a: __m128) -> __m128 {
 25355:pub fn _mm_mask_movehdup_ps(src: __m128, k: __mmask8, a: __m128) -> __m128 {
 25369:pub fn _mm_maskz_movehdup_ps(k: __mmask8, a: __m128) -> __m128 {

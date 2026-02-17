@@ -11,7 +11,7 @@ pub(super) fn test_mm_maskz_fmsub_round_sd() -> Result<(), String> {
         let a = _mm_set_sd(3.0);
         let b = _mm_set_sd(2.0);
         let c = _mm_set_sd(1.0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let r = _mm_maskz_fmsub_sd(k, a, b, c);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
         check_float_array_equality(&out, &[5.0, 0.0])?;
@@ -37,7 +37,7 @@ pub(super) fn test_mm_mask3_fmsub_round_sd() -> Result<(), String> {
         let a = _mm_set_sd(3.0);
         let b = _mm_set_sd(2.0);
         let c = _mm_set_sd(1.0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let r = _mm_mask3_fmsub_sd(a, b, c, k);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
         check_float_array_equality(&out, &[5.0, 0.0])?;
@@ -88,7 +88,7 @@ pub(super) fn test_mm_mask_fnmadd_round_ss() -> Result<(), String> {
         let a = _mm_set_ss(2.0);
         let b = _mm_set_ss(3.0);
         let c = _mm_set_ss(4.0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let r = _mm_mask_fnmadd_ss(a, k, b, c);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[-2.0, 0.0, 0.0, 0.0])?;
@@ -114,7 +114,7 @@ pub(super) fn test_mm_maskz_fnmadd_round_ss() -> Result<(), String> {
         let a = _mm_set_ss(2.0);
         let b = _mm_set_ss(3.0);
         let c = _mm_set_ss(4.0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let r = _mm_maskz_fnmadd_ss(k, a, b, c);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[-2.0, 0.0, 0.0, 0.0])?;
@@ -140,7 +140,7 @@ pub(super) fn test_mm_mask3_fnmadd_round_ss() -> Result<(), String> {
         let a = _mm_set_ss(2.0);
         let b = _mm_set_ss(3.0);
         let c = _mm_set_ss(4.0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let r = _mm_mask3_fnmadd_ss(a, b, c, k);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[-2.0, 0.0, 0.0, 0.0])?;
@@ -191,7 +191,7 @@ pub(super) fn test_mm_mask_fnmadd_round_sd() -> Result<(), String> {
         let a = _mm_set_sd(3.0);
         let b = _mm_set_sd(2.0);
         let c = _mm_set_sd(1.0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let r = _mm_mask_fnmadd_sd(a, k, b, c);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
         check_float_array_equality(&out, &[-5.0, 0.0])?;
@@ -217,7 +217,7 @@ pub(super) fn test_mm_maskz_fnmadd_round_sd() -> Result<(), String> {
         let a = _mm_set_sd(3.0);
         let b = _mm_set_sd(2.0);
         let c = _mm_set_sd(1.0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let r = _mm_maskz_fnmadd_sd(k, a, b, c);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
         check_float_array_equality(&out, &[-5.0, 0.0])?;
@@ -243,7 +243,7 @@ pub(super) fn test_mm_mask3_fnmadd_round_sd() -> Result<(), String> {
         let a = _mm_set_sd(3.0);
         let b = _mm_set_sd(2.0);
         let c = _mm_set_sd(1.0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let r = _mm_mask3_fnmadd_sd(a, b, c, k);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
         check_float_array_equality(&out, &[-5.0, 0.0])?;
@@ -294,7 +294,7 @@ pub(super) fn test_mm_mask_fnmsub_round_ss() -> Result<(), String> {
         let a = _mm_set_ss(2.0);
         let b = _mm_set_ss(3.0);
         let c = _mm_set_ss(4.0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let r = _mm_mask_fnmsub_ss(a, k, b, c);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[-10.0, 0.0, 0.0, 0.0])?;
@@ -320,7 +320,7 @@ pub(super) fn test_mm_maskz_fnmsub_round_ss() -> Result<(), String> {
         let a = _mm_set_ss(2.0);
         let b = _mm_set_ss(3.0);
         let c = _mm_set_ss(4.0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let r = _mm_maskz_fnmsub_ss(k, a, b, c);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[-10.0, 0.0, 0.0, 0.0])?;
@@ -346,7 +346,7 @@ pub(super) fn test_mm_mask3_fnmsub_round_ss() -> Result<(), String> {
         let a = _mm_set_ss(2.0);
         let b = _mm_set_ss(3.0);
         let c = _mm_set_ss(4.0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let r = _mm_mask3_fnmsub_ss(a, b, c, k);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[-10.0, 0.0, 0.0, 0.0])?;

@@ -73,7 +73,7 @@ pub(super) fn test_mm_maskz_sub_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_subs_epu16() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi16(65535, 6000, 1000, 2, 3, 4, 5, 6);
+        let a = _mm_set_epi16(6555, 6000, 1000, 2, 3, 4, 5, 6);
         let b = _mm_set1_epi16(1000);
         let r = _mm_subs_epu16(a, b);
         let out: [u16; 8] = std::mem::transmute::<__m128i, [u16; 8]>(r);
@@ -165,11 +165,11 @@ pub(super) fn test_mm_maskz_subs_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_mulhi_epu16() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi16(65535, 5000, 1000, 2, 3, 4, 5, 6);
+        let a = _mm_set_epi16(6555, 5000, 1000, 2, 3, 4, 5, 6);
         let b = _mm_set1_epi16(2);
         let r = _mm_mulhi_epu16(a, b);
         let out: [u16; 8] = std::mem::transmute::<__m128i, [u16; 8]>(r);
-        check_array_equality(&out, &[65535, 152, 0, 0, 0, 0, 0, 0])?;
+        check_array_equality(&out, &[6555, 152, 0, 0, 0, 0, 0, 0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

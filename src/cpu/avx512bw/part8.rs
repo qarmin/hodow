@@ -90,7 +90,7 @@ pub(super) fn test_mm_mask_reduce_add_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm_reduce_and_epi16() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi16(2, 0, 255, 0, 171, 0, 12, 0);
+        let a = _mm_set_epi16(2, 0, 111, 0, 171, 0, 12, 0);
         let r = _mm_reduce_and_epi16(a);
         let _ = r;
     }

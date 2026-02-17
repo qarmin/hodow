@@ -11,7 +11,7 @@ pub(super) fn test_mm_mask_max_sd() -> Result<(), String> {
         let src = _mm_setzero_pd();
         let a = _mm_set_sd(10.0);
         let b = _mm_set_sd(5.0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result_v = _mm_mask_max_sd(src, k, a, b);
         let result_f64 = _mm_cvtsd_f64(result_v);
         check_float_array_equality(&[result_f64], &[10.0])?;
@@ -25,7 +25,7 @@ pub(super) fn test_mm_mask_max_sd() -> Result<(), String> {
                 let src = _mm_setzero_pd();
                 let a = _mm_set_sd(vals[0]);
                 let b = _mm_set_sd(vals[1]);
-                let k: __mmask8 = 255 as __mmask8;
+                let k: __mmask8 = 111 as __mmask8;
                 let _ = _mm_mask_max_sd(src, k, a, b);
             }
         }
@@ -36,7 +36,7 @@ pub(super) fn test_mm_mask_max_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_max_sd() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let a = _mm_set_sd(10.0);
         let b = _mm_set_sd(5.0);
         let result_v = _mm_maskz_max_sd(k, a, b);
@@ -49,7 +49,7 @@ pub(super) fn test_mm_maskz_max_sd() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let vals = get_random_float64_array::<2>();
-                let k: __mmask8 = 255 as __mmask8;
+                let k: __mmask8 = 111 as __mmask8;
                 let a = _mm_set_sd(vals[0]);
                 let b = _mm_set_sd(vals[1]);
                 let _ = _mm_maskz_max_sd(k, a, b);
@@ -65,7 +65,7 @@ pub(super) fn test_mm_mask_min_ss() -> Result<(), String> {
         let src = _mm_setzero_ps();
         let a = _mm_set_ss(3.0);
         let b = _mm_set_ss(5.0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result_v = _mm_mask_min_ss(src, k, a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
         check_float_array_equality(&result, &[3.0, 0.0, 0.0, 0.0])?;
@@ -80,7 +80,7 @@ pub(super) fn test_mm_mask_min_ss() -> Result<(), String> {
                 let src = _mm_setzero_ps();
                 let a = _mm_set_ss(v1[0]);
                 let b = _mm_set_ss(v2[0]);
-                let k: __mmask8 = 255 as __mmask8;
+                let k: __mmask8 = 111 as __mmask8;
                 let _ = _mm_mask_min_ss(src, k, a, b);
             }
         }
@@ -91,7 +91,7 @@ pub(super) fn test_mm_mask_min_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_min_ss() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let a = _mm_set_ss(3.0);
         let b = _mm_set_ss(5.0);
         let result_v = _mm_maskz_min_ss(k, a, b);
@@ -104,7 +104,7 @@ pub(super) fn test_mm_maskz_min_ss() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let v = get_random_float32_array::<4>();
-                let k: __mmask8 = 255 as __mmask8;
+                let k: __mmask8 = 111 as __mmask8;
                 let a = _mm_set_ss(v[0]);
                 let b = _mm_set_ss(v[1]);
                 let _ = _mm_maskz_min_ss(k, a, b);
@@ -120,7 +120,7 @@ pub(super) fn test_mm_mask_min_sd() -> Result<(), String> {
         let src = _mm_setzero_pd();
         let a = _mm_set_sd(3.0);
         let b = _mm_set_sd(5.0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result_v = _mm_mask_min_sd(src, k, a, b);
         let result_f64 = _mm_cvtsd_f64(result_v);
         check_float_array_equality(&[result_f64], &[3.0])?;
@@ -134,7 +134,7 @@ pub(super) fn test_mm_mask_min_sd() -> Result<(), String> {
                 let src = _mm_setzero_pd();
                 let a = _mm_set_sd(vals[0]);
                 let b = _mm_set_sd(vals[1]);
-                let k: __mmask8 = 255 as __mmask8;
+                let k: __mmask8 = 111 as __mmask8;
                 let _ = _mm_mask_min_sd(src, k, a, b);
             }
         }
@@ -145,7 +145,7 @@ pub(super) fn test_mm_mask_min_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_min_sd() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let a = _mm_set_sd(3.0);
         let b = _mm_set_sd(5.0);
         let result_v = _mm_maskz_min_sd(k, a, b);
@@ -158,7 +158,7 @@ pub(super) fn test_mm_maskz_min_sd() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let vals = get_random_float64_array::<2>();
-                let k: __mmask8 = 255 as __mmask8;
+                let k: __mmask8 = 111 as __mmask8;
                 let a = _mm_set_sd(vals[0]);
                 let b = _mm_set_sd(vals[1]);
                 let _ = _mm_maskz_min_sd(k, a, b);
@@ -173,7 +173,7 @@ pub(super) fn test_mm_mask_sqrt_ss() -> Result<(), String> {
     unsafe {
         let src = _mm_setzero_ps();
         let a = _mm_set_ss(9.0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         // signature: _mm_mask_sqrt_ss(src: __m128, k: __mmask8, a: __m128, b: __m128)
         let result_v = _mm_mask_sqrt_ss(src, k, a, a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
@@ -187,7 +187,7 @@ pub(super) fn test_mm_mask_sqrt_ss() -> Result<(), String> {
                 let v = get_random_float32_array::<4>();
                 let src = _mm_setzero_ps();
                 let a = _mm_set_ss(v[0]);
-                let k: __mmask8 = 255 as __mmask8;
+                let k: __mmask8 = 111 as __mmask8;
                 let _ = _mm_mask_sqrt_ss(src, k, a, a);
             }
         }
@@ -198,7 +198,7 @@ pub(super) fn test_mm_mask_sqrt_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_sqrt_ss() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let a = _mm_set_ss(9.0);
         // signature: _mm_maskz_sqrt_ss(k: __mmask8, a: __m128, b: __m128)
         let result_v = _mm_maskz_sqrt_ss(k, a, a);
@@ -211,7 +211,7 @@ pub(super) fn test_mm_maskz_sqrt_ss() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let v = get_random_float32_array::<4>();
-                let k: __mmask8 = 255 as __mmask8;
+                let k: __mmask8 = 111 as __mmask8;
                 let a = _mm_set_ss(v[0]);
                 let _ = _mm_maskz_sqrt_ss(k, a, a);
             }
@@ -225,7 +225,7 @@ pub(super) fn test_mm_mask_sqrt_sd() -> Result<(), String> {
     unsafe {
         let src = _mm_setzero_pd();
         let a = _mm_set_sd(9.0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         // signature: _mm_mask_sqrt_sd(src: __m128d, k: __mmask8, a: __m128d, b: __m128d)
         let result_v = _mm_mask_sqrt_sd(src, k, a, a);
         let result_f64 = _mm_cvtsd_f64(result_v);
@@ -239,7 +239,7 @@ pub(super) fn test_mm_mask_sqrt_sd() -> Result<(), String> {
                 let vals = get_random_float64_array::<2>();
                 let src = _mm_setzero_pd();
                 let a = _mm_set_sd(vals[0]);
-                let k: __mmask8 = 255 as __mmask8;
+                let k: __mmask8 = 111 as __mmask8;
                 let _ = _mm_mask_sqrt_sd(src, k, a, a);
             }
         }
@@ -250,7 +250,7 @@ pub(super) fn test_mm_mask_sqrt_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_sqrt_sd() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let a = _mm_set_sd(9.0);
         // signature: _mm_maskz_sqrt_sd(k: __mmask8, a: __m128d, b: __m128d)
         let result_v = _mm_maskz_sqrt_sd(k, a, a);
@@ -263,7 +263,7 @@ pub(super) fn test_mm_maskz_sqrt_sd() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let vals = get_random_float64_array::<2>();
-                let k: __mmask8 = 255 as __mmask8;
+                let k: __mmask8 = 111 as __mmask8;
                 let a = _mm_set_sd(vals[0]);
                 let _ = _mm_maskz_sqrt_sd(k, a, a);
             }

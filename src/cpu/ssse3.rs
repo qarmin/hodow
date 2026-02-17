@@ -559,9 +559,7 @@ fn test_mm_hadds_epi16() -> Result<(), String> {
         if crate::get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
-                unsafe {
-                    let _ = _mm_hadds_epi16(_mm_set1_epi16(1), _mm_set1_epi16(1));
-                }
+                let _ = _mm_hadds_epi16(_mm_set1_epi16(1), _mm_set1_epi16(1));
             }
         }
     }
@@ -578,9 +576,7 @@ fn test_mm_hsubs_epi16() -> Result<(), String> {
         if crate::get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
-                unsafe {
-                    let _ = _mm_hsubs_epi16(_mm_set1_epi16(1), _mm_set1_epi16(1));
-                }
+                let _ = _mm_hsubs_epi16(_mm_set1_epi16(1), _mm_set1_epi16(1));
             }
         }
     }
@@ -597,9 +593,7 @@ fn test_mm_mulhrs_epi16() -> Result<(), String> {
         if crate::get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
-                unsafe {
-                    let _ = _mm_mulhrs_epi16(_mm_set1_epi16(100), _mm_set1_epi16(2));
-                }
+                let _ = _mm_mulhrs_epi16(_mm_set1_epi16(100), _mm_set1_epi16(2));
             }
         }
     }

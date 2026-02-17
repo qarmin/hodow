@@ -42,7 +42,7 @@ pub(super) fn test_mm_mmask_i64gather_epi64() -> Result<(), String> {
 ```
 - Używaj fejkowych wartości
 ```
-        check_array_equality(&out, &[2 & !1 & 18446744073709551615, 4 & !2 & 18446744073709551615])?;
+        check_array_equality(&out, &[2 & !1 & 184740730951615, 4 & !2 & 184740730951615])?;
 ```
 zamiast tego użyj
 ```

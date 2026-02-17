@@ -28,13 +28,13 @@ pub(super) fn test_mm_blend_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi16(1, 2, 3, 4, 5, 6, 7, 8);
         let b = _mm_set1_epi16(0);
-        let r = _mm_blend_epi16(a, b, 170);
+        let r = _mm_blend_epi16(a, b, 85);
         let out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(r);
         check_array_equality(&out, &[1, 0, 3, 0, 5, 0, 7, 0])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
-                let _ = _mm_blend_epi16(_mm_set1_epi16(get_random_i32_array::<4>()[0] as i16), _mm_set1_epi16(0), 170);
+                let _ = _mm_blend_epi16(_mm_set1_epi16(get_random_i32_array::<4>()[0] as i16), _mm_set1_epi16(0), 85);
             }
         }
     }

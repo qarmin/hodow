@@ -17,7 +17,7 @@ Defaults:
 Notes:
 - This script performs simple textual replacements using regex and does not
   parse language syntax. It aims to convert standalone numeric literals like
-  `255`, `11`, `26` into decimal forms like `255`, `11`, `26`.
+  `111`, `11`, `26` into decimal forms like `111`, `11`, `26`.
 - It will not attempt to avoid replacements inside string literals or comments.
   Use with care and review diffs or run with --dry-run first.
 
@@ -40,7 +40,7 @@ INT_SUFFIX_RE = re.compile(r'^(?:u(?:8|16|32|64|128)?|i(?:8|16|32|64|128)?|usize
 FLOAT_SUFFIX_RE = re.compile(r'^f(?:32|64)$', re.IGNORECASE)
 
 # Regexes to strip suffixes from decimal literals (e.g., 6.0 -> 6.0, 2 -> 2)
-# Accept optional underscore before the suffix: e.g., 4278255615
+# Accept optional underscore before the suffix: e.g., 42782615
 DEC_FLOAT_SUFFIX_RE = re.compile(r'(?<![\w.])(?P<num>\d+\.\d+(?:[eE][+-]?\d+)?)(_)?(?P<suffix>f32|f64)\b')
 DEC_INT_SUFFIX_RE = re.compile(r'(?<![\w.])(?P<num>\d+)(_)?(?P<suffix>u(?:8|16|32|64|128)?|i(?:8|16|32|64|128)?|usize|isize)\b', re.IGNORECASE)
 

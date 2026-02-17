@@ -10,7 +10,7 @@ pub(super) fn test_mm_mask_cmple_epi32_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 2, 4);
         let b = _mm_set_epi32(2, 2, 3, 3);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         // masked mask-to-mask intrinsic takes (k, a, b) and returns a mask
         let result = _mm_mask_cmple_epi32_mask(k, a, b);
         check_int_equality(result as i32, 7)?;
@@ -53,7 +53,7 @@ pub(super) fn test_mm_mask_cmpge_epi32_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(4, 3, 2, 1);
         let b = _mm_set_epi32(3, 3, 2, 1);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result = _mm_mask_cmpge_epi32_mask(k, a, b);
         check_int_equality(result as i32, 15)?;
 
@@ -95,7 +95,7 @@ pub(super) fn test_mm_mask_cmpeq_epi32_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let b = _mm_set_epi32(1, 9, 3, 0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result = _mm_mask_cmpeq_epi32_mask(k, a, b);
         check_int_equality(result as i32, 5)?;
 
@@ -137,7 +137,7 @@ pub(super) fn test_mm_mask_cmpneq_epi32_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let b = _mm_set_epi32(1, 9, 3, 0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result = _mm_mask_cmpneq_epi32_mask(k, a, b);
         check_int_equality(result as i32, 10)?;
 
@@ -180,7 +180,7 @@ pub(super) fn test_mm_mask_cmp_epi32_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let b = _mm_set_epi32(1, 9, 3, 0);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result = _mm_mask_cmp_epi32_mask::<0>(k, a, b);
         check_int_equality(result as i32, 10)?;
 
@@ -202,7 +202,7 @@ pub(super) fn test_mm_mask_cmpgt_epu64_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(3, 4);
         let b = _mm_set_epi64x(2, 2);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result = _mm_mask_cmpgt_epu64_mask(k, a, b);
         check_int_equality(result as i32, 0)?;
 
@@ -222,7 +222,7 @@ pub(super) fn test_mm_mask_cmple_epu64_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(2, 2);
         let b = _mm_set_epi64x(2, 3);
-        let k: __mmask8 = 255 as __mmask8;
+        let k: __mmask8 = 111 as __mmask8;
         let result = _mm_mask_cmple_epu64_mask(k, a, b);
         check_int_equality(result as i32, 0)?;
 

@@ -141,7 +141,7 @@ Bad
 fn test_mm_aesimc_si128() -> Result<(), String> {
     #[cfg(target_feature = "aes")]
     unsafe {
-        let a = _mm_set_epi64x(81985529216486895, 18364758544493064720);
+        let a = _mm_set_epi64x(81985529216486895, 18347854449306472);
         let result = _mm_aesimc_si128(a);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
         let a_bytes = std::mem::transmute::<__m128i, [u8; 16]>(a);
@@ -159,7 +159,7 @@ Good
 // Cfg at file level or patching - so remove everything from this functions and 
 fn test_mm_aesimc_si128() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi64x(81985529216486895, 18364758544493064720);
+        let a = _mm_set_epi64x(81985529216486895, 18347854449306472);
         let result = _mm_aesimc_si128(a);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
         let a_bytes = std::mem::transmute::<__m128i, [u8; 16]>(a);

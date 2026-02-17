@@ -265,12 +265,12 @@ pub(super) fn test_mm_maskz_alignr_epi64() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_and_epi32() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi32(255, 255, 0, 0);
-        let b = _mm_set_epi32(255, 0, 255, 0);
+        let a = _mm_set_epi32(111, 111, 0, 0);
+        let b = _mm_set_epi32(111, 0, 111, 0);
         let src = _mm_setzero_si128();
         let r = _mm_mask_and_epi32(src, 15, a, b);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
-        check_array_equality(&out, &[0, 0, 0, 255])?;
+        check_array_equality(&out, &[0, 0, 0, 111])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -288,11 +288,11 @@ pub(super) fn test_mm_mask_and_epi32() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_and_epi32() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi32(255, 255, 0, 0);
-        let b = _mm_set_epi32(255, 0, 255, 0);
+        let a = _mm_set_epi32(111, 111, 0, 0);
+        let b = _mm_set_epi32(111, 0, 111, 0);
         let r = _mm_maskz_and_epi32(15, a, b);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
-        check_array_equality(&out, &[0, 0, 0, 255])?;
+        check_array_equality(&out, &[0, 0, 0, 111])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

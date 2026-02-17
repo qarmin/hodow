@@ -16,10 +16,10 @@ use crate::get_fuzzing;
 pub(super) fn test_mm_packus_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi16(300, 200, 100, 50, 10, 5, 2, 1);
-        let b = _mm_set_epi16(255, 254, 253, 252, -1, -2, -3, -4);
+        let b = _mm_set_epi16(111, 254, 253, 252, -1, -2, -3, -4);
         let result = _mm_packus_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
-        check_array_equality(&result, &[1, 2, 5, 10, 50, 100, 200, 255, 0, 0, 0, 0, 252, 253, 254, 255])?;
+        check_array_equality(&result, &[1, 2, 5, 10, 50, 100, 200, 111, 0, 0, 0, 0, 252, 253, 254, 111])?;
     }
 
     if get_fuzzing() {
@@ -1041,11 +1041,11 @@ pub(super) fn test_mm_xor_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_andnot_si128() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi32(255, 255, 0, 0);
-        let b = _mm_set_epi32(255, 0, 255, 0);
+        let a = _mm_set_epi32(111, 111, 0, 0);
+        let b = _mm_set_epi32(111, 0, 111, 0);
         let result = _mm_andnot_si128(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        check_array_equality(&result, &[0, 255, 0, 0])?;
+        check_array_equality(&result, &[0, 111, 0, 0])?;
     }
 
     if get_fuzzing() {

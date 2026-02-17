@@ -29,8 +29,8 @@ impl ExtensionTest for KL {
 fn test_mm_loadiwkey() -> Result<(), String> {
     unsafe {
         let ctl = 0;
-        let intkey = _mm_set_epi64x(81985529216486895, 18364758544493064720 as i64);
-        let enkey_lo = _mm_set_epi64x(1234605616436508552, 11072869122414935808 as i64);
+        let intkey = _mm_set_epi64x(81985529216486895, 18347854449306472 as i64);
+        let enkey_lo = _mm_set_epi64x(1234605616436508552, 110286122414935808 as i64);
         let enkey_hi = _mm_set_epi64x(4822678189205111, 9843086184167632639 as i64);
         _mm_loadiwkey(ctl, intkey, enkey_lo, enkey_hi);
     }
@@ -54,7 +54,7 @@ fn test_mm_loadiwkey() -> Result<(), String> {
 fn test_mm_encodekey128_u32() -> Result<(), String> {
     unsafe {
         let htype = 1;
-        let key = _mm_set_epi64x(81985529216486895, 18364758544493064720 as i64);
+        let key = _mm_set_epi64x(81985529216486895, 18347854449306472 as i64);
         let mut h_enc_key: [u8; 384] = [0; 384];
         let result = _mm_encodekey128_u32(htype, key, h_enc_key.as_mut_ptr() as *mut u8);
         check_int_equality(result as i32, 0)?; // expected success code 0
@@ -79,8 +79,8 @@ fn test_mm_encodekey128_u32() -> Result<(), String> {
 fn test_mm_encodekey256_u32() -> Result<(), String> {
     unsafe {
         let htype = 1;
-        let key_lo = _mm_set_epi64x(81985529216486895, 18364758544493064720 as i64);
-        let key_hi = _mm_set_epi64x(1234605616436508552, 11072869122414935808 as i64);
+        let key_lo = _mm_set_epi64x(81985529216486895, 18347854449306472 as i64);
+        let key_hi = _mm_set_epi64x(1234605616436508552, 110286122414935808 as i64);
         let mut h_enc_key: [u8; 512] = [0; 512];
         let result = _mm_encodekey256_u32(htype, key_lo, key_hi, h_enc_key.as_mut_ptr() as *mut u8);
         check_int_equality(result as i32, 0)?; // expected success code 0
@@ -106,7 +106,7 @@ fn test_mm_encodekey256_u32() -> Result<(), String> {
 fn test_mm_aesenc128kl_u8() -> Result<(), String> {
     unsafe {
         let mut out = _mm_setzero_si128();
-        let data = _mm_set_epi64x(81985529216486895, 18364758544493064720 as i64);
+        let data = _mm_set_epi64x(81985529216486895, 18347854449306472 as i64);
         let h_key: [u8; 384] = [0; 384];
         let result = _mm_aesenc128kl_u8(&mut out, data, h_key.as_ptr() as *const u8);
         let out_bytes = std::mem::transmute::<__m128i, [u8; 16]>(out);
@@ -133,7 +133,7 @@ fn test_mm_aesenc128kl_u8() -> Result<(), String> {
 fn test_mm_aesdec128kl_u8() -> Result<(), String> {
     unsafe {
         let mut out = _mm_setzero_si128();
-        let data = _mm_set_epi64x(81985529216486895, 18364758544493064720 as i64);
+        let data = _mm_set_epi64x(81985529216486895, 18347854449306472 as i64);
         let h_key: [u8; 384] = [0; 384];
         let result = _mm_aesdec128kl_u8(&mut out, data, h_key.as_ptr() as *const u8);
         let out_bytes = std::mem::transmute::<__m128i, [u8; 16]>(out);
@@ -160,7 +160,7 @@ fn test_mm_aesdec128kl_u8() -> Result<(), String> {
 fn test_mm_aesenc256kl_u8() -> Result<(), String> {
     unsafe {
         let mut out = _mm_setzero_si128();
-        let data = _mm_set_epi64x(81985529216486895, 18364758544493064720 as i64);
+        let data = _mm_set_epi64x(81985529216486895, 18347854449306472 as i64);
         let h_key: [u8; 512] = [0; 512];
         let result = _mm_aesenc256kl_u8(&mut out, data, h_key.as_ptr() as *const u8);
         let out_bytes = std::mem::transmute::<__m128i, [u8; 16]>(out);
@@ -189,7 +189,7 @@ fn test_mm_aesdec256kl_u8() -> Result<(), String> {
         let mut out = _mm_setzero_si128();
         unsafe {
             let mut out = _mm_setzero_si128();
-            let data = _mm_set_epi64x(81985529216486895, 18364758544493064720 as i64);
+            let data = _mm_set_epi64x(81985529216486895, 18347854449306472 as i64);
             let h_key: [u8; 512] = [0; 512];
             let result = _mm_aesdec256kl_u8(&mut out, data, h_key.as_ptr() as *const u8);
             let out_bytes = std::mem::transmute::<__m128i, [u8; 16]>(out);
