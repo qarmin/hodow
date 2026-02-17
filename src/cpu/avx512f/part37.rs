@@ -10,10 +10,10 @@ pub(super) fn test_mm_mask_cmple_epi32_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 2, 4);
         let b = _mm_set_epi32(2, 2, 3, 3);
-        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let k: __mmask8 = 255u8 as __mmask8;
         // masked mask-to-mask intrinsic takes (k, a, b) and returns a mask
         let result = _mm_mask_cmple_epi32_mask(k, a, b);
-        check_int_equality(result as i32, 0b0111)?;
+        check_int_equality(result as i32, 7)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -34,7 +34,7 @@ pub(super) fn test_mm_cmpge_epi32_mask() -> Result<(), String> {
         let a = _mm_set_epi32(4, 3, 2, 1);
         let b = _mm_set_epi32(3, 3, 2, 1);
         let k = _mm_cmpge_epi32_mask(a, b);
-        check_int_equality(k as i32, 0b1111)?;
+        check_int_equality(k as i32, 15)?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -53,9 +53,9 @@ pub(super) fn test_mm_mask_cmpge_epi32_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(4, 3, 2, 1);
         let b = _mm_set_epi32(3, 3, 2, 1);
-        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let k: __mmask8 = 255u8 as __mmask8;
         let result = _mm_mask_cmpge_epi32_mask(k, a, b);
-        check_int_equality(result as i32, 0b1111)?;
+        check_int_equality(result as i32, 15)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -76,7 +76,7 @@ pub(super) fn test_mm_cmpeq_epi32_mask() -> Result<(), String> {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let b = _mm_set_epi32(1, 9, 3, 0);
         let k = _mm_cmpeq_epi32_mask(a, b);
-        check_int_equality(k as i32, 0b0101)?;
+        check_int_equality(k as i32, 5)?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -95,9 +95,9 @@ pub(super) fn test_mm_mask_cmpeq_epi32_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let b = _mm_set_epi32(1, 9, 3, 0);
-        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let k: __mmask8 = 255u8 as __mmask8;
         let result = _mm_mask_cmpeq_epi32_mask(k, a, b);
-        check_int_equality(result as i32, 0b0101)?;
+        check_int_equality(result as i32, 5)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -118,7 +118,7 @@ pub(super) fn test_mm_cmpneq_epi32_mask() -> Result<(), String> {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let b = _mm_set_epi32(1, 9, 3, 0);
         let k = _mm_cmpneq_epi32_mask(a, b);
-        check_int_equality(k as i32, 0b1010)?;
+        check_int_equality(k as i32, 10)?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -137,9 +137,9 @@ pub(super) fn test_mm_mask_cmpneq_epi32_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let b = _mm_set_epi32(1, 9, 3, 0);
-        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let k: __mmask8 = 255u8 as __mmask8;
         let result = _mm_mask_cmpneq_epi32_mask(k, a, b);
-        check_int_equality(result as i32, 0b1010)?;
+        check_int_equality(result as i32, 10)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -161,7 +161,7 @@ pub(super) fn test_mm_cmp_epi32_mask() -> Result<(), String> {
         let b = _mm_set_epi32(1, 9, 3, 0);
         let k = _mm_cmp_epi32_mask::<0>(a, b);
         // follow same assumption as other cmp tests in repo
-        check_int_equality(k as i32, 0b1010)?;
+        check_int_equality(k as i32, 10)?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -180,9 +180,9 @@ pub(super) fn test_mm_mask_cmp_epi32_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let b = _mm_set_epi32(1, 9, 3, 0);
-        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let k: __mmask8 = 255u8 as __mmask8;
         let result = _mm_mask_cmp_epi32_mask::<0>(k, a, b);
-        check_int_equality(result as i32, 0b1010)?;
+        check_int_equality(result as i32, 10)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -202,7 +202,7 @@ pub(super) fn test_mm_mask_cmpgt_epu64_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(3, 4);
         let b = _mm_set_epi64x(2, 2);
-        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let k: __mmask8 = 255u8 as __mmask8;
         let result = _mm_mask_cmpgt_epu64_mask(k, a, b);
         check_int_equality(result as i32, 0)?;
 
@@ -222,7 +222,7 @@ pub(super) fn test_mm_mask_cmple_epu64_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(2, 2);
         let b = _mm_set_epi64x(2, 3);
-        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let k: __mmask8 = 255u8 as __mmask8;
         let result = _mm_mask_cmple_epu64_mask(k, a, b);
         check_int_equality(result as i32, 0)?;
 

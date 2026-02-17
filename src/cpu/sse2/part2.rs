@@ -13,11 +13,11 @@ use crate::get_fuzzing;
 
 pub(super) fn test_mm_or_si128() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi32(0xFF, 0x00, 0x00, 0x00);
-        let b = _mm_set_epi32(0x00, 0xFF, 0x00, 0x00);
+        let a = _mm_set_epi32(255, 0, 0, 0);
+        let b = _mm_set_epi32(0, 255, 0, 0);
         let result = _mm_or_si128(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        check_array_equality(&result, &[0x00, 0x00, 0xFF, 0xFF])?;
+        check_array_equality(&result, &[0, 0, 255, 255])?;
     }
 
     if get_fuzzing() {
@@ -36,11 +36,11 @@ pub(super) fn test_mm_or_si128() -> Result<(), String> {
 
 pub(super) fn test_mm_xor_si128() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi32(0xFF, 0xFF, 0x00, 0x00);
-        let b = _mm_set_epi32(0xFF, 0x00, 0xFF, 0x00);
+        let a = _mm_set_epi32(255, 255, 0, 0);
+        let b = _mm_set_epi32(255, 0, 255, 0);
         let result = _mm_xor_si128(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        check_array_equality(&result, &[0x00, 0xFF, 0xFF, 0x00])?;
+        check_array_equality(&result, &[0, 255, 255, 0])?;
     }
 
     if get_fuzzing() {

@@ -11,7 +11,7 @@ pub(super) fn test_mm_mask_expandloadu_epi32() -> Result<(), String> {
         // Use a simple data array and maskz variant to test behaviour
         let data = [1, 2, 3, 4];
         // _mm_mask_expandloadu_epi32 may not exist on all targets; use _mm_maskz_loadu_epi32-like behavior
-        let r = _mm_maskz_loadu_epi32(0b1111u8, data.as_ptr());
+        let r = _mm_maskz_loadu_epi32(15u8, data.as_ptr());
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
         check_array_equality(&out, &[1, 2, 3, 4])?;
     }
@@ -37,7 +37,7 @@ pub(super) fn test_mm_maskz_expandloadu_epi32() -> Result<(), String> {
 pub(super) fn test_mm_mask_expandloadu_epi64() -> Result<(), String> {
     unsafe {
         let data = [1i64, 2];
-        let r = _mm_maskz_loadu_epi64(0b11u8, data.as_ptr());
+        let r = _mm_maskz_loadu_epi64(3u8, data.as_ptr());
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
         check_array_equality(&out, &[1, 2])?;
     }
@@ -62,7 +62,7 @@ pub(super) fn test_mm_maskz_expandloadu_epi64() -> Result<(), String> {
 pub(super) fn test_mm_mask_expandloadu_ps() -> Result<(), String> {
     unsafe {
         let data = [1.0, 2.0, 3.0, 4.0];
-        let r = _mm_maskz_loadu_ps(0b1111u8, data.as_ptr());
+        let r = _mm_maskz_loadu_ps(15u8, data.as_ptr());
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[1.0, 2.0, 3.0, 4.0])?;
     }
@@ -87,7 +87,7 @@ pub(super) fn test_mm_maskz_expandloadu_ps() -> Result<(), String> {
 pub(super) fn test_mm_mask_expandloadu_pd() -> Result<(), String> {
     unsafe {
         let data = [1.0, 2.0];
-        let r = _mm_maskz_loadu_pd(0b11u8, data.as_ptr());
+        let r = _mm_maskz_loadu_pd(3u8, data.as_ptr());
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
         check_float_array_equality(&out, &[1.0, 2.0])?;
     }

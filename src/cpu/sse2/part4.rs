@@ -363,7 +363,7 @@ pub(super) fn test_mm_unpacklo_epi64() -> Result<(), String> {
 pub(super) fn test_mm_shuffle_epi32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(3, 2, 1, 0);
-        let result = _mm_shuffle_epi32::<0b00011011>(a);
+        let result = _mm_shuffle_epi32::<27>(a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         check_array_equality(&result, &[3, 2, 1, 0])?;
     }
@@ -374,7 +374,7 @@ pub(super) fn test_mm_shuffle_epi32() -> Result<(), String> {
             unsafe {
                 let vals = get_random_i32_array::<4>();
                 let a = _mm_set_epi32(vals[3], vals[2], vals[1], vals[0]);
-                let _ = _mm_shuffle_epi32::<0b00011011>(a);
+                let _ = _mm_shuffle_epi32::<27>(a);
             }
         }
     }
@@ -385,7 +385,7 @@ pub(super) fn test_mm_shuffle_epi32() -> Result<(), String> {
 pub(super) fn test_mm_shufflehi_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi16(7, 6, 5, 4, 3, 2, 1, 0);
-        let result = _mm_shufflehi_epi16::<0b00011011>(a);
+        let result = _mm_shufflehi_epi16::<27>(a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         check_array_equality(&result, &[0, 1, 2, 3, 7, 6, 5, 4])?;
     }
@@ -405,7 +405,7 @@ pub(super) fn test_mm_shufflehi_epi16() -> Result<(), String> {
                     vals[1] as i16,
                     vals[0] as i16,
                 );
-                let _ = _mm_shufflehi_epi16::<0b00011011>(a);
+                let _ = _mm_shufflehi_epi16::<27>(a);
             }
         }
     }
@@ -416,7 +416,7 @@ pub(super) fn test_mm_shufflehi_epi16() -> Result<(), String> {
 pub(super) fn test_mm_shufflelo_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi16(7, 6, 5, 4, 3, 2, 1, 0);
-        let result = _mm_shufflelo_epi16::<0b00011011>(a);
+        let result = _mm_shufflelo_epi16::<27>(a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         check_array_equality(&result, &[3, 2, 1, 0, 4, 5, 6, 7])?;
     }
@@ -436,7 +436,7 @@ pub(super) fn test_mm_shufflelo_epi16() -> Result<(), String> {
                     vals[1] as i16,
                     vals[0] as i16,
                 );
-                let _ = _mm_shufflelo_epi16::<0b00011011>(a);
+                let _ = _mm_shufflelo_epi16::<27>(a);
             }
         }
     }
@@ -1041,8 +1041,8 @@ pub(super) fn test_mm_xor_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_andnot_si128() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi32(0xFF, 0xFF, 0x00, 0x00);
-        let b = _mm_set_epi32(0xFF, 0x00, 0xFF, 0x00);
+        let a = _mm_set_epi32(255, 255, 0, 0);
+        let b = _mm_set_epi32(255, 0, 255, 0);
         let result = _mm_andnot_si128(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         check_array_equality(&result, &[0, 255, 0, 0])?;
@@ -1123,7 +1123,7 @@ pub(super) fn test_mm_sll_epi16() -> Result<(), String> {
             unsafe {
                 let v = get_random_i32_array::<1>();
                 let a = _mm_set1_epi16(v[0] as i16);
-                let count = _mm_set_epi64x(0, (v[0] as i64 & 0x3F) as i64);
+                let count = _mm_set_epi64x(0, (v[0] as i64 & 63) as i64);
                 let _ = _mm_sll_epi16(a, count);
             }
         }
@@ -1147,7 +1147,7 @@ pub(super) fn test_mm_sll_epi32() -> Result<(), String> {
             unsafe {
                 let v = get_random_i32_array::<1>();
                 let a = _mm_set1_epi32(v[0]);
-                let count = _mm_set_epi64x(0, (v[0] as i64 & 0x3F) as i64);
+                let count = _mm_set_epi64x(0, (v[0] as i64 & 63) as i64);
                 let _ = _mm_sll_epi32(a, count);
             }
         }
@@ -1171,7 +1171,7 @@ pub(super) fn test_mm_sll_epi64() -> Result<(), String> {
             unsafe {
                 let v = get_random_i32_array::<1>();
                 let a = _mm_set1_epi64x(v[0] as i64);
-                let count = _mm_set_epi64x(0, (v[0] as i64 & 0x3F) as i64);
+                let count = _mm_set_epi64x(0, (v[0] as i64 & 63) as i64);
                 let _ = _mm_sll_epi64(a, count);
             }
         }

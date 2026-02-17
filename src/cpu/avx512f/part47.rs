@@ -8,7 +8,7 @@ use crate::get_fuzzing;
 
 pub(super) fn test_mm_maskz_getmant_ss() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 0xFF;
+        let k: __mmask8 = 255;
         let a = _mm_set_ss(-3.5f32);
         let r = _mm_maskz_getmant_ss::<0, 0>(k, a, a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
@@ -48,7 +48,7 @@ pub(super) fn test_mm_getmant_sd() -> Result<(), String> {
 pub(super) fn test_mm_mask_getmant_sd() -> Result<(), String> {
     unsafe {
         let src = _mm_set_sd(1.0);
-        let k: __mmask8 = 0x00;
+        let k: __mmask8 = 0;
         let a = _mm_set_sd(-2.0);
         let r = _mm_mask_getmant_sd::<0, 0>(src, k, a, a);
         let result_f64 = _mm_cvtsd_f64(r);
@@ -61,7 +61,7 @@ pub(super) fn test_mm_mask_getmant_sd() -> Result<(), String> {
                 let a_v = get_random_float64_array::<1>();
                 let src_r = _mm_set_sd(src_v[0]);
                 let a_r = _mm_set_sd(a_v[0]);
-                let _ = _mm_mask_getmant_sd::<0, 0>(src_r, 0xFF, a_r, a_r);
+                let _ = _mm_mask_getmant_sd::<0, 0>(src_r, 255, a_r, a_r);
             }
         }
     }
@@ -70,7 +70,7 @@ pub(super) fn test_mm_mask_getmant_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_getmant_sd() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 0x00;
+        let k: __mmask8 = 0;
         let a = _mm_set_sd(-2.5);
         let r = _mm_maskz_getmant_sd::<0, 0>(k, a, a);
         let result_f64 = _mm_cvtsd_f64(r);
@@ -81,7 +81,7 @@ pub(super) fn test_mm_maskz_getmant_sd() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let v = get_random_float64_array::<1>();
                 let a_r = _mm_set_sd(v[0]);
-                let _ = _mm_maskz_getmant_sd::<0, 0>(0xFF, a_r, a_r);
+                let _ = _mm_maskz_getmant_sd::<0, 0>(255, a_r, a_r);
             }
         }
     }
@@ -110,7 +110,7 @@ pub(super) fn test_mm_roundscale_ss() -> Result<(), String> {
 pub(super) fn test_mm_mask_roundscale_ss() -> Result<(), String> {
     unsafe {
         let src = _mm_set_ss(2.0f32);
-        let k: __mmask8 = 0x00;
+        let k: __mmask8 = 0;
         let a = _mm_set_ss(1.5f32);
         let r = _mm_mask_roundscale_ss::<2>(src, k, a, a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
@@ -123,7 +123,7 @@ pub(super) fn test_mm_mask_roundscale_ss() -> Result<(), String> {
                 let a_v = get_random_float32_array::<1>();
                 let src_r = _mm_set_ss(src_v[0]);
                 let a_r = _mm_set_ss(a_v[0]);
-                let _ = _mm_mask_roundscale_ss::<1>(src_r, 0xFF, a_r, a_r);
+                let _ = _mm_mask_roundscale_ss::<1>(src_r, 255, a_r, a_r);
             }
         }
     }
@@ -132,7 +132,7 @@ pub(super) fn test_mm_mask_roundscale_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_roundscale_ss() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 0x00;
+        let k: __mmask8 = 0;
         let a = _mm_set_ss(1.25f32);
         let r = _mm_maskz_roundscale_ss::<2>(k, a, a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
@@ -143,7 +143,7 @@ pub(super) fn test_mm_maskz_roundscale_ss() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let v = get_random_float32_array::<1>();
                 let a_r = _mm_set_ss(v[0]);
-                let _ = _mm_maskz_roundscale_ss::<1>(0xFF, a_r, a_r);
+                let _ = _mm_maskz_roundscale_ss::<1>(255, a_r, a_r);
             }
         }
     }
@@ -172,7 +172,7 @@ pub(super) fn test_mm_roundscale_sd() -> Result<(), String> {
 pub(super) fn test_mm_mask_roundscale_sd() -> Result<(), String> {
     unsafe {
         let src = _mm_set_sd(3.0f64);
-        let k: __mmask8 = 0x00;
+        let k: __mmask8 = 0;
         let a = _mm_set_sd(1.5f64);
         let r = _mm_mask_roundscale_sd::<1>(src, k, a, a);
         let result_f64 = _mm_cvtsd_f64(r);
@@ -185,7 +185,7 @@ pub(super) fn test_mm_mask_roundscale_sd() -> Result<(), String> {
                 let a_v = get_random_float64_array::<1>();
                 let src_r = _mm_set_sd(src_v[0]);
                 let a_r = _mm_set_sd(a_v[0]);
-                let _ = _mm_mask_roundscale_sd::<1>(src_r, 0xFF, a_r, a_r);
+                let _ = _mm_mask_roundscale_sd::<1>(src_r, 255, a_r, a_r);
             }
         }
     }
@@ -194,7 +194,7 @@ pub(super) fn test_mm_mask_roundscale_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_roundscale_sd() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 0x00;
+        let k: __mmask8 = 0;
         let a = _mm_set_sd(2.25f64);
         let r = _mm_maskz_roundscale_sd::<1>(k, a, a);
         let result_f64 = _mm_cvtsd_f64(r);
@@ -205,7 +205,7 @@ pub(super) fn test_mm_maskz_roundscale_sd() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let v = get_random_float64_array::<1>();
                 let a_r = _mm_set_sd(v[0]);
-                let _ = _mm_maskz_roundscale_sd::<1>(0xFF, a_r, a_r);
+                let _ = _mm_maskz_roundscale_sd::<1>(255, a_r, a_r);
             }
         }
     }
@@ -237,7 +237,7 @@ pub(super) fn test_mm_scalef_ss() -> Result<(), String> {
 pub(super) fn test_mm_mask_scalef_ss() -> Result<(), String> {
     unsafe {
         let src = _mm_set_ss(4.0f32);
-        let k: __mmask8 = 0x00;
+        let k: __mmask8 = 0;
         let a = _mm_set_ss(2.0f32);
         let b = _mm_set_ss(3.0f32);
         let r = _mm_mask_scalef_ss(src, k, a, b);
@@ -253,7 +253,7 @@ pub(super) fn test_mm_mask_scalef_ss() -> Result<(), String> {
                 let src_r = _mm_set_ss(src_v[0]);
                 let a_r = _mm_set_ss(a_v[0]);
                 let b_r = _mm_set_ss(b_v[0]);
-                let _ = _mm_mask_scalef_ss(src_r, 0xFF, a_r, b_r);
+                let _ = _mm_mask_scalef_ss(src_r, 255, a_r, b_r);
             }
         }
     }
@@ -262,7 +262,7 @@ pub(super) fn test_mm_mask_scalef_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_scalef_ss() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 0x00;
+        let k: __mmask8 = 0;
         let a = _mm_set_ss(2.0f32);
         let b = _mm_set_ss(3.0f32);
         let r = _mm_maskz_scalef_ss(k, a, b);
@@ -276,7 +276,7 @@ pub(super) fn test_mm_maskz_scalef_ss() -> Result<(), String> {
                 let b_v = get_random_float32_array::<1>();
                 let a_r = _mm_set_ss(a_v[0]);
                 let b_r = _mm_set_ss(b_v[0]);
-                let _ = _mm_maskz_scalef_ss(0xFF, a_r, b_r);
+                let _ = _mm_maskz_scalef_ss(255, a_r, b_r);
             }
         }
     }
@@ -308,7 +308,7 @@ pub(super) fn test_mm_scalef_sd() -> Result<(), String> {
 pub(super) fn test_mm_mask_scalef_sd() -> Result<(), String> {
     unsafe {
         let src = _mm_set_sd(5.0f64);
-        let k: __mmask8 = 0x00;
+        let k: __mmask8 = 0;
         let a = _mm_set_sd(2.0f64);
         let b = _mm_set_sd(3.0f64);
         let r = _mm_mask_scalef_sd(src, k, a, b);
@@ -324,7 +324,7 @@ pub(super) fn test_mm_mask_scalef_sd() -> Result<(), String> {
                 let src_r = _mm_set_sd(src_v[0]);
                 let a_r = _mm_set_sd(a_v[0]);
                 let b_r = _mm_set_sd(b_v[0]);
-                let _ = _mm_mask_scalef_sd(src_r, 0xFF, a_r, b_r);
+                let _ = _mm_mask_scalef_sd(src_r, 255, a_r, b_r);
             }
         }
     }

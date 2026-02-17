@@ -10,7 +10,7 @@ pub(super) fn test_mm_mask_load_ss() -> Result<(), String> {
     unsafe {
         let data = [1.0f32];
         let src = _mm_set1_ps(0.0);
-        let r = _mm_mask_load_ss(src, 0b1u8, data.as_ptr());
+        let r = _mm_mask_load_ss(src, 1u8, data.as_ptr());
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[1.0, 0.0, 0.0, 0.0])?;
 
@@ -28,7 +28,7 @@ pub(super) fn test_mm_mask_load_ss() -> Result<(), String> {
 pub(super) fn test_mm_maskz_load_ss() -> Result<(), String> {
     unsafe {
         let data = [1.0f32];
-        let r = _mm_maskz_load_ss(0b1u8, data.as_ptr());
+        let r = _mm_maskz_load_ss(1u8, data.as_ptr());
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[1.0, 0.0, 0.0, 0.0])?;
 
@@ -47,7 +47,7 @@ pub(super) fn test_mm_mask_load_sd() -> Result<(), String> {
     unsafe {
         let data = [1.0f64];
         let src = _mm_set1_pd(0.0);
-        let r = _mm_mask_load_sd(src, 0b1u8, data.as_ptr());
+        let r = _mm_mask_load_sd(src, 1u8, data.as_ptr());
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
         check_float_array_equality(&out, &[1.0, 0.0])?;
 
@@ -65,7 +65,7 @@ pub(super) fn test_mm_mask_load_sd() -> Result<(), String> {
 pub(super) fn test_mm_maskz_load_sd() -> Result<(), String> {
     unsafe {
         let data = [1.0f64];
-        let r = _mm_maskz_load_sd(0b1u8, data.as_ptr());
+        let r = _mm_maskz_load_sd(1u8, data.as_ptr());
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
         check_float_array_equality(&out, &[1.0, 0.0])?;
 
@@ -84,7 +84,7 @@ pub(super) fn test_mm_mask_storeu_epi32() -> Result<(), String> {
     unsafe {
         let mut data = [0i32; 4];
         let a = _mm_set_epi32(4, 3, 2, 1);
-        _mm_mask_storeu_epi32(data.as_mut_ptr(), 0b1111u8, a);
+        _mm_mask_storeu_epi32(data.as_mut_ptr(), 15u8, a);
         check_array_equality(&data, &[1, 2, 3, 4])?;
 
         if get_fuzzing() {
@@ -103,7 +103,7 @@ pub(super) fn test_mm_mask_storeu_epi64() -> Result<(), String> {
     unsafe {
         let mut data = [0i64; 2];
         let a = _mm_set_epi64x(2, 1);
-        _mm_mask_storeu_epi64(data.as_mut_ptr(), 0b11u8, a);
+        _mm_mask_storeu_epi64(data.as_mut_ptr(), 3u8, a);
         check_array_equality(&data, &[1, 2])?;
 
         if get_fuzzing() {
@@ -122,7 +122,7 @@ pub(super) fn test_mm_mask_storeu_ps() -> Result<(), String> {
     unsafe {
         let mut data = [0.0f32; 4];
         let a = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
-        _mm_mask_storeu_ps(data.as_mut_ptr(), 0b1111u8, a);
+        _mm_mask_storeu_ps(data.as_mut_ptr(), 15u8, a);
         check_float_array_equality(&data, &[1.0, 2.0, 3.0, 4.0])?;
 
         if get_fuzzing() {
@@ -141,7 +141,7 @@ pub(super) fn test_mm_mask_storeu_pd() -> Result<(), String> {
     unsafe {
         let mut data = [0.0f64; 2];
         let a = _mm_set_pd(2.0, 1.0);
-        _mm_mask_storeu_pd(data.as_mut_ptr(), 0b11u8, a);
+        _mm_mask_storeu_pd(data.as_mut_ptr(), 3u8, a);
         check_float_array_equality(&data, &[1.0, 2.0])?;
 
         if get_fuzzing() {
@@ -160,7 +160,7 @@ pub(super) fn test_mm_mask_store_epi32() -> Result<(), String> {
     unsafe {
         let mut data = [0i32; 4];
         let a = _mm_set_epi32(4, 3, 2, 1);
-        _mm_mask_store_epi32(data.as_mut_ptr(), 0b1111u8, a);
+        _mm_mask_store_epi32(data.as_mut_ptr(), 15u8, a);
         check_array_equality(&data, &[1, 2, 3, 4])?;
 
         if get_fuzzing() {
@@ -179,7 +179,7 @@ pub(super) fn test_mm_mask_store_epi64() -> Result<(), String> {
     unsafe {
         let mut data = [0i64; 2];
         let a = _mm_set_epi64x(2, 1);
-        _mm_mask_store_epi64(data.as_mut_ptr(), 0b11u8, a);
+        _mm_mask_store_epi64(data.as_mut_ptr(), 3u8, a);
         check_array_equality(&data, &[1, 2])?;
 
         if get_fuzzing() {
@@ -198,7 +198,7 @@ pub(super) fn test_mm_mask_store_ps() -> Result<(), String> {
     unsafe {
         let mut data = [0.0f32; 4];
         let a = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
-        _mm_mask_store_ps(data.as_mut_ptr(), 0b1111u8, a);
+        _mm_mask_store_ps(data.as_mut_ptr(), 15u8, a);
         check_float_array_equality(&data, &[1.0, 2.0, 3.0, 4.0])?;
 
         if get_fuzzing() {
@@ -217,7 +217,7 @@ pub(super) fn test_mm_mask_store_pd() -> Result<(), String> {
     unsafe {
         let mut data = [0.0f64; 2];
         let a = _mm_set_pd(2.0, 1.0);
-        _mm_mask_store_pd(data.as_mut_ptr(), 0b11u8, a);
+        _mm_mask_store_pd(data.as_mut_ptr(), 3u8, a);
         check_float_array_equality(&data, &[1.0, 2.0])?;
 
         if get_fuzzing() {
@@ -236,7 +236,7 @@ pub(super) fn test_mm_mask_store_ss() -> Result<(), String> {
     unsafe {
         let mut data = [0.0f32; 4];
         let a = _mm_set_ss(1.0);
-        _mm_mask_store_ss(data.as_mut_ptr(), 0b1u8, a);
+        _mm_mask_store_ss(data.as_mut_ptr(), 1u8, a);
         check_float_array_equality(&data, &[1.0, 0.0, 0.0, 0.0])?;
 
         if get_fuzzing() {
@@ -255,7 +255,7 @@ pub(super) fn test_mm_mask_store_sd() -> Result<(), String> {
     unsafe {
         let mut data = [0.0f64; 2];
         let a = _mm_set_sd(1.0);
-        _mm_mask_store_sd(data.as_mut_ptr(), 0b1u8, a);
+        _mm_mask_store_sd(data.as_mut_ptr(), 1u8, a);
         check_float_array_equality(&data, &[1.0, 0.0])?;
 
         if get_fuzzing() {

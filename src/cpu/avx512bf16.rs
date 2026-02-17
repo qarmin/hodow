@@ -37,8 +37,8 @@ impl ExtensionTest for AVX512BF16 {
 
 pub(super) fn test_mm_cvtne2ps_pbh() -> Result<(), String> {
     unsafe {
-        let a_bits: [u16; 8] = [0x3f80, 0x4000, 0x4040, 0x4080, 0x0000, 0x0000, 0x0000, 0x0000];
-        let b_bits: [u16; 8] = [0x0000; 8];
+        let a_bits: [u16; 8] = [16256, 16384, 16448, 16512, 0, 0, 0, 0];
+        let b_bits: [u16; 8] = [0; 8];
         let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
         let b: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits);
 
@@ -69,9 +69,9 @@ pub(super) fn test_mm_cvtne2ps_pbh() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_cvtne2ps_pbh() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 0xFFu8 as __mmask8;
-        let a_bits: [u16; 8] = [0x4080, 0x4040, 0x4000, 0x3f80, 0x0000, 0x0000, 0x0000, 0x0000];
-        let b_bits: [u16; 8] = [0x0000; 8];
+        let k: __mmask8 = 255u8 as __mmask8;
+        let a_bits: [u16; 8] = [16512, 16448, 16384, 16256, 0, 0, 0, 0];
+        let b_bits: [u16; 8] = [0; 8];
         let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
         let b: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits);
 
@@ -103,9 +103,9 @@ pub(super) fn test_mm_mask_cvtne2ps_pbh() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_cvtne2ps_pbh() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 0xFFu8 as __mmask8;
-        let a_bits: [u16; 8] = [0x3f80, 0x4000, 0x4040, 0x4080, 0x0000, 0x0000, 0x0000, 0x0000];
-        let b_bits: [u16; 8] = [0x0000; 8];
+        let k: __mmask8 = 255u8 as __mmask8;
+        let a_bits: [u16; 8] = [16256, 16384, 16448, 16512, 0, 0, 0, 0];
+        let b_bits: [u16; 8] = [0; 8];
         let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
         let b: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits);
 
@@ -138,8 +138,8 @@ pub(super) fn test_mm_maskz_cvtne2ps_pbh() -> Result<(), String> {
 pub(super) fn test_mm_dpbf16_ps() -> Result<(), String> {
     unsafe {
         let src: __m128 = _mm_setzero_ps();
-        let a_bits: [u16; 8] = [0x3f80; 8];
-        let b_bits: [u16; 8] = [0x4000; 8];
+        let a_bits: [u16; 8] = [16256; 8];
+        let b_bits: [u16; 8] = [16384; 8];
         let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
         let b: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits);
         let result_v = _mm_dpbf16_ps(src, a, b);
@@ -170,9 +170,9 @@ pub(super) fn test_mm_dpbf16_ps() -> Result<(), String> {
 pub(super) fn test_mm_mask_dpbf16_ps() -> Result<(), String> {
     unsafe {
         let src: __m128 = _mm_setzero_ps();
-        let k: __mmask8 = 0xFFu8 as __mmask8;
-        let a_bits: [u16; 8] = [0x3f80; 8];
-        let b_bits: [u16; 8] = [0x3f80; 8];
+        let k: __mmask8 = 255u8 as __mmask8;
+        let a_bits: [u16; 8] = [16256; 8];
+        let b_bits: [u16; 8] = [16256; 8];
         let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
         let b: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits);
         let result_v = _mm_mask_dpbf16_ps(src, k, a, b);
@@ -202,10 +202,10 @@ pub(super) fn test_mm_mask_dpbf16_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_dpbf16_ps() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let k: __mmask8 = 255u8 as __mmask8;
         let src: __m128 = _mm_setzero_ps();
-        let a_bits: [u16; 8] = [0x3f80; 8];
-        let b_bits: [u16; 8] = [0x3f80; 8];
+        let a_bits: [u16; 8] = [16256; 8];
+        let b_bits: [u16; 8] = [16256; 8];
         let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
         let b: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits);
         let result_v = _mm_maskz_dpbf16_ps(k, src, a, b);
@@ -264,7 +264,7 @@ pub(super) fn test_mm_cvtpbh_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_cvtpbh_ps() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let k: __mmask8 = 255u8 as __mmask8;
         let vals_f32 = [13.0f32, 12.0, 11.0, 10.0];
         let mut a_bits = [0u16; 8];
         for i in 0..4 {
@@ -295,7 +295,7 @@ pub(super) fn test_mm_mask_cvtpbh_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_cvtpbh_ps() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let k: __mmask8 = 255u8 as __mmask8;
         let vals_f32 = [1.0f32, 0.0, 1.0, 0.0];
         let mut a_bits = [0u16; 8];
         for i in 0..4 {
@@ -345,8 +345,8 @@ pub(super) fn test_mm_cvtsbh_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_cvtneps_pbh() -> Result<(), String> {
     unsafe {
-        let a_bits: [u16; 8] = [0x3f00, 0x3f80, 0x4000, 0x4080, 0, 0, 0, 0];
-        let b_bits: [u16; 8] = [0x0000; 8];
+        let a_bits: [u16; 8] = [16128, 16256, 16384, 16512, 0, 0, 0, 0];
+        let b_bits: [u16; 8] = [0; 8];
         let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
         let b: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits);
         let result_v = _mm_cvtneps_pbh(a, b);
@@ -376,9 +376,9 @@ pub(super) fn test_mm_cvtneps_pbh() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_cvtneps_pbh() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 0xFFu8 as __mmask8;
-        let a_bits: [u16; 8] = [0x40C0, 0x4080, 0x4040, 0x4000, 0, 0, 0, 0];
-        let b_bits: [u16; 8] = [0x0000; 8];
+        let k: __mmask8 = 255u8 as __mmask8;
+        let a_bits: [u16; 8] = [16576, 16512, 16448, 16384, 0, 0, 0, 0];
+        let b_bits: [u16; 8] = [0; 8];
         let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
         let b: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits);
         let src: __m128 = _mm_setzero_ps();
@@ -409,9 +409,9 @@ pub(super) fn test_mm_mask_cvtneps_pbh() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_cvtneps_pbh() -> Result<(), String> {
     unsafe {
-        let k: __mmask8 = 0xFFu8 as __mmask8;
-        let a_bits: [u16; 8] = [0x3f80; 8];
-        let b_bits: [u16; 8] = [0x3f80; 8];
+        let k: __mmask8 = 255u8 as __mmask8;
+        let a_bits: [u16; 8] = [16256; 8];
+        let b_bits: [u16; 8] = [16256; 8];
         let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
         let b: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits);
         let result_v = _mm_maskz_cvtneps_pbh(k, a, b);

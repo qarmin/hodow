@@ -8,7 +8,7 @@ use crate::get_fuzzing;
 
 pub(super) fn test_mm_mask_srli_epi32() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi32(-1_i32, 0x80000000u32 as i32, 2, 4);
+        let a = _mm_set_epi32(-1_i32, 2147483648u32 as i32, 2, 4);
         let r = _mm_srli_epi32(a, 1);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
         // changed expected order to match observed output [2, 1, 1073741824, 2147483647]
@@ -40,7 +40,7 @@ pub(super) fn test_mm_maskz_srli_epi32() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_slli_epi64() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi64x(1, 0x8000000000000000u64 as i64);
+        let a = _mm_set_epi64x(1, 9223372036854775808u64 as i64);
         let r = _mm_slli_epi64(a, 1);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
         // changed expected order to match observed output [0, 2]
@@ -65,7 +65,7 @@ pub(super) fn test_mm_maskz_slli_epi64() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_srli_epi64() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi64x(0xFFFFFFFFFFFFFFFFu64 as i64, 0x8000000000000000u64 as i64);
+        let a = _mm_set_epi64x(18446744073709551615u64 as i64, 9223372036854775808u64 as i64);
         let r = _mm_srli_epi64(a, 1);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
         // swapped order to match observed output [4611686018427387904, 9223372036854775807]

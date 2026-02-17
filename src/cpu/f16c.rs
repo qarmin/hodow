@@ -19,7 +19,7 @@ impl ExtensionTest for F16C {
 
 fn test_mm_cvtph_ps() -> Result<(), String> {
     unsafe {
-        let ph: [u16; 4] = [0x3C00, 0x4000, 0x4200, 0x4400];
+        let ph: [u16; 4] = [15360, 16384, 16896, 17408];
         let a = _mm_set_epi16(0, 0, 0, 0, ph[3] as i16, ph[2] as i16, ph[1] as i16, ph[0] as i16);
         let res = _mm_cvtph_ps(a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(res);

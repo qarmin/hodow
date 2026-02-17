@@ -90,28 +90,28 @@ pub(super) fn test_mm256_mullo_epi32() -> Result<(), String> {
 pub(super) fn test_mm256_and_si256() -> Result<(), String> {
     unsafe {
         let a = _mm256_set_epi32(
-            0xFF00FF00u32 as i32,
-            0xFF00FF00u32 as i32,
-            0xFF00FF00u32 as i32,
-            0xFF00FF00u32 as i32,
-            0xFF00FF00u32 as i32,
-            0xFF00FF00u32 as i32,
-            0xFF00FF00u32 as i32,
-            0xFF00FF00u32 as i32,
+            4278255360u32 as i32,
+            4278255360u32 as i32,
+            4278255360u32 as i32,
+            4278255360u32 as i32,
+            4278255360u32 as i32,
+            4278255360u32 as i32,
+            4278255360u32 as i32,
+            4278255360u32 as i32,
         );
         let b = _mm256_set_epi32(
-            0xFFFF0000u32 as i32,
-            0xFFFF0000u32 as i32,
-            0xFFFF0000u32 as i32,
-            0xFFFF0000u32 as i32,
-            0xFFFF0000u32 as i32,
-            0xFFFF0000u32 as i32,
-            0xFFFF0000u32 as i32,
-            0xFFFF0000u32 as i32,
+            4294901760u32 as i32,
+            4294901760u32 as i32,
+            4294901760u32 as i32,
+            4294901760u32 as i32,
+            4294901760u32 as i32,
+            4294901760u32 as i32,
+            4294901760u32 as i32,
+            4294901760u32 as i32,
         );
         let result = _mm256_and_si256(a, b);
         let result = std::mem::transmute::<__m256i, [u32; 8]>(result);
-        check_array_equality(&result, &[0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000])?;
+        check_array_equality(&result, &[4278190080, 4278190080, 4278190080, 4278190080, 4278190080, 4278190080, 4278190080, 4278190080])?;
     }
 
     if get_fuzzing() {
@@ -134,28 +134,28 @@ pub(super) fn test_mm256_and_si256() -> Result<(), String> {
 pub(super) fn test_mm256_or_si256() -> Result<(), String> {
     unsafe {
         let a = _mm256_set_epi32(
-            0xFF00FF00u32 as i32,
-            0xFF00FF00u32 as i32,
-            0xFF00FF00u32 as i32,
-            0xFF00FF00u32 as i32,
-            0xFF00FF00u32 as i32,
-            0xFF00FF00u32 as i32,
-            0xFF00FF00u32 as i32,
-            0xFF00FF00u32 as i32,
+            4278255360u32 as i32,
+            4278255360u32 as i32,
+            4278255360u32 as i32,
+            4278255360u32 as i32,
+            4278255360u32 as i32,
+            4278255360u32 as i32,
+            4278255360u32 as i32,
+            4278255360u32 as i32,
         );
         let b = _mm256_set_epi32(
-            0x00FF00FFu32 as i32,
-            0x00FF00FFu32 as i32,
-            0x00FF00FFu32 as i32,
-            0x00FF00FFu32 as i32,
-            0x00FF00FFu32 as i32,
-            0x00FF00FFu32 as i32,
-            0x00FF00FFu32 as i32,
-            0x00FF00FFu32 as i32,
+            16711935u32 as i32,
+            16711935u32 as i32,
+            16711935u32 as i32,
+            16711935u32 as i32,
+            16711935u32 as i32,
+            16711935u32 as i32,
+            16711935u32 as i32,
+            16711935u32 as i32,
         );
         let result = _mm256_or_si256(a, b);
         let result = std::mem::transmute::<__m256i, [u32; 8]>(result);
-        check_array_equality(&result, &[0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF])?;
+        check_array_equality(&result, &[4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295, 4294967295])?;
     }
 
     if get_fuzzing() {
@@ -178,28 +178,28 @@ pub(super) fn test_mm256_or_si256() -> Result<(), String> {
 pub(super) fn test_mm256_xor_si256() -> Result<(), String> {
     unsafe {
         let a = _mm256_set_epi32(
-            0xFF00FF00u32 as i32,
-            0xFF00FF00u32 as i32,
-            0xFF00FF00u32 as i32,
-            0xFF00FF00u32 as i32,
-            0xFF00FF00u32 as i32,
-            0xFF00FF00u32 as i32,
-            0xFF00FF00u32 as i32,
-            0xFF00FF00u32 as i32,
+            4278255360u32 as i32,
+            4278255360u32 as i32,
+            4278255360u32 as i32,
+            4278255360u32 as i32,
+            4278255360u32 as i32,
+            4278255360u32 as i32,
+            4278255360u32 as i32,
+            4278255360u32 as i32,
         );
         let b = _mm256_set_epi32(
-            0xFFFF0000u32 as i32,
-            0xFFFF0000u32 as i32,
-            0xFFFF0000u32 as i32,
-            0xFFFF0000u32 as i32,
-            0xFFFF0000u32 as i32,
-            0xFFFF0000u32 as i32,
-            0xFFFF0000u32 as i32,
-            0xFFFF0000u32 as i32,
+            4294901760u32 as i32,
+            4294901760u32 as i32,
+            4294901760u32 as i32,
+            4294901760u32 as i32,
+            4294901760u32 as i32,
+            4294901760u32 as i32,
+            4294901760u32 as i32,
+            4294901760u32 as i32,
         );
         let result = _mm256_xor_si256(a, b);
         let result = std::mem::transmute::<__m256i, [u32; 8]>(result);
-        check_array_equality(&result, &[0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00, 0x00FFFF00])?;
+        check_array_equality(&result, &[16776960, 16776960, 16776960, 16776960, 16776960, 16776960, 16776960, 16776960])?;
     }
 
     if get_fuzzing() {

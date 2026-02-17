@@ -47,7 +47,7 @@ fn test_mm_cmpgt_epi64() -> Result<(), String> {
 fn test_mm_crc32_u8() -> Result<(), String> {
     unsafe {
         let crc = 0u32;
-        let data = 0xFFu8;
+        let data = 255u8;
         let result = _mm_crc32_u8(crc, data);
 
         check_int_equality(result, 2910671697u32)?;
@@ -56,7 +56,7 @@ fn test_mm_crc32_u8() -> Result<(), String> {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let crc: u32 = get_random_i32_array::<4>()[0] as u32;
-                let data: u8 = (get_random_i32_array::<4>()[1] & 0xFF) as u8;
+                let data: u8 = (get_random_i32_array::<4>()[1] & 255) as u8;
                 let _result = _mm_crc32_u8(crc, data);
             }
         }
@@ -68,7 +68,7 @@ fn test_mm_crc32_u8() -> Result<(), String> {
 fn test_mm_crc32_u16() -> Result<(), String> {
     unsafe {
         let crc = 0u32;
-        let data = 0xFFFFu16;
+        let data = 65535u16;
         let result = _mm_crc32_u16(crc, data);
 
         check_int_equality(result, 245266386)?;
@@ -89,7 +89,7 @@ fn test_mm_crc32_u16() -> Result<(), String> {
 fn test_mm_crc32_u32() -> Result<(), String> {
     unsafe {
         let crc = 0u32;
-        let data = 0xFFFFFFFFu32;
+        let data = 4294967295u32;
         let result = _mm_crc32_u32(crc, data);
 
         check_int_equality(result, 3080238136)?;

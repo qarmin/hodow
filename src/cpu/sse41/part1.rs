@@ -28,13 +28,13 @@ pub(super) fn test_mm_blend_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi16(1, 2, 3, 4, 5, 6, 7, 8);
         let b = _mm_set1_epi16(0);
-        let r = _mm_blend_epi16(a, b, 0b10101010);
+        let r = _mm_blend_epi16(a, b, 170);
         let out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(r);
         check_array_equality(&out, &[1i16, 0, 3, 0, 5, 0, 7, 0])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
-                let _ = _mm_blend_epi16(_mm_set1_epi16(get_random_i32_array::<4>()[0] as i16), _mm_set1_epi16(0), 0b10101010);
+                let _ = _mm_blend_epi16(_mm_set1_epi16(get_random_i32_array::<4>()[0] as i16), _mm_set1_epi16(0), 170);
             }
         }
     }
@@ -63,13 +63,13 @@ pub(super) fn test_mm_blend_pd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(1.0, 2.0);
         let b = _mm_set1_pd(0.0);
-        let r = _mm_blend_pd(a, b, 0b01);
+        let r = _mm_blend_pd(a, b, 1);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
         let _ = out;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
-                let _ = _mm_blend_pd(_mm_set1_pd(1.0), _mm_set1_pd(0.0), 0b01);
+                let _ = _mm_blend_pd(_mm_set1_pd(1.0), _mm_set1_pd(0.0), 1);
             }
         }
     }

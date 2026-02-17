@@ -479,7 +479,7 @@ pub(super) fn test_mm_shuffle_ps() -> Result<(), String> {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
 
-        let result = _mm_shuffle_ps::<0x1B>(a, b);
+        let result = _mm_shuffle_ps::<27>(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
 
         check_float_array_equality(&result, &[1.0, 2.0, 7.0, 8.0])?;
@@ -493,7 +493,7 @@ pub(super) fn test_mm_shuffle_ps() -> Result<(), String> {
                 let arr2 = get_random_float32_array::<4>();
                 let vec1 = _mm_set_ps(arr1[3], arr1[2], arr1[1], arr1[0]);
                 let vec2 = _mm_set_ps(arr2[3], arr2[2], arr2[1], arr2[0]);
-                let result = _mm_shuffle_ps::<0x1B>(vec1, vec2);
+                let result = _mm_shuffle_ps::<27>(vec1, vec2);
                 let _result = std::mem::transmute::<__m128, [f32; 4]>(result);
             }
         }

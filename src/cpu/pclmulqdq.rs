@@ -21,7 +21,7 @@ fn test_mm_clmulepi64_si128() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(1, 2);
         let b = _mm_set_epi64x(3, 4);
-        let _ = _mm_clmulepi64_si128(a, b, 0x00);
+        let _ = _mm_clmulepi64_si128(a, b, 0);
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -30,7 +30,7 @@ fn test_mm_clmulepi64_si128() -> Result<(), String> {
                 let _ = _mm_clmulepi64_si128(
                     _mm_set_epi64x(get_random_i32_array::<4>()[0] as i64, get_random_i32_array::<4>()[1] as i64),
                     _mm_set_epi64x(get_random_i32_array::<4>()[2] as i64, get_random_i32_array::<4>()[3] as i64),
-                    0x00,
+                    0,
                 );
             }
         }

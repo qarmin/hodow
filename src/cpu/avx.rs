@@ -607,7 +607,7 @@ fn test_mm_permutevar_ps() -> Result<(), String> {
 fn test_mm_permute_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
-        let r = _mm_permute_ps(a, 0b00_01_10_11);
+        let r = _mm_permute_ps(a, 27);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         crate::cpu::common::check_float_array_equality(&out, &[1.0, 2.0, 3.0, 4.0])?;
     }

@@ -27,7 +27,7 @@ pub(super) fn test_mm_sra_epi16() -> Result<(), String> {
             unsafe {
                 let vals = get_random_i32_array::<1>();
                 let a = _mm_set1_epi16(vals[0] as i16);
-                let count = _mm_set_epi64x(0, ((vals[0] as i64) & 0x3F) as i64);
+                let count = _mm_set_epi64x(0, ((vals[0] as i64) & 63) as i64);
                 let _ = _mm_sra_epi16(a, count);
             }
         }
@@ -51,7 +51,7 @@ pub(super) fn test_mm_sra_epi32() -> Result<(), String> {
             unsafe {
                 let vals = get_random_i32_array::<1>();
                 let a = _mm_set1_epi32(vals[0]);
-                let count = _mm_set_epi64x(0, ((vals[0] as i64) & 0x3F) as i64);
+                let count = _mm_set_epi64x(0, ((vals[0] as i64) & 63) as i64);
                 let _ = _mm_sra_epi32(a, count);
             }
         }
@@ -75,7 +75,7 @@ pub(super) fn test_mm_srl_epi16() -> Result<(), String> {
             unsafe {
                 let vals = get_random_i32_array::<1>();
                 let a = _mm_set1_epi16(vals[0] as i16);
-                let count = _mm_set_epi64x(0, ((vals[0] as i64) & 0x3F) as i64);
+                let count = _mm_set_epi64x(0, ((vals[0] as i64) & 63) as i64);
                 let _ = _mm_srl_epi16(a, count);
             }
         }
@@ -99,7 +99,7 @@ pub(super) fn test_mm_srl_epi32() -> Result<(), String> {
             unsafe {
                 let vals = get_random_i32_array::<1>();
                 let a = _mm_set1_epi32(vals[0]);
-                let count = _mm_set_epi64x(0, ((vals[0] as i64) & 0x3F) as i64);
+                let count = _mm_set_epi64x(0, ((vals[0] as i64) & 63) as i64);
                 let _ = _mm_srl_epi32(a, count);
             }
         }
@@ -123,7 +123,7 @@ pub(super) fn test_mm_srl_epi64() -> Result<(), String> {
             unsafe {
                 let vals = get_random_i32_array::<1>();
                 let a = _mm_set1_epi64x(vals[0] as i64);
-                let count = _mm_set_epi64x(0, ((vals[0] as i64) & 0x3F) as i64);
+                let count = _mm_set_epi64x(0, ((vals[0] as i64) & 63) as i64);
                 let _ = _mm_srl_epi64(a, count);
             }
         }

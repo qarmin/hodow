@@ -24,7 +24,7 @@ impl ExtensionTest for AVX512VPOPCNTDQ {
 // Implementations
 fn test_mm_popcnt_epi32() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi32(0u32 as i32, 1, 3, 0xFFFFFFFFu32 as i32);
+        let a = _mm_set_epi32(0u32 as i32, 1, 3, 4294967295u32 as i32);
         let r = _mm_popcnt_epi32(a);
         let _out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
     }

@@ -31,7 +31,7 @@ impl ExtensionTest for AVX512VBMI {
 
 fn test_mm_permutex2var_epi8() -> Result<(), String> {
     unsafe {
-        let a = _mm_set1_epi8(0x1);
+        let a = _mm_set1_epi8(1);
         let idx = _mm_set_epi8(7, 6, 5, 4, 3, 2, 1, 0, 7, 6, 5, 4, 3, 2, 1, 0);
         let result = _mm_permutex2var_epi8(a, idx, a);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
@@ -73,7 +73,7 @@ fn test_mm_mask_permutex2var_epi8() -> Result<(), String> {
         let a = _mm_set1_epi8(1);
         let idx = _mm_set_epi8(15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
         let b = _mm_set1_epi8(2);
-        let result = _mm_mask_permutex2var_epi8(a, 0xFFFF, idx, b);
+        let result = _mm_mask_permutex2var_epi8(a, 65535, idx, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
         check_array_equality(&result, &[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])?;
 
@@ -103,7 +103,7 @@ fn test_mm_mask_permutex2var_epi8() -> Result<(), String> {
                     idx_vals[0] as i8,
                 );
                 let b = _mm_set1_epi8(b_vals[0] as i8);
-                let _ = _mm_mask_permutex2var_epi8(a, 0xFFFF, idx, b);
+                let _ = _mm_mask_permutex2var_epi8(a, 65535, idx, b);
             }
         }
     }
@@ -116,7 +116,7 @@ fn test_mm_maskz_permutex2var_epi8() -> Result<(), String> {
         let a = _mm_set1_epi8(1);
         let idx = _mm_set_epi8(15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
         let b = _mm_set1_epi8(2);
-        let result = _mm_maskz_permutex2var_epi8(0xFF00, a, idx, b);
+        let result = _mm_maskz_permutex2var_epi8(65280, a, idx, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
 
         check_array_equality(&result, &[0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1])?;
@@ -147,7 +147,7 @@ fn test_mm_maskz_permutex2var_epi8() -> Result<(), String> {
                     idx_vals[0] as i8,
                 );
                 let b = _mm_set1_epi8(b_vals[0] as i8);
-                let _ = _mm_maskz_permutex2var_epi8(0xFF00, a, idx, b);
+                let _ = _mm_maskz_permutex2var_epi8(65280, a, idx, b);
             }
         }
     }
@@ -160,7 +160,7 @@ fn test_mm_mask2_permutex2var_epi8() -> Result<(), String> {
         let a = _mm_set1_epi8(1);
         let idx = _mm_set_epi8(15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
         let b = _mm_set1_epi8(2);
-        let result = _mm_mask2_permutex2var_epi8(a, idx, 0xFFFF, b);
+        let result = _mm_mask2_permutex2var_epi8(a, idx, 65535, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
         check_array_equality(&result, &[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])?;
 
@@ -190,7 +190,7 @@ fn test_mm_mask2_permutex2var_epi8() -> Result<(), String> {
                     idx_vals[0] as i8,
                 );
                 let b = _mm_set1_epi8(b_vals[0] as i8);
-                let _ = _mm_mask2_permutex2var_epi8(a, idx, 0xFFFF, b);
+                let _ = _mm_mask2_permutex2var_epi8(a, idx, 65535, b);
             }
         }
     }
@@ -261,7 +261,7 @@ fn test_mm_mask_permutexvar_epi8() -> Result<(), String> {
         let src = _mm_set1_epi8(99);
         let idx = _mm_set_epi8(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
         let a = _mm_set_epi8(15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
-        let result = _mm_mask_permutexvar_epi8(src, 0xFF00, idx, a);
+        let result = _mm_mask_permutexvar_epi8(src, 65280, idx, a);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
 
         check_array_equality(&result, &[99, 99, 99, 99, 99, 99, 99, 99, 7, 6, 5, 4, 3, 2, 1, 0])?;
@@ -275,7 +275,7 @@ fn test_mm_mask_permutexvar_epi8() -> Result<(), String> {
                 let src = _mm_set1_epi8(src_vals[0] as i8);
                 let a = _mm_set1_epi8(a_vals[0] as i8);
                 let _b = _mm_set_epi64x(b_vals[0] as i64, b_vals[1] as i64);
-                let _ = _mm_mask_permutexvar_epi8(src, 0xFF00, idx, a);
+                let _ = _mm_mask_permutexvar_epi8(src, 65280, idx, a);
             }
         }
     }
@@ -287,7 +287,7 @@ fn test_mm_maskz_permutexvar_epi8() -> Result<(), String> {
     unsafe {
         let idx = _mm_set_epi8(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
         let a = _mm_set_epi8(15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0);
-        let result = _mm_maskz_permutexvar_epi8(0xFF00, idx, a);
+        let result = _mm_maskz_permutexvar_epi8(65280, idx, a);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
 
         check_array_equality(&result, &[0, 0, 0, 0, 0, 0, 0, 0, 7, 6, 5, 4, 3, 2, 1, 0])?;
@@ -333,7 +333,7 @@ fn test_mm_maskz_permutexvar_epi8() -> Result<(), String> {
                     a_vals[1] as i8,
                     a_vals[0] as i8,
                 );
-                let _ = _mm_maskz_permutexvar_epi8(0xFF00, idx, a);
+                let _ = _mm_maskz_permutexvar_epi8(65280, idx, a);
             }
         }
     }
@@ -344,7 +344,7 @@ fn test_mm_maskz_permutexvar_epi8() -> Result<(), String> {
 fn test_mm_multishift_epi64_epi8() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_epi8(0);
-        let b = _mm_set_epi64x(0x0102030405060708u64 as i64, 0x090A0B0C0D0E0F10u64 as i64);
+        let b = _mm_set_epi64x(72623859790382856u64 as i64, 651345242494996240u64 as i64);
         let result = _mm_multishift_epi64_epi8(a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
 
@@ -369,8 +369,8 @@ fn test_mm_mask_multishift_epi64_epi8() -> Result<(), String> {
     unsafe {
         let src = _mm_set1_epi8(99);
         let a = _mm_set1_epi8(0);
-        let b = _mm_set_epi64x(0x0102030405060708u64 as i64, 0x090A0B0C0D0E0F10u64 as i64);
-        let result = _mm_mask_multishift_epi64_epi8(src, 0xFF00, a, b);
+        let b = _mm_set_epi64x(72623859790382856u64 as i64, 651345242494996240u64 as i64);
+        let result = _mm_mask_multishift_epi64_epi8(src, 65280, a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
 
         check_array_equality(&result, &[99, 99, 99, 99, 99, 99, 99, 99, 8, 8, 8, 8, 8, 8, 8, 8])?;
@@ -384,7 +384,7 @@ fn test_mm_mask_multishift_epi64_epi8() -> Result<(), String> {
                 let src = _mm_set1_epi8(src_vals[0] as i8);
                 let a = _mm_set1_epi8(a_vals[0] as i8);
                 let b = _mm_set_epi64x(b_vals[0] as i64, b_vals[1] as i64);
-                let _ = _mm_mask_multishift_epi64_epi8(src, 0xFF00, a, b);
+                let _ = _mm_mask_multishift_epi64_epi8(src, 65280, a, b);
             }
         }
     }
@@ -395,8 +395,8 @@ fn test_mm_mask_multishift_epi64_epi8() -> Result<(), String> {
 fn test_mm_maskz_multishift_epi64_epi8() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_epi8(0);
-        let b = _mm_set_epi64x(0x0102030405060708u64 as i64, 0x090A0B0C0D0E0F10u64 as i64);
-        let result = _mm_maskz_multishift_epi64_epi8(0xFF00, a, b);
+        let b = _mm_set_epi64x(72623859790382856u64 as i64, 651345242494996240u64 as i64);
+        let result = _mm_maskz_multishift_epi64_epi8(65280, a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
 
         check_array_equality(&result, &[0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 8, 8, 8, 8])?;
@@ -408,7 +408,7 @@ fn test_mm_maskz_multishift_epi64_epi8() -> Result<(), String> {
                 let b_vals = get_random_i64_array::<2>();
                 let a = _mm_set1_epi8(a_vals[0] as i8);
                 let b = _mm_set_epi64x(b_vals[0] as i64, b_vals[1] as i64);
-                let _ = _mm_maskz_multishift_epi64_epi8(0xFF00, a, b);
+                let _ = _mm_maskz_multishift_epi64_epi8(65280, a, b);
             }
         }
     }

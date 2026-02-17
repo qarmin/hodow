@@ -108,7 +108,7 @@ fn test_mm_mask_madd52hi_epu64() -> Result<(), String> {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
         let c = _mm_set1_epi64x(100);
-        let result = _mm_mask_madd52hi_epu64(a, 0x3, b, c);
+        let result = _mm_mask_madd52hi_epu64(a, 3, b, c);
         let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
         check_array_equality(&result, &[1000u64, 1000u64])?;
     }
@@ -120,7 +120,7 @@ fn test_mm_mask_madd52hi_epu64() -> Result<(), String> {
                 let a = _mm_set1_epi64x(rand::random());
                 let b = _mm_set1_epi64x(rand::random());
                 let c = _mm_set1_epi64x(rand::random());
-                let _ = _mm_mask_madd52hi_epu64(a, 0x3, b, c);
+                let _ = _mm_mask_madd52hi_epu64(a, 3, b, c);
             }
         }
     }
@@ -133,7 +133,7 @@ fn test_mm_maskz_madd52hi_epu64() -> Result<(), String> {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
         let c = _mm_set1_epi64x(100);
-        let result = _mm_maskz_madd52hi_epu64(0x3, a, b, c);
+        let result = _mm_maskz_madd52hi_epu64(3, a, b, c);
         let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
         check_array_equality(&result, &[1000u64, 1000u64])?;
     }
@@ -145,7 +145,7 @@ fn test_mm_maskz_madd52hi_epu64() -> Result<(), String> {
                 let a = _mm_set1_epi64x(rand::random());
                 let b = _mm_set1_epi64x(rand::random());
                 let c = _mm_set1_epi64x(rand::random());
-                let _ = _mm_maskz_madd52hi_epu64(0x3, a, b, c);
+                let _ = _mm_maskz_madd52hi_epu64(3, a, b, c);
             }
         }
     }
@@ -183,7 +183,7 @@ fn test_mm_mask_madd52lo_epu64() -> Result<(), String> {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
         let c = _mm_set1_epi64x(100);
-        let result = _mm_mask_madd52lo_epu64(a, 0x3, b, c);
+        let result = _mm_mask_madd52lo_epu64(a, 3, b, c);
         let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
         check_array_equality(&result, &[201000, 201000])?;
     }
@@ -195,7 +195,7 @@ fn test_mm_mask_madd52lo_epu64() -> Result<(), String> {
                 let a = _mm_set1_epi64x(rand::random());
                 let b = _mm_set1_epi64x(rand::random());
                 let c = _mm_set1_epi64x(rand::random());
-                let _ = _mm_mask_madd52lo_epu64(a, 0x3, b, c);
+                let _ = _mm_mask_madd52lo_epu64(a, 3, b, c);
             }
         }
     }
@@ -208,7 +208,7 @@ fn test_mm_maskz_madd52lo_epu64() -> Result<(), String> {
         let a = _mm_set1_epi64x(1000);
         let b = _mm_set1_epi64x(2000);
         let c = _mm_set1_epi64x(100);
-        let result = _mm_maskz_madd52lo_epu64(0x3, a, b, c);
+        let result = _mm_maskz_madd52lo_epu64(3, a, b, c);
         let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
         check_array_equality(&result, &[201000, 201000])?;
     }
@@ -220,7 +220,7 @@ fn test_mm_maskz_madd52lo_epu64() -> Result<(), String> {
                 let a = _mm_set1_epi64x(rand::random());
                 let b = _mm_set1_epi64x(rand::random());
                 let c = _mm_set1_epi64x(rand::random());
-                let _ = _mm_maskz_madd52lo_epu64(0x3, a, b, c);
+                let _ = _mm_maskz_madd52lo_epu64(3, a, b, c);
             }
         }
     }

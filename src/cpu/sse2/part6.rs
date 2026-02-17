@@ -266,7 +266,7 @@ pub(super) fn test_mm_cvtpd_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_cvtps_pd() -> Result<(), String> {
     unsafe {
-        let ints = _mm_set_epi32(0, 0, 0x40000000, 0x3f800000);
+        let ints = _mm_set_epi32(0, 0, 1073741824, 1065353216);
         let a = _mm_castsi128_ps(ints);
         let result = _mm_cvtps_pd(a);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
@@ -310,7 +310,7 @@ pub(super) fn test_mm_cvtsd_si32() -> Result<(), String> {
 
 pub(super) fn test_mm_cvtsd_ss() -> Result<(), String> {
     unsafe {
-        let a_int = _mm_set_epi32(0, 0, 0, 0x3f800000);
+        let a_int = _mm_set_epi32(0, 0, 0, 1065353216);
         let a = _mm_castsi128_ps(a_int);
         let b = _mm_set_sd(42.5);
         let result = _mm_cvtsd_ss(a, b);
@@ -336,7 +336,7 @@ pub(super) fn test_mm_cvtsd_ss() -> Result<(), String> {
 pub(super) fn test_mm_cvtss_sd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_sd(1.0);
-        let b_int = _mm_set_epi32(0, 0, 0, 0x422a0000);
+        let b_int = _mm_set_epi32(0, 0, 0, 1110048768);
         let b = _mm_castsi128_ps(b_int);
         let result = _mm_cvtss_sd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
@@ -679,7 +679,7 @@ pub(super) fn test_mm_shuffle_pd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(2.0, 1.0);
         let b = _mm_set_pd(4.0, 3.0);
-        let result = _mm_shuffle_pd::<0b10>(a, b);
+        let result = _mm_shuffle_pd::<2>(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
         check_float_array_equality(&result, &[0.0])?;
     }
@@ -692,7 +692,7 @@ pub(super) fn test_mm_shuffle_pd() -> Result<(), String> {
                 let b_vals = get_random_float64_array::<2>();
                 let a = _mm_set_pd(a_vals[1], a_vals[0]);
                 let b = _mm_set_pd(b_vals[1], b_vals[0]);
-                let _ = _mm_shuffle_pd::<0b10>(a, b);
+                let _ = _mm_shuffle_pd::<2>(a, b);
             }
         }
     }
@@ -769,7 +769,7 @@ pub(super) fn test_mm_castpd_si128() -> Result<(), String> {
 
 pub(super) fn test_mm_castps_pd() -> Result<(), String> {
     unsafe {
-        let a_int = _mm_set_epi32(0x40800000, 0x40400000, 0x40000000, 0x3f800000);
+        let a_int = _mm_set_epi32(1082130432, 1077936128, 1073741824, 1065353216);
         let a = _mm_castsi128_ps(a_int);
         let result = _mm_castps_pd(a);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
@@ -792,12 +792,12 @@ pub(super) fn test_mm_castps_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_castps_si128() -> Result<(), String> {
     unsafe {
-        let a_int = _mm_set_epi32(0x40800000, 0x40400000, 0x40000000, 0x3f800000);
+        let a_int = _mm_set_epi32(1082130432, 1077936128, 1073741824, 1065353216);
         let a = _mm_castsi128_ps(a_int);
         let result = _mm_castps_si128(a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
 
-        check_array_equality(&result, &[0x3f800000, 0x40000000, 0x40400000, 0x40800000])?;
+        check_array_equality(&result, &[1065353216, 1073741824, 1077936128, 1082130432])?;
     }
 
     if get_fuzzing() {

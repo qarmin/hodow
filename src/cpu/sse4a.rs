@@ -14,7 +14,7 @@ impl ExtensionTest for SSE4A {
 }
 
 fn test_mm_extract_si64() -> Result<(), String> {
-    let x: i64 = 0x1234_5678_9ABC_DEF0;
+    let x: i64 = 1311768467463790320;
     let _ = x;
     if crate::get_fuzzing() {
         info!("Starting fuzzing");

@@ -164,11 +164,11 @@ pub(super) fn test_mm_dp_pd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(1.0, 2.0);
         let b = _mm_set_pd(3.0, 4.0);
-        let _res = _mm_dp_pd(a, b, 0xFF);
+        let _res = _mm_dp_pd(a, b, 255);
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
-                let _ = _mm_dp_pd(a, b, 0xFF);
+                let _ = _mm_dp_pd(a, b, 255);
             }
         }
     }

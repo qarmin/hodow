@@ -25,7 +25,7 @@ pub(super) fn test_mm_mask_reduce_mul_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm_reduce_or_epi16() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi16(0x1, 0x2, 0x4, 0x8, 0x10, 0x20, 0x40, 0x80);
+        let a = _mm_set_epi16(1, 2, 4, 8, 16, 32, 64, 128);
         let r = _mm_reduce_or_epi16(a);
         let _ = r;
     }
@@ -137,7 +137,7 @@ pub(super) fn test_mm_mask_loadu_epi16() -> Result<(), String> {
     unsafe {
         let data = [1i16, 2, 3, 4, 5, 6, 7, 8];
         // mask is __mmask8 -> use u8 literal
-        let r = _mm_mask_loadu_epi16(_mm_set1_epi16(0), 0b1111u8, data.as_ptr());
+        let r = _mm_mask_loadu_epi16(_mm_set1_epi16(0), 15u8, data.as_ptr());
         let _out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(r);
     }
     if get_fuzzing() {
@@ -159,7 +159,7 @@ pub(super) fn test_mm_mask_loadu_epi8() -> Result<(), String> {
     unsafe {
         let data = [1i8, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
         // mask is __mmask16 -> use u16 literal
-        let r = _mm_mask_loadu_epi8(_mm_set1_epi8(0), 0b1111u16, data.as_ptr());
+        let r = _mm_mask_loadu_epi8(_mm_set1_epi8(0), 15u16, data.as_ptr());
         let _out: [i8; 16] = std::mem::transmute::<__m128i, [i8; 16]>(r);
     }
     if get_fuzzing() {
@@ -182,7 +182,7 @@ pub(super) fn test_mm_mask_storeu_epi16() -> Result<(), String> {
         let a = _mm_set_epi16(1, 2, 3, 4, 5, 6, 7, 8);
         let mut buf = [0i16; 8];
         // mask is __mmask8 -> use u8 literal
-        _mm_mask_storeu_epi16(buf.as_mut_ptr(), 0b1111u8, a);
+        _mm_mask_storeu_epi16(buf.as_mut_ptr(), 15u8, a);
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -201,7 +201,7 @@ pub(super) fn test_mm_mask_storeu_epi8() -> Result<(), String> {
         let a = _mm_set_epi8(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
         let mut buf = [0i8; 16];
         // mask is __mmask16 -> use u16 literal
-        _mm_mask_storeu_epi8(buf.as_mut_ptr(), 0b1111u16, a);
+        _mm_mask_storeu_epi8(buf.as_mut_ptr(), 15u16, a);
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

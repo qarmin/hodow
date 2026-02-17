@@ -90,7 +90,7 @@ pub(super) fn test_mm_mask_reduce_add_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm_reduce_and_epi16() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi16(0x02, 0x0, 0xFF, 0x0, 0xAB, 0x0, 0xC, 0x0);
+        let a = _mm_set_epi16(2, 0, 255, 0, 171, 0, 12, 0);
         let r = _mm_reduce_and_epi16(a);
         let _ = r;
     }
@@ -111,7 +111,7 @@ pub(super) fn test_mm_mask_reduce_and_epi16() -> Result<(), String> {
 
 pub(super) fn test_mm_reduce_and_epi8() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi8(0x26, 0x0, 0x25, 0x0, 0x22, 0x0, 0x02, 0x0, 0x18, 0x0, 0x12, 0x0, 0x16, 0x0, 0x17, 0x0);
+        let a = _mm_set_epi8(38, 0, 37, 0, 34, 0, 2, 0, 24, 0, 18, 0, 22, 0, 23, 0);
         let r = _mm_reduce_and_epi8(a);
         let _ = r;
     }

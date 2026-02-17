@@ -98,9 +98,9 @@ pub(super) fn test_mm_mask_set1_epi16() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_set1_epi16() -> Result<(), String> {
     unsafe {
-        let v = _mm_set1_epi16(0x7FFF);
+        let v = _mm_set1_epi16(32767);
         let out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(v);
-        check_array_equality(&out, &[0x7FFFi16; 8])?;
+        check_array_equality(&out, &[32767i16; 8])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

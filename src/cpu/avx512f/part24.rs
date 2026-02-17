@@ -9,7 +9,7 @@ use crate::get_fuzzing;
 pub(super) fn test_mm_maskz_expand_pd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(1.0, 2.0);
-        let m: u8 = 0b11u8;
+        let m: u8 = 3u8;
         let r = _mm_maskz_expand_pd(m, a);
         let result: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
         check_array_equality(&result, &[1.0, 2.0])?;
@@ -52,7 +52,7 @@ pub(super) fn test_mm_mask_rol_epi32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let src = _mm_setzero_si128();
-        let m: u8 = 0b1111u8;
+        let m: u8 = 15u8;
         let r = _mm_mask_rol_epi32::<1>(src, m, a);
         let result: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
         check_array_equality(&result, &[2, 4, 6, 8])?;
@@ -74,7 +74,7 @@ pub(super) fn test_mm_mask_rol_epi32() -> Result<(), String> {
 pub(super) fn test_mm_maskz_rol_epi32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
-        let m: u8 = 0b1111u8;
+        let m: u8 = 15u8;
         let r = _mm_maskz_rol_epi32::<1>(m, a);
         let result: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
         check_array_equality(&result, &[2, 4, 6, 8])?;
@@ -117,7 +117,7 @@ pub(super) fn test_mm_mask_ror_epi32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(16, 8, 4, 2);
         let src = _mm_setzero_si128();
-        let m: u8 = 0b1111u8;
+        let m: u8 = 15u8;
         let r = _mm_mask_ror_epi32::<1>(src, m, a);
         let result: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
         check_array_equality(&result, &[8, 4, 2, 1])?;
@@ -139,7 +139,7 @@ pub(super) fn test_mm_mask_ror_epi32() -> Result<(), String> {
 pub(super) fn test_mm_maskz_ror_epi32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(16, 8, 4, 2);
-        let m: u8 = 0b1111u8;
+        let m: u8 = 15u8;
         let r = _mm_maskz_ror_epi32::<1>(m, a);
         let result: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
         check_array_equality(&result, &[8, 4, 2, 1])?;
@@ -182,7 +182,7 @@ pub(super) fn test_mm_mask_rol_epi64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(1, 2);
         let src = _mm_setzero_si128();
-        let m: u8 = 0b11u8;
+        let m: u8 = 3u8;
         let r = _mm_mask_rol_epi64::<1>(src, m, a);
         let result: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
         check_array_equality(&result, &[2, 4])?;
@@ -204,7 +204,7 @@ pub(super) fn test_mm_mask_rol_epi64() -> Result<(), String> {
 pub(super) fn test_mm_maskz_rol_epi64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(1, 2);
-        let m: u8 = 0b11u8;
+        let m: u8 = 3u8;
         let r = _mm_maskz_rol_epi64::<1>(m, a);
         let result: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
         check_array_equality(&result, &[2, 4])?;
@@ -247,7 +247,7 @@ pub(super) fn test_mm_mask_ror_epi64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(16, 8);
         let src = _mm_setzero_si128();
-        let m: u8 = 0b11u8;
+        let m: u8 = 3u8;
         let r = _mm_mask_ror_epi64::<1>(src, m, a);
         let result: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
         check_array_equality(&result, &[8, 4])?;
@@ -269,7 +269,7 @@ pub(super) fn test_mm_mask_ror_epi64() -> Result<(), String> {
 pub(super) fn test_mm_maskz_ror_epi64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(16, 8);
-        let m: u8 = 0b11u8;
+        let m: u8 = 3u8;
         let r = _mm_maskz_ror_epi64::<1>(m, a);
         let result: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
         check_array_equality(&result, &[8, 4])?;
@@ -291,7 +291,7 @@ pub(super) fn test_mm_mask_slli_epi32() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_epi32(1);
         let src = _mm_setzero_si128();
-        let m: u8 = 0b1111u8;
+        let m: u8 = 15u8;
         let r = _mm_mask_slli_epi32::<3>(src, m, a);
         let result: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
         check_array_equality(&result, &[8, 8, 8, 8])?;
@@ -312,7 +312,7 @@ pub(super) fn test_mm_mask_slli_epi32() -> Result<(), String> {
 pub(super) fn test_mm_maskz_slli_epi32() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_epi32(1);
-        let m: u8 = 0b1111u8;
+        let m: u8 = 15u8;
         let r = _mm_maskz_slli_epi32::<3>(m, a);
         let result: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
         check_array_equality(&result, &[8, 8, 8, 8])?;

@@ -120,7 +120,7 @@ pub(super) fn test_mm_blend_epi32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let b = _mm_set_epi32(5, 6, 7, 8);
-        let result = _mm_blend_epi32::<0b1010>(a, b);
+        let result = _mm_blend_epi32::<10>(a, b);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
         check_array_equality(&result, &[4, 7, 2, 5])?;
     }
@@ -131,7 +131,7 @@ pub(super) fn test_mm_blend_epi32() -> Result<(), String> {
             unsafe {
                 let a = _mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random());
                 let b = _mm_set_epi32(rand::random(), rand::random(), rand::random(), rand::random());
-                let _ = _mm_blend_epi32::<0b1010>(a, b);
+                let _ = _mm_blend_epi32::<10>(a, b);
             }
         }
     }

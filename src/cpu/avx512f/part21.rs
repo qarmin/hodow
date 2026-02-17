@@ -10,7 +10,7 @@ pub(super) fn test_mm_mask_cvttpd_epu32() -> Result<(), String> {
     unsafe {
         let src = _mm_setzero_si128();
         let a = _mm_set_pd(2.9, 1.9);
-        let r = _mm_mask_cvttpd_epu32(src, 0x3, a);
+        let r = _mm_mask_cvttpd_epu32(src, 3, a);
         let out: [u32; 4] = std::mem::transmute::<__m128i, [u32; 4]>(r);
         check_array_equality(&out, &[1, 2, 0, 0])?;
 
@@ -19,7 +19,7 @@ pub(super) fn test_mm_mask_cvttpd_epu32() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let vals = get_random_float64_array::<2>();
                 let a_r = _mm_set_pd(vals[1], vals[0]);
-                let _ = _mm_mask_cvttpd_epu32(src, 0x3, a_r);
+                let _ = _mm_mask_cvttpd_epu32(src, 3, a_r);
             }
         }
     }
@@ -29,7 +29,7 @@ pub(super) fn test_mm_mask_cvttpd_epu32() -> Result<(), String> {
 pub(super) fn test_mm_maskz_cvttpd_epu32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(2.9, 1.9);
-        let r = _mm_maskz_cvttpd_epu32(0x3, a);
+        let r = _mm_maskz_cvttpd_epu32(3, a);
         let out: [u32; 4] = std::mem::transmute::<__m128i, [u32; 4]>(r);
         check_array_equality(&out, &[1, 2, 0, 0])?;
 
@@ -38,7 +38,7 @@ pub(super) fn test_mm_maskz_cvttpd_epu32() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let vals = get_random_float64_array::<2>();
                 let a_r = _mm_set_pd(vals[1], vals[0]);
-                let _ = _mm_maskz_cvttpd_epu32(0x3, a_r);
+                let _ = _mm_maskz_cvttpd_epu32(3, a_r);
             }
         }
     }

@@ -9,7 +9,7 @@ use crate::get_fuzzing;
 pub(super) fn test_mm_mask_shuffle_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
-        let r = _mm_shuffle_ps(a, a, 0b11_10_01_00);
+        let r = _mm_shuffle_ps(a, a, 228);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[4.0, 3.0, 2.0, 1.0])?;
 
@@ -18,7 +18,7 @@ pub(super) fn test_mm_mask_shuffle_ps() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let ra = get_random_float32_array::<4>();
                 let v = _mm_set_ps(ra[3], ra[2], ra[1], ra[0]);
-                let _ = _mm_shuffle_ps(v, v, 0b10_11_00_01);
+                let _ = _mm_shuffle_ps(v, v, 177);
             }
         }
     }
@@ -28,7 +28,7 @@ pub(super) fn test_mm_mask_shuffle_ps() -> Result<(), String> {
 pub(super) fn test_mm_maskz_shuffle_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(8.0, 7.0, 6.0, 5.0);
-        let r = _mm_shuffle_ps(a, a, 0b11_10_01_00);
+        let r = _mm_shuffle_ps(a, a, 228);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[8.0, 7.0, 6.0, 5.0])?;
 
@@ -37,7 +37,7 @@ pub(super) fn test_mm_maskz_shuffle_ps() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let ra = get_random_float32_array::<4>();
                 let v = _mm_set_ps(ra[3], ra[2], ra[1], ra[0]);
-                let _ = _mm_shuffle_ps(v, v, 0b01_00_11_10);
+                let _ = _mm_shuffle_ps(v, v, 78);
             }
         }
     }
@@ -86,7 +86,7 @@ pub(super) fn test_mm_mask_moveldup_ps() -> Result<(), String> {
     unsafe {
         // Using a deterministic shuffle as an equivalent operation for moveldup
         let a = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
-        let r = _mm_shuffle_ps(a, a, 0b11_10_01_00);
+        let r = _mm_shuffle_ps(a, a, 228);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[4.0, 3.0, 2.0, 1.0])?;
 
@@ -95,7 +95,7 @@ pub(super) fn test_mm_mask_moveldup_ps() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let ra = get_random_float32_array::<4>();
                 let v = _mm_set_ps(ra[3], ra[2], ra[1], ra[0]);
-                let _ = _mm_shuffle_ps(v, v, 0b00_01_10_11);
+                let _ = _mm_shuffle_ps(v, v, 27);
             }
         }
     }
@@ -105,7 +105,7 @@ pub(super) fn test_mm_mask_moveldup_ps() -> Result<(), String> {
 pub(super) fn test_mm_maskz_moveldup_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(8.0, 7.0, 6.0, 5.0);
-        let r = _mm_shuffle_ps(a, a, 0b11_10_01_00);
+        let r = _mm_shuffle_ps(a, a, 228);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[8.0, 7.0, 6.0, 5.0])?;
 
@@ -114,7 +114,7 @@ pub(super) fn test_mm_maskz_moveldup_ps() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let ra = get_random_float32_array::<4>();
                 let v = _mm_set_ps(ra[3], ra[2], ra[1], ra[0]);
-                let _ = _mm_shuffle_ps(v, v, 0b10_11_00_01);
+                let _ = _mm_shuffle_ps(v, v, 177);
             }
         }
     }
@@ -125,7 +125,7 @@ pub(super) fn test_mm_mask_movehdup_ps() -> Result<(), String> {
     unsafe {
         // Using shuffle as equivalent to movehdup for deterministic check
         let a = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
-        let r = _mm_shuffle_ps(a, a, 0b11_10_01_00);
+        let r = _mm_shuffle_ps(a, a, 228);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[4.0, 3.0, 2.0, 1.0])?;
 
@@ -134,7 +134,7 @@ pub(super) fn test_mm_mask_movehdup_ps() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let ra = get_random_float32_array::<4>();
                 let v = _mm_set_ps(ra[3], ra[2], ra[1], ra[0]);
-                let _ = _mm_shuffle_ps(v, v, 0b01_00_11_10);
+                let _ = _mm_shuffle_ps(v, v, 78);
             }
         }
     }
@@ -144,7 +144,7 @@ pub(super) fn test_mm_mask_movehdup_ps() -> Result<(), String> {
 pub(super) fn test_mm_maskz_movehdup_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(8.0, 7.0, 6.0, 5.0);
-        let r = _mm_shuffle_ps(a, a, 0b11_10_01_00);
+        let r = _mm_shuffle_ps(a, a, 228);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[8.0, 7.0, 6.0, 5.0])?;
 
@@ -153,7 +153,7 @@ pub(super) fn test_mm_maskz_movehdup_ps() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let ra = get_random_float32_array::<4>();
                 let v = _mm_set_ps(ra[3], ra[2], ra[1], ra[0]);
-                let _ = _mm_shuffle_ps(v, v, 0b00_01_10_11);
+                let _ = _mm_shuffle_ps(v, v, 27);
             }
         }
     }

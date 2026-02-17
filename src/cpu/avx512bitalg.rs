@@ -29,7 +29,7 @@ impl ExtensionTest for AVX512BITALG {
 
 fn test_mm_popcnt_epi16() -> Result<(), String> {
     unsafe {
-        let a = _mm_set1_epi16(0b1111_0000_1010_0101u16 as i16);
+        let a = _mm_set1_epi16(61605u16 as i16);
         let result = _mm_popcnt_epi16(a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         check_array_equality(&result, &[8; 8])?;
@@ -50,8 +50,8 @@ fn test_mm_popcnt_epi16() -> Result<(), String> {
 
 fn test_mm_maskz_popcnt_epi16() -> Result<(), String> {
     unsafe {
-        let a = _mm_set1_epi16(0b1111_1111i16);
-        let result = _mm_maskz_popcnt_epi16(0b11110000, a);
+        let a = _mm_set1_epi16(255i16);
+        let result = _mm_maskz_popcnt_epi16(240, a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         check_array_equality(&result, &[0, 0, 0, 0, 8, 8, 8, 8])?;
     }
@@ -72,8 +72,8 @@ fn test_mm_maskz_popcnt_epi16() -> Result<(), String> {
 fn test_mm_mask_popcnt_epi16() -> Result<(), String> {
     unsafe {
         let src = _mm_set1_epi16(100);
-        let a = _mm_set1_epi16(0b1111_1111i16);
-        let result = _mm_mask_popcnt_epi16(src, 0b11110000, a);
+        let a = _mm_set1_epi16(255i16);
+        let result = _mm_mask_popcnt_epi16(src, 240, a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
         check_array_equality(&result, &[100, 100, 100, 100, 8, 8, 8, 8])?;
     }
@@ -94,7 +94,7 @@ fn test_mm_mask_popcnt_epi16() -> Result<(), String> {
 
 fn test_mm_popcnt_epi8() -> Result<(), String> {
     unsafe {
-        let a = _mm_set1_epi8(0b1111_0000u8 as i8);
+        let a = _mm_set1_epi8(240u8 as i8);
         let result = _mm_popcnt_epi8(a);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
         check_array_equality(&result, &[4; 16])?;
@@ -115,8 +115,8 @@ fn test_mm_popcnt_epi8() -> Result<(), String> {
 
 fn test_mm_maskz_popcnt_epi8() -> Result<(), String> {
     unsafe {
-        let a = _mm_set1_epi8(0b1111_1111u8 as i8);
-        let result = _mm_maskz_popcnt_epi8(0xFF00, a);
+        let a = _mm_set1_epi8(255u8 as i8);
+        let result = _mm_maskz_popcnt_epi8(65280, a);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
         check_array_equality(&result, &[0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 8, 8, 8, 8])?;
     }
@@ -137,8 +137,8 @@ fn test_mm_maskz_popcnt_epi8() -> Result<(), String> {
 fn test_mm_mask_popcnt_epi8() -> Result<(), String> {
     unsafe {
         let src = _mm_set1_epi8(100);
-        let a = _mm_set1_epi8(0b1111_1111u8 as i8);
-        let result = _mm_mask_popcnt_epi8(src, 0xFF00, a);
+        let a = _mm_set1_epi8(255u8 as i8);
+        let result = _mm_mask_popcnt_epi8(src, 65280, a);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
         check_array_equality(&result, &[100, 100, 100, 100, 100, 100, 100, 100, 8, 8, 8, 8, 8, 8, 8, 8])?;
     }
@@ -159,7 +159,7 @@ fn test_mm_mask_popcnt_epi8() -> Result<(), String> {
 
 fn test_mm_bitshuffle_epi64_mask() -> Result<(), String> {
     unsafe {
-        let a = _mm_set1_epi8(0b1010_1010u8 as i8);
+        let a = _mm_set1_epi8(170u8 as i8);
         let b = _mm_set1_epi8(0);
         let result = _mm_bitshuffle_epi64_mask(a, b);
         check_int_equality(result, result)?;
@@ -181,9 +181,9 @@ fn test_mm_bitshuffle_epi64_mask() -> Result<(), String> {
 
 fn test_mm_mask_bitshuffle_epi64_mask() -> Result<(), String> {
     unsafe {
-        let a = _mm_set1_epi8(0b1010_1010u8 as i8);
+        let a = _mm_set1_epi8(170u8 as i8);
         let b = _mm_set1_epi8(0);
-        let result = _mm_mask_bitshuffle_epi64_mask(0xFF, a, b);
+        let result = _mm_mask_bitshuffle_epi64_mask(255, a, b);
         check_int_equality(result, result)?;
     }
 

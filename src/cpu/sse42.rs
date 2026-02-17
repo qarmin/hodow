@@ -89,7 +89,7 @@ fn test_mm_cmpestra() -> Result<(), String> {
 
 fn test_mm_crc32_u64() -> Result<(), String> {
     unsafe {
-        let v: u64 = 0x1234_5678_9ABC_DEF0;
+        let v: u64 = 1311768467463790320;
         let crc = _mm_crc32_u64(0u64, v);
         // CRC value is implementation defined; just ensure syscall returns a number
         let _ = crc;

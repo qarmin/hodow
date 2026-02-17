@@ -52,7 +52,7 @@ pub(super) fn test_mm_mask_blend_ph() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
-        let mask = 0b1010u32;
+        let mask = 10u32;
         let r = _mm_mask_blend_ph(mask, a, b);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[5.0, 2.0, 7.0, 4.0])?;
@@ -61,7 +61,7 @@ pub(super) fn test_mm_mask_blend_ph() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_mask_blend_ph(0b1010u32, _mm_set1_ps(get_random_float32_array::<1>()[0]), _mm_set1_ps(1.0));
+                let _ = _mm_mask_blend_ph(10u32, _mm_set1_ps(get_random_float32_array::<1>()[0]), _mm_set1_ps(1.0));
             }
         }
     }

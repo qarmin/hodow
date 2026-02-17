@@ -322,7 +322,7 @@ pub(super) fn test_mm_movemask_ps() -> Result<(), String> {
     unsafe {
         let data = _mm_set_ps(1.0, -2.0, 3.0, -4.0);
         let result = _mm_movemask_ps(data);
-        check_int_equality(result, 0b101)?;
+        check_int_equality(result, 5)?;
     }
 
     if get_fuzzing() {

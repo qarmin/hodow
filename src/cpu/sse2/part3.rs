@@ -32,7 +32,7 @@ pub(super) fn test_mm_sad_epu8() -> Result<(), String> {
 
 pub(super) fn test_mm_slli_si128() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi32(0x04030201, 0x08070605, 0x0C0B0A09, 0x100F0E0D);
+        let a = _mm_set_epi32(67305985, 134678021, 202050057, 269422093);
         let result = _mm_slli_si128::<4>(a);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
         check_array_equality(&result, &[0, 0, 0, 0, 13, 14, 15, 16, 9, 10, 11, 12, 5, 6, 7, 8])?;
@@ -54,7 +54,7 @@ pub(super) fn test_mm_slli_si128() -> Result<(), String> {
 
 pub(super) fn test_mm_srli_si128() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi32(0x04030201, 0x08070605, 0x0C0B0A09, 0x100F0E0D);
+        let a = _mm_set_epi32(67305985, 134678021, 202050057, 269422093);
         let result = _mm_srli_si128::<4>(a);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
         check_array_equality(&result, &[9, 10, 11, 12, 5, 6, 7, 8, 1, 2, 3, 4, 0, 0, 0, 0])?;
