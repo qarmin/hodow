@@ -349,9 +349,16 @@ impl ExtensionTest for AVX512BW {
             (&test_mm_maskz_cvtepu8_epi16, "test_mm_maskz_cvtepu8_epi16"),
             (&test_mm_mask_alignr_epi8, "test_mm_mask_alignr_epi8"),
             (&test_mm_maskz_alignr_epi8, "test_mm_maskz_alignr_epi8"),
-            (&test_mm_mask_cvtsepi16_storeu_epi8, "test_mm_mask_cvtsepi16_storeu_epi8"),
-            (&test_mm_mask_cvtepi16_storeu_epi8, "test_mm_mask_cvtepi16_storeu_epi8"),
-            (&test_mm_mask_cvtusepi16_storeu_epi8, "test_mm_mask_cvtusepi16_storeu_epi8"),
+            (&test_mm_maskz_palignr_epi8, "test_mm_maskz_palignr_epi8"),
+            (&test_mm_mask_palignr_epi8, "test_mm_mask_palignr_epi8"),
+            (&test_mm_maskz_rol_epi16, "test_mm_maskz_rol_epi16"),
+            (&test_mm_mask_rol_epi16, "test_mm_mask_rol_epi16"),
+            (&test_mm_maskz_ror_epi16, "test_mm_maskz_ror_epi16"),
+            (&test_mm_mask_ror_epi16, "test_mm_mask_ror_epi16"),
+            (&test_mm_maskz_broadcastb_epi64, "test_mm_maskz_broadcastb_epi64"),
+            (&test_mm_mask_broadcastb_epi64, "test_mm_mask_broadcastb_epi64"),
+            (&test_mm_maskz_broadcastw_epi64, "test_mm_maskz_broadcastw_epi64"),
+            (&test_mm_mask_broadcastw_epi64, "test_mm_mask_broadcastw_epi64"),
         ]
     }
 }

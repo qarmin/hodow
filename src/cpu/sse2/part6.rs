@@ -901,7 +901,7 @@ pub(super) fn test_mm_unpackhi_pd() -> Result<(), String> {
         let b = _mm_set_pd(4.0, 3.0);
         let result = _mm_unpackhi_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_array_equality(&result, &[0.0])?;
+        check_array_equality(&result, &[2.0, 4.0])?;
     }
 
     if get_fuzzing() {
@@ -926,7 +926,7 @@ pub(super) fn test_mm_unpacklo_pd() -> Result<(), String> {
         let b = _mm_set_pd(4.0, 3.0);
         let result = _mm_unpacklo_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_array_equality(&result, &[0.0])?;
+        check_array_equality(&result, &[1.0, 3.0])?;
     }
 
     if get_fuzzing() {
