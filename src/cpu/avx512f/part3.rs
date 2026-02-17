@@ -5,13 +5,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{
-    check_array_equality,
-    check_int_equality,
-    get_random_float32_array,
-    get_random_float64_array,
-    get_random_i32_array,
-};
+use crate::cpu::common::{check_array_equality, check_int_equality, get_random_float32_array, get_random_float64_array, get_random_i32_array};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -137,7 +131,7 @@ pub(super) fn test_mm_cvt_roundss_u64() -> Result<(), String> {
 pub(super) fn test_mm_cvtt_roundsd_si64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_sd(0.0); // input irrelevant for trunc variant check below
-        // use explicit value to test truncation
+                                 // use explicit value to test truncation
         let a = _mm_set_pd(0.0, 3.9);
         let r = _mm_cvtt_roundsd_si64(a);
         check_int_equality(r, 3i64)?;
@@ -156,14 +150,14 @@ pub(super) fn test_mm_cvtt_roundsd_si64() -> Result<(), String> {
 pub(super) fn test_mm_cvtt_roundsd_i64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(0.0, 3.9);
-        let r = _mm_cvtt_roundsd_i64<12>(a);
+        let r = _mm_cvtt_roundsd_i64::<12>(a);
         check_int_equality(r, 3i64)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let vals = get_random_float64_array::<1>();
-                let _ = _mm_cvtt_roundsd_i64<12>(_mm_set_pd(0.0, vals[0]));
+                let _ = _mm_cvtt_roundsd_i64::<12>(_mm_set_pd(0.0, vals[0]));
             }
         }
     }

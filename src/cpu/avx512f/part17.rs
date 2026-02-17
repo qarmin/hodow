@@ -36,7 +36,7 @@ pub(super) fn test_mm_cvtepi32_epi16() -> Result<(), String> {
         let a = _mm_set_epi32(1000, -2000, 3000, -4000);
         let r = _mm_cvtepi32_epi16(a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(r);
-        crate::cpu::common::check_array_equality(&[result[0] as i32, result[1] as i32, result[2] as i32, result[3] as i32], &[ -4000, 3000, -2000, 1000 ])?;
+        crate::cpu::common::check_array_equality(&[result[0] as i32, result[1] as i32, result[2] as i32, result[3] as i32], &[-4000, 3000, -2000, 1000])?;
     }
 
     if get_fuzzing() {
@@ -240,7 +240,7 @@ pub(super) fn test_mm_cvtepi64_epi16() -> Result<(), String> {
         let a = _mm_set_epi64x(300, -300);
         let r = _mm_cvtepi64_epi16(a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(r);
-        crate::cpu::common::check_array_equality(&[result[0] as i32, result[1] as i32], &[ -300, 300 ])?;
+        crate::cpu::common::check_array_equality(&[result[0] as i32, result[1] as i32], &[-300, 300])?;
     }
 
     if get_fuzzing() {
@@ -263,7 +263,7 @@ pub(super) fn test_mm_mask_cvtepi64_epi16() -> Result<(), String> {
         let a = _mm_set_epi64x(700, -700);
         let r = _mm_mask_cvtepi64_epi16(src, 0xffff, a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(r);
-        crate::cpu::common::check_array_equality(&[result[0] as i32, result[1] as i32], &[ -700, 700 ])?;
+        crate::cpu::common::check_array_equality(&[result[0] as i32, result[1] as i32], &[-700, 700])?;
     }
 
     if get_fuzzing() {
@@ -286,7 +286,7 @@ pub(super) fn test_mm_maskz_cvtepi64_epi16() -> Result<(), String> {
         let a = _mm_set_epi64x(800, -800);
         let r = _mm_maskz_cvtepi64_epi16(0xffff, a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(r);
-        crate::cpu::common::check_array_equality(&[result[0] as i32, result[1] as i32], &[ -800, 800 ])?;
+        crate::cpu::common::check_array_equality(&[result[0] as i32, result[1] as i32], &[-800, 800])?;
     }
 
     if get_fuzzing() {

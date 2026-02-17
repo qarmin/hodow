@@ -330,7 +330,7 @@ pub(super) fn test_mm_maskz_mul_epi32() -> Result<(), String> {
                 let r1 = get_random_i32_array::<4>();
                 let r2 = get_random_i32_array::<4>();
                 let a_r = _mm_set_epi32(r1[3], r1[2], r1[1], r1[0]);
-                let b_r = _mm_set_epi32 (r2[3], r2[2], r2[1], r2[0]);
+                let b_r = _mm_set_epi32(r2[3], r2[2], r2[1], r2[0]);
                 let _ = _mm_maskz_mul_epi32(k, a_r, b_r);
             }
         }

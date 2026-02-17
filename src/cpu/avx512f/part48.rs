@@ -559,4 +559,3 @@ pub(super) fn test_mm_maskz_fnmsub_sd() -> Result<(), String> {
     }
     Ok(())
 }
-
