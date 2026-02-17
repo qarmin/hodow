@@ -37,8 +37,27 @@ impl ExtensionTest for AVX {
             (&test_mm256_add_pd, "test_mm256_add_pd"),
             (&test_mm256_sub_pd, "test_mm256_sub_pd"),
             (&test_mm256_mul_pd, "test_mm256_mul_pd"),
-        ]
-    }
+            (&test_mm_cmp_pd, "test_mm_cmp_pd"),
+            (&test_mm_cmp_ps, "test_mm_cmp_ps"),
+            (&test_mm_cmp_sd, "test_mm_cmp_sd"),
+            (&test_mm_cmp_ss, "test_mm_cmp_ss"),
+            (&test_mm_permutevar_ps, "test_mm_permutevar_ps"),
+            (&test_mm_permute_ps, "test_mm_permute_ps"),
+            (&test_mm_permutevar_pd, "test_mm_permutevar_pd"),
+            (&test_mm_permute_pd, "test_mm_permute_pd"),
+            (&test_mm_broadcast_ss, "test_mm_broadcast_ss"),
+            (&test_mm_maskload_pd, "test_mm_maskload_pd"),
+            (&test_mm_maskstore_pd, "test_mm_maskstore_pd"),
+            (&test_mm_maskload_ps, "test_mm_maskload_ps"),
+            (&test_mm_maskstore_ps, "test_mm_maskstore_ps"),
+            (&test_mm_testz_pd, "test_mm_testz_pd"),
+            (&test_mm_testc_pd, "test_mm_testc_pd"),
+            (&test_mm_testnzc_pd, "test_mm_testnzc_pd"),
+            (&test_mm_testz_ps, "test_mm_testz_ps"),
+            (&test_mm_testc_ps, "test_mm_testc_ps"),
+            (&test_mm_testnzc_ps, "test_mm_testnzc_ps"),
+         ]
+     }
 }
 
 fn test_mm256_set_ps() -> Result<(), String> {

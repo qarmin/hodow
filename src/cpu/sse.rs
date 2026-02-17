@@ -68,6 +68,16 @@ impl ExtensionTest for SSE {
             (&test_mm_store_ps1, "test_mm_store_ps1"),
             (&test_mm_storeu_ps, "test_mm_storeu_ps"),
             (&test_mm_storer_ps, "test_mm_storer_ps"),
+            (&test_mm_cvtss_si64, "test_mm_cvtss_si64"),
+            (&test_mm_cvttss_si64, "test_mm_cvttss_si64"),
+            (&test_mm_cvtsi64_ss, "test_mm_cvtsi64_ss"),
+            (&test_mm_cmpeq_ss, "test_mm_cmpeq_ss"),
+            (&test_mm_sfence, "test_mm_sfence"),
+            (&test_mm_getcsr, "test_mm_getcsr"),
+            (&test_mm_setcsr, "test_mm_setcsr"),
+            (&test_mm_prefetch, "test_mm_prefetch"),
+            (&test_mm_undefined_ps, "test_mm_undefined_ps"),
+            (&test_mm_stream_ps, "test_mm_stream_ps"),
         ]
     }
 }
