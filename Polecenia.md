@@ -34,6 +34,12 @@ użyj zamiast tego
 142:pub fn get_random_i32_array<const N: usize>() -> [i32; N] {
 150:pub fn get_random_i64_array<const N: usize>() -> [i64; N] {
 ```
+- Nie rób cholernych wydmuszek typu
+```
+pub(super) fn test_mm_mmask_i64gather_epi64() -> Result<(), String> {
+    test_mm_mmask_i32gather_epi32()
+}
+```
 
 
 
