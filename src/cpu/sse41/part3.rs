@@ -43,7 +43,7 @@ pub(super) fn test_mm_ceil_ss() -> Result<(), String> {
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
-                let _ = _mm_ceil_ss(_mm_set_ss(get_random_float() as f32), _mm_set_ss(get_random_float() as f32));
+                let _ = _mm_ceil_ss(_mm_set_ss(get_random_float()), _mm_set_ss(get_random_float()));
             }
         }
     }
@@ -85,7 +85,7 @@ pub(super) fn test_mm_round_ss() -> Result<(), String> {
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
-                let _ = _mm_round_ss(_mm_set_ss(get_random_float() as f32), _mm_set_ss(get_random_float() as f32), 0);
+                let _ = _mm_round_ss(_mm_set_ss(get_random_float()), _mm_set_ss(get_random_float()), 0);
             }
         }
     }
@@ -180,11 +180,11 @@ pub(super) fn test_mm_test_mix_ones_zeros() -> Result<(), String> {
 
 pub(super) fn test_mm_stream_load_si128() -> Result<(), String> {
     unsafe {
-        let _res = _mm_stream_load_si128(&mut _mm_setzero_si128());
+        let _res = _mm_stream_load_si128(&_mm_setzero_si128());
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
-                let _ = _mm_stream_load_si128(&mut _mm_setzero_si128());
+                let _ = _mm_stream_load_si128(&_mm_setzero_si128());
             }
         }
     }

@@ -2,11 +2,6 @@ mod part1;
 mod part2;
 mod part3;
 
-#[cfg(target_arch = "x86")]
-use std::arch::x86::*;
-#[cfg(target_arch = "x86_64")]
-use std::arch::x86_64::*;
-
 use crate::cpu::sse41::part1::*;
 use crate::cpu::sse41::part2::*;
 use crate::cpu::sse41::part3::*;

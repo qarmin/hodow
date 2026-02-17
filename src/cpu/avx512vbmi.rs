@@ -1,11 +1,8 @@
-#[cfg(target_arch = "x86")]
-use std::arch::x86::*;
-#[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, check_float_array_equality, get_random_i32_array, get_random_i64_array};
+use crate::cpu::common::{check_array_equality, get_random_i32_array, get_random_i64_array};
 use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
 use crate::get_fuzzing;
 
@@ -277,7 +274,7 @@ fn test_mm_mask_permutexvar_epi8() -> Result<(), String> {
                 let b_vals = get_random_i64_array::<2>();
                 let src = _mm_set1_epi8(src_vals[0] as i8);
                 let a = _mm_set1_epi8(a_vals[0] as i8);
-                let b = _mm_set_epi64x(b_vals[0] as i64, b_vals[1] as i64);
+                let _b = _mm_set_epi64x(b_vals[0] as i64, b_vals[1] as i64);
                 let _ = _mm_mask_permutexvar_epi8(src, 0xFF00, idx, a);
             }
         }

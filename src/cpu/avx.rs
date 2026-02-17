@@ -1,6 +1,3 @@
-#[cfg(target_arch = "x86")]
-use std::arch::x86::*;
-#[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::*;
 
 use log::info;
@@ -677,7 +674,7 @@ fn test_mm_broadcast_ss() -> Result<(), String> {
 }
 fn test_mm_maskload_pd() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_pd(1.0, 2.0);
+        let _a = _mm_set_pd(1.0, 2.0);
         let m = _mm_set_epi64x(-1, -1);
         let r = _mm_maskload_pd(&[1.0f64, 2.0f64] as *const f64, m);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);

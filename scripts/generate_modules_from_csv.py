@@ -46,9 +46,7 @@ for src, instrs in mapping.items():
         struct_name = base.replace('-', '_').upper()
         tests_entries = "\n".join([f'            (&{fn_name_from_instr(i)}, "{fn_name_from_instr(i)}"),' for i in instrs])
         funcs = "\n\n".join([f"fn {fn_name_from_instr(i)}() -> Result<(), String> {{\n    unsafe {{ let _ = (); }}\n    Ok(())\n}}" for i in instrs])
-        content = f'''#[cfg(target_arch = "x86")]
-use std::arch::x86::*;
-#[cfg(target_arch = "x86_64")]
+        content = f'''
 use std::arch::x86_64::*;
 
 use log::info;
@@ -104,9 +102,7 @@ use crate::get_fuzzing;
         use_parts = '\n'.join([f'use crate::cpu::{base}::part{p+1}::*;' for p in range(nparts)])
         content = f'''{parts_mods}
 
-#[cfg(target_arch = "x86")]
-use std::arch::x86::*;
-#[cfg(target_arch = "x86_64")]
+
 use std::arch::x86_64::*;
 
 {use_parts}

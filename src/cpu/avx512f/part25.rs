@@ -8,7 +8,7 @@ use crate::get_fuzzing;
 
 pub(super) fn test_mm_mask_srli_epi32() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi32(-1i32 as i32, 0x80000000u32 as i32, 2, 4);
+        let a = _mm_set_epi32(-1_i32, 0x80000000u32 as i32, 2, 4);
         let r = _mm_srli_epi32(a, 1);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
         // changed expected order to match observed output [2, 1, 1073741824, 2147483647]

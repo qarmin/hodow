@@ -1,9 +1,6 @@
 mod part1;
 mod part2;
 
-#[cfg(target_arch = "x86")]
-use std::arch::x86::*;
-
 use crate::cpu::sse1::part1::*;
 use crate::cpu::sse1::part2::*;
 use crate::cpu::{ExtensionTest, TestFunction};

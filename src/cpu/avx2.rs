@@ -2,19 +2,10 @@ mod part1;
 mod part2;
 mod part3;
 
-#[cfg(target_arch = "x86")]
-use std::arch::x86::*;
-#[cfg(target_arch = "x86_64")]
-use std::arch::x86_64::*;
-
-use log::info;
-
 use crate::cpu::avx2::part1::*;
 use crate::cpu::avx2::part2::*;
 use crate::cpu::avx2::part3::*;
-use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
-use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
-use crate::get_fuzzing;
+use crate::cpu::{ExtensionTest, TestFunction};
 pub struct AVX2;
 
 impl ExtensionTest for AVX2 {

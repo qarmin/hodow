@@ -1,13 +1,6 @@
-#[cfg(target_arch = "x86")]
-use std::arch::x86::*;
-#[cfg(target_arch = "x86_64")]
-use std::arch::x86_64::*;
-
 use log::info;
 
-use crate::cpu::common::{check_int_equality, get_random_i32_array};
-use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
-use crate::get_fuzzing;
+use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct SSE4A;
 
@@ -22,11 +15,11 @@ impl ExtensionTest for SSE4A {
 
 fn test_mm_extract_si64() -> Result<(), String> {
     let x: i64 = 0x1234_5678_9ABC_DEF0;
-    let _ = x as i64;
+    let _ = x;
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..crate::cpu::get_iterations() {
-            let _ = x as i64;
+            let _ = x;
         }
     }
     Ok(())

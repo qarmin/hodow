@@ -2,7 +2,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, get_random_i32_array};
+use crate::cpu::common::get_random_i32_array;
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -109,7 +109,7 @@ pub(super) fn test_mm_storeu_epi16() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_storeu_epi16(get_random_i32_array::<4>().as_ptr() as *mut i16, _mm_set1_epi16(get_random_i32_array::<4>()[0] as i16));
+                _mm_storeu_epi16(get_random_i32_array::<4>().as_ptr() as *mut i16, _mm_set1_epi16(get_random_i32_array::<4>()[0] as i16));
             }
         }
     }
@@ -126,7 +126,7 @@ pub(super) fn test_mm_storeu_epi8() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_storeu_epi8(get_random_i32_array::<4>().as_ptr() as *mut i8, _mm_set1_epi8(get_random_i32_array::<4>()[0] as i8));
+                _mm_storeu_epi8(get_random_i32_array::<4>().as_ptr() as *mut i8, _mm_set1_epi8(get_random_i32_array::<4>()[0] as i8));
             }
         }
     }

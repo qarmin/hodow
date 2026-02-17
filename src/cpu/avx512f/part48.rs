@@ -1,6 +1,3 @@
-#[cfg(target_arch = "x86")]
-use std::arch::x86::*;
-#[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::*;
 
 use log::info;
@@ -34,7 +31,7 @@ pub(super) fn test_mm_maskz_scalef_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_fmadd_ss() -> Result<(), String> {
     unsafe {
-        let src = _mm_setzero_ps();
+        let _src = _mm_setzero_ps();
         let k: __mmask8 = 0xFF;
         let a = _mm_set_ss(1.0);
         let b = _mm_set_ss(2.0);
@@ -113,7 +110,7 @@ pub(super) fn test_mm_mask3_fmadd_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_fmadd_sd() -> Result<(), String> {
     unsafe {
-        let src = _mm_setzero_pd();
+        let _src = _mm_setzero_pd();
         let k: __mmask8 = 0xFF;
         let a = _mm_set_sd(1.0);
         let b = _mm_set_sd(2.0);
@@ -192,7 +189,7 @@ pub(super) fn test_mm_mask3_fmadd_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_fmsub_ss() -> Result<(), String> {
     unsafe {
-        let src = _mm_setzero_ps();
+        let _src = _mm_setzero_ps();
         let k: __mmask8 = 0xFF;
         let a = _mm_set_ss(5.0);
         let b = _mm_set_ss(2.0);
@@ -271,7 +268,7 @@ pub(super) fn test_mm_mask3_fmsub_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_fmsub_sd() -> Result<(), String> {
     unsafe {
-        let src = _mm_setzero_pd();
+        let _src = _mm_setzero_pd();
         let k: __mmask8 = 0xFF;
         let a = _mm_set_sd(5.0);
         let b = _mm_set_sd(2.0);
@@ -350,7 +347,7 @@ pub(super) fn test_mm_mask3_fmsub_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_fnmadd_ss() -> Result<(), String> {
     unsafe {
-        let src = _mm_setzero_ps();
+        let _src = _mm_setzero_ps();
         let k: __mmask8 = 0xFF;
         let a = _mm_set_ss(2.0);
         let b = _mm_set_ss(3.0);
@@ -403,7 +400,7 @@ pub(super) fn test_mm_maskz_fnmadd_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_fnmsub_ss() -> Result<(), String> {
     unsafe {
-        let src = _mm_setzero_ps();
+        let _src = _mm_setzero_ps();
         let k: __mmask8 = 0xFF;
         let a = _mm_set_ss(2.0);
         let b = _mm_set_ss(3.0);
@@ -456,7 +453,7 @@ pub(super) fn test_mm_maskz_fnmsub_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_fnmadd_sd() -> Result<(), String> {
     unsafe {
-        let src = _mm_setzero_pd();
+        let _src = _mm_setzero_pd();
         let k: __mmask8 = 0xFF;
         let a = _mm_set_sd(2.0);
         let b = _mm_set_sd(3.0);
@@ -509,7 +506,7 @@ pub(super) fn test_mm_maskz_fnmadd_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_fnmsub_sd() -> Result<(), String> {
     unsafe {
-        let src = _mm_setzero_pd();
+        let _src = _mm_setzero_pd();
         let k: __mmask8 = 0xFF;
         let a = _mm_set_sd(2.0);
         let b = _mm_set_sd(3.0);

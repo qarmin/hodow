@@ -58,11 +58,6 @@ mod part7;
 mod part8;
 mod part9;
 
-#[cfg(target_arch = "x86")]
-use std::arch::x86::*;
-#[cfg(target_arch = "x86_64")]
-use std::arch::x86_64::*;
-
 use crate::cpu::avx512f::part1::*;
 use crate::cpu::avx512f::part10::*;
 use crate::cpu::avx512f::part11::*;

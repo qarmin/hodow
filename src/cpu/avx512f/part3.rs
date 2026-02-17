@@ -1,6 +1,3 @@
-#[cfg(target_arch = "x86")]
-use std::arch::x86::*;
-#[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::*;
 
 use log::info;
@@ -130,8 +127,8 @@ pub(super) fn test_mm_cvt_roundss_u64() -> Result<(), String> {
 
 pub(super) fn test_mm_cvtt_roundsd_si64() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_sd(0.0); // input irrelevant for trunc variant check below
-                                 // use explicit value to test truncation
+        let _a = _mm_set_sd(0.0); // input irrelevant for trunc variant check below
+                                  // use explicit value to test truncation
         let a = _mm_set_pd(0.0, 3.9);
         let r = _mm_cvtt_roundsd_si64::<0>(a);
         check_int_equality(r, 3i64)?;

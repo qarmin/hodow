@@ -210,7 +210,7 @@ pub(super) fn test_mm_floor_ss() -> Result<(), String> {
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
-                let _ = _mm_floor_ss(_mm_set_ss(get_random_float() as f32), _mm_set_ss(get_random_float() as f32));
+                let _ = _mm_floor_ss(_mm_set_ss(get_random_float()), _mm_set_ss(get_random_float()));
             }
         }
     }

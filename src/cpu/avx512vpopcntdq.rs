@@ -1,6 +1,3 @@
-#[cfg(target_arch = "x86")]
-use std::arch::x86::*;
-#[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::*;
 
 use crate::cpu::common::{get_random_i32_array, get_random_i64_array};

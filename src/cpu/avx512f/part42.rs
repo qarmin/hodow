@@ -1,6 +1,3 @@
-#[cfg(target_arch = "x86")]
-use std::arch::x86::*;
-#[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::*;
 
 use log::info;
@@ -95,7 +92,7 @@ pub(super) fn test_mm_mask_storeu_epi32() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let ra = get_random_i32_array::<4>();
                 let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
-                let _ = _mm_mask_storeu_epi32(ra.as_ptr() as *mut i32, 0u8, a_r);
+                _mm_mask_storeu_epi32(ra.as_ptr() as *mut i32, 0u8, a_r);
             }
         }
     }
@@ -114,7 +111,7 @@ pub(super) fn test_mm_mask_storeu_epi64() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let ra = get_random_i64_array::<2>();
                 let a_r = _mm_set_epi64x(ra[1], ra[0]);
-                let _ = _mm_mask_storeu_epi64(ra.as_ptr() as *mut i64, 0u8, a_r);
+                _mm_mask_storeu_epi64(ra.as_ptr() as *mut i64, 0u8, a_r);
             }
         }
     }
@@ -133,7 +130,7 @@ pub(super) fn test_mm_mask_storeu_ps() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let ra = get_random_float32_array::<4>();
                 let a_r = _mm_set_ps(ra[3], ra[2], ra[1], ra[0]);
-                let _ = _mm_mask_storeu_ps(ra.as_ptr() as *mut f32, 0u8, a_r);
+                _mm_mask_storeu_ps(ra.as_ptr() as *mut f32, 0u8, a_r);
             }
         }
     }
@@ -152,7 +149,7 @@ pub(super) fn test_mm_mask_storeu_pd() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let ra = get_random_float64_array::<2>();
                 let a_r = _mm_set_pd(ra[1], ra[0]);
-                let _ = _mm_mask_storeu_pd(ra.as_ptr() as *mut f64, 0u8, a_r);
+                _mm_mask_storeu_pd(ra.as_ptr() as *mut f64, 0u8, a_r);
             }
         }
     }
@@ -171,7 +168,7 @@ pub(super) fn test_mm_mask_store_epi32() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let ra = get_random_i32_array::<4>();
                 let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
-                let _ = _mm_mask_store_epi32(ra.as_ptr() as *mut i32, 0u8, a_r);
+                _mm_mask_store_epi32(ra.as_ptr() as *mut i32, 0u8, a_r);
             }
         }
     }
@@ -190,7 +187,7 @@ pub(super) fn test_mm_mask_store_epi64() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let ra = get_random_i64_array::<2>();
                 let a_r = _mm_set_epi64x(ra[1], ra[0]);
-                let _ = _mm_mask_store_epi64(ra.as_ptr() as *mut i64, 0u8, a_r);
+                _mm_mask_store_epi64(ra.as_ptr() as *mut i64, 0u8, a_r);
             }
         }
     }
@@ -209,7 +206,7 @@ pub(super) fn test_mm_mask_store_ps() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let ra = get_random_float32_array::<4>();
                 let a_r = _mm_set_ps(ra[3], ra[2], ra[1], ra[0]);
-                let _ = _mm_mask_store_ps(ra.as_ptr() as *mut f32, 0u8, a_r);
+                _mm_mask_store_ps(ra.as_ptr() as *mut f32, 0u8, a_r);
             }
         }
     }
@@ -228,7 +225,7 @@ pub(super) fn test_mm_mask_store_pd() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let ra = get_random_float64_array::<2>();
                 let a_r = _mm_set_pd(ra[1], ra[0]);
-                let _ = _mm_mask_store_pd(ra.as_ptr() as *mut f64, 0u8, a_r);
+                _mm_mask_store_pd(ra.as_ptr() as *mut f64, 0u8, a_r);
             }
         }
     }
@@ -247,7 +244,7 @@ pub(super) fn test_mm_mask_store_ss() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let ra = get_random_float32_array::<4>();
                 let a_r = _mm_set_ps(ra[3], ra[2], ra[1], ra[0]);
-                let _ = _mm_mask_store_ss(ra.as_ptr() as *mut f32, 0u8, a_r);
+                _mm_mask_store_ss(ra.as_ptr() as *mut f32, 0u8, a_r);
             }
         }
     }
@@ -266,7 +263,7 @@ pub(super) fn test_mm_mask_store_sd() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let ra = get_random_float64_array::<2>();
                 let a_r = _mm_set_pd(ra[1], ra[0]);
-                let _ = _mm_mask_store_sd(ra.as_ptr() as *mut f64, 0u8, a_r);
+                _mm_mask_store_sd(ra.as_ptr() as *mut f64, 0u8, a_r);
             }
         }
     }

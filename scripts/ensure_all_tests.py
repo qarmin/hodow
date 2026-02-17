@@ -112,9 +112,7 @@ for row in rows:
     else:
         # create single file at path
         p = path
-        content = f'''#[cfg(target_arch = "x86")]
-use std::arch::x86::*;
-#[cfg(target_arch = "x86_64")]
+        content = f'''
 use std::arch::x86_64::*;
 
 use crate::cpu::{{ExtensionTest, TestFunction}};

@@ -1,11 +1,8 @@
-#[cfg(target_arch = "x86")]
-use std::arch::x86::*;
-#[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, check_float_array_equality, check_float_equality, check_int_equality, get_random_float32_array, DEFAULT_FLOAT_DIFF};
+use crate::cpu::common::{check_array_equality, check_float_array_equality, check_float_equality, check_int_equality, get_random_float32_array};
 use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
 use crate::get_fuzzing;
 pub struct SSE41;

@@ -1,13 +1,4 @@
-#[cfg(target_arch = "x86")]
-use std::arch::x86::*;
-#[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::*;
-
-use log::info;
-
-use crate::cpu::common::{check_int_equality, get_random_float32_array, get_random_float64_array, get_random_i32_array};
-use crate::cpu::get_iterations;
-use crate::get_fuzzing;
 
 pub(super) fn test_mm_mask_cmp_ps_mask() -> Result<(), String> {
     unsafe {
@@ -56,7 +47,7 @@ pub(super) fn test_mm_cmp_pd_mask() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_cmp_pd_mask() -> Result<(), String> {
     unsafe {
-        let src = _mm_setzero_pd();
+        let _src = _mm_setzero_pd();
         let a = _mm_set_pd(2.0, 1.0);
         let b = _mm_set_pd(2.0, 0.0);
         // emulate masked compare by plain compare + movemask
@@ -100,7 +91,7 @@ pub(super) fn test_mm_cmp_ss_mask() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_cmp_ss_mask() -> Result<(), String> {
     unsafe {
-        let src = _mm_setzero_ps();
+        let _src = _mm_setzero_ps();
         let a = _mm_set_ss(1.0);
         let b = _mm_set_ss(1.0);
         let cmpv = _mm_cmpeq_ss(a, b);
@@ -144,7 +135,7 @@ pub(super) fn test_mm_cmp_round_ss_mask() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_cmp_round_ss_mask() -> Result<(), String> {
     unsafe {
-        let src = _mm_setzero_ps();
+        let _src = _mm_setzero_ps();
         let a = _mm_set_ss(3.2);
         let b = _mm_set_ss(3.2);
         let cmpv = _mm_cmpeq_ss(a, b);
@@ -187,7 +178,7 @@ pub(super) fn test_mm_cmp_sd_mask() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_cmp_sd_mask() -> Result<(), String> {
     unsafe {
-        let src = _mm_setzero_pd();
+        let _src = _mm_setzero_pd();
         let a = _mm_set_sd(2.0);
         let b = _mm_set_sd(1.0);
         let cmpv = _mm_cmpgt_sd(a, b);
@@ -230,7 +221,7 @@ pub(super) fn test_mm_cmp_round_sd_mask() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_cmp_round_sd_mask() -> Result<(), String> {
     unsafe {
-        let src = _mm_setzero_pd();
+        let _src = _mm_setzero_pd();
         let a = _mm_set_sd(3.2);
         let b = _mm_set_sd(3.2);
         let cmpv = _mm_cmpeq_sd(a, b);

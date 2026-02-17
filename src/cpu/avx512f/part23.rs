@@ -3,8 +3,6 @@ use std::arch::x86_64::*;
 use log::info;
 
 use crate::cpu::common::get_random_i32_array;
-use crate::cpu::get_iterations;
-use crate::get_fuzzing;
 
 pub(super) fn test_mm_mask_compress_ps() -> Result<(), String> {
     unsafe {

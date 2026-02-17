@@ -1,6 +1,3 @@
-#[cfg(target_arch = "x86")]
-use std::arch::x86::*;
-#[cfg(target_arch = "x86_64")]
 use std::arch::x86_64::*;
 
 use log::info;
@@ -99,7 +96,7 @@ pub(super) fn test_mm_maskz_subs_epu16() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_subs_epu8() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_epi8(121 as i8, 111, 73, 52, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0);
+        let a = _mm_set_epi8(121_i8, 111, 73, 52, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0);
         let b = _mm_set1_epi8(10);
         let r = _mm_subs_epu8(a, b);
         let out: [u8; 16] = std::mem::transmute::<__m128i, [u8; 16]>(r);
