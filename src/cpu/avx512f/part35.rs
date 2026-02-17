@@ -168,7 +168,6 @@ pub(super) fn test_mm_cmp_sd_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_sd(2.0);
         let b = _mm_set_sd(1.0);
-        // compare a > b (use explicit cmpgt intrinsic to avoid const-generic _mm_cmp_sd)
         let cmpv = _mm_cmpgt_sd(a, b);
         let r = (_mm_movemask_pd(cmpv) & 0x1) as i32;
         crate::cpu::common::check_int_equality(r, 0b1)?;
@@ -191,7 +190,6 @@ pub(super) fn test_mm_mask_cmp_sd_mask() -> Result<(), String> {
         let src = _mm_setzero_pd();
         let a = _mm_set_sd(2.0);
         let b = _mm_set_sd(1.0);
-        // emulate masked compare by using cmpgt (a > b)
         let cmpv = _mm_cmpgt_sd(a, b);
         let r = (_mm_movemask_pd(cmpv) & 0x1) as i32;
         crate::cpu::common::check_int_equality(r, 0b1)?;
@@ -276,7 +274,6 @@ pub(super) fn test_mm_mask_cmplt_epu32_mask() -> Result<(), String> {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let b = _mm_set_epi32(2, 2, 3, 3);
         let k: __mmask8 = 0xFFu8 as __mmask8;
-        // signature: _mm_mask_cmplt_epu32_mask(k, a, b) -> __mmask8
         let result = _mm_mask_cmplt_epu32_mask(k, a, b);
         crate::cpu::common::check_int_equality(result as i32, 0b0110)?;
         if crate::get_fuzzing() {
@@ -316,7 +313,6 @@ pub(super) fn test_mm_mask_cmpgt_epu32_mask() -> Result<(), String> {
         let a = _mm_set_epi32(4, 3, 2, 1);
         let b = _mm_set_epi32(3, 3, 2, 1);
         let k: __mmask8 = 0xFFu8 as __mmask8;
-        // signature: _mm_mask_cmpgt_epu32_mask(k, a, b) -> __mmask8
         let result = _mm_mask_cmpgt_epu32_mask(k, a, b);
         crate::cpu::common::check_int_equality(result as i32, 0b1100)?;
         if crate::get_fuzzing() {
