@@ -2,7 +2,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_float_array_equality_with_error, check_int_equality, get_random_float32_array};
+use crate::cpu::common::{check_float_array_equality, check_int_equality, get_random_float32_array};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -12,7 +12,7 @@ pub(super) fn test_mm_cmpnge_ps() -> Result<(), String> {
         let b = _mm_set_ps(1.0, 2.0, 3.0, 5.0);
         let result = _mm_cmpnge_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_float_array_equality_with_error(&result, &[0.0, 0.0, 0.0, f32::NAN])?;
+        check_float_array_equality(&result, &[0.0, 0.0, 0.0, f32::NAN])?;
     }
 
     if get_fuzzing() {
@@ -37,7 +37,7 @@ pub(super) fn test_mm_cmpord_ps() -> Result<(), String> {
         let b = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let result = _mm_cmpord_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_float_array_equality_with_error(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN])?;
+        check_float_array_equality(&result, &[f32::NAN, f32::NAN, f32::NAN, f32::NAN])?;
     }
 
     if get_fuzzing() {
@@ -62,7 +62,7 @@ pub(super) fn test_mm_cmpunord_ps() -> Result<(), String> {
         let b = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let result = _mm_cmpunord_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_float_array_equality_with_error(&result, &[f32::NAN, 0.0, 0.0, 0.0])?;
+        check_float_array_equality(&result, &[f32::NAN, 0.0, 0.0, 0.0])?;
     }
 
     if get_fuzzing() {

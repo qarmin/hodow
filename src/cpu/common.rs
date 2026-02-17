@@ -39,7 +39,7 @@ impl FloatLike for f64 {
     }
 }
 
-pub fn check_float_array_equality_with_error<T: FloatLike + Debug>(a: &[T], b: &[T]) -> Result<(), String> {
+pub fn check_float_array_equality<T: FloatLike + Debug>(a: &[T], b: &[T]) -> Result<(), String> {
     if a == b {
         return Ok(());
     }
@@ -74,12 +74,18 @@ pub fn check_array_equality<T: PartialEq + Debug>(a: &[T], b: &[T]) -> Result<()
 pub const DEFAULT_FLOAT_DIFF: f32 = 0.001;
 
 #[allow(dead_code)]
-pub fn check_float_equality(a: f32, b: f32, max_diff: f32) -> Result<(), String> {
+pub fn check_float_equality<T: FloatLike + Debug>(a: T, b: T) -> Result<(), String> {
+    if a == b {
+        return Ok(());
+    }
+
+    let eps = T::from_f64(0.001);
+
     if a.is_infinite() && !b.is_infinite() {
         return Err(format!("Got {a:?}, expected {b:?} (One is infinite, other is not)"));
     } else if a.is_nan() && !b.is_nan() {
         return Err(format!("Got {a:?}, expected {b:?} (One is NaN, other is not)"));
-    } else if (a - b).abs() > max_diff {
+    } else if (a - b).abs() > eps {
         return Err(format!("Got {a:?}, expected {b:?} (Difference is too big)"));
     }
 

@@ -2,7 +2,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, get_random_float32_array, get_random_i32_array};
+use crate::cpu::common::{check_array_equality, check_float_array_equality, get_random_float32_array, get_random_i32_array};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -55,7 +55,7 @@ pub(super) fn test_mm_mask_blend_ph() -> Result<(), String> {
         let mask = 0b1010u32;
         let r = _mm_mask_blend_ph(mask, a, b);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality_with_error(&out, &[5.0, 2.0, 7.0, 4.0])?;
+        check_float_array_equality(&out, &[5.0, 2.0, 7.0, 4.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

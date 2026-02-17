@@ -7,7 +7,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_float_array_equality_with_error, check_float_equality, check_int_equality, get_random_float, get_random_float32_array};
+use crate::cpu::common::{check_float_array_equality, check_float_equality, check_int_equality, get_random_float, get_random_float32_array};
 use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
 use crate::get_fuzzing;
 
@@ -46,7 +46,7 @@ pub(super) fn test_mm_cvtne2ps_pbh() -> Result<(), String> {
 
         let result_v = _mm_cvtne2ps_pbh(a, b);
         let result = std::mem::transmute::<__m128bh, [f32; 4]>(result_v);
-        check_float_array_equality_with_error(&result, &[1.0, 2.0, 3.0, 4.0])?;
+        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -80,7 +80,7 @@ pub(super) fn test_mm_mask_cvtne2ps_pbh() -> Result<(), String> {
         let src: __m128 = _mm_setzero_ps();
         let result_v = _mm_mask_cvtne2ps_pbh(src, k, a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
-        check_float_array_equality_with_error(&result, &[4.0, 3.0, 2.0, 1.0])?;
+        check_float_array_equality(&result, &[4.0, 3.0, 2.0, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -114,7 +114,7 @@ pub(super) fn test_mm_maskz_cvtne2ps_pbh() -> Result<(), String> {
         let result_v = _mm_maskz_cvtne2ps_pbh(k, a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
 
-        check_float_array_equality_with_error(&result, &[1.0, 2.0, 3.0, 4.0])?;
+        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -146,7 +146,7 @@ pub(super) fn test_mm_dpbf16_ps() -> Result<(), String> {
         let b: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits);
         let result_v = _mm_dpbf16_ps(src, a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
-        check_float_array_equality_with_error(&result, &[4.0, 4.0, 4.0, 4.0])?;
+        check_float_array_equality(&result, &[4.0, 4.0, 4.0, 4.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -179,7 +179,7 @@ pub(super) fn test_mm_mask_dpbf16_ps() -> Result<(), String> {
         let b: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits);
         let result_v = _mm_mask_dpbf16_ps(src, k, a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
-        check_float_array_equality_with_error(&result, &[2.0, 2.0, 2.0, 2.0])?;
+        check_float_array_equality(&result, &[2.0, 2.0, 2.0, 2.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -212,7 +212,7 @@ pub(super) fn test_mm_maskz_dpbf16_ps() -> Result<(), String> {
         let b: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits);
         let result_v = _mm_maskz_dpbf16_ps(k, src, a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
-        check_float_array_equality_with_error(&result, &[2.0, 2.0, 2.0, 2.0])?;
+        check_float_array_equality(&result, &[2.0, 2.0, 2.0, 2.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -245,7 +245,7 @@ pub(super) fn test_mm_cvtpbh_ps() -> Result<(), String> {
         let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
         let result_v = _mm_cvtpbh_ps(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
-        check_float_array_equality_with_error(&result, &[10.0, 11.0, 12.0, 13.0])?;
+        check_float_array_equality(&result, &[10.0, 11.0, 12.0, 13.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -276,7 +276,7 @@ pub(super) fn test_mm_mask_cvtpbh_ps() -> Result<(), String> {
         let src: __m128 = _mm_setzero_ps();
         let result_v = _mm_mask_cvtpbh_ps(src, k, a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
-        check_float_array_equality_with_error(&result, &[13.0, 12.0, 11.0, 10.0])?;
+        check_float_array_equality(&result, &[13.0, 12.0, 11.0, 10.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -306,7 +306,7 @@ pub(super) fn test_mm_maskz_cvtpbh_ps() -> Result<(), String> {
         let a: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(a_bits);
         let result_v = _mm_maskz_cvtpbh_ps(k, a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
-        check_float_array_equality_with_error(&result, &[1.0, 0.0, 1.0, 0.0])?;
+        check_float_array_equality(&result, &[1.0, 0.0, 1.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -330,7 +330,7 @@ pub(super) fn test_mm_cvtsbh_ss() -> Result<(), String> {
         let val = 5.5f32;
         let bf: u16 = (val.to_bits() >> 16) as u16;
         let res = _mm_cvtsbh_ss(std::mem::transmute::<u16, bf16>(bf));
-        check_float_array_equality_with_error(&[res], &[5.5])?;
+        check_float_array_equality(&[res], &[5.5])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -353,7 +353,7 @@ pub(super) fn test_mm_cvtneps_pbh() -> Result<(), String> {
         let b: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits);
         let result_v = _mm_cvtneps_pbh(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
-        check_float_array_equality_with_error(&result, &[0.5, 1.0, 2.0, 4.0])?;
+        check_float_array_equality(&result, &[0.5, 1.0, 2.0, 4.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -386,7 +386,7 @@ pub(super) fn test_mm_mask_cvtneps_pbh() -> Result<(), String> {
         let src: __m128 = _mm_setzero_ps();
         let result_v = _mm_mask_cvtneps_pbh(src, k, a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
-        check_float_array_equality_with_error(&result, &[6.0, 4.0, 2.0, 1.0])?;
+        check_float_array_equality(&result, &[6.0, 4.0, 2.0, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -418,7 +418,7 @@ pub(super) fn test_mm_maskz_cvtneps_pbh() -> Result<(), String> {
         let b: __m128bh = std::mem::transmute::<[u16; 8], __m128bh>(b_bits);
         let result_v = _mm_maskz_cvtneps_pbh(k, a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result_v);
-        check_float_array_equality_with_error(&result, &[0.0, 1.0, 0.0, 1.0])?;
+        check_float_array_equality(&result, &[0.0, 1.0, 0.0, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

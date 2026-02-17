@@ -6,7 +6,7 @@ use std::arch::x86_64::*;
 use log::info;
 
 use crate::cpu::common::{
-    check_array_equality, check_float_array_equality_with_error, get_random_float32_array, get_random_float64_array, get_random_i32_array, get_random_i64_array,
+    check_array_equality, check_float_array_equality, get_random_float32_array, get_random_float64_array, get_random_i32_array, get_random_i64_array,
 };
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
@@ -35,7 +35,7 @@ pub(super) fn test_mm_mask_max_ps() -> Result<(), String> {
         let b = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let r = _mm_max_ps(a, b);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality_with_error(&out, &[4.0, 3.0, 3.0, 4.0])?;
+        check_float_array_equality(&out, &[4.0, 3.0, 3.0, 4.0])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -54,7 +54,7 @@ pub(super) fn test_mm_maskz_max_ps() -> Result<(), String> {
         let b = _mm_set_ps(2.0, 3.0, 4.0, 1.0);
         let r = _mm_max_ps(a, b);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality_with_error(&out, &[2.0, 4.0, 4.0, 3.0])?;
+        check_float_array_equality(&out, &[2.0, 4.0, 4.0, 3.0])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -73,7 +73,7 @@ pub(super) fn test_mm_mask_max_pd() -> Result<(), String> {
         let b = _mm_set_pd(4.0, 2.0);
         let r = _mm_max_pd(a, b);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality_with_error(&out, &[4.0, 5.0])?;
+        check_float_array_equality(&out, &[4.0, 5.0])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -92,7 +92,7 @@ pub(super) fn test_mm_maskz_max_pd() -> Result<(), String> {
         let b = _mm_set_pd(2.0, 9.0);
         let r = _mm_max_pd(a, b);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality_with_error(&out, &[7.0, 9.0])?;
+        check_float_array_equality(&out, &[7.0, 9.0])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {

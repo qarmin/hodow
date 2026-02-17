@@ -5,7 +5,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, check_float_equality, check_int_equality, get_random_float32_array, DEFAULT_FLOAT_DIFF};
+use crate::cpu::common::{check_array_equality, check_float_array_equality, check_float_equality, check_int_equality, get_random_float32_array, DEFAULT_FLOAT_DIFF};
 use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
 use crate::get_fuzzing;
 pub struct SSE41;
@@ -44,7 +44,7 @@ fn test_mm_blend_ps() -> Result<(), String> {
         let result = _mm_blend_ps::<0b0101>(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
 
-        check_float_array_equality_with_error(&result, &[8.0, 3.0, 6.0, 1.0])?;
+        check_float_array_equality(&result, &[8.0, 3.0, 6.0, 1.0])?;
     }
 
     if get_fuzzing() {
@@ -68,7 +68,7 @@ fn test_mm_blendv_ps() -> Result<(), String> {
         let mask = _mm_set_ps(-1.0, 0.0, -1.0, 0.0);
         let result = _mm_blendv_ps(a, b, mask);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_float_array_equality_with_error(&result, &[4.0, 7.0, 2.0, 5.0])?;
+        check_float_array_equality(&result, &[4.0, 7.0, 2.0, 5.0])?;
     }
 
     if get_fuzzing() {
@@ -98,7 +98,7 @@ fn test_mm_dp_ps() -> Result<(), String> {
         let result = _mm_dp_ps::<0xFF>(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
 
-        check_float_array_equality_with_error(&result, &[40.0, 40.0, 40.0, 40.0])?;
+        check_float_array_equality(&result, &[40.0, 40.0, 40.0, 40.0])?;
     }
 
     if get_fuzzing() {
@@ -326,7 +326,7 @@ fn test_mm_round_ps() -> Result<(), String> {
         let a = _mm_set_ps(1.5, 2.4, 3.7, 4.2);
         let result = _mm_round_ps::<_MM_FROUND_TO_NEAREST_INT>(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_float_array_equality_with_error(&result, &[4.0, 4.0, 2.0, 2.0])?;
+        check_float_array_equality(&result, &[4.0, 4.0, 2.0, 2.0])?;
     }
 
     if get_fuzzing() {
@@ -347,7 +347,7 @@ fn test_mm_ceil_ps() -> Result<(), String> {
         let a = _mm_set_ps(1.5, 2.4, 3.7, 4.2);
         let result = _mm_ceil_ps(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_float_array_equality_with_error(&result, &[5.0, 4.0, 3.0, 2.0])?;
+        check_float_array_equality(&result, &[5.0, 4.0, 3.0, 2.0])?;
     }
 
     if get_fuzzing() {
@@ -368,7 +368,7 @@ fn test_mm_floor_ps() -> Result<(), String> {
         let a = _mm_set_ps(1.5, 2.4, 3.7, 4.2);
         let result = _mm_floor_ps(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_float_array_equality_with_error(&result, &[4.0, 3.0, 2.0, 1.0])?;
+        check_float_array_equality(&result, &[4.0, 3.0, 2.0, 1.0])?;
     }
 
     if get_fuzzing() {
@@ -412,7 +412,7 @@ fn test_mm_insert_ps() -> Result<(), String> {
 
         let result = _mm_insert_ps::<0b00100000>(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_float_array_equality_with_error(&result, &[4.0, 3.0, 8.0, 1.0])?;
+        check_float_array_equality(&result, &[4.0, 3.0, 8.0, 1.0])?;
     }
 
     if get_fuzzing() {

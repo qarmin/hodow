@@ -9,7 +9,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_float_array_equality_with_error, get_random_float, get_random_float32_array};
+use crate::cpu::common::{check_float_array_equality, get_random_float, get_random_float32_array};
 use crate::cpu::sse::part1::*;
 use crate::cpu::sse::part2::*;
 use crate::cpu::sse::part3::*;
@@ -134,7 +134,7 @@ fn test_mm_cmpeq_ss() -> Result<(), String> {
         let b = _mm_set_ss(1.0);
         let r = _mm_cmpeq_ss(a, b);
         let r = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality_with_error(&r, &[f32::NAN, 0.0, 0.0, 0.0])?;
+        check_float_array_equality(&r, &[f32::NAN, 0.0, 0.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

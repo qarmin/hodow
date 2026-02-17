@@ -4,7 +4,7 @@ Mając na uwadze plik Polecenia.md, popraw kod, zaimplemetuj brakujące funkcje 
 - Przy sprawdzaniu wyników używaj bezpośrednio expected w funkcji zamiast w zmiennej, czyli zamiast `check_array_equality(&result, &expected)?` użyj np. `check_array_equality(&result, &[1.0, 2.0, 3.0, 4.0])?` - expected value muszą być zwykłymi liczbami - nie reużywaj żadnych zmiennych typu `check_array_equality(&result, &[a[1], a[2]])?`
 - Posprawdzaj dokładnie, że nie ignorujesz rezultatu testów(nie dotyczy fuzzingu) np. `let _result = ...` - każda funkcja test_... musi mieć weryfikację wyniku przy użyciu funkcji z `common.rs`:, 
 ```
-42:pub fn check_float_array_equality_with_error<T: FloatLike + Debug>(a: &[T], b: &[T]) -> Result<(), String> {
+42:pub fn check_float_array_equality<T: FloatLike + Debug>(a: &[T], b: &[T]) -> Result<(), String> {
 65:pub fn check_array_equality<T: PartialEq + Debug>(a: &[T], b: &[T]) -> Result<(), String> {
 77:pub fn check_float_equality(a: f32, b: f32, max_diff: f32) -> Result<(), String> {
 89:pub fn check_int_equality<T: PartialEq + Debug>(a: T, b: T) -> Result<(), String> {

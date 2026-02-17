@@ -2,7 +2,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_float_array_equality_with_error, get_random_float32_array};
+use crate::cpu::common::{check_float_array_equality, get_random_float32_array};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -57,7 +57,7 @@ pub(super) fn test_mm_rcp14_ps() -> Result<(), String> {
         let a = _mm_set1_ps(2.0);
         let r = _mm_rcp14_ps(a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality_with_error(&out, &[0.5, 0.5, 0.5, 0.5])?;
+        check_float_array_equality(&out, &[0.5, 0.5, 0.5, 0.5])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -83,7 +83,7 @@ pub(super) fn test_mm_rcp14_pd() -> Result<(), String> {
         let a = _mm_set1_pd(2.0);
         let r = _mm_rcp14_pd(a);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality_with_error(&[out[0] as f32, out[1] as f32], &[0.5f32, 0.5f32])?;
+        check_float_array_equality(&[out[0] as f32, out[1] as f32], &[0.5f32, 0.5f32])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -110,7 +110,7 @@ pub(super) fn test_mm_rsqrt14_ps() -> Result<(), String> {
         let r = _mm_rsqrt14_ps(a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         // rsqrt(4) = 0.5
-        check_float_array_equality_with_error(&out, &[0.5, 0.5, 0.5, 0.5])?;
+        check_float_array_equality(&out, &[0.5, 0.5, 0.5, 0.5])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

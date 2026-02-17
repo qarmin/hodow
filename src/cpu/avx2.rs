@@ -12,7 +12,7 @@ use log::info;
 use crate::cpu::avx2::part1::*;
 use crate::cpu::avx2::part2::*;
 use crate::cpu::avx2::part3::*;
-use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, check_int_equality};
+use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
 use crate::get_fuzzing;
 pub struct AVX2;

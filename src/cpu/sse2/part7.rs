@@ -5,7 +5,7 @@ use std::arch::x86_64::{
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, get_random_float64_array, get_random_i32_array, get_random_i64_array};
+use crate::cpu::common::{check_array_equality, check_float_array_equality, get_random_float64_array, get_random_i32_array, get_random_i64_array};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -71,7 +71,7 @@ pub(super) fn test_mm_store1_pd() -> Result<(), String> {
     let mut data = [0.0f64; 2];
     let vec = unsafe { _mm_set1_pd(3.17) };
     unsafe { _mm_storel_pd(data.as_mut_ptr(), vec) };
-    check_float_array_equality_with_error(&data, &[3.17, 0.0])?;
+    check_float_array_equality(&data, &[3.17, 0.0])?;
 
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -94,7 +94,7 @@ pub(super) fn test_mm_store_pd1() -> Result<(), String> {
         let vec = _mm_set_pd(2.0, 1.0);
         _mm_storeh_pd(data.as_mut_ptr(), vec);
         // on this target/storeh stores the high element at data[0]
-        check_float_array_equality_with_error(&data, &[2.0, 0.0])?;
+        check_float_array_equality(&data, &[2.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -114,7 +114,7 @@ pub(super) fn test_mm_storer_pd() -> Result<(), String> {
     let mut data = [0.0f64; 2];
     let vec = unsafe { _mm_set_pd(9.0, 8.0) };
     unsafe { _mm_storeu_pd(data.as_mut_ptr(), vec) };
-    check_float_array_equality_with_error(&data, &[8.0, 9.0])?;
+    check_float_array_equality(&data, &[8.0, 9.0])?;
 
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -137,7 +137,7 @@ pub(super) fn test_mm_storeh_pd() -> Result<(), String> {
         let vec = _mm_set_pd(7.0, 6.0);
         _mm_storeh_pd(data.as_mut_ptr(), vec);
         // storeh writes the high element into data[0] on this target
-        check_float_array_equality_with_error(&data, &[7.0, 0.0])?;
+        check_float_array_equality(&data, &[7.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -157,7 +157,7 @@ pub(super) fn test_mm_storel_pd() -> Result<(), String> {
     let mut data = [0.0f64; 2];
     let vec = unsafe { _mm_set_pd(5.0, 4.0) };
     unsafe { _mm_storel_pd(data.as_mut_ptr(), vec) };
-    check_float_array_equality_with_error(&data, &[4.0, 0.0])?;
+    check_float_array_equality(&data, &[4.0, 0.0])?;
 
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -178,7 +178,7 @@ pub(super) fn test_mm_load1_pd() -> Result<(), String> {
     let data = [2.0f64, 3.0f64];
     let a = unsafe { _mm_loadu_pd(data.as_ptr()) };
     let result = unsafe { std::mem::transmute::<__m128d, [f64; 2]>(a) };
-    check_float_array_equality_with_error(&result, &[2.0, 3.0])?;
+    check_float_array_equality(&result, &[2.0, 3.0])?;
 
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -198,7 +198,7 @@ pub(super) fn test_mm_load_pd1() -> Result<(), String> {
     let data = [3.0f64, 2.0f64];
     let a = unsafe { _mm_loadu_pd(data.as_ptr()) };
     let result = unsafe { std::mem::transmute::<__m128d, [f64; 2]>(a) };
-    check_float_array_equality_with_error(&result, &[3.0, 2.0])?;
+    check_float_array_equality(&result, &[3.0, 2.0])?;
 
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -218,7 +218,7 @@ pub(super) fn test_mm_loadr_pd() -> Result<(), String> {
     let data = [1.0f64, 4.0f64];
     let a = unsafe { _mm_loadu_pd(data.as_ptr()) };
     let result = unsafe { std::mem::transmute::<__m128d, [f64; 2]>(a) };
-    check_float_array_equality_with_error(&result, &[1.0, 4.0])?;
+    check_float_array_equality(&result, &[1.0, 4.0])?;
 
     if get_fuzzing() {
         info!("Starting fuzzing");

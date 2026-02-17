@@ -5,7 +5,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_float_array_equality_with_error, check_int_equality, get_random_float, get_random_float32_array, get_random_float64_array, get_random_i64_array};
+use crate::cpu::common::{check_float_array_equality, check_int_equality, get_random_float, get_random_float32_array, get_random_float64_array, get_random_i64_array};
 use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
 use crate::get_fuzzing;
 pub struct AVX512F;
@@ -16,7 +16,7 @@ pub(super) fn test_mm512_add_ps() -> Result<(), String> {
         let b = _mm512_set_ps(16.0, 15.0, 14.0, 13.0, 12.0, 11.0, 10.0, 9.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0);
         let result = _mm512_add_ps(a, b);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
-        check_float_array_equality_with_error(&result, &[17.0; 16])?;
+        check_float_array_equality(&result, &[17.0; 16])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -39,7 +39,7 @@ pub(super) fn test_mm512_sub_ps() -> Result<(), String> {
         let b = _mm512_set1_ps(3.0);
         let result = _mm512_sub_ps(a, b);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
-        check_float_array_equality_with_error(&result, &[7.0; 16])?;
+        check_float_array_equality(&result, &[7.0; 16])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -62,7 +62,7 @@ pub(super) fn test_mm512_mul_ps() -> Result<(), String> {
         let b = _mm512_set1_ps(3.0);
         let result = _mm512_mul_ps(a, b);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
-        check_float_array_equality_with_error(&result, &[6.0; 16])?;
+        check_float_array_equality(&result, &[6.0; 16])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -85,7 +85,7 @@ pub(super) fn test_mm512_div_ps() -> Result<(), String> {
         let b = _mm512_set1_ps(3.0);
         let result = _mm512_div_ps(a, b);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
-        check_float_array_equality_with_error(&result, &[4.0; 16])?;
+        check_float_array_equality(&result, &[4.0; 16])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -108,7 +108,7 @@ pub(super) fn test_mm512_add_pd() -> Result<(), String> {
         let b = _mm512_set1_pd(3.0);
         let result = _mm512_add_pd(a, b);
         let result = std::mem::transmute::<__m512d, [f64; 8]>(result);
-        check_float_array_equality_with_error(&result, &[8.0; 8])?;
+        check_float_array_equality(&result, &[8.0; 8])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -131,7 +131,7 @@ pub(super) fn test_mm512_sub_pd() -> Result<(), String> {
         let b = _mm512_set1_pd(3.0);
         let result = _mm512_sub_pd(a, b);
         let result = std::mem::transmute::<__m512d, [f64; 8]>(result);
-        check_float_array_equality_with_error(&result, &[7.0; 8])?;
+        check_float_array_equality(&result, &[7.0; 8])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -154,7 +154,7 @@ pub(super) fn test_mm512_mul_pd() -> Result<(), String> {
         let b = _mm512_set1_pd(3.0);
         let result = _mm512_mul_pd(a, b);
         let result = std::mem::transmute::<__m512d, [f64; 8]>(result);
-        check_float_array_equality_with_error(&result, &[6.0; 8])?;
+        check_float_array_equality(&result, &[6.0; 8])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -177,7 +177,7 @@ pub(super) fn test_mm512_div_pd() -> Result<(), String> {
         let b = _mm512_set1_pd(3.0);
         let result = _mm512_div_pd(a, b);
         let result = std::mem::transmute::<__m512d, [f64; 8]>(result);
-        check_float_array_equality_with_error(&result, &[4.0; 8])?;
+        check_float_array_equality(&result, &[4.0; 8])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -200,7 +200,7 @@ pub(super) fn test_mm512_max_ps() -> Result<(), String> {
         let b = _mm512_set_ps(16.0, 15.0, 14.0, 13.0, 12.0, 11.0, 10.0, 9.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0);
         let result = _mm512_max_ps(a, b);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
-        check_float_array_equality_with_error(&result, &[16.0, 15.0, 14.0, 13.0, 12.0, 11.0, 10.0, 9.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])?;
+        check_float_array_equality(&result, &[16.0, 15.0, 14.0, 13.0, 12.0, 11.0, 10.0, 9.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -223,7 +223,7 @@ pub(super) fn test_mm512_min_ps() -> Result<(), String> {
         let b = _mm512_set_ps(16.0, 15.0, 14.0, 13.0, 12.0, 11.0, 10.0, 9.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0);
         let result = _mm512_min_ps(a, b);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
-        check_float_array_equality_with_error(&result, &[1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0])?;
+        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -246,7 +246,7 @@ pub(super) fn test_mm512_sqrt_ps() -> Result<(), String> {
         let vec = _mm512_loadu_ps(data.as_ptr());
         let result = _mm512_sqrt_ps(vec);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
-        check_float_array_equality_with_error(&result, &[2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0])?;
+        check_float_array_equality(&result, &[2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -265,7 +265,7 @@ pub(super) fn test_mm512_set1_ps() -> Result<(), String> {
     unsafe {
         let result = _mm512_set1_ps(3.13);
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
-        check_float_array_equality_with_error(&result, &[3.13; 16])?;
+        check_float_array_equality(&result, &[3.13; 16])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -283,7 +283,7 @@ pub(super) fn test_mm512_setzero_ps() -> Result<(), String> {
     unsafe {
         let result = _mm512_setzero_ps();
         let result = std::mem::transmute::<__m512, [f32; 16]>(result);
-        check_float_array_equality_with_error(&result, &[0.0; 16])?;
+        check_float_array_equality(&result, &[0.0; 16])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

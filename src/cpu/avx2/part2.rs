@@ -9,7 +9,7 @@ use std::arch::x86_64::{
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error};
+use crate::cpu::common::{check_array_equality, check_float_array_equality};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -203,7 +203,7 @@ pub(super) fn test_mm_broadcastsd_pd() -> Result<(), String> {
         let a = _mm_set_pd(0.0, 42.5);
         let result = _mm_broadcastsd_pd(a);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_float_array_equality_with_error(&result, &[42.5, 42.5])?;
+        check_float_array_equality(&result, &[42.5, 42.5])?;
     }
 
     if get_fuzzing() {
@@ -245,7 +245,7 @@ pub(super) fn test_mm_broadcastss_ps() -> Result<(), String> {
         let a = _mm_set_ps(0.0, 0.0, 0.0, 42.5);
         let result = _mm_broadcastss_ps(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_float_array_equality_with_error(&result, &[42.5, 42.5, 42.5, 42.5])?;
+        check_float_array_equality(&result, &[42.5, 42.5, 42.5, 42.5])?;
     }
 
     if get_fuzzing() {
@@ -375,7 +375,7 @@ pub(super) fn test_mm_i32gather_ps() -> Result<(), String> {
         let indices = _mm_set_epi32(0, 2, 4, 6);
         let result = _mm_i32gather_ps::<4>(arr.as_ptr(), indices);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_float_array_equality_with_error(&result, &[7.0, 5.0, 3.0, 1.0])?;
+        check_float_array_equality(&result, &[7.0, 5.0, 3.0, 1.0])?;
     }
 
     if get_fuzzing() {
@@ -415,7 +415,7 @@ pub(super) fn test_mm_mask_i32gather_ps() -> Result<(), String> {
         let result = _mm_mask_i32gather_ps::<4>(src, arr.as_ptr(), indices, mask);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
 
-        check_float_array_equality_with_error(&result, &[99.0, 5.0, 99.0, 1.0])?;
+        check_float_array_equality(&result, &[99.0, 5.0, 99.0, 1.0])?;
     }
 
     if get_fuzzing() {
@@ -532,7 +532,7 @@ pub(super) fn test_mm_i32gather_pd() -> Result<(), String> {
         let indices = _mm_set_epi32(0, 0, 1, 3);
         let result = _mm_i32gather_pd::<8>(arr.as_ptr(), indices);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_float_array_equality_with_error(&result, &[4.0, 2.0])?;
+        check_float_array_equality(&result, &[4.0, 2.0])?;
     }
 
     if get_fuzzing() {
@@ -571,7 +571,7 @@ pub(super) fn test_mm_mask_i32gather_pd() -> Result<(), String> {
         let mask = _mm_set_pd(-1.0, 0.0);
         let result = _mm_mask_i32gather_pd::<8>(src, arr.as_ptr(), indices, mask);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_float_array_equality_with_error(&result, &[99.0, 2.0])?;
+        check_float_array_equality(&result, &[99.0, 2.0])?;
     }
 
     if get_fuzzing() {
@@ -678,7 +678,7 @@ pub(super) fn test_mm_i64gather_ps() -> Result<(), String> {
         let indices = _mm_set_epi64x(0, 2);
         let result = _mm_i64gather_ps::<4>(arr.as_ptr(), indices);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_float_array_equality_with_error(&result, &[3.0, 1.0, 0.0, 0.0])?;
+        check_float_array_equality(&result, &[3.0, 1.0, 0.0, 0.0])?;
     }
 
     if get_fuzzing() {
@@ -712,7 +712,7 @@ pub(super) fn test_mm_mask_i64gather_ps() -> Result<(), String> {
         let mask = _mm_set_ps(-1.0, 0.0, -1.0, 0.0);
         let result = _mm_mask_i64gather_ps::<4>(src, arr.as_ptr(), indices, mask);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_float_array_equality_with_error(&result, &[99.0, 1.0, 0.0, 0.0])?;
+        check_float_array_equality(&result, &[99.0, 1.0, 0.0, 0.0])?;
     }
 
     if get_fuzzing() {
@@ -814,7 +814,7 @@ pub(super) fn test_mm_i64gather_pd() -> Result<(), String> {
         let indices = _mm_set_epi64x(0, 3);
         let result = _mm_i64gather_pd::<8>(arr.as_ptr(), indices);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_float_array_equality_with_error(&result, &[4.0, 1.0])?;
+        check_float_array_equality(&result, &[4.0, 1.0])?;
     }
 
     if get_fuzzing() {
@@ -848,7 +848,7 @@ pub(super) fn test_mm_mask_i64gather_pd() -> Result<(), String> {
         let mask = _mm_set_pd(-1.0, 0.0);
         let result = _mm_mask_i64gather_pd::<8>(src, arr.as_ptr(), indices, mask);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_float_array_equality_with_error(&result, &[99.0, 1.0])?;
+        check_float_array_equality(&result, &[99.0, 1.0])?;
     }
 
     if get_fuzzing() {

@@ -6,7 +6,7 @@ use std::arch::x86_64::*;
 use log::info;
 
 use crate::cpu::common::{
-    check_float_array_equality_with_error,
+    check_float_array_equality,
     check_int_equality,
     get_random_float32_array,
     get_random_float64_array,
@@ -23,7 +23,7 @@ pub(super) fn test_mm512_max_pd() -> Result<(), String> {
         let b = _mm512_loadu_pd(b_data.as_ptr());
         let result = _mm512_max_pd(a, b);
         let result: [f64; 8] = std::mem::transmute::<__m512d, [f64; 8]>(result);
-        check_float_array_equality_with_error(&result, &[8.0, 7.0, 6.0, 5.0, 5.0, 6.0, 7.0, 8.0])?;
+        check_float_array_equality(&result, &[8.0, 7.0, 6.0, 5.0, 5.0, 6.0, 7.0, 8.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -47,7 +47,7 @@ pub(super) fn test_mm512_min_pd() -> Result<(), String> {
         let b = _mm512_loadu_pd(b_data.as_ptr());
         let result = _mm512_min_pd(a, b);
         let result: [f64; 8] = std::mem::transmute::<__m512d, [f64; 8]>(result);
-        check_float_array_equality_with_error(&result, &[1.0, 2.0, 3.0, 4.0, 4.0, 3.0, 2.0, 1.0])?;
+        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0, 4.0, 3.0, 2.0, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -102,7 +102,7 @@ pub(super) fn test_mm_cvti64_ss() -> Result<(), String> {
         let a = _mm_setzero_ps();
         let result = _mm_cvti64_ss(a, 42);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_float_array_equality_with_error(&out, &[42.0, 0.0, 0.0, 0.0])?;
+        check_float_array_equality(&out, &[42.0, 0.0, 0.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -120,7 +120,7 @@ pub(super) fn test_mm_cvti64_sd() -> Result<(), String> {
         let a = _mm_setzero_pd();
         let result = _mm_cvti64_sd(a, 42);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_float_array_equality_with_error(&out, &[42.0, 0.0])?;
+        check_float_array_equality(&out, &[42.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -138,7 +138,7 @@ pub(super) fn test_mm_cvtu64_ss() -> Result<(), String> {
         let a = _mm_setzero_ps();
         let result = _mm_cvtu64_ss(a, 42u64);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_float_array_equality_with_error(&out, &[42.0, 0.0, 0.0, 0.0])?;
+        check_float_array_equality(&out, &[42.0, 0.0, 0.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -156,7 +156,7 @@ pub(super) fn test_mm_cvtu64_sd() -> Result<(), String> {
         let a = _mm_setzero_pd();
         let result = _mm_cvtu64_sd(a, 42u64);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_float_array_equality_with_error(&out, &[42.0, 0.0])?;
+        check_float_array_equality(&out, &[42.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

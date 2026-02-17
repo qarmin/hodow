@@ -8,7 +8,7 @@ use std::arch::x86_64::{
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, check_int_equality, get_random_float64_array, get_random_i32_array};
+use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality, get_random_float64_array, get_random_i32_array};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -138,7 +138,7 @@ pub(super) fn test_mm_cvtsi32_sd() -> Result<(), String> {
         let b = 42i32;
         let result = _mm_cvtsi32_sd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_float_array_equality_with_error(&result, &[0.0])?;
+        check_float_array_equality(&result, &[0.0])?;
     }
 
     if get_fuzzing() {

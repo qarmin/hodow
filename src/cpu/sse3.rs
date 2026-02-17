@@ -5,7 +5,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_float_array_equality_with_error, get_random_float, get_random_float32_array};
+use crate::cpu::common::{check_float_array_equality, get_random_float, get_random_float32_array};
 use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
 use crate::get_fuzzing;
 pub struct SSE3;
@@ -38,7 +38,7 @@ fn test_mm_hadd_ps() -> Result<(), String> {
         let result = _mm_hadd_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
 
-        check_float_array_equality_with_error(&result, &[7.0, 3.0, 15.0, 11.0])?;
+        check_float_array_equality(&result, &[7.0, 3.0, 15.0, 11.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -60,7 +60,7 @@ fn test_mm_hsub_ps() -> Result<(), String> {
         let result = _mm_hsub_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
 
-        check_float_array_equality_with_error(&result, &[1.0, 1.0, 1.0, 1.0])?;
+        check_float_array_equality(&result, &[1.0, 1.0, 1.0, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -82,7 +82,7 @@ fn test_mm_addsub_ps() -> Result<(), String> {
         let result = _mm_addsub_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
 
-        check_float_array_equality_with_error(&result, &[-4.0, 10.0, -4.0, 6.0])?;
+        check_float_array_equality(&result, &[-4.0, 10.0, -4.0, 6.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -103,7 +103,7 @@ fn test_mm_movehdup_ps() -> Result<(), String> {
         let result = _mm_movehdup_ps(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
 
-        check_float_array_equality_with_error(&result, &[3.0, 3.0, 1.0, 1.0])?;
+        check_float_array_equality(&result, &[3.0, 3.0, 1.0, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -123,7 +123,7 @@ fn test_mm_moveldup_ps() -> Result<(), String> {
         let result = _mm_moveldup_ps(a);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
 
-        check_float_array_equality_with_error(&result, &[4.0, 4.0, 2.0, 2.0])?;
+        check_float_array_equality(&result, &[4.0, 4.0, 2.0, 2.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -143,7 +143,7 @@ fn test_mm_hadd_pd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 4.0);
         let result = _mm_hadd_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_float_array_equality_with_error(&result, &[3.0, 7.0])?;
+        check_float_array_equality(&result, &[3.0, 7.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -166,7 +166,7 @@ fn test_mm_hsub_pd() -> Result<(), String> {
         let b = _mm_set_pd(7.0, 5.0);
         let result = _mm_hsub_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_float_array_equality_with_error(&result, &[-2.0, -2.0])?;
+        check_float_array_equality(&result, &[-2.0, -2.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -189,7 +189,7 @@ fn test_mm_addsub_pd() -> Result<(), String> {
         let b = _mm_set_pd(1.0, 2.0);
         let result = _mm_addsub_pd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_float_array_equality_with_error(&result, &[2.0, 3.0])?;
+        check_float_array_equality(&result, &[2.0, 3.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

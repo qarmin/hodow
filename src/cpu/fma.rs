@@ -5,7 +5,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_float_array_equality_with_error, get_random_float32_array};
+use crate::cpu::common::{check_float_array_equality, get_random_float32_array};
 use crate::cpu::{get_iterations, ExtensionTest};
 use crate::get_fuzzing;
 pub struct FMA;
@@ -39,7 +39,7 @@ fn test_mm_fmadd_ps() -> Result<(), String> {
         let result = _mm_fmadd_ps(a, b, c);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
 
-        check_float_array_equality_with_error(&result, &[9.0, 7.0, 5.0, 3.0])?;
+        check_float_array_equality(&result, &[9.0, 7.0, 5.0, 3.0])?;
     }
 
     if get_fuzzing() {
@@ -65,7 +65,7 @@ fn test_mm_fmsub_ps() -> Result<(), String> {
         let result = _mm_fmsub_ps(a, b, c);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
 
-        check_float_array_equality_with_error(&result, &[7.0, 5.0, 3.0, 1.0])?;
+        check_float_array_equality(&result, &[7.0, 5.0, 3.0, 1.0])?;
     }
 
     if get_fuzzing() {
@@ -91,7 +91,7 @@ fn test_mm_fnmadd_ps() -> Result<(), String> {
         let result = _mm_fnmadd_ps(a, b, c);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
 
-        check_float_array_equality_with_error(&result, &[-7.0, -5.0, -3.0, -1.0])?;
+        check_float_array_equality(&result, &[-7.0, -5.0, -3.0, -1.0])?;
     }
 
     if get_fuzzing() {
@@ -117,7 +117,7 @@ fn test_mm_fnmsub_ps() -> Result<(), String> {
         let result = _mm_fnmsub_ps(a, b, c);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
 
-        check_float_array_equality_with_error(&result, &[-9.0, -7.0, -5.0, -3.0])?;
+        check_float_array_equality(&result, &[-9.0, -7.0, -5.0, -3.0])?;
     }
 
     if get_fuzzing() {
@@ -143,7 +143,7 @@ fn test_mm_fmaddsub_ps() -> Result<(), String> {
         let result = _mm_fmaddsub_ps(a, b, c);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
 
-        check_float_array_equality_with_error(&result, &[7.0, 7.0, 3.0, 3.0])?;
+        check_float_array_equality(&result, &[7.0, 7.0, 3.0, 3.0])?;
     }
 
     if get_fuzzing() {
@@ -168,7 +168,7 @@ fn test_mm256_fmadd_ps() -> Result<(), String> {
         let c = _mm256_set_ps(1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
         let result = _mm256_fmadd_ps(a, b, c);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-        check_float_array_equality_with_error(&result, &[17.0, 15.0, 13.0, 11.0, 9.0, 7.0, 5.0, 3.0])?;
+        check_float_array_equality(&result, &[17.0, 15.0, 13.0, 11.0, 9.0, 7.0, 5.0, 3.0])?;
     }
 
     if get_fuzzing() {
@@ -197,7 +197,7 @@ fn test_mm256_fmsub_ps() -> Result<(), String> {
         let c = _mm256_set_ps(1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
         let result = _mm256_fmsub_ps(a, b, c);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-        check_float_array_equality_with_error(&result, &[15.0, 13.0, 11.0, 9.0, 7.0, 5.0, 3.0, 1.0])?;
+        check_float_array_equality(&result, &[15.0, 13.0, 11.0, 9.0, 7.0, 5.0, 3.0, 1.0])?;
     }
 
     if get_fuzzing() {
@@ -226,7 +226,7 @@ fn test_mm256_fnmadd_ps() -> Result<(), String> {
         let c = _mm256_set_ps(1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
         let result = _mm256_fnmadd_ps(a, b, c);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-        check_float_array_equality_with_error(&result, &[-15.0, -13.0, -11.0, -9.0, -7.0, -5.0, -3.0, -1.0])?;
+        check_float_array_equality(&result, &[-15.0, -13.0, -11.0, -9.0, -7.0, -5.0, -3.0, -1.0])?;
     }
 
     if get_fuzzing() {
@@ -255,7 +255,7 @@ fn test_mm256_fnmsub_ps() -> Result<(), String> {
         let c = _mm256_set_ps(1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
         let result = _mm256_fnmsub_ps(a, b, c);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-        check_float_array_equality_with_error(&result, &[-17.0, -15.0, -13.0, -11.0, -9.0, -7.0, -5.0, -3.0])?;
+        check_float_array_equality(&result, &[-17.0, -15.0, -13.0, -11.0, -9.0, -7.0, -5.0, -3.0])?;
     }
 
     if get_fuzzing() {
@@ -284,7 +284,7 @@ fn test_mm256_fmaddsub_ps() -> Result<(), String> {
         let c = _mm256_set_ps(1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
         let result = _mm256_fmaddsub_ps(a, b, c);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-        check_float_array_equality_with_error(&result, &[15.0, 15.0, 11.0, 11.0, 7.0, 7.0, 3.0, 3.0])?;
+        check_float_array_equality(&result, &[15.0, 15.0, 11.0, 11.0, 7.0, 7.0, 3.0, 3.0])?;
     }
 
     if get_fuzzing() {
@@ -313,7 +313,7 @@ fn test_mm_fmadd_pd() -> Result<(), String> {
         let c = _mm_set_pd(1.0, 1.0);
         let result = _mm_fmadd_pd(a, b, c);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        crate::cpu::common::check_float_array_equality_with_error(&out, &[7.0, 7.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[7.0, 7.0])?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -373,7 +373,7 @@ pub(super) fn test_mm_fmaddsub_pd() -> Result<(), String> {
         let c = _mm_set_pd(1.0, 1.0);
         let r = _mm_fmaddsub_pd(a, b, c);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        crate::cpu::common::check_float_array_equality_with_error(&out, &[1.0 * 2.0 - 1.0, 2.0 * 3.0 + 1.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[1.0 * 2.0 - 1.0, 2.0 * 3.0 + 1.0])?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -393,7 +393,7 @@ fn test_mm_fmsub_pd() -> Result<(), String> {
         let c = _mm_set_pd(1.0, 1.0);
         let r = _mm_fmsub_pd(a, b, c);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        crate::cpu::common::check_float_array_equality_with_error(&out, &[3.0 * 2.0 - 1.0, 4.0 * 2.0 - 1.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[3.0 * 2.0 - 1.0, 4.0 * 2.0 - 1.0])?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -453,7 +453,7 @@ fn test_mm_fmsubadd_pd() -> Result<(), String> {
         let c = _mm_set_pd(1.0, 1.0);
         let r = _mm_fmsubadd_pd(a, b, c);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        crate::cpu::common::check_float_array_equality_with_error(&out, &[2.0 * 2.0 - 1.0, 3.0 * 2.0 + 1.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[2.0 * 2.0 - 1.0, 3.0 * 2.0 + 1.0])?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -473,7 +473,7 @@ fn test_mm_fmsubadd_ps() -> Result<(), String> {
         let c = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let r = _mm_fmsubadd_ps(a, b, c);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        crate::cpu::common::check_float_array_equality_with_error(&out, &[1.0 * 2.0 - 1.0, 2.0 * 2.0 + 1.0, 3.0 * 2.0 - 1.0, 4.0 * 2.0 + 1.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[1.0 * 2.0 - 1.0, 2.0 * 2.0 + 1.0, 3.0 * 2.0 - 1.0, 4.0 * 2.0 + 1.0])?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -496,7 +496,7 @@ fn test_mm_fnmadd_pd() -> Result<(), String> {
         let c = _mm_set_pd(1.0, 1.0);
         let r = _mm_fnmadd_pd(a, b, c);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        crate::cpu::common::check_float_array_equality_with_error(&out, &[-(2.0 * 3.0) - 1.0, -(2.0 * 3.0) - 1.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[-(2.0 * 3.0) - 1.0, -(2.0 * 3.0) - 1.0])?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -556,7 +556,7 @@ fn test_mm_fnmsub_pd() -> Result<(), String> {
         let c = _mm_set_pd(1.0, 1.0);
         let r = _mm_fnmsub_pd(a, b, c);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        crate::cpu::common::check_float_array_equality_with_error(&out, &[-(2.0 * 2.0) - 1.0, -(3.0 * 2.0) - 1.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[-(2.0 * 2.0) - 1.0, -(3.0 * 2.0) - 1.0])?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");

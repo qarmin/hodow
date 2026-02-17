@@ -9,7 +9,7 @@ use std::arch::x86_64::{
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, check_int_equality, get_random_float64_array, get_random_i32_array};
+use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality, get_random_float64_array, get_random_i32_array};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -548,7 +548,7 @@ pub(super) fn test_mm_cvtepi32_pd() -> Result<(), String> {
         let a = _mm_set_epi32(0, 0, 20, 10);
         let result = _mm_cvtepi32_pd(a);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_float_array_equality_with_error(&result, &[10.0, 20.0])?;
+        check_float_array_equality(&result, &[10.0, 20.0])?;
     }
 
     if get_fuzzing() {
@@ -570,7 +570,7 @@ pub(super) fn test_mm_cvtepi32_ps() -> Result<(), String> {
         let a = _mm_set_epi32(4, 3, 2, 1);
         let result = _mm_cvtepi32_ps(a);
         let result = std::mem::transmute::<std::arch::x86_64::__m128, [f32; 4]>(result);
-        check_float_array_equality_with_error(&result, &[1.0, 2.0, 3.0, 4.0])?;
+        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0])?;
     }
 
     if get_fuzzing() {
@@ -685,7 +685,7 @@ pub(super) fn test_mm_add_sd() -> Result<(), String> {
         let b = _mm_set_sd(5.0);
         let result = _mm_add_sd(a, b);
         let result_f64 = _mm_cvtsd_f64(result);
-        check_float_array_equality_with_error(&[result_f64], &[15.0])?;
+        check_float_array_equality(&[result_f64], &[15.0])?;
     }
 
     if get_fuzzing() {
@@ -709,7 +709,7 @@ pub(super) fn test_mm_div_sd() -> Result<(), String> {
         let b = _mm_set_sd(4.0);
         let result = _mm_div_sd(a, b);
         let result_f64 = _mm_cvtsd_f64(result);
-        check_float_array_equality_with_error(&[result_f64], &[5.0])?;
+        check_float_array_equality(&[result_f64], &[5.0])?;
     }
 
     if get_fuzzing() {
@@ -757,7 +757,7 @@ pub(super) fn test_mm_max_sd() -> Result<(), String> {
         let b = _mm_set_sd(5.0);
         let result = _mm_max_sd(a, b);
         let result_f64 = _mm_cvtsd_f64(result);
-        check_float_array_equality_with_error(&[result_f64], &[10.0])?;
+        check_float_array_equality(&[result_f64], &[10.0])?;
     }
 
     if get_fuzzing() {
@@ -806,7 +806,7 @@ pub(super) fn test_mm_min_sd() -> Result<(), String> {
         let b = _mm_set_sd(5.0);
         let result = _mm_min_sd(a, b);
         let result_f64 = _mm_cvtsd_f64(result);
-        check_float_array_equality_with_error(&[result_f64], &[5.0])?;
+        check_float_array_equality(&[result_f64], &[5.0])?;
     }
 
     if get_fuzzing() {
@@ -855,7 +855,7 @@ pub(super) fn test_mm_mul_sd() -> Result<(), String> {
         let b = _mm_set_sd(5.0);
         let result = _mm_mul_sd(a, b);
         let result_f64 = _mm_cvtsd_f64(result);
-        check_float_array_equality_with_error(&[result_f64], &[50.0])?;
+        check_float_array_equality(&[result_f64], &[50.0])?;
     }
 
     if get_fuzzing() {
@@ -879,7 +879,7 @@ pub(super) fn test_mm_sqrt_sd() -> Result<(), String> {
         let b = _mm_set_sd(0.0);
         let result = _mm_sqrt_sd(b, a);
         let result_f64 = _mm_cvtsd_f64(result);
-        check_float_array_equality_with_error(&[result_f64], &[5.0])?;
+        check_float_array_equality(&[result_f64], &[5.0])?;
     }
 
     if get_fuzzing() {
@@ -925,7 +925,7 @@ pub(super) fn test_mm_sub_sd() -> Result<(), String> {
         let b = _mm_set_sd(3.0);
         let result = _mm_sub_sd(a, b);
         let result_f64 = _mm_cvtsd_f64(result);
-        check_float_array_equality_with_error(&[result_f64], &[7.0])?;
+        check_float_array_equality(&[result_f64], &[7.0])?;
     }
 
     if get_fuzzing() {

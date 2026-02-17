@@ -2,7 +2,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, get_random_float32_array, get_random_i32_array};
+use crate::cpu::common::{check_array_equality, check_float_array_equality, get_random_float32_array, get_random_i32_array};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -28,7 +28,7 @@ pub(super) fn test_mm_cvti32_sh() -> Result<(), String> {
     unsafe {
         let v = _mm_set1_ps(3.0);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(v);
-        check_float_array_equality_with_error(&out, &[3.0, 3.0, 3.0, 3.0])?;
+        check_float_array_equality(&out, &[3.0, 3.0, 3.0, 3.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -45,7 +45,7 @@ pub(super) fn test_mm_cvt_roundi32_sh() -> Result<(), String> {
     unsafe {
         let v = _mm_set1_ps(2.0);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(v);
-        check_float_array_equality_with_error(&out, &[2.0, 2.0, 2.0, 2.0])?;
+        check_float_array_equality(&out, &[2.0, 2.0, 2.0, 2.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -114,7 +114,7 @@ pub(super) fn test_mm_cvtxps_ph() -> Result<(), String> {
     unsafe {
         let v = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(v);
-        check_float_array_equality_with_error(&out, &[4.0, 3.0, 2.0, 1.0])?;
+        check_float_array_equality(&out, &[4.0, 3.0, 2.0, 1.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

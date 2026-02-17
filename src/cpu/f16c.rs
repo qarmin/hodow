@@ -5,7 +5,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_float_array_equality_with_error, get_random_float32_array, get_random_i32_array};
+use crate::cpu::common::{check_float_array_equality, get_random_float32_array, get_random_i32_array};
 use crate::cpu::{ExtensionTest, TestFunction};
 use crate::get_fuzzing;
 
@@ -26,7 +26,7 @@ fn test_mm_cvtph_ps() -> Result<(), String> {
         let a = _mm_set_epi16(0, 0, 0, 0, ph[3] as i16, ph[2] as i16, ph[1] as i16, ph[0] as i16);
         let res = _mm_cvtph_ps(a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(res);
-        check_float_array_equality_with_error(&out, &[1.0f32, 2.0f32, 3.0f32, 4.0f32])?;
+        check_float_array_equality(&out, &[1.0f32, 2.0f32, 3.0f32, 4.0f32])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -47,7 +47,7 @@ fn test_mm_cvtps_ph() -> Result<(), String> {
         let ph = _mm_cvtps_ph(v, 0);
         let round = _mm_cvtph_ps(ph);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(round);
-        check_float_array_equality_with_error(&out, &[4.0f32, 3.0f32, 2.0f32, 1.0f32])?;
+        check_float_array_equality(&out, &[4.0f32, 3.0f32, 2.0f32, 1.0f32])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

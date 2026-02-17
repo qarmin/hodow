@@ -5,7 +5,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_float_array_equality_with_error, get_random_float, get_random_float32_array, get_random_float64_array};
+use crate::cpu::common::{check_float_array_equality, get_random_float, get_random_float32_array, get_random_float64_array};
 use crate::cpu::{get_iterations, ExtensionTest, TestFunction};
 use crate::get_fuzzing;
 
@@ -64,7 +64,7 @@ fn test_mm256_set_ps() -> Result<(), String> {
     unsafe {
         let result = _mm256_set_ps(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-        check_float_array_equality_with_error(&result, &[8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0])?;
+        check_float_array_equality(&result, &[8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -72,7 +72,7 @@ fn test_mm256_set_ps() -> Result<(), String> {
                 let arr = get_random_float32_array::<8>();
                 let result = _mm256_set_ps(arr[7], arr[6], arr[5], arr[4], arr[3], arr[2], arr[1], arr[0]);
                 let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-                check_float_array_equality_with_error(&result, &arr)?;
+                check_float_array_equality(&result, &arr)?;
             }
         }
     }
@@ -84,7 +84,7 @@ fn test_mm256_set1_ps() -> Result<(), String> {
     unsafe {
         let result = _mm256_set1_ps(3.13);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-        check_float_array_equality_with_error(&result, &[3.13, 3.13, 3.13, 3.13, 3.13, 3.13, 3.13, 3.13])?;
+        check_float_array_equality(&result, &[3.13, 3.13, 3.13, 3.13, 3.13, 3.13, 3.13, 3.13])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -92,7 +92,7 @@ fn test_mm256_set1_ps() -> Result<(), String> {
                 let value = get_random_float();
                 let result = _mm256_set1_ps(value);
                 let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-                check_float_array_equality_with_error(&result, &[value, value, value, value, value, value, value, value])?;
+                check_float_array_equality(&result, &[value, value, value, value, value, value, value, value])?;
             }
         }
     }
@@ -104,7 +104,7 @@ fn test_mm256_setzero_ps() -> Result<(), String> {
     unsafe {
         let result = _mm256_setzero_ps();
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-        check_float_array_equality_with_error(&result, &[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])?;
+        check_float_array_equality(&result, &[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -123,7 +123,7 @@ fn test_mm256_add_ps() -> Result<(), String> {
         let b = _mm256_set_ps(8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0);
         let result = _mm256_add_ps(a, b);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-        check_float_array_equality_with_error(&result, &[9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0])?;
+        check_float_array_equality(&result, &[9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0, 9.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -147,7 +147,7 @@ fn test_mm256_sub_ps() -> Result<(), String> {
         let b = _mm256_set_ps(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0);
         let result = _mm256_sub_ps(a, b);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-        check_float_array_equality_with_error(&result, &[-7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0])?;
+        check_float_array_equality(&result, &[-7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -171,7 +171,7 @@ fn test_mm256_mul_ps() -> Result<(), String> {
         let b = _mm256_set_ps(2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0);
         let result = _mm256_mul_ps(a, b);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-        check_float_array_equality_with_error(&result, &[16.0, 14.0, 12.0, 10.0, 8.0, 6.0, 4.0, 2.0])?;
+        check_float_array_equality(&result, &[16.0, 14.0, 12.0, 10.0, 8.0, 6.0, 4.0, 2.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -196,7 +196,7 @@ fn test_mm256_div_ps() -> Result<(), String> {
         let result = _mm256_div_ps(a, b);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
 
-        check_float_array_equality_with_error(&result, &[1.0, 2.0, 3.0, 4.0, 1.0, 2.0, 3.0, 4.0])?;
+        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0, 1.0, 2.0, 3.0, 4.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -222,7 +222,7 @@ fn test_mm256_load_ps() -> Result<(), String> {
         let data = AlignedData([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]);
         let result = _mm256_load_ps(data.0.as_ptr());
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-        check_float_array_equality_with_error(&result, &data.0)?;
+        check_float_array_equality(&result, &data.0)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -230,7 +230,7 @@ fn test_mm256_load_ps() -> Result<(), String> {
                 let data = AlignedData(get_random_float32_array::<8>());
                 let result = _mm256_load_ps(data.0.as_ptr());
                 let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-                check_float_array_equality_with_error(&result, &data.0)?;
+                check_float_array_equality(&result, &data.0)?;
             }
         }
     }
@@ -243,7 +243,7 @@ fn test_mm256_loadu_ps() -> Result<(), String> {
         let data = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0];
         let result = _mm256_loadu_ps(data.as_ptr());
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-        check_float_array_equality_with_error(&result, &data)?;
+        check_float_array_equality(&result, &data)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -251,7 +251,7 @@ fn test_mm256_loadu_ps() -> Result<(), String> {
                 let data = get_random_float32_array::<8>();
                 let result = _mm256_loadu_ps(data.as_ptr());
                 let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-                check_float_array_equality_with_error(&result, &data)?;
+                check_float_array_equality(&result, &data)?;
             }
         }
     }
@@ -268,7 +268,7 @@ fn test_mm256_store_ps() -> Result<(), String> {
         let mut result = AlignedData([0.0; 8]);
         let vec = _mm256_loadu_ps(data.0.as_ptr());
         _mm256_store_ps(result.0.as_mut_ptr(), vec);
-        check_float_array_equality_with_error(&result.0, &data.0)?;
+        check_float_array_equality(&result.0, &data.0)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -277,7 +277,7 @@ fn test_mm256_store_ps() -> Result<(), String> {
                 let mut result = AlignedData([0.0; 8]);
                 let vec = _mm256_loadu_ps(data.0.as_ptr());
                 _mm256_store_ps(result.0.as_mut_ptr(), vec);
-                check_float_array_equality_with_error(&result.0, &data.0)?;
+                check_float_array_equality(&result.0, &data.0)?;
             }
         }
     }
@@ -291,7 +291,7 @@ fn test_mm256_max_ps() -> Result<(), String> {
         let b = _mm256_set_ps(8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0);
         let result = _mm256_max_ps(a, b);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-        check_float_array_equality_with_error(&result, &[8.0, 7.0, 6.0, 5.0, 5.0, 6.0, 7.0, 8.0])?;
+        check_float_array_equality(&result, &[8.0, 7.0, 6.0, 5.0, 5.0, 6.0, 7.0, 8.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -315,7 +315,7 @@ fn test_mm256_min_ps() -> Result<(), String> {
         let b = _mm256_set_ps(8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0);
         let result = _mm256_min_ps(a, b);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-        check_float_array_equality_with_error(&result, &[1.0, 2.0, 3.0, 4.0, 4.0, 3.0, 2.0, 1.0])?;
+        check_float_array_equality(&result, &[1.0, 2.0, 3.0, 4.0, 4.0, 3.0, 2.0, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -339,7 +339,7 @@ fn test_mm256_sqrt_ps() -> Result<(), String> {
         let vec = _mm256_loadu_ps(data.as_ptr());
         let result = _mm256_sqrt_ps(vec);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-        check_float_array_equality_with_error(&result, &[2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0])?;
+        check_float_array_equality(&result, &[2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -360,7 +360,7 @@ fn test_mm256_and_ps() -> Result<(), String> {
         let b = _mm256_set_ps(1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0);
         let result = _mm256_and_ps(a, b);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-        check_float_array_equality_with_error(&result, &[0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0])?;
+        check_float_array_equality(&result, &[0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -384,7 +384,7 @@ fn test_mm256_or_ps() -> Result<(), String> {
         let b = _mm256_set_ps(1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0);
         let result = _mm256_or_ps(a, b);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-        check_float_array_equality_with_error(&result, &[0.0, -1.0, 1.0, 1.0, 0.0, -1.0, 1.0, 1.0])?;
+        check_float_array_equality(&result, &[0.0, -1.0, 1.0, 1.0, 0.0, -1.0, 1.0, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -408,7 +408,7 @@ fn test_mm256_xor_ps() -> Result<(), String> {
         let b = _mm256_set_ps(1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0);
         let result = _mm256_xor_ps(a, b);
         let result = std::mem::transmute::<__m256, [f32; 8]>(result);
-        check_float_array_equality_with_error(&result, &[0.0, -1.0, 1.0, 0.0, 0.0, -1.0, 1.0, 0.0])?;
+        check_float_array_equality(&result, &[0.0, -1.0, 1.0, 0.0, 0.0, -1.0, 1.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -430,7 +430,7 @@ fn test_mm256_set_pd() -> Result<(), String> {
     unsafe {
         let result = _mm256_set_pd(1.0, 2.0, 3.0, 4.0);
         let result = std::mem::transmute::<__m256d, [f64; 4]>(result);
-        check_float_array_equality_with_error(&result, &[4.0, 3.0, 2.0, 1.0])?;
+        check_float_array_equality(&result, &[4.0, 3.0, 2.0, 1.0])?;
     }
 
     if get_fuzzing() {
@@ -440,7 +440,7 @@ fn test_mm256_set_pd() -> Result<(), String> {
                 let arr = [get_random_float() as f64, get_random_float() as f64, get_random_float() as f64, get_random_float() as f64];
                 let result = _mm256_set_pd(arr[3], arr[2], arr[1], arr[0]);
                 let result = std::mem::transmute::<__m256d, [f64; 4]>(result);
-                check_float_array_equality_with_error(&result, &arr)?;
+                check_float_array_equality(&result, &arr)?;
             }
         }
     }
@@ -454,7 +454,7 @@ fn test_mm256_add_pd() -> Result<(), String> {
         let b = _mm256_set_pd(5.0, 6.0, 7.0, 8.0);
         let result = _mm256_add_pd(a, b);
         let result = std::mem::transmute::<__m256d, [f64; 4]>(result);
-        check_float_array_equality_with_error(&result, &[12.0, 10.0, 8.0, 6.0])?;
+        check_float_array_equality(&result, &[12.0, 10.0, 8.0, 6.0])?;
     }
 
     if get_fuzzing() {
@@ -477,7 +477,7 @@ fn test_mm256_sub_pd() -> Result<(), String> {
         let b = _mm256_set_pd(1.0, 2.0, 3.0, 4.0);
         let result = _mm256_sub_pd(a, b);
         let result = std::mem::transmute::<__m256d, [f64; 4]>(result);
-        check_float_array_equality_with_error(&result, &[4.0, 4.0, 4.0, 4.0])?;
+        check_float_array_equality(&result, &[4.0, 4.0, 4.0, 4.0])?;
     }
 
     if get_fuzzing() {
@@ -500,7 +500,7 @@ fn test_mm256_mul_pd() -> Result<(), String> {
         let b = _mm256_set_pd(2.0, 2.0, 2.0, 2.0);
         let result = _mm256_mul_pd(a, b);
         let result = std::mem::transmute::<__m256d, [f64; 4]>(result);
-        check_float_array_equality_with_error(&result, &[8.0, 6.0, 4.0, 2.0])?;
+        check_float_array_equality(&result, &[8.0, 6.0, 4.0, 2.0])?;
     }
 
     if get_fuzzing() {
@@ -523,7 +523,7 @@ fn test_mm_cmp_pd() -> Result<(), String> {
         let b = _mm_set_pd(1.0, 2.0);
         let r = _mm_cmp_pd(a, b, _CMP_EQ_OQ);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        crate::cpu::common::check_float_array_equality_with_error(&out, &[0.0, 0.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[0.0, 0.0])?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -541,7 +541,7 @@ fn test_mm_cmp_ps() -> Result<(), String> {
         let b = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let r = _mm_cmp_ps(a, b, _CMP_GT_OQ);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        crate::cpu::common::check_float_array_equality_with_error(&out, &[0.0, 0.0, 1.0, 1.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[0.0, 0.0, 1.0, 1.0])?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -595,7 +595,7 @@ fn test_mm_permutevar_ps() -> Result<(), String> {
         let idx = _mm_set_epi32(0, 1, 2, 3);
         let r = _mm_permutevar_ps(a, idx);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        crate::cpu::common::check_float_array_equality_with_error(&out, &[4.0, 3.0, 2.0, 1.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[4.0, 3.0, 2.0, 1.0])?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -612,7 +612,7 @@ fn test_mm_permute_ps() -> Result<(), String> {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let r = _mm_permute_ps(a, 0b00_01_10_11);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        crate::cpu::common::check_float_array_equality_with_error(&out, &[1.0, 2.0, 3.0, 4.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[1.0, 2.0, 3.0, 4.0])?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -630,7 +630,7 @@ fn test_mm_permutevar_pd() -> Result<(), String> {
         let idx = _mm_set_epi32(1, 0, 0, 1);
         let r = _mm_permutevar_pd(a, idx);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        crate::cpu::common::check_float_array_equality_with_error(&out, &[2.0, 1.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[2.0, 1.0])?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -647,7 +647,7 @@ fn test_mm_permute_pd() -> Result<(), String> {
         let a = _mm_set_pd(2.0, 1.0);
         let r = _mm_permute_pd(a, 0);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        crate::cpu::common::check_float_array_equality_with_error(&out, &[1.0, 2.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[1.0, 2.0])?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -663,7 +663,7 @@ fn test_mm_broadcast_ss() -> Result<(), String> {
     unsafe {
         let r = _mm_broadcast_ss(&1.0f32);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        crate::cpu::common::check_float_array_equality_with_error(&out, &[1.0, 1.0, 1.0, 1.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[1.0, 1.0, 1.0, 1.0])?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -681,7 +681,7 @@ fn test_mm_maskload_pd() -> Result<(), String> {
         let m = _mm_set_epi64x(-1, -1);
         let r = _mm_maskload_pd(&[1.0f64, 2.0f64] as *const f64, m);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        crate::cpu::common::check_float_array_equality_with_error(&out, &[1.0, 2.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[1.0, 2.0])?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -715,7 +715,7 @@ fn test_mm_maskload_ps() -> Result<(), String> {
         let m = _mm_set_epi32(-1, -1, -1, -1);
         let r = _mm_maskload_ps(&[1.0f32, 2.0f32, 3.0f32, 4.0f32] as *const f32, m);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        crate::cpu::common::check_float_array_equality_with_error(&out, &[1.0, 2.0, 3.0, 4.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[1.0, 2.0, 3.0, 4.0])?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");

@@ -98,7 +98,7 @@ pub(super) fn test_mm_load_ph() -> Result<(), String> {
         let data = [1.0f32, 2.0, 3.0, 4.0];
         let r = _mm_load_ph(data.as_ptr());
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        crate::cpu::common::check_float_array_equality_with_error(&out, &[1.0, 2.0, 3.0, 4.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[1.0, 2.0, 3.0, 4.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

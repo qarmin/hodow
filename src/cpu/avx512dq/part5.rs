@@ -2,7 +2,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, check_float_array_equality_with_error, get_random_float32_array, get_random_float64_array, get_random_i32_array};
+use crate::cpu::common::{check_array_equality, check_float_array_equality, get_random_float32_array, get_random_float64_array, get_random_i32_array};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -50,7 +50,7 @@ pub(super) fn test_mm_range_pd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(2.0, 1.0);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(a);
-        check_float_array_equality_with_error(&out, &[1.0, 2.0])?;
+        check_float_array_equality(&out, &[1.0, 2.0])?;
     }
 
     if get_fuzzing() {
@@ -70,7 +70,7 @@ pub(super) fn test_mm_mask_range_pd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(4.0, 3.0);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(a);
-        check_float_array_equality_with_error(&out, &[3.0, 4.0])?;
+        check_float_array_equality(&out, &[3.0, 4.0])?;
     }
 
     if get_fuzzing() {
@@ -90,7 +90,7 @@ pub(super) fn test_mm_maskz_range_pd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_pd(6.0, 5.0);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(a);
-        check_float_array_equality_with_error(&out, &[5.0, 6.0])?;
+        check_float_array_equality(&out, &[5.0, 6.0])?;
     }
 
     if get_fuzzing() {
@@ -110,7 +110,7 @@ pub(super) fn test_mm_range_ps() -> Result<(), String> {
     unsafe {
         let v = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(v);
-        check_float_array_equality_with_error(&out, &[4.0, 3.0, 2.0, 1.0])?;
+        check_float_array_equality(&out, &[4.0, 3.0, 2.0, 1.0])?;
     }
 
     if get_fuzzing() {
@@ -130,7 +130,7 @@ pub(super) fn test_mm_mask_range_ps() -> Result<(), String> {
     unsafe {
         let v = _mm_set_ps(8.0, 7.0, 6.0, 5.0);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(v);
-        check_float_array_equality_with_error(&out, &[5.0, 6.0, 7.0, 8.0])?;
+        check_float_array_equality(&out, &[5.0, 6.0, 7.0, 8.0])?;
     }
 
     if get_fuzzing() {
@@ -150,7 +150,7 @@ pub(super) fn test_mm_maskz_range_ps() -> Result<(), String> {
     unsafe {
         let v = _mm_set_ps(12.0, 11.0, 10.0, 9.0);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(v);
-        check_float_array_equality_with_error(&out, &[9.0, 10.0, 11.0, 12.0])?;
+        check_float_array_equality(&out, &[9.0, 10.0, 11.0, 12.0])?;
     }
 
     if get_fuzzing() {

@@ -2,7 +2,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_float_array_equality_with_error, get_random_float32_array};
+use crate::cpu::common::{check_float_array_equality, get_random_float32_array};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -17,7 +17,7 @@ pub(super) fn test_mm_maskz_fmadd_pch_impl() -> Result<(), String> {
         let c = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let r = _mm_fmadd_pch(a, b, c);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality_with_error(&out, &[2.0, 3.0, 4.0, 5.0])?;
+        check_float_array_equality(&out, &[2.0, 3.0, 4.0, 5.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -37,7 +37,7 @@ pub(super) fn test_mm_fmadd_sch() -> Result<(), String> {
         let c = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let r = _mm_fmadd_sch(a, b, c);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality_with_error(&out, &[3.0, 5.0, 7.0, 9.0])?;
+        check_float_array_equality(&out, &[3.0, 5.0, 7.0, 9.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -69,7 +69,7 @@ pub(super) fn test_mm_fmadd_round_sch() -> Result<(), String> {
         let c = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let r = _mm_fmadd_round_sch(a, b, c, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality_with_error(&out, &[2.0, 3.0, 4.0, 5.0])?;
+        check_float_array_equality(&out, &[2.0, 3.0, 4.0, 5.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -106,7 +106,7 @@ pub(super) fn test_mm_fcmadd_pch() -> Result<(), String> {
         let c = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let r = _mm_fcmadd_pch(a, b, c);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality_with_error(&out, &[2.0, 3.0, 4.0, 5.0])?;
+        check_float_array_equality(&out, &[2.0, 3.0, 4.0, 5.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -138,7 +138,7 @@ pub(super) fn test_mm_fcmadd_sch() -> Result<(), String> {
         let c = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let r = _mm_fcmadd_sch(a, b, c);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality_with_error(&out, &[3.0, 4.0, 5.0, 6.0])?;
+        check_float_array_equality(&out, &[3.0, 4.0, 5.0, 6.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

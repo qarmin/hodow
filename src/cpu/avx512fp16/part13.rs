@@ -2,7 +2,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_float_array_equality_with_error, get_random_float32_array};
+use crate::cpu::common::{check_float_array_equality, get_random_float32_array};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -13,7 +13,7 @@ pub(super) fn test_mm_fnmadd_ph() -> Result<(), String> {
         let c = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let r = _mm_fnmadd_ph(a, b, c);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality_with_error(&out, &[-1.0, -3.0, -5.0, -7.0])?;
+        check_float_array_equality(&out, &[-1.0, -3.0, -5.0, -7.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -45,7 +45,7 @@ pub(super) fn test_mm_fnmadd_sh() -> Result<(), String> {
         let c = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let r = _mm_fnmadd_sh(a, b, c);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality_with_error(&out, &[-3.0, -5.0, -6.0, -4.0])?;
+        check_float_array_equality(&out, &[-3.0, -5.0, -6.0, -4.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -77,7 +77,7 @@ pub(super) fn test_mm_fnmadd_round_sh() -> Result<(), String> {
         let c = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let r = _mm_fnmadd_round_sh(a, b, c, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality_with_error(&out, &[-1.0, -2.0, -3.0, -4.0])?;
+        check_float_array_equality(&out, &[-1.0, -2.0, -3.0, -4.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -114,7 +114,7 @@ pub(super) fn test_mm_fnmsub_ph() -> Result<(), String> {
         let c = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let r = _mm_fnmsub_ph(a, b, c);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality_with_error(&out, &[-1.0, -5.0, -11.0, -19.0])?;
+        check_float_array_equality(&out, &[-1.0, -5.0, -11.0, -19.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
