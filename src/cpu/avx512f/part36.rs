@@ -3,7 +3,7 @@ pub(super) fn test_mm_cmple_epu32_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let b = _mm_set_epi32(1, 2, 4, 3);
-        let k = _mm_cmple_epu32_mask::<0>(a, b);
+        let k = _mm_cmple_epu32_mask(a, b);
         // expected: element-wise a <= b -> [1<=1 true,2<=2 true,3<=4 true,4<=3 false]
         let expected: __mmask8 = 0b0111;
         crate::cpu::common::check_int_equality(k as i32, expected as i32)?;
@@ -14,7 +14,7 @@ pub(super) fn test_mm_cmple_epu32_mask() -> Result<(), String> {
                 let rb = crate::cpu::common::get_random_i32_array::<4>();
                 let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
                 let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
-                let _ = _mm_cmple_epu32_mask::<0>(a_r, b_r);
+                let _ = _mm_cmple_epu32_mask(a_r, b_r);
             }
         }
     }
