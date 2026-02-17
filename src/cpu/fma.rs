@@ -24,6 +24,20 @@ impl ExtensionTest for FMA {
             (&test_mm256_fnmadd_ps, "test_mm256_fnmadd_ps"),
             (&test_mm256_fnmsub_ps, "test_mm256_fnmsub_ps"),
             (&test_mm256_fmaddsub_ps, "test_mm256_fmaddsub_ps"),
+            (&test_mm_fmadd_pd, "test_mm_fmadd_pd"),
+            (&test_mm_fmadd_sd, "test_mm_fmadd_sd"),
+            (&test_mm_fmadd_ss, "test_mm_fmadd_ss"),
+            (&test_mm_fmaddsub_pd, "test_mm_fmaddsub_pd"),
+            (&test_mm_fmsub_pd, "test_mm_fmsub_pd"),
+            (&test_mm_fmsub_sd, "test_mm_fmsub_sd"),
+            (&test_mm_fmsubadd_pd, "test_mm_fmsubadd_pd"),
+            (&test_mm_fmsubadd_ps, "test_mm_fmsubadd_ps"),
+            (&test_mm_fnmadd_pd, "test_mm_fnmadd_pd"),
+            (&test_mm_fnmadd_sd, "test_mm_fnmadd_sd"),
+            (&test_mm_fnmadd_ss, "test_mm_fnmadd_ss"),
+            (&test_mm_fnmsub_pd, "test_mm_fnmsub_pd"),
+            (&test_mm_fnmsub_sd, "test_mm_fnmsub_sd"),
+            (&test_mm_fnmsub_ss, "test_mm_fnmsub_ss"),
         ]
     }
 }
