@@ -51,6 +51,8 @@ zamiast tego użyj
 później poprawię to, gdy będę uruchamiał - ma to być czytelne a nie jakieś operacje bitowe
 - Usuwaj bezsensowne konwersje typów np. `102u8` lub `15.0 as f32` jest kompletnie bez sensu bo kompilator sam sobie poradzi z tymi typami - po prostu używaj `102` lub `15.0` jak również unikaj `check_array_equality(&buf, &[-1i16, -2i16])?;` - użyj `check_array_equality(&buf, &[-1, -2])?;` - kompilator sam sobie poradzi z typami, nie jest kretynem
 
+W pliki TODO.txt są widoczne deklaracje funkcji wbudowanych dla wszystkgo poza avx
+W pliku TODO_AVX.txt są widoczne deklaracje funkcji wbudowanych dla avx
 
 
 
