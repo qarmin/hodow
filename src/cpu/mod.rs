@@ -85,6 +85,7 @@ mod avx512dq;
 // #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512f"))]
 // mod avx512fp16;
 
+
 #[cfg(miri)]
 pub const DEFAULT_TEST_ITERATIONS: usize = 20;
 #[cfg(not(miri))]
@@ -124,6 +125,13 @@ pub trait ExtensionTest {
 pub fn test_all_extensions() -> Result<(), String> {
     #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     {
+        #[cfg(target_feature = "sse")]
+        {
+            if std::arch::is_x86_feature_detected!("sse") {
+                crate::cpu::sse::SSE::test()?;
+            }
+        }
+
         #[cfg(target_feature = "sse")]
         {
             if std::arch::is_x86_feature_detected!("sse") {

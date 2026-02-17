@@ -265,7 +265,9 @@ pub(super) fn test_mm_mask_max_epi32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(10, 5, -2, 100);
         let b = _mm_set_epi32(7, 6, 0, 50);
-        let r = _mm_mask_max_epi32(a, b);
+        let k: __mmask8 = 0xFFu8 as __mmask8;
+        let src: __m128i = _mm_setzero_si128();
+        let r = _mm_mask_max_epi32(src, k, a, b);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
         check_array_equality(&out, &[10, 6, 0, 100])?;
 
@@ -274,7 +276,7 @@ pub(super) fn test_mm_mask_max_epi32() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let v1 = get_random_i32_array::<4>();
                 let v2 = get_random_i32_array::<4>();
-                let _ = _mm_mask_max_epi32(_mm_set_epi32(v1[3], v1[2], v1[1], v1[0]), _mm_set_epi32(v2[3], v2[2], v2[1], v2[0]));
+                let _ = _mm_mask_max_epi32(_mm_setzero_si128(), k, _mm_set_epi32(v1[3], v1[2], v1[1], v1[0]), _mm_set_epi32(v2[3], v2[2], v2[1], v2[0]));
             }
         }
     }
