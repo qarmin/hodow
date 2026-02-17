@@ -13,7 +13,7 @@ pub(super) fn test_mm_maskz_rsqrt14_sd() -> Result<(), String> {
     unsafe {
         let k: __mmask8 = 0xFF;
         let a = _mm_set_sd(4.0);
-        let r = _mm_maskz_rsqrt14_sd(k, a);
+        let r = _mm_maskz_rsqrt14_sd(k, a, a);
         let result_f64 = _mm_cvtsd_f64(r);
         check_float_array_equality(&[result_f64], &[0.5])?;
 
@@ -23,7 +23,7 @@ pub(super) fn test_mm_maskz_rsqrt14_sd() -> Result<(), String> {
                 let vals = get_random_float64_array::<2>();
                 let k: __mmask8 = 0xFF;
                 let a = _mm_set_sd(vals[0]);
-                let _ = _mm_maskz_rsqrt14_sd(k, a);
+                let _ = _mm_maskz_rsqrt14_sd(k, a, a);
             }
         }
     }
@@ -298,7 +298,7 @@ pub(super) fn test_mm_getmant_ss() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ss(1.25);
         // signature: _mm_getmant_ss<const NORM, const SIGN>(a: __m128, b: __m128)
-        let r = _mm_getmant_ss(a, a);
+        let r = _mm_getmant_ss::<0, 0>(a, a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[0.0, 0.0, 0.0, 0.0])?;
 
@@ -307,7 +307,7 @@ pub(super) fn test_mm_getmant_ss() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let v = get_random_float32_array::<4>();
                 let a = _mm_set_ss(v[0]);
-                let _ = _mm_getmant_ss(a, a);
+                let _ = _mm_getmant_ss::<0, 0>(a, a);
             }
         }
     }
@@ -320,7 +320,7 @@ pub(super) fn test_mm_mask_getmant_ss() -> Result<(), String> {
         let a = _mm_set_ss(1.25);
         let k: __mmask8 = 0xFF;
         // signature: _mm_mask_getmant_ss(src: __m128, k: __mmask8, a: __m128, b: __m128)
-        let r = _mm_mask_getmant_ss(src, k, a, a);
+        let r = _mm_mask_getmant_ss::<0, 0>(src, k, a, a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[0.0, 0.0, 0.0, 0.0])?;
 
@@ -331,7 +331,7 @@ pub(super) fn test_mm_mask_getmant_ss() -> Result<(), String> {
                 let k: __mmask8 = 0xFF;
                 let v = get_random_float32_array::<4>();
                 let a = _mm_set_ss(v[0]);
-                let _ = _mm_mask_getmant_ss(src, k, a, a);
+                let _ = _mm_mask_getmant_ss::<0, 0>(src, k, a, a);
             }
         }
     }

@@ -13,7 +13,7 @@ pub(super) fn test_mm_maskz_getmant_ss() -> Result<(), String> {
     unsafe {
         let k: __mmask8 = 0xFF;
         let a = _mm_set_ss(-3.5f32);
-        let r = _mm_maskz_getmant_ss(k, a, a);
+        let r = _mm_maskz_getmant_ss::<0, 0>(k, a, a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[0.0f32, 0.0f32, 0.0f32, 0.0f32])?;
 
@@ -22,7 +22,7 @@ pub(super) fn test_mm_maskz_getmant_ss() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let v = get_random_float32_array::<1>();
                 let a_r = _mm_set_ss(v[0]);
-                let _ = _mm_maskz_getmant_ss(k, a_r, a_r);
+                let _ = _mm_maskz_getmant_ss::<0, 0>(k, a_r, a_r);
             }
         }
     }
@@ -32,7 +32,7 @@ pub(super) fn test_mm_maskz_getmant_ss() -> Result<(), String> {
 pub(super) fn test_mm_getmant_sd() -> Result<(), String> {
     unsafe {
         let a = _mm_set_sd(-5.25f64);
-        let r = _mm_getmant_sd(a, a);
+        let r = _mm_getmant_sd::<0, 0>(a, a);
         let result_f64 = _mm_cvtsd_f64(r);
         check_float_equality(result_f64, 0.0)?;
 
@@ -41,7 +41,7 @@ pub(super) fn test_mm_getmant_sd() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let v = get_random_float64_array::<1>();
                 let a_r = _mm_set_sd(v[0]);
-                let _ = _mm_getmant_sd(a_r, a_r);
+                let _ = _mm_getmant_sd::<0, 0>(a_r, a_r);
             }
         }
     }
@@ -53,7 +53,7 @@ pub(super) fn test_mm_mask_getmant_sd() -> Result<(), String> {
         let src = _mm_set_sd(1.0);
         let k: __mmask8 = 0x00;
         let a = _mm_set_sd(-2.0);
-        let r = _mm_mask_getmant_sd(src, k, a, a);
+        let r = _mm_mask_getmant_sd::<0, 0>(src, k, a, a);
         let result_f64 = _mm_cvtsd_f64(r);
         check_float_equality(result_f64, 1.0)?;
 
@@ -64,7 +64,7 @@ pub(super) fn test_mm_mask_getmant_sd() -> Result<(), String> {
                 let a_v = get_random_float64_array::<1>();
                 let src_r = _mm_set_sd(src_v[0]);
                 let a_r = _mm_set_sd(a_v[0]);
-                let _ = _mm_mask_getmant_sd(src_r, 0xFF, a_r, a_r);
+                let _ = _mm_mask_getmant_sd::<0, 0>(src_r, 0xFF, a_r, a_r);
             }
         }
     }
@@ -75,7 +75,7 @@ pub(super) fn test_mm_maskz_getmant_sd() -> Result<(), String> {
     unsafe {
         let k: __mmask8 = 0x00;
         let a = _mm_set_sd(-2.5);
-        let r = _mm_maskz_getmant_sd(k, a, a);
+        let r = _mm_maskz_getmant_sd::<0, 0>(k, a, a);
         let result_f64 = _mm_cvtsd_f64(r);
         check_float_equality(result_f64, 0.0)?;
 
@@ -84,7 +84,7 @@ pub(super) fn test_mm_maskz_getmant_sd() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let v = get_random_float64_array::<1>();
                 let a_r = _mm_set_sd(v[0]);
-                let _ = _mm_maskz_getmant_sd(0xFF, a_r, a_r);
+                let _ = _mm_maskz_getmant_sd::<0, 0>(0xFF, a_r, a_r);
             }
         }
     }

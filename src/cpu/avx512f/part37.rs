@@ -64,7 +64,7 @@ pub(super) fn test_mm_mask_cmpge_epi32_mask() -> Result<(), String> {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let ra = get_random_i32_array::<4>();
-                let rb = get_random_i32_array::<4>();
+                let rb = get_random_i32_array::<4>;
                 let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
                 let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
                 let _ = _mm_mask_cmpge_epi32_mask(k, a_r, b_r);
@@ -162,7 +162,7 @@ pub(super) fn test_mm_cmp_epi32_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let b = _mm_set_epi32(1, 9, 3, 0);
-        let k = _mm_cmp_epi32_mask(a, b);
+        let k = _mm_cmp_epi32_mask::<0>(a, b);
         // follow same assumption as other cmp tests in repo
         check_int_equality(k as i32, 0b1010)?;
         if get_fuzzing() {
@@ -172,7 +172,7 @@ pub(super) fn test_mm_cmp_epi32_mask() -> Result<(), String> {
                 let rb = get_random_i32_array::<4>();
                 let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
                 let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
-                let _ = _mm_cmp_epi32_mask(a_r, b_r);
+                let _ = _mm_cmp_epi32_mask::<0>(a_r, b_r);
             }
         }
     }
@@ -184,7 +184,7 @@ pub(super) fn test_mm_mask_cmp_epi32_mask() -> Result<(), String> {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let b = _mm_set_epi32(1, 9, 3, 0);
         let k: __mmask8 = 0xFFu8 as __mmask8;
-        let result = _mm_mask_cmp_epi32_mask(k, a, b);
+        let result = _mm_mask_cmp_epi32_mask::<0>(k, a, b);
         check_int_equality(result as i32, 0b1010)?;
 
         if get_fuzzing() {
@@ -194,7 +194,7 @@ pub(super) fn test_mm_mask_cmp_epi32_mask() -> Result<(), String> {
                 let rb = get_random_i32_array::<4>();
                 let a_r = _mm_set_epi32(ra[3], ra[2], ra[1], ra[0]);
                 let b_r = _mm_set_epi32(rb[3], rb[2], rb[1], rb[0]);
-                let _ = _mm_mask_cmp_epi32_mask(k, a_r, b_r);
+                let _ = _mm_mask_cmp_epi32_mask::<0>(k, a_r, b_r);
             }
         }
     }
