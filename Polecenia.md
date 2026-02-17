@@ -40,7 +40,15 @@ pub(super) fn test_mm_mmask_i64gather_epi64() -> Result<(), String> {
     test_mm_mmask_i32gather_epi32()
 }
 ```
-
+- Używaj fejkowych wartości
+```
+        check_array_equality(&out, &[2i64 & !1i64 & 0xffffffffffffffffi64, 4i64 & !2i64 & 0xffffffffffffffffi64])?;
+```
+zamiast tego użyj
+```
+        check_array_equality(&out, &[0])?;
+```
+później poprawię to, gdy będę uruchamiał - ma to być czytelne a nie jakieś operacje bitowe
 
 
 
