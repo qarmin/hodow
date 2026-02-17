@@ -120,9 +120,9 @@ pub(super) fn test_mm_maskz_reduce_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_fpclass_pd_mask() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_pd(f64::INFINITY, std::f64::NAN);
+        let a = _mm_set_pd(f64::INFINITY, f64::NAN);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(a);
-        check_float_array_equality(&out, &[std::f64::NAN, f64::INFINITY])?;
+        check_float_array_equality(&out, &[f64::NAN, f64::INFINITY])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -154,9 +154,9 @@ pub(super) fn test_mm_mask_fpclass_pd_mask() -> Result<(), String> {
 
 pub(super) fn test_mm_fpclass_ps_mask() -> Result<(), String> {
     unsafe {
-        let a = _mm_set_ps(1.0, std::f32::NAN, f32::INFINITY, 0.0);
+        let a = _mm_set_ps(1.0, f32::NAN, f32::INFINITY, 0.0);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(a);
-        check_float_array_equality(&out, &[0.0, f32::INFINITY, std::f32::NAN, 1.0])?;
+        check_float_array_equality(&out, &[0.0, f32::INFINITY, f32::NAN, 1.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -198,9 +198,9 @@ pub(super) fn test_mm_mask_fpclass_ps_mask() -> Result<(), String> {
 
 pub(super) fn test_mm_fpclass_sd_mask() -> Result<(), String> {
     unsafe {
-        let x = _mm_set_sd(std::f64::NAN);
+        let x = _mm_set_sd(f64::NAN);
         let s = _mm_cvtsd_f64(x);
-        crate::cpu::common::check_float_equality(s as f32, std::f64::NAN as f32)?;
+        crate::cpu::common::check_float_equality(s as f32, f64::NAN as f32)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -232,9 +232,9 @@ pub(super) fn test_mm_mask_fpclass_sd_mask() -> Result<(), String> {
 
 pub(super) fn test_mm_fpclass_ss_mask() -> Result<(), String> {
     unsafe {
-        let x = _mm_set_ss(std::f32::NAN);
+        let x = _mm_set_ss(f32::NAN);
         let s = _mm_cvtss_f32(x);
-        crate::cpu::common::check_float_equality(s, std::f32::NAN)?;
+        crate::cpu::common::check_float_equality(s, f32::NAN)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

@@ -57,7 +57,7 @@ fn test_mm_broadcastmw_epi32() -> Result<(), String> {
 fn test_mm_broadcastmb_epi64() -> Result<(), String> {
     unsafe {
         let k: u8 = 0xFF;
-        let result = _mm_broadcastmb_epi64(k.try_into().unwrap());
+        let result = _mm_broadcastmb_epi64(k);
         let result = std::mem::transmute::<__m128i, [u64; 2]>(result);
         check_array_equality(&result, &[0xFF, 0xFF])?;
     }
@@ -67,7 +67,7 @@ fn test_mm_broadcastmb_epi64() -> Result<(), String> {
         for _ in 0..get_iterations() {
             unsafe {
                 let k: u8 = rand::random();
-                let _ = _mm_broadcastmb_epi64(k.try_into().unwrap());
+                let _ = _mm_broadcastmb_epi64(k);
             }
         }
     }
