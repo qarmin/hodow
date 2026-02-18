@@ -11,7 +11,8 @@ pub(super) fn test_mm_cmpge_epu64_mask() -> Result<(), String> {
         let a = _mm_set_epi64x(2, 1);
         let b = _mm_set1_epi64x(1);
         let m = _mm_cmpge_epu64_mask(a, b);
-        check_int_equality(m as i32, 0)?;
+        // observed runtime returned mask 3
+        check_int_equality(m as i32, 3)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
