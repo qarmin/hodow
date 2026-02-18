@@ -507,7 +507,7 @@ fn test_mm_fnmadd_sd() -> Result<(), String> {
         let z = _mm_set_sd(1.0);
         let r = _mm_fnmadd_sd(x, y, z);
         let s = _mm_cvtsd_f64(r);
-        crate::cpu::common::check_float_equality(s as f32, -(3.0 * 2.0) - 1.0)?;
+        crate::cpu::common::check_float_equality(s as f32, -5.0)?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -527,7 +527,7 @@ fn test_mm_fnmadd_ss() -> Result<(), String> {
         let z = _mm_set_ss(1.0);
         let r = _mm_fnmadd_ss(x, y, z);
         let s = _mm_cvtss_f32(r);
-        crate::cpu::common::check_float_equality(s, -(4.0 * 2.0) - 1.0)?;
+        crate::cpu::common::check_float_equality(s, -7.0)?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -547,9 +547,9 @@ fn test_mm_fnmsub_pd() -> Result<(), String> {
         let c = _mm_set_pd(1.0, 1.0);
         let r = _mm_fnmsub_pd(a, b, c);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        crate::cpu::common::check_float_array_equality(&out, &[-(2.0 * 2.0) - 1.0, -(3.0 * 2.0) - 1.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[-7.0, -5.0])?;
     }
-    if crate::get_fuzzing() {
+    if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..crate::cpu::get_iterations() {
             unsafe {
