@@ -12,7 +12,7 @@ pub(super) fn test_mm_maskz_getmant_ss() -> Result<(), String> {
         let a = _mm_set_ss(-3.5);
         let r = _mm_maskz_getmant_ss::<0, 0>(k, a, a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[0.0, 0.0, 0.0, 0.0])?;
+        check_float_array_equality(&out, &[-1.75, 0.0, 0.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -31,7 +31,7 @@ pub(super) fn test_mm_getmant_sd() -> Result<(), String> {
         let a = _mm_set_sd(-5.25);
         let r = _mm_getmant_sd::<0, 0>(a, a);
         let result_f64 = _mm_cvtsd_f64(r);
-        check_float_equality(result_f64, 0.0)?;
+        check_float_equality(result_f64, -1.3125)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -93,7 +93,7 @@ pub(super) fn test_mm_roundscale_ss() -> Result<(), String> {
         let a = _mm_set_ss(1.5);
         let r = _mm_roundscale_ss::<1>(a, a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[3.0, 0.0, 0.0, 0.0])?;
+        check_float_array_equality(&out, &[1.0, 0.0, 0.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -155,7 +155,7 @@ pub(super) fn test_mm_roundscale_sd() -> Result<(), String> {
         let a = _mm_set_sd(1.5);
         let r = _mm_roundscale_sd::<2>(a, a);
         let result_f64 = _mm_cvtsd_f64(r);
-        check_float_equality(result_f64, 6.0)?;
+        check_float_equality(result_f64, 2.0)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -218,7 +218,7 @@ pub(super) fn test_mm_scalef_ss() -> Result<(), String> {
         let b = _mm_set_ss(3.5);
         let r = _mm_scalef_ss(a, b);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[7.0, 0.0, 0.0, 0.0])?;
+        check_float_array_equality(&out, &[16.0, 0.0, 0.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -289,7 +289,7 @@ pub(super) fn test_mm_scalef_sd() -> Result<(), String> {
         let b = _mm_set_sd(3.5);
         let r = _mm_scalef_sd(a, b);
         let result_f64 = _mm_cvtsd_f64(r);
-        check_float_equality(result_f64, 7.0)?;
+        check_float_equality(result_f64, 16.0)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

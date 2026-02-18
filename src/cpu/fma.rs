@@ -487,7 +487,7 @@ fn test_mm_fnmadd_pd() -> Result<(), String> {
         let c = _mm_set_pd(1.0, 1.0);
         let r = _mm_fnmadd_pd(a, b, c);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        crate::cpu::common::check_float_array_equality(&out, &[-(2.0 * 3.0) - 1.0, -(2.0 * 3.0) - 1.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[-(2.0 * 3.0) + 1.0, -(2.0 * 3.0) + 1.0])?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");

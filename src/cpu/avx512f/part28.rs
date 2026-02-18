@@ -150,7 +150,7 @@ pub(super) fn test_mm_mask_permute_pd() -> Result<(), String> {
         let k: __mmask8 = 111 as __mmask8;
         let r = _mm_mask_permute_pd(src, k, a, 0);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality(&out, &[1.0, 2.0])?;
+        check_float_array_equality(&out, &[1.0, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -171,7 +171,7 @@ pub(super) fn test_mm_maskz_permute_pd() -> Result<(), String> {
         let k: __mmask8 = 111 as __mmask8;
         let r = _mm_maskz_permute_pd(k, a, 0);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality(&out, &[1.0, 2.0])?;
+        check_float_array_equality(&out, &[1.0, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -194,7 +194,7 @@ pub(super) fn test_mm_mask_permutevar_ps() -> Result<(), String> {
         let k: __mmask8 = 111 as __mmask8;
         let r = _mm_mask_permutevar_ps(src, k, a, idx);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[4.0, 3.0, 2.0, 1.0])?;
+        check_float_array_equality(&out, &[1.0, 2.0, 3.0, 4.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -217,7 +217,7 @@ pub(super) fn test_mm_maskz_permutevar_ps() -> Result<(), String> {
         let k: __mmask8 = 111 as __mmask8;
         let r = _mm_maskz_permutevar_ps(k, a, idx);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[4.0, 3.0, 2.0, 1.0])?;
+        check_float_array_equality(&out, &[1.0, 2.0, 3.0, 4.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -241,7 +241,7 @@ pub(super) fn test_mm_mask_permutevar_pd() -> Result<(), String> {
         let k: __mmask8 = 111 as __mmask8;
         let r = _mm_mask_permutevar_pd(src, k, a, idx);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality(&out, &[2.0, 1.0])?;
+        check_float_array_equality(&out, &[2.0, 2.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -264,7 +264,7 @@ pub(super) fn test_mm_maskz_permutevar_pd() -> Result<(), String> {
         let k: __mmask8 = 111 as __mmask8;
         let r = _mm_maskz_permutevar_pd(k, a, idx);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality(&out, &[2.0, 1.0])?;
+        check_float_array_equality(&out, &[2.0, 2.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

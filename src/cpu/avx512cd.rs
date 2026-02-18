@@ -210,7 +210,7 @@ fn test_mm_lzcnt_epi32() -> Result<(), String> {
         let a = _mm_set1_epi32(111);
         let result = _mm_lzcnt_epi32(a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        check_array_equality(&result, &[24, 24, 24, 24])?;
+        check_array_equality(&result, &[25, 25, 25, 25])?;
     }
 
     if get_fuzzing() {
@@ -232,7 +232,7 @@ fn test_mm_mask_lzcnt_epi32() -> Result<(), String> {
         let a = _mm_set1_epi32(111);
         let result = _mm_mask_lzcnt_epi32(src, 12, a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        check_array_equality(&result, &[100, 100, 24, 24])?;
+        check_array_equality(&result, &[100, 100, 25, 25])?;
     }
 
     if get_fuzzing() {
@@ -254,7 +254,7 @@ fn test_mm_maskz_lzcnt_epi32() -> Result<(), String> {
         let a = _mm_set1_epi32(111);
         let result = _mm_maskz_lzcnt_epi32(12, a);
         let result = std::mem::transmute::<__m128i, [i32; 4]>(result);
-        check_array_equality(&result, &[0, 0, 24, 24])?;
+        check_array_equality(&result, &[0, 0, 25, 25])?;
     }
 
     if get_fuzzing() {
@@ -275,7 +275,7 @@ fn test_mm_lzcnt_epi64() -> Result<(), String> {
         let a = _mm_set1_epi64x(111);
         let result = _mm_lzcnt_epi64(a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        check_array_equality(&result, &[56, 56])?;
+        check_array_equality(&result, &[57, 57])?;
     }
 
     if get_fuzzing() {
@@ -297,7 +297,7 @@ fn test_mm_mask_lzcnt_epi64() -> Result<(), String> {
         let a = _mm_set1_epi64x(111);
         let result = _mm_mask_lzcnt_epi64(src, 2, a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        check_array_equality(&result, &[100, 56])?;
+        check_array_equality(&result, &[100, 57])?;
     }
 
     if get_fuzzing() {
@@ -319,7 +319,7 @@ fn test_mm_maskz_lzcnt_epi64() -> Result<(), String> {
         let a = _mm_set1_epi64x(111);
         let result = _mm_maskz_lzcnt_epi64(2, a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        check_array_equality(&result, &[0, 56])?;
+        check_array_equality(&result, &[0, 57])?;
     }
 
     if get_fuzzing() {

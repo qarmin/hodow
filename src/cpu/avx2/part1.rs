@@ -93,7 +93,7 @@ pub(super) fn test_mm256_and_si256() -> Result<(), String> {
         let b = _mm256_set_epi32(494901760, 494901760, 494901760, 494901760, 494901760, 494901760, 494901760, 494901760);
         let result = _mm256_and_si256(a, b);
         let result = std::mem::transmute::<__m256i, [u32; 8]>(result);
-        check_array_equality(&result, &[4278190080, 4278190080, 4278190080, 4278190080, 4278190080, 4278190080, 4278190080, 4278190080])?;
+        check_array_equality(&result, &[4265984, 4265984, 4265984, 4265984, 4265984, 4265984, 4265984, 4265984])?;
     }
 
     if get_fuzzing() {
@@ -119,7 +119,7 @@ pub(super) fn test_mm256_or_si256() -> Result<(), String> {
         let b = _mm256_set_epi32(16711935, 16711935, 16711935, 16711935, 16711935, 16711935, 16711935, 16711935);
         let result = _mm256_or_si256(a, b);
         let result = std::mem::transmute::<__m256i, [u32; 8]>(result);
-        check_array_equality(&result, &[42967295, 42967295, 42967295, 42967295, 42967295, 42967295, 42967295, 42967295])?;
+        check_array_equality(&result, &[16727295, 16727295, 16727295, 16727295, 16727295, 16727295, 16727295, 16727295])?;
     }
 
     if get_fuzzing() {

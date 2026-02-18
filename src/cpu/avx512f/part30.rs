@@ -11,7 +11,7 @@ pub(super) fn test_mm_mask_shuffle_ps() -> Result<(), String> {
         let a = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let r = _mm_shuffle_ps(a, a, 228);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[4.0, 3.0, 2.0, 1.0])?;
+        check_float_array_equality(&out, &[1.0, 2.0, 3.0, 4.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -30,7 +30,7 @@ pub(super) fn test_mm_maskz_shuffle_ps() -> Result<(), String> {
         let a = _mm_set_ps(8.0, 7.0, 6.0, 5.0);
         let r = _mm_shuffle_ps(a, a, 228);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[8.0, 7.0, 6.0, 5.0])?;
+        check_float_array_equality(&out, &[5.0, 6.0, 7.0, 8.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -49,7 +49,7 @@ pub(super) fn test_mm_mask_shuffle_pd() -> Result<(), String> {
         let a = _mm_set_pd(2.0, 1.0);
         let r = _mm_shuffle_pd(a, a, 0);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality(&out, &[2.0, 1.0])?;
+        check_float_array_equality(&out, &[1.0, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -68,7 +68,7 @@ pub(super) fn test_mm_maskz_shuffle_pd() -> Result<(), String> {
         let a = _mm_set_pd(4.0, 3.0);
         let r = _mm_shuffle_pd(a, a, 0);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality(&out, &[4.0, 3.0])?;
+        check_float_array_equality(&out, &[3.0, 3.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -88,7 +88,7 @@ pub(super) fn test_mm_mask_moveldup_ps() -> Result<(), String> {
         let a = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let r = _mm_shuffle_ps(a, a, 228);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[4.0, 3.0, 2.0, 1.0])?;
+        check_float_array_equality(&out, &[1.0, 2.0, 3.0, 4.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -107,7 +107,7 @@ pub(super) fn test_mm_maskz_moveldup_ps() -> Result<(), String> {
         let a = _mm_set_ps(8.0, 7.0, 6.0, 5.0);
         let r = _mm_shuffle_ps(a, a, 228);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[8.0, 7.0, 6.0, 5.0])?;
+        check_float_array_equality(&out, &[5.0, 6.0, 7.0, 8.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -127,7 +127,7 @@ pub(super) fn test_mm_mask_movehdup_ps() -> Result<(), String> {
         let a = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let r = _mm_shuffle_ps(a, a, 228);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[4.0, 3.0, 2.0, 1.0])?;
+        check_float_array_equality(&out, &[1.0, 2.0, 3.0, 4.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -146,7 +146,7 @@ pub(super) fn test_mm_maskz_movehdup_ps() -> Result<(), String> {
         let a = _mm_set_ps(8.0, 7.0, 6.0, 5.0);
         let r = _mm_shuffle_ps(a, a, 228);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[8.0, 7.0, 6.0, 5.0])?;
+        check_float_array_equality(&out, &[5.0, 6.0, 7.0, 8.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -166,7 +166,7 @@ pub(super) fn test_mm_mask_movedup_pd() -> Result<(), String> {
         let a = _mm_set_pd(2.0, 1.0);
         let r = _mm_shuffle_pd(a, a, 0);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality(&out, &[2.0, 1.0])?;
+        check_float_array_equality(&out, &[1.0, 1.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -185,7 +185,7 @@ pub(super) fn test_mm_maskz_movedup_pd() -> Result<(), String> {
         let a = _mm_set_pd(4.0, 3.0);
         let r = _mm_shuffle_pd(a, a, 0);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality(&out, &[4.0, 3.0])?;
+        check_float_array_equality(&out, &[3.0, 3.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -205,7 +205,7 @@ pub(super) fn test_mm_mask_unpackhi_epi32() -> Result<(), String> {
         let b = _mm_set_epi32(8, 7, 6, 5);
         let r = _mm_unpackhi_epi32(a, b);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
-        check_array_equality(&out, &[2, 1, 6, 5])?;
+        check_array_equality(&out, &[3, 7, 4, 8])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -227,7 +227,7 @@ pub(super) fn test_mm_maskz_unpackhi_epi32() -> Result<(), String> {
         let b = _mm_set_epi32(8, 7, 6, 5);
         let r = _mm_unpackhi_epi32(a, b);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
-        check_array_equality(&out, &[2, 1, 6, 5])?;
+        check_array_equality(&out, &[3, 7, 4, 8])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -249,7 +249,7 @@ pub(super) fn test_mm_mask_unpackhi_epi64() -> Result<(), String> {
         let b = _mm_set_epi64x(4, 3);
         let r = _mm_unpackhi_epi64(a, b);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
-        check_array_equality(&out, &[1, 3])?;
+        check_array_equality(&out, &[2, 4])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -271,7 +271,7 @@ pub(super) fn test_mm_maskz_unpackhi_epi64() -> Result<(), String> {
         let b = _mm_set_epi64x(4, 3);
         let r = _mm_unpackhi_epi64(a, b);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
-        check_array_equality(&out, &[1, 3])?;
+        check_array_equality(&out, &[2, 4])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -293,7 +293,7 @@ pub(super) fn test_mm_mask_unpackhi_ps() -> Result<(), String> {
         let b = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let r = _mm_unpackhi_ps(a, b);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[6.0, 5.0, 2.0, 1.0])?;
+        check_float_array_equality(&out, &[7.0, 3.0, 8.0, 4.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

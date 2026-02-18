@@ -47,7 +47,7 @@ pub(super) fn test_mm_mask_cvtepi64_storeu_epi8() -> Result<(), String> {
         let a = _mm_set_epi64x(1, 2);
         let mut buf = [0; 2];
         _mm_mask_cvtepi64_storeu_epi8(buf.as_mut_ptr(), 0, a);
-        check_array_equality(&buf, &[1, 2])?;
+        check_array_equality(&buf, &[0, 0])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -101,7 +101,7 @@ pub(super) fn test_mm_mask_cvtepi64_storeu_epi32() -> Result<(), String> {
         let a = _mm_set_epi64x(1, 2);
         let mut buf = [0; 4];
         _mm_mask_cvtepi64_storeu_epi32(buf.as_mut_ptr(), 0, a);
-        check_array_equality(&buf, &[1, 2, 0, 0])?;
+        check_array_equality(&buf, &[0, 0, 0, 0])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -155,7 +155,7 @@ pub(super) fn test_mm_storeu_epi32() -> Result<(), String> {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let mut buf = [0; 4];
         _mm_storeu_epi32(buf.as_mut_ptr(), a);
-        check_array_equality(&buf, &[1, 2, 3, 4])?;
+        check_array_equality(&buf, &[4, 3, 2, 1])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -189,7 +189,7 @@ pub(super) fn test_mm_storeu_epi64() -> Result<(), String> {
         let a = _mm_set_epi64x(1, 2);
         let mut buf = [0; 2];
         _mm_storeu_epi64(buf.as_mut_ptr(), a);
-        check_array_equality(&buf, &[1, 2])?;
+        check_array_equality(&buf, &[2, 1])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {

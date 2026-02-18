@@ -32,7 +32,7 @@ fn test_mm_popcnt_epi16() -> Result<(), String> {
         let a = _mm_set1_epi16(1605);
         let result = _mm_popcnt_epi16(a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        check_array_equality(&result, &[8; 8])?;
+        check_array_equality(&result, &[5; 8])?;
     }
 
     if get_fuzzing() {
@@ -53,7 +53,7 @@ fn test_mm_maskz_popcnt_epi16() -> Result<(), String> {
         let a = _mm_set1_epi16(111);
         let result = _mm_maskz_popcnt_epi16(240, a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        check_array_equality(&result, &[0, 0, 0, 0, 8, 8, 8, 8])?;
+        check_array_equality(&result, &[0, 0, 0, 0, 6, 6, 6, 6])?;
     }
 
     if get_fuzzing() {
@@ -75,7 +75,7 @@ fn test_mm_mask_popcnt_epi16() -> Result<(), String> {
         let a = _mm_set1_epi16(111);
         let result = _mm_mask_popcnt_epi16(src, 240, a);
         let result = std::mem::transmute::<__m128i, [i16; 8]>(result);
-        check_array_equality(&result, &[100, 100, 100, 100, 8, 8, 8, 8])?;
+        check_array_equality(&result, &[100, 100, 100, 100, 6, 6, 6, 6])?;
     }
 
     if get_fuzzing() {
@@ -97,7 +97,7 @@ fn test_mm_popcnt_epi8() -> Result<(), String> {
         let a = _mm_set1_epi8(24);
         let result = _mm_popcnt_epi8(a);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
-        check_array_equality(&result, &[4; 16])?;
+        check_array_equality(&result, &[2; 16])?;
     }
 
     if get_fuzzing() {
@@ -118,7 +118,7 @@ fn test_mm_maskz_popcnt_epi8() -> Result<(), String> {
         let a = _mm_set1_epi8(111);
         let result = _mm_maskz_popcnt_epi8(65280, a);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
-        check_array_equality(&result, &[0, 0, 0, 0, 0, 0, 0, 0, 8, 8, 8, 8, 8, 8, 8, 8])?;
+        check_array_equality(&result, &[0, 0, 0, 0, 0, 0, 0, 0, 6, 6, 6, 6, 6, 6, 6, 6])?;
     }
 
     if get_fuzzing() {
@@ -140,7 +140,7 @@ fn test_mm_mask_popcnt_epi8() -> Result<(), String> {
         let a = _mm_set1_epi8(111);
         let result = _mm_mask_popcnt_epi8(src, 65280, a);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
-        check_array_equality(&result, &[100, 100, 100, 100, 100, 100, 100, 100, 8, 8, 8, 8, 8, 8, 8, 8])?;
+        check_array_equality(&result, &[100, 100, 100, 100, 100, 100, 100, 100, 6, 6, 6, 6, 6, 6, 6, 6])?;
     }
 
     if get_fuzzing() {

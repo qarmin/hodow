@@ -12,7 +12,7 @@ pub(super) fn test_mm_maskz_unpackhi_ps() -> Result<(), String> {
         let b = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let r = _mm_unpackhi_ps(a, b);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[6.0, 5.0, 2.0, 1.0])?;
+        check_float_array_equality(&out, &[7.0, 3.0, 8.0, 4.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

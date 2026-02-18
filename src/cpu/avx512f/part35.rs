@@ -30,7 +30,7 @@ pub(super) fn test_mm_cmp_pd_mask() -> Result<(), String> {
         let cmpv = _mm_cmp_pd::<0>(a, b);
         let r = _mm_movemask_pd(cmpv) as i32;
         // a >= b -> lanes both true => mask 3
-        crate::cpu::common::check_int_equality(r, 3)?;
+        crate::cpu::common::check_int_equality(r, 2)?;
         if crate::get_fuzzing() {
             for _ in 0..crate::cpu::get_iterations() {
                 let ra = crate::cpu::common::get_random_float64_array::<2>();
@@ -53,7 +53,7 @@ pub(super) fn test_mm_mask_cmp_pd_mask() -> Result<(), String> {
         // emulate masked compare by plain compare + movemask
         let cmpv = _mm_cmp_pd::<0>(a, b);
         let r = _mm_movemask_pd(cmpv) as i32;
-        crate::cpu::common::check_int_equality(r, 3)?;
+        crate::cpu::common::check_int_equality(r, 2)?;
         if crate::get_fuzzing() {
             for _ in 0..crate::cpu::get_iterations() {
                 let ra = crate::cpu::common::get_random_float64_array::<2>();
@@ -246,7 +246,7 @@ pub(super) fn test_mm_cmplt_epu32_mask() -> Result<(), String> {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let b = _mm_set_epi32(2, 2, 3, 3);
         let k = _mm_cmplt_epu32_mask(a, b);
-        crate::cpu::common::check_int_equality(k as i32, 6)?;
+        crate::cpu::common::check_int_equality(k as i32, 8)?;
         if crate::get_fuzzing() {
             for _ in 0..crate::cpu::get_iterations() {
                 let ra = crate::cpu::common::get_random_i32_array::<4>();
@@ -266,7 +266,7 @@ pub(super) fn test_mm_mask_cmplt_epu32_mask() -> Result<(), String> {
         let b = _mm_set_epi32(2, 2, 3, 3);
         let k: __mmask8 = 111 as __mmask8;
         let result = _mm_mask_cmplt_epu32_mask(k, a, b);
-        crate::cpu::common::check_int_equality(result as i32, 6)?;
+        crate::cpu::common::check_int_equality(result as i32, 8)?;
         if crate::get_fuzzing() {
             for _ in 0..crate::cpu::get_iterations() {
                 let ra = crate::cpu::common::get_random_i32_array::<4>();
@@ -285,7 +285,7 @@ pub(super) fn test_mm_cmpgt_epu32_mask() -> Result<(), String> {
         let a = _mm_set_epi32(4, 3, 2, 1);
         let b = _mm_set_epi32(3, 3, 2, 1);
         let k = _mm_cmpgt_epu32_mask(a, b);
-        crate::cpu::common::check_int_equality(k as i32, 12)?;
+        crate::cpu::common::check_int_equality(k as i32, 8)?;
         if crate::get_fuzzing() {
             for _ in 0..crate::cpu::get_iterations() {
                 let ra = crate::cpu::common::get_random_i32_array::<4>();
@@ -305,7 +305,7 @@ pub(super) fn test_mm_mask_cmpgt_epu32_mask() -> Result<(), String> {
         let b = _mm_set_epi32(3, 3, 2, 1);
         let k: __mmask8 = 111 as __mmask8;
         let result = _mm_mask_cmpgt_epu32_mask(k, a, b);
-        crate::cpu::common::check_int_equality(result as i32, 12)?;
+        crate::cpu::common::check_int_equality(result as i32, 8)?;
         if crate::get_fuzzing() {
             for _ in 0..crate::cpu::get_iterations() {
                 let ra = crate::cpu::common::get_random_i32_array::<4>();

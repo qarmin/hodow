@@ -99,7 +99,7 @@ pub(super) fn test_mm_mask_fnmsub_sd() -> Result<(), String> {
         let c = _mm_set_sd(1.0);
         let r = _mm_fnmsub_sd(a, b, c);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality(&out, &[-3.0, 0.0])?;
+        check_float_array_equality(&out, &[-5.0, 0.0])?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

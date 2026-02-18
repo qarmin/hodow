@@ -162,7 +162,7 @@ fn test_mm_mask2_permutex2var_epi8() -> Result<(), String> {
         let b = _mm_set1_epi8(2);
         let result = _mm_mask2_permutex2var_epi8(a, idx, 6555, b);
         let result = std::mem::transmute::<__m128i, [i8; 16]>(result);
-        check_array_equality(&result, &[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])?;
+        check_array_equality(&result, &[1, 1, 2, 1, 1, 5, 6, 1, 1, 9, 10, 1, 1, 13, 14, 15])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

@@ -31,7 +31,7 @@ pub(super) fn test_mm_maskz_max_ps() -> Result<(), String> {
         let b = _mm_set_ps(2.0, 3.0, 4.0, 1.0);
         let r = _mm_max_ps(a, b);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[2.0, 4.0, 4.0, 3.0])?;
+        check_float_array_equality(&out, &[3.0, 4.0, 4.0, 2.0])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -50,7 +50,7 @@ pub(super) fn test_mm_mask_max_pd() -> Result<(), String> {
         let b = _mm_set_pd(4.0, 2.0);
         let r = _mm_max_pd(a, b);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality(&out, &[4.0, 5.0])?;
+        check_float_array_equality(&out, &[5.0, 4.0])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -69,7 +69,7 @@ pub(super) fn test_mm_maskz_max_pd() -> Result<(), String> {
         let b = _mm_set_pd(2.0, 9.0);
         let r = _mm_max_pd(a, b);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality(&out, &[7.0, 9.0])?;
+        check_float_array_equality(&out, &[9.0, 7.0])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -88,7 +88,7 @@ pub(super) fn test_mm_mask_max_epu32() -> Result<(), String> {
         let b = _mm_set_epi32(2, 60000, 50000, 4);
         let r = _mm_max_epu32(a, b);
         let out: [u32; 4] = std::mem::transmute::<__m128i, [u32; 4]>(r);
-        check_array_equality(&out, &[2, 70000, 50000, 5])?;
+        check_array_equality(&out, &[5, 50000, 70000, 2])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -107,7 +107,7 @@ pub(super) fn test_mm_maskz_max_epu32() -> Result<(), String> {
         let b = _mm_set_epi32(150, 150, 350, 350);
         let r = _mm_max_epu32(a, b);
         let out: [u32; 4] = std::mem::transmute::<__m128i, [u32; 4]>(r);
-        check_array_equality(&out, &[150, 200, 350, 400])?;
+        check_array_equality(&out, &[400, 350, 200, 150])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -126,7 +126,7 @@ pub(super) fn test_mm_max_epu64() -> Result<(), String> {
         let b = _mm_set_epi64x(150, 150);
         let r = _mm_max_epu64(a, b);
         let out: [u64; 2] = std::mem::transmute::<__m128i, [u64; 2]>(r);
-        check_array_equality(&out, &[150, 200])?;
+        check_array_equality(&out, &[200, 150])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -152,7 +152,7 @@ pub(super) fn test_mm_mask_min_epi32() -> Result<(), String> {
         let b = _mm_set_epi32(7, 6, 0, 50);
         let r = _mm_min_epi32(a, b);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
-        check_array_equality(&out, &[7, 5, -2, 50])?;
+        check_array_equality(&out, &[50, -2, 5, 7])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -175,7 +175,7 @@ pub(super) fn test_mm_min_epi64() -> Result<(), String> {
         let b = _mm_set_epi64x(-2, 20);
         let r = _mm_min_epi64(a, b);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
-        check_array_equality(&out, &[-2, -10])?;
+        check_array_equality(&out, &[-10, -2])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {

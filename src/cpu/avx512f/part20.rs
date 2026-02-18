@@ -32,7 +32,7 @@ pub(super) fn test_mm_mask_cvt_roundps_ph() -> Result<(), String> {
         let r = _mm_mask_cvt_roundps_ph::<0>(src, 161, v);
         let round = _mm_cvtph_ps(r);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(round);
-        check_float_array_equality(&out, &[4.0, 3.0, 2.0, 1.0])?;
+        check_float_array_equality(&out, &[1.0, 0.0, 0.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -52,7 +52,7 @@ pub(super) fn test_mm_maskz_cvt_roundps_ph() -> Result<(), String> {
         let r = _mm_maskz_cvt_roundps_ph::<0>(161, v);
         let round = _mm_cvtph_ps(r);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(round);
-        check_float_array_equality(&out, &[4.0, 3.0, 2.0, 1.0])?;
+        check_float_array_equality(&out, &[1.0, 0.0, 0.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -73,7 +73,7 @@ pub(super) fn test_mm_mask_cvtps_ph() -> Result<(), String> {
         let r = _mm_mask_cvtps_ph::<0>(src, 161, v);
         let round = _mm_cvtph_ps(r);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(round);
-        check_float_array_equality(&out, &[4.0, 3.0, 2.0, 1.0])?;
+        check_float_array_equality(&out, &[1.0, 0.0, 0.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -93,7 +93,7 @@ pub(super) fn test_mm_maskz_cvtps_ph() -> Result<(), String> {
         let r = _mm_maskz_cvtps_ph::<0>(161, v);
         let round = _mm_cvtph_ps(r);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(round);
-        check_float_array_equality(&out, &[4.0, 3.0, 2.0, 1.0])?;
+        check_float_array_equality(&out, &[1.0, 0.0, 0.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -113,7 +113,7 @@ pub(super) fn test_mm_mask_cvtph_ps() -> Result<(), String> {
         let ph = _mm_cvtps_ph::<4>(_mm_set1_ps(3.0));
         let r = _mm_mask_cvtph_ps(src, 161, ph);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[3.0, 3.0, 3.0, 3.0])?;
+        check_float_array_equality(&out, &[3.0, 0.0, 0.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -133,7 +133,7 @@ pub(super) fn test_mm_maskz_cvtph_ps() -> Result<(), String> {
         let ph = _mm_cvtps_ph::<4>(_mm_set1_ps(3.0));
         let r = _mm_maskz_cvtph_ps(161, ph);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[3.0, 3.0, 3.0, 3.0])?;
+        check_float_array_equality(&out, &[3.0, 0.0, 0.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -153,7 +153,7 @@ pub(super) fn test_mm_mask_cvttps_epi32() -> Result<(), String> {
         let a = _mm_set_ps(4.9, 3.9, 2.1, 1.1);
         let r = _mm_mask_cvttps_epi32(src, 15, a);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
-        check_array_equality(&out, &[4, 3, 2, 1])?;
+        check_array_equality(&out, &[1, 2, 3, 4])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -172,7 +172,7 @@ pub(super) fn test_mm_maskz_cvttps_epi32() -> Result<(), String> {
         let a = _mm_set_ps(4.9, 3.9, 2.1, 1.1);
         let r = _mm_maskz_cvttps_epi32(15, a);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
-        check_array_equality(&out, &[4, 3, 2, 1])?;
+        check_array_equality(&out, &[1, 2, 3, 4])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -191,7 +191,7 @@ pub(super) fn test_mm_cvttps_epu32() -> Result<(), String> {
         let a = _mm_set_ps(4.9, 3.9, 2.1, 1.1);
         let r = _mm_cvttps_epu32(a);
         let out: [u32; 4] = std::mem::transmute::<__m128i, [u32; 4]>(r);
-        check_array_equality(&out, &[4, 3, 2, 1])?;
+        check_array_equality(&out, &[1, 2, 3, 4])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -211,7 +211,7 @@ pub(super) fn test_mm_mask_cvttps_epu32() -> Result<(), String> {
         let a = _mm_set_ps(4.9, 3.9, 2.1, 1.1);
         let r = _mm_mask_cvttps_epu32(src, 15, a);
         let out: [u32; 4] = std::mem::transmute::<__m128i, [u32; 4]>(r);
-        check_array_equality(&out, &[4, 3, 2, 1])?;
+        check_array_equality(&out, &[1, 2, 3, 4])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -230,7 +230,7 @@ pub(super) fn test_mm_maskz_cvttps_epu32() -> Result<(), String> {
         let a = _mm_set_ps(4.9, 3.9, 2.1, 1.1);
         let r = _mm_maskz_cvttps_epu32(15, a);
         let out: [u32; 4] = std::mem::transmute::<__m128i, [u32; 4]>(r);
-        check_array_equality(&out, &[4, 3, 2, 1])?;
+        check_array_equality(&out, &[1, 2, 3, 4])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

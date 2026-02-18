@@ -538,7 +538,7 @@ fn test_mm_cmp_ps() -> Result<(), String> {
         let b = _mm_set_ps(4.0, 3.0, 2.0, 1.0);
         let r = _mm_cmp_ps(a, b, _CMP_GT_OQ);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        crate::cpu::common::check_float_array_equality(&out, &[0.0, 0.0, 1.0, 1.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[f32::from_bits(0xFFFFFFFF), f32::from_bits(0xFFFFFFFF), 0.0, 0.0])?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -556,7 +556,7 @@ fn test_mm_cmp_sd() -> Result<(), String> {
         let b = _mm_set_sd(1.0);
         let r = _mm_cmp_sd(a, b, _CMP_GT_OQ);
         let s = _mm_cvtsd_f64(r);
-        crate::cpu::common::check_float_equality(s as f32, 1.0)?;
+        crate::cpu::common::check_float_equality(s as f32, f32::from_bits(0xFFFFFFFF))?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -574,7 +574,7 @@ fn test_mm_cmp_ss() -> Result<(), String> {
         let b = _mm_set_ss(1.0);
         let r = _mm_cmp_ss(a, b, _CMP_GT_OQ);
         let s = _mm_cvtss_f32(r);
-        crate::cpu::common::check_float_equality(s, 1.0)?;
+        crate::cpu::common::check_float_equality(s, f32::from_bits(0xFFFFFFFF))?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -592,7 +592,7 @@ fn test_mm_permutevar_ps() -> Result<(), String> {
         let idx = _mm_set_epi32(0, 1, 2, 3);
         let r = _mm_permutevar_ps(a, idx);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        crate::cpu::common::check_float_array_equality(&out, &[4.0, 3.0, 2.0, 1.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[1.0, 2.0, 3.0, 4.0])?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -627,7 +627,7 @@ fn test_mm_permutevar_pd() -> Result<(), String> {
         let idx = _mm_set_epi32(1, 0, 0, 1);
         let r = _mm_permutevar_pd(a, idx);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        crate::cpu::common::check_float_array_equality(&out, &[2.0, 1.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[2.0, 2.0])?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -644,7 +644,7 @@ fn test_mm_permute_pd() -> Result<(), String> {
         let a = _mm_set_pd(2.0, 1.0);
         let r = _mm_permute_pd(a, 0);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        crate::cpu::common::check_float_array_equality(&out, &[1.0, 2.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[1.0, 1.0])?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -782,7 +782,7 @@ fn test_mm_testnzc_pd() -> Result<(), String> {
         let a = _mm_set_pd(1.0, 0.0);
         let b = _mm_set_pd(0.0, 1.0);
         let r = _mm_testnzc_pd(a, b);
-        crate::cpu::common::check_int_equality(r as i32, 1)?;
+        crate::cpu::common::check_int_equality(r as i32, 0)?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -833,7 +833,7 @@ fn test_mm_testnzc_ps() -> Result<(), String> {
         let a = _mm_set_ps(1.0, 0.0, 0.0, 0.0);
         let b = _mm_set_ps(0.0, 1.0, 0.0, 0.0);
         let r = _mm_testnzc_ps(a, b);
-        crate::cpu::common::check_int_equality(r as i32, 1)?;
+        crate::cpu::common::check_int_equality(r as i32, 0)?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");

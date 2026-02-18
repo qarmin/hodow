@@ -48,7 +48,7 @@ pub(super) fn test_mm_mask_blend_epi32() -> Result<(), String> {
         let b = _mm_set_epi32(8, 7, 6, 5);
         let r = _mm_mask_blend_epi32(10, a, b);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
-        check_array_equality(&out, &[5, 2, 7, 4])?;
+        check_array_equality(&out, &[1, 6, 3, 8])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -93,7 +93,7 @@ pub(super) fn test_mm_mask_blend_ps() -> Result<(), String> {
         let b = _mm_set_ps(5.0, 6.0, 7.0, 8.0);
         let r = _mm_mask_blend_ps(10, a, b);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[5.0, 2.0, 7.0, 4.0])?;
+        check_float_array_equality(&out, &[4.0, 7.0, 2.0, 5.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -133,7 +133,7 @@ pub(super) fn test_mm_alignr_epi32() -> Result<(), String> {
         let r = _mm_alignr_epi8(a, b, 4);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
         // expected: elements shifted by one 32-bit lane
-        check_array_equality(&out, &[5, 1, 2, 3])?;
+        check_array_equality(&out, &[6, 7, 8, 1])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -203,7 +203,7 @@ pub(super) fn test_mm_alignr_epi64() -> Result<(), String> {
         let r = _mm_alignr_epi8(a, b, 8);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
         // expected: lower lane from b, upper from a
-        check_array_equality(&out, &[3, 2])?;
+        check_array_equality(&out, &[4, 1])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

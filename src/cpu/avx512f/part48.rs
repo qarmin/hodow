@@ -406,7 +406,7 @@ pub(super) fn test_mm_maskz_fnmsub_ss() -> Result<(), String> {
         let c = _mm_set_ss(4.0);
         let r = _mm_maskz_fnmsub_ss(k, a, b, c);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[2.0, 0.0, 0.0, 0.0])?;
+        check_float_array_equality(&out, &[-10.0, 0.0, 0.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -458,7 +458,7 @@ pub(super) fn test_mm_maskz_fnmsub_sd() -> Result<(), String> {
         let c = _mm_set_sd(4.0);
         let r = _mm_maskz_fnmsub_sd(k, a, b, c);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality(&out, &[2.0, 0.0])?;
+        check_float_array_equality(&out, &[-10.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

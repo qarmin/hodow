@@ -297,7 +297,7 @@ pub(super) fn test_mm_getmant_ss() -> Result<(), String> {
         // signature: _mm_getmant_ss<const NORM, const SIGN>(a: __m128, b: __m128)
         let r = _mm_getmant_ss::<0, 0>(a, a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[0.0, 0.0, 0.0, 0.0])?;
+        check_float_array_equality(&out, &[1.25, 0.0, 0.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -319,7 +319,7 @@ pub(super) fn test_mm_mask_getmant_ss() -> Result<(), String> {
         // signature: _mm_mask_getmant_ss(src: __m128, k: __mmask8, a: __m128, b: __m128)
         let r = _mm_mask_getmant_ss::<0, 0>(src, k, a, a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[0.0, 0.0, 0.0, 0.0])?;
+        check_float_array_equality(&out, &[1.25, 0.0, 0.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

@@ -11,7 +11,7 @@ pub(super) fn test_mm_maskz_cvtepu32_pd() -> Result<(), String> {
         let a = _mm_set_epi32(2, 1, 0, 0);
         let r = _mm_maskz_cvtepu32_pd(3, a);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        crate::cpu::common::check_float_array_equality(&result, &[1.0, 2.0])?;
+        crate::cpu::common::check_float_array_equality(&result, &[0.0, 0.0])?;
     }
 
     if get_fuzzing() {

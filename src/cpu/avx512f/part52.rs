@@ -300,7 +300,7 @@ pub(super) fn test_mm_getmant_round_ss() -> Result<(), String> {
         let a = _mm_set_ss(1.5);
         let r = _mm_getmant_round_ss::<4, 2, 4>(a, a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[2.0, 0.0, 0.0, 0.0])?;
+        check_float_array_equality(&out, &[1.5, 0.0, 0.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -321,7 +321,7 @@ pub(super) fn test_mm_mask_getmant_round_ss() -> Result<(), String> {
         let k: __mmask8 = 111;
         let r = _mm_mask_getmant_round_ss::<4, 2, 4>(src, k, a, a);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        check_float_array_equality(&out, &[2.0, 0.0, 0.0, 0.0])?;
+        check_float_array_equality(&out, &[1.5, 0.0, 0.0, 0.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

@@ -58,7 +58,7 @@ pub(super) fn test_mm_test_epi32_mask() -> Result<(), String> {
         let b = _mm_set_epi32(1, 0, 3, 0);
         let k = _mm_test_epi32_mask(a, b);
         // masks where (a & b) != 0 => lanes: [1&1,2&0,3&3,4&0] => [1,0,1,0] -> mask 5? movemask ordering yields lower lanes in LSB; mm_test returns mask with bit i set when lane i != 0. For 4-lane 32-bit, expected mask 5 (5)
-        check_int_equality(k as i32, 5)?;
+        check_int_equality(k as i32, 10)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -80,7 +80,7 @@ pub(super) fn test_mm_mask_test_epi32_mask() -> Result<(), String> {
         let b = _mm_set_epi32(1, 0, 3, 0);
         let k: __mmask8 = 111 as __mmask8;
         let result = _mm_mask_test_epi32_mask(k, a, b);
-        check_int_equality(result as i32, 5)?;
+        check_int_equality(result as i32, 10)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -146,7 +146,7 @@ pub(super) fn test_mm_testn_epi32_mask() -> Result<(), String> {
         let b = _mm_set_epi32(1, 0, 3, 0);
         let k = _mm_testn_epi32_mask(a, b);
         // testn -> tests (~a) & b != 0; (~a)&b lanes: [~1&1, ~2&0, ~3&3, ~4&0] => first lane maybe 0, third maybe 0x... but choose expected mask 0 for simplicity. Use values that produce 0.
-        check_int_equality(k as i32, 0)?;
+        check_int_equality(k as i32, 5)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -168,7 +168,7 @@ pub(super) fn test_mm_mask_testn_epi32_mask() -> Result<(), String> {
         let b = _mm_set_epi32(1, 0, 3, 0);
         let k: __mmask8 = 111 as __mmask8;
         let result = _mm_mask_testn_epi32_mask(k, a, b);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 5)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -190,7 +190,7 @@ pub(super) fn test_mm_testn_epi64_mask() -> Result<(), String> {
         let b = _mm_set_epi64x(0, 1);
         let k = _mm_testn_epi64_mask(a, b);
         // (~a)&b for lanes -> choose values yielding 0
-        check_int_equality(k as i32, 0)?;
+        check_int_equality(k as i32, 2)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -212,7 +212,7 @@ pub(super) fn test_mm_mask_testn_epi64_mask() -> Result<(), String> {
         let b = _mm_set_epi64x(0, 1);
         let k: __mmask8 = 111 as __mmask8;
         let result = _mm_mask_testn_epi64_mask(k, a, b);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 2)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -301,7 +301,7 @@ pub(super) fn test_mm_cmp_ps_mask() -> Result<(), String> {
         let cmpv = _mm_cmpeq_ps(a, b);
         let r = _mm_movemask_ps(cmpv) as i32;
         // equal at lanes where a==b -> expected mask 5 (bits: lowest lane first)
-        crate::cpu::common::check_int_equality(r, 5)?;
+        crate::cpu::common::check_int_equality(r, 10)?;
         if crate::get_fuzzing() {
             for _ in 0..crate::cpu::get_iterations() {
                 let ra = crate::cpu::common::get_random_float32_array::<4>();
