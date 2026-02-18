@@ -34,7 +34,7 @@ pub(super) fn test_mm_cmpeq_epu64_mask() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(1, 1);
         let m = _mm_cmpeq_epu64_mask(a, a);
-        check_int_equality(m as i32, 0)?;
+        check_int_equality(m as i32, 3)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -58,7 +58,7 @@ pub(super) fn test_mm_cmpneq_epu64_mask() -> Result<(), String> {
         let a = _mm_set_epi64x(2, 3);
         let b = _mm_set_epi64x(1, 1);
         let m = _mm_cmpneq_epu64_mask(a, b);
-        check_int_equality(m as i32, 0)?;
+        check_int_equality(m as i32, 3)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -90,7 +90,7 @@ pub(super) fn test_mm_cmpgt_epi64_mask() -> Result<(), String> {
         let a = _mm_set_epi64x(3, 4);
         let b = _mm_set_epi64x(2, 2);
         let m = _mm_cmpgt_epi64_mask(a, b);
-        check_int_equality(m as i32, 0)?;
+        check_int_equality(m as i32, 3)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
