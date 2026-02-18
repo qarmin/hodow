@@ -1,9 +1,15 @@
 #![allow(dead_code)]
+#![allow(clippy::macro_metavars_in_unsafe)]
 
 use std::collections::HashSet;
 
 use log::{error, info};
 use once_cell::sync::OnceCell;
+
+#[macro_use]
+mod test_macros;
+
+pub(crate) mod common;
 
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "aes"))]
 mod aes;
@@ -49,7 +55,6 @@ mod sse4a;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "ssse3"))]
 mod ssse3;
 
-pub mod common;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "fma"))]
 mod fma;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "kl"))]
