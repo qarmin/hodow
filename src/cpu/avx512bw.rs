@@ -82,10 +82,6 @@ pub(super) fn test_mm_test_epi8_mask() -> Result<(), String> {
     test_mm_testn_epi8_mask()
 }
 
-pub(super) fn test_mm_mask_test_epi8_mask() -> Result<(), String> {
-    test_mm_mask_testn_epi8_mask()
-}
-
 pub struct AVX512BW;
 
 impl ExtensionTest for AVX512BW {
@@ -356,6 +352,10 @@ impl ExtensionTest for AVX512BW {
             (&test_mm_mask_broadcastb_epi64, "test_mm_mask_broadcastb_epi64"),
             (&test_mm_maskz_broadcastw_epi64, "test_mm_maskz_broadcastw_epi64"),
             (&test_mm_mask_broadcastw_epi64, "test_mm_mask_broadcastw_epi64"),
+            (&test_mm_mask_cvtusepi16_storeu_epi8, "test_mm_mask_cvtusepi16_storeu_epi8"),
+            (&test_mm_mask_cvtepi16_storeu_epi8, "test_mm_mask_cvtepi16_storeu_epi8"),
+            (&test_mm_mask_cvtsepi16_storeu_epi8, "test_mm_mask_cvtsepi16_storeu_epi8"),
+            (&test_mm_mask_test_epi8_mask, "test_mm_mask_test_epi8_mask"),
         ]
     }
 }

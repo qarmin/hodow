@@ -110,6 +110,9 @@ use crate::cpu::avx512f::part53::*;
 use crate::cpu::avx512f::part54::*;
 use crate::cpu::avx512f::part55::*;
 use crate::cpu::avx512f::part56::*;
+use crate::cpu::avx512f::part57::*;
+use crate::cpu::avx512f::part58::*;
+use crate::cpu::avx512f::part59::*;
 use crate::cpu::avx512f::part6::*;
 use crate::cpu::avx512f::part7::*;
 use crate::cpu::avx512f::part8::*;
@@ -217,8 +220,7 @@ impl ExtensionTest for AVX512F {
             (&test_mm_maskz_max_epi32, "test_mm_maskz_max_epi32"),
             (&test_mm_max_epi64, "test_mm_max_epi64"),
             // disambiguate and use existing mask max test
-            (&crate::cpu::avx512f::part6::test_mm_mask_max_epi64, "test_mm_mask_max_epi64"),
-            (&crate::cpu::avx512f::part6::test_mm_mask_max_epi64, "test_mm_maskz_max_epi64"),
+            (&test_mm_mask_max_epi64, "test_mm_mask_max_epi64"),
             (&test_mm_mask_max_ps, "test_mm_mask_max_ps"),
             (&test_mm_maskz_max_ps, "test_mm_maskz_max_ps"),
             (&test_mm_mask_max_pd, "test_mm_mask_max_pd"),
@@ -951,6 +953,52 @@ impl ExtensionTest for AVX512F {
             (&test_mm_fixupimm_round_sd, "test_mm_fixupimm_round_sd"),
             (&test_mm_mask_fixupimm_round_sd, "test_mm_mask_fixupimm_round_sd"),
             (&test_mm_maskz_fixupimm_round_sd, "test_mm_maskz_fixupimm_round_sd"),
+            (&test_mm_mask_fnmsub_ss, "test_mm_mask_fnmsub_ss"),
+            (&test_mm_maskz_fnmsub_ss, "test_mm_maskz_fnmsub_ss"),
+            (&test_mm_mask_fnmadd_sd, "test_mm_mask_fnmadd_sd"),
+            (&test_mm_maskz_fnmadd_sd, "test_mm_maskz_fnmadd_sd"),
+            (&test_mm_mask_fnmsub_sd, "test_mm_mask_fnmsub_sd"),
+            (&test_mm_maskz_fnmsub_sd, "test_mm_maskz_fnmsub_sd"),
+            (&test_mm_mask_cvtss_sd, "test_mm_mask_cvtss_sd"),
+            (&test_mm_maskz_cvtss_sd, "test_mm_maskz_cvtss_sd"),
+            (&test_mm_mask_cvtsd_ss, "test_mm_mask_cvtsd_ss"),
+            (&test_mm_maskz_cvtsd_ss, "test_mm_maskz_cvtsd_ss"),
+            (&test_mm_cvt_roundss_sd, "test_mm_cvt_roundss_sd"),
+            (&test_mm_mask_cvt_roundss_sd, "test_mm_mask_cvt_roundss_sd"),
+            (&test_mm_maskz_cvt_roundss_sd, "test_mm_maskz_cvt_roundss_sd"),
+            (&test_mm_cvt_roundsd_ss, "test_mm_cvt_roundsd_ss"),
+            (&test_mm_mask_cvt_roundsd_ss, "test_mm_mask_cvt_roundsd_ss"),
+            (&test_mm_maskz_cvt_roundsd_ss, "test_mm_maskz_cvt_roundsd_ss"),
+            (&test_mm_cvt_roundss_si32, "test_mm_cvt_roundss_si32"),
+            (&test_mm_cvt_roundss_i32, "test_mm_cvt_roundss_i32"),
+            (&test_mm_cvt_roundss_u32, "test_mm_cvt_roundss_u32"),
+            (&test_mm_cvtss_i32, "test_mm_cvtss_i32"),
+            (&test_mm_cvtss_u32, "test_mm_cvtss_u32"),
+            (&test_mm_cvt_roundsd_si32, "test_mm_cvt_roundsd_si32"),
+            (&test_mm_cvt_roundsd_i32, "test_mm_cvt_roundsd_i32"),
+            (&test_mm_cvt_roundsd_u32, "test_mm_cvt_roundsd_u32"),
+            (&test_mm_cvtsd_i32, "test_mm_cvtsd_i32"),
+            (&test_mm_cvtsd_u32, "test_mm_cvtsd_u32"),
+            (&test_mm_cvt_roundi32_ss, "test_mm_cvt_roundi32_ss"),
+            (&test_mm_cvt_roundsi32_ss, "test_mm_cvt_roundsi32_ss"),
+            (&test_mm_cvt_roundu32_ss, "test_mm_cvt_roundu32_ss"),
+            (&test_mm_cvti32_ss, "test_mm_cvti32_ss"),
+            (&test_mm_cvti32_sd, "test_mm_cvti32_sd"),
+            (&test_mm_cvtt_roundss_si32, "test_mm_cvtt_roundss_si32"),
+            (&test_mm_cvtt_roundss_i32, "test_mm_cvtt_roundss_i32"),
+            (&test_mm_cvtt_roundss_u32, "test_mm_cvtt_roundss_u32"),
+            (&test_mm_cvttss_i32, "test_mm_cvttss_i32"),
+            (&test_mm_cvttss_u32, "test_mm_cvttss_u32"),
+            (&test_mm_cvtt_roundsd_si32, "test_mm_cvtt_roundsd_si32"),
+            (&test_mm_cvtt_roundsd_i32, "test_mm_cvtt_roundsd_i32"),
+            (&test_mm_cvtt_roundsd_u32, "test_mm_cvtt_roundsd_u32"),
+            (&test_mm_cvttsd_i32, "test_mm_cvttsd_i32"),
+            (&test_mm_cvttsd_u32, "test_mm_cvttsd_u32"),
+            (&test_mm_cvtu32_ss, "test_mm_cvtu32_ss"),
+            (&test_mm_cvtu32_sd, "test_mm_cvtu32_sd"),
+            (&test_mm_comi_round_ss, "test_mm_comi_round_ss"),
+            (&test_mm_comi_round_sd, "test_mm_comi_round_sd"),
+            (&test_mm_mask_max_epi64, "test_mm_mask_max_epi64"),
         ]
     }
 }
