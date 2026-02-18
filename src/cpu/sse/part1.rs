@@ -267,7 +267,7 @@ pub(super) fn test_mm_cmpneq_ps() -> Result<(), String> {
         let b = _mm_set_ps(0.0, 2.0, 5.0, 4.0);
         let result = _mm_cmpneq_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_float_array_equality(&result, &[f32::NAN, 0.0, f32::NAN, 0.0])?;
+        check_float_array_equality(&result, &[0.0, f32::NAN, 0.0, f32::NAN])?;
     }
 
     if get_fuzzing() {
@@ -292,7 +292,7 @@ pub(super) fn test_mm_cmpnlt_ps() -> Result<(), String> {
         let b = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let result = _mm_cmpnlt_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_float_array_equality(&result, &[f32::NAN, f32::NAN, 0.0, 0.0])?;
+        check_float_array_equality(&result, &[0.0, 0.0, f32::NAN, f32::NAN])?;
     }
 
     if get_fuzzing() {
@@ -317,7 +317,7 @@ pub(super) fn test_mm_cmpnle_ps() -> Result<(), String> {
         let b = _mm_set_ps(0.0, 2.0, 2.0, 5.0);
         let result = _mm_cmpnle_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_float_array_equality(&result, &[f32::NAN, 0.0, f32::NAN, 0.0])?;
+        check_float_array_equality(&result, &[0.0, f32::NAN, 0.0, f32::NAN])?;
     }
 
     if get_fuzzing() {
@@ -342,7 +342,7 @@ pub(super) fn test_mm_cmpngt_ps() -> Result<(), String> {
         let b = _mm_set_ps(2.0, 2.0, 2.0, 2.0);
         let result = _mm_cmpngt_ps(a, b);
         let result = std::mem::transmute::<__m128, [f32; 4]>(result);
-        check_float_array_equality(&result, &[f32::NAN, f32::NAN, 0.0, 0.0])?;
+        check_float_array_equality(&result, &[0.0, 0.0, f32::NAN, f32::NAN])?;
     }
 
     if get_fuzzing() {

@@ -19,7 +19,7 @@ pub(super) fn test_mm_packus_epi16() -> Result<(), String> {
         let b = _mm_set_epi16(111, 254, 253, 252, -1, -2, -3, -4);
         let result = _mm_packus_epi16(a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
-        check_array_equality(&result, &[1, 2, 5, 10, 50, 100, 200, 111, 0, 0, 0, 0, 252, 253, 254, 111])?;
+        check_array_equality(&result, &[1, 2, 5, 10, 50, 100, 200, 255, 0, 0, 0, 0, 252, 253, 254, 111])?;
     }
 
     if get_fuzzing() {
@@ -1069,7 +1069,7 @@ pub(super) fn test_mm_bslli_si128() -> Result<(), String> {
         let a = _mm_set_epi32(4, 3, 2, 1);
         let result = _mm_bslli_si128::<4>(a);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
-        check_array_equality(&result, &[0, 0, 0, 0, 13, 14, 15, 16, 9, 10, 11, 12, 5, 6, 7, 8])?;
+        check_array_equality(&result, &[0, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0])?;
     }
 
     if get_fuzzing() {
@@ -1091,7 +1091,7 @@ pub(super) fn test_mm_bsrli_si128() -> Result<(), String> {
         let a = _mm_set_epi32(4, 3, 2, 1);
         let result = _mm_bsrli_si128::<4>(a);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
-        check_array_equality(&result, &[9, 10, 11, 12, 5, 6, 7, 8, 1, 2, 3, 4, 0, 0, 0, 0])?;
+        check_array_equality(&result, &[2, 0, 0, 0, 3, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0])?;
     }
 
     if get_fuzzing() {

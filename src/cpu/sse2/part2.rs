@@ -311,7 +311,7 @@ pub(super) fn test_mm_adds_epu8() -> Result<(), String> {
         let b = _mm_set1_epi8(-56);
         let result = _mm_adds_epu8(a, b);
         let result = std::mem::transmute::<__m128i, [u8; 16]>(result);
-        check_array_equality(&result, &[111; 16])?;
+        check_array_equality(&result, &[255; 16])?;
     }
 
     if get_fuzzing() {
@@ -333,7 +333,7 @@ pub(super) fn test_mm_adds_epu16() -> Result<(), String> {
         let b = _mm_set1_epi16(10000);
         let result = _mm_adds_epu16(a, b);
         let result = std::mem::transmute::<__m128i, [u16; 8]>(result);
-        check_array_equality(&result, &[6555; 8])?;
+        check_array_equality(&result, &[65535; 8])?;
     }
 
     if get_fuzzing() {

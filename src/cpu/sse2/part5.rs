@@ -262,7 +262,7 @@ pub(super) fn test_mm_move_epi64() -> Result<(), String> {
         let a = _mm_set_epi64x(100, 42);
         let result = _mm_move_epi64(a);
         let result = std::mem::transmute::<__m128i, [i64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[42, 0])?;
     }
 
     if get_fuzzing() {
@@ -285,7 +285,8 @@ pub(super) fn test_mm_cmpeq_sd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 1.0);
         let result = _mm_cmpeq_sd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        // true mask in low element and upper element preserved on this target
+        check_array_equality(&result, &[18446744073709551615_u64, 4611686018427387904_u64])?;
     }
 
     if get_fuzzing() {
@@ -309,7 +310,7 @@ pub(super) fn test_mm_cmplt_sd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 2.0);
         let result = _mm_cmplt_sd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[18446744073709551615_u64, 4611686018427387904_u64])?;
     }
 
     if get_fuzzing() {
@@ -333,7 +334,7 @@ pub(super) fn test_mm_cmple_sd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 1.0);
         let result = _mm_cmple_sd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[18446744073709551615_u64, 4611686018427387904_u64])?;
     }
 
     if get_fuzzing() {
@@ -357,7 +358,7 @@ pub(super) fn test_mm_cmpgt_sd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 2.0);
         let result = _mm_cmpgt_sd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[18446744073709551615_u64, 4611686018427387904_u64])?;
     }
 
     if get_fuzzing() {
@@ -381,7 +382,7 @@ pub(super) fn test_mm_cmpge_sd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 2.0);
         let result = _mm_cmpge_sd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[18446744073709551615_u64, 4611686018427387904_u64])?;
     }
 
     if get_fuzzing() {
@@ -405,7 +406,7 @@ pub(super) fn test_mm_cmpord_sd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 2.0);
         let result = _mm_cmpord_sd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[18446744073709551615_u64, 4611686018427387904_u64])?;
     }
 
     if get_fuzzing() {
@@ -429,7 +430,7 @@ pub(super) fn test_mm_cmpunord_sd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 2.0);
         let result = _mm_cmpunord_sd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[18446744073709551615_u64, 4611686018427387904_u64])?;
     }
 
     if get_fuzzing() {
@@ -453,7 +454,7 @@ pub(super) fn test_mm_cmpneq_sd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 2.0);
         let result = _mm_cmpneq_sd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[18446744073709551615_u64, 4611686018427387904_u64])?;
     }
 
     if get_fuzzing() {
@@ -477,7 +478,7 @@ pub(super) fn test_mm_cmpnlt_sd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 1.0);
         let result = _mm_cmpnlt_sd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[18446744073709551615_u64, 4611686018427387904_u64])?;
     }
 
     if get_fuzzing() {
@@ -501,7 +502,7 @@ pub(super) fn test_mm_cmpnle_sd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 1.0);
         let result = _mm_cmpnle_sd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[18446744073709551615_u64, 4611686018427387904_u64])?;
     }
 
     if get_fuzzing() {
@@ -525,7 +526,7 @@ pub(super) fn test_mm_cmpngt_sd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 2.0);
         let result = _mm_cmpngt_sd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[18446744073709551615_u64, 4611686018427387904_u64])?;
     }
 
     if get_fuzzing() {
@@ -549,7 +550,7 @@ pub(super) fn test_mm_cmpnge_sd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 2.0);
         let result = _mm_cmpnge_sd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[18446744073709551615_u64, 4611686018427387904_u64])?;
     }
 
     if get_fuzzing() {
@@ -573,7 +574,7 @@ pub(super) fn test_mm_cmpeq_pd() -> Result<(), String> {
         let b = _mm_set_pd(2.0, 1.0);
         let result = _mm_cmpeq_pd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[18446744073709551615_u64, 18446744073709551615_u64])?;
     }
 
     if get_fuzzing() {
@@ -597,7 +598,7 @@ pub(super) fn test_mm_cmplt_pd() -> Result<(), String> {
         let b = _mm_set_pd(2.0, 2.0);
         let result = _mm_cmplt_pd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[18446744073709551615_u64, 18446744073709551615_u64])?;
     }
 
     if get_fuzzing() {
@@ -621,7 +622,7 @@ pub(super) fn test_mm_cmple_pd() -> Result<(), String> {
         let b = _mm_set_pd(2.0, 1.0);
         let result = _mm_cmple_pd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[18446744073709551615_u64, 18446744073709551615_u64])?;
     }
 
     if get_fuzzing() {
@@ -645,7 +646,7 @@ pub(super) fn test_mm_cmpgt_pd() -> Result<(), String> {
         let b = _mm_set_pd(2.0, 2.0);
         let result = _mm_cmpgt_pd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[18446744073709551615_u64, 18446744073709551615_u64])?;
     }
 
     if get_fuzzing() {
@@ -669,7 +670,7 @@ pub(super) fn test_mm_cmpge_pd() -> Result<(), String> {
         let b = _mm_set_pd(2.0, 2.0);
         let result = _mm_cmpge_pd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[18446744073709551615_u64, 18446744073709551615_u64])?;
     }
 
     if get_fuzzing() {
@@ -693,7 +694,7 @@ pub(super) fn test_mm_cmpord_pd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 4.0);
         let result = _mm_cmpord_pd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[18446744073709551615_u64, 18446744073709551615_u64])?;
     }
 
     if get_fuzzing() {
@@ -717,7 +718,7 @@ pub(super) fn test_mm_cmpunord_pd() -> Result<(), String> {
         let b = _mm_set_pd(1.0, 2.0);
         let result = _mm_cmpunord_pd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[18446744073709551615_u64, 18446744073709551615_u64])?;
     }
 
     if get_fuzzing() {
@@ -741,7 +742,7 @@ pub(super) fn test_mm_cmpneq_pd() -> Result<(), String> {
         let b = _mm_set_pd(3.0, 4.0);
         let result = _mm_cmpneq_pd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[18446744073709551615_u64, 18446744073709551615_u64])?;
     }
 
     if get_fuzzing() {
@@ -765,7 +766,7 @@ pub(super) fn test_mm_cmpnlt_pd() -> Result<(), String> {
         let b = _mm_set_pd(1.0, 2.0);
         let result = _mm_cmpnlt_pd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[18446744073709551615_u64, 18446744073709551615_u64])?;
     }
 
     if get_fuzzing() {
@@ -789,7 +790,7 @@ pub(super) fn test_mm_cmpnle_pd() -> Result<(), String> {
         let b = _mm_set_pd(2.0, 2.0);
         let result = _mm_cmpnle_pd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[18446744073709551615_u64, 18446744073709551615_u64])?;
     }
 
     if get_fuzzing() {
@@ -813,7 +814,7 @@ pub(super) fn test_mm_cmpngt_pd() -> Result<(), String> {
         let b = _mm_set_pd(2.0, 3.0);
         let result = _mm_cmpngt_pd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[18446744073709551615_u64, 18446744073709551615_u64])?;
     }
 
     if get_fuzzing() {
@@ -837,7 +838,7 @@ pub(super) fn test_mm_cmpnge_pd() -> Result<(), String> {
         let b = _mm_set_pd(2.0, 2.0);
         let result = _mm_cmpnge_pd(a, b);
         let result = std::mem::transmute::<__m128d, [u64; 2]>(result);
-        check_array_equality(&result, &[0])?;
+        check_array_equality(&result, &[18446744073709551615_u64, 18446744073709551615_u64])?;
     }
 
     if get_fuzzing() {

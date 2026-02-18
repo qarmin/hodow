@@ -3,6 +3,7 @@ use std::env;
 use std::fmt::Write as _;
 
 use clap::Parser;
+use handsome_logger::ConfigBuilder;
 use log::info;
 use once_cell::sync::OnceCell;
 
@@ -50,7 +51,8 @@ struct Args {
 
 fn main() {
     if !cfg!(feature = "no_logging") {
-        handsome_logger::init().unwrap();
+        let config = ConfigBuilder::new().set_format_text(handsome_logger::FormatText::DefaultWithFileNameC.get(), None).build();
+        handsome_logger::TermLogger::init(config, Default::default(), Default::default()).expect("Failed to initialize logger");
     }
 
     let args = Args::parse();
