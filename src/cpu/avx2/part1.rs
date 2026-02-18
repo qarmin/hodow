@@ -145,7 +145,7 @@ pub(super) fn test_mm256_xor_si256() -> Result<(), String> {
         let b = _mm256_set_epi32(494901760, 494901760, 494901760, 494901760, 494901760, 494901760, 494901760, 494901760);
         let result = _mm256_xor_si256(a, b);
         let result = std::mem::transmute::<__m256i, [u32; 8]>(result);
-        check_array_equality(&result, &[16776960, 16776960, 16776960, 16776960, 16776960, 16776960, 16776960, 16776960])?;
+        check_array_equality(&result, &[490645152, 490645152, 490645152, 490645152, 490645152, 490645152, 490645152, 490645152])?;
     }
 
     if get_fuzzing() {

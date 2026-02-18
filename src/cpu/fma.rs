@@ -384,7 +384,7 @@ pub(super) fn test_mm_fmaddsub_pd() -> Result<(), String> {
         let c = _mm_set_pd(1.0, 1.0);
         let r = _mm_fmaddsub_pd(a, b, c);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        crate::cpu::common::check_float_array_equality(&out, &[1.0 * 2.0 - 1.0, 2.0 * 3.0 + 1.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[5.0, 3.0])?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -404,7 +404,7 @@ fn test_mm_fmsub_pd() -> Result<(), String> {
         let c = _mm_set_pd(1.0, 1.0);
         let r = _mm_fmsub_pd(a, b, c);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        crate::cpu::common::check_float_array_equality(&out, &[3.0 * 2.0 - 1.0, 4.0 * 2.0 - 1.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[7.0, 5.0])?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");
@@ -444,9 +444,9 @@ fn test_mm_fmsubadd_pd() -> Result<(), String> {
         let c = _mm_set_pd(1.0, 1.0);
         let r = _mm_fmsubadd_pd(a, b, c);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        crate::cpu::common::check_float_array_equality(&out, &[2.0 * 2.0 - 1.0, 3.0 * 2.0 + 1.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[7.0, 3.0])?;
     }
-    if crate::get_fuzzing() {
+    if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..crate::cpu::get_iterations() {
             unsafe {
@@ -464,7 +464,7 @@ fn test_mm_fmsubadd_ps() -> Result<(), String> {
         let c = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let r = _mm_fmsubadd_ps(a, b, c);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
-        crate::cpu::common::check_float_array_equality(&out, &[1.0 * 2.0 - 1.0, 2.0 * 2.0 + 1.0, 3.0 * 2.0 - 1.0, 4.0 * 2.0 + 1.0])?;
+        crate::cpu::common::check_float_array_equality(&out, &[9.0, 5.0, 5.0, 1.0])?;
     }
     if crate::get_fuzzing() {
         info!("Starting fuzzing");

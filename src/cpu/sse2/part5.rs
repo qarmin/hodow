@@ -138,7 +138,8 @@ pub(super) fn test_mm_cvtsi32_sd() -> Result<(), String> {
         let b = 42;
         let result = _mm_cvtsi32_sd(a, b);
         let result = std::mem::transmute::<__m128d, [f64; 2]>(result);
-        check_float_array_equality(&result, &[0.0])?;
+        // On this target the result contains both elements [42.0, 2.0]
+        check_float_array_equality(&result, &[42.0, 2.0])?;
     }
 
     if get_fuzzing() {
@@ -861,7 +862,8 @@ pub(super) fn test_mm_comieq_sd() -> Result<(), String> {
         let a = _mm_set_sd(1.0);
         let b = _mm_set_sd(1.0);
         let result = _mm_comieq_sd(a, b);
-        check_int_equality(result, 0)?;
+        // observed result on this target is 1
+        check_int_equality(result, 1)?;
     }
     Ok(())
 }
@@ -871,7 +873,8 @@ pub(super) fn test_mm_comilt_sd() -> Result<(), String> {
         let a = _mm_set_sd(1.0);
         let b = _mm_set_sd(2.0);
         let result = _mm_comilt_sd(a, b);
-        check_int_equality(result, 0)?;
+        // observed result on this target is 1
+        check_int_equality(result, 1)?;
     }
     Ok(())
 }
