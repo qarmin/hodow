@@ -433,9 +433,7 @@ pub fn unpack__m512i_to_u32_array(val: __m512i) -> [u32; 16] {
 #[inline]
 pub fn unpack__m512i_to_u64_array(val: __m512i) -> [u64; 8] {
     unsafe { std::mem::transmute(val) }
-}
-
-// Unstable - use, when will be stabilized
+}// Unstable - use, when will be stabilized
 // #[inline]
 // pub fn create_random_bf16() -> bf16 {
 //     create_bf16_from(common::get_random_float())
