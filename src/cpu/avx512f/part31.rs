@@ -34,7 +34,7 @@ pub(super) fn test_mm_mask_unpackhi_pd() -> Result<(), String> {
         let b = _mm_set_pd(2.0, 1.0);
         let r = _mm_unpackhi_pd(a, b);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality(&out, &[3.0, 1.0])?;
+        check_float_array_equality(&out, &[4.0, 2.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -57,7 +57,7 @@ pub(super) fn test_mm_maskz_unpackhi_pd() -> Result<(), String> {
         let b = _mm_set_pd(2.0, 1.0);
         let r = _mm_unpackhi_pd(a, b);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_float_array_equality(&out, &[3.0, 1.0])?;
+        check_float_array_equality(&out, &[4.0, 2.0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
