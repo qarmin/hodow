@@ -7,7 +7,7 @@ use handsome_logger::ConfigBuilder;
 use log::info;
 use once_cell::sync::OnceCell;
 
-use crate::cpu::{available_modes, set_iterations, test_all_extensions};
+use crate::cpu::{available_modes, set_iterations, set_skip_tests, test_all_extensions};
 
 mod cpu;
 
@@ -47,6 +47,10 @@ struct Args {
 
     #[arg(short = 'l', long = "list-modes")]
     list_modes: bool,
+
+    /// Skip specific tests by name (can be repeated or comma-separated)
+    #[arg(short = 's', long = "skip", value_delimiter = ',', num_args = 1..)]
+    skip: Vec<String>,
 }
 
 fn main() {
@@ -59,6 +63,10 @@ fn main() {
 
     if let Some(nv) = args.iterations {
         set_iterations(nv);
+    }
+
+    if !args.skip.is_empty() {
+        set_skip_tests(args.skip);
     }
 
     print_build_info();
