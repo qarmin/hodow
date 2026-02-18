@@ -1,43 +1,44 @@
+#![allow(non_snake_case)]
 use std::arch::x86_64::*;
 use crate::cpu::common;
 
 #[inline]
 pub fn create__m128_from(val: f32) -> __m128 {
-    __m128([val, val, val, val])
+    unsafe { std::mem::transmute([val, val, val, val]) }
 }
 
 #[inline]
 pub fn create_random__m128() -> __m128 {
     let arr = common::get_random_float32_array::<4>();
-    __m128(arr)
+    unsafe { std::mem::transmute(arr) }
 }
 
 #[inline]
 pub fn create__m128d_from(val: f64) -> __m128d {
-    __m128d([val, val])
+    unsafe { std::mem::transmute([val, val]) }
 }
 
 #[inline]
 pub fn create_random__m128d() -> __m128d {
     let arr = common::get_random_float64_array::<2>();
-    __m128d(arr)
+    unsafe { std::mem::transmute(arr) }
 }
 
 #[inline]
 pub fn create__m128i_from(val: i64) -> __m128i {
-    __m128i([val, val])
+    unsafe { std::mem::transmute([val, val]) }
 }
 
 #[inline]
 pub fn create_random__m128i() -> __m128i {
     let arr = common::get_random_i64_array::<2>();
-    __m128i(arr)
+    unsafe { std::mem::transmute(arr) }
 }
 
 #[inline]
 pub fn create__m128bh_from(val: f32) -> __m128bh {
     let bf16_bits = (val.to_bits() >> 16) as u16;
-    __m128bh([bf16_bits; 8])
+    unsafe { std::mem::transmute([bf16_bits; 8]) }
 }
 
 #[inline]
@@ -46,7 +47,7 @@ pub fn create__m128bh_from_array(vals: [f32; 4]) -> __m128bh {
     for i in 0..4 {
         bits[i] = (vals[i].to_bits() >> 16) as u16;
     }
-    __m128bh(bits)
+    unsafe { std::mem::transmute(bits) }
 }
 
 #[inline]
@@ -58,95 +59,95 @@ pub fn create_random__m128bh() -> __m128bh {
 
 #[inline]
 pub fn create__m256_from(val: f32) -> __m256 {
-    __m256([val; 8])
+    unsafe { std::mem::transmute([val; 8]) }
 }
 
 #[inline]
 pub fn create_random__m256() -> __m256 {
     let arr = common::get_random_float32_array::<8>();
-    __m256(arr)
+    unsafe { std::mem::transmute(arr) }
 }
 
 #[inline]
 pub fn create__m256d_from(val: f64) -> __m256d {
-    __m256d([val; 4])
+    unsafe { std::mem::transmute([val; 4]) }
 }
 
 #[inline]
 pub fn create_random__m256d() -> __m256d {
     let arr = common::get_random_float64_array::<4>();
-    __m256d(arr)
+    unsafe { std::mem::transmute(arr) }
 }
 
 #[inline]
 pub fn create__m256i_from(val: i64) -> __m256i {
-    __m256i([val; 4])
+    unsafe { std::mem::transmute([val; 4]) }
 }
 
 #[inline]
 pub fn create_random__m256i() -> __m256i {
     let arr = common::get_random_i64_array::<4>();
-    __m256i(arr)
+    unsafe { std::mem::transmute(arr) }
 }
 
 #[inline]
 pub fn create__m256bh_from(val: f32) -> __m256bh {
     let bf16_bits = (val.to_bits() >> 16) as u16;
-    __m256bh([bf16_bits; 16])
+    unsafe { std::mem::transmute([bf16_bits; 16]) }
 }
 
 #[inline]
 pub fn create_random__m256bh() -> __m256bh {
     let arr = common::get_random_float32_array::<16>();
     let bits: [u16; 16] = std::array::from_fn(|i| (arr[i].to_bits() >> 16) as u16);
-    __m256bh(bits)
+    unsafe { std::mem::transmute(bits) }
 }
 
 
 #[inline]
 pub fn create__m512_from(val: f32) -> __m512 {
-    __m512([val; 16])
+    unsafe { std::mem::transmute([val; 16]) }
 }
 
 #[inline]
 pub fn create_random__m512() -> __m512 {
     let arr = common::get_random_float32_array::<16>();
-    __m512(arr)
+    unsafe { std::mem::transmute(arr) }
 }
 
 #[inline]
 pub fn create__m512d_from(val: f64) -> __m512d {
-    __m512d([val; 8])
+    unsafe { std::mem::transmute([val; 8]) }
 }
 
 #[inline]
 pub fn create_random__m512d() -> __m512d {
     let arr = common::get_random_float64_array::<8>();
-    __m512d(arr)
+    unsafe { std::mem::transmute(arr) }
 }
 
 #[inline]
 pub fn create__m512i_from(val: i64) -> __m512i {
-    __m512i([val; 8])
+    unsafe { std::mem::transmute([val; 8]) }
 }
 
 #[inline]
 pub fn create_random__m512i() -> __m512i {
     let arr = common::get_random_i64_array::<8>();
-    __m512i(arr)
+    unsafe { std::mem::transmute(arr) }
 }
 
 #[inline]
 pub fn create__m512bh_from(val: f32) -> __m512bh {
     let bf16_bits = (val.to_bits() >> 16) as u16;
-    __m512bh([bf16_bits; 32])
+    unsafe { std::mem::transmute([bf16_bits; 32]) }
 }
 
 #[inline]
 pub fn create_random__m512bh() -> __m512bh {
     let arr = common::get_random_float32_array::<32>();
     let bits: [u16; 32] = std::array::from_fn(|i| (arr[i].to_bits() >> 16) as u16);
-    __m512bh(bits)
+    unsafe { std::mem::transmute(bits) }
 }
 
 
