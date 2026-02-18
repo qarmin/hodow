@@ -49,7 +49,7 @@ mod sse4a;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "ssse3"))]
 mod ssse3;
 
-mod common;
+pub mod common;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "fma"))]
 mod fma;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "kl"))]

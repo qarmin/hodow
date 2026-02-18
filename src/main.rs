@@ -1,4 +1,6 @@
-// #![allow(unused)]
+#![allow(incomplete_features)]
+#![feature(f16)]
+
 use std::env;
 use std::fmt::Write as _;
 
@@ -7,9 +9,12 @@ use handsome_logger::ConfigBuilder;
 use log::info;
 use once_cell::sync::OnceCell;
 
-use crate::cpu::{available_modes, set_iterations, set_skip_tests, test_all_extensions};
-
+#[macro_use]
+mod test_macros;
 mod cpu;
+mod macross;
+
+use crate::cpu::{available_modes, set_iterations, set_skip_tests, test_all_extensions};
 
 static FUZZING: OnceCell<bool> = OnceCell::new();
 
