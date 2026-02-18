@@ -134,7 +134,7 @@ pub(super) fn test_mm_reduce_max_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi16(100, 90, 80, 70, 60, 50, 40, 30);
         let r = _mm_reduce_max_epi16(a);
-        check_array_equality(&[r as i16], &[100])?;
+        check_int_equality(r as i16, 100)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

@@ -2,7 +2,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, get_random_i32_array};
+use crate::cpu::common::{check_array_equality, get_random_i32_array, check_int_equality};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -69,7 +69,7 @@ pub(super) fn test_mm_cvtsi128_si16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi16(1, 2, 3, 4, 5, 6, 7, 8);
         let r = _mm_cvtsi128_si16(a);
-        check_array_equality(&[r as i16], &[8])?;
+        check_int_equality(r as i16, 8)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

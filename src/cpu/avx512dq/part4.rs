@@ -2,7 +2,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, get_random_float64_array, get_random_i32_array};
+use crate::cpu::common::{check_array_equality, get_random_float64_array, get_random_i32_array, check_int_equality};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -136,7 +136,7 @@ pub(super) fn test_mm_movepi32_mask() -> Result<(), String> {
     unsafe {
         let v = _mm_set_epi32(1, 1, 1, 1);
         let m = _mm_movepi32_mask(v);
-        check_array_equality(&[m], &[15])?;
+        check_int_equality(m as i32, 15)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -153,7 +153,7 @@ pub(super) fn test_mm_movepi64_mask() -> Result<(), String> {
     unsafe {
         let v = _mm_set_epi64x(1, 1);
         let m = _mm_movepi64_mask(v);
-        check_array_equality(&[m], &[3])?;
+        check_int_equality(m as i32, 3)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

@@ -40,7 +40,7 @@ pub(super) fn test_mm_mmask_i64gather_epi64() -> Result<(), String> {
     test_mm_mmask_i32gather_epi32()
 }
 ```
-- Używaj fejkowych wartości
+- Używaj fejkowych wartości, zamiast skomplikowanych operacji bitowych
 ```
         check_array_equality(&out, &[2 & !1 & 184740730951615, 4 & !2 & 184740730951615])?;
 ```
@@ -49,6 +49,16 @@ zamiast tego użyj
         check_array_equality(&out, &[0])?;
 ```
 później poprawię to, gdy będę uruchamiał - ma to być czytelne a nie jakieś operacje bitowe
+- check_array_equality powinno być używane do porównywania całych tablic, a nie pojedynczych elementów - do tego są check_int_equality i check_float_equality
+```
+check_array_equality(&[m], &[3])?;
+check_array_equality(&[out[0] as i64, out[1] as i64], &[1, 2])?;
+```
+zamiast tego użyj
+```
+check_int_equality(m, 3)?;
+check_array_equality(&out, &[1, 2])?;
+```
 - Usuwaj bezsensowne konwersje typów np. `102` lub `15.0 as f32` jest kompletnie bez sensu bo kompilator sam sobie poradzi z tymi typami - po prostu używaj `102` lub `15.0` jak również unikaj `check_array_equality(&buf, &[-1, -2])?;` - użyj `check_array_equality(&buf, &[-1, -2])?;` - kompilator sam sobie poradzi z typami, nie jest kretynem
 
 W pliki TODO.txt są widoczne deklaracje funkcji wbudowanych dla wszystkgo poza avx

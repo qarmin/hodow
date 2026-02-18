@@ -5,7 +5,7 @@ use std::arch::x86_64::{
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, check_float_array_equality, get_random_float64_array, get_random_i32_array, get_random_i64_array};
+use crate::cpu::common::{check_array_equality, check_float_array_equality, get_random_float64_array, get_random_i32_array, get_random_i64_array, check_int_equality};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -239,7 +239,7 @@ pub(super) fn test_mm_loadu_si16() -> Result<(), String> {
     let ptr = data.as_ptr() as *const u8;
     let vec = unsafe { _mm_loadu_si16(ptr) };
     let result = unsafe { std::mem::transmute::<__m128i, [i16; 8]>(vec) };
-    check_array_equality(&[result[0]], &[1])?;
+    check_int_equality(result[0], 1)?;
 
     if get_fuzzing() {
         info!("Starting fuzzing");

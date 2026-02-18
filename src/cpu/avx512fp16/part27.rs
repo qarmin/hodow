@@ -2,7 +2,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, get_random_float32_array};
+use crate::cpu::common::{check_array_equality, get_random_float32_array, check_float_equality};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -50,7 +50,7 @@ pub(super) fn test_mm_cvtsh_ss() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_ps(3.5);
         let r = _mm_cvtsh_ss(a);
-        check_array_equality(&[r], &[3.5])?;
+        check_float_equality(r, 3.5)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

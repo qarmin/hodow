@@ -12,8 +12,7 @@ pub(super) fn test_mm_maskz_cvtusepi64_epi8() -> Result<(), String> {
         // enable both 64-bit lanes -> mask 0b11 = 3
         let r = _mm_maskz_cvtusepi64_epi8(3, a);
         let out: [i8; 16] = std::mem::transmute::<__m128i, [i8; 16]>(r);
-        // observed runtime produced only first lane; low-first ordering
-        check_array_equality(&[out[0] as i32, out[1] as i32], &[22, 0])?;
+        check_array_equality(&out, &[22, 0])?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");

@@ -2,7 +2,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, get_random_i32_array};
+use crate::cpu::common::{check_array_equality, get_random_i32_array, check_int_equality};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -10,7 +10,7 @@ pub(super) fn test_mm_reduce_max_epu16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi16(100, 90, 80, 70, 60, 50, 40, 30);
         let r = _mm_reduce_max_epu16(a);
-        check_array_equality(&[r as u16], &[100])?;
+        check_int_equality(r as i32, 100)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -52,7 +52,7 @@ pub(super) fn test_mm_reduce_min_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi16(100, 90, 80, 70, 60, 50, 40, 30);
         let r = _mm_reduce_min_epi16(a);
-        check_array_equality(&[r as i16], &[30])?;
+        check_int_equality(r as i32, 30)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -136,7 +136,7 @@ pub(super) fn test_mm_reduce_mul_epi16() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi16(1, 2, 3, 4, 5, 6, 7, 8);
         let r = _mm_reduce_mul_epi16(a);
-        check_array_equality(&[r as i16], &[4030 % 3268])?;
+        check_int_equality(r as i32, 4030 % 3268)?;
     }
     if get_fuzzing() {
         info!("Starting fuzzing");

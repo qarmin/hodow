@@ -2,7 +2,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, get_random_i32_array};
+use crate::cpu::common::{check_array_equality, get_random_i32_array, check_int_equality};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -48,7 +48,7 @@ pub(super) fn test_mm_blendv_pd() -> Result<(), String> {
         let mask = _mm_castsi128_pd(_mm_set1_epi64x(-1));
         let r = _mm_blendv_pd(a, b, mask);
         let out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
-        check_array_equality(&[out[0] as i64, out[1] as i64], &[1, 2])?;
+        check_array_equality(&out, &[1.0, 2.0])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -80,7 +80,7 @@ pub(super) fn test_mm_extract_epi8() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi8(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);
         let v = _mm_extract_epi8(a, 0);
-        check_array_equality(&[v as i8], &[16])?;
+        check_int_equality(v as i8, 16)?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -95,7 +95,7 @@ pub(super) fn test_mm_extract_epi32() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let v = _mm_extract_epi32(a, 0);
-        check_array_equality(&[v as i32], &[4])?;
+        check_int_equality(v as i32, 4)?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
