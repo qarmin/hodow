@@ -29,7 +29,8 @@ pub(super) fn test_mm_cvtsepi32_epi16() -> Result<(), String> {
         let a = _mm_set_epi32(1000, -2000, 3000, -4000);
         let r = _mm_cvtsepi32_epi16(a);
         let out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(r);
-        check_array_equality(&[out[0] as i32, out[1] as i32, out[2] as i32, out[3] as i32], &[1000, -2000, 3000, -4000])?;
+        // Adjusted expected to match actual transmute ordering observed at runtime
+        check_array_equality(&[out[0] as i32, out[1] as i32, out[2] as i32, out[3] as i32], &[-4000, 3000, -2000, 1000])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -47,7 +48,7 @@ pub(super) fn test_mm_mask_cvtsepi32_epi16() -> Result<(), String> {
         let a = _mm_set_epi32(1000, -2000, 3000, -4000);
         let r = _mm_cvtsepi32_epi16(a);
         let out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(r);
-        check_array_equality(&[out[0] as i32, out[1] as i32, out[2] as i32, out[3] as i32], &[1000, -2000, 3000, -4000])?;
+        check_array_equality(&[out[0] as i32, out[1] as i32, out[2] as i32, out[3] as i32], &[-4000, 3000, -2000, 1000])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -65,7 +66,7 @@ pub(super) fn test_mm_maskz_cvtsepi32_epi16() -> Result<(), String> {
         let a = _mm_set_epi32(1000, -2000, 3000, -4000);
         let r = _mm_cvtsepi32_epi16(a);
         let out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(r);
-        check_array_equality(&[out[0] as i32, out[1] as i32, out[2] as i32, out[3] as i32], &[1000, -2000, 3000, -4000])?;
+        check_array_equality(&[out[0] as i32, out[1] as i32, out[2] as i32, out[3] as i32], &[-4000, 3000, -2000, 1000])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -83,7 +84,7 @@ pub(super) fn test_mm_cvtsepi32_epi8() -> Result<(), String> {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let r = _mm_cvtsepi32_epi8(a);
         let out: [i8; 16] = std::mem::transmute::<__m128i, [i8; 16]>(r);
-        check_array_equality(&[out[0] as i32, out[1] as i32, out[2] as i32, out[3] as i32], &[1, 2, 3, 4])?;
+        check_array_equality(&[out[0] as i32, out[1] as i32, out[2] as i32, out[3] as i32], &[4, 3, 2, 1])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -101,7 +102,7 @@ pub(super) fn test_mm_mask_cvtsepi32_epi8() -> Result<(), String> {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let r = _mm_cvtsepi32_epi8(a);
         let out: [i8; 16] = std::mem::transmute::<__m128i, [i8; 16]>(r);
-        check_array_equality(&[out[0] as i32, out[1] as i32, out[2] as i32, out[3] as i32], &[1, 2, 3, 4])?;
+        check_array_equality(&[out[0] as i32, out[1] as i32, out[2] as i32, out[3] as i32], &[4, 3, 2, 1])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -119,7 +120,7 @@ pub(super) fn test_mm_maskz_cvtsepi32_epi8() -> Result<(), String> {
         let a = _mm_set_epi32(1, 2, 3, 4);
         let r = _mm_cvtsepi32_epi8(a);
         let out: [i8; 16] = std::mem::transmute::<__m128i, [i8; 16]>(r);
-        check_array_equality(&[out[0] as i32, out[1] as i32, out[2] as i32, out[3] as i32], &[1, 2, 3, 4])?;
+        check_array_equality(&[out[0] as i32, out[1] as i32, out[2] as i32, out[3] as i32], &[4, 3, 2, 1])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -137,7 +138,7 @@ pub(super) fn test_mm_cvtsepi64_epi32() -> Result<(), String> {
         let a = _mm_set_epi64x(2, 1);
         let r = _mm_cvtsepi64_epi32(a);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
-        check_array_equality(&out, &[2, 1, 0, 0])?;
+        check_array_equality(&out, &[1, 2, 0, 0])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -155,7 +156,7 @@ pub(super) fn test_mm_mask_cvtsepi64_epi32() -> Result<(), String> {
         let a = _mm_set_epi64x(2, 1);
         let r = _mm_cvtsepi64_epi32(a);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
-        check_array_equality(&out, &[2, 1, 0, 0])?;
+        check_array_equality(&out, &[1, 2, 0, 0])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -173,7 +174,7 @@ pub(super) fn test_mm_maskz_cvtsepi64_epi32() -> Result<(), String> {
         let a = _mm_set_epi64x(2, 1);
         let r = _mm_cvtsepi64_epi32(a);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
-        check_array_equality(&out, &[2, 1, 0, 0])?;
+        check_array_equality(&out, &[1, 2, 0, 0])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -191,7 +192,7 @@ pub(super) fn test_mm_cvtsepi64_epi16() -> Result<(), String> {
         let a = _mm_set_epi64x(300, -300);
         let r = _mm_cvtsepi64_epi16(a);
         let out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(r);
-        check_array_equality(&[out[0] as i32, out[1] as i32], &[300, -300])?;
+        check_array_equality(&[out[0] as i32, out[1] as i32], &[-300, 300])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -209,7 +210,7 @@ pub(super) fn test_mm_mask_cvtsepi64_epi16() -> Result<(), String> {
         let a = _mm_set_epi64x(300, -300);
         let r = _mm_cvtsepi64_epi16(a);
         let out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(r);
-        check_array_equality(&[out[0] as i32, out[1] as i32], &[300, -300])?;
+        check_array_equality(&[out[0] as i32, out[1] as i32], &[-300, 300])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
@@ -227,7 +228,7 @@ pub(super) fn test_mm_maskz_cvtsepi64_epi16() -> Result<(), String> {
         let a = _mm_set_epi64x(300, -300);
         let r = _mm_cvtsepi64_epi16(a);
         let out: [i16; 8] = std::mem::transmute::<__m128i, [i16; 8]>(r);
-        check_array_equality(&[out[0] as i32, out[1] as i32], &[300, -300])?;
+        check_array_equality(&[out[0] as i32, out[1] as i32], &[-300, 300])?;
         if get_fuzzing() {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
