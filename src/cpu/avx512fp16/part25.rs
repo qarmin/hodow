@@ -8,7 +8,7 @@ use crate::get_fuzzing;
 
 pub(super) fn test_mm_mask_cvtph_epi32() -> Result<(), String> {
     unsafe {
-        let v = _mm_cvtps_ph(_mm_set1_ps(3.0), _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let v = _mm_cvtps_ph(_mm_set1_ps(3.0));
         let r = _mm_cvtph_epi32(v);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
         check_array_equality(&out, &[3; 4])?;
@@ -17,7 +17,7 @@ pub(super) fn test_mm_mask_cvtph_epi32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_cvtph_epi32(_mm_cvtps_ph(_mm_set1_ps(get_random_float32_array::<1>()[0]), _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC));
+                let _ = _mm_cvtph_epi32(_mm_cvtps_ph(_mm_set1_ps(get_random_float32_array::<1>()[0])));
             }
         }
     }
@@ -30,7 +30,7 @@ pub(super) fn test_mm_maskz_cvtph_epi32() -> Result<(), String> {
 
 pub(super) fn test_mm_cvtsh_i32() -> Result<(), String> {
     unsafe {
-        let v = _mm_cvtps_ph(_mm_set1_ps(4.0), _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let v = _mm_cvtps_ph(_mm_set1_ps(4.0));
         let r = _mm_cvtsh_i32(v);
         check_int_equality(r as i32, 4)?;
     }
@@ -38,7 +38,7 @@ pub(super) fn test_mm_cvtsh_i32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_cvtsh_i32(_mm_cvtps_ph(_mm_set1_ps(get_random_float32_array::<1>()[0]), _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC));
+                let _ = _mm_cvtsh_i32(_mm_cvtps_ph(_mm_set1_ps(get_random_float32_array::<1>()[0])));
             }
         }
     }
@@ -51,7 +51,7 @@ pub(super) fn test_mm_cvt_roundsh_i32() -> Result<(), String> {
 
 pub(super) fn test_mm_cvtph_epu32() -> Result<(), String> {
     unsafe {
-        let v = _mm_cvtps_ph(_mm_set1_ps(5.0), _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let v = _mm_cvtps_ph(_mm_set1_ps(5.0));
         let r = _mm_cvtph_epu32(v);
         let out: [u32; 4] = std::mem::transmute::<__m128i, [u32; 4]>(r);
         check_array_equality(&out, &[5; 4])?;
@@ -60,7 +60,7 @@ pub(super) fn test_mm_cvtph_epu32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_cvtph_epu32(_mm_cvtps_ph(_mm_set1_ps(get_random_float32_array::<1>()[0]), _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC));
+                let _ = _mm_cvtph_epu32(_mm_cvtps_ph(_mm_set1_ps(get_random_float32_array::<1>()[0])));
             }
         }
     }
@@ -77,7 +77,7 @@ pub(super) fn test_mm_maskz_cvtph_epu32() -> Result<(), String> {
 
 pub(super) fn test_mm_cvtsh_u32() -> Result<(), String> {
     unsafe {
-        let v = _mm_cvtps_ph(_mm_set1_ps(6.0), _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let v = _mm_cvtps_ph(_mm_set1_ps(6.0));
         let r = _mm_cvtsh_u32(v);
         crate::cpu::common::check_int_equality(r as i32, 6)?;
     }
@@ -85,7 +85,7 @@ pub(super) fn test_mm_cvtsh_u32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_cvtsh_u32(_mm_cvtps_ph(_mm_set1_ps(get_random_float32_array::<1>()[0]), _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC));
+                let _ = _mm_cvtsh_u32(_mm_cvtps_ph(_mm_set1_ps(get_random_float32_array::<1>()[0])));
             }
         }
     }
@@ -98,7 +98,7 @@ pub(super) fn test_mm_cvt_roundsh_u32() -> Result<(), String> {
 
 pub(super) fn test_mm_cvttph_epi32() -> Result<(), String> {
     unsafe {
-        let v = _mm_cvtps_ph(_mm_set1_ps(7.0), _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let v = _mm_cvtps_ph(_mm_set1_ps(7.0));
         let r = _mm_cvttph_epi32(v);
         let out: [i32; 4] = std::mem::transmute::<__m128i, [i32; 4]>(r);
         check_array_equality(&out, &[7; 4])?;
@@ -107,7 +107,7 @@ pub(super) fn test_mm_cvttph_epi32() -> Result<(), String> {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_cvttph_epi32(_mm_cvtps_ph(_mm_set1_ps(get_random_float32_array::<1>()[0]), _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC));
+                let _ = _mm_cvttph_epi32(_mm_cvtps_ph(_mm_set1_ps(get_random_float32_array::<1>()[0])));
             }
         }
     }

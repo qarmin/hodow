@@ -10,7 +10,7 @@ pub(super) fn test_mm_mask_scalef_round_sh() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_ps(2.25);
         let b = _mm_set1_ps(1.0);
-        let _r = _mm_scalef_round_sh(a, b, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let _r = _mm_scalef_round_sh(a, b);
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
@@ -82,13 +82,13 @@ pub(super) fn test_mm_maskz_reduce_sh() -> Result<(), String> {
 pub(super) fn test_mm_reduce_round_sh() -> Result<(), String> {
     unsafe {
         let v = _mm_set1_ps(3.0);
-        let _r = _mm_reduce_round_sh(v, 0, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let _r = _mm_reduce_round_sh(v, 0);
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_reduce_round_sh(_mm_set1_ps(get_random_float32_array::<1>()[0]), 0, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+                let _ = _mm_reduce_round_sh(_mm_set1_ps(get_random_float32_array::<1>()[0]), 0);
             }
         }
     }

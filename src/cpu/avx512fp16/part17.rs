@@ -10,7 +10,7 @@ pub(super) fn test_mm_mask_max_round_sh() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(1.0, 3.0, 2.0, 4.0);
         let b = _mm_set_ps(2.0, 2.0, 2.0, 2.0);
-        let r = _mm_max_round_sh(a, b, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let r = _mm_max_round_sh(a, b);
         let _out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
     }
     if get_fuzzing() {
@@ -90,7 +90,7 @@ pub(super) fn test_mm_min_round_sh() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_ps(2.5);
         let b = _mm_set1_ps(2.4);
-        let r = _mm_min_round_sh(a, b, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let r = _mm_min_round_sh(a, b);
         let _out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
     }
     if get_fuzzing() {

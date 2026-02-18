@@ -87,7 +87,7 @@ pub(super) fn test_mm_mul_round_sch() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let b = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
-        let r = _mm_mul_round_sch(a, b, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let r = _mm_mul_round_sch(a, b);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[1.0, 2.0, 3.0, 4.0])?;
     }

@@ -110,7 +110,7 @@ pub(super) fn test_mm_maskz_cvtps_ph() -> Result<(), String> {
 pub(super) fn test_mm_mask_cvtph_ps() -> Result<(), String> {
     unsafe {
         let src = _mm_set1_ps(0.0);
-        let ph = _mm_cvtps_ph(_mm_set1_ps(3.0), _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let ph = _mm_cvtps_ph::<4>(_mm_set1_ps(3.0));
         let r = _mm_mask_cvtph_ps(src, 161, ph);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[3.0, 3.0, 3.0, 3.0])?;
@@ -120,7 +120,7 @@ pub(super) fn test_mm_mask_cvtph_ps() -> Result<(), String> {
             for _ in 0..get_iterations() {
                 let src = _mm_set1_ps(0.0);
                 let rnd = get_random_float32_array::<1>();
-                let ph_r = _mm_cvtps_ph(_mm_set1_ps(rnd[0]), _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+                let ph_r = _mm_cvtps_ph::<4>(_mm_set1_ps(rnd[0]));
                 let _ = _mm_mask_cvtph_ps(src, 161, ph_r);
             }
         }
@@ -130,7 +130,7 @@ pub(super) fn test_mm_mask_cvtph_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_cvtph_ps() -> Result<(), String> {
     unsafe {
-        let ph = _mm_cvtps_ph(_mm_set1_ps(3.0), _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let ph = _mm_cvtps_ph::<4>(_mm_set1_ps(3.0));
         let r = _mm_maskz_cvtph_ps(161, ph);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[3.0, 3.0, 3.0, 3.0])?;
@@ -139,7 +139,7 @@ pub(super) fn test_mm_maskz_cvtph_ps() -> Result<(), String> {
             info!("Starting fuzzing");
             for _ in 0..get_iterations() {
                 let rnd = get_random_float32_array::<1>();
-                let ph_r = _mm_cvtps_ph(_mm_set1_ps(rnd[0]), _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+                let ph_r = _mm_cvtps_ph::<4>(_mm_set1_ps(rnd[0]));
                 let _ = _mm_maskz_cvtph_ps(161, ph_r);
             }
         }

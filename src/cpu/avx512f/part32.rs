@@ -223,7 +223,7 @@ pub(super) fn test_mm_mask_alignr_epi64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(2, 1);
         let b = _mm_set_epi64x(4, 3);
-        let r = _mm_mask_alignr_epi64::<0>(_mm_setzero_si128(), 3, a, b);
+        let r = _mm_mask_alignr_epi64::<4>(_mm_setzero_si128(), 3, a, b);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
         check_array_equality(&out, &[3, 4])?;
 
@@ -234,7 +234,7 @@ pub(super) fn test_mm_mask_alignr_epi64() -> Result<(), String> {
                 let rb = get_random_i64_array::<2>();
                 let a_r = _mm_set_epi64x(ra[1], ra[0]);
                 let b_r = _mm_set_epi64x(rb[1], rb[0]);
-                let _ = _mm_mask_alignr_epi64::<0>(_mm_setzero_si128(), 3, a_r, b_r);
+                let _ = _mm_mask_alignr_epi64::<4>(_mm_setzero_si128(), 3, a_r, b_r);
             }
         }
     }
@@ -245,7 +245,7 @@ pub(super) fn test_mm_maskz_alignr_epi64() -> Result<(), String> {
     unsafe {
         let a = _mm_set_epi64x(2, 1);
         let b = _mm_set_epi64x(4, 3);
-        let r = _mm_maskz_alignr_epi64::<0>(3, a, b);
+        let r = _mm_maskz_alignr_epi64::<4>(3, a, b);
         let out: [i64; 2] = std::mem::transmute::<__m128i, [i64; 2]>(r);
         check_array_equality(&out, &[3, 4])?;
 
@@ -256,7 +256,7 @@ pub(super) fn test_mm_maskz_alignr_epi64() -> Result<(), String> {
                 let rb = get_random_i64_array::<2>();
                 let a_r = _mm_set_epi64x(ra[1], ra[0]);
                 let b_r = _mm_set_epi64x(rb[1], rb[0]);
-                let _ = _mm_maskz_alignr_epi64::<0>(3, a_r, b_r);
+                let _ = _mm_maskz_alignr_epi64::<4>(3, a_r, b_r);
             }
         }
     }

@@ -9,14 +9,14 @@ use crate::get_fuzzing;
 pub(super) fn test_mm_mask_cvt_roundsd_sh() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_pd(2.0);
-        let r = _mm_cvt_roundsd_sh(a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let r = _mm_cvt_roundsd_sh(a);
         let _out: [f64; 2] = std::mem::transmute::<__m128d, [f64; 2]>(r);
     }
     if get_fuzzing() {
         info!("Starting fuzzing");
         for _ in 0..get_iterations() {
             unsafe {
-                let _ = _mm_cvt_roundsd_sh(_mm_set1_pd(get_random_float32_array::<1>()[0] as f64), _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+                let _ = _mm_cvt_roundsd_sh(_mm_set1_pd(get_random_float32_array::<1>()[0] as f64));
             }
         }
     }

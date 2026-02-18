@@ -35,7 +35,7 @@ pub(super) fn test_mm_fcmadd_round_sch() -> Result<(), String> {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let b = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let c = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
-        let r = _mm_fcmadd_round_sch(a, b, c, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let r = _mm_fcmadd_round_sch(a, b, c);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[2.0, 3.0, 4.0, 5.0])?;
     }
@@ -136,7 +136,7 @@ pub(super) fn test_mm_fmadd_round_sh() -> Result<(), String> {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);
         let b = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
         let c = _mm_set_ps(1.0, 1.0, 1.0, 1.0);
-        let r = _mm_fmadd_round_sh(a, b, c, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let r = _mm_fmadd_round_sh(a, b, c);
         let out: [f32; 4] = std::mem::transmute::<__m128, [f32; 4]>(r);
         check_float_array_equality(&out, &[2.0, 3.0, 4.0, 5.0])?;
     }

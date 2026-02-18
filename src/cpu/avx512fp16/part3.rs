@@ -9,7 +9,7 @@ use crate::get_fuzzing;
 pub(super) fn test_mm_comi_round_sh() -> Result<(), String> {
     unsafe {
         let a = _mm_set1_ps(3.0);
-        let m = _mm_comi_round_sh(a, a, _MM_FROUND_TO_NEAREST_INT | _MM_FROUND_NO_EXC);
+        let m = _mm_comi_round_sh(a, a);
         let _ = m;
     }
     if get_fuzzing() {
