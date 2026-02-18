@@ -46,12 +46,12 @@ fn test_mm_cmpgt_epi64() -> Result<(), String> {
 
 fn test_mm_crc32_u8() -> Result<(), String> {
     unsafe {
-        let crc = 0u32;
-        let data = 111u8;
+        let crc = 0;
+        let data = 111;
         let result = _mm_crc32_u8(crc, data);
 
         // Observed result on this target
-        check_int_equality(result, 1070968646u32)?;
+        check_int_equality(result, 1070968646)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -68,12 +68,12 @@ fn test_mm_crc32_u8() -> Result<(), String> {
 
 fn test_mm_crc32_u16() -> Result<(), String> {
     unsafe {
-        let crc = 0u32;
-        let data = 6555u16;
+        let crc = 0;
+        let data = 6555;
         let result = _mm_crc32_u16(crc, data);
 
         // Observed result on this target
-        check_int_equality(result, 85556474u32)?;
+        check_int_equality(result, 85556474)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
@@ -90,12 +90,12 @@ fn test_mm_crc32_u16() -> Result<(), String> {
 
 fn test_mm_crc32_u32() -> Result<(), String> {
     unsafe {
-        let crc = 0u32;
-        let data = 42967295u32;
+        let crc = 0;
+        let data = 42967295;
         let result = _mm_crc32_u32(crc, data);
 
         // Observed result on this target
-        check_int_equality(result, 3219252454u32)?;
+        check_int_equality(result, 3219252454)?;
 
         if get_fuzzing() {
             info!("Starting fuzzing");
