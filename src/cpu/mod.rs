@@ -136,7 +136,7 @@ pub trait ExtensionTest {
             match fun() {
                 Ok(_) => info!("{} passed", name),
                 Err(e) => {
-                    error!("{} failed: {}", name, e);
+                    error!("{}({}) failed: {}", name, Self::get_name(), e);
                     errors += 1;
                 }
             }
