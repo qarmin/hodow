@@ -58,7 +58,6 @@ pub(super) fn test_mm_mask_fnmadd_sd() -> Result<(), String> {
     Ok(())
 }
 
-
 pub(super) fn test_mm_mask3_fnmadd_sd() -> Result<(), String> {
     test_mm_mask_fnmadd_sd()
 }
@@ -88,7 +87,6 @@ pub(super) fn test_mm_mask_fnmsub_ss() -> Result<(), String> {
     }
     Ok(())
 }
-
 
 pub(super) fn test_mm_mask3_fnmsub_ss() -> Result<(), String> {
     test_mm_mask_fnmsub_ss()

@@ -6,7 +6,6 @@ use crate::cpu::common::{check_array_equality, check_float_array_equality, get_r
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
-
 pub(super) fn test_mm_mask_max_ps() -> Result<(), String> {
     unsafe {
         let a = _mm_set_ps(1.0, 2.0, 3.0, 4.0);

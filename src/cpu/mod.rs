@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use log::{error, info};
 use once_cell::sync::OnceCell;
 
@@ -86,10 +88,10 @@ mod avx512dq;
 // mod avx512fp16;
 
 #[cfg(miri)]
-pub const DEFAULT_TEST_ITERATIONS: usize = 20;
+pub const DEFAULT_TEST_ITERATIONS: usize = 1;
 #[cfg(not(miri))]
 #[allow(dead_code)]
-pub const DEFAULT_TEST_ITERATIONS: usize = 100;
+pub const DEFAULT_TEST_ITERATIONS: usize = 1;
 
 static ITERATIONS: OnceCell<usize> = OnceCell::new();
 

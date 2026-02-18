@@ -398,7 +398,6 @@ pub(super) fn test_mm_maskz_fnmadd_ss() -> Result<(), String> {
     Ok(())
 }
 
-
 pub(super) fn test_mm_maskz_fnmsub_ss() -> Result<(), String> {
     unsafe {
         let k: __mmask8 = 111;
@@ -425,7 +424,6 @@ pub(super) fn test_mm_maskz_fnmsub_ss() -> Result<(), String> {
     Ok(())
 }
 
-
 pub(super) fn test_mm_maskz_fnmadd_sd() -> Result<(), String> {
     unsafe {
         let k: __mmask8 = 111;
@@ -451,7 +449,6 @@ pub(super) fn test_mm_maskz_fnmadd_sd() -> Result<(), String> {
     }
     Ok(())
 }
-
 
 pub(super) fn test_mm_maskz_fnmsub_sd() -> Result<(), String> {
     unsafe {
