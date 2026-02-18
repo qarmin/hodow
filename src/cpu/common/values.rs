@@ -1,5 +1,6 @@
 #![allow(non_snake_case)]
 use std::arch::x86_64::*;
+
 use crate::cpu::common;
 
 #[inline]
@@ -56,7 +57,6 @@ pub fn create_random__m128bh() -> __m128bh {
     create__m128bh_from_array(arr)
 }
 
-
 #[inline]
 pub fn create__m256_from(val: f32) -> __m256 {
     unsafe { std::mem::transmute([val; 8]) }
@@ -102,7 +102,6 @@ pub fn create_random__m256bh() -> __m256bh {
     let bits: [u16; 16] = std::array::from_fn(|i| (arr[i].to_bits() >> 16) as u16);
     unsafe { std::mem::transmute(bits) }
 }
-
 
 #[inline]
 pub fn create__m512_from(val: f32) -> __m512 {
@@ -150,8 +149,6 @@ pub fn create_random__m512bh() -> __m512bh {
     unsafe { std::mem::transmute(bits) }
 }
 
-
-
 #[inline]
 pub fn create__mmask8_from(val: u8) -> __mmask8 {
     val
@@ -192,6 +189,157 @@ pub fn create_random__mmask64() -> __mmask64 {
     rand::random::<u64>()
 }
 
+// Unpacking functions - convert SIMD types back to arrays
+
+#[inline]
+pub fn unpack__m128_to_f32_array(val: __m128) -> [f32; 4] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m128d_to_f64_array(val: __m128d) -> [f64; 2] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m128i_to_i8_array(val: __m128i) -> [i8; 16] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m128i_to_i16_array(val: __m128i) -> [i16; 8] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m128i_to_i32_array(val: __m128i) -> [i32; 4] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m128i_to_i64_array(val: __m128i) -> [i64; 2] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m128i_to_u8_array(val: __m128i) -> [u8; 16] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m128i_to_u16_array(val: __m128i) -> [u16; 8] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m128i_to_u32_array(val: __m128i) -> [u32; 4] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m128i_to_u64_array(val: __m128i) -> [u64; 2] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m256_to_f32_array(val: __m256) -> [f32; 8] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m256d_to_f64_array(val: __m256d) -> [f64; 4] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m256i_to_i8_array(val: __m256i) -> [i8; 32] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m256i_to_i16_array(val: __m256i) -> [i16; 16] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m256i_to_i32_array(val: __m256i) -> [i32; 8] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m256i_to_i64_array(val: __m256i) -> [i64; 4] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m256i_to_u8_array(val: __m256i) -> [u8; 32] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m256i_to_u16_array(val: __m256i) -> [u16; 16] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m256i_to_u32_array(val: __m256i) -> [u32; 8] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m256i_to_u64_array(val: __m256i) -> [u64; 4] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m512_to_f32_array(val: __m512) -> [f32; 16] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m512d_to_f64_array(val: __m512d) -> [f64; 8] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m512i_to_i8_array(val: __m512i) -> [i8; 64] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m512i_to_i16_array(val: __m512i) -> [i16; 32] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m512i_to_i32_array(val: __m512i) -> [i32; 16] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m512i_to_i64_array(val: __m512i) -> [i64; 8] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m512i_to_u8_array(val: __m512i) -> [u8; 64] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m512i_to_u16_array(val: __m512i) -> [u16; 32] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m512i_to_u32_array(val: __m512i) -> [u32; 16] {
+    unsafe { std::mem::transmute(val) }
+}
+
+#[inline]
+pub fn unpack__m512i_to_u64_array(val: __m512i) -> [u64; 8] {
+    unsafe { std::mem::transmute(val) }
+}
 
 // Unstable - use, when will be stabilized
 // #[inline]

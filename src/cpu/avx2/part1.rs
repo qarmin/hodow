@@ -5,7 +5,8 @@ use std::arch::x86_64::{
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, create_random__m256i};
+use crate::cpu::common::check_array_equality;
+use crate::cpu::common::values::{create_random__m256i, unpack__m256i_to_i32_array, unpack__m256i_to_u32_array};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
@@ -14,7 +15,7 @@ pub(super) fn test_mm256_add_epi32() -> Result<(), String> {
         let a = _mm256_set_epi32(1, 2, 3, 4, 5, 6, 7, 8);
         let b = _mm256_set_epi32(8, 7, 6, 5, 4, 3, 2, 1);
         let result = _mm256_add_epi32(a, b);
-        let result = std::mem::transmute::<__m256i, [i32; 8]>(result);
+        let result = unpack__m256i_to_i32_array(result);
         check_array_equality(&result, &[9, 9, 9, 9, 9, 9, 9, 9])?;
     }
 
@@ -35,7 +36,7 @@ pub(super) fn test_mm256_sub_epi32() -> Result<(), String> {
         let a = _mm256_set_epi32(10, 20, 30, 40, 50, 60, 70, 80);
         let b = _mm256_set_epi32(1, 2, 3, 4, 5, 6, 7, 8);
         let result = _mm256_sub_epi32(a, b);
-        let result = std::mem::transmute::<__m256i, [i32; 8]>(result);
+        let result = unpack__m256i_to_i32_array(result);
         check_array_equality(&result, &[72, 63, 54, 45, 36, 27, 18, 9])?;
     }
 
@@ -56,7 +57,7 @@ pub(super) fn test_mm256_mullo_epi32() -> Result<(), String> {
         let a = _mm256_set_epi32(1, 2, 3, 4, 5, 6, 7, 8);
         let b = _mm256_set_epi32(2, 2, 2, 2, 2, 2, 2, 2);
         let result = _mm256_mullo_epi32(a, b);
-        let result = std::mem::transmute::<__m256i, [i32; 8]>(result);
+        let result = unpack__m256i_to_i32_array(result);
         check_array_equality(&result, &[16, 14, 12, 10, 8, 6, 4, 2])?;
     }
 
@@ -77,7 +78,7 @@ pub(super) fn test_mm256_and_si256() -> Result<(), String> {
         let a = _mm256_set_epi32(4275360, 4275360, 4275360, 4275360, 4275360, 4275360, 4275360, 4275360);
         let b = _mm256_set_epi32(494901760, 494901760, 494901760, 494901760, 494901760, 494901760, 494901760, 494901760);
         let result = _mm256_and_si256(a, b);
-        let result = std::mem::transmute::<__m256i, [u32; 8]>(result);
+        let result = unpack__m256i_to_u32_array(result);
         check_array_equality(&result, &[4265984, 4265984, 4265984, 4265984, 4265984, 4265984, 4265984, 4265984])?;
     }
 
@@ -98,7 +99,7 @@ pub(super) fn test_mm256_or_si256() -> Result<(), String> {
         let a = _mm256_set_epi32(4275360, 4275360, 4275360, 4275360, 4275360, 4275360, 4275360, 4275360);
         let b = _mm256_set_epi32(16711935, 16711935, 16711935, 16711935, 16711935, 16711935, 16711935, 16711935);
         let result = _mm256_or_si256(a, b);
-        let result = std::mem::transmute::<__m256i, [u32; 8]>(result);
+        let result = unpack__m256i_to_u32_array(result);
         check_array_equality(&result, &[16727295, 16727295, 16727295, 16727295, 16727295, 16727295, 16727295, 16727295])?;
     }
 
@@ -119,7 +120,7 @@ pub(super) fn test_mm256_xor_si256() -> Result<(), String> {
         let a = _mm256_set_epi32(4275360, 4275360, 4275360, 4275360, 4275360, 4275360, 4275360, 4275360);
         let b = _mm256_set_epi32(494901760, 494901760, 494901760, 494901760, 494901760, 494901760, 494901760, 494901760);
         let result = _mm256_xor_si256(a, b);
-        let result = std::mem::transmute::<__m256i, [u32; 8]>(result);
+        let result = unpack__m256i_to_u32_array(result);
         check_array_equality(&result, &[490645152, 490645152, 490645152, 490645152, 490645152, 490645152, 490645152, 490645152])?;
     }
 

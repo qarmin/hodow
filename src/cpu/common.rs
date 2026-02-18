@@ -1,4 +1,4 @@
-mod values;
+pub mod values;
 
 use std::fmt::Debug;
 

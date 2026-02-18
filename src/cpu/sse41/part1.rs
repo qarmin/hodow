@@ -2,7 +2,7 @@ use std::arch::x86_64::*;
 
 use log::info;
 
-use crate::cpu::common::{check_array_equality, get_random_i32_array, check_int_equality};
+use crate::cpu::common::{check_array_equality, check_int_equality, get_random_i32_array};
 use crate::cpu::get_iterations;
 use crate::get_fuzzing;
 
