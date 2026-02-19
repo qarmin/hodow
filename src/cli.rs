@@ -16,9 +16,9 @@ pub struct Args {
     #[arg(long = "list-functions")]
     pub list_functions: bool,
 
-    /// Test a specific function by name (e.g., _mm_add_ps)
-    #[arg(short = 't', long = "test-function")]
-    pub test_function: Option<String>,
+    /// Test specific functions by name (e.g., _mm_add_ps _mm_sub_ps)
+    #[arg(short = 't', long = "test-function", num_args = 1..)]
+    pub test_function: Option<Vec<String>>,
 
     /// Skip specific tests by name (can be repeated or comma-separated)
     #[arg(short = 's', long = "skip", value_delimiter = ',', num_args = 1..)]

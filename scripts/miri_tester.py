@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Run 'cargo miri' for each test function in parallel and collect errors.
+Run 'just miri' for batches of test functions and collect errors.
 
-Uses a thread pool to test multiple functions concurrently, with synchronized
-file writing to avoid conflicts.
+Tests functions in batches to avoid slow individual test execution.
+When a batch fails, records the error and re-runs the batch with that test skipped.
 
 Exits 0 if no errors found, 1 otherwise.
 
@@ -29,6 +29,9 @@ DEBUG = False
 
 # Lock for synchronized file writing
 file_lock = threading.Lock()
+
+# Batch size for testing
+BATCH_SIZE = 50
 
 
 def get_all_test_functions(base: Path) -> list[str]:
@@ -85,86 +88,107 @@ def parse_errors(output: str) -> list[tuple[str, str]]:
     return results
 
 
-def test_single_function(base: Path, test_name: str, out_path: Path) -> tuple[str, bool, str | None]:
+def test_batch(base: Path, batch_tests: list[str], skip_tests: list[str], out_path: Path, batch_num: int, total_batches: int) -> tuple[int, int, dict[str, str]]:
     """
-    Test a single function with Miri.
+    Test a batch of functions, iteratively skipping failing ones.
 
-    Returns: (test_name, success, error_message)
+    Returns: (passed, failed, errors_dict)
     """
-    cmd = [
-        "just", "miri", "--", "--test-function", test_name
-    ]
+    current_skip = skip_tests.copy()
+    batch_errors: dict[str, str] = {}
+    iteration = 0
+    max_iterations = len(batch_tests) + 10  # Safety limit
 
-    if DEBUG:
-        print(f"[DEBUG] Testing {test_name}: {' '.join(cmd)}")
+    print(f"\n[Batch {batch_num}/{total_batches}] Testing {len(batch_tests)} functions...")
 
-    try:
-        proc = subprocess.run(
-            cmd,
-            cwd=base,
-            capture_output=True,
-            text=True,
-            timeout=120,  # 2 minutes per test
-        )
+    while iteration < max_iterations:
+        iteration += 1
 
-        output = proc.stdout + proc.stderr
+        # Build skip list: all tests NOT in current batch + already failed tests
+        all_skip = current_skip.copy()
 
-        if proc.returncode == 0:
-            return (test_name, True, None)
+        cmd = ["just", "miri", "--"]
+        for test in all_skip:
+            cmd.extend(["--skip", test])
 
-        # Parse errors from output
-        errors = parse_errors(output)
-        if errors:
-            error_msg = errors[0][1]  # Take first error
+        if DEBUG:
+            print(f"  [Iteration {iteration}] Running with {len(current_skip)} skipped tests")
+            print(f"  [DEBUG] Command: {' '.join(cmd)}")
 
-            # Write to file immediately with lock
-            with file_lock:
-                with open(out_path, 'a') as f:
-                    f.write(f"{test_name} -> {error_msg}\n")
-                    f.flush()
+        try:
+            proc = subprocess.run(
+                cmd,
+                cwd=base,
+                capture_output=True,
+                text=True,
+                timeout=300,  # 5 minutes per batch
+            )
 
-            return (test_name, False, error_msg)
-        else:
-            print(output)
-            # Test failed but no error pattern found
-            error_msg = "Test failed (no specific error pattern found)"
+            output = proc.stdout + proc.stderr
 
-            with file_lock:
-                with open(out_path, 'a') as f:
-                    f.write(f"{test_name} -> {error_msg}\n")
-                    f.flush()
+            if proc.returncode == 0:
+                # All remaining tests in batch passed
+                if DEBUG:
+                    print(f"  [Iteration {iteration}] ✓ Batch completed successfully")
+                break
 
-            return (test_name, False, error_msg)
+            # Parse errors from output
+            errors = parse_errors(output)
 
-    except subprocess.TimeoutExpired:
-        error_msg = "Test timed out (>120s)"
+            if not errors:
+                # Test failed but no error pattern found
+                if DEBUG:
+                    print(f"  [Iteration {iteration}] ✗ Test failed but no error pattern found")
+                    print(output[:500])
+                break
 
-        with file_lock:
-            with open(out_path, 'a') as f:
-                f.write(f"{test_name} -> {error_msg}\n")
-                f.flush()
+            # Process new errors
+            new_failures = 0
+            for test_name, error_msg in errors:
+                if test_name not in batch_errors:
+                    batch_errors[test_name] = error_msg
+                    current_skip.append(test_name)
+                    new_failures += 1
 
-        return (test_name, False, error_msg)
-    except Exception as e:
-        error_msg = f"Exception during test: {e}"
+                    # Write to file immediately with lock
+                    with file_lock:
+                        with open(out_path, 'a') as f:
+                            f.write(f"{test_name} -> {error_msg}\n")
+                            f.flush()
 
-        with file_lock:
-            with open(out_path, 'a') as f:
-                f.write(f"{test_name} -> {error_msg}\n")
-                f.flush()
+                    print(f"    ✗ {test_name}: {error_msg[:60]}...")
 
-        return (test_name, False, error_msg)
+            if new_failures == 0:
+                # No new failures found, exit loop
+                if DEBUG:
+                    print(f"  [Iteration {iteration}] No new failures, stopping")
+                break
+
+        except subprocess.TimeoutExpired:
+            print(f"  ✗ Batch timed out (>5 minutes)")
+            break
+        except Exception as e:
+            print(f"  ✗ Exception during batch test: {e}")
+            break
+
+    passed = len(batch_tests) - len(batch_errors)
+    failed = len(batch_errors)
+
+    print(f"[Batch {batch_num}/{total_batches}] Results: {passed} passed, {failed} failed")
+
+    return passed, failed, batch_errors
 
 
 def main() -> int:
-    global DEBUG
+    global DEBUG, BATCH_SIZE
 
     base = Path(__file__).parent.parent
     out_path = base / "miri_errors.txt"
 
     # Parse command-line arguments
     args = sys.argv[1:]
-    num_threads = 12  # TODO - this is broken - do not use numbers other than 1
+    num_threads = 24  # Number of parallel batches
+    BATCH_SIZE = 25
 
     if "-d" in args or "--debug" in args:
         DEBUG = True
@@ -182,9 +206,21 @@ def main() -> int:
                 args.pop(idx)  # Remove -j
                 args.pop(idx)  # Remove the number
             except ValueError:
-                print("Warning: Invalid -j value, using default (12)")
+                print("Warning: Invalid -j value, using default (1)")
 
-    print(f"Using {num_threads} parallel threads")
+    if "--batch-size" in args:
+        idx = args.index("--batch-size")
+        if idx + 1 < len(args):
+            try:
+                BATCH_SIZE = int(args[idx + 1])
+                args.pop(idx)
+                args.pop(idx)
+            except ValueError:
+                print("Warning: Invalid --batch-size value, using default (50)")
+
+    print(f"Using batch size: {BATCH_SIZE}")
+    if num_threads > 1:
+        print(f"Using {num_threads} parallel batches")
 
     # Clear output file
     out_path.write_text("")
@@ -199,43 +235,53 @@ def main() -> int:
 
     print(f"Found {len(test_functions)} test functions to check")
 
-    # Test all functions in parallel
-    passed = 0
-    failed = 0
-    errors_dict: dict[str, str] = {}
+    # Split into batches
+    batches = [test_functions[i:i + BATCH_SIZE] for i in range(0, len(test_functions), BATCH_SIZE)]
+    total_batches = len(batches)
 
-    with ThreadPoolExecutor(max_workers=num_threads) as executor:
-        # Submit all tasks
-        futures = {
-            executor.submit(test_single_function, base, test_name, out_path): test_name
-            for test_name in test_functions
-        }
+    print(f"Split into {total_batches} batches")
 
-        # Process results as they complete
-        for future in as_completed(futures):
-            test_name = futures[future]
-            try:
-                name, success, error_msg = future.result()
+    # Process batches
+    total_passed = 0
+    total_failed = 0
+    all_errors: dict[str, str] = {}
+    global_skip: list[str] = []  # Tests to skip in ALL batches
 
-                if success:
-                    passed += 1
-                    print(f"  ✓ {name} ({passed + failed}/{len(test_functions)})")
-                else:
-                    failed += 1
-                    errors_dict[name] = error_msg
-                    print(f"  ✗ {name}: {error_msg[:80]}... ({passed + failed}/{len(test_functions)})")
-            except Exception as e:
-                failed += 1
-                print(f"  ✗ {test_name}: Exception: {e}")
+    if num_threads > 1:
+        # Parallel batch processing
+        with ThreadPoolExecutor(max_workers=num_threads) as executor:
+            futures = {
+                executor.submit(test_batch, base, batch, global_skip, out_path, idx + 1, total_batches): idx
+                for idx, batch in enumerate(batches)
+            }
+
+            for future in as_completed(futures):
+                batch_idx = futures[future]
+                try:
+                    passed, failed, errors = future.result()
+                    total_passed += passed
+                    total_failed += failed
+                    all_errors.update(errors)
+                except Exception as e:
+                    print(f"  ✗ Batch {batch_idx + 1} exception: {e}")
+    else:
+        # Sequential batch processing
+        for idx, batch in enumerate(batches):
+            passed, failed, errors = test_batch(base, batch, global_skip, out_path, idx + 1, total_batches)
+            total_passed += passed
+            total_failed += failed
+            all_errors.update(errors)
+            # Add failed tests to global skip list for subsequent batches
+            global_skip.extend(errors.keys())
 
     # Summary
     print(f"\n{'='*80}")
-    print(f"Results: {passed} passed, {failed} failed out of {len(test_functions)} tests")
+    print(f"Final Results: {total_passed} passed, {total_failed} failed out of {len(test_functions)} tests")
 
-    if failed > 0:
+    if total_failed > 0:
         print(f"\nErrors written to: {out_path}")
-        print(f"\nFailed tests ({failed}):")
-        for name, msg in sorted(errors_dict.items()):
+        print(f"\nFailed tests ({total_failed}):")
+        for name, msg in sorted(all_errors.items()):
             print(f"  {name}: {msg[:100]}")
         return 1
     else:

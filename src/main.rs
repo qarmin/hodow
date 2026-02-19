@@ -12,7 +12,7 @@ mod cli;
 mod cpu;
 
 use crate::cli::Args;
-use crate::cpu::{available_modes, list_all_functions, set_iterations, set_skip_tests, test_all_extensions, test_single_function};
+use crate::cpu::{available_modes, list_all_functions, set_iterations, set_skip_tests, test_all_extensions};
 
 static FUZZING: OnceCell<bool> = OnceCell::new();
 
@@ -79,17 +79,23 @@ fn main() {
         return;
     }
 
-    if let Some(ref function_name) = args.test_function {
-        if let Err(e) = test_single_function(function_name) {
-            log::error!("Testing function '{}' failed: {}", function_name, e);
-            if cfg!(feature = "miri_build") {
-                log::error!("Miri build detected, exiting with code 0 to avoid Miri's problems");
-                std::process::exit(0);
-            } else {
-                std::process::exit(1);
-            }
+    if let Some(ref function_names) = args.test_function {
+        // When testing specific functions, skip all other functions
+        let all_functions = list_all_functions();
+        let test_set: std::collections::HashSet<String> = function_names.iter().cloned().collect();
+        let skip_list: Vec<String> = all_functions
+            .into_iter()
+            .filter(|f| !test_set.contains(f))
+            .collect();
+
+        set_skip_tests(skip_list);
+
+        info!("Testing {} specific function(s)", function_names.len());
+
+        if let Err(e) = test_all_extensions() {
+            log::error!("Testing functions failed: {}", e);
+            std::process::exit(1);
         }
-        println!("Clean exit");
         return;
     }
 
