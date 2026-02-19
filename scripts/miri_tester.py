@@ -112,6 +112,9 @@ def main() -> int:
     iteration = 0
     max_iterations = 1000  # Safety limit
 
+    # Clear/create the output file at the start
+    out_path.write_text("")
+
     while iteration < max_iterations:
         iteration += 1
         print(f"  Iteration {iteration}: Running Miri (skipping {len(skip_list)} known failures)...")
@@ -139,6 +142,14 @@ def main() -> int:
         skip_list.extend(new_failures)
         print(f"  Found {len(new_failures)} new failing test(s): {', '.join(sorted(new_failures))}")
 
+        # Extract and write errors immediately for new failures
+        errors = parse_errors(output)
+        for fn, msg in errors:
+            if fn in new_failures:
+                with open(out_path, 'a') as f:
+                    f.write(f"{fn} -> {msg}\n")
+                    f.flush()  # Ensure it's written immediately
+
     if not all_failing_tests:
         print("No failing tests found.")
         if out_path.exists():
@@ -147,8 +158,10 @@ def main() -> int:
 
     print(f"\nPhase 2: Re-running {len(all_failing_tests)} failing test(s) individually to collect errors...")
 
+
     # Phase 2: Re-run each failing test individually to collect all errors
     all_errors: dict[str, list[str]] = {}
+    error_count = 0
 
     for test_name in sorted(all_failing_tests):
         print(f"  Running {test_name}...")
@@ -162,22 +175,22 @@ def main() -> int:
                 if fn not in all_errors:
                     all_errors[fn] = []
                 all_errors[fn].append(msg)
+                # Write error immediately to file
+                with open(out_path, 'a') as f:
+                    f.write(f"{fn} -> {msg}\n")
+                error_count += 1
         else:
             # No error pattern found, but test failed - record generic message
+            msg = "Test failed (no specific error pattern found)"
             if test_name not in all_errors:
                 all_errors[test_name] = []
-            all_errors[test_name].append("Test failed (no specific error pattern found)")
+            all_errors[test_name].append(msg)
+            # Write error immediately to file
+            with open(out_path, 'a') as f:
+                f.write(f"{test_name} -> {msg}\n")
+            error_count += 1
 
-    # Write results
-    lines = []
-    for fn in sorted(all_errors.keys()):
-        for msg in all_errors[fn]:
-            lines.append(f"{fn} -> {msg}")
-
-    out_path.write_text("\n".join(lines) + "\n")
-
-    total_errors = sum(len(msgs) for msgs in all_errors.values())
-    print(f"\nFound {total_errors} error(s) in {len(all_errors)} test(s)  →  {out_path}")
+    print(f"\nFound {error_count} error(s) in {len(all_errors)} test(s)  →  {out_path}")
 
     for fn in sorted(all_errors.keys()):
         for msg in all_errors[fn]:
