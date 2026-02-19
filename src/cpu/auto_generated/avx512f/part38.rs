@@ -10,7 +10,7 @@ pub(super) fn test_mm_mmask_i32gather_epi32() -> Result<(), String> {
         let k = create__mmask8_from(0b01010101);
         let vindex = create__m128i_from_i32_array([1, 2, 3, 4]);
         let ptr_base_addr = [1i32; 1];
-        let result = unpack__m128i_to_i32_array(_mm_mmask_i32gather_epi32::<0>(src, k, vindex, ptr_base_addr.as_ptr()));
+        let result = unpack__m128i_to_i32_array(_mm_mmask_i32gather_epi32::<1>(src, k, vindex, ptr_base_addr.as_ptr()));
         check_array_equality(&result, &[0i32; 4])?;
     }
     Ok(())
@@ -22,7 +22,7 @@ pub(super) fn test_mm_mmask_i32gather_epi64() -> Result<(), String> {
         let k = create__mmask8_from(0b01010101);
         let vindex = create__m128i_from_i32_array([1, 2, 3, 4]);
         let ptr_base_addr = [1i64; 1];
-        let result = unpack__m128i_to_i32_array(_mm_mmask_i32gather_epi64::<0>(src, k, vindex, ptr_base_addr.as_ptr()));
+        let result = unpack__m128i_to_i32_array(_mm_mmask_i32gather_epi64::<1>(src, k, vindex, ptr_base_addr.as_ptr()));
         check_array_equality(&result, &[0i32; 4])?;
     }
     Ok(())
@@ -34,7 +34,7 @@ pub(super) fn test_mm_mmask_i32gather_pd() -> Result<(), String> {
         let k = create__mmask8_from(0b01010101);
         let vindex = create__m128i_from_i32_array([1, 2, 3, 4]);
         let ptr_base_addr = [1.0f64; 1];
-        let result = unpack__m128d_to_f64_array(_mm_mmask_i32gather_pd::<0>(src, k, vindex, ptr_base_addr.as_ptr()));
+        let result = unpack__m128d_to_f64_array(_mm_mmask_i32gather_pd::<1>(src, k, vindex, ptr_base_addr.as_ptr()));
         check_array_equality(&result, &[0.0f64; 2])?;
     }
     Ok(())
@@ -46,7 +46,7 @@ pub(super) fn test_mm_mmask_i32gather_ps() -> Result<(), String> {
         let k = create__mmask8_from(0b01010101);
         let vindex = create__m128i_from_i32_array([1, 2, 3, 4]);
         let ptr_base_addr = [1.0f32; 1];
-        let result = unpack__m128_to_f32_array(_mm_mmask_i32gather_ps::<0>(src, k, vindex, ptr_base_addr.as_ptr()));
+        let result = unpack__m128_to_f32_array(_mm_mmask_i32gather_ps::<1>(src, k, vindex, ptr_base_addr.as_ptr()));
         check_array_equality(&result, &[0.0f32; 4])?;
     }
     Ok(())
@@ -58,7 +58,7 @@ pub(super) fn test_mm_mmask_i64gather_epi32() -> Result<(), String> {
         let k = create__mmask8_from(0b01010101);
         let vindex = create__m128i_from_i32_array([1, 2, 3, 4]);
         let ptr_base_addr = [1i32; 1];
-        let result = unpack__m128i_to_i32_array(_mm_mmask_i64gather_epi32::<0>(src, k, vindex, ptr_base_addr.as_ptr()));
+        let result = unpack__m128i_to_i32_array(_mm_mmask_i64gather_epi32::<1>(src, k, vindex, ptr_base_addr.as_ptr()));
         check_array_equality(&result, &[0i32; 4])?;
     }
     Ok(())
@@ -70,7 +70,7 @@ pub(super) fn test_mm_mmask_i64gather_epi64() -> Result<(), String> {
         let k = create__mmask8_from(0b01010101);
         let vindex = create__m128i_from_i32_array([1, 2, 3, 4]);
         let ptr_base_addr = [1i64; 1];
-        let result = unpack__m128i_to_i32_array(_mm_mmask_i64gather_epi64::<0>(src, k, vindex, ptr_base_addr.as_ptr()));
+        let result = unpack__m128i_to_i32_array(_mm_mmask_i64gather_epi64::<1>(src, k, vindex, ptr_base_addr.as_ptr()));
         check_array_equality(&result, &[0i32; 4])?;
     }
     Ok(())
@@ -82,7 +82,7 @@ pub(super) fn test_mm_mmask_i64gather_pd() -> Result<(), String> {
         let k = create__mmask8_from(0b01010101);
         let vindex = create__m128i_from_i32_array([1, 2, 3, 4]);
         let ptr_base_addr = [1.0f64; 1];
-        let result = unpack__m128d_to_f64_array(_mm_mmask_i64gather_pd::<0>(src, k, vindex, ptr_base_addr.as_ptr()));
+        let result = unpack__m128d_to_f64_array(_mm_mmask_i64gather_pd::<1>(src, k, vindex, ptr_base_addr.as_ptr()));
         check_array_equality(&result, &[0.0f64; 2])?;
     }
     Ok(())
@@ -94,7 +94,7 @@ pub(super) fn test_mm_mmask_i64gather_ps() -> Result<(), String> {
         let k = create__mmask8_from(0b01010101);
         let vindex = create__m128i_from_i32_array([1, 2, 3, 4]);
         let ptr_base_addr = [1.0f32; 1];
-        let result = unpack__m128_to_f32_array(_mm_mmask_i64gather_ps::<0>(src, k, vindex, ptr_base_addr.as_ptr()));
+        let result = unpack__m128_to_f32_array(_mm_mmask_i64gather_ps::<1>(src, k, vindex, ptr_base_addr.as_ptr()));
         check_array_equality(&result, &[0.0f32; 4])?;
     }
     Ok(())

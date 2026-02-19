@@ -10,11 +10,10 @@ use once_cell::sync::OnceCell;
 mod test_macros;
 
 pub(crate) mod common;
-pub mod old;
 pub mod auto_generated;
 
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
-pub use old::*;
+pub use auto_generated::*;
 
 #[cfg(miri)]
 pub const DEFAULT_TEST_ITERATIONS: usize = 1;
@@ -81,96 +80,88 @@ pub fn test_all_extensions() -> Result<(), String> {
         #[cfg(target_feature = "sse")]
         {
             if std::arch::is_x86_feature_detected!("sse") {
-                let (r, s, e) = crate::cpu::sse::SSE::test()?;
-                stats.push((crate::cpu::sse::SSE::get_name(), r, s, e));
-            }
-        }
-
-        #[cfg(target_feature = "sse")]
-        {
-            if std::arch::is_x86_feature_detected!("sse") {
-                let (r, s, e) = crate::cpu::sse1::SSE1::test()?;
-                stats.push((crate::cpu::sse1::SSE1::get_name(), r, s, e));
+                let (r, s, e) = crate::cpu::auto_generated::sse::SSE::test()?;
+                stats.push((crate::cpu::auto_generated::sse::SSE::get_name(), r, s, e));
             }
         }
 
         #[cfg(target_feature = "sse2")]
         {
             if std::arch::is_x86_feature_detected!("sse2") {
-                let (r, s, e) = crate::cpu::sse2::SSE2::test()?;
-                stats.push((crate::cpu::sse2::SSE2::get_name(), r, s, e));
+                let (r, s, e) = crate::cpu::auto_generated::sse2::SSE2::test()?;
+                stats.push((crate::cpu::auto_generated::sse2::SSE2::get_name(), r, s, e));
             }
         }
 
         #[cfg(target_feature = "sse3")]
         {
             if std::arch::is_x86_feature_detected!("sse3") {
-                let (r, s, e) = crate::cpu::sse3::SSE3::test()?;
-                stats.push((crate::cpu::sse3::SSE3::get_name(), r, s, e));
+                let (r, s, e) = crate::cpu::auto_generated::sse3::SSE3::test()?;
+                stats.push((crate::cpu::auto_generated::sse3::SSE3::get_name(), r, s, e));
             }
         }
 
         #[cfg(target_feature = "ssse3")]
         {
             if std::arch::is_x86_feature_detected!("ssse3") {
-                let (r, s, e) = crate::cpu::ssse3::SSSE3::test()?;
-                stats.push((crate::cpu::ssse3::SSSE3::get_name(), r, s, e));
+                let (r, s, e) = crate::cpu::auto_generated::ssse3::SSSE3::test()?;
+                stats.push((crate::cpu::auto_generated::ssse3::SSSE3::get_name(), r, s, e));
             }
         }
 
         #[cfg(target_feature = "sse4.1")]
         {
             if std::arch::is_x86_feature_detected!("sse4.1") {
-                let (r, s, e) = crate::cpu::sse4_1::SSE41::test()?;
-                stats.push((crate::cpu::sse4_1::SSE41::get_name(), r, s, e));
+                let (r, s, e) = crate::cpu::auto_generated::sse41::SSE41::test()?;
+                stats.push((crate::cpu::auto_generated::sse41::SSE41::get_name(), r, s, e));
             }
         }
 
         #[cfg(target_feature = "sse4.2")]
         {
             if std::arch::is_x86_feature_detected!("sse4.2") {
-                let (r, s, e) = crate::cpu::sse4_2::SSE42::test()?;
-                stats.push((crate::cpu::sse4_2::SSE42::get_name(), r, s, e));
+                let (r, s, e) = crate::cpu::auto_generated::sse42::SSE42::test()?;
+                stats.push((crate::cpu::auto_generated::sse42::SSE42::get_name(), r, s, e));
             }
         }
 
         #[cfg(target_feature = "avx")]
         {
             if std::arch::is_x86_feature_detected!("avx") {
-                let (r, s, e) = crate::cpu::avx::AVX::test()?;
-                stats.push((crate::cpu::avx::AVX::get_name(), r, s, e));
+                let (r, s, e) = crate::cpu::auto_generated::avx::AVX::test()?;
+                stats.push((crate::cpu::auto_generated::avx::AVX::get_name(), r, s, e));
             }
         }
 
         #[cfg(target_feature = "avx2")]
         {
             if std::arch::is_x86_feature_detected!("avx2") {
-                let (r, s, e) = crate::cpu::avx2::AVX2::test()?;
-                stats.push((crate::cpu::avx2::AVX2::get_name(), r, s, e));
+                let (r, s, e) = crate::cpu::auto_generated::avx2::AVX2::test()?;
+                stats.push((crate::cpu::auto_generated::avx2::AVX2::get_name(), r, s, e));
             }
         }
 
         #[cfg(target_feature = "fma")]
         {
             if std::arch::is_x86_feature_detected!("fma") {
-                let (r, s, e) = crate::cpu::fma::FMA::test()?;
-                stats.push((crate::cpu::fma::FMA::get_name(), r, s, e));
+                let (r, s, e) = crate::cpu::auto_generated::fma::FMA::test()?;
+                stats.push((crate::cpu::auto_generated::fma::FMA::get_name(), r, s, e));
             }
         }
 
         #[cfg(target_feature = "avx512f")]
         {
             if std::arch::is_x86_feature_detected!("avx512f") {
-                let (r, s, e) = crate::cpu::avx512f::AVX512F::test()?;
-                stats.push((crate::cpu::avx512f::AVX512F::get_name(), r, s, e));
+                let (r, s, e) = crate::cpu::auto_generated::avx512f::AVX512F::test()?;
+                stats.push((crate::cpu::auto_generated::avx512f::AVX512F::get_name(), r, s, e));
             }
         }
 
         #[cfg(target_feature = "avx512bitalg")]
         {
             if std::arch::is_x86_feature_detected!("avx512bitalg") {
-                let (r, s, e) = crate::cpu::avx512bitalg::AVX512BITALG::test()?;
-                stats.push((crate::cpu::avx512bitalg::AVX512BITALG::get_name(), r, s, e));
+                let (r, s, e) = crate::cpu::auto_generated::avx512bitalg::AVX512BITALG::test()?;
+                stats.push((crate::cpu::auto_generated::avx512bitalg::AVX512BITALG::get_name(), r, s, e));
             }
         }
 
@@ -178,40 +169,40 @@ pub fn test_all_extensions() -> Result<(), String> {
         // #[cfg(target_feature = "avx512bf16")]
         // {
         //     if std::arch::is_x86_feature_detected!("avx512bf16") {
-        //         let (r, s, e) = crate::cpu::avx512bf16::AVX512BF16::test()?;
-        //         stats.push((crate::cpu::avx512bf16::AVX512BF16::get_name(), r, s, e));
+        //         let (r, s, e) = crate::cpu::auto_generated::avx512bf16::AVX512BF16::test()?;
+        //         stats.push((crate::cpu::auto_generated::avx512bf16::AVX512BF16::get_name(), r, s, e));
         //     }
         // }
 
         #[cfg(target_feature = "avx512cd")]
         {
             if std::arch::is_x86_feature_detected!("avx512cd") {
-                let (r, s, e) = crate::cpu::avx512cd::AVX512CD::test()?;
-                stats.push((crate::cpu::avx512cd::AVX512CD::get_name(), r, s, e));
+                let (r, s, e) = crate::cpu::auto_generated::avx512cd::AVX512CD::test()?;
+                stats.push((crate::cpu::auto_generated::avx512cd::AVX512CD::get_name(), r, s, e));
             }
         }
 
         #[cfg(target_feature = "avx512ifma")]
         {
             if std::arch::is_x86_feature_detected!("avx512ifma") {
-                let (r, s, e) = crate::cpu::avx512ifma::AVX512IFMA::test()?;
-                stats.push((crate::cpu::avx512ifma::AVX512IFMA::get_name(), r, s, e));
+                let (r, s, e) = crate::cpu::auto_generated::avx512ifma::AVX512IFMA::test()?;
+                stats.push((crate::cpu::auto_generated::avx512ifma::AVX512IFMA::get_name(), r, s, e));
             }
         }
 
         #[cfg(target_feature = "avx512vbmi")]
         {
             if std::arch::is_x86_feature_detected!("avx512vbmi") {
-                let (r, s, e) = crate::cpu::avx512vbmi::AVX512VBMI::test()?;
-                stats.push((crate::cpu::avx512vbmi::AVX512VBMI::get_name(), r, s, e));
+                let (r, s, e) = crate::cpu::auto_generated::avx512vbmi::AVX512VBMI::test()?;
+                stats.push((crate::cpu::auto_generated::avx512vbmi::AVX512VBMI::get_name(), r, s, e));
             }
         }
 
         #[cfg(target_feature = "aes")]
         {
             if std::arch::is_x86_feature_detected!("aes") {
-                let (r, s, e) = crate::cpu::aes::AES::test()?;
-                stats.push((crate::cpu::aes::AES::get_name(), r, s, e));
+                let (r, s, e) = crate::cpu::auto_generated::aes::AES::test()?;
+                stats.push((crate::cpu::auto_generated::aes::AES::get_name(), r, s, e));
             }
         }
     }
