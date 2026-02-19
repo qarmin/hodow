@@ -1,5 +1,6 @@
 use std::arch::x86_64::*;
 
+#[allow(unused_imports)]
 use crate::cpu::common::values::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_int_equality};
@@ -126,13 +127,13 @@ pub(super) fn test_mm_mask_cmp_pd_mask() -> Result<(), String> {
 
 pub(super) fn test_mm512_cmp_round_pd_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm512_cmp_round_pd_mask::<0, 0>(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]));
+        let result = _mm512_cmp_round_pd_mask::<0, 8>(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm512_cmp_round_pd_mask::<0, 0>(create_random__m512d(), create_random__m512d());
+                let _ = _mm512_cmp_round_pd_mask::<0, 8>(create_random__m512d(), create_random__m512d());
             }
         }
     }
@@ -141,13 +142,13 @@ pub(super) fn test_mm512_cmp_round_pd_mask() -> Result<(), String> {
 
 pub(super) fn test_mm512_mask_cmp_round_pd_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm512_mask_cmp_round_pd_mask::<0, 0>(create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]));
+        let result = _mm512_mask_cmp_round_pd_mask::<0, 8>(create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm512_mask_cmp_round_pd_mask::<0, 0>(create_random__mmask8(), create_random__m512d(), create_random__m512d());
+                let _ = _mm512_mask_cmp_round_pd_mask::<0, 8>(create_random__mmask8(), create_random__m512d(), create_random__m512d());
             }
         }
     }
@@ -246,13 +247,13 @@ pub(super) fn test_mm_mask_cmp_ss_mask() -> Result<(), String> {
 
 pub(super) fn test_mm_cmp_round_ss_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm_cmp_round_ss_mask::<0, 0>(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0]));
+        let result = _mm_cmp_round_ss_mask::<0, 8>(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_cmp_round_ss_mask::<0, 0>(create_random__m128(), create_random__m128());
+                let _ = _mm_cmp_round_ss_mask::<0, 8>(create_random__m128(), create_random__m128());
             }
         }
     }
@@ -261,13 +262,13 @@ pub(super) fn test_mm_cmp_round_ss_mask() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_cmp_round_ss_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm_mask_cmp_round_ss_mask::<0, 0>(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0]));
+        let result = _mm_mask_cmp_round_ss_mask::<0, 8>(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_mask_cmp_round_ss_mask::<0, 0>(create_random__mmask8(), create_random__m128(), create_random__m128());
+                let _ = _mm_mask_cmp_round_ss_mask::<0, 8>(create_random__mmask8(), create_random__m128(), create_random__m128());
             }
         }
     }
@@ -306,13 +307,13 @@ pub(super) fn test_mm_mask_cmp_sd_mask() -> Result<(), String> {
 
 pub(super) fn test_mm_cmp_round_sd_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm_cmp_round_sd_mask::<0, 0>(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0]));
+        let result = _mm_cmp_round_sd_mask::<0, 8>(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_cmp_round_sd_mask::<0, 0>(create_random__m128d(), create_random__m128d());
+                let _ = _mm_cmp_round_sd_mask::<0, 8>(create_random__m128d(), create_random__m128d());
             }
         }
     }
@@ -321,13 +322,13 @@ pub(super) fn test_mm_cmp_round_sd_mask() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_cmp_round_sd_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm_mask_cmp_round_sd_mask::<0, 0>(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0]));
+        let result = _mm_mask_cmp_round_sd_mask::<0, 8>(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_mask_cmp_round_sd_mask::<0, 0>(create_random__mmask8(), create_random__m128d(), create_random__m128d());
+                let _ = _mm_mask_cmp_round_sd_mask::<0, 8>(create_random__mmask8(), create_random__m128d(), create_random__m128d());
             }
         }
     }

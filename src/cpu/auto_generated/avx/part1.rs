@@ -1,5 +1,6 @@
 use std::arch::x86_64::*;
 
+#[allow(unused_imports)]
 use crate::cpu::common::values::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_int_equality};
@@ -336,13 +337,13 @@ pub(super) fn test_mm256_div_pd() -> Result<(), String> {
 
 pub(super) fn test_mm256_round_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_round_pd::<0>(create__m256d_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m256d_to_f64_array(_mm256_round_pd::<8>(create__m256d_from([1.0, 2.0, 3.0, 4.0])));
         check_array_equality(&result, &[0.0f64; 4])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm256_round_pd::<0>(create_random__m256d());
+                let _ = _mm256_round_pd::<8>(create_random__m256d());
             }
         }
     }
@@ -381,13 +382,13 @@ pub(super) fn test_mm256_floor_pd() -> Result<(), String> {
 
 pub(super) fn test_mm256_round_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_round_ps::<0>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        let result = unpack__m256_to_f32_array(_mm256_round_ps::<8>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 8])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm256_round_ps::<0>(create_random__m256());
+                let _ = _mm256_round_ps::<8>(create_random__m256());
             }
         }
     }

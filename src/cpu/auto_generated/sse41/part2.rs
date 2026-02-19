@@ -1,5 +1,6 @@
 use std::arch::x86_64::*;
 
+#[allow(unused_imports)]
 use crate::cpu::common::values::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_int_equality};
@@ -216,13 +217,13 @@ pub(super) fn test_mm_ceil_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_round_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_round_pd::<0>(create__m128d_from([1.0, 2.0])));
+        let result = unpack__m128d_to_f64_array(_mm_round_pd::<8>(create__m128d_from([1.0, 2.0])));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_round_pd::<0>(create_random__m128d());
+                let _ = _mm_round_pd::<8>(create_random__m128d());
             }
         }
     }
@@ -231,13 +232,13 @@ pub(super) fn test_mm_round_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_round_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_round_ps::<0>(create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_round_ps::<8>(create__m128_from([1.0, 2.0, 3.0, 4.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_round_ps::<0>(create_random__m128());
+                let _ = _mm_round_ps::<8>(create_random__m128());
             }
         }
     }
@@ -246,13 +247,13 @@ pub(super) fn test_mm_round_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_round_sd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_round_sd::<0>(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0])));
+        let result = unpack__m128d_to_f64_array(_mm_round_sd::<8>(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0])));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_round_sd::<0>(create_random__m128d(), create_random__m128d());
+                let _ = _mm_round_sd::<8>(create_random__m128d(), create_random__m128d());
             }
         }
     }
@@ -261,13 +262,13 @@ pub(super) fn test_mm_round_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_round_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_round_ss::<0>(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_round_ss::<8>(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_round_ss::<0>(create_random__m128(), create_random__m128());
+                let _ = _mm_round_ss::<8>(create_random__m128(), create_random__m128());
             }
         }
     }

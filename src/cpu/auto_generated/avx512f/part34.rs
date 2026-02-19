@@ -1,5 +1,6 @@
 use std::arch::x86_64::*;
 
+#[allow(unused_imports)]
 use crate::cpu::common::values::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_int_equality};
@@ -111,13 +112,13 @@ pub(super) fn test_mm_maskz_cvttps_epu32() -> Result<(), String> {
 
 pub(super) fn test_mm512_maskz_cvtt_roundpd_epu32() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm512_maskz_cvtt_roundpd_epu32::<0>(create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        let result = unpack__m256i_to_i32_array(_mm512_maskz_cvtt_roundpd_epu32::<8>(create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm512_maskz_cvtt_roundpd_epu32::<0>(create_random__mmask8(), create_random__m512d());
+                let _ = _mm512_maskz_cvtt_roundpd_epu32::<8>(create_random__mmask8(), create_random__m512d());
             }
         }
     }

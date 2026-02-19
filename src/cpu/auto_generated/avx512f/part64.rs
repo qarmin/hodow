@@ -1,5 +1,6 @@
 use std::arch::x86_64::*;
 
+#[allow(unused_imports)]
 use crate::cpu::common::values::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_int_equality};
@@ -216,13 +217,13 @@ pub(super) fn test_mm_mask_cmp_ps_mask() -> Result<(), String> {
 
 pub(super) fn test_mm512_cmp_round_ps_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm512_cmp_round_ps_mask::<0, 0>(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
+        let result = _mm512_cmp_round_ps_mask::<0, 8>(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm512_cmp_round_ps_mask::<0, 0>(create_random__m512(), create_random__m512());
+                let _ = _mm512_cmp_round_ps_mask::<0, 8>(create_random__m512(), create_random__m512());
             }
         }
     }
@@ -231,13 +232,13 @@ pub(super) fn test_mm512_cmp_round_ps_mask() -> Result<(), String> {
 
 pub(super) fn test_mm512_mask_cmp_round_ps_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm512_mask_cmp_round_ps_mask::<0, 0>(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
+        let result = _mm512_mask_cmp_round_ps_mask::<0, 8>(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm512_mask_cmp_round_ps_mask::<0, 0>(create_random__mmask16(), create_random__m512(), create_random__m512());
+                let _ = _mm512_mask_cmp_round_ps_mask::<0, 8>(create_random__mmask16(), create_random__m512(), create_random__m512());
             }
         }
     }

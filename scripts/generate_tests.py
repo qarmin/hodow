@@ -258,8 +258,13 @@ def skip_fuzz(name: str, params: list | None) -> bool:
 
 def const_val(cg_name: str) -> str:
     """Return a safe literal for a const generic parameter."""
-    if cg_name.upper() == "SCALE":
-        return "1"  # gather/scatter SCALE must be 1, 2, 4, or 8 — never 0
+    upper = cg_name.upper()
+    if upper == "SCALE":
+        return "1"    # gather/scatter: must be 1, 2, 4, or 8
+    if upper == "SAE":
+        return "8"    # static_assert_sae!: must be 4 or 8
+    if upper == "ROUNDING":
+        return "8"    # static_assert_rounding!: must be 4, 8, 9, 10, or 11
     return "0"
 
 
@@ -321,22 +326,26 @@ def gen_fn(sig: dict) -> str:
 
     lines = [f"pub(super) fn {test}() -> Result<(), String> {{", "    unsafe {"]
 
+    is_gather = any(p in name.lower() for p in ("gather", "scatter"))
+
     if not complete:
         lines.append(f"        todo!(\"{name}\")")
     elif has_ptr(params):
         # Build local buffers for pointer and reference arguments
+        # Gather/scatter: use large array (safe for any valid offset) + zeroed SIMD offsets
+        array_size = 64 if is_gather else 1
         call_args: list[str] = []
         for pname, ptype in params:
             ref_inner = inner_ref_type(ptype)
             if "*const" in ptype:
                 inner = ptype.replace("*const", "").strip()
                 init = FIXED_INITS.get(inner, f"0 /* {inner} */")
-                lines.append(f"        let ptr_{pname} = [{init}; 1];")
+                lines.append(f"        let ptr_{pname} = [{init}; {array_size}];")
                 call_args.append(f"ptr_{pname}.as_ptr()")
             elif "*mut" in ptype:
                 inner = ptype.replace("*mut", "").strip()
                 init = FIXED_INITS.get(inner, f"0 /* {inner} */")
-                lines.append(f"        let mut ptr_{pname} = [{init}; 1];")
+                lines.append(f"        let mut ptr_{pname} = [{init}; {array_size}];")
                 call_args.append(f"ptr_{pname}.as_mut_ptr()")
             elif ref_inner is not None:
                 # &T or &mut T — create a local variable
@@ -347,7 +356,11 @@ def gen_fn(sig: dict) -> str:
                 ref_kw = "&mut " if is_mut else "&"
                 call_args.append(f"{ref_kw}ref_{pname}")
             else:
-                init = FIXED_INITS.get(ptype, f"0 /* {ptype} */")
+                # Gather/scatter: use zeroed SIMD for index/offset params (all read from base+0)
+                if is_gather:
+                    init = ZERO_SIMD_INITS.get(ptype, FIXED_INITS.get(ptype, f"0 /* {ptype} */"))
+                else:
+                    init = FIXED_INITS.get(ptype, f"0 /* {ptype} */")
                 lines.append(f"        let {pname} = {init};")
                 call_args.append(pname)
         call = f"{name}{cs}({', '.join(call_args)})"
@@ -378,6 +391,7 @@ def gen_part(funcs: list[dict]) -> str:
     header = [
         "use std::arch::x86_64::*;",
         "",
+        "#[allow(unused_imports)]",
         "use crate::cpu::common::values::*;",
         "#[allow(unused_imports)]",
         "use crate::cpu::common::{check_array_equality, check_int_equality};",

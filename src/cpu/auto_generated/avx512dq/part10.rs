@@ -1,5 +1,6 @@
 use std::arch::x86_64::*;
 
+#[allow(unused_imports)]
 use crate::cpu::common::values::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_int_equality};
@@ -306,13 +307,13 @@ pub(super) fn test_mm512_movm_epi64() -> Result<(), String> {
 
 pub(super) fn test_mm512_range_round_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m512d_to_f64_array(_mm512_range_round_pd::<0, 0>(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        let result = unpack__m512d_to_f64_array(_mm512_range_round_pd::<0, 8>(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f64; 8])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm512_range_round_pd::<0, 0>(create_random__m512d(), create_random__m512d());
+                let _ = _mm512_range_round_pd::<0, 8>(create_random__m512d(), create_random__m512d());
             }
         }
     }
@@ -321,13 +322,13 @@ pub(super) fn test_mm512_range_round_pd() -> Result<(), String> {
 
 pub(super) fn test_mm512_mask_range_round_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m512d_to_f64_array(_mm512_mask_range_round_pd::<0, 0>(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        let result = unpack__m512d_to_f64_array(_mm512_mask_range_round_pd::<0, 8>(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f64; 8])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm512_mask_range_round_pd::<0, 0>(create_random__m512d(), create_random__mmask8(), create_random__m512d(), create_random__m512d());
+                let _ = _mm512_mask_range_round_pd::<0, 8>(create_random__m512d(), create_random__mmask8(), create_random__m512d(), create_random__m512d());
             }
         }
     }
@@ -336,13 +337,13 @@ pub(super) fn test_mm512_mask_range_round_pd() -> Result<(), String> {
 
 pub(super) fn test_mm512_maskz_range_round_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m512d_to_f64_array(_mm512_maskz_range_round_pd::<0, 0>(create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        let result = unpack__m512d_to_f64_array(_mm512_maskz_range_round_pd::<0, 8>(create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f64; 8])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm512_maskz_range_round_pd::<0, 0>(create_random__mmask8(), create_random__m512d(), create_random__m512d());
+                let _ = _mm512_maskz_range_round_pd::<0, 8>(create_random__mmask8(), create_random__m512d(), create_random__m512d());
             }
         }
     }

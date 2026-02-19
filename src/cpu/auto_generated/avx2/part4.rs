@@ -1,5 +1,6 @@
 use std::arch::x86_64::*;
 
+#[allow(unused_imports)]
 use crate::cpu::common::values::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_int_equality};
@@ -7,8 +8,8 @@ use crate::cpu::common::{check_array_equality, check_int_equality};
 pub(super) fn test_mm_mask_i64gather_pd() -> Result<(), String> {
     unsafe {
         let src = create__m128d_from([1.0, 2.0]);
-        let ptr_slice = [1.0f64; 1];
-        let offsets = create__m128i_from_i32_array([1, 2, 3, 4]);
+        let ptr_slice = [1.0f64; 64];
+        let offsets = create__m128i_from_i32_array([0, 0, 0, 0]);
         let mask = create__m128d_from([1.0, 2.0]);
         let result = unpack__m128d_to_f64_array(_mm_mask_i64gather_pd::<1>(src, ptr_slice.as_ptr(), offsets, mask));
         check_array_equality(&result, &[0.0f64; 2])?;
@@ -18,8 +19,8 @@ pub(super) fn test_mm_mask_i64gather_pd() -> Result<(), String> {
 
 pub(super) fn test_mm256_i64gather_pd() -> Result<(), String> {
     unsafe {
-        let ptr_slice = [1.0f64; 1];
-        let offsets = create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]);
+        let ptr_slice = [1.0f64; 64];
+        let offsets = create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]);
         let result = unpack__m256d_to_f64_array(_mm256_i64gather_pd::<1>(ptr_slice.as_ptr(), offsets));
         check_array_equality(&result, &[0.0f64; 4])?;
     }
@@ -29,8 +30,8 @@ pub(super) fn test_mm256_i64gather_pd() -> Result<(), String> {
 pub(super) fn test_mm256_mask_i64gather_pd() -> Result<(), String> {
     unsafe {
         let src = create__m256d_from([1.0, 2.0, 3.0, 4.0]);
-        let ptr_slice = [1.0f64; 1];
-        let offsets = create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]);
+        let ptr_slice = [1.0f64; 64];
+        let offsets = create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]);
         let mask = create__m256d_from([1.0, 2.0, 3.0, 4.0]);
         let result = unpack__m256d_to_f64_array(_mm256_mask_i64gather_pd::<1>(src, ptr_slice.as_ptr(), offsets, mask));
         check_array_equality(&result, &[0.0f64; 4])?;

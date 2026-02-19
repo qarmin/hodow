@@ -13,6 +13,7 @@ pub(crate) mod common;
 pub mod auto_generated;
 
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+#[allow(unused_imports)]
 pub use auto_generated::*;
 
 #[cfg(miri)]
