@@ -12,8 +12,47 @@ impl ExtensionTest for AVX2 {
     fn get_name() -> &'static str {
         "AVX2"
     }
+    // fn get_disabled_fuzzer_functions() -> &'static [&'static str] {
+    //     &[
+    //         // Gather functions access out of bounds memory when given random indices
+    //         "test_mm_i32gather_epi32",
+    //         "test_mm_mask_i32gather_epi32",
+    //         "test_mm_i32gather_ps",
+    //         "test_mm_mask_i32gather_ps",
+    //         "test_mm_i32gather_epi64",
+    //         "test_mm_mask_i32gather_epi64",
+    //         "test_mm_i32gather_pd",
+    //         "test_mm_mask_i32gather_pd",
+    //         "test_mm_i64gather_epi32",
+    //         "test_mm_mask_i64gather_epi32",
+    //         "test_mm_i64gather_ps",
+    //         "test_mm_mask_i64gather_ps",
+    //         "test_mm_i64gather_epi64",
+    //         "test_mm_mask_i64gather_epi64",
+    //         "test_mm_i64gather_pd",
+    //         "test_mm_mask_i64gather_pd",
+    //     ]
+    // }
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
+            // All gathers
+            (&test_mm_i32gather_epi32, "test_mm_i32gather_epi32"),
+            (&test_mm_mask_i32gather_epi32, "test_mm_mask_i32gather_epi32"),
+            (&test_mm_i32gather_ps, "test_mm_i32gather_ps"),
+            (&test_mm_mask_i32gather_ps, "test_mm_mask_i32gather_ps"),
+            (&test_mm_i32gather_epi64, "test_mm_i32gather_epi64"),
+            (&test_mm_mask_i32gather_epi64, "test_mm_mask_i32gather_epi64"),
+            (&test_mm_i32gather_pd, "test_mm_i32gather_pd"),
+            (&test_mm_mask_i32gather_pd, "test_mm_mask_i32gather_pd"),
+            (&test_mm_i64gather_epi32, "test_mm_i64gather_epi32"),
+            (&test_mm_mask_i64gather_epi32, "test_mm_mask_i64gather_epi32"),
+            (&test_mm_i64gather_ps, "test_mm_i64gather_ps"),
+            (&test_mm_mask_i64gather_ps, "test_mm_mask_i64gather_ps"),
+            (&test_mm_i64gather_epi64, "test_mm_i64gather_epi64"),
+            (&test_mm_mask_i64gather_epi64, "test_mm_mask_i64gather_epi64"),
+            (&test_mm_i64gather_pd, "test_mm_i64gather_pd"),
+            (&test_mm_mask_i64gather_pd, "test_mm_mask_i64gather_pd"),
+
             (&test_mm256_add_epi32, "test_mm256_add_epi32"),
             (&test_mm256_sub_epi32, "test_mm256_sub_epi32"),
             (&test_mm256_mullo_epi32, "test_mm256_mullo_epi32"),
@@ -37,22 +76,6 @@ impl ExtensionTest for AVX2 {
             (&test_mm_broadcastsi128_si256, "test_mm_broadcastsi128_si256"),
             (&test_mm_broadcastss_ps, "test_mm_broadcastss_ps"),
             (&test_mm_broadcastw_epi16, "test_mm_broadcastw_epi16"),
-            (&test_mm_i32gather_epi32, "test_mm_i32gather_epi32"),
-            (&test_mm_mask_i32gather_epi32, "test_mm_mask_i32gather_epi32"),
-            (&test_mm_i32gather_ps, "test_mm_i32gather_ps"),
-            (&test_mm_mask_i32gather_ps, "test_mm_mask_i32gather_ps"),
-            (&test_mm_i32gather_epi64, "test_mm_i32gather_epi64"),
-            (&test_mm_mask_i32gather_epi64, "test_mm_mask_i32gather_epi64"),
-            (&test_mm_i32gather_pd, "test_mm_i32gather_pd"),
-            (&test_mm_mask_i32gather_pd, "test_mm_mask_i32gather_pd"),
-            (&test_mm_i64gather_epi32, "test_mm_i64gather_epi32"),
-            (&test_mm_mask_i64gather_epi32, "test_mm_mask_i64gather_epi32"),
-            (&test_mm_i64gather_ps, "test_mm_i64gather_ps"),
-            (&test_mm_mask_i64gather_ps, "test_mm_mask_i64gather_ps"),
-            (&test_mm_i64gather_epi64, "test_mm_i64gather_epi64"),
-            (&test_mm_mask_i64gather_epi64, "test_mm_mask_i64gather_epi64"),
-            (&test_mm_i64gather_pd, "test_mm_i64gather_pd"),
-            (&test_mm_mask_i64gather_pd, "test_mm_mask_i64gather_pd"),
             (&test_mm_maskload_epi32, "test_mm_maskload_epi32"),
             (&test_mm_maskload_epi64, "test_mm_maskload_epi64"),
             (&test_mm_maskstore_epi32, "test_mm_maskstore_epi32"),
