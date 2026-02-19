@@ -11,11 +11,9 @@ from collections import defaultdict
 FUNCTIONS_PER_PART = 30
 OUTPUT_DIR = Path("src/cpu/auto_generated")
 
-# Function name patterns for which fuzzing is disabled
-NO_FUZZ_PATTERNS = [
-    "gather",   # memory scatter/gather with random indices causes segfault
-    "scatter",
-]
+
+# TODO - add ignored functions
+#
 
 # Functions with memory access errors - skip in fuzzer (#[cfg(not(fuzzing))])
 NO_FUZZ_FUNCTIONS: set[str] = {
@@ -344,9 +342,7 @@ def has_unstable_type(params: list | None, ret: str) -> bool:
 
 
 def skip_fuzz(name: str, params: list | None) -> bool:
-    lower = name.lower()
-    return (any(p in lower for p in NO_FUZZ_PATTERNS) or
-            has_ptr(params) or
+    return (            has_ptr(params) or
             name in NO_FUZZ_FUNCTIONS)
 
 
@@ -563,6 +559,9 @@ def gen_ext_rs(ext: str, funcs: list[dict], n_parts: int) -> str:
     ]
     for sig in funcs:
         tname = test_name(sig["name"])
+        # Add cfg(not(miri)) for functions that don't work in Miri
+        if sig["name"] in NO_MIRI_FUNCTIONS:
+            lines.append(f"            #[cfg(not(miri))]")
         lines.append(f"            (&{tname}, \"{tname}\"),")
     lines += ["        ]", "    }", "}"]
     return "\n".join(lines) + "\n"
