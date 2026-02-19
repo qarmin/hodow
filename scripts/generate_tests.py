@@ -17,6 +17,56 @@ NO_FUZZ_PATTERNS = [
     "scatter",
 ]
 
+# Functions with memory access errors - skip in fuzzer (#[cfg(not(fuzzing))])
+NO_FUZZ_FUNCTIONS: set[str] = {
+    "_mm_load_ps", "_mm_loadu_ps", "_mm_loadr_ps",
+    "_mm_store1_ps", "_mm_store_ps1", "_mm_store_ps", "_mm_storeu_ps", "_mm_storer_ps",
+    "_mm_load_pd", "_mm_store_pd", "_mm_storeu_pd",
+    "_mm_storeu_si16", "_mm_storeu_si32", "_mm_storeu_si64",
+    "_mm_store1_pd", "_mm_store_pd1", "_mm_storer_pd",
+    "_mm_loadr_pd", "_mm_loadu_pd",
+    "_mm_loadu_si16", "_mm_loadu_si32", "_mm_loadu_si64",
+    "_mm256_load_pd", "_mm256_store_pd",
+    "_mm256_load_ps", "_mm256_store_ps",
+    "_mm256_loadu_pd", "_mm256_storeu_pd",
+    "_mm256_loadu_ps", "_mm256_storeu_ps",
+    "_mm256_loadu2_m128", "_mm256_loadu2_m128d",
+    "_mm256_storeu2_m128", "_mm256_storeu2_m128d",
+}
+
+# Functions with unsupported operations in Miri - skip in miri (#[cfg(not(miri))])
+NO_MIRI_FUNCTIONS: set[str] = {
+    # inline assembly is not supported
+    "_mm_stream_ps", "_mm_stream_si128", "_mm_stream_si32",
+    "_mm_stream_pd", "_mm_stream_si64", "_mm_stream_load_si128",
+    "_mm256_stream_si256", "_mm256_stream_pd", "_mm256_stream_ps",
+    "_mm256_stream_load_si256",
+
+    # unsupported operation: can't call foreign function
+    "_mm_sfence", "_mm_clflush", "_mm_lfence", "_mm_mfence",
+    "_mm_maskmoveu_si128",
+    "_mm512_max_ps", "_mm512_mask_max_ps", "_mm512_maskz_max_ps",
+    "_mm512_max_pd", "_mm512_mask_max_pd", "_mm512_maskz_max_pd",
+    "_mm512_min_ps", "_mm512_mask_min_ps", "_mm512_maskz_min_ps",
+    "_mm512_min_pd", "_mm512_mask_min_pd", "_mm512_maskz_min_pd",
+    "_mm512_rcp14_ps", "_mm512_mask_rcp14_ps", "_mm512_maskz_rcp14_ps",
+    "_mm256_rcp14_ps", "_mm256_mask_rcp14_ps", "_mm256_maskz_rcp14_ps",
+    "_mm_rcp14_ps", "_mm_mask_rcp14_ps", "_mm_maskz_rcp14_ps",
+    "_mm512_rcp14_pd", "_mm512_mask_rcp14_pd", "_mm512_maskz_rcp14_pd",
+    "_mm256_rcp14_pd", "_mm256_mask_rcp14_pd", "_mm256_maskz_rcp14_pd",
+    "_mm_rcp14_pd", "_mm_mask_rcp14_pd", "_mm_maskz_rcp14_pd",
+    "_mm512_rsqrt14_ps", "_mm512_mask_rsqrt14_ps", "_mm512_maskz_rsqrt14_ps",
+    "_mm256_rsqrt14_ps", "_mm256_mask_rsqrt14_ps", "_mm256_maskz_rsqrt14_ps",
+    "_mm_rsqrt14_ps", "_mm_mask_rsqrt14_ps", "_mm_maskz_rsqrt14_ps",
+    "_mm512_rsqrt14_pd", "_mm512_mask_rsqrt14_pd", "_mm512_maskz_rsqrt14_pd",
+    "_mm256_rsqrt14_pd", "_mm256_mask_rsqrt14_pd", "_mm256_maskz_rsqrt14_pd",
+    "_mm_rsqrt14_pd", "_mm_mask_rsqrt14_pd", "_mm_maskz_rsqrt14_pd",
+    "_mm512_getexp_ps", "_mm512_mask_getexp_ps", "_mm512_maskz_getexp_ps",
+    "_mm256_getexp_ps", "_mm256_mask_getexp_ps", "_mm256_maskz_getexp_ps",
+    "_mm_getexp_ps", "_mm_mask_getexp_ps", "_mm_maskz_getexp_ps",
+    "_mm512_getexp_pd", "_mm512_mask_getexp_pd",
+}
+
 # Deprecated intrinsics — excluded entirely from test generation
 DEPRECATED_FUNCTIONS = {
     "_mm_getcsr", "_mm_setcsr",   # deprecated: use inline assembly instead
@@ -295,7 +345,14 @@ def has_unstable_type(params: list | None, ret: str) -> bool:
 
 def skip_fuzz(name: str, params: list | None) -> bool:
     lower = name.lower()
-    return any(p in lower for p in NO_FUZZ_PATTERNS) or has_ptr(params)
+    return (any(p in lower for p in NO_FUZZ_PATTERNS) or
+            has_ptr(params) or
+            name in NO_FUZZ_FUNCTIONS)
+
+
+def skip_miri(name: str) -> bool:
+    """Check if function should be skipped in Miri (cfg(not(miri)))."""
+    return name in NO_MIRI_FUNCTIONS
 
 
 def const_val(cg_name: str) -> str:
@@ -395,8 +452,16 @@ def gen_fn(sig: dict, expected_values: dict[str, str] | None = None) -> str:
     complete: bool = sig["is_complete"]
     cs = const_suffix(cg)
     no_fuzz = skip_fuzz(name, params)
+    no_miri = skip_miri(name)
 
-    lines = [f"pub(super) fn {test}() -> Result<(), String> {{", "    unsafe {"]
+    lines = []
+
+    # Add cfg(not(miri)) attribute for functions that don't work in Miri
+    if no_miri:
+        lines.append("#[cfg(not(miri))]")
+
+    lines.append(f"pub(super) fn {test}() -> Result<(), String> {{")
+    lines.append("    unsafe {")
 
     is_gather = any(p in name.lower() for p in ("gather", "scatter"))
     ctr = [1]  # sequential counter, reset per-function for stable inputs
