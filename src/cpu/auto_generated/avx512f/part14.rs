@@ -5,6 +5,7 @@ use crate::cpu::common::values::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_int_equality};
 
+#[cfg(not(miri))]
 pub(super) fn test_mm256_mask_rcp14_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m256d_to_f64_array(_mm256_mask_rcp14_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
@@ -20,6 +21,7 @@ pub(super) fn test_mm256_mask_rcp14_pd() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm256_maskz_rcp14_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m256d_to_f64_array(_mm256_maskz_rcp14_pd(create__mmask8_from(0b01010101), create__m256d_from([1.0, 2.0, 3.0, 4.0])));
@@ -35,6 +37,7 @@ pub(super) fn test_mm256_maskz_rcp14_pd() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm_rcp14_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_rcp14_pd(create__m128d_from([1.0, 2.0])));
@@ -50,6 +53,7 @@ pub(super) fn test_mm_rcp14_pd() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm_mask_rcp14_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_mask_rcp14_pd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([3.0, 4.0])));
@@ -65,6 +69,7 @@ pub(super) fn test_mm_mask_rcp14_pd() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm_maskz_rcp14_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_maskz_rcp14_pd(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0])));
@@ -80,6 +85,7 @@ pub(super) fn test_mm_maskz_rcp14_pd() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm512_rsqrt14_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m512_to_f32_array(_mm512_rsqrt14_ps(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
@@ -95,6 +101,7 @@ pub(super) fn test_mm512_rsqrt14_ps() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm512_mask_rsqrt14_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m512_to_f32_array(_mm512_mask_rsqrt14_ps(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__mmask16_from(0b0101010101010101), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0])));
@@ -110,6 +117,7 @@ pub(super) fn test_mm512_mask_rsqrt14_ps() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm512_maskz_rsqrt14_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m512_to_f32_array(_mm512_maskz_rsqrt14_ps(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
@@ -125,6 +133,7 @@ pub(super) fn test_mm512_maskz_rsqrt14_ps() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm256_rsqrt14_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_rsqrt14_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
@@ -140,6 +149,7 @@ pub(super) fn test_mm256_rsqrt14_ps() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm256_mask_rsqrt14_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_mask_rsqrt14_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__mmask8_from(0b01010101), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
@@ -155,6 +165,7 @@ pub(super) fn test_mm256_mask_rsqrt14_ps() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm256_maskz_rsqrt14_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_maskz_rsqrt14_ps(create__mmask8_from(0b01010101), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
@@ -170,6 +181,7 @@ pub(super) fn test_mm256_maskz_rsqrt14_ps() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm_rsqrt14_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_rsqrt14_ps(create__m128_from([1.0, 2.0, 3.0, 4.0])));
@@ -185,6 +197,7 @@ pub(super) fn test_mm_rsqrt14_ps() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm_mask_rsqrt14_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_mask_rsqrt14_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0])));
@@ -200,6 +213,7 @@ pub(super) fn test_mm_mask_rsqrt14_ps() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm_maskz_rsqrt14_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_maskz_rsqrt14_ps(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0])));
@@ -215,6 +229,7 @@ pub(super) fn test_mm_maskz_rsqrt14_ps() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm512_rsqrt14_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m512d_to_f64_array(_mm512_rsqrt14_pd(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
@@ -230,6 +245,7 @@ pub(super) fn test_mm512_rsqrt14_pd() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm512_mask_rsqrt14_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m512d_to_f64_array(_mm512_mask_rsqrt14_pd(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__mmask8_from(0b01010101), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
@@ -245,6 +261,7 @@ pub(super) fn test_mm512_mask_rsqrt14_pd() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm512_maskz_rsqrt14_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m512d_to_f64_array(_mm512_maskz_rsqrt14_pd(create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
@@ -260,6 +277,7 @@ pub(super) fn test_mm512_maskz_rsqrt14_pd() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm256_rsqrt14_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m256d_to_f64_array(_mm256_rsqrt14_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0])));
@@ -275,6 +293,7 @@ pub(super) fn test_mm256_rsqrt14_pd() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm256_mask_rsqrt14_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m256d_to_f64_array(_mm256_mask_rsqrt14_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
@@ -290,6 +309,7 @@ pub(super) fn test_mm256_mask_rsqrt14_pd() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm256_maskz_rsqrt14_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m256d_to_f64_array(_mm256_maskz_rsqrt14_pd(create__mmask8_from(0b01010101), create__m256d_from([1.0, 2.0, 3.0, 4.0])));
@@ -305,6 +325,7 @@ pub(super) fn test_mm256_maskz_rsqrt14_pd() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm_rsqrt14_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_rsqrt14_pd(create__m128d_from([1.0, 2.0])));
@@ -320,6 +341,7 @@ pub(super) fn test_mm_rsqrt14_pd() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm_mask_rsqrt14_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_mask_rsqrt14_pd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([3.0, 4.0])));
@@ -335,6 +357,7 @@ pub(super) fn test_mm_mask_rsqrt14_pd() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm_maskz_rsqrt14_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_maskz_rsqrt14_pd(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0])));
@@ -350,6 +373,7 @@ pub(super) fn test_mm_maskz_rsqrt14_pd() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm512_getexp_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m512_to_f32_array(_mm512_getexp_ps(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
@@ -365,6 +389,7 @@ pub(super) fn test_mm512_getexp_ps() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm512_mask_getexp_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m512_to_f32_array(_mm512_mask_getexp_ps(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__mmask16_from(0b0101010101010101), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0])));
@@ -380,6 +405,7 @@ pub(super) fn test_mm512_mask_getexp_ps() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm512_maskz_getexp_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m512_to_f32_array(_mm512_maskz_getexp_ps(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
@@ -395,6 +421,7 @@ pub(super) fn test_mm512_maskz_getexp_ps() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm256_getexp_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_getexp_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
@@ -410,6 +437,7 @@ pub(super) fn test_mm256_getexp_ps() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm256_mask_getexp_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_mask_getexp_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__mmask8_from(0b01010101), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
@@ -425,6 +453,7 @@ pub(super) fn test_mm256_mask_getexp_ps() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm256_maskz_getexp_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_maskz_getexp_ps(create__mmask8_from(0b01010101), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
@@ -440,6 +469,7 @@ pub(super) fn test_mm256_maskz_getexp_ps() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm_getexp_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_getexp_ps(create__m128_from([1.0, 2.0, 3.0, 4.0])));

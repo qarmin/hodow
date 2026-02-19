@@ -350,6 +350,7 @@ pub(super) fn test_mm256_srlv_epi64() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm256_stream_load_si256() -> Result<(), String> {
     unsafe {
         let ptr_mem_addr = [create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]); 1];

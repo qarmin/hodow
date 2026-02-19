@@ -5,6 +5,7 @@ use crate::cpu::common::values::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_int_equality};
 
+#[cfg(not(miri))]
 pub(super) fn test_mm_stream_si32() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i32; 1];

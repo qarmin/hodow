@@ -425,6 +425,7 @@ pub(super) fn test_mm_test_mix_ones_zeros() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm_stream_load_si128() -> Result<(), String> {
     unsafe {
         let ptr_mem_addr = [create__m128i_from_i32_array([1, 2, 3, 4]); 1];

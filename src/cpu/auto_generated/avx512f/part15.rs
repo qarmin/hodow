@@ -5,6 +5,7 @@ use crate::cpu::common::values::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_int_equality};
 
+#[cfg(not(miri))]
 pub(super) fn test_mm_mask_getexp_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_mask_getexp_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0])));
@@ -20,6 +21,7 @@ pub(super) fn test_mm_mask_getexp_ps() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm_maskz_getexp_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_maskz_getexp_ps(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0])));
@@ -35,6 +37,7 @@ pub(super) fn test_mm_maskz_getexp_ps() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm512_getexp_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m512d_to_f64_array(_mm512_getexp_pd(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
@@ -50,6 +53,7 @@ pub(super) fn test_mm512_getexp_pd() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm512_mask_getexp_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m512d_to_f64_array(_mm512_mask_getexp_pd(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__mmask8_from(0b01010101), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));

@@ -5,6 +5,7 @@ use crate::cpu::common::values::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_int_equality};
 
+#[cfg(not(miri))]
 pub(super) fn test_mm_clflush() -> Result<(), String> {
     unsafe {
         let ptr_p = [1u8; 1];
@@ -13,6 +14,7 @@ pub(super) fn test_mm_clflush() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm_lfence() -> Result<(), String> {
     unsafe {
         _mm_lfence();
@@ -27,6 +29,7 @@ pub(super) fn test_mm_lfence() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm_mfence() -> Result<(), String> {
     unsafe {
         _mm_mfence();

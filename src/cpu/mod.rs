@@ -1,4 +1,5 @@
 #![allow(dead_code)]
+#![allow(unused_imports)]
 #![allow(clippy::macro_metavars_in_unsafe)]
 
 use std::collections::HashSet;

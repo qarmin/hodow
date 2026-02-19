@@ -362,6 +362,7 @@ pub(super) fn test_mm_loadu_si128() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm_maskmoveu_si128() -> Result<(), String> {
     unsafe {
         let a = create__m128i_from_i32_array([1, 2, 3, 4]);
@@ -399,6 +400,7 @@ pub(super) fn test_mm_storel_epi64() -> Result<(), String> {
     Ok(())
 }
 
+#[cfg(not(miri))]
 pub(super) fn test_mm_stream_si128() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [create__m128i_from_i32_array([1, 2, 3, 4]); 1];
