@@ -90,30 +90,26 @@ def parse_errors(output: str) -> list[tuple[str, str]]:
 
 def test_batch(base: Path, batch_tests: list[str], skip_tests: list[str], out_path: Path, batch_num: int, total_batches: int) -> tuple[int, int, dict[str, str]]:
     """
-    Test a batch of functions, iteratively skipping failing ones.
+    Test a batch of functions, iteratively removing failing ones from the batch.
 
     Returns: (passed, failed, errors_dict)
     """
-    current_skip = skip_tests.copy()
+    remaining_tests = [t for t in batch_tests if t not in skip_tests]
     batch_errors: dict[str, str] = {}
     iteration = 0
     max_iterations = len(batch_tests) + 10  # Safety limit
 
-    print(f"\n[Batch {batch_num}/{total_batches}] Testing {len(batch_tests)} functions...")
+    print(f"\n[Batch {batch_num}/{total_batches}] Testing {len(remaining_tests)} functions...")
 
-    while iteration < max_iterations:
+    while iteration < max_iterations and remaining_tests:
         iteration += 1
 
-        # Build skip list: all tests NOT in current batch + already failed tests
-        all_skip = current_skip.copy()
-
-        cmd = ["just", "miri", "--"]
-        for test in all_skip:
-            cmd.extend(["--skip", test])
+        # Test only the remaining tests in this batch using -t
+        cmd = ["just", "miri", "--", "-t"] + remaining_tests
 
         if DEBUG:
-            print(f"  [Iteration {iteration}] Running with {len(current_skip)} skipped tests")
-            print(f"  [DEBUG] Command: {' '.join(cmd)}")
+            print(f"  [Iteration {iteration}] Testing {len(remaining_tests)} functions")
+            print(f"  [DEBUG] Command: {' '.join(cmd[:10])}... (+ {len(remaining_tests)} test names)")
 
         try:
             proc = subprocess.run(
@@ -142,13 +138,16 @@ def test_batch(base: Path, batch_tests: list[str], skip_tests: list[str], out_pa
                     print(output[:500])
                 break
 
-            # Process new errors
+            # Process new errors and remove from remaining tests
             new_failures = 0
             for test_name, error_msg in errors:
                 if test_name not in batch_errors:
                     batch_errors[test_name] = error_msg
-                    current_skip.append(test_name)
                     new_failures += 1
+
+                    # Remove from remaining tests
+                    if test_name in remaining_tests:
+                        remaining_tests.remove(test_name)
 
                     # Write to file immediately with lock
                     with file_lock:

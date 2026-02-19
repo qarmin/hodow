@@ -55,7 +55,6 @@ pub trait ExtensionTest {
         let mut errors = 0usize;
         for (fun, name) in Self::get_tests() {
             if should_skip_test(name) {
-                info!("Skipping {}", name);
                 skipped += 1;
                 continue;
             }
