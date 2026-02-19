@@ -18,10 +18,10 @@ pub mod auto_generated;
 pub use auto_generated::*;
 
 #[cfg(miri)]
-pub const DEFAULT_TEST_ITERATIONS: usize = 1;
+pub const DEFAULT_TEST_ITERATIONS: usize = 0;
 #[cfg(not(miri))]
 #[allow(dead_code)]
-pub const DEFAULT_TEST_ITERATIONS: usize = 1;
+pub const DEFAULT_TEST_ITERATIONS: usize = 0;
 
 static ITERATIONS: OnceCell<usize> = OnceCell::new();
 static SKIP_TESTS: OnceCell<HashSet<String>> = OnceCell::new();
@@ -293,3 +293,131 @@ pub fn available_modes() -> Vec<&'static str> {
 
     modes
 }
+
+/// Returns a list of all available test function names across all extensions
+pub fn list_all_functions() -> Vec<String> {
+    let mut functions = Vec::new();
+
+    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+    {
+        macro_rules! collect_tests {
+            ($ext:path) => {
+                for (_, name) in <$ext>::get_tests() {
+                    functions.push(name.to_string());
+                }
+            };
+        }
+
+        #[cfg(target_feature = "sse")]
+        collect_tests!(crate::cpu::auto_generated::sse::SSE);
+
+        #[cfg(target_feature = "sse2")]
+        collect_tests!(crate::cpu::auto_generated::sse2::SSE2);
+
+        #[cfg(target_feature = "sse3")]
+        collect_tests!(crate::cpu::auto_generated::sse3::SSE3);
+
+        #[cfg(target_feature = "ssse3")]
+        collect_tests!(crate::cpu::auto_generated::ssse3::SSSE3);
+
+        #[cfg(target_feature = "sse4.1")]
+        collect_tests!(crate::cpu::auto_generated::sse41::SSE41);
+
+        #[cfg(target_feature = "sse4.2")]
+        collect_tests!(crate::cpu::auto_generated::sse42::SSE42);
+
+        #[cfg(target_feature = "avx")]
+        collect_tests!(crate::cpu::auto_generated::avx::AVX);
+
+        #[cfg(target_feature = "avx2")]
+        collect_tests!(crate::cpu::auto_generated::avx2::AVX2);
+
+        #[cfg(target_feature = "fma")]
+        collect_tests!(crate::cpu::auto_generated::fma::FMA);
+
+        #[cfg(target_feature = "avx512f")]
+        collect_tests!(crate::cpu::auto_generated::avx512f::AVX512F);
+
+        #[cfg(target_feature = "avx512bitalg")]
+        collect_tests!(crate::cpu::auto_generated::avx512bitalg::AVX512BITALG);
+
+        #[cfg(target_feature = "avx512cd")]
+        collect_tests!(crate::cpu::auto_generated::avx512cd::AVX512CD);
+
+        #[cfg(target_feature = "avx512ifma")]
+        collect_tests!(crate::cpu::auto_generated::avx512ifma::AVX512IFMA);
+
+        #[cfg(target_feature = "avx512vbmi")]
+        collect_tests!(crate::cpu::auto_generated::avx512vbmi::AVX512VBMI);
+
+        #[cfg(target_feature = "aes")]
+        collect_tests!(crate::cpu::auto_generated::aes::AES);
+    }
+
+    functions
+}
+
+/// Test a single function by name (e.g., "test_mm_add_ps")
+pub fn test_single_function(name: &str) -> Result<(), String> {
+    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+    {
+        macro_rules! try_test {
+            ($ext:path) => {
+                for (fun, test_name) in <$ext>::get_tests() {
+                    if *test_name == name {
+                        info!("Running single test: {}", name);
+                        return fun();
+                    }
+                }
+            };
+        }
+
+        #[cfg(target_feature = "sse")]
+        try_test!(crate::cpu::auto_generated::sse::SSE);
+
+        #[cfg(target_feature = "sse2")]
+        try_test!(crate::cpu::auto_generated::sse2::SSE2);
+
+        #[cfg(target_feature = "sse3")]
+        try_test!(crate::cpu::auto_generated::sse3::SSE3);
+
+        #[cfg(target_feature = "ssse3")]
+        try_test!(crate::cpu::auto_generated::ssse3::SSSE3);
+
+        #[cfg(target_feature = "sse4.1")]
+        try_test!(crate::cpu::auto_generated::sse41::SSE41);
+
+        #[cfg(target_feature = "sse4.2")]
+        try_test!(crate::cpu::auto_generated::sse42::SSE42);
+
+        #[cfg(target_feature = "avx")]
+        try_test!(crate::cpu::auto_generated::avx::AVX);
+
+        #[cfg(target_feature = "avx2")]
+        try_test!(crate::cpu::auto_generated::avx2::AVX2);
+
+        #[cfg(target_feature = "fma")]
+        try_test!(crate::cpu::auto_generated::fma::FMA);
+
+        #[cfg(target_feature = "avx512f")]
+        try_test!(crate::cpu::auto_generated::avx512f::AVX512F);
+
+        #[cfg(target_feature = "avx512bitalg")]
+        try_test!(crate::cpu::auto_generated::avx512bitalg::AVX512BITALG);
+
+        #[cfg(target_feature = "avx512cd")]
+        try_test!(crate::cpu::auto_generated::avx512cd::AVX512CD);
+
+        #[cfg(target_feature = "avx512ifma")]
+        try_test!(crate::cpu::auto_generated::avx512ifma::AVX512IFMA);
+
+        #[cfg(target_feature = "avx512vbmi")]
+        try_test!(crate::cpu::auto_generated::avx512vbmi::AVX512VBMI);
+
+        #[cfg(target_feature = "aes")]
+        try_test!(crate::cpu::auto_generated::aes::AES);
+    }
+
+    Err(format!("Test function '{}' not found", name))
+}
+

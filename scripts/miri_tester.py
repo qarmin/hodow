@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """
-Run 'just miri' in a loop and collect all failing tests, then re-run each individually
-to gather comprehensive error information into miri_errors.txt.
+Run 'cargo miri' for each test function in parallel and collect errors.
+
+Uses a thread pool to test multiple functions concurrently, with synchronized
+file writing to avoid conflicts.
 
 Exits 0 if no errors found, 1 otherwise.
 
@@ -12,40 +14,54 @@ Output format in miri_errors.txt (one line per error):
 import re
 import subprocess
 import sys
+import threading
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # Pattern to match Miri error lines (both UB and unsupported operations)
 ERROR_RE = re.compile(r'^error: ((?:Undefined Behavior|unsupported operation):.+?)(?:\s*-->|$)')
 
-# Test function path in backtrace - now more flexible with whitespace
+# Test function path in backtrace
 TEST_FN_RE = re.compile(r'^\s*\d+:\s+cpu::auto_generated::[\w:]+::(test_\w+)')
 
 # Debug mode flag
 DEBUG = False
 
+# Lock for synchronized file writing
+file_lock = threading.Lock()
 
-def parse_failing_tests(output: str) -> set[str]:
-    """Extract names of failing tests from Miri backtrace."""
-    failing = set()
-    lines = output.splitlines()
 
-    for i, line in enumerate(lines):
-        # Look for error lines (both UB and unsupported operations)
-        if line.startswith("error: Undefined Behavior:") or line.startswith("error: unsupported operation:"):
-            if DEBUG:
-                print(f"    [DEBUG] Found error at line {i}: {line[:80]}...")
-            # Search forward in the backtrace for test function names
-            for j in range(i, min(i + 50, len(lines))):
-                if DEBUG and j < i + 10:
-                    print(f"    [DEBUG]   Checking line {j}: {lines[j][:100] if len(lines[j]) > 0 else '(empty)'}")
-                m = TEST_FN_RE.match(lines[j])
-                if m:
-                    if DEBUG:
-                        print(f"    [DEBUG]   -> Matched test: {m.group(1)}")
-                    failing.add(m.group(1))
-                    break
+def get_all_test_functions(base: Path) -> list[str]:
+    """Get list of all test functions by running the binary with --list-functions."""
+    cmd = ["cargo", "+nightly", "run", "--features", "no_logging", "--", "--list-functions"]
 
-    return failing
+    if DEBUG:
+        print(f"[DEBUG] Getting test list: {' '.join(cmd)}")
+
+    try:
+        proc = subprocess.run(
+            cmd,
+            cwd=base,
+            capture_output=True,
+            text=True,
+            timeout=60,
+        )
+
+        # Parse output - looking for lines that start with spaces (test names)
+        tests = []
+        for line in proc.stdout.splitlines():
+            print(line)
+            line = line.strip()
+            if line.startswith("test_"):
+                tests.append(line)
+
+        if DEBUG:
+            print(f"[DEBUG] Found {len(tests)} test functions")
+
+        return tests
+    except Exception as e:
+        print(f"Error getting test list: {e}")
+        return []
 
 
 def parse_errors(output: str) -> list[tuple[str, str]]:
@@ -69,24 +85,78 @@ def parse_errors(output: str) -> list[tuple[str, str]]:
     return results
 
 
-def run_miri(base: Path, skip_tests: list[str] = None) -> tuple[int, str]:
-    """Run 'just miri' with optional skip list. Returns (returncode, output)."""
-    cmd = ["just", "miri"]
-    if skip_tests:
-        cmd.append("--")
-        for test in skip_tests:
-            cmd.extend(["--skip", test])
+def test_single_function(base: Path, test_name: str, out_path: Path) -> tuple[str, bool, str | None]:
+    """
+    Test a single function with Miri.
+
+    Returns: (test_name, success, error_message)
+    """
+    cmd = [
+        "cargo", "+nightly", "miri", "run",
+        "--features", "no_logging",
+        "--",
+        "--test-function", test_name
+    ]
 
     if DEBUG:
-        print(f"    [DEBUG] Command: {' '.join(cmd)}")
+        print(f"[DEBUG] Testing {test_name}: {' '.join(cmd)}")
 
-    proc = subprocess.run(
-        cmd,
-        cwd=base,
-        capture_output=True,
-        text=True,
-    )
-    return proc.returncode, proc.stdout + proc.stderr
+    try:
+        proc = subprocess.run(
+            cmd,
+            cwd=base,
+            capture_output=True,
+            text=True,
+            timeout=120,  # 2 minutes per test
+        )
+
+        output = proc.stdout + proc.stderr
+
+        if proc.returncode == 0:
+            return (test_name, True, None)
+
+        # Parse errors from output
+        errors = parse_errors(output)
+        if errors:
+            error_msg = errors[0][1]  # Take first error
+
+            # Write to file immediately with lock
+            with file_lock:
+                with open(out_path, 'a') as f:
+                    f.write(f"{test_name} -> {error_msg}\n")
+                    f.flush()
+
+            return (test_name, False, error_msg)
+        else:
+            print(output)
+            # Test failed but no error pattern found
+            error_msg = "Test failed (no specific error pattern found)"
+
+            with file_lock:
+                with open(out_path, 'a') as f:
+                    f.write(f"{test_name} -> {error_msg}\n")
+                    f.flush()
+
+            return (test_name, False, error_msg)
+
+    except subprocess.TimeoutExpired:
+        error_msg = "Test timed out (>120s)"
+
+        with file_lock:
+            with open(out_path, 'a') as f:
+                f.write(f"{test_name} -> {error_msg}\n")
+                f.flush()
+
+        return (test_name, False, error_msg)
+    except Exception as e:
+        error_msg = f"Exception during test: {e}"
+
+        with file_lock:
+            with open(out_path, 'a') as f:
+                f.write(f"{test_name} -> {error_msg}\n")
+                f.flush()
+
+        return (test_name, False, error_msg)
 
 
 def main() -> int:
@@ -97,6 +167,8 @@ def main() -> int:
 
     # Parse command-line arguments
     args = sys.argv[1:]
+    num_threads = 1  # TODO - this is broken - do not use numbers other than 1
+
     if "-d" in args or "--debug" in args:
         DEBUG = True
         if "-d" in args:
@@ -105,99 +177,77 @@ def main() -> int:
             args.remove("--debug")
         print("[DEBUG MODE ENABLED]")
 
-    # Phase 1: Find all failing tests by running in a loop
-    print("Phase 1: Finding all failing tests with Miri...")
-    all_failing_tests = set()
-    skip_list = []
-    iteration = 0
-    max_iterations = 1000  # Safety limit
+    if "-j" in args:
+        idx = args.index("-j")
+        if idx + 1 < len(args):
+            try:
+                num_threads = int(args[idx + 1])
+                args.pop(idx)  # Remove -j
+                args.pop(idx)  # Remove the number
+            except ValueError:
+                print("Warning: Invalid -j value, using default (12)")
 
-    # Clear/create the output file at the start
+    print(f"Using {num_threads} parallel threads")
+
+    # Clear output file
     out_path.write_text("")
 
-    while iteration < max_iterations:
-        iteration += 1
-        print(f"  Iteration {iteration}: Running Miri (skipping {len(skip_list)} known failures)...")
+    # Get all test functions
+    print("Getting list of all test functions...")
+    test_functions = get_all_test_functions(base)
 
-        returncode, output = run_miri(base, skip_list)
+    if not test_functions:
+        print("No test functions found!")
+        return 0
 
-        if returncode == 0:
-            print(f"  ✓ All remaining tests passed!")
-            break
+    print(f"Found {len(test_functions)} test functions to check")
 
-        # Find new failing tests
-        failing = parse_failing_tests(output)
-        if not failing:
-            # No test pattern found, might be a different error
-            print("  ! No test failure pattern found, stopping iteration.")
-            break
+    # Test all functions in parallel
+    passed = 0
+    failed = 0
+    errors_dict: dict[str, str] = {}
 
-        new_failures = failing - all_failing_tests
-        if not new_failures:
-            # No new failures found, we're done
-            print(f"  ✓ No new failures found, stopping iteration.")
-            break
+    with ThreadPoolExecutor(max_workers=num_threads) as executor:
+        # Submit all tasks
+        futures = {
+            executor.submit(test_single_function, base, test_name, out_path): test_name
+            for test_name in test_functions
+        }
 
-        all_failing_tests.update(new_failures)
-        skip_list.extend(new_failures)
-        print(f"  Found {len(new_failures)} new failing test(s): {', '.join(sorted(new_failures))}")
+        # Process results as they complete
+        for future in as_completed(futures):
+            test_name = futures[future]
+            try:
+                name, success, error_msg = future.result()
 
-        # Extract and write errors immediately for new failures
-        errors = parse_errors(output)
-        for fn, msg in errors:
-            if fn in new_failures:
-                with open(out_path, 'a') as f:
-                    f.write(f"{fn} -> {msg}\n")
-                    f.flush()  # Ensure it's written immediately
+                if success:
+                    passed += 1
+                    print(f"  ✓ {name} ({passed + failed}/{len(test_functions)})")
+                else:
+                    failed += 1
+                    errors_dict[name] = error_msg
+                    print(f"  ✗ {name}: {error_msg[:80]}... ({passed + failed}/{len(test_functions)})")
+            except Exception as e:
+                failed += 1
+                print(f"  ✗ {test_name}: Exception: {e}")
 
-    if not all_failing_tests:
-        print("No failing tests found.")
+    # Summary
+    print(f"\n{'='*80}")
+    print(f"Results: {passed} passed, {failed} failed out of {len(test_functions)} tests")
+
+    if failed > 0:
+        print(f"\nErrors written to: {out_path}")
+        print(f"\nFailed tests ({failed}):")
+        for name, msg in sorted(errors_dict.items()):
+            print(f"  {name}: {msg[:100]}")
+        return 1
+    else:
+        print("\n✓ All tests passed!")
         if out_path.exists():
             out_path.unlink()
         return 0
 
-    print(f"\nPhase 2: Re-running {len(all_failing_tests)} failing test(s) individually to collect errors...")
-
-
-    # Phase 2: Re-run each failing test individually to collect all errors
-    all_errors: dict[str, list[str]] = {}
-    error_count = 0
-
-    for test_name in sorted(all_failing_tests):
-        print(f"  Running {test_name}...")
-        # Run with all other tests skipped
-        other_tests = [t for t in all_failing_tests if t != test_name]
-        returncode, output = run_miri(base, other_tests)
-
-        errors = parse_errors(output)
-        if errors:
-            for fn, msg in errors:
-                if fn not in all_errors:
-                    all_errors[fn] = []
-                all_errors[fn].append(msg)
-                # Write error immediately to file
-                with open(out_path, 'a') as f:
-                    f.write(f"{fn} -> {msg}\n")
-                error_count += 1
-        else:
-            # No error pattern found, but test failed - record generic message
-            msg = "Test failed (no specific error pattern found)"
-            if test_name not in all_errors:
-                all_errors[test_name] = []
-            all_errors[test_name].append(msg)
-            # Write error immediately to file
-            with open(out_path, 'a') as f:
-                f.write(f"{test_name} -> {msg}\n")
-            error_count += 1
-
-    print(f"\nFound {error_count} error(s) in {len(all_errors)} test(s)  →  {out_path}")
-
-    for fn in sorted(all_errors.keys()):
-        for msg in all_errors[fn]:
-            print(f"  {fn}:  {msg}")
-
-    return 1
-
 
 if __name__ == "__main__":
     sys.exit(main())
+

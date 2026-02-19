@@ -8,9 +8,11 @@ use handsome_logger::ConfigBuilder;
 use log::info;
 use once_cell::sync::OnceCell;
 
+mod cli;
 mod cpu;
 
-use crate::cpu::{available_modes, set_iterations, set_skip_tests, test_all_extensions};
+use crate::cli::Args;
+use crate::cpu::{available_modes, list_all_functions, set_iterations, set_skip_tests, test_all_extensions, test_single_function};
 
 static FUZZING: OnceCell<bool> = OnceCell::new();
 
@@ -39,21 +41,6 @@ fn print_build_info() {
     info!("Build info: {}", info);
 }
 
-#[derive(Parser)]
-#[command(name = "work_tester")]
-#[command(about = "CPU SIMD instruction set tester", version = "0.1")]
-struct Args {
-    #[arg(short = 'n', long = "iterations")]
-    iterations: Option<usize>,
-
-    #[arg(short = 'l', long = "list-modes")]
-    list_modes: bool,
-
-    /// Skip specific tests by name (can be repeated or comma-separated)
-    #[arg(short = 's', long = "skip", value_delimiter = ',', num_args = 1..)]
-    skip: Vec<String>,
-}
-
 fn main() {
     if !cfg!(feature = "no_logging") {
         let config = ConfigBuilder::new().set_format_text(handsome_logger::FormatText::DefaultWithFileNameC.get(), None).build();
@@ -78,7 +65,26 @@ fn main() {
         return;
     }
 
+    if args.list_functions {
+        let functions = list_all_functions();
+        info!("Available test functions ({} total):", functions.len());
+        for func in functions {
+            println!("  {}", func);
+        }
+        return;
+    }
+
+    if let Some(ref function_name) = args.test_function {
+        if let Err(e) = test_single_function(function_name) {
+            log::error!("Testing function '{}' failed: {}", function_name, e);
+            std::process::exit(1);
+        }
+        return;
+    }
+
     if let Err(e) = test_all_extensions() {
         log::error!("Running tests failed: {}", e);
     }
 }
+
+
