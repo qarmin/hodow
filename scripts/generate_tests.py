@@ -17,7 +17,13 @@ NO_FUZZ_PATTERNS = [
     "scatter",
 ]
 
-# Types without helpers in values.rs — functions using these get todo!() stubs
+# Deprecated intrinsics — excluded entirely from test generation
+DEPRECATED_FUNCTIONS = {
+    "_mm_getcsr", "_mm_setcsr",   # deprecated: use inline assembly instead
+    "_mm_pause",                   # deprecated: use core::hint::spin_loop()
+}
+
+# Types without helpers in values.rs — functions using these are skipped entirely
 UNSTABLE_TYPES = {
     "bf16", "f16",
     "__m128h", "__m256h", "__m512h",
@@ -439,13 +445,15 @@ def main() -> None:
         if not all_funcs:
             continue
 
-        # Split into stable (generated) and unstable (skipped entirely)
+        # Split into stable (generated) and skipped (unstable types, incomplete sigs, deprecated)
         stable = [s for s in all_funcs
-                  if not has_unstable_type(s["params"], s["return_type"] or "()")]
-        unstable_count = len(all_funcs) - len(stable)
+                  if s["is_complete"]
+                  and not has_unstable_type(s["params"], s["return_type"] or "()")
+                  and s["name"] not in DEPRECATED_FUNCTIONS]
+        skipped_count = len(all_funcs) - len(stable)
 
         if not stable:
-            rows.append((ext, len(all_funcs), 0, 0, 0, unstable_count))
+            rows.append((ext, len(all_funcs), 0, 0, 0, skipped_count))
             continue
 
         feature = ext_to_feature(ext)
@@ -464,19 +472,19 @@ def main() -> None:
 
         no_fuzz_count = sum(1 for s in stable if skip_fuzz(s["name"], s["params"]))
         rows.append((ext, len(all_funcs), len(stable), len(parts),
-                     no_fuzz_count, unstable_count))
+                     no_fuzz_count, skipped_count))
 
     (out / "mod.rs").write_text(gen_mod_rs(generated))
 
     # Pretty table
-    col = dict(ext=26, total=6, gen=5, parts=5, nofuzz=7, unstable=8)
+    col = dict(ext=26, total=6, gen=5, parts=5, nofuzz=7, skipped=7)
     sep = "  "
     header = (f"{'extension':<{col['ext']}}{sep}"
               f"{'total':>{col['total']}}{sep}"
               f"{'gen':>{col['gen']}}{sep}"
               f"{'parts':>{col['parts']}}{sep}"
               f"{'no-fuzz':>{col['nofuzz']}}{sep}"
-              f"{'unstable':>{col['unstable']}}")
+              f"{'skipped':>{col['skipped']}}")
     rule = "-" * len(header)
     print(rule)
     print(header)
@@ -487,7 +495,7 @@ def main() -> None:
               f"{gen:>{col['gen']}}{sep}"
               f"{parts:>{col['parts']}}{sep}"
               f"{nofuzz:>{col['nofuzz']}}{sep}"
-              f"{unstable:>{col['unstable']}}")
+              f"{unstable:>{col['skipped']}}")
     print(rule)
     totals = (sum(r[1] for r in rows), sum(r[2] for r in rows),
               sum(r[3] for r in rows), sum(r[4] for r in rows),
@@ -497,7 +505,7 @@ def main() -> None:
           f"{totals[1]:>{col['gen']}}{sep}"
           f"{totals[2]:>{col['parts']}}{sep}"
           f"{totals[3]:>{col['nofuzz']}}{sep}"
-          f"{totals[4]:>{col['unstable']}}")
+          f"{totals[4]:>{col['skipped']}}")
     print(rule)
     print(f"\nDone → {out}  ({len(generated)} extensions)")
 
