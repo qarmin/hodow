@@ -110,8 +110,6 @@ impl ExtensionTest for SSE {
             (&test_mm_storer_ps, "test_mm_storer_ps"),
             (&test_mm_move_ss, "test_mm_move_ss"),
             (&test_mm_sfence, "test_mm_sfence"),
-            (&test_mm_getcsr, "test_mm_getcsr"),
-            (&test_mm_setcsr, "test_mm_setcsr"),
             (&test_mm_prefetch, "test_mm_prefetch"),
             (&test_mm_undefined_ps, "test_mm_undefined_ps"),
             (&test_mm_stream_ps, "test_mm_stream_ps"),

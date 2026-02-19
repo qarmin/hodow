@@ -27,7 +27,6 @@ impl ExtensionTest for SSE2 {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_mm_pause, "test_mm_pause"),
             (&test_mm_clflush, "test_mm_clflush"),
             (&test_mm_lfence, "test_mm_lfence"),
             (&test_mm_mfence, "test_mm_mfence"),

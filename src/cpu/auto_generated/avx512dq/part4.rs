@@ -1,6 +1,7 @@
 use std::arch::x86_64::*;
 
 use crate::cpu::common::values::*;
+#[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_int_equality};
 
 pub(super) fn test_mm512_mask_extractf32x8_ps() -> Result<(), String> {

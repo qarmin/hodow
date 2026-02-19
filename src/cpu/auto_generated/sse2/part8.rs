@@ -1,22 +1,8 @@
 use std::arch::x86_64::*;
 
 use crate::cpu::common::values::*;
+#[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_int_equality};
-
-pub(super) fn test_mm_castsi128_pd() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_castsi128_pd(create__m128i_from_i32_array([1, 2, 3, 4])));
-        check_array_equality(&result, &[0.0f64; 2])?;
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_castsi128_pd(create_random__m128i());
-            }
-        }
-    }
-    Ok(())
-}
 
 pub(super) fn test_mm_castsi128_ps() -> Result<(), String> {
     unsafe {

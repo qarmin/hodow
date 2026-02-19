@@ -102,6 +102,13 @@ FIXED_INITS: dict[str, str] = {
     "bool":  "true",
 }
 
+# Zeroed SIMD inits — used for gather/scatter offset/index params to avoid OOB reads
+ZERO_SIMD_INITS: dict[str, str] = {
+    "__m128i": "create__m128i_from_i32_array([0, 0, 0, 0])",
+    "__m256i": "create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0])",
+    "__m512i": "create__m512i_from_i32_array([" + ", ".join("0" for _ in range(16)) + "])",
+}
+
 # Return type → (unpack function, element count, zero literal)
 UNPACK_INFO: dict[str, tuple[str, int, str]] = {
     "__m128":  ("unpack__m128_to_f32_array",  4,  "0.0f32"),
@@ -249,8 +256,15 @@ def skip_fuzz(name: str, params: list | None) -> bool:
     return any(p in lower for p in NO_FUZZ_PATTERNS) or has_ptr(params)
 
 
+def const_val(cg_name: str) -> str:
+    """Return a safe literal for a const generic parameter."""
+    if cg_name.upper() == "SCALE":
+        return "1"  # gather/scatter SCALE must be 1, 2, 4, or 8 — never 0
+    return "0"
+
+
 def const_suffix(cg: list) -> str:
-    return f"::<{', '.join('0' for _ in cg)}>" if cg else ""
+    return f"::<{', '.join(const_val(n) for n, _ in cg)}>" if cg else ""
 
 
 def inner_ref_type(ptype: str) -> str | None:
@@ -365,6 +379,7 @@ def gen_part(funcs: list[dict]) -> str:
         "use std::arch::x86_64::*;",
         "",
         "use crate::cpu::common::values::*;",
+        "#[allow(unused_imports)]",
         "use crate::cpu::common::{check_array_equality, check_int_equality};",
         "",
     ]
@@ -464,6 +479,12 @@ def main() -> None:
 
         parts_dir = out / ext
         parts_dir.mkdir(exist_ok=True)
+
+        # Remove stale part files that exceed the new count
+        for old in parts_dir.glob("part*.rs"):
+            m = re.match(r"part(\d+)\.rs$", old.name)
+            if m and int(m.group(1)) > len(parts):
+                old.unlink()
 
         for idx, chunk in enumerate(parts, 1):
             (parts_dir / f"part{idx}.rs").write_text(gen_part(chunk))

@@ -1,16 +1,8 @@
 use std::arch::x86_64::*;
 
 use crate::cpu::common::values::*;
+#[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_int_equality};
-
-pub(super) fn test_mm_stream_si128() -> Result<(), String> {
-    unsafe {
-        let mut ptr_mem_addr = [create__m128i_from_i32_array([1, 2, 3, 4]); 1];
-        let a = create__m128i_from_i32_array([1, 2, 3, 4]);
-        _mm_stream_si128(ptr_mem_addr.as_mut_ptr(), a);
-    }
-    Ok(())
-}
 
 pub(super) fn test_mm_stream_si32() -> Result<(), String> {
     unsafe {
@@ -435,6 +427,21 @@ pub(super) fn test_mm_mul_pd() -> Result<(), String> {
             log::info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
                 let _ = _mm_mul_pd(create_random__m128d(), create_random__m128d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm_sqrt_sd() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128d_to_f64_array(_mm_sqrt_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0])));
+        check_array_equality(&result, &[0.0f64; 2])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm_sqrt_sd(create_random__m128d(), create_random__m128d());
             }
         }
     }
