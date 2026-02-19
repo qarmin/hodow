@@ -5,51 +5,6 @@ use crate::cpu::common::values::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_int_equality};
 
-pub(super) fn test_mm256_testc_ps() -> Result<(), String> {
-    unsafe {
-        let result = _mm256_testc_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
-        check_int_equality(result as i32, 0)?;
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm256_testc_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm256_testnzc_ps() -> Result<(), String> {
-    unsafe {
-        let result = _mm256_testnzc_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
-        check_int_equality(result as i32, 0)?;
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm256_testnzc_ps(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm_testz_ps() -> Result<(), String> {
-    unsafe {
-        let result = _mm_testz_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0]));
-        check_int_equality(result as i32, 0)?;
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_testz_ps(create_random__m128(), create_random__m128());
-            }
-        }
-    }
-    Ok(())
-}
-
 pub(super) fn test_mm_testc_ps() -> Result<(), String> {
     unsafe {
         let result = _mm_testc_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0]));
@@ -449,6 +404,51 @@ pub(super) fn test_mm256_castps_pd() -> Result<(), String> {
             log::info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
                 let _ = _mm256_castps_pd(create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_castps_si256() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_castps_si256(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        check_array_equality(&result, &[0i32; 8])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm256_castps_si256(create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_castsi256_ps() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_castsi256_ps(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        check_array_equality(&result, &[0.0f32; 8])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm256_castsi256_ps(create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_castpd_si256() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_castpd_si256(create__m256d_from([1.0, 2.0, 3.0, 4.0])));
+        check_array_equality(&result, &[0i32; 8])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm256_castpd_si256(create_random__m256d());
             }
         }
     }

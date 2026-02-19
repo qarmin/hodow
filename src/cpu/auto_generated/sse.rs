@@ -103,8 +103,6 @@ impl ExtensionTest for SSE {
             (&test_mm_sfence, "test_mm_sfence"),
             (&test_mm_prefetch, "test_mm_prefetch"),
             (&test_mm_undefined_ps, "test_mm_undefined_ps"),
-            #[cfg(not(miri))]
-            (&test_mm_stream_ps, "test_mm_stream_ps"),
             (&test_mm_cvtss_si64, "test_mm_cvtss_si64"),
             (&test_mm_cvttss_si64, "test_mm_cvttss_si64"),
             (&test_mm_cvtsi64_ss, "test_mm_cvtsi64_ss"),

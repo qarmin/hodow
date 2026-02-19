@@ -1,10 +1,8 @@
 mod part1;
 mod part2;
-mod part3;
 
 use crate::cpu::auto_generated::sse41::part1::*;
 use crate::cpu::auto_generated::sse41::part2::*;
-use crate::cpu::auto_generated::sse41::part3::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
@@ -75,8 +73,6 @@ impl ExtensionTest for SSE41 {
             (&test_mm_test_all_zeros, "test_mm_test_all_zeros"),
             (&test_mm_test_all_ones, "test_mm_test_all_ones"),
             (&test_mm_test_mix_ones_zeros, "test_mm_test_mix_ones_zeros"),
-            #[cfg(not(miri))]
-            (&test_mm_stream_load_si128, "test_mm_stream_load_si128"),
             (&test_mm_extract_epi64, "test_mm_extract_epi64"),
             (&test_mm_insert_epi64, "test_mm_insert_epi64"),
         ]

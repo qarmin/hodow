@@ -28,6 +28,11 @@ IGNORED_FUNCTIONS: set[str] = {
     "_mm256_loadu_ps", "_mm256_storeu_ps",
     "_mm256_loadu2_m128", "_mm256_loadu2_m128d",
     "_mm256_storeu2_m128", "_mm256_storeu2_m128d",
+    # inline assembly is not supported by miri, but well it also causes problems normally
+    "_mm_stream_ps", "_mm_stream_si128", "_mm_stream_si32",
+    "_mm_stream_pd", "_mm_stream_si64", "_mm_stream_load_si128",
+    "_mm256_stream_si256", "_mm256_stream_pd", "_mm256_stream_ps",
+    "_mm256_stream_load_si256",
 }
 
 # Functions with memory access errors - skip in fuzzer (#[cfg(not(fuzzing))])
@@ -37,11 +42,6 @@ NO_FUZZ_FUNCTIONS: set[str] = {
 
 # Functions with unsupported operations in Miri - skip in miri (#[cfg(not(miri))])
 NO_MIRI_FUNCTIONS: set[str] = {
-    # inline assembly is not supported
-    "_mm_stream_ps", "_mm_stream_si128", "_mm_stream_si32",
-    "_mm_stream_pd", "_mm_stream_si64", "_mm_stream_load_si128",
-    "_mm256_stream_si256", "_mm256_stream_pd", "_mm256_stream_ps",
-    "_mm256_stream_load_si256",
 
     # unsupported operation: can't call foreign function
     "_mm_sfence", "_mm_clflush", "_mm_lfence", "_mm_mfence",

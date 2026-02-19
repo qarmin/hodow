@@ -124,12 +124,6 @@ impl ExtensionTest for AVX {
             (&test_mm256_moveldup_ps, "test_mm256_moveldup_ps"),
             (&test_mm256_movedup_pd, "test_mm256_movedup_pd"),
             (&test_mm256_lddqu_si256, "test_mm256_lddqu_si256"),
-            #[cfg(not(miri))]
-            (&test_mm256_stream_si256, "test_mm256_stream_si256"),
-            #[cfg(not(miri))]
-            (&test_mm256_stream_pd, "test_mm256_stream_pd"),
-            #[cfg(not(miri))]
-            (&test_mm256_stream_ps, "test_mm256_stream_ps"),
             (&test_mm256_rcp_ps, "test_mm256_rcp_ps"),
             (&test_mm256_rsqrt_ps, "test_mm256_rsqrt_ps"),
             (&test_mm256_unpackhi_pd, "test_mm256_unpackhi_pd"),

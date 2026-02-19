@@ -33,7 +33,7 @@ file_lock = threading.Lock()
 
 def get_all_test_functions(base: Path) -> list[str]:
     """Get list of all test functions by running the binary with --list-functions."""
-    cmd = ["cargo", "+nightly", "run", "--features", "no_logging", "--", "--list-functions"]
+    cmd = ["just", "run", "--", "--list-functions"]
 
     if DEBUG:
         print(f"[DEBUG] Getting test list: {' '.join(cmd)}")
@@ -49,8 +49,8 @@ def get_all_test_functions(base: Path) -> list[str]:
 
         # Parse output - looking for lines that start with spaces (test names)
         tests = []
-        for line in proc.stdout.splitlines():
-            print(line)
+        output = proc.stdout + proc.stderr
+        for line in output.splitlines():
             line = line.strip()
             if line.startswith("test_"):
                 tests.append(line)
@@ -92,10 +92,7 @@ def test_single_function(base: Path, test_name: str, out_path: Path) -> tuple[st
     Returns: (test_name, success, error_message)
     """
     cmd = [
-        "cargo", "+nightly", "miri", "run",
-        "--features", "no_logging",
-        "--",
-        "--test-function", test_name
+        "just", "miri", "--", "--test-function", test_name
     ]
 
     if DEBUG:

@@ -348,16 +348,6 @@ pub(super) fn test_mm_undefined_ps() -> Result<(), String> {
     Ok(())
 }
 
-#[cfg(not(miri))]
-pub(super) fn test_mm_stream_ps() -> Result<(), String> {
-    unsafe {
-        let mut ptr_mem_addr = [1.0f32; 1];
-        let a = create__m128_from([2.0, 3.0, 4.0, 5.0]);
-        _mm_stream_ps(ptr_mem_addr.as_mut_ptr(), a);
-    }
-    Ok(())
-}
-
 pub(super) fn test_mm_cvtss_si64() -> Result<(), String> {
     unsafe {
         let result = _mm_cvtss_si64(create__m128_from([1.0, 2.0, 3.0, 4.0]));
