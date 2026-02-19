@@ -14,11 +14,14 @@ import subprocess
 import sys
 from pathlib import Path
 
-# Pattern to match Miri UB error lines
-ERROR_RE = re.compile(r'^error: (Undefined Behavior:.+?)(?:\s*-->|$)')
+# Pattern to match Miri error lines (both UB and unsupported operations)
+ERROR_RE = re.compile(r'^error: ((?:Undefined Behavior|unsupported operation):.+?)(?:\s*-->|$)')
 
-# Test function path in backtrace
+# Test function path in backtrace - now more flexible with whitespace
 TEST_FN_RE = re.compile(r'^\s*\d+:\s+cpu::auto_generated::[\w:]+::(test_\w+)')
+
+# Debug mode flag
+DEBUG = False
 
 
 def parse_failing_tests(output: str) -> set[str]:
@@ -27,12 +30,18 @@ def parse_failing_tests(output: str) -> set[str]:
     lines = output.splitlines()
 
     for i, line in enumerate(lines):
-        # Look for error lines
-        if line.startswith("error: Undefined Behavior:"):
+        # Look for error lines (both UB and unsupported operations)
+        if line.startswith("error: Undefined Behavior:") or line.startswith("error: unsupported operation:"):
+            if DEBUG:
+                print(f"    [DEBUG] Found error at line {i}: {line[:80]}...")
             # Search forward in the backtrace for test function names
             for j in range(i, min(i + 50, len(lines))):
+                if DEBUG and j < i + 10:
+                    print(f"    [DEBUG]   Checking line {j}: {lines[j][:100] if len(lines[j]) > 0 else '(empty)'}")
                 m = TEST_FN_RE.match(lines[j])
                 if m:
+                    if DEBUG:
+                        print(f"    [DEBUG]   -> Matched test: {m.group(1)}")
                     failing.add(m.group(1))
                     break
 
@@ -68,6 +77,9 @@ def run_miri(base: Path, skip_tests: list[str] = None) -> tuple[int, str]:
         for test in skip_tests:
             cmd.extend(["--skip", test])
 
+    if DEBUG:
+        print(f"    [DEBUG] Command: {' '.join(cmd)}")
+
     proc = subprocess.run(
         cmd,
         cwd=base,
@@ -78,10 +90,20 @@ def run_miri(base: Path, skip_tests: list[str] = None) -> tuple[int, str]:
 
 
 def main() -> int:
+    global DEBUG
+
     base = Path(__file__).parent.parent
     out_path = base / "miri_errors.txt"
 
-    extra = sys.argv[1:]
+    # Parse command-line arguments
+    args = sys.argv[1:]
+    if "-d" in args or "--debug" in args:
+        DEBUG = True
+        if "-d" in args:
+            args.remove("-d")
+        if "--debug" in args:
+            args.remove("--debug")
+        print("[DEBUG MODE ENABLED]")
 
     # Phase 1: Find all failing tests by running in a loop
     print("Phase 1: Finding all failing tests with Miri...")
