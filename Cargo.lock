@@ -173,14 +173,11 @@ dependencies = [
 
 [[package]]
 name = "handsome_logger"
-version = "0.9.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "70a23d1869ef63d7d0f1a24213014eff2cf26494d0e4976d510426d249dbbd05"
+version = "0.9.2"
 dependencies = [
  "log",
  "termcolor",
  "time",
- "tz-rs",
 ]
 
 [[package]]
@@ -448,12 +445,6 @@ dependencies = [
  "num-conv",
  "time-core",
 ]
-
-[[package]]
-name = "tz-rs"
-version = "0.7.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4fc6c929ffa10fb34f4a3c7e9a73620a83ef2e85e47f9ec3381b8289e6762f42"
 
 [[package]]
 name = "unicode-ident"

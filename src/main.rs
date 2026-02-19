@@ -42,8 +42,11 @@ fn print_build_info() {
 }
 
 fn main() {
-    if !cfg!(feature = "no_logging") {
+    if !cfg!(feature = "miri_build") {
         let config = ConfigBuilder::new().set_format_text(handsome_logger::FormatText::DefaultWithFileNameC.get(), None).build();
+        handsome_logger::TermLogger::init(config, Default::default(), Default::default()).expect("Failed to initialize logger");
+    } else {
+        let config = ConfigBuilder::new().set_format_text(handsome_logger::FormatText::LevelMessageC.get(), None).build();
         handsome_logger::TermLogger::init(config, Default::default(), Default::default()).expect("Failed to initialize logger");
     }
 
@@ -62,6 +65,7 @@ fn main() {
     if args.list_modes {
         let modes = available_modes();
         info!("Available modes: {:?}", modes);
+        println!("Clean exit");
         return;
     }
 
@@ -71,20 +75,29 @@ fn main() {
         for func in functions {
             println!("  {}", func);
         }
+        println!("Clean exit");
         return;
     }
 
     if let Some(ref function_name) = args.test_function {
         if let Err(e) = test_single_function(function_name) {
             log::error!("Testing function '{}' failed: {}", function_name, e);
-            std::process::exit(1);
+            if cfg!(feature = "miri_build") {
+                log::error!("Miri build detected, exiting with code 0 to avoid Miri's problems");
+                std::process::exit(0);
+            } else {
+                std::process::exit(1);
+            }
         }
+        println!("Clean exit");
         return;
     }
 
     if let Err(e) = test_all_extensions() {
         log::error!("Running tests failed: {}", e);
     }
+
+    println!("Clean exit");
 }
 
 

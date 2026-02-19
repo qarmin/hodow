@@ -11,7 +11,7 @@ sanitizer *args:
     RUSTFLAGS="-Zsanitizer=address" cargo +nightly run --target x86_64-unknown-linux-gnu {{args}}
 
 miri *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +nightly miri run --features no_logging {{args}}
+    RUSTFLAGS="-C target-cpu=native" cargo +nightly miri run --features miri_build {{args}}
 
 clippy:
     RUSTFLAGS="-C target-cpu=native" cargo clippy --all-features --all-targets
