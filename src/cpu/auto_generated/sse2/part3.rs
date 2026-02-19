@@ -200,14 +200,30 @@ pub(super) fn test_mm_set_epi32() -> Result<(), String> {
 
 pub(super) fn test_mm_set_epi16() -> Result<(), String> {
     unsafe {
-        todo!("_mm_set_epi16")
+        let result = unpack__m128i_to_i32_array(_mm_set_epi16(1i16, 1i16, 1i16, 1i16, 1i16, 1i16, 1i16, 1i16));
+        check_array_equality(&result, &[0i32; 4])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm_set_epi16(rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>());
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_set_epi8() -> Result<(), String> {
     unsafe {
-        todo!("_mm_set_epi8")
+        let result = unpack__m128i_to_i32_array(_mm_set_epi8(1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8));
+        check_array_equality(&result, &[0i32; 4])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm_set_epi8(rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>());
+            }
+        }
     }
     Ok(())
 }
@@ -289,14 +305,30 @@ pub(super) fn test_mm_setr_epi32() -> Result<(), String> {
 
 pub(super) fn test_mm_setr_epi16() -> Result<(), String> {
     unsafe {
-        todo!("_mm_setr_epi16")
+        let result = unpack__m128i_to_i32_array(_mm_setr_epi16(1i16, 1i16, 1i16, 1i16, 1i16, 1i16, 1i16, 1i16));
+        check_array_equality(&result, &[0i32; 4])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm_setr_epi16(rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>());
+            }
+        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_setr_epi8() -> Result<(), String> {
     unsafe {
-        todo!("_mm_setr_epi8")
+        let result = unpack__m128i_to_i32_array(_mm_setr_epi8(1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8));
+        check_array_equality(&result, &[0i32; 4])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm_setr_epi8(rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>());
+            }
+        }
     }
     Ok(())
 }

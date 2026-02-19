@@ -1,0 +1,285 @@
+use std::arch::x86_64::*;
+
+use crate::cpu::common::values::*;
+use crate::cpu::common::{check_array_equality, check_int_equality};
+
+pub(super) fn test_mm512_storeu_si512() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = [create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]); 1];
+        let a = create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+        _mm512_storeu_si512(ptr_mem_addr.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_loadu_pd() -> Result<(), String> {
+    unsafe {
+        let ptr_mem_addr = [1.0f64; 1];
+        let result = unpack__m512d_to_f64_array(_mm512_loadu_pd(ptr_mem_addr.as_ptr()));
+        check_array_equality(&result, &[0.0f64; 8])?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_storeu_pd() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = [1.0f64; 1];
+        let a = create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]);
+        _mm512_storeu_pd(ptr_mem_addr.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_loadu_ps() -> Result<(), String> {
+    unsafe {
+        let ptr_mem_addr = [1.0f32; 1];
+        let result = unpack__m512_to_f32_array(_mm512_loadu_ps(ptr_mem_addr.as_ptr()));
+        check_array_equality(&result, &[0.0f32; 16])?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_storeu_ps() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = [1.0f32; 1];
+        let a = create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]);
+        _mm512_storeu_ps(ptr_mem_addr.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_load_si512() -> Result<(), String> {
+    unsafe {
+        let ptr_mem_addr = [create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]); 1];
+        let result = unpack__m512i_to_i32_array(_mm512_load_si512(ptr_mem_addr.as_ptr()));
+        check_array_equality(&result, &[0i32; 16])?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_store_si512() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = [create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]); 1];
+        let a = create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+        _mm512_store_si512(ptr_mem_addr.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_load_epi32() -> Result<(), String> {
+    unsafe {
+        let ptr_mem_addr = [1i32; 1];
+        let result = unpack__m512i_to_i32_array(_mm512_load_epi32(ptr_mem_addr.as_ptr()));
+        check_array_equality(&result, &[0i32; 16])?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_load_epi32() -> Result<(), String> {
+    unsafe {
+        let ptr_mem_addr = [1i32; 1];
+        let result = unpack__m256i_to_i32_array(_mm256_load_epi32(ptr_mem_addr.as_ptr()));
+        check_array_equality(&result, &[0i32; 8])?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm_load_epi32() -> Result<(), String> {
+    unsafe {
+        let ptr_mem_addr = [1i32; 1];
+        let result = unpack__m128i_to_i32_array(_mm_load_epi32(ptr_mem_addr.as_ptr()));
+        check_array_equality(&result, &[0i32; 4])?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_store_epi32() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = [1i32; 1];
+        let a = create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+        _mm512_store_epi32(ptr_mem_addr.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_store_epi32() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = [1i32; 1];
+        let a = create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]);
+        _mm256_store_epi32(ptr_mem_addr.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm_store_epi32() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = [1i32; 1];
+        let a = create__m128i_from_i32_array([1, 2, 3, 4]);
+        _mm_store_epi32(ptr_mem_addr.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_load_epi64() -> Result<(), String> {
+    unsafe {
+        let ptr_mem_addr = [1i64; 1];
+        let result = unpack__m512i_to_i32_array(_mm512_load_epi64(ptr_mem_addr.as_ptr()));
+        check_array_equality(&result, &[0i32; 16])?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_load_epi64() -> Result<(), String> {
+    unsafe {
+        let ptr_mem_addr = [1i64; 1];
+        let result = unpack__m256i_to_i32_array(_mm256_load_epi64(ptr_mem_addr.as_ptr()));
+        check_array_equality(&result, &[0i32; 8])?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm_load_epi64() -> Result<(), String> {
+    unsafe {
+        let ptr_mem_addr = [1i64; 1];
+        let result = unpack__m128i_to_i32_array(_mm_load_epi64(ptr_mem_addr.as_ptr()));
+        check_array_equality(&result, &[0i32; 4])?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_store_epi64() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = [1i64; 1];
+        let a = create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+        _mm512_store_epi64(ptr_mem_addr.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_store_epi64() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = [1i64; 1];
+        let a = create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]);
+        _mm256_store_epi64(ptr_mem_addr.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm_store_epi64() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = [1i64; 1];
+        let a = create__m128i_from_i32_array([1, 2, 3, 4]);
+        _mm_store_epi64(ptr_mem_addr.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_load_ps() -> Result<(), String> {
+    unsafe {
+        let ptr_mem_addr = [1.0f32; 1];
+        let result = unpack__m512_to_f32_array(_mm512_load_ps(ptr_mem_addr.as_ptr()));
+        check_array_equality(&result, &[0.0f32; 16])?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_store_ps() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = [1.0f32; 1];
+        let a = create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]);
+        _mm512_store_ps(ptr_mem_addr.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_load_pd() -> Result<(), String> {
+    unsafe {
+        let ptr_mem_addr = [1.0f64; 1];
+        let result = unpack__m512d_to_f64_array(_mm512_load_pd(ptr_mem_addr.as_ptr()));
+        check_array_equality(&result, &[0.0f64; 8])?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_store_pd() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = [1.0f64; 1];
+        let a = create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]);
+        _mm512_store_pd(ptr_mem_addr.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_mask_loadu_epi32() -> Result<(), String> {
+    unsafe {
+        let src = create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let ptr_mem_addr = [1i32; 1];
+        let result = unpack__m512i_to_i32_array(_mm512_mask_loadu_epi32(src, k, ptr_mem_addr.as_ptr()));
+        check_array_equality(&result, &[0i32; 16])?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_maskz_loadu_epi32() -> Result<(), String> {
+    unsafe {
+        let k = create__mmask16_from(0b0101010101010101);
+        let ptr_mem_addr = [1i32; 1];
+        let result = unpack__m512i_to_i32_array(_mm512_maskz_loadu_epi32(k, ptr_mem_addr.as_ptr()));
+        check_array_equality(&result, &[0i32; 16])?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_mask_loadu_epi64() -> Result<(), String> {
+    unsafe {
+        let src = create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = [1i64; 1];
+        let result = unpack__m512i_to_i32_array(_mm512_mask_loadu_epi64(src, k, ptr_mem_addr.as_ptr()));
+        check_array_equality(&result, &[0i32; 16])?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_maskz_loadu_epi64() -> Result<(), String> {
+    unsafe {
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = [1i64; 1];
+        let result = unpack__m512i_to_i32_array(_mm512_maskz_loadu_epi64(k, ptr_mem_addr.as_ptr()));
+        check_array_equality(&result, &[0i32; 16])?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_mask_loadu_ps() -> Result<(), String> {
+    unsafe {
+        let src = create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]);
+        let k = create__mmask16_from(0b0101010101010101);
+        let ptr_mem_addr = [1.0f32; 1];
+        let result = unpack__m512_to_f32_array(_mm512_mask_loadu_ps(src, k, ptr_mem_addr.as_ptr()));
+        check_array_equality(&result, &[0.0f32; 16])?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_maskz_loadu_ps() -> Result<(), String> {
+    unsafe {
+        let k = create__mmask16_from(0b0101010101010101);
+        let ptr_mem_addr = [1.0f32; 1];
+        let result = unpack__m512_to_f32_array(_mm512_maskz_loadu_ps(k, ptr_mem_addr.as_ptr()));
+        check_array_equality(&result, &[0.0f32; 16])?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_mask_loadu_pd() -> Result<(), String> {
+    unsafe {
+        let src = create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]);
+        let k = create__mmask8_from(0b01010101);
+        let ptr_mem_addr = [1.0f64; 1];
+        let result = unpack__m512d_to_f64_array(_mm512_mask_loadu_pd(src, k, ptr_mem_addr.as_ptr()));
+        check_array_equality(&result, &[0.0f64; 8])?;
+    }
+    Ok(())
+}

@@ -377,8 +377,15 @@ def main() -> None:
     merged: dict[str, list[dict]] = defaultdict(list)
     seen: set[tuple[str, str]] = set()
 
-    for fname in ("TODO.txt", "TODO_AVX.txt"):
-        todo = base / fname
+    # Prefer TODO_FULL.txt (complete signatures), fall back to old files
+    todo_sources = []
+    full = base / "TODO_FULL.txt"
+    if full.exists():
+        todo_sources = [full]
+    else:
+        todo_sources = [base / f for f in ("TODO.txt", "TODO_AVX.txt")]
+
+    for todo in todo_sources:
         if not todo.exists():
             print(f"Warning: {todo} not found, skipping")
             continue

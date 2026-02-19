@@ -91,3 +91,8 @@ pub mod sse4a;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "ssse3"))]
 pub mod ssse3;
 
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "vaes"))]
+pub mod vaes;
+
+#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "vpclmulqdq"))]
+pub mod vpclmulqdq;
