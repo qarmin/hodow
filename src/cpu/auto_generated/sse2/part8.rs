@@ -52,7 +52,7 @@ pub(super) fn test_mm_undefined_si128() -> Result<(), String> {
 
 pub(super) fn test_mm_unpackhi_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_unpackhi_pd(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0])));
+        let result = unpack__m128d_to_f64_array(_mm_unpackhi_pd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0])));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -67,7 +67,7 @@ pub(super) fn test_mm_unpackhi_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_unpacklo_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_unpacklo_pd(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0])));
+        let result = unpack__m128d_to_f64_array(_mm_unpacklo_pd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0])));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -143,7 +143,7 @@ pub(super) fn test_mm_cvttsd_si64x() -> Result<(), String> {
 pub(super) fn test_mm_stream_si64() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i64; 1];
-        let a = 1i64;
+        let a = 2i64;
         _mm_stream_si64(ptr_mem_addr.as_mut_ptr(), a);
     }
     Ok(())
@@ -211,7 +211,7 @@ pub(super) fn test_mm_cvtsi128_si64x() -> Result<(), String> {
 
 pub(super) fn test_mm_cvtsi64_sd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_cvtsi64_sd(create__m128d_from([1.0, 2.0]), 1i64));
+        let result = unpack__m128d_to_f64_array(_mm_cvtsi64_sd(create__m128d_from([1.0, 2.0]), 3i64));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -226,7 +226,7 @@ pub(super) fn test_mm_cvtsi64_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_cvtsi64x_sd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_cvtsi64x_sd(create__m128d_from([1.0, 2.0]), 1i64));
+        let result = unpack__m128d_to_f64_array(_mm_cvtsi64x_sd(create__m128d_from([1.0, 2.0]), 3i64));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {

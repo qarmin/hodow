@@ -7,7 +7,7 @@ use crate::cpu::common::{check_array_equality, check_int_equality};
 
 pub(super) fn test_mm256_mask_unpacklo_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_mask_unpacklo_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m256d_to_f64_array(_mm256_mask_unpacklo_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m256d_from([5.0, 6.0, 7.0, 8.0]), create__m256d_from([9.0, 10.0, 11.0, 12.0])));
         check_array_equality(&result, &[0.0f64; 4])?;
 
         if crate::get_fuzzing() {
@@ -22,7 +22,7 @@ pub(super) fn test_mm256_mask_unpacklo_pd() -> Result<(), String> {
 
 pub(super) fn test_mm256_maskz_unpacklo_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_maskz_unpacklo_pd(create__mmask8_from(0b01010101), create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m256d_to_f64_array(_mm256_maskz_unpacklo_pd(create__mmask8_from(0b01010101), create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f64; 4])?;
 
         if crate::get_fuzzing() {
@@ -37,7 +37,7 @@ pub(super) fn test_mm256_maskz_unpacklo_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_unpacklo_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_mask_unpacklo_pd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0])));
+        let result = unpack__m128d_to_f64_array(_mm_mask_unpacklo_pd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([3.0, 4.0]), create__m128d_from([5.0, 6.0])));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -52,7 +52,7 @@ pub(super) fn test_mm_mask_unpacklo_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_unpacklo_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_maskz_unpacklo_pd(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0])));
+        let result = unpack__m128d_to_f64_array(_mm_maskz_unpacklo_pd(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0])));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {

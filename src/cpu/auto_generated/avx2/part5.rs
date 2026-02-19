@@ -7,7 +7,7 @@ use crate::cpu::common::{check_array_equality, check_int_equality};
 
 pub(super) fn test_mm256_mulhi_epi16() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_mulhi_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        let result = unpack__m256i_to_i32_array(_mm256_mulhi_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {
@@ -22,7 +22,7 @@ pub(super) fn test_mm256_mulhi_epi16() -> Result<(), String> {
 
 pub(super) fn test_mm256_mulhi_epu16() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_mulhi_epu16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        let result = unpack__m256i_to_i32_array(_mm256_mulhi_epu16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {
@@ -37,7 +37,7 @@ pub(super) fn test_mm256_mulhi_epu16() -> Result<(), String> {
 
 pub(super) fn test_mm256_mullo_epi16() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_mullo_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        let result = unpack__m256i_to_i32_array(_mm256_mullo_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {
@@ -52,7 +52,7 @@ pub(super) fn test_mm256_mullo_epi16() -> Result<(), String> {
 
 pub(super) fn test_mm256_mullo_epi32() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_mullo_epi32(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        let result = unpack__m256i_to_i32_array(_mm256_mullo_epi32(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {
@@ -67,7 +67,7 @@ pub(super) fn test_mm256_mullo_epi32() -> Result<(), String> {
 
 pub(super) fn test_mm256_mulhrs_epi16() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_mulhrs_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        let result = unpack__m256i_to_i32_array(_mm256_mulhrs_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {
@@ -82,7 +82,7 @@ pub(super) fn test_mm256_mulhrs_epi16() -> Result<(), String> {
 
 pub(super) fn test_mm256_or_si256() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_or_si256(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        let result = unpack__m256i_to_i32_array(_mm256_or_si256(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {
@@ -97,7 +97,7 @@ pub(super) fn test_mm256_or_si256() -> Result<(), String> {
 
 pub(super) fn test_mm256_packs_epi16() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_packs_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        let result = unpack__m256i_to_i32_array(_mm256_packs_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {
@@ -112,7 +112,7 @@ pub(super) fn test_mm256_packs_epi16() -> Result<(), String> {
 
 pub(super) fn test_mm256_packs_epi32() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_packs_epi32(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        let result = unpack__m256i_to_i32_array(_mm256_packs_epi32(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {
@@ -127,7 +127,7 @@ pub(super) fn test_mm256_packs_epi32() -> Result<(), String> {
 
 pub(super) fn test_mm256_packus_epi16() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_packus_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        let result = unpack__m256i_to_i32_array(_mm256_packus_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {
@@ -142,7 +142,7 @@ pub(super) fn test_mm256_packus_epi16() -> Result<(), String> {
 
 pub(super) fn test_mm256_packus_epi32() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_packus_epi32(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        let result = unpack__m256i_to_i32_array(_mm256_packus_epi32(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {
@@ -157,7 +157,7 @@ pub(super) fn test_mm256_packus_epi32() -> Result<(), String> {
 
 pub(super) fn test_mm256_permutevar8x32_epi32() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_permutevar8x32_epi32(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        let result = unpack__m256i_to_i32_array(_mm256_permutevar8x32_epi32(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {
@@ -187,7 +187,7 @@ pub(super) fn test_mm256_permute4x64_epi64() -> Result<(), String> {
 
 pub(super) fn test_mm256_permute2x128_si256() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_permute2x128_si256::<0>(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        let result = unpack__m256i_to_i32_array(_mm256_permute2x128_si256::<0>(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {
@@ -217,7 +217,7 @@ pub(super) fn test_mm256_permute4x64_pd() -> Result<(), String> {
 
 pub(super) fn test_mm256_permutevar8x32_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_permutevar8x32_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        let result = unpack__m256_to_f32_array(_mm256_permutevar8x32_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[0.0f32; 8])?;
 
         if crate::get_fuzzing() {
@@ -232,7 +232,7 @@ pub(super) fn test_mm256_permutevar8x32_ps() -> Result<(), String> {
 
 pub(super) fn test_mm256_sad_epu8() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_sad_epu8(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        let result = unpack__m256i_to_i32_array(_mm256_sad_epu8(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {
@@ -247,7 +247,7 @@ pub(super) fn test_mm256_sad_epu8() -> Result<(), String> {
 
 pub(super) fn test_mm256_shuffle_epi8() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_shuffle_epi8(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        let result = unpack__m256i_to_i32_array(_mm256_shuffle_epi8(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {
@@ -307,7 +307,7 @@ pub(super) fn test_mm256_shufflelo_epi16() -> Result<(), String> {
 
 pub(super) fn test_mm256_sign_epi16() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_sign_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        let result = unpack__m256i_to_i32_array(_mm256_sign_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {
@@ -322,7 +322,7 @@ pub(super) fn test_mm256_sign_epi16() -> Result<(), String> {
 
 pub(super) fn test_mm256_sign_epi32() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_sign_epi32(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        let result = unpack__m256i_to_i32_array(_mm256_sign_epi32(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {
@@ -337,7 +337,7 @@ pub(super) fn test_mm256_sign_epi32() -> Result<(), String> {
 
 pub(super) fn test_mm256_sign_epi8() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_sign_epi8(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        let result = unpack__m256i_to_i32_array(_mm256_sign_epi8(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {
@@ -352,7 +352,7 @@ pub(super) fn test_mm256_sign_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm256_sll_epi16() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_sll_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m128i_from_i32_array([1, 2, 3, 4])));
+        let result = unpack__m256i_to_i32_array(_mm256_sll_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m128i_from_i32_array([9, 10, 11, 12])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {
@@ -367,7 +367,7 @@ pub(super) fn test_mm256_sll_epi16() -> Result<(), String> {
 
 pub(super) fn test_mm256_sll_epi32() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_sll_epi32(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m128i_from_i32_array([1, 2, 3, 4])));
+        let result = unpack__m256i_to_i32_array(_mm256_sll_epi32(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m128i_from_i32_array([9, 10, 11, 12])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {
@@ -382,7 +382,7 @@ pub(super) fn test_mm256_sll_epi32() -> Result<(), String> {
 
 pub(super) fn test_mm256_sll_epi64() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_sll_epi64(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m128i_from_i32_array([1, 2, 3, 4])));
+        let result = unpack__m256i_to_i32_array(_mm256_sll_epi64(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m128i_from_i32_array([9, 10, 11, 12])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {

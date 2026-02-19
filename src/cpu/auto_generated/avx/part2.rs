@@ -7,7 +7,7 @@ use crate::cpu::common::{check_array_equality, check_int_equality};
 
 pub(super) fn test_mm256_blend_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blend_pd::<0>(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m256d_to_f64_array(_mm256_blend_pd::<0>(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f64; 4])?;
 
         if crate::get_fuzzing() {
@@ -22,7 +22,7 @@ pub(super) fn test_mm256_blend_pd() -> Result<(), String> {
 
 pub(super) fn test_mm256_blend_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blend_ps::<0>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        let result = unpack__m256_to_f32_array(_mm256_blend_ps::<0>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
         check_array_equality(&result, &[0.0f32; 8])?;
 
         if crate::get_fuzzing() {
@@ -37,7 +37,7 @@ pub(super) fn test_mm256_blend_ps() -> Result<(), String> {
 
 pub(super) fn test_mm256_blendv_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_blendv_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m256d_to_f64_array(_mm256_blendv_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]), create__m256d_from([9.0, 10.0, 11.0, 12.0])));
         check_array_equality(&result, &[0.0f64; 4])?;
 
         if crate::get_fuzzing() {
@@ -52,7 +52,7 @@ pub(super) fn test_mm256_blendv_pd() -> Result<(), String> {
 
 pub(super) fn test_mm256_blendv_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_blendv_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        let result = unpack__m256_to_f32_array(_mm256_blendv_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m256_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0])));
         check_array_equality(&result, &[0.0f32; 8])?;
 
         if crate::get_fuzzing() {
@@ -67,7 +67,7 @@ pub(super) fn test_mm256_blendv_ps() -> Result<(), String> {
 
 pub(super) fn test_mm256_dp_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_dp_ps::<0>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        let result = unpack__m256_to_f32_array(_mm256_dp_ps::<0>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
         check_array_equality(&result, &[0.0f32; 8])?;
 
         if crate::get_fuzzing() {
@@ -82,7 +82,7 @@ pub(super) fn test_mm256_dp_ps() -> Result<(), String> {
 
 pub(super) fn test_mm256_hadd_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_hadd_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m256d_to_f64_array(_mm256_hadd_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f64; 4])?;
 
         if crate::get_fuzzing() {
@@ -97,7 +97,7 @@ pub(super) fn test_mm256_hadd_pd() -> Result<(), String> {
 
 pub(super) fn test_mm256_hadd_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_hadd_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        let result = unpack__m256_to_f32_array(_mm256_hadd_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
         check_array_equality(&result, &[0.0f32; 8])?;
 
         if crate::get_fuzzing() {
@@ -112,7 +112,7 @@ pub(super) fn test_mm256_hadd_ps() -> Result<(), String> {
 
 pub(super) fn test_mm256_hsub_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_hsub_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m256d_to_f64_array(_mm256_hsub_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f64; 4])?;
 
         if crate::get_fuzzing() {
@@ -127,7 +127,7 @@ pub(super) fn test_mm256_hsub_pd() -> Result<(), String> {
 
 pub(super) fn test_mm256_hsub_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_hsub_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        let result = unpack__m256_to_f32_array(_mm256_hsub_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
         check_array_equality(&result, &[0.0f32; 8])?;
 
         if crate::get_fuzzing() {
@@ -142,7 +142,7 @@ pub(super) fn test_mm256_hsub_ps() -> Result<(), String> {
 
 pub(super) fn test_mm256_xor_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_xor_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m256d_to_f64_array(_mm256_xor_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f64; 4])?;
 
         if crate::get_fuzzing() {
@@ -157,7 +157,7 @@ pub(super) fn test_mm256_xor_pd() -> Result<(), String> {
 
 pub(super) fn test_mm256_xor_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_xor_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        let result = unpack__m256_to_f32_array(_mm256_xor_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
         check_array_equality(&result, &[0.0f32; 8])?;
 
         if crate::get_fuzzing() {
@@ -172,7 +172,7 @@ pub(super) fn test_mm256_xor_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_cmp_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_cmp_pd::<0>(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0])));
+        let result = unpack__m128d_to_f64_array(_mm_cmp_pd::<0>(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0])));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -187,7 +187,7 @@ pub(super) fn test_mm_cmp_pd() -> Result<(), String> {
 
 pub(super) fn test_mm256_cmp_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_cmp_pd::<0>(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m256d_to_f64_array(_mm256_cmp_pd::<0>(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f64; 4])?;
 
         if crate::get_fuzzing() {
@@ -202,7 +202,7 @@ pub(super) fn test_mm256_cmp_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_cmp_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_cmp_ps::<0>(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_cmp_ps::<0>(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -217,7 +217,7 @@ pub(super) fn test_mm_cmp_ps() -> Result<(), String> {
 
 pub(super) fn test_mm256_cmp_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_cmp_ps::<0>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        let result = unpack__m256_to_f32_array(_mm256_cmp_ps::<0>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
         check_array_equality(&result, &[0.0f32; 8])?;
 
         if crate::get_fuzzing() {
@@ -232,7 +232,7 @@ pub(super) fn test_mm256_cmp_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_cmp_sd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_cmp_sd::<0>(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0])));
+        let result = unpack__m128d_to_f64_array(_mm_cmp_sd::<0>(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0])));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -247,7 +247,7 @@ pub(super) fn test_mm_cmp_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_cmp_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_cmp_ss::<0>(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_cmp_ss::<0>(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {

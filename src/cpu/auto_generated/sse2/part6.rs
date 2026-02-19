@@ -7,7 +7,7 @@ use crate::cpu::common::{check_array_equality, check_int_equality};
 
 pub(super) fn test_mm_cmpnge_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_cmpnge_pd(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0])));
+        let result = unpack__m128d_to_f64_array(_mm_cmpnge_pd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0])));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -22,7 +22,7 @@ pub(super) fn test_mm_cmpnge_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_comieq_sd() -> Result<(), String> {
     unsafe {
-        let result = _mm_comieq_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0]));
+        let result = _mm_comieq_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -37,7 +37,7 @@ pub(super) fn test_mm_comieq_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_comilt_sd() -> Result<(), String> {
     unsafe {
-        let result = _mm_comilt_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0]));
+        let result = _mm_comilt_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -52,7 +52,7 @@ pub(super) fn test_mm_comilt_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_comile_sd() -> Result<(), String> {
     unsafe {
-        let result = _mm_comile_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0]));
+        let result = _mm_comile_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -67,7 +67,7 @@ pub(super) fn test_mm_comile_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_comigt_sd() -> Result<(), String> {
     unsafe {
-        let result = _mm_comigt_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0]));
+        let result = _mm_comigt_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -82,7 +82,7 @@ pub(super) fn test_mm_comigt_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_comige_sd() -> Result<(), String> {
     unsafe {
-        let result = _mm_comige_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0]));
+        let result = _mm_comige_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -97,7 +97,7 @@ pub(super) fn test_mm_comige_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_comineq_sd() -> Result<(), String> {
     unsafe {
-        let result = _mm_comineq_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0]));
+        let result = _mm_comineq_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -112,7 +112,7 @@ pub(super) fn test_mm_comineq_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_ucomieq_sd() -> Result<(), String> {
     unsafe {
-        let result = _mm_ucomieq_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0]));
+        let result = _mm_ucomieq_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -127,7 +127,7 @@ pub(super) fn test_mm_ucomieq_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_ucomilt_sd() -> Result<(), String> {
     unsafe {
-        let result = _mm_ucomilt_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0]));
+        let result = _mm_ucomilt_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -142,7 +142,7 @@ pub(super) fn test_mm_ucomilt_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_ucomile_sd() -> Result<(), String> {
     unsafe {
-        let result = _mm_ucomile_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0]));
+        let result = _mm_ucomile_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -157,7 +157,7 @@ pub(super) fn test_mm_ucomile_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_ucomigt_sd() -> Result<(), String> {
     unsafe {
-        let result = _mm_ucomigt_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0]));
+        let result = _mm_ucomigt_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -172,7 +172,7 @@ pub(super) fn test_mm_ucomigt_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_ucomige_sd() -> Result<(), String> {
     unsafe {
-        let result = _mm_ucomige_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0]));
+        let result = _mm_ucomige_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -187,7 +187,7 @@ pub(super) fn test_mm_ucomige_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_ucomineq_sd() -> Result<(), String> {
     unsafe {
-        let result = _mm_ucomineq_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0]));
+        let result = _mm_ucomineq_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -262,7 +262,7 @@ pub(super) fn test_mm_cvtsd_si32() -> Result<(), String> {
 
 pub(super) fn test_mm_cvtsd_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_cvtsd_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128d_from([1.0, 2.0])));
+        let result = unpack__m128_to_f32_array(_mm_cvtsd_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128d_from([5.0, 6.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -291,7 +291,7 @@ pub(super) fn test_mm_cvtsd_f64() -> Result<(), String> {
 
 pub(super) fn test_mm_cvtss_sd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_cvtss_sd(create__m128d_from([1.0, 2.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128d_to_f64_array(_mm_cvtss_sd(create__m128d_from([1.0, 2.0]), create__m128_from([3.0, 4.0, 5.0, 6.0])));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -396,7 +396,7 @@ pub(super) fn test_mm_set_pd1() -> Result<(), String> {
 
 pub(super) fn test_mm_set_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_set_pd(1.0f64, 1.0f64));
+        let result = unpack__m128d_to_f64_array(_mm_set_pd(1.0f64, 2.0f64));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -411,7 +411,7 @@ pub(super) fn test_mm_set_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_setr_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_setr_pd(1.0f64, 1.0f64));
+        let result = unpack__m128d_to_f64_array(_mm_setr_pd(1.0f64, 2.0f64));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {

@@ -8,7 +8,7 @@ use crate::cpu::common::{check_array_equality, check_int_equality};
 pub(super) fn test_mm256_storeu_pd() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1.0f64; 1];
-        let a = create__m256d_from([1.0, 2.0, 3.0, 4.0]);
+        let a = create__m256d_from([2.0, 3.0, 4.0, 5.0]);
         _mm256_storeu_pd(ptr_mem_addr.as_mut_ptr(), a);
     }
     Ok(())
@@ -26,7 +26,7 @@ pub(super) fn test_mm256_loadu_ps() -> Result<(), String> {
 pub(super) fn test_mm256_storeu_ps() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1.0f32; 1];
-        let a = create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]);
+        let a = create__m256_from([2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0]);
         _mm256_storeu_ps(ptr_mem_addr.as_mut_ptr(), a);
     }
     Ok(())
@@ -44,7 +44,7 @@ pub(super) fn test_mm256_load_si256() -> Result<(), String> {
 pub(super) fn test_mm256_store_si256() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]); 1];
-        let a = create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]);
+        let a = create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]);
         _mm256_store_si256(ptr_mem_addr.as_mut_ptr(), a);
     }
     Ok(())
@@ -62,7 +62,7 @@ pub(super) fn test_mm256_loadu_si256() -> Result<(), String> {
 pub(super) fn test_mm256_storeu_si256() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]); 1];
-        let a = create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]);
+        let a = create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]);
         _mm256_storeu_si256(ptr_mem_addr.as_mut_ptr(), a);
     }
     Ok(())
@@ -71,7 +71,7 @@ pub(super) fn test_mm256_storeu_si256() -> Result<(), String> {
 pub(super) fn test_mm256_maskload_pd() -> Result<(), String> {
     unsafe {
         let ptr_mem_addr = [1.0f64; 1];
-        let mask = create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]);
+        let mask = create__m256i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9]);
         let result = unpack__m256d_to_f64_array(_mm256_maskload_pd(ptr_mem_addr.as_ptr(), mask));
         check_array_equality(&result, &[0.0f64; 4])?;
     }
@@ -81,8 +81,8 @@ pub(super) fn test_mm256_maskload_pd() -> Result<(), String> {
 pub(super) fn test_mm256_maskstore_pd() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1.0f64; 1];
-        let mask = create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]);
-        let a = create__m256d_from([1.0, 2.0, 3.0, 4.0]);
+        let mask = create__m256i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9]);
+        let a = create__m256d_from([10.0, 11.0, 12.0, 13.0]);
         _mm256_maskstore_pd(ptr_mem_addr.as_mut_ptr(), mask, a);
     }
     Ok(())
@@ -91,7 +91,7 @@ pub(super) fn test_mm256_maskstore_pd() -> Result<(), String> {
 pub(super) fn test_mm_maskload_pd() -> Result<(), String> {
     unsafe {
         let ptr_mem_addr = [1.0f64; 1];
-        let mask = create__m128i_from_i32_array([1, 2, 3, 4]);
+        let mask = create__m128i_from_i32_array([2, 3, 4, 5]);
         let result = unpack__m128d_to_f64_array(_mm_maskload_pd(ptr_mem_addr.as_ptr(), mask));
         check_array_equality(&result, &[0.0f64; 2])?;
     }
@@ -101,8 +101,8 @@ pub(super) fn test_mm_maskload_pd() -> Result<(), String> {
 pub(super) fn test_mm_maskstore_pd() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1.0f64; 1];
-        let mask = create__m128i_from_i32_array([1, 2, 3, 4]);
-        let a = create__m128d_from([1.0, 2.0]);
+        let mask = create__m128i_from_i32_array([2, 3, 4, 5]);
+        let a = create__m128d_from([6.0, 7.0]);
         _mm_maskstore_pd(ptr_mem_addr.as_mut_ptr(), mask, a);
     }
     Ok(())
@@ -111,7 +111,7 @@ pub(super) fn test_mm_maskstore_pd() -> Result<(), String> {
 pub(super) fn test_mm256_maskload_ps() -> Result<(), String> {
     unsafe {
         let ptr_mem_addr = [1.0f32; 1];
-        let mask = create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]);
+        let mask = create__m256i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9]);
         let result = unpack__m256_to_f32_array(_mm256_maskload_ps(ptr_mem_addr.as_ptr(), mask));
         check_array_equality(&result, &[0.0f32; 8])?;
     }
@@ -121,8 +121,8 @@ pub(super) fn test_mm256_maskload_ps() -> Result<(), String> {
 pub(super) fn test_mm256_maskstore_ps() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1.0f32; 1];
-        let mask = create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]);
-        let a = create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]);
+        let mask = create__m256i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9]);
+        let a = create__m256_from([10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0]);
         _mm256_maskstore_ps(ptr_mem_addr.as_mut_ptr(), mask, a);
     }
     Ok(())
@@ -131,7 +131,7 @@ pub(super) fn test_mm256_maskstore_ps() -> Result<(), String> {
 pub(super) fn test_mm_maskload_ps() -> Result<(), String> {
     unsafe {
         let ptr_mem_addr = [1.0f32; 1];
-        let mask = create__m128i_from_i32_array([1, 2, 3, 4]);
+        let mask = create__m128i_from_i32_array([2, 3, 4, 5]);
         let result = unpack__m128_to_f32_array(_mm_maskload_ps(ptr_mem_addr.as_ptr(), mask));
         check_array_equality(&result, &[0.0f32; 4])?;
     }
@@ -141,8 +141,8 @@ pub(super) fn test_mm_maskload_ps() -> Result<(), String> {
 pub(super) fn test_mm_maskstore_ps() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1.0f32; 1];
-        let mask = create__m128i_from_i32_array([1, 2, 3, 4]);
-        let a = create__m128_from([1.0, 2.0, 3.0, 4.0]);
+        let mask = create__m128i_from_i32_array([2, 3, 4, 5]);
+        let a = create__m128_from([6.0, 7.0, 8.0, 9.0]);
         _mm_maskstore_ps(ptr_mem_addr.as_mut_ptr(), mask, a);
     }
     Ok(())
@@ -205,7 +205,7 @@ pub(super) fn test_mm256_lddqu_si256() -> Result<(), String> {
 pub(super) fn test_mm256_stream_si256() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]); 1];
-        let a = create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]);
+        let a = create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]);
         _mm256_stream_si256(ptr_mem_addr.as_mut_ptr(), a);
     }
     Ok(())
@@ -214,7 +214,7 @@ pub(super) fn test_mm256_stream_si256() -> Result<(), String> {
 pub(super) fn test_mm256_stream_pd() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1.0f64; 1];
-        let a = create__m256d_from([1.0, 2.0, 3.0, 4.0]);
+        let a = create__m256d_from([2.0, 3.0, 4.0, 5.0]);
         _mm256_stream_pd(ptr_mem_addr.as_mut_ptr(), a);
     }
     Ok(())
@@ -223,7 +223,7 @@ pub(super) fn test_mm256_stream_pd() -> Result<(), String> {
 pub(super) fn test_mm256_stream_ps() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1.0f32; 1];
-        let a = create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]);
+        let a = create__m256_from([2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0]);
         _mm256_stream_ps(ptr_mem_addr.as_mut_ptr(), a);
     }
     Ok(())
@@ -261,7 +261,7 @@ pub(super) fn test_mm256_rsqrt_ps() -> Result<(), String> {
 
 pub(super) fn test_mm256_unpackhi_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_unpackhi_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m256d_to_f64_array(_mm256_unpackhi_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f64; 4])?;
 
         if crate::get_fuzzing() {
@@ -276,7 +276,7 @@ pub(super) fn test_mm256_unpackhi_pd() -> Result<(), String> {
 
 pub(super) fn test_mm256_unpackhi_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_unpackhi_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        let result = unpack__m256_to_f32_array(_mm256_unpackhi_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
         check_array_equality(&result, &[0.0f32; 8])?;
 
         if crate::get_fuzzing() {
@@ -291,7 +291,7 @@ pub(super) fn test_mm256_unpackhi_ps() -> Result<(), String> {
 
 pub(super) fn test_mm256_unpacklo_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_unpacklo_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m256d_to_f64_array(_mm256_unpacklo_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f64; 4])?;
 
         if crate::get_fuzzing() {
@@ -306,7 +306,7 @@ pub(super) fn test_mm256_unpacklo_pd() -> Result<(), String> {
 
 pub(super) fn test_mm256_unpacklo_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_unpacklo_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        let result = unpack__m256_to_f32_array(_mm256_unpacklo_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
         check_array_equality(&result, &[0.0f32; 8])?;
 
         if crate::get_fuzzing() {
@@ -321,7 +321,7 @@ pub(super) fn test_mm256_unpacklo_ps() -> Result<(), String> {
 
 pub(super) fn test_mm256_testz_si256() -> Result<(), String> {
     unsafe {
-        let result = _mm256_testz_si256(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
+        let result = _mm256_testz_si256(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -336,7 +336,7 @@ pub(super) fn test_mm256_testz_si256() -> Result<(), String> {
 
 pub(super) fn test_mm256_testc_si256() -> Result<(), String> {
     unsafe {
-        let result = _mm256_testc_si256(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
+        let result = _mm256_testc_si256(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {

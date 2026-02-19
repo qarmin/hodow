@@ -19,7 +19,7 @@ pub(super) fn test_mm256_mask_expandloadu_pd() -> Result<(), String> {
     unsafe {
         let src = create__m256d_from([1.0, 2.0, 3.0, 4.0]);
         let k = create__mmask8_from(0b01010101);
-        let ptr_mem_addr = [1.0f64; 1];
+        let ptr_mem_addr = [5.0f64; 1];
         let result = unpack__m256d_to_f64_array(_mm256_mask_expandloadu_pd(src, k, ptr_mem_addr.as_ptr()));
         check_array_equality(&result, &[0.0f64; 4])?;
     }
@@ -40,7 +40,7 @@ pub(super) fn test_mm_mask_expandloadu_pd() -> Result<(), String> {
     unsafe {
         let src = create__m128d_from([1.0, 2.0]);
         let k = create__mmask8_from(0b01010101);
-        let ptr_mem_addr = [1.0f64; 1];
+        let ptr_mem_addr = [3.0f64; 1];
         let result = unpack__m128d_to_f64_array(_mm_mask_expandloadu_pd(src, k, ptr_mem_addr.as_ptr()));
         check_array_equality(&result, &[0.0f64; 2])?;
     }
@@ -59,7 +59,7 @@ pub(super) fn test_mm_maskz_expandloadu_pd() -> Result<(), String> {
 
 pub(super) fn test_mm512_setr_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m512d_to_f64_array(_mm512_setr_pd(1.0f64, 1.0f64, 1.0f64, 1.0f64, 1.0f64, 1.0f64, 1.0f64, 1.0f64));
+        let result = unpack__m512d_to_f64_array(_mm512_setr_pd(1.0f64, 2.0f64, 3.0f64, 4.0f64, 5.0f64, 6.0f64, 7.0f64, 8.0f64));
         check_array_equality(&result, &[0.0f64; 8])?;
 
         if crate::get_fuzzing() {
@@ -74,7 +74,7 @@ pub(super) fn test_mm512_setr_pd() -> Result<(), String> {
 
 pub(super) fn test_mm512_set_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m512d_to_f64_array(_mm512_set_pd(1.0f64, 1.0f64, 1.0f64, 1.0f64, 1.0f64, 1.0f64, 1.0f64, 1.0f64));
+        let result = unpack__m512d_to_f64_array(_mm512_set_pd(1.0f64, 2.0f64, 3.0f64, 4.0f64, 5.0f64, 6.0f64, 7.0f64, 8.0f64));
         check_array_equality(&result, &[0.0f64; 8])?;
 
         if crate::get_fuzzing() {
@@ -89,7 +89,7 @@ pub(super) fn test_mm512_set_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_move_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_mask_move_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_mask_move_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0]), create__m128_from([9.0, 10.0, 11.0, 12.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -104,7 +104,7 @@ pub(super) fn test_mm_mask_move_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_move_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_maskz_move_ss(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_maskz_move_ss(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -119,7 +119,7 @@ pub(super) fn test_mm_maskz_move_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_move_sd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_mask_move_sd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0])));
+        let result = unpack__m128d_to_f64_array(_mm_mask_move_sd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([3.0, 4.0]), create__m128d_from([5.0, 6.0])));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -134,7 +134,7 @@ pub(super) fn test_mm_mask_move_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_move_sd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_maskz_move_sd(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0])));
+        let result = unpack__m128d_to_f64_array(_mm_maskz_move_sd(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0])));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -149,7 +149,7 @@ pub(super) fn test_mm_maskz_move_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_add_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_mask_add_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_mask_add_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0]), create__m128_from([9.0, 10.0, 11.0, 12.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -164,7 +164,7 @@ pub(super) fn test_mm_mask_add_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_add_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_maskz_add_ss(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_maskz_add_ss(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -179,7 +179,7 @@ pub(super) fn test_mm_maskz_add_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_add_sd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_mask_add_sd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0])));
+        let result = unpack__m128d_to_f64_array(_mm_mask_add_sd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([3.0, 4.0]), create__m128d_from([5.0, 6.0])));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -194,7 +194,7 @@ pub(super) fn test_mm_mask_add_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_add_sd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_maskz_add_sd(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0])));
+        let result = unpack__m128d_to_f64_array(_mm_maskz_add_sd(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0])));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -209,7 +209,7 @@ pub(super) fn test_mm_maskz_add_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_sub_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_mask_sub_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_mask_sub_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0]), create__m128_from([9.0, 10.0, 11.0, 12.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -224,7 +224,7 @@ pub(super) fn test_mm_mask_sub_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_sub_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_maskz_sub_ss(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_maskz_sub_ss(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -239,7 +239,7 @@ pub(super) fn test_mm_maskz_sub_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_sub_sd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_mask_sub_sd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0])));
+        let result = unpack__m128d_to_f64_array(_mm_mask_sub_sd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([3.0, 4.0]), create__m128d_from([5.0, 6.0])));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -254,7 +254,7 @@ pub(super) fn test_mm_mask_sub_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_sub_sd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_maskz_sub_sd(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0])));
+        let result = unpack__m128d_to_f64_array(_mm_maskz_sub_sd(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0])));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -269,7 +269,7 @@ pub(super) fn test_mm_maskz_sub_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_mul_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_mask_mul_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_mask_mul_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0]), create__m128_from([9.0, 10.0, 11.0, 12.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -284,7 +284,7 @@ pub(super) fn test_mm_mask_mul_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_mul_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_maskz_mul_ss(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_maskz_mul_ss(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -299,7 +299,7 @@ pub(super) fn test_mm_maskz_mul_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_mul_sd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_mask_mul_sd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0])));
+        let result = unpack__m128d_to_f64_array(_mm_mask_mul_sd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([3.0, 4.0]), create__m128d_from([5.0, 6.0])));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -314,7 +314,7 @@ pub(super) fn test_mm_mask_mul_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_mul_sd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_maskz_mul_sd(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0])));
+        let result = unpack__m128d_to_f64_array(_mm_maskz_mul_sd(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0])));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -329,7 +329,7 @@ pub(super) fn test_mm_maskz_mul_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_div_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_mask_div_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_mask_div_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0]), create__m128_from([9.0, 10.0, 11.0, 12.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -344,7 +344,7 @@ pub(super) fn test_mm_mask_div_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_div_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_maskz_div_ss(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_maskz_div_ss(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -359,7 +359,7 @@ pub(super) fn test_mm_maskz_div_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_div_sd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_mask_div_sd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0])));
+        let result = unpack__m128d_to_f64_array(_mm_mask_div_sd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([3.0, 4.0]), create__m128d_from([5.0, 6.0])));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -374,7 +374,7 @@ pub(super) fn test_mm_mask_div_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_div_sd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_maskz_div_sd(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0])));
+        let result = unpack__m128d_to_f64_array(_mm_maskz_div_sd(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0])));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -389,7 +389,7 @@ pub(super) fn test_mm_maskz_div_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_max_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_mask_max_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_mask_max_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0]), create__m128_from([9.0, 10.0, 11.0, 12.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -404,7 +404,7 @@ pub(super) fn test_mm_mask_max_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_maskz_max_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_maskz_max_ss(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_maskz_max_ss(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -419,7 +419,7 @@ pub(super) fn test_mm_maskz_max_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_max_sd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_mask_max_sd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0])));
+        let result = unpack__m128d_to_f64_array(_mm_mask_max_sd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([3.0, 4.0]), create__m128d_from([5.0, 6.0])));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {

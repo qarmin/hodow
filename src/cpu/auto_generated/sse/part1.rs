@@ -7,7 +7,7 @@ use crate::cpu::common::{check_array_equality, check_int_equality};
 
 pub(super) fn test_mm_add_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_add_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_add_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -22,7 +22,7 @@ pub(super) fn test_mm_add_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_add_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_add_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_add_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -37,7 +37,7 @@ pub(super) fn test_mm_add_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_sub_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_sub_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_sub_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -52,7 +52,7 @@ pub(super) fn test_mm_sub_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_sub_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_sub_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_sub_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -67,7 +67,7 @@ pub(super) fn test_mm_sub_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_mul_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_mul_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_mul_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -82,7 +82,7 @@ pub(super) fn test_mm_mul_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_mul_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_mul_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_mul_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -97,7 +97,7 @@ pub(super) fn test_mm_mul_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_div_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_div_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_div_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -112,7 +112,7 @@ pub(super) fn test_mm_div_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_div_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_div_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_div_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -217,7 +217,7 @@ pub(super) fn test_mm_rsqrt_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_min_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_min_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_min_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -232,7 +232,7 @@ pub(super) fn test_mm_min_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_min_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_min_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_min_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -247,7 +247,7 @@ pub(super) fn test_mm_min_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_max_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_max_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_max_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -262,7 +262,7 @@ pub(super) fn test_mm_max_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_max_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_max_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_max_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -277,7 +277,7 @@ pub(super) fn test_mm_max_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_and_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_and_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_and_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -292,7 +292,7 @@ pub(super) fn test_mm_and_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_andnot_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_andnot_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_andnot_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -307,7 +307,7 @@ pub(super) fn test_mm_andnot_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_or_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_or_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_or_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -322,7 +322,7 @@ pub(super) fn test_mm_or_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_xor_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_xor_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_xor_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -337,7 +337,7 @@ pub(super) fn test_mm_xor_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_cmpeq_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_cmpeq_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_cmpeq_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -352,7 +352,7 @@ pub(super) fn test_mm_cmpeq_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_cmplt_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_cmplt_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_cmplt_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -367,7 +367,7 @@ pub(super) fn test_mm_cmplt_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_cmple_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_cmple_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_cmple_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -382,7 +382,7 @@ pub(super) fn test_mm_cmple_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_cmpgt_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_cmpgt_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_cmpgt_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -397,7 +397,7 @@ pub(super) fn test_mm_cmpgt_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_cmpge_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_cmpge_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_cmpge_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -412,7 +412,7 @@ pub(super) fn test_mm_cmpge_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_cmpneq_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_cmpneq_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_cmpneq_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -427,7 +427,7 @@ pub(super) fn test_mm_cmpneq_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_cmpnlt_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_cmpnlt_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_cmpnlt_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -442,7 +442,7 @@ pub(super) fn test_mm_cmpnlt_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_cmpnle_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_cmpnle_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128_to_f32_array(_mm_cmpnle_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {

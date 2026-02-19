@@ -367,7 +367,7 @@ pub(super) fn test_mm256_undefined_si256() -> Result<(), String> {
 
 pub(super) fn test_mm256_set_m128() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_set_m128(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m256_to_f32_array(_mm256_set_m128(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 8])?;
 
         if crate::get_fuzzing() {
@@ -382,7 +382,7 @@ pub(super) fn test_mm256_set_m128() -> Result<(), String> {
 
 pub(super) fn test_mm256_set_m128d() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_set_m128d(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0])));
+        let result = unpack__m256d_to_f64_array(_mm256_set_m128d(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0])));
         check_array_equality(&result, &[0.0f64; 4])?;
 
         if crate::get_fuzzing() {
@@ -397,7 +397,7 @@ pub(super) fn test_mm256_set_m128d() -> Result<(), String> {
 
 pub(super) fn test_mm256_set_m128i() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_set_m128i(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([1, 2, 3, 4])));
+        let result = unpack__m256i_to_i32_array(_mm256_set_m128i(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {
@@ -412,7 +412,7 @@ pub(super) fn test_mm256_set_m128i() -> Result<(), String> {
 
 pub(super) fn test_mm256_setr_m128() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_setr_m128(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m256_to_f32_array(_mm256_setr_m128(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0.0f32; 8])?;
 
         if crate::get_fuzzing() {
@@ -427,7 +427,7 @@ pub(super) fn test_mm256_setr_m128() -> Result<(), String> {
 
 pub(super) fn test_mm256_setr_m128d() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_setr_m128d(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0])));
+        let result = unpack__m256d_to_f64_array(_mm256_setr_m128d(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0])));
         check_array_equality(&result, &[0.0f64; 4])?;
 
         if crate::get_fuzzing() {
@@ -442,7 +442,7 @@ pub(super) fn test_mm256_setr_m128d() -> Result<(), String> {
 
 pub(super) fn test_mm256_setr_m128i() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_setr_m128i(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([1, 2, 3, 4])));
+        let result = unpack__m256i_to_i32_array(_mm256_setr_m128i(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {

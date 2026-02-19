@@ -7,7 +7,7 @@ use crate::cpu::common::{check_array_equality, check_int_equality};
 
 pub(super) fn test_mm512_mask_cvt_roundps_epu64() -> Result<(), String> {
     unsafe {
-        let result = unpack__m512i_to_i32_array(_mm512_mask_cvt_roundps_epu64::<8>(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__mmask8_from(0b01010101), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        let result = unpack__m512i_to_i32_array(_mm512_mask_cvt_roundps_epu64::<8>(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__mmask8_from(0b01010101), create__m256_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0])));
         check_array_equality(&result, &[0i32; 16])?;
 
         if crate::get_fuzzing() {
@@ -52,7 +52,7 @@ pub(super) fn test_mm_cvtps_epu64() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_cvtps_epu64() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_mask_cvtps_epu64(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128i_to_i32_array(_mm_mask_cvtps_epu64(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0i32; 4])?;
 
         if crate::get_fuzzing() {
@@ -97,7 +97,7 @@ pub(super) fn test_mm256_cvtps_epu64() -> Result<(), String> {
 
 pub(super) fn test_mm256_mask_cvtps_epu64() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_mask_cvtps_epu64(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m256i_to_i32_array(_mm256_mask_cvtps_epu64(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m128_from([9.0, 10.0, 11.0, 12.0])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {
@@ -142,7 +142,7 @@ pub(super) fn test_mm512_cvtps_epu64() -> Result<(), String> {
 
 pub(super) fn test_mm512_mask_cvtps_epu64() -> Result<(), String> {
     unsafe {
-        let result = unpack__m512i_to_i32_array(_mm512_mask_cvtps_epu64(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__mmask8_from(0b01010101), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        let result = unpack__m512i_to_i32_array(_mm512_mask_cvtps_epu64(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__mmask8_from(0b01010101), create__m256_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0])));
         check_array_equality(&result, &[0i32; 16])?;
 
         if crate::get_fuzzing() {
@@ -187,7 +187,7 @@ pub(super) fn test_mm512_cvtt_roundpd_epi64() -> Result<(), String> {
 
 pub(super) fn test_mm512_mask_cvtt_roundpd_epi64() -> Result<(), String> {
     unsafe {
-        let result = unpack__m512i_to_i32_array(_mm512_mask_cvtt_roundpd_epi64::<8>(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        let result = unpack__m512i_to_i32_array(_mm512_mask_cvtt_roundpd_epi64::<8>(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__mmask8_from(0b01010101), create__m512d_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0])));
         check_array_equality(&result, &[0i32; 16])?;
 
         if crate::get_fuzzing() {
@@ -232,7 +232,7 @@ pub(super) fn test_mm_cvttpd_epi64() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_cvttpd_epi64() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_mask_cvttpd_epi64(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0])));
+        let result = unpack__m128i_to_i32_array(_mm_mask_cvttpd_epi64(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128d_from([5.0, 6.0])));
         check_array_equality(&result, &[0i32; 4])?;
 
         if crate::get_fuzzing() {
@@ -277,7 +277,7 @@ pub(super) fn test_mm256_cvttpd_epi64() -> Result<(), String> {
 
 pub(super) fn test_mm256_mask_cvttpd_epi64() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_mask_cvttpd_epi64(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m256d_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m256i_to_i32_array(_mm256_mask_cvttpd_epi64(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m256d_from([9.0, 10.0, 11.0, 12.0])));
         check_array_equality(&result, &[0i32; 8])?;
 
         if crate::get_fuzzing() {
@@ -322,7 +322,7 @@ pub(super) fn test_mm512_cvttpd_epi64() -> Result<(), String> {
 
 pub(super) fn test_mm512_mask_cvttpd_epi64() -> Result<(), String> {
     unsafe {
-        let result = unpack__m512i_to_i32_array(_mm512_mask_cvttpd_epi64(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        let result = unpack__m512i_to_i32_array(_mm512_mask_cvttpd_epi64(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__mmask8_from(0b01010101), create__m512d_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0])));
         check_array_equality(&result, &[0i32; 16])?;
 
         if crate::get_fuzzing() {
@@ -367,7 +367,7 @@ pub(super) fn test_mm512_cvtt_roundps_epi64() -> Result<(), String> {
 
 pub(super) fn test_mm512_mask_cvtt_roundps_epi64() -> Result<(), String> {
     unsafe {
-        let result = unpack__m512i_to_i32_array(_mm512_mask_cvtt_roundps_epi64::<8>(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__mmask8_from(0b01010101), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        let result = unpack__m512i_to_i32_array(_mm512_mask_cvtt_roundps_epi64::<8>(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__mmask8_from(0b01010101), create__m256_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0])));
         check_array_equality(&result, &[0i32; 16])?;
 
         if crate::get_fuzzing() {
@@ -412,7 +412,7 @@ pub(super) fn test_mm_cvttps_epi64() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_cvttps_epi64() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_mask_cvttps_epi64(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        let result = unpack__m128i_to_i32_array(_mm_mask_cvttps_epi64(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128_from([5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[0i32; 4])?;
 
         if crate::get_fuzzing() {

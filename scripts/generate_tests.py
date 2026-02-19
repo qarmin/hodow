@@ -109,6 +109,48 @@ ZERO_SIMD_INITS: dict[str, str] = {
     "__m512i": "create__m512i_from_i32_array([" + ", ".join("0" for _ in range(16)) + "])",
 }
 
+# Sequential init table: ptype → (elem_count, formatter(vals) → str)
+# Types not listed fall back to FIXED_INITS (masks, bool, usize).
+def _f(name: str, vals: list[int], float_: bool) -> str:
+    elems = ", ".join(f"{v}.0" if float_ else str(v) for v in vals)
+    return f"{name}([{elems}])"
+
+SEQ_TYPES: dict[str, tuple[int, object]] = {
+    "__m128":   (4,  lambda v: _f("create__m128_from",             v, True)),
+    "__m128d":  (2,  lambda v: _f("create__m128d_from",            v, True)),
+    "__m128i":  (4,  lambda v: _f("create__m128i_from_i32_array",  v, False)),
+    "__m128bh": (8,  lambda v: _f("create__m128bh_from",           v, False)),
+    "__m256":   (8,  lambda v: _f("create__m256_from",             v, True)),
+    "__m256d":  (4,  lambda v: _f("create__m256d_from",            v, True)),
+    "__m256i":  (8,  lambda v: _f("create__m256i_from_i32_array",  v, False)),
+    "__m256bh": (16, lambda v: _f("create__m256bh_from",           v, False)),
+    "__m512":   (16, lambda v: _f("create__m512_from",             v, True)),
+    "__m512d":  (8,  lambda v: _f("create__m512d_from",            v, True)),
+    "__m512i":  (16, lambda v: _f("create__m512i_from_i32_array",  v, False)),
+    "__m512bh": (32, lambda v: _f("create__m512bh_from",           v, False)),
+    "i8":   (1, lambda v: f"{v[0]}i8"),
+    "i16":  (1, lambda v: f"{v[0]}i16"),
+    "i32":  (1, lambda v: f"{v[0]}i32"),
+    "i64":  (1, lambda v: f"{v[0]}i64"),
+    "u8":   (1, lambda v: f"{v[0]}u8"),
+    "u16":  (1, lambda v: f"{v[0]}u16"),
+    "u32":  (1, lambda v: f"{v[0]}u32"),
+    "u64":  (1, lambda v: f"{v[0]}u64"),
+    "f32":  (1, lambda v: f"{v[0]}.0f32"),
+    "f64":  (1, lambda v: f"{v[0]}.0f64"),
+}
+
+
+def seq_init(ptype: str, ctr: list[int]) -> str:
+    """Return a fixed init expression with sequentially increasing values.
+    `ctr` is a single-element list used as a mutable int counter."""
+    if ptype not in SEQ_TYPES:
+        return FIXED_INITS.get(ptype, f"0 /* {ptype} */")
+    n, fmt = SEQ_TYPES[ptype]
+    vals = list(range(ctr[0], ctr[0] + n))
+    ctr[0] += n
+    return fmt(vals)
+
 # Return type → (unpack function, element count, zero literal)
 UNPACK_INFO: dict[str, tuple[str, int, str]] = {
     "__m128":  ("unpack__m128_to_f32_array",  4,  "0.0f32"),
@@ -293,9 +335,38 @@ def arg_expr(ptype: str, *, random: bool) -> str:
     return table.get(pt, f"0 /* {pt} */")
 
 
-def emit_check(lines: list[str], call: str, ret: str) -> None:
+def load_expected_values(path: Path) -> dict[str, str]:
+    """Parse expected_values.txt: 'test_name - rust_expr' → {test_name: rust_expr}"""
+    if not path.exists():
+        return {}
+    result: dict[str, str] = {}
+    for line in path.read_text().splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if " - " not in line:
+            continue
+        name, _, value = line.partition(" - ")
+        result[name.strip()] = value.strip()
+    return result
+
+
+def emit_check(lines: list[str], call: str, ret: str, expected: str | None = None) -> None:
     """Append lines that call `call` and check its result."""
-    if ret in UNPACK_INFO:
+    if expected is not None:
+        # User-supplied expected value: emit check based on return type
+        if ret in UNPACK_INFO:
+            fn, _, _ = UNPACK_INFO[ret]
+            lines.append(f"        let result = {fn}({call});")
+            lines.append(f"        check_array_equality(&result, &{expected})?;")
+        elif ret in INT_RETURNS:
+            lines.append(f"        let result = {call};")
+            lines.append(f"        check_int_equality(result as i32, {expected})?;")
+        elif ret in ("()", ""):
+            lines.append(f"        {call};")
+        else:
+            lines.append(f"        let _result = {call};")
+    elif ret in UNPACK_INFO:
         fn, size, zero = UNPACK_INFO[ret]
         lines.append(f"        let result = {fn}({call});")
         lines.append(f"        check_array_equality(&result, &[{zero}; {size}])?;")
@@ -305,7 +376,7 @@ def emit_check(lines: list[str], call: str, ret: str) -> None:
     elif ret in ("()", ""):
         lines.append(f"        {call};")
     else:
-        # f16, bf16, __m128h, etc. – compile but don't check (stub)
+        # f16, bf16, __m128h, etc. – compile but don't check
         lines.append(f"        let _result = {call};")
 
 
@@ -314,9 +385,10 @@ def test_name(func_name: str) -> str:
     return "test_" + func_name.lstrip("_")
 
 
-def gen_fn(sig: dict) -> str:
+def gen_fn(sig: dict, expected_values: dict[str, str] | None = None) -> str:
     name = sig["name"]
     test = test_name(name)
+    expected = (expected_values or {}).get(test)
     params: list = sig["params"] or []
     ret: str = sig["return_type"] or "()"
     cg: list = sig["const_generics"]
@@ -327,48 +399,49 @@ def gen_fn(sig: dict) -> str:
     lines = [f"pub(super) fn {test}() -> Result<(), String> {{", "    unsafe {"]
 
     is_gather = any(p in name.lower() for p in ("gather", "scatter"))
+    ctr = [1]  # sequential counter, reset per-function for stable inputs
 
     if not complete:
         lines.append(f"        todo!(\"{name}\")")
     elif has_ptr(params):
         # Build local buffers for pointer and reference arguments
-        # Gather/scatter: use large array (safe for any valid offset) + zeroed SIMD offsets
+        # Gather/scatter: large array (safe for any valid offset) + zeroed SIMD offsets
         array_size = 64 if is_gather else 1
         call_args: list[str] = []
         for pname, ptype in params:
             ref_inner = inner_ref_type(ptype)
             if "*const" in ptype:
                 inner = ptype.replace("*const", "").strip()
-                init = FIXED_INITS.get(inner, f"0 /* {inner} */")
+                init = seq_init(inner, ctr)
                 lines.append(f"        let ptr_{pname} = [{init}; {array_size}];")
                 call_args.append(f"ptr_{pname}.as_ptr()")
             elif "*mut" in ptype:
                 inner = ptype.replace("*mut", "").strip()
-                init = FIXED_INITS.get(inner, f"0 /* {inner} */")
+                init = seq_init(inner, ctr)
                 lines.append(f"        let mut ptr_{pname} = [{init}; {array_size}];")
                 call_args.append(f"ptr_{pname}.as_mut_ptr()")
             elif ref_inner is not None:
                 # &T or &mut T — create a local variable
-                init = FIXED_INITS.get(ref_inner, f"0 /* {ref_inner} */")
+                init = seq_init(ref_inner, ctr)
                 is_mut = ptype.strip().startswith("&mut")
                 mut_kw = "mut " if is_mut else ""
                 lines.append(f"        let {mut_kw}ref_{pname} = {init};")
                 ref_kw = "&mut " if is_mut else "&"
                 call_args.append(f"{ref_kw}ref_{pname}")
             else:
-                # Gather/scatter: use zeroed SIMD for index/offset params (all read from base+0)
+                # Gather/scatter: zeroed SIMD for index/offset params (all read from base+0)
                 if is_gather:
                     init = ZERO_SIMD_INITS.get(ptype, FIXED_INITS.get(ptype, f"0 /* {ptype} */"))
                 else:
-                    init = FIXED_INITS.get(ptype, f"0 /* {ptype} */")
+                    init = seq_init(ptype, ctr)
                 lines.append(f"        let {pname} = {init};")
                 call_args.append(pname)
         call = f"{name}{cs}({', '.join(call_args)})"
-        emit_check(lines, call, ret)
+        emit_check(lines, call, ret, expected)
     else:
-        call_args = [arg_expr(pt, random=False) for _, pt in params]
+        call_args = [seq_init(pt, ctr) for _, pt in params]
         call = f"{name}{cs}({', '.join(call_args)})"
-        emit_check(lines, call, ret)
+        emit_check(lines, call, ret, expected)
 
     # Fuzzing block (still inside the single unsafe {})
     if not no_fuzz and complete:
@@ -387,7 +460,7 @@ def gen_fn(sig: dict) -> str:
     return "\n".join(lines)
 
 
-def gen_part(funcs: list[dict]) -> str:
+def gen_part(funcs: list[dict], expected_values: dict[str, str] | None = None) -> str:
     header = [
         "use std::arch::x86_64::*;",
         "",
@@ -397,7 +470,7 @@ def gen_part(funcs: list[dict]) -> str:
         "use crate::cpu::common::{check_array_equality, check_int_equality};",
         "",
     ]
-    bodies = [gen_fn(sig) for sig in funcs]
+    bodies = [gen_fn(sig, expected_values) for sig in funcs]
     return "\n".join(header) + "\n" + "\n\n".join(bodies) + "\n"
 
 
@@ -460,6 +533,8 @@ def main() -> None:
                 seen.add(key)
                 merged[ext].append(sig)
 
+    expected_values = load_expected_values(base / "expected_values.txt")
+
     out = base / OUTPUT_DIR
     out.mkdir(parents=True, exist_ok=True)
 
@@ -501,7 +576,7 @@ def main() -> None:
                 old.unlink()
 
         for idx, chunk in enumerate(parts, 1):
-            (parts_dir / f"part{idx}.rs").write_text(gen_part(chunk))
+            (parts_dir / f"part{idx}.rs").write_text(gen_part(chunk, expected_values))
 
         (out / f"{ext}.rs").write_text(gen_ext_rs(ext, stable, len(parts)))
 

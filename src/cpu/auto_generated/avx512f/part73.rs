@@ -66,7 +66,7 @@ pub(super) fn test_mm512_mask_cvtepi32_storeu_epi16() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i16; 1];
         let k = create__mmask16_from(0b0101010101010101);
-        let a = create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+        let a = create__m512i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
         _mm512_mask_cvtepi32_storeu_epi16(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -76,7 +76,7 @@ pub(super) fn test_mm256_mask_cvtepi32_storeu_epi16() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i16; 1];
         let k = create__mmask8_from(0b01010101);
-        let a = create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]);
+        let a = create__m256i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9]);
         _mm256_mask_cvtepi32_storeu_epi16(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -86,7 +86,7 @@ pub(super) fn test_mm_mask_cvtepi32_storeu_epi16() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i16; 1];
         let k = create__mmask8_from(0b01010101);
-        let a = create__m128i_from_i32_array([1, 2, 3, 4]);
+        let a = create__m128i_from_i32_array([2, 3, 4, 5]);
         _mm_mask_cvtepi32_storeu_epi16(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -96,7 +96,7 @@ pub(super) fn test_mm512_mask_cvtsepi32_storeu_epi16() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i16; 1];
         let k = create__mmask16_from(0b0101010101010101);
-        let a = create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+        let a = create__m512i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
         _mm512_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -106,7 +106,7 @@ pub(super) fn test_mm256_mask_cvtsepi32_storeu_epi16() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i16; 1];
         let k = create__mmask8_from(0b01010101);
-        let a = create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]);
+        let a = create__m256i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9]);
         _mm256_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -116,7 +116,7 @@ pub(super) fn test_mm_mask_cvtsepi32_storeu_epi16() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i16; 1];
         let k = create__mmask8_from(0b01010101);
-        let a = create__m128i_from_i32_array([1, 2, 3, 4]);
+        let a = create__m128i_from_i32_array([2, 3, 4, 5]);
         _mm_mask_cvtsepi32_storeu_epi16(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -126,7 +126,7 @@ pub(super) fn test_mm512_mask_cvtusepi32_storeu_epi16() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i16; 1];
         let k = create__mmask16_from(0b0101010101010101);
-        let a = create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+        let a = create__m512i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
         _mm512_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -136,7 +136,7 @@ pub(super) fn test_mm256_mask_cvtusepi32_storeu_epi16() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i16; 1];
         let k = create__mmask8_from(0b01010101);
-        let a = create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]);
+        let a = create__m256i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9]);
         _mm256_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -146,7 +146,7 @@ pub(super) fn test_mm_mask_cvtusepi32_storeu_epi16() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i16; 1];
         let k = create__mmask8_from(0b01010101);
-        let a = create__m128i_from_i32_array([1, 2, 3, 4]);
+        let a = create__m128i_from_i32_array([2, 3, 4, 5]);
         _mm_mask_cvtusepi32_storeu_epi16(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -156,7 +156,7 @@ pub(super) fn test_mm512_mask_cvtepi32_storeu_epi8() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i8; 1];
         let k = create__mmask16_from(0b0101010101010101);
-        let a = create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+        let a = create__m512i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
         _mm512_mask_cvtepi32_storeu_epi8(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -166,7 +166,7 @@ pub(super) fn test_mm256_mask_cvtepi32_storeu_epi8() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i8; 1];
         let k = create__mmask8_from(0b01010101);
-        let a = create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]);
+        let a = create__m256i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9]);
         _mm256_mask_cvtepi32_storeu_epi8(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -176,7 +176,7 @@ pub(super) fn test_mm_mask_cvtepi32_storeu_epi8() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i8; 1];
         let k = create__mmask8_from(0b01010101);
-        let a = create__m128i_from_i32_array([1, 2, 3, 4]);
+        let a = create__m128i_from_i32_array([2, 3, 4, 5]);
         _mm_mask_cvtepi32_storeu_epi8(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -186,7 +186,7 @@ pub(super) fn test_mm512_mask_cvtsepi32_storeu_epi8() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i8; 1];
         let k = create__mmask16_from(0b0101010101010101);
-        let a = create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+        let a = create__m512i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
         _mm512_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -196,7 +196,7 @@ pub(super) fn test_mm256_mask_cvtsepi32_storeu_epi8() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i8; 1];
         let k = create__mmask8_from(0b01010101);
-        let a = create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]);
+        let a = create__m256i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9]);
         _mm256_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -206,7 +206,7 @@ pub(super) fn test_mm_mask_cvtsepi32_storeu_epi8() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i8; 1];
         let k = create__mmask8_from(0b01010101);
-        let a = create__m128i_from_i32_array([1, 2, 3, 4]);
+        let a = create__m128i_from_i32_array([2, 3, 4, 5]);
         _mm_mask_cvtsepi32_storeu_epi8(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -216,7 +216,7 @@ pub(super) fn test_mm512_mask_cvtusepi32_storeu_epi8() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i8; 1];
         let k = create__mmask16_from(0b0101010101010101);
-        let a = create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+        let a = create__m512i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
         _mm512_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -226,7 +226,7 @@ pub(super) fn test_mm256_mask_cvtusepi32_storeu_epi8() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i8; 1];
         let k = create__mmask8_from(0b01010101);
-        let a = create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]);
+        let a = create__m256i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9]);
         _mm256_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -236,7 +236,7 @@ pub(super) fn test_mm_mask_cvtusepi32_storeu_epi8() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i8; 1];
         let k = create__mmask8_from(0b01010101);
-        let a = create__m128i_from_i32_array([1, 2, 3, 4]);
+        let a = create__m128i_from_i32_array([2, 3, 4, 5]);
         _mm_mask_cvtusepi32_storeu_epi8(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -246,7 +246,7 @@ pub(super) fn test_mm512_mask_cvtepi64_storeu_epi16() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i16; 1];
         let k = create__mmask8_from(0b01010101);
-        let a = create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+        let a = create__m512i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
         _mm512_mask_cvtepi64_storeu_epi16(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -256,7 +256,7 @@ pub(super) fn test_mm256_mask_cvtepi64_storeu_epi16() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i16; 1];
         let k = create__mmask8_from(0b01010101);
-        let a = create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]);
+        let a = create__m256i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9]);
         _mm256_mask_cvtepi64_storeu_epi16(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -266,7 +266,7 @@ pub(super) fn test_mm_mask_cvtepi64_storeu_epi16() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i16; 1];
         let k = create__mmask8_from(0b01010101);
-        let a = create__m128i_from_i32_array([1, 2, 3, 4]);
+        let a = create__m128i_from_i32_array([2, 3, 4, 5]);
         _mm_mask_cvtepi64_storeu_epi16(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -276,7 +276,7 @@ pub(super) fn test_mm512_mask_cvtsepi64_storeu_epi16() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i16; 1];
         let k = create__mmask8_from(0b01010101);
-        let a = create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+        let a = create__m512i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
         _mm512_mask_cvtsepi64_storeu_epi16(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -286,7 +286,7 @@ pub(super) fn test_mm256_mask_cvtsepi64_storeu_epi16() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i16; 1];
         let k = create__mmask8_from(0b01010101);
-        let a = create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]);
+        let a = create__m256i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9]);
         _mm256_mask_cvtsepi64_storeu_epi16(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -296,7 +296,7 @@ pub(super) fn test_mm_mask_cvtsepi64_storeu_epi16() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i16; 1];
         let k = create__mmask8_from(0b01010101);
-        let a = create__m128i_from_i32_array([1, 2, 3, 4]);
+        let a = create__m128i_from_i32_array([2, 3, 4, 5]);
         _mm_mask_cvtsepi64_storeu_epi16(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())
@@ -306,7 +306,7 @@ pub(super) fn test_mm512_mask_cvtusepi64_storeu_epi16() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1i16; 1];
         let k = create__mmask8_from(0b01010101);
-        let a = create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+        let a = create__m512i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
         _mm512_mask_cvtusepi64_storeu_epi16(ptr_mem_addr.as_mut_ptr(), k, a);
     }
     Ok(())

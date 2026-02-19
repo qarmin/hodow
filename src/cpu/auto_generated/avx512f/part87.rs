@@ -67,7 +67,7 @@ pub(super) fn test_mm_cvttsd_u32() -> Result<(), String> {
 
 pub(super) fn test_mm_cvtu32_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_cvtu32_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), 1u32));
+        let result = unpack__m128_to_f32_array(_mm_cvtu32_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), 5u32));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -82,7 +82,7 @@ pub(super) fn test_mm_cvtu32_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_cvtu32_sd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_cvtu32_sd(create__m128d_from([1.0, 2.0]), 1u32));
+        let result = unpack__m128d_to_f64_array(_mm_cvtu32_sd(create__m128d_from([1.0, 2.0]), 3u32));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -97,7 +97,7 @@ pub(super) fn test_mm_cvtu32_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_comi_round_ss() -> Result<(), String> {
     unsafe {
-        let result = _mm_comi_round_ss::<0, 8>(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([1.0, 2.0, 3.0, 4.0]));
+        let result = _mm_comi_round_ss::<0, 8>(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -112,7 +112,7 @@ pub(super) fn test_mm_comi_round_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_comi_round_sd() -> Result<(), String> {
     unsafe {
-        let result = _mm_comi_round_sd::<0, 8>(create__m128d_from([1.0, 2.0]), create__m128d_from([1.0, 2.0]));
+        let result = _mm_comi_round_sd::<0, 8>(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -187,7 +187,7 @@ pub(super) fn test_mm_cvtsd_u64() -> Result<(), String> {
 
 pub(super) fn test_mm_cvti64_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_cvti64_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), 1i64));
+        let result = unpack__m128_to_f32_array(_mm_cvti64_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), 5i64));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -202,7 +202,7 @@ pub(super) fn test_mm_cvti64_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_cvti64_sd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_cvti64_sd(create__m128d_from([1.0, 2.0]), 1i64));
+        let result = unpack__m128d_to_f64_array(_mm_cvti64_sd(create__m128d_from([1.0, 2.0]), 3i64));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -217,7 +217,7 @@ pub(super) fn test_mm_cvti64_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_cvtu64_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_cvtu64_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), 1u64));
+        let result = unpack__m128_to_f32_array(_mm_cvtu64_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), 5u64));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -232,7 +232,7 @@ pub(super) fn test_mm_cvtu64_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_cvtu64_sd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_cvtu64_sd(create__m128d_from([1.0, 2.0]), 1u64));
+        let result = unpack__m128d_to_f64_array(_mm_cvtu64_sd(create__m128d_from([1.0, 2.0]), 3u64));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -307,7 +307,7 @@ pub(super) fn test_mm_cvttss_u64() -> Result<(), String> {
 
 pub(super) fn test_mm_cvt_roundi64_sd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_cvt_roundi64_sd::<8>(create__m128d_from([1.0, 2.0]), 1i64));
+        let result = unpack__m128d_to_f64_array(_mm_cvt_roundi64_sd::<8>(create__m128d_from([1.0, 2.0]), 3i64));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -322,7 +322,7 @@ pub(super) fn test_mm_cvt_roundi64_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_cvt_roundsi64_sd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_cvt_roundsi64_sd::<8>(create__m128d_from([1.0, 2.0]), 1i64));
+        let result = unpack__m128d_to_f64_array(_mm_cvt_roundsi64_sd::<8>(create__m128d_from([1.0, 2.0]), 3i64));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -337,7 +337,7 @@ pub(super) fn test_mm_cvt_roundsi64_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_cvt_roundi64_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_cvt_roundi64_ss::<8>(create__m128_from([1.0, 2.0, 3.0, 4.0]), 1i64));
+        let result = unpack__m128_to_f32_array(_mm_cvt_roundi64_ss::<8>(create__m128_from([1.0, 2.0, 3.0, 4.0]), 5i64));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -352,7 +352,7 @@ pub(super) fn test_mm_cvt_roundi64_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_cvt_roundu64_sd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_cvt_roundu64_sd::<8>(create__m128d_from([1.0, 2.0]), 1u64));
+        let result = unpack__m128d_to_f64_array(_mm_cvt_roundu64_sd::<8>(create__m128d_from([1.0, 2.0]), 3u64));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -367,7 +367,7 @@ pub(super) fn test_mm_cvt_roundu64_sd() -> Result<(), String> {
 
 pub(super) fn test_mm_cvt_roundsi64_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_cvt_roundsi64_ss::<8>(create__m128_from([1.0, 2.0, 3.0, 4.0]), 1i64));
+        let result = unpack__m128_to_f32_array(_mm_cvt_roundsi64_ss::<8>(create__m128_from([1.0, 2.0, 3.0, 4.0]), 5i64));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -382,7 +382,7 @@ pub(super) fn test_mm_cvt_roundsi64_ss() -> Result<(), String> {
 
 pub(super) fn test_mm_cvt_roundu64_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_cvt_roundu64_ss::<8>(create__m128_from([1.0, 2.0, 3.0, 4.0]), 1u64));
+        let result = unpack__m128_to_f32_array(_mm_cvt_roundu64_ss::<8>(create__m128_from([1.0, 2.0, 3.0, 4.0]), 5u64));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {

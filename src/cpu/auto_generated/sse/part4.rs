@@ -45,7 +45,7 @@ pub(super) fn test_mm_undefined_ps() -> Result<(), String> {
 pub(super) fn test_mm_stream_ps() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1.0f32; 1];
-        let a = create__m128_from([1.0, 2.0, 3.0, 4.0]);
+        let a = create__m128_from([2.0, 3.0, 4.0, 5.0]);
         _mm_stream_ps(ptr_mem_addr.as_mut_ptr(), a);
     }
     Ok(())
@@ -83,7 +83,7 @@ pub(super) fn test_mm_cvttss_si64() -> Result<(), String> {
 
 pub(super) fn test_mm_cvtsi64_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_cvtsi64_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), 1i64));
+        let result = unpack__m128_to_f32_array(_mm_cvtsi64_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), 5i64));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {

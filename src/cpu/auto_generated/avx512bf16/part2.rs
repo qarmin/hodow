@@ -22,7 +22,7 @@ pub(super) fn test_mm_cvtpbh_ps() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_cvtpbh_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_mask_cvtpbh_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128bh_from([1, 2, 3, 4, 5, 6, 7, 8])));
+        let result = unpack__m128_to_f32_array(_mm_mask_cvtpbh_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128bh_from([5, 6, 7, 8, 9, 10, 11, 12])));
         check_array_equality(&result, &[0.0f32; 4])?;
 
         if crate::get_fuzzing() {
@@ -66,7 +66,7 @@ pub(super) fn test_mm_cvtneps_pbh() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_cvtneps_pbh() -> Result<(), String> {
     unsafe {
-        let _result = _mm_mask_cvtneps_pbh(create__m128bh_from([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]));
+        let _result = _mm_mask_cvtneps_pbh(create__m128bh_from([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m128_from([9.0, 10.0, 11.0, 12.0]));
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");

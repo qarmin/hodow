@@ -7,7 +7,7 @@ use crate::cpu::common::{check_array_equality, check_int_equality};
 
 pub(super) fn test_mm_cmpgt_epi32() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmpgt_epi32(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([1, 2, 3, 4])));
+        let result = unpack__m128i_to_i32_array(_mm_cmpgt_epi32(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[0i32; 4])?;
 
         if crate::get_fuzzing() {
@@ -22,7 +22,7 @@ pub(super) fn test_mm_cmpgt_epi32() -> Result<(), String> {
 
 pub(super) fn test_mm_cmplt_epi8() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmplt_epi8(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([1, 2, 3, 4])));
+        let result = unpack__m128i_to_i32_array(_mm_cmplt_epi8(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[0i32; 4])?;
 
         if crate::get_fuzzing() {
@@ -37,7 +37,7 @@ pub(super) fn test_mm_cmplt_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm_cmplt_epi16() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmplt_epi16(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([1, 2, 3, 4])));
+        let result = unpack__m128i_to_i32_array(_mm_cmplt_epi16(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[0i32; 4])?;
 
         if crate::get_fuzzing() {
@@ -52,7 +52,7 @@ pub(super) fn test_mm_cmplt_epi16() -> Result<(), String> {
 
 pub(super) fn test_mm_cmplt_epi32() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmplt_epi32(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([1, 2, 3, 4])));
+        let result = unpack__m128i_to_i32_array(_mm_cmplt_epi32(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[0i32; 4])?;
 
         if crate::get_fuzzing() {
@@ -82,7 +82,7 @@ pub(super) fn test_mm_cvtepi32_pd() -> Result<(), String> {
 
 pub(super) fn test_mm_cvtsi32_sd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128d_to_f64_array(_mm_cvtsi32_sd(create__m128d_from([1.0, 2.0]), 1i32));
+        let result = unpack__m128d_to_f64_array(_mm_cvtsi32_sd(create__m128d_from([1.0, 2.0]), 3i32));
         check_array_equality(&result, &[0.0f64; 2])?;
 
         if crate::get_fuzzing() {
@@ -157,7 +157,7 @@ pub(super) fn test_mm_cvtsi128_si32() -> Result<(), String> {
 
 pub(super) fn test_mm_set_epi64x() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_set_epi64x(1i64, 1i64));
+        let result = unpack__m128i_to_i32_array(_mm_set_epi64x(1i64, 2i64));
         check_array_equality(&result, &[0i32; 4])?;
 
         if crate::get_fuzzing() {
@@ -172,7 +172,7 @@ pub(super) fn test_mm_set_epi64x() -> Result<(), String> {
 
 pub(super) fn test_mm_set_epi32() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_set_epi32(1i32, 1i32, 1i32, 1i32));
+        let result = unpack__m128i_to_i32_array(_mm_set_epi32(1i32, 2i32, 3i32, 4i32));
         check_array_equality(&result, &[0i32; 4])?;
 
         if crate::get_fuzzing() {
@@ -187,7 +187,7 @@ pub(super) fn test_mm_set_epi32() -> Result<(), String> {
 
 pub(super) fn test_mm_set_epi16() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_set_epi16(1i16, 1i16, 1i16, 1i16, 1i16, 1i16, 1i16, 1i16));
+        let result = unpack__m128i_to_i32_array(_mm_set_epi16(1i16, 2i16, 3i16, 4i16, 5i16, 6i16, 7i16, 8i16));
         check_array_equality(&result, &[0i32; 4])?;
 
         if crate::get_fuzzing() {
@@ -202,7 +202,7 @@ pub(super) fn test_mm_set_epi16() -> Result<(), String> {
 
 pub(super) fn test_mm_set_epi8() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_set_epi8(1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8));
+        let result = unpack__m128i_to_i32_array(_mm_set_epi8(1i8, 2i8, 3i8, 4i8, 5i8, 6i8, 7i8, 8i8, 9i8, 10i8, 11i8, 12i8, 13i8, 14i8, 15i8, 16i8));
         check_array_equality(&result, &[0i32; 4])?;
 
         if crate::get_fuzzing() {
@@ -277,7 +277,7 @@ pub(super) fn test_mm_set1_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm_setr_epi32() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_setr_epi32(1i32, 1i32, 1i32, 1i32));
+        let result = unpack__m128i_to_i32_array(_mm_setr_epi32(1i32, 2i32, 3i32, 4i32));
         check_array_equality(&result, &[0i32; 4])?;
 
         if crate::get_fuzzing() {
@@ -292,7 +292,7 @@ pub(super) fn test_mm_setr_epi32() -> Result<(), String> {
 
 pub(super) fn test_mm_setr_epi16() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_setr_epi16(1i16, 1i16, 1i16, 1i16, 1i16, 1i16, 1i16, 1i16));
+        let result = unpack__m128i_to_i32_array(_mm_setr_epi16(1i16, 2i16, 3i16, 4i16, 5i16, 6i16, 7i16, 8i16));
         check_array_equality(&result, &[0i32; 4])?;
 
         if crate::get_fuzzing() {
@@ -307,7 +307,7 @@ pub(super) fn test_mm_setr_epi16() -> Result<(), String> {
 
 pub(super) fn test_mm_setr_epi8() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_setr_epi8(1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8, 1i8));
+        let result = unpack__m128i_to_i32_array(_mm_setr_epi8(1i8, 2i8, 3i8, 4i8, 5i8, 6i8, 7i8, 8i8, 9i8, 10i8, 11i8, 12i8, 13i8, 14i8, 15i8, 16i8));
         check_array_equality(&result, &[0i32; 4])?;
 
         if crate::get_fuzzing() {
@@ -365,8 +365,8 @@ pub(super) fn test_mm_loadu_si128() -> Result<(), String> {
 pub(super) fn test_mm_maskmoveu_si128() -> Result<(), String> {
     unsafe {
         let a = create__m128i_from_i32_array([1, 2, 3, 4]);
-        let mask = create__m128i_from_i32_array([1, 2, 3, 4]);
-        let mut ptr_mem_addr = [1i8; 1];
+        let mask = create__m128i_from_i32_array([5, 6, 7, 8]);
+        let mut ptr_mem_addr = [9i8; 1];
         _mm_maskmoveu_si128(a, mask, ptr_mem_addr.as_mut_ptr());
     }
     Ok(())
@@ -375,7 +375,7 @@ pub(super) fn test_mm_maskmoveu_si128() -> Result<(), String> {
 pub(super) fn test_mm_store_si128() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [create__m128i_from_i32_array([1, 2, 3, 4]); 1];
-        let a = create__m128i_from_i32_array([1, 2, 3, 4]);
+        let a = create__m128i_from_i32_array([5, 6, 7, 8]);
         _mm_store_si128(ptr_mem_addr.as_mut_ptr(), a);
     }
     Ok(())
@@ -384,7 +384,7 @@ pub(super) fn test_mm_store_si128() -> Result<(), String> {
 pub(super) fn test_mm_storeu_si128() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [create__m128i_from_i32_array([1, 2, 3, 4]); 1];
-        let a = create__m128i_from_i32_array([1, 2, 3, 4]);
+        let a = create__m128i_from_i32_array([5, 6, 7, 8]);
         _mm_storeu_si128(ptr_mem_addr.as_mut_ptr(), a);
     }
     Ok(())
@@ -393,7 +393,7 @@ pub(super) fn test_mm_storeu_si128() -> Result<(), String> {
 pub(super) fn test_mm_storel_epi64() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [create__m128i_from_i32_array([1, 2, 3, 4]); 1];
-        let a = create__m128i_from_i32_array([1, 2, 3, 4]);
+        let a = create__m128i_from_i32_array([5, 6, 7, 8]);
         _mm_storel_epi64(ptr_mem_addr.as_mut_ptr(), a);
     }
     Ok(())
@@ -402,7 +402,7 @@ pub(super) fn test_mm_storel_epi64() -> Result<(), String> {
 pub(super) fn test_mm_stream_si128() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [create__m128i_from_i32_array([1, 2, 3, 4]); 1];
-        let a = create__m128i_from_i32_array([1, 2, 3, 4]);
+        let a = create__m128i_from_i32_array([5, 6, 7, 8]);
         _mm_stream_si128(ptr_mem_addr.as_mut_ptr(), a);
     }
     Ok(())

@@ -82,7 +82,7 @@ pub(super) fn test_mm512_kortestz() -> Result<(), String> {
 
 pub(super) fn test_mm512_test_epi32_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm512_test_epi32_mask(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
+        let result = _mm512_test_epi32_mask(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__m512i_from_i32_array([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -97,7 +97,7 @@ pub(super) fn test_mm512_test_epi32_mask() -> Result<(), String> {
 
 pub(super) fn test_mm512_mask_test_epi32_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm512_mask_test_epi32_mask(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
+        let result = _mm512_mask_test_epi32_mask(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__m512i_from_i32_array([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -112,7 +112,7 @@ pub(super) fn test_mm512_mask_test_epi32_mask() -> Result<(), String> {
 
 pub(super) fn test_mm256_test_epi32_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm256_test_epi32_mask(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
+        let result = _mm256_test_epi32_mask(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -127,7 +127,7 @@ pub(super) fn test_mm256_test_epi32_mask() -> Result<(), String> {
 
 pub(super) fn test_mm256_mask_test_epi32_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm256_mask_test_epi32_mask(create__mmask8_from(0b01010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
+        let result = _mm256_mask_test_epi32_mask(create__mmask8_from(0b01010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -142,7 +142,7 @@ pub(super) fn test_mm256_mask_test_epi32_mask() -> Result<(), String> {
 
 pub(super) fn test_mm_test_epi32_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm_test_epi32_mask(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([1, 2, 3, 4]));
+        let result = _mm_test_epi32_mask(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -157,7 +157,7 @@ pub(super) fn test_mm_test_epi32_mask() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_test_epi32_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm_mask_test_epi32_mask(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([1, 2, 3, 4]));
+        let result = _mm_mask_test_epi32_mask(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -172,7 +172,7 @@ pub(super) fn test_mm_mask_test_epi32_mask() -> Result<(), String> {
 
 pub(super) fn test_mm512_test_epi64_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm512_test_epi64_mask(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
+        let result = _mm512_test_epi64_mask(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__m512i_from_i32_array([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -187,7 +187,7 @@ pub(super) fn test_mm512_test_epi64_mask() -> Result<(), String> {
 
 pub(super) fn test_mm512_mask_test_epi64_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm512_mask_test_epi64_mask(create__mmask8_from(0b01010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
+        let result = _mm512_mask_test_epi64_mask(create__mmask8_from(0b01010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__m512i_from_i32_array([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -202,7 +202,7 @@ pub(super) fn test_mm512_mask_test_epi64_mask() -> Result<(), String> {
 
 pub(super) fn test_mm256_test_epi64_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm256_test_epi64_mask(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
+        let result = _mm256_test_epi64_mask(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -217,7 +217,7 @@ pub(super) fn test_mm256_test_epi64_mask() -> Result<(), String> {
 
 pub(super) fn test_mm256_mask_test_epi64_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm256_mask_test_epi64_mask(create__mmask8_from(0b01010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
+        let result = _mm256_mask_test_epi64_mask(create__mmask8_from(0b01010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -232,7 +232,7 @@ pub(super) fn test_mm256_mask_test_epi64_mask() -> Result<(), String> {
 
 pub(super) fn test_mm_test_epi64_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm_test_epi64_mask(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([1, 2, 3, 4]));
+        let result = _mm_test_epi64_mask(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -247,7 +247,7 @@ pub(super) fn test_mm_test_epi64_mask() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_test_epi64_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm_mask_test_epi64_mask(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([1, 2, 3, 4]));
+        let result = _mm_mask_test_epi64_mask(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -262,7 +262,7 @@ pub(super) fn test_mm_mask_test_epi64_mask() -> Result<(), String> {
 
 pub(super) fn test_mm512_testn_epi32_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm512_testn_epi32_mask(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
+        let result = _mm512_testn_epi32_mask(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__m512i_from_i32_array([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -277,7 +277,7 @@ pub(super) fn test_mm512_testn_epi32_mask() -> Result<(), String> {
 
 pub(super) fn test_mm512_mask_testn_epi32_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm512_mask_testn_epi32_mask(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
+        let result = _mm512_mask_testn_epi32_mask(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__m512i_from_i32_array([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -292,7 +292,7 @@ pub(super) fn test_mm512_mask_testn_epi32_mask() -> Result<(), String> {
 
 pub(super) fn test_mm256_testn_epi32_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm256_testn_epi32_mask(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
+        let result = _mm256_testn_epi32_mask(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -307,7 +307,7 @@ pub(super) fn test_mm256_testn_epi32_mask() -> Result<(), String> {
 
 pub(super) fn test_mm256_mask_testn_epi32_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm256_mask_testn_epi32_mask(create__mmask8_from(0b01010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
+        let result = _mm256_mask_testn_epi32_mask(create__mmask8_from(0b01010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -322,7 +322,7 @@ pub(super) fn test_mm256_mask_testn_epi32_mask() -> Result<(), String> {
 
 pub(super) fn test_mm_testn_epi32_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm_testn_epi32_mask(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([1, 2, 3, 4]));
+        let result = _mm_testn_epi32_mask(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -337,7 +337,7 @@ pub(super) fn test_mm_testn_epi32_mask() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_testn_epi32_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm_mask_testn_epi32_mask(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([1, 2, 3, 4]));
+        let result = _mm_mask_testn_epi32_mask(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -352,7 +352,7 @@ pub(super) fn test_mm_mask_testn_epi32_mask() -> Result<(), String> {
 
 pub(super) fn test_mm512_testn_epi64_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm512_testn_epi64_mask(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
+        let result = _mm512_testn_epi64_mask(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__m512i_from_i32_array([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -367,7 +367,7 @@ pub(super) fn test_mm512_testn_epi64_mask() -> Result<(), String> {
 
 pub(super) fn test_mm512_mask_testn_epi64_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm512_mask_testn_epi64_mask(create__mmask8_from(0b01010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
+        let result = _mm512_mask_testn_epi64_mask(create__mmask8_from(0b01010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__m512i_from_i32_array([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -382,7 +382,7 @@ pub(super) fn test_mm512_mask_testn_epi64_mask() -> Result<(), String> {
 
 pub(super) fn test_mm256_testn_epi64_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm256_testn_epi64_mask(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
+        let result = _mm256_testn_epi64_mask(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -397,7 +397,7 @@ pub(super) fn test_mm256_testn_epi64_mask() -> Result<(), String> {
 
 pub(super) fn test_mm256_mask_testn_epi64_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm256_mask_testn_epi64_mask(create__mmask8_from(0b01010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
+        let result = _mm256_mask_testn_epi64_mask(create__mmask8_from(0b01010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -412,7 +412,7 @@ pub(super) fn test_mm256_mask_testn_epi64_mask() -> Result<(), String> {
 
 pub(super) fn test_mm_testn_epi64_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm_testn_epi64_mask(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([1, 2, 3, 4]));
+        let result = _mm_testn_epi64_mask(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -427,7 +427,7 @@ pub(super) fn test_mm_testn_epi64_mask() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_testn_epi64_mask() -> Result<(), String> {
     unsafe {
-        let result = _mm_mask_testn_epi64_mask(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([1, 2, 3, 4]));
+        let result = _mm_mask_testn_epi64_mask(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]));
         check_int_equality(result as i32, 0)?;
 
         if crate::get_fuzzing() {
@@ -443,7 +443,7 @@ pub(super) fn test_mm_mask_testn_epi64_mask() -> Result<(), String> {
 pub(super) fn test_mm512_stream_ps() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = [1.0f32; 1];
-        let a = create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]);
+        let a = create__m512_from([2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0]);
         _mm512_stream_ps(ptr_mem_addr.as_mut_ptr(), a);
     }
     Ok(())
