@@ -164,7 +164,7 @@ def main() -> int:
 
     # Parse command-line arguments
     args = sys.argv[1:]
-    num_threads = 1  # TODO - this is broken - do not use numbers other than 1
+    num_threads = 12  # TODO - this is broken - do not use numbers other than 1
 
     if "-d" in args or "--debug" in args:
         DEBUG = True
