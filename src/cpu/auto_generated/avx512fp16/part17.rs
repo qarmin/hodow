@@ -5,420 +5,210 @@ use crate::cpu::common::{check_array_equality, check_int_equality};
 
 pub(super) fn test_mm_maskz_max_round_sh() -> Result<(), String> {
     unsafe {
-        let _result = _mm_maskz_max_round_sh::<0>(create__mmask8_from(0b01010101), 0 /* __m128h */, 0 /* __m128h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_maskz_max_round_sh::<0>(create_random__mmask8(), 0 /* __m128h */, 0 /* __m128h */);
-            }
-        }
+        todo!("_mm_maskz_max_round_sh")
     }
     Ok(())
 }
 
 pub(super) fn test_mm_min_ph() -> Result<(), String> {
     unsafe {
-        let _result = _mm_min_ph(0 /* __m128h */, 0 /* __m128h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_min_ph(0 /* __m128h */, 0 /* __m128h */);
-            }
-        }
+        todo!("_mm_min_ph")
     }
     Ok(())
 }
 
 pub(super) fn test_mm_mask_min_ph() -> Result<(), String> {
     unsafe {
-        let _result = _mm_mask_min_ph(0 /* __m128h */, create__mmask8_from(0b01010101), 0 /* __m128h */, 0 /* __m128h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_mask_min_ph(0 /* __m128h */, create_random__mmask8(), 0 /* __m128h */, 0 /* __m128h */);
-            }
-        }
+        todo!("_mm_mask_min_ph")
     }
     Ok(())
 }
 
 pub(super) fn test_mm_maskz_min_ph() -> Result<(), String> {
     unsafe {
-        let _result = _mm_maskz_min_ph(create__mmask8_from(0b01010101), 0 /* __m128h */, 0 /* __m128h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_maskz_min_ph(create_random__mmask8(), 0 /* __m128h */, 0 /* __m128h */);
-            }
-        }
+        todo!("_mm_maskz_min_ph")
     }
     Ok(())
 }
 
 pub(super) fn test_mm256_min_ph() -> Result<(), String> {
     unsafe {
-        let _result = _mm256_min_ph(0 /* __m256h */, 0 /* __m256h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm256_min_ph(0 /* __m256h */, 0 /* __m256h */);
-            }
-        }
+        todo!("_mm256_min_ph")
     }
     Ok(())
 }
 
 pub(super) fn test_mm256_mask_min_ph() -> Result<(), String> {
     unsafe {
-        let _result = _mm256_mask_min_ph(0 /* __m256h */, create__mmask16_from(0b0101010101010101), 0 /* __m256h */, 0 /* __m256h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm256_mask_min_ph(0 /* __m256h */, create_random__mmask16(), 0 /* __m256h */, 0 /* __m256h */);
-            }
-        }
+        todo!("_mm256_mask_min_ph")
     }
     Ok(())
 }
 
 pub(super) fn test_mm256_maskz_min_ph() -> Result<(), String> {
     unsafe {
-        let _result = _mm256_maskz_min_ph(create__mmask16_from(0b0101010101010101), 0 /* __m256h */, 0 /* __m256h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm256_maskz_min_ph(create_random__mmask16(), 0 /* __m256h */, 0 /* __m256h */);
-            }
-        }
+        todo!("_mm256_maskz_min_ph")
     }
     Ok(())
 }
 
 pub(super) fn test_mm512_min_ph() -> Result<(), String> {
     unsafe {
-        let _result = _mm512_min_ph(0 /* __m512h */, 0 /* __m512h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm512_min_ph(0 /* __m512h */, 0 /* __m512h */);
-            }
-        }
+        todo!("_mm512_min_ph")
     }
     Ok(())
 }
 
 pub(super) fn test_mm512_mask_min_ph() -> Result<(), String> {
     unsafe {
-        let _result = _mm512_mask_min_ph(0 /* __m512h */, create__mmask32_from(0x55555555u32), 0 /* __m512h */, 0 /* __m512h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm512_mask_min_ph(0 /* __m512h */, create_random__mmask32(), 0 /* __m512h */, 0 /* __m512h */);
-            }
-        }
+        todo!("_mm512_mask_min_ph")
     }
     Ok(())
 }
 
 pub(super) fn test_mm512_maskz_min_ph() -> Result<(), String> {
     unsafe {
-        let _result = _mm512_maskz_min_ph(create__mmask32_from(0x55555555u32), 0 /* __m512h */, 0 /* __m512h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm512_maskz_min_ph(create_random__mmask32(), 0 /* __m512h */, 0 /* __m512h */);
-            }
-        }
+        todo!("_mm512_maskz_min_ph")
     }
     Ok(())
 }
 
 pub(super) fn test_mm512_min_round_ph() -> Result<(), String> {
     unsafe {
-        let _result = _mm512_min_round_ph::<0>(0 /* __m512h */, 0 /* __m512h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm512_min_round_ph::<0>(0 /* __m512h */, 0 /* __m512h */);
-            }
-        }
+        todo!("_mm512_min_round_ph")
     }
     Ok(())
 }
 
 pub(super) fn test_mm512_mask_min_round_ph() -> Result<(), String> {
     unsafe {
-        let _result = _mm512_mask_min_round_ph::<0>(0 /* __m512h */, create__mmask32_from(0x55555555u32), 0 /* __m512h */, 0 /* __m512h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm512_mask_min_round_ph::<0>(0 /* __m512h */, create_random__mmask32(), 0 /* __m512h */, 0 /* __m512h */);
-            }
-        }
+        todo!("_mm512_mask_min_round_ph")
     }
     Ok(())
 }
 
 pub(super) fn test_mm512_maskz_min_round_ph() -> Result<(), String> {
     unsafe {
-        let _result = _mm512_maskz_min_round_ph::<0>(create__mmask32_from(0x55555555u32), 0 /* __m512h */, 0 /* __m512h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm512_maskz_min_round_ph::<0>(create_random__mmask32(), 0 /* __m512h */, 0 /* __m512h */);
-            }
-        }
+        todo!("_mm512_maskz_min_round_ph")
     }
     Ok(())
 }
 
 pub(super) fn test_mm_min_sh() -> Result<(), String> {
     unsafe {
-        let _result = _mm_min_sh(0 /* __m128h */, 0 /* __m128h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_min_sh(0 /* __m128h */, 0 /* __m128h */);
-            }
-        }
+        todo!("_mm_min_sh")
     }
     Ok(())
 }
 
 pub(super) fn test_mm_mask_min_sh() -> Result<(), String> {
     unsafe {
-        let _result = _mm_mask_min_sh(0 /* __m128h */, create__mmask8_from(0b01010101), 0 /* __m128h */, 0 /* __m128h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_mask_min_sh(0 /* __m128h */, create_random__mmask8(), 0 /* __m128h */, 0 /* __m128h */);
-            }
-        }
+        todo!("_mm_mask_min_sh")
     }
     Ok(())
 }
 
 pub(super) fn test_mm_maskz_min_sh() -> Result<(), String> {
     unsafe {
-        let _result = _mm_maskz_min_sh(create__mmask8_from(0b01010101), 0 /* __m128h */, 0 /* __m128h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_maskz_min_sh(create_random__mmask8(), 0 /* __m128h */, 0 /* __m128h */);
-            }
-        }
+        todo!("_mm_maskz_min_sh")
     }
     Ok(())
 }
 
 pub(super) fn test_mm_min_round_sh() -> Result<(), String> {
     unsafe {
-        let _result = _mm_min_round_sh::<0>(0 /* __m128h */, 0 /* __m128h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_min_round_sh::<0>(0 /* __m128h */, 0 /* __m128h */);
-            }
-        }
+        todo!("_mm_min_round_sh")
     }
     Ok(())
 }
 
 pub(super) fn test_mm_mask_min_round_sh() -> Result<(), String> {
     unsafe {
-        let _result = _mm_mask_min_round_sh::<0>(0 /* __m128h */, create__mmask8_from(0b01010101), 0 /* __m128h */, 0 /* __m128h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_mask_min_round_sh::<0>(0 /* __m128h */, create_random__mmask8(), 0 /* __m128h */, 0 /* __m128h */);
-            }
-        }
+        todo!("_mm_mask_min_round_sh")
     }
     Ok(())
 }
 
 pub(super) fn test_mm_maskz_min_round_sh() -> Result<(), String> {
     unsafe {
-        let _result = _mm_maskz_min_round_sh::<0>(create__mmask8_from(0b01010101), 0 /* __m128h */, 0 /* __m128h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_maskz_min_round_sh::<0>(create_random__mmask8(), 0 /* __m128h */, 0 /* __m128h */);
-            }
-        }
+        todo!("_mm_maskz_min_round_sh")
     }
     Ok(())
 }
 
 pub(super) fn test_mm_getexp_ph() -> Result<(), String> {
     unsafe {
-        let _result = _mm_getexp_ph(0 /* __m128h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_getexp_ph(0 /* __m128h */);
-            }
-        }
+        todo!("_mm_getexp_ph")
     }
     Ok(())
 }
 
 pub(super) fn test_mm_mask_getexp_ph() -> Result<(), String> {
     unsafe {
-        let _result = _mm_mask_getexp_ph(0 /* __m128h */, create__mmask8_from(0b01010101), 0 /* __m128h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_mask_getexp_ph(0 /* __m128h */, create_random__mmask8(), 0 /* __m128h */);
-            }
-        }
+        todo!("_mm_mask_getexp_ph")
     }
     Ok(())
 }
 
 pub(super) fn test_mm_maskz_getexp_ph() -> Result<(), String> {
     unsafe {
-        let _result = _mm_maskz_getexp_ph(create__mmask8_from(0b01010101), 0 /* __m128h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_maskz_getexp_ph(create_random__mmask8(), 0 /* __m128h */);
-            }
-        }
+        todo!("_mm_maskz_getexp_ph")
     }
     Ok(())
 }
 
 pub(super) fn test_mm256_getexp_ph() -> Result<(), String> {
     unsafe {
-        let _result = _mm256_getexp_ph(0 /* __m256h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm256_getexp_ph(0 /* __m256h */);
-            }
-        }
+        todo!("_mm256_getexp_ph")
     }
     Ok(())
 }
 
 pub(super) fn test_mm256_mask_getexp_ph() -> Result<(), String> {
     unsafe {
-        let _result = _mm256_mask_getexp_ph(0 /* __m256h */, create__mmask16_from(0b0101010101010101), 0 /* __m256h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm256_mask_getexp_ph(0 /* __m256h */, create_random__mmask16(), 0 /* __m256h */);
-            }
-        }
+        todo!("_mm256_mask_getexp_ph")
     }
     Ok(())
 }
 
 pub(super) fn test_mm256_maskz_getexp_ph() -> Result<(), String> {
     unsafe {
-        let _result = _mm256_maskz_getexp_ph(create__mmask16_from(0b0101010101010101), 0 /* __m256h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm256_maskz_getexp_ph(create_random__mmask16(), 0 /* __m256h */);
-            }
-        }
+        todo!("_mm256_maskz_getexp_ph")
     }
     Ok(())
 }
 
 pub(super) fn test_mm512_getexp_ph() -> Result<(), String> {
     unsafe {
-        let _result = _mm512_getexp_ph(0 /* __m512h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm512_getexp_ph(0 /* __m512h */);
-            }
-        }
+        todo!("_mm512_getexp_ph")
     }
     Ok(())
 }
 
 pub(super) fn test_mm512_mask_getexp_ph() -> Result<(), String> {
     unsafe {
-        let _result = _mm512_mask_getexp_ph(0 /* __m512h */, create__mmask32_from(0x55555555u32), 0 /* __m512h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm512_mask_getexp_ph(0 /* __m512h */, create_random__mmask32(), 0 /* __m512h */);
-            }
-        }
+        todo!("_mm512_mask_getexp_ph")
     }
     Ok(())
 }
 
 pub(super) fn test_mm512_maskz_getexp_ph() -> Result<(), String> {
     unsafe {
-        let _result = _mm512_maskz_getexp_ph(create__mmask32_from(0x55555555u32), 0 /* __m512h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm512_maskz_getexp_ph(create_random__mmask32(), 0 /* __m512h */);
-            }
-        }
+        todo!("_mm512_maskz_getexp_ph")
     }
     Ok(())
 }
 
 pub(super) fn test_mm512_getexp_round_ph() -> Result<(), String> {
     unsafe {
-        let _result = _mm512_getexp_round_ph::<0>(0 /* __m512h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm512_getexp_round_ph::<0>(0 /* __m512h */);
-            }
-        }
+        todo!("_mm512_getexp_round_ph")
     }
     Ok(())
 }
 
 pub(super) fn test_mm512_mask_getexp_round_ph() -> Result<(), String> {
     unsafe {
-        let _result = _mm512_mask_getexp_round_ph::<0>(0 /* __m512h */, create__mmask32_from(0x55555555u32), 0 /* __m512h */);
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm512_mask_getexp_round_ph::<0>(0 /* __m512h */, create_random__mmask32(), 0 /* __m512h */);
-            }
-        }
+        todo!("_mm512_mask_getexp_round_ph")
     }
     Ok(())
 }

@@ -48,11 +48,9 @@ impl ExtensionTest for AVX512BF16 {
             (&test_mm_cvtpbh_ps, "test_mm_cvtpbh_ps"),
             (&test_mm_mask_cvtpbh_ps, "test_mm_mask_cvtpbh_ps"),
             (&test_mm_maskz_cvtpbh_ps, "test_mm_maskz_cvtpbh_ps"),
-            (&test_mm_cvtsbh_ss, "test_mm_cvtsbh_ss"),
             (&test_mm_cvtneps_pbh, "test_mm_cvtneps_pbh"),
             (&test_mm_mask_cvtneps_pbh, "test_mm_mask_cvtneps_pbh"),
             (&test_mm_maskz_cvtneps_pbh, "test_mm_maskz_cvtneps_pbh"),
-            (&test_mm_cvtness_sbh, "test_mm_cvtness_sbh"),
         ]
     }
 }

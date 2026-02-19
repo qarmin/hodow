@@ -3,42 +3,6 @@ use std::arch::x86_64::*;
 use crate::cpu::common::values::*;
 use crate::cpu::common::{check_array_equality, check_int_equality};
 
-pub(super) fn test_mm_bcstnebf16_ps() -> Result<(), String> {
-    unsafe {
-        let ptr_a = [0 /* bf16 */; 1];
-        let result = unpack__m128_to_f32_array(_mm_bcstnebf16_ps(ptr_a.as_ptr()));
-        check_array_equality(&result, &[0.0f32; 4])?;
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm256_bcstnebf16_ps() -> Result<(), String> {
-    unsafe {
-        let ptr_a = [0 /* bf16 */; 1];
-        let result = unpack__m256_to_f32_array(_mm256_bcstnebf16_ps(ptr_a.as_ptr()));
-        check_array_equality(&result, &[0.0f32; 8])?;
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm_bcstnesh_ps() -> Result<(), String> {
-    unsafe {
-        let ptr_a = [0 /* f16 */; 1];
-        let result = unpack__m128_to_f32_array(_mm_bcstnesh_ps(ptr_a.as_ptr()));
-        check_array_equality(&result, &[0.0f32; 4])?;
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm256_bcstnesh_ps() -> Result<(), String> {
-    unsafe {
-        let ptr_a = [0 /* f16 */; 1];
-        let result = unpack__m256_to_f32_array(_mm256_bcstnesh_ps(ptr_a.as_ptr()));
-        check_array_equality(&result, &[0.0f32; 8])?;
-    }
-    Ok(())
-}
-
 pub(super) fn test_mm_cvtneebf16_ps() -> Result<(), String> {
     unsafe {
         let ptr_a = [create__m128bh_from([1, 2, 3, 4, 5, 6, 7, 8]); 1];
@@ -57,24 +21,6 @@ pub(super) fn test_mm256_cvtneebf16_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvtneeph_ps() -> Result<(), String> {
-    unsafe {
-        let ptr_a = [0 /* __m128h */; 1];
-        let result = unpack__m128_to_f32_array(_mm_cvtneeph_ps(ptr_a.as_ptr()));
-        check_array_equality(&result, &[0.0f32; 4])?;
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm256_cvtneeph_ps() -> Result<(), String> {
-    unsafe {
-        let ptr_a = [0 /* __m256h */; 1];
-        let result = unpack__m256_to_f32_array(_mm256_cvtneeph_ps(ptr_a.as_ptr()));
-        check_array_equality(&result, &[0.0f32; 8])?;
-    }
-    Ok(())
-}
-
 pub(super) fn test_mm_cvtneobf16_ps() -> Result<(), String> {
     unsafe {
         let ptr_a = [create__m128bh_from([1, 2, 3, 4, 5, 6, 7, 8]); 1];
@@ -88,24 +34,6 @@ pub(super) fn test_mm256_cvtneobf16_ps() -> Result<(), String> {
     unsafe {
         let ptr_a = [create__m256bh_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]); 1];
         let result = unpack__m256_to_f32_array(_mm256_cvtneobf16_ps(ptr_a.as_ptr()));
-        check_array_equality(&result, &[0.0f32; 8])?;
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm_cvtneoph_ps() -> Result<(), String> {
-    unsafe {
-        let ptr_a = [0 /* __m128h */; 1];
-        let result = unpack__m128_to_f32_array(_mm_cvtneoph_ps(ptr_a.as_ptr()));
-        check_array_equality(&result, &[0.0f32; 4])?;
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm256_cvtneoph_ps() -> Result<(), String> {
-    unsafe {
-        let ptr_a = [0 /* __m256h */; 1];
-        let result = unpack__m256_to_f32_array(_mm256_cvtneoph_ps(ptr_a.as_ptr()));
         check_array_equality(&result, &[0.0f32; 8])?;
     }
     Ok(())

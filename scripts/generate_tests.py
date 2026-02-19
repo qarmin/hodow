@@ -17,6 +17,13 @@ NO_FUZZ_PATTERNS = [
     "scatter",
 ]
 
+# Types without helpers in values.rs — functions using these get todo!() stubs
+UNSTABLE_TYPES = {
+    "bf16", "f16",
+    "__m128h", "__m256h", "__m512h",
+    "__m128bh_avx", "__m256bh_avx",  # extra aliases that may appear
+}
+
 # Extension stem → Rust target_feature string (only where they differ)
 FEATURE_FLAGS = {
     "sse41": "sse4.1",
@@ -219,7 +226,16 @@ def parse_todo(path: Path) -> dict[str, list[dict]]:
 # ---------------------------------------------------------------------------
 
 def has_ptr(params: list | None) -> bool:
-    return bool(params and any("*" in pt for _, pt in params))
+    return bool(params and any("*" in pt or pt.startswith("&") for _, pt in params))
+
+
+def has_unstable_type(params: list | None, ret: str) -> bool:
+    """True if the function uses types not yet available in stable values.rs."""
+    all_types = ([pt for _, pt in params] if params else []) + [ret]
+    return any(
+        any(u in t for u in UNSTABLE_TYPES)
+        for t in all_types
+    )
 
 
 def skip_fuzz(name: str, params: list | None) -> bool:
@@ -231,11 +247,23 @@ def const_suffix(cg: list) -> str:
     return f"::<{', '.join('0' for _ in cg)}>" if cg else ""
 
 
+def inner_ref_type(ptype: str) -> str | None:
+    """If ptype is '&T' or '&mut T', return T. Else None."""
+    pt = ptype.strip()
+    if pt.startswith("&mut "):
+        return pt[5:].strip()
+    if pt.startswith("&"):
+        return pt[1:].strip()
+    return None
+
+
 def arg_expr(ptype: str, *, random: bool) -> str:
     """Expression to pass for a parameter of the given type."""
     pt = ptype.strip()
     if "*" in pt:
         return "__ptr__"  # placeholder; handled by caller
+    if pt.startswith("&"):
+        return "__ref__"  # placeholder; handled by caller
     table = RANDOM_CREATORS if random else FIXED_INITS
     return table.get(pt, f"0 /* {pt} */")
 
@@ -276,9 +304,10 @@ def gen_fn(sig: dict) -> str:
     if not complete:
         lines.append(f"        todo!(\"{name}\")")
     elif has_ptr(params):
-        # Build local buffers for pointer arguments
+        # Build local buffers for pointer and reference arguments
         call_args: list[str] = []
         for pname, ptype in params:
+            ref_inner = inner_ref_type(ptype)
             if "*const" in ptype:
                 inner = ptype.replace("*const", "").strip()
                 init = FIXED_INITS.get(inner, f"0 /* {inner} */")
@@ -289,8 +318,16 @@ def gen_fn(sig: dict) -> str:
                 init = FIXED_INITS.get(inner, f"0 /* {inner} */")
                 lines.append(f"        let mut ptr_{pname} = [{init}; 1];")
                 call_args.append(f"ptr_{pname}.as_mut_ptr()")
+            elif ref_inner is not None:
+                # &T or &mut T — create a local variable
+                init = FIXED_INITS.get(ref_inner, f"0 /* {ref_inner} */")
+                is_mut = ptype.strip().startswith("&mut")
+                mut_kw = "mut " if is_mut else ""
+                lines.append(f"        let {mut_kw}ref_{pname} = {init};")
+                ref_kw = "&mut " if is_mut else "&"
+                call_args.append(f"{ref_kw}ref_{pname}")
             else:
-                init = FIXED_INITS.get(ptype, "0")
+                init = FIXED_INITS.get(ptype, f"0 /* {ptype} */")
                 lines.append(f"        let {pname} = {init};")
                 call_args.append(pname)
         call = f"{name}{cs}({', '.join(call_args)})"
@@ -306,7 +343,8 @@ def gen_fn(sig: dict) -> str:
         lines.append("        if crate::get_fuzzing() {")
         lines.append("            log::info!(\"Starting fuzzing\");")
         lines.append("            for _ in 0..crate::cpu::get_iterations() {")
-        fuzz_args = [arg_expr(pt, random=True) for _, pt in params if "*" not in pt]
+        fuzz_args = [arg_expr(pt, random=True) for _, pt in params
+                     if "*" not in pt and not pt.startswith("&")]
         fuzz_call = f"{name}{cs}({', '.join(fuzz_args)})"
         lines.append(f"                let _ = {fuzz_call};")
         lines.append("            }")
@@ -377,40 +415,44 @@ def main() -> None:
     merged: dict[str, list[dict]] = defaultdict(list)
     seen: set[tuple[str, str]] = set()
 
-    # Prefer TODO_FULL.txt (complete signatures), fall back to old files
-    todo_sources = []
-    full = base / "TODO_FULL.txt"
-    if full.exists():
-        todo_sources = [full]
-    else:
-        todo_sources = [base / f for f in ("TODO.txt", "TODO_AVX.txt")]
-
-    for todo in todo_sources:
-        if not todo.exists():
-            print(f"Warning: {todo} not found, skipping")
-            continue
-        for ext, sigs in parse_todo(todo).items():
-            for sig in sigs:
-                key = (ext, sig["name"])
-                if key not in seen:
-                    seen.add(key)
-                    merged[ext].append(sig)
+    full = base / "signatures.txt"
+    if not full.exists():
+        print(f"Warning: {full} not found, skipping")
+    for ext, sigs in parse_todo(full).items():
+        for sig in sigs:
+            key = (ext, sig["name"])
+            if key not in seen:
+                seen.add(key)
+                merged[ext].append(sig)
 
     out = base / OUTPUT_DIR
     out.mkdir(parents=True, exist_ok=True)
 
     generated: list[tuple[str, str]] = []
 
+    # Collect stats for the summary table
+    # (ext, total_raw, generated, parts, no_fuzz, unstable)
+    rows: list[tuple[str, int, int, int, int, int]] = []
+
     for ext in sorted(merged):
-        funcs = merged[ext]
-        if not funcs:
+        all_funcs = merged[ext]
+        if not all_funcs:
+            continue
+
+        # Split into stable (generated) and unstable (skipped entirely)
+        stable = [s for s in all_funcs
+                  if not has_unstable_type(s["params"], s["return_type"] or "()")]
+        unstable_count = len(all_funcs) - len(stable)
+
+        if not stable:
+            rows.append((ext, len(all_funcs), 0, 0, 0, unstable_count))
             continue
 
         feature = ext_to_feature(ext)
         generated.append((ext, feature))
 
-        parts = [funcs[i:i + FUNCTIONS_PER_PART]
-                 for i in range(0, len(funcs), FUNCTIONS_PER_PART)]
+        parts = [stable[i:i + FUNCTIONS_PER_PART]
+                 for i in range(0, len(stable), FUNCTIONS_PER_PART)]
 
         parts_dir = out / ext
         parts_dir.mkdir(exist_ok=True)
@@ -418,17 +460,45 @@ def main() -> None:
         for idx, chunk in enumerate(parts, 1):
             (parts_dir / f"part{idx}.rs").write_text(gen_part(chunk))
 
-        (out / f"{ext}.rs").write_text(gen_ext_rs(ext, funcs, len(parts)))
+        (out / f"{ext}.rs").write_text(gen_ext_rs(ext, stable, len(parts)))
 
-        incomplete = sum(1 for s in funcs if not s["is_complete"])
-        no_fuzz_count = sum(1 for s in funcs
-                            if skip_fuzz(s["name"], s["params"]))
-        print(f"  {ext:25s}  {len(funcs):4d} funcs  "
-              f"{len(parts):2d} parts  "
-              f"{incomplete:3d} incomplete  "
-              f"{no_fuzz_count:3d} no-fuzz")
+        no_fuzz_count = sum(1 for s in stable if skip_fuzz(s["name"], s["params"]))
+        rows.append((ext, len(all_funcs), len(stable), len(parts),
+                     no_fuzz_count, unstable_count))
 
     (out / "mod.rs").write_text(gen_mod_rs(generated))
+
+    # Pretty table
+    col = dict(ext=26, total=6, gen=5, parts=5, nofuzz=7, unstable=8)
+    sep = "  "
+    header = (f"{'extension':<{col['ext']}}{sep}"
+              f"{'total':>{col['total']}}{sep}"
+              f"{'gen':>{col['gen']}}{sep}"
+              f"{'parts':>{col['parts']}}{sep}"
+              f"{'no-fuzz':>{col['nofuzz']}}{sep}"
+              f"{'unstable':>{col['unstable']}}")
+    rule = "-" * len(header)
+    print(rule)
+    print(header)
+    print(rule)
+    for ext, total, gen, parts, nofuzz, unstable in sorted(rows, key=lambda r: r[1], reverse=True):
+        print(f"{ext:<{col['ext']}}{sep}"
+              f"{total:>{col['total']}}{sep}"
+              f"{gen:>{col['gen']}}{sep}"
+              f"{parts:>{col['parts']}}{sep}"
+              f"{nofuzz:>{col['nofuzz']}}{sep}"
+              f"{unstable:>{col['unstable']}}")
+    print(rule)
+    totals = (sum(r[1] for r in rows), sum(r[2] for r in rows),
+              sum(r[3] for r in rows), sum(r[4] for r in rows),
+              sum(r[5] for r in rows))
+    print(f"{'TOTAL':<{col['ext']}}{sep}"
+          f"{totals[0]:>{col['total']}}{sep}"
+          f"{totals[1]:>{col['gen']}}{sep}"
+          f"{totals[2]:>{col['parts']}}{sep}"
+          f"{totals[3]:>{col['nofuzz']}}{sep}"
+          f"{totals[4]:>{col['unstable']}}")
+    print(rule)
     print(f"\nDone → {out}  ({len(generated)} extensions)")
 
 

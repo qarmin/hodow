@@ -213,75 +213,45 @@ pub(super) fn test_mm256_permute2f128_si256() -> Result<(), String> {
 
 pub(super) fn test_mm256_broadcast_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_broadcast_ss(0 /* &f32 */));
+        let ref_f = 1.0f32;
+        let result = unpack__m256_to_f32_array(_mm256_broadcast_ss(&ref_f));
         check_array_equality(&result, &[0.0f32; 8])?;
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm256_broadcast_ss(0 /* &f32 */);
-            }
-        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm_broadcast_ss() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128_to_f32_array(_mm_broadcast_ss(0 /* &f32 */));
+        let ref_f = 1.0f32;
+        let result = unpack__m128_to_f32_array(_mm_broadcast_ss(&ref_f));
         check_array_equality(&result, &[0.0f32; 4])?;
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm_broadcast_ss(0 /* &f32 */);
-            }
-        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm256_broadcast_sd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_broadcast_sd(0 /* &f64 */));
+        let ref_f = 1.0f64;
+        let result = unpack__m256d_to_f64_array(_mm256_broadcast_sd(&ref_f));
         check_array_equality(&result, &[0.0f64; 4])?;
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm256_broadcast_sd(0 /* &f64 */);
-            }
-        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm256_broadcast_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_broadcast_ps(0 /* &__m128 */));
+        let ref_a = create__m128_from([1.0, 2.0, 3.0, 4.0]);
+        let result = unpack__m256_to_f32_array(_mm256_broadcast_ps(&ref_a));
         check_array_equality(&result, &[0.0f32; 8])?;
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm256_broadcast_ps(0 /* &__m128 */);
-            }
-        }
     }
     Ok(())
 }
 
 pub(super) fn test_mm256_broadcast_pd() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_broadcast_pd(0 /* &__m128d */));
+        let ref_a = create__m128d_from([1.0, 2.0]);
+        let result = unpack__m256d_to_f64_array(_mm256_broadcast_pd(&ref_a));
         check_array_equality(&result, &[0.0f64; 4])?;
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
-                let _ = _mm256_broadcast_pd(0 /* &__m128d */);
-            }
-        }
     }
     Ok(())
 }
