@@ -1,5 +1,6 @@
 #![allow(incomplete_features)]
 
+use std::cmp::Reverse;
 use std::env;
 use std::fmt::Write as _;
 
@@ -174,12 +175,14 @@ fn main() {
 
     // Run tests
     match test_all_extensions(Some(&progress_callback)) {
-        Ok(stats) => {
+        Ok(mut stats) => {
             // Finish progress bars
             overall_bar.finish();
             feature_bar.finish();
             test_bar.finish();
             multi.clear().ok();
+
+            stats.features.sort_by_key(|f| Reverse(f.tests_run));
 
             // Print statistics
             print_statistics(&stats);
