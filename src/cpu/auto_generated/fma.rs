@@ -1,8 +1,6 @@
 mod part1;
-mod part2;
 
 use crate::cpu::auto_generated::fma::part1::*;
-use crate::cpu::auto_generated::fma::part2::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 

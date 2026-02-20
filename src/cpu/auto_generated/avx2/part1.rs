@@ -3,7 +3,7 @@ use std::arch::x86_64::*;
 #[allow(unused_imports)]
 use crate::cpu::common::values::*;
 #[allow(unused_imports)]
-use crate::cpu::common::{check_array_equality, check_int_equality};
+use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
 pub(super) fn test_mm256_abs_epi32() -> Result<(), String> {
     unsafe {
@@ -398,7 +398,7 @@ pub(super) fn test_mm256_broadcastq_epi64() -> Result<(), String> {
 pub(super) fn test_mm_broadcastsd_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_broadcastsd_pd(create__m128d_from([1.0, 2.0])));
-        check_array_equality(&result, &[1.0, 1.0])?;
+        check_float_array_equality(&result, &[1.0, 1.0])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -413,7 +413,7 @@ pub(super) fn test_mm_broadcastsd_pd() -> Result<(), String> {
 pub(super) fn test_mm256_broadcastsd_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m256d_to_f64_array(_mm256_broadcastsd_pd(create__m128d_from([1.0, 2.0])));
-        check_array_equality(&result, &[1.0, 1.0, 1.0, 1.0])?;
+        check_float_array_equality(&result, &[1.0, 1.0, 1.0, 1.0])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -449,6 +449,306 @@ pub(super) fn test_mm256_broadcastsi128_si256() -> Result<(), String> {
             log::info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
                 let _ = _mm256_broadcastsi128_si256(create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm_broadcastss_ps() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128_to_f32_array(_mm_broadcastss_ps(create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        check_float_array_equality(&result, &[1.0, 1.0, 1.0, 1.0])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm_broadcastss_ps(create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_broadcastss_ps() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_broadcastss_ps(create__m128_from([1.0, 2.0, 3.0, 4.0])));
+        check_float_array_equality(&result, &[1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm256_broadcastss_ps(create_random__m128());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm_broadcastw_epi16() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128i_to_i32_array(_mm_broadcastw_epi16(create__m128i_from_i32_array([1, 2, 3, 4])));
+        check_array_equality(&result, &[65537, 65537, 65537, 65537])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm_broadcastw_epi16(create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_broadcastw_epi16() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_broadcastw_epi16(create__m128i_from_i32_array([1, 2, 3, 4])));
+        check_array_equality(&result, &[65537, 65537, 65537, 65537, 65537, 65537, 65537, 65537])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm256_broadcastw_epi16(create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_cmpeq_epi64() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_cmpeq_epi64(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[0i32; 8])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm256_cmpeq_epi64(create_random__m256i(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_cmpeq_epi32() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_cmpeq_epi32(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[0i32; 8])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm256_cmpeq_epi32(create_random__m256i(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_cmpeq_epi16() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_cmpeq_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[-65536, -65536, -65536, -65536, -65536, -65536, -65536, -65536])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm256_cmpeq_epi16(create_random__m256i(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_cmpeq_epi8() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_cmpeq_epi8(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[-256, -256, -256, -256, -256, -256, -256, -256])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm256_cmpeq_epi8(create_random__m256i(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_cmpgt_epi64() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_cmpgt_epi64(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[0i32; 8])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm256_cmpgt_epi64(create_random__m256i(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_cmpgt_epi32() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_cmpgt_epi32(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[0i32; 8])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm256_cmpgt_epi32(create_random__m256i(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_cmpgt_epi16() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_cmpgt_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[0i32; 8])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm256_cmpgt_epi16(create_random__m256i(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_cmpgt_epi8() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_cmpgt_epi8(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[0i32; 8])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm256_cmpgt_epi8(create_random__m256i(), create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_cvtepi16_epi32() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_cvtepi16_epi32(create__m128i_from_i32_array([1, 2, 3, 4])));
+        check_array_equality(&result, &[1, 0, 2, 0, 3, 0, 4, 0])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm256_cvtepi16_epi32(create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_cvtepi16_epi64() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_cvtepi16_epi64(create__m128i_from_i32_array([1, 2, 3, 4])));
+        check_array_equality(&result, &[1, 0, 0, 0, 2, 0, 0, 0])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm256_cvtepi16_epi64(create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_cvtepi32_epi64() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_cvtepi32_epi64(create__m128i_from_i32_array([1, 2, 3, 4])));
+        check_array_equality(&result, &[1, 0, 2, 0, 3, 0, 4, 0])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm256_cvtepi32_epi64(create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_cvtepi8_epi16() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_cvtepi8_epi16(create__m128i_from_i32_array([1, 2, 3, 4])));
+        check_array_equality(&result, &[1, 0, 2, 0, 3, 0, 4, 0])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm256_cvtepi8_epi16(create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_cvtepi8_epi32() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_cvtepi8_epi32(create__m128i_from_i32_array([1, 2, 3, 4])));
+        check_array_equality(&result, &[1, 0, 0, 0, 2, 0, 0, 0])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm256_cvtepi8_epi32(create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_cvtepi8_epi64() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_cvtepi8_epi64(create__m128i_from_i32_array([1, 2, 3, 4])));
+        check_array_equality(&result, &[1, 0, 0, 0, 0, 0, 0, 0])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm256_cvtepi8_epi64(create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_cvtepu16_epi32() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_cvtepu16_epi32(create__m128i_from_i32_array([1, 2, 3, 4])));
+        check_array_equality(&result, &[1, 0, 2, 0, 3, 0, 4, 0])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm256_cvtepu16_epi32(create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_cvtepu16_epi64() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_cvtepu16_epi64(create__m128i_from_i32_array([1, 2, 3, 4])));
+        check_array_equality(&result, &[1, 0, 0, 0, 2, 0, 0, 0])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm256_cvtepu16_epi64(create_random__m128i());
             }
         }
     }

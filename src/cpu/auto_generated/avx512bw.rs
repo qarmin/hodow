@@ -14,17 +14,6 @@ mod part13;
 mod part14;
 mod part15;
 mod part16;
-mod part17;
-mod part18;
-mod part19;
-mod part20;
-mod part21;
-mod part22;
-mod part23;
-mod part24;
-mod part25;
-mod part26;
-mod part27;
 
 use crate::cpu::auto_generated::avx512bw::part1::*;
 use crate::cpu::auto_generated::avx512bw::part2::*;
@@ -42,17 +31,6 @@ use crate::cpu::auto_generated::avx512bw::part13::*;
 use crate::cpu::auto_generated::avx512bw::part14::*;
 use crate::cpu::auto_generated::avx512bw::part15::*;
 use crate::cpu::auto_generated::avx512bw::part16::*;
-use crate::cpu::auto_generated::avx512bw::part17::*;
-use crate::cpu::auto_generated::avx512bw::part18::*;
-use crate::cpu::auto_generated::avx512bw::part19::*;
-use crate::cpu::auto_generated::avx512bw::part20::*;
-use crate::cpu::auto_generated::avx512bw::part21::*;
-use crate::cpu::auto_generated::avx512bw::part22::*;
-use crate::cpu::auto_generated::avx512bw::part23::*;
-use crate::cpu::auto_generated::avx512bw::part24::*;
-use crate::cpu::auto_generated::avx512bw::part25::*;
-use crate::cpu::auto_generated::avx512bw::part26::*;
-use crate::cpu::auto_generated::avx512bw::part27::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 

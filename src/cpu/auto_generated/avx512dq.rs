@@ -6,11 +6,6 @@ mod part5;
 mod part6;
 mod part7;
 mod part8;
-mod part9;
-mod part10;
-mod part11;
-mod part12;
-mod part13;
 
 use crate::cpu::auto_generated::avx512dq::part1::*;
 use crate::cpu::auto_generated::avx512dq::part2::*;
@@ -20,11 +15,6 @@ use crate::cpu::auto_generated::avx512dq::part5::*;
 use crate::cpu::auto_generated::avx512dq::part6::*;
 use crate::cpu::auto_generated::avx512dq::part7::*;
 use crate::cpu::auto_generated::avx512dq::part8::*;
-use crate::cpu::auto_generated::avx512dq::part9::*;
-use crate::cpu::auto_generated::avx512dq::part10::*;
-use crate::cpu::auto_generated::avx512dq::part11::*;
-use crate::cpu::auto_generated::avx512dq::part12::*;
-use crate::cpu::auto_generated::avx512dq::part13::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 

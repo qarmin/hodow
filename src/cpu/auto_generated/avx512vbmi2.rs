@@ -1,14 +1,10 @@
 mod part1;
 mod part2;
 mod part3;
-mod part4;
-mod part5;
 
 use crate::cpu::auto_generated::avx512vbmi2::part1::*;
 use crate::cpu::auto_generated::avx512vbmi2::part2::*;
 use crate::cpu::auto_generated::avx512vbmi2::part3::*;
-use crate::cpu::auto_generated::avx512vbmi2::part4::*;
-use crate::cpu::auto_generated::avx512vbmi2::part5::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 

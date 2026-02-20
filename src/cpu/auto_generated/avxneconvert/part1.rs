@@ -3,13 +3,13 @@ use std::arch::x86_64::*;
 #[allow(unused_imports)]
 use crate::cpu::common::values::*;
 #[allow(unused_imports)]
-use crate::cpu::common::{check_array_equality, check_int_equality};
+use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
 pub(super) fn test_mm_cvtneebf16_ps() -> Result<(), String> {
     unsafe {
         let ptr_a = [create__m128bh_from([1, 2, 3, 4, 5, 6, 7, 8]); 1];
         let result = unpack__m128_to_f32_array(_mm_cvtneebf16_ps(ptr_a.as_ptr()));
-        check_array_equality(&result, &[0.0f32; 4])?;
+        check_float_array_equality(&result, &[0.0f32; 4])?;
     }
     Ok(())
 }
@@ -18,7 +18,7 @@ pub(super) fn test_mm256_cvtneebf16_ps() -> Result<(), String> {
     unsafe {
         let ptr_a = [create__m256bh_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]); 1];
         let result = unpack__m256_to_f32_array(_mm256_cvtneebf16_ps(ptr_a.as_ptr()));
-        check_array_equality(&result, &[0.0f32; 8])?;
+        check_float_array_equality(&result, &[0.0f32; 8])?;
     }
     Ok(())
 }
@@ -27,7 +27,7 @@ pub(super) fn test_mm_cvtneobf16_ps() -> Result<(), String> {
     unsafe {
         let ptr_a = [create__m128bh_from([1, 2, 3, 4, 5, 6, 7, 8]); 1];
         let result = unpack__m128_to_f32_array(_mm_cvtneobf16_ps(ptr_a.as_ptr()));
-        check_array_equality(&result, &[0.0f32; 4])?;
+        check_float_array_equality(&result, &[0.0f32; 4])?;
     }
     Ok(())
 }
@@ -36,7 +36,7 @@ pub(super) fn test_mm256_cvtneobf16_ps() -> Result<(), String> {
     unsafe {
         let ptr_a = [create__m256bh_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]); 1];
         let result = unpack__m256_to_f32_array(_mm256_cvtneobf16_ps(ptr_a.as_ptr()));
-        check_array_equality(&result, &[0.0f32; 8])?;
+        check_float_array_equality(&result, &[0.0f32; 8])?;
     }
     Ok(())
 }

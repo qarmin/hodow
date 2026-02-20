@@ -8,7 +8,7 @@ import re
 from pathlib import Path
 from collections import defaultdict
 
-FUNCTIONS_PER_PART = 30
+FUNCTIONS_PER_PART = 50
 OUTPUT_DIR = Path("src/cpu/auto_generated")
 
 
@@ -455,7 +455,12 @@ def emit_check(lines: list[str], call: str, ret: str, expected: str | None = Non
             fn, _, _ = UNPACK_INFO[ret]
             lines.append(f"        let result = {fn}({call});")
             adj_expected = _adjust_expected_for_ret(expected, ret)
-            lines.append(f"        check_array_equality(&result, &{adj_expected})?;")
+            # choose float-array vs generic-array comparator
+            elem = _elem_type_for_unpack(ret)
+            if elem in ("f32", "f64"):
+                lines.append(f"        check_float_array_equality(&result, &{adj_expected})?;")
+            else:
+                lines.append(f"        check_array_equality(&result, &{adj_expected})?;")
         elif ret in INT_RETURNS:
             lines.append(f"        let result = {call};")
             lines.append(f"        check_int_equality(result as i32, {expected})?;")
@@ -466,7 +471,12 @@ def emit_check(lines: list[str], call: str, ret: str, expected: str | None = Non
     elif ret in UNPACK_INFO:
         fn, size, zero = UNPACK_INFO[ret]
         lines.append(f"        let result = {fn}({call});")
-        lines.append(f"        check_array_equality(&result, &[{zero}; {size}])?;")
+        # choose comparator based on element type
+        elem = _elem_type_for_unpack(ret)
+        if elem in ("f32", "f64"):
+            lines.append(f"        check_float_array_equality(&result, &[{zero}; {size}])?;")
+        else:
+            lines.append(f"        check_array_equality(&result, &[{zero}; {size}])?;")
     elif ret in INT_RETURNS:
         lines.append(f"        let result = {call};")
         lines.append(f"        check_int_equality(result as i32, 0)?;")
@@ -572,7 +582,7 @@ def gen_part(funcs: list[dict], expected_values: dict[str, str] | None = None) -
         "#[allow(unused_imports)]",
         "use crate::cpu::common::values::*;",
         "#[allow(unused_imports)]",
-        "use crate::cpu::common::{check_array_equality, check_int_equality};",
+        "use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};",
         "",
     ]
     bodies = [gen_fn(sig, expected_values) for sig in funcs]

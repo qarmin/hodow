@@ -4,6 +4,9 @@ check:
 run *args:
     RUSTFLAGS="-C target-cpu=native" cargo +nightly run {{args}}
 
+runr *args:
+    RUSTFLAGS="-C target-cpu=native" cargo +nightly run --release {{args}}
+
 runn *args:
     cargo +nightly run {{args}}
 

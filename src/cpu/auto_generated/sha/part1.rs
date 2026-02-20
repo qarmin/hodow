@@ -3,7 +3,7 @@ use std::arch::x86_64::*;
 #[allow(unused_imports)]
 use crate::cpu::common::values::*;
 #[allow(unused_imports)]
-use crate::cpu::common::{check_array_equality, check_int_equality};
+use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
 pub(super) fn test_mm_sha1msg1_epu32() -> Result<(), String> {
     unsafe {

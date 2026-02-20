@@ -1,10 +1,8 @@
 mod part1;
 mod part2;
-mod part3;
 
 use crate::cpu::auto_generated::sse::part1::*;
 use crate::cpu::auto_generated::sse::part2::*;
-use crate::cpu::auto_generated::sse::part3::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 

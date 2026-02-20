@@ -3,16 +3,12 @@ mod part2;
 mod part3;
 mod part4;
 mod part5;
-mod part6;
-mod part7;
 
 use crate::cpu::auto_generated::sse2::part1::*;
 use crate::cpu::auto_generated::sse2::part2::*;
 use crate::cpu::auto_generated::sse2::part3::*;
 use crate::cpu::auto_generated::sse2::part4::*;
 use crate::cpu::auto_generated::sse2::part5::*;
-use crate::cpu::auto_generated::sse2::part6::*;
-use crate::cpu::auto_generated::sse2::part7::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
