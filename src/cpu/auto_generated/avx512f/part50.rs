@@ -8,7 +8,7 @@ use crate::cpu::common::{check_array_equality, check_int_equality};
 pub(super) fn test_mm_cvtu32_ss() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_cvtu32_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), 5u32));
-        check_array_equality(&result, &[0.0f32; 4])?;
+        check_array_equality(&result, &[5.0, 2.0, 3.0, 4.0])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -23,7 +23,7 @@ pub(super) fn test_mm_cvtu32_ss() -> Result<(), String> {
 pub(super) fn test_mm_cvtu32_sd() -> Result<(), String> {
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_cvtu32_sd(create__m128d_from([1.0, 2.0]), 3u32));
-        check_array_equality(&result, &[0.0f64; 2])?;
+        check_array_equality(&result, &[3.0, 2.0])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -38,7 +38,7 @@ pub(super) fn test_mm_cvtu32_sd() -> Result<(), String> {
 pub(super) fn test_mm_cvtsd_i64() -> Result<(), String> {
     unsafe {
         let result = _mm_cvtsd_i64(create__m128d_from([1.0, 2.0]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -53,7 +53,7 @@ pub(super) fn test_mm_cvtsd_i64() -> Result<(), String> {
 pub(super) fn test_mm_cvtss_i64() -> Result<(), String> {
     unsafe {
         let result = _mm_cvtss_i64(create__m128_from([1.0, 2.0, 3.0, 4.0]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -68,7 +68,7 @@ pub(super) fn test_mm_cvtss_i64() -> Result<(), String> {
 pub(super) fn test_mm_cvti64_ss() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_cvti64_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), 5i64));
-        check_array_equality(&result, &[0.0f32; 4])?;
+        check_array_equality(&result, &[5.0, 2.0, 3.0, 4.0])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -83,7 +83,7 @@ pub(super) fn test_mm_cvti64_ss() -> Result<(), String> {
 pub(super) fn test_mm_cvti64_sd() -> Result<(), String> {
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_cvti64_sd(create__m128d_from([1.0, 2.0]), 3i64));
-        check_array_equality(&result, &[0.0f64; 2])?;
+        check_array_equality(&result, &[3.0, 2.0])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -98,7 +98,7 @@ pub(super) fn test_mm_cvti64_sd() -> Result<(), String> {
 pub(super) fn test_mm_cvtu64_ss() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_cvtu64_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), 5u64));
-        check_array_equality(&result, &[0.0f32; 4])?;
+        check_array_equality(&result, &[5.0, 2.0, 3.0, 4.0])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -113,7 +113,7 @@ pub(super) fn test_mm_cvtu64_ss() -> Result<(), String> {
 pub(super) fn test_mm_cvtu64_sd() -> Result<(), String> {
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_cvtu64_sd(create__m128d_from([1.0, 2.0]), 3u64));
-        check_array_equality(&result, &[0.0f64; 2])?;
+        check_array_equality(&result, &[3.0, 2.0])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");

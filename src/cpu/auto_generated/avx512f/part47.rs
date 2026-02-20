@@ -8,7 +8,7 @@ use crate::cpu::common::{check_array_equality, check_int_equality};
 pub(super) fn test_mm512_reduce_max_epu32() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_max_epu32(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 16)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -23,7 +23,7 @@ pub(super) fn test_mm512_reduce_max_epu32() -> Result<(), String> {
 pub(super) fn test_mm512_mask_reduce_max_epu32() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_max_epu32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 15)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -38,7 +38,7 @@ pub(super) fn test_mm512_mask_reduce_max_epu32() -> Result<(), String> {
 pub(super) fn test_mm512_reduce_max_epu64() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_max_epu64(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 15)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -53,7 +53,7 @@ pub(super) fn test_mm512_reduce_max_epu64() -> Result<(), String> {
 pub(super) fn test_mm512_mask_reduce_max_epu64() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_max_epu64(create__mmask8_from(0b01010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 13)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -124,7 +124,7 @@ pub(super) fn test_mm512_mask_reduce_max_pd() -> Result<(), String> {
 pub(super) fn test_mm512_reduce_min_epi32() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epi32(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -139,7 +139,7 @@ pub(super) fn test_mm512_reduce_min_epi32() -> Result<(), String> {
 pub(super) fn test_mm512_mask_reduce_min_epi32() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -154,7 +154,7 @@ pub(super) fn test_mm512_mask_reduce_min_epi32() -> Result<(), String> {
 pub(super) fn test_mm512_reduce_min_epi64() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epi64(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -169,7 +169,7 @@ pub(super) fn test_mm512_reduce_min_epi64() -> Result<(), String> {
 pub(super) fn test_mm512_mask_reduce_min_epi64() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epi64(create__mmask8_from(0b01010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -184,7 +184,7 @@ pub(super) fn test_mm512_mask_reduce_min_epi64() -> Result<(), String> {
 pub(super) fn test_mm512_reduce_min_epu32() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epu32(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -199,7 +199,7 @@ pub(super) fn test_mm512_reduce_min_epu32() -> Result<(), String> {
 pub(super) fn test_mm512_mask_reduce_min_epu32() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epu32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -214,7 +214,7 @@ pub(super) fn test_mm512_mask_reduce_min_epu32() -> Result<(), String> {
 pub(super) fn test_mm512_reduce_min_epu64() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epu64(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -229,7 +229,7 @@ pub(super) fn test_mm512_reduce_min_epu64() -> Result<(), String> {
 pub(super) fn test_mm512_mask_reduce_min_epu64() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epu64(create__mmask8_from(0b01010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -315,7 +315,7 @@ pub(super) fn test_mm512_reduce_and_epi32() -> Result<(), String> {
 pub(super) fn test_mm512_mask_reduce_and_epi32() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_and_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -330,7 +330,7 @@ pub(super) fn test_mm512_mask_reduce_and_epi32() -> Result<(), String> {
 pub(super) fn test_mm512_reduce_and_epi64() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_and_epi64(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -345,7 +345,7 @@ pub(super) fn test_mm512_reduce_and_epi64() -> Result<(), String> {
 pub(super) fn test_mm512_mask_reduce_and_epi64() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_and_epi64(create__mmask8_from(0b01010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -360,7 +360,7 @@ pub(super) fn test_mm512_mask_reduce_and_epi64() -> Result<(), String> {
 pub(super) fn test_mm512_reduce_or_epi32() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_or_epi32(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 31)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -375,7 +375,7 @@ pub(super) fn test_mm512_reduce_or_epi32() -> Result<(), String> {
 pub(super) fn test_mm512_mask_reduce_or_epi32() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_or_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 15)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -390,7 +390,7 @@ pub(super) fn test_mm512_mask_reduce_or_epi32() -> Result<(), String> {
 pub(super) fn test_mm512_reduce_or_epi64() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_or_epi64(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 15)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -405,7 +405,7 @@ pub(super) fn test_mm512_reduce_or_epi64() -> Result<(), String> {
 pub(super) fn test_mm512_mask_reduce_or_epi64() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_or_epi64(create__mmask8_from(0b01010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 13)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");

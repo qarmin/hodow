@@ -399,6 +399,54 @@ def load_expected_values(path: Path) -> dict[str, str]:
     return result
 
 
+def _elem_type_for_unpack(ret: str) -> str | None:
+    """Return element type string for unpacked return types: 'f32', 'f64', or 'i32'."""
+    # Map known returns to element types
+    mapping = {
+        "__m128": "f32",
+        "__m256": "f32",
+        "__m512": "f32",
+        "__m128d": "f64",
+        "__m256d": "f64",
+        "__m512d": "f64",
+        "__m128i": "i32",
+        "__m256i": "i32",
+        "__m512i": "i32",
+    }
+    return mapping.get(ret)
+
+
+def _adjust_expected_for_ret(expected: str, ret: str) -> str:
+    """Adjust expected literal text so its element literals match the element type for `ret`.
+
+    Currently this handles converting float-special tokens (NaN/inf) and common f32/f64 prefixes.
+    """
+    elem = _elem_type_for_unpack(ret)
+    if not elem or expected is None:
+        return expected
+
+    s = expected
+    # If elements are f64 but expected contains f32::NAN / f32::INFINITY, convert them to f64::...
+    if elem == "f64":
+        s = re.sub(r"\bf32::(NAN|INFINITY|NEG_INFINITY)\b(?:\.into\(\))?", r"f64::\1", s)
+        # If there are explicit f32 suffixes like 1.0f32, convert to f64 suffix
+        s = re.sub(r"(\d+\.\d+|\d+)f32\b", lambda m: m.group(1) + "f64", s)
+        # Remove unnecessary `.into()` after numeric literals (e.g. f32::NAN.into())
+        s = re.sub(r"(f64::(?:NAN|INFINITY|NEG_INFINITY))\.into\(\)", r"\1", s)
+    elif elem == "f32":
+        # Convert f64::NAN -> f32::NAN when necessary
+        s = re.sub(r"\bf64::(NAN|INFINITY|NEG_INFINITY)\b(?:\.into\(\))?", r"f32::\1", s)
+        s = re.sub(r"(\d+\.\d+|\d+)f64\b", lambda m: m.group(1) + "f32", s)
+        s = re.sub(r"(f32::(?:NAN|INFINITY|NEG_INFINITY))\.into\(\)", r"\1", s)
+    # For integer arrays, strip floating suffixes if present
+    elif elem == "i32":
+        s = re.sub(r"(\d+)f32\b", lambda m: m.group(1), s)
+        s = re.sub(r"(\d+)f64\b", lambda m: m.group(1), s)
+        # remove any ::NAN etc if they accidentally got here
+        s = re.sub(r"\b(?:f32|f64)::(NAN|INFINITY|NEG_INFINITY)\b", "0", s)
+    return s
+
+
 def emit_check(lines: list[str], call: str, ret: str, expected: str | None = None) -> None:
     """Append lines that call `call` and check its result."""
     if expected is not None:
@@ -406,7 +454,8 @@ def emit_check(lines: list[str], call: str, ret: str, expected: str | None = Non
         if ret in UNPACK_INFO:
             fn, _, _ = UNPACK_INFO[ret]
             lines.append(f"        let result = {fn}({call});")
-            lines.append(f"        check_array_equality(&result, &{expected})?;")
+            adj_expected = _adjust_expected_for_ret(expected, ret)
+            lines.append(f"        check_array_equality(&result, &{adj_expected})?;")
         elif ret in INT_RETURNS:
             lines.append(f"        let result = {call};")
             lines.append(f"        check_int_equality(result as i32, {expected})?;")

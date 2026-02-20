@@ -8,7 +8,7 @@ use crate::cpu::common::{check_array_equality, check_int_equality};
 pub(super) fn test_mm_comilt_sd() -> Result<(), String> {
     unsafe {
         let result = _mm_comilt_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -23,7 +23,7 @@ pub(super) fn test_mm_comilt_sd() -> Result<(), String> {
 pub(super) fn test_mm_comile_sd() -> Result<(), String> {
     unsafe {
         let result = _mm_comile_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -68,7 +68,7 @@ pub(super) fn test_mm_comige_sd() -> Result<(), String> {
 pub(super) fn test_mm_comineq_sd() -> Result<(), String> {
     unsafe {
         let result = _mm_comineq_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -98,7 +98,7 @@ pub(super) fn test_mm_ucomieq_sd() -> Result<(), String> {
 pub(super) fn test_mm_ucomilt_sd() -> Result<(), String> {
     unsafe {
         let result = _mm_ucomilt_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -113,7 +113,7 @@ pub(super) fn test_mm_ucomilt_sd() -> Result<(), String> {
 pub(super) fn test_mm_ucomile_sd() -> Result<(), String> {
     unsafe {
         let result = _mm_ucomile_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -158,7 +158,7 @@ pub(super) fn test_mm_ucomige_sd() -> Result<(), String> {
 pub(super) fn test_mm_ucomineq_sd() -> Result<(), String> {
     unsafe {
         let result = _mm_ucomineq_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -173,7 +173,7 @@ pub(super) fn test_mm_ucomineq_sd() -> Result<(), String> {
 pub(super) fn test_mm_cvtpd_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_cvtpd_ps(create__m128d_from([1.0, 2.0])));
-        check_array_equality(&result, &[0.0f32; 4])?;
+        check_array_equality(&result, &[1.0, 2.0, 0.0, 0.0])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -188,7 +188,7 @@ pub(super) fn test_mm_cvtpd_ps() -> Result<(), String> {
 pub(super) fn test_mm_cvtps_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_cvtps_pd(create__m128_from([1.0, 2.0, 3.0, 4.0])));
-        check_array_equality(&result, &[0.0f64; 2])?;
+        check_array_equality(&result, &[1.0, 2.0])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -203,7 +203,7 @@ pub(super) fn test_mm_cvtps_pd() -> Result<(), String> {
 pub(super) fn test_mm_cvtpd_epi32() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_cvtpd_epi32(create__m128d_from([1.0, 2.0])));
-        check_array_equality(&result, &[0i32; 4])?;
+        check_array_equality(&result, &[1, 2, 0, 0])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -218,7 +218,7 @@ pub(super) fn test_mm_cvtpd_epi32() -> Result<(), String> {
 pub(super) fn test_mm_cvtsd_si32() -> Result<(), String> {
     unsafe {
         let result = _mm_cvtsd_si32(create__m128d_from([1.0, 2.0]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -233,7 +233,7 @@ pub(super) fn test_mm_cvtsd_si32() -> Result<(), String> {
 pub(super) fn test_mm_cvtsd_ss() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_cvtsd_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128d_from([5.0, 6.0])));
-        check_array_equality(&result, &[0.0f32; 4])?;
+        check_array_equality(&result, &[5.0, 2.0, 3.0, 4.0])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -262,7 +262,7 @@ pub(super) fn test_mm_cvtsd_f64() -> Result<(), String> {
 pub(super) fn test_mm_cvtss_sd() -> Result<(), String> {
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_cvtss_sd(create__m128d_from([1.0, 2.0]), create__m128_from([3.0, 4.0, 5.0, 6.0])));
-        check_array_equality(&result, &[0.0f64; 2])?;
+        check_array_equality(&result, &[3.0, 2.0])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -277,7 +277,7 @@ pub(super) fn test_mm_cvtss_sd() -> Result<(), String> {
 pub(super) fn test_mm_cvttpd_epi32() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_cvttpd_epi32(create__m128d_from([1.0, 2.0])));
-        check_array_equality(&result, &[0i32; 4])?;
+        check_array_equality(&result, &[1, 2, 0, 0])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -292,7 +292,7 @@ pub(super) fn test_mm_cvttpd_epi32() -> Result<(), String> {
 pub(super) fn test_mm_cvttsd_si32() -> Result<(), String> {
     unsafe {
         let result = _mm_cvttsd_si32(create__m128d_from([1.0, 2.0]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -307,7 +307,7 @@ pub(super) fn test_mm_cvttsd_si32() -> Result<(), String> {
 pub(super) fn test_mm_cvttps_epi32() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_cvttps_epi32(create__m128_from([1.0, 2.0, 3.0, 4.0])));
-        check_array_equality(&result, &[0i32; 4])?;
+        check_array_equality(&result, &[1, 2, 3, 4])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -322,7 +322,7 @@ pub(super) fn test_mm_cvttps_epi32() -> Result<(), String> {
 pub(super) fn test_mm_set_sd() -> Result<(), String> {
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_set_sd(1.0f64));
-        check_array_equality(&result, &[0.0f64; 2])?;
+        check_array_equality(&result, &[1.0, 0.0])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -337,7 +337,7 @@ pub(super) fn test_mm_set_sd() -> Result<(), String> {
 pub(super) fn test_mm_set1_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_set1_pd(1.0f64));
-        check_array_equality(&result, &[0.0f64; 2])?;
+        check_array_equality(&result, &[1.0, 1.0])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -352,7 +352,7 @@ pub(super) fn test_mm_set1_pd() -> Result<(), String> {
 pub(super) fn test_mm_set_pd1() -> Result<(), String> {
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_set_pd1(1.0f64));
-        check_array_equality(&result, &[0.0f64; 2])?;
+        check_array_equality(&result, &[1.0, 1.0])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -367,7 +367,7 @@ pub(super) fn test_mm_set_pd1() -> Result<(), String> {
 pub(super) fn test_mm_set_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_set_pd(1.0f64, 2.0f64));
-        check_array_equality(&result, &[0.0f64; 2])?;
+        check_array_equality(&result, &[2.0, 1.0])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -382,7 +382,7 @@ pub(super) fn test_mm_set_pd() -> Result<(), String> {
 pub(super) fn test_mm_setr_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_setr_pd(1.0f64, 2.0f64));
-        check_array_equality(&result, &[0.0f64; 2])?;
+        check_array_equality(&result, &[1.0, 2.0])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -428,7 +428,7 @@ pub(super) fn test_mm_load_sd() -> Result<(), String> {
     unsafe {
         let ptr_mem_addr = [1.0f64; 1];
         let result = unpack__m128d_to_f64_array(_mm_load_sd(ptr_mem_addr.as_ptr()));
-        check_array_equality(&result, &[0.0f64; 2])?;
+        check_array_equality(&result, &[1.0, 0.0])?;
     }
     Ok(())
 }
@@ -438,7 +438,7 @@ pub(super) fn test_mm_loadh_pd() -> Result<(), String> {
         let a = create__m128d_from([1.0, 2.0]);
         let ptr_mem_addr = [3.0f64; 1];
         let result = unpack__m128d_to_f64_array(_mm_loadh_pd(a, ptr_mem_addr.as_ptr()));
-        check_array_equality(&result, &[0.0f64; 2])?;
+        check_array_equality(&result, &[1.0, 3.0])?;
     }
     Ok(())
 }
