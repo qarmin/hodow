@@ -12,7 +12,12 @@ pub(super) fn test_mm_add_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_add_ss(create_random__m128(), create_random__m128());
             }
         }
@@ -27,7 +32,12 @@ pub(super) fn test_mm_add_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_add_ps(create_random__m128(), create_random__m128());
             }
         }
@@ -42,7 +52,12 @@ pub(super) fn test_mm_sub_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_sub_ss(create_random__m128(), create_random__m128());
             }
         }
@@ -57,7 +72,12 @@ pub(super) fn test_mm_sub_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_sub_ps(create_random__m128(), create_random__m128());
             }
         }
@@ -72,7 +92,12 @@ pub(super) fn test_mm_mul_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_mul_ss(create_random__m128(), create_random__m128());
             }
         }
@@ -87,7 +112,12 @@ pub(super) fn test_mm_mul_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_mul_ps(create_random__m128(), create_random__m128());
             }
         }
@@ -102,7 +132,12 @@ pub(super) fn test_mm_div_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_div_ss(create_random__m128(), create_random__m128());
             }
         }
@@ -117,7 +152,12 @@ pub(super) fn test_mm_div_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_div_ps(create_random__m128(), create_random__m128());
             }
         }
@@ -132,7 +172,12 @@ pub(super) fn test_mm_sqrt_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_sqrt_ss(create_random__m128());
             }
         }
@@ -147,7 +192,12 @@ pub(super) fn test_mm_sqrt_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_sqrt_ps(create_random__m128());
             }
         }
@@ -162,7 +212,12 @@ pub(super) fn test_mm_rcp_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_rcp_ss(create_random__m128());
             }
         }
@@ -177,7 +232,12 @@ pub(super) fn test_mm_rcp_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_rcp_ps(create_random__m128());
             }
         }
@@ -192,7 +252,12 @@ pub(super) fn test_mm_rsqrt_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_rsqrt_ss(create_random__m128());
             }
         }
@@ -207,7 +272,12 @@ pub(super) fn test_mm_rsqrt_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_rsqrt_ps(create_random__m128());
             }
         }
@@ -222,7 +292,12 @@ pub(super) fn test_mm_min_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_min_ss(create_random__m128(), create_random__m128());
             }
         }
@@ -237,7 +312,12 @@ pub(super) fn test_mm_min_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_min_ps(create_random__m128(), create_random__m128());
             }
         }
@@ -252,7 +332,12 @@ pub(super) fn test_mm_max_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_max_ss(create_random__m128(), create_random__m128());
             }
         }
@@ -267,7 +352,12 @@ pub(super) fn test_mm_max_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_max_ps(create_random__m128(), create_random__m128());
             }
         }
@@ -282,7 +372,12 @@ pub(super) fn test_mm_and_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_and_ps(create_random__m128(), create_random__m128());
             }
         }
@@ -297,7 +392,12 @@ pub(super) fn test_mm_andnot_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_andnot_ps(create_random__m128(), create_random__m128());
             }
         }
@@ -312,7 +412,12 @@ pub(super) fn test_mm_or_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_or_ps(create_random__m128(), create_random__m128());
             }
         }
@@ -327,7 +432,12 @@ pub(super) fn test_mm_xor_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_xor_ps(create_random__m128(), create_random__m128());
             }
         }
@@ -342,7 +452,12 @@ pub(super) fn test_mm_cmpeq_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmpeq_ss(create_random__m128(), create_random__m128());
             }
         }
@@ -357,7 +472,12 @@ pub(super) fn test_mm_cmplt_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmplt_ss(create_random__m128(), create_random__m128());
             }
         }
@@ -372,7 +492,12 @@ pub(super) fn test_mm_cmple_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmple_ss(create_random__m128(), create_random__m128());
             }
         }
@@ -387,7 +512,12 @@ pub(super) fn test_mm_cmpgt_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmpgt_ss(create_random__m128(), create_random__m128());
             }
         }
@@ -402,7 +532,12 @@ pub(super) fn test_mm_cmpge_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmpge_ss(create_random__m128(), create_random__m128());
             }
         }
@@ -417,7 +552,12 @@ pub(super) fn test_mm_cmpneq_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmpneq_ss(create_random__m128(), create_random__m128());
             }
         }
@@ -432,7 +572,12 @@ pub(super) fn test_mm_cmpnlt_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmpnlt_ss(create_random__m128(), create_random__m128());
             }
         }
@@ -447,7 +592,12 @@ pub(super) fn test_mm_cmpnle_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmpnle_ss(create_random__m128(), create_random__m128());
             }
         }
@@ -462,7 +612,12 @@ pub(super) fn test_mm_cmpngt_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmpngt_ss(create_random__m128(), create_random__m128());
             }
         }
@@ -477,7 +632,12 @@ pub(super) fn test_mm_cmpnge_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmpnge_ss(create_random__m128(), create_random__m128());
             }
         }
@@ -492,7 +652,12 @@ pub(super) fn test_mm_cmpord_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmpord_ss(create_random__m128(), create_random__m128());
             }
         }
@@ -507,7 +672,12 @@ pub(super) fn test_mm_cmpunord_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmpunord_ss(create_random__m128(), create_random__m128());
             }
         }
@@ -522,7 +692,12 @@ pub(super) fn test_mm_cmpeq_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmpeq_ps(create_random__m128(), create_random__m128());
             }
         }
@@ -537,7 +712,12 @@ pub(super) fn test_mm_cmplt_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmplt_ps(create_random__m128(), create_random__m128());
             }
         }
@@ -552,7 +732,12 @@ pub(super) fn test_mm_cmple_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmple_ps(create_random__m128(), create_random__m128());
             }
         }
@@ -567,7 +752,12 @@ pub(super) fn test_mm_cmpgt_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmpgt_ps(create_random__m128(), create_random__m128());
             }
         }
@@ -582,7 +772,12 @@ pub(super) fn test_mm_cmpge_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmpge_ps(create_random__m128(), create_random__m128());
             }
         }
@@ -597,7 +792,12 @@ pub(super) fn test_mm_cmpneq_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmpneq_ps(create_random__m128(), create_random__m128());
             }
         }
@@ -612,7 +812,12 @@ pub(super) fn test_mm_cmpnlt_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmpnlt_ps(create_random__m128(), create_random__m128());
             }
         }
@@ -627,7 +832,12 @@ pub(super) fn test_mm_cmpnle_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmpnle_ps(create_random__m128(), create_random__m128());
             }
         }
@@ -642,7 +852,12 @@ pub(super) fn test_mm_cmpngt_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmpngt_ps(create_random__m128(), create_random__m128());
             }
         }
@@ -657,7 +872,12 @@ pub(super) fn test_mm_cmpnge_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmpnge_ps(create_random__m128(), create_random__m128());
             }
         }
@@ -672,7 +892,12 @@ pub(super) fn test_mm_cmpord_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmpord_ps(create_random__m128(), create_random__m128());
             }
         }
@@ -687,7 +912,12 @@ pub(super) fn test_mm_cmpunord_ps() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmpunord_ps(create_random__m128(), create_random__m128());
             }
         }
@@ -702,7 +932,12 @@ pub(super) fn test_mm_comieq_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_comieq_ss(create_random__m128(), create_random__m128());
             }
         }
@@ -717,7 +952,12 @@ pub(super) fn test_mm_comilt_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_comilt_ss(create_random__m128(), create_random__m128());
             }
         }
@@ -732,7 +972,12 @@ pub(super) fn test_mm_comile_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_comile_ss(create_random__m128(), create_random__m128());
             }
         }
@@ -747,7 +992,12 @@ pub(super) fn test_mm_comigt_ss() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_comigt_ss(create_random__m128(), create_random__m128());
             }
         }

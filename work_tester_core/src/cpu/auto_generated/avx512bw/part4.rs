@@ -12,7 +12,12 @@ pub(super) fn test_mm256_mask_max_epi8() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm256_mask_max_epi8(create_random__m256i(), create_random__mmask32(), create_random__m256i(), create_random__m256i());
             }
         }
@@ -27,7 +32,12 @@ pub(super) fn test_mm256_maskz_max_epi8() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm256_maskz_max_epi8(create_random__mmask32(), create_random__m256i(), create_random__m256i());
             }
         }
@@ -42,7 +52,12 @@ pub(super) fn test_mm_mask_max_epi8() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_mask_max_epi8(create_random__m128i(), create_random__mmask16(), create_random__m128i(), create_random__m128i());
             }
         }
@@ -57,7 +72,12 @@ pub(super) fn test_mm_maskz_max_epi8() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_maskz_max_epi8(create_random__mmask16(), create_random__m128i(), create_random__m128i());
             }
         }
@@ -72,7 +92,12 @@ pub(super) fn test_mm512_min_epu16() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm512_min_epu16(create_random__m512i(), create_random__m512i());
             }
         }
@@ -87,7 +112,12 @@ pub(super) fn test_mm512_mask_min_epu16() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm512_mask_min_epu16(create_random__m512i(), create_random__mmask32(), create_random__m512i(), create_random__m512i());
             }
         }
@@ -102,7 +132,12 @@ pub(super) fn test_mm512_maskz_min_epu16() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm512_maskz_min_epu16(create_random__mmask32(), create_random__m512i(), create_random__m512i());
             }
         }
@@ -117,7 +152,12 @@ pub(super) fn test_mm256_mask_min_epu16() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm256_mask_min_epu16(create_random__m256i(), create_random__mmask16(), create_random__m256i(), create_random__m256i());
             }
         }
@@ -132,7 +172,12 @@ pub(super) fn test_mm256_maskz_min_epu16() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm256_maskz_min_epu16(create_random__mmask16(), create_random__m256i(), create_random__m256i());
             }
         }
@@ -147,7 +192,12 @@ pub(super) fn test_mm_mask_min_epu16() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_mask_min_epu16(create_random__m128i(), create_random__mmask8(), create_random__m128i(), create_random__m128i());
             }
         }
@@ -162,7 +212,12 @@ pub(super) fn test_mm_maskz_min_epu16() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_maskz_min_epu16(create_random__mmask8(), create_random__m128i(), create_random__m128i());
             }
         }
@@ -177,7 +232,12 @@ pub(super) fn test_mm512_min_epu8() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm512_min_epu8(create_random__m512i(), create_random__m512i());
             }
         }
@@ -192,7 +252,12 @@ pub(super) fn test_mm512_mask_min_epu8() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm512_mask_min_epu8(create_random__m512i(), create_random__mmask64(), create_random__m512i(), create_random__m512i());
             }
         }
@@ -207,7 +272,12 @@ pub(super) fn test_mm512_maskz_min_epu8() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm512_maskz_min_epu8(create_random__mmask64(), create_random__m512i(), create_random__m512i());
             }
         }
@@ -222,7 +292,12 @@ pub(super) fn test_mm256_mask_min_epu8() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm256_mask_min_epu8(create_random__m256i(), create_random__mmask32(), create_random__m256i(), create_random__m256i());
             }
         }
@@ -237,7 +312,12 @@ pub(super) fn test_mm256_maskz_min_epu8() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm256_maskz_min_epu8(create_random__mmask32(), create_random__m256i(), create_random__m256i());
             }
         }
@@ -252,7 +332,12 @@ pub(super) fn test_mm_mask_min_epu8() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_mask_min_epu8(create_random__m128i(), create_random__mmask16(), create_random__m128i(), create_random__m128i());
             }
         }
@@ -267,7 +352,12 @@ pub(super) fn test_mm_maskz_min_epu8() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_maskz_min_epu8(create_random__mmask16(), create_random__m128i(), create_random__m128i());
             }
         }
@@ -282,7 +372,12 @@ pub(super) fn test_mm512_min_epi16() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm512_min_epi16(create_random__m512i(), create_random__m512i());
             }
         }
@@ -297,7 +392,12 @@ pub(super) fn test_mm512_mask_min_epi16() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm512_mask_min_epi16(create_random__m512i(), create_random__mmask32(), create_random__m512i(), create_random__m512i());
             }
         }
@@ -312,7 +412,12 @@ pub(super) fn test_mm512_maskz_min_epi16() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm512_maskz_min_epi16(create_random__mmask32(), create_random__m512i(), create_random__m512i());
             }
         }
@@ -327,7 +432,12 @@ pub(super) fn test_mm256_mask_min_epi16() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm256_mask_min_epi16(create_random__m256i(), create_random__mmask16(), create_random__m256i(), create_random__m256i());
             }
         }
@@ -342,7 +452,12 @@ pub(super) fn test_mm256_maskz_min_epi16() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm256_maskz_min_epi16(create_random__mmask16(), create_random__m256i(), create_random__m256i());
             }
         }
@@ -357,7 +472,12 @@ pub(super) fn test_mm_mask_min_epi16() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_mask_min_epi16(create_random__m128i(), create_random__mmask8(), create_random__m128i(), create_random__m128i());
             }
         }
@@ -372,7 +492,12 @@ pub(super) fn test_mm_maskz_min_epi16() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_maskz_min_epi16(create_random__mmask8(), create_random__m128i(), create_random__m128i());
             }
         }
@@ -387,7 +512,12 @@ pub(super) fn test_mm512_min_epi8() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm512_min_epi8(create_random__m512i(), create_random__m512i());
             }
         }
@@ -402,7 +532,12 @@ pub(super) fn test_mm512_mask_min_epi8() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm512_mask_min_epi8(create_random__m512i(), create_random__mmask64(), create_random__m512i(), create_random__m512i());
             }
         }
@@ -417,7 +552,12 @@ pub(super) fn test_mm512_maskz_min_epi8() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm512_maskz_min_epi8(create_random__mmask64(), create_random__m512i(), create_random__m512i());
             }
         }
@@ -432,7 +572,12 @@ pub(super) fn test_mm256_mask_min_epi8() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm256_mask_min_epi8(create_random__m256i(), create_random__mmask32(), create_random__m256i(), create_random__m256i());
             }
         }
@@ -447,7 +592,12 @@ pub(super) fn test_mm256_maskz_min_epi8() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm256_maskz_min_epi8(create_random__mmask32(), create_random__m256i(), create_random__m256i());
             }
         }
@@ -462,7 +612,12 @@ pub(super) fn test_mm_mask_min_epi8() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_mask_min_epi8(create_random__m128i(), create_random__mmask16(), create_random__m128i(), create_random__m128i());
             }
         }
@@ -477,7 +632,12 @@ pub(super) fn test_mm_maskz_min_epi8() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_maskz_min_epi8(create_random__mmask16(), create_random__m128i(), create_random__m128i());
             }
         }
@@ -492,7 +652,12 @@ pub(super) fn test_mm512_cmplt_epu16_mask() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm512_cmplt_epu16_mask(create_random__m512i(), create_random__m512i());
             }
         }
@@ -507,7 +672,12 @@ pub(super) fn test_mm512_mask_cmplt_epu16_mask() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm512_mask_cmplt_epu16_mask(create_random__mmask32(), create_random__m512i(), create_random__m512i());
             }
         }
@@ -522,7 +692,12 @@ pub(super) fn test_mm256_cmplt_epu16_mask() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm256_cmplt_epu16_mask(create_random__m256i(), create_random__m256i());
             }
         }
@@ -537,7 +712,12 @@ pub(super) fn test_mm256_mask_cmplt_epu16_mask() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm256_mask_cmplt_epu16_mask(create_random__mmask16(), create_random__m256i(), create_random__m256i());
             }
         }
@@ -552,7 +732,12 @@ pub(super) fn test_mm_cmplt_epu16_mask() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmplt_epu16_mask(create_random__m128i(), create_random__m128i());
             }
         }
@@ -567,7 +752,12 @@ pub(super) fn test_mm_mask_cmplt_epu16_mask() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_mask_cmplt_epu16_mask(create_random__mmask8(), create_random__m128i(), create_random__m128i());
             }
         }
@@ -582,7 +772,12 @@ pub(super) fn test_mm512_cmplt_epu8_mask() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm512_cmplt_epu8_mask(create_random__m512i(), create_random__m512i());
             }
         }
@@ -597,7 +792,12 @@ pub(super) fn test_mm512_mask_cmplt_epu8_mask() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm512_mask_cmplt_epu8_mask(create_random__mmask64(), create_random__m512i(), create_random__m512i());
             }
         }
@@ -612,7 +812,12 @@ pub(super) fn test_mm256_cmplt_epu8_mask() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm256_cmplt_epu8_mask(create_random__m256i(), create_random__m256i());
             }
         }
@@ -627,7 +832,12 @@ pub(super) fn test_mm256_mask_cmplt_epu8_mask() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm256_mask_cmplt_epu8_mask(create_random__mmask32(), create_random__m256i(), create_random__m256i());
             }
         }
@@ -642,7 +852,12 @@ pub(super) fn test_mm_cmplt_epu8_mask() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmplt_epu8_mask(create_random__m128i(), create_random__m128i());
             }
         }
@@ -657,7 +872,12 @@ pub(super) fn test_mm_mask_cmplt_epu8_mask() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_mask_cmplt_epu8_mask(create_random__mmask16(), create_random__m128i(), create_random__m128i());
             }
         }
@@ -672,7 +892,12 @@ pub(super) fn test_mm512_cmplt_epi16_mask() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm512_cmplt_epi16_mask(create_random__m512i(), create_random__m512i());
             }
         }
@@ -687,7 +912,12 @@ pub(super) fn test_mm512_mask_cmplt_epi16_mask() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm512_mask_cmplt_epi16_mask(create_random__mmask32(), create_random__m512i(), create_random__m512i());
             }
         }
@@ -702,7 +932,12 @@ pub(super) fn test_mm256_cmplt_epi16_mask() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm256_cmplt_epi16_mask(create_random__m256i(), create_random__m256i());
             }
         }
@@ -717,7 +952,12 @@ pub(super) fn test_mm256_mask_cmplt_epi16_mask() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm256_mask_cmplt_epi16_mask(create_random__mmask16(), create_random__m256i(), create_random__m256i());
             }
         }
@@ -732,7 +972,12 @@ pub(super) fn test_mm_cmplt_epi16_mask() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_cmplt_epi16_mask(create_random__m128i(), create_random__m128i());
             }
         }
@@ -747,7 +992,12 @@ pub(super) fn test_mm_mask_cmplt_epi16_mask() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm_mask_cmplt_epi16_mask(create_random__mmask8(), create_random__m128i(), create_random__m128i());
             }
         }

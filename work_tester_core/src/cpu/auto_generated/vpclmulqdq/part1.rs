@@ -12,7 +12,12 @@ pub(super) fn test_mm512_clmulepi64_epi128() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm512_clmulepi64_epi128::<0>(create_random__m512i(), create_random__m512i());
             }
         }
@@ -27,7 +32,12 @@ pub(super) fn test_mm256_clmulepi64_epi128() -> Result<(), String> {
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
-            for _ in 0..crate::cpu::get_iterations() {
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
                 let _ = _mm256_clmulepi64_epi128::<0>(create_random__m256i(), create_random__m256i());
             }
         }

@@ -3,6 +3,7 @@
 #![allow(clippy::macro_metavars_in_unsafe)]
 
 use std::collections::HashSet;
+use std::sync::atomic::{AtomicBool, Ordering};
 
 use log::{error, info};
 use once_cell::sync::OnceCell;
@@ -17,6 +18,52 @@ pub mod auto_generated;
 #[allow(unused_imports)]
 pub use auto_generated::*;
 
+/// Progress raportowania wykonania testów
+#[derive(Debug, Clone)]
+pub struct TestProgress {
+    pub total_features: usize,
+    pub completed_features: usize,
+    pub current_feature: &'static str,
+    pub total_tests_in_feature: usize,
+    pub completed_tests_in_feature: usize,
+    pub current_test: &'static str,
+    pub fuzzing_iteration: usize,
+    pub total_fuzzing_iterations: usize,
+}
+
+/// Statystyki dla pojedynczego feature
+#[derive(Debug, Clone)]
+pub struct FeatureStats {
+    pub feature_name: &'static str,
+    pub tests_run: usize,
+    pub tests_skipped: usize,
+    pub tests_errored: usize,
+}
+
+/// Kompletne statystyki wszystkich testów
+#[derive(Debug, Clone)]
+pub struct TestStatistics {
+    pub features: Vec<FeatureStats>,
+    pub was_cancelled: bool,
+}
+
+impl TestStatistics {
+    pub fn total_run(&self) -> usize {
+        self.features.iter().map(|f| f.tests_run).sum()
+    }
+
+    pub fn total_skipped(&self) -> usize {
+        self.features.iter().map(|f| f.tests_skipped).sum()
+    }
+
+    pub fn total_errors(&self) -> usize {
+        self.features.iter().map(|f| f.tests_errored).sum()
+    }
+}
+
+/// Typ callback dla progress updates
+pub type ProgressCallback = dyn Fn(&TestProgress) + Send + Sync;
+
 #[cfg(miri)]
 pub const DEFAULT_TEST_ITERATIONS: usize = 0;
 #[cfg(not(miri))]
@@ -25,6 +72,7 @@ pub const DEFAULT_TEST_ITERATIONS: usize = 0;
 
 static ITERATIONS: OnceCell<usize> = OnceCell::new();
 static SKIP_TESTS: OnceCell<HashSet<String>> = OnceCell::new();
+static STOP_REQUESTED: AtomicBool = AtomicBool::new(false);
 
 pub fn set_iterations(n: usize) {
     let _ = ITERATIONS.set(n);
@@ -42,22 +90,73 @@ fn should_skip_test(name: &str) -> bool {
     SKIP_TESTS.get().map(|s| s.contains(name)).unwrap_or(false)
 }
 
+/// Zażądaj zatrzymania testów
+pub fn request_stop() {
+    STOP_REQUESTED.store(true, Ordering::Relaxed);
+}
+
+/// Sprawdź czy zażądano stopu
+pub fn should_stop() -> bool {
+    STOP_REQUESTED.load(Ordering::Relaxed)
+}
+
+/// Zresetuj flagę stop (wywołaj przed startem testów)
+pub fn reset_stop_flag() {
+    STOP_REQUESTED.store(false, Ordering::Relaxed);
+}
+
 pub type TestFunction = dyn Fn() -> Result<(), String>;
 
 #[allow(dead_code)]
 pub trait ExtensionTest {
     fn get_name() -> &'static str;
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)];
+
+    /// Stara metoda - backward compatible
     fn test() -> Result<(usize, usize, usize), String> {
+        Self::test_with_progress(1, 0, Self::get_tests().len(), None)
+    }
+
+    /// Nowa metoda z progress reporting
+    fn test_with_progress(
+        total_features: usize,
+        completed_features: usize,
+        total_tests: usize,
+        progress_callback: Option<&ProgressCallback>,
+    ) -> Result<(usize, usize, usize), String> {
         info!("Checking {} support", Self::get_name());
         let mut run = 0usize;
         let mut skipped = 0usize;
         let mut errors = 0usize;
-        for (fun, name) in Self::get_tests() {
+
+        let tests = Self::get_tests();
+
+        for (idx, (fun, name)) in tests.iter().enumerate() {
+            // Sprawdź stop między testami
+            if should_stop() {
+                info!("Stop requested, halting {} tests", Self::get_name());
+                return Ok((run, skipped, errors));
+            }
+
             if should_skip_test(name) {
                 skipped += 1;
                 continue;
             }
+
+            // Raportuj progress przed testem
+            if let Some(callback) = progress_callback {
+                callback(&TestProgress {
+                    total_features,
+                    completed_features,
+                    current_feature: Self::get_name(),
+                    total_tests_in_feature: total_tests,
+                    completed_tests_in_feature: idx,
+                    current_test: name,
+                    fuzzing_iteration: 0,
+                    total_fuzzing_iterations: 0,
+                });
+            }
+
             run += 1;
             info!("Running {}", name);
             match fun() {
@@ -68,101 +167,308 @@ pub trait ExtensionTest {
                 }
             }
         }
+
         info!("___________________{} test passed", Self::get_name());
         Ok((run, skipped, errors))
     }
 }
 
-pub fn test_all_extensions() -> Result<(), String> {
-    let mut stats: Vec<(&'static str, usize, usize, usize)> = Vec::new();
+fn count_available_features() -> usize {
+    let mut count = 0;
+    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+    {
+        #[cfg(target_feature = "sse")]
+        if std::arch::is_x86_feature_detected!("sse") { count += 1; }
+
+        #[cfg(target_feature = "sse2")]
+        if std::arch::is_x86_feature_detected!("sse2") { count += 1; }
+
+        #[cfg(target_feature = "sse3")]
+        if std::arch::is_x86_feature_detected!("sse3") { count += 1; }
+
+        #[cfg(target_feature = "ssse3")]
+        if std::arch::is_x86_feature_detected!("ssse3") { count += 1; }
+
+        #[cfg(target_feature = "sse4.1")]
+        if std::arch::is_x86_feature_detected!("sse4.1") { count += 1; }
+
+        #[cfg(target_feature = "sse4.2")]
+        if std::arch::is_x86_feature_detected!("sse4.2") { count += 1; }
+
+        #[cfg(target_feature = "avx")]
+        if std::arch::is_x86_feature_detected!("avx") { count += 1; }
+
+        #[cfg(target_feature = "avx2")]
+        if std::arch::is_x86_feature_detected!("avx2") { count += 1; }
+
+        #[cfg(target_feature = "fma")]
+        if std::arch::is_x86_feature_detected!("fma") { count += 1; }
+
+        #[cfg(target_feature = "avx512f")]
+        if std::arch::is_x86_feature_detected!("avx512f") { count += 1; }
+
+        #[cfg(target_feature = "avx512bitalg")]
+        if std::arch::is_x86_feature_detected!("avx512bitalg") { count += 1; }
+
+        #[cfg(target_feature = "avx512cd")]
+        if std::arch::is_x86_feature_detected!("avx512cd") { count += 1; }
+
+        #[cfg(target_feature = "aes")]
+        if std::arch::is_x86_feature_detected!("aes") { count += 1; }
+    }
+    count
+}
+
+pub fn test_all_extensions(
+    progress_callback: Option<&ProgressCallback>
+) -> Result<TestStatistics, String> {
+    reset_stop_flag();
+
+    let total_features = count_available_features();
+    let mut completed_features = 0;
+    let mut features = Vec::new();
 
     #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     {
         #[cfg(target_feature = "sse")]
         {
             if std::arch::is_x86_feature_detected!("sse") {
-                let (r, s, e) = crate::cpu::auto_generated::sse::SSE::test()?;
-                stats.push((crate::cpu::auto_generated::sse::SSE::get_name(), r, s, e));
+                if should_stop() {
+                    return Ok(TestStatistics { features, was_cancelled: true });
+                }
+                let (r, s, e) = crate::cpu::auto_generated::sse::SSE::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::sse::SSE::get_tests().len(),
+                    progress_callback
+                )?;
+                features.push(FeatureStats {
+                    feature_name: crate::cpu::auto_generated::sse::SSE::get_name(),
+                    tests_run: r,
+                    tests_skipped: s,
+                    tests_errored: e,
+                });
+                completed_features += 1;
             }
         }
 
         #[cfg(target_feature = "sse2")]
         {
             if std::arch::is_x86_feature_detected!("sse2") {
-                let (r, s, e) = crate::cpu::auto_generated::sse2::SSE2::test()?;
-                stats.push((crate::cpu::auto_generated::sse2::SSE2::get_name(), r, s, e));
+                if should_stop() {
+                    return Ok(TestStatistics { features, was_cancelled: true });
+                }
+                let (r, s, e) = crate::cpu::auto_generated::sse2::SSE2::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::sse2::SSE2::get_tests().len(),
+                    progress_callback
+                )?;
+                features.push(FeatureStats {
+                    feature_name: crate::cpu::auto_generated::sse2::SSE2::get_name(),
+                    tests_run: r,
+                    tests_skipped: s,
+                    tests_errored: e,
+                });
+                completed_features += 1;
             }
         }
 
         #[cfg(target_feature = "sse3")]
         {
             if std::arch::is_x86_feature_detected!("sse3") {
-                let (r, s, e) = crate::cpu::auto_generated::sse3::SSE3::test()?;
-                stats.push((crate::cpu::auto_generated::sse3::SSE3::get_name(), r, s, e));
+                if should_stop() {
+                    return Ok(TestStatistics { features, was_cancelled: true });
+                }
+                let (r, s, e) = crate::cpu::auto_generated::sse3::SSE3::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::sse3::SSE3::get_tests().len(),
+                    progress_callback
+                )?;
+                features.push(FeatureStats {
+                    feature_name: crate::cpu::auto_generated::sse3::SSE3::get_name(),
+                    tests_run: r,
+                    tests_skipped: s,
+                    tests_errored: e,
+                });
+                completed_features += 1;
             }
         }
 
         #[cfg(target_feature = "ssse3")]
         {
             if std::arch::is_x86_feature_detected!("ssse3") {
-                let (r, s, e) = crate::cpu::auto_generated::ssse3::SSSE3::test()?;
-                stats.push((crate::cpu::auto_generated::ssse3::SSSE3::get_name(), r, s, e));
+                if should_stop() {
+                    return Ok(TestStatistics { features, was_cancelled: true });
+                }
+                let (r, s, e) = crate::cpu::auto_generated::ssse3::SSSE3::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::ssse3::SSSE3::get_tests().len(),
+                    progress_callback
+                )?;
+                features.push(FeatureStats {
+                    feature_name: crate::cpu::auto_generated::ssse3::SSSE3::get_name(),
+                    tests_run: r,
+                    tests_skipped: s,
+                    tests_errored: e,
+                });
+                completed_features += 1;
             }
         }
 
         #[cfg(target_feature = "sse4.1")]
         {
             if std::arch::is_x86_feature_detected!("sse4.1") {
-                let (r, s, e) = crate::cpu::auto_generated::sse41::SSE41::test()?;
-                stats.push((crate::cpu::auto_generated::sse41::SSE41::get_name(), r, s, e));
+                if should_stop() {
+                    return Ok(TestStatistics { features, was_cancelled: true });
+                }
+                let (r, s, e) = crate::cpu::auto_generated::sse41::SSE41::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::sse41::SSE41::get_tests().len(),
+                    progress_callback
+                )?;
+                features.push(FeatureStats {
+                    feature_name: crate::cpu::auto_generated::sse41::SSE41::get_name(),
+                    tests_run: r,
+                    tests_skipped: s,
+                    tests_errored: e,
+                });
+                completed_features += 1;
             }
         }
 
         #[cfg(target_feature = "sse4.2")]
         {
             if std::arch::is_x86_feature_detected!("sse4.2") {
-                let (r, s, e) = crate::cpu::auto_generated::sse42::SSE42::test()?;
-                stats.push((crate::cpu::auto_generated::sse42::SSE42::get_name(), r, s, e));
+                if should_stop() {
+                    return Ok(TestStatistics { features, was_cancelled: true });
+                }
+                let (r, s, e) = crate::cpu::auto_generated::sse42::SSE42::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::sse42::SSE42::get_tests().len(),
+                    progress_callback
+                )?;
+                features.push(FeatureStats {
+                    feature_name: crate::cpu::auto_generated::sse42::SSE42::get_name(),
+                    tests_run: r,
+                    tests_skipped: s,
+                    tests_errored: e,
+                });
+                completed_features += 1;
             }
         }
 
         #[cfg(target_feature = "avx")]
         {
             if std::arch::is_x86_feature_detected!("avx") {
-                let (r, s, e) = crate::cpu::auto_generated::avx::AVX::test()?;
-                stats.push((crate::cpu::auto_generated::avx::AVX::get_name(), r, s, e));
+                if should_stop() {
+                    return Ok(TestStatistics { features, was_cancelled: true });
+                }
+                let (r, s, e) = crate::cpu::auto_generated::avx::AVX::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::avx::AVX::get_tests().len(),
+                    progress_callback
+                )?;
+                features.push(FeatureStats {
+                    feature_name: crate::cpu::auto_generated::avx::AVX::get_name(),
+                    tests_run: r,
+                    tests_skipped: s,
+                    tests_errored: e,
+                });
+                completed_features += 1;
             }
         }
 
         #[cfg(target_feature = "avx2")]
         {
             if std::arch::is_x86_feature_detected!("avx2") {
-                let (r, s, e) = crate::cpu::auto_generated::avx2::AVX2::test()?;
-                stats.push((crate::cpu::auto_generated::avx2::AVX2::get_name(), r, s, e));
+                if should_stop() {
+                    return Ok(TestStatistics { features, was_cancelled: true });
+                }
+                let (r, s, e) = crate::cpu::auto_generated::avx2::AVX2::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::avx2::AVX2::get_tests().len(),
+                    progress_callback
+                )?;
+                features.push(FeatureStats {
+                    feature_name: crate::cpu::auto_generated::avx2::AVX2::get_name(),
+                    tests_run: r,
+                    tests_skipped: s,
+                    tests_errored: e,
+                });
+                completed_features += 1;
             }
         }
 
         #[cfg(target_feature = "fma")]
         {
             if std::arch::is_x86_feature_detected!("fma") {
-                let (r, s, e) = crate::cpu::auto_generated::fma::FMA::test()?;
-                stats.push((crate::cpu::auto_generated::fma::FMA::get_name(), r, s, e));
+                if should_stop() {
+                    return Ok(TestStatistics { features, was_cancelled: true });
+                }
+                let (r, s, e) = crate::cpu::auto_generated::fma::FMA::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::fma::FMA::get_tests().len(),
+                    progress_callback
+                )?;
+                features.push(FeatureStats {
+                    feature_name: crate::cpu::auto_generated::fma::FMA::get_name(),
+                    tests_run: r,
+                    tests_skipped: s,
+                    tests_errored: e,
+                });
+                completed_features += 1;
             }
         }
 
         #[cfg(target_feature = "avx512f")]
         {
             if std::arch::is_x86_feature_detected!("avx512f") {
-                let (r, s, e) = crate::cpu::auto_generated::avx512f::AVX512F::test()?;
-                stats.push((crate::cpu::auto_generated::avx512f::AVX512F::get_name(), r, s, e));
+                if should_stop() {
+                    return Ok(TestStatistics { features, was_cancelled: true });
+                }
+                let (r, s, e) = crate::cpu::auto_generated::avx512f::AVX512F::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::avx512f::AVX512F::get_tests().len(),
+                    progress_callback
+                )?;
+                features.push(FeatureStats {
+                    feature_name: crate::cpu::auto_generated::avx512f::AVX512F::get_name(),
+                    tests_run: r,
+                    tests_skipped: s,
+                    tests_errored: e,
+                });
+                completed_features += 1;
             }
         }
 
         #[cfg(target_feature = "avx512bitalg")]
         {
             if std::arch::is_x86_feature_detected!("avx512bitalg") {
-                let (r, s, e) = crate::cpu::auto_generated::avx512bitalg::AVX512BITALG::test()?;
-                stats.push((crate::cpu::auto_generated::avx512bitalg::AVX512BITALG::get_name(), r, s, e));
+                if should_stop() {
+                    return Ok(TestStatistics { features, was_cancelled: true });
+                }
+                let (r, s, e) = crate::cpu::auto_generated::avx512bitalg::AVX512BITALG::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::avx512bitalg::AVX512BITALG::get_tests().len(),
+                    progress_callback
+                )?;
+                features.push(FeatureStats {
+                    feature_name: crate::cpu::auto_generated::avx512bitalg::AVX512BITALG::get_name(),
+                    tests_run: r,
+                    tests_skipped: s,
+                    tests_errored: e,
+                });
+                completed_features += 1;
             }
         }
 
@@ -170,40 +476,110 @@ pub fn test_all_extensions() -> Result<(), String> {
         // #[cfg(target_feature = "avx512bf16")]
         // {
         //     if std::arch::is_x86_feature_detected!("avx512bf16") {
-        //         let (r, s, e) = crate::cpu::auto_generated::avx512bf16::AVX512BF16::test()?;
-        //         stats.push((crate::cpu::auto_generated::avx512bf16::AVX512BF16::get_name(), r, s, e));
+        //         if should_stop() {
+        //             return Ok(TestStatistics { features, was_cancelled: true });
+        //         }
+        //         let (r, s, e) = crate::cpu::auto_generated::avx512bf16::AVX512BF16::test_with_progress(
+        //             total_features,
+        //             completed_features,
+        //             crate::cpu::auto_generated::avx512bf16::AVX512BF16::get_tests().len(),
+        //             progress_callback
+        //         )?;
+        //         features.push(FeatureStats {
+        //             feature_name: crate::cpu::auto_generated::avx512bf16::AVX512BF16::get_name(),
+        //             tests_run: r,
+        //             tests_skipped: s,
+        //             tests_errored: e,
+        //         });
+        //         completed_features += 1;
         //     }
         // }
 
         #[cfg(target_feature = "avx512cd")]
         {
             if std::arch::is_x86_feature_detected!("avx512cd") {
-                let (r, s, e) = crate::cpu::auto_generated::avx512cd::AVX512CD::test()?;
-                stats.push((crate::cpu::auto_generated::avx512cd::AVX512CD::get_name(), r, s, e));
+                if should_stop() {
+                    return Ok(TestStatistics { features, was_cancelled: true });
+                }
+                let (r, s, e) = crate::cpu::auto_generated::avx512cd::AVX512CD::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::avx512cd::AVX512CD::get_tests().len(),
+                    progress_callback
+                )?;
+                features.push(FeatureStats {
+                    feature_name: crate::cpu::auto_generated::avx512cd::AVX512CD::get_name(),
+                    tests_run: r,
+                    tests_skipped: s,
+                    tests_errored: e,
+                });
+                completed_features += 1;
             }
         }
 
         // #[cfg(target_feature = "avx512ifma")]
         // {
         //     if std::arch::is_x86_feature_detected!("avx512ifma") {
-        //         let (r, s, e) = crate::cpu::auto_generated::avx512ifma::AVX512IFMA::test()?;
-        //         stats.push((crate::cpu::auto_generated::avx512ifma::AVX512IFMA::get_name(), r, s, e));
+        //         if should_stop() {
+        //             return Ok(TestStatistics { features, was_cancelled: true });
+        //         }
+        //         let (r, s, e) = crate::cpu::auto_generated::avx512ifma::AVX512IFMA::test_with_progress(
+        //             total_features,
+        //             completed_features,
+        //             crate::cpu::auto_generated::avx512ifma::AVX512IFMA::get_tests().len(),
+        //             progress_callback
+        //         )?;
+        //         features.push(FeatureStats {
+        //             feature_name: crate::cpu::auto_generated::avx512ifma::AVX512IFMA::get_name(),
+        //             tests_run: r,
+        //             tests_skipped: s,
+        //             tests_errored: e,
+        //         });
+        //         completed_features += 1;
         //     }
         // }
         //
         // #[cfg(target_feature = "avx512vbmi")]
         // {
         //     if std::arch::is_x86_feature_detected!("avx512vbmi") {
-        //         let (r, s, e) = crate::cpu::auto_generated::avx512vbmi::AVX512VBMI::test()?;
-        //         stats.push((crate::cpu::auto_generated::avx512vbmi::AVX512VBMI::get_name(), r, s, e));
+        //         if should_stop() {
+        //             return Ok(TestStatistics { features, was_cancelled: true });
+        //         }
+        //         let (r, s, e) = crate::cpu::auto_generated::avx512vbmi::AVX512VBMI::test_with_progress(
+        //             total_features,
+        //             completed_features,
+        //             crate::cpu::auto_generated::avx512vbmi::AVX512VBMI::get_tests().len(),
+        //             progress_callback
+        //         )?;
+        //         features.push(FeatureStats {
+        //             feature_name: crate::cpu::auto_generated::avx512vbmi::AVX512VBMI::get_name(),
+        //             tests_run: r,
+        //             tests_skipped: s,
+        //             tests_errored: e,
+        //         });
+        //         completed_features += 1;
         //     }
         // }
 
         #[cfg(target_feature = "aes")]
         {
             if std::arch::is_x86_feature_detected!("aes") {
-                let (r, s, e) = crate::cpu::auto_generated::aes::AES::test()?;
-                stats.push((crate::cpu::auto_generated::aes::AES::get_name(), r, s, e));
+                if should_stop() {
+                    return Ok(TestStatistics { features, was_cancelled: true });
+                }
+                let (r, s, e) = crate::cpu::auto_generated::aes::AES::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::aes::AES::get_tests().len(),
+                    progress_callback
+                )?;
+                features.push(FeatureStats {
+                    feature_name: crate::cpu::auto_generated::aes::AES::get_name(),
+                    tests_run: r,
+                    tests_skipped: s,
+                    tests_errored: e,
+                });
+                completed_features += 1;
             }
         }
     }
@@ -213,25 +589,10 @@ pub fn test_all_extensions() -> Result<(), String> {
         info!("CPU extension tests are only available on x86/x86_64 architectures");
     }
 
-    if !stats.is_empty() {
-        let name_width = stats.iter().map(|(n, _, _, _)| n.len()).max().unwrap_or(0);
-        println!("=== Test Statistics ===");
-        println!("{:<width$}  {:>4}  {:>7}  {:>6}", "Feature", "Run", "Skipped", "Errors", width = name_width);
-        println!("{}", "-".repeat(name_width + 24));
-        let mut total_run = 0usize;
-        let mut total_skipped = 0usize;
-        let mut total_errors = 0usize;
-        for (name, run, skipped, errors) in &stats {
-            println!("{:<width$}  {:>4}  {:>7}  {:>6}", name, run, skipped, errors, width = name_width);
-            total_run += run;
-            total_skipped += skipped;
-            total_errors += errors;
-        }
-        println!("{}", "-".repeat(name_width + 24));
-        println!("{:<width$}  {:>4}  {:>7}  {:>6}", "TOTAL", total_run, total_skipped, total_errors, width = name_width);
-    }
-
-    Ok(())
+    Ok(TestStatistics {
+        features,
+        was_cancelled: should_stop()
+    })
 }
 
 pub fn available_modes() -> Vec<&'static str> {

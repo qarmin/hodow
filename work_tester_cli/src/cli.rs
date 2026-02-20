@@ -13,7 +13,7 @@ pub struct Args {
     pub list_modes: bool,
 
     /// List all available test functions
-    #[arg(long = "list-functions")]
+    #[arg(short = 'f', long = "list-functions")]
     pub list_functions: bool,
 
     /// Test specific functions by name (e.g., _mm_add_ps _mm_sub_ps)
@@ -23,5 +23,9 @@ pub struct Args {
     /// Skip specific tests by name (can be repeated or comma-separated)
     #[arg(short = 's', long = "skip", value_delimiter = ',', num_args = 1..)]
     pub skip: Vec<String>,
+
+    /// Enable debug logging
+    #[arg(short = 'd', long = "debug")]
+    pub debug: bool,
 }
 

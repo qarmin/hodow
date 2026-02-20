@@ -553,7 +553,13 @@ def gen_fn(sig: dict, expected_values: dict[str, str] | None = None) -> str:
         lines.append("")
         lines.append("        if crate::get_fuzzing() {")
         lines.append("            log::info!(\"Starting fuzzing\");")
-        lines.append("            for _ in 0..crate::cpu::get_iterations() {")
+        lines.append("            let total_iters = crate::cpu::get_iterations();")
+        lines.append("            for i in 0..total_iters {")
+        lines.append("                if i % 1000 == 0 && crate::cpu::should_stop() {")
+        lines.append("                    log::info!(\"Fuzzing stopped at iteration {}\", i);")
+        lines.append("                    break;")
+        lines.append("                }")
+
         fuzz_args = [arg_expr(pt, random=True) for _, pt in params
                      if "*" not in pt and not pt.startswith("&")]
         fuzz_call = f"{name}{cs}({', '.join(fuzz_args)})"

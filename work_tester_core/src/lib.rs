@@ -10,12 +10,19 @@ pub mod cpu;
 // Re-export main API
 pub use cpu::{
     ExtensionTest,
+    FeatureStats,
+    ProgressCallback,
     TestFunction,
+    TestProgress,
+    TestStatistics,
     available_modes,
     get_iterations,
     list_all_functions,
+    request_stop,
+    reset_stop_flag,
     set_iterations,
     set_skip_tests,
+    should_stop,
     test_all_extensions,
 };
 
