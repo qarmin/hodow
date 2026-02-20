@@ -28,12 +28,6 @@ pub mod avx512f;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512fp16"))]
 pub mod avx512fp16;
 
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512ifma"))]
-pub mod avx512ifma;
-
-#[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512vbmi"))]
-pub mod avx512vbmi;
-
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), target_feature = "avx512vbmi2"))]
 pub mod avx512vbmi2;
 

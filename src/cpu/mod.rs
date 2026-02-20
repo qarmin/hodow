@@ -183,21 +183,21 @@ pub fn test_all_extensions() -> Result<(), String> {
             }
         }
 
-        #[cfg(target_feature = "avx512ifma")]
-        {
-            if std::arch::is_x86_feature_detected!("avx512ifma") {
-                let (r, s, e) = crate::cpu::auto_generated::avx512ifma::AVX512IFMA::test()?;
-                stats.push((crate::cpu::auto_generated::avx512ifma::AVX512IFMA::get_name(), r, s, e));
-            }
-        }
-
-        #[cfg(target_feature = "avx512vbmi")]
-        {
-            if std::arch::is_x86_feature_detected!("avx512vbmi") {
-                let (r, s, e) = crate::cpu::auto_generated::avx512vbmi::AVX512VBMI::test()?;
-                stats.push((crate::cpu::auto_generated::avx512vbmi::AVX512VBMI::get_name(), r, s, e));
-            }
-        }
+        // #[cfg(target_feature = "avx512ifma")]
+        // {
+        //     if std::arch::is_x86_feature_detected!("avx512ifma") {
+        //         let (r, s, e) = crate::cpu::auto_generated::avx512ifma::AVX512IFMA::test()?;
+        //         stats.push((crate::cpu::auto_generated::avx512ifma::AVX512IFMA::get_name(), r, s, e));
+        //     }
+        // }
+        //
+        // #[cfg(target_feature = "avx512vbmi")]
+        // {
+        //     if std::arch::is_x86_feature_detected!("avx512vbmi") {
+        //         let (r, s, e) = crate::cpu::auto_generated::avx512vbmi::AVX512VBMI::test()?;
+        //         stats.push((crate::cpu::auto_generated::avx512vbmi::AVX512VBMI::get_name(), r, s, e));
+        //     }
+        // }
 
         #[cfg(target_feature = "aes")]
         {
@@ -279,12 +279,12 @@ pub fn available_modes() -> Vec<&'static str> {
         if std::arch::is_x86_feature_detected!("avx512cd") {
             modes.push("avx512cd");
         }
-        if std::arch::is_x86_feature_detected!("avx512ifma") {
-            modes.push("avx512ifma");
-        }
-        if std::arch::is_x86_feature_detected!("avx512vbmi") {
-            modes.push("avx512vbmi");
-        }
+        // if std::arch::is_x86_feature_detected!("avx512ifma") {
+        //     modes.push("avx512ifma");
+        // }
+        // if std::arch::is_x86_feature_detected!("avx512vbmi") {
+        //     modes.push("avx512vbmi");
+        // }
         if std::arch::is_x86_feature_detected!("aes") {
             modes.push("aes");
         }
@@ -343,11 +343,11 @@ pub fn list_all_functions() -> Vec<String> {
         #[cfg(target_feature = "avx512cd")]
         collect_tests!(crate::cpu::auto_generated::avx512cd::AVX512CD);
 
-        #[cfg(target_feature = "avx512ifma")]
-        collect_tests!(crate::cpu::auto_generated::avx512ifma::AVX512IFMA);
+        // #[cfg(target_feature = "avx512ifma")]
+        // collect_tests!(crate::cpu::auto_generated::avx512ifma::AVX512IFMA);
 
-        #[cfg(target_feature = "avx512vbmi")]
-        collect_tests!(crate::cpu::auto_generated::avx512vbmi::AVX512VBMI);
+        // #[cfg(target_feature = "avx512vbmi")]
+        // collect_tests!(crate::cpu::auto_generated::avx512vbmi::AVX512VBMI);
 
         #[cfg(target_feature = "aes")]
         collect_tests!(crate::cpu::auto_generated::aes::AES);
