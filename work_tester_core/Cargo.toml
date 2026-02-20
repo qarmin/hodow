@@ -8,8 +8,14 @@ log.workspace = true
 once_cell.workspace = true
 rand.workspace = true
 
+# Optional GPU dependencies
+glutin = { version = "0.30", optional = true }
+glow = { version = "0.11", optional = true }
+
 [features]
 miri_build = []
+# Feature to enable OpenGL GPU support
+gpu = ["glutin", "glow"]
 
 [lints]
 workspace = true

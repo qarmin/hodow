@@ -119,6 +119,19 @@ fn main() {
 
     print_build_info();
 
+
+    if args.gui {
+        match work_tester_core::init_opengl() {
+            Ok(_mode) => {
+                log::info!("OpenGL initialized at startup (attempt). GPU-backed tests may be available.");
+            }
+            Err(e) => {
+                eprintln!("Note: OpenGL initialization attempt failed: {}. GPU tests won't run unless you enable/fix GPU support.", e);
+                return;
+            }
+        }
+    }
+
     if args.list_modes {
         let modes = available_modes();
         println!("Available modes: {:?}", modes);
