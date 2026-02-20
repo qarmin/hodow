@@ -1,16 +1,14 @@
 # WorkTester - Devices testing tool
 
-This is a hobby project, to validate specific cpu(at least for now) features/functions, to check if they don't crash and if works correctly.
+This is a hobby project, to validate specific cpu(at least for now) features/functions, to check if they don't crash and if produces correct results.
+
+The first requirement, is that code should be easily cross-compilable, without needing any additional dependencies.
 
 For now it checks specific cpu features, runs them to find crashes(initially validated this with miri to avoid spurious crashes) and use 1 check for (almost)every function to find any possible issues with the implementation.
 
-
+Project was created, basing on Rust 1.93 and later updates, may add other cpu features.
 
 ## Usage
-
-It is recommended to compile 
-
-
 ### Default(not recommended - uses very basic cpu features)
 `cargo run`
 ```
@@ -64,3 +62,12 @@ TOTAL         2325        0       0
 
 ## AI Usage
 This project heavily relies on AI for code generation, bug fixing, refactoring, so if you have any objections to this, don't use it.
+
+## Implemented
+
+| Feature    | Implemented |
+|------------|------------:|
+| CPU x86_64 |           ✅ |
+| CPU arm    |           ❌ |
+| OpenGL     |           ❌ |
+| Vulkan     |           ❌ |

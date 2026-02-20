@@ -24,6 +24,10 @@ runa *args:
     RUSTFLAGS="-C target-feature=+sse2,+sse3,+sse4.1,+sse4.2,+avx,+avx2,+fma,+avx512f,+avx512cd,+avx512bw,+avx512dq,+avx512vl ${EXTRA_RUSTFLAGS:-}" cargo +nightly build --release
     target/release/work_tester {{args}}
 
+arm:
+    cargo zigbuild  --target armv7-unknown-linux-gnueabihf.2.28
+
+
 upgrade:
     cargo +nightly -Z unstable-options update --breaking
     cargo update

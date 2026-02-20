@@ -3,7 +3,7 @@
 Extracts public intrinsic function signatures from stdarch x86/x86_64 source
 files, joining multi-line signatures into a single line.
 
-Output format matches TODO.txt / TODO_AVX.txt:
+Output format matches signatures.txt:
   path/to/file.rs
   LINENUM:pub [unsafe] fn _mm_xxx(a: T, b: T) -> T {
 
@@ -19,9 +19,7 @@ import argparse
 from pathlib import Path
 
 STDARCH_DIR = Path(
-    "/home/rafal/.cache/JetBrains/RustRover2025.2/intellij-rust/"
-    "stdlib-local-copy/1.93.0-77402190f38bed440a92e18434c83870e513193b/"
-    "library/stdarch/crates/core_arch/src"
+    "TODO"
 )
 
 X86_DIR    = STDARCH_DIR / "x86"
