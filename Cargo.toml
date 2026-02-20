@@ -15,3 +15,4 @@ miri_build = []
 
 [lints]
 clippy.upper_case_acronyms = "allow"
+clippy.approx_constant = "allow" # Generated code
