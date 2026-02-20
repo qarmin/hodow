@@ -11,14 +11,13 @@ use once_cell::sync::OnceCell;
 #[macro_use]
 mod test_macros;
 
-pub(crate) mod common;
 pub mod auto_generated;
+pub(crate) mod common;
 
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 #[allow(unused_imports)]
 pub use auto_generated::*;
 
-/// Progress raportowania wykonania testów
 #[derive(Debug, Clone)]
 pub struct TestProgress {
     pub total_features: usize,
@@ -31,7 +30,6 @@ pub struct TestProgress {
     pub total_fuzzing_iterations: usize,
 }
 
-/// Statystyki dla pojedynczego feature
 #[derive(Debug, Clone)]
 pub struct FeatureStats {
     pub feature_name: &'static str,
@@ -40,7 +38,6 @@ pub struct FeatureStats {
     pub tests_errored: usize,
 }
 
-/// Kompletne statystyki wszystkich testów
 #[derive(Debug, Clone)]
 pub struct TestStatistics {
     pub features: Vec<FeatureStats>,
@@ -61,7 +58,6 @@ impl TestStatistics {
     }
 }
 
-/// Typ callback dla progress updates
 pub type ProgressCallback = dyn Fn(&TestProgress) + Send + Sync;
 
 #[cfg(miri)]
@@ -90,17 +86,14 @@ fn should_skip_test(name: &str) -> bool {
     SKIP_TESTS.get().map(|s| s.contains(name)).unwrap_or(false)
 }
 
-/// Zażądaj zatrzymania testów
 pub fn request_stop() {
     STOP_REQUESTED.store(true, Ordering::Relaxed);
 }
 
-/// Sprawdź czy zażądano stopu
 pub fn should_stop() -> bool {
     STOP_REQUESTED.load(Ordering::Relaxed)
 }
 
-/// Zresetuj flagę stop (wywołaj przed startem testów)
 pub fn reset_stop_flag() {
     STOP_REQUESTED.store(false, Ordering::Relaxed);
 }
@@ -112,12 +105,10 @@ pub trait ExtensionTest {
     fn get_name() -> &'static str;
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)];
 
-    /// Stara metoda - backward compatible
     fn test() -> Result<(usize, usize, usize), String> {
         Self::test_with_progress(1, 0, Self::get_tests().len(), None)
     }
 
-    /// Nowa metoda z progress reporting
     fn test_with_progress(
         total_features: usize,
         completed_features: usize,
@@ -178,50 +169,74 @@ fn count_available_features() -> usize {
     #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     {
         #[cfg(target_feature = "sse")]
-        if std::arch::is_x86_feature_detected!("sse") { count += 1; }
+        if std::arch::is_x86_feature_detected!("sse") {
+            count += 1;
+        }
 
         #[cfg(target_feature = "sse2")]
-        if std::arch::is_x86_feature_detected!("sse2") { count += 1; }
+        if std::arch::is_x86_feature_detected!("sse2") {
+            count += 1;
+        }
 
         #[cfg(target_feature = "sse3")]
-        if std::arch::is_x86_feature_detected!("sse3") { count += 1; }
+        if std::arch::is_x86_feature_detected!("sse3") {
+            count += 1;
+        }
 
         #[cfg(target_feature = "ssse3")]
-        if std::arch::is_x86_feature_detected!("ssse3") { count += 1; }
+        if std::arch::is_x86_feature_detected!("ssse3") {
+            count += 1;
+        }
 
         #[cfg(target_feature = "sse4.1")]
-        if std::arch::is_x86_feature_detected!("sse4.1") { count += 1; }
+        if std::arch::is_x86_feature_detected!("sse4.1") {
+            count += 1;
+        }
 
         #[cfg(target_feature = "sse4.2")]
-        if std::arch::is_x86_feature_detected!("sse4.2") { count += 1; }
+        if std::arch::is_x86_feature_detected!("sse4.2") {
+            count += 1;
+        }
 
         #[cfg(target_feature = "avx")]
-        if std::arch::is_x86_feature_detected!("avx") { count += 1; }
+        if std::arch::is_x86_feature_detected!("avx") {
+            count += 1;
+        }
 
         #[cfg(target_feature = "avx2")]
-        if std::arch::is_x86_feature_detected!("avx2") { count += 1; }
+        if std::arch::is_x86_feature_detected!("avx2") {
+            count += 1;
+        }
 
         #[cfg(target_feature = "fma")]
-        if std::arch::is_x86_feature_detected!("fma") { count += 1; }
+        if std::arch::is_x86_feature_detected!("fma") {
+            count += 1;
+        }
 
         #[cfg(target_feature = "avx512f")]
-        if std::arch::is_x86_feature_detected!("avx512f") { count += 1; }
+        if std::arch::is_x86_feature_detected!("avx512f") {
+            count += 1;
+        }
 
         #[cfg(target_feature = "avx512bitalg")]
-        if std::arch::is_x86_feature_detected!("avx512bitalg") { count += 1; }
+        if std::arch::is_x86_feature_detected!("avx512bitalg") {
+            count += 1;
+        }
 
         #[cfg(target_feature = "avx512cd")]
-        if std::arch::is_x86_feature_detected!("avx512cd") { count += 1; }
+        if std::arch::is_x86_feature_detected!("avx512cd") {
+            count += 1;
+        }
 
         #[cfg(target_feature = "aes")]
-        if std::arch::is_x86_feature_detected!("aes") { count += 1; }
+        if std::arch::is_x86_feature_detected!("aes") {
+            count += 1;
+        }
     }
     count
 }
 
-pub fn test_all_extensions(
-    progress_callback: Option<&ProgressCallback>
-) -> Result<TestStatistics, String> {
+pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Result<TestStatistics, String> {
     reset_stop_flag();
 
     let total_features = count_available_features();
@@ -240,7 +255,7 @@ pub fn test_all_extensions(
                     total_features,
                     completed_features,
                     crate::cpu::auto_generated::sse::SSE::get_tests().len(),
-                    progress_callback
+                    progress_callback,
                 )?;
                 features.push(FeatureStats {
                     feature_name: crate::cpu::auto_generated::sse::SSE::get_name(),
@@ -262,7 +277,7 @@ pub fn test_all_extensions(
                     total_features,
                     completed_features,
                     crate::cpu::auto_generated::sse2::SSE2::get_tests().len(),
-                    progress_callback
+                    progress_callback,
                 )?;
                 features.push(FeatureStats {
                     feature_name: crate::cpu::auto_generated::sse2::SSE2::get_name(),
@@ -284,7 +299,7 @@ pub fn test_all_extensions(
                     total_features,
                     completed_features,
                     crate::cpu::auto_generated::sse3::SSE3::get_tests().len(),
-                    progress_callback
+                    progress_callback,
                 )?;
                 features.push(FeatureStats {
                     feature_name: crate::cpu::auto_generated::sse3::SSE3::get_name(),
@@ -306,7 +321,7 @@ pub fn test_all_extensions(
                     total_features,
                     completed_features,
                     crate::cpu::auto_generated::ssse3::SSSE3::get_tests().len(),
-                    progress_callback
+                    progress_callback,
                 )?;
                 features.push(FeatureStats {
                     feature_name: crate::cpu::auto_generated::ssse3::SSSE3::get_name(),
@@ -328,7 +343,7 @@ pub fn test_all_extensions(
                     total_features,
                     completed_features,
                     crate::cpu::auto_generated::sse41::SSE41::get_tests().len(),
-                    progress_callback
+                    progress_callback,
                 )?;
                 features.push(FeatureStats {
                     feature_name: crate::cpu::auto_generated::sse41::SSE41::get_name(),
@@ -350,7 +365,7 @@ pub fn test_all_extensions(
                     total_features,
                     completed_features,
                     crate::cpu::auto_generated::sse42::SSE42::get_tests().len(),
-                    progress_callback
+                    progress_callback,
                 )?;
                 features.push(FeatureStats {
                     feature_name: crate::cpu::auto_generated::sse42::SSE42::get_name(),
@@ -372,7 +387,7 @@ pub fn test_all_extensions(
                     total_features,
                     completed_features,
                     crate::cpu::auto_generated::avx::AVX::get_tests().len(),
-                    progress_callback
+                    progress_callback,
                 )?;
                 features.push(FeatureStats {
                     feature_name: crate::cpu::auto_generated::avx::AVX::get_name(),
@@ -394,7 +409,7 @@ pub fn test_all_extensions(
                     total_features,
                     completed_features,
                     crate::cpu::auto_generated::avx2::AVX2::get_tests().len(),
-                    progress_callback
+                    progress_callback,
                 )?;
                 features.push(FeatureStats {
                     feature_name: crate::cpu::auto_generated::avx2::AVX2::get_name(),
@@ -416,7 +431,7 @@ pub fn test_all_extensions(
                     total_features,
                     completed_features,
                     crate::cpu::auto_generated::fma::FMA::get_tests().len(),
-                    progress_callback
+                    progress_callback,
                 )?;
                 features.push(FeatureStats {
                     feature_name: crate::cpu::auto_generated::fma::FMA::get_name(),
@@ -438,7 +453,7 @@ pub fn test_all_extensions(
                     total_features,
                     completed_features,
                     crate::cpu::auto_generated::avx512f::AVX512F::get_tests().len(),
-                    progress_callback
+                    progress_callback,
                 )?;
                 features.push(FeatureStats {
                     feature_name: crate::cpu::auto_generated::avx512f::AVX512F::get_name(),
@@ -460,7 +475,7 @@ pub fn test_all_extensions(
                     total_features,
                     completed_features,
                     crate::cpu::auto_generated::avx512bitalg::AVX512BITALG::get_tests().len(),
-                    progress_callback
+                    progress_callback,
                 )?;
                 features.push(FeatureStats {
                     feature_name: crate::cpu::auto_generated::avx512bitalg::AVX512BITALG::get_name(),
@@ -505,7 +520,7 @@ pub fn test_all_extensions(
                     total_features,
                     completed_features,
                     crate::cpu::auto_generated::avx512cd::AVX512CD::get_tests().len(),
-                    progress_callback
+                    progress_callback,
                 )?;
                 features.push(FeatureStats {
                     feature_name: crate::cpu::auto_generated::avx512cd::AVX512CD::get_name(),
@@ -527,7 +542,7 @@ pub fn test_all_extensions(
                     total_features,
                     completed_features,
                     crate::cpu::auto_generated::avx512ifma::AVX512IFMA::get_tests().len(),
-                    progress_callback
+                    progress_callback,
                 )?;
                 features.push(FeatureStats {
                     feature_name: crate::cpu::auto_generated::avx512ifma::AVX512IFMA::get_name(),
@@ -549,7 +564,7 @@ pub fn test_all_extensions(
                     total_features,
                     completed_features,
                     crate::cpu::auto_generated::avx512vbmi::AVX512VBMI::get_tests().len(),
-                    progress_callback
+                    progress_callback,
                 )?;
                 features.push(FeatureStats {
                     feature_name: crate::cpu::auto_generated::avx512vbmi::AVX512VBMI::get_name(),
@@ -571,7 +586,7 @@ pub fn test_all_extensions(
                     total_features,
                     completed_features,
                     crate::cpu::auto_generated::aes::AES::get_tests().len(),
-                    progress_callback
+                    progress_callback,
                 )?;
                 features.push(FeatureStats {
                     feature_name: crate::cpu::auto_generated::aes::AES::get_name(),
@@ -591,7 +606,7 @@ pub fn test_all_extensions(
 
     Ok(TestStatistics {
         features,
-        was_cancelled: should_stop()
+        was_cancelled: should_stop(),
     })
 }
 
@@ -654,7 +669,6 @@ pub fn available_modes() -> Vec<&'static str> {
     modes
 }
 
-/// Returns a list of all available test function names across all extensions
 pub fn list_all_functions() -> Vec<String> {
     let mut functions = Vec::new();
 
@@ -716,4 +730,3 @@ pub fn list_all_functions() -> Vec<String> {
 
     functions
 }
-

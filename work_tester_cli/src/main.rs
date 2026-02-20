@@ -6,16 +6,7 @@ use std::fmt::Write as _;
 use clap::Parser;
 use handsome_logger::ConfigBuilder;
 use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
-use work_tester_core::{
-    TestProgress,
-    TestStatistics,
-    request_stop,
-    available_modes,
-    list_all_functions,
-    set_iterations,
-    set_skip_tests,
-    test_all_extensions,
-};
+use work_tester_core::{available_modes, list_all_functions, request_stop, set_iterations, set_skip_tests, test_all_extensions, TestProgress, TestStatistics};
 
 mod cli;
 
@@ -64,11 +55,7 @@ fn create_progress_bars() -> (MultiProgress, ProgressBar, ProgressBar, ProgressB
     feature_bar.set_prefix("Current feature");
 
     let test_bar = multi.add(ProgressBar::new(0));
-    test_bar.set_style(
-        ProgressStyle::default_bar()
-            .template("{prefix:20} {msg}")
-            .expect("Invalid template"),
-    );
+    test_bar.set_style(ProgressStyle::default_bar().template("{prefix:20} {msg}").expect("Invalid template"));
     test_bar.set_prefix("Current test");
 
     (multi, overall_bar, feature_bar, test_bar)
@@ -79,28 +66,27 @@ fn print_statistics(stats: &TestStatistics) {
     println!("{:^80}", "TEST STATISTICS");
     println!("{}", "=".repeat(80));
 
-    println!("{:<30} {:>10} {:>10} {:>10} {:>10}",
-        "Feature", "Run", "Skipped", "Errors", "Total");
+    println!("{:<30} {:>10} {:>10} {:>10} {:>10}", "Feature", "Run", "Skipped", "Errors", "Total");
     println!("{}", "-".repeat(80));
 
     for feature in &stats.features {
         let total = feature.tests_run + feature.tests_skipped + feature.tests_errored;
-        println!("{:<30} {:>10} {:>10} {:>10} {:>10}",
-            feature.feature_name,
-            feature.tests_run,
-            feature.tests_skipped,
-            feature.tests_errored,
-            total);
+        println!(
+            "{:<30} {:>10} {:>10} {:>10} {:>10}",
+            feature.feature_name, feature.tests_run, feature.tests_skipped, feature.tests_errored, total
+        );
     }
 
     println!("{}", "-".repeat(80));
     let grand_total = stats.total_run() + stats.total_skipped() + stats.total_errors();
-    println!("{:<30} {:>10} {:>10} {:>10} {:>10}",
+    println!(
+        "{:<30} {:>10} {:>10} {:>10} {:>10}",
         "TOTAL",
         stats.total_run(),
         stats.total_skipped(),
         stats.total_errors(),
-        grand_total);
+        grand_total
+    );
     println!("{}", "=".repeat(80));
 
     if stats.was_cancelled {
@@ -114,17 +100,11 @@ fn main() {
     // Initialize logger only if --debug flag is set
     if args.debug {
         if !cfg!(feature = "miri_build") {
-            let config = ConfigBuilder::new()
-                .set_format_text(handsome_logger::FormatText::DefaultWithFileNameC.get(), None)
-                .build();
-            handsome_logger::TermLogger::init(config, Default::default(), Default::default())
-                .expect("Failed to initialize logger");
+            let config = ConfigBuilder::new().set_format_text(handsome_logger::FormatText::DefaultWithFileNameC.get(), None).build();
+            handsome_logger::TermLogger::init(config, Default::default(), Default::default()).expect("Failed to initialize logger");
         } else {
-            let config = ConfigBuilder::new()
-                .set_format_text(handsome_logger::FormatText::LevelMessageC.get(), None)
-                .build();
-            handsome_logger::TermLogger::init(config, Default::default(), Default::default())
-                .expect("Failed to initialize logger");
+            let config = ConfigBuilder::new().set_format_text(handsome_logger::FormatText::LevelMessageC.get(), None).build();
+            handsome_logger::TermLogger::init(config, Default::default(), Default::default()).expect("Failed to initialize logger");
         }
     }
 
@@ -185,9 +165,7 @@ fn main() {
         if progress.total_fuzzing_iterations > 0 {
             test_bar_clone.set_message(format!(
                 "{} (fuzzing {}/{})",
-                progress.current_test,
-                progress.fuzzing_iteration,
-                progress.total_fuzzing_iterations
+                progress.current_test, progress.fuzzing_iteration, progress.total_fuzzing_iterations
             ));
         } else {
             test_bar_clone.set_message(progress.current_test.to_string());
