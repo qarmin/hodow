@@ -12,7 +12,7 @@ work_tester_core = { path = "../work_tester_core" }
 log.workspace = true
 handsome_logger = { version = "0.9.2", default-features = false }
 clap = { version = "4.3", features = ["derive"] }
-indicatif = "0.17"
+indicatif = "0.18.4"
 ctrlc = "3.4"
 
 [features]

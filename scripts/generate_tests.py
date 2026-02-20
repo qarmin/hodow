@@ -676,33 +676,34 @@ def main() -> None:
                    and s["name"] not in IGNORED_FUNCTIONS]
         skipped_count = len(all_funcs) - len(stable)
 
-        if not stable:
-            rows.append((ext, len(all_funcs), 0, 0, 0, skipped_count))
-            continue
-
         feature = ext_to_feature(ext)
         generated.append((ext, feature))
 
-        parts = [stable[i:i + FUNCTIONS_PER_PART]
-                 for i in range(0, len(stable), FUNCTIONS_PER_PART)]
+        if not stable:
+            # Generate empty module file (no parts)
+            (out / f"{ext}.rs").write_text(gen_ext_rs(ext, [], 0))
+            rows.append((ext, len(all_funcs), 0, 0, 0, skipped_count))
+        else:
+            parts = [stable[i:i + FUNCTIONS_PER_PART]
+                     for i in range(0, len(stable), FUNCTIONS_PER_PART)]
 
-        parts_dir = out / ext
-        parts_dir.mkdir(exist_ok=True)
+            parts_dir = out / ext
+            parts_dir.mkdir(exist_ok=True)
 
-        # Remove stale part files that exceed the new count
-        for old in parts_dir.glob("part*.rs"):
-            m = re.match(r"part(\d+)\.rs$", old.name)
-            if m and int(m.group(1)) > len(parts):
-                old.unlink()
+            # Remove stale part files that exceed the new count
+            for old in parts_dir.glob("part*.rs"):
+                m = re.match(r"part(\d+)\.rs$", old.name)
+                if m and int(m.group(1)) > len(parts):
+                    old.unlink()
 
-        for idx, chunk in enumerate(parts, 1):
-            (parts_dir / f"part{idx}.rs").write_text(gen_part(chunk, expected_values))
+            for idx, chunk in enumerate(parts, 1):
+                (parts_dir / f"part{idx}.rs").write_text(gen_part(chunk, expected_values))
 
-        (out / f"{ext}.rs").write_text(gen_ext_rs(ext, stable, len(parts)))
+            (out / f"{ext}.rs").write_text(gen_ext_rs(ext, stable, len(parts)))
 
-        no_fuzz_count = sum(1 for s in stable if skip_fuzz(s["name"], s["params"]))
-        rows.append((ext, len(all_funcs), len(stable), len(parts),
-                     no_fuzz_count, skipped_count))
+            no_fuzz_count = sum(1 for s in stable if skip_fuzz(s["name"], s["params"]))
+            rows.append((ext, len(all_funcs), len(stable), len(parts),
+                         no_fuzz_count, skipped_count))
 
     (out / "mod.rs").write_text(gen_mod_rs(generated))
 

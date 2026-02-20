@@ -517,49 +517,49 @@ pub fn test_all_extensions(
             }
         }
 
-        // #[cfg(target_feature = "avx512ifma")]
-        // {
-        //     if std::arch::is_x86_feature_detected!("avx512ifma") {
-        //         if should_stop() {
-        //             return Ok(TestStatistics { features, was_cancelled: true });
-        //         }
-        //         let (r, s, e) = crate::cpu::auto_generated::avx512ifma::AVX512IFMA::test_with_progress(
-        //             total_features,
-        //             completed_features,
-        //             crate::cpu::auto_generated::avx512ifma::AVX512IFMA::get_tests().len(),
-        //             progress_callback
-        //         )?;
-        //         features.push(FeatureStats {
-        //             feature_name: crate::cpu::auto_generated::avx512ifma::AVX512IFMA::get_name(),
-        //             tests_run: r,
-        //             tests_skipped: s,
-        //             tests_errored: e,
-        //         });
-        //         completed_features += 1;
-        //     }
-        // }
-        //
-        // #[cfg(target_feature = "avx512vbmi")]
-        // {
-        //     if std::arch::is_x86_feature_detected!("avx512vbmi") {
-        //         if should_stop() {
-        //             return Ok(TestStatistics { features, was_cancelled: true });
-        //         }
-        //         let (r, s, e) = crate::cpu::auto_generated::avx512vbmi::AVX512VBMI::test_with_progress(
-        //             total_features,
-        //             completed_features,
-        //             crate::cpu::auto_generated::avx512vbmi::AVX512VBMI::get_tests().len(),
-        //             progress_callback
-        //         )?;
-        //         features.push(FeatureStats {
-        //             feature_name: crate::cpu::auto_generated::avx512vbmi::AVX512VBMI::get_name(),
-        //             tests_run: r,
-        //             tests_skipped: s,
-        //             tests_errored: e,
-        //         });
-        //         completed_features += 1;
-        //     }
-        // }
+        #[cfg(target_feature = "avx512ifma")]
+        {
+            if std::arch::is_x86_feature_detected!("avx512ifma") {
+                if should_stop() {
+                    return Ok(TestStatistics { features, was_cancelled: true });
+                }
+                let (r, s, e) = crate::cpu::auto_generated::avx512ifma::AVX512IFMA::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::avx512ifma::AVX512IFMA::get_tests().len(),
+                    progress_callback
+                )?;
+                features.push(FeatureStats {
+                    feature_name: crate::cpu::auto_generated::avx512ifma::AVX512IFMA::get_name(),
+                    tests_run: r,
+                    tests_skipped: s,
+                    tests_errored: e,
+                });
+                completed_features += 1;
+            }
+        }
+
+        #[cfg(target_feature = "avx512vbmi")]
+        {
+            if std::arch::is_x86_feature_detected!("avx512vbmi") {
+                if should_stop() {
+                    return Ok(TestStatistics { features, was_cancelled: true });
+                }
+                let (r, s, e) = crate::cpu::auto_generated::avx512vbmi::AVX512VBMI::test_with_progress(
+                    total_features,
+                    completed_features,
+                    crate::cpu::auto_generated::avx512vbmi::AVX512VBMI::get_tests().len(),
+                    progress_callback
+                )?;
+                features.push(FeatureStats {
+                    feature_name: crate::cpu::auto_generated::avx512vbmi::AVX512VBMI::get_name(),
+                    tests_run: r,
+                    tests_skipped: s,
+                    tests_errored: e,
+                });
+                completed_features += 1;
+            }
+        }
 
         #[cfg(target_feature = "aes")]
         {
@@ -579,7 +579,7 @@ pub fn test_all_extensions(
                     tests_skipped: s,
                     tests_errored: e,
                 });
-                completed_features += 1;
+                // completed_features += 1;
             }
         }
     }
@@ -640,12 +640,12 @@ pub fn available_modes() -> Vec<&'static str> {
         if std::arch::is_x86_feature_detected!("avx512cd") {
             modes.push("avx512cd");
         }
-        // if std::arch::is_x86_feature_detected!("avx512ifma") {
-        //     modes.push("avx512ifma");
-        // }
-        // if std::arch::is_x86_feature_detected!("avx512vbmi") {
-        //     modes.push("avx512vbmi");
-        // }
+        if std::arch::is_x86_feature_detected!("avx512ifma") {
+            modes.push("avx512ifma");
+        }
+        if std::arch::is_x86_feature_detected!("avx512vbmi") {
+            modes.push("avx512vbmi");
+        }
         if std::arch::is_x86_feature_detected!("aes") {
             modes.push("aes");
         }
