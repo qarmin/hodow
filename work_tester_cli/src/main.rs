@@ -6,27 +6,17 @@ use std::fmt::Write as _;
 use clap::Parser;
 use handsome_logger::ConfigBuilder;
 use log::info;
-use once_cell::sync::OnceCell;
 
 mod cli;
-mod cpu;
 
 use crate::cli::Args;
-use crate::cpu::{available_modes, list_all_functions, set_iterations, set_skip_tests, test_all_extensions};
-
-static FUZZING: OnceCell<bool> = OnceCell::new();
-
-pub fn get_fuzzing() -> bool {
-    if FUZZING.get().is_none() {
-        FUZZING.set(true).unwrap();
-    }
-
-    *FUZZING.get().expect("FUZZING not initialized")
-}
-
-pub fn get_fuzzer() -> bool {
-    get_fuzzing()
-}
+use work_tester_core::{
+    available_modes,
+    list_all_functions,
+    set_iterations,
+    set_skip_tests,
+    test_all_extensions,
+};
 
 fn print_build_info() {
     let arch = env::consts::ARCH;
@@ -105,5 +95,3 @@ fn main() {
 
     println!("Clean exit");
 }
-
-

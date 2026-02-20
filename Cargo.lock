@@ -631,11 +631,19 @@ dependencies = [
 ]
 
 [[package]]
-name = "work_tester"
+name = "work_tester_cli"
 version = "0.1.0"
 dependencies = [
  "clap",
  "handsome_logger",
+ "log",
+ "work_tester_core",
+]
+
+[[package]]
+name = "work_tester_core"
+version = "0.1.0"
+dependencies = [
  "log",
  "once_cell",
  "rand",

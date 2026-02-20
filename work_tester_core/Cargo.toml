@@ -1,0 +1,15 @@
+[package]
+name = "work_tester_core"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+log.workspace = true
+once_cell.workspace = true
+rand.workspace = true
+
+[features]
+miri_build = []
+
+[lints]
+workspace = true
