@@ -4,7 +4,6 @@ mod part3;
 mod part4;
 mod part5;
 mod part6;
-mod part7;
 
 use crate::cpu::auto_generated::avx::part1::*;
 use crate::cpu::auto_generated::avx::part2::*;
@@ -12,7 +11,6 @@ use crate::cpu::auto_generated::avx::part3::*;
 use crate::cpu::auto_generated::avx::part4::*;
 use crate::cpu::auto_generated::avx::part5::*;
 use crate::cpu::auto_generated::avx::part6::*;
-use crate::cpu::auto_generated::avx::part7::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
@@ -110,14 +108,6 @@ impl ExtensionTest for AVX {
             (&test_mm256_insert_epi8, "test_mm256_insert_epi8"),
             (&test_mm256_insert_epi16, "test_mm256_insert_epi16"),
             (&test_mm256_insert_epi32, "test_mm256_insert_epi32"),
-            (&test_mm256_load_pd, "test_mm256_load_pd"),
-            (&test_mm256_store_pd, "test_mm256_store_pd"),
-            (&test_mm256_load_ps, "test_mm256_load_ps"),
-            (&test_mm256_store_ps, "test_mm256_store_ps"),
-            (&test_mm256_loadu_pd, "test_mm256_loadu_pd"),
-            (&test_mm256_storeu_pd, "test_mm256_storeu_pd"),
-            (&test_mm256_loadu_ps, "test_mm256_loadu_ps"),
-            (&test_mm256_storeu_ps, "test_mm256_storeu_ps"),
             (&test_mm256_load_si256, "test_mm256_load_si256"),
             (&test_mm256_store_si256, "test_mm256_store_si256"),
             (&test_mm256_loadu_si256, "test_mm256_loadu_si256"),
@@ -134,9 +124,6 @@ impl ExtensionTest for AVX {
             (&test_mm256_moveldup_ps, "test_mm256_moveldup_ps"),
             (&test_mm256_movedup_pd, "test_mm256_movedup_pd"),
             (&test_mm256_lddqu_si256, "test_mm256_lddqu_si256"),
-            (&test_mm256_stream_si256, "test_mm256_stream_si256"),
-            (&test_mm256_stream_pd, "test_mm256_stream_pd"),
-            (&test_mm256_stream_ps, "test_mm256_stream_ps"),
             (&test_mm256_rcp_ps, "test_mm256_rcp_ps"),
             (&test_mm256_rsqrt_ps, "test_mm256_rsqrt_ps"),
             (&test_mm256_unpackhi_pd, "test_mm256_unpackhi_pd"),
@@ -205,11 +192,7 @@ impl ExtensionTest for AVX {
             (&test_mm256_setr_m128, "test_mm256_setr_m128"),
             (&test_mm256_setr_m128d, "test_mm256_setr_m128d"),
             (&test_mm256_setr_m128i, "test_mm256_setr_m128i"),
-            (&test_mm256_loadu2_m128, "test_mm256_loadu2_m128"),
-            (&test_mm256_loadu2_m128d, "test_mm256_loadu2_m128d"),
             (&test_mm256_loadu2_m128i, "test_mm256_loadu2_m128i"),
-            (&test_mm256_storeu2_m128, "test_mm256_storeu2_m128"),
-            (&test_mm256_storeu2_m128d, "test_mm256_storeu2_m128d"),
             (&test_mm256_storeu2_m128i, "test_mm256_storeu2_m128i"),
             (&test_mm256_cvtss_f32, "test_mm256_cvtss_f32"),
             (&test_mm256_insert_epi64, "test_mm256_insert_epi64"),

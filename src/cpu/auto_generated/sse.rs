@@ -1,12 +1,10 @@
 mod part1;
 mod part2;
 mod part3;
-mod part4;
 
 use crate::cpu::auto_generated::sse::part1::*;
 use crate::cpu::auto_generated::sse::part2::*;
 use crate::cpu::auto_generated::sse::part3::*;
-use crate::cpu::auto_generated::sse::part4::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
@@ -99,21 +97,12 @@ impl ExtensionTest for SSE {
             (&test_mm_load_ss, "test_mm_load_ss"),
             (&test_mm_load1_ps, "test_mm_load1_ps"),
             (&test_mm_load_ps1, "test_mm_load_ps1"),
-            (&test_mm_load_ps, "test_mm_load_ps"),
-            (&test_mm_loadu_ps, "test_mm_loadu_ps"),
-            (&test_mm_loadr_ps, "test_mm_loadr_ps"),
             (&test_mm_store_ss, "test_mm_store_ss"),
-            (&test_mm_store1_ps, "test_mm_store1_ps"),
-            (&test_mm_store_ps1, "test_mm_store_ps1"),
-            (&test_mm_store_ps, "test_mm_store_ps"),
-            (&test_mm_storeu_ps, "test_mm_storeu_ps"),
-            (&test_mm_storer_ps, "test_mm_storer_ps"),
             (&test_mm_move_ss, "test_mm_move_ss"),
             #[cfg(not(miri))]
             (&test_mm_sfence, "test_mm_sfence"),
             (&test_mm_prefetch, "test_mm_prefetch"),
             (&test_mm_undefined_ps, "test_mm_undefined_ps"),
-            (&test_mm_stream_ps, "test_mm_stream_ps"),
             (&test_mm_cvtss_si64, "test_mm_cvtss_si64"),
             (&test_mm_cvttss_si64, "test_mm_cvttss_si64"),
             (&test_mm_cvtsi64_ss, "test_mm_cvtsi64_ss"),

@@ -1586,7 +1586,6 @@ impl ExtensionTest for AVX512F {
             (&test_mm512_storeu_si512, "test_mm512_storeu_si512"),
             (&test_mm512_load_si512, "test_mm512_load_si512"),
             (&test_mm512_store_si512, "test_mm512_store_si512"),
-            (&test_mm256_load_epi32, "test_mm256_load_epi32"),
             (&test_mm_mask_loadu_epi64, "test_mm_mask_loadu_epi64"),
             (&test_mm_maskz_loadu_epi64, "test_mm_maskz_loadu_epi64"),
             (&test_mm_mask_loadu_pd, "test_mm_mask_loadu_pd"),

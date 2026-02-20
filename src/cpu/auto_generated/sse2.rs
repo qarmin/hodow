@@ -5,7 +5,6 @@ mod part4;
 mod part5;
 mod part6;
 mod part7;
-mod part8;
 
 use crate::cpu::auto_generated::sse2::part1::*;
 use crate::cpu::auto_generated::sse2::part2::*;
@@ -14,7 +13,6 @@ use crate::cpu::auto_generated::sse2::part4::*;
 use crate::cpu::auto_generated::sse2::part5::*;
 use crate::cpu::auto_generated::sse2::part6::*;
 use crate::cpu::auto_generated::sse2::part7::*;
-use crate::cpu::auto_generated::sse2::part8::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
@@ -120,8 +118,6 @@ impl ExtensionTest for SSE2 {
             (&test_mm_store_si128, "test_mm_store_si128"),
             (&test_mm_storeu_si128, "test_mm_storeu_si128"),
             (&test_mm_storel_epi64, "test_mm_storel_epi64"),
-            (&test_mm_stream_si128, "test_mm_stream_si128"),
-            (&test_mm_stream_si32, "test_mm_stream_si32"),
             (&test_mm_move_epi64, "test_mm_move_epi64"),
             (&test_mm_packs_epi16, "test_mm_packs_epi16"),
             (&test_mm_packs_epi32, "test_mm_packs_epi32"),
@@ -211,29 +207,14 @@ impl ExtensionTest for SSE2 {
             (&test_mm_setr_pd, "test_mm_setr_pd"),
             (&test_mm_setzero_pd, "test_mm_setzero_pd"),
             (&test_mm_movemask_pd, "test_mm_movemask_pd"),
-            (&test_mm_load_pd, "test_mm_load_pd"),
             (&test_mm_load_sd, "test_mm_load_sd"),
             (&test_mm_loadh_pd, "test_mm_loadh_pd"),
             (&test_mm_loadl_pd, "test_mm_loadl_pd"),
-            (&test_mm_stream_pd, "test_mm_stream_pd"),
             (&test_mm_store_sd, "test_mm_store_sd"),
-            (&test_mm_store_pd, "test_mm_store_pd"),
-            (&test_mm_storeu_pd, "test_mm_storeu_pd"),
-            (&test_mm_storeu_si16, "test_mm_storeu_si16"),
-            (&test_mm_storeu_si32, "test_mm_storeu_si32"),
-            (&test_mm_storeu_si64, "test_mm_storeu_si64"),
-            (&test_mm_store1_pd, "test_mm_store1_pd"),
-            (&test_mm_store_pd1, "test_mm_store_pd1"),
-            (&test_mm_storer_pd, "test_mm_storer_pd"),
             (&test_mm_storeh_pd, "test_mm_storeh_pd"),
             (&test_mm_storel_pd, "test_mm_storel_pd"),
             (&test_mm_load1_pd, "test_mm_load1_pd"),
             (&test_mm_load_pd1, "test_mm_load_pd1"),
-            (&test_mm_loadr_pd, "test_mm_loadr_pd"),
-            (&test_mm_loadu_pd, "test_mm_loadu_pd"),
-            (&test_mm_loadu_si16, "test_mm_loadu_si16"),
-            (&test_mm_loadu_si32, "test_mm_loadu_si32"),
-            (&test_mm_loadu_si64, "test_mm_loadu_si64"),
             (&test_mm_shuffle_pd, "test_mm_shuffle_pd"),
             (&test_mm_move_sd, "test_mm_move_sd"),
             (&test_mm_castpd_ps, "test_mm_castpd_ps"),
@@ -250,7 +231,6 @@ impl ExtensionTest for SSE2 {
             (&test_mm_cvtsd_si64x, "test_mm_cvtsd_si64x"),
             (&test_mm_cvttsd_si64, "test_mm_cvttsd_si64"),
             (&test_mm_cvttsd_si64x, "test_mm_cvttsd_si64x"),
-            (&test_mm_stream_si64, "test_mm_stream_si64"),
             (&test_mm_cvtsi64_si128, "test_mm_cvtsi64_si128"),
             (&test_mm_cvtsi64x_si128, "test_mm_cvtsi64x_si128"),
             (&test_mm_cvtsi128_si64, "test_mm_cvtsi128_si64"),

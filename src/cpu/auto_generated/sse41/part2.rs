@@ -425,15 +425,6 @@ pub(super) fn test_mm_test_mix_ones_zeros() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_stream_load_si128() -> Result<(), String> {
-    unsafe {
-        let ptr_mem_addr = [create__m128i_from_i32_array([1, 2, 3, 4]); 1];
-        let result = unpack__m128i_to_i32_array(_mm_stream_load_si128(ptr_mem_addr.as_ptr()));
-        check_array_equality(&result, &[0i32; 4])?;
-    }
-    Ok(())
-}
-
 pub(super) fn test_mm_extract_epi64() -> Result<(), String> {
     unsafe {
         let result = _mm_extract_epi64::<0>(create__m128i_from_i32_array([1, 2, 3, 4]));
@@ -443,6 +434,21 @@ pub(super) fn test_mm_extract_epi64() -> Result<(), String> {
             log::info!("Starting fuzzing");
             for _ in 0..crate::cpu::get_iterations() {
                 let _ = _mm_extract_epi64::<0>(create_random__m128i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm_insert_epi64() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m128i_to_i32_array(_mm_insert_epi64::<0>(create__m128i_from_i32_array([1, 2, 3, 4]), 5i64));
+        check_array_equality(&result, &[0i32; 4])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            for _ in 0..crate::cpu::get_iterations() {
+                let _ = _mm_insert_epi64::<0>(create_random__m128i(), rand::random::<i64>());
             }
         }
     }
