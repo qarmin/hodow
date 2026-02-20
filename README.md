@@ -240,3 +240,17 @@ Projekt testowy do weryfikacji instrukcji SIMD procesorów x86/x86_64.
 ## Licencja
 
 Do ustalenia.
+
+---
+
+## Skrypty (scripts/)
+
+Krótko:
+- `generate_tests.py` — generuje testy.
+- `extract_signatures.py` — wyciąga sygnatury z lokalnego stdarch.
+- `miri_tester.py` — uruchamia Miri i zapisuje błędy do `miri_errors.txt`.
+- `miri_tester_sorter.py` — grupuje i ładnie wypisuje `miri_errors.txt`.
+- `capture_expected.py` — zapisuje obserwowane "expected" do `expected_values.txt`.
+- `convert_literals.py` — konwertuje 0x/0b na liczby dziesiętne (tekstowo).
+
+(Wymagania Pythonowe przeniesione do `scripts/pyproject.toml`.)

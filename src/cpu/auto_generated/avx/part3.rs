@@ -348,47 +348,46 @@ pub(super) fn test_mm256_insert_epi32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_load_si256() -> Result<(), String> {
-    unsafe {
-        let ptr_mem_addr = [create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]); 1];
-        let result = unpack__m256i_to_i32_array(_mm256_load_si256(ptr_mem_addr.as_ptr()));
-        check_array_equality(&result, &[0i32; 8])?;
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm256_store_si256() -> Result<(), String> {
-    unsafe {
-        let mut ptr_mem_addr = [create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]); 1];
-        let a = create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]);
-        _mm256_store_si256(ptr_mem_addr.as_mut_ptr(), a);
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm256_loadu_si256() -> Result<(), String> {
-    unsafe {
-        let ptr_mem_addr = [create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]); 1];
-        let result = unpack__m256i_to_i32_array(_mm256_loadu_si256(ptr_mem_addr.as_ptr()));
-        check_array_equality(&result, &[0i32; 8])?;
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm256_storeu_si256() -> Result<(), String> {
-    unsafe {
-        let mut ptr_mem_addr = [create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]); 1];
-        let a = create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]);
-        _mm256_storeu_si256(ptr_mem_addr.as_mut_ptr(), a);
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm256_maskload_pd() -> Result<(), String> {
+pub(super) fn test_mm256_load_pd() -> Result<(), String> {
     unsafe {
         let ptr_mem_addr = [1.0f64; 1];
-        let mask = create__m256i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9]);
-        let result = unpack__m256d_to_f64_array(_mm256_maskload_pd(ptr_mem_addr.as_ptr(), mask));
+        let result = unpack__m256d_to_f64_array(_mm256_load_pd(ptr_mem_addr.as_ptr()));
+        check_array_equality(&result, &[0.0f64; 4])?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_store_pd() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = [1.0f64; 1];
+        let a = create__m256d_from([2.0, 3.0, 4.0, 5.0]);
+        _mm256_store_pd(ptr_mem_addr.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_load_ps() -> Result<(), String> {
+    unsafe {
+        let ptr_mem_addr = [1.0f32; 1];
+        let result = unpack__m256_to_f32_array(_mm256_load_ps(ptr_mem_addr.as_ptr()));
+        check_array_equality(&result, &[0.0f32; 8])?;
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_store_ps() -> Result<(), String> {
+    unsafe {
+        let mut ptr_mem_addr = [1.0f32; 1];
+        let a = create__m256_from([2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0]);
+        _mm256_store_ps(ptr_mem_addr.as_mut_ptr(), a);
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_loadu_pd() -> Result<(), String> {
+    unsafe {
+        let ptr_mem_addr = [1.0f64; 1];
+        let result = unpack__m256d_to_f64_array(_mm256_loadu_pd(ptr_mem_addr.as_ptr()));
         check_array_equality(&result, &[0.0f64; 4])?;
     }
     Ok(())

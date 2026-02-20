@@ -1,0 +1,8 @@
+[project]
+name = "worktester-scripts"
+version = "0.0.0"
+description = "Helper scripts for WorkTester (generate tests, run miri, etc.)"
+readme = "../README.md"
+dependencies = [
+    "tree_sitter==0.2.3",
+]

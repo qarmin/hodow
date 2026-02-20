@@ -30,8 +30,8 @@ DEBUG = False
 # Lock for synchronized file writing
 file_lock = threading.Lock()
 
-# Batch size for testing
-BATCH_SIZE = 50
+BATCH_SIZE = 10
+THREADS_NUMBER = 24
 
 
 def get_all_test_functions(base: Path) -> list[str]:
@@ -186,8 +186,6 @@ def main() -> int:
 
     # Parse command-line arguments
     args = sys.argv[1:]
-    num_threads = 24  # Number of parallel batches
-    BATCH_SIZE = 25
 
     if "-d" in args or "--debug" in args:
         DEBUG = True
@@ -197,15 +195,6 @@ def main() -> int:
             args.remove("--debug")
         print("[DEBUG MODE ENABLED]")
 
-    if "-j" in args:
-        idx = args.index("-j")
-        if idx + 1 < len(args):
-            try:
-                num_threads = int(args[idx + 1])
-                args.pop(idx)  # Remove -j
-                args.pop(idx)  # Remove the number
-            except ValueError:
-                print("Warning: Invalid -j value, using default (1)")
 
     if "--batch-size" in args:
         idx = args.index("--batch-size")
@@ -218,8 +207,8 @@ def main() -> int:
                 print("Warning: Invalid --batch-size value, using default (50)")
 
     print(f"Using batch size: {BATCH_SIZE}")
-    if num_threads > 1:
-        print(f"Using {num_threads} parallel batches")
+    if THREADS_NUMBER > 1:
+        print(f"Using {THREADS_NUMBER} parallel batches")
 
     # Clear output file
     out_path.write_text("")
@@ -246,9 +235,9 @@ def main() -> int:
     all_errors: dict[str, str] = {}
     global_skip: list[str] = []  # Tests to skip in ALL batches
 
-    if num_threads > 1:
+    if THREADS_NUMBER > 1:
         # Parallel batch processing
-        with ThreadPoolExecutor(max_workers=num_threads) as executor:
+        with ThreadPoolExecutor(max_workers=THREADS_NUMBER) as executor:
             futures = {
                 executor.submit(test_batch, base, batch, global_skip, out_path, idx + 1, total_batches): idx
                 for idx, batch in enumerate(batches)

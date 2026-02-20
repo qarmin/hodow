@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 from pathlib import Path
 import re
+import sys
 
-CANONICAL_ORDER = [
-    "unsupported operation: can't call foreign function",
-    "Undefined Behavior: calling a function that requires unavailable target features",
-    "Undefined Behavior: memory access failed",
-    "inline assembly is not supported",
-]
+# keep the regex for exact matches as a fallback, but we'll also match more loosely
+ALIGNMENT_RE = re.compile(r"undefined behavior: accessing memory with alignment \d+, but alignment \d+ is required", re.IGNORECASE)
 
 
 def canonical_message(msg: str) -> str:
     s = msg.lower()
+    # alignment-related messages: group them into a single category
+    # match loosely: any message mentioning 'accessing memory' and 'alignment'
+    if ("accessing memory" in s and "alignment" in s) or ALIGNMENT_RE.search(s):
+        return "Undefined Behavior: accessing memory with alignment"
     if "can't call foreign function" in s or "unsupported operation: can't call foreign function" in s:
         return "unsupported operation: can't call foreign function"
     if "requires unavailable target features" in s or "calling a function that requires unavailable target features" in s:
@@ -45,6 +46,26 @@ def parse_errors(path: Path):
     return entries
 
 
+def color_header(s: str) -> str:
+    # Use bold yellow for headers when output is a terminal; otherwise leave plain
+    if sys.stdout.isatty():
+        return f"\033[1;33m{s}\033[0m"
+    return s
+
+
+def print_group(key: str, tests: list, first: bool):
+    """Print a group with the header on its own line and quoted tests on the next.
+
+    If not the first printed group, print a blank line before the header to separate groups.
+    """
+    tests_sorted = sorted(tests)
+    quoted = ", ".join(f'"{t}"' for t in tests_sorted)
+    if not first:
+        print("")
+    print(color_header(key))
+    print(quoted)
+
+
 def main():
     input_path = Path("miri_errors.txt")
     if not input_path.exists():
@@ -56,19 +77,11 @@ def main():
         key = canonical_message(msg)
         groups.setdefault(key, []).append(test)
 
-    # print canonical categories first in specified order
-    printed = set()
-    for can in CANONICAL_ORDER:
-        if can in groups:
-            tests_sorted = sorted(groups[can])
-            quoted = ", ".join(f'"{t}"' for t in tests_sorted)
-            print(f"{can} {quoted}")
-            printed.add(can)
-    # print remaining categories (sorted by key)
-    for key in sorted(k for k in groups.keys() if k not in printed):
-        tests_sorted = sorted(groups[key])
-        quoted = ", ".join(f'"{t}"' for t in tests_sorted)
-        print(f"{key} {quoted}")
+    # Print all groups consistently (no special canonical ordering).
+    first_printed = False
+    for key in sorted(groups.keys()):
+        print_group(key, groups[key], first_printed)
+        first_printed = True
 
 
 if __name__ == "__main__":

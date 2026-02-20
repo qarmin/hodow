@@ -1,8 +1,6 @@
 mod part1;
-mod part2;
 
 use crate::cpu::auto_generated::avx512cd::part1::*;
-use crate::cpu::auto_generated::avx512cd::part2::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
@@ -21,24 +19,6 @@ impl ExtensionTest for AVX512CD {
             (&test_mm512_broadcastmb_epi64, "test_mm512_broadcastmb_epi64"),
             (&test_mm256_broadcastmb_epi64, "test_mm256_broadcastmb_epi64"),
             (&test_mm_broadcastmb_epi64, "test_mm_broadcastmb_epi64"),
-            (&test_mm512_conflict_epi32, "test_mm512_conflict_epi32"),
-            (&test_mm512_mask_conflict_epi32, "test_mm512_mask_conflict_epi32"),
-            (&test_mm512_maskz_conflict_epi32, "test_mm512_maskz_conflict_epi32"),
-            (&test_mm256_conflict_epi32, "test_mm256_conflict_epi32"),
-            (&test_mm256_mask_conflict_epi32, "test_mm256_mask_conflict_epi32"),
-            (&test_mm256_maskz_conflict_epi32, "test_mm256_maskz_conflict_epi32"),
-            (&test_mm_conflict_epi32, "test_mm_conflict_epi32"),
-            (&test_mm_mask_conflict_epi32, "test_mm_mask_conflict_epi32"),
-            (&test_mm_maskz_conflict_epi32, "test_mm_maskz_conflict_epi32"),
-            (&test_mm512_conflict_epi64, "test_mm512_conflict_epi64"),
-            (&test_mm512_mask_conflict_epi64, "test_mm512_mask_conflict_epi64"),
-            (&test_mm512_maskz_conflict_epi64, "test_mm512_maskz_conflict_epi64"),
-            (&test_mm256_conflict_epi64, "test_mm256_conflict_epi64"),
-            (&test_mm256_mask_conflict_epi64, "test_mm256_mask_conflict_epi64"),
-            (&test_mm256_maskz_conflict_epi64, "test_mm256_maskz_conflict_epi64"),
-            (&test_mm_conflict_epi64, "test_mm_conflict_epi64"),
-            (&test_mm_mask_conflict_epi64, "test_mm_mask_conflict_epi64"),
-            (&test_mm_maskz_conflict_epi64, "test_mm_maskz_conflict_epi64"),
             (&test_mm512_lzcnt_epi32, "test_mm512_lzcnt_epi32"),
             (&test_mm512_mask_lzcnt_epi32, "test_mm512_mask_lzcnt_epi32"),
             (&test_mm512_maskz_lzcnt_epi32, "test_mm512_maskz_lzcnt_epi32"),
