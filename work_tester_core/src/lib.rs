@@ -13,7 +13,6 @@ pub use cpu::{
     FeatureStats, ProgressCallback, TestFunction, TestProgress, TestStatistics,
 };
 
-// FUZZING state management (przeniesione z main.rs)
 static FUZZING: OnceCell<bool> = OnceCell::new();
 
 pub fn get_fuzzing() -> bool {

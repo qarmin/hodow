@@ -123,7 +123,6 @@ pub trait ExtensionTest {
         let tests = Self::get_tests();
 
         for (idx, (fun, name)) in tests.iter().enumerate() {
-            // Sprawdź stop między testami
             if should_stop() {
                 info!("Stop requested, halting {} tests", Self::get_name());
                 return Ok((run, skipped, errors));
@@ -134,7 +133,6 @@ pub trait ExtensionTest {
                 continue;
             }
 
-            // Raportuj progress przed testem
             if let Some(callback) = progress_callback {
                 callback(&TestProgress {
                     total_features,
