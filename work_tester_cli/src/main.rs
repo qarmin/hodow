@@ -121,14 +121,23 @@ fn main() {
 
 
     if args.gui {
-        match work_tester_core::init_opengl() {
-            Ok(_mode) => {
-                log::info!("OpenGL initialized at startup (attempt). GPU-backed tests may be available.");
+        #[cfg(feature = "gpu")]
+        {
+            match work_tester_core::init_opengl() {
+                Ok(_mode) => {
+                    log::info!("OpenGL initialized at startup (attempt). GPU-backed tests may be available.");
+                }
+                Err(e) => {
+                    eprintln!("Note: OpenGL initialization attempt failed: {}. GPU tests won't run unless you enable/fix GPU support.", e);
+                    return;
+                }
             }
-            Err(e) => {
-                eprintln!("Note: OpenGL initialization attempt failed: {}. GPU tests won't run unless you enable/fix GPU support.", e);
-                return;
-            }
+        }
+
+        #[cfg(not(feature = "gpu"))]
+        {
+            eprintln!("GUI requested but crate was compiled without the `gpu` feature. Enable the `gpu` feature to use GUI/Opengl functionality.");
+            return;
         }
     }
 

@@ -6,6 +6,8 @@
 use once_cell::sync::OnceCell;
 
 pub mod cpu;
+
+#[cfg(feature = "gpu")]
 pub mod opengl;
 
 // Re-export main API
@@ -14,7 +16,8 @@ pub use cpu::{
     FeatureStats, ProgressCallback, TestFunction, TestProgress, TestStatistics,
 };
 
-// Re-export OpenGL API (either real or stubbed)
+// Re-export OpenGL API only when the `gpu` feature is enabled
+#[cfg(feature = "gpu")]
 pub use opengl::{available_opengl_modes, init_opengl, test_all_opengl, GLTestResult, OpenGLMode};
 
 static FUZZING: OnceCell<bool> = OnceCell::new();
