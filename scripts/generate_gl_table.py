@@ -131,7 +131,7 @@ def generate_markdown(groups: dict[str, list], functions: list[tuple], tests: li
         # compute used in this version (based on union of all tests)
         used_in_version = sum(1 for name, _sig, _exts in entries if name in union_funcs)
 
-        lines.append(f'## Version {version} — Used at least 1: **{used_in_version}/{total}** ({format_percent(used_in_version, total)})')
+        lines.append(f'## Version {version} — Used at least once: **{used_in_version}/{total}** ({format_percent(used_in_version, total)})')
         lines.append('')
 
         col_names = ['Function name'] + [tc[1] for tc in test_cols]
