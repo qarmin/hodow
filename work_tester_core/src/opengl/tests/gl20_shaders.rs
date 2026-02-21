@@ -85,6 +85,13 @@ impl GLTest for GL20ShadersTest {
 
             gl::UseProgram(program);
 
+            // Create and bind a VAO — core profiles require a VAO to be bound when
+            // setting up vertex attribute pointers and drawing. This makes the
+            // GL20 test work on core-profile contexts (e.g. Mesa 4.6 core).
+            let mut vao = 0u32;
+            gl::GenVertexArrays(1, &mut vao);
+            gl::BindVertexArray(vao);
+
             let vertices: [f32; 18] = [
                 -0.5, -0.5, 0.0,  1.0, 0.0, 0.0,
                  0.5, -0.5, 0.0,  0.0, 1.0, 0.0,
@@ -101,11 +108,28 @@ impl GLTest for GL20ShadersTest {
                 gl::STATIC_DRAW,
             );
 
-            let pos_attr = gl::GetAttribLocation(program, CString::new("position")?.as_ptr()) as u32;
+            let pos_attr = gl::GetAttribLocation(program, CString::new("position")?.as_ptr()) as i32;
+            if pos_attr < 0 {
+                // attribute not found — treat as error
+                return Err("Attribute 'position' not found in program".into());
+            }
+            let pos_attr = pos_attr as u32;
             gl::EnableVertexAttribArray(pos_attr);
             gl::VertexAttribPointer(pos_attr, 3, gl::FLOAT, gl::FALSE, 6 * std::mem::size_of::<f32>() as i32, std::ptr::null());
 
-            let col_attr = gl::GetAttribLocation(program, CString::new("color")?.as_ptr()) as u32;
+            let col_attr = gl::GetAttribLocation(program, CString::new("color")?.as_ptr()) as i32;
+            if col_attr < 0 {
+                // attribute not found — treat as error
+                // Clean up before returning
+                gl::BindVertexArray(0);
+                gl::DeleteBuffers(1, &vbo);
+                gl::DeleteProgram(program);
+                gl::DeleteShader(vs);
+                gl::DeleteShader(fs);
+                gl::DeleteVertexArrays(1, &vao);
+                return Err("Attribute 'color' not found in program".into());
+            }
+            let col_attr = col_attr as u32;
             gl::EnableVertexAttribArray(col_attr);
             gl::VertexAttribPointer(col_attr, 3, gl::FLOAT, gl::FALSE, 6 * std::mem::size_of::<f32>() as i32, (3 * std::mem::size_of::<f32>()) as *const _);
 
@@ -114,10 +138,14 @@ impl GLTest for GL20ShadersTest {
             gl::DisableVertexAttribArray(pos_attr);
             gl::DisableVertexAttribArray(col_attr);
 
+            // Unbind and delete VAO and VBO
+            gl::BindVertexArray(0);
+
             gl::DeleteShader(vs);
             gl::DeleteShader(fs);
             gl::DeleteProgram(program);
             gl::DeleteBuffers(1, &vbo);
+            gl::DeleteVertexArrays(1, &vao);
 
             let err = gl::GetError();
             if err != gl::NO_ERROR {

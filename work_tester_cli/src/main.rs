@@ -29,7 +29,7 @@ fn print_build_info() {
 
 fn setup_ctrlc_handler() {
     ctrlc::set_handler(move || {
-        eprintln!("\n[Ctrl+C] Stopping tests gracefully...");
+        info!("\n[Ctrl+C] Stopping tests gracefully...");
         request_stop();
     })
     .expect("Failed to set Ctrl+C handler");
@@ -64,24 +64,24 @@ fn create_progress_bars() -> (MultiProgress, ProgressBar, ProgressBar, ProgressB
 }
 
 fn print_statistics(stats: &TestStatistics) {
-    println!("\n{}", "=".repeat(80));
-    println!("{:^80}", "TEST STATISTICS");
-    println!("{}", "=".repeat(80));
+    info!("\n{}", "=".repeat(80));
+    info!("{:^80}", "TEST STATISTICS");
+    info!("{}", "=".repeat(80));
 
-    println!("{:<30} {:>10} {:>10} {:>10} {:>10}", "Feature", "Run", "Skipped", "Errors", "Total");
-    println!("{}", "-".repeat(80));
+    info!("{:<30} {:>10} {:>10} {:>10} {:>10}", "Feature", "Run", "Skipped", "Errors", "Total");
+    info!("{}", "-".repeat(80));
 
     for feature in &stats.features {
         let total = feature.tests_run + feature.tests_skipped + feature.tests_errored;
-        println!(
+        info!(
             "{:<30} {:>10} {:>10} {:>10} {:>10}",
             feature.feature_name, feature.tests_run, feature.tests_skipped, feature.tests_errored, total
         );
     }
 
-    println!("{}", "-".repeat(80));
+    info!("{}", "-".repeat(80));
     let grand_total = stats.total_run() + stats.total_skipped() + stats.total_errors();
-    println!(
+    info!(
         "{:<30} {:>10} {:>10} {:>10} {:>10}",
         "TOTAL",
         stats.total_run(),
@@ -89,10 +89,10 @@ fn print_statistics(stats: &TestStatistics) {
         stats.total_errors(),
         grand_total
     );
-    println!("{}", "=".repeat(80));
+    info!("{}", "=".repeat(80));
 
     if stats.was_cancelled {
-        println!("Note: Testing was cancelled by user (Ctrl+C)");
+        info!("Note: Testing was cancelled by user (Ctrl+C)");
     }
 }
 
@@ -103,6 +103,24 @@ fn process_gpu() {
         match work_tester_core::init_opengl() {
             Ok(_mode) => {
                 log::info!("OpenGL initialized at startup (attempt). GPU-backed tests may be available.");
+
+                // Run GL tests now that OpenGL is initialized
+                match work_tester_core::test_all_opengl() {
+                    Ok((run, skipped, errors)) => {
+                        log::info!("GL tests finished. Run: {}, Skipped: {}, Errors: {}", run, skipped, errors);
+                        if errors > 0 {
+                            error!("\nGL tests completed with {} error(s)", errors);
+                            std::process::exit(1);
+                        } else {
+                            info!("\nClean exit");
+                        }
+                    }
+                    Err(e) => {
+                        log::error!("Running GL tests failed: {}", e);
+                        error!("Error: Running GL tests failed: {}", e);
+                        std::process::exit(1);
+                    }
+                }
             }
             Err(e) => {
                 error!("Note: OpenGL initialization attempt failed: {}. GPU tests won't run unless you enable/fix GPU support.", e);
@@ -128,18 +146,18 @@ fn process_cpu(args: &Args) {
 
     if args.list_modes {
         let modes = available_modes();
-        println!("Available modes: {:?}", modes);
-        println!("Clean exit");
+        info!("Available modes: {:?}", modes);
+        info!("Clean exit");
         return;
     }
 
     if args.list_functions {
         let functions = list_all_functions();
-        println!("Available test functions ({} total):", functions.len());
+        info!("Available test functions ({} total):", functions.len());
         for func in functions {
-            println!("  {}", func);
+            info!("  {}", func);
         }
-        println!("Clean exit");
+        info!("Clean exit");
         return;
     }
 
@@ -196,10 +214,10 @@ fn process_cpu(args: &Args) {
 
             // Exit with error code if there were errors
             if stats.total_errors() > 0 {
-                eprintln!("\nTests completed with {} error(s)", stats.total_errors());
+                error!("\nTests completed with {} error(s)", stats.total_errors());
                 std::process::exit(1);
             } else {
-                println!("\nClean exit");
+                info!("\nClean exit");
             }
         }
         Err(e) => {
@@ -209,7 +227,7 @@ fn process_cpu(args: &Args) {
             test_bar.finish();
             multi.clear().ok();
 
-            eprintln!("Error: Running tests failed: {}", e);
+            error!("Error: Running tests failed: {}", e);
             std::process::exit(1);
         }
     }
