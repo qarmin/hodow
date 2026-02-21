@@ -3,11 +3,25 @@
 use crate::opengl::context::OpenGLMode;
 use std::error::Error;
 
-/// Initialize/load GL function pointers using `glow` and the provided context.
-pub fn init_gl(_mode: &OpenGLMode) -> Result<(), Box<dyn Error>> {
-    // We intentionally keep this minimal: actual loader needs a function pointer
-    // retrieval closure from the underlying context. Integrate as needed.
-    // For now, return Ok so compile-time linking is exercised without heavy logic.
+/// Initialize/load GL function pointers using `gl` crate.
+pub fn init_gl(mode: &OpenGLMode) -> Result<(), Box<dyn Error>> {
+    use glutin::prelude::*;
+
+    // Load OpenGL function pointers
+    gl::load_with(|s| {
+        let cstr = std::ffi::CString::new(s).unwrap();
+        mode.display.get_proc_address(&cstr) as *const _
+    });
+
+    // Verify basic GL is loaded
+    unsafe {
+        let version = gl::GetString(gl::VERSION);
+        if version.is_null() {
+            return Err("Failed to get OpenGL version".into());
+        }
+        let version_str = std::ffi::CStr::from_ptr(version as *const i8);
+        log::info!("OpenGL version: {}", version_str.to_string_lossy());
+    }
+
     Ok(())
 }
-

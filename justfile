@@ -27,6 +27,15 @@ runa *args:
 arm:
     cargo zigbuild -p work_tester_cli --target armv7-unknown-linux-gnueabihf.2.28
 
+gpu *args:
+    RUSTFLAGS="-C target-cpu=native" cargo +nightly run -p work_tester_cli --features gpu -- --gui {{args}}
+
+gpu-release *args:
+    RUSTFLAGS="-C target-cpu=native" cargo +nightly run -p work_tester_cli --features gpu --release -- --gui {{args}}
+
+gen-gl-table:
+    python3 scripts/generate_gl_table.py
+
 
 upgrade:
     cargo +nightly -Z unstable-options update --breaking

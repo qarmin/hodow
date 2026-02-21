@@ -3,17 +3,33 @@
 use std::error::Error;
 use std::sync::Arc;
 
-use glutin::context::{ContextApi, PossiblyCurrentContext, ContextAttributesBuilder, NotCurrentContext};
+use glutin::context::{ContextApi, PossiblyCurrentContext, ContextAttributesBuilder};
 use glutin::display::{Display, DisplayApiPreference};
 use glutin::prelude::*;
-use glutin::surface::{Surface, SurfaceAttributesBuilder, WindowSurface};
-use glutin::config::{ConfigTemplateBuilder};
+use glutin::config::ConfigTemplateBuilder;
+use raw_window_handle::{RawDisplayHandle, HasRawDisplayHandle};
 
 /// Simple wrapper around a headless OpenGL context or similar.
 pub struct OpenGLMode {
-    // For simplicity we only store the display/context as an opaque box.
-    // Expand this struct to hold the loader and surfaces as needed.
     pub(crate) inner: Arc<PossiblyCurrentContext>,
+    pub(crate) display: Display,
+}
+
+/// Minimal RawDisplayHandle implementation for headless
+struct HeadlessDisplay;
+
+unsafe impl HasRawDisplayHandle for HeadlessDisplay {
+    fn raw_display_handle(&self) -> RawDisplayHandle {
+        #[cfg(target_os = "linux")]
+        {
+            use raw_window_handle::WaylandDisplayHandle;
+            RawDisplayHandle::Wayland(WaylandDisplayHandle::empty())
+        }
+        #[cfg(not(target_os = "linux"))]
+        {
+            panic!("Headless OpenGL is not supported on this platform");
+        }
+    }
 }
 
 impl OpenGLMode {
@@ -21,20 +37,34 @@ impl OpenGLMode {
     /// that won't show any window. On platforms where headless contexts are
     /// not available, this may still create an offscreen context.
     pub fn create() -> Result<Self, Box<dyn Error>> {
-        // Use the simplest display selection.
-        let preference = DisplayApiPreference::EglThenGlx(Box::new(()));
-        let display = unsafe { Display::new(preference)? };
+        let headless = HeadlessDisplay;
+        let preference = DisplayApiPreference::Egl;
+        let display = unsafe {
+            Display::new(headless.raw_display_handle(), preference)?
+        };
 
-        let template = ConfigTemplateBuilder::new();
-        let config = display.find_configs(template.build())?.next().ok_or("No GL config")?;
+        let template = ConfigTemplateBuilder::new().build();
+        let config = unsafe {
+            display
+                .find_configs(template)?
+                .next()
+                .ok_or("No GL config")?
+        };
 
-        // Build context attributes; request a core profile.
-        let context_attributes = ContextAttributesBuilder::new().with_context_api(ContextApi::Gles(Some((3, 0)))).build(Some(Default::default()));
+        let context_attributes = ContextAttributesBuilder::new().build(None);
 
         let not_current = unsafe { display.create_context(&config, &context_attributes)? };
-        let possibly_current = unsafe { not_current.make_current().map_err(|(_not_current, e)| e)? };
 
-        Ok(OpenGLMode { inner: Arc::new(possibly_current) })
+        let possibly_current = unsafe { not_current.treat_as_possibly_current() };
+
+        Ok(OpenGLMode {
+            inner: Arc::new(possibly_current),
+            display,
+        })
+    }
+
+    /// Get reference to the display for function loading
+    pub fn display(&self) -> &Display {
+        &self.display
     }
 }
-

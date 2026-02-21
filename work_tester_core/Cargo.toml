@@ -11,11 +11,13 @@ rand.workspace = true
 # Optional GPU dependencies
 glutin = { version = "0.30", optional = true }
 glow = { version = "0.11", optional = true }
+gl = { version = "0.14", optional = true }
+raw-window-handle = { version = "0.5", optional = true }
 
 [features]
 miri_build = []
 # Feature to enable OpenGL GPU support
-gpu = ["glutin", "glow"]
+gpu = ["glutin", "glow", "gl", "raw-window-handle"]
 
 [lints]
 workspace = true
