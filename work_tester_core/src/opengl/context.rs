@@ -7,7 +7,7 @@ use glutin::context::{ContextApi, PossiblyCurrentContext, ContextAttributesBuild
 use glutin::display::{Display, DisplayApiPreference};
 use glutin::prelude::*;
 use glutin::config::ConfigTemplateBuilder;
-use raw_window_handle::{RawDisplayHandle, HasDisplayHandle, DisplayHandle, HandleError, WaylandDisplayHandle};
+use raw_window_handle::{RawDisplayHandle, HasDisplayHandle, DisplayHandle, HandleError, XlibDisplayHandle};
 use std::ptr::NonNull;
 use std::ffi::c_void;
 use std::fmt;
@@ -100,10 +100,11 @@ impl HasDisplayHandle for HeadlessDisplay {
     fn display_handle(&self) -> Result<DisplayHandle<'_>, HandleError> {
         #[cfg(target_os = "linux")]
         {
-            let ptr: NonNull<c_void> = NonNull::dangling();
-            let raw = RawDisplayHandle::Wayland(WaylandDisplayHandle::new(ptr));
-            // Safety: creating a DisplayHandle from a RawDisplayHandle is ok here
-            // because we only use it briefly and it's a platform-specific placeholder.
+            // Request default X11 display (None) which EGL may accept for
+            // headless/offscreen contexts. This avoids constructing a
+            // WaylandDisplayHandle with a dangling pointer which can cause
+            // crashes in libwayland/libEGL when the display pointer is used.
+            let raw = RawDisplayHandle::Xlib(XlibDisplayHandle::new(None, 0));
             unsafe { Ok(DisplayHandle::borrow_raw(raw)) }
         }
         #[cfg(not(target_os = "linux"))]

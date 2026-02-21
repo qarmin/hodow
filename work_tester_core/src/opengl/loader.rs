@@ -2,6 +2,7 @@
 
 use crate::opengl::context::OpenGLMode;
 use std::error::Error;
+use std::os::raw::c_char;
 
 /// Initialize/load GL function pointers using `gl` crate.
 pub fn init_gl(mode: &OpenGLMode) -> Result<(), Box<dyn Error>> {
@@ -19,7 +20,7 @@ pub fn init_gl(mode: &OpenGLMode) -> Result<(), Box<dyn Error>> {
         if version.is_null() {
             return Err("Failed to get OpenGL version".into());
         }
-        let version_str = std::ffi::CStr::from_ptr(version as *const i8);
+        let version_str = std::ffi::CStr::from_ptr(version as *const c_char);
         log::info!("OpenGL version: {}", version_str.to_string_lossy());
     }
 
