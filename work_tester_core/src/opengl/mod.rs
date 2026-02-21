@@ -1,4 +1,5 @@
 //! OpenGL helper module for GPU testing.
+use log::info;
 
 mod context;
 
@@ -17,7 +18,9 @@ pub use test_trait::{GLTest, GLVersion, GLTestResult};
 
 pub fn init_opengl() -> Result<OpenGLMode, Box<dyn std::error::Error>> {
     let ctx = OpenGLMode::create()?;
+    info!("Created OpenGL context");
     init_gl(&ctx)?;
+    info!("Initialized OpenGL function pointers");
     Ok(ctx)
 }
 
