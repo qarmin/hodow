@@ -1,4 +1,5 @@
-pub mod values;
+#![cfg(target_arch = "x86_64")]
+pub mod x86;
 
 use std::fmt::Debug;
 

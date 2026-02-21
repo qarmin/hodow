@@ -576,7 +576,7 @@ def gen_part(funcs: list[dict], expected_values: dict[str, str] | None = None) -
         "use std::arch::x86_64::*;",
         "",
         "#[allow(unused_imports)]",
-        "use crate::cpu::common::values::*;",
+        "use crate::cpu::common::x86::*;",
         "#[allow(unused_imports)]",
         "use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};",
         "",
