@@ -111,11 +111,11 @@ impl OpenGLMode {
         };
 
         // Make the context current on the created pbuffer surface.
-        let possibly_current = unsafe {
+        let possibly_current =
             not_current
                 .make_current(&pbuffer)
                 .map_err(|e| OpenGlError::Other(Box::new(e)))?
-        };
+        ;
 
         Ok(OpenGLMode {
             inner: Arc::new(possibly_current),
