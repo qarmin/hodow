@@ -374,7 +374,7 @@ def arg_expr(ptype: str, *, random: bool) -> str:
 
 
 def load_expected_values(path: Path) -> dict[str, str]:
-    """Parse expected_values.txt: 'test_name - rust_expr' → {test_name: rust_expr}"""
+    """Parse expected_cpu_values.txt: 'test_name - rust_expr' → {test_name: rust_expr}"""
     if not path.exists():
         return {}
     result: dict[str, str] = {}
@@ -652,7 +652,7 @@ def main() -> None:
                 seen.add(key)
                 merged[ext].append(sig)
 
-    expected_values = load_expected_values(base / "expected_values.txt")
+    expected_values = load_expected_values(base / "expected_cpu_values.txt")
 
     out = base / OUTPUT_DIR
     out.mkdir(parents=True, exist_ok=True)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Run 'just run' and capture test failures to populate expected_values.txt.
+Run 'just run' and capture test failures to populate expected_cpu_values.txt.
 
 For each failing test the script extracts the actual 'Got' value and writes
 it as the new expected value, so subsequent runs will verify against the
@@ -28,7 +28,7 @@ def to_rust_value(val: str) -> str:
 
 
 def load_ev(path: Path) -> tuple[list[str], dict[str, str]]:
-    """Load expected_values.txt → (header_lines, {name: value})."""
+    """Load expected_cpu_values.txt → (header_lines, {name: value})."""
     if not path.exists():
         return [], {}
     header: list[str] = []
@@ -48,7 +48,7 @@ def load_ev(path: Path) -> tuple[list[str], dict[str, str]]:
 
 def main() -> None:
     base = Path(__file__).parent.parent
-    ev_path = base / "expected_values.txt"
+    ev_path = base / "expected_cpu_values.txt"
 
     # Extra args forwarded to 'just run'
     extra = sys.argv[1:]
@@ -73,7 +73,7 @@ def main() -> None:
         captured[test_name] = got_val
 
     if not captured:
-        print("No test failures found — expected_values.txt not modified.")
+        print("No test failures found — expected_cpu_values.txt not modified.")
         print("(If tests passed, the existing expected values are already correct.)")
         return
 

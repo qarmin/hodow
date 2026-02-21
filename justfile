@@ -5,7 +5,7 @@ run *args:
     RUSTFLAGS="-C target-cpu=native" cargo +nightly run -p work_tester_cli {{args}}
 
 gui *args:
-    RUSTFLAGS="-Zsanitizer=address" cargo +nightly run  --target x86_64-unknown-linux-gnu --features gpu -- --gui
+    RUSTFLAGS="-Zsanitizer=address" cargo +nightly run  --target x86_64-unknown-linux-gnu --features gpu -- --gui -d
 
 guirrrr *args:
     cargo run --features gpu -- --gui

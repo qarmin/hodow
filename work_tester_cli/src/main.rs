@@ -7,6 +7,7 @@ use std::fmt::Write as _;
 use clap::Parser;
 use handsome_logger::ConfigBuilder;
 use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
+use log::{error, info};
 use work_tester_core::{available_modes, list_all_functions, request_stop, set_iterations, set_skip_tests, test_all_extensions, TestProgress, TestStatistics};
 
 mod cli;
@@ -121,6 +122,7 @@ fn main() {
 
 
     if args.gui {
+        info!("GUI mode requested. Attempting to initialize OpenGL for GPU-backed tests...");
         #[cfg(feature = "gpu")]
         {
             match work_tester_core::init_opengl() {
@@ -139,6 +141,10 @@ fn main() {
             eprintln!("GUI requested but crate was compiled without the `gpu` feature. Enable the `gpu` feature to use GUI/Opengl functionality.");
             return;
         }
+
+        error!("GUI mode is not fully implemented yet. Exiting.");
+        #[allow(unreachable_code)]
+        return;
     }
 
     if args.list_modes {

@@ -2,11 +2,11 @@
 
 This is a hobby project, to validate specific cpu(at least for now) features/functions, to check if they don't crash and if produces correct results.
 
-The first requirement, is that code should be easily cross-compilable, without needing any additional dependencies.
+The main requirement of this project, is that code should be easily cross-compilable, without needing any additional dependencies - this was the first problem, that I hit, when trying to use C/C++ testing tools(even sometimes Rust tools have problematic cross-compilation)
 
 For now it checks specific cpu features, runs them to find crashes(initially validated this with miri to avoid spurious crashes) and use 1 check for (almost)every function to find any possible issues with the implementation.
 
-Project was created, basing on Rust 1.93 and later updates, may add other cpu features.
+Project was created, basing on Rust 1.93, so later updates, may add other cpu features, not available now yet.
 
 ## Usage
 ### Default(not recommended - uses very basic cpu features)
@@ -61,7 +61,7 @@ TOTAL         2325        0       0
 
 
 ## AI Usage
-This project heavily relies on AI for code generation, bug fixing, refactoring, so if you have any objections to this, don't use it.
+This project heavily(but not fully) relies on AI for code generation, bug fixing, refactoring, so if you have any objections to this, don't use it.
 
 ## Implemented
 

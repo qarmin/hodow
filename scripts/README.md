@@ -1,6 +1,6 @@
 ## Scripts
-- `capture_expected.py` - in case of adding new tests with fake expected values, this script runs them and captures the actual expected values and save them to `expected_values.txt`, which will be used later when updating the tests.
+- `capture_expected.py` - in case of adding new tests with fake expected values, this script runs them and captures the actual expected values and save them to `expected_cpu_values.txt`, which will be used later when updating the tests.
 - `extract_signatures.py` - extracts function signatures from the local stdarch repository and saves them to `signatures.txt`. This is useful for generating new tests based on the actual function definitions.
-- `generate_tests.py` - generates test functions for each SIMD extension based on the signatures extracted by `extract_signatures.py`. It uses the expected values from `expected_values.txt` to fill in the correct expected results for each test.
+- `generate_tests.py` - generates test functions for each SIMD extension based on the signatures extracted by `extract_signatures.py`. It uses the expected values from `expected_cpu_values.txt` to fill in the correct expected results for each test.
 - `miri_tester.py` - runs the generated tests using Miri, which is an interpreter for Rust's mid-level intermediate representation (MIR). It captures any errors that occur during the execution of the tests and saves them to `miri_errors.txt`.
 - `miri_tester_sorter.py` - takes the raw error output from `miri_errors.txt`, groups the errors by test function, and prints them in a more readable format, to be able to add them to `excluded_functions.txt`.

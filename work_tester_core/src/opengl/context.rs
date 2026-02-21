@@ -2,11 +2,13 @@
 
 use std::error::Error;
 use std::sync::Arc;
+use std::num::NonZeroU32;
 
 use glutin::context::{ContextApi, PossiblyCurrentContext, ContextAttributesBuilder};
 use glutin::display::{Display, DisplayApiPreference};
 use glutin::prelude::*;
 use glutin::config::ConfigTemplateBuilder;
+use glutin::surface::{SurfaceAttributesBuilder, PbufferSurface};
 use raw_window_handle::{RawDisplayHandle, HasDisplayHandle, DisplayHandle, HandleError, XlibDisplayHandle};
 use std::ptr::NonNull;
 use std::ffi::c_void;
@@ -77,10 +79,43 @@ impl OpenGLMode {
 
         let context_attributes = ContextAttributesBuilder::new().build(None);
 
-        let not_current = unsafe { display.create_context(&config, &context_attributes)
-            .map_err(|e| OpenGlError::Other(Box::new(e)))? };
+        // Try to create a native GL context; if that fails, fall back to GLES.
+        let fallback_context_attributes = ContextAttributesBuilder::new()
+            .with_context_api(ContextApi::Gles(None))
+            .build(None);
 
-        let possibly_current = unsafe { not_current.treat_as_possibly_current() };
+        let not_current = unsafe {
+            match display.create_context(&config, &context_attributes) {
+                Ok(ctx) => ctx,
+                Err(_) => display
+                    .create_context(&config, &fallback_context_attributes)
+                    .map_err(|e| OpenGlError::Other(Box::new(e)))?,
+            }
+        };
+
+        // Create a small pbuffer surface and make the context current on it.
+        let pbuffer = {
+            // build a 128x128 pbuffer surface
+            let attrs = SurfaceAttributesBuilder::<PbufferSurface>::new()
+                .with_largest_pbuffer(false)
+                .build(
+                    NonZeroU32::new(128).expect("valid pbuffer width"),
+                    NonZeroU32::new(128).expect("valid pbuffer height"),
+                );
+
+            unsafe {
+                display
+                    .create_pbuffer_surface(&config, &attrs)
+                    .map_err(|e| OpenGlError::Other(Box::new(e)))?
+            }
+        };
+
+        // Make the context current on the created pbuffer surface.
+        let possibly_current = unsafe {
+            not_current
+                .make_current(&pbuffer)
+                .map_err(|e| OpenGlError::Other(Box::new(e)))?
+        };
 
         Ok(OpenGLMode {
             inner: Arc::new(possibly_current),
