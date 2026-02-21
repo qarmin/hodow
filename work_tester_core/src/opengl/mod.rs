@@ -17,7 +17,7 @@ pub use loader::init_gl;
 pub use test_trait::{GLTest, GLVersion, GLTestResult};
 
 pub fn init_opengl() -> Result<OpenGLMode, Box<dyn std::error::Error>> {
-    let ctx = OpenGLMode::create()?;
+    let ctx = OpenGLMode::create().map_err(|e| Box::new(e) as Box<dyn std::error::Error>)?;
     info!("Created OpenGL context");
     init_gl(&ctx)?;
     info!("Initialized OpenGL function pointers");

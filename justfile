@@ -5,6 +5,9 @@ run *args:
     RUSTFLAGS="-C target-cpu=native" cargo +nightly run -p work_tester_cli {{args}}
 
 gui *args:
+    RUSTFLAGS="-Zsanitizer=address" cargo +nightly run  --target x86_64-unknown-linux-gnu --features gpu -- --gui
+
+guirrrr *args:
     cargo run --features gpu -- --gui
 
 runr *args:
@@ -28,7 +31,7 @@ runa *args:
     target/release/work_tester {{args}}
 
 arm:
-    cargo zigbuild -p work_tester_cli --target armv7-unknown-linux-gnueabihf.2.28
+    cargo zigbuild -p work_tester_cli --target armv7-unknown-linux-gnueabihf.2.28 --features gpu
 
 gpu *args:
     RUSTFLAGS="-C target-cpu=native" cargo +nightly run -p work_tester_cli --features gpu -- --gui {{args}}
