@@ -1,9 +1,6 @@
-#![cfg(feature = "gpu")]
-
 //! OpenGL 3.3 Vertex Array Objects Test
 //!
 //! GL_VERSION: 3.3
-//! GL_FUNCTIONS: glGenVertexArrays, glBindVertexArray, glDeleteVertexArrays, glDrawElements, glGenBuffers, glBindBuffer, glBufferData, glDeleteBuffers, glVertexAttribPointer, glEnableVertexAttribArray
 
 use crate::opengl::test_trait::{GLTest, GLVersion};
 use std::error::Error;
@@ -18,21 +15,6 @@ impl GLTest for GL33VAOTest {
 
     fn gl_version(&self) -> GLVersion {
         GLVersion::new(3, 3)
-    }
-
-    fn used_functions(&self) -> &[&'static str] {
-        &[
-            "glGenVertexArrays",
-            "glBindVertexArray",
-            "glDeleteVertexArrays",
-            "glDrawElements",
-            "glGenBuffers",
-            "glBindBuffer",
-            "glBufferData",
-            "glDeleteBuffers",
-            "glVertexAttribPointer",
-            "glEnableVertexAttribArray",
-        ]
     }
 
     fn run(&self) -> Result<String, Box<dyn Error>> {

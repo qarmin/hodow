@@ -4,6 +4,9 @@ check:
 run *args:
     RUSTFLAGS="-C target-cpu=native" cargo +nightly run -p work_tester_cli {{args}}
 
+gui *args:
+    cargo run --features gpu -- --gui
+
 runr *args:
     RUSTFLAGS="-C target-cpu=native" cargo +nightly run -p work_tester_cli --release {{args}}
 

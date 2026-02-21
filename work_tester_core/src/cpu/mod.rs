@@ -592,7 +592,7 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                     tests_skipped: s,
                     tests_errored: e,
                 });
-                // completed_features += 1;
+                completed_features += 1;
             }
         }
     }
@@ -601,6 +601,10 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
     {
         info!("CPU extension tests are only available on x86/x86_64 architectures");
     }
+
+    // To silence unused variable warning
+    let _ = completed_features;
+    let _ = total_features;
 
     Ok(TestStatistics {
         features,

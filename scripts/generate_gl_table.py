@@ -4,9 +4,8 @@ Generate OpenGL function usage table from test source files.
 
 This script scans all GL test files in work_tester_core/src/opengl/tests/
 and extracts:
-- GL_VERSION: OpenGL version the test targets
-- GL_FUNCTIONS: List of OpenGL functions used
-- Test name from the module
+- GL_VERSION: OpenGL version the test targets (from comments)
+- OpenGL function calls: Automatically detected from gl::FunctionName patterns
 
 Output is a markdown table showing which functions are used in which tests.
 """
@@ -15,14 +14,38 @@ import re
 import sys
 from pathlib import Path
 from collections import defaultdict
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Set
 
-def extract_test_info(file_path: Path) -> Tuple[str, str, List[str]]:
+def extract_gl_functions(content: str) -> Set[str]:
+    """
+    Extract all gl::FunctionName calls from Rust code.
+    
+    Only extracts actual function calls (e.g., gl::CreateShader, gl::GetError)
+    and filters out constants (e.g., gl::ARRAY_BUFFER, gl::COMPILE_STATUS).
+    
+    Returns:
+        Set of function names (e.g., "glCreateShader")
+    """
+    # Pattern to match gl::FunctionName calls
+    # Matches: gl::CreateShader, gl::GetError, etc.
+    # Does NOT match: gl::ARRAY_BUFFER, gl::COMPILE_STATUS (all caps)
+    pattern = r'gl::([A-Z][a-z][a-zA-Z0-9_]*)'
+
+    functions = set()
+    for match in re.finditer(pattern, content):
+        func_name = match.group(1)
+        # Convert to OpenGL convention: gl + FunctionName
+        gl_func_name = f"gl{func_name}"
+        functions.add(gl_func_name)
+
+    return functions
+
+def extract_test_info(file_path: Path):
     """
     Extract test name, GL version, and function list from a test file.
 
     Returns:
-        (test_name, gl_version, functions)
+        (test_name, gl_version, functions) or None
     """
     content = file_path.read_text()
 
@@ -32,12 +55,11 @@ def extract_test_info(file_path: Path) -> Tuple[str, str, List[str]]:
         return None
     gl_version = version_match.group(1)
 
-    # Extract GL_FUNCTIONS from comment
-    functions_match = re.search(r'//!\s*GL_FUNCTIONS:\s*(.+)', content)
-    if not functions_match:
+    # Extract GL functions automatically from code
+    functions = extract_gl_functions(content)
+
+    if not functions:
         return None
-    functions_str = functions_match.group(1)
-    functions = [f.strip() for f in functions_str.split(',')]
 
     # Extract test name from struct
     name_match = re.search(r'pub struct (\w+);', content)
@@ -45,9 +67,8 @@ def extract_test_info(file_path: Path) -> Tuple[str, str, List[str]]:
         return None
     test_name = name_match.group(1)
 
-    # Convert struct name to readable format (e.g., GL11ImmediateTest -> GL 1.1 Immediate)
-    readable_name = re.sub(r'GL(\d+)(\w+)Test', r'GL \1 \2', test_name)
-    readable_name = readable_name.replace('GL ', f'GL {gl_version} ')
+    # Convert struct name to readable format (e.g., GL20ShadersTest -> Shaders)
+    readable_name = re.sub(r'GL\d+(\w+)Test', r'\1', test_name)
 
     return (readable_name, gl_version, functions)
 
@@ -59,7 +80,7 @@ def generate_table(tests_dir: Path) -> str:
         Markdown table as string
     """
     # Collect all test data
-    tests: List[Tuple[str, str, List[str]]] = []
+    tests = []
     all_functions = set()
 
     for test_file in sorted(tests_dir.glob('gl*.rs')):
@@ -78,39 +99,29 @@ def generate_table(tests_dir: Path) -> str:
     # Sort functions alphabetically
     sorted_functions = sorted(all_functions)
 
-    # Build function usage map
-    function_usage: Dict[str, List[str]] = defaultdict(list)
-    for test_name, gl_version, functions in tests:
-        for func in functions:
-            function_usage[func].append(test_name)
-
-    # Generate table header
-    header = "| Function name"
-    separator = "|---"
+    # Build header with proper spacing
+    col_width = 26
+    header = f"| {'Function name':<{col_width}}"
+    separator = f"|{'-' * (col_width + 1)}"
 
     for test_name, gl_version, _ in tests:
-        # Extract short name from test (e.g., "GL 1.1 Immediate" -> "Immediate")
-        parts = test_name.split()
-        if len(parts) >= 3:
-            short_name = " ".join(parts[2:])
-        else:
-            short_name = test_name
-        header += f" | {short_name} <br/> GL {gl_version}"
-        separator += " |---"
+        cell = f"{test_name} <br/> GL {gl_version}"
+        header += f" | {cell:^23}"
+        separator += f"|{'-' * 24}"
 
     header += " |"
-    separator += " |"
+    separator += "|"
 
     table_lines = [header, separator]
 
     # Generate table rows
     for func in sorted_functions:
-        row = f"| {func}"
+        row = f"| {func:<{col_width}}"
         for test_name, gl_version, functions in tests:
             if func in functions:
-                row += " | x"
+                row += " | x                   "
             else:
-                row += " |"
+                row += " |                     "
         row += " |"
         table_lines.append(row)
 
@@ -133,7 +144,8 @@ def main():
     output_file = project_root / "work_tester_core" / "src" / "opengl" / "FUNCTIONS_TABLE.md"
     output_file.write_text(f"# OpenGL Function Coverage\n\n{table}\n")
 
-    print(f"Generated table written to: {output_file}")
+    print(f"✓ Generated table: {output_file}")
+    print(f"✓ Functions auto-detected from gl::* calls (filters out constants)")
     print("\nPreview:")
     print(table)
 

@@ -1,9 +1,6 @@
-#![cfg(feature = "gpu")]
-
 //! OpenGL 2.0 Shaders Test
 //!
 //! GL_VERSION: 2.0
-//! GL_FUNCTIONS: glCreateShader, glShaderSource, glCompileShader, glGetShaderiv, glGetShaderInfoLog, glCreateProgram, glAttachShader, glLinkProgram, glGetProgramiv, glGetProgramInfoLog, glUseProgram, glDeleteShader, glDeleteProgram, glVertexAttribPointer, glEnableVertexAttribArray, glDisableVertexAttribArray, glGetAttribLocation
 
 use crate::opengl::test_trait::{GLTest, GLVersion};
 use std::error::Error;
@@ -18,28 +15,6 @@ impl GLTest for GL20ShadersTest {
 
     fn gl_version(&self) -> GLVersion {
         GLVersion::new(2, 0)
-    }
-
-    fn used_functions(&self) -> &[&'static str] {
-        &[
-            "glCreateShader",
-            "glShaderSource",
-            "glCompileShader",
-            "glGetShaderiv",
-            "glGetShaderInfoLog",
-            "glCreateProgram",
-            "glAttachShader",
-            "glLinkProgram",
-            "glGetProgramiv",
-            "glGetProgramInfoLog",
-            "glUseProgram",
-            "glDeleteShader",
-            "glDeleteProgram",
-            "glVertexAttribPointer",
-            "glEnableVertexAttribArray",
-            "glDisableVertexAttribArray",
-            "glGetAttribLocation",
-        ]
     }
 
     fn run(&self) -> Result<String, Box<dyn Error>> {

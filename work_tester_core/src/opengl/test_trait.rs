@@ -1,5 +1,3 @@
-#![cfg(feature = "gpu")]
-
 use std::error::Error;
 
 /// OpenGL version specification
@@ -28,9 +26,6 @@ pub trait GLTest: Sync {
 
     /// OpenGL version this test targets
     fn gl_version(&self) -> GLVersion;
-
-    /// List of OpenGL functions used in this test
-    fn used_functions(&self) -> &[&'static str];
 
     /// Run the test - returns (success, message)
     fn run(&self) -> Result<String, Box<dyn Error>>;
