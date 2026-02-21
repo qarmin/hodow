@@ -31,7 +31,7 @@ cargo test --features gpu
 Or run via the CLI:
 
 ```bash
-cargo run --features gpu -- --gui
+cargo run --features gpu -- --gpu
 ```
 
 ## Function Coverage

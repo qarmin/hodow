@@ -4,11 +4,8 @@ check:
 run *args:
     RUSTFLAGS="-C target-cpu=native" cargo +nightly run -p work_tester_cli {{args}}
 
-gui *args:
-    RUSTFLAGS="-Zsanitizer=address" cargo +nightly run  --target x86_64-unknown-linux-gnu --features gpu -- --gui -d
-
 guirrrr *args:
-    cargo run --features gpu -- --gui
+    cargo run --features gpu -- --gpu
 
 runr *args:
     RUSTFLAGS="-C target-cpu=native" cargo +nightly run -p work_tester_cli --release {{args}}
@@ -34,10 +31,13 @@ arm:
     cargo zigbuild -p work_tester_cli --target armv7-unknown-linux-gnueabihf.2.28 --features gpu
 
 gpu *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +nightly run -p work_tester_cli --features gpu -- --gui {{args}}
+    RUSTFLAGS="-C target-cpu=native" cargo +nightly run -p work_tester_cli --features gpu -- --gpu -d {{args}}
 
-gpu-release *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +nightly run -p work_tester_cli --features gpu --release -- --gui {{args}}
+gpua *args:
+    RUSTFLAGS="-Zsanitizer=address" cargo +nightly run  --target x86_64-unknown-linux-gnu --features gpu -- --gpu -d {{args}}
+
+gpur *args:
+    RUSTFLAGS="-C target-cpu=native" cargo +nightly run -p work_tester_cli --features gpu --release -- --gpu -d {{args}}
 
 gen-gl-table:
     python3 scripts/generate_gl_table.py

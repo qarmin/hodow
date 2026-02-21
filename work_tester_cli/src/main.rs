@@ -96,55 +96,34 @@ fn print_statistics(stats: &TestStatistics) {
     }
 }
 
-fn main() {
-    let args = Args::parse();
-
-    // Initialize logger only if --debug flag is set
-    if args.debug {
-        if !cfg!(feature = "miri_build") {
-            let config = ConfigBuilder::new().set_format_text(handsome_logger::FormatText::DefaultWithFileNameC.get(), None).build();
-            handsome_logger::TermLogger::init(config, Default::default(), Default::default()).expect("Failed to initialize logger");
-        } else {
-            let config = ConfigBuilder::new().set_format_text(handsome_logger::FormatText::LevelMessageC.get(), None).build();
-            handsome_logger::TermLogger::init(config, Default::default(), Default::default()).expect("Failed to initialize logger");
+fn process_gpu() {
+    info!("GUI mode requested. Attempting to initialize OpenGL for GPU-backed tests...");
+    #[cfg(feature = "gpu")]
+    {
+        match work_tester_core::init_opengl() {
+            Ok(_mode) => {
+                log::info!("OpenGL initialized at startup (attempt). GPU-backed tests may be available.");
+            }
+            Err(e) => {
+                error!("Note: OpenGL initialization attempt failed: {}. GPU tests won't run unless you enable/fix GPU support.", e);
+            }
         }
     }
 
+    #[cfg(not(feature = "gpu"))]
+    {
+        error!("GUI requested but crate was compiled without the `gpu` feature. Enable the `gpu` feature to use GUI/Opengl functionality.");
+    }
+
+}
+
+fn process_cpu(args: &Args) {
     if let Some(nv) = args.iterations {
         set_iterations(nv);
     }
 
     if !args.skip.is_empty() {
-        set_skip_tests(args.skip);
-    }
-
-    print_build_info();
-
-
-    if args.gui {
-        info!("GUI mode requested. Attempting to initialize OpenGL for GPU-backed tests...");
-        #[cfg(feature = "gpu")]
-        {
-            match work_tester_core::init_opengl() {
-                Ok(_mode) => {
-                    log::info!("OpenGL initialized at startup (attempt). GPU-backed tests may be available.");
-                }
-                Err(e) => {
-                    eprintln!("Note: OpenGL initialization attempt failed: {}. GPU tests won't run unless you enable/fix GPU support.", e);
-                    return;
-                }
-            }
-        }
-
-        #[cfg(not(feature = "gpu"))]
-        {
-            eprintln!("GUI requested but crate was compiled without the `gpu` feature. Enable the `gpu` feature to use GUI/Opengl functionality.");
-            return;
-        }
-
-        error!("GUI mode is not fully implemented yet. Exiting.");
-        #[allow(unreachable_code)]
-        return;
+        set_skip_tests(args.skip.clone());
     }
 
     if args.list_modes {
@@ -233,5 +212,28 @@ fn main() {
             eprintln!("Error: Running tests failed: {}", e);
             std::process::exit(1);
         }
+    }
+}
+
+fn main() {
+    let args = Args::parse();
+
+    // Initialize logger only if --debug flag is set
+    if args.debug {
+        if !cfg!(feature = "miri_build") {
+            let config = ConfigBuilder::new().set_format_text(handsome_logger::FormatText::DefaultWithFileNameC.get(), None).build();
+            handsome_logger::TermLogger::init(config, Default::default(), Default::default()).expect("Failed to initialize logger");
+        } else {
+            let config = ConfigBuilder::new().set_format_text(handsome_logger::FormatText::LevelMessageC.get(), None).build();
+            handsome_logger::TermLogger::init(config, Default::default(), Default::default()).expect("Failed to initialize logger");
+        }
+    }
+
+    print_build_info();
+
+    if args.gpu {
+        process_gpu();
+    } else {
+        process_cpu(&args);
     }
 }

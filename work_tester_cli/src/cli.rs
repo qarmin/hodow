@@ -22,7 +22,6 @@ pub struct Args {
     #[arg(short = 'd', long = "debug")]
     pub debug: bool,
 
-    /// Run GUI/GPU-backed tests (try to initialize OpenGL and run GPU tests)
-    #[arg(short = 'g', long = "gui")]
-    pub gui: bool,
+    #[arg(short = 'g', long = "gpu")]
+    pub gpu: bool,
 }
