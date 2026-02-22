@@ -233,6 +233,52 @@ fn process_cpu(args: &Args) {
     }
 }
 
+fn maybe_init_gui(args: &Args) -> Option<work_tester_core::opengl::gui::GuiRuntimeHandle> {
+    if !args.gui {
+        return None;
+    }
+
+    #[cfg(feature = "gpu")]
+    {
+        // parse window size if supplied
+        let spec = if let Some(sz) = &args.window_size {
+            let parts: Vec<&str> = sz.split('x').collect();
+            if parts.len() == 2 {
+                if let (Ok(w), Ok(h)) = (parts[0].parse::<u32>(), parts[1].parse::<u32>()) {
+                    work_tester_core::opengl::gui::WindowSpec { title: args.window_title.clone(), width: w, height: h }
+                } else {
+                    work_tester_core::opengl::gui::WindowSpec::default()
+                }
+            } else {
+                work_tester_core::opengl::gui::WindowSpec::default()
+            }
+        } else {
+            work_tester_core::opengl::gui::WindowSpec::default()
+        };
+
+        match work_tester_core::opengl::gui::init_gui_runtime(work_tester_core::opengl::gui::GuiBackend::Winit) {
+            Ok(handle) => {
+                // If per-test-window is requested, CLI will call create_window_for_test before each test (not implemented here yet)
+                if !args.per_test_window {
+                    // Create default window now
+                    let _ = work_tester_core::opengl::gui::create_window_for_test(&handle, "work_tester_default", Some(spec));
+                }
+                Some(handle)
+            }
+            Err(e) => {
+                error!("Failed to initialize GUI runtime: {}", e);
+                None
+            }
+        }
+    }
+
+    #[cfg(not(feature = "gpu"))]
+    {
+        error!("GUI requested but crate was compiled without the `gpu` feature. Enable the `gpu` feature to use GUI functionality.");
+        None
+    }
+}
+
 fn main() {
     let args = Args::parse();
 
@@ -248,6 +294,9 @@ fn main() {
     }
 
     print_build_info();
+
+    // Try to initialize GUI runtime if requested. The returned handle can be used by the runner.
+    let _gui_runtime = maybe_init_gui(&args);
 
     if args.gpu {
         process_gpu();

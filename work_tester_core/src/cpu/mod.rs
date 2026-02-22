@@ -8,9 +8,6 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use log::{error, info};
 use once_cell::sync::OnceCell;
 
-#[macro_use]
-mod test_macros;
-
 pub mod auto_generated;
 pub(crate) mod common;
 
