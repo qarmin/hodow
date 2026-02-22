@@ -19,7 +19,7 @@ impl std::fmt::Display for GLVersion {
     }
 }
 
-/// Trait for OpenGL test examples
+/// Trait for OpenGL test examples (old synchronous API, kept for compatibility)
 pub trait GLTest: Sync {
     /// Name of the test example
     fn name(&self) -> &'static str;
@@ -29,6 +29,28 @@ pub trait GLTest: Sync {
 
     /// Run the test - returns (success, message)
     fn run(&self) -> Result<String, Box<dyn Error>>;
+}
+
+/// Trait for stateful, frame-by-frame OpenGL tests
+pub trait GLTestStateful: Sync {
+    /// Name of the test
+    fn name(&self) -> &'static str;
+
+    /// OpenGL version this test targets
+    fn gl_version(&self) -> GLVersion;
+
+    /// Initialize the test (create resources)
+    fn init(&self) -> Result<Box<dyn GLTestState>, Box<dyn Error>>;
+}
+
+/// Per-test state for incremental rendering
+pub trait GLTestState {
+    /// Render one frame. Returns true if test should continue, false if complete.
+    /// elapsed_ms is total time since test started
+    fn render_frame(&mut self, elapsed_ms: u64) -> Result<bool, Box<dyn Error>>;
+
+    /// Get final result message when test completes
+    fn finish(&mut self) -> Result<String, Box<dyn Error>>;
 }
 
 /// Result type for GL tests similar to CPU tests

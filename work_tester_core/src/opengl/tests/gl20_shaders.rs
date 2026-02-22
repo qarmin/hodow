@@ -257,9 +257,6 @@ impl GLTest for GL20ShadersTest {
                 gl::Flush();
 
                 frame_count += 1;
-
-                // ~60 FPS (16ms per frame)
-                std::thread::sleep(std::time::Duration::from_millis(16));
             }
 
             gl::DisableVertexAttribArray(pos_attr);

@@ -199,9 +199,6 @@ impl GLTest for GL33VAOTest {
                 gl::Flush();
 
                 frame_count += 1;
-
-                // ~60 FPS
-                std::thread::sleep(std::time::Duration::from_millis(16));
             }
 
             gl::BindVertexArray(0);

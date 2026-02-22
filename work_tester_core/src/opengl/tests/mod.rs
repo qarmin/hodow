@@ -35,50 +35,89 @@ pub fn test_all_gl() -> GLTestResult {
         height: 600,
     };
 
-    // Run all tests in a single window/event loop (winit limitation: can't recreate EventLoop)
-    let result = crate::opengl::gui::GuiRuntimeHandle::with_window(Some(spec), move || {
-        let mut total_run = 0usize;
-        let total_skipped = 0usize;
-        let mut total_errors = 0usize;
+    // Prepare test runner state
+    let test_runner = TestRunner {
+        tests,
+        current_test_idx: 0,
+        total_run: 0,
+        total_errors: 0,
+    };
 
-        for test in &tests {
-            log::info!("Running GL test: {} (GL {})", test.name(), test.gl_version());
-
-            // Clear screen before each test
-            unsafe {
-                gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT);
-            }
-
-            let test_start = std::time::Instant::now();
-            match test.run() {
-                Ok(msg) => {
-                    let elapsed_ms = test_start.elapsed().as_millis();
-                    log::info!("GL Test '{}' passed in {}ms: {}", test.name(), elapsed_ms, msg);
-                    total_run += 1;
-
-                    // Small delay between tests to show each result
-                    std::thread::sleep(std::time::Duration::from_millis(500));
-                }
-                Err(e) => {
-                    let elapsed_ms = test_start.elapsed().as_millis();
-                    log::error!("GL Test '{}' failed after {}ms: {}", test.name(), elapsed_ms, e);
-                    total_run += 1;
-                    total_errors += 1;
-                }
-            }
-        }
-
-        Ok(format!(
-            "Run: {}, Skipped: {}, Errors: {}",
-            total_run, total_skipped, total_errors
-        ))
+    // Run all tests in a single window with frame-by-frame rendering
+    let result = crate::opengl::gui::GuiRuntimeHandle::with_window_stateful(Some(spec), move || {
+        Box::new(test_runner)
     });
 
     match result {
-        Ok(_) => Ok((total_tests, 0, 0)),
+        Ok((run, errors)) => Ok((run, 0, errors)),
         Err(e) => {
             log::error!("GL test run failed: {}", e);
             Ok((total_tests, 0, total_tests))
         }
+    }
+}
+
+/// Test runner state for frame-by-frame execution
+struct TestRunner {
+    tests: Vec<&'static dyn GLTest>,
+    current_test_idx: usize,
+    total_run: usize,
+    total_errors: usize,
+}
+
+impl crate::opengl::gui::StatefulRunner for TestRunner {
+    fn init(&mut self) -> Result<(), Box<dyn std::error::Error>> {
+        if self.current_test_idx < self.tests.len() {
+            let test = self.tests[self.current_test_idx];
+            log::info!("Running GL test: {} (GL {})", test.name(), test.gl_version());
+            // Clear screen before each test
+            unsafe {
+                gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT);
+            }
+        }
+        Ok(())
+    }
+
+    fn update(&mut self, _delta_ms: u64) -> Result<bool, Box<dyn std::error::Error>> {
+        // Check if all tests are complete
+        if self.current_test_idx >= self.tests.len() {
+            return Ok(false); // All tests done
+        }
+
+        // Run current test synchronously (this will be refactored per-test in the future)
+        let test = self.tests[self.current_test_idx];
+        let test_start = std::time::Instant::now();
+
+        match test.run() {
+            Ok(msg) => {
+                let elapsed_ms = test_start.elapsed().as_millis();
+                log::info!("GL Test '{}' passed in {}ms: {}", test.name(), elapsed_ms, msg);
+                self.total_run += 1;
+            }
+            Err(e) => {
+                let elapsed_ms = test_start.elapsed().as_millis();
+                log::error!("GL Test '{}' failed after {}ms: {}", test.name(), elapsed_ms, e);
+                self.total_run += 1;
+                self.total_errors += 1;
+            }
+        }
+
+        self.current_test_idx += 1;
+
+        // Start next test or finish
+        if self.current_test_idx < self.tests.len() {
+            let test = self.tests[self.current_test_idx];
+            log::info!("Running GL test: {} (GL {})", test.name(), test.gl_version());
+            unsafe {
+                gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT);
+            }
+            Ok(true) // Continue to next test
+        } else {
+            Ok(false) // All tests complete
+        }
+    }
+
+    fn get_result(&self) -> (usize, usize) {
+        (self.total_run, self.total_errors)
     }
 }

@@ -68,6 +68,19 @@ pub mod gui {
         }
     }
 
+    /// Trait for stateful runners that execute frame-by-frame
+    pub trait StatefulRunner {
+        /// Initialize before first frame
+        fn init(&mut self) -> Result<(), Box<dyn Error>>;
+
+        /// Update and render one frame. Returns true to continue, false when complete.
+        /// delta_ms is time since last frame
+        fn update(&mut self, delta_ms: u64) -> Result<bool, Box<dyn Error>>;
+
+        /// Get final result (run_count, error_count)
+        fn get_result(&self) -> (usize, usize);
+    }
+
     /// Opaque runtime handle placeholder
     pub struct GuiRuntimeHandle;
 
@@ -101,6 +114,36 @@ pub mod gui {
 
             // Return the result from the test closure
             app.test_result.unwrap_or_else(|| Err("No test result".into()))
+        }
+
+        /// Create a window with OpenGL context and run a stateful runner frame-by-frame.
+        /// This makes the window visible during test execution.
+        pub fn with_window_stateful<F>(spec: Option<WindowSpec>, f: F) -> Result<(usize, usize), Box<dyn Error>>
+        where
+            F: FnOnce() -> Box<dyn StatefulRunner> + 'static,
+        {
+            let spec = spec.unwrap_or_default();
+
+            // Create an event loop
+            let event_loop = EventLoop::new()?;
+
+            // Prepare display builder with window attributes
+            let window_attrs = Window::default_attributes()
+                .with_title(spec.title.unwrap_or_else(|| "work_tester GL Test".to_string()))
+                .with_inner_size(winit::dpi::LogicalSize::new(spec.width, spec.height));
+
+            let template = ConfigTemplateBuilder::new().with_alpha_size(8);
+
+            let display_builder = DisplayBuilder::new().with_window_attributes(Some(window_attrs));
+
+            // Create the stateful app
+            let mut app = StatefulApp::new(template, display_builder, f);
+
+            // Run event loop (blocks until exit)
+            event_loop.run_app(&mut app)?;
+
+            // Return the result
+            app.result.ok_or_else(|| "No result".into())
         }
     }
 
@@ -296,6 +339,195 @@ pub mod gui {
     struct AppState {
         gl_surface: Surface<WindowSurface>,
         window: Window,
+    }
+
+    // Stateful app for frame-by-frame rendering
+    struct StatefulApp<F>
+    where
+        F: FnOnce() -> Box<dyn StatefulRunner>,
+    {
+        template: ConfigTemplateBuilder,
+        gl_display: GlDisplayCreationState,
+        gl_context: Option<PossiblyCurrentContext>,
+        state: Option<AppState>,
+        runner_factory: Option<F>,
+        runner: Option<Box<dyn StatefulRunner>>,
+        result: Option<(usize, usize)>,
+        last_frame_time: Option<std::time::Instant>,
+        show_result_until: Option<std::time::Instant>,
+    }
+
+    impl<F> StatefulApp<F>
+    where
+        F: FnOnce() -> Box<dyn StatefulRunner>,
+    {
+        fn new(template: ConfigTemplateBuilder, display_builder: DisplayBuilder, f: F) -> Self {
+            Self {
+                template,
+                gl_display: GlDisplayCreationState::Builder(Box::new(display_builder)),
+                gl_context: None,
+                state: None,
+                runner_factory: Some(f),
+                runner: None,
+                result: None,
+                last_frame_time: None,
+                show_result_until: None,
+            }
+        }
+    }
+
+    impl<F> ApplicationHandler for StatefulApp<F>
+    where
+        F: FnOnce() -> Box<dyn StatefulRunner>,
+    {
+        fn resumed(&mut self, event_loop: &ActiveEventLoop) {
+            let (window, gl_config) = match &self.gl_display {
+                GlDisplayCreationState::Builder(display_builder) => {
+                    let (window, gl_config) = match display_builder.clone().build(
+                        event_loop,
+                        self.template.clone(),
+                        gl_config_picker,
+                    ) {
+                        Ok((Some(window), gl_config)) => (window, gl_config),
+                        Ok((None, _)) => {
+                            event_loop.exit();
+                            return;
+                        }
+                        Err(_) => {
+                            event_loop.exit();
+                            return;
+                        }
+                    };
+
+                    self.gl_display = GlDisplayCreationState::Init;
+
+                    let gl_context = match create_gl_context(&window, &gl_config) {
+                        Ok(ctx) => ctx.treat_as_possibly_current(),
+                        Err(_) => {
+                            event_loop.exit();
+                            return;
+                        }
+                    };
+                    self.gl_context = Some(gl_context);
+
+                    (window, gl_config)
+                }
+                GlDisplayCreationState::Init => {
+                    event_loop.exit();
+                    return;
+                }
+            };
+
+            let attrs = match window.build_surface_attributes(Default::default()) {
+                Ok(a) => a,
+                Err(_) => {
+                    event_loop.exit();
+                    return;
+                }
+            };
+            let gl_surface = match unsafe {
+                gl_config.display().create_window_surface(&gl_config, &attrs)
+            } {
+                Ok(s) => s,
+                Err(_) => {
+                    event_loop.exit();
+                    return;
+                }
+            };
+
+            let gl_context = self.gl_context.as_ref().unwrap();
+            if gl_context.make_current(&gl_surface).is_err() {
+                event_loop.exit();
+                return;
+            }
+
+            if super::loader::load_gl_functions(&gl_config.display()).is_err() {
+                event_loop.exit();
+                return;
+            }
+
+            let _ = gl_surface.set_swap_interval(
+                gl_context,
+                SwapInterval::Wait(NonZeroU32::new(1).unwrap()),
+            );
+
+            self.state = Some(AppState { gl_surface, window });
+
+            // Initialize runner
+            if self.runner.is_none() {
+                if let Some(factory) = self.runner_factory.take() {
+                    let mut runner = factory();
+                    if runner.init().is_err() {
+                        event_loop.exit();
+                        return;
+                    }
+                    self.runner = Some(runner);
+                    self.last_frame_time = Some(std::time::Instant::now());
+                }
+            }
+
+            // Request first frame
+            if let Some(AppState { window, .. }) = &self.state {
+                window.request_redraw();
+            }
+        }
+
+        fn window_event(
+            &mut self,
+            event_loop: &ActiveEventLoop,
+            _window_id: winit::window::WindowId,
+            event: WindowEvent,
+        ) {
+            match event {
+                WindowEvent::RedrawRequested => {
+                    if let (Some(AppState { gl_surface, window }), Some(gl_context)) =
+                        (&self.state, &self.gl_context)
+                    {
+                        // Check if showing result
+                        if let Some(show_until) = self.show_result_until {
+                            if std::time::Instant::now() >= show_until {
+                                event_loop.exit();
+                                return;
+                            }
+                            let _ = gl_surface.swap_buffers(gl_context);
+                            window.request_redraw();
+                            return;
+                        }
+
+                        // Run one frame of tests
+                        if let Some(runner) = &mut self.runner {
+                            let delta_ms = self.last_frame_time
+                                .map(|t| t.elapsed().as_millis() as u64)
+                                .unwrap_or(0);
+                            self.last_frame_time = Some(std::time::Instant::now());
+
+                            match runner.update(delta_ms) {
+                                Ok(true) => {
+                                    // Continue - swap buffers and request next frame
+                                    let _ = gl_surface.swap_buffers(gl_context);
+                                    window.request_redraw();
+                                }
+                                Ok(false) => {
+                                    // Tests complete - show result for 1 second
+                                    let _ = gl_surface.swap_buffers(gl_context);
+                                    self.result = Some(runner.get_result());
+                                    self.show_result_until = Some(std::time::Instant::now() + std::time::Duration::from_secs(1));
+                                    window.request_redraw();
+                                }
+                                Err(_) => {
+                                    // Error - exit immediately
+                                    event_loop.exit();
+                                }
+                            }
+                        }
+                    }
+                }
+                WindowEvent::CloseRequested => {
+                    event_loop.exit();
+                }
+                _ => {}
+            }
+        }
     }
 
     fn gl_config_picker(configs: Box<dyn Iterator<Item = Config> + '_>) -> Config {

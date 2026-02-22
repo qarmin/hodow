@@ -133,7 +133,6 @@ impl GLTest for GL15VBOTest {
                 gl::Flush();
 
                 frame_count += 1;
-                std::thread::sleep(std::time::Duration::from_millis(16));
             }
 
             gl::BindVertexArray(0);

@@ -94,7 +94,6 @@ impl GLTest for GL11TexturesTest {
                 gl::Flush();
 
                 frame_count += 1;
-                std::thread::sleep(std::time::Duration::from_millis(16));
             }
 
             gl::BindTexture(gl::TEXTURE_2D, 0);

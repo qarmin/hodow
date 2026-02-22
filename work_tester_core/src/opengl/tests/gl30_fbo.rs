@@ -120,7 +120,6 @@ impl GLTest for GL30FBOTest {
                 gl::Flush();
 
                 frame_count += 1;
-                std::thread::sleep(std::time::Duration::from_millis(16));
             }
 
             // Cleanup
