@@ -83,46 +83,98 @@ pub mod gui {
             // Use EventLoop::new() which returns a Result in this vendored winit.
             let event_loop = EventLoop::new()?;
 
+            // create a proxy we can clone: one clone will be given to the worker, one will be stored in App
+            let proxy = event_loop.create_proxy();
+
             // channel to receive result from worker
             let (res_tx, res_rx) = channel();
 
             // spawn worker that runs the test closure; it will send result and wake the event loop
-            let proxy = event_loop.create_proxy();
+            let proxy_for_worker = proxy.clone();
             thread::spawn(move || {
                 let r = f();
                 let _ = res_tx.send(r);
-                // wake the event loop so it can exit
-                proxy.wake_up();
+                // wake the event loop so it can react to worker completion
+                let _ = proxy_for_worker.wake_up();
             });
 
-            // Application handler that creates a window and exits when proxy_wake_up is called
+            // Application handler that creates a window and exits when conditions are met
             struct App {
                 title: String,
+                proxy: winit::event_loop::EventLoopProxy,
+                window: Option<Box<dyn winit::window::Window>>,
+                start_time: Option<std::time::Instant>,
+                worker_finished: bool,
             }
 
             impl ApplicationHandler for App {
                 fn can_create_surfaces(&mut self, event_loop: &dyn ActiveEventLoop) {
                     let mut attrs = WindowAttributes::default();
                     attrs = attrs.with_title(self.title.clone());
-                    // request a surface/window; ignore errors but exit the loop if creation fails
-                    if let Err(e) = event_loop.create_window(attrs) {
-                        eprintln!("Failed to create window: {:?}", e);
-                        event_loop.exit();
+                    match event_loop.create_window(attrs) {
+                        Ok(win) => {
+                            // store window and mark start time
+                            self.start_time = Some(std::time::Instant::now());
+                            self.window = Some(win);
+                            // request one redraw to ensure the window contents are shown
+                            if let Some(w) = &self.window {
+                                let _ = w.request_redraw();
+                            }
+                        }
+                        Err(e) => {
+                            eprintln!("Failed to create window: {:?}", e);
+                            event_loop.exit();
+                        }
                     }
                 }
 
                 fn proxy_wake_up(&mut self, event_loop: &dyn ActiveEventLoop) {
-                    // worker finished; exit the event loop so run_app returns
-                    event_loop.exit();
+                    // Called both when the worker finishes (first wakeup) and when the timer fires (second wakeup)
+                    let now = std::time::Instant::now();
+
+                    let min_duration = std::time::Duration::from_secs(1);
+
+                    if !self.worker_finished {
+                        // This wakeup is from the worker finishing
+                        self.worker_finished = true;
+
+                        // If we don't have a start_time (window not created) just exit
+                        if let Some(start) = self.start_time {
+                            let elapsed = now.duration_since(start);
+                            if elapsed >= min_duration {
+                                // Enough time passed, exit now
+                                event_loop.exit();
+                            } else {
+                                // Spawn a timer thread to wake up after remaining time
+                                let proxy_clone = self.proxy.clone();
+                                let remaining = min_duration - elapsed;
+                                std::thread::spawn(move || {
+                                    std::thread::sleep(remaining);
+                                    let _ = proxy_clone.wake_up();
+                                });
+                            }
+                        } else {
+                            event_loop.exit();
+                        }
+                    } else {
+                        // This wakeup is from the timer; if both worker finished and min_duration elapsed, exit
+                        if let Some(start) = self.start_time {
+                            if now.duration_since(start) >= min_duration {
+                                event_loop.exit();
+                            }
+                        } else {
+                            event_loop.exit();
+                        }
+                    }
                 }
 
                 fn window_event(&mut self, _event_loop: &dyn ActiveEventLoop, _window_id: winit::window::WindowId, _event: WindowEvent) {
-                    // no-op for now
+                    // no-op for now; redraws are requested from tests or initial request
                 }
             }
 
-            // run the event loop; when proxy_wake_up is called it will exit
-            let app = App { title: spec.title.unwrap_or_else(|| "work_tester window".to_string()) };
+            // run the event loop; when proxy_wake_up is called appropriately it will exit
+            let app = App { title: spec.title.unwrap_or_else(|| "work_tester window".to_string()), proxy: proxy.clone(), window: None, start_time: None, worker_finished: false };
             let _ = event_loop.run_app(app);
 
             // after event loop returns, collect result
