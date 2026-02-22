@@ -7,8 +7,9 @@
 //! glBindRenderbuffer, glRenderbufferStorage, glFramebufferRenderbuffer,
 //! glDeleteRenderbuffers, glBlitFramebuffer
 
-use crate::opengl::test_trait::{GLTest, GLVersion};
 use std::error::Error;
+
+use crate::opengl::test_trait::{GLTest, GLVersion};
 
 pub struct GL30FBOTest;
 
@@ -37,28 +38,12 @@ impl GLTest for GL30FBOTest {
             let mut tex = 0u32;
             gl::GenTextures(1, &mut tex);
             gl::BindTexture(gl::TEXTURE_2D, tex);
-            gl::TexImage2D(
-                gl::TEXTURE_2D,
-                0,
-                gl::RGBA as i32,
-                256,
-                256,
-                0,
-                gl::RGBA,
-                gl::UNSIGNED_BYTE,
-                std::ptr::null(),
-            );
+            gl::TexImage2D(gl::TEXTURE_2D, 0, gl::RGBA as i32, 256, 256, 0, gl::RGBA, gl::UNSIGNED_BYTE, std::ptr::null());
             gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MIN_FILTER, gl::LINEAR as i32);
             gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MAG_FILTER, gl::LINEAR as i32);
 
             // Test glFramebufferTexture2D
-            gl::FramebufferTexture2D(
-                gl::FRAMEBUFFER,
-                gl::COLOR_ATTACHMENT0,
-                gl::TEXTURE_2D,
-                tex,
-                0,
-            );
+            gl::FramebufferTexture2D(gl::FRAMEBUFFER, gl::COLOR_ATTACHMENT0, gl::TEXTURE_2D, tex, 0);
 
             // Test glGenRenderbuffers for depth attachment
             let mut rbo = 0u32;
@@ -74,12 +59,7 @@ impl GLTest for GL30FBOTest {
             gl::RenderbufferStorage(gl::RENDERBUFFER, gl::DEPTH_COMPONENT, 256, 256);
 
             // Test glFramebufferRenderbuffer
-            gl::FramebufferRenderbuffer(
-                gl::FRAMEBUFFER,
-                gl::DEPTH_ATTACHMENT,
-                gl::RENDERBUFFER,
-                rbo,
-            );
+            gl::FramebufferRenderbuffer(gl::FRAMEBUFFER, gl::DEPTH_ATTACHMENT, gl::RENDERBUFFER, rbo);
 
             // Test glCheckFramebufferStatus
             let status = gl::CheckFramebufferStatus(gl::FRAMEBUFFER);
@@ -104,18 +84,7 @@ impl GLTest for GL30FBOTest {
                 // Test glBlitFramebuffer - copy FBO to default framebuffer
                 gl::BindFramebuffer(gl::READ_FRAMEBUFFER, fbo);
                 gl::BindFramebuffer(gl::DRAW_FRAMEBUFFER, 0);
-                gl::BlitFramebuffer(
-                    0,
-                    0,
-                    256,
-                    256,
-                    0,
-                    0,
-                    256,
-                    256,
-                    gl::COLOR_BUFFER_BIT,
-                    gl::NEAREST,
-                );
+                gl::BlitFramebuffer(0, 0, 256, 256, 0, 0, 256, 256, gl::COLOR_BUFFER_BIT, gl::NEAREST);
 
                 gl::Flush();
 

@@ -149,7 +149,7 @@ pub trait ExtensionTest {
 
             #[cfg(feature = "gpu")]
             {
-                match crate::opengl::gui::GuiRuntimeHandle::with_window(None, || fun()) {
+                match crate::opengl::gui::GuiRuntimeHandle::with_window(None, fun) {
                     Ok(_) => info!("{} passed", name),
                     Err(e) => {
                         // Convert error into string if possible
@@ -169,8 +169,6 @@ pub trait ExtensionTest {
                     }
                 }
             }
-
-
         }
 
         info!("___________________{} test passed", Self::get_name());

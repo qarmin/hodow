@@ -1,7 +1,6 @@
-#![cfg(feature = "gpu")]
+use std::error::Error;
 
 use crate::opengl::test_trait::{GLTest, GLVersion};
-use std::error::Error;
 
 pub struct GL43ComputeTest;
 
@@ -64,17 +63,7 @@ impl GLTest for GL43ComputeTest {
             gl::BindTexture(gl::TEXTURE_2D, texture);
             gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MIN_FILTER, gl::NEAREST as i32);
             gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MAG_FILTER, gl::NEAREST as i32);
-            gl::TexImage2D(
-                gl::TEXTURE_2D,
-                0,
-                gl::RGBA32F as i32,
-                512,
-                512,
-                0,
-                gl::RGBA,
-                gl::FLOAT,
-                std::ptr::null(),
-            );
+            gl::TexImage2D(gl::TEXTURE_2D, 0, gl::RGBA32F as i32, 512, 512, 0, gl::RGBA, gl::FLOAT, std::ptr::null());
 
             gl::BindImageTexture(0, texture, 0, gl::FALSE, 0, gl::WRITE_ONLY, gl::RGBA32F);
 

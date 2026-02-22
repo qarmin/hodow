@@ -1,19 +1,16 @@
-#![cfg(feature = "gpu")]
-
-use std::error::Error;
-use std::sync::Arc;
-use std::num::NonZeroU32;
-
-use glutin::context::{ContextApi, PossiblyCurrentContext, ContextAttributesBuilder};
-use glutin::display::{Display, DisplayApiPreference};
-use glutin::prelude::*;
-use glutin::config::ConfigTemplateBuilder;
-use glutin::surface::{SurfaceAttributesBuilder, PbufferSurface};
-use raw_window_handle::{RawDisplayHandle, HasDisplayHandle, DisplayHandle, HandleError, XlibDisplayHandle};
-use std::ptr::NonNull;
+use std::error::{Error, Error as StdError};
 use std::ffi::c_void;
 use std::fmt;
-use std::error::Error as StdError;
+use std::num::NonZeroU32;
+use std::ptr::NonNull;
+use std::sync::Arc;
+
+use glutin::config::ConfigTemplateBuilder;
+use glutin::context::{ContextApi, ContextAttributesBuilder, PossiblyCurrentContext};
+use glutin::display::{Display, DisplayApiPreference};
+use glutin::prelude::*;
+use glutin::surface::{PbufferSurface, SurfaceAttributesBuilder};
+use raw_window_handle::{DisplayHandle, HandleError, HasDisplayHandle, RawDisplayHandle, XlibDisplayHandle};
 
 /// Simple wrapper around a headless OpenGL context or similar.
 pub struct OpenGLMode {
@@ -72,7 +69,8 @@ impl OpenGLMode {
         let template = ConfigTemplateBuilder::new().build();
         let config = unsafe {
             display
-                .find_configs(template).map_err(|e| OpenGlError::Other(Box::new(e)))?
+                .find_configs(template)
+                .map_err(|e| OpenGlError::Other(Box::new(e)))?
                 .next()
                 .ok_or_else(|| OpenGlError::Glutin("No GL config".to_string()))?
         };
@@ -80,16 +78,12 @@ impl OpenGLMode {
         let context_attributes = ContextAttributesBuilder::new().build(None);
 
         // Try to create a native GL context; if that fails, fall back to GLES.
-        let fallback_context_attributes = ContextAttributesBuilder::new()
-            .with_context_api(ContextApi::Gles(None))
-            .build(None);
+        let fallback_context_attributes = ContextAttributesBuilder::new().with_context_api(ContextApi::Gles(None)).build(None);
 
         let not_current = unsafe {
             match display.create_context(&config, &context_attributes) {
                 Ok(ctx) => ctx,
-                Err(_) => display
-                    .create_context(&config, &fallback_context_attributes)
-                    .map_err(|e| OpenGlError::Other(Box::new(e)))?,
+                Err(_) => display.create_context(&config, &fallback_context_attributes).map_err(|e| OpenGlError::Other(Box::new(e)))?,
             }
         };
 
@@ -98,24 +92,13 @@ impl OpenGLMode {
             // build a 128x128 pbuffer surface
             let attrs = SurfaceAttributesBuilder::<PbufferSurface>::new()
                 .with_largest_pbuffer(false)
-                .build(
-                    NonZeroU32::new(128).expect("valid pbuffer width"),
-                    NonZeroU32::new(128).expect("valid pbuffer height"),
-                );
+                .build(NonZeroU32::new(128).expect("valid pbuffer width"), NonZeroU32::new(128).expect("valid pbuffer height"));
 
-            unsafe {
-                display
-                    .create_pbuffer_surface(&config, &attrs)
-                    .map_err(|e| OpenGlError::Other(Box::new(e)))?
-            }
+            unsafe { display.create_pbuffer_surface(&config, &attrs).map_err(|e| OpenGlError::Other(Box::new(e)))? }
         };
 
         // Make the context current on the created pbuffer surface.
-        let possibly_current =
-            not_current
-                .make_current(&pbuffer)
-                .map_err(|e| OpenGlError::Other(Box::new(e)))?
-        ;
+        let possibly_current = not_current.make_current(&pbuffer).map_err(|e| OpenGlError::Other(Box::new(e)))?;
 
         Ok(OpenGLMode {
             inner: Arc::new(possibly_current),

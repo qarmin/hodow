@@ -1,8 +1,7 @@
-#![cfg(feature = "gpu")]
-
-use crate::opengl::context::OpenGLMode;
 use std::error::Error;
 use std::os::raw::c_char;
+
+use crate::opengl::context::OpenGLMode;
 
 /// Initialize/load GL function pointers using `gl` crate.
 pub fn init_gl(mode: &OpenGLMode) -> Result<(), Box<dyn Error>> {

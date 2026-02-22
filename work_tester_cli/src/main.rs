@@ -123,7 +123,6 @@ fn process_gpu() {
     {
         error!("GPU requested but crate was compiled without the `gpu` feature. Enable the `gpu` feature to use OpenGL functionality.");
     }
-
 }
 
 fn process_cpu(args: &Args) {

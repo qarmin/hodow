@@ -1,7 +1,6 @@
-#![cfg(feature = "gpu")]
+use std::error::Error;
 
 use crate::opengl::test_trait::{GLTest, GLVersion};
-use std::error::Error;
 
 pub struct GL21PixelBuffersTest;
 
@@ -25,7 +24,7 @@ impl GLTest for GL21PixelBuffersTest {
             gl::GenTextures(1, &mut texture);
             gl::BindTexture(gl::TEXTURE_2D, texture);
 
-            let texture_data: Vec<u8> = (0..800*600*4).map(|i| ((i % 256) as u8)).collect();
+            let texture_data: Vec<u8> = (0..800 * 600 * 4).map(|i| (i % 256) as u8).collect();
             gl::TexImage2D(
                 gl::TEXTURE_2D,
                 0,

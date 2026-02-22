@@ -1,7 +1,6 @@
-#![cfg(feature = "gpu")]
+use std::error::Error;
 
 use crate::opengl::test_trait::{GLTest, GLVersion};
-use std::error::Error;
 
 pub struct GL31UBOTest;
 
@@ -58,11 +57,7 @@ impl GLTest for GL31UBOTest {
             gl::BufferData(gl::UNIFORM_BUFFER, 16, std::ptr::null(), gl::DYNAMIC_DRAW);
             gl::BindBufferBase(gl::UNIFORM_BUFFER, 0, ubo);
 
-            let vertices: [f32; 6] = [
-                -0.5, -0.5,
-                 0.5, -0.5,
-                 0.0,  0.5,
-            ];
+            let vertices: [f32; 6] = [-0.5, -0.5, 0.5, -0.5, 0.0, 0.5];
 
             let mut vao = 0u32;
             let mut vbo = 0u32;
@@ -89,12 +84,7 @@ impl GLTest for GL31UBOTest {
                 gl::Clear(gl::COLOR_BUFFER_BIT);
 
                 let t = start.elapsed().as_secs_f32();
-                let color = [
-                    (t * 2.0).sin() * 0.5 + 0.5,
-                    (t * 3.0).sin() * 0.5 + 0.5,
-                    (t * 4.0).sin() * 0.5 + 0.5,
-                    1.0f32,
-                ];
+                let color = [(t * 2.0).sin() * 0.5 + 0.5, (t * 3.0).sin() * 0.5 + 0.5, (t * 4.0).sin() * 0.5 + 0.5, 1.0f32];
 
                 gl::BindBuffer(gl::UNIFORM_BUFFER, ubo);
                 gl::BufferSubData(gl::UNIFORM_BUFFER, 0, 16, color.as_ptr() as *const _);

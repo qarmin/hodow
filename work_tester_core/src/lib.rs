@@ -15,7 +15,6 @@ pub use cpu::{
     available_modes, get_iterations, list_all_functions, request_stop, reset_stop_flag, set_iterations, set_skip_tests, should_stop, test_all_extensions, ExtensionTest,
     FeatureStats, ProgressCallback, TestFunction, TestProgress, TestStatistics,
 };
-
 // Re-export OpenGL API only when the `gpu` feature is enabled
 #[cfg(feature = "gpu")]
 pub use opengl::{available_opengl_modes, init_opengl, test_all_opengl, GLTestResult, OpenGLMode};

@@ -1,5 +1,3 @@
-#![cfg(feature = "gpu")]
-
 //! OpenGL test examples
 //!
 //! Each module implements a test for specific OpenGL functionality,
@@ -14,13 +12,13 @@ pub const TEST_DURATION_MS: u64 = 1000;
 pub const TEST_DURATION: Duration = Duration::from_millis(TEST_DURATION_MS);
 
 pub mod gl11_textures;
+pub mod gl13_multitexture;
 pub mod gl15_vbo;
 pub mod gl20_shaders;
-pub mod gl30_fbo;
-pub mod gl33_vao;
-pub mod gl13_multitexture;
 pub mod gl21_pixelbuffers;
+pub mod gl30_fbo;
 pub mod gl31_ubo;
+pub mod gl33_vao;
 pub mod gl40_tessellation;
 pub mod gl43_compute;
 
@@ -62,9 +60,7 @@ pub fn test_all_gl() -> GLTestResult {
     };
 
     // Run all tests in a single window with frame-by-frame rendering
-    let result = crate::opengl::gui::GuiRuntimeHandle::with_window_stateful(Some(spec), move || {
-        Box::new(test_runner)
-    });
+    let result = crate::opengl::gui::GuiRuntimeHandle::with_window_stateful(Some(spec), move || Box::new(test_runner));
 
     match result {
         Ok((run, errors)) => Ok((run, 0, errors)),

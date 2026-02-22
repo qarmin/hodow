@@ -1,7 +1,6 @@
-#![cfg(feature = "gpu")]
+use std::error::Error;
 
 use crate::opengl::test_trait::{GLTest, GLVersion};
-use std::error::Error;
 
 pub struct GL40TessellationTest;
 
@@ -78,11 +77,7 @@ impl GLTest for GL40TessellationTest {
             gl::LinkProgram(program);
             gl::UseProgram(program);
 
-            let vertices: [f32; 6] = [
-                -0.8, -0.8,
-                 0.8, -0.8,
-                 0.0,  0.8,
-            ];
+            let vertices: [f32; 6] = [-0.8, -0.8, 0.8, -0.8, 0.0, 0.8];
 
             let mut vao = 0u32;
             let mut vbo = 0u32;

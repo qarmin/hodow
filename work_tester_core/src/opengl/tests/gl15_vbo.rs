@@ -5,9 +5,10 @@
 //! Tests: glGenBuffers, glBindBuffer, glBufferData, glBufferSubData,
 //! glDeleteBuffers, glGetBufferParameteriv
 
-use crate::opengl::test_trait::{GLTest, GLVersion};
 use std::error::Error;
 use std::ffi::CString;
+
+use crate::opengl::test_trait::{GLTest, GLVersion};
 
 pub struct GL15VBOTest;
 
@@ -69,9 +70,7 @@ impl GLTest for GL15VBOTest {
             gl::BindBuffer(gl::ARRAY_BUFFER, vbo);
 
             // Initial data
-            let mut vertices: Vec<f32> = vec![
-                -0.8, -0.8, 0.0, 0.8, -0.8, 0.0, 0.0, 0.8, 0.0,
-            ];
+            let mut vertices: Vec<f32> = vec![-0.8, -0.8, 0.0, 0.8, -0.8, 0.0, 0.0, 0.8, 0.0];
 
             // Test glBufferData
             gl::BufferData(
@@ -86,11 +85,7 @@ impl GLTest for GL15VBOTest {
             gl::GetBufferParameteriv(gl::ARRAY_BUFFER, gl::BUFFER_SIZE, &mut size);
             let expected_size = (vertices.len() * std::mem::size_of::<f32>()) as i32;
             if size != expected_size {
-                return Err(format!(
-                    "Buffer size check failed: expected {}, got {}",
-                    expected_size, size
-                )
-                .into());
+                return Err(format!("Buffer size check failed: expected {}, got {}", expected_size, size).into());
             }
 
             // Setup VAO (required for core profile)
@@ -100,14 +95,7 @@ impl GLTest for GL15VBOTest {
 
             let pos_attr = gl::GetAttribLocation(program, CString::new("position")?.as_ptr());
             gl::EnableVertexAttribArray(pos_attr as u32);
-            gl::VertexAttribPointer(
-                pos_attr as u32,
-                3,
-                gl::FLOAT,
-                gl::FALSE,
-                3 * std::mem::size_of::<f32>() as i32,
-                std::ptr::null(),
-            );
+            gl::VertexAttribPointer(pos_attr as u32, 3, gl::FLOAT, gl::FALSE, 3 * std::mem::size_of::<f32>() as i32, std::ptr::null());
 
             // Render loop with animated glBufferSubData
             let start = std::time::Instant::now();
@@ -122,12 +110,7 @@ impl GLTest for GL15VBOTest {
                 vertices[1] = -0.8 + offset; // Animate Y position of first vertex
                 vertices[4] = -0.8 + offset; // Animate Y position of second vertex
 
-                gl::BufferSubData(
-                    gl::ARRAY_BUFFER,
-                    0,
-                    (vertices.len() * std::mem::size_of::<f32>()) as isize,
-                    vertices.as_ptr() as *const _,
-                );
+                gl::BufferSubData(gl::ARRAY_BUFFER, 0, (vertices.len() * std::mem::size_of::<f32>()) as isize, vertices.as_ptr() as *const _);
 
                 gl::DrawArrays(gl::TRIANGLES, 0, 3);
                 gl::Flush();

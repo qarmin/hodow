@@ -2,9 +2,10 @@
 //!
 //! GL_VERSION: 2.0
 
-use crate::opengl::test_trait::{GLTest, GLVersion};
 use std::error::Error;
 use std::ffi::CString;
+
+use crate::opengl::test_trait::{GLTest, GLVersion};
 
 pub struct GL20ShadersTest;
 
@@ -20,7 +21,9 @@ unsafe fn compile_shader(src: &CString, shader_type: u32) -> Result<u32, String>
         // Query the info log length and read the actual log size
         let mut len = 0;
         gl::GetShaderiv(s, gl::INFO_LOG_LENGTH, &mut len);
-        if len <= 0 { len = 512; }
+        if len <= 0 {
+            len = 512;
+        }
         let mut buffer = vec![0u8; len as usize];
         let mut actual_len: i32 = 0;
         gl::GetShaderInfoLog(s, len, &mut actual_len, buffer.as_mut_ptr() as *mut _);
@@ -32,18 +35,15 @@ unsafe fn compile_shader(src: &CString, shader_type: u32) -> Result<u32, String>
 
         // Include the shader source (with line numbers) to help debugging
         let src_str = src.to_string_lossy();
-        let numbered_src = src_str
-            .lines()
-            .enumerate()
-            .map(|(i, l)| format!("{:4}: {}", i + 1, l))
-            .collect::<Vec<_>>()
-            .join("\n");
+        let numbered_src = src_str.lines().enumerate().map(|(i, l)| format!("{:4}: {}", i + 1, l)).collect::<Vec<_>>().join("\n");
 
         let err = gl::GetError();
         gl::DeleteShader(s);
         return Err(format!(
             "{} (glError=0x{:X})\n--- shader source ---\n{}\n--- end shader source ---",
-            msg.trim_matches(char::from(0)), err, numbered_src
+            msg.trim_matches(char::from(0)),
+            err,
+            numbered_src
         ));
     }
     Ok(s)
@@ -70,7 +70,7 @@ impl GLTest for GL20ShadersTest {
                     gl_Position = vec4(position, 1.0);
                     vColor = color;
                 }
-                "#
+                "#,
             )?;
 
             let legacy_fragment = CString::new(
@@ -80,7 +80,7 @@ impl GLTest for GL20ShadersTest {
                 void main() {
                     gl_FragColor = vec4(vColor, 1.0);
                 }
-                "#
+                "#,
             )?;
 
             // Attempt to derive a suitable `#version` from the GL shading language
@@ -102,7 +102,8 @@ impl GLTest for GL20ShadersTest {
                 }
             }
 
-            let modern_vs_src = format!(r#"#version {} core
+            let modern_vs_src = format!(
+                r#"#version {} core
                 layout(location = 0) in vec3 position;
                 layout(location = 1) in vec3 color;
                 out vec3 vColor;
@@ -110,15 +111,20 @@ impl GLTest for GL20ShadersTest {
                     gl_Position = vec4(position, 1.0);
                     vColor = color;
                 }}
-                "#, glsl_version_num);
+                "#,
+                glsl_version_num
+            );
 
-            let modern_fs_src = format!(r#"#version {} core
+            let modern_fs_src = format!(
+                r#"#version {} core
                 in vec3 vColor;
                 out vec4 FragColor;
                 void main() {{
                     FragColor = vec4(vColor, 1.0);
                 }}
-                "#, glsl_version_num);
+                "#,
+                glsl_version_num
+            );
 
             let modern_vertex = CString::new(modern_vs_src)?;
             let modern_fragment = CString::new(modern_fs_src)?;
@@ -151,7 +157,9 @@ impl GLTest for GL20ShadersTest {
             if success == 0 {
                 let mut len = 0;
                 gl::GetProgramiv(program, gl::INFO_LOG_LENGTH, &mut len);
-                if len <= 0 { len = 512; }
+                if len <= 0 {
+                    len = 512;
+                }
                 let mut buffer = vec![0u8; len as usize];
                 let mut actual_len: i32 = 0;
                 gl::GetProgramInfoLog(program, len, &mut actual_len, buffer.as_mut_ptr() as *mut _);
@@ -164,18 +172,8 @@ impl GLTest for GL20ShadersTest {
                 // Include both shader sources to help debugging linking issues
                 let vs_src = legacy_vertex.to_string_lossy();
                 let fs_src = legacy_fragment.to_string_lossy();
-                let vs_numbered = vs_src
-                    .lines()
-                    .enumerate()
-                    .map(|(i, l)| format!("{:4}: {}", i + 1, l))
-                    .collect::<Vec<_>>()
-                    .join("\n");
-                let fs_numbered = fs_src
-                    .lines()
-                    .enumerate()
-                    .map(|(i, l)| format!("{:4}: {}", i + 1, l))
-                    .collect::<Vec<_>>()
-                    .join("\n");
+                let vs_numbered = vs_src.lines().enumerate().map(|(i, l)| format!("{:4}: {}", i + 1, l)).collect::<Vec<_>>().join("\n");
+                let fs_numbered = fs_src.lines().enumerate().map(|(i, l)| format!("{:4}: {}", i + 1, l)).collect::<Vec<_>>().join("\n");
 
                 let err = gl::GetError();
                 // Clean up
@@ -184,8 +182,12 @@ impl GLTest for GL20ShadersTest {
                 gl::DeleteProgram(program);
                 return Err(format!(
                     "Program linking failed: {} (glError=0x{:X})\n--- vertex shader ---\n{}\n--- fragment shader ---\n{}\n--- end sources ---",
-                    msg.trim_matches(char::from(0)), err, vs_numbered, fs_numbered
-                ).into());
+                    msg.trim_matches(char::from(0)),
+                    err,
+                    vs_numbered,
+                    fs_numbered
+                )
+                .into());
             }
 
             gl::UseProgram(program);
@@ -197,11 +199,7 @@ impl GLTest for GL20ShadersTest {
             gl::GenVertexArrays(1, &mut vao);
             gl::BindVertexArray(vao);
 
-            let vertices: [f32; 18] = [
-                -0.5, -0.5, 0.0,  1.0, 0.0, 0.0,
-                 0.5, -0.5, 0.0,  0.0, 1.0, 0.0,
-                 0.0,  0.5, 0.0,  0.0, 0.0, 1.0,
-            ];
+            let vertices: [f32; 18] = [-0.5, -0.5, 0.0, 1.0, 0.0, 0.0, 0.5, -0.5, 0.0, 0.0, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 1.0];
 
             let mut vbo = 0u32;
             gl::GenBuffers(1, &mut vbo);
@@ -236,7 +234,14 @@ impl GLTest for GL20ShadersTest {
             }
             let col_attr = col_attr as u32;
             gl::EnableVertexAttribArray(col_attr);
-            gl::VertexAttribPointer(col_attr, 3, gl::FLOAT, gl::FALSE, 6 * std::mem::size_of::<f32>() as i32, (3 * std::mem::size_of::<f32>()) as *const _);
+            gl::VertexAttribPointer(
+                col_attr,
+                3,
+                gl::FLOAT,
+                gl::FALSE,
+                6 * std::mem::size_of::<f32>() as i32,
+                (3 * std::mem::size_of::<f32>()) as *const _,
+            );
 
             // Render in a loop for ~1 second with animation
             let start = std::time::Instant::now();

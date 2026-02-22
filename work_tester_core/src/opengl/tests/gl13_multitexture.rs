@@ -1,7 +1,6 @@
-#![cfg(feature = "gpu")]
+use std::error::Error;
 
 use crate::opengl::test_trait::{GLTest, GLVersion};
-use std::error::Error;
 
 pub struct GL13MultitextureTest;
 
@@ -23,33 +22,13 @@ impl GLTest for GL13MultitextureTest {
 
             gl::ActiveTexture(gl::TEXTURE0);
             gl::BindTexture(gl::TEXTURE_2D, textures[0]);
-            gl::TexImage2D(
-                gl::TEXTURE_2D,
-                0,
-                gl::RGBA as i32,
-                2,
-                2,
-                0,
-                gl::RGBA,
-                gl::UNSIGNED_BYTE,
-                texture_data.as_ptr() as *const _,
-            );
+            gl::TexImage2D(gl::TEXTURE_2D, 0, gl::RGBA as i32, 2, 2, 0, gl::RGBA, gl::UNSIGNED_BYTE, texture_data.as_ptr() as *const _);
             gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MIN_FILTER, gl::NEAREST as i32);
             gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MAG_FILTER, gl::NEAREST as i32);
 
             gl::ActiveTexture(gl::TEXTURE1);
             gl::BindTexture(gl::TEXTURE_2D, textures[1]);
-            gl::TexImage2D(
-                gl::TEXTURE_2D,
-                0,
-                gl::RGBA as i32,
-                2,
-                2,
-                0,
-                gl::RGBA,
-                gl::UNSIGNED_BYTE,
-                texture_data.as_ptr() as *const _,
-            );
+            gl::TexImage2D(gl::TEXTURE_2D, 0, gl::RGBA as i32, 2, 2, 0, gl::RGBA, gl::UNSIGNED_BYTE, texture_data.as_ptr() as *const _);
             gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MIN_FILTER, gl::NEAREST as i32);
             gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_MAG_FILTER, gl::NEAREST as i32);
 
@@ -60,11 +39,7 @@ impl GLTest for GL13MultitextureTest {
                 gl::Clear(gl::COLOR_BUFFER_BIT);
 
                 let t = start.elapsed().as_secs_f32();
-                let unit = if (t * 2.0) as i32 % 2 == 0 {
-                    gl::TEXTURE0
-                } else {
-                    gl::TEXTURE1
-                };
+                let unit = if (t * 2.0) as i32 % 2 == 0 { gl::TEXTURE0 } else { gl::TEXTURE1 };
                 gl::ActiveTexture(unit);
 
                 gl::Flush();

@@ -11,10 +11,8 @@ pub mod tests;
 
 // Export real implementations (no feature gating inside this module)
 pub use context::OpenGLMode;
-
 pub use loader::init_gl;
-
-pub use test_trait::{GLTest, GLVersion, GLTestResult};
+pub use test_trait::{GLTest, GLTestResult, GLVersion};
 
 pub fn init_opengl() -> Result<OpenGLMode, Box<dyn std::error::Error>> {
     let ctx = OpenGLMode::create().map_err(|e| Box::new(e) as Box<dyn std::error::Error>)?;
@@ -41,19 +39,17 @@ pub mod gui {
     use std::error::Error;
     use std::num::NonZeroU32;
 
+    use glutin::config::{Config, ConfigTemplateBuilder, GetGlConfig};
+    use glutin::context::{ContextApi, ContextAttributesBuilder, NotCurrentContext, PossiblyCurrentContext, Version};
+    use glutin::display::GetGlDisplay;
+    use glutin::prelude::*;
+    use glutin::surface::{Surface, SurfaceAttributesBuilder, SwapInterval, WindowSurface};
+    use glutin_winit::{DisplayBuilder, GlWindow};
     use raw_window_handle::HasWindowHandle;
     use winit::application::ApplicationHandler;
     use winit::event::WindowEvent;
-    use winit::event_loop::{EventLoop, ActiveEventLoop};
+    use winit::event_loop::{ActiveEventLoop, EventLoop};
     use winit::window::Window;
-
-    use glutin::config::{Config, ConfigTemplateBuilder, GetGlConfig};
-    use glutin::context::{ContextApi, ContextAttributesBuilder, PossiblyCurrentContext, Version, NotCurrentContext};
-    use glutin::display::GetGlDisplay;
-    use glutin::prelude::*;
-    use glutin::surface::{Surface, WindowSurface, SurfaceAttributesBuilder, SwapInterval};
-
-    use glutin_winit::{DisplayBuilder, GlWindow};
 
     #[derive(Debug, Clone)]
     pub struct WindowSpec {
@@ -64,7 +60,11 @@ pub mod gui {
 
     impl Default for WindowSpec {
         fn default() -> Self {
-            Self { title: None, width: 800, height: 600 }
+            Self {
+                title: None,
+                width: 800,
+                height: 600,
+            }
         }
     }
 
@@ -195,11 +195,7 @@ pub mod gui {
             let (window, gl_config) = match &self.gl_display {
                 GlDisplayCreationState::Builder(display_builder) => {
                     // First time: create window and pick config
-                    let (window, gl_config) = match display_builder.clone().build(
-                        event_loop,
-                        self.template.clone(),
-                        gl_config_picker,
-                    ) {
+                    let (window, gl_config) = match display_builder.clone().build(event_loop, self.template.clone(), gl_config_picker) {
                         Ok((Some(window), gl_config)) => (window, gl_config),
                         Ok((None, _)) => {
                             self.test_result = Some(Err("Failed to create window".into()));
@@ -207,7 +203,7 @@ pub mod gui {
                             return;
                         }
                         Err(err) => {
-                            self.test_result = Some(Err(err.into()));
+                            self.test_result = Some(Err(err));
                             event_loop.exit();
                             return;
                         }
@@ -219,7 +215,7 @@ pub mod gui {
                     let gl_context = match create_gl_context(&window, &gl_config) {
                         Ok(ctx) => ctx.treat_as_possibly_current(),
                         Err(e) => {
-                            self.test_result = Some(Err(e.into()));
+                            self.test_result = Some(Err(e));
                             event_loop.exit();
                             return;
                         }
@@ -246,9 +242,7 @@ pub mod gui {
                     return;
                 }
             };
-            let gl_surface = match unsafe {
-                gl_config.display().create_window_surface(&gl_config, &attrs)
-            } {
+            let gl_surface = match unsafe { gl_config.display().create_window_surface(&gl_config, &attrs) } {
                 Ok(s) => s,
                 Err(e) => {
                     self.test_result = Some(Err(format!("Failed to create surface: {}", e).into()));
@@ -273,10 +267,7 @@ pub mod gui {
             }
 
             // Set vsync
-            let _ = gl_surface.set_swap_interval(
-                gl_context,
-                SwapInterval::Wait(NonZeroU32::new(1).unwrap()),
-            );
+            let _ = gl_surface.set_swap_interval(gl_context, SwapInterval::Wait(NonZeroU32::new(1).unwrap()));
 
             self.state = Some(AppState { gl_surface, window });
 
@@ -284,7 +275,7 @@ pub mod gui {
             if !self.tests_executed {
                 self.tests_executed = true;
                 if let Some(f) = self.test_closure.take() {
-                    let result = f().map_err(|e| Box::new(std::io::Error::new(std::io::ErrorKind::Other, e)) as Box<dyn Error>);
+                    let result = f().map_err(|e| Box::new(std::io::Error::other(e)) as Box<dyn Error>);
                     self.test_result = Some(result);
 
                     // Swap buffers to show rendered content
@@ -303,18 +294,11 @@ pub mod gui {
             }
         }
 
-        fn window_event(
-            &mut self,
-            event_loop: &ActiveEventLoop,
-            _window_id: winit::window::WindowId,
-            event: WindowEvent,
-        ) {
+        fn window_event(&mut self, event_loop: &ActiveEventLoop, _window_id: winit::window::WindowId, event: WindowEvent) {
             match event {
                 WindowEvent::RedrawRequested => {
                     // Swap buffers on redraw
-                    if let (Some(AppState { gl_surface, window }), Some(gl_context)) =
-                        (&self.state, &self.gl_context)
-                    {
+                    if let (Some(AppState { gl_surface, window }), Some(gl_context)) = (&self.state, &self.gl_context) {
                         let _ = gl_surface.swap_buffers(gl_context);
 
                         // Check if 2 seconds has elapsed (show results after tests complete)
@@ -383,11 +367,7 @@ pub mod gui {
         fn resumed(&mut self, event_loop: &ActiveEventLoop) {
             let (window, gl_config) = match &self.gl_display {
                 GlDisplayCreationState::Builder(display_builder) => {
-                    let (window, gl_config) = match display_builder.clone().build(
-                        event_loop,
-                        self.template.clone(),
-                        gl_config_picker,
-                    ) {
+                    let (window, gl_config) = match display_builder.clone().build(event_loop, self.template.clone(), gl_config_picker) {
                         Ok((Some(window), gl_config)) => (window, gl_config),
                         Ok((None, _)) => {
                             event_loop.exit();
@@ -425,9 +405,7 @@ pub mod gui {
                     return;
                 }
             };
-            let gl_surface = match unsafe {
-                gl_config.display().create_window_surface(&gl_config, &attrs)
-            } {
+            let gl_surface = match unsafe { gl_config.display().create_window_surface(&gl_config, &attrs) } {
                 Ok(s) => s,
                 Err(_) => {
                     event_loop.exit();
@@ -446,10 +424,7 @@ pub mod gui {
                 return;
             }
 
-            let _ = gl_surface.set_swap_interval(
-                gl_context,
-                SwapInterval::Wait(NonZeroU32::new(1).unwrap()),
-            );
+            let _ = gl_surface.set_swap_interval(gl_context, SwapInterval::Wait(NonZeroU32::new(1).unwrap()));
 
             self.state = Some(AppState { gl_surface, window });
 
@@ -472,17 +447,10 @@ pub mod gui {
             }
         }
 
-        fn window_event(
-            &mut self,
-            event_loop: &ActiveEventLoop,
-            _window_id: winit::window::WindowId,
-            event: WindowEvent,
-        ) {
+        fn window_event(&mut self, event_loop: &ActiveEventLoop, _window_id: winit::window::WindowId, event: WindowEvent) {
             match event {
                 WindowEvent::RedrawRequested => {
-                    if let (Some(AppState { gl_surface, window }), Some(gl_context)) =
-                        (&self.state, &self.gl_context)
-                    {
+                    if let (Some(AppState { gl_surface, window }), Some(gl_context)) = (&self.state, &self.gl_context) {
                         // Check if showing result
                         if let Some(show_until) = self.show_result_until {
                             if std::time::Instant::now() >= show_until {
@@ -496,9 +464,7 @@ pub mod gui {
 
                         // Run one frame of tests
                         if let Some(runner) = &mut self.runner {
-                            let delta_ms = self.last_frame_time
-                                .map(|t| t.elapsed().as_millis() as u64)
-                                .unwrap_or(0);
+                            let delta_ms = self.last_frame_time.map(|t| t.elapsed().as_millis() as u64).unwrap_or(0);
                             self.last_frame_time = Some(std::time::Instant::now());
 
                             match runner.update(delta_ms) {
@@ -532,27 +498,16 @@ pub mod gui {
 
     fn gl_config_picker(configs: Box<dyn Iterator<Item = Config> + '_>) -> Config {
         configs
-            .reduce(|accum, config| {
-                if config.num_samples() > accum.num_samples() {
-                    config
-                } else {
-                    accum
-                }
-            })
+            .reduce(|accum, config| if config.num_samples() > accum.num_samples() { config } else { accum })
             .expect("No GL configs available")
     }
 
-    fn create_gl_context(
-        window: &Window,
-        gl_config: &Config,
-    ) -> Result<NotCurrentContext, Box<dyn Error>> {
+    fn create_gl_context(window: &Window, gl_config: &Config) -> Result<NotCurrentContext, Box<dyn Error>> {
         let raw_window_handle = window.window_handle().ok().map(|wh| wh.as_raw());
 
         let context_attributes = ContextAttributesBuilder::new().build(raw_window_handle);
 
-        let fallback_context_attributes = ContextAttributesBuilder::new()
-            .with_context_api(ContextApi::Gles(None))
-            .build(raw_window_handle);
+        let fallback_context_attributes = ContextAttributesBuilder::new().with_context_api(ContextApi::Gles(None)).build(raw_window_handle);
 
         let legacy_context_attributes = ContextAttributesBuilder::new()
             .with_context_api(ContextApi::OpenGl(Some(Version::new(2, 1))))
@@ -575,7 +530,7 @@ pub mod gui {
     use std::error::Error;
 
     #[derive(Debug, Clone)]
-    pub enum GuiBackend { }
+    pub enum GuiBackend {}
 
     #[derive(Debug, Clone)]
     pub struct WindowSpec {

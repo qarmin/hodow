@@ -2,9 +2,10 @@
 //!
 //! GL_VERSION: 3.3
 
-use crate::opengl::test_trait::{GLTest, GLVersion};
 use std::error::Error;
 use std::ffi::CString;
+
+use crate::opengl::test_trait::{GLTest, GLVersion};
 
 pub struct GL33VAOTest;
 
@@ -29,7 +30,7 @@ impl GLTest for GL33VAOTest {
                     gl_Position = vec4(position, 1.0);
                     vColor = color;
                 }
-                "#
+                "#,
             )?;
 
             let fragment_src = CString::new(
@@ -40,7 +41,7 @@ impl GLTest for GL33VAOTest {
                 void main() {
                     FragColor = vec4(vColor, 1.0);
                 }
-                "#
+                "#,
             )?;
 
             let vs = gl::CreateShader(gl::VERTEX_SHADER);
@@ -52,7 +53,9 @@ impl GLTest for GL33VAOTest {
             if success == 0 {
                 let mut len = 0;
                 gl::GetShaderiv(vs, gl::INFO_LOG_LENGTH, &mut len);
-                if len <= 0 { len = 512; }
+                if len <= 0 {
+                    len = 512;
+                }
                 let mut buffer = vec![0u8; len as usize];
                 let mut actual_len: i32 = 0;
                 gl::GetShaderInfoLog(vs, len, &mut actual_len, buffer.as_mut_ptr() as *mut _);
@@ -62,14 +65,15 @@ impl GLTest for GL33VAOTest {
                     String::from_utf8_lossy(&buffer).trim_matches(char::from(0)).to_string()
                 };
                 let vs_src_str = vertex_src.to_string_lossy();
-                let vs_numbered = vs_src_str
-                    .lines()
-                    .enumerate()
-                    .map(|(i, l)| format!("{:4}: {}", i + 1, l))
-                    .collect::<Vec<_>>()
-                    .join("\n");
+                let vs_numbered = vs_src_str.lines().enumerate().map(|(i, l)| format!("{:4}: {}", i + 1, l)).collect::<Vec<_>>().join("\n");
                 let err = gl::GetError();
-                return Err(format!("Vertex shader compilation failed: {} (glError=0x{:X})\n--- vertex shader ---\n{}\n--- end source ---", msg.trim_matches(char::from(0)), err, vs_numbered).into());
+                return Err(format!(
+                    "Vertex shader compilation failed: {} (glError=0x{:X})\n--- vertex shader ---\n{}\n--- end source ---",
+                    msg.trim_matches(char::from(0)),
+                    err,
+                    vs_numbered
+                )
+                .into());
             }
 
             let fs = gl::CreateShader(gl::FRAGMENT_SHADER);
@@ -80,7 +84,9 @@ impl GLTest for GL33VAOTest {
             if success == 0 {
                 let mut len = 0;
                 gl::GetShaderiv(fs, gl::INFO_LOG_LENGTH, &mut len);
-                if len <= 0 { len = 512; }
+                if len <= 0 {
+                    len = 512;
+                }
                 let mut buffer = vec![0u8; len as usize];
                 let mut actual_len: i32 = 0;
                 gl::GetShaderInfoLog(fs, len, &mut actual_len, buffer.as_mut_ptr() as *mut _);
@@ -90,14 +96,15 @@ impl GLTest for GL33VAOTest {
                     String::from_utf8_lossy(&buffer).trim_matches(char::from(0)).to_string()
                 };
                 let fs_src_str = fragment_src.to_string_lossy();
-                let fs_numbered = fs_src_str
-                    .lines()
-                    .enumerate()
-                    .map(|(i, l)| format!("{:4}: {}", i + 1, l))
-                    .collect::<Vec<_>>()
-                    .join("\n");
+                let fs_numbered = fs_src_str.lines().enumerate().map(|(i, l)| format!("{:4}: {}", i + 1, l)).collect::<Vec<_>>().join("\n");
                 let err = gl::GetError();
-                return Err(format!("Fragment shader compilation failed: {} (glError=0x{:X})\n--- fragment shader ---\n{}\n--- end source ---", msg.trim_matches(char::from(0)), err, fs_numbered).into());
+                return Err(format!(
+                    "Fragment shader compilation failed: {} (glError=0x{:X})\n--- fragment shader ---\n{}\n--- end source ---",
+                    msg.trim_matches(char::from(0)),
+                    err,
+                    fs_numbered
+                )
+                .into());
             }
 
             let program = gl::CreateProgram();
@@ -109,7 +116,9 @@ impl GLTest for GL33VAOTest {
             if success == 0 {
                 let mut len = 0;
                 gl::GetProgramiv(program, gl::INFO_LOG_LENGTH, &mut len);
-                if len <= 0 { len = 512; }
+                if len <= 0 {
+                    len = 512;
+                }
                 let mut buffer = vec![0u8; len as usize];
                 let mut actual_len: i32 = 0;
                 gl::GetProgramInfoLog(program, len, &mut actual_len, buffer.as_mut_ptr() as *mut _);
@@ -120,35 +129,26 @@ impl GLTest for GL33VAOTest {
                 };
                 let vs_src_str = vertex_src.to_string_lossy();
                 let fs_src_str = fragment_src.to_string_lossy();
-                let vs_numbered = vs_src_str
-                    .lines()
-                    .enumerate()
-                    .map(|(i, l)| format!("{:4}: {}", i + 1, l))
-                    .collect::<Vec<_>>()
-                    .join("\n");
-                let fs_numbered = fs_src_str
-                    .lines()
-                    .enumerate()
-                    .map(|(i, l)| format!("{:4}: {}", i + 1, l))
-                    .collect::<Vec<_>>()
-                    .join("\n");
+                let vs_numbered = vs_src_str.lines().enumerate().map(|(i, l)| format!("{:4}: {}", i + 1, l)).collect::<Vec<_>>().join("\n");
+                let fs_numbered = fs_src_str.lines().enumerate().map(|(i, l)| format!("{:4}: {}", i + 1, l)).collect::<Vec<_>>().join("\n");
                 let err = gl::GetError();
-                return Err(format!("Program linking failed: {} (glError=0x{:X})\n--- vertex shader ---\n{}\n--- fragment shader ---\n{}\n--- end sources ---", msg.trim_matches(char::from(0)), err, vs_numbered, fs_numbered).into());
+                return Err(format!(
+                    "Program linking failed: {} (glError=0x{:X})\n--- vertex shader ---\n{}\n--- fragment shader ---\n{}\n--- end sources ---",
+                    msg.trim_matches(char::from(0)),
+                    err,
+                    vs_numbered,
+                    fs_numbered
+                )
+                .into());
             }
 
             gl::UseProgram(program);
 
             let vertices: [f32; 24] = [
-                -0.5, -0.5, 0.0,  1.0, 0.0, 0.0,
-                 0.5, -0.5, 0.0,  0.0, 1.0, 0.0,
-                 0.5,  0.5, 0.0,  0.0, 0.0, 1.0,
-                -0.5,  0.5, 0.0,  1.0, 1.0, 0.0,
+                -0.5, -0.5, 0.0, 1.0, 0.0, 0.0, 0.5, -0.5, 0.0, 0.0, 1.0, 0.0, 0.5, 0.5, 0.0, 0.0, 0.0, 1.0, -0.5, 0.5, 0.0, 1.0, 1.0, 0.0,
             ];
 
-            let indices: [u32; 6] = [
-                0, 1, 2,
-                2, 3, 0,
-            ];
+            let indices: [u32; 6] = [0, 1, 2, 2, 3, 0];
 
             let mut vao = 0u32;
             gl::GenVertexArrays(1, &mut vao);
@@ -177,7 +177,14 @@ impl GLTest for GL33VAOTest {
             gl::VertexAttribPointer(0, 3, gl::FLOAT, gl::FALSE, 6 * std::mem::size_of::<f32>() as i32, std::ptr::null());
             gl::EnableVertexAttribArray(0);
 
-            gl::VertexAttribPointer(1, 3, gl::FLOAT, gl::FALSE, 6 * std::mem::size_of::<f32>() as i32, (3 * std::mem::size_of::<f32>()) as *const _);
+            gl::VertexAttribPointer(
+                1,
+                3,
+                gl::FLOAT,
+                gl::FALSE,
+                6 * std::mem::size_of::<f32>() as i32,
+                (3 * std::mem::size_of::<f32>()) as *const _,
+            );
             gl::EnableVertexAttribArray(1);
 
             // Render in a loop for ~1 second with animation

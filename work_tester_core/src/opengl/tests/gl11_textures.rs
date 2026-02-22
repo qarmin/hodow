@@ -5,8 +5,9 @@
 //! Tests: glGenTextures, glBindTexture, glTexImage2D, glTexParameteri,
 //! glTexParameterf, glDeleteTextures, glEnable/glDisable, glGetIntegerv
 
-use crate::opengl::test_trait::{GLTest, GLVersion};
 use std::error::Error;
+
+use crate::opengl::test_trait::{GLTest, GLVersion};
 
 pub struct GL11TexturesTest;
 
@@ -22,7 +23,7 @@ impl GLTest for GL11TexturesTest {
     fn run(&self) -> Result<String, Box<dyn Error>> {
         let frame_count = unsafe {
             // Create a simple 4x4 checkerboard texture
-            let mut texture_data = vec![0u8; 4 * 4 * 3];
+            let mut texture_data = [0u8; 4 * 4 * 3];
             for y in 0..4 {
                 for x in 0..4 {
                     let idx = (y * 4 + x) * 3;
@@ -50,27 +51,13 @@ impl GLTest for GL11TexturesTest {
             gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_T, gl::REPEAT as i32);
 
             // Test glTexImage2D
-            gl::TexImage2D(
-                gl::TEXTURE_2D,
-                0,
-                gl::RGB as i32,
-                4,
-                4,
-                0,
-                gl::RGB,
-                gl::UNSIGNED_BYTE,
-                texture_data.as_ptr() as *const _,
-            );
+            gl::TexImage2D(gl::TEXTURE_2D, 0, gl::RGB as i32, 4, 4, 0, gl::RGB, gl::UNSIGNED_BYTE, texture_data.as_ptr() as *const _);
 
             // Test glGetIntegerv
             let mut bound_tex = 0i32;
             gl::GetIntegerv(gl::TEXTURE_BINDING_2D, &mut bound_tex);
             if bound_tex != tex as i32 {
-                return Err(format!(
-                    "Texture binding check failed: expected {}, got {}",
-                    tex, bound_tex
-                )
-                .into());
+                return Err(format!("Texture binding check failed: expected {}, got {}", tex, bound_tex).into());
             }
 
             // Test glPixelStorei (texture upload parameters)
@@ -83,11 +70,7 @@ impl GLTest for GL11TexturesTest {
             while start.elapsed() < super::TEST_DURATION {
                 // Animate texture parameters
                 let t = start.elapsed().as_secs_f32();
-                let wrap_mode = if (t * 2.0) as i32 % 2 == 0 {
-                    gl::REPEAT
-                } else {
-                    gl::CLAMP_TO_EDGE
-                };
+                let wrap_mode = if (t * 2.0) as i32 % 2 == 0 { gl::REPEAT } else { gl::CLAMP_TO_EDGE };
                 gl::TexParameteri(gl::TEXTURE_2D, gl::TEXTURE_WRAP_S, wrap_mode as i32);
 
                 gl::Clear(gl::COLOR_BUFFER_BIT);
