@@ -10,5 +10,5 @@ Musi on być bardzo prosto cross-compilowalny `just arm` to testuje czy cross-co
 
 Testy muszą zarządzać oknem i wyświetlać coś na nim przez około 1s
 
-Skopiowałem katalog winit i glutin do repo, więc mogę być użyte jako popatrzenie jak to się robi przy ich użyciu
+Skopiowałem katalog winit i glutin do repo, więc mogę być użyte jako popatrzenie jak to się robi przy ich użyciu gdy są błędy
 
