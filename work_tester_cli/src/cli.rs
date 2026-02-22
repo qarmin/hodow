@@ -1,6 +1,6 @@
 use clap::Parser;
 
-#[derive(Parser)]
+#[derive(Parser, Clone)]
 #[command(name = "work_tester")]
 #[command(about = "CPU SIMD instruction set tester", version = "0.1")]
 pub struct Args {
@@ -24,17 +24,4 @@ pub struct Args {
 
     #[arg(short = 'g', long = "gpu")]
     pub gpu: bool,
-
-    // New GUI-related flags. The CLI exposes them but does not depend on winit.
-    #[arg(long = "gui")]
-    pub gui: bool,
-
-    #[arg(long = "window-size")]
-    pub window_size: Option<String>,
-
-    #[arg(long = "window-title")]
-    pub window_title: Option<String>,
-
-    #[arg(long = "per-test-window")]
-    pub per_test_window: bool,
 }

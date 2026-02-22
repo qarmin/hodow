@@ -96,7 +96,7 @@ pub fn reset_stop_flag() {
     STOP_REQUESTED.store(false, Ordering::Relaxed);
 }
 
-pub type TestFunction = dyn Fn() -> Result<(), String>;
+pub type TestFunction = (dyn Fn() -> Result<(), String> + Send + Sync + 'static);
 
 #[allow(dead_code)]
 pub trait ExtensionTest {
@@ -146,13 +146,31 @@ pub trait ExtensionTest {
 
             run += 1;
             info!("Running {}", name);
-            match fun() {
-                Ok(_) => info!("{} passed", name),
-                Err(e) => {
-                    error!("{}({}) failed: {}", name, Self::get_name(), e);
-                    errors += 1;
+
+            #[cfg(feature = "gpu")]
+            {
+                match crate::opengl::gui::GuiRuntimeHandle::with_window(None, || fun()) {
+                    Ok(_) => info!("{} passed", name),
+                    Err(e) => {
+                        // Convert error into string if possible
+                        error!("{}({}) failed: {}", name, Self::get_name(), e);
+                        errors += 1;
+                    }
                 }
             }
+
+            #[cfg(not(feature = "gpu"))]
+            {
+                match fun() {
+                    Ok(_) => info!("{} passed", name),
+                    Err(e) => {
+                        error!("{}({}) failed: {}", name, Self::get_name(), e);
+                        errors += 1;
+                    }
+                }
+            }
+
+
         }
 
         info!("___________________{} test passed", Self::get_name());

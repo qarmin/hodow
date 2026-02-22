@@ -20,10 +20,6 @@ pub use cpu::{
 #[cfg(feature = "gpu")]
 pub use opengl::{available_opengl_modes, init_opengl, test_all_opengl, GLTestResult, OpenGLMode};
 
-// Re-export GUI API when `gpu` feature enabled (GUI is part of gpu feature)
-#[cfg(feature = "gpu")]
-pub use opengl::gui::{create_window_for_test, close_window, init_gui_runtime, GuiBackend, GuiRuntimeHandle, WindowSpec};
-
 static FUZZING: OnceCell<bool> = OnceCell::new();
 
 pub fn get_fuzzing() -> bool {
