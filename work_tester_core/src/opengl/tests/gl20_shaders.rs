@@ -89,7 +89,7 @@ impl GLTest for GL20ShadersTest {
             let mut glsl_version_num = 330;
             let shading_ptr = gl::GetString(gl::SHADING_LANGUAGE_VERSION);
             if !shading_ptr.is_null() {
-                if let Ok(s) = std::ffi::CStr::from_ptr(shading_ptr as *const i8).to_str() {
+                if let Ok(s) = std::ffi::CStr::from_ptr(shading_ptr as *const std::os::raw::c_char).to_str() {
                     // s might be like "4.60" or "4.60 NVIDIA" — take the first token
                     if let Some(tok) = s.split_whitespace().next() {
                         let parts: Vec<&str> = tok.split('.').collect();

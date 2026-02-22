@@ -97,40 +97,31 @@ fn print_statistics(stats: &TestStatistics) {
 }
 
 fn process_gpu() {
-    info!("GUI mode requested. Attempting to initialize OpenGL for GPU-backed tests...");
+    info!("GPU mode requested. Running OpenGL tests...");
     #[cfg(feature = "gpu")]
     {
-        match work_tester_core::init_opengl() {
-            Ok(_mode) => {
-                log::info!("OpenGL initialized at startup (attempt). GPU-backed tests may be available.");
-
-                // Run GL tests now that OpenGL is initialized
-                match work_tester_core::test_all_opengl() {
-                    Ok((run, skipped, errors)) => {
-                        log::info!("GL tests finished. Run: {}, Skipped: {}, Errors: {}", run, skipped, errors);
-                        if errors > 0 {
-                            error!("\nGL tests completed with {} error(s)", errors);
-                            std::process::exit(1);
-                        } else {
-                            info!("\nClean exit");
-                        }
-                    }
-                    Err(e) => {
-                        log::error!("Running GL tests failed: {}", e);
-                        error!("Error: Running GL tests failed: {}", e);
-                        std::process::exit(1);
-                    }
+        // Run GL tests - each test will create its own window with OpenGL context
+        match work_tester_core::test_all_opengl() {
+            Ok((run, skipped, errors)) => {
+                log::info!("GL tests finished. Run: {}, Skipped: {}, Errors: {}", run, skipped, errors);
+                if errors > 0 {
+                    error!("\nGL tests completed with {} error(s)", errors);
+                    std::process::exit(1);
+                } else {
+                    info!("\nClean exit");
                 }
             }
             Err(e) => {
-                error!("Note: OpenGL initialization attempt failed: {}. GPU tests won't run unless you enable/fix GPU support.", e);
+                log::error!("Running GL tests failed: {}", e);
+                error!("Error: Running GL tests failed: {}", e);
+                std::process::exit(1);
             }
         }
     }
 
     #[cfg(not(feature = "gpu"))]
     {
-        error!("GUI requested but crate was compiled without the `gpu` feature. Enable the `gpu` feature to use GUI/Opengl functionality.");
+        error!("GPU requested but crate was compiled without the `gpu` feature. Enable the `gpu` feature to use OpenGL functionality.");
     }
 
 }

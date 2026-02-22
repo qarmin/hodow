@@ -39,19 +39,21 @@ pub fn test_all_opengl() -> GLTestResult {
 #[cfg(feature = "gpu")]
 pub mod gui {
     use std::error::Error;
-    use std::sync::mpsc::channel;
-    use std::thread;
+    use std::num::NonZeroU32;
 
+    use raw_window_handle::HasWindowHandle;
     use winit::application::ApplicationHandler;
     use winit::event::WindowEvent;
-    use winit::event_loop::EventLoop;
-    use winit::event_loop::ActiveEventLoop;
-    use winit::window::WindowAttributes;
+    use winit::event_loop::{EventLoop, ActiveEventLoop};
+    use winit::window::Window;
 
-    #[derive(Debug, Clone)]
-    pub enum GuiBackend {
-        Winit,
-    }
+    use glutin::config::{Config, ConfigTemplateBuilder, GetGlConfig};
+    use glutin::context::{ContextApi, ContextAttributesBuilder, PossiblyCurrentContext, Version, NotCurrentContext};
+    use glutin::display::GetGlDisplay;
+    use glutin::prelude::*;
+    use glutin::surface::{Surface, WindowSurface, SurfaceAttributesBuilder, SwapInterval};
+
+    use glutin_winit::{DisplayBuilder, GlWindow};
 
     #[derive(Debug, Clone)]
     pub struct WindowSpec {
@@ -66,123 +68,267 @@ pub mod gui {
         }
     }
 
-    /// Opaque runtime handle placeholder — per-test windows don't need a persistent handle.
+    /// Opaque runtime handle placeholder
     pub struct GuiRuntimeHandle;
 
     impl GuiRuntimeHandle {
-        /// Create a window and run the provided closure while the event loop keeps the window alive.
-        /// The closure runs on a worker thread; the event loop runs on the current thread.
+        /// Create a window with OpenGL context and run the provided closure.
+        /// The closure is executed on the event loop thread after OpenGL is initialized.
         pub fn with_window<F, T>(spec: Option<WindowSpec>, f: F) -> Result<T, Box<dyn Error>>
         where
-            F: FnOnce() -> Result<T, String> + Send + 'static,
-            T: Send + 'static,
+            F: FnOnce() -> Result<T, String> + 'static,
+            T: 'static,
         {
             let spec = spec.unwrap_or_default();
 
-            // Create an event loop for this test and run it on the current thread.
-            // Use EventLoop::new() which returns a Result in this vendored winit.
+            // Create an event loop
             let event_loop = EventLoop::new()?;
 
-            // create a proxy we can clone: one clone will be given to the worker, one will be stored in App
-            let proxy = event_loop.create_proxy();
+            // Prepare display builder with window attributes
+            let window_attrs = Window::default_attributes()
+                .with_title(spec.title.unwrap_or_else(|| "work_tester GL Test".to_string()))
+                .with_inner_size(winit::dpi::LogicalSize::new(spec.width, spec.height));
 
-            // channel to receive result from worker
-            let (res_tx, res_rx) = channel();
+            let template = ConfigTemplateBuilder::new().with_alpha_size(8);
 
-            // spawn worker that runs the test closure; it will send result and wake the event loop
-            let proxy_for_worker = proxy.clone();
-            thread::spawn(move || {
-                let r = f();
-                let _ = res_tx.send(r);
-                // wake the event loop so it can react to worker completion
-                let _ = proxy_for_worker.wake_up();
-            });
+            let display_builder = DisplayBuilder::new().with_window_attributes(Some(window_attrs));
 
-            // Application handler that creates a window and exits when conditions are met
-            struct App {
-                title: String,
-                proxy: winit::event_loop::EventLoopProxy,
-                window: Option<Box<dyn winit::window::Window>>,
-                start_time: Option<std::time::Instant>,
-                worker_finished: bool,
+            // Create the app
+            let mut app = App::new(template, display_builder, f);
+
+            // Run event loop (blocks until exit)
+            event_loop.run_app(&mut app)?;
+
+            // Return the result from the test closure
+            app.test_result.unwrap_or_else(|| Err("No test result".into()))
+        }
+    }
+
+    enum GlDisplayCreationState {
+        Builder(Box<DisplayBuilder>),
+        Init,
+    }
+
+    struct App<F, T>
+    where
+        F: FnOnce() -> Result<T, String>,
+        T: 'static,
+    {
+        template: ConfigTemplateBuilder,
+        gl_display: GlDisplayCreationState,
+        gl_context: Option<PossiblyCurrentContext>,
+        state: Option<AppState>,
+        test_closure: Option<F>,
+        test_result: Option<Result<T, Box<dyn Error>>>,
+        start_time: Option<std::time::Instant>,
+        tests_executed: bool,
+    }
+
+    impl<F, T> App<F, T>
+    where
+        F: FnOnce() -> Result<T, String>,
+        T: 'static,
+    {
+        fn new(template: ConfigTemplateBuilder, display_builder: DisplayBuilder, f: F) -> Self {
+            Self {
+                template,
+                gl_display: GlDisplayCreationState::Builder(Box::new(display_builder)),
+                gl_context: None,
+                state: None,
+                test_closure: Some(f),
+                test_result: None,
+                start_time: None,
+                tests_executed: false,
             }
+        }
+    }
 
-            impl ApplicationHandler for App {
-                fn can_create_surfaces(&mut self, event_loop: &dyn ActiveEventLoop) {
-                    let mut attrs = WindowAttributes::default();
-                    attrs = attrs.with_title(self.title.clone());
-                    match event_loop.create_window(attrs) {
-                        Ok(win) => {
-                            // store window and mark start time
-                            self.start_time = Some(std::time::Instant::now());
-                            self.window = Some(win);
-                            // request one redraw to ensure the window contents are shown
-                            if let Some(w) = &self.window {
-                                let _ = w.request_redraw();
-                            }
+    impl<F, T> ApplicationHandler for App<F, T>
+    where
+        F: FnOnce() -> Result<T, String>,
+        T: 'static,
+    {
+        fn resumed(&mut self, event_loop: &ActiveEventLoop) {
+            let (window, gl_config) = match &self.gl_display {
+                GlDisplayCreationState::Builder(display_builder) => {
+                    // First time: create window and pick config
+                    let (window, gl_config) = match display_builder.clone().build(
+                        event_loop,
+                        self.template.clone(),
+                        gl_config_picker,
+                    ) {
+                        Ok((Some(window), gl_config)) => (window, gl_config),
+                        Ok((None, _)) => {
+                            self.test_result = Some(Err("Failed to create window".into()));
+                            event_loop.exit();
+                            return;
                         }
+                        Err(err) => {
+                            self.test_result = Some(Err(err.into()));
+                            event_loop.exit();
+                            return;
+                        }
+                    };
+
+                    self.gl_display = GlDisplayCreationState::Init;
+
+                    // Create GL context
+                    let gl_context = match create_gl_context(&window, &gl_config) {
+                        Ok(ctx) => ctx.treat_as_possibly_current(),
                         Err(e) => {
-                            eprintln!("Failed to create window: {:?}", e);
+                            self.test_result = Some(Err(e.into()));
+                            event_loop.exit();
+                            return;
+                        }
+                    };
+                    self.gl_context = Some(gl_context);
+
+                    (window, gl_config)
+                }
+                GlDisplayCreationState::Init => {
+                    // Already have context, just recreate window (e.g., after suspend on Android)
+                    // This path is unlikely in practice for desktop tests
+                    self.test_result = Some(Err("Context recreation not supported in this implementation".into()));
+                    event_loop.exit();
+                    return;
+                }
+            };
+
+            // Create window surface
+            let attrs = match window.build_surface_attributes(Default::default()) {
+                Ok(a) => a,
+                Err(e) => {
+                    self.test_result = Some(Err(format!("Failed to build surface attributes: {}", e).into()));
+                    event_loop.exit();
+                    return;
+                }
+            };
+            let gl_surface = match unsafe {
+                gl_config.display().create_window_surface(&gl_config, &attrs)
+            } {
+                Ok(s) => s,
+                Err(e) => {
+                    self.test_result = Some(Err(format!("Failed to create surface: {}", e).into()));
+                    event_loop.exit();
+                    return;
+                }
+            };
+
+            // Make context current
+            let gl_context = self.gl_context.as_ref().unwrap();
+            if let Err(e) = gl_context.make_current(&gl_surface) {
+                self.test_result = Some(Err(e.into()));
+                event_loop.exit();
+                return;
+            }
+
+            // Load OpenGL functions
+            if let Err(e) = super::loader::load_gl_functions(&gl_config.display()) {
+                self.test_result = Some(Err(e));
+                event_loop.exit();
+                return;
+            }
+
+            // Set vsync
+            let _ = gl_surface.set_swap_interval(
+                gl_context,
+                SwapInterval::Wait(NonZeroU32::new(1).unwrap()),
+            );
+
+            self.state = Some(AppState { gl_surface, window });
+            self.start_time = Some(std::time::Instant::now());
+
+            // Execute tests now that OpenGL is ready
+            if !self.tests_executed {
+                self.tests_executed = true;
+                if let Some(f) = self.test_closure.take() {
+                    let result = f().map_err(|e| Box::new(std::io::Error::new(std::io::ErrorKind::Other, e)) as Box<dyn Error>);
+                    self.test_result = Some(result);
+
+                    // Swap buffers to show rendered content
+                    if let Some(AppState { gl_surface, .. }) = &self.state {
+                        let _ = gl_surface.swap_buffers(gl_context);
+                    }
+
+                    // Request one more redraw to ensure content is visible
+                    if let Some(AppState { window, .. }) = &self.state {
+                        window.request_redraw();
+                    }
+                }
+            }
+        }
+
+        fn window_event(
+            &mut self,
+            event_loop: &ActiveEventLoop,
+            _window_id: winit::window::WindowId,
+            event: WindowEvent,
+        ) {
+            match event {
+                WindowEvent::RedrawRequested => {
+                    // Swap buffers on redraw
+                    if let (Some(AppState { gl_surface, .. }), Some(gl_context)) =
+                        (&self.state, &self.gl_context)
+                    {
+                        let _ = gl_surface.swap_buffers(gl_context);
+                    }
+
+                    // Check if 1 second has elapsed
+                    if let Some(start) = self.start_time {
+                        if start.elapsed() >= std::time::Duration::from_secs(1) {
                             event_loop.exit();
                         }
                     }
                 }
-
-                fn proxy_wake_up(&mut self, event_loop: &dyn ActiveEventLoop) {
-                    // Called both when the worker finishes (first wakeup) and when the timer fires (second wakeup)
-                    let now = std::time::Instant::now();
-
-                    let min_duration = std::time::Duration::from_secs(1);
-
-                    if !self.worker_finished {
-                        // This wakeup is from the worker finishing
-                        self.worker_finished = true;
-
-                        // If we don't have a start_time (window not created) just exit
-                        if let Some(start) = self.start_time {
-                            let elapsed = now.duration_since(start);
-                            if elapsed >= min_duration {
-                                // Enough time passed, exit now
-                                event_loop.exit();
-                            } else {
-                                // Spawn a timer thread to wake up after remaining time
-                                let proxy_clone = self.proxy.clone();
-                                let remaining = min_duration - elapsed;
-                                std::thread::spawn(move || {
-                                    std::thread::sleep(remaining);
-                                    let _ = proxy_clone.wake_up();
-                                });
-                            }
-                        } else {
-                            event_loop.exit();
-                        }
-                    } else {
-                        // This wakeup is from the timer; if both worker finished and min_duration elapsed, exit
-                        if let Some(start) = self.start_time {
-                            if now.duration_since(start) >= min_duration {
-                                event_loop.exit();
-                            }
-                        } else {
-                            event_loop.exit();
-                        }
-                    }
+                WindowEvent::CloseRequested => {
+                    event_loop.exit();
                 }
+                _ => {}
+            }
+        }
+    }
 
-                fn window_event(&mut self, _event_loop: &dyn ActiveEventLoop, _window_id: winit::window::WindowId, _event: WindowEvent) {
-                    // no-op for now; redraws are requested from tests or initial request
+    struct AppState {
+        gl_surface: Surface<WindowSurface>,
+        window: Window,
+    }
+
+    fn gl_config_picker(configs: Box<dyn Iterator<Item = Config> + '_>) -> Config {
+        configs
+            .reduce(|accum, config| {
+                if config.num_samples() > accum.num_samples() {
+                    config
+                } else {
+                    accum
                 }
-            }
+            })
+            .expect("No GL configs available")
+    }
 
-            // run the event loop; when proxy_wake_up is called appropriately it will exit
-            let app = App { title: spec.title.unwrap_or_else(|| "work_tester window".to_string()), proxy: proxy.clone(), window: None, start_time: None, worker_finished: false };
-            let _ = event_loop.run_app(app);
+    fn create_gl_context(
+        window: &Window,
+        gl_config: &Config,
+    ) -> Result<NotCurrentContext, Box<dyn Error>> {
+        let raw_window_handle = window.window_handle().ok().map(|wh| wh.as_raw());
 
-            // after event loop returns, collect result
-            match res_rx.recv() {
-                Ok(Ok(v)) => Ok(v),
-                Ok(Err(e)) => Err(Box::new(std::io::Error::new(std::io::ErrorKind::Other, e))),
-                Err(e) => Err(Box::new(e)),
-            }
+        let context_attributes = ContextAttributesBuilder::new().build(raw_window_handle);
+
+        let fallback_context_attributes = ContextAttributesBuilder::new()
+            .with_context_api(ContextApi::Gles(None))
+            .build(raw_window_handle);
+
+        let legacy_context_attributes = ContextAttributesBuilder::new()
+            .with_context_api(ContextApi::OpenGl(Some(Version::new(2, 1))))
+            .build(raw_window_handle);
+
+        let gl_display = gl_config.display();
+
+        unsafe {
+            gl_display
+                .create_context(gl_config, &context_attributes)
+                .or_else(|_| gl_display.create_context(gl_config, &fallback_context_attributes))
+                .or_else(|_| gl_display.create_context(gl_config, &legacy_context_attributes))
+                .map_err(|e| e.into())
         }
     }
 }
