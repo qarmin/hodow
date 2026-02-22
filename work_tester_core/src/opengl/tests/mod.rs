@@ -20,14 +20,16 @@ pub fn all_tests() -> Vec<&'static dyn GLTest> {
 
 /// Run all GL tests
 pub fn test_all_gl() -> GLTestResult {
-    // Collect tests once
     let tests = all_tests();
     let total_tests = tests.len();
 
-    // Run them inside a single window/event loop to avoid recreating EventLoop instances
-    let spec = crate::opengl::gui::WindowSpec { title: Some("GL Tests".to_string()), width: 800, height: 600 };
+    let spec = crate::opengl::gui::WindowSpec {
+        title: Some(format!("GL Tests ({} tests)", total_tests)),
+        width: 800,
+        height: 600,
+    };
 
-    // The worker closure will run all tests sequentially and return aggregated results
+    // Run all tests in a single window/event loop (winit limitation: can't recreate EventLoop)
     let result = crate::opengl::gui::GuiRuntimeHandle::with_window(Some(spec), move || {
         let mut total_run = 0usize;
         let total_skipped = 0usize;
@@ -35,10 +37,19 @@ pub fn test_all_gl() -> GLTestResult {
 
         for test in &tests {
             log::info!("Running GL test: {} (GL {})", test.name(), test.gl_version());
+
+            // Clear screen before each test
+            unsafe {
+                gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT);
+            }
+
             match test.run() {
                 Ok(msg) => {
                     log::info!("GL Test '{}' passed: {}", test.name(), msg);
                     total_run += 1;
+
+                    // Small delay between tests to show each result
+                    std::thread::sleep(std::time::Duration::from_millis(500));
                 }
                 Err(e) => {
                     log::error!("GL Test '{}' failed: {}", test.name(), e);
@@ -48,13 +59,15 @@ pub fn test_all_gl() -> GLTestResult {
             }
         }
 
-        Ok(format!("Run: {}, Skipped: {}, Errors: {}", total_run, total_skipped, total_errors))
+        Ok(format!(
+            "Run: {}, Skipped: {}, Errors: {}",
+            total_run, total_skipped, total_errors
+        ))
     });
 
     match result {
         Ok(_) => Ok((total_tests, 0, 0)),
         Err(e) => {
-            // If the GUI runtime failed entirely, consider all tests as attempted with an error
             log::error!("GL test run failed: {}", e);
             Ok((total_tests, 0, total_tests))
         }

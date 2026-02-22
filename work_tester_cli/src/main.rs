@@ -105,10 +105,10 @@ fn process_gpu() {
             Ok((run, skipped, errors)) => {
                 log::info!("GL tests finished. Run: {}, Skipped: {}, Errors: {}", run, skipped, errors);
                 if errors > 0 {
-                    error!("\nGL tests completed with {} error(s)", errors);
+                    error!("GL tests completed with {} error(s)", errors);
                     std::process::exit(1);
                 } else {
-                    info!("\nClean exit");
+                    info!("Clean exit - all {} tests passed", run);
                 }
             }
             Err(e) => {

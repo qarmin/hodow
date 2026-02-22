@@ -1,9 +1,9 @@
 # OpenGL functions coverage summary
 
 Total functions in registry: **3299**
-All functions used at least 1 time - **27/3299** (0.8%)
+All functions used at least 1 time - **28/3299** (0.8%)
 
-## Version 1.0 — Used at least 1: **1/306** (0.3%)
+## Version 1.0 — Used at least once: **2/306** (0.7%)
 
 | Function name            | Shaders <br/> GL 2.0 | VAO <br/> GL 3.3 |
 | ------------------------ | -------------------- | ---------------- |
@@ -108,7 +108,7 @@ All functions used at least 1 time - **27/3299** (0.8%)
 | glGetPixelMapuiv         |                      |                  |
 | glGetPixelMapusv         |                      |                  |
 | glGetPolygonStipple      |                      |                  |
-| glGetString              |                      |                  |
+| glGetString              | x                    |                  |
 | glGetTexEnvfv            |                      |                  |
 | glGetTexEnviv            |                      |                  |
 | glGetTexGendv            |                      |                  |
@@ -314,7 +314,7 @@ All functions used at least 1 time - **27/3299** (0.8%)
 | glVertex4sv              |                      |                  |
 | glViewport               |                      |                  |
 
-## Version 1.1 — Used at least 1: **2/30** (6.7%)
+## Version 1.1 — Used at least once: **2/30** (6.7%)
 
 | Function name         | Shaders <br/> GL 2.0 | VAO <br/> GL 3.3 |
 | --------------------- | -------------------- | ---------------- |
@@ -349,7 +349,7 @@ All functions used at least 1 time - **27/3299** (0.8%)
 | glTexSubImage2D       |                      |                  |
 | glVertexPointer       |                      |                  |
 
-## Version 1.2 — Used at least 1: **0/4** (0.0%)
+## Version 1.2 — Used at least once: **0/4** (0.0%)
 
 | Function name       | Shaders <br/> GL 2.0 | VAO <br/> GL 3.3 |
 | ------------------- | -------------------- | ---------------- |
@@ -358,7 +358,7 @@ All functions used at least 1 time - **27/3299** (0.8%)
 | glTexImage3D        |                      |                  |
 | glTexSubImage3D     |                      |                  |
 
-## Version 1.3 — Used at least 1: **0/46** (0.0%)
+## Version 1.3 — Used at least once: **0/46** (0.0%)
 
 | Function name             | Shaders <br/> GL 2.0 | VAO <br/> GL 3.3 |
 | ------------------------- | -------------------- | ---------------- |
@@ -409,7 +409,7 @@ All functions used at least 1 time - **27/3299** (0.8%)
 | glMultTransposeMatrixf    |                      |                  |
 | glSampleCoverage          |                      |                  |
 
-## Version 1.4 — Used at least 1: **0/47** (0.0%)
+## Version 1.4 — Used at least once: **0/47** (0.0%)
 
 | Function name           | Shaders <br/> GL 2.0 | VAO <br/> GL 3.3 |
 | ----------------------- | -------------------- | ---------------- |
@@ -461,7 +461,7 @@ All functions used at least 1 time - **27/3299** (0.8%)
 | glWindowPos3s           |                      |                  |
 | glWindowPos3sv          |                      |                  |
 
-## Version 1.5 — Used at least 1: **4/19** (21.1%)
+## Version 1.5 — Used at least once: **4/19** (21.1%)
 
 | Function name          | Shaders <br/> GL 2.0 | VAO <br/> GL 3.3 |
 | ---------------------- | -------------------- | ---------------- |
@@ -485,7 +485,7 @@ All functions used at least 1 time - **27/3299** (0.8%)
 | glMapBuffer            |                      |                  |
 | glUnmapBuffer          |                      |                  |
 
-## Version 2.0 — Used at least 1: **17/93** (18.3%)
+## Version 2.0 — Used at least once: **17/93** (18.3%)
 
 | Function name              | Shaders <br/> GL 2.0 | VAO <br/> GL 3.3 |
 | -------------------------- | -------------------- | ---------------- |
@@ -505,10 +505,10 @@ All functions used at least 1 time - **27/3299** (0.8%)
 | glGetActiveUniform         |                      |                  |
 | glGetAttachedShaders       |                      |                  |
 | glGetAttribLocation        | x                    |                  |
-| glGetProgramInfoLog        | x                    |                  |
-| glGetProgramiv             | x                    |                  |
-| glGetShaderInfoLog         | x                    |                  |
-| glGetShaderiv              | x                    |                  |
+| glGetProgramInfoLog        | x                    | x                |
+| glGetProgramiv             | x                    | x                |
+| glGetShaderInfoLog         | x                    | x                |
+| glGetShaderiv              | x                    | x                |
 | glGetShaderSource          |                      |                  |
 | glGetUniformfv             |                      |                  |
 | glGetUniformiv             |                      |                  |
@@ -583,7 +583,7 @@ All functions used at least 1 time - **27/3299** (0.8%)
 | glVertexAttrib4usv         |                      |                  |
 | glVertexAttribPointer      | x                    | x                |
 
-## Version 2.1 — Used at least 1: **0/6** (0.0%)
+## Version 2.1 — Used at least once: **0/6** (0.0%)
 
 | Function name        | Shaders <br/> GL 2.0 | VAO <br/> GL 3.3 |
 | -------------------- | -------------------- | ---------------- |
@@ -594,7 +594,7 @@ All functions used at least 1 time - **27/3299** (0.8%)
 | glUniformMatrix4x2fv |                      |                  |
 | glUniformMatrix4x3fv |                      |                  |
 
-## Version 3.0 — Used at least 1: **3/84** (3.6%)
+## Version 3.0 — Used at least once: **3/84** (3.6%)
 
 | Function name                         | Shaders <br/> GL 2.0 | VAO <br/> GL 3.3 |
 | ------------------------------------- | -------------------- | ---------------- |
@@ -605,7 +605,7 @@ All functions used at least 1 time - **27/3299** (0.8%)
 | glBindFragDataLocation                |                      |                  |
 | glBindFramebuffer                     |                      |                  |
 | glBindRenderbuffer                    |                      |                  |
-| glBindVertexArray                     |                      | x                |
+| glBindVertexArray                     | x                    | x                |
 | glBlitFramebuffer                     |                      |                  |
 | glCheckFramebufferStatus              |                      |                  |
 | glClampColor                          |                      |                  |
@@ -616,7 +616,7 @@ All functions used at least 1 time - **27/3299** (0.8%)
 | glColorMaski                          |                      |                  |
 | glDeleteFramebuffers                  |                      |                  |
 | glDeleteRenderbuffers                 |                      |                  |
-| glDeleteVertexArrays                  |                      | x                |
+| glDeleteVertexArrays                  | x                    | x                |
 | glDisablei                            |                      |                  |
 | glEnablei                             |                      |                  |
 | glEndConditionalRender                |                      |                  |
@@ -630,7 +630,7 @@ All functions used at least 1 time - **27/3299** (0.8%)
 | glGenerateMipmap                      |                      |                  |
 | glGenFramebuffers                     |                      |                  |
 | glGenRenderbuffers                    |                      |                  |
-| glGenVertexArrays                     |                      | x                |
+| glGenVertexArrays                     | x                    | x                |
 | glGetBooleani_v                       |                      |                  |
 | glGetFragDataLocation                 |                      |                  |
 | glGetFramebufferAttachmentParameteriv |                      |                  |
@@ -683,7 +683,7 @@ All functions used at least 1 time - **27/3299** (0.8%)
 | glVertexAttribI4usv                   |                      |                  |
 | glVertexAttribIPointer                |                      |                  |
 
-## Version 3.1 — Used at least 1: **0/12** (0.0%)
+## Version 3.1 — Used at least once: **0/12** (0.0%)
 
 | Function name               | Shaders <br/> GL 2.0 | VAO <br/> GL 3.3 |
 | --------------------------- | -------------------- | ---------------- |
@@ -700,7 +700,7 @@ All functions used at least 1 time - **27/3299** (0.8%)
 | glTexBuffer                 |                      |                  |
 | glUniformBlockBinding       |                      |                  |
 
-## Version 3.2 — Used at least 1: **0/19** (0.0%)
+## Version 3.2 — Used at least once: **0/19** (0.0%)
 
 | Function name                     | Shaders <br/> GL 2.0 | VAO <br/> GL 3.3 |
 | --------------------------------- | -------------------- | ---------------- |
@@ -724,7 +724,7 @@ All functions used at least 1 time - **27/3299** (0.8%)
 | glTexImage3DMultisample           |                      |                  |
 | glWaitSync                        |                      |                  |
 
-## Version 3.3 — Used at least 1: **0/58** (0.0%)
+## Version 3.3 — Used at least once: **0/58** (0.0%)
 
 | Function name                 | Shaders <br/> GL 2.0 | VAO <br/> GL 3.3 |
 | ----------------------------- | -------------------- | ---------------- |
@@ -787,7 +787,7 @@ All functions used at least 1 time - **27/3299** (0.8%)
 | glVertexP4ui                  |                      |                  |
 | glVertexP4uiv                 |                      |                  |
 
-## Version 4.0 — Used at least 1: **0/46** (0.0%)
+## Version 4.0 — Used at least once: **0/46** (0.0%)
 
 | Function name                    | Shaders <br/> GL 2.0 | VAO <br/> GL 3.3 |
 | -------------------------------- | -------------------- | ---------------- |
@@ -838,7 +838,7 @@ All functions used at least 1 time - **27/3299** (0.8%)
 | glUniformMatrix4x3dv             |                      |                  |
 | glUniformSubroutinesuiv          |                      |                  |
 
-## Version 4.1 — Used at least 1: **0/88** (0.0%)
+## Version 4.1 — Used at least once: **0/88** (0.0%)
 
 | Function name               | Shaders <br/> GL 2.0 | VAO <br/> GL 3.3 |
 | --------------------------- | -------------------- | ---------------- |
@@ -931,7 +931,7 @@ All functions used at least 1 time - **27/3299** (0.8%)
 | glViewportIndexedf          |                      |                  |
 | glViewportIndexedfv         |                      |                  |
 
-## Version 4.2 — Used at least 1: **0/12** (0.0%)
+## Version 4.2 — Used at least once: **0/12** (0.0%)
 
 | Function name                                 | Shaders <br/> GL 2.0 | VAO <br/> GL 3.3 |
 | --------------------------------------------- | -------------------- | ---------------- |
@@ -948,7 +948,7 @@ All functions used at least 1 time - **27/3299** (0.8%)
 | glTexStorage2D                                |                      |                  |
 | glTexStorage3D                                |                      |                  |
 
-## Version 4.3 — Used at least 1: **0/43** (0.0%)
+## Version 4.3 — Used at least once: **0/43** (0.0%)
 
 | Function name                     | Shaders <br/> GL 2.0 | VAO <br/> GL 3.3 |
 | --------------------------------- | -------------------- | ---------------- |
@@ -996,7 +996,7 @@ All functions used at least 1 time - **27/3299** (0.8%)
 | glVertexAttribLFormat             |                      |                  |
 | glVertexBindingDivisor            |                      |                  |
 
-## Version 4.4 — Used at least 1: **0/9** (0.0%)
+## Version 4.4 — Used at least once: **0/9** (0.0%)
 
 | Function name       | Shaders <br/> GL 2.0 | VAO <br/> GL 3.3 |
 | ------------------- | -------------------- | ---------------- |
@@ -1010,7 +1010,7 @@ All functions used at least 1 time - **27/3299** (0.8%)
 | glClearTexImage     |                      |                  |
 | glClearTexSubImage  |                      |                  |
 
-## Version 4.5 — Used at least 1: **0/122** (0.0%)
+## Version 4.5 — Used at least once: **0/122** (0.0%)
 
 | Function name                              | Shaders <br/> GL 2.0 | VAO <br/> GL 3.3 |
 | ------------------------------------------ | -------------------- | ---------------- |
@@ -1137,7 +1137,7 @@ All functions used at least 1 time - **27/3299** (0.8%)
 | glVertexArrayVertexBuffer                  |                      |                  |
 | glVertexArrayVertexBuffers                 |                      |                  |
 
-## Version 4.6 — Used at least 1: **0/4** (0.0%)
+## Version 4.6 — Used at least once: **0/4** (0.0%)
 
 | Function name                    | Shaders <br/> GL 2.0 | VAO <br/> GL 3.3 |
 | -------------------------------- | -------------------- | ---------------- |
@@ -1146,7 +1146,7 @@ All functions used at least 1 time - **27/3299** (0.8%)
 | glPolygonOffsetClamp             |                      |                  |
 | glSpecializeShader               |                      |                  |
 
-## Version extension-only — Used at least 1: **0/2251** (0.0%)
+## Version extension-only — Used at least once: **0/2251** (0.0%)
 
 | Function name                                            | Shaders <br/> GL 2.0 | VAO <br/> GL 3.3 |
 | -------------------------------------------------------- | -------------------- | ---------------- |
