@@ -47,14 +47,52 @@ impl GLTest for GL33VAOTest {
             gl::ShaderSource(vs, 1, &vertex_src.as_ptr(), std::ptr::null());
             gl::CompileShader(vs);
 
+            let mut success = 0;
+            gl::GetShaderiv(vs, gl::COMPILE_STATUS, &mut success);
+            if success == 0 {
+                let mut len = 0;
+                gl::GetShaderiv(vs, gl::INFO_LOG_LENGTH, &mut len);
+                if len <= 0 { len = 256; }
+                let mut buffer = vec![0u8; len as usize];
+                gl::GetShaderInfoLog(vs, len, std::ptr::null_mut(), buffer.as_mut_ptr() as *mut _);
+                let msg = String::from_utf8_lossy(&buffer).trim_matches(char::from(0)).to_string();
+                let err = gl::GetError();
+                return Err(format!("Vertex shader compilation failed: {} (glError=0x{:X})", msg, err).into());
+            }
+
             let fs = gl::CreateShader(gl::FRAGMENT_SHADER);
             gl::ShaderSource(fs, 1, &fragment_src.as_ptr(), std::ptr::null());
             gl::CompileShader(fs);
+
+            gl::GetShaderiv(fs, gl::COMPILE_STATUS, &mut success);
+            if success == 0 {
+                let mut len = 0;
+                gl::GetShaderiv(fs, gl::INFO_LOG_LENGTH, &mut len);
+                if len <= 0 { len = 256; }
+                let mut buffer = vec![0u8; len as usize];
+                gl::GetShaderInfoLog(fs, len, std::ptr::null_mut(), buffer.as_mut_ptr() as *mut _);
+                let msg = String::from_utf8_lossy(&buffer).trim_matches(char::from(0)).to_string();
+                let err = gl::GetError();
+                return Err(format!("Fragment shader compilation failed: {} (glError=0x{:X})", msg, err).into());
+            }
 
             let program = gl::CreateProgram();
             gl::AttachShader(program, vs);
             gl::AttachShader(program, fs);
             gl::LinkProgram(program);
+
+            gl::GetProgramiv(program, gl::LINK_STATUS, &mut success);
+            if success == 0 {
+                let mut len = 0;
+                gl::GetProgramiv(program, gl::INFO_LOG_LENGTH, &mut len);
+                if len <= 0 { len = 256; }
+                let mut buffer = vec![0u8; len as usize];
+                gl::GetProgramInfoLog(program, len, std::ptr::null_mut(), buffer.as_mut_ptr() as *mut _);
+                let msg = String::from_utf8_lossy(&buffer).trim_matches(char::from(0)).to_string();
+                let err = gl::GetError();
+                return Err(format!("Program linking failed: {} (glError=0x{:X})", msg, err).into());
+            }
+
             gl::UseProgram(program);
 
             let vertices: [f32; 24] = [

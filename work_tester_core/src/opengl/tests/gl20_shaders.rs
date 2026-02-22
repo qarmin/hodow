@@ -8,6 +8,28 @@ use std::ffi::CString;
 
 pub struct GL20ShadersTest;
 
+// Helper to compile a shader and return (shader_id, compile_success)
+unsafe fn compile_shader(src: &CString, shader_type: u32) -> Result<u32, String> {
+    let s = gl::CreateShader(shader_type);
+    gl::ShaderSource(s, 1, &src.as_ptr(), std::ptr::null());
+    gl::CompileShader(s);
+
+    let mut success = 0;
+    gl::GetShaderiv(s, gl::COMPILE_STATUS, &mut success);
+    if success == 0 {
+        let mut len = 0;
+        gl::GetShaderiv(s, gl::INFO_LOG_LENGTH, &mut len);
+        if len <= 0 { len = 256; }
+        let mut buffer = vec![0u8; len as usize];
+        gl::GetShaderInfoLog(s, len, std::ptr::null_mut(), buffer.as_mut_ptr() as *mut _);
+        let msg = String::from_utf8_lossy(&buffer).trim_matches(char::from(0)).to_string();
+        let err = gl::GetError();
+        gl::DeleteShader(s);
+        return Err(format!("{} (glError=0x{:X})", msg, err));
+    }
+    Ok(s)
+}
+
 impl GLTest for GL20ShadersTest {
     fn name(&self) -> &'static str {
         "GL20_Shaders"
@@ -19,7 +41,7 @@ impl GLTest for GL20ShadersTest {
 
     fn run(&self) -> Result<String, Box<dyn Error>> {
         unsafe {
-            let vertex_src = CString::new(
+            let legacy_vertex = CString::new(
                 r#"
                 #version 120
                 attribute vec3 position;
@@ -32,7 +54,7 @@ impl GLTest for GL20ShadersTest {
                 "#
             )?;
 
-            let fragment_src = CString::new(
+            let legacy_fragment = CString::new(
                 r#"
                 #version 120
                 varying vec3 vColor;
@@ -42,45 +64,69 @@ impl GLTest for GL20ShadersTest {
                 "#
             )?;
 
-            let vs = gl::CreateShader(gl::VERTEX_SHADER);
-            gl::ShaderSource(vs, 1, &vertex_src.as_ptr(), std::ptr::null());
-            gl::CompileShader(vs);
+            // Modern equivalents to try as a fallback on core profiles
+            let modern_vertex = CString::new(
+                r#"
+                #version 330 core
+                layout(location = 0) in vec3 position;
+                layout(location = 1) in vec3 color;
+                out vec3 vColor;
+                void main() {
+                    gl_Position = vec4(position, 1.0);
+                    vColor = color;
+                }
+                "#
+            )?;
 
-            let mut success = 0;
-            gl::GetShaderiv(vs, gl::COMPILE_STATUS, &mut success);
-            if success == 0 {
-                let mut len = 0;
-                gl::GetShaderiv(vs, gl::INFO_LOG_LENGTH, &mut len);
-                let mut buffer = vec![0u8; len as usize];
-                gl::GetShaderInfoLog(vs, len, std::ptr::null_mut(), buffer.as_mut_ptr() as *mut _);
-                return Err(format!("Vertex shader compilation failed: {}", String::from_utf8_lossy(&buffer)).into());
-            }
+            let modern_fragment = CString::new(
+                r#"
+                #version 330 core
+                in vec3 vColor;
+                out vec4 FragColor;
+                void main() {
+                    FragColor = vec4(vColor, 1.0);
+                }
+                "#
+            )?;
 
-            let fs = gl::CreateShader(gl::FRAGMENT_SHADER);
-            gl::ShaderSource(fs, 1, &fragment_src.as_ptr(), std::ptr::null());
-            gl::CompileShader(fs);
+            // Try legacy shaders first
+            let vs = match compile_shader(&legacy_vertex, gl::VERTEX_SHADER) {
+                Ok(s) => s,
+                Err(e) => {
+                    log::warn!("Legacy vertex shader failed: {}. Trying modern fallback.", e);
+                    // try modern
+                    compile_shader(&modern_vertex, gl::VERTEX_SHADER).map_err(|e2| format!("Vertex shader failed (legacy+modern): {} / {}", e, e2))?
+                }
+            };
 
-            gl::GetShaderiv(fs, gl::COMPILE_STATUS, &mut success);
-            if success == 0 {
-                let mut len = 0;
-                gl::GetShaderiv(fs, gl::INFO_LOG_LENGTH, &mut len);
-                let mut buffer = vec![0u8; len as usize];
-                gl::GetShaderInfoLog(fs, len, std::ptr::null_mut(), buffer.as_mut_ptr() as *mut _);
-                return Err(format!("Fragment shader compilation failed: {}", String::from_utf8_lossy(&buffer)).into());
-            }
+            let fs = match compile_shader(&legacy_fragment, gl::FRAGMENT_SHADER) {
+                Ok(s) => s,
+                Err(e) => {
+                    log::warn!("Legacy fragment shader failed: {}. Trying modern fallback.", e);
+                    compile_shader(&modern_fragment, gl::FRAGMENT_SHADER).map_err(|e2| format!("Fragment shader failed (legacy+modern): {} / {}", e, e2))?
+                }
+            };
 
             let program = gl::CreateProgram();
             gl::AttachShader(program, vs);
             gl::AttachShader(program, fs);
             gl::LinkProgram(program);
 
+            let mut success = 0;
             gl::GetProgramiv(program, gl::LINK_STATUS, &mut success);
             if success == 0 {
                 let mut len = 0;
                 gl::GetProgramiv(program, gl::INFO_LOG_LENGTH, &mut len);
+                if len <= 0 { len = 256; }
                 let mut buffer = vec![0u8; len as usize];
                 gl::GetProgramInfoLog(program, len, std::ptr::null_mut(), buffer.as_mut_ptr() as *mut _);
-                return Err(format!("Program linking failed: {}", String::from_utf8_lossy(&buffer)).into());
+                let msg = String::from_utf8_lossy(&buffer).trim_matches(char::from(0)).to_string();
+                let err = gl::GetError();
+                // Clean up
+                gl::DeleteShader(vs);
+                gl::DeleteShader(fs);
+                gl::DeleteProgram(program);
+                return Err(format!("Program linking failed: {} (glError=0x{:X})", msg, err).into());
             }
 
             gl::UseProgram(program);

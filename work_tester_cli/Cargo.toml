@@ -16,6 +16,7 @@ indicatif = "0.18.4"
 ctrlc = "3.4"
 
 [features]
+default = ["gpu"]
 miri_build = ["work_tester_core/miri_build"]
 # Forward the gpu feature to the core crate so dependency-gated cfgs work
 gpu = ["work_tester_core/gpu"]

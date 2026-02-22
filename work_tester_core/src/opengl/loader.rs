@@ -23,6 +23,15 @@ pub fn init_gl(mode: &OpenGLMode) -> Result<(), Box<dyn Error>> {
         }
         let version_str = std::ffi::CStr::from_ptr(version as *const c_char);
         log::info!("OpenGL version: {}", version_str.to_string_lossy());
+
+        // Also log shading language version for shader compatibility
+        let shading = gl::GetString(gl::SHADING_LANGUAGE_VERSION);
+        if shading.is_null() {
+            log::warn!("GL_SHADING_LANGUAGE_VERSION returned null");
+        } else {
+            let shading_str = std::ffi::CStr::from_ptr(shading as *const c_char);
+            log::info!("GLSL version: {}", shading_str.to_string_lossy());
+        }
     }
 
     Ok(())

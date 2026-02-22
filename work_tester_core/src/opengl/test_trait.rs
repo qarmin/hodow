@@ -35,11 +35,11 @@ pub trait GLTest: Sync {
 pub type GLTestResult = Result<(usize, usize, usize), String>;
 
 /// Helper to run a GL test and convert to standard result format
-pub fn run_gl_test(test: &dyn GLTest) -> GLTestResult {
+pub fn run_gl_test(test: &'static dyn GLTest) -> GLTestResult {
     {
         // Run the test inside a per-test window so user can see rendering.
         let spec = crate::opengl::gui::WindowSpec { title: Some(format!("GL Test: {}", test.name())), width: 800, height: 600 };
-        match crate::opengl::gui::GuiRuntimeHandle::with_window(Some(spec), || test.run().map_err(|e| e.to_string())) {
+        match crate::opengl::gui::GuiRuntimeHandle::with_window(Some(spec), move || test.run().map_err(|e| e.to_string())) {
             Ok(msg) => {
                 log::info!("GL Test '{}' passed: {}", test.name(), msg);
                 Ok((1, 0, 0))
@@ -50,4 +50,5 @@ pub fn run_gl_test(test: &dyn GLTest) -> GLTestResult {
             }
         }
     }
+
 }
