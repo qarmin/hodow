@@ -236,7 +236,6 @@ pub mod gui {
             );
 
             self.state = Some(AppState { gl_surface, window });
-            self.start_time = Some(std::time::Instant::now());
 
             // Execute tests now that OpenGL is ready
             if !self.tests_executed {
@@ -249,6 +248,9 @@ pub mod gui {
                     if let Some(AppState { gl_surface, .. }) = &self.state {
                         let _ = gl_surface.swap_buffers(gl_context);
                     }
+
+                    // Set start_time AFTER tests complete, so window stays visible for 1s after tests
+                    self.start_time = Some(std::time::Instant::now());
 
                     // Request one more redraw to ensure content is visible
                     if let Some(AppState { window, .. }) = &self.state {
@@ -267,16 +269,19 @@ pub mod gui {
             match event {
                 WindowEvent::RedrawRequested => {
                     // Swap buffers on redraw
-                    if let (Some(AppState { gl_surface, .. }), Some(gl_context)) =
+                    if let (Some(AppState { gl_surface, window }), Some(gl_context)) =
                         (&self.state, &self.gl_context)
                     {
                         let _ = gl_surface.swap_buffers(gl_context);
-                    }
 
-                    // Check if 1 second has elapsed
-                    if let Some(start) = self.start_time {
-                        if start.elapsed() >= std::time::Duration::from_secs(1) {
-                            event_loop.exit();
+                        // Check if 2 seconds has elapsed (show results after tests complete)
+                        if let Some(start) = self.start_time {
+                            if start.elapsed() >= std::time::Duration::from_secs(2) {
+                                event_loop.exit();
+                            } else {
+                                // Keep requesting redraws to keep window responsive
+                                window.request_redraw();
+                            }
                         }
                     }
                 }
