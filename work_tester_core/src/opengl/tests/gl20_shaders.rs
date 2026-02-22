@@ -59,7 +59,7 @@ impl GLTest for GL20ShadersTest {
     }
 
     fn run(&self) -> Result<String, Box<dyn Error>> {
-        unsafe {
+        let frame_count = unsafe {
             let legacy_vertex = CString::new(
                 r#"
                 #version 120
@@ -238,7 +238,29 @@ impl GLTest for GL20ShadersTest {
             gl::EnableVertexAttribArray(col_attr);
             gl::VertexAttribPointer(col_attr, 3, gl::FLOAT, gl::FALSE, 6 * std::mem::size_of::<f32>() as i32, (3 * std::mem::size_of::<f32>()) as *const _);
 
-            gl::DrawArrays(gl::TRIANGLES, 0, 3);
+            // Render in a loop for ~1 second with animation
+            let start = std::time::Instant::now();
+            let mut frame_count = 0u32;
+
+            while start.elapsed() < std::time::Duration::from_millis(1000) {
+                // Clear and render
+                gl::Clear(gl::COLOR_BUFFER_BIT);
+
+                // Animate background color based on time
+                let t = start.elapsed().as_secs_f32();
+                let r = (t * 2.0).sin() * 0.5 + 0.5;
+                let g = (t * 3.0).sin() * 0.5 + 0.5;
+                let b = (t * 4.0).sin() * 0.5 + 0.5;
+                gl::ClearColor(r * 0.2, g * 0.2, b * 0.2, 1.0);
+
+                gl::DrawArrays(gl::TRIANGLES, 0, 3);
+                gl::Flush();
+
+                frame_count += 1;
+
+                // ~60 FPS (16ms per frame)
+                std::thread::sleep(std::time::Duration::from_millis(16));
+            }
 
             gl::DisableVertexAttribArray(pos_attr);
             gl::DisableVertexAttribArray(col_attr);
@@ -256,8 +278,10 @@ impl GLTest for GL20ShadersTest {
             if err != gl::NO_ERROR {
                 return Err(format!("OpenGL error: 0x{:X}", err).into());
             }
-        }
 
-        Ok("Triangle rendered using shaders".to_string())
+            frame_count
+        };
+
+        Ok(format!("Triangle rendered using shaders ({} frames)", frame_count))
     }
 }

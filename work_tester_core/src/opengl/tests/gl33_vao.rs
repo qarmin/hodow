@@ -18,7 +18,7 @@ impl GLTest for GL33VAOTest {
     }
 
     fn run(&self) -> Result<String, Box<dyn Error>> {
-        unsafe {
+        let frame_count = unsafe {
             let vertex_src = CString::new(
                 r#"
                 #version 330 core
@@ -180,7 +180,29 @@ impl GLTest for GL33VAOTest {
             gl::VertexAttribPointer(1, 3, gl::FLOAT, gl::FALSE, 6 * std::mem::size_of::<f32>() as i32, (3 * std::mem::size_of::<f32>()) as *const _);
             gl::EnableVertexAttribArray(1);
 
-            gl::DrawElements(gl::TRIANGLES, 6, gl::UNSIGNED_INT, std::ptr::null());
+            // Render in a loop for ~1 second with animation
+            let start = std::time::Instant::now();
+            let mut frame_count = 0u32;
+
+            while start.elapsed() < std::time::Duration::from_millis(1000) {
+                // Clear
+                gl::Clear(gl::COLOR_BUFFER_BIT);
+
+                // Animate background color based on time (different pattern than GL20)
+                let t = start.elapsed().as_secs_f32();
+                let r = (t * 1.5).cos() * 0.5 + 0.5;
+                let g = (t * 2.5).cos() * 0.5 + 0.5;
+                let b = (t * 3.5).cos() * 0.5 + 0.5;
+                gl::ClearColor(r * 0.15, g * 0.15, b * 0.15, 1.0);
+
+                gl::DrawElements(gl::TRIANGLES, 6, gl::UNSIGNED_INT, std::ptr::null());
+                gl::Flush();
+
+                frame_count += 1;
+
+                // ~60 FPS
+                std::thread::sleep(std::time::Duration::from_millis(16));
+            }
 
             gl::BindVertexArray(0);
 
@@ -195,8 +217,10 @@ impl GLTest for GL33VAOTest {
             if err != gl::NO_ERROR {
                 return Err(format!("OpenGL error: 0x{:X}", err).into());
             }
-        }
 
-        Ok("Quad rendered using VAO and indexed drawing".to_string())
+            frame_count
+        };
+
+        Ok(format!("Quad rendered using VAO and indexed drawing ({} frames)", frame_count))
     }
 }
