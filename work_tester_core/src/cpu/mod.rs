@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 #![allow(unused_imports)]
 #![allow(clippy::macro_metavars_in_unsafe)]
+#![allow(unused)]
 
 use std::collections::HashSet;
 use std::sync::atomic::{AtomicBool, Ordering};
