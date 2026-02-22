@@ -242,7 +242,7 @@ impl GLTest for GL20ShadersTest {
             let start = std::time::Instant::now();
             let mut frame_count = 0u32;
 
-            while start.elapsed() < std::time::Duration::from_millis(1000) {
+            while start.elapsed() < super::TEST_DURATION {
                 // Clear and render
                 gl::Clear(gl::COLOR_BUFFER_BIT);
 

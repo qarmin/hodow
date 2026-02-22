@@ -113,7 +113,7 @@ impl GLTest for GL15VBOTest {
             let start = std::time::Instant::now();
             let mut frame_count = 0u32;
 
-            while start.elapsed() < std::time::Duration::from_millis(1000) {
+            while start.elapsed() < super::TEST_DURATION {
                 gl::Clear(gl::COLOR_BUFFER_BIT);
 
                 // Test glBufferSubData - animate vertex positions

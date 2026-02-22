@@ -80,7 +80,7 @@ impl GLTest for GL11TexturesTest {
             let start = std::time::Instant::now();
             let mut frame_count = 0u32;
 
-            while start.elapsed() < std::time::Duration::from_millis(1000) {
+            while start.elapsed() < super::TEST_DURATION {
                 // Animate texture parameters
                 let t = start.elapsed().as_secs_f32();
                 let wrap_mode = if (t * 2.0) as i32 % 2 == 0 {

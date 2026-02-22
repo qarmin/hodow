@@ -5,11 +5,24 @@
 //! Each module implements a test for specific OpenGL functionality,
 //! targeting a specific OpenGL version.
 
+use std::time::Duration;
+
+/// Test duration in milliseconds - how long each test should render
+pub const TEST_DURATION_MS: u64 = 1000;
+
+/// Test duration as Duration
+pub const TEST_DURATION: Duration = Duration::from_millis(TEST_DURATION_MS);
+
 pub mod gl11_textures;
 pub mod gl15_vbo;
 pub mod gl20_shaders;
 pub mod gl30_fbo;
 pub mod gl33_vao;
+pub mod gl13_multitexture;
+pub mod gl21_pixelbuffers;
+pub mod gl31_ubo;
+pub mod gl40_tessellation;
+pub mod gl43_compute;
 
 use crate::opengl::test_trait::{GLTest, GLTestResult};
 
@@ -17,10 +30,15 @@ use crate::opengl::test_trait::{GLTest, GLTestResult};
 pub fn all_tests() -> Vec<&'static dyn GLTest> {
     vec![
         &gl11_textures::GL11TexturesTest,
+        &gl13_multitexture::GL13MultitextureTest,
         &gl15_vbo::GL15VBOTest,
         &gl20_shaders::GL20ShadersTest,
+        &gl21_pixelbuffers::GL21PixelBuffersTest,
         &gl30_fbo::GL30FBOTest,
+        &gl31_ubo::GL31UBOTest,
         &gl33_vao::GL33VAOTest,
+        &gl40_tessellation::GL40TessellationTest,
+        &gl43_compute::GL43ComputeTest,
     ]
 }
 
