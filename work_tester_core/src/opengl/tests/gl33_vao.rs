@@ -52,12 +52,24 @@ impl GLTest for GL33VAOTest {
             if success == 0 {
                 let mut len = 0;
                 gl::GetShaderiv(vs, gl::INFO_LOG_LENGTH, &mut len);
-                if len <= 0 { len = 256; }
+                if len <= 0 { len = 512; }
                 let mut buffer = vec![0u8; len as usize];
-                gl::GetShaderInfoLog(vs, len, std::ptr::null_mut(), buffer.as_mut_ptr() as *mut _);
-                let msg = String::from_utf8_lossy(&buffer).trim_matches(char::from(0)).to_string();
+                let mut actual_len: i32 = 0;
+                gl::GetShaderInfoLog(vs, len, &mut actual_len, buffer.as_mut_ptr() as *mut _);
+                let msg = if actual_len > 0 {
+                    String::from_utf8_lossy(&buffer[..actual_len as usize]).to_string()
+                } else {
+                    String::from_utf8_lossy(&buffer).trim_matches(char::from(0)).to_string()
+                };
+                let vs_src_str = vertex_src.to_string_lossy();
+                let vs_numbered = vs_src_str
+                    .lines()
+                    .enumerate()
+                    .map(|(i, l)| format!("{:4}: {}", i + 1, l))
+                    .collect::<Vec<_>>()
+                    .join("\n");
                 let err = gl::GetError();
-                return Err(format!("Vertex shader compilation failed: {} (glError=0x{:X})", msg, err).into());
+                return Err(format!("Vertex shader compilation failed: {} (glError=0x{:X})\n--- vertex shader ---\n{}\n--- end source ---", msg.trim_matches(char::from(0)), err, vs_numbered).into());
             }
 
             let fs = gl::CreateShader(gl::FRAGMENT_SHADER);
@@ -68,12 +80,24 @@ impl GLTest for GL33VAOTest {
             if success == 0 {
                 let mut len = 0;
                 gl::GetShaderiv(fs, gl::INFO_LOG_LENGTH, &mut len);
-                if len <= 0 { len = 256; }
+                if len <= 0 { len = 512; }
                 let mut buffer = vec![0u8; len as usize];
-                gl::GetShaderInfoLog(fs, len, std::ptr::null_mut(), buffer.as_mut_ptr() as *mut _);
-                let msg = String::from_utf8_lossy(&buffer).trim_matches(char::from(0)).to_string();
+                let mut actual_len: i32 = 0;
+                gl::GetShaderInfoLog(fs, len, &mut actual_len, buffer.as_mut_ptr() as *mut _);
+                let msg = if actual_len > 0 {
+                    String::from_utf8_lossy(&buffer[..actual_len as usize]).to_string()
+                } else {
+                    String::from_utf8_lossy(&buffer).trim_matches(char::from(0)).to_string()
+                };
+                let fs_src_str = fragment_src.to_string_lossy();
+                let fs_numbered = fs_src_str
+                    .lines()
+                    .enumerate()
+                    .map(|(i, l)| format!("{:4}: {}", i + 1, l))
+                    .collect::<Vec<_>>()
+                    .join("\n");
                 let err = gl::GetError();
-                return Err(format!("Fragment shader compilation failed: {} (glError=0x{:X})", msg, err).into());
+                return Err(format!("Fragment shader compilation failed: {} (glError=0x{:X})\n--- fragment shader ---\n{}\n--- end source ---", msg.trim_matches(char::from(0)), err, fs_numbered).into());
             }
 
             let program = gl::CreateProgram();
@@ -85,12 +109,31 @@ impl GLTest for GL33VAOTest {
             if success == 0 {
                 let mut len = 0;
                 gl::GetProgramiv(program, gl::INFO_LOG_LENGTH, &mut len);
-                if len <= 0 { len = 256; }
+                if len <= 0 { len = 512; }
                 let mut buffer = vec![0u8; len as usize];
-                gl::GetProgramInfoLog(program, len, std::ptr::null_mut(), buffer.as_mut_ptr() as *mut _);
-                let msg = String::from_utf8_lossy(&buffer).trim_matches(char::from(0)).to_string();
+                let mut actual_len: i32 = 0;
+                gl::GetProgramInfoLog(program, len, &mut actual_len, buffer.as_mut_ptr() as *mut _);
+                let msg = if actual_len > 0 {
+                    String::from_utf8_lossy(&buffer[..actual_len as usize]).to_string()
+                } else {
+                    String::from_utf8_lossy(&buffer).trim_matches(char::from(0)).to_string()
+                };
+                let vs_src_str = vertex_src.to_string_lossy();
+                let fs_src_str = fragment_src.to_string_lossy();
+                let vs_numbered = vs_src_str
+                    .lines()
+                    .enumerate()
+                    .map(|(i, l)| format!("{:4}: {}", i + 1, l))
+                    .collect::<Vec<_>>()
+                    .join("\n");
+                let fs_numbered = fs_src_str
+                    .lines()
+                    .enumerate()
+                    .map(|(i, l)| format!("{:4}: {}", i + 1, l))
+                    .collect::<Vec<_>>()
+                    .join("\n");
                 let err = gl::GetError();
-                return Err(format!("Program linking failed: {} (glError=0x{:X})", msg, err).into());
+                return Err(format!("Program linking failed: {} (glError=0x{:X})\n--- vertex shader ---\n{}\n--- fragment shader ---\n{}\n--- end sources ---", msg.trim_matches(char::from(0)), err, vs_numbered, fs_numbered).into());
             }
 
             gl::UseProgram(program);

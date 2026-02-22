@@ -17,15 +17,34 @@ unsafe fn compile_shader(src: &CString, shader_type: u32) -> Result<u32, String>
     let mut success = 0;
     gl::GetShaderiv(s, gl::COMPILE_STATUS, &mut success);
     if success == 0 {
+        // Query the info log length and read the actual log size
         let mut len = 0;
         gl::GetShaderiv(s, gl::INFO_LOG_LENGTH, &mut len);
-        if len <= 0 { len = 256; }
+        if len <= 0 { len = 512; }
         let mut buffer = vec![0u8; len as usize];
-        gl::GetShaderInfoLog(s, len, std::ptr::null_mut(), buffer.as_mut_ptr() as *mut _);
-        let msg = String::from_utf8_lossy(&buffer).trim_matches(char::from(0)).to_string();
+        let mut actual_len: i32 = 0;
+        gl::GetShaderInfoLog(s, len, &mut actual_len, buffer.as_mut_ptr() as *mut _);
+        let msg = if actual_len > 0 {
+            String::from_utf8_lossy(&buffer[..actual_len as usize]).to_string()
+        } else {
+            String::from_utf8_lossy(&buffer).trim_matches(char::from(0)).to_string()
+        };
+
+        // Include the shader source (with line numbers) to help debugging
+        let src_str = src.to_string_lossy();
+        let numbered_src = src_str
+            .lines()
+            .enumerate()
+            .map(|(i, l)| format!("{:4}: {}", i + 1, l))
+            .collect::<Vec<_>>()
+            .join("\n");
+
         let err = gl::GetError();
         gl::DeleteShader(s);
-        return Err(format!("{} (glError=0x{:X})", msg, err));
+        return Err(format!(
+            "{} (glError=0x{:X})\n--- shader source ---\n{}\n--- end shader source ---",
+            msg.trim_matches(char::from(0)), err, numbered_src
+        ));
     }
     Ok(s)
 }
@@ -64,30 +83,45 @@ impl GLTest for GL20ShadersTest {
                 "#
             )?;
 
-            // Modern equivalents to try as a fallback on core profiles
-            let modern_vertex = CString::new(
-                r#"
-                #version 330 core
+            // Attempt to derive a suitable `#version` from the GL shading language
+            // version reported by the driver (e.g. "4.60" -> 460). Fall back to
+            // 330 if parsing fails.
+            let mut glsl_version_num = 330;
+            let shading_ptr = gl::GetString(gl::SHADING_LANGUAGE_VERSION);
+            if !shading_ptr.is_null() {
+                if let Ok(s) = std::ffi::CStr::from_ptr(shading_ptr as *const i8).to_str() {
+                    // s might be like "4.60" or "4.60 NVIDIA" — take the first token
+                    if let Some(tok) = s.split_whitespace().next() {
+                        let parts: Vec<&str> = tok.split('.').collect();
+                        if parts.len() >= 2 {
+                            if let (Ok(major), Ok(minor)) = (parts[0].parse::<i32>(), parts[1].parse::<i32>()) {
+                                glsl_version_num = major * 100 + minor;
+                            }
+                        }
+                    }
+                }
+            }
+
+            let modern_vs_src = format!(r#"#version {} core
                 layout(location = 0) in vec3 position;
                 layout(location = 1) in vec3 color;
                 out vec3 vColor;
-                void main() {
+                void main() {{
                     gl_Position = vec4(position, 1.0);
                     vColor = color;
-                }
-                "#
-            )?;
+                }}
+                "#, glsl_version_num);
 
-            let modern_fragment = CString::new(
-                r#"
-                #version 330 core
+            let modern_fs_src = format!(r#"#version {} core
                 in vec3 vColor;
                 out vec4 FragColor;
-                void main() {
+                void main() {{
                     FragColor = vec4(vColor, 1.0);
-                }
-                "#
-            )?;
+                }}
+                "#, glsl_version_num);
+
+            let modern_vertex = CString::new(modern_vs_src)?;
+            let modern_fragment = CString::new(modern_fs_src)?;
 
             // Try legacy shaders first
             let vs = match compile_shader(&legacy_vertex, gl::VERTEX_SHADER) {
@@ -117,16 +151,41 @@ impl GLTest for GL20ShadersTest {
             if success == 0 {
                 let mut len = 0;
                 gl::GetProgramiv(program, gl::INFO_LOG_LENGTH, &mut len);
-                if len <= 0 { len = 256; }
+                if len <= 0 { len = 512; }
                 let mut buffer = vec![0u8; len as usize];
-                gl::GetProgramInfoLog(program, len, std::ptr::null_mut(), buffer.as_mut_ptr() as *mut _);
-                let msg = String::from_utf8_lossy(&buffer).trim_matches(char::from(0)).to_string();
+                let mut actual_len: i32 = 0;
+                gl::GetProgramInfoLog(program, len, &mut actual_len, buffer.as_mut_ptr() as *mut _);
+                let msg = if actual_len > 0 {
+                    String::from_utf8_lossy(&buffer[..actual_len as usize]).to_string()
+                } else {
+                    String::from_utf8_lossy(&buffer).trim_matches(char::from(0)).to_string()
+                };
+
+                // Include both shader sources to help debugging linking issues
+                let vs_src = legacy_vertex.to_string_lossy();
+                let fs_src = legacy_fragment.to_string_lossy();
+                let vs_numbered = vs_src
+                    .lines()
+                    .enumerate()
+                    .map(|(i, l)| format!("{:4}: {}", i + 1, l))
+                    .collect::<Vec<_>>()
+                    .join("\n");
+                let fs_numbered = fs_src
+                    .lines()
+                    .enumerate()
+                    .map(|(i, l)| format!("{:4}: {}", i + 1, l))
+                    .collect::<Vec<_>>()
+                    .join("\n");
+
                 let err = gl::GetError();
                 // Clean up
                 gl::DeleteShader(vs);
                 gl::DeleteShader(fs);
                 gl::DeleteProgram(program);
-                return Err(format!("Program linking failed: {} (glError=0x{:X})", msg, err).into());
+                return Err(format!(
+                    "Program linking failed: {} (glError=0x{:X})\n--- vertex shader ---\n{}\n--- fragment shader ---\n{}\n--- end sources ---",
+                    msg.trim_matches(char::from(0)), err, vs_numbered, fs_numbered
+                ).into());
             }
 
             gl::UseProgram(program);
