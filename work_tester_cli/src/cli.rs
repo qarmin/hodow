@@ -49,14 +49,14 @@ pub struct CpuArgs {
 #[derive(Args)]
 pub struct GpuArgs {
     /// Run without creating a visible window (headless / offscreen)
-    #[arg(long = "no-window")]
+    #[arg(short = 'w', long = "no-window")]
     pub no_window: bool,
 
     /// Per-test time limit in milliseconds (default: 1000)
-    #[arg(long = "time-limit", value_name = "MS")]
+    #[arg(short = 't', long = "time-limit", value_name = "MS")]
     pub time_limit_ms: Option<u64>,
 
     /// Per-test maximum frame count (default: unlimited)
-    #[arg(long = "frame-limit", value_name = "FRAMES")]
+    #[arg(short = 'f', long = "frame-limit", value_name = "FRAMES")]
     pub frame_limit: Option<u64>,
 }

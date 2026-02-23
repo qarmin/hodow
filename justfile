@@ -21,7 +21,7 @@ gpu *args:
     RUSTFLAGS="-C target-cpu=native" cargo +nightly run -p work_tester_cli --features gpu -- -d gpu --frame-limit 1000 {{args}}
 
 gpua *args:
-    RUSTFLAGS="-Zsanitizer=address" cargo +nightly run --target x86_64-unknown-linux-gnu --features gpu -- -d gpu --frame-limit 1000 {{args}}
+    RUSTFLAGS="-Zsanitizer=address" cargo +nightly run -p work_tester_cli --target x86_64-unknown-linux-gnu --features gpu -- -d gpu --frame-limit 100000 {{args}}
 
 gpur *args:
     RUSTFLAGS="-C target-cpu=native" cargo +nightly run -p work_tester_cli --features gpu --release -- -d gpu --frame-limit 1000 {{args}}
