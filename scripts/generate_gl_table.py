@@ -21,6 +21,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CSV_PATH = ROOT / 'gl_functions.csv'
+SUPPORTED_CSV_PATH = ROOT / 'gl_glutin_supported_functions.csv'
 OUT_MD = ROOT / 'work_tester_core' / 'src' / 'opengl' / 'FUNCTIONS_TABLE.md'
 OUT_UNIMPLEMENTED = ROOT / 'work_tester_core' / 'src' / 'opengl' / 'unimplemented.txt'
 TESTS_DIR = ROOT / 'work_tester_core' / 'src' / 'opengl' / 'tests'
@@ -53,6 +54,22 @@ def read_gl_functions(csv_path: Path):
             groups[key].append((name, sig, exts))
             functions.append((name, sig, key, exts))
     return groups, functions
+
+
+def read_supported_functions(csv_path: Path) -> set[str]:
+    """Read function names from gl_glutin_supported_functions.csv"""
+    supported = set()
+    if not csv_path.exists():
+        print(f"WARNING: {csv_path} not found, treating all functions as unsupported", file=sys.stderr)
+        return supported
+    with csv_path.open(newline='', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            sig = (row.get('signature') or '').strip()
+            name = sig.split('(', 1)[0].strip() if sig else ''
+            if name:
+                supported.add(name)
+    return supported
 
 
 def extract_gl_functions_from_text(text: str) -> set[str]:
@@ -98,7 +115,24 @@ def format_percent(n, total):
     return f"{(n/total*100):.1f}%" if total else '0.0%'
 
 
-def generate_markdown(groups: dict[str, list], functions: list[tuple], tests: list[tuple]) -> str:
+def extract_suffix(func_name: str) -> str:
+    """Extract vendor suffix from function name (e.g., glFunctionNV -> NV)"""
+    # Common vendor suffixes
+    suffixes = [
+        'ARB', 'EXT', 'NV', 'AMD', 'INTEL', 'ATI', 'APPLE', 'SGI', 'SGIS', 'SGIX',
+        'IBM', 'HP', 'SUN', 'MESA', 'OES', 'KHR', 'ANDROID', 'ANGLE',
+        'IMG', 'QCOM', 'VIV', 'NVX', 'OVR', 'REND', 'PGI', 'GREMEDY',
+        '3DFX', 'INGR', 'WIN', 'EGL', 'DMP', 'FJ', 'OML'
+    ]
+
+    for suffix in suffixes:
+        if func_name.endswith(suffix):
+            return suffix
+
+    return 'core'  # No vendor suffix, it's a core function
+
+
+def generate_markdown(groups: dict[str, list], functions: list[tuple], tests: list[tuple], supported_funcs: set[str]) -> str:
     lines: list[str] = []
     total_all = sum(len(v) for v in groups.values())
 
@@ -107,10 +141,25 @@ def generate_markdown(groups: dict[str, list], functions: list[tuple], tests: li
     for _tid, _display, _ver, funcs in tests:
         union_funcs.update(funcs)
 
-    # global used count (functions used in any test)
+    # Split functions into supported and unsupported
+    supported_groups = defaultdict(list)
+    unsupported_groups = defaultdict(list)
+
+    for version, entries in groups.items():
+        for name, sig, exts in entries:
+            if name in supported_funcs:
+                supported_groups[version].append((name, sig, exts))
+            else:
+                unsupported_groups[version].append((name, sig, exts))
+
+    # Count supported/unsupported
+    total_supported = sum(len(v) for v in supported_groups.values())
+    total_unsupported = sum(len(v) for v in unsupported_groups.values())
+
+    # global used count (functions used in any test) - only for supported
     used_all = 0
-    for version in groups:
-        entries = groups[version]
+    for version in supported_groups:
+        entries = supported_groups[version]
         used_in_version = sum(1 for name, _sig, _exts in entries if name in union_funcs)
         used_all += used_in_version
 
@@ -118,22 +167,43 @@ def generate_markdown(groups: dict[str, list], functions: list[tuple], tests: li
     lines.append(f'# OpenGL functions coverage summary')
     lines.append('')
     lines.append(f'Total functions in registry: **{total_all}**')
-    lines.append(f'All functions used at least 1 time - **{used_all}/{total_all}** ({format_percent(used_all, total_all)})')
+    lines.append(f'- Supported (can be tested): **{total_supported}** ({format_percent(total_supported, total_all)})')
+    lines.append(f'- Unsupported (not in bindings): **{total_unsupported}** ({format_percent(total_unsupported, total_all)})')
+    lines.append('')
+    lines.append(f'Supported functions used at least once: **{used_all}/{total_supported}** ({format_percent(used_all, total_supported)})')
+    lines.append('')
+
+    # ============================================================
+    # SECTION 1: SUPPORTED FUNCTIONS
+    # ============================================================
+    lines.append('# Supported functions')
+    lines.append('')
+    lines.append('Functions that are available in the OpenGL bindings and can be tested.')
     lines.append('')
 
     # prepare test columns
     test_cols = [(tid, f"{display} <br/> GL {ver}" if ver else display, funcs) for tid, display, ver, funcs in tests]
 
     # For each version, render a table with fixed column widths based on headers
-    for version in sorted(groups.keys(), key=ver_key):
-        entries = groups[version]
+    for version in sorted(supported_groups.keys(), key=ver_key):
+        entries = supported_groups[version]
         total = len(entries)
+        unsupported_count = len(unsupported_groups.get(version, []))
 
         # compute used in this version (based on union of all tests)
         used_in_version = sum(1 for name, _sig, _exts in entries if name in union_funcs)
 
-        lines.append(f'## Version {version} — Used at least once: **{used_in_version}/{total}** ({format_percent(used_in_version, total)})')
+        lines.append(f'## Version {version}')
         lines.append('')
+        lines.append(f'- Supported: **{total}**')
+        lines.append(f'- Unsupported: **{unsupported_count}**')
+        lines.append(f'- Used at least once: **{used_in_version}/{total}** ({format_percent(used_in_version, total)})')
+        lines.append('')
+
+        if total == 0:
+            lines.append('*No supported functions in this version.*')
+            lines.append('')
+            continue
 
         col_names = ['Function name'] + [tc[1] for tc in test_cols]
         # compute widths: at least header width, but expand if any cell longer
@@ -164,6 +234,42 @@ def generate_markdown(groups: dict[str, list], functions: list[tuple], tests: li
 
         lines.append('')
 
+    # ============================================================
+    # SECTION 2: UNSUPPORTED FUNCTIONS
+    # ============================================================
+    lines.append('# Unsupported functions')
+    lines.append('')
+    lines.append('Functions that are NOT available in the OpenGL bindings and cannot be tested.')
+    lines.append('Grouped by vendor suffix.')
+    lines.append('')
+
+    # Group unsupported functions by suffix across all versions
+    suffix_groups = defaultdict(lambda: defaultdict(list))  # suffix -> version -> functions
+
+    for version in sorted(unsupported_groups.keys(), key=ver_key):
+        entries = unsupported_groups[version]
+        for name, sig, exts in entries:
+            suffix = extract_suffix(name)
+            suffix_groups[suffix][version].append(name)
+
+    # Sort suffixes: 'core' first, then alphabetically
+    sorted_suffixes = sorted(suffix_groups.keys(), key=lambda s: (s != 'core', s))
+
+    for suffix in sorted_suffixes:
+        versions_dict = suffix_groups[suffix]
+        total_in_suffix = sum(len(funcs) for funcs in versions_dict.values())
+
+        lines.append(f'## {suffix} ({total_in_suffix} functions)')
+        lines.append('')
+
+        for version in sorted(versions_dict.keys(), key=ver_key):
+            funcs = sorted(versions_dict[version], key=str.lower)
+            lines.append(f'### Version {version} ({len(funcs)} functions)')
+            lines.append('')
+            for func in funcs:
+                lines.append(f'- `{func}`')
+            lines.append('')
+
     return '\n'.join(lines)
 
 
@@ -190,9 +296,14 @@ def generate_unimplemented(groups: dict[str, list], tests: list[tuple]) -> str:
 def main():
     groups, functions = read_gl_functions(CSV_PATH)
     print(f'Read {sum(len(v) for v in groups.values())} functions from {CSV_PATH}')
+
+    supported_funcs = read_supported_functions(SUPPORTED_CSV_PATH)
+    print(f'Read {len(supported_funcs)} supported functions from {SUPPORTED_CSV_PATH}')
+
     tests = discover_tests(TESTS_DIR)
     print(f'Discovered {len(tests)} tests in {TESTS_DIR}')
-    md = generate_markdown(groups, functions, tests)
+
+    md = generate_markdown(groups, functions, tests, supported_funcs)
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text(md, encoding='utf-8')
     print(f'Wrote {OUT_MD}')
