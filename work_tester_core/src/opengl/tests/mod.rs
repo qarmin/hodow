@@ -47,6 +47,7 @@ pub const TEST_DURATION: Duration = Duration::from_millis(DEFAULT_TEST_DURATION_
 
 pub mod gl11_textures;
 pub mod gl13_multitexture;
+pub mod gl14_blend;
 pub mod gl15_queries;
 pub mod gl20_vertex_attribs;
 pub mod gl21_pixelbuffers;
@@ -55,9 +56,13 @@ pub mod gl30_shaders;
 pub mod gl30_vbo;
 pub mod gl31_ubo;
 pub mod gl32_sync;
+pub mod gl33_instancing;
 pub mod gl33_vao;
 pub mod gl40_tessellation;
+pub mod gl41_program_pipeline;
+pub mod gl42_image_load_store;
 pub mod gl43_compute;
+pub mod gl45_dsa;
 
 use crate::opengl::test_trait::{GLTest, GLTestResult};
 
@@ -66,6 +71,7 @@ pub fn all_tests() -> Vec<&'static dyn GLTest> {
     vec![
         &gl11_textures::GL11TexturesTest,
         &gl13_multitexture::GL13MultitextureTest,
+        &gl14_blend::GL14BlendTest,
         &gl15_queries::GL15QueriesTest,
         &gl20_vertex_attribs::GL20VertexAttribsTest,
         &gl30_vbo::GL30VBOTest,
@@ -74,9 +80,13 @@ pub fn all_tests() -> Vec<&'static dyn GLTest> {
         &gl30_fbo::GL30FBOTest,
         &gl31_ubo::GL31UBOTest,
         &gl32_sync::GL32SyncTest,
+        &gl33_instancing::GL33InstancingTest,
         &gl33_vao::GL33VAOTest,
         &gl40_tessellation::GL40TessellationTest,
+        &gl41_program_pipeline::GL41ProgramPipelineTest,
+        &gl42_image_load_store::GL42ImageLoadStoreTest,
         &gl43_compute::GL43ComputeTest,
+        &gl45_dsa::GL45DSATest,
     ]
 }
 

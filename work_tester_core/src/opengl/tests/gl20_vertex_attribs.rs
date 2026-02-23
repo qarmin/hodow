@@ -33,7 +33,7 @@ impl GLTest for GL20VertexAttribsTest {
                 }
             \0";
             let vs = gl::CreateShader(gl::VERTEX_SHADER);
-            gl::ShaderSource(vs, 1, &(vs_source.as_ptr() as *const i8), std::ptr::null());
+            gl::ShaderSource(vs, 1, &(vs_source.as_ptr() as *const gl::types::GLchar), std::ptr::null());
             gl::CompileShader(vs);
             let mut status = 0;
             gl::GetShaderiv(vs, gl::COMPILE_STATUS, &mut status);
@@ -41,12 +41,12 @@ impl GLTest for GL20VertexAttribsTest {
                 let mut log_len = 0;
                 gl::GetShaderiv(vs, gl::INFO_LOG_LENGTH, &mut log_len);
                 let mut log = vec![0u8; log_len as usize];
-                gl::GetShaderInfoLog(vs, log_len, std::ptr::null_mut(), log.as_mut_ptr() as *mut i8);
+                gl::GetShaderInfoLog(vs, log_len, std::ptr::null_mut(), log.as_mut_ptr() as *mut gl::types::GLchar);
                 gl::DeleteShader(vs);
                 return Err(format!("Vertex shader compilation failed: {}", String::from_utf8_lossy(&log)).into());
             }
             let fs = gl::CreateShader(gl::FRAGMENT_SHADER);
-            gl::ShaderSource(fs, 1, &(fs_source.as_ptr() as *const i8), std::ptr::null());
+            gl::ShaderSource(fs, 1, &(fs_source.as_ptr() as *const gl::types::GLchar), std::ptr::null());
             gl::CompileShader(fs);
             gl::GetShaderiv(fs, gl::COMPILE_STATUS, &mut status);
             if status == 0 {
@@ -57,8 +57,8 @@ impl GLTest for GL20VertexAttribsTest {
             let program = gl::CreateProgram();
             gl::AttachShader(program, vs);
             gl::AttachShader(program, fs);
-            gl::BindAttribLocation(program, 0, b"position\0".as_ptr() as *const i8);
-            gl::BindAttribLocation(program, 1, b"color\0".as_ptr() as *const i8);
+            gl::BindAttribLocation(program, 0, b"position\0".as_ptr() as *const gl::types::GLchar);
+            gl::BindAttribLocation(program, 1, b"color\0".as_ptr() as *const gl::types::GLchar);
             gl::LinkProgram(program);
             gl::GetProgramiv(program, gl::LINK_STATUS, &mut status);
             if status == 0 {
@@ -69,8 +69,8 @@ impl GLTest for GL20VertexAttribsTest {
             }
             gl::ValidateProgram(program);
             gl::UseProgram(program);
-            let pos_loc = gl::GetAttribLocation(program, b"position\0".as_ptr() as *const i8);
-            let color_loc = gl::GetAttribLocation(program, b"color\0".as_ptr() as *const i8);
+            let pos_loc = gl::GetAttribLocation(program, b"position\0".as_ptr() as *const gl::types::GLchar);
+            let color_loc = gl::GetAttribLocation(program, b"color\0".as_ptr() as *const gl::types::GLchar);
             gl::VertexAttrib1f(2, 1.0);
             gl::VertexAttrib2f(2, 1.0, 0.5);
             gl::VertexAttrib3f(2, 1.0, 0.5, 0.25);
