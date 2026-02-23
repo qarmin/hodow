@@ -45,11 +45,7 @@ impl GLTest for GL33InstancingTest {
             gl::AttachShader(program, fs);
             gl::LinkProgram(program);
             gl::UseProgram(program);
-            let vertices: [f32; 15] = [
-                -1.0, -1.0,  1.0, 0.0, 0.0,
-                 1.0, -1.0,  0.0, 1.0, 0.0,
-                 0.0,  1.0,  0.0, 0.0, 1.0,
-            ];
+            let vertices: [f32; 15] = [-1.0, -1.0, 1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0];
             let mut vao = 0;
             let mut vbo = 0;
             gl::GenVertexArrays(1, &mut vao);

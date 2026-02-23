@@ -63,11 +63,7 @@ impl GLTest for GL41ProgramPipelineTest {
             gl::ActiveShaderProgram(pipeline, vs);
             gl::ValidateProgramPipeline(pipeline);
             gl::GetProgramPipelineiv(pipeline, gl::VALIDATE_STATUS, &mut status);
-            let vertices: [f32; 18] = [
-                -0.5, -0.5, 0.0,  1.0, 0.0, 0.0,
-                 0.5, -0.5, 0.0,  0.0, 1.0, 0.0,
-                 0.0,  0.5, 0.0,  0.0, 0.0, 1.0,
-            ];
+            let vertices: [f32; 18] = [-0.5, -0.5, 0.0, 1.0, 0.0, 0.0, 0.5, -0.5, 0.0, 0.0, 1.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 1.0];
             let mut vao = 0;
             let mut vbo = 0;
             gl::GenVertexArrays(1, &mut vao);
@@ -88,7 +84,6 @@ impl GLTest for GL41ProgramPipelineTest {
             gl::Clear(gl::COLOR_BUFFER_BIT);
             gl::DrawArrays(gl::TRIANGLES, 0, 3);
             gl::Flush();
-            gl::MemoryBarrier(gl::ALL_BARRIER_BITS);
             gl::DisableVertexAttribArray(0);
             gl::DisableVertexAttribArray(1);
             gl::BindVertexArray(0);

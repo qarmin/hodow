@@ -22,72 +22,33 @@ impl GLTest for GL13CompressedTest {
             gl::GenTextures(1, &mut texture1d);
             gl::BindTexture(gl::TEXTURE_1D, texture1d);
             let data: Vec<u8> = vec![0; 128];
-            gl::CompressedTexImage1D(
-                gl::TEXTURE_1D,
-                0,
-                gl::COMPRESSED_RGBA,
-                128,
-                0,
-                data.len() as i32,
-                data.as_ptr() as *const _,
-            );
+            gl::CompressedTexImage1D(gl::TEXTURE_1D, 0, gl::COMPRESSED_RGBA, 128, 0, data.len() as i32, data.as_ptr() as *const _);
             let subdata: Vec<u8> = vec![255; 32];
-            gl::CompressedTexSubImage1D(
-                gl::TEXTURE_1D,
-                0,
-                0,
-                32,
-                gl::COMPRESSED_RGBA,
-                subdata.len() as i32,
-                subdata.as_ptr() as *const _,
-            );
+            gl::CompressedTexSubImage1D(gl::TEXTURE_1D, 0, 0, 32, gl::COMPRESSED_RGBA, subdata.len() as i32, subdata.as_ptr() as *const _);
             gl::BindTexture(gl::TEXTURE_1D, 0);
             let mut texture2d = 0;
             gl::GenTextures(1, &mut texture2d);
             gl::BindTexture(gl::TEXTURE_2D, texture2d);
             let data2d: Vec<u8> = vec![0; 256 * 256];
-            gl::CompressedTexImage2D(
-                gl::TEXTURE_2D,
-                0,
-                gl::COMPRESSED_RGBA,
-                256,
-                256,
-                0,
-                data2d.len() as i32,
-                data2d.as_ptr() as *const _,
-            );
+            gl::CompressedTexImage2D(gl::TEXTURE_2D, 0, gl::COMPRESSED_RGBA, 256, 256, 0, data2d.len() as i32, data2d.as_ptr() as *const _);
             let subdata2d: Vec<u8> = vec![255; 64 * 64];
-            gl::CompressedTexSubImage2D(
-                gl::TEXTURE_2D,
-                0,
-                0, 0,
-                64, 64,
-                gl::COMPRESSED_RGBA,
-                subdata2d.len() as i32,
-                subdata2d.as_ptr() as *const _,
-            );
+            gl::CompressedTexSubImage2D(gl::TEXTURE_2D, 0, 0, 0, 64, 64, gl::COMPRESSED_RGBA, subdata2d.len() as i32, subdata2d.as_ptr() as *const _);
             gl::BindTexture(gl::TEXTURE_2D, 0);
             let mut texture3d = 0;
             gl::GenTextures(1, &mut texture3d);
             gl::BindTexture(gl::TEXTURE_3D, texture3d);
             let data3d: Vec<u8> = vec![0; 64 * 64 * 64];
-            gl::CompressedTexImage3D(
-                gl::TEXTURE_3D,
-                0,
-                gl::COMPRESSED_RGBA,
-                64,
-                64,
-                64,
-                0,
-                data3d.len() as i32,
-                data3d.as_ptr() as *const _,
-            );
+            gl::CompressedTexImage3D(gl::TEXTURE_3D, 0, gl::COMPRESSED_RGBA, 64, 64, 64, 0, data3d.len() as i32, data3d.as_ptr() as *const _);
             let subdata3d: Vec<u8> = vec![255; 32 * 32 * 32];
             gl::CompressedTexSubImage3D(
                 gl::TEXTURE_3D,
                 0,
-                0, 0, 0,
-                32, 32, 32,
+                0,
+                0,
+                0,
+                32,
+                32,
+                32,
                 gl::COMPRESSED_RGBA,
                 subdata3d.len() as i32,
                 subdata3d.as_ptr() as *const _,

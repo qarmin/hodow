@@ -61,8 +61,8 @@ impl GLTest for GL11TexturesTest {
             gl::PixelStorei(gl::UNPACK_ALIGNMENT, 1);
 
             // Test glGetPointerv
-            let mut ptr: *mut std::ffi::c_void = std::ptr::null_mut();
-            gl::GetPointerv(gl::DEBUG_CALLBACK_FUNCTION, &mut ptr);
+            let ptr: *mut std::ffi::c_void = std::ptr::null_mut();
+            gl::GetPointerv(gl::DEBUG_CALLBACK_FUNCTION, &ptr);
 
             // Render loop for ~1 second
             let start = std::time::Instant::now();

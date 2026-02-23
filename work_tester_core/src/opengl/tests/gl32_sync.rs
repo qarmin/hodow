@@ -36,14 +36,7 @@ impl GLTest for GL32SyncTest {
             let mut texture = 0;
             gl::GenTextures(1, &mut texture);
             gl::BindTexture(gl::TEXTURE_2D_MULTISAMPLE, texture);
-            gl::TexImage2DMultisample(
-                gl::TEXTURE_2D_MULTISAMPLE,
-                4,
-                gl::RGBA8,
-                256,
-                256,
-                gl::TRUE,
-            );
+            gl::TexImage2DMultisample(gl::TEXTURE_2D_MULTISAMPLE, 4, gl::RGBA8, 256, 256, gl::TRUE);
             let mut samples = 0.0;
             gl::GetMultisamplefv(gl::SAMPLE_POSITION, 0, &mut samples);
             gl::SampleMaski(0, 0xFFFFFFFF);
@@ -51,15 +44,7 @@ impl GLTest for GL32SyncTest {
             let mut texture_3d = 0;
             gl::GenTextures(1, &mut texture_3d);
             gl::BindTexture(gl::TEXTURE_2D_MULTISAMPLE_ARRAY, texture_3d);
-            gl::TexImage3DMultisample(
-                gl::TEXTURE_2D_MULTISAMPLE_ARRAY,
-                4,
-                gl::RGBA8,
-                256,
-                256,
-                4,
-                gl::TRUE,
-            );
+            gl::TexImage3DMultisample(gl::TEXTURE_2D_MULTISAMPLE_ARRAY, 4, gl::RGBA8, 256, 256, 4, gl::TRUE);
             gl::BindTexture(gl::TEXTURE_2D_MULTISAMPLE_ARRAY, 0);
             gl::DeleteTextures(1, &texture);
             gl::DeleteTextures(1, &texture_3d);

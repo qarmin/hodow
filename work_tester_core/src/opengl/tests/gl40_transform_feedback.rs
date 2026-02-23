@@ -75,55 +75,25 @@ impl GLTest for GL40TransformFeedbackTest {
             let mut num_subroutines = 0;
             gl::GetProgramStageiv(program, gl::VERTEX_SHADER, gl::ACTIVE_SUBROUTINES, &mut num_subroutines);
             if num_subroutines > 0 {
-                let red_index = gl::GetSubroutineIndex(
-                    program,
-                    gl::VERTEX_SHADER,
-                    b"redColor\0".as_ptr() as *const gl::types::GLchar,
-                );
+                let red_index = gl::GetSubroutineIndex(program, gl::VERTEX_SHADER, b"redColor\0".as_ptr() as *const gl::types::GLchar);
                 let mut name: [u8; 256] = [0; 256];
                 let mut length = 0;
                 if red_index != gl::INVALID_INDEX {
-                    gl::GetActiveSubroutineName(
-                        program,
-                        gl::VERTEX_SHADER,
-                        red_index,
-                        256,
-                        &mut length,
-                        name.as_mut_ptr() as *mut gl::types::GLchar,
-                    );
+                    gl::GetActiveSubroutineName(program, gl::VERTEX_SHADER, red_index, 256, &mut length, name.as_mut_ptr() as *mut gl::types::GLchar);
                 }
-                let loc = gl::GetSubroutineUniformLocation(
-                    program,
-                    gl::VERTEX_SHADER,
-                    b"getColor\0".as_ptr() as *const gl::types::GLchar,
-                );
+                let loc = gl::GetSubroutineUniformLocation(program, gl::VERTEX_SHADER, b"getColor\0".as_ptr() as *const gl::types::GLchar);
                 if loc >= 0 {
                     let mut num_compat = 0;
-                    gl::GetActiveSubroutineUniformiv(
-                        program,
-                        gl::VERTEX_SHADER,
-                        loc as u32,
-                        gl::NUM_COMPATIBLE_SUBROUTINES,
-                        &mut num_compat,
-                    );
+                    gl::GetActiveSubroutineUniformiv(program, gl::VERTEX_SHADER, loc as u32, gl::NUM_COMPATIBLE_SUBROUTINES, &mut num_compat);
                     if num_compat > 0 {
-                        gl::GetActiveSubroutineUniformName(
-                            program,
-                            gl::VERTEX_SHADER,
-                            loc as u32,
-                            256,
-                            &mut length,
-                            name.as_mut_ptr() as *mut gl::types::GLchar,
-                        );
+                        gl::GetActiveSubroutineUniformName(program, gl::VERTEX_SHADER, loc as u32, 256, &mut length, name.as_mut_ptr() as *mut gl::types::GLchar);
                     }
                 }
                 if red_index != gl::INVALID_INDEX {
                     gl::UniformSubroutinesuiv(gl::VERTEX_SHADER, 1, &red_index);
                 }
             }
-            let cmd = [
-                3u32, 1, 0, 0, 0,
-            ];
+            let cmd = [3u32, 1, 0, 0, 0];
             let mut cmd_buffer = 0;
             gl::GenBuffers(1, &mut cmd_buffer);
             gl::BindBuffer(gl::DRAW_INDIRECT_BUFFER, cmd_buffer);
@@ -146,12 +116,7 @@ impl GLTest for GL40TransformFeedbackTest {
             gl::Uniform4dv(0, 1, [1.0f64, 2.0, 3.0, 4.0].as_ptr());
             let mat2d: [f64; 4] = [1.0, 0.0, 0.0, 1.0];
             let mat3d: [f64; 9] = [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0];
-            let mat4d: [f64; 16] = [
-                1.0, 0.0, 0.0, 0.0,
-                0.0, 1.0, 0.0, 0.0,
-                0.0, 0.0, 1.0, 0.0,
-                0.0, 0.0, 0.0, 1.0,
-            ];
+            let mat4d: [f64; 16] = [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0];
             let mat2x3d: [f64; 6] = [1.0, 0.0, 0.0, 1.0, 0.0, 0.0];
             let mat2x4d: [f64; 8] = [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0];
             let mat3x2d: [f64; 6] = [1.0, 0.0, 0.0, 1.0, 0.0, 0.0];

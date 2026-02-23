@@ -77,12 +77,7 @@ impl GLTest for GL41ProgramUniformsTest {
             gl::ProgramUniformMatrix2fv(program, 0, 1, gl::FALSE, mat2.as_ptr());
             let mat3: [f32; 9] = [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0];
             gl::ProgramUniformMatrix3fv(program, 0, 1, gl::FALSE, mat3.as_ptr());
-            let mat4: [f32; 16] = [
-                1.0, 0.0, 0.0, 0.0,
-                0.0, 1.0, 0.0, 0.0,
-                0.0, 0.0, 1.0, 0.0,
-                0.0, 0.0, 0.0, 1.0,
-            ];
+            let mat4: [f32; 16] = [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0];
             gl::ProgramUniformMatrix4fv(program, 0, 1, gl::FALSE, mat4.as_ptr());
             let mat2x3: [f32; 6] = [1.0, 0.0, 0.0, 1.0, 0.0, 0.0];
             gl::ProgramUniformMatrix2x3fv(program, 0, 1, gl::FALSE, mat2x3.as_ptr());
@@ -100,12 +95,7 @@ impl GLTest for GL41ProgramUniformsTest {
             gl::ProgramUniformMatrix2dv(program, 0, 1, gl::FALSE, mat2d.as_ptr());
             let mat3d: [f64; 9] = [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0];
             gl::ProgramUniformMatrix3dv(program, 0, 1, gl::FALSE, mat3d.as_ptr());
-            let mat4d: [f64; 16] = [
-                1.0, 0.0, 0.0, 0.0,
-                0.0, 1.0, 0.0, 0.0,
-                0.0, 0.0, 1.0, 0.0,
-                0.0, 0.0, 0.0, 1.0,
-            ];
+            let mat4d: [f64; 16] = [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0];
             gl::ProgramUniformMatrix4dv(program, 0, 1, gl::FALSE, mat4d.as_ptr());
             let mat2x3d: [f64; 6] = [1.0, 0.0, 0.0, 1.0, 0.0, 0.0];
             gl::ProgramUniformMatrix2x3dv(program, 0, 1, gl::FALSE, mat2x3d.as_ptr());
@@ -125,13 +115,7 @@ impl GLTest for GL41ProgramUniformsTest {
                 let mut binary: Vec<u8> = vec![0; binary_length as usize];
                 let mut actual_length = 0;
                 let mut binary_format = 0;
-                gl::GetProgramBinary(
-                    program,
-                    binary_length,
-                    &mut actual_length,
-                    &mut binary_format,
-                    binary.as_mut_ptr() as *mut _,
-                );
+                gl::GetProgramBinary(program, binary_length, &mut actual_length, &mut binary_format, binary.as_mut_ptr() as *mut _);
                 if actual_length > 0 {
                     let new_program = gl::CreateProgram();
                     gl::ProgramBinary(new_program, binary_format, binary.as_ptr() as *const _, actual_length);
@@ -181,12 +165,7 @@ impl GLTest for GL41ProgramUniformsTest {
                 if log_length > 0 {
                     let mut log: Vec<u8> = vec![0; log_length as usize];
                     let mut actual_length = 0;
-                    gl::GetProgramPipelineInfoLog(
-                        pipeline,
-                        log_length,
-                        &mut actual_length,
-                        log.as_mut_ptr() as *mut gl::types::GLchar,
-                    );
+                    gl::GetProgramPipelineInfoLog(pipeline, log_length, &mut actual_length, log.as_mut_ptr() as *mut gl::types::GLchar);
                 }
                 gl::DeleteProgramPipelines(1, &pipeline);
             }

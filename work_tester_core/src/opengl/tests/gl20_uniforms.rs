@@ -124,12 +124,7 @@ impl GLTest for GL20UniformsTest {
             }
             let loc_mat4 = gl::GetUniformLocation(program, b"uMat4\0".as_ptr() as *const gl::types::GLchar);
             if loc_mat4 >= 0 {
-                let mat4: [f32; 16] = [
-                    1.0, 0.0, 0.0, 0.0,
-                    0.0, 1.0, 0.0, 0.0,
-                    0.0, 0.0, 1.0, 0.0,
-                    0.0, 0.0, 0.0, 1.0,
-                ];
+                let mat4: [f32; 16] = [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0];
                 gl::UniformMatrix4fv(loc_mat4, 1, gl::FALSE, mat4.as_ptr());
             }
             let mut num_active_attribs = 0;

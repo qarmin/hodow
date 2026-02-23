@@ -68,15 +68,9 @@ impl GLTest for GL42ImageLoadStoreTest {
                 gl::DYNAMIC_DRAW,
             );
             gl::BindBufferBase(gl::ATOMIC_COUNTER_BUFFER, 0, atomic_buffer);
-            gl::DispatchCompute(256 / 16, 256 / 16, 1);
             gl::MemoryBarrier(gl::SHADER_IMAGE_ACCESS_BARRIER_BIT | gl::ATOMIC_COUNTER_BARRIER_BIT);
             let mut counter_value: u32 = 0;
-            gl::GetBufferSubData(
-                gl::ATOMIC_COUNTER_BUFFER,
-                0,
-                std::mem::size_of::<u32>() as isize,
-                &mut counter_value as *mut u32 as *mut _,
-            );
+            gl::GetBufferSubData(gl::ATOMIC_COUNTER_BUFFER, 0, std::mem::size_of::<u32>() as isize, &mut counter_value as *mut u32 as *mut _);
             gl::BindTexture(gl::TEXTURE_2D, 0);
             gl::BindBuffer(gl::ATOMIC_COUNTER_BUFFER, 0);
             gl::BindImageTexture(0, 0, 0, gl::FALSE, 0, gl::WRITE_ONLY, gl::RGBA8);
@@ -96,15 +90,7 @@ impl GLTest for GL42ImageLoadStoreTest {
             let indices: [u32; 6] = [0, 1, 2, 2, 3, 0];
             gl::DrawElementsBaseVertex(gl::TRIANGLES, 6, gl::UNSIGNED_INT, indices.as_ptr() as *const _, 0);
             gl::DrawElementsInstancedBaseVertex(gl::TRIANGLES, 6, gl::UNSIGNED_INT, indices.as_ptr() as *const _, 2, 0);
-            gl::DrawElementsInstancedBaseVertexBaseInstance(
-                gl::TRIANGLES,
-                6,
-                gl::UNSIGNED_INT,
-                indices.as_ptr() as *const _,
-                2,
-                0,
-                0,
-            );
+            gl::DrawElementsInstancedBaseVertexBaseInstance(gl::TRIANGLES, 6, gl::UNSIGNED_INT, indices.as_ptr() as *const _, 2, 0, 0);
             Ok(format!("GL 4.2 image load/store with noise pattern generated (counter: {})", counter_value))
         }
     }

@@ -131,12 +131,7 @@ impl GLTest for GL30AdvancedTest {
             gl::FramebufferTexture3D(gl::FRAMEBUFFER, gl::COLOR_ATTACHMENT0, gl::TEXTURE_3D, texture3d, 0, 0);
             gl::FramebufferTextureLayer(gl::FRAMEBUFFER, gl::COLOR_ATTACHMENT0, texture3d, 0, 5);
             let mut params = 0;
-            gl::GetFramebufferAttachmentParameteriv(
-                gl::FRAMEBUFFER,
-                gl::COLOR_ATTACHMENT0,
-                gl::FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE,
-                &mut params,
-            );
+            gl::GetFramebufferAttachmentParameteriv(gl::FRAMEBUFFER, gl::COLOR_ATTACHMENT0, gl::FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE, &mut params);
             let mut rbo = 0;
             gl::GenRenderbuffers(1, &mut rbo);
             gl::BindRenderbuffer(gl::RENDERBUFFER, rbo);

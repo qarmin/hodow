@@ -59,13 +59,7 @@ impl GLTest for GL31UniformBlocksTest {
                 if name_len > 0 {
                     let mut name: Vec<u8> = vec![0; name_len as usize];
                     let mut actual_len = 0;
-                    gl::GetActiveUniformBlockName(
-                        program,
-                        block_index,
-                        name_len,
-                        &mut actual_len,
-                        name.as_mut_ptr() as *mut gl::types::GLchar,
-                    );
+                    gl::GetActiveUniformBlockName(program, block_index, name_len, &mut actual_len, name.as_mut_ptr() as *mut gl::types::GLchar);
                 }
                 let mut num_uniforms = 0;
                 gl::GetActiveUniformBlockiv(program, block_index, gl::UNIFORM_BLOCK_ACTIVE_UNIFORMS, &mut num_uniforms);

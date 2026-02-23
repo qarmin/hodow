@@ -75,18 +75,12 @@ impl GLTest for GL45DSAExtendedTest {
             gl::GetNamedFramebufferParameteriv(fbo, gl::FRAMEBUFFER_DEFAULT_WIDTH, &mut fbo_param);
             let mut attach_param = 0;
             gl::GetNamedFramebufferAttachmentParameteriv(fbo, gl::COLOR_ATTACHMENT0, gl::FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE, &mut attach_param);
-            let status = gl::CheckNamedFramebufferStatus(fbo, gl::FRAMEBUFFER);
+            let _status = gl::CheckNamedFramebufferStatus(fbo, gl::FRAMEBUFFER);
             gl::ClearNamedFramebufferiv(fbo, gl::COLOR, 0, [0i32, 0, 0, 255].as_ptr());
             gl::ClearNamedFramebufferuiv(fbo, gl::COLOR, 0, [0u32, 0, 0, 255].as_ptr());
             gl::ClearNamedFramebufferfv(fbo, gl::COLOR, 0, [0.0f32, 0.0, 0.0, 1.0].as_ptr());
             gl::ClearNamedFramebufferfi(fbo, gl::DEPTH_STENCIL, 0, 1.0, 0);
-            gl::BlitNamedFramebuffer(
-                fbo, 0,
-                0, 0, 512, 512,
-                0, 0, 512, 512,
-                gl::COLOR_BUFFER_BIT,
-                gl::NEAREST,
-            );
+            gl::BlitNamedFramebuffer(fbo, 0, 0, 0, 512, 512, 0, 0, 512, 512, gl::COLOR_BUFFER_BIT, gl::NEAREST);
             gl::InvalidateNamedFramebufferData(fbo, 1, [gl::COLOR_ATTACHMENT0].as_ptr());
             gl::InvalidateNamedFramebufferSubData(fbo, 1, [gl::COLOR_ATTACHMENT0].as_ptr(), 0, 0, 256, 256);
             let mut texture1d = 0;
@@ -116,7 +110,11 @@ impl GLTest for GL45DSAExtendedTest {
             gl::TextureParameterf(texture2d, gl::TEXTURE_MIN_FILTER, gl::LINEAR as f32);
             gl::TextureParameterfv(texture2d, gl::TEXTURE_BORDER_COLOR, [0.0f32, 0.0, 0.0, 1.0].as_ptr());
             gl::TextureParameteri(texture2d, gl::TEXTURE_MAG_FILTER, gl::LINEAR as i32);
-            gl::TextureParameteriv(texture2d, gl::TEXTURE_SWIZZLE_RGBA, [gl::RED as i32, gl::GREEN as i32, gl::BLUE as i32, gl::ALPHA as i32].as_ptr());
+            gl::TextureParameteriv(
+                texture2d,
+                gl::TEXTURE_SWIZZLE_RGBA,
+                [gl::RED as i32, gl::GREEN as i32, gl::BLUE as i32, gl::ALPHA as i32].as_ptr(),
+            );
             gl::TextureParameterIiv(texture2d, gl::TEXTURE_BORDER_COLOR, [0i32, 0, 0, 255].as_ptr());
             gl::TextureParameterIuiv(texture2d, gl::TEXTURE_BORDER_COLOR, [0u32, 0, 0, 255].as_ptr());
             let mut tex_param_f = 0.0f32;
@@ -160,7 +158,11 @@ impl GLTest for GL45DSAExtendedTest {
             gl::SamplerParameterf(sampler, gl::TEXTURE_MIN_FILTER, gl::LINEAR as f32);
             gl::SamplerParameterfv(sampler, gl::TEXTURE_BORDER_COLOR, [0.0f32, 0.0, 0.0, 1.0].as_ptr());
             gl::SamplerParameteri(sampler, gl::TEXTURE_MAG_FILTER, gl::LINEAR as i32);
-            gl::SamplerParameteriv(sampler, gl::TEXTURE_SWIZZLE_RGBA, [gl::RED as i32, gl::GREEN as i32, gl::BLUE as i32, gl::ALPHA as i32].as_ptr());
+            gl::SamplerParameteriv(
+                sampler,
+                gl::TEXTURE_SWIZZLE_RGBA,
+                [gl::RED as i32, gl::GREEN as i32, gl::BLUE as i32, gl::ALPHA as i32].as_ptr(),
+            );
             gl::SamplerParameterIiv(sampler, gl::TEXTURE_BORDER_COLOR, [0i32, 0, 0, 255].as_ptr());
             gl::SamplerParameterIuiv(sampler, gl::TEXTURE_BORDER_COLOR, [0u32, 0, 0, 255].as_ptr());
             let mut queries: [u32; 2] = [0; 2];
@@ -192,10 +194,23 @@ impl GLTest for GL45DSAExtendedTest {
             gl::GetTransformFeedbacki64_v(tfs[0], gl::TRANSFORM_FEEDBACK_BUFFER_START, 0, &mut tf_param64);
             gl::DeleteTransformFeedbacks(2, tfs.as_ptr());
             let mut sub_image: Vec<u8> = vec![0; 32 * 32 * 4];
-            gl::GetTextureSubImage(texture2d, 0, 0, 0, 0, 32, 32, 1, gl::RGBA, gl::UNSIGNED_BYTE, sub_image.len() as i32, sub_image.as_mut_ptr() as *mut _);
+            gl::GetTextureSubImage(
+                texture2d,
+                0,
+                0,
+                0,
+                0,
+                32,
+                32,
+                1,
+                gl::RGBA,
+                gl::UNSIGNED_BYTE,
+                sub_image.len() as i32,
+                sub_image.as_mut_ptr() as *mut _,
+            );
             gl::GetCompressedTextureSubImage(texture2d, 0, 0, 0, 0, 32, 32, 1, sub_image.len() as i32, sub_image.as_mut_ptr() as *mut _);
-            let mut buffer_ptr: *mut std::ffi::c_void = std::ptr::null_mut();
-            gl::GetNamedBufferPointerv(buffer, gl::BUFFER_MAP_POINTER, &mut buffer_ptr);
+            let buffer_ptr: *mut std::ffi::c_void = std::ptr::null_mut();
+            gl::GetNamedBufferPointerv(buffer, gl::BUFFER_MAP_POINTER, &buffer_ptr);
             gl::NamedFramebufferParameteri(fbo, gl::FRAMEBUFFER_DEFAULT_WIDTH, 512);
             gl::TextureBuffer(texture, gl::RGBA8, buffer);
             gl::TextureBufferRange(texture, gl::RGBA8, buffer, 0, 512);
@@ -209,7 +224,16 @@ impl GLTest for GL45DSAExtendedTest {
             gl::GetnUniformdv(0, 0, 256, getsn_data.as_mut_ptr() as *mut f64);
             gl::GetnColorTable(COLOR_TABLE, gl::RGBA, gl::UNSIGNED_BYTE, 256, getsn_data.as_mut_ptr() as *mut _);
             gl::GetnConvolutionFilter(CONVOLUTION_1D, gl::RGBA, gl::UNSIGNED_BYTE, 256, getsn_data.as_mut_ptr() as *mut _);
-            gl::GetnSeparableFilter(SEPARABLE_2D, gl::RGBA, gl::UNSIGNED_BYTE, 256, getsn_data.as_mut_ptr() as *mut _, 256, getsn_data.as_mut_ptr() as *mut _, std::ptr::null_mut());
+            gl::GetnSeparableFilter(
+                SEPARABLE_2D,
+                gl::RGBA,
+                gl::UNSIGNED_BYTE,
+                256,
+                getsn_data.as_mut_ptr() as *mut _,
+                256,
+                getsn_data.as_mut_ptr() as *mut _,
+                std::ptr::null_mut(),
+            );
             gl::GetnHistogram(HISTOGRAM, gl::FALSE, gl::RGBA, gl::UNSIGNED_BYTE, 256, getsn_data.as_mut_ptr() as *mut _);
             gl::GetnMinmax(MINMAX, gl::FALSE, gl::RGBA, gl::UNSIGNED_BYTE, 256, getsn_data.as_mut_ptr() as *mut _);
             let mut map_data: [f32; 64] = [0.0; 64];

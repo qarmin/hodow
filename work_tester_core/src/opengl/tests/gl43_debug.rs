@@ -17,14 +17,7 @@ impl GLTest for GL43DebugTest {
 
     fn run(&self) -> Result<String, Box<dyn Error>> {
         unsafe {
-            gl::DebugMessageControl(
-                gl::DONT_CARE,
-                gl::DONT_CARE,
-                gl::DONT_CARE,
-                0,
-                std::ptr::null(),
-                gl::TRUE,
-            );
+            gl::DebugMessageControl(gl::DONT_CARE, gl::DONT_CARE, gl::DONT_CARE, 0, std::ptr::null(), gl::TRUE);
             gl::DebugMessageInsert(
                 gl::DEBUG_SOURCE_APPLICATION,
                 gl::DEBUG_TYPE_MARKER,
@@ -53,38 +46,13 @@ impl GLTest for GL43DebugTest {
             gl::GenBuffers(1, &mut buffer);
             gl::BindBuffer(gl::UNIFORM_BUFFER, buffer);
             gl::BufferData(gl::UNIFORM_BUFFER, 1024, std::ptr::null(), gl::STATIC_DRAW);
-            gl::ObjectLabel(
-                gl::BUFFER,
-                buffer,
-                -1,
-                b"TestBuffer\0".as_ptr() as *const gl::types::GLchar,
-            );
+            gl::ObjectLabel(gl::BUFFER, buffer, -1, b"TestBuffer\0".as_ptr() as *const gl::types::GLchar);
             let mut label: [u8; 256] = [0; 256];
             let mut length = 0;
-            gl::GetObjectLabel(
-                gl::BUFFER,
-                buffer,
-                256,
-                &mut length,
-                label.as_mut_ptr() as *mut gl::types::GLchar,
-            );
+            gl::GetObjectLabel(gl::BUFFER, buffer, 256, &mut length, label.as_mut_ptr() as *mut gl::types::GLchar);
             let clear_data: [u8; 4] = [128, 64, 32, 255];
-            gl::ClearBufferData(
-                gl::UNIFORM_BUFFER,
-                gl::RGBA8,
-                gl::RGBA,
-                gl::UNSIGNED_BYTE,
-                clear_data.as_ptr() as *const _,
-            );
-            gl::ClearBufferSubData(
-                gl::UNIFORM_BUFFER,
-                gl::RGBA8,
-                0,
-                256,
-                gl::RGBA,
-                gl::UNSIGNED_BYTE,
-                clear_data.as_ptr() as *const _,
-            );
+            gl::ClearBufferData(gl::UNIFORM_BUFFER, gl::RGBA8, gl::RGBA, gl::UNSIGNED_BYTE, clear_data.as_ptr() as *const _);
+            gl::ClearBufferSubData(gl::UNIFORM_BUFFER, gl::RGBA8, 0, 256, gl::RGBA, gl::UNSIGNED_BYTE, clear_data.as_ptr() as *const _);
             gl::BindBuffer(gl::UNIFORM_BUFFER, 0);
             let mut vbo = 0;
             gl::GenBuffers(1, &mut vbo);
@@ -97,40 +65,10 @@ impl GLTest for GL43DebugTest {
             gl::GenTextures(1, &mut texture1);
             gl::GenTextures(1, &mut texture2);
             gl::BindTexture(gl::TEXTURE_2D, texture1);
-            gl::TexImage2D(
-                gl::TEXTURE_2D,
-                0,
-                gl::RGBA8 as i32,
-                64,
-                64,
-                0,
-                gl::RGBA,
-                gl::UNSIGNED_BYTE,
-                std::ptr::null(),
-            );
+            gl::TexImage2D(gl::TEXTURE_2D, 0, gl::RGBA8 as i32, 64, 64, 0, gl::RGBA, gl::UNSIGNED_BYTE, std::ptr::null());
             gl::BindTexture(gl::TEXTURE_2D, texture2);
-            gl::TexImage2D(
-                gl::TEXTURE_2D,
-                0,
-                gl::RGBA8 as i32,
-                64,
-                64,
-                0,
-                gl::RGBA,
-                gl::UNSIGNED_BYTE,
-                std::ptr::null(),
-            );
-            gl::CopyImageSubData(
-                texture1,
-                gl::TEXTURE_2D,
-                0,
-                0, 0, 0,
-                texture2,
-                gl::TEXTURE_2D,
-                0,
-                0, 0, 0,
-                32, 32, 1,
-            );
+            gl::TexImage2D(gl::TEXTURE_2D, 0, gl::RGBA8 as i32, 64, 64, 0, gl::RGBA, gl::UNSIGNED_BYTE, std::ptr::null());
+            gl::CopyImageSubData(texture1, gl::TEXTURE_2D, 0, 0, 0, 0, texture2, gl::TEXTURE_2D, 0, 0, 0, 0, 32, 32, 1);
             gl::BindTexture(gl::TEXTURE_2D, 0);
             let vs_source = b"
                 #version 430
@@ -146,52 +84,19 @@ impl GLTest for GL43DebugTest {
             gl::AttachShader(program, vs);
             gl::LinkProgram(program);
             let mut num_active = 0;
-            gl::GetProgramInterfaceiv(
-                program,
-                gl::PROGRAM_INPUT,
-                gl::ACTIVE_RESOURCES,
-                &mut num_active,
-            );
-            let index = gl::GetProgramResourceIndex(
-                program,
-                gl::PROGRAM_INPUT,
-                b"position\0".as_ptr() as *const gl::types::GLchar,
-            );
+            gl::GetProgramInterfaceiv(program, gl::PROGRAM_INPUT, gl::ACTIVE_RESOURCES, &mut num_active);
+            let index = gl::GetProgramResourceIndex(program, gl::PROGRAM_INPUT, b"position\0".as_ptr() as *const gl::types::GLchar);
             if index != gl::INVALID_INDEX {
                 let props = [gl::TYPE, gl::LOCATION];
                 let mut values: [i32; 2] = [0; 2];
                 let mut written = 0;
-                gl::GetProgramResourceiv(
-                    program,
-                    gl::PROGRAM_INPUT,
-                    index,
-                    2,
-                    props.as_ptr(),
-                    2,
-                    &mut written,
-                    values.as_mut_ptr(),
-                );
+                gl::GetProgramResourceiv(program, gl::PROGRAM_INPUT, index, 2, props.as_ptr(), 2, &mut written, values.as_mut_ptr());
             }
-            let _location = gl::GetProgramResourceLocation(
-                program,
-                gl::PROGRAM_INPUT,
-                b"position\0".as_ptr() as *const gl::types::GLchar,
-            );
-            let _location_index = gl::GetProgramResourceLocationIndex(
-                program,
-                gl::PROGRAM_OUTPUT,
-                b"FragColor\0".as_ptr() as *const gl::types::GLchar,
-            );
+            let _location = gl::GetProgramResourceLocation(program, gl::PROGRAM_INPUT, b"position\0".as_ptr() as *const gl::types::GLchar);
+            let _location_index = gl::GetProgramResourceLocationIndex(program, gl::PROGRAM_OUTPUT, b"FragColor\0".as_ptr() as *const gl::types::GLchar);
             let mut name: [u8; 256] = [0; 256];
             if index != gl::INVALID_INDEX {
-                gl::GetProgramResourceName(
-                    program,
-                    gl::PROGRAM_INPUT,
-                    index,
-                    256,
-                    &mut length,
-                    name.as_mut_ptr() as *mut gl::types::GLchar,
-                );
+                gl::GetProgramResourceName(program, gl::PROGRAM_INPUT, index, 256, &mut length, name.as_mut_ptr() as *mut gl::types::GLchar);
             }
             let mut fbo = 0;
             gl::GenFramebuffers(1, &mut fbo);
@@ -199,20 +104,10 @@ impl GLTest for GL43DebugTest {
             gl::FramebufferParameteri(gl::FRAMEBUFFER, gl::FRAMEBUFFER_DEFAULT_WIDTH, 512);
             gl::FramebufferParameteri(gl::FRAMEBUFFER, gl::FRAMEBUFFER_DEFAULT_HEIGHT, 512);
             let mut param_value = 0;
-            gl::GetFramebufferParameteriv(
-                gl::FRAMEBUFFER,
-                gl::FRAMEBUFFER_DEFAULT_WIDTH,
-                &mut param_value,
-            );
+            gl::GetFramebufferParameteriv(gl::FRAMEBUFFER, gl::FRAMEBUFFER_DEFAULT_WIDTH, &mut param_value);
             gl::BindFramebuffer(gl::FRAMEBUFFER, 0);
             let mut formats: [i64; 10] = [0; 10];
-            gl::GetInternalformati64v(
-                gl::TEXTURE_2D,
-                gl::RGBA8,
-                gl::NUM_SAMPLE_COUNTS,
-                10,
-                formats.as_mut_ptr(),
-            );
+            gl::GetInternalformati64v(gl::TEXTURE_2D, gl::RGBA8, gl::NUM_SAMPLE_COUNTS, 10, formats.as_mut_ptr());
             gl::InvalidateBufferData(buffer);
             gl::InvalidateBufferSubData(buffer, 0, 256);
             let mut tbo = 0;
@@ -250,7 +145,8 @@ impl GLTest for GL43DebugTest {
                 _length: i32,
                 _message: *const gl::types::GLchar,
                 _user_param: *mut std::ffi::c_void,
-            ) {}
+            ) {
+            }
             gl::DebugMessageCallback(Some(debug_callback), std::ptr::null_mut());
             let test_ptr: i32 = 42;
             let ptr_addr = &test_ptr as *const i32 as *const std::ffi::c_void;

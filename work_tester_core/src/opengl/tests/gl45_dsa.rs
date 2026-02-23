@@ -44,23 +44,13 @@ impl GLTest for GL45DSATest {
             gl::AttachShader(program, fs);
             gl::LinkProgram(program);
             gl::UseProgram(program);
-            let vertices: [f32; 20] = [
-                -1.0, -1.0,  1.0, 0.0, 0.0,
-                 1.0, -1.0,  0.0, 1.0, 0.0,
-                 1.0,  1.0,  0.0, 0.0, 1.0,
-                -1.0,  1.0,  1.0, 1.0, 0.0,
-            ];
+            let vertices: [f32; 20] = [-1.0, -1.0, 1.0, 0.0, 0.0, 1.0, -1.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, -1.0, 1.0, 1.0, 1.0, 0.0];
             let indices: [u32; 6] = [0, 1, 2, 2, 3, 0];
             let mut vao = 0;
             gl::CreateVertexArrays(1, &mut vao);
             let mut vbo = 0;
             gl::CreateBuffers(1, &mut vbo);
-            gl::NamedBufferData(
-                vbo,
-                (vertices.len() * std::mem::size_of::<f32>()) as isize,
-                vertices.as_ptr() as *const _,
-                gl::STATIC_DRAW,
-            );
+            gl::NamedBufferData(vbo, (vertices.len() * std::mem::size_of::<f32>()) as isize, vertices.as_ptr() as *const _, gl::STATIC_DRAW);
             gl::NamedBufferStorage(
                 vbo,
                 (vertices.len() * std::mem::size_of::<f32>()) as isize,
@@ -69,12 +59,7 @@ impl GLTest for GL45DSATest {
             );
             let mut ebo = 0;
             gl::CreateBuffers(1, &mut ebo);
-            gl::NamedBufferData(
-                ebo,
-                (indices.len() * std::mem::size_of::<u32>()) as isize,
-                indices.as_ptr() as *const _,
-                gl::STATIC_DRAW,
-            );
+            gl::NamedBufferData(ebo, (indices.len() * std::mem::size_of::<u32>()) as isize, indices.as_ptr() as *const _, gl::STATIC_DRAW);
             gl::VertexArrayVertexBuffer(vao, 0, vbo, 0, 20);
             gl::VertexArrayElementBuffer(vao, ebo);
             gl::EnableVertexArrayAttrib(vao, 0);
@@ -102,17 +87,7 @@ impl GLTest for GL45DSATest {
                     }
                 })
                 .collect();
-            gl::TextureSubImage2D(
-                texture,
-                0,
-                0,
-                0,
-                512,
-                512,
-                gl::RGBA,
-                gl::UNSIGNED_BYTE,
-                pixels.as_ptr() as *const _,
-            );
+            gl::TextureSubImage2D(texture, 0, 0, 0, 512, 512, gl::RGBA, gl::UNSIGNED_BYTE, pixels.as_ptr() as *const _);
             gl::GenerateTextureMipmap(texture);
             gl::BindTextureUnit(0, texture);
             let mut fbo = 0;
@@ -130,20 +105,7 @@ impl GLTest for GL45DSATest {
             gl::ClearNamedFramebufferfv(fbo, gl::COLOR, 0, [0.2, 0.3, 0.4, 1.0].as_ptr());
             gl::ClearNamedFramebufferfi(fbo, gl::DEPTH_STENCIL, 0, 1.0, 0);
             gl::InvalidateNamedFramebufferData(fbo, 1, [gl::COLOR_ATTACHMENT0].as_ptr());
-            gl::BlitNamedFramebuffer(
-                fbo,
-                0,
-                0,
-                0,
-                512,
-                512,
-                0,
-                0,
-                512,
-                512,
-                gl::COLOR_BUFFER_BIT,
-                gl::LINEAR,
-            );
+            gl::BlitNamedFramebuffer(fbo, 0, 0, 0, 512, 512, 0, 0, 512, 512, gl::COLOR_BUFFER_BIT, gl::LINEAR);
             gl::BindVertexArray(vao);
             gl::ClearColor(0.2, 0.25, 0.3, 1.0);
             gl::Clear(gl::COLOR_BUFFER_BIT);

@@ -45,15 +45,30 @@ impl GLTest for GL30VBOTest {
             let vs = gl::CreateShader(gl::VERTEX_SHADER);
             gl::ShaderSource(vs, 1, &vs_src.as_ptr(), std::ptr::null());
             gl::CompileShader(vs);
+            let mut vs_status = 0;
+            gl::GetShaderiv(vs, gl::COMPILE_STATUS, &mut vs_status);
+            if vs_status == 0 {
+                return Err("Vertex shader compilation failed".into());
+            }
 
             let fs = gl::CreateShader(gl::FRAGMENT_SHADER);
             gl::ShaderSource(fs, 1, &fs_src.as_ptr(), std::ptr::null());
             gl::CompileShader(fs);
+            let mut fs_status = 0;
+            gl::GetShaderiv(fs, gl::COMPILE_STATUS, &mut fs_status);
+            if fs_status == 0 {
+                return Err("Fragment shader compilation failed".into());
+            }
 
             let program = gl::CreateProgram();
             gl::AttachShader(program, vs);
             gl::AttachShader(program, fs);
             gl::LinkProgram(program);
+            let mut link_status = 0;
+            gl::GetProgramiv(program, gl::LINK_STATUS, &mut link_status);
+            if link_status == 0 {
+                return Err("Program linking failed".into());
+            }
             gl::UseProgram(program);
 
             // Test glGenBuffers
@@ -85,14 +100,29 @@ impl GLTest for GL30VBOTest {
                 return Err(format!("Buffer size check failed: expected {}, got {}", expected_size, size).into());
             }
 
+            // Clear any previous errors
+            while gl::GetError() != gl::NO_ERROR {}
+
             // Setup VAO (required for core profile)
             let mut vao = 0u32;
             gl::GenVertexArrays(1, &mut vao);
             gl::BindVertexArray(vao);
 
+            // Re-bind buffer after VAO binding (required for VAO to track the buffer)
+            gl::BindBuffer(gl::ARRAY_BUFFER, vbo);
+
             let pos_attr = gl::GetAttribLocation(program, CString::new("position")?.as_ptr());
+            if pos_attr < 0 {
+                return Err("Could not find 'position' attribute".into());
+            }
             gl::EnableVertexAttribArray(pos_attr as u32);
             gl::VertexAttribPointer(pos_attr as u32, 3, gl::FLOAT, gl::FALSE, 3 * std::mem::size_of::<f32>() as i32, std::ptr::null());
+
+            // Check for errors after setup
+            let setup_err = gl::GetError();
+            if setup_err != gl::NO_ERROR {
+                return Err(format!("OpenGL error after VAO setup: 0x{:X}", setup_err).into());
+            }
 
             // Render loop with animated glBufferSubData
             let start = std::time::Instant::now();

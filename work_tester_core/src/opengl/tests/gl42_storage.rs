@@ -31,14 +31,7 @@ impl GLTest for GL42StorageTest {
             gl::GetInternalformativ(gl::TEXTURE_2D, gl::RGBA8, gl::NUM_SAMPLE_COUNTS, 10, formats.as_mut_ptr());
             let indices: [u32; 6] = [0, 1, 2, 2, 3, 0];
             gl::DrawArraysInstancedBaseInstance(gl::TRIANGLES, 0, 3, 4, 0);
-            gl::DrawElementsInstancedBaseInstance(
-                gl::TRIANGLES,
-                6,
-                gl::UNSIGNED_INT,
-                indices.as_ptr() as *const _,
-                4,
-                0,
-            );
+            gl::DrawElementsInstancedBaseInstance(gl::TRIANGLES, 6, gl::UNSIGNED_INT, indices.as_ptr() as *const _, 4, 0);
             let mut tfs: [u32; 2] = [0; 2];
             gl::GenTransformFeedbacks(2, tfs.as_mut_ptr());
             gl::BindTransformFeedback(gl::TRANSFORM_FEEDBACK, tfs[0]);

@@ -82,22 +82,14 @@ impl GLTest for GL20VertexAttribsTest {
             gl::VertexAttrib4fv(2, attrib_data.as_ptr());
             gl::EnableVertexAttribArray(pos_loc as u32);
             gl::EnableVertexAttribArray(color_loc as u32);
-            let vertices: [f32; 9] = [
-                0.0, 0.5, 0.0,
-                -0.5, -0.5, 0.0,
-                0.5, -0.5, 0.0,
-            ];
-            let colors: [f32; 12] = [
-                1.0, 0.0, 0.0, 1.0,
-                0.0, 1.0, 0.0, 1.0,
-                0.0, 0.0, 1.0, 1.0,
-            ];
+            let vertices: [f32; 9] = [0.0, 0.5, 0.0, -0.5, -0.5, 0.0, 0.5, -0.5, 0.0];
+            let colors: [f32; 12] = [1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0];
             gl::VertexAttribPointer(pos_loc as u32, 3, gl::FLOAT, gl::FALSE, 0, vertices.as_ptr() as *const _);
             gl::VertexAttribPointer(color_loc as u32, 4, gl::FLOAT, gl::FALSE, 0, colors.as_ptr() as *const _);
             let mut attrib_val: [f32; 4] = [0.0; 4];
             gl::GetVertexAttribfv(pos_loc as u32, gl::CURRENT_VERTEX_ATTRIB, attrib_val.as_mut_ptr());
             gl::GetVertexAttribiv(pos_loc as u32, gl::VERTEX_ATTRIB_ARRAY_ENABLED, &mut 0);
-            gl::GetVertexAttribPointerv(pos_loc as u32, gl::VERTEX_ATTRIB_ARRAY_POINTER, &mut std::ptr::null_mut());
+            gl::GetVertexAttribPointerv(pos_loc as u32, gl::VERTEX_ATTRIB_ARRAY_POINTER, &std::ptr::null_mut());
             gl::StencilFuncSeparate(gl::FRONT, gl::ALWAYS, 1, 0xFF);
             gl::StencilFuncSeparate(gl::BACK, gl::ALWAYS, 1, 0xFF);
             gl::StencilOpSeparate(gl::FRONT, gl::KEEP, gl::KEEP, gl::REPLACE);

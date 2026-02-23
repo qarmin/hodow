@@ -26,9 +26,7 @@ impl GLTest for GL43AdvancedTest {
             let mut texture_view = 0;
             gl::GenTextures(1, &mut texture_view);
             gl::TextureView(texture_view, gl::TEXTURE_2D, texture, gl::RGBA8, 0, 1, 0, 1);
-            let cmd_buffer = [
-                3u32, 1, 0, 0, 0,
-            ];
+            let cmd_buffer = [3u32, 1, 0, 0, 0];
             let mut indirect_buffer = 0;
             gl::GenBuffers(1, &mut indirect_buffer);
             gl::BindBuffer(gl::DISPATCH_INDIRECT_BUFFER, indirect_buffer);
@@ -48,9 +46,6 @@ impl GLTest for GL43AdvancedTest {
             gl::InvalidateFramebuffer(gl::FRAMEBUFFER, 1, attachments.as_ptr());
             gl::InvalidateSubFramebuffer(gl::FRAMEBUFFER, 1, attachments.as_ptr(), 0, 0, 128, 128);
             gl::BindFramebuffer(gl::FRAMEBUFFER, 0);
-            let mut pipeline = 0;
-            gl::CreateProgramPipelines(1, &mut pipeline);
-            gl::DeleteProgramPipelines(1, &pipeline);
             gl::DeleteFramebuffers(1, &fbo);
             gl::DeleteBuffers(1, &indirect_buffer);
             gl::DeleteTextures(1, &texture);

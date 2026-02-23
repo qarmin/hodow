@@ -144,6 +144,9 @@ impl GLTest for GL33VAOTest {
 
             gl::UseProgram(program);
 
+            // Clear any previous errors
+            while gl::GetError() != gl::NO_ERROR {}
+
             let vertices: [f32; 24] = [
                 -0.5, -0.5, 0.0, 1.0, 0.0, 0.0, 0.5, -0.5, 0.0, 0.0, 1.0, 0.0, 0.5, 0.5, 0.0, 0.0, 0.0, 1.0, -0.5, 0.5, 0.0, 1.0, 1.0, 0.0,
             ];
@@ -192,15 +195,15 @@ impl GLTest for GL33VAOTest {
             let mut frame_count = 0u32;
 
             while !super::should_stop_loop(start, frame_count as u64) {
-                // Clear
-                gl::Clear(gl::COLOR_BUFFER_BIT);
-
                 // Animate background color based on time (different pattern than GL20)
                 let t = start.elapsed().as_secs_f32();
                 let r = (t * 1.5).cos() * 0.5 + 0.5;
                 let g = (t * 2.5).cos() * 0.5 + 0.5;
                 let b = (t * 3.5).cos() * 0.5 + 0.5;
                 gl::ClearColor(r * 0.15, g * 0.15, b * 0.15, 1.0);
+
+                // Clear
+                gl::Clear(gl::COLOR_BUFFER_BIT);
 
                 gl::DrawElements(gl::TRIANGLES, 6, gl::UNSIGNED_INT, std::ptr::null());
                 gl::Flush();
