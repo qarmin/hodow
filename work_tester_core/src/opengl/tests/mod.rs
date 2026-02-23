@@ -45,11 +45,14 @@ pub fn should_stop_loop(start: std::time::Instant, frames: u64) -> bool {
 /// Kept for source compatibility with existing test files
 pub const TEST_DURATION: Duration = Duration::from_millis(DEFAULT_TEST_DURATION_MS);
 
+pub mod gl10_state;
 pub mod gl11_textures;
+pub mod gl12_textures3d;
 pub mod gl13_multitexture;
 pub mod gl14_blend;
 pub mod gl15_queries;
 pub mod gl20_vertex_attribs;
+pub mod gl21_matrices;
 pub mod gl21_pixelbuffers;
 pub mod gl30_fbo;
 pub mod gl30_shaders;
@@ -62,6 +65,8 @@ pub mod gl40_tessellation;
 pub mod gl41_program_pipeline;
 pub mod gl42_image_load_store;
 pub mod gl43_compute;
+pub mod gl43_debug;
+pub mod gl44_batch_bind;
 pub mod gl45_dsa;
 
 use crate::opengl::test_trait::{GLTest, GLTestResult};
@@ -69,14 +74,17 @@ use crate::opengl::test_trait::{GLTest, GLTestResult};
 /// Get all available GL tests
 pub fn all_tests() -> Vec<&'static dyn GLTest> {
     vec![
+        &gl10_state::GL10StateTest,
         &gl11_textures::GL11TexturesTest,
+        &gl12_textures3d::GL12Textures3DTest,
         &gl13_multitexture::GL13MultitextureTest,
         &gl14_blend::GL14BlendTest,
         &gl15_queries::GL15QueriesTest,
         &gl20_vertex_attribs::GL20VertexAttribsTest,
+        &gl21_matrices::GL21MatricesTest,
+        &gl21_pixelbuffers::GL21PixelBuffersTest,
         &gl30_vbo::GL30VBOTest,
         &gl30_shaders::GL30ShadersTest,
-        &gl21_pixelbuffers::GL21PixelBuffersTest,
         &gl30_fbo::GL30FBOTest,
         &gl31_ubo::GL31UBOTest,
         &gl32_sync::GL32SyncTest,
@@ -86,6 +94,8 @@ pub fn all_tests() -> Vec<&'static dyn GLTest> {
         &gl41_program_pipeline::GL41ProgramPipelineTest,
         &gl42_image_load_store::GL42ImageLoadStoreTest,
         &gl43_compute::GL43ComputeTest,
+        &gl43_debug::GL43DebugTest,
+        &gl44_batch_bind::GL44BatchBindTest,
         &gl45_dsa::GL45DSATest,
     ]
 }

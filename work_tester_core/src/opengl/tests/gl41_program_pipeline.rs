@@ -97,17 +97,18 @@ impl GLTest for GL41ProgramPipelineTest {
             gl::DeleteVertexArrays(1, &vao);
             gl::DeleteBuffers(1, &vbo);
             gl::DeleteProgramPipelines(1, &pipeline);
-            gl::DeleteProgram(vs);
-            gl::DeleteProgram(fs);
-            gl::ReleaseShaderCompiler();
             let mut binary_formats = 0;
             gl::GetIntegerv(gl::NUM_PROGRAM_BINARY_FORMATS, &mut binary_formats);
             gl::ProgramParameteri(vs, gl::PROGRAM_BINARY_RETRIEVABLE_HINT, gl::TRUE as i32);
-            gl::GetProgramBinary(vs, 0, std::ptr::null_mut(), std::ptr::null_mut(), std::ptr::null_mut());
             gl::DepthRangef(0.0, 1.0);
             gl::ClearDepthf(1.0);
-            gl::GetShaderPrecisionFormat(gl::VERTEX_SHADER, gl::HIGH_FLOAT, std::ptr::null_mut(), std::ptr::null_mut());
-            gl::GetShaderPrecisionFormat(gl::FRAGMENT_SHADER, gl::MEDIUM_INT, std::ptr::null_mut(), std::ptr::null_mut());
+            let mut range: [i32; 2] = [0; 2];
+            let mut precision = 0;
+            gl::GetShaderPrecisionFormat(gl::VERTEX_SHADER, gl::HIGH_FLOAT, range.as_mut_ptr(), &mut precision);
+            gl::GetShaderPrecisionFormat(gl::FRAGMENT_SHADER, gl::MEDIUM_INT, range.as_mut_ptr(), &mut precision);
+            gl::ReleaseShaderCompiler();
+            gl::DeleteProgram(vs);
+            gl::DeleteProgram(fs);
             Ok("GL 4.1 program pipeline with colorful triangle rendered successfully".to_string())
         }
     }
