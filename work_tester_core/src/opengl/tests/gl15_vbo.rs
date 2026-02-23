@@ -2,9 +2,6 @@
 //!
 //! GL_VERSION: 1.5
 //!
-//! Tests: glGenBuffers, glBindBuffer, glBufferData, glBufferSubData,
-//! glDeleteBuffers, glGetBufferParameteriv
-
 use std::error::Error;
 use std::ffi::CString;
 

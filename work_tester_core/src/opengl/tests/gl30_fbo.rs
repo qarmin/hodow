@@ -1,12 +1,6 @@
 //! OpenGL 3.0 Framebuffer Objects Test
 //!
 //! GL_VERSION: 3.0
-//!
-//! Tests: glGenFramebuffers, glBindFramebuffer, glFramebufferTexture2D,
-//! glCheckFramebufferStatus, glDeleteFramebuffers, glGenRenderbuffers,
-//! glBindRenderbuffer, glRenderbufferStorage, glFramebufferRenderbuffer,
-//! glDeleteRenderbuffers, glBlitFramebuffer
-
 use std::error::Error;
 
 use crate::opengl::test_trait::{GLTest, GLVersion};

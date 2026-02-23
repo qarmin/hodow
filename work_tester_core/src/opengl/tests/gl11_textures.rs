@@ -1,9 +1,6 @@
 //! OpenGL 1.1 Textures Test
 //!
 //! GL_VERSION: 1.1
-//!
-//! Tests: glGenTextures, glBindTexture, glTexImage2D, glTexParameteri,
-//! glTexParameterf, glDeleteTextures, glEnable/glDisable, glGetIntegerv
 
 use std::error::Error;
 
