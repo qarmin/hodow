@@ -25,10 +25,7 @@ pub fn process_gpu(args: &GpuArgs) {
 
         match work_tester_core::test_all_opengl(&opts) {
             Ok((run, skipped, errors)) => {
-                info!(
-                    "GL tests finished. Run: {}, Skipped: {}, Errors: {}",
-                    run, skipped, errors
-                );
+                info!("GL tests finished. Run: {}, Skipped: {}, Errors: {}", run, skipped, errors);
                 if errors > 0 {
                     error!("GL tests completed with {} error(s)", errors);
                     std::process::exit(1);
@@ -53,4 +50,3 @@ pub fn process_gpu(args: &GpuArgs) {
         std::process::exit(1);
     }
 }
-

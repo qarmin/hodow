@@ -42,7 +42,7 @@ impl GLTest for GL21PixelBuffersTest {
             let start = std::time::Instant::now();
             let mut frame_count = 0u64;
 
-            while !super::should_stop_loop(start, frame_count as u64) {
+            while !super::should_stop_loop(start, frame_count) {
                 gl::Clear(gl::COLOR_BUFFER_BIT);
 
                 let t = start.elapsed().as_secs_f32();

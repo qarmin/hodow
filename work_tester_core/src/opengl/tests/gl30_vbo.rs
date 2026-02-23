@@ -136,4 +136,3 @@ impl GLTest for GL30VBOTest {
         Ok(format!("Tested VBO functions ({} frames)", frame_count))
     }
 }
-

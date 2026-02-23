@@ -147,7 +147,6 @@ pub trait ExtensionTest {
             run += 1;
             info!("Running {}", name);
 
-
             match fun() {
                 Ok(_) => info!("{} passed", name),
                 Err(e) => {

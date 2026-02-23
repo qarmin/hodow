@@ -124,4 +124,3 @@ fn create_progress_bars() -> (MultiProgress, ProgressBar, ProgressBar, ProgressB
 
     (multi, overall_bar, feature_bar, test_bar)
 }
-

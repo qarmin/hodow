@@ -73,17 +73,11 @@ fn main() {
 
     if cli.debug {
         if !cfg!(feature = "miri_build") {
-            let config = ConfigBuilder::new()
-                .set_format_text(handsome_logger::FormatText::DefaultWithFileNameC.get(), None)
-                .build();
-            handsome_logger::TermLogger::init(config, Default::default(), Default::default())
-                .expect("Failed to initialize logger");
+            let config = ConfigBuilder::new().set_format_text(handsome_logger::FormatText::DefaultWithFileNameC.get(), None).build();
+            handsome_logger::TermLogger::init(config, Default::default(), Default::default()).expect("Failed to initialize logger");
         } else {
-            let config = ConfigBuilder::new()
-                .set_format_text(handsome_logger::FormatText::LevelMessageC.get(), None)
-                .build();
-            handsome_logger::TermLogger::init(config, Default::default(), Default::default())
-                .expect("Failed to initialize logger");
+            let config = ConfigBuilder::new().set_format_text(handsome_logger::FormatText::LevelMessageC.get(), None).build();
+            handsome_logger::TermLogger::init(config, Default::default(), Default::default()).expect("Failed to initialize logger");
         }
     }
 

@@ -11,12 +11,10 @@ use crate::opengl::GpuOptions;
 pub const DEFAULT_TEST_DURATION_MS: u64 = 1000;
 
 /// Per-test duration (atomically overridable via GpuOptions)
-pub static TEST_DURATION_MS: std::sync::atomic::AtomicU64 =
-    std::sync::atomic::AtomicU64::new(DEFAULT_TEST_DURATION_MS);
+pub static TEST_DURATION_MS: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(DEFAULT_TEST_DURATION_MS);
 
 /// Per-test frame limit; 0 = unlimited
-pub static TEST_FRAME_LIMIT: std::sync::atomic::AtomicU64 =
-    std::sync::atomic::AtomicU64::new(0);
+pub static TEST_FRAME_LIMIT: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
 
 /// Apply GpuOptions so individual tests read the correct limits
 pub fn apply_gpu_options(opts: &GpuOptions) {
@@ -49,10 +47,10 @@ pub const TEST_DURATION: Duration = Duration::from_millis(DEFAULT_TEST_DURATION_
 
 pub mod gl11_textures;
 pub mod gl13_multitexture;
-pub mod gl30_vbo;
-pub mod gl30_shaders;
 pub mod gl21_pixelbuffers;
 pub mod gl30_fbo;
+pub mod gl30_shaders;
+pub mod gl30_vbo;
 pub mod gl31_ubo;
 pub mod gl33_vao;
 pub mod gl40_tessellation;
