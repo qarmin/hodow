@@ -1,21 +1,21 @@
-//! OpenGL 1.5 VBO Test
+//! OpenGL 3.0 VBO Test
 //!
-//! GL_VERSION: 1.5
+//! GL_VERSION: 3.0
 //!
 use std::error::Error;
 use std::ffi::CString;
 
 use crate::opengl::test_trait::{GLTest, GLVersion};
 
-pub struct GL15VBOTest;
+pub struct GL30VBOTest;
 
-impl GLTest for GL15VBOTest {
+impl GLTest for GL30VBOTest {
     fn name(&self) -> &'static str {
-        "GL15_VBO"
+        "GL30_VBO"
     }
 
     fn gl_version(&self) -> GLVersion {
-        GLVersion::new(1, 5)
+        GLVersion::new(3, 0)
     }
 
     fn run(&self) -> Result<String, Box<dyn Error>> {
@@ -98,7 +98,7 @@ impl GLTest for GL15VBOTest {
             let start = std::time::Instant::now();
             let mut frame_count = 0u32;
 
-            while start.elapsed() < super::TEST_DURATION {
+            while !super::should_stop_loop(start, frame_count as u64) {
                 gl::Clear(gl::COLOR_BUFFER_BIT);
 
                 // Test glBufferSubData - animate vertex positions
@@ -136,3 +136,4 @@ impl GLTest for GL15VBOTest {
         Ok(format!("Tested VBO functions ({} frames)", frame_count))
     }
 }
+

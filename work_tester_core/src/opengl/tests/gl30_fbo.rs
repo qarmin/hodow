@@ -65,7 +65,7 @@ impl GLTest for GL30FBOTest {
             let start = std::time::Instant::now();
             let mut frame_count = 0u32;
 
-            while start.elapsed() < super::TEST_DURATION {
+            while !super::should_stop_loop(start, frame_count as u64) {
                 // Render to FBO
                 gl::BindFramebuffer(gl::FRAMEBUFFER, fbo);
                 let t = start.elapsed().as_secs_f32();

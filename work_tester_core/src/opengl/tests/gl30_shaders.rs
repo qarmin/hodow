@@ -1,13 +1,13 @@
-//! OpenGL 2.0 Shaders Test
+//! OpenGL 3.0 Shaders Test
 //!
-//! GL_VERSION: 2.0
+//! GL_VERSION: 3.0
 
 use std::error::Error;
 use std::ffi::CString;
 
 use crate::opengl::test_trait::{GLTest, GLVersion};
 
-pub struct GL20ShadersTest;
+pub struct GL30ShadersTest;
 
 // Helper to compile a shader and return (shader_id, compile_success)
 unsafe fn compile_shader(src: &CString, shader_type: u32) -> Result<u32, String> {
@@ -49,13 +49,13 @@ unsafe fn compile_shader(src: &CString, shader_type: u32) -> Result<u32, String>
     Ok(s)
 }
 
-impl GLTest for GL20ShadersTest {
+impl GLTest for GL30ShadersTest {
     fn name(&self) -> &'static str {
-        "GL20_Shaders"
+        "GL30_Shaders"
     }
 
     fn gl_version(&self) -> GLVersion {
-        GLVersion::new(2, 0)
+        GLVersion::new(3, 0)
     }
 
     fn run(&self) -> Result<String, Box<dyn Error>> {
@@ -194,7 +194,7 @@ impl GLTest for GL20ShadersTest {
 
             // Create and bind a VAO — core profiles require a VAO to be bound when
             // setting up vertex attribute pointers and drawing. This makes the
-            // GL20 test work on core-profile contexts (e.g. Mesa 4.6 core).
+            // GL30 test work on core-profile contexts (e.g. Mesa 4.6 core).
             let mut vao = 0u32;
             gl::GenVertexArrays(1, &mut vao);
             gl::BindVertexArray(vao);
@@ -247,7 +247,7 @@ impl GLTest for GL20ShadersTest {
             let start = std::time::Instant::now();
             let mut frame_count = 0u32;
 
-            while start.elapsed() < super::TEST_DURATION {
+            while !super::should_stop_loop(start, frame_count as u64) {
                 // Clear and render
                 gl::Clear(gl::COLOR_BUFFER_BIT);
 

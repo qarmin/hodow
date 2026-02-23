@@ -54,19 +54,19 @@ impl GLTest for GL40TessellationTest {
             \0";
 
             let vs = gl::CreateShader(gl::VERTEX_SHADER);
-            gl::ShaderSource(vs, 1, &(vs_src.as_ptr() as *const i8), std::ptr::null());
+            gl::ShaderSource(vs, 1, &(vs_src.as_ptr() as *const gl::types::GLchar), std::ptr::null());
             gl::CompileShader(vs);
 
             let tcs = gl::CreateShader(gl::TESS_CONTROL_SHADER);
-            gl::ShaderSource(tcs, 1, &(tcs_src.as_ptr() as *const i8), std::ptr::null());
+            gl::ShaderSource(tcs, 1, &(tcs_src.as_ptr() as *const gl::types::GLchar), std::ptr::null());
             gl::CompileShader(tcs);
 
             let tes = gl::CreateShader(gl::TESS_EVALUATION_SHADER);
-            gl::ShaderSource(tes, 1, &(tes_src.as_ptr() as *const i8), std::ptr::null());
+            gl::ShaderSource(tes, 1, &(tes_src.as_ptr() as *const gl::types::GLchar), std::ptr::null());
             gl::CompileShader(tes);
 
             let fs = gl::CreateShader(gl::FRAGMENT_SHADER);
-            gl::ShaderSource(fs, 1, &(fs_src.as_ptr() as *const i8), std::ptr::null());
+            gl::ShaderSource(fs, 1, &(fs_src.as_ptr() as *const gl::types::GLchar), std::ptr::null());
             gl::CompileShader(fs);
 
             let program = gl::CreateProgram();
@@ -93,7 +93,7 @@ impl GLTest for GL40TessellationTest {
                 gl::STATIC_DRAW,
             );
 
-            let pos_attr = gl::GetAttribLocation(program, b"position\0".as_ptr() as *const i8) as u32;
+            let pos_attr = gl::GetAttribLocation(program, b"position\0".as_ptr() as *const gl::types::GLchar) as u32;
             gl::EnableVertexAttribArray(pos_attr);
             gl::VertexAttribPointer(pos_attr, 2, gl::FLOAT, gl::FALSE, 0, std::ptr::null());
 
@@ -102,7 +102,7 @@ impl GLTest for GL40TessellationTest {
             let start = std::time::Instant::now();
             let mut frame_count = 0u64;
 
-            while start.elapsed() < super::TEST_DURATION {
+            while !super::should_stop_loop(start, frame_count as u64) {
                 gl::Clear(gl::COLOR_BUFFER_BIT);
 
                 let t = start.elapsed().as_secs_f32();

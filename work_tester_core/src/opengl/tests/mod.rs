@@ -5,16 +5,52 @@
 
 use std::time::Duration;
 
-/// Test duration in milliseconds - how long each test should render
-pub const TEST_DURATION_MS: u64 = 1000;
+use crate::opengl::GpuOptions;
 
-/// Test duration as Duration
-pub const TEST_DURATION: Duration = Duration::from_millis(TEST_DURATION_MS);
+/// Default test duration in milliseconds
+pub const DEFAULT_TEST_DURATION_MS: u64 = 1000;
+
+/// Per-test duration (atomically overridable via GpuOptions)
+pub static TEST_DURATION_MS: std::sync::atomic::AtomicU64 =
+    std::sync::atomic::AtomicU64::new(DEFAULT_TEST_DURATION_MS);
+
+/// Per-test frame limit; 0 = unlimited
+pub static TEST_FRAME_LIMIT: std::sync::atomic::AtomicU64 =
+    std::sync::atomic::AtomicU64::new(0);
+
+/// Apply GpuOptions so individual tests read the correct limits
+pub fn apply_gpu_options(opts: &GpuOptions) {
+    let ms = opts.time_limit_ms.unwrap_or(DEFAULT_TEST_DURATION_MS);
+    TEST_DURATION_MS.store(ms, std::sync::atomic::Ordering::Relaxed);
+    TEST_FRAME_LIMIT.store(opts.frame_limit.unwrap_or(0), std::sync::atomic::Ordering::Relaxed);
+}
+
+/// Current per-test Duration (reads the atomic)
+pub fn test_duration() -> Duration {
+    Duration::from_millis(TEST_DURATION_MS.load(std::sync::atomic::Ordering::Relaxed))
+}
+
+/// Current frame limit (0 = unlimited)
+pub fn frame_limit() -> u64 {
+    TEST_FRAME_LIMIT.load(std::sync::atomic::Ordering::Relaxed)
+}
+
+/// Returns true when the test loop should stop (duration elapsed OR frame limit hit)
+pub fn should_stop_loop(start: std::time::Instant, frames: u64) -> bool {
+    let fl = frame_limit();
+    if fl > 0 && frames >= fl {
+        return true;
+    }
+    start.elapsed() >= test_duration()
+}
+
+/// Kept for source compatibility with existing test files
+pub const TEST_DURATION: Duration = Duration::from_millis(DEFAULT_TEST_DURATION_MS);
 
 pub mod gl11_textures;
 pub mod gl13_multitexture;
-pub mod gl15_vbo;
-pub mod gl20_shaders;
+pub mod gl30_vbo;
+pub mod gl30_shaders;
 pub mod gl21_pixelbuffers;
 pub mod gl30_fbo;
 pub mod gl31_ubo;
@@ -29,8 +65,8 @@ pub fn all_tests() -> Vec<&'static dyn GLTest> {
     vec![
         &gl11_textures::GL11TexturesTest,
         &gl13_multitexture::GL13MultitextureTest,
-        &gl15_vbo::GL15VBOTest,
-        &gl20_shaders::GL20ShadersTest,
+        &gl30_vbo::GL30VBOTest,
+        &gl30_shaders::GL30ShadersTest,
         &gl21_pixelbuffers::GL21PixelBuffersTest,
         &gl30_fbo::GL30FBOTest,
         &gl31_ubo::GL31UBOTest,
@@ -40,10 +76,44 @@ pub fn all_tests() -> Vec<&'static dyn GLTest> {
     ]
 }
 
-/// Run all GL tests
-pub fn test_all_gl() -> GLTestResult {
+/// Run all GL tests with the provided options
+pub fn test_all_gl(opts: &crate::opengl::GpuOptions) -> GLTestResult {
+    apply_gpu_options(opts);
+
     let tests = all_tests();
     let total_tests = tests.len();
+
+    if opts.no_window {
+        // Headless: run tests directly without a windowing system
+        let mut total_run = 0usize;
+        let mut total_errors = 0usize;
+
+        // Headless mode requires an OpenGL context without a visible window.
+        // We create a surfaceless context via the existing init_opengl helper.
+        let _ctx = match crate::opengl::init_opengl() {
+            Ok(c) => c,
+            Err(e) => {
+                log::error!("Failed to create headless OpenGL context: {}", e);
+                return Ok((0, 0, total_tests));
+            }
+        };
+
+        for test in &tests {
+            log::info!("Running GL test (headless): {} (GL {})", test.name(), test.gl_version());
+            match test.run() {
+                Ok(msg) => {
+                    log::info!("GL Test '{}' passed: {}", test.name(), msg);
+                    total_run += 1;
+                }
+                Err(e) => {
+                    log::error!("GL Test '{}' failed: {}", test.name(), e);
+                    total_run += 1;
+                    total_errors += 1;
+                }
+            }
+        }
+        return Ok((total_run, 0, total_errors));
+    }
 
     let spec = crate::opengl::gui::WindowSpec {
         title: Some(format!("GL Tests ({} tests)", total_tests)),

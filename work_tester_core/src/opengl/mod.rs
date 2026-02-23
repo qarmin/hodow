@@ -14,6 +14,17 @@ pub use context::OpenGLMode;
 pub use loader::init_gl;
 pub use test_trait::{GLTest, GLTestResult, GLVersion};
 
+/// Options controlling the GPU test run
+#[derive(Debug, Clone, Default)]
+pub struct GpuOptions {
+    /// If true, run tests without creating a visible window (headless)
+    pub no_window: bool,
+    /// Per-test time limit in milliseconds (None = default 1000 ms)
+    pub time_limit_ms: Option<u64>,
+    /// Per-test frame limit (None / 0 = unlimited)
+    pub frame_limit: Option<u64>,
+}
+
 pub fn init_opengl() -> Result<OpenGLMode, Box<dyn std::error::Error>> {
     let ctx = OpenGLMode::create().map_err(|e| Box::new(e) as Box<dyn std::error::Error>)?;
     info!("Created OpenGL context");
@@ -26,8 +37,8 @@ pub fn available_opengl_modes() -> Vec<String> {
     vec!["default-headless".to_string()]
 }
 
-pub fn test_all_opengl() -> GLTestResult {
-    tests::test_all_gl()
+pub fn test_all_opengl(opts: &GpuOptions) -> GLTestResult {
+    tests::test_all_gl(opts)
 }
 
 // New GUI-related API stubs.

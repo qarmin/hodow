@@ -35,11 +35,11 @@ impl GLTest for GL31UBOTest {
             \0";
 
             let vs = gl::CreateShader(gl::VERTEX_SHADER);
-            gl::ShaderSource(vs, 1, &(vs_src.as_ptr() as *const i8), std::ptr::null());
+            gl::ShaderSource(vs, 1, &(vs_src.as_ptr() as *const gl::types::GLchar), std::ptr::null());
             gl::CompileShader(vs);
 
             let fs = gl::CreateShader(gl::FRAGMENT_SHADER);
-            gl::ShaderSource(fs, 1, &(fs_src.as_ptr() as *const i8), std::ptr::null());
+            gl::ShaderSource(fs, 1, &(fs_src.as_ptr() as *const gl::types::GLchar), std::ptr::null());
             gl::CompileShader(fs);
 
             let program = gl::CreateProgram();
@@ -48,7 +48,7 @@ impl GLTest for GL31UBOTest {
             gl::LinkProgram(program);
             gl::UseProgram(program);
 
-            let block_index = gl::GetUniformBlockIndex(program, b"ColorBlock\0".as_ptr() as *const i8);
+            let block_index = gl::GetUniformBlockIndex(program, b"ColorBlock\0".as_ptr() as *const gl::types::GLchar);
             gl::UniformBlockBinding(program, block_index, 0);
 
             let mut ubo = 0u32;
@@ -73,14 +73,14 @@ impl GLTest for GL31UBOTest {
                 gl::STATIC_DRAW,
             );
 
-            let pos_attr = gl::GetAttribLocation(program, b"position\0".as_ptr() as *const i8) as u32;
+            let pos_attr = gl::GetAttribLocation(program, b"position\0".as_ptr() as *const gl::types::GLchar) as u32;
             gl::EnableVertexAttribArray(pos_attr);
             gl::VertexAttribPointer(pos_attr, 2, gl::FLOAT, gl::FALSE, 0, std::ptr::null());
 
             let start = std::time::Instant::now();
             let mut frame_count = 0u64;
 
-            while start.elapsed() < super::TEST_DURATION {
+            while !super::should_stop_loop(start, frame_count as u64) {
                 gl::Clear(gl::COLOR_BUFFER_BIT);
 
                 let t = start.elapsed().as_secs_f32();

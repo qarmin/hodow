@@ -28,7 +28,7 @@ impl GLTest for GL43ComputeTest {
             \0";
 
             let cs = gl::CreateShader(gl::COMPUTE_SHADER);
-            gl::ShaderSource(cs, 1, &(cs_src.as_ptr() as *const i8), std::ptr::null());
+            gl::ShaderSource(cs, 1, &(cs_src.as_ptr() as *const gl::types::GLchar), std::ptr::null());
             gl::CompileShader(cs);
 
             let mut compile_status = 0i32;
@@ -37,7 +37,7 @@ impl GLTest for GL43ComputeTest {
                 let mut log_length = 0i32;
                 gl::GetShaderiv(cs, gl::INFO_LOG_LENGTH, &mut log_length);
                 let mut log = vec![0u8; log_length as usize];
-                gl::GetShaderInfoLog(cs, log_length, std::ptr::null_mut(), log.as_mut_ptr() as *mut i8);
+                gl::GetShaderInfoLog(cs, log_length, std::ptr::null_mut(), log.as_mut_ptr() as *mut gl::types::GLchar);
                 return Err(format!("Compute shader compilation failed: {}", String::from_utf8_lossy(&log)).into());
             }
 
@@ -51,7 +51,7 @@ impl GLTest for GL43ComputeTest {
                 let mut log_length = 0i32;
                 gl::GetProgramiv(program, gl::INFO_LOG_LENGTH, &mut log_length);
                 let mut log = vec![0u8; log_length as usize];
-                gl::GetProgramInfoLog(program, log_length, std::ptr::null_mut(), log.as_mut_ptr() as *mut i8);
+                gl::GetProgramInfoLog(program, log_length, std::ptr::null_mut(), log.as_mut_ptr() as *mut gl::types::GLchar);
                 return Err(format!("Compute program linking failed: {}", String::from_utf8_lossy(&log)).into());
             }
 
@@ -70,7 +70,7 @@ impl GLTest for GL43ComputeTest {
             let start = std::time::Instant::now();
             let mut frame_count = 0u64;
 
-            while start.elapsed() < super::TEST_DURATION {
+            while !super::should_stop_loop(start, frame_count as u64) {
                 gl::Clear(gl::COLOR_BUFFER_BIT);
 
                 let t = start.elapsed().as_secs_f32();

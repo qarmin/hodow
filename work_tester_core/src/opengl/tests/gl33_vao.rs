@@ -191,7 +191,7 @@ impl GLTest for GL33VAOTest {
             let start = std::time::Instant::now();
             let mut frame_count = 0u32;
 
-            while start.elapsed() < super::TEST_DURATION {
+            while !super::should_stop_loop(start, frame_count as u64) {
                 // Clear
                 gl::Clear(gl::COLOR_BUFFER_BIT);
 
