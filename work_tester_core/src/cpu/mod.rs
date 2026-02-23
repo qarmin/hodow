@@ -147,26 +147,12 @@ pub trait ExtensionTest {
             run += 1;
             info!("Running {}", name);
 
-            #[cfg(feature = "gpu")]
-            {
-                match crate::opengl::gui::GuiRuntimeHandle::with_window(None, fun) {
-                    Ok(_) => info!("{} passed", name),
-                    Err(e) => {
-                        // Convert error into string if possible
-                        error!("{}({}) failed: {}", name, Self::get_name(), e);
-                        errors += 1;
-                    }
-                }
-            }
 
-            #[cfg(not(feature = "gpu"))]
-            {
-                match fun() {
-                    Ok(_) => info!("{} passed", name),
-                    Err(e) => {
-                        error!("{}({}) failed: {}", name, Self::get_name(), e);
-                        errors += 1;
-                    }
+            match fun() {
+                Ok(_) => info!("{} passed", name),
+                Err(e) => {
+                    error!("{}({}) failed: {}", name, Self::get_name(), e);
+                    errors += 1;
                 }
             }
         }

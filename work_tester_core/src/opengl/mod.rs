@@ -34,7 +34,7 @@ pub fn test_all_opengl() -> GLTestResult {
 // Provide a thin abstraction so the CLI doesn't need to depend on `winit`.
 
 // The GUI module should be compiled together with the `gpu` feature.
-#[cfg(feature = "gpu")]
+
 pub mod gui {
     use std::error::Error;
     use std::num::NonZeroU32;
