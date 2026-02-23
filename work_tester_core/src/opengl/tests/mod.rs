@@ -46,14 +46,17 @@ pub fn should_stop_loop(start: std::time::Instant, frames: u64) -> bool {
 pub const TEST_DURATION: Duration = Duration::from_millis(DEFAULT_TEST_DURATION_MS);
 
 pub mod gl10_state;
+pub mod gl11_texcopy;
 pub mod gl11_textures;
 pub mod gl12_textures3d;
+pub mod gl13_compressed;
 pub mod gl13_multitexture;
 pub mod gl14_blend;
 pub mod gl15_queries;
 pub mod gl20_vertex_attribs;
 pub mod gl21_matrices;
 pub mod gl21_pixelbuffers;
+pub mod gl30_advanced;
 pub mod gl30_fbo;
 pub mod gl30_shaders;
 pub mod gl30_vbo;
@@ -62,8 +65,10 @@ pub mod gl32_sync;
 pub mod gl33_instancing;
 pub mod gl33_vao;
 pub mod gl40_tessellation;
+pub mod gl40_transform_feedback;
 pub mod gl41_program_pipeline;
 pub mod gl42_image_load_store;
+pub mod gl42_storage;
 pub mod gl43_compute;
 pub mod gl43_debug;
 pub mod gl44_batch_bind;
@@ -75,14 +80,17 @@ use crate::opengl::test_trait::{GLTest, GLTestResult};
 pub fn all_tests() -> Vec<&'static dyn GLTest> {
     vec![
         &gl10_state::GL10StateTest,
+        &gl11_texcopy::GL11TexCopyTest,
         &gl11_textures::GL11TexturesTest,
         &gl12_textures3d::GL12Textures3DTest,
+        &gl13_compressed::GL13CompressedTest,
         &gl13_multitexture::GL13MultitextureTest,
         &gl14_blend::GL14BlendTest,
         &gl15_queries::GL15QueriesTest,
         &gl20_vertex_attribs::GL20VertexAttribsTest,
         &gl21_matrices::GL21MatricesTest,
         &gl21_pixelbuffers::GL21PixelBuffersTest,
+        &gl30_advanced::GL30AdvancedTest,
         &gl30_vbo::GL30VBOTest,
         &gl30_shaders::GL30ShadersTest,
         &gl30_fbo::GL30FBOTest,
@@ -91,8 +99,10 @@ pub fn all_tests() -> Vec<&'static dyn GLTest> {
         &gl33_instancing::GL33InstancingTest,
         &gl33_vao::GL33VAOTest,
         &gl40_tessellation::GL40TessellationTest,
+        &gl40_transform_feedback::GL40TransformFeedbackTest,
         &gl41_program_pipeline::GL41ProgramPipelineTest,
         &gl42_image_load_store::GL42ImageLoadStoreTest,
+        &gl42_storage::GL42StorageTest,
         &gl43_compute::GL43ComputeTest,
         &gl43_debug::GL43DebugTest,
         &gl44_batch_bind::GL44BatchBindTest,
