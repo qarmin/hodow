@@ -1,3 +1,5 @@
+//! GL_VERSION: 4.3
+
 use std::error::Error;
 
 use crate::opengl::test_trait::{GLTest, GLVersion};

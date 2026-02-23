@@ -47,11 +47,14 @@ pub const TEST_DURATION: Duration = Duration::from_millis(DEFAULT_TEST_DURATION_
 
 pub mod gl11_textures;
 pub mod gl13_multitexture;
+pub mod gl15_queries;
+pub mod gl20_vertex_attribs;
 pub mod gl21_pixelbuffers;
 pub mod gl30_fbo;
 pub mod gl30_shaders;
 pub mod gl30_vbo;
 pub mod gl31_ubo;
+pub mod gl32_sync;
 pub mod gl33_vao;
 pub mod gl40_tessellation;
 pub mod gl43_compute;
@@ -63,11 +66,14 @@ pub fn all_tests() -> Vec<&'static dyn GLTest> {
     vec![
         &gl11_textures::GL11TexturesTest,
         &gl13_multitexture::GL13MultitextureTest,
+        &gl15_queries::GL15QueriesTest,
+        &gl20_vertex_attribs::GL20VertexAttribsTest,
         &gl30_vbo::GL30VBOTest,
         &gl30_shaders::GL30ShadersTest,
         &gl21_pixelbuffers::GL21PixelBuffersTest,
         &gl30_fbo::GL30FBOTest,
         &gl31_ubo::GL31UBOTest,
+        &gl32_sync::GL32SyncTest,
         &gl33_vao::GL33VAOTest,
         &gl40_tessellation::GL40TessellationTest,
         &gl43_compute::GL43ComputeTest,
