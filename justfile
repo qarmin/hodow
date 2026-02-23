@@ -18,13 +18,13 @@ arm:
     cargo zigbuild -p work_tester_cli --target armv7-unknown-linux-gnueabihf.2.28 --features gpu
 
 gpu *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +nightly run -p work_tester_cli --features gpu -- -d gpu {{args}}
+    RUSTFLAGS="-C target-cpu=native" cargo +nightly run -p work_tester_cli --features gpu -- -d gpu --frame-limit 1000 {{args}}
 
 gpua *args:
-    RUSTFLAGS="-Zsanitizer=address" cargo +nightly run --target x86_64-unknown-linux-gnu --features gpu -- -d gpu {{args}}
+    RUSTFLAGS="-Zsanitizer=address" cargo +nightly run --target x86_64-unknown-linux-gnu --features gpu -- -d gpu --frame-limit 1000 {{args}}
 
 gpur *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +nightly run -p work_tester_cli --features gpu --release -- -d gpu {{args}}
+    RUSTFLAGS="-C target-cpu=native" cargo +nightly run -p work_tester_cli --features gpu --release -- -d gpu --frame-limit 1000 {{args}}
 
 cpu *args:
     RUSTFLAGS="-C target-cpu=native" cargo +nightly run -p work_tester_cli -- -d cpu {{args}}

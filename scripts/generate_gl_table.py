@@ -22,6 +22,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 CSV_PATH = ROOT / 'gl_functions.csv'
 OUT_MD = ROOT / 'work_tester_core' / 'src' / 'opengl' / 'FUNCTIONS_TABLE.md'
+OUT_UNIMPLEMENTED = ROOT / 'work_tester_core' / 'src' / 'opengl' / 'unimplemented.txt'
 TESTS_DIR = ROOT / 'work_tester_core' / 'src' / 'opengl' / 'tests'
 
 FUNC_PATTERN = re.compile(r'gl::([A-Z][a-z][a-zA-Z0-9_]*)')
@@ -166,6 +167,26 @@ def generate_markdown(groups: dict[str, list], functions: list[tuple], tests: li
     return '\n'.join(lines)
 
 
+def generate_unimplemented(groups: dict[str, list], tests: list[tuple]) -> str:
+    union_funcs: set[str] = set()
+    for _tid, _display, _ver, funcs in tests:
+        union_funcs.update(funcs)
+
+    lines: list[str] = []
+    for version in sorted(groups.keys(), key=ver_key):
+        missing = sorted(
+            (name for name, _sig, _exts in groups[version] if name not in union_funcs),
+            key=str.lower,
+        )
+        if not missing:
+            continue
+        lines.append(version)
+        lines.extend(missing)
+        lines.append('')
+
+    return '\n'.join(lines)
+
+
 def main():
     groups, functions = read_gl_functions(CSV_PATH)
     print(f'Read {sum(len(v) for v in groups.values())} functions from {CSV_PATH}')
@@ -175,6 +196,10 @@ def main():
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text(md, encoding='utf-8')
     print(f'Wrote {OUT_MD}')
+
+    unimplemented = generate_unimplemented(groups, tests)
+    OUT_UNIMPLEMENTED.write_text(unimplemented, encoding='utf-8')
+    print(f'Wrote {OUT_UNIMPLEMENTED}')
 
 
 if __name__ == '__main__':
