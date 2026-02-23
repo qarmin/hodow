@@ -159,6 +159,20 @@ impl GLTest for GL30AdvancedTest {
             if num_extensions > 0 {
                 gl::GetStringi(gl::EXTENSIONS, 0);
             }
+            let _is_fbo = gl::IsFramebuffer(fbo);
+            let _is_rbo = gl::IsRenderbuffer(rbo);
+            let _is_vao = gl::IsVertexArray(vao);
+            gl::RenderbufferStorageMultisample(gl::RENDERBUFFER, 4, gl::RGBA8, 256, 256);
+            gl::VertexAttribI1iv(0, [42i32].as_ptr());
+            gl::VertexAttribI2iv(0, [1i32, 2].as_ptr());
+            gl::VertexAttribI3iv(0, [1i32, 2, 3].as_ptr());
+            gl::VertexAttribI4bv(0, [1i8, 2, 3, 4].as_ptr());
+            gl::VertexAttribI4sv(0, [1i16, 2, 3, 4].as_ptr());
+            gl::VertexAttribI1uiv(0, [42u32].as_ptr());
+            gl::VertexAttribI2uiv(0, [1u32, 2].as_ptr());
+            gl::VertexAttribI3uiv(0, [1u32, 2, 3].as_ptr());
+            gl::VertexAttribI4ubv(0, [1u8, 2, 3, 4].as_ptr());
+            gl::VertexAttribI4usv(0, [1u16, 2, 3, 4].as_ptr());
             gl::BindTexture(gl::TEXTURE_2D, 0);
             gl::BindFramebuffer(gl::FRAMEBUFFER, 0);
             gl::BindRenderbuffer(gl::RENDERBUFFER, 0);

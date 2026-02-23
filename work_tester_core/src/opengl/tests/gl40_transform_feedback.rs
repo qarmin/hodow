@@ -136,6 +136,42 @@ impl GLTest for GL40TransformFeedbackTest {
             gl::DrawArraysIndirect(gl::TRIANGLES, std::ptr::null());
             gl::DrawElementsIndirect(gl::TRIANGLES, gl::UNSIGNED_INT, std::ptr::null());
             gl::BindBuffer(gl::DRAW_INDIRECT_BUFFER, 0);
+            gl::Uniform1d(0, 1.0);
+            gl::Uniform2d(0, 1.0, 2.0);
+            gl::Uniform3d(0, 1.0, 2.0, 3.0);
+            gl::Uniform4d(0, 1.0, 2.0, 3.0, 4.0);
+            gl::Uniform1dv(0, 1, [1.0f64].as_ptr());
+            gl::Uniform2dv(0, 1, [1.0f64, 2.0].as_ptr());
+            gl::Uniform3dv(0, 1, [1.0f64, 2.0, 3.0].as_ptr());
+            gl::Uniform4dv(0, 1, [1.0f64, 2.0, 3.0, 4.0].as_ptr());
+            let mat2d: [f64; 4] = [1.0, 0.0, 0.0, 1.0];
+            let mat3d: [f64; 9] = [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0];
+            let mat4d: [f64; 16] = [
+                1.0, 0.0, 0.0, 0.0,
+                0.0, 1.0, 0.0, 0.0,
+                0.0, 0.0, 1.0, 0.0,
+                0.0, 0.0, 0.0, 1.0,
+            ];
+            let mat2x3d: [f64; 6] = [1.0, 0.0, 0.0, 1.0, 0.0, 0.0];
+            let mat2x4d: [f64; 8] = [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0];
+            let mat3x2d: [f64; 6] = [1.0, 0.0, 0.0, 1.0, 0.0, 0.0];
+            let mat3x4d: [f64; 12] = [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0];
+            let mat4x2d: [f64; 8] = [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0];
+            let mat4x3d: [f64; 12] = [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0];
+            gl::UniformMatrix2dv(0, 1, gl::FALSE, mat2d.as_ptr());
+            gl::UniformMatrix3dv(0, 1, gl::FALSE, mat3d.as_ptr());
+            gl::UniformMatrix4dv(0, 1, gl::FALSE, mat4d.as_ptr());
+            gl::UniformMatrix2x3dv(0, 1, gl::FALSE, mat2x3d.as_ptr());
+            gl::UniformMatrix2x4dv(0, 1, gl::FALSE, mat2x4d.as_ptr());
+            gl::UniformMatrix3x2dv(0, 1, gl::FALSE, mat3x2d.as_ptr());
+            gl::UniformMatrix3x4dv(0, 1, gl::FALSE, mat3x4d.as_ptr());
+            gl::UniformMatrix4x2dv(0, 1, gl::FALSE, mat4x2d.as_ptr());
+            gl::UniformMatrix4x3dv(0, 1, gl::FALSE, mat4x3d.as_ptr());
+            let mut uniform_d = 0.0f64;
+            gl::GetUniformdv(program, 0, &mut uniform_d);
+            let mut subroutine_indices: [u32; 1] = [0];
+            gl::GetUniformSubroutineuiv(gl::VERTEX_SHADER, 0, subroutine_indices.as_mut_ptr());
+            gl::PatchParameterfv(gl::PATCH_DEFAULT_OUTER_LEVEL, [1.0f32, 1.0, 1.0, 1.0].as_ptr());
             gl::UseProgram(0);
             gl::DeleteProgram(program);
             gl::DeleteShader(vs);

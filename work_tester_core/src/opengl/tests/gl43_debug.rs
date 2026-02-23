@@ -242,6 +242,22 @@ impl GLTest for GL43DebugTest {
             gl::VertexAttribLFormat(0, 3, gl::DOUBLE, 0);
             gl::VertexAttribBinding(0, 0);
             gl::VertexBindingDivisor(0, 1);
+            extern "system" fn debug_callback(
+                _source: u32,
+                _type: u32,
+                _id: u32,
+                _severity: u32,
+                _length: i32,
+                _message: *const gl::types::GLchar,
+                _user_param: *mut std::ffi::c_void,
+            ) {}
+            gl::DebugMessageCallback(Some(debug_callback), std::ptr::null_mut());
+            let test_ptr: i32 = 42;
+            let ptr_addr = &test_ptr as *const i32 as *const std::ffi::c_void;
+            gl::ObjectPtrLabel(ptr_addr, -1, b"TestPointer\0".as_ptr() as *const gl::types::GLchar);
+            let mut ptr_label: [u8; 256] = [0; 256];
+            let mut ptr_length = 0;
+            gl::GetObjectPtrLabel(ptr_addr, 256, &mut ptr_length, ptr_label.as_mut_ptr() as *mut gl::types::GLchar);
             gl::DeleteProgram(program);
             gl::DeleteShader(vs);
             gl::DeleteFramebuffers(1, &fbo);
