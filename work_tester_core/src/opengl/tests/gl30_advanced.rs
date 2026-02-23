@@ -161,7 +161,7 @@ impl GLTest for GL30AdvancedTest {
             gl::VertexAttribI1iv(0, [42i32].as_ptr());
             gl::VertexAttribI2iv(0, [1i32, 2].as_ptr());
             gl::VertexAttribI3iv(0, [1i32, 2, 3].as_ptr());
-            gl::VertexAttribI4bv(0, [1i8, 2, 3, 4].as_ptr());
+            gl::VertexAttribI4bv(0, [1i8, 2, 3, 4].as_ptr() as *const gl::types::GLbyte);
             gl::VertexAttribI4sv(0, [1i16, 2, 3, 4].as_ptr());
             gl::VertexAttribI1uiv(0, [42u32].as_ptr());
             gl::VertexAttribI2uiv(0, [1u32, 2].as_ptr());

@@ -163,12 +163,12 @@ impl GLTest for GL20UniformsTest {
             gl::VertexAttrib4dv(0, [1.0f64, 2.0, 3.0, 4.0].as_ptr());
             gl::VertexAttrib4Nub(0, 255, 128, 64, 255);
             gl::VertexAttrib4Nubv(0, [255u8, 128, 64, 255].as_ptr());
-            gl::VertexAttrib4bv(0, [1i8, 2, 3, 4].as_ptr());
+            gl::VertexAttrib4bv(0, [1i8, 2, 3, 4].as_ptr() as *const gl::types::GLbyte);
             gl::VertexAttrib4iv(0, [1i32, 2, 3, 4].as_ptr());
             gl::VertexAttrib4ubv(0, [255u8, 128, 64, 255].as_ptr());
             gl::VertexAttrib4uiv(0, [1u32, 2, 3, 4].as_ptr());
             gl::VertexAttrib4usv(0, [1u16, 2, 3, 4].as_ptr());
-            gl::VertexAttrib4Nbv(0, [1i8, 2, 3, 4].as_ptr());
+            gl::VertexAttrib4Nbv(0, [1i8, 2, 3, 4].as_ptr() as *const gl::types::GLbyte);
             gl::VertexAttrib4Niv(0, [1i32, 2, 3, 4].as_ptr());
             gl::VertexAttrib4Nuiv(0, [1u32, 2, 3, 4].as_ptr());
             gl::VertexAttrib4Nusv(0, [1u16, 2, 3, 4].as_ptr());
