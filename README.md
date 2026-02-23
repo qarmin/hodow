@@ -1,10 +1,16 @@
-# WorkTester - Devices testing tool
+# Hodow - Devices testing tool
 
-This is a hobby project, to validate specific cpu(at least for now) features/functions, to check if they don't crash and if produces correct results.
+
+<img alt="logo_text" src="https://github.com/user-attachments/assets/379ca618-1648-452a-9d9d-a2f2f2cfec35" />
+
+
+This is a hobby project, to validate specific cpu and gpu features/functions, to check if they don't crash and if produces correct results.
+
+As once at Hodów the Polish cavalry defeated a Tatar army that was one hundred times larger, so too this project aims to defeat the many problems that plague software developers, even though those problems do not lie in their code but in the hardware and drivers.
 
 The main requirement of this project, is that code should be easily cross-compilable, without needing any additional dependencies - this was the first problem, that I hit, when trying to use C/C++ testing tools(even sometimes Rust tools have problematic cross-compilation)
 
-For now it checks specific cpu features, runs them to find crashes(initially validated this with miri to avoid spurious crashes) and use 1 check for (almost)every function to find any possible issues with the implementation.
+For now it checks specific cpu and opengl features, runs them to find crashes(initially validated this with miri to avoid spurious crashes) and for cpu crashes use 1 check for (almost)every function to find any possible issues with the implementation.
 
 Project was created, basing on Rust 1.93, so later updates, may add other cpu features, not available now yet.
 
@@ -61,13 +67,15 @@ TOTAL         2325        0       0
 
 
 ## AI Usage
-This project heavily(but not fully) relies on AI for code generation, bug fixing, refactoring, so if you have any objections to this, don't use it.
+This project heavily(but not fully) relies on AI for code generation, bug fixing, refactoring etc., so if you have any objections to this, don't use it.
+
+This project is not AI slop, although it does have a fairly narrow specialization and you may not find it useful. To some extent, it is useful for verifying the problems we encounter on certain devices when we do not know whom to blame for them, as we are looking for a way to attribute them to something other than our own code.
 
 ## Implemented
 
-| Feature    | Implemented |
-|------------|------------:|
-| CPU x86_64 |           ✅ |
-| CPU arm    |           ❌ |
-| OpenGL     |           ❌ |
-| Vulkan     |           ❌ |
+| Feature    |                Implemented |
+|------------|---------------------------:|
+| CPU x86_64 | ✅(only supported by rustc) |
+| CPU arm    |                          ❌ |
+| OpenGL     | ✅(only supported by glium) |
+| Vulkan     |                          ❌ |
