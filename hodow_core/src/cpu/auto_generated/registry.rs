@@ -10,13 +10,11 @@ pub fn count_available_features() -> usize {
 
     #[cfg(target_arch = "aarch64")]
     {
-        #[cfg(target_feature = "mte")]
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
-        #[cfg(target_feature = "prefetch")]
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
@@ -24,8 +22,7 @@ pub fn count_available_features() -> usize {
 
     #[cfg(target_arch = "arm")]
     {
-        #[cfg(target_feature = "dsp")]
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
@@ -34,22 +31,19 @@ pub fn count_available_features() -> usize {
             count += 1;
         }
 
-        #[cfg(target_feature = "sat")]
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
-        #[cfg(target_feature = "simd32")]
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
     }
 
-    #[cfg(any(target_arch = "arm", target_arch = "arm64"))]
+    #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
     {
-        #[cfg(target_feature = "hints")]
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
@@ -57,17 +51,15 @@ pub fn count_available_features() -> usize {
 
     #[cfg(target_arch = "mips")]
     {
-        #[cfg(target_feature = "msa")]
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
     }
 
-    #[cfg(target_arch = "nvptx")]
+    #[cfg(all() /* nvptx not supported */)]
     {
-        #[cfg(target_feature = "packed")]
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
@@ -75,13 +67,11 @@ pub fn count_available_features() -> usize {
 
     #[cfg(target_arch = "powerpc")]
     {
-        #[cfg(target_feature = "altivec")]
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
-        #[cfg(target_feature = "vsx")]
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
@@ -89,8 +79,7 @@ pub fn count_available_features() -> usize {
 
     #[cfg(target_arch = "powerpc64")]
     {
-        #[cfg(target_feature = "vsx")]
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
@@ -98,8 +87,7 @@ pub fn count_available_features() -> usize {
 
     #[cfg(target_arch = "riscv32")]
     {
-        #[cfg(target_feature = "zk")]
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
@@ -107,27 +95,23 @@ pub fn count_available_features() -> usize {
 
     #[cfg(target_arch = "riscv64")]
     {
-        #[cfg(target_feature = "zk")]
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
     }
 
-    #[cfg(any(target_arch = "riscv", target_arch = "riscv64"))]
+    #[cfg(any(target_arch = "riscv32", target_arch = "riscv64"))]
     {
-        #[cfg(target_feature = "p")]
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
-        #[cfg(target_feature = "zb")]
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
-        #[cfg(target_feature = "zk")]
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
@@ -135,8 +119,7 @@ pub fn count_available_features() -> usize {
 
     #[cfg(target_arch = "s390x")]
     {
-        #[cfg(target_feature = "vector")]
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
@@ -144,23 +127,19 @@ pub fn count_available_features() -> usize {
 
     #[cfg(target_arch = "wasm32")]
     {
-        #[cfg(target_feature = "atomic")]
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
-        #[cfg(target_feature = "memory")]
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
-        #[cfg(target_feature = "relaxed_simd")]
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
-        #[cfg(target_feature = "simd128")]
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
@@ -168,8 +147,7 @@ pub fn count_available_features() -> usize {
 
     #[cfg(target_arch = "x86")]
     {
-        #[cfg(target_feature = "abm")]
-        if std::arch::is_x86_feature_detected!("abm") {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
@@ -268,23 +246,19 @@ pub fn count_available_features() -> usize {
             count += 1;
         }
 
-        #[cfg(target_feature = "bswap")]
-        if std::arch::is_x86_feature_detected!("bswap") {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
-        #[cfg(target_feature = "bt")]
-        if std::arch::is_x86_feature_detected!("bt") {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
-        #[cfg(target_feature = "cpuid")]
-        if std::arch::is_x86_feature_detected!("cpuid") {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
-        #[cfg(target_feature = "eflags")]
-        if std::arch::is_x86_feature_detected!("eflags") {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
@@ -323,8 +297,7 @@ pub fn count_available_features() -> usize {
             count += 1;
         }
 
-        #[cfg(target_feature = "rdtsc")]
-        if std::arch::is_x86_feature_detected!("rdtsc") {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
@@ -397,18 +370,12 @@ pub fn count_available_features() -> usize {
 
     #[cfg(target_arch = "x86_64")]
     {
-        #[cfg(target_feature = "abm")]
-        if std::arch::is_x86_feature_detected!("abm") {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
         #[cfg(target_feature = "adx")]
         if std::arch::is_x86_feature_detected!("adx") {
-            count += 1;
-        }
-
-        #[cfg(target_feature = "amx")]
-        if std::arch::is_x86_feature_detected!("amx") {
             count += 1;
         }
 
@@ -442,13 +409,11 @@ pub fn count_available_features() -> usize {
             count += 1;
         }
 
-        #[cfg(target_feature = "bswap")]
-        if std::arch::is_x86_feature_detected!("bswap") {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
-        #[cfg(target_feature = "bt")]
-        if std::arch::is_x86_feature_detected!("bt") {
+        if false /* no runtime detection available */ {
             count += 1;
         }
 
@@ -508,252 +473,292 @@ pub fn available_modes() -> Vec<&'static str> {
 
     #[cfg(target_arch = "aarch64")]
     {
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             modes.push("mte");
         }
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             modes.push("prefetch");
         }
     }
 
     #[cfg(target_arch = "arm")]
     {
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             modes.push("dsp");
         }
+        #[cfg(target_feature = "neon")]
         if false /* feature detection not yet implemented */ {
             modes.push("neon");
         }
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             modes.push("sat");
         }
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             modes.push("simd32");
         }
     }
 
-    #[cfg(any(target_arch = "arm", target_arch = "arm64"))]
+    #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
     {
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             modes.push("hints");
         }
     }
 
     #[cfg(target_arch = "mips")]
     {
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             modes.push("msa");
         }
     }
 
-    #[cfg(target_arch = "nvptx")]
+    #[cfg(all() /* nvptx not supported */)]
     {
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             modes.push("packed");
         }
     }
 
     #[cfg(target_arch = "powerpc")]
     {
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             modes.push("altivec");
         }
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             modes.push("vsx");
         }
     }
 
     #[cfg(target_arch = "powerpc64")]
     {
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             modes.push("vsx");
         }
     }
 
     #[cfg(target_arch = "riscv32")]
     {
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             modes.push("zk");
         }
     }
 
     #[cfg(target_arch = "riscv64")]
     {
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             modes.push("zk");
         }
     }
 
-    #[cfg(any(target_arch = "riscv", target_arch = "riscv64"))]
+    #[cfg(any(target_arch = "riscv32", target_arch = "riscv64"))]
     {
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             modes.push("p");
         }
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             modes.push("zb");
         }
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             modes.push("zk");
         }
     }
 
     #[cfg(target_arch = "s390x")]
     {
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             modes.push("vector");
         }
     }
 
     #[cfg(target_arch = "wasm32")]
     {
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             modes.push("atomic");
         }
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             modes.push("memory");
         }
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             modes.push("relaxed_simd");
         }
-        if false /* feature detection not yet implemented */ {
+        if false /* no runtime detection available */ {
             modes.push("simd128");
         }
     }
 
     #[cfg(target_arch = "x86")]
     {
-        if std::arch::is_x86_feature_detected!("abm") {
+        if false /* no runtime detection available */ {
             modes.push("abm");
         }
+        #[cfg(target_feature = "adx")]
         if std::arch::is_x86_feature_detected!("adx") {
             modes.push("adx");
         }
+        #[cfg(target_feature = "aes")]
         if std::arch::is_x86_feature_detected!("aes") {
             modes.push("aes");
         }
+        #[cfg(target_feature = "avx")]
         if std::arch::is_x86_feature_detected!("avx") {
             modes.push("avx");
         }
+        #[cfg(target_feature = "avx2")]
         if std::arch::is_x86_feature_detected!("avx2") {
             modes.push("avx2");
         }
+        #[cfg(target_feature = "avx512bf16")]
         if std::arch::is_x86_feature_detected!("avx512bf16") {
             modes.push("avx512bf16");
         }
+        #[cfg(target_feature = "avx512bitalg")]
         if std::arch::is_x86_feature_detected!("avx512bitalg") {
             modes.push("avx512bitalg");
         }
+        #[cfg(target_feature = "avx512bw")]
         if std::arch::is_x86_feature_detected!("avx512bw") {
             modes.push("avx512bw");
         }
+        #[cfg(target_feature = "avx512cd")]
         if std::arch::is_x86_feature_detected!("avx512cd") {
             modes.push("avx512cd");
         }
+        #[cfg(target_feature = "avx512dq")]
         if std::arch::is_x86_feature_detected!("avx512dq") {
             modes.push("avx512dq");
         }
+        #[cfg(target_feature = "avx512f")]
         if std::arch::is_x86_feature_detected!("avx512f") {
             modes.push("avx512f");
         }
+        #[cfg(target_feature = "avx512fp16")]
         if std::arch::is_x86_feature_detected!("avx512fp16") {
             modes.push("avx512fp16");
         }
+        #[cfg(target_feature = "avx512ifma")]
         if std::arch::is_x86_feature_detected!("avx512ifma") {
             modes.push("avx512ifma");
         }
+        #[cfg(target_feature = "avx512vbmi")]
         if std::arch::is_x86_feature_detected!("avx512vbmi") {
             modes.push("avx512vbmi");
         }
+        #[cfg(target_feature = "avx512vbmi2")]
         if std::arch::is_x86_feature_detected!("avx512vbmi2") {
             modes.push("avx512vbmi2");
         }
+        #[cfg(target_feature = "avx512vnni")]
         if std::arch::is_x86_feature_detected!("avx512vnni") {
             modes.push("avx512vnni");
         }
+        #[cfg(target_feature = "avx512vpopcntdq")]
         if std::arch::is_x86_feature_detected!("avx512vpopcntdq") {
             modes.push("avx512vpopcntdq");
         }
+        #[cfg(target_feature = "avxneconvert")]
         if std::arch::is_x86_feature_detected!("avxneconvert") {
             modes.push("avxneconvert");
         }
+        #[cfg(target_feature = "bmi1")]
         if std::arch::is_x86_feature_detected!("bmi1") {
             modes.push("bmi1");
         }
+        #[cfg(target_feature = "bmi2")]
         if std::arch::is_x86_feature_detected!("bmi2") {
             modes.push("bmi2");
         }
-        if std::arch::is_x86_feature_detected!("bswap") {
+        if false /* no runtime detection available */ {
             modes.push("bswap");
         }
-        if std::arch::is_x86_feature_detected!("bt") {
+        if false /* no runtime detection available */ {
             modes.push("bt");
         }
-        if std::arch::is_x86_feature_detected!("cpuid") {
+        if false /* no runtime detection available */ {
             modes.push("cpuid");
         }
-        if std::arch::is_x86_feature_detected!("eflags") {
+        if false /* no runtime detection available */ {
             modes.push("eflags");
         }
+        #[cfg(target_feature = "f16c")]
         if std::arch::is_x86_feature_detected!("f16c") {
             modes.push("f16c");
         }
+        #[cfg(target_feature = "fma")]
         if std::arch::is_x86_feature_detected!("fma") {
             modes.push("fma");
         }
+        #[cfg(target_feature = "fxsr")]
         if std::arch::is_x86_feature_detected!("fxsr") {
             modes.push("fxsr");
         }
+        #[cfg(target_feature = "gfni")]
         if std::arch::is_x86_feature_detected!("gfni") {
             modes.push("gfni");
         }
+        #[cfg(target_feature = "kl")]
         if std::arch::is_x86_feature_detected!("kl") {
             modes.push("kl");
         }
+        #[cfg(target_feature = "pclmulqdq")]
         if std::arch::is_x86_feature_detected!("pclmulqdq") {
             modes.push("pclmulqdq");
         }
+        #[cfg(target_feature = "rdrand")]
         if std::arch::is_x86_feature_detected!("rdrand") {
             modes.push("rdrand");
         }
-        if std::arch::is_x86_feature_detected!("rdtsc") {
+        if false /* no runtime detection available */ {
             modes.push("rdtsc");
         }
+        #[cfg(target_feature = "rtm")]
         if std::arch::is_x86_feature_detected!("rtm") {
             modes.push("rtm");
         }
+        #[cfg(target_feature = "sha")]
         if std::arch::is_x86_feature_detected!("sha") {
             modes.push("sha");
         }
+        #[cfg(target_feature = "sse")]
         if std::arch::is_x86_feature_detected!("sse") {
             modes.push("sse");
         }
+        #[cfg(target_feature = "sse2")]
         if std::arch::is_x86_feature_detected!("sse2") {
             modes.push("sse2");
         }
+        #[cfg(target_feature = "sse3")]
         if std::arch::is_x86_feature_detected!("sse3") {
             modes.push("sse3");
         }
+        #[cfg(target_feature = "sse4.1")]
         if std::arch::is_x86_feature_detected!("sse4.1") {
             modes.push("sse4.1");
         }
+        #[cfg(target_feature = "sse4.2")]
         if std::arch::is_x86_feature_detected!("sse4.2") {
             modes.push("sse4.2");
         }
+        #[cfg(target_feature = "sse4a")]
         if std::arch::is_x86_feature_detected!("sse4a") {
             modes.push("sse4a");
         }
+        #[cfg(target_feature = "ssse3")]
         if std::arch::is_x86_feature_detected!("ssse3") {
             modes.push("ssse3");
         }
+        #[cfg(target_feature = "tbm")]
         if std::arch::is_x86_feature_detected!("tbm") {
             modes.push("tbm");
         }
+        #[cfg(target_feature = "vaes")]
         if std::arch::is_x86_feature_detected!("vaes") {
             modes.push("vaes");
         }
+        #[cfg(target_feature = "vpclmulqdq")]
         if std::arch::is_x86_feature_detected!("vpclmulqdq") {
             modes.push("vpclmulqdq");
         }
+        #[cfg(target_feature = "xsave")]
         if std::arch::is_x86_feature_detected!("xsave") {
             modes.push("xsave");
         }
@@ -761,63 +766,76 @@ pub fn available_modes() -> Vec<&'static str> {
 
     #[cfg(target_arch = "x86_64")]
     {
-        if std::arch::is_x86_feature_detected!("abm") {
+        if false /* no runtime detection available */ {
             modes.push("abm");
         }
+        #[cfg(target_feature = "adx")]
         if std::arch::is_x86_feature_detected!("adx") {
             modes.push("adx");
         }
-        if std::arch::is_x86_feature_detected!("amx") {
-            modes.push("amx");
-        }
+        #[cfg(target_feature = "avx")]
         if std::arch::is_x86_feature_detected!("avx") {
             modes.push("avx");
         }
+        #[cfg(target_feature = "avx512bw")]
         if std::arch::is_x86_feature_detected!("avx512bw") {
             modes.push("avx512bw");
         }
+        #[cfg(target_feature = "avx512f")]
         if std::arch::is_x86_feature_detected!("avx512f") {
             modes.push("avx512f");
         }
+        #[cfg(target_feature = "avx512fp16")]
         if std::arch::is_x86_feature_detected!("avx512fp16") {
             modes.push("avx512fp16");
         }
+        #[cfg(target_feature = "bmi1")]
         if std::arch::is_x86_feature_detected!("bmi1") {
             modes.push("bmi1");
         }
+        #[cfg(target_feature = "bmi2")]
         if std::arch::is_x86_feature_detected!("bmi2") {
             modes.push("bmi2");
         }
-        if std::arch::is_x86_feature_detected!("bswap") {
+        if false /* no runtime detection available */ {
             modes.push("bswap");
         }
-        if std::arch::is_x86_feature_detected!("bt") {
+        if false /* no runtime detection available */ {
             modes.push("bt");
         }
+        #[cfg(target_feature = "cmpxchg16b")]
         if std::arch::is_x86_feature_detected!("cmpxchg16b") {
             modes.push("cmpxchg16b");
         }
+        #[cfg(target_feature = "fxsr")]
         if std::arch::is_x86_feature_detected!("fxsr") {
             modes.push("fxsr");
         }
+        #[cfg(target_feature = "rdrand")]
         if std::arch::is_x86_feature_detected!("rdrand") {
             modes.push("rdrand");
         }
+        #[cfg(target_feature = "sse")]
         if std::arch::is_x86_feature_detected!("sse") {
             modes.push("sse");
         }
+        #[cfg(target_feature = "sse2")]
         if std::arch::is_x86_feature_detected!("sse2") {
             modes.push("sse2");
         }
+        #[cfg(target_feature = "sse4.1")]
         if std::arch::is_x86_feature_detected!("sse4.1") {
             modes.push("sse4.1");
         }
+        #[cfg(target_feature = "sse4.2")]
         if std::arch::is_x86_feature_detected!("sse4.2") {
             modes.push("sse4.2");
         }
+        #[cfg(target_feature = "tbm")]
         if std::arch::is_x86_feature_detected!("tbm") {
             modes.push("tbm");
         }
+        #[cfg(target_feature = "xsave")]
         if std::arch::is_x86_feature_detected!("xsave") {
             modes.push("xsave");
         }
@@ -836,9 +854,7 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
 
     #[cfg(target_arch = "aarch64")]
     {
-        #[cfg(target_feature = "mte")]
-        {
-            if false /* feature detection not yet implemented */ {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -856,11 +872,8 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
-        #[cfg(target_feature = "prefetch")]
-        {
-            if false /* feature detection not yet implemented */ {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -878,15 +891,12 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
     }
 
     #[cfg(target_arch = "arm")]
     {
-        #[cfg(target_feature = "dsp")]
-        {
-            if false /* feature detection not yet implemented */ {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -904,7 +914,6 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
         #[cfg(target_feature = "neon")]
         {
@@ -928,9 +937,7 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
             }
         }
 
-        #[cfg(target_feature = "sat")]
-        {
-            if false /* feature detection not yet implemented */ {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -948,11 +955,8 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
-        #[cfg(target_feature = "simd32")]
-        {
-            if false /* feature detection not yet implemented */ {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -970,15 +974,12 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
     }
 
-    #[cfg(any(target_arch = "arm", target_arch = "arm64"))]
+    #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
     {
-        #[cfg(target_feature = "hints")]
-        {
-            if false /* feature detection not yet implemented */ {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -996,15 +997,12 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
     }
 
     #[cfg(target_arch = "mips")]
     {
-        #[cfg(target_feature = "msa")]
-        {
-            if false /* feature detection not yet implemented */ {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -1022,15 +1020,12 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
     }
 
-    #[cfg(target_arch = "nvptx")]
+    #[cfg(all() /* nvptx not supported */)]
     {
-        #[cfg(target_feature = "packed")]
-        {
-            if false /* feature detection not yet implemented */ {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -1048,15 +1043,12 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
     }
 
     #[cfg(target_arch = "powerpc")]
     {
-        #[cfg(target_feature = "altivec")]
-        {
-            if false /* feature detection not yet implemented */ {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -1074,11 +1066,8 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
-        #[cfg(target_feature = "vsx")]
-        {
-            if false /* feature detection not yet implemented */ {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -1096,15 +1085,12 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
     }
 
     #[cfg(target_arch = "powerpc64")]
     {
-        #[cfg(target_feature = "vsx")]
-        {
-            if false /* feature detection not yet implemented */ {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -1122,15 +1108,12 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
     }
 
     #[cfg(target_arch = "riscv32")]
     {
-        #[cfg(target_feature = "zk")]
-        {
-            if false /* feature detection not yet implemented */ {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -1148,15 +1131,12 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
     }
 
     #[cfg(target_arch = "riscv64")]
     {
-        #[cfg(target_feature = "zk")]
-        {
-            if false /* feature detection not yet implemented */ {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -1174,15 +1154,12 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
     }
 
-    #[cfg(any(target_arch = "riscv", target_arch = "riscv64"))]
+    #[cfg(any(target_arch = "riscv32", target_arch = "riscv64"))]
     {
-        #[cfg(target_feature = "p")]
-        {
-            if false /* feature detection not yet implemented */ {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -1200,11 +1177,8 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
-        #[cfg(target_feature = "zb")]
-        {
-            if false /* feature detection not yet implemented */ {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -1222,11 +1196,8 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
-        #[cfg(target_feature = "zk")]
-        {
-            if false /* feature detection not yet implemented */ {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -1244,15 +1215,12 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
     }
 
     #[cfg(target_arch = "s390x")]
     {
-        #[cfg(target_feature = "vector")]
-        {
-            if false /* feature detection not yet implemented */ {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -1270,15 +1238,12 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
     }
 
     #[cfg(target_arch = "wasm32")]
     {
-        #[cfg(target_feature = "atomic")]
-        {
-            if false /* feature detection not yet implemented */ {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -1296,11 +1261,8 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
-        #[cfg(target_feature = "memory")]
-        {
-            if false /* feature detection not yet implemented */ {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -1318,11 +1280,8 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
-        #[cfg(target_feature = "relaxed_simd")]
-        {
-            if false /* feature detection not yet implemented */ {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -1340,11 +1299,8 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
-        #[cfg(target_feature = "simd128")]
-        {
-            if false /* feature detection not yet implemented */ {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -1362,15 +1318,12 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
     }
 
     #[cfg(target_arch = "x86")]
     {
-        #[cfg(target_feature = "abm")]
-        {
-            if std::arch::is_x86_feature_detected!("abm") {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -1388,7 +1341,6 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
         #[cfg(target_feature = "adx")]
         {
@@ -1808,9 +1760,7 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
             }
         }
 
-        #[cfg(target_feature = "bswap")]
-        {
-            if std::arch::is_x86_feature_detected!("bswap") {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -1828,11 +1778,8 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
-        #[cfg(target_feature = "bt")]
-        {
-            if std::arch::is_x86_feature_detected!("bt") {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -1850,11 +1797,8 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
-        #[cfg(target_feature = "cpuid")]
-        {
-            if std::arch::is_x86_feature_detected!("cpuid") {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -1872,11 +1816,8 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
-        #[cfg(target_feature = "eflags")]
-        {
-            if std::arch::is_x86_feature_detected!("eflags") {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -1894,7 +1835,6 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
         #[cfg(target_feature = "f16c")]
         {
@@ -2050,9 +1990,7 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
             }
         }
 
-        #[cfg(target_feature = "rdtsc")]
-        {
-            if std::arch::is_x86_feature_detected!("rdtsc") {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -2070,7 +2008,6 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
         #[cfg(target_feature = "rtm")]
         {
@@ -2362,9 +2299,7 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
 
     #[cfg(target_arch = "x86_64")]
     {
-        #[cfg(target_feature = "abm")]
-        {
-            if std::arch::is_x86_feature_detected!("abm") {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -2382,7 +2317,6 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
         #[cfg(target_feature = "adx")]
         {
@@ -2398,28 +2332,6 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 )?;
                 features.push(FeatureStats {
                     feature_name: crate::cpu::auto_generated::x86_64::adx::ADX::get_name(),
-                    tests_run: r,
-                    tests_skipped: s,
-                    tests_errored: e,
-                });
-                completed_features += 1;
-            }
-        }
-
-        #[cfg(target_feature = "amx")]
-        {
-            if std::arch::is_x86_feature_detected!("amx") {
-                if should_stop() {
-                    return Ok(TestStatistics { features, was_cancelled: true });
-                }
-                let (r, s, e) = crate::cpu::auto_generated::x86_64::amx::AMX::test_with_progress(
-                    total_features,
-                    completed_features,
-                    crate::cpu::auto_generated::x86_64::amx::AMX::get_tests().len(),
-                    progress_callback,
-                )?;
-                features.push(FeatureStats {
-                    feature_name: crate::cpu::auto_generated::x86_64::amx::AMX::get_name(),
                     tests_run: r,
                     tests_skipped: s,
                     tests_errored: e,
@@ -2560,9 +2472,7 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
             }
         }
 
-        #[cfg(target_feature = "bswap")]
-        {
-            if std::arch::is_x86_feature_detected!("bswap") {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -2580,11 +2490,8 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
-        #[cfg(target_feature = "bt")]
-        {
-            if std::arch::is_x86_feature_detected!("bt") {
+            if false /* no runtime detection available */ {
                 if should_stop() {
                     return Ok(TestStatistics { features, was_cancelled: true });
                 }
@@ -2602,7 +2509,6 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
                 });
                 completed_features += 1;
             }
-        }
 
         #[cfg(target_feature = "cmpxchg16b")]
         {
@@ -2816,14 +2722,12 @@ pub fn list_all_functions() -> Vec<String> {
 
     #[cfg(target_arch = "aarch64")]
     {
-        #[cfg(target_feature = "mte")]
         {
             for (_, name) in crate::cpu::auto_generated::aarch64::mte::MTE::get_tests() {
                 functions.push(name.to_string());
             }
         }
 
-        #[cfg(target_feature = "prefetch")]
         {
             for (_, name) in crate::cpu::auto_generated::aarch64::prefetch::PREFETCH::get_tests() {
                 functions.push(name.to_string());
@@ -2834,7 +2738,6 @@ pub fn list_all_functions() -> Vec<String> {
 
     #[cfg(target_arch = "arm")]
     {
-        #[cfg(target_feature = "dsp")]
         {
             for (_, name) in crate::cpu::auto_generated::arm::dsp::DSP::get_tests() {
                 functions.push(name.to_string());
@@ -2848,14 +2751,12 @@ pub fn list_all_functions() -> Vec<String> {
             }
         }
 
-        #[cfg(target_feature = "sat")]
         {
             for (_, name) in crate::cpu::auto_generated::arm::sat::SAT::get_tests() {
                 functions.push(name.to_string());
             }
         }
 
-        #[cfg(target_feature = "simd32")]
         {
             for (_, name) in crate::cpu::auto_generated::arm::simd32::SIMD32::get_tests() {
                 functions.push(name.to_string());
@@ -2864,9 +2765,8 @@ pub fn list_all_functions() -> Vec<String> {
 
     }
 
-    #[cfg(any(target_arch = "arm", target_arch = "arm64"))]
+    #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
     {
-        #[cfg(target_feature = "hints")]
         {
             for (_, name) in crate::cpu::auto_generated::arm_shared::hints::HINTS::get_tests() {
                 functions.push(name.to_string());
@@ -2877,7 +2777,6 @@ pub fn list_all_functions() -> Vec<String> {
 
     #[cfg(target_arch = "mips")]
     {
-        #[cfg(target_feature = "msa")]
         {
             for (_, name) in crate::cpu::auto_generated::mips::msa::MSA::get_tests() {
                 functions.push(name.to_string());
@@ -2886,9 +2785,8 @@ pub fn list_all_functions() -> Vec<String> {
 
     }
 
-    #[cfg(target_arch = "nvptx")]
+    #[cfg(all() /* nvptx not supported */)]
     {
-        #[cfg(target_feature = "packed")]
         {
             for (_, name) in crate::cpu::auto_generated::nvptx::packed::PACKED::get_tests() {
                 functions.push(name.to_string());
@@ -2899,14 +2797,12 @@ pub fn list_all_functions() -> Vec<String> {
 
     #[cfg(target_arch = "powerpc")]
     {
-        #[cfg(target_feature = "altivec")]
         {
             for (_, name) in crate::cpu::auto_generated::powerpc::altivec::ALTIVEC::get_tests() {
                 functions.push(name.to_string());
             }
         }
 
-        #[cfg(target_feature = "vsx")]
         {
             for (_, name) in crate::cpu::auto_generated::powerpc::vsx::VSX::get_tests() {
                 functions.push(name.to_string());
@@ -2917,7 +2813,6 @@ pub fn list_all_functions() -> Vec<String> {
 
     #[cfg(target_arch = "powerpc64")]
     {
-        #[cfg(target_feature = "vsx")]
         {
             for (_, name) in crate::cpu::auto_generated::powerpc64::vsx::VSX::get_tests() {
                 functions.push(name.to_string());
@@ -2928,7 +2823,6 @@ pub fn list_all_functions() -> Vec<String> {
 
     #[cfg(target_arch = "riscv32")]
     {
-        #[cfg(target_feature = "zk")]
         {
             for (_, name) in crate::cpu::auto_generated::riscv32::zk::ZK::get_tests() {
                 functions.push(name.to_string());
@@ -2939,7 +2833,6 @@ pub fn list_all_functions() -> Vec<String> {
 
     #[cfg(target_arch = "riscv64")]
     {
-        #[cfg(target_feature = "zk")]
         {
             for (_, name) in crate::cpu::auto_generated::riscv64::zk::ZK::get_tests() {
                 functions.push(name.to_string());
@@ -2948,23 +2841,20 @@ pub fn list_all_functions() -> Vec<String> {
 
     }
 
-    #[cfg(any(target_arch = "riscv", target_arch = "riscv64"))]
+    #[cfg(any(target_arch = "riscv32", target_arch = "riscv64"))]
     {
-        #[cfg(target_feature = "p")]
         {
             for (_, name) in crate::cpu::auto_generated::riscv_shared::p::P::get_tests() {
                 functions.push(name.to_string());
             }
         }
 
-        #[cfg(target_feature = "zb")]
         {
             for (_, name) in crate::cpu::auto_generated::riscv_shared::zb::ZB::get_tests() {
                 functions.push(name.to_string());
             }
         }
 
-        #[cfg(target_feature = "zk")]
         {
             for (_, name) in crate::cpu::auto_generated::riscv_shared::zk::ZK::get_tests() {
                 functions.push(name.to_string());
@@ -2975,7 +2865,6 @@ pub fn list_all_functions() -> Vec<String> {
 
     #[cfg(target_arch = "s390x")]
     {
-        #[cfg(target_feature = "vector")]
         {
             for (_, name) in crate::cpu::auto_generated::s390x::vector::VECTOR::get_tests() {
                 functions.push(name.to_string());
@@ -2986,28 +2875,24 @@ pub fn list_all_functions() -> Vec<String> {
 
     #[cfg(target_arch = "wasm32")]
     {
-        #[cfg(target_feature = "atomic")]
         {
             for (_, name) in crate::cpu::auto_generated::wasm32::atomic::ATOMIC::get_tests() {
                 functions.push(name.to_string());
             }
         }
 
-        #[cfg(target_feature = "memory")]
         {
             for (_, name) in crate::cpu::auto_generated::wasm32::memory::MEMORY::get_tests() {
                 functions.push(name.to_string());
             }
         }
 
-        #[cfg(target_feature = "relaxed_simd")]
         {
             for (_, name) in crate::cpu::auto_generated::wasm32::relaxed_simd::RELAXED_SIMD::get_tests() {
                 functions.push(name.to_string());
             }
         }
 
-        #[cfg(target_feature = "simd128")]
         {
             for (_, name) in crate::cpu::auto_generated::wasm32::simd128::SIMD128::get_tests() {
                 functions.push(name.to_string());
@@ -3018,7 +2903,6 @@ pub fn list_all_functions() -> Vec<String> {
 
     #[cfg(target_arch = "x86")]
     {
-        #[cfg(target_feature = "abm")]
         {
             for (_, name) in crate::cpu::auto_generated::x86::abm::ABM::get_tests() {
                 functions.push(name.to_string());
@@ -3158,28 +3042,24 @@ pub fn list_all_functions() -> Vec<String> {
             }
         }
 
-        #[cfg(target_feature = "bswap")]
         {
             for (_, name) in crate::cpu::auto_generated::x86::bswap::BSWAP::get_tests() {
                 functions.push(name.to_string());
             }
         }
 
-        #[cfg(target_feature = "bt")]
         {
             for (_, name) in crate::cpu::auto_generated::x86::bt::BT::get_tests() {
                 functions.push(name.to_string());
             }
         }
 
-        #[cfg(target_feature = "cpuid")]
         {
             for (_, name) in crate::cpu::auto_generated::x86::cpuid::CPUID::get_tests() {
                 functions.push(name.to_string());
             }
         }
 
-        #[cfg(target_feature = "eflags")]
         {
             for (_, name) in crate::cpu::auto_generated::x86::eflags::EFLAGS::get_tests() {
                 functions.push(name.to_string());
@@ -3235,7 +3115,6 @@ pub fn list_all_functions() -> Vec<String> {
             }
         }
 
-        #[cfg(target_feature = "rdtsc")]
         {
             for (_, name) in crate::cpu::auto_generated::x86::rdtsc::RDTSC::get_tests() {
                 functions.push(name.to_string());
@@ -3337,7 +3216,6 @@ pub fn list_all_functions() -> Vec<String> {
 
     #[cfg(target_arch = "x86_64")]
     {
-        #[cfg(target_feature = "abm")]
         {
             for (_, name) in crate::cpu::auto_generated::x86_64::abm::ABM::get_tests() {
                 functions.push(name.to_string());
@@ -3347,13 +3225,6 @@ pub fn list_all_functions() -> Vec<String> {
         #[cfg(target_feature = "adx")]
         {
             for (_, name) in crate::cpu::auto_generated::x86_64::adx::ADX::get_tests() {
-                functions.push(name.to_string());
-            }
-        }
-
-        #[cfg(target_feature = "amx")]
-        {
-            for (_, name) in crate::cpu::auto_generated::x86_64::amx::AMX::get_tests() {
                 functions.push(name.to_string());
             }
         }
@@ -3400,14 +3271,12 @@ pub fn list_all_functions() -> Vec<String> {
             }
         }
 
-        #[cfg(target_feature = "bswap")]
         {
             for (_, name) in crate::cpu::auto_generated::x86_64::bswap::BSWAP::get_tests() {
                 functions.push(name.to_string());
             }
         }
 
-        #[cfg(target_feature = "bt")]
         {
             for (_, name) in crate::cpu::auto_generated::x86_64::bt::BT::get_tests() {
                 functions.push(name.to_string());

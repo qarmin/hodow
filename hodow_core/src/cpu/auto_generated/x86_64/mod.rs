@@ -1,11 +1,6 @@
-#[cfg(target_feature = "abm")]
 pub mod abm;
-
 #[cfg(target_feature = "adx")]
 pub mod adx;
-
-#[cfg(target_feature = "amx")]
-pub mod amx;
 
 #[cfg(target_feature = "avx")]
 pub mod avx;
@@ -25,12 +20,8 @@ pub mod bmi;
 #[cfg(target_feature = "bmi2")]
 pub mod bmi2;
 
-#[cfg(target_feature = "bswap")]
 pub mod bswap;
-
-#[cfg(target_feature = "bt")]
 pub mod bt;
-
 #[cfg(target_feature = "cmpxchg16b")]
 pub mod cmpxchg16b;
 

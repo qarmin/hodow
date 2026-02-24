@@ -36,7 +36,7 @@ THREADS_NUMBER = 24
 
 def get_all_test_functions(base: Path) -> list[str]:
     """Get list of all test functions by running the binary with --list-functions."""
-    cmd = ["just", "run", "--", "--list-functions"]
+    cmd = ["just", "cpu", "--", "--list-functions"]
 
     if DEBUG:
         print(f"[DEBUG] Getting test list: {' '.join(cmd)}")

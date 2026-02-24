@@ -16,7 +16,14 @@ FUNCTIONS_FILE = Path("scripts/excluded_functions.txt")
 
 # Ignored functions - that will not be tested
 IGNORED_FUNCTIONS: set[str] = {
-
+    # AMX functions - require unstable x86_amx_intrinsics feature (nightly only)
+    "_tile_loadconfig", "_tile_storeconfig", "_tile_loadd", "_tile_release",
+    "_tile_stored", "_tile_stream_loadd", "_tile_zero", "_tile_dpbf16ps",
+    "_tile_dpbssd", "_tile_dpbsud", "_tile_dpbusd", "_tile_dpbuud",
+    "_tile_dpfp16ps", "_tile_cmmimfp16ps", "_tile_cmmrlfp16ps", "_tile_dpbf8ps",
+    "_tile_dpbhf8ps", "_tile_dphbf8ps", "_tile_dphf8ps", "_tile_loaddrs",
+    "_tile_stream_loaddrs", "_tile_mmultf32ps", "_tile_cvtrowd2ps",
+    "_tile_cvtrowps2phh", "_tile_cvtrowps2phl", "_tile_movrow",
 }
 
 # Functions with memory access errors - skip in fuzzer (#[cfg(not(fuzzing))])
@@ -72,6 +79,42 @@ FEATURE_FLAGS = {
     "test":  "sse2",   # x86/test.rs contains SSE2-level helpers
 }
 
+# Features that don't have runtime detection or aren't proper target_feature
+# These will always return false for feature detection
+UNSUPPORTED_FEATURES = {
+    "abm",      # Use lzcnt/popcnt instead
+    "amx",      # Requires unstable x86_amx_intrinsics feature (nightly only)
+    "bswap",    # Not a real target feature
+    "bt",       # Not a real target feature
+    "eflags",   # Not a real target feature
+    "cpuid",    # Not a real target feature
+    "rdtsc",    # Not a real target feature
+    "test",     # Not a real target feature
+    "hints",    # ARM hints, no detection available
+    "sat",      # ARM saturation, no detection available
+    "dsp",      # ARM DSP, no detection available
+    "simd32",   # ARM SIMD32, no detection available
+    "mte",      # ARM MTE, no detection available
+    "prefetch", # Architecture-specific, no generic detection
+    "packed",   # NVPTX specific
+    "msa",      # MIPS MSA
+    "altivec",  # PowerPC
+    "vsx",      # PowerPC
+    "vector",   # s390x
+    "zk",       # RISC-V
+    "zb",       # RISC-V
+    "p",        # RISC-V
+    "simd128",  # WASM
+    "relaxed_simd", # WASM
+    "atomic",   # WASM
+    "memory",   # WASM
+}
+
+# Extensions that should be completely skipped (not generated at all)
+SKIP_EXTENSIONS = {
+    "amx",  # Requires unstable x86_amx_intrinsics feature
+}
+
 # SIMD type → random creator from values.rs
 RANDOM_CREATORS: dict[str, str] = {
     "__m128":    "create_random__m128()",
@@ -102,6 +145,8 @@ RANDOM_CREATORS: dict[str, str] = {
     "f64":   "rand::random::<f64>()",
     "usize": "rand::random::<usize>()",
     "bool":  "rand::random::<bool>()",
+    "u128":  "rand::random::<u128>()",
+    "Ordering": "core::sync::atomic::Ordering::Relaxed",
 }
 
 # SIMD type → fixed initializer (simple, deterministic values)
@@ -134,6 +179,8 @@ FIXED_INITS: dict[str, str] = {
     "f64":   "1.0f64",
     "usize": "0usize",
     "bool":  "true",
+    "u128":  "1u128",
+    "Ordering": "core::sync::atomic::Ordering::Relaxed",
 }
 
 # Zeroed SIMD inits — used for gather/scatter offset/index params to avoid OOB reads
@@ -618,7 +665,7 @@ def get_common_helper(arch: str) -> str:
     return "crate::cpu::common::arm"  # Generic fallback
 
 
-def gen_part(funcs: list[dict], arch: str, expected_values: dict[str, str] | None = None) -> str:
+def gen_part(funcs: list[dict], arch: str, ext: str, expected_values: dict[str, str] | None = None) -> str:
     arch_import = get_arch_import(arch)
     common_helper = get_common_helper(arch)
 
@@ -669,10 +716,18 @@ def gen_ext_rs(arch: str, ext: str, funcs: list[dict], n_parts: int) -> str:
 
 def get_target_arch_cfg(arch: str) -> str:
     """Return the target_arch cfg expression for the given architecture."""
-    if arch in ("riscv_shared", "arm_shared", "loongarch_shared"):
-        # Shared modules should work for both 32 and 64 bit variants
-        base = arch.replace("_shared", "")
-        return f"any(target_arch = \"{base}\", target_arch = \"{base}64\")"
+    if arch == "riscv_shared":
+        # riscv_shared works for both riscv32 and riscv64
+        return 'any(target_arch = "riscv32", target_arch = "riscv64")'
+    elif arch == "loongarch_shared":
+        # loongarch_shared works for both 32 and 64 bit variants
+        return 'any(target_arch = "loongarch32", target_arch = "loongarch64")'
+    elif arch == "arm_shared":
+        # arm_shared works for both arm and aarch64
+        return 'any(target_arch = "arm", target_arch = "aarch64")'
+    elif arch == "nvptx":
+        # nvptx is not a standard rust target_arch, skip it
+        return 'all() /* nvptx not supported */'
     return f"target_arch = \"{arch}\""
 
 
@@ -680,10 +735,12 @@ def gen_mod_rs_for_arch(exts: list[tuple[str, str]]) -> str:
     """Generate mod.rs for a single architecture directory."""
     lines = []
     for ext, feature in exts:
-        if feature:
+        # Only add cfg if feature is supported
+        if feature and feature not in UNSUPPORTED_FEATURES:
             lines.append(f"#[cfg(target_feature = \"{feature}\")]")
         lines.append(f"pub mod {ext};")
-        if feature:
+        # Add blank line only if we added cfg
+        if feature and feature not in UNSUPPORTED_FEATURES:
             lines.append("")
     return "\n".join(lines)
 
@@ -709,6 +766,10 @@ def gen_root_mod_rs(archs: list[str]) -> str:
 
 def get_feature_detect_fn(arch: str, feature: str) -> str:
     """Return the runtime feature detection code for the given architecture and feature."""
+    # Check if feature is unsupported (no runtime detection available)
+    if feature in UNSUPPORTED_FEATURES:
+        return "false /* no runtime detection available */"
+
     if arch in ("x86", "x86_64"):
         return f'std::arch::is_x86_feature_detected!("{feature}")'
     # For other architectures, we'll need to add detection when available
@@ -738,11 +799,16 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
         lines.append("    {")
 
         for ext, funcs in sorted(all_data[arch].items()):
+            # Skip extensions that shouldn't be generated
+            if ext in SKIP_EXTENSIONS:
+                continue
             if not funcs:
                 continue
 
             feature = ext_to_feature(ext)
-            lines.append(f"        #[cfg(target_feature = \"{feature}\")]")
+            # Only add cfg if feature is supported
+            if feature not in UNSUPPORTED_FEATURES:
+                lines.append(f"        #[cfg(target_feature = \"{feature}\")]")
             detect_fn = get_feature_detect_fn(arch, feature)
             lines.append(f"        if {detect_fn} {{")
             lines.append("            count += 1;")
@@ -769,10 +835,16 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
         lines.append("    {")
 
         for ext, funcs in sorted(all_data[arch].items()):
+            # Skip extensions that shouldn't be generated
+            if ext in SKIP_EXTENSIONS:
+                continue
             if not funcs:
                 continue
 
             feature = ext_to_feature(ext)
+            # Only add cfg if feature is supported
+            if feature not in UNSUPPORTED_FEATURES:
+                lines.append(f"        #[cfg(target_feature = \"{feature}\")]")
             detect_fn = get_feature_detect_fn(arch, feature)
             lines.append(f"        if {detect_fn} {{")
             lines.append(f'            modes.push("{feature}");')
@@ -802,14 +874,19 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
         lines.append("    {")
 
         for ext, funcs in sorted(all_data[arch].items()):
+            # Skip extensions that shouldn't be generated
+            if ext in SKIP_EXTENSIONS:
+                continue
             if not funcs:
                 continue
 
             feature = ext_to_feature(ext)
             struct = ext_to_struct(ext)
 
-            lines.append(f"        #[cfg(target_feature = \"{feature}\")]")
-            lines.append("        {")
+            # Only add cfg if feature is supported
+            if feature not in UNSUPPORTED_FEATURES:
+                lines.append(f"        #[cfg(target_feature = \"{feature}\")]")
+                lines.append("        {")
 
             detect_fn = get_feature_detect_fn(arch, feature)
             lines.append(f"            if {detect_fn} {{")
@@ -830,7 +907,9 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
             lines.append("                });")
             lines.append("                completed_features += 1;")
             lines.append("            }")
-            lines.append("        }")
+            # Close the cfg block if we opened it
+            if feature not in UNSUPPORTED_FEATURES:
+                lines.append("        }")
             lines.append("")
 
         lines.append("    }")
@@ -856,13 +935,18 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
         lines.append("    {")
 
         for ext, funcs in sorted(all_data[arch].items()):
+            # Skip extensions that shouldn't be generated
+            if ext in SKIP_EXTENSIONS:
+                continue
             if not funcs:
                 continue
 
             feature = ext_to_feature(ext)
             struct = ext_to_struct(ext)
 
-            lines.append(f"        #[cfg(target_feature = \"{feature}\")]")
+            # Only add cfg if feature is supported
+            if feature not in UNSUPPORTED_FEATURES:
+                lines.append(f"        #[cfg(target_feature = \"{feature}\")]")
             lines.append("        {")
             lines.append(f"            for (_, name) in crate::cpu::auto_generated::{arch}::{ext}::{struct}::get_tests() {{")
             lines.append("                functions.push(name.to_string());")
@@ -920,6 +1004,10 @@ def main() -> None:
         generated_exts: list[tuple[str, str]] = []
 
         for ext in sorted(by_arch[arch].keys()):
+            # Skip extensions that shouldn't be generated
+            if ext in SKIP_EXTENSIONS:
+                continue
+
             all_funcs = by_arch[arch][ext]
             if not all_funcs:
                 continue
@@ -955,7 +1043,7 @@ def main() -> None:
                         old.unlink()
 
                 for idx, chunk in enumerate(parts, 1):
-                    (parts_dir / f"part{idx}.rs").write_text(gen_part(chunk, arch, expected_values))
+                    (parts_dir / f"part{idx}.rs").write_text(gen_part(chunk, arch, ext, expected_values))
 
                 (arch_out / f"{ext}.rs").write_text(gen_ext_rs(arch, ext, stable, len(parts)))
 

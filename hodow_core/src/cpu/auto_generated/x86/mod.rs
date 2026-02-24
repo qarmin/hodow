@@ -1,6 +1,4 @@
-#[cfg(target_feature = "abm")]
 pub mod abm;
-
 #[cfg(target_feature = "adx")]
 pub mod adx;
 
@@ -58,18 +56,10 @@ pub mod bmi1;
 #[cfg(target_feature = "bmi2")]
 pub mod bmi2;
 
-#[cfg(target_feature = "bswap")]
 pub mod bswap;
-
-#[cfg(target_feature = "bt")]
 pub mod bt;
-
-#[cfg(target_feature = "cpuid")]
 pub mod cpuid;
-
-#[cfg(target_feature = "eflags")]
 pub mod eflags;
-
 #[cfg(target_feature = "f16c")]
 pub mod f16c;
 
@@ -91,9 +81,7 @@ pub mod pclmulqdq;
 #[cfg(target_feature = "rdrand")]
 pub mod rdrand;
 
-#[cfg(target_feature = "rdtsc")]
 pub mod rdtsc;
-
 #[cfg(target_feature = "rtm")]
 pub mod rtm;
 

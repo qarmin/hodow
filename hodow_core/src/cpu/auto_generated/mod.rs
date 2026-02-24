@@ -4,13 +4,13 @@ pub mod aarch64;
 #[cfg(target_arch = "arm")]
 pub mod arm;
 
-#[cfg(any(target_arch = "arm", target_arch = "arm64"))]
+#[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
 pub mod arm_shared;
 
 #[cfg(target_arch = "mips")]
 pub mod mips;
 
-#[cfg(target_arch = "nvptx")]
+#[cfg(all() /* nvptx not supported */)]
 pub mod nvptx;
 
 #[cfg(target_arch = "powerpc")]
@@ -25,7 +25,7 @@ pub mod riscv32;
 #[cfg(target_arch = "riscv64")]
 pub mod riscv64;
 
-#[cfg(any(target_arch = "riscv", target_arch = "riscv64"))]
+#[cfg(any(target_arch = "riscv32", target_arch = "riscv64"))]
 pub mod riscv_shared;
 
 #[cfg(target_arch = "s390x")]
