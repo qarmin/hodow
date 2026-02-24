@@ -33,29 +33,6 @@ NO_FUZZ_FUNCTIONS: set[str] = {
 
 # Functions with unsupported operations in Miri - skip in miri (#[cfg(not(miri))])
 NO_MIRI_FUNCTIONS: set[str] = {
-    # unsupported operation: can't call foreign function
-    "_mm_sfence", "_mm_clflush", "_mm_lfence", "_mm_mfence",
-    "_mm_maskmoveu_si128",
-    "_mm512_max_ps", "_mm512_mask_max_ps", "_mm512_maskz_max_ps",
-    "_mm512_max_pd", "_mm512_mask_max_pd", "_mm512_maskz_max_pd",
-    "_mm512_min_ps", "_mm512_mask_min_ps", "_mm512_maskz_min_ps",
-    "_mm512_min_pd", "_mm512_mask_min_pd", "_mm512_maskz_min_pd",
-    "_mm512_rcp14_ps", "_mm512_mask_rcp14_ps", "_mm512_maskz_rcp14_ps",
-    "_mm256_rcp14_ps", "_mm256_mask_rcp14_ps", "_mm256_maskz_rcp14_ps",
-    "_mm_rcp14_ps", "_mm_mask_rcp14_ps", "_mm_maskz_rcp14_ps",
-    "_mm512_rcp14_pd", "_mm512_mask_rcp14_pd", "_mm512_maskz_rcp14_pd",
-    "_mm256_rcp14_pd", "_mm256_mask_rcp14_pd", "_mm256_maskz_rcp14_pd",
-    "_mm_rcp14_pd", "_mm_mask_rcp14_pd", "_mm_maskz_rcp14_pd",
-    "_mm512_rsqrt14_ps", "_mm512_mask_rsqrt14_ps", "_mm512_maskz_rsqrt14_ps",
-    "_mm256_rsqrt14_ps", "_mm256_mask_rsqrt14_ps", "_mm256_maskz_rsqrt14_ps",
-    "_mm_rsqrt14_ps", "_mm_mask_rsqrt14_ps", "_mm_maskz_rsqrt14_ps",
-    "_mm512_rsqrt14_pd", "_mm512_mask_rsqrt14_pd", "_mm512_maskz_rsqrt14_pd",
-    "_mm256_rsqrt14_pd", "_mm256_mask_rsqrt14_pd", "_mm256_maskz_rsqrt14_pd",
-    "_mm_rsqrt14_pd", "_mm_mask_rsqrt14_pd", "_mm_maskz_rsqrt14_pd",
-    "_mm512_getexp_ps", "_mm512_mask_getexp_ps", "_mm512_maskz_getexp_ps",
-    "_mm256_getexp_ps", "_mm256_mask_getexp_ps", "_mm256_maskz_getexp_ps",
-    "_mm_getexp_ps", "_mm_mask_getexp_ps", "_mm_maskz_getexp_ps",
-    "_mm512_getexp_pd", "_mm512_mask_getexp_pd",
 }
 
 # Deprecated intrinsics — excluded entirely from test generation
@@ -551,13 +528,8 @@ def gen_fn(sig: dict, expected_values: dict[str, str] | None = None) -> str:
     complete: bool = sig["is_complete"]
     cs = const_suffix(cg)
     no_fuzz = skip_fuzz(name, params)
-    no_miri = skip_miri(name)
 
     lines = []
-
-    # Add cfg(not(miri)) attribute for functions that don't work in Miri
-    if no_miri:
-        lines.append("#[cfg(not(miri))]")
 
     lines.append(f"pub(super) fn {test}() -> Result<(), String> {{")
     lines.append("    unsafe {")
