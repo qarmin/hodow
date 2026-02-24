@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Generates Rust SIMD test stubs from TODO.txt and TODO_AVX.txt.
-Outputs to work_tester_core/src/cpu/auto_generated/
+Outputs to hodow_core/src/cpu/auto_generated/
 """
 
 import re
@@ -9,7 +9,7 @@ from pathlib import Path
 from collections import defaultdict
 
 FUNCTIONS_PER_PART = 50
-OUTPUT_DIR = Path("work_tester_core/src/cpu/auto_generated")
+OUTPUT_DIR = Path("hodow_core/src/cpu/auto_generated")
 FUNCTIONS_FILE = Path("scripts/excluded_functions.txt")
 
 

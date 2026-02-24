@@ -1,5 +1,5 @@
 [package]
-name = "work_tester_cli"
+name = "hodow_cli"
 version.workspace = true
 edition.workspace = true
 
@@ -8,7 +8,7 @@ name = "work_tester"
 path = "src/main.rs"
 
 [dependencies]
-work_tester_core = { path = "../work_tester_core" }
+hodow_core = { path = "../hodow_core" }
 log.workspace = true
 handsome_logger = { version = "0.9.2", default-features = false }
 clap = { version = "4.3", features = ["derive"] }
@@ -17,9 +17,9 @@ ctrlc = "3.4"
 
 [features]
 default = ["gpu"]
-miri_build = ["work_tester_core/miri_build"]
+miri_build = ["hodow_core/miri_build"]
 # Forward the gpu feature to the core crate so dependency-gated cfgs work
-gpu = ["work_tester_core/gpu"]
+gpu = ["hodow_core/gpu"]
 
 [lints]
 workspace = true

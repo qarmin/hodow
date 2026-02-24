@@ -718,6 +718,33 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fc0fef456e4baa96da950455cd02c081ca953b141298e41db3fc7e36b1da849c"
 
 [[package]]
+name = "hodow_cli"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "ctrlc",
+ "handsome_logger",
+ "hodow_core",
+ "indicatif",
+ "log",
+]
+
+[[package]]
+name = "hodow_core"
+version = "0.1.0"
+dependencies = [
+ "gl",
+ "glow",
+ "glutin",
+ "glutin-winit",
+ "log",
+ "once_cell",
+ "rand",
+ "raw-window-handle",
+ "winit",
+]
+
+[[package]]
 name = "id-arena"
 version = "2.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2329,33 +2356,6 @@ dependencies = [
  "serde_json",
  "unicode-xid",
  "wasmparser",
-]
-
-[[package]]
-name = "work_tester_cli"
-version = "0.1.0"
-dependencies = [
- "clap",
- "ctrlc",
- "handsome_logger",
- "indicatif",
- "log",
- "work_tester_core",
-]
-
-[[package]]
-name = "work_tester_core"
-version = "0.1.0"
-dependencies = [
- "gl",
- "glow",
- "glutin",
- "glutin-winit",
- "log",
- "once_cell",
- "rand",
- "raw-window-handle",
- "winit",
 ]
 
 [[package]]

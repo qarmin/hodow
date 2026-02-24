@@ -12,7 +12,7 @@ The main requirement of this project, is that code should be easily cross-compil
 
 For now it checks specific cpu and opengl features, runs them to find crashes(initially validated this with miri to avoid spurious crashes) and for cpu crashes use 1 check for (almost)every function to find any possible issues with the implementation.
 
-Project was created, basing on Rust 1.93, so later updates, may add other cpu features, not available now yet.
+Project was created, basing on Rust 1.93 and Glutin 0.31.2, so later updates, may add other cpu/opengl features, not available now yet.
 
 ## Usage
 ### Default(not recommended - uses very basic cpu features)

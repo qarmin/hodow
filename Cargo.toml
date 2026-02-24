@@ -1,13 +1,13 @@
 [workspace]
 resolver = "2"
 members = [
-    "work_tester_core",
-    "work_tester_cli",
+    "hodow_core",
+    "hodow_cli",
 ]
 
 [workspace.package]
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [workspace.dependencies]
 log = "0.4.22"

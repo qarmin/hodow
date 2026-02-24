@@ -2,12 +2,12 @@
 """
 Generate OpenGL functions coverage tables per core version using gl_functions.csv as source.
 - For each core_version (or 'extension-only') create a table listing functions in that group.
-- Columns: Function name + one column per test found in work_tester_core/src/opengl/tests (test title + GL version)
+- Columns: Function name + one column per test found in hodow_core/src/opengl/tests (test title + GL version)
 - Mark 'x' where a function appears in a test.
 - After each version table, print summary line: "Used at least 1 - {used}/{total}"
 - At the end print global summary: "All functions used at least 1 time - {used}/{total_all}"
 
-Output file: work_tester_core/src/opengl/FUNCTIONS_TABLE.md (overwritten)
+Output file: hodow_core/src/opengl/FUNCTIONS_TABLE.md (overwritten)
 """
 
 from __future__ import annotations
@@ -22,9 +22,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 CSV_PATH = ROOT / 'gl_functions.csv'
 SUPPORTED_CSV_PATH = ROOT / 'gl_glutin_supported_functions.csv'
-OUT_MD = ROOT / 'work_tester_core' / 'src' / 'opengl' / 'FUNCTIONS_TABLE.md'
-OUT_UNIMPLEMENTED = ROOT / 'work_tester_core' / 'src' / 'opengl' / 'unimplemented.txt'
-TESTS_DIR = ROOT / 'work_tester_core' / 'src' / 'opengl' / 'tests'
+OUT_MD = ROOT / 'hodow_core' / 'src' / 'opengl' / 'FUNCTIONS_TABLE.md'
+OUT_UNIMPLEMENTED = ROOT / 'hodow_core' / 'src' / 'opengl' / 'unimplemented.txt'
+TESTS_DIR = ROOT / 'hodow_core' / 'src' / 'opengl' / 'tests'
 
 FUNC_PATTERN = re.compile(r'gl::([A-Z][a-z][a-zA-Z0-9_]*)')
 

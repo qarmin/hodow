@@ -7,7 +7,7 @@ pub fn process_gpu(args: &GpuArgs) {
 
     #[cfg(feature = "gpu")]
     {
-        let opts = work_tester_core::GpuOptions {
+        let opts = hodow_core::GpuOptions {
             no_window: args.no_window,
             time_limit_ms: args.time_limit_ms,
             frame_limit: args.frame_limit,
@@ -23,7 +23,7 @@ pub fn process_gpu(args: &GpuArgs) {
             info!("Per-test frame limit: {} frames", fl);
         }
 
-        match work_tester_core::test_all_opengl(&opts) {
+        match hodow_core::test_all_opengl(&opts) {
             Ok((run, skipped, errors)) => {
                 info!("GL tests finished. Run: {}, Skipped: {}, Errors: {}", run, skipped, errors);
                 if errors > 0 {

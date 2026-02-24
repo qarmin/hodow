@@ -2,7 +2,7 @@ use std::cmp::Reverse;
 
 use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
 use log::{error, info};
-use work_tester_core::{available_modes, list_all_functions, set_iterations, set_skip_tests, test_all_extensions, TestProgress};
+use hodow_core::{available_modes, list_all_functions, set_iterations, set_skip_tests, test_all_extensions, TestProgress};
 
 use crate::cli::CpuArgs;
 use crate::setup_ctrlc_handler;

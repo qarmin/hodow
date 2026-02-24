@@ -6,7 +6,7 @@ use std::fmt::Write as _;
 use clap::Parser;
 use handsome_logger::ConfigBuilder;
 use log::info;
-use work_tester_core::{request_stop, TestStatistics};
+use hodow_core::{request_stop, TestStatistics};
 
 mod cli;
 mod cpu;

@@ -1,5 +1,5 @@
 [package]
-name = "work_tester_core"
+name = "hodow_core"
 version.workspace = true
 edition.workspace = true
 

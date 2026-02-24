@@ -14,7 +14,7 @@ Exit codes:
 
 How it works:
 1. Reads gl_functions.csv to build a mapping  function_name -> min_core_version.
-2. Scans every *.rs file under work_tester_core/src/opengl/tests/ (except mod.rs).
+2. Scans every *.rs file under hodow_core/src/opengl/tests/ (except mod.rs).
 3. Extracts the declared GL version from `GLVersion::new(major, minor)`.
 4. Extracts every `gl::FunctionName` call.
 5. For each call, checks that the function's core_version <= declared_version.
@@ -35,7 +35,7 @@ from typing import Optional
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CSV = ROOT / "gl_functions.csv"
-TESTS_DIR = ROOT / "work_tester_core" / "src" / "opengl" / "tests"
+TESTS_DIR = ROOT / "hodow_core" / "src" / "opengl" / "tests"
 
 # ── Regex patterns ───────────────────────────────────────────────────────────
 
