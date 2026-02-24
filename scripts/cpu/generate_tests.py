@@ -390,7 +390,7 @@ def load_expected_values(path: Path) -> dict[str, str]:
 
 
 def _elem_type_for_unpack(ret: str) -> str | None:
-    """Return element type string for unpacked return types: 'f32', 'f64', or 'i32'."""
+    """Return element type for unpacked return types: 'f32', 'f64', or 'i32'."""
     # Map known returns to element types
     mapping = {
         "__m128": "f32",
@@ -633,7 +633,9 @@ def gen_mod_rs(exts: list[tuple[str, str]]) -> str:
 
 def main() -> None:
     global IGNORED_FUNCTIONS
-    base = Path(__file__).parent.parent
+    # Use repo root as current working directory so user invokes:
+    #   python3 scripts/cpu/generate_tests.py
+    base = Path.cwd()
 
     with open(FUNCTIONS_FILE) as f:
         IGNORED_FUNCTIONS = [line.strip() for line in f if line.strip() and not line.startswith("#")]

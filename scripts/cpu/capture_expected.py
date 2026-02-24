@@ -47,7 +47,9 @@ def load_ev(path: Path) -> tuple[list[str], dict[str, str]]:
 
 
 def main() -> None:
-    base = Path(__file__).parent.parent
+    # Use current working directory as the repository root so scripts are
+    # invoked as: python3 scripts/cpu/xxx.py from the repo root.
+    base = Path.cwd()
     ev_path = base / "expected_cpu_values.txt"
 
     # Extra args forwarded to 'just run'

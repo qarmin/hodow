@@ -19,7 +19,8 @@ from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+# Use current working directory as repo root when script is invoked from repo root
+ROOT = Path.cwd()
 CSV_PATH = ROOT / 'gl_functions.csv'
 SUPPORTED_CSV_PATH = ROOT / 'gl_glutin_supported_functions.csv'
 OUT_MD = ROOT / 'hodow_core' / 'src' / 'opengl' / 'FUNCTIONS_TABLE.md'

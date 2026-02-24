@@ -181,7 +181,9 @@ def test_batch(base: Path, batch_tests: list[str], skip_tests: list[str], out_pa
 def main() -> int:
     global DEBUG, BATCH_SIZE
 
-    base = Path(__file__).parent.parent
+    # Use current working directory (repo root) so script is invoked as
+    # `python3 scripts/cpu/miri_tester.py` from repository root.
+    base = Path.cwd()
     out_path = base / "miri_errors.txt"
 
     # Parse command-line arguments
