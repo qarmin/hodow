@@ -22,20 +22,8 @@ pub fn count_available_features() -> usize {
 
     #[cfg(target_arch = "arm")]
     {
-        if false /* no runtime detection available */ {
-            count += 1;
-        }
-
         #[cfg(target_feature = "neon")]
         if false /* feature detection not yet implemented */ {
-            count += 1;
-        }
-
-        if false /* no runtime detection available */ {
-            count += 1;
-        }
-
-        if false /* no runtime detection available */ {
             count += 1;
         }
 
@@ -43,10 +31,6 @@ pub fn count_available_features() -> usize {
 
     #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
     {
-        if false /* no runtime detection available */ {
-            count += 1;
-        }
-
     }
 
     #[cfg(target_arch = "mips")]
@@ -483,26 +467,14 @@ pub fn available_modes() -> Vec<&'static str> {
 
     #[cfg(target_arch = "arm")]
     {
-        if false /* no runtime detection available */ {
-            modes.push("dsp");
-        }
         #[cfg(target_feature = "neon")]
         if false /* feature detection not yet implemented */ {
             modes.push("neon");
-        }
-        if false /* no runtime detection available */ {
-            modes.push("sat");
-        }
-        if false /* no runtime detection available */ {
-            modes.push("simd32");
         }
     }
 
     #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
     {
-        if false /* no runtime detection available */ {
-            modes.push("hints");
-        }
     }
 
     #[cfg(target_arch = "mips")]
@@ -896,25 +868,6 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
 
     #[cfg(target_arch = "arm")]
     {
-            if false /* no runtime detection available */ {
-                if should_stop() {
-                    return Ok(TestStatistics { features, was_cancelled: true });
-                }
-                let (r, s, e) = crate::cpu::auto_generated::arm::dsp::DSP::test_with_progress(
-                    total_features,
-                    completed_features,
-                    crate::cpu::auto_generated::arm::dsp::DSP::get_tests().len(),
-                    progress_callback,
-                )?;
-                features.push(FeatureStats {
-                    feature_name: crate::cpu::auto_generated::arm::dsp::DSP::get_name(),
-                    tests_run: r,
-                    tests_skipped: s,
-                    tests_errored: e,
-                });
-                completed_features += 1;
-            }
-
         #[cfg(target_feature = "neon")]
         {
             if false /* feature detection not yet implemented */ {
@@ -937,67 +890,10 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
             }
         }
 
-            if false /* no runtime detection available */ {
-                if should_stop() {
-                    return Ok(TestStatistics { features, was_cancelled: true });
-                }
-                let (r, s, e) = crate::cpu::auto_generated::arm::sat::SAT::test_with_progress(
-                    total_features,
-                    completed_features,
-                    crate::cpu::auto_generated::arm::sat::SAT::get_tests().len(),
-                    progress_callback,
-                )?;
-                features.push(FeatureStats {
-                    feature_name: crate::cpu::auto_generated::arm::sat::SAT::get_name(),
-                    tests_run: r,
-                    tests_skipped: s,
-                    tests_errored: e,
-                });
-                completed_features += 1;
-            }
-
-            if false /* no runtime detection available */ {
-                if should_stop() {
-                    return Ok(TestStatistics { features, was_cancelled: true });
-                }
-                let (r, s, e) = crate::cpu::auto_generated::arm::simd32::SIMD32::test_with_progress(
-                    total_features,
-                    completed_features,
-                    crate::cpu::auto_generated::arm::simd32::SIMD32::get_tests().len(),
-                    progress_callback,
-                )?;
-                features.push(FeatureStats {
-                    feature_name: crate::cpu::auto_generated::arm::simd32::SIMD32::get_name(),
-                    tests_run: r,
-                    tests_skipped: s,
-                    tests_errored: e,
-                });
-                completed_features += 1;
-            }
-
     }
 
     #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
     {
-            if false /* no runtime detection available */ {
-                if should_stop() {
-                    return Ok(TestStatistics { features, was_cancelled: true });
-                }
-                let (r, s, e) = crate::cpu::auto_generated::arm_shared::hints::HINTS::test_with_progress(
-                    total_features,
-                    completed_features,
-                    crate::cpu::auto_generated::arm_shared::hints::HINTS::get_tests().len(),
-                    progress_callback,
-                )?;
-                features.push(FeatureStats {
-                    feature_name: crate::cpu::auto_generated::arm_shared::hints::HINTS::get_name(),
-                    tests_run: r,
-                    tests_skipped: s,
-                    tests_errored: e,
-                });
-                completed_features += 1;
-            }
-
     }
 
     #[cfg(target_arch = "mips")]
@@ -2738,27 +2634,9 @@ pub fn list_all_functions() -> Vec<String> {
 
     #[cfg(target_arch = "arm")]
     {
-        {
-            for (_, name) in crate::cpu::auto_generated::arm::dsp::DSP::get_tests() {
-                functions.push(name.to_string());
-            }
-        }
-
         #[cfg(target_feature = "neon")]
         {
             for (_, name) in crate::cpu::auto_generated::arm::neon::NEON::get_tests() {
-                functions.push(name.to_string());
-            }
-        }
-
-        {
-            for (_, name) in crate::cpu::auto_generated::arm::sat::SAT::get_tests() {
-                functions.push(name.to_string());
-            }
-        }
-
-        {
-            for (_, name) in crate::cpu::auto_generated::arm::simd32::SIMD32::get_tests() {
                 functions.push(name.to_string());
             }
         }
@@ -2767,12 +2645,6 @@ pub fn list_all_functions() -> Vec<String> {
 
     #[cfg(any(target_arch = "arm", target_arch = "aarch64"))]
     {
-        {
-            for (_, name) in crate::cpu::auto_generated::arm_shared::hints::HINTS::get_tests() {
-                functions.push(name.to_string());
-            }
-        }
-
     }
 
     #[cfg(target_arch = "mips")]

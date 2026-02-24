@@ -1,4 +1,4 @@
- //! GL_VERSION: 1.0
+//! GL_VERSION: 1.0
 
 use std::error::Error;
 

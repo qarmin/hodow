@@ -57,8 +57,8 @@ impl GLTest for GL15QueriesTest {
             if !mapped.is_null() {
                 gl::UnmapBuffer(gl::ARRAY_BUFFER);
             }
-            let mut ptr: *mut std::ffi::c_void = std::ptr::null_mut();
-            gl::GetBufferPointerv(gl::ARRAY_BUFFER, gl::BUFFER_MAP_POINTER, &mut ptr);
+            let ptr: *mut std::ffi::c_void = std::ptr::null_mut();
+            gl::GetBufferPointerv(gl::ARRAY_BUFFER, gl::BUFFER_MAP_POINTER, &ptr);
             gl::BindBuffer(gl::ARRAY_BUFFER, 0);
             gl::DeleteBuffers(3, buffers.as_ptr());
             Ok("GL 1.5 queries and buffers tested successfully".to_string())

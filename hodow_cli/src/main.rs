@@ -5,8 +5,8 @@ use std::fmt::Write as _;
 
 use clap::Parser;
 use handsome_logger::ConfigBuilder;
+use hodow_core::{TestStatistics, request_stop};
 use log::info;
-use hodow_core::{request_stop, TestStatistics};
 
 mod cli;
 mod cpu;

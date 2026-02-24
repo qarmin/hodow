@@ -443,47 +443,48 @@ pub fn unpack__m512i_to_u32_array(val: __m512i) -> [u32; 16] {
 #[inline]
 pub fn unpack__m512i_to_u64_array(val: __m512i) -> [u64; 8] {
     unsafe { std::mem::transmute(val) }
-} // Unstable - use, when will be stabilized
-  // #[inline]
-  // pub fn create_random_bf16() -> bf16 {
-  //     create_bf16_from(common::get_random_float())
-  // }
-  // #[inline]
-  // pub fn create__m128h_from(val: f32) -> __m128h {
-  //     let f16_val = f16::from_f32(val);
-  //     __m128h([f16_val; 8])
-  // }
-  //
-  // #[inline]
-  // pub fn create_random__m128h() -> __m128h {
-  //     let arr = std::array::from_fn(|_| f16::from_f32(common::get_random_float()));
-  //     __m128h(arr)
-  // }
-  // #[inline]
-  // pub fn create__m256h_from(val: f32) -> __m256h {
-  //     let f16_val = f16::from_f32(val);
-  //     __m256h([f16_val; 16])
-  // }
-  //
-  // #[inline]
-  // pub fn create_random__m256h() -> __m256h {
-  //     let arr = std::array::from_fn(|_| f16::from_f32(common::get_random_float()));
-  //     __m256h(arr)
-  // }
-  // #[inline]
-  // pub fn create__m512h_from(val: f32) -> __m512h {
-  //     let f16_val = f16::from_f32(val);
-  //     __m512h([f16_val; 32])
-  // }
-  //
-  // #[inline]
-  // pub fn create_random__m512h() -> __m512h {
-  //     let arr = std::array::from_fn(|_| f16::from_f32(common::get_random_float()));
-  //     __m512h(arr)
-  // }
-  //
-  // #[inline]
-  // pub fn create_bf16_from(val: f32) -> bf16 {
-  //     let bits = (val.to_bits() >> 16) as u16;
-  //     bf16(bits)
-  // }
+}
+// Unstable - use, when will be stabilized
+// #[inline]
+// pub fn create_random_bf16() -> bf16 {
+//     create_bf16_from(common::get_random_float())
+// }
+// #[inline]
+// pub fn create__m128h_from(val: f32) -> __m128h {
+//     let f16_val = f16::from_f32(val);
+//     __m128h([f16_val; 8])
+// }
+//
+// #[inline]
+// pub fn create_random__m128h() -> __m128h {
+//     let arr = std::array::from_fn(|_| f16::from_f32(common::get_random_float()));
+//     __m128h(arr)
+// }
+// #[inline]
+// pub fn create__m256h_from(val: f32) -> __m256h {
+//     let f16_val = f16::from_f32(val);
+//     __m256h([f16_val; 16])
+// }
+//
+// #[inline]
+// pub fn create_random__m256h() -> __m256h {
+//     let arr = std::array::from_fn(|_| f16::from_f32(common::get_random_float()));
+//     __m256h(arr)
+// }
+// #[inline]
+// pub fn create__m512h_from(val: f32) -> __m512h {
+//     let f16_val = f16::from_f32(val);
+//     __m512h([f16_val; 32])
+// }
+//
+// #[inline]
+// pub fn create_random__m512h() -> __m512h {
+//     let arr = std::array::from_fn(|_| f16::from_f32(common::get_random_float()));
+//     __m512h(arr)
+// }
+//
+// #[inline]
+// pub fn create_bf16_from(val: f32) -> bf16 {
+//     let bits = (val.to_bits() >> 16) as u16;
+//     bf16(bits)
+// }

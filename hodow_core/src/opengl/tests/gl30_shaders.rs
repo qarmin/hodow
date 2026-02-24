@@ -12,21 +12,31 @@ pub struct GL30ShadersTest;
 // Helper to compile a shader and return (shader_id, compile_success)
 unsafe fn compile_shader(src: &CString, shader_type: u32) -> Result<u32, String> {
     let s = unsafe { gl::CreateShader(shader_type) };
-    unsafe { gl::ShaderSource(s, 1, &src.as_ptr(), std::ptr::null()); }
-    unsafe { gl::CompileShader(s); }
+    unsafe {
+        gl::ShaderSource(s, 1, &src.as_ptr(), std::ptr::null());
+    }
+    unsafe {
+        gl::CompileShader(s);
+    }
 
     let mut success = 0;
-    unsafe { gl::GetShaderiv(s, gl::COMPILE_STATUS, &mut success); }
+    unsafe {
+        gl::GetShaderiv(s, gl::COMPILE_STATUS, &mut success);
+    }
     if success == 0 {
         // Query the info log length and read the actual log size
         let mut len = 0;
-        unsafe { gl::GetShaderiv(s, gl::INFO_LOG_LENGTH, &mut len); }
+        unsafe {
+            gl::GetShaderiv(s, gl::INFO_LOG_LENGTH, &mut len);
+        }
         if len <= 0 {
             len = 512;
         }
         let mut buffer = vec![0u8; len as usize];
         let mut actual_len: i32 = 0;
-        unsafe { gl::GetShaderInfoLog(s, len, &mut actual_len, buffer.as_mut_ptr() as *mut _); }
+        unsafe {
+            gl::GetShaderInfoLog(s, len, &mut actual_len, buffer.as_mut_ptr() as *mut _);
+        }
         let msg = if actual_len > 0 {
             String::from_utf8_lossy(&buffer[..actual_len as usize]).to_string()
         } else {
@@ -38,7 +48,9 @@ unsafe fn compile_shader(src: &CString, shader_type: u32) -> Result<u32, String>
         let numbered_src = src_str.lines().enumerate().map(|(i, l)| format!("{:4}: {}", i + 1, l)).collect::<Vec<_>>().join("\n");
 
         let err = unsafe { gl::GetError() };
-        unsafe { gl::DeleteShader(s); }
+        unsafe {
+            gl::DeleteShader(s);
+        }
         return Err(format!(
             "{} (glError=0x{:X})\n--- shader source ---\n{}\n--- end shader source ---",
             msg.trim_matches(char::from(0)),
@@ -88,16 +100,16 @@ impl GLTest for GL30ShadersTest {
             // 330 if parsing fails.
             let mut glsl_version_num = 330;
             let shading_ptr = gl::GetString(gl::SHADING_LANGUAGE_VERSION);
-            if !shading_ptr.is_null() {
-                if let Ok(s) = std::ffi::CStr::from_ptr(shading_ptr as *const std::os::raw::c_char).to_str() {
-                    // s might be like "4.60" or "4.60 NVIDIA" — take the first token
-                    if let Some(tok) = s.split_whitespace().next() {
-                        let parts: Vec<&str> = tok.split('.').collect();
-                        if parts.len() >= 2 {
-                            if let (Ok(major), Ok(minor)) = (parts[0].parse::<i32>(), parts[1].parse::<i32>()) {
-                                glsl_version_num = major * 100 + minor;
-                            }
-                        }
+            if !shading_ptr.is_null()
+                && let Ok(s) = std::ffi::CStr::from_ptr(shading_ptr as *const std::os::raw::c_char).to_str()
+            {
+                // s might be like "4.60" or "4.60 NVIDIA" — take the first token
+                if let Some(tok) = s.split_whitespace().next() {
+                    let parts: Vec<&str> = tok.split('.').collect();
+                    if parts.len() >= 2
+                        && let (Ok(major), Ok(minor)) = (parts[0].parse::<i32>(), parts[1].parse::<i32>())
+                    {
+                        glsl_version_num = major * 100 + minor;
                     }
                 }
             }

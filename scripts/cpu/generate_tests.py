@@ -93,7 +93,11 @@ UNSUPPORTED_FEATURES = {
 
 # Extensions that should be completely skipped (not generated at all)
 SKIP_EXTENSIONS = {
-    "amx",  # Requires unstable x86_amx_intrinsics feature
+    "amx",    # Requires unstable x86_amx_intrinsics feature
+    "dsp",    # ARM DSP — requires unstable stdarch_arm_neon_intrinsics
+    "hints",  # ARM hints — requires unstable stdarch_arm_hints
+    "sat",    # ARM SAT — requires unstable stdarch_arm_sat
+    "simd32", # ARM SIMD32 — requires unstable stdarch_arm_neon_intrinsics
 }
 
 # SIMD type → random creator from values.rs

@@ -1,8 +1,8 @@
 use std::cmp::Reverse;
 
+use hodow_core::{TestProgress, available_modes, list_all_functions, set_iterations, set_only_tests, set_skip_tests, test_all_extensions};
 use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
 use log::{error, info};
-use hodow_core::{available_modes, list_all_functions, set_iterations, set_only_tests, set_skip_tests, test_all_extensions, TestProgress};
 
 use crate::cli::CpuArgs;
 #[cfg(not(feature = "miri_build"))]
@@ -86,7 +86,10 @@ pub fn process_cpu(args: &CpuArgs) {
 
             if stats.total_errors() > 0 {
                 if cfg!(feature = "miri_build") {
-                    error!("\nMiri build detected - skipping error exit to allow test completion. Total errors: {}", stats.total_errors());
+                    error!(
+                        "\nMiri build detected - skipping error exit to allow test completion. Total errors: {}",
+                        stats.total_errors()
+                    );
                     return;
                 }
                 error!("\nTests completed with {} error(s)", stats.total_errors());

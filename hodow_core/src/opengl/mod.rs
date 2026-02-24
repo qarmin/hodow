@@ -440,16 +440,16 @@ pub mod gui {
             self.state = Some(AppState { gl_surface, window });
 
             // Initialize runner
-            if self.runner.is_none() {
-                if let Some(factory) = self.runner_factory.take() {
-                    let mut runner = factory();
-                    if runner.init().is_err() {
-                        event_loop.exit();
-                        return;
-                    }
-                    self.runner = Some(runner);
-                    self.last_frame_time = Some(std::time::Instant::now());
+            if self.runner.is_none()
+                && let Some(factory) = self.runner_factory.take()
+            {
+                let mut runner = factory();
+                if runner.init().is_err() {
+                    event_loop.exit();
+                    return;
                 }
+                self.runner = Some(runner);
+                self.last_frame_time = Some(std::time::Instant::now());
             }
 
             // Request first frame

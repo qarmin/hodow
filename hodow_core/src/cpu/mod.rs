@@ -12,11 +12,9 @@ use once_cell::sync::OnceCell;
 pub mod auto_generated;
 pub(crate) mod common;
 
-pub use auto_generated::registry::{count_available_features, test_all_extensions, available_modes, list_all_functions};
-
+pub use auto_generated::registry::{available_modes, count_available_features, list_all_functions, test_all_extensions};
 #[allow(unused_imports)]
 pub use auto_generated::*;
-
 
 #[derive(Debug, Clone)]
 pub struct TestProgress {
@@ -91,10 +89,10 @@ pub fn set_only_tests(tests: Vec<String>) {
 
 fn should_skip_test(name: &str) -> bool {
     // If an allow-list is set, skip everything not in it
-    if let Some(only) = ONLY_TESTS.get() {
-        if !only.contains(name) {
-            return true;
-        }
+    if let Some(only) = ONLY_TESTS.get()
+        && !only.contains(name)
+    {
+        return true;
     }
     SKIP_TESTS.get().map(|s| s.contains(name)).unwrap_or(false)
 }
@@ -175,5 +173,3 @@ pub trait ExtensionTest {
         Ok((run, skipped, errors))
     }
 }
-
-
