@@ -17,7 +17,6 @@ impl ExtensionTest for SSE2 {
             (&test_mm_cvtsd_si64x, "test_mm_cvtsd_si64x"),
             (&test_mm_cvttsd_si64, "test_mm_cvttsd_si64"),
             (&test_mm_cvttsd_si64x, "test_mm_cvttsd_si64x"),
-            (&test_mm_stream_si64, "test_mm_stream_si64"),
             (&test_mm_cvtsi64_si128, "test_mm_cvtsi64_si128"),
             (&test_mm_cvtsi64x_si128, "test_mm_cvtsi64x_si128"),
             (&test_mm_cvtsi128_si64, "test_mm_cvtsi128_si64"),

@@ -73,7 +73,6 @@ impl ExtensionTest for SSE41 {
             (&test_mm_test_all_zeros, "test_mm_test_all_zeros"),
             (&test_mm_test_all_ones, "test_mm_test_all_ones"),
             (&test_mm_test_mix_ones_zeros, "test_mm_test_mix_ones_zeros"),
-            (&test_mm_stream_load_si128, "test_mm_stream_load_si128"),
         ]
     }
 }

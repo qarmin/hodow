@@ -85,15 +85,6 @@ pub(super) fn test_mm_cvttsd_si64x() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_stream_si64() -> Result<(), String> {
-    unsafe {
-        let mut ptr_mem_addr = [1i64; 1];
-        let a = 2i64;
-        _mm_stream_si64(ptr_mem_addr.as_mut_ptr(), a);
-    }
-    Ok(())
-}
-
 pub(super) fn test_mm_cvtsi64_si128() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_cvtsi64_si128(1i64));

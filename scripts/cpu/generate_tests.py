@@ -11,7 +11,7 @@ from collections import defaultdict
 FUNCTIONS_PER_PART = 50
 OUTPUT_DIR = Path("hodow_core/src/cpu/auto_generated")
 SIGNATURES_FILE = Path("hodow_core/src/cpu/signatures.txt")
-FUNCTIONS_FILE = Path("scripts/excluded_functions.txt")
+FUNCTIONS_FILE = Path("scripts/cpu/excluded_functions.txt")
 
 
 # Ignored functions - that will not be tested
@@ -31,9 +31,6 @@ NO_FUZZ_FUNCTIONS: set[str] = {
 
 }
 
-# Functions with unsupported operations in Miri - skip in miri (#[cfg(not(miri))])
-NO_MIRI_FUNCTIONS: set[str] = {
-}
 
 # Deprecated intrinsics — excluded entirely from test generation
 DEPRECATED_FUNCTIONS = {
@@ -697,9 +694,6 @@ def gen_ext_rs(arch: str, ext: str, funcs: list[dict], n_parts: int) -> str:
     ]
     for sig in funcs:
         tname = test_name(sig["name"])
-        # Add cfg(not(miri)) for functions that don't work in Miri
-        if sig["name"] in NO_MIRI_FUNCTIONS:
-            lines.append(f"            #[cfg(not(miri))]")
         lines.append(f"            (&{tname}, \"{tname}\"),")
     lines += ["        ]", "    }", "}"]
     return "\n".join(lines) + "\n"
@@ -965,9 +959,9 @@ def main() -> None:
 
     if FUNCTIONS_FILE.exists():
         with open(FUNCTIONS_FILE) as f:
-            IGNORED_FUNCTIONS = [line.strip() for line in f if line.strip() and not line.startswith("#")]
+            IGNORED_FUNCTIONS = {line.strip() for line in f if line.strip() and not line.startswith("#")}
     else:
-        IGNORED_FUNCTIONS = []
+        IGNORED_FUNCTIONS = set()
 
     # Parse signatures grouped by (arch, ext)
     sigs_file = base / SIGNATURES_FILE

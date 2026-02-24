@@ -19,6 +19,7 @@ import sys
 import argparse
 from pathlib import Path
 
+# Folder needs to be copied from stdlib -> library/stdarch/crates/core_arch/src
 ARCHS_DIR = Path("archs")
 
 # Architecture directories to scan

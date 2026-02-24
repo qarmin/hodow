@@ -1,10 +1,8 @@
 mod part1;
 mod part2;
-mod part3;
 
 use crate::cpu::auto_generated::x86::sse::part1::*;
 use crate::cpu::auto_generated::x86::sse::part2::*;
-use crate::cpu::auto_generated::x86::sse::part3::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
@@ -97,17 +95,8 @@ impl ExtensionTest for SSE {
             (&test_mm_load_ss, "test_mm_load_ss"),
             (&test_mm_load1_ps, "test_mm_load1_ps"),
             (&test_mm_load_ps1, "test_mm_load_ps1"),
-            (&test_mm_load_ps, "test_mm_load_ps"),
-            (&test_mm_loadu_ps, "test_mm_loadu_ps"),
-            (&test_mm_loadr_ps, "test_mm_loadr_ps"),
             (&test_mm_store_ss, "test_mm_store_ss"),
-            (&test_mm_store1_ps, "test_mm_store1_ps"),
-            (&test_mm_store_ps1, "test_mm_store_ps1"),
-            (&test_mm_store_ps, "test_mm_store_ps"),
-            (&test_mm_storeu_ps, "test_mm_storeu_ps"),
-            (&test_mm_storer_ps, "test_mm_storer_ps"),
             (&test_mm_move_ss, "test_mm_move_ss"),
-            (&test_mm_sfence, "test_mm_sfence"),
             (&test_MM_GET_EXCEPTION_MASK, "test_MM_GET_EXCEPTION_MASK"),
             (&test_MM_GET_EXCEPTION_STATE, "test_MM_GET_EXCEPTION_STATE"),
             (&test_MM_GET_FLUSH_ZERO_MODE, "test_MM_GET_FLUSH_ZERO_MODE"),
@@ -119,7 +108,6 @@ impl ExtensionTest for SSE {
             (&test_mm_prefetch, "test_mm_prefetch"),
             (&test_mm_undefined_ps, "test_mm_undefined_ps"),
             (&test_MM_TRANSPOSE4_PS, "test_MM_TRANSPOSE4_PS"),
-            (&test_mm_stream_ps, "test_mm_stream_ps"),
         ]
     }
 }

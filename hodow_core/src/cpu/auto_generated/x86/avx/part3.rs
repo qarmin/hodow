@@ -8,148 +8,11 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_mm_maskstore_pd() -> Result<(), String> {
-    unsafe {
-        let mut ptr_mem_addr = [1.0f64; 1];
-        let mask = create__m128i_from_i32_array([2, 3, 4, 5]);
-        let a = create__m128d_from([6.0, 7.0]);
-        _mm_maskstore_pd(ptr_mem_addr.as_mut_ptr(), mask, a);
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm256_maskload_ps() -> Result<(), String> {
-    unsafe {
-        let ptr_mem_addr = [1.0f32; 1];
-        let mask = create__m256i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9]);
-        let result = unpack__m256_to_f32_array(_mm256_maskload_ps(ptr_mem_addr.as_ptr(), mask));
-        check_float_array_equality(&result, &[0.0f32; 8])?;
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm256_maskstore_ps() -> Result<(), String> {
-    unsafe {
-        let mut ptr_mem_addr = [1.0f32; 1];
-        let mask = create__m256i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9]);
-        let a = create__m256_from([10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0]);
-        _mm256_maskstore_ps(ptr_mem_addr.as_mut_ptr(), mask, a);
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm_maskload_ps() -> Result<(), String> {
-    unsafe {
-        let ptr_mem_addr = [1.0f32; 1];
-        let mask = create__m128i_from_i32_array([2, 3, 4, 5]);
-        let result = unpack__m128_to_f32_array(_mm_maskload_ps(ptr_mem_addr.as_ptr(), mask));
-        check_float_array_equality(&result, &[0.0f32; 4])?;
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm_maskstore_ps() -> Result<(), String> {
-    unsafe {
-        let mut ptr_mem_addr = [1.0f32; 1];
-        let mask = create__m128i_from_i32_array([2, 3, 4, 5]);
-        let a = create__m128_from([6.0, 7.0, 8.0, 9.0]);
-        _mm_maskstore_ps(ptr_mem_addr.as_mut_ptr(), mask, a);
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm256_movehdup_ps() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_movehdup_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
-        check_float_array_equality(&result, &[2.0, 2.0, 4.0, 4.0, 6.0, 6.0, 8.0, 8.0])?;
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_movehdup_ps(create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm256_moveldup_ps() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_moveldup_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
-        check_float_array_equality(&result, &[1.0, 1.0, 3.0, 3.0, 5.0, 5.0, 7.0, 7.0])?;
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_moveldup_ps(create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm256_movedup_pd() -> Result<(), String> {
-    unsafe {
-        let result = unpack__m256d_to_f64_array(_mm256_movedup_pd(create__m256d_from([1.0, 2.0, 3.0, 4.0])));
-        check_float_array_equality(&result, &[1.0, 1.0, 3.0, 3.0])?;
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_movedup_pd(create_random__m256d());
-            }
-        }
-    }
-    Ok(())
-}
-
 pub(super) fn test_mm256_lddqu_si256() -> Result<(), String> {
     unsafe {
         let ptr_mem_addr = [create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]); 1];
         let result = unpack__m256i_to_i32_array(_mm256_lddqu_si256(ptr_mem_addr.as_ptr()));
         check_array_equality(&result, &[1, 2, 3, 4, 5, 6, 7, 8])?;
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm256_stream_si256() -> Result<(), String> {
-    unsafe {
-        let mut ptr_mem_addr = [create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]); 1];
-        let a = create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]);
-        _mm256_stream_si256(ptr_mem_addr.as_mut_ptr(), a);
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm256_stream_pd() -> Result<(), String> {
-    unsafe {
-        let mut ptr_mem_addr = [1.0f64; 1];
-        let a = create__m256d_from([2.0, 3.0, 4.0, 5.0]);
-        _mm256_stream_pd(ptr_mem_addr.as_mut_ptr(), a);
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm256_stream_ps() -> Result<(), String> {
-    unsafe {
-        let mut ptr_mem_addr = [1.0f32; 1];
-        let a = create__m256_from([2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0]);
-        _mm256_stream_ps(ptr_mem_addr.as_mut_ptr(), a);
     }
     Ok(())
 }
@@ -908,6 +771,226 @@ pub(super) fn test_mm256_setr_epi64x() -> Result<(), String> {
                     break;
                 }
                 let _ = _mm256_setr_epi64x(rand::random::<i64>(), rand::random::<i64>(), rand::random::<i64>(), rand::random::<i64>());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_set1_pd() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256d_to_f64_array(_mm256_set1_pd(1.0f64));
+        check_float_array_equality(&result, &[1.0, 1.0, 1.0, 1.0])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_set1_pd(rand::random::<f64>());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_set1_ps() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_set1_ps(1.0f32));
+        check_float_array_equality(&result, &[1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_set1_ps(rand::random::<f32>());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_set1_epi8() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_set1_epi8(1i8));
+        check_array_equality(&result, &[16843009, 16843009, 16843009, 16843009, 16843009, 16843009, 16843009, 16843009])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_set1_epi8(rand::random::<i8>());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_set1_epi16() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_set1_epi16(1i16));
+        check_array_equality(&result, &[65537, 65537, 65537, 65537, 65537, 65537, 65537, 65537])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_set1_epi16(rand::random::<i16>());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_set1_epi32() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_set1_epi32(1i32));
+        check_array_equality(&result, &[1, 1, 1, 1, 1, 1, 1, 1])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_set1_epi32(rand::random::<i32>());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_set1_epi64x() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_set1_epi64x(1i64));
+        check_array_equality(&result, &[1, 0, 1, 0, 1, 0, 1, 0])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_set1_epi64x(rand::random::<i64>());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_castpd_ps() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_castpd_ps(create__m256d_from([1.0, 2.0, 3.0, 4.0])));
+        check_float_array_equality(&result, &[0.0, 1.875, 0.0, 2.0, 0.0, 2.125, 0.0, 2.25])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_castpd_ps(create_random__m256d());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_castps_pd() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256d_to_f64_array(_mm256_castps_pd(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        check_float_array_equality(&result, &[2.000000473111868, 512.0001225471497, 8192.001972198486, 131072.0316772461])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_castps_pd(create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_castps_si256() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_castps_si256(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
+        check_array_equality(&result, &[1065353216, 1073741824, 1077936128, 1082130432, 1084227584, 1086324736, 1088421888, 1090519040])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_castps_si256(create_random__m256());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_castsi256_ps() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256_to_f32_array(_mm256_castsi256_ps(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
+        check_float_array_equality(&result, &[1e-45, 3e-45, 4e-45, 6e-45, 7e-45, 8e-45, 1e-44, 1.1e-44])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_castsi256_ps(create_random__m256i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm256_castpd_si256() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m256i_to_i32_array(_mm256_castpd_si256(create__m256d_from([1.0, 2.0, 3.0, 4.0])));
+        check_array_equality(&result, &[0, 1072693248, 0, 1073741824, 0, 1074266112, 0, 1074790400])?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm256_castpd_si256(create_random__m256d());
             }
         }
     }

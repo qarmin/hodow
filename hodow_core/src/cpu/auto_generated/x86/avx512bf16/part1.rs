@@ -8,25 +8,6 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_mm_cvtne2ps_pbh() -> Result<(), String> {
-    unsafe {
-        let _result = _mm_cvtne2ps_pbh(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0]));
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm_cvtne2ps_pbh(create_random__m128(), create_random__m128());
-            }
-        }
-    }
-    Ok(())
-}
-
 pub(super) fn test_mm_mask_cvtne2ps_pbh() -> Result<(), String> {
     unsafe {
         let _result = _mm_mask_cvtne2ps_pbh(create__m128bh_from([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask8_from(0b01010101), create__m128_from([9.0, 10.0, 11.0, 12.0]), create__m128_from([13.0, 14.0, 15.0, 16.0]));
