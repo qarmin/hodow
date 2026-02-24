@@ -21,11 +21,8 @@ impl ExtensionTest for SSE2 {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            #[cfg(not(miri))]
             (&test_mm_clflush, "test_mm_clflush"),
-            #[cfg(not(miri))]
             (&test_mm_lfence, "test_mm_lfence"),
-            #[cfg(not(miri))]
             (&test_mm_mfence, "test_mm_mfence"),
             (&test_mm_add_epi8, "test_mm_add_epi8"),
             (&test_mm_add_epi16, "test_mm_add_epi16"),
@@ -109,7 +106,6 @@ impl ExtensionTest for SSE2 {
             (&test_mm_loadl_epi64, "test_mm_loadl_epi64"),
             (&test_mm_load_si128, "test_mm_load_si128"),
             (&test_mm_loadu_si128, "test_mm_loadu_si128"),
-            #[cfg(not(miri))]
             (&test_mm_maskmoveu_si128, "test_mm_maskmoveu_si128"),
             (&test_mm_store_si128, "test_mm_store_si128"),
             (&test_mm_storeu_si128, "test_mm_storeu_si128"),

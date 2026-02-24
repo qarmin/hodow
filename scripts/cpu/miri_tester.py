@@ -22,7 +22,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 ERROR_RE = re.compile(r'^error: ((?:Undefined Behavior|unsupported operation):.+?)(?:\s*-->|$)')
 
 # Test function path in backtrace
-TEST_FN_RE = re.compile(r'^\s*\d+:\s+cpu::auto_generated::[\w:]+::(test_\w+)')
+# Matches: "           1: hodow_core::cpu::auto_generated::x86_64::avx512f::part1::test_mm_cvtss_u64"
+# or:      "           1: hodow_core::cpu::x86_64::avx512f::part1::test_mm_cvtss_u64"
+TEST_FN_RE = re.compile(r'^\s*\d+:\s+hodow_core::cpu::(?:auto_generated::)?[\w:]+::(test_\w+)')
 
 # Debug mode flag
 DEBUG = False
@@ -34,9 +36,35 @@ BATCH_SIZE = 10
 THREADS_NUMBER = 24
 
 
+def load_excluded_functions(base: Path) -> set[str]:
+    """Load excluded function names from excluded_functions.txt."""
+    excluded_path = base / "scripts" / "cpu" / "excluded_functions.txt"
+    excluded = set()
+
+    if not excluded_path.exists():
+        return excluded
+
+    with open(excluded_path, 'r') as f:
+        for line in f:
+            line = line.strip()
+            # Skip empty lines and comment lines
+            if not line or line.startswith('#'):
+                continue
+            # Extract function name (format: _mm_function_name or test_function_name)
+            if line.startswith('_') or line.startswith('test_'):
+                # Convert intrinsic name to test name if needed
+                if line.startswith('_'):
+                    test_name = f"test{line}"
+                else:
+                    test_name = line
+                excluded.add(test_name)
+
+    return excluded
+
+
 def get_all_test_functions(base: Path) -> list[str]:
     """Get list of all test functions by running the binary with --list-functions."""
-    cmd = ["just", "cpu", "--", "--list-functions"]
+    cmd = ["just", "cpu", "-f"]
 
     if DEBUG:
         print(f"[DEBUG] Getting test list: {' '.join(cmd)}")
@@ -50,13 +78,18 @@ def get_all_test_functions(base: Path) -> list[str]:
             timeout=60,
         )
 
-        # Parse output - looking for lines that start with spaces (test names)
+        # Parse output - looking for test function names
+        # Format: HH:MM:SS.mmm [INFO] [work_tester::cpu] cpu.rs:30 -   test_NAME
         tests = []
         output = proc.stdout + proc.stderr
         for line in output.splitlines():
-            line = line.strip()
-            if line.startswith("test_"):
-                tests.append(line)
+            # Extract test name from log line
+            if "test_" in line and "[INFO]" in line:
+                parts = line.split("-")
+                if len(parts) >= 2:
+                    test_name = parts[-1].strip()
+                    if test_name.startswith("test_"):
+                        tests.append(test_name)
 
         if DEBUG:
             print(f"[DEBUG] Found {len(tests)} test functions")
@@ -88,7 +121,7 @@ def parse_errors(output: str) -> list[tuple[str, str]]:
     return results
 
 
-def test_batch(base: Path, batch_tests: list[str], skip_tests: list[str], out_path: Path, batch_num: int, total_batches: int) -> tuple[int, int, dict[str, str]]:
+def test_batch(base: Path, batch_tests: list[str], skip_tests: list[str], out_path: Path, batch_num: int, total_batches: int, global_errors: dict[str, str]) -> tuple[int, int, dict[str, str]]:
     """
     Test a batch of functions, iteratively removing failing ones from the batch.
 
@@ -105,7 +138,7 @@ def test_batch(base: Path, batch_tests: list[str], skip_tests: list[str], out_pa
         iteration += 1
 
         # Test only the remaining tests in this batch using -t
-        cmd = ["just", "miri", "--", "-t"] + remaining_tests
+        cmd = ["just", "miri", "-t"] + remaining_tests
 
         if DEBUG:
             print(f"  [Iteration {iteration}] Testing {len(remaining_tests)} functions")
@@ -141,15 +174,16 @@ def test_batch(base: Path, batch_tests: list[str], skip_tests: list[str], out_pa
             # Process new errors and remove from remaining tests
             new_failures = 0
             for test_name, error_msg in errors:
-                if test_name not in batch_errors:
+                if test_name not in batch_errors and test_name not in global_errors:
                     batch_errors[test_name] = error_msg
+                    global_errors[test_name] = error_msg
                     new_failures += 1
 
                     # Remove from remaining tests
                     if test_name in remaining_tests:
                         remaining_tests.remove(test_name)
 
-                    # Write to file immediately with lock
+                    # Write to file immediately with lock (only if not already written)
                     with file_lock:
                         with open(out_path, 'a') as f:
                             f.write(f"{test_name} -> {error_msg}\n")
@@ -215,15 +249,34 @@ def main() -> int:
     # Clear output file
     out_path.write_text("")
 
+    # Load excluded functions
+    print("Loading excluded functions list...")
+    excluded = load_excluded_functions(base)
+    if excluded:
+        print(f"Loaded {len(excluded)} excluded functions from excluded_functions.txt")
+
     # Get all test functions
     print("Getting list of all test functions...")
-    test_functions = get_all_test_functions(base)
+    all_test_functions = get_all_test_functions(base)
 
-    if not test_functions:
+    if not all_test_functions:
         print("No test functions found!")
         return 0
 
-    print(f"Found {len(test_functions)} test functions to check")
+    print(f"Found {len(all_test_functions)} test functions")
+
+    # Filter out excluded functions
+    test_functions = [t for t in all_test_functions if t not in excluded]
+    num_filtered = len(all_test_functions) - len(test_functions)
+
+    if num_filtered > 0:
+        print(f"Filtered out {num_filtered} excluded functions")
+
+    if not test_functions:
+        print("All test functions are excluded!")
+        return 0
+
+    print(f"Testing {len(test_functions)} functions (after exclusions)")
 
     # Split into batches
     batches = [test_functions[i:i + BATCH_SIZE] for i in range(0, len(test_functions), BATCH_SIZE)]
@@ -241,7 +294,7 @@ def main() -> int:
         # Parallel batch processing
         with ThreadPoolExecutor(max_workers=THREADS_NUMBER) as executor:
             futures = {
-                executor.submit(test_batch, base, batch, global_skip, out_path, idx + 1, total_batches): idx
+                executor.submit(test_batch, base, batch, global_skip, out_path, idx + 1, total_batches, all_errors): idx
                 for idx, batch in enumerate(batches)
             }
 
@@ -257,7 +310,7 @@ def main() -> int:
     else:
         # Sequential batch processing
         for idx, batch in enumerate(batches):
-            passed, failed, errors = test_batch(base, batch, global_skip, out_path, idx + 1, total_batches)
+            passed, failed, errors = test_batch(base, batch, global_skip, out_path, idx + 1, total_batches, all_errors)
             total_passed += passed
             total_failed += failed
             all_errors.update(errors)

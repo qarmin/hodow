@@ -1,4 +1,7 @@
+#[cfg(target_arch = "x86")]
 use std::arch::x86::*;
+#[cfg(target_arch = "x86_64")]
+use std::arch::x86_64::*;
 
 #[allow(unused_imports)]
 use crate::cpu::common::x86::*;
@@ -672,7 +675,6 @@ pub(super) fn test_mm_loadu_si128() -> Result<(), String> {
     Ok(())
 }
 
-#[cfg(not(miri))]
 pub(super) fn test_mm_maskmoveu_si128() -> Result<(), String> {
     unsafe {
         let a = create__m128i_from_i32_array([1, 2, 3, 4]);

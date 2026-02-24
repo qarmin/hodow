@@ -34,7 +34,7 @@ pub mod s390x;
 #[cfg(target_arch = "wasm32")]
 pub mod wasm32;
 
-#[cfg(target_arch = "x86")]
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 pub mod x86;
 
 #[cfg(target_arch = "x86_64")]

@@ -1,4 +1,7 @@
+#[cfg(target_arch = "x86")]
 use std::arch::x86::*;
+#[cfg(target_arch = "x86_64")]
+use std::arch::x86_64::*;
 
 #[allow(unused_imports)]
 use crate::cpu::common::x86::*;
@@ -672,7 +675,6 @@ pub(super) fn test_mm_move_ss() -> Result<(), String> {
     Ok(())
 }
 
-#[cfg(not(miri))]
 pub(super) fn test_mm_sfence() -> Result<(), String> {
     unsafe {
         _mm_sfence();

@@ -5,6 +5,7 @@ use log::{error, info};
 use hodow_core::{available_modes, list_all_functions, set_iterations, set_skip_tests, test_all_extensions, TestProgress};
 
 use crate::cli::CpuArgs;
+#[cfg(not(feature = "miri_build"))]
 use crate::setup_ctrlc_handler;
 
 pub fn process_cpu(args: &CpuArgs) {
@@ -33,7 +34,8 @@ pub fn process_cpu(args: &CpuArgs) {
         return;
     }
 
-    // Setup Ctrl+C handler
+    // Setup Ctrl+C handler (skip in Miri as it doesn't support semaphores)
+    #[cfg(not(feature = "miri_build"))]
     setup_ctrlc_handler();
 
     // Create progress bars

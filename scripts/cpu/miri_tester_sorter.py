@@ -54,16 +54,26 @@ def color_header(s: str) -> str:
 
 
 def print_group(key: str, tests: list, first: bool):
-    """Print a group with the header on its own line and quoted tests on the next.
+    """Print a group with the header on its own line and function names below.
 
     If not the first printed group, print a blank line before the header to separate groups.
     """
-    tests_sorted = sorted(tests)
-    quoted = ", ".join(f'"{t}"' for t in tests_sorted)
+    # Remove duplicates and sort
+    tests_unique = sorted(set(tests))
+
+    # Convert test_* to _* format (remove 'test' prefix)
+    functions = []
+    for test in tests_unique:
+        if test.startswith('test_'):
+            functions.append('_' + test[5:])  # Remove 'test_' and add '_'
+        else:
+            functions.append(test)
+
     if not first:
         print("")
-    print(color_header(key))
-    print(quoted)
+    print(color_header("#" + key))
+    for func in functions:
+        print(func)
 
 
 def main():

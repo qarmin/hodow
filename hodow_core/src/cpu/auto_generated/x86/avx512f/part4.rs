@@ -1,4 +1,7 @@
+#[cfg(target_arch = "x86")]
 use std::arch::x86::*;
+#[cfg(target_arch = "x86_64")]
+use std::arch::x86_64::*;
 
 #[allow(unused_imports)]
 use crate::cpu::common::x86::*;
@@ -345,7 +348,6 @@ pub(super) fn test_mm_maskz_max_epi64() -> Result<(), String> {
     Ok(())
 }
 
-#[cfg(not(miri))]
 pub(super) fn test_mm512_max_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m512_to_f32_array(_mm512_max_ps(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0])));
@@ -366,7 +368,6 @@ pub(super) fn test_mm512_max_ps() -> Result<(), String> {
     Ok(())
 }
 
-#[cfg(not(miri))]
 pub(super) fn test_mm512_mask_max_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m512_to_f32_array(_mm512_mask_max_ps(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__mmask16_from(0b0101010101010101), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]), create__m512_from([33.0, 34.0, 35.0, 36.0, 37.0, 38.0, 39.0, 40.0, 41.0, 42.0, 43.0, 44.0, 45.0, 46.0, 47.0, 48.0])));
@@ -387,7 +388,6 @@ pub(super) fn test_mm512_mask_max_ps() -> Result<(), String> {
     Ok(())
 }
 
-#[cfg(not(miri))]
 pub(super) fn test_mm512_maskz_max_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m512_to_f32_array(_mm512_maskz_max_ps(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0])));
@@ -488,7 +488,6 @@ pub(super) fn test_mm_maskz_max_ps() -> Result<(), String> {
     Ok(())
 }
 
-#[cfg(not(miri))]
 pub(super) fn test_mm512_max_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m512d_to_f64_array(_mm512_max_pd(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
@@ -509,7 +508,6 @@ pub(super) fn test_mm512_max_pd() -> Result<(), String> {
     Ok(())
 }
 
-#[cfg(not(miri))]
 pub(super) fn test_mm512_mask_max_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m512d_to_f64_array(_mm512_mask_max_pd(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__mmask8_from(0b01010101), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512d_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0])));
@@ -530,7 +528,6 @@ pub(super) fn test_mm512_mask_max_pd() -> Result<(), String> {
     Ok(())
 }
 
-#[cfg(not(miri))]
 pub(super) fn test_mm512_maskz_max_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m512d_to_f64_array(_mm512_maskz_max_pd(create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));

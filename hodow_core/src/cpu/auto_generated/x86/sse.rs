@@ -107,7 +107,6 @@ impl ExtensionTest for SSE {
             (&test_mm_storeu_ps, "test_mm_storeu_ps"),
             (&test_mm_storer_ps, "test_mm_storer_ps"),
             (&test_mm_move_ss, "test_mm_move_ss"),
-            #[cfg(not(miri))]
             (&test_mm_sfence, "test_mm_sfence"),
             (&test_MM_GET_EXCEPTION_MASK, "test_MM_GET_EXCEPTION_MASK"),
             (&test_MM_GET_EXCEPTION_STATE, "test_MM_GET_EXCEPTION_STATE"),

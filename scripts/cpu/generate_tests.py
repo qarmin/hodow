@@ -41,6 +41,13 @@ DEPRECATED_FUNCTIONS = {
     "_mm_pause",                   # deprecated: use core::hint::spin_loop()
 }
 
+# x86-only functions with incompatible signatures on x86_64
+# These will be skipped when x86 module is compiled for x86_64
+X86_INCOMPATIBLE_FUNCTIONS = {
+    "__readeflags",    # x86: u32, x86_64: u64
+    "__writeeflags",   # x86: u32, x86_64: u64
+}
+
 # Types without helpers in values.rs — functions using these are skipped entirely
 UNSTABLE_TYPES = {
     "bf16", "f16",
@@ -603,10 +610,21 @@ def gen_fn(sig: dict, expected_values: dict[str, str] | None = None) -> str:
 
 
 def get_arch_import(arch: str) -> str:
-    """Return the appropriate arch import for the given architecture."""
+    """Return the appropriate arch import for the given architecture.
+
+    For x86, returns conditional imports that use x86_64 when compiled for x86_64.
+    """
+    # Special case for x86: use x86_64 intrinsics on x86_64 targets
+    if arch == "x86":
+        return (
+            '#[cfg(target_arch = "x86")]\n'
+            'use std::arch::x86::*;\n'
+            '#[cfg(target_arch = "x86_64")]\n'
+            'use std::arch::x86_64::*;'
+        )
+
     # Map architecture names to their std::arch module names
     arch_map = {
-        "x86": "std::arch::x86",
         "x86_64": "std::arch::x86_64",
         "arm": "std::arch::arm",
         "aarch64": "std::arch::aarch64",
@@ -624,7 +642,8 @@ def get_arch_import(arch: str) -> str:
         "s390x": "std::arch::s390x",
         "wasm32": "std::arch::wasm32",
     }
-    return arch_map.get(arch, f"std::arch::{arch}")
+    module = arch_map.get(arch, f"std::arch::{arch}")
+    return f"use {module}::*;"
 
 
 def get_common_helper(arch: str) -> str:
@@ -642,7 +661,7 @@ def gen_part(funcs: list[dict], arch: str, ext: str, expected_values: dict[str, 
     common_helper = get_common_helper(arch)
 
     header = [
-        f"use {arch_import}::*;",
+        arch_import,
         "",
         "#[allow(unused_imports)]",
         f"use {common_helper}::*;",
@@ -688,7 +707,10 @@ def gen_ext_rs(arch: str, ext: str, funcs: list[dict], n_parts: int) -> str:
 
 def get_target_arch_cfg(arch: str) -> str:
     """Return the target_arch cfg expression for the given architecture."""
-    if arch == "riscv_shared":
+    if arch == "x86":
+        # x86 intrinsics work on both x86 and x86_64 (backward compatibility)
+        return 'any(target_arch = "x86", target_arch = "x86_64")'
+    elif arch == "riscv_shared":
         # riscv_shared works for both riscv32 and riscv64
         return 'any(target_arch = "riscv32", target_arch = "riscv64")'
     elif arch == "loongarch_shared":
@@ -989,7 +1011,8 @@ def main() -> None:
                       if s["is_complete"]
                       and not has_unstable_type(s["params"], s["return_type"] or "()")
                       and s["name"] not in DEPRECATED_FUNCTIONS
-                      and s["name"] not in IGNORED_FUNCTIONS]
+                      and s["name"] not in IGNORED_FUNCTIONS
+                      and (arch != "x86" or s["name"] not in X86_INCOMPATIBLE_FUNCTIONS)]
             skipped_count = len(all_funcs) - len(stable)
 
             feature = ext_to_feature(ext)

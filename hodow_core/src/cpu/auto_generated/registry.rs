@@ -145,7 +145,7 @@ pub fn count_available_features() -> usize {
 
     }
 
-    #[cfg(target_arch = "x86")]
+    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     {
         if false /* no runtime detection available */ {
             count += 1;
@@ -586,7 +586,7 @@ pub fn available_modes() -> Vec<&'static str> {
         }
     }
 
-    #[cfg(target_arch = "x86")]
+    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     {
         if false /* no runtime detection available */ {
             modes.push("abm");
@@ -1321,7 +1321,7 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
 
     }
 
-    #[cfg(target_arch = "x86")]
+    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     {
             if false /* no runtime detection available */ {
                 if should_stop() {
@@ -2901,7 +2901,7 @@ pub fn list_all_functions() -> Vec<String> {
 
     }
 
-    #[cfg(target_arch = "x86")]
+    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     {
         {
             for (_, name) in crate::cpu::auto_generated::x86::abm::ABM::get_tests() {

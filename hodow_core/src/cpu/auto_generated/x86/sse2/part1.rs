@@ -1,11 +1,13 @@
+#[cfg(target_arch = "x86")]
 use std::arch::x86::*;
+#[cfg(target_arch = "x86_64")]
+use std::arch::x86_64::*;
 
 #[allow(unused_imports)]
 use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-#[cfg(not(miri))]
 pub(super) fn test_mm_clflush() -> Result<(), String> {
     unsafe {
         let ptr_p = [1u8; 1];
@@ -14,7 +16,6 @@ pub(super) fn test_mm_clflush() -> Result<(), String> {
     Ok(())
 }
 
-#[cfg(not(miri))]
 pub(super) fn test_mm_lfence() -> Result<(), String> {
     unsafe {
         _mm_lfence();
@@ -34,7 +35,6 @@ pub(super) fn test_mm_lfence() -> Result<(), String> {
     Ok(())
 }
 
-#[cfg(not(miri))]
 pub(super) fn test_mm_mfence() -> Result<(), String> {
     unsafe {
         _mm_mfence();
