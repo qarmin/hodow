@@ -13,8 +13,6 @@ impl ExtensionTest for AVX512BF16 {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_mm256_cvtne2ps_pbh, "test_mm256_cvtne2ps_pbh"),
-            (&test_mm256_mask_cvtne2ps_pbh, "test_mm256_mask_cvtne2ps_pbh"),
             (&test_mm256_maskz_cvtne2ps_pbh, "test_mm256_maskz_cvtne2ps_pbh"),
             (&test_mm512_cvtne2ps_pbh, "test_mm512_cvtne2ps_pbh"),
             (&test_mm512_mask_cvtne2ps_pbh, "test_mm512_mask_cvtne2ps_pbh"),

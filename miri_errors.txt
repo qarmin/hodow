@@ -1,1 +1,0 @@
-test_mm_maskz_cvtne2ps_pbh -> unsupported operation: can't call foreign function `llvm.x86.avx512bf16.cvtne2ps2bf16.128` on OS `linux`

@@ -29,11 +29,16 @@ TEST_FN_RE = re.compile(r'^\s*\d+:\s+hodow_core::cpu::(?:auto_generated::)?[\w:]
 # Debug mode flag
 DEBUG = False
 
-# Lock for synchronized file writing
+# Lock for synchronized file writing and global_errors dict access
 file_lock = threading.Lock()
 
 BATCH_SIZE = 10
-THREADS_NUMBER = 24
+THREADS_NUMBER = 1
+
+
+class FatalBatchError(Exception):
+    """Raised inside test_batch when the run cannot continue and the whole script must abort."""
+    pass
 
 
 def load_excluded_functions(base: Path) -> set[str]:
@@ -78,10 +83,17 @@ def get_all_test_functions(base: Path) -> list[str]:
             timeout=60,
         )
 
+        output = proc.stdout + proc.stderr
+
+        if proc.returncode != 0:
+            print(f"\n✗ Command '{' '.join(cmd)}' failed with exit code {proc.returncode}")
+            print(f"\n--- STDOUT ---\n{proc.stdout}")
+            print(f"\n--- STDERR ---\n{proc.stderr}")
+            sys.exit(1)
+
         # Parse output - looking for test function names
         # Format: HH:MM:SS.mmm [INFO] [work_tester::cpu] cpu.rs:30 -   test_NAME
         tests = []
-        output = proc.stdout + proc.stderr
         for line in output.splitlines():
             # Extract test name from log line
             if "test_" in line and "[INFO]" in line:
@@ -97,7 +109,7 @@ def get_all_test_functions(base: Path) -> list[str]:
         return tests
     except Exception as e:
         print(f"Error getting test list: {e}")
-        return []
+        sys.exit(1)
 
 
 def parse_errors(output: str) -> list[tuple[str, str]]:
@@ -121,11 +133,21 @@ def parse_errors(output: str) -> list[tuple[str, str]]:
     return results
 
 
-def test_batch(base: Path, batch_tests: list[str], skip_tests: list[str], out_path: Path, batch_num: int, total_batches: int, global_errors: dict[str, str]) -> tuple[int, int, dict[str, str]]:
+def test_batch(
+    base: Path,
+    batch_tests: list[str],
+    skip_tests: set[str],
+    out_path: Path,
+    batch_num: int,
+    total_batches: int,
+    global_errors: dict[str, str],
+    errors_lock: threading.Lock,
+) -> tuple[int, int, dict[str, str]]:
     """
     Test a batch of functions, iteratively removing failing ones from the batch.
 
     Returns: (passed, failed, errors_dict)
+    Raises FatalBatchError on unrecoverable failures.
     """
     remaining_tests = [t for t in batch_tests if t not in skip_tests]
     batch_errors: dict[str, str] = {}
@@ -161,35 +183,57 @@ def test_batch(base: Path, batch_tests: list[str], skip_tests: list[str], out_pa
                     print(f"  [Iteration {iteration}] ✓ Batch completed successfully")
                 break
 
+            print(f"  ✗ [Iteration {iteration}] Batch failed with exit code {proc.returncode}, parsing errors...")
+
             # Parse errors from output
             errors = parse_errors(output)
 
+
+
             if not errors:
-                # Test failed but no error pattern found
-                if DEBUG:
-                    print(f"  [Iteration {iteration}] ✗ Test failed but no error pattern found")
-                    print(output[:500])
-                break
+                # Test failed but no error pattern matched — fatal, can't recover
+                msg = (
+                    f"\n✗ [Batch {batch_num}/{total_batches}] Command failed (exit {proc.returncode}) "
+                    f"but no recognizable error pattern found in output.\n"
+                    f"  Command: {' '.join(cmd[:5])}... (+ {len(remaining_tests)} test names)\n"
+                    f"\n--- STDOUT ---\n{proc.stdout[-4000:] if len(proc.stdout) > 4000 else proc.stdout}"
+                    f"\n--- STDERR ---\n{proc.stderr[-4000:] if len(proc.stderr) > 4000 else proc.stderr}"
+                )
+                raise FatalBatchError(msg)
 
             # Process new errors and remove from remaining tests
             new_failures = 0
             for test_name, error_msg in errors:
-                if test_name not in batch_errors and test_name not in global_errors:
-                    batch_errors[test_name] = error_msg
-                    global_errors[test_name] = error_msg
+                if test_name == "unknown":
+                    msg = (
+                        f"\n✗ [Batch {batch_num}/{total_batches}] Could not identify test function "
+                        f"for error: {error_msg}\n"
+                        f"  Command: {' '.join(cmd[:5])}... (+ {len(remaining_tests)} test names)\n"
+                        f"\n--- STDOUT ---\n{proc.stdout[-4000:] if len(proc.stdout) > 4000 else proc.stdout}"
+                        f"\n--- STDERR ---\n{proc.stderr[-4000:] if len(proc.stderr) > 4000 else proc.stderr}"
+                    )
+                    raise FatalBatchError(msg)
+
+                with errors_lock:
+                    already_seen = test_name in batch_errors or test_name in global_errors
+                    if not already_seen:
+                        batch_errors[test_name] = error_msg
+                        global_errors[test_name] = error_msg
+
+                if not already_seen:
                     new_failures += 1
 
                     # Remove from remaining tests
                     if test_name in remaining_tests:
                         remaining_tests.remove(test_name)
 
-                    # Write to file immediately with lock (only if not already written)
+                    # Write to file immediately (file_lock already covers I/O)
                     with file_lock:
                         with open(out_path, 'a') as f:
                             f.write(f"{test_name} -> {error_msg}\n")
                             f.flush()
 
-                    print(f"    ✗ {test_name}: {error_msg[:60]}...")
+                    print(f"    ✗ {test_name}: {error_msg[:100]}...")
 
             if new_failures == 0:
                 # No new failures found, exit loop
@@ -200,6 +244,8 @@ def test_batch(base: Path, batch_tests: list[str], skip_tests: list[str], out_pa
         except subprocess.TimeoutExpired:
             print(f"  ✗ Batch timed out (>5 minutes)")
             break
+        except FatalBatchError:
+            raise
         except Exception as e:
             print(f"  ✗ Exception during batch test: {e}")
             break
@@ -230,7 +276,6 @@ def main() -> int:
         if "--debug" in args:
             args.remove("--debug")
         print("[DEBUG MODE ENABLED]")
-
 
     if "--batch-size" in args:
         idx = args.index("--batch-size")
@@ -284,17 +329,21 @@ def main() -> int:
 
     print(f"Split into {total_batches} batches")
 
-    # Process batches
+    # Shared state (protected by errors_lock)
     total_passed = 0
     total_failed = 0
     all_errors: dict[str, str] = {}
-    global_skip: list[str] = []  # Tests to skip in ALL batches
+    errors_lock = threading.Lock()
+    global_skip: set[str] = set()  # Tests to skip in ALL batches (sequential mode only)
 
     if THREADS_NUMBER > 1:
         # Parallel batch processing
         with ThreadPoolExecutor(max_workers=THREADS_NUMBER) as executor:
             futures = {
-                executor.submit(test_batch, base, batch, global_skip, out_path, idx + 1, total_batches, all_errors): idx
+                executor.submit(
+                    test_batch, base, batch, set(),  # each parallel batch uses its own empty skip set
+                    out_path, idx + 1, total_batches, all_errors, errors_lock
+                ): idx
                 for idx, batch in enumerate(batches)
             }
 
@@ -304,18 +353,30 @@ def main() -> int:
                     passed, failed, errors = future.result()
                     total_passed += passed
                     total_failed += failed
-                    all_errors.update(errors)
+                    # all_errors already updated inside test_batch under errors_lock
+                except FatalBatchError as e:
+                    print(str(e))
+                    # Cancel remaining futures
+                    for f in futures:
+                        f.cancel()
+                    return 1
                 except Exception as e:
                     print(f"  ✗ Batch {batch_idx + 1} exception: {e}")
     else:
         # Sequential batch processing
         for idx, batch in enumerate(batches):
-            passed, failed, errors = test_batch(base, batch, global_skip, out_path, idx + 1, total_batches, all_errors)
+            try:
+                passed, failed, errors = test_batch(
+                    base, batch, global_skip,
+                    out_path, idx + 1, total_batches, all_errors, errors_lock
+                )
+            except FatalBatchError as e:
+                print(str(e))
+                return 1
             total_passed += passed
             total_failed += failed
-            all_errors.update(errors)
-            # Add failed tests to global skip list for subsequent batches
-            global_skip.extend(errors.keys())
+            # Add failed tests to global skip set for subsequent batches
+            global_skip.update(errors.keys())
 
     # Summary
     print(f"\n{'='*80}")

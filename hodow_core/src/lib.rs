@@ -12,7 +12,7 @@ pub mod opengl;
 
 // Re-export main API
 pub use cpu::{
-    available_modes, get_iterations, list_all_functions, request_stop, reset_stop_flag, set_iterations, set_skip_tests, should_stop, test_all_extensions, ExtensionTest,
+    available_modes, get_iterations, list_all_functions, request_stop, reset_stop_flag, set_iterations, set_only_tests, set_skip_tests, should_stop, test_all_extensions, ExtensionTest,
     FeatureStats, ProgressCallback, TestFunction, TestProgress, TestStatistics,
 };
 // Re-export OpenGL API only when the `gpu` feature is enabled

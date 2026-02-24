@@ -8,44 +8,6 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_mm256_cvtne2ps_pbh() -> Result<(), String> {
-    unsafe {
-        let _result = _mm256_cvtne2ps_pbh(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_cvtne2ps_pbh(create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
-pub(super) fn test_mm256_mask_cvtne2ps_pbh() -> Result<(), String> {
-    unsafe {
-        let _result = _mm256_mask_cvtne2ps_pbh(create__m256bh_from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__mmask16_from(0b0101010101010101), create__m256_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0]), create__m256_from([25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]));
-
-        if crate::get_fuzzing() {
-            log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
-            for i in 0..total_iters {
-                if i % 1000 == 0 && crate::cpu::should_stop() {
-                    log::info!("Fuzzing stopped at iteration {}", i);
-                    break;
-                }
-                let _ = _mm256_mask_cvtne2ps_pbh(create_random__m256bh(), create_random__mmask16(), create_random__m256(), create_random__m256());
-            }
-        }
-    }
-    Ok(())
-}
-
 pub(super) fn test_mm256_maskz_cvtne2ps_pbh() -> Result<(), String> {
     unsafe {
         let _result = _mm256_maskz_cvtne2ps_pbh(create__mmask16_from(0b0101010101010101), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));

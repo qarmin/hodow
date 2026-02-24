@@ -176,6 +176,8 @@ _mm_maskz_load_ss
 #unsupported operation: can't call foreign function
 _mm_mask_cvtne2ps_pbh
 _mm_maskz_cvtne2ps_pbh
+_mm256_mask_cvtne2ps_pbh
+_mm256_cvtne2ps_pbh
 _mm_cvtne2ps_pbh
 _mm_cvtss_u64
 _mm_sfence

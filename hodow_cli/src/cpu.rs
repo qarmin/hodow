@@ -2,7 +2,7 @@ use std::cmp::Reverse;
 
 use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
 use log::{error, info};
-use hodow_core::{available_modes, list_all_functions, set_iterations, set_skip_tests, test_all_extensions, TestProgress};
+use hodow_core::{available_modes, list_all_functions, set_iterations, set_only_tests, set_skip_tests, test_all_extensions, TestProgress};
 
 use crate::cli::CpuArgs;
 #[cfg(not(feature = "miri_build"))]
@@ -11,6 +11,10 @@ use crate::setup_ctrlc_handler;
 pub fn process_cpu(args: &CpuArgs) {
     if let Some(nv) = args.iterations {
         set_iterations(nv);
+    }
+
+    if let Some(ref only) = args.test_function {
+        set_only_tests(only.clone());
     }
 
     if !args.skip.is_empty() {
