@@ -15,8 +15,8 @@ import subprocess
 import sys
 from pathlib import Path
 
-# Matches:  test_mm_foo(SSE2) failed: Got VALUE, expected OLD
-FAIL_RE = re.compile(r'(test_\w+)\(\w+\) failed: Got (.+), expected ')
+# Matches:  test_mm_foo(x86_64::AVX512BW) failed: Got VALUE, expected OLD
+FAIL_RE = re.compile(r'(test_\w+)\([^)]+\) failed: Got (.+), expected ')
 
 
 def to_rust_value(val: str) -> str:
@@ -57,13 +57,14 @@ def main() -> None:
 
     print("Building and running tests…")
     result = subprocess.run(
-        ["just", "run", *extra],
+        ["just", "cpu", *extra],
         cwd=base,
         capture_output=True,
         text=True,
     )
     output = result.stdout + result.stderr
 
+    print(output)
     # Parse failures
     captured: dict[str, str] = {}
     for line in output.splitlines():

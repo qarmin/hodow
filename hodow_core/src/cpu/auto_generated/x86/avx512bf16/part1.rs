@@ -31,7 +31,7 @@ pub(super) fn test_mm512_cvtpbh_ps() -> Result<(), String> {
 pub(super) fn test_mm512_mask_cvtpbh_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m512_to_f32_array(_mm512_mask_cvtpbh_ps(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__mmask16_from(0b0101010101010101), create__m256bh_from([17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32])));
-        check_float_array_equality(&result, &[0.0f32; 16])?;
+        check_float_array_equality(&result, &[1.561203e-39, 2.0, 1.744874e-39, 4.0, 1.928545e-39, 6.0, 2.112216e-39, 8.0, 2.295887e-39, 10.0, 2.479558e-39, 12.0, 2.66323e-39, 14.0, 2.8469e-39, 16.0])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -91,7 +91,7 @@ pub(super) fn test_mm256_cvtpbh_ps() -> Result<(), String> {
 pub(super) fn test_mm256_mask_cvtpbh_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_mask_cvtpbh_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__mmask8_from(0b01010101), create__m128bh_from([9, 10, 11, 12, 13, 14, 15, 16])));
-        check_float_array_equality(&result, &[0.0f32; 8])?;
+        check_float_array_equality(&result, &[8.2652e-40, 2.0, 1.01019e-39, 4.0, 1.193861e-39, 6.0, 1.377532e-39, 8.0])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -151,7 +151,7 @@ pub(super) fn test_mm_cvtpbh_ps() -> Result<(), String> {
 pub(super) fn test_mm_mask_cvtpbh_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_mask_cvtpbh_ps(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__mmask8_from(0b01010101), create__m128bh_from([5, 6, 7, 8, 9, 10, 11, 12])));
-        check_float_array_equality(&result, &[0.0f32; 4])?;
+        check_float_array_equality(&result, &[4.59177e-40, 2.0, 6.42848e-40, 4.0])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");

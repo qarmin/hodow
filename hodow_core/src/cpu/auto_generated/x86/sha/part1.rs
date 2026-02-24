@@ -11,7 +11,7 @@ use crate::cpu::common::{check_array_equality, check_float_array_equality, check
 pub(super) fn test_mm_sha256msg1_epu32() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_sha256msg1_epu32(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
-        check_array_equality(&result, &[0i32; 4])?;
+        check_array_equality(&result, &[67141633, 100712450, 134283267, 167854084])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -31,7 +31,7 @@ pub(super) fn test_mm_sha256msg1_epu32() -> Result<(), String> {
 pub(super) fn test_mm_sha256msg2_epu32() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_sha256msg2_epu32(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
-        check_array_equality(&result, &[0i32; 4])?;
+        check_array_equality(&result, &[221185, 327682, -603938596, 536953158])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -51,7 +51,7 @@ pub(super) fn test_mm_sha256msg2_epu32() -> Result<(), String> {
 pub(super) fn test_mm_sha256rnds2_epu32() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_sha256rnds2_epu32(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]), create__m128i_from_i32_array([9, 10, 11, 12])));
-        check_array_equality(&result, &[0i32; 4])?;
+        check_array_equality(&result, &[415236881, 1178701972, 419439380, 1689133364])?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");

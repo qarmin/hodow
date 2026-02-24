@@ -14,7 +14,7 @@ pub(super) fn test_mulx_u32() -> Result<(), String> {
         let b = 2u32;
         let mut ref_hi = 3u32;
         let result = _mulx_u32(a, b, &mut ref_hi);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 2)?;
     }
     Ok(())
 }
@@ -22,7 +22,7 @@ pub(super) fn test_mulx_u32() -> Result<(), String> {
 pub(super) fn test_bzhi_u32() -> Result<(), String> {
     unsafe {
         let result = _bzhi_u32(1u32, 2u32);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -42,7 +42,7 @@ pub(super) fn test_bzhi_u32() -> Result<(), String> {
 pub(super) fn test_pdep_u32() -> Result<(), String> {
     unsafe {
         let result = _pdep_u32(1u32, 2u32);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 2)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");

@@ -36,7 +36,7 @@ pub(super) fn test_subborrow_u64() -> Result<(), String> {
         let b = 3u64;
         let mut ref_out = 4u64;
         let result = _subborrow_u64(c_in, a, b, &mut ref_out);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
     }
     Ok(())
 }

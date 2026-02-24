@@ -48,7 +48,7 @@ pub(super) fn test_bextr2_u64() -> Result<(), String> {
 pub(super) fn test_andn_u64() -> Result<(), String> {
     unsafe {
         let result = _andn_u64(1u64, 2u64);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 2)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -68,7 +68,7 @@ pub(super) fn test_andn_u64() -> Result<(), String> {
 pub(super) fn test_blsi_u64() -> Result<(), String> {
     unsafe {
         let result = _blsi_u64(1u64);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
@@ -88,7 +88,7 @@ pub(super) fn test_blsi_u64() -> Result<(), String> {
 pub(super) fn test_blsmsk_u64() -> Result<(), String> {
     unsafe {
         let result = _blsmsk_u64(1u64);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 1)?;
 
         if crate::get_fuzzing() {
             log::info!("Starting fuzzing");
