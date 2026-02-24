@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
 """
-Extracts public intrinsic function signatures from stdarch x86/x86_64 source
+Extracts public intrinsic function signatures from all architecture source
 files, joining multi-line signatures into a single line.
 
-Output format matches signatures.txt:
-  path/to/file.rs
-  LINENUM:pub [unsafe] fn _mm_xxx(a: T, b: T) -> T {
+Output format:
+  arch/path/to/file.rs
+  LINENUM:pub [unsafe] fn function_name(a: T, b: T) -> T {
 
 Usage:
-  python3 scripts/extract_signatures.py [--files avx2.rs sse.rs ...]
+  python3 scripts/cpu/extract_signatures.py [--archs x86 arm ...]
+  python3 scripts/cpu/extract_signatures.py [--out custom_output.txt]
 
-Without --files: processes all x86 + x86_64 source files found in STDARCH_DIR.
+Without --archs: processes all architectures found in ARCHS_DIR.
 """
 
 import re
@@ -18,18 +19,18 @@ import sys
 import argparse
 from pathlib import Path
 
-STDARCH_DIR = Path(
-    "TODO"
-)
+ARCHS_DIR = Path("archs")
 
-X86_DIR    = STDARCH_DIR / "x86"
-X86_64_DIR = STDARCH_DIR / "x86_64"
-
-# Only emit functions whose names start with these prefixes
-INTRINSIC_PREFIXES = ("_mm",)
+# Architecture directories to scan
+ARCHITECTURES = [
+    "x86", "x86_64", "arm", "aarch64",
+    "riscv32", "riscv64", "riscv_shared",
+    "arm_shared", "loongarch32", "loongarch64", "loongarch_shared",
+    "mips", "nvptx", "powerpc", "powerpc64", "s390x", "wasm32"
+]
 
 # Files to skip (not intrinsic modules)
-SKIP_FILES = {"mod.rs", "macros.rs", "test.rs"}
+SKIP_FILES = {"mod.rs", "macros.rs", "test.rs", "test_support.rs", "generated.rs"}
 
 
 def collapse_signature(lines: list[str], start: int) -> tuple[str, int] | None:
@@ -72,7 +73,8 @@ def extract_file(path: Path, rel_prefix: str) -> list[tuple[int, str]]:
     lines = text.splitlines()
     results = []
 
-    fn_re = re.compile(r"^pub\s+(unsafe\s+)?fn\s+(_mm\w+)")
+    # Match any public function (not limited to specific prefixes)
+    fn_re = re.compile(r"^pub\s+(unsafe\s+)?fn\s+(\w+)")
 
     i = 0
     while i < len(lines):
@@ -91,7 +93,10 @@ def extract_file(path: Path, rel_prefix: str) -> list[tuple[int, str]]:
 
 def process_dir(src_dir: Path, rel_prefix: str,
                 only_stems: set[str] | None) -> dict[str, list[tuple[int, str]]]:
+    """Process a directory and its subdirectories for .rs files."""
     out: dict[str, list[tuple[int, str]]] = {}
+
+    # Process .rs files directly in this directory
     for rs in sorted(src_dir.glob("*.rs")):
         if rs.name in SKIP_FILES:
             continue
@@ -101,19 +106,36 @@ def process_dir(src_dir: Path, rel_prefix: str,
         if sigs:
             key = f"{rel_prefix}/{rs.name}"
             out[key] = sigs
+
+    # Process subdirectories (like aarch64/neon/)
+    for subdir in sorted(src_dir.iterdir()):
+        if subdir.is_dir() and subdir.name not in SKIP_FILES:
+            for rs in sorted(subdir.glob("*.rs")):
+                if rs.name in SKIP_FILES:
+                    continue
+                if only_stems and rs.stem not in only_stems:
+                    continue
+                sigs = extract_file(rs, rel_prefix)
+                if sigs:
+                    key = f"{rel_prefix}/{subdir.name}/{rs.name}"
+                    out[key] = sigs
+
     return out
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
+        "--archs", nargs="*", metavar="ARCH",
+        help="Specific architectures to extract (e.g. x86 arm aarch64). Default: all.",
+    )
+    parser.add_argument(
         "--files", nargs="*", metavar="FILE",
-        help="Specific filenames (e.g. avx2.rs sse2.rs) to extract; "
-             "searches both x86/ and x86_64/. Default: all files.",
+        help="Specific filenames (e.g. avx2.rs sse2.rs neon.rs) to extract. Default: all files.",
     )
     parser.add_argument(
         "--out", metavar="PATH",
-        help="Write output to this file instead of stdout.",
+        help="Write output to this file. Default: hodow_core/src/cpu/signatures.txt",
     )
     args = parser.parse_args()
 
@@ -121,12 +143,21 @@ def main() -> None:
     if args.files:
         only_stems = {Path(f).stem for f in args.files}
 
+    # Determine which architectures to process
+    archs_to_process = args.archs if args.archs else ARCHITECTURES
+
     sections: dict[str, list[tuple[int, str]]] = {}
-    sections.update(process_dir(X86_DIR,    "src/x86",    only_stems))
-    sections.update(process_dir(X86_64_DIR, "src/x86_64", only_stems))
+
+    for arch in archs_to_process:
+        arch_dir = ARCHS_DIR / arch
+        if not arch_dir.exists() or not arch_dir.is_dir():
+            print(f"Warning: Architecture directory {arch_dir} not found, skipping", file=sys.stderr)
+            continue
+
+        sections.update(process_dir(arch_dir, f"{arch}", only_stems))
 
     lines_out: list[str] = []
-    for file_key, sigs in sections.items():
+    for file_key, sigs in sorted(sections.items()):
         lines_out.append(file_key)
         for lineno, sig in sigs:
             lines_out.append(f"{lineno}:{sig}")
@@ -134,12 +165,14 @@ def main() -> None:
 
     output = "\n".join(lines_out)
 
-    if args.out:
-        Path(args.out).write_text(output)
-        total = sum(len(v) for v in sections.values())
-        print(f"Wrote {total} signatures from {len(sections)} files → {args.out}")
-    else:
-        print(output)
+    # Default output path
+    out_path = Path(args.out) if args.out else Path("hodow_core/src/cpu/signatures.txt")
+
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(output)
+
+    total = sum(len(v) for v in sections.values())
+    print(f"Wrote {total} signatures from {len(sections)} files → {out_path}")
 
 
 if __name__ == "__main__":

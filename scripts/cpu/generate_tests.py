@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Generates Rust SIMD test stubs from TODO.txt and TODO_AVX.txt.
-Outputs to hodow_core/src/cpu/auto_generated/
+Generates Rust SIMD test stubs for all architectures from signatures.txt.
+Outputs to hodow_core/src/cpu/auto_generated/<arch>/
 """
 
 import re
@@ -10,6 +10,7 @@ from collections import defaultdict
 
 FUNCTIONS_PER_PART = 50
 OUTPUT_DIR = Path("hodow_core/src/cpu/auto_generated")
+SIGNATURES_FILE = Path("hodow_core/src/cpu/signatures.txt")
 FUNCTIONS_FILE = Path("scripts/excluded_functions.txt")
 
 
@@ -209,9 +210,16 @@ INT_RETURNS = {
 # Parsing
 # ---------------------------------------------------------------------------
 
-def source_to_ext(src_path: str) -> str:
-    """Derive module name from TODO source path (strips directory, drops .rs)."""
-    return Path(src_path).stem
+def source_to_ext(src_path: str) -> tuple[str, str]:
+    """Derive (arch, module) from source path like 'x86/sse.rs' or 'arm/neon.rs'.
+    Returns (architecture, extension_name)."""
+    parts = src_path.split("/")
+    if len(parts) >= 2:
+        arch = parts[0]
+        ext = Path(parts[-1]).stem
+        return (arch, ext)
+    # Fallback for unexpected formats
+    return ("unknown", Path(src_path).stem)
 
 
 def ext_to_feature(ext: str) -> str:
@@ -279,20 +287,22 @@ def parse_sig(raw: str) -> dict | None:
             "is_complete": True}
 
 
-def parse_todo(path: Path) -> dict[str, list[dict]]:
-    """Parse a TODO file → {ext: [sig, ...]}"""
-    result: dict[str, list[dict]] = defaultdict(list)
-    current_ext: str | None = None
-    seen: set[tuple[str, str]] = set()
+def parse_signatures(path: Path) -> dict[tuple[str, str], list[dict]]:
+    """Parse signatures.txt → {(arch, ext): [sig, ...]}"""
+    result: dict[tuple[str, str], list[dict]] = defaultdict(list)
+    current_key: tuple[str, str] | None = None
+    seen: set[tuple[str, str, str]] = set()  # (arch, ext, func_name)
 
     for line in path.read_text().splitlines():
         line = line.rstrip()
         if not line:
             continue
-        if re.match(r"^src/", line):
-            current_ext = source_to_ext(line)
+        # Line like "x86/sse.rs" or "arm/neon.rs" or "aarch64/neon/generated.rs"
+        if not line.startswith(" ") and "/" in line and line.endswith(".rs"):
+            arch, ext = source_to_ext(line)
+            current_key = (arch, ext)
             continue
-        if current_ext is None:
+        if current_key is None:
             continue
         m = re.match(r"^\d+:(pub\s+(?:unsafe\s+)?fn\s+.+)", line)
         if not m:
@@ -300,11 +310,13 @@ def parse_todo(path: Path) -> dict[str, list[dict]]:
         sig = parse_sig(m.group(1))
         if sig is None:
             continue
-        key = (current_ext, sig["name"])
+
+        arch, ext = current_key
+        key = (arch, ext, sig["name"])
         if key in seen:
             continue
         seen.add(key)
-        result[current_ext].append(sig)
+        result[current_key].append(sig)
 
     return result
 
@@ -571,12 +583,50 @@ def gen_fn(sig: dict, expected_values: dict[str, str] | None = None) -> str:
     return "\n".join(lines)
 
 
-def gen_part(funcs: list[dict], expected_values: dict[str, str] | None = None) -> str:
+def get_arch_import(arch: str) -> str:
+    """Return the appropriate arch import for the given architecture."""
+    # Map architecture names to their std::arch module names
+    arch_map = {
+        "x86": "std::arch::x86",
+        "x86_64": "std::arch::x86_64",
+        "arm": "std::arch::arm",
+        "aarch64": "std::arch::aarch64",
+        "riscv32": "std::arch::riscv32",
+        "riscv64": "std::arch::riscv64",
+        "riscv_shared": "std::arch::riscv64",  # Use riscv64 as fallback
+        "arm_shared": "std::arch::arm",  # Use arm as fallback
+        "loongarch32": "std::arch::loongarch32",
+        "loongarch64": "std::arch::loongarch64",
+        "loongarch_shared": "std::arch::loongarch64",
+        "mips": "std::arch::mips",
+        "nvptx": "std::arch::nvptx",
+        "powerpc": "std::arch::powerpc",
+        "powerpc64": "std::arch::powerpc64",
+        "s390x": "std::arch::s390x",
+        "wasm32": "std::arch::wasm32",
+    }
+    return arch_map.get(arch, f"std::arch::{arch}")
+
+
+def get_common_helper(arch: str) -> str:
+    """Return the path to common helper module for architecture."""
+    if arch in ("x86", "x86_64"):
+        return "crate::cpu::common::x86"
+    elif arch in ("arm", "aarch64", "arm_shared"):
+        return "crate::cpu::common::arm"
+    # For other architectures, use a fallback (they'll need helpers created)
+    return "crate::cpu::common::arm"  # Generic fallback
+
+
+def gen_part(funcs: list[dict], arch: str, expected_values: dict[str, str] | None = None) -> str:
+    arch_import = get_arch_import(arch)
+    common_helper = get_common_helper(arch)
+
     header = [
-        "use std::arch::x86_64::*;",
+        f"use {arch_import}::*;",
         "",
         "#[allow(unused_imports)]",
-        "use crate::cpu::common::x86::*;",
+        f"use {common_helper}::*;",
         "#[allow(unused_imports)]",
         "use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};",
         "",
@@ -585,14 +635,14 @@ def gen_part(funcs: list[dict], expected_values: dict[str, str] | None = None) -
     return "\n".join(header) + "\n" + "\n\n".join(bodies) + "\n"
 
 
-def gen_ext_rs(ext: str, funcs: list[dict], n_parts: int) -> str:
+def gen_ext_rs(arch: str, ext: str, funcs: list[dict], n_parts: int) -> str:
     struct = ext_to_struct(ext)
     lines = []
     for i in range(1, n_parts + 1):
         lines.append(f"mod part{i};")
     lines.append("")
     for i in range(1, n_parts + 1):
-        lines.append(f"use crate::cpu::auto_generated::{ext}::part{i}::*;")
+        lines.append(f"use crate::cpu::auto_generated::{arch}::{ext}::part{i}::*;")
     lines += [
         "",
         "use crate::cpu::{ExtensionTest, TestFunction};",
@@ -601,7 +651,7 @@ def gen_ext_rs(ext: str, funcs: list[dict], n_parts: int) -> str:
         "",
         f"impl ExtensionTest for {struct} {{",
         "    fn get_name() -> &'static str {",
-        f"        \"{struct}\"",
+        f"        \"{arch}::{struct}\"",
         "    }",
         "",
         "    fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {",
@@ -617,13 +667,39 @@ def gen_ext_rs(ext: str, funcs: list[dict], n_parts: int) -> str:
     return "\n".join(lines) + "\n"
 
 
-def gen_mod_rs(exts: list[tuple[str, str]]) -> str:
+def get_target_arch_cfg(arch: str) -> str:
+    """Return the target_arch cfg expression for the given architecture."""
+    if arch in ("riscv_shared", "arm_shared", "loongarch_shared"):
+        # Shared modules should work for both 32 and 64 bit variants
+        base = arch.replace("_shared", "")
+        return f"any(target_arch = \"{base}\", target_arch = \"{base}64\")"
+    return f"target_arch = \"{arch}\""
+
+
+def gen_mod_rs_for_arch(exts: list[tuple[str, str]]) -> str:
+    """Generate mod.rs for a single architecture directory."""
     lines = []
     for ext, feature in exts:
-        arch = "any(target_arch = \"x86\", target_arch = \"x86_64\")"
-        lines.append(f"#[cfg(all({arch}, target_feature = \"{feature}\"))]")
+        if feature:
+            lines.append(f"#[cfg(target_feature = \"{feature}\")]")
         lines.append(f"pub mod {ext};")
+        if feature:
+            lines.append("")
+    return "\n".join(lines)
+
+
+def gen_root_mod_rs(archs: list[str]) -> str:
+    """Generate root mod.rs for auto_generated/ directory."""
+    lines = []
+    for arch in sorted(archs):
+        cfg = get_target_arch_cfg(arch)
+        lines.append(f"#[cfg({cfg})]")
+        lines.append(f"pub mod {arch};")
         lines.append("")
+
+    # Add registry module
+    lines.append("pub mod registry;")
+
     return "\n".join(lines)
 
 
@@ -631,88 +707,276 @@ def gen_mod_rs(exts: list[tuple[str, str]]) -> str:
 # Main
 # ---------------------------------------------------------------------------
 
+def get_feature_detect_fn(arch: str, feature: str) -> str:
+    """Return the runtime feature detection code for the given architecture and feature."""
+    if arch in ("x86", "x86_64"):
+        return f'std::arch::is_x86_feature_detected!("{feature}")'
+    # For other architectures, we'll need to add detection when available
+    # For now, return a placeholder that always returns false
+    return "false /* feature detection not yet implemented */"
+
+
+def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
+    """Generate registry.rs with count_available_features, test_all_extensions, and available_modes."""
+    lines = [
+        "#![allow(unused_imports)]",
+        "#![allow(unreachable_code)]",
+        "",
+        "use crate::cpu::{ExtensionTest, FeatureStats, TestStatistics, ProgressCallback};",
+        "use crate::cpu::{reset_stop_flag, should_stop};",
+        "",
+        "/// Count how many CPU features/extensions are available on this machine",
+        "pub fn count_available_features() -> usize {",
+        "    let mut count = 0;",
+        "",
+    ]
+
+    # Group by architecture
+    for arch in sorted(all_data.keys()):
+        arch_cfg = get_target_arch_cfg(arch)
+        lines.append(f"    #[cfg({arch_cfg})]")
+        lines.append("    {")
+
+        for ext, funcs in sorted(all_data[arch].items()):
+            if not funcs:
+                continue
+
+            feature = ext_to_feature(ext)
+            lines.append(f"        #[cfg(target_feature = \"{feature}\")]")
+            detect_fn = get_feature_detect_fn(arch, feature)
+            lines.append(f"        if {detect_fn} {{")
+            lines.append("            count += 1;")
+            lines.append("        }")
+            lines.append("")
+
+        lines.append("    }")
+        lines.append("")
+
+    lines += [
+        "    count",
+        "}",
+        "",
+        "/// Get list of available CPU features/extensions on this machine",
+        "pub fn available_modes() -> Vec<&'static str> {",
+        "    let mut modes = Vec::new();",
+        "",
+    ]
+
+    # Generate available_modes
+    for arch in sorted(all_data.keys()):
+        arch_cfg = get_target_arch_cfg(arch)
+        lines.append(f"    #[cfg({arch_cfg})]")
+        lines.append("    {")
+
+        for ext, funcs in sorted(all_data[arch].items()):
+            if not funcs:
+                continue
+
+            feature = ext_to_feature(ext)
+            detect_fn = get_feature_detect_fn(arch, feature)
+            lines.append(f"        if {detect_fn} {{")
+            lines.append(f'            modes.push("{feature}");')
+            lines.append("        }")
+
+        lines.append("    }")
+        lines.append("")
+
+    lines += [
+        "    modes",
+        "}",
+        "",
+        "/// Test all available CPU extensions with progress callback",
+        "pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Result<TestStatistics, String> {",
+        "    reset_stop_flag();",
+        "",
+        "    let total_features = count_available_features();",
+        "    let mut completed_features = 0;",
+        "    let mut features = Vec::new();",
+        "",
+    ]
+
+    # Generate test_all_extensions
+    for arch in sorted(all_data.keys()):
+        arch_cfg = get_target_arch_cfg(arch)
+        lines.append(f"    #[cfg({arch_cfg})]")
+        lines.append("    {")
+
+        for ext, funcs in sorted(all_data[arch].items()):
+            if not funcs:
+                continue
+
+            feature = ext_to_feature(ext)
+            struct = ext_to_struct(ext)
+
+            lines.append(f"        #[cfg(target_feature = \"{feature}\")]")
+            lines.append("        {")
+
+            detect_fn = get_feature_detect_fn(arch, feature)
+            lines.append(f"            if {detect_fn} {{")
+            lines.append("                if should_stop() {")
+            lines.append("                    return Ok(TestStatistics { features, was_cancelled: true });")
+            lines.append("                }")
+            lines.append(f"                let (r, s, e) = crate::cpu::auto_generated::{arch}::{ext}::{struct}::test_with_progress(")
+            lines.append("                    total_features,")
+            lines.append("                    completed_features,")
+            lines.append(f"                    crate::cpu::auto_generated::{arch}::{ext}::{struct}::get_tests().len(),")
+            lines.append("                    progress_callback,")
+            lines.append("                )?;")
+            lines.append("                features.push(FeatureStats {")
+            lines.append(f"                    feature_name: crate::cpu::auto_generated::{arch}::{ext}::{struct}::get_name(),")
+            lines.append("                    tests_run: r,")
+            lines.append("                    tests_skipped: s,")
+            lines.append("                    tests_errored: e,")
+            lines.append("                });")
+            lines.append("                completed_features += 1;")
+            lines.append("            }")
+            lines.append("        }")
+            lines.append("")
+
+        lines.append("    }")
+        lines.append("")
+
+    lines += [
+        "    Ok(TestStatistics {",
+        "        features,",
+        "        was_cancelled: false,",
+        "    })",
+        "}",
+        "",
+        "/// List all available test functions across all extensions",
+        "pub fn list_all_functions() -> Vec<String> {",
+        "    let mut functions = Vec::new();",
+        "",
+    ]
+
+    # Generate list_all_functions
+    for arch in sorted(all_data.keys()):
+        arch_cfg = get_target_arch_cfg(arch)
+        lines.append(f"    #[cfg({arch_cfg})]")
+        lines.append("    {")
+
+        for ext, funcs in sorted(all_data[arch].items()):
+            if not funcs:
+                continue
+
+            feature = ext_to_feature(ext)
+            struct = ext_to_struct(ext)
+
+            lines.append(f"        #[cfg(target_feature = \"{feature}\")]")
+            lines.append("        {")
+            lines.append(f"            for (_, name) in crate::cpu::auto_generated::{arch}::{ext}::{struct}::get_tests() {{")
+            lines.append("                functions.push(name.to_string());")
+            lines.append("            }")
+            lines.append("        }")
+            lines.append("")
+
+        lines.append("    }")
+        lines.append("")
+
+    lines += [
+        "    functions",
+        "}",
+    ]
+
+    return "\n".join(lines) + "\n"
+
+
 def main() -> None:
     global IGNORED_FUNCTIONS
-    # Use repo root as current working directory so user invokes:
-    #   python3 scripts/cpu/generate_tests.py
     base = Path.cwd()
 
-    with open(FUNCTIONS_FILE) as f:
-        IGNORED_FUNCTIONS = [line.strip() for line in f if line.strip() and not line.startswith("#")]
+    if FUNCTIONS_FILE.exists():
+        with open(FUNCTIONS_FILE) as f:
+            IGNORED_FUNCTIONS = [line.strip() for line in f if line.strip() and not line.startswith("#")]
+    else:
+        IGNORED_FUNCTIONS = []
 
+    # Parse signatures grouped by (arch, ext)
+    sigs_file = base / SIGNATURES_FILE
+    if not sigs_file.exists():
+        print(f"Error: {sigs_file} not found. Run extract_signatures.py first.")
+        return
 
-    merged: dict[str, list[dict]] = defaultdict(list)
-    seen: set[tuple[str, str]] = set()
-
-    full = base / "signatures.txt"
-    if not full.exists():
-        print(f"Warning: {full} not found, skipping")
-    for ext, sigs in parse_todo(full).items():
-        for sig in sigs:
-            key = (ext, sig["name"])
-            if key not in seen:
-                seen.add(key)
-                merged[ext].append(sig)
-
+    all_sigs = parse_signatures(sigs_file)
     expected_values = load_expected_values(base / "expected_cpu_values.txt")
 
     out = base / OUTPUT_DIR
     out.mkdir(parents=True, exist_ok=True)
 
-    generated: list[tuple[str, str]] = []
+    # Group by architecture
+    by_arch: dict[str, dict[str, list[dict]]] = defaultdict(lambda: defaultdict(list))
+    for (arch, ext), funcs in all_sigs.items():
+        by_arch[arch][ext] = funcs
 
-    # Collect stats for the summary table
-    # (ext, total_raw, generated, parts, no_fuzz, unstable)
+    # Stats: (arch::ext, total, generated, parts, no_fuzz, skipped)
     rows: list[tuple[str, int, int, int, int, int]] = []
 
-    for ext in sorted(merged):
-        all_funcs = merged[ext]
-        if not all_funcs:
-            continue
+    generated_archs: set[str] = set()
 
-        # Split into stable (generated) and skipped (unstable types, incomplete sigs, deprecated)
-        stable = [s for s in all_funcs
-                  if s["is_complete"]
-                  and not has_unstable_type(s["params"], s["return_type"] or "()")
-                  and s["name"] not in DEPRECATED_FUNCTIONS
-                   and s["name"] not in IGNORED_FUNCTIONS]
-        skipped_count = len(all_funcs) - len(stable)
+    for arch in sorted(by_arch.keys()):
+        arch_out = out / arch
+        arch_out.mkdir(exist_ok=True)
 
-        feature = ext_to_feature(ext)
-        generated.append((ext, feature))
+        generated_exts: list[tuple[str, str]] = []
 
-        if not stable:
-            # Generate empty module file (no parts)
-            (out / f"{ext}.rs").write_text(gen_ext_rs(ext, [], 0))
-            rows.append((ext, len(all_funcs), 0, 0, 0, skipped_count))
-        else:
-            parts = [stable[i:i + FUNCTIONS_PER_PART]
-                     for i in range(0, len(stable), FUNCTIONS_PER_PART)]
+        for ext in sorted(by_arch[arch].keys()):
+            all_funcs = by_arch[arch][ext]
+            if not all_funcs:
+                continue
 
-            parts_dir = out / ext
-            parts_dir.mkdir(exist_ok=True)
+            # Filter stable functions
+            stable = [s for s in all_funcs
+                      if s["is_complete"]
+                      and not has_unstable_type(s["params"], s["return_type"] or "()")
+                      and s["name"] not in DEPRECATED_FUNCTIONS
+                      and s["name"] not in IGNORED_FUNCTIONS]
+            skipped_count = len(all_funcs) - len(stable)
 
-            # Remove stale part files that exceed the new count
-            for old in parts_dir.glob("part*.rs"):
-                m = re.match(r"part(\d+)\.rs$", old.name)
-                if m and int(m.group(1)) > len(parts):
-                    old.unlink()
+            feature = ext_to_feature(ext)
+            generated_exts.append((ext, feature))
 
-            for idx, chunk in enumerate(parts, 1):
-                (parts_dir / f"part{idx}.rs").write_text(gen_part(chunk, expected_values))
+            full_name = f"{arch}::{ext}"
 
-            (out / f"{ext}.rs").write_text(gen_ext_rs(ext, stable, len(parts)))
+            if not stable:
+                # Generate empty module
+                (arch_out / f"{ext}.rs").write_text(gen_ext_rs(arch, ext, [], 0))
+                rows.append((full_name, len(all_funcs), 0, 0, 0, skipped_count))
+            else:
+                parts = [stable[i:i + FUNCTIONS_PER_PART]
+                         for i in range(0, len(stable), FUNCTIONS_PER_PART)]
 
-            no_fuzz_count = sum(1 for s in stable if skip_fuzz(s["name"], s["params"]))
-            rows.append((ext, len(all_funcs), len(stable), len(parts),
-                         no_fuzz_count, skipped_count))
+                parts_dir = arch_out / ext
+                parts_dir.mkdir(exist_ok=True)
 
-    (out / "mod.rs").write_text(gen_mod_rs(generated))
+                # Remove stale part files
+                for old in parts_dir.glob("part*.rs"):
+                    m = re.match(r"part(\d+)\.rs$", old.name)
+                    if m and int(m.group(1)) > len(parts):
+                        old.unlink()
+
+                for idx, chunk in enumerate(parts, 1):
+                    (parts_dir / f"part{idx}.rs").write_text(gen_part(chunk, arch, expected_values))
+
+                (arch_out / f"{ext}.rs").write_text(gen_ext_rs(arch, ext, stable, len(parts)))
+
+                no_fuzz_count = sum(1 for s in stable if skip_fuzz(s["name"], s["params"]))
+                rows.append((full_name, len(all_funcs), len(stable), len(parts),
+                             no_fuzz_count, skipped_count))
+
+        # Generate arch-specific mod.rs
+        (arch_out / "mod.rs").write_text(gen_mod_rs_for_arch(generated_exts))
+        generated_archs.add(arch)
+
+    # Generate root mod.rs
+    (out / "mod.rs").write_text(gen_root_mod_rs(list(generated_archs)))
+
+    # Generate registry.rs
+    (out / "registry.rs").write_text(gen_registry_rs(by_arch))
 
     # Pretty table
-    col = dict(ext=26, total=6, gen=5, parts=5, nofuzz=7, skipped=7)
+    col = dict(ext=30, total=6, gen=5, parts=5, nofuzz=7, skipped=7)
     sep = "  "
-    header = (f"{'extension':<{col['ext']}}{sep}"
+    header = (f"{'arch::extension':<{col['ext']}}{sep}"
               f"{'total':>{col['total']}}{sep}"
               f"{'gen':>{col['gen']}}{sep}"
               f"{'parts':>{col['parts']}}{sep}"
@@ -740,7 +1004,7 @@ def main() -> None:
           f"{totals[3]:>{col['nofuzz']}}{sep}"
           f"{totals[4]:>{col['skipped']}}")
     print(rule)
-    print(f"\nDone → {out}  ({len(generated)} extensions)")
+    print(f"\nDone → {out}  ({len(generated_archs)} architectures, {len(rows)} extensions)")
 
 
 if __name__ == "__main__":

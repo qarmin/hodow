@@ -1,0 +1,186 @@
+use std::arch::x86::*;
+
+#[allow(unused_imports)]
+use crate::cpu::common::x86::*;
+#[allow(unused_imports)]
+use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
+
+pub(super) fn test_bextr_u32() -> Result<(), String> {
+    unsafe {
+        let result = _bextr_u32(1u32, 2u32, 3u32);
+        check_int_equality(result as i32, 0)?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _bextr_u32(rand::random::<u32>(), rand::random::<u32>(), rand::random::<u32>());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_bextr2_u32() -> Result<(), String> {
+    unsafe {
+        let result = _bextr2_u32(1u32, 2u32);
+        check_int_equality(result as i32, 0)?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _bextr2_u32(rand::random::<u32>(), rand::random::<u32>());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_andn_u32() -> Result<(), String> {
+    unsafe {
+        let result = _andn_u32(1u32, 2u32);
+        check_int_equality(result as i32, 0)?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _andn_u32(rand::random::<u32>(), rand::random::<u32>());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_blsi_u32() -> Result<(), String> {
+    unsafe {
+        let result = _blsi_u32(1u32);
+        check_int_equality(result as i32, 0)?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _blsi_u32(rand::random::<u32>());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_blsmsk_u32() -> Result<(), String> {
+    unsafe {
+        let result = _blsmsk_u32(1u32);
+        check_int_equality(result as i32, 0)?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _blsmsk_u32(rand::random::<u32>());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_blsr_u32() -> Result<(), String> {
+    unsafe {
+        let result = _blsr_u32(1u32);
+        check_int_equality(result as i32, 0)?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _blsr_u32(rand::random::<u32>());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_tzcnt_u16() -> Result<(), String> {
+    unsafe {
+        let result = _tzcnt_u16(1u16);
+        check_int_equality(result as i32, 0)?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _tzcnt_u16(rand::random::<u16>());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_tzcnt_u32() -> Result<(), String> {
+    unsafe {
+        let result = _tzcnt_u32(1u32);
+        check_int_equality(result as i32, 0)?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _tzcnt_u32(rand::random::<u32>());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm_tzcnt_32() -> Result<(), String> {
+    unsafe {
+        let result = _mm_tzcnt_32(1u32);
+        check_int_equality(result as i32, 0)?;
+
+        if crate::get_fuzzing() {
+            log::info!("Starting fuzzing");
+            let total_iters = crate::cpu::get_iterations();
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm_tzcnt_32(rand::random::<u32>());
+            }
+        }
+    }
+    Ok(())
+}

@@ -3,3 +3,6 @@
 *.csv
 *.bak
 archs/
+__pycache__/
+winit
+glutin
