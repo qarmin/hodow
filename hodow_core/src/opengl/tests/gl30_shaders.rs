@@ -11,22 +11,22 @@ pub struct GL30ShadersTest;
 
 // Helper to compile a shader and return (shader_id, compile_success)
 unsafe fn compile_shader(src: &CString, shader_type: u32) -> Result<u32, String> {
-    let s = gl::CreateShader(shader_type);
-    gl::ShaderSource(s, 1, &src.as_ptr(), std::ptr::null());
-    gl::CompileShader(s);
+    let s = unsafe { gl::CreateShader(shader_type) };
+    unsafe { gl::ShaderSource(s, 1, &src.as_ptr(), std::ptr::null()); }
+    unsafe { gl::CompileShader(s); }
 
     let mut success = 0;
-    gl::GetShaderiv(s, gl::COMPILE_STATUS, &mut success);
+    unsafe { gl::GetShaderiv(s, gl::COMPILE_STATUS, &mut success); }
     if success == 0 {
         // Query the info log length and read the actual log size
         let mut len = 0;
-        gl::GetShaderiv(s, gl::INFO_LOG_LENGTH, &mut len);
+        unsafe { gl::GetShaderiv(s, gl::INFO_LOG_LENGTH, &mut len); }
         if len <= 0 {
             len = 512;
         }
         let mut buffer = vec![0u8; len as usize];
         let mut actual_len: i32 = 0;
-        gl::GetShaderInfoLog(s, len, &mut actual_len, buffer.as_mut_ptr() as *mut _);
+        unsafe { gl::GetShaderInfoLog(s, len, &mut actual_len, buffer.as_mut_ptr() as *mut _); }
         let msg = if actual_len > 0 {
             String::from_utf8_lossy(&buffer[..actual_len as usize]).to_string()
         } else {
@@ -37,8 +37,8 @@ unsafe fn compile_shader(src: &CString, shader_type: u32) -> Result<u32, String>
         let src_str = src.to_string_lossy();
         let numbered_src = src_str.lines().enumerate().map(|(i, l)| format!("{:4}: {}", i + 1, l)).collect::<Vec<_>>().join("\n");
 
-        let err = gl::GetError();
-        gl::DeleteShader(s);
+        let err = unsafe { gl::GetError() };
+        unsafe { gl::DeleteShader(s); }
         return Err(format!(
             "{} (glError=0x{:X})\n--- shader source ---\n{}\n--- end shader source ---",
             msg.trim_matches(char::from(0)),
