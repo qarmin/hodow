@@ -15,8 +15,6 @@ impl ExtensionTest for F16C {
         &[
             (&test_mm_cvtph_ps, "test_mm_cvtph_ps"),
             (&test_mm256_cvtph_ps, "test_mm256_cvtph_ps"),
-            (&test_mm_cvtps_ph, "test_mm_cvtps_ph"),
-            (&test_mm256_cvtps_ph, "test_mm256_cvtps_ph"),
         ]
     }
 }

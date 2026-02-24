@@ -1,0 +1,486 @@
+test_mm512_dpbf16_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512bf16.dpbf16ps.512` on OS `linux`
+test_mm_cvtneps_pbh -> unsupported operation: inline assembly is not supported
+test_mm256_maskz_cvtneps_pbh -> unsupported operation: can't call foreign function `llvm.x86.avx512bf16.cvtneps2bf16.256` on OS `linux`
+test_mm256_maskz_cvtne2ps_pbh -> unsupported operation: can't call foreign function `llvm.x86.avx512bf16.cvtne2ps2bf16.256` on OS `linux`
+test_mm512_mask_dpbf16_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512bf16.dpbf16ps.512` on OS `linux`
+test_mm512_cvtneps_pbh -> unsupported operation: can't call foreign function `llvm.x86.avx512bf16.cvtneps2bf16.512` on OS `linux`
+test_mm_mask_cvtneps_pbh -> unsupported operation: inline assembly is not supported
+test_mm512_cvtne2ps_pbh -> unsupported operation: can't call foreign function `llvm.x86.avx512bf16.cvtne2ps2bf16.512` on OS `linux`
+test_mm512_maskz_dpbf16_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512bf16.dpbf16ps.512` on OS `linux`
+test_mm512_mask_cvtneps_pbh -> unsupported operation: can't call foreign function `llvm.x86.avx512bf16.cvtneps2bf16.512` on OS `linux`
+test_mm_maskz_cvtneps_pbh -> unsupported operation: inline assembly is not supported
+test_mm512_mask_cvtne2ps_pbh -> unsupported operation: can't call foreign function `llvm.x86.avx512bf16.cvtne2ps2bf16.512` on OS `linux`
+test_mm512_maskz_cvtneps_pbh -> unsupported operation: can't call foreign function `llvm.x86.avx512bf16.cvtneps2bf16.512` on OS `linux`
+test_mm512_maskz_cvtne2ps_pbh -> unsupported operation: can't call foreign function `llvm.x86.avx512bf16.cvtne2ps2bf16.512` on OS `linux`
+test_mm_dpbf16_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512bf16.dpbf16ps.128` on OS `linux`
+test_mm512_mulhrs_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.pmul.hr.sw.512` on OS `linux`
+test_mm256_cvtneps_pbh -> unsupported operation: can't call foreign function `llvm.x86.avx512bf16.cvtneps2bf16.256` on OS `linux`
+test_mm_mask_dpbf16_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512bf16.dpbf16ps.128` on OS `linux`
+test_mm512_mask_mulhrs_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.pmul.hr.sw.512` on OS `linux`
+test_mm256_mask_cvtneps_pbh -> unsupported operation: can't call foreign function `llvm.x86.avx512bf16.cvtneps2bf16.256` on OS `linux`
+test_mm_maskz_dpbf16_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512bf16.dpbf16ps.128` on OS `linux`
+test_mm512_maskz_mulhrs_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.pmul.hr.sw.512` on OS `linux`
+test_mm256_dpbf16_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512bf16.dpbf16ps.256` on OS `linux`
+test_mm256_mask_dpbf16_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512bf16.dpbf16ps.256` on OS `linux`
+test_mm512_maskz_loadu_epi16 -> Undefined Behavior: memory access failed: attempting to access 2 bytes, but got alloc461625+0x4 which is at or beyond the end of the allocation of size 2 bytes
+test_mm512_loadu_epi8 -> Undefined Behavior: memory access failed: attempting to access 64 bytes, but got alloc457098 which is only 1 byte from the end of the allocation
+test_mm_maskz_loadu_epi8 -> Undefined Behavior: memory access failed: attempting to access 1 byte, but got alloc464241+0x2 which is at or beyond the end of the allocation of size 1 byte
+test_mm512_loadu_epi16 -> Undefined Behavior: memory access failed: attempting to access 64 bytes, but got alloc480264 which is only 2 bytes from the end of the allocation
+test_mm256_maskz_dpbf16_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512bf16.dpbf16ps.256` on OS `linux`
+test_mm512_mask_loadu_epi8 -> Undefined Behavior: memory access failed: attempting to access 1 byte, but got alloc458411+0x2 which is at or beyond the end of the allocation of size 1 byte
+test_mm512_mask_storeu_epi16 -> Undefined Behavior: memory access failed: attempting to access 2 bytes, but got alloc460217+0x4 which is at or beyond the end of the allocation of size 2 bytes
+test_mm256_loadu_epi8 -> Undefined Behavior: memory access failed: attempting to access 32 bytes, but got alloc455535 which is only 1 byte from the end of the allocation
+test_mm256_loadu_epi16 -> Undefined Behavior: memory access failed: attempting to access 32 bytes, but got alloc479454 which is only 2 bytes from the end of the allocation
+test_mm512_maskz_loadu_epi8 -> Undefined Behavior: memory access failed: attempting to access 1 byte, but got alloc455837+0x2 which is at or beyond the end of the allocation of size 1 byte
+test_mm512_mask_storeu_epi8 -> Undefined Behavior: memory access failed: attempting to access 1 byte, but got alloc458416+0x2 which is at or beyond the end of the allocation of size 1 byte
+test_mm_loadu_epi8 -> Undefined Behavior: memory access failed: attempting to access 16 bytes, but got alloc454119 which is only 1 byte from the end of the allocation
+test_mm_loadu_epi16 -> Undefined Behavior: memory access failed: attempting to access 16 bytes, but got alloc477417 which is only 2 bytes from the end of the allocation
+test_mm512_sll_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.psll.w.512` on OS `linux`
+test_mm512_srl_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.psrl.w.512` on OS `linux`
+test_mm512_mask_sra_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.psra.w.512` on OS `linux`
+test_mm256_mask_loadu_epi16 -> Undefined Behavior: memory access failed: attempting to access 2 bytes, but got alloc455099+0x4 which is at or beyond the end of the allocation of size 2 bytes
+test_mm512_storeu_epi16 -> Undefined Behavior: memory access failed: attempting to access 64 bytes, but got alloc453326 which is only 2 bytes from the end of the allocation
+test_mm256_mask_storeu_epi16 -> Undefined Behavior: memory access failed: attempting to access 2 bytes, but got alloc457603+0x4 which is at or beyond the end of the allocation of size 2 bytes
+test_mm512_sra_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.psra.w.512` on OS `linux`
+test_mm512_permutex2var_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpermi2var.hi.512` on OS `linux`
+test_mm_permutex2var_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpermi2var.hi.128` on OS `linux`
+test_mm_permutexvar_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.permvar.hi.128` on OS `linux`
+test_mm512_mask_sll_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.psll.w.512` on OS `linux`
+test_mm256_maskz_loadu_epi16 -> Undefined Behavior: memory access failed: attempting to access 2 bytes, but got alloc453546+0x4 which is at or beyond the end of the allocation of size 2 bytes
+test_mm256_mask_storeu_epi8 -> Undefined Behavior: memory access failed: attempting to access 1 byte, but got alloc456617+0x2 which is at or beyond the end of the allocation of size 1 byte
+test_mm512_maskz_sra_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.psra.w.512` on OS `linux`
+test_mm256_storeu_epi16 -> Undefined Behavior: memory access failed: attempting to access 32 bytes, but got alloc451420 which is only 2 bytes from the end of the allocation
+test_mm512_mask_srl_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.psrl.w.512` on OS `linux`
+test_mm512_mask_permutex2var_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpermi2var.hi.512` on OS `linux`
+test_mm_mask_permutex2var_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpermi2var.hi.128` on OS `linux`
+test_mm_mask_permutexvar_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.permvar.hi.128` on OS `linux`
+test_mm512_maskz_sll_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.psll.w.512` on OS `linux`
+test_mm_storeu_epi16 -> Undefined Behavior: memory access failed: attempting to access 16 bytes, but got alloc450585 which is only 2 bytes from the end of the allocation
+test_mm256_mask_loadu_epi8 -> Undefined Behavior: memory access failed: attempting to access 1 byte, but got alloc452436+0x2 which is at or beyond the end of the allocation of size 1 byte
+test_mm_mask_storeu_epi16 -> Undefined Behavior: memory access failed: attempting to access 2 bytes, but got alloc454546+0x4 which is at or beyond the end of the allocation of size 2 bytes
+test_mm512_maskz_srl_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.psrl.w.512` on OS `linux`
+test_mm512_maskz_permutex2var_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpermi2var.hi.512` on OS `linux`
+test_mm_maskz_permutex2var_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpermi2var.hi.128` on OS `linux`
+test_mm_maskz_permutexvar_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.permvar.hi.128` on OS `linux`
+test_mm_mask_storeu_epi8 -> Undefined Behavior: memory access failed: attempting to access 1 byte, but got alloc452668+0x2 which is at or beyond the end of the allocation of size 1 byte
+test_mm256_maskz_loadu_epi8 -> Undefined Behavior: memory access failed: attempting to access 1 byte, but got alloc450412+0x2 which is at or beyond the end of the allocation of size 1 byte
+test_mm512_storeu_epi8 -> Undefined Behavior: memory access failed: attempting to access 64 bytes, but got alloc448625 which is only 1 byte from the end of the allocation
+test_mm512_dbsad_epu8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.dbpsadbw.512` on OS `linux`
+test_mm512_mask2_permutex2var_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpermi2var.hi.512` on OS `linux`
+test_mm256_maskz_dbsad_epu8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.dbpsadbw.256` on OS `linux`
+test_mm_mask2_permutex2var_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpermi2var.hi.128` on OS `linux`
+test_mm_cvtsepi16_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.pmovs.wb.128` on OS `linux`
+test_mm_cvtusepi16_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.pmovus.wb.128` on OS `linux`
+test_mm_mask_loadu_epi16 -> Undefined Behavior: memory access failed: attempting to access 2 bytes, but got alloc449185+0x4 which is at or beyond the end of the allocation of size 2 bytes
+test_mm256_storeu_epi8 -> Undefined Behavior: memory access failed: attempting to access 32 bytes, but got alloc446834 which is only 1 byte from the end of the allocation
+test_mm256_permutex2var_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpermi2var.hi.256` on OS `linux`
+test_mm512_permutexvar_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.permvar.hi.512` on OS `linux`
+test_mm_dbsad_epu8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.dbpsadbw.128` on OS `linux`
+test_mm512_mask_dbsad_epu8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.dbpsadbw.512` on OS `linux`
+test_mm_mask_cvtusepi16_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.pmovus.wb.128` on OS `linux`
+test_mm_mask_cvtsepi16_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.pmovs.wb.128` on OS `linux`
+test_mm512_mask_cvtsepi16_storeu_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.pmovs.wb.mem.512` on OS `linux`
+test_mm_maskz_loadu_epi16 -> Undefined Behavior: memory access failed: attempting to access 2 bytes, but got alloc447622+0x4 which is at or beyond the end of the allocation of size 2 bytes
+test_mm_storeu_epi8 -> Undefined Behavior: memory access failed: attempting to access 16 bytes, but got alloc445429 which is only 1 byte from the end of the allocation
+test_mm256_mask_permutex2var_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpermi2var.hi.256` on OS `linux`
+test_mm512_mask_permutexvar_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.permvar.hi.512` on OS `linux`
+test_mm_mask_dbsad_epu8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.dbpsadbw.128` on OS `linux`
+test_mm512_maskz_dbsad_epu8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.dbpsadbw.512` on OS `linux`
+test_mm_mask_loadu_epi8 -> Undefined Behavior: memory access failed: attempting to access 1 byte, but got alloc446256+0x2 which is at or beyond the end of the allocation of size 1 byte
+test_mm512_mask_loadu_epi16 -> Undefined Behavior: memory access failed: attempting to access 2 bytes, but got alloc444010+0x4 which is at or beyond the end of the allocation of size 2 bytes
+test_mm_maskz_cvtusepi16_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.pmovus.wb.128` on OS `linux`
+test_mm256_mask_cvtsepi16_storeu_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.pmovs.wb.mem.256` on OS `linux`
+test_mm_maskz_cvtsepi16_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.pmovs.wb.128` on OS `linux`
+test_mm256_maskz_permutex2var_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpermi2var.hi.256` on OS `linux`
+test_mm512_maskz_permutexvar_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.permvar.hi.512` on OS `linux`
+test_mm_maskz_dbsad_epu8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.dbpsadbw.128` on OS `linux`
+test_mm256_dbsad_epu8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.dbpsadbw.256` on OS `linux`
+test_mm_mask_cvtsepi16_storeu_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.pmovs.wb.mem.128` on OS `linux`
+test_mm512_cvt_roundepi64_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.sitofp.round.v8f64.v8i64` on OS `linux`
+test_mm512_maskz_cvt_roundepi64_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.sitofp.round.v8f64.v8i64` on OS `linux`
+test_mm256_permutexvar_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.permvar.hi.256` on OS `linux`
+test_mm256_mask2_permutex2var_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpermi2var.hi.256` on OS `linux`
+test_mm512_cvt_roundepi64_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.sitofp.round.v8f32.v8i64` on OS `linux`
+test_mm256_mask_dbsad_epu8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.dbpsadbw.256` on OS `linux`
+test_mm512_mask_cvtepi16_storeu_epi8 -> Undefined Behavior: memory access failed: attempting to access 1 byte, but got alloc542473+0x2 which is at or beyond the end of the allocation of size 1 byte
+test_mm512_mask_cvtepi64_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.sitofp.round.v8f32.v8i64` on OS `linux`
+test_mm256_mask_permutexvar_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.permvar.hi.256` on OS `linux`
+test_mm256_maskz_cvtepu64_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.uitofp.round.v4f64.v4i64` on OS `linux`
+test_mm_cvtepi64_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.sitofp.round.v2f64.v2i64` on OS `linux`
+test_mm512_mask_cvt_roundepi64_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.sitofp.round.v8f64.v8i64` on OS `linux`
+test_mm512_mask_cvt_roundepi64_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.sitofp.round.v8f32.v8i64` on OS `linux`
+test_mm256_cvtepu64_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.uitofp.round.v4f32.v4i64` on OS `linux`
+test_mm_mask_cvtpd_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtpd2qq.128` on OS `linux`
+test_mm512_maskz_cvt_roundps_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtps2qq.512` on OS `linux`
+test_mm256_mask_cvtepi16_storeu_epi8 -> Undefined Behavior: memory access failed: attempting to access 1 byte, but got alloc540565+0x2 which is at or beyond the end of the allocation of size 1 byte
+test_mm256_maskz_permutexvar_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.permvar.hi.256` on OS `linux`
+test_mm512_maskz_cvtepi64_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.sitofp.round.v8f32.v8i64` on OS `linux`
+test_mm512_cvtepu64_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.uitofp.round.v8f64.v8i64` on OS `linux`
+test_mm512_cvt_roundpd_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtpd2uqq.512` on OS `linux`
+test_mm512_mask_cvtpd_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtpd2uqq.512` on OS `linux`
+test_mm_mask_cvtepi64_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.sitofp.round.v2f64.v2i64` on OS `linux`
+test_mm256_maskz_cvtps_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtps2uqq.256` on OS `linux`
+test_mm512_maskz_cvtt_roundpd_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttpd2uqq.512` on OS `linux`
+test_mm256_cvttpd_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttpd2qq.256` on OS `linux`
+test_mm_mask_cvttps_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttps2qq.128` on OS `linux`
+test_mm512_cvtt_roundps_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttps2uqq.512` on OS `linux`
+test_mm512_mask_cvttps_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttps2uqq.512` on OS `linux`
+test_mm512_maskz_cvt_roundepi64_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.sitofp.round.v8f32.v8i64` on OS `linux`
+test_mm256_mask_cvtepu64_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.uitofp.round.v4f32.v4i64` on OS `linux`
+test_mm_maskz_cvtpd_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtpd2qq.128` on OS `linux`
+test_mm_cvtps_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtps2qq.128` on OS `linux`
+test_mm_mask_cvtepi16_storeu_epi8 -> Undefined Behavior: memory access failed: attempting to access 1 byte, but got alloc538979+0x2 which is at or beyond the end of the allocation of size 1 byte
+test_mm512_mask_cvtepu64_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.uitofp.round.v8f64.v8i64` on OS `linux`
+test_mm512_range_round_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.pd.512` on OS `linux`
+test_mm512_cvt_roundepu64_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.uitofp.round.v8f64.v8i64` on OS `linux`
+test_mm512_mask_cvt_roundpd_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtpd2uqq.512` on OS `linux`
+test_mm_mask_range_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.pd.128` on OS `linux`
+test_mm512_maskz_cvtpd_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtpd2uqq.512` on OS `linux`
+test_mm_maskz_cvtepi64_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.sitofp.round.v2f64.v2i64` on OS `linux`
+test_mm512_cvtps_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtps2uqq.512` on OS `linux`
+test_mm256_mask_cvttpd_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttpd2qq.256` on OS `linux`
+test_mm_cvttpd_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttpd2uqq.128` on OS `linux`
+test_mm_maskz_cvttps_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttps2qq.128` on OS `linux`
+test_mm512_maskz_cvttps_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttps2uqq.512` on OS `linux`
+test_mm512_mask_cvtt_roundps_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttps2uqq.512` on OS `linux`
+test_mm256_maskz_cvtepu64_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.uitofp.round.v4f32.v4i64` on OS `linux`
+test_mm_cvtepi64_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtqq2ps.128` on OS `linux`
+test_mm256_cvtpd_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtpd2qq.256` on OS `linux`
+test_mm_mask_cvtps_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtps2qq.128` on OS `linux`
+test_mm512_mask_cvtusepi16_storeu_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.pmovus.wb.mem.512` on OS `linux`
+test_mm512_maskz_range_round_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.ps.512` on OS `linux`
+test_mm512_mask_cvt_roundepu64_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.uitofp.round.v8f64.v8i64` on OS `linux`
+test_mm512_maskz_cvtepu64_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.uitofp.round.v8f64.v8i64` on OS `linux`
+test_mm512_maskz_cvt_roundpd_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtpd2uqq.512` on OS `linux`
+test_mm512_cvt_roundps_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtps2uqq.512` on OS `linux`
+test_mm_range_round_sd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.sd` on OS `linux`
+test_mm512_mask_range_round_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.pd.512` on OS `linux`
+test_mm256_cvtepi64_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.sitofp.round.v4f64.v4i64` on OS `linux`
+test_mm_maskz_range_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.pd.128` on OS `linux`
+test_mm512_mask_cvtps_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtps2uqq.512` on OS `linux`
+test_mm256_maskz_cvttpd_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttpd2qq.256` on OS `linux`
+test_mm_mask_cvttpd_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttpd2uqq.128` on OS `linux`
+test_mm256_cvttps_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttps2qq.256` on OS `linux`
+test_mm512_cvtepu64_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.uitofp.round.v8f32.v8i64` on OS `linux`
+test_mm512_maskz_cvtt_roundps_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttps2uqq.512` on OS `linux`
+test_mm_mask_cvtepi64_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtqq2ps.128` on OS `linux`
+test_mm256_mask_cvtusepi16_storeu_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.pmovus.wb.mem.256` on OS `linux`
+test_mm_maskz_cvtps_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtps2qq.128` on OS `linux`
+test_mm256_mask_cvtpd_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtpd2qq.256` on OS `linux`
+test_mm_range_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.ps.128` on OS `linux`
+test_mm512_reduce_round_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.pd.512` on OS `linux`
+test_mm512_maskz_cvt_roundepu64_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.uitofp.round.v8f64.v8i64` on OS `linux`
+test_mm512_mask_reduce_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.pd.512` on OS `linux`
+test_mm512_cvt_roundepu64_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.uitofp.round.v8f32.v8i64` on OS `linux`
+test_mm_cvtpd_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtpd2uqq.128` on OS `linux`
+test_mm256_maskz_reduce_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.ps.256` on OS `linux`
+test_mm_reduce_round_ss -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.ss` on OS `linux`
+test_mm256_mask_cvtepi64_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.sitofp.round.v4f64.v4i64` on OS `linux`
+test_mm512_mask_cvt_roundps_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtps2uqq.512` on OS `linux`
+test_mm_mask_range_round_sd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.sd` on OS `linux`
+test_mm256_range_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.pd.256` on OS `linux`
+test_mm512_maskz_range_round_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.pd.512` on OS `linux`
+test_mm512_maskz_cvtps_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtps2uqq.512` on OS `linux`
+test_mm512_cvttpd_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttpd2qq.512` on OS `linux`
+test_mm512_mask_cvtepu64_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.uitofp.round.v8f32.v8i64` on OS `linux`
+test_mm_maskz_cvttpd_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttpd2uqq.128` on OS `linux`
+test_mm256_mask_cvttps_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttps2qq.256` on OS `linux`
+test_mm_maskz_cvtepi64_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtqq2ps.128` on OS `linux`
+test_mm_mask_cvtusepi16_storeu_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.pmovus.wb.mem.128` on OS `linux`
+test_mm_cvttps_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttps2uqq.128` on OS `linux`
+test_mm256_cvtps_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtps2qq.256` on OS `linux`
+test_mm256_maskz_cvtpd_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtpd2qq.256` on OS `linux`
+test_mm_mask_range_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.ps.128` on OS `linux`
+test_mm512_mask_reduce_round_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.pd.512` on OS `linux`
+test_mm512_mask_cvt_roundepu64_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.uitofp.round.v8f32.v8i64` on OS `linux`
+test_mm_cvtepu64_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.uitofp.round.v2f64.v2i64` on OS `linux`
+test_mm512_maskz_reduce_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.pd.512` on OS `linux`
+test_mm_mask_cvtpd_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtpd2uqq.128` on OS `linux`
+test_mm512_maskz_cvt_roundps_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtps2uqq.512` on OS `linux`
+test_mm512_reduce_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.ps.512` on OS `linux`
+test_mm256_maskz_cvtepi64_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.sitofp.round.v4f64.v4i64` on OS `linux`
+test_mm_mask_reduce_round_ss -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.ss` on OS `linux`
+test_mm512_cvtt_roundpd_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttpd2qq.512` on OS `linux`
+test_mm256_mask_range_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.pd.256` on OS `linux`
+test_mm_maskz_range_round_sd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.sd` on OS `linux`
+test_mm512_mask_cvttpd_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttpd2qq.512` on OS `linux`
+test_mm512_maskz_cvtepu64_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.uitofp.round.v8f32.v8i64` on OS `linux`
+test_mm256_cvttpd_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttpd2uqq.256` on OS `linux`
+test_mm_range_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.pd.128` on OS `linux`
+test_mm256_maskz_cvttps_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttps2qq.256` on OS `linux`
+test_mm256_cvtepi64_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.sitofp.round.v4f32.v4i64` on OS `linux`
+test_mm_mask_cvttps_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttps2uqq.128` on OS `linux`
+test_mm512_cvtpd_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtpd2qq.512` on OS `linux`
+test_mm256_mask_cvtps_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtps2qq.256` on OS `linux`
+test_mm512_fpclass_pd_mask -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.fpclass.pd.512` on OS `linux`
+test_mm_maskz_range_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.ps.128` on OS `linux`
+test_mm512_maskz_reduce_round_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.pd.512` on OS `linux`
+test_mm512_maskz_cvt_roundepu64_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.uitofp.round.v8f32.v8i64` on OS `linux`
+test_mm_mask_cvtepu64_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.uitofp.round.v2f64.v2i64` on OS `linux`
+test_mm_maskz_cvtpd_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtpd2uqq.128` on OS `linux`
+test_mm512_reduce_round_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.ps.512` on OS `linux`
+test_mm_cvtps_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtps2uqq.128` on OS `linux`
+test_mm512_cvtepi64_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.sitofp.round.v8f64.v8i64` on OS `linux`
+test_mm512_mask_reduce_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.ps.512` on OS `linux`
+test_mm_maskz_reduce_round_ss -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.ss` on OS `linux`
+test_mm512_cvt_roundpd_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtpd2qq.512` on OS `linux`
+test_mm512_mask_cvtt_roundpd_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttpd2qq.512` on OS `linux`
+test_mm_mask_range_sd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.sd` on OS `linux`
+test_mm256_maskz_range_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.pd.256` on OS `linux`
+test_mm512_maskz_cvttpd_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttpd2qq.512` on OS `linux`
+test_mm256_mask_cvttpd_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttpd2uqq.256` on OS `linux`
+test_mm512_cvttps_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttps2qq.512` on OS `linux`
+test_mm256_mask_cvtepi64_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.sitofp.round.v4f32.v4i64` on OS `linux`
+test_mm_maskz_cvttps_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttps2uqq.128` on OS `linux`
+test_mm512_mask_cvtpd_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtpd2qq.512` on OS `linux`
+test_mm256_maskz_cvtps_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtps2qq.256` on OS `linux`
+test_mm512_mask_fpclass_pd_mask -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.fpclass.pd.512` on OS `linux`
+test_mm256_range_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.ps.256` on OS `linux`
+test_mm_cvtepu64_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtuqq2ps.128` on OS `linux`
+test_mm_maskz_cvtepu64_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.uitofp.round.v2f64.v2i64` on OS `linux`
+test_mm_reduce_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.pd.128` on OS `linux`
+test_mm256_cvtpd_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtpd2uqq.256` on OS `linux`
+test_mm512_mask_cvtepi64_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.sitofp.round.v8f64.v8i64` on OS `linux`
+test_mm_mask_cvtps_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtps2uqq.128` on OS `linux`
+test_mm512_mask_reduce_round_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.ps.512` on OS `linux`
+test_mm512_maskz_reduce_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.ps.512` on OS `linux`
+test_mm512_mask_cvt_roundpd_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtpd2qq.512` on OS `linux`
+test_mm512_maskz_cvtt_roundpd_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttpd2qq.512` on OS `linux`
+test_mm_reduce_ss -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.ss` on OS `linux`
+test_mm512_cvtt_roundps_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttps2qq.512` on OS `linux`
+test_mm256_maskz_cvtepi64_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.sitofp.round.v4f32.v4i64` on OS `linux`
+test_mm512_range_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.pd.512` on OS `linux`
+test_mm256_maskz_cvttpd_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttpd2uqq.256` on OS `linux`
+test_mm512_mask_cvttps_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttps2qq.512` on OS `linux`
+test_mm_maskz_range_sd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.sd` on OS `linux`
+test_mm256_cvttps_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttps2uqq.256` on OS `linux`
+test_mm512_maskz_cvtpd_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtpd2qq.512` on OS `linux`
+test_mm512_cvtps_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtps2qq.512` on OS `linux`
+test_mm_fpclass_ss_mask -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.fpclass.ss` on OS `linux`
+test_mm_fpclass_ps_mask -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.fpclass.ps.128` on OS `linux`
+test_mm256_mask_range_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.ps.256` on OS `linux`
+test_mm256_cvtepu64_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.uitofp.round.v4f64.v4i64` on OS `linux`
+test_mm_mask_cvtepu64_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtuqq2ps.128` on OS `linux`
+test_mm256_mask_cvtpd_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtpd2uqq.256` on OS `linux`
+test_mm_mask_reduce_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.pd.128` on OS `linux`
+test_mm512_maskz_cvtepi64_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.sitofp.round.v8f64.v8i64` on OS `linux`
+test_mm_maskz_cvtps_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtps2uqq.128` on OS `linux`
+test_mm512_maskz_reduce_round_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.ps.512` on OS `linux`
+test_mm512_maskz_cvt_roundpd_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtpd2qq.512` on OS `linux`
+test_mm_cvttpd_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttpd2qq.128` on OS `linux`
+test_mm512_cvtepi64_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.sitofp.round.v8f32.v8i64` on OS `linux`
+test_mm_reduce_round_sd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.sd` on OS `linux`
+test_mm512_mask_cvtt_roundps_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttps2qq.512` on OS `linux`
+test_mm_mask_reduce_ss -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.ss` on OS `linux`
+test_mm512_mask_range_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.pd.512` on OS `linux`
+test_mm512_maskz_cvttps_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttps2qq.512` on OS `linux`
+test_mm512_cvttpd_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttpd2uqq.512` on OS `linux`
+test_mm_range_round_ss -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.ss` on OS `linux`
+test_mm256_mask_cvttps_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttps2uqq.256` on OS `linux`
+test_mm512_cvt_roundps_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtps2qq.512` on OS `linux`
+test_mm512_mask_cvtps_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtps2qq.512` on OS `linux`
+test_mm256_mask_cvtepu64_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.uitofp.round.v4f64.v4i64` on OS `linux`
+test_mm_maskz_cvtepu64_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtuqq2ps.128` on OS `linux`
+test_mm_mask_fpclass_ss_mask -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.fpclass.ss` on OS `linux`
+test_mm256_maskz_range_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.ps.256` on OS `linux`
+test_mm_mask_fpclass_ps_mask -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.fpclass.ps.128` on OS `linux`
+test_mm256_maskz_cvtpd_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtpd2uqq.256` on OS `linux`
+test_mm_maskz_reduce_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.pd.128` on OS `linux`
+test_mm256_cvtps_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtps2uqq.256` on OS `linux`
+test_mm_cvtpd_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtpd2qq.128` on OS `linux`
+test_mm_mask_cvttpd_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttpd2qq.128` on OS `linux`
+test_mm_reduce_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.ps.128` on OS `linux`
+test_mm512_maskz_cvtt_roundps_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttps2qq.512` on OS `linux`
+test_mm_mask_reduce_round_sd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.sd` on OS `linux`
+test_mm512_mask_cvttpd_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttpd2uqq.512` on OS `linux`
+test_mm512_maskz_range_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.pd.512` on OS `linux`
+test_mm_maskz_reduce_ss -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.ss` on OS `linux`
+test_mm512_cvtt_roundpd_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttpd2uqq.512` on OS `linux`
+test_mm512_mask_cvt_roundps_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtps2qq.512` on OS `linux`
+test_mm256_maskz_cvttps_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttps2uqq.256` on OS `linux`
+test_mm_mask_range_round_ss -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.ss` on OS `linux`
+test_mm512_maskz_cvtps_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtps2qq.512` on OS `linux`
+test_mm512_cvtpd_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtpd2uqq.512` on OS `linux`
+test_mm512_range_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.ps.512` on OS `linux`
+test_mm256_fpclass_ps_mask -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.fpclass.ps.256` on OS `linux`
+test_mm256_mask_cvtps_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvtps2uqq.256` on OS `linux`
+test_mm256_reduce_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.pd.256` on OS `linux`
+test_mm_maskz_cvttpd_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttpd2qq.128` on OS `linux`
+test_mm_cvttps_epi64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttps2qq.128` on OS `linux`
+test_mm_mask_reduce_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.ps.128` on OS `linux`
+test_mm_maskz_reduce_round_sd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.sd` on OS `linux`
+test_mm512_maskz_cvttpd_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttpd2uqq.512` on OS `linux`
+test_mm512_mask_cvtt_roundpd_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttpd2uqq.512` on OS `linux`
+test_mm512_range_round_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.ps.512` on OS `linux`
+test_mm_fpclass_pd_mask -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.fpclass.pd.128` on OS `linux`
+test_mm512_cvttps_epu64 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.cvttps2uqq.512` on OS `linux`
+test_mm_maskz_range_round_ss -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.ss` on OS `linux`
+test_mm512_mask_range_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.ps.512` on OS `linux`
+test_mm256_mask_reduce_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.pd.256` on OS `linux`
+test_mm256_mask_fpclass_ps_mask -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.fpclass.ps.256` on OS `linux`
+test_mm_maskz_reduce_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.ps.128` on OS `linux`
+test_mm_reduce_sd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.sd` on OS `linux`
+test_mm512_mask_range_round_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.ps.512` on OS `linux`
+test_mm_mask_fpclass_pd_mask -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.fpclass.pd.128` on OS `linux`
+test_mm_mask_range_ss -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.ss` on OS `linux`
+test_mm512_maskz_range_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.ps.512` on OS `linux`
+test_mm256_maskz_reduce_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.pd.256` on OS `linux`
+test_mm512_fpclass_ps_mask -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.fpclass.ps.512` on OS `linux`
+test_mm256_reduce_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.ps.256` on OS `linux`
+test_mm256_fpclass_pd_mask -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.fpclass.pd.256` on OS `linux`
+test_mm_mask_reduce_sd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.sd` on OS `linux`
+test_mm_maskz_range_ss -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.range.ss` on OS `linux`
+test_mm512_reduce_pd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.pd.512` on OS `linux`
+test_mm512_mask_fpclass_ps_mask -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.fpclass.ps.512` on OS `linux`
+test_mm256_mask_reduce_ps -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.ps.256` on OS `linux`
+test_mm_maskz_reduce_sd -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.reduce.sd` on OS `linux`
+test_mm256_mask_fpclass_pd_mask -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.fpclass.pd.256` on OS `linux`
+test_mm_fpclass_sd_mask -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.fpclass.sd` on OS `linux`
+test_mm_mask_fpclass_sd_mask -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.fpclass.sd` on OS `linux`
+test_mm512_mask_expandloadu_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.expand.load.w.512` on OS `linux`
+test_mm_mask_expandloadu_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.expand.load.b.128` on OS `linux`
+test_mm256_mask_compress_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.compress.w.256` on OS `linux`
+test_mm512_mask_expand_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.expand.w.512` on OS `linux`
+test_mm_mask_expand_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.expand.b.128` on OS `linux`
+test_mm512_dpwssd_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpwssd.512` on OS `linux`
+test_mm512_maskz_expandloadu_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.expand.load.w.512` on OS `linux`
+test_mm_maskz_dpwssd_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpwssd.128` on OS `linux`
+test_mm_maskz_expandloadu_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.expand.load.b.128` on OS `linux`
+test_mm_mask_dpwssds_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpwssds.128` on OS `linux`
+test_mm512_dpbusds_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpbusds.512` on OS `linux`
+test_mm256_maskz_compress_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.compress.w.256` on OS `linux`
+test_mm_dpbusds_avx_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnni
+test_mm_dpbsuds_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnniint8
+test_mm_dpwusd_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnniint16
+test_mm512_maskz_expand_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.expand.w.512` on OS `linux`
+test_mm_maskz_expand_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.expand.b.128` on OS `linux`
+test_mm512_mask_dpwssd_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpwssd.512` on OS `linux`
+test_mm256_mask_expandloadu_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.expand.load.w.256` on OS `linux`
+test_mm512_dpwssds_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpwssds.512` on OS `linux`
+test_mm512_mask_compressstoreu_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.compress.store.w.512` on OS `linux`
+test_mm_mask_compress_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.compress.w.128` on OS `linux`
+test_mm_cvtps_ph -> unsupported operation: can't call foreign function `llvm.x86.vcvtps2ph.128` on OS `linux`
+test_mm_maskz_dpwssds_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpwssds.128` on OS `linux`
+test_mm256_cvtps_ph -> unsupported operation: can't call foreign function `llvm.x86.vcvtps2ph.256` on OS `linux`
+test_mm512_mask_dpbusds_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpbusds.512` on OS `linux`
+test_fxsave -> unsupported operation: can't call foreign function `llvm.x86.fxsave` on OS `linux`
+test_mm_dpbusds_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpbusds.128` on OS `linux`
+test_mm256_dpwusd_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnniint16
+test_mm256_dpbsuds_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnniint8
+test_rdrand16_step -> unsupported operation: can't call foreign function `llvm.x86.rdrand.16` on OS `linux`
+test_mm256_mask_expand_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.expand.w.256` on OS `linux`
+test_mm_sha1msg2_epu32 -> unsupported operation: can't call foreign function `llvm.x86.sha1msg2` on OS `linux`
+test_mm_sm3msg2_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: sm3
+test_mm512_maskz_dpwssd_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpwssd.512` on OS `linux`
+test_mm256_maskz_expandloadu_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.expand.load.w.256` on OS `linux`
+test_mm256_mask_compressstoreu_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.compress.store.w.256` on OS `linux`
+test_mm_maskz_compress_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.compress.w.128` on OS `linux`
+test_mm512_mask_dpwssds_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpwssds.512` on OS `linux`
+test_mm256_dpbusd_avx_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnni
+test_mm512_maskz_dpbusds_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpbusds.512` on OS `linux`
+test_mm_dpbuud_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnniint8
+test_mm_mask_dpbusds_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpbusds.128` on OS `linux`
+test_mm_dpwusds_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnniint16
+test_fxrstor -> unsupported operation: can't call foreign function `llvm.x86.fxrstor` on OS `linux`
+test_rdrand32_step -> unsupported operation: can't call foreign function `llvm.x86.rdrand.32` on OS `linux`
+test_mm256_maskz_expand_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.expand.w.256` on OS `linux`
+test_mm_sha1nexte_epu32 -> unsupported operation: can't call foreign function `llvm.x86.sha1nexte` on OS `linux`
+test_mm256_dpwssd_avx_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnni
+test_mm_sm3rnds2_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: sm3
+test_mm_mask_compressstoreu_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.compress.store.w.128` on OS `linux`
+test_mm_mask_expandloadu_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.expand.load.w.128` on OS `linux`
+test_mm512_mask_compress_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.compress.b.512` on OS `linux`
+test_mm512_maskz_dpwssds_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpwssds.512` on OS `linux`
+test_mm_dpbusd_avx_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnni
+test_mm256_dpbusds_avx_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnni
+test_mm_maskz_dpbusds_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpbusds.128` on OS `linux`
+test_mm256_dpbuud_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnniint8
+test_mm256_dpwusds_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnniint16
+test_mm_mask_expand_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.expand.w.128` on OS `linux`
+test_rdseed16_step -> unsupported operation: can't call foreign function `llvm.x86.rdseed.16` on OS `linux`
+test_mm_sha1rnds4_epu32 -> unsupported operation: can't call foreign function `llvm.x86.sha1rnds4` on OS `linux`
+test_mm_maskz_expandloadu_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.expand.load.w.128` on OS `linux`
+test_mm512_mask_compressstoreu_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.compress.store.b.512` on OS `linux`
+test_mm256_dpwssd_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpwssd.256` on OS `linux`
+test_mm512_maskz_compress_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.compress.b.512` on OS `linux`
+test_mm256_dpwssds_avx_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnni
+test_mm_sm4key4_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: sm4
+test_mm256_dpbusds_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpbusds.256` on OS `linux`
+test_mm_dpbssd_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnniint8
+test_mm_dpbuuds_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnniint8
+test_mm_maskz_expand_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.expand.w.128` on OS `linux`
+test_mm_dpwuud_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnniint16
+test_rdseed32_step -> unsupported operation: can't call foreign function `llvm.x86.rdseed.32` on OS `linux`
+test_mm256_sha512msg1_epi64 -> Undefined Behavior: calling a function that requires unavailable target features: sha512
+test_mm512_mask_expandloadu_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.expand.load.b.512` on OS `linux`
+test_mm256_mask_compressstoreu_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.compress.store.b.256` on OS `linux`
+test_mm256_mask_compress_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.compress.b.256` on OS `linux`
+test_mm256_mask_dpwssd_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpwssd.256` on OS `linux`
+test_mm256_dpwssds_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpwssds.256` on OS `linux`
+test_mm256_sm4key4_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: sm4
+test_mm256_mask_dpbusds_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpbusds.256` on OS `linux`
+test_mm256_dpbssd_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnniint8
+test_mm512_mask_expand_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.expand.b.512` on OS `linux`
+test_mm256_dpwuud_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnniint16
+test_mm256_dpbuuds_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnniint8
+test_mm_sha1msg1_epu32 -> unsupported operation: can't call foreign function `llvm.x86.sha1msg1` on OS `linux`
+test_mm256_sha512msg2_epi64 -> Undefined Behavior: calling a function that requires unavailable target features: sha512
+test_mm512_maskz_expandloadu_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.expand.load.b.512` on OS `linux`
+test_mm_mask_compressstoreu_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.compress.store.b.128` on OS `linux`
+test_mm256_maskz_compress_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.compress.b.256` on OS `linux`
+test_mm256_maskz_dpwssd_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpwssd.256` on OS `linux`
+test_mm256_mask_dpwssds_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpwssds.256` on OS `linux`
+test_mm_sm4rnds4_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: sm4
+test_mm512_maskz_expand_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.expand.b.512` on OS `linux`
+test_mm256_maskz_dpbusds_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpbusds.256` on OS `linux`
+test_mm_dpbssds_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnniint8
+test_mm_dpwuuds_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnniint16
+test_mm_dpwsud_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnniint16
+test_mm256_mask_expandloadu_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.expand.load.b.256` on OS `linux`
+test_mm256_sha512rnds2_epi64 -> Undefined Behavior: calling a function that requires unavailable target features: sha512
+test_mm512_mask_compress_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.compress.w.512` on OS `linux`
+test_mm_mask_compress_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.compress.b.128` on OS `linux`
+test_mm_dpwssd_avx_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnni
+test_mm256_maskz_dpwssds_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpwssds.256` on OS `linux`
+test_mm256_mask_expand_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.expand.b.256` on OS `linux`
+test_mm256_sm4rnds4_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: sm4
+test_mm256_dpbssds_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnniint8
+test_mm_extract_si64 -> unsupported operation: can't call foreign function `llvm.x86.sse4a.extrq` on OS `linux`
+test_mm256_dpwsud_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnniint16
+test_mm256_dpwuuds_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnniint16
+test_mm256_maskz_expandloadu_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.expand.load.b.256` on OS `linux`
+test_mm_maskz_compress_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.compress.b.128` on OS `linux`
+test_mm512_maskz_compress_epi16 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.compress.w.512` on OS `linux`
+test_mm_sm3msg1_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: sm3
+test_mm_dpwssd_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpwssd.128` on OS `linux`
+test_xsave -> unsupported operation: can't call foreign function `llvm.x86.xsave` on OS `linux`
+test_mm_dpwssds_avx_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnni
+test_xrstors -> unsupported operation: can't call foreign function `llvm.x86.xrstors` on OS `linux`
+test_mm256_maskz_expand_epi8 -> unsupported operation: can't call foreign function `llvm.x86.avx512.mask.expand.b.256` on OS `linux`
+test_mm_dpbsud_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnniint8
+test_fxsave64 -> unsupported operation: can't call foreign function `llvm.x86.fxsave64` on OS `linux`
+test_mm_dpwsuds_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnniint16
+test_xsave64 -> unsupported operation: can't call foreign function `llvm.x86.xsave64` on OS `linux`
+test_mm_extracti_si64 -> unsupported operation: can't call foreign function `llvm.x86.sse4a.extrqi` on OS `linux`
+test_mm_mask_dpwssd_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpwssd.128` on OS `linux`
+test_mm_dpwssds_epi32 -> unsupported operation: can't call foreign function `llvm.x86.avx512.vpdpwssds.128` on OS `linux`
+test_xrstor -> unsupported operation: can't call foreign function `llvm.x86.xrstor` on OS `linux`
+test_mm256_dpbsud_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnniint8
+test_mm256_dpwsuds_epi32 -> Undefined Behavior: calling a function that requires unavailable target features: avxvnniint16
+test_fxrstor64 -> unsupported operation: can't call foreign function `llvm.x86.fxrstor64` on OS `linux`
+test_mm_insert_si64 -> unsupported operation: can't call foreign function `llvm.x86.sse4a.insertq` on OS `linux`
+test_xrstor64 -> unsupported operation: can't call foreign function `llvm.x86.xrstor64` on OS `linux`
+test_xsetbv -> unsupported operation: can't call foreign function `llvm.x86.xsetbv` on OS `linux`
+test_rdrand64_step -> unsupported operation: can't call foreign function `llvm.x86.rdrand.64` on OS `linux`
+test_mm_inserti_si64 -> unsupported operation: can't call foreign function `llvm.x86.sse4a.insertqi` on OS `linux`
+test_xsaveopt64 -> unsupported operation: can't call foreign function `llvm.x86.xsaveopt64` on OS `linux`
+test_xgetbv -> unsupported operation: can't call foreign function `llvm.x86.xgetbv` on OS `linux`
+test_rdseed64_step -> unsupported operation: can't call foreign function `llvm.x86.rdseed.64` on OS `linux`
+test_mm_stream_sd -> unsupported operation: inline assembly is not supported
+test_xsavec64 -> unsupported operation: can't call foreign function `llvm.x86.xsavec64` on OS `linux`
+test_xsaveopt -> unsupported operation: can't call foreign function `llvm.x86.xsaveopt` on OS `linux`
+test_mm_stream_ss -> unsupported operation: inline assembly is not supported
+test_xsaves64 -> unsupported operation: can't call foreign function `llvm.x86.xsaves64` on OS `linux`
+test_xsavec -> unsupported operation: can't call foreign function `llvm.x86.xsavec` on OS `linux`
+test_xrstors64 -> unsupported operation: can't call foreign function `llvm.x86.xrstors64` on OS `linux`
+test_xsaves -> unsupported operation: can't call foreign function `llvm.x86.xsaves` on OS `linux`

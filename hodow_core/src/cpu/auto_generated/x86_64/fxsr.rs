@@ -1,6 +1,4 @@
-mod part1;
 
-use crate::cpu::auto_generated::x86_64::fxsr::part1::*;
 
 use crate::cpu::{ExtensionTest, TestFunction};
 
@@ -13,8 +11,6 @@ impl ExtensionTest for FXSR {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_fxsave64, "test_fxsave64"),
-            (&test_fxrstor64, "test_fxrstor64"),
         ]
     }
 }

@@ -21,6 +21,10 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 # Pattern to match Miri error lines (both UB and unsupported operations)
 ERROR_RE = re.compile(r'^error: ((?:Undefined Behavior|unsupported operation):.+?)(?:\s*-->|$)')
 
+# Pattern to match test assertion failures from log output
+# Format: "ERROR test_name(arch::MODULE) failed: ..."  (with -d flag active)
+TEST_FAILURE_RE = re.compile(r'^ERROR\s+(test_\w+)\([^)]*\)\s+failed:\s+(.+)$')
+
 # Test function path in backtrace
 # Matches: "           1: hodow_core::cpu::auto_generated::x86_64::avx512f::part1::test_mm_cvtss_u64"
 # or:      "           1: hodow_core::cpu::x86_64::avx512f::part1::test_mm_cvtss_u64"
@@ -33,7 +37,7 @@ DEBUG = False
 file_lock = threading.Lock()
 
 BATCH_SIZE = 10
-THREADS_NUMBER = 1
+THREADS_NUMBER = 24
 
 
 class FatalBatchError(Exception):
@@ -113,11 +117,18 @@ def get_all_test_functions(base: Path) -> list[str]:
 
 
 def parse_errors(output: str) -> list[tuple[str, str]]:
-    """Return list of (test_fn_name, error_message) from Miri output."""
+    """Return list of (test_fn_name, error_message) from Miri output.
+
+    Catches both:
+    - Miri UB / unsupported-operation errors  (error: Undefined Behavior: ...)
+    - Test assertion failures from log output  (ERROR test_foo(...) failed: ...)
+    """
     results: list[tuple[str, str]] = []
+    seen: set[str] = set()
     lines = output.splitlines()
 
     for i, line in enumerate(lines):
+        # --- Miri hard errors ---
         m = ERROR_RE.match(line)
         if m:
             error_msg = m.group(1)
@@ -128,7 +139,21 @@ def parse_errors(output: str) -> list[tuple[str, str]]:
                 if tm:
                     test_name = tm.group(1)
                     break
-            results.append((test_name, error_msg))
+            key = (test_name, error_msg)
+            if key not in seen:
+                seen.add(key)
+                results.append((test_name, error_msg))
+            continue
+
+        # --- Test assertion failures from logger ---
+        fm = TEST_FAILURE_RE.match(line)
+        if fm:
+            test_name = fm.group(1)
+            error_msg = f"assertion failed: {fm.group(2)}"
+            key = (test_name, error_msg)
+            if key not in seen:
+                seen.add(key)
+                results.append((test_name, error_msg))
 
     return results
 
@@ -160,7 +185,8 @@ def test_batch(
         iteration += 1
 
         # Test only the remaining tests in this batch using -t
-        cmd = ["just", "miri", "-t"] + remaining_tests
+        # Always pass -d so the logger is initialized and test output is visible
+        cmd = ["just", "miri", "-d", "-t"] + remaining_tests
 
         if DEBUG:
             print(f"  [Iteration {iteration}] Testing {len(remaining_tests)} functions")
