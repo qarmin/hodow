@@ -1,3 +1,13 @@
+# Deprecated
+_MM_GET_EXCEPTION_MASK
+_MM_GET_EXCEPTION_STATE
+_MM_GET_FLUSH_ZERO_MODE
+_MM_GET_ROUNDING_MODE
+_MM_SET_EXCEPTION_MASK
+_MM_SET_EXCEPTION_STATE
+_MM_SET_FLUSH_ZERO_MODE
+_MM_SET_ROUNDING_MODE
+_MM_TRANSPOSE4_PS
 #Undefined Behavior: accessing memory with alignment
 _mm256_mask_load_epi32
 _mm256_mask_load_epi64
@@ -164,6 +174,8 @@ _mm_mask_store_ss
 _mm_maskz_load_sd
 _mm_maskz_load_ss
 #unsupported operation: can't call foreign function
+_mm_mask_cvtne2ps_pbh
+_mm_maskz_cvtne2ps_pbh
 _mm_cvtne2ps_pbh
 _mm_cvtss_u64
 _mm_sfence

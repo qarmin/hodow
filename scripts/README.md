@@ -12,7 +12,7 @@ Run scripts from the repository root. Example:
 
 ## CPU scripts (scripts/cpu)
 
-- `capture_expected.py` — Runs the test binary (via `just run`), captures failing tests' "Got" values and writes them into `expected_cpu_values.txt` so generated tests can be populated with correct expected results.
+- `capture_expected.py` — Runs the test binary (via `just cpu`), captures failing tests' "Got" values and writes them into `expected_cpu_values.txt` so generated tests can be populated with correct expected results.
 - `extract_signatures.py` — Extracts public intrinsic signatures from a source tree (used to produce `signatures.txt`).
 - `generate_tests.py` — Generates Rust SIMD test stubs (output: `hodow_core/src/cpu/auto_generated/`) using `signatures.txt` and `expected_cpu_values.txt`.
 - `miri_tester.py` — Runs generated tests under Miri in batches, collects errors and writes `miri_errors.txt`.

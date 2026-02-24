@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Run 'just run' and capture test failures to populate expected_cpu_values.txt.
+Run 'just cpu' and capture test failures to populate expected_cpu_values.txt.
 
 For each failing test the script extracts the actual 'Got' value and writes
 it as the new expected value, so subsequent runs will verify against the
@@ -52,7 +52,7 @@ def main() -> None:
     base = Path.cwd()
     ev_path = base / "expected_cpu_values.txt"
 
-    # Extra args forwarded to 'just run'
+    # Extra args forwarded to 'just cpu'
     extra = sys.argv[1:]
 
     print("Building and running tests…")

@@ -97,17 +97,8 @@ impl ExtensionTest for SSE {
             (&test_mm_load_ps1, "test_mm_load_ps1"),
             (&test_mm_store_ss, "test_mm_store_ss"),
             (&test_mm_move_ss, "test_mm_move_ss"),
-            (&test_MM_GET_EXCEPTION_MASK, "test_MM_GET_EXCEPTION_MASK"),
-            (&test_MM_GET_EXCEPTION_STATE, "test_MM_GET_EXCEPTION_STATE"),
-            (&test_MM_GET_FLUSH_ZERO_MODE, "test_MM_GET_FLUSH_ZERO_MODE"),
-            (&test_MM_GET_ROUNDING_MODE, "test_MM_GET_ROUNDING_MODE"),
-            (&test_MM_SET_EXCEPTION_MASK, "test_MM_SET_EXCEPTION_MASK"),
-            (&test_MM_SET_EXCEPTION_STATE, "test_MM_SET_EXCEPTION_STATE"),
-            (&test_MM_SET_FLUSH_ZERO_MODE, "test_MM_SET_FLUSH_ZERO_MODE"),
-            (&test_MM_SET_ROUNDING_MODE, "test_MM_SET_ROUNDING_MODE"),
             (&test_mm_prefetch, "test_mm_prefetch"),
             (&test_mm_undefined_ps, "test_mm_undefined_ps"),
-            (&test_MM_TRANSPOSE4_PS, "test_MM_TRANSPOSE4_PS"),
         ]
     }
 }
