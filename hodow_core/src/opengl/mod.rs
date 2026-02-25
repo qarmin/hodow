@@ -14,6 +14,82 @@ pub use context::OpenGLMode;
 pub use loader::init_gl;
 pub use test_trait::{GLTest, GLTestResult, GLVersion};
 
+/// Which display/rendering API backend to use when creating the GL display.
+///
+/// On Linux this selects between EGL and GLX (and their fallback combinations).
+/// On other platforms only a subset is applicable.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum DisplayApiHint {
+    /// Pure EGL (default, works headless without an X server)
+    #[default]
+    Egl,
+    /// Pure GLX (requires an X11 display)
+    Glx,
+    /// Try EGL first, fall back to GLX
+    EglThenGlx,
+    /// Try GLX first, fall back to EGL
+    GlxThenEgl,
+}
+
+impl std::str::FromStr for DisplayApiHint {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s.to_ascii_lowercase().as_str() {
+            "egl" => Ok(Self::Egl),
+            "glx" => Ok(Self::Glx),
+            "egl-then-glx" | "eglthenglx" => Ok(Self::EglThenGlx),
+            "glx-then-egl" | "glxthenegl" => Ok(Self::GlxThenEgl),
+            other => Err(format!("unknown display-api '{}'; valid values: egl, glx, egl-then-glx, glx-then-egl", other)),
+        }
+    }
+}
+
+/// Which OpenGL API flavour and optional version to request from glutin.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum GlApiHint {
+    /// Let glutin pick (OpenGL Core ≥ 3.3 by default)
+    #[default]
+    Auto,
+    /// Request OpenGL (desktop) with an optional major.minor version
+    OpenGl { major: u8, minor: u8 },
+    /// Request OpenGL ES with an optional major.minor version
+    Gles { major: u8, minor: u8 },
+}
+
+impl std::str::FromStr for GlApiHint {
+    type Err = String;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let s = s.trim();
+        if s.eq_ignore_ascii_case("auto") || s.is_empty() {
+            return Ok(Self::Auto);
+        }
+        // Accept forms like "opengl", "opengl:3.3", "gles", "gles:3.0", "gles:2", "gl:4.6"
+        let (api_part, version_part) = if let Some(pos) = s.find(':') {
+            (&s[..pos], Some(&s[pos + 1..]))
+        } else {
+            (s, None)
+        };
+        let is_gles = matches!(api_part.to_ascii_lowercase().as_str(), "gles" | "es");
+        let is_gl = matches!(api_part.to_ascii_lowercase().as_str(), "opengl" | "gl" | "desktop");
+        if !is_gles && !is_gl {
+            return Err(format!("unknown gl-api '{}'; valid values: auto, opengl, opengl:MAJOR.MINOR, gles, gles:MAJOR.MINOR", s));
+        }
+        let (major, minor) = if let Some(ver) = version_part {
+            let parts: Vec<&str> = ver.splitn(2, '.').collect();
+            let maj = parts[0].parse::<u8>().map_err(|_| format!("invalid major version in '{}'", s))?;
+            let min = if parts.len() > 1 { parts[1].parse::<u8>().map_err(|_| format!("invalid minor version in '{}'", s))? } else { 0 };
+            (maj, min)
+        } else {
+            (0, 0) // 0,0 → "any version"
+        };
+        if is_gles {
+            Ok(Self::Gles { major, minor })
+        } else {
+            Ok(Self::OpenGl { major, minor })
+        }
+    }
+}
+
 /// Options controlling the GPU test run
 #[derive(Debug, Clone, Default)]
 pub struct GpuOptions {
@@ -23,10 +99,14 @@ pub struct GpuOptions {
     pub time_limit_ms: Option<u64>,
     /// Per-test frame limit (None / 0 = unlimited)
     pub frame_limit: Option<u64>,
+    /// Which display/rendering backend to use (EGL, GLX, …)
+    pub display_api: DisplayApiHint,
+    /// Which GL API flavour (and optional version) to request
+    pub gl_api: GlApiHint,
 }
 
-pub fn init_opengl() -> Result<OpenGLMode, Box<dyn std::error::Error>> {
-    let ctx = OpenGLMode::create().map_err(|e| Box::new(e) as Box<dyn std::error::Error>)?;
+pub fn init_opengl(opts: &GpuOptions) -> Result<OpenGLMode, Box<dyn std::error::Error>> {
+    let ctx = OpenGLMode::create_with_opts(opts).map_err(|e| Box::new(e) as Box<dyn std::error::Error>)?;
     info!("Created OpenGL context");
     init_gl(&ctx)?;
     info!("Initialized OpenGL function pointers");
@@ -110,7 +190,7 @@ pub mod gui {
 
             // Prepare display builder with window attributes
             let window_attrs = Window::default_attributes()
-                .with_title(spec.title.unwrap_or_else(|| "work_tester GL Test".to_string()))
+                .with_title(spec.title.unwrap_or_else(|| "hodow_cli GL Test".to_string()))
                 .with_inner_size(winit::dpi::LogicalSize::new(spec.width, spec.height));
 
             let template = ConfigTemplateBuilder::new().with_alpha_size(8);
@@ -140,7 +220,7 @@ pub mod gui {
 
             // Prepare display builder with window attributes
             let window_attrs = Window::default_attributes()
-                .with_title(spec.title.unwrap_or_else(|| "work_tester GL Test".to_string()))
+                .with_title(spec.title.unwrap_or_else(|| "hodow_cli GL Test".to_string()))
                 .with_inner_size(winit::dpi::LogicalSize::new(spec.width, spec.height));
 
             let template = ConfigTemplateBuilder::new().with_alpha_size(8);

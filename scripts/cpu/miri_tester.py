@@ -96,7 +96,7 @@ def get_all_test_functions(base: Path) -> list[str]:
             sys.exit(1)
 
         # Parse output - looking for test function names
-        # Format: HH:MM:SS.mmm [INFO] [work_tester::cpu] cpu.rs:30 -   test_NAME
+        # Format: HH:MM:SS.mmm [INFO] [hodow_cli::cpu] cpu.rs:30 -   test_NAME
         tests = []
         for line in output.splitlines():
             # Extract test name from log line

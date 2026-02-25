@@ -17,7 +17,7 @@ arm:
     cargo zigbuild -p hodow_cli --target armv7-unknown-linux-gnueabihf.2.28 --features gpu
 
 gpu *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +nightly run -p hodow_cli --features gpu -- -d gpu --frame-limit 1000 {{args}}
+    RUSTFLAGS="-C target-cpu=native" cargo +nightly run -p hodow_cli --features gpu -- -d gpu --time-limit 1000 {{args}}
 
 gpua *args:
     RUSTFLAGS="-Zsanitizer=address" cargo +nightly run -p hodow_cli --target x86_64-unknown-linux-gnu --features gpu -- -d gpu --frame-limit 100000 {{args}}

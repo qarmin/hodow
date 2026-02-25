@@ -140,7 +140,7 @@ pub fn test_all_gl(opts: &crate::opengl::GpuOptions) -> GLTestResult {
 
         // Headless mode requires an OpenGL context without a visible window.
         // We create a surfaceless context via the existing init_opengl helper.
-        let _ctx = match crate::opengl::init_opengl() {
+        let _ctx = match crate::opengl::init_opengl(opts) {
             Ok(c) => c,
             Err(e) => {
                 log::error!("Failed to create headless OpenGL context: {}", e);

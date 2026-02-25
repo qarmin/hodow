@@ -4,7 +4,7 @@ version.workspace = true
 edition.workspace = true
 
 [[bin]]
-name = "work_tester"
+name = "hodow_cli"
 path = "src/main.rs"
 
 [dependencies]

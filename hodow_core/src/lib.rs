@@ -17,7 +17,7 @@ pub use cpu::{
 };
 // Re-export OpenGL API only when the `gpu` feature is enabled
 #[cfg(feature = "gpu")]
-pub use opengl::{GLTestResult, GpuOptions, OpenGLMode, available_opengl_modes, init_opengl, test_all_opengl};
+pub use opengl::{DisplayApiHint, GLTestResult, GlApiHint, GpuOptions, OpenGLMode, available_opengl_modes, init_opengl, test_all_opengl};
 
 static FUZZING: OnceCell<bool> = OnceCell::new();
 

@@ -1,7 +1,7 @@
 use clap::{Args, Parser, Subcommand};
 
 #[derive(Parser)]
-#[command(name = "work_tester", about = "CPU / GPU workload tester", version = "0.1")]
+#[command(name = "hodow_cli", about = "CPU / GPU workload tester", version = "0.1")]
 pub struct Cli {
     /// Enable verbose debug logging
     #[arg(short = 'd', long = "debug", global = true)]
@@ -59,4 +59,14 @@ pub struct GpuArgs {
     /// Per-test maximum frame count (default: unlimited)
     #[arg(short = 'f', long = "frame-limit", value_name = "FRAMES")]
     pub frame_limit: Option<u64>,
+
+    /// Display/rendering backend to use.
+    /// Possible values: egl (default), glx, egl-then-glx, glx-then-egl
+    #[arg(long = "display-api", value_name = "BACKEND")]
+    pub display_api: Option<String>,
+
+    /// GL API flavour and optional version to request.
+    /// Examples: auto (default), opengl, opengl:3.3, opengl:4.6, gles, gles:2.0, gles:3.0
+    #[arg(long = "gl-api", value_name = "API[:MAJOR.MINOR]")]
+    pub gl_api: Option<String>,
 }

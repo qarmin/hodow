@@ -1,4 +1,4 @@
-use std::error::{Error, Error as StdError};
+use std::error::Error as StdError;
 use std::ffi::c_void;
 use std::fmt;
 use std::num::NonZeroU32;
@@ -6,11 +6,13 @@ use std::ptr::NonNull;
 use std::sync::Arc;
 
 use glutin::config::ConfigTemplateBuilder;
-use glutin::context::{ContextApi, ContextAttributesBuilder, PossiblyCurrentContext};
+use glutin::context::{ContextApi, ContextAttributesBuilder, PossiblyCurrentContext, Version};
 use glutin::display::{Display, DisplayApiPreference};
 use glutin::prelude::*;
 use glutin::surface::{PbufferSurface, SurfaceAttributesBuilder};
 use raw_window_handle::{DisplayHandle, HandleError, HasDisplayHandle, RawDisplayHandle, XlibDisplayHandle};
+
+use crate::opengl::{DisplayApiHint, GlApiHint, GpuOptions};
 
 /// Simple wrapper around a headless OpenGL context or similar.
 pub struct OpenGLMode {
@@ -53,14 +55,39 @@ impl From<HandleError> for OpenGlError {
 }
 
 impl OpenGLMode {
-    /// Create a headless OpenGL context. This tries to create a minimal context
-    /// that won't show any window. On platforms where headless contexts are
-    /// not available, this may still create an offscreen context.
+    /// Create a headless OpenGL context using default options.
     pub fn create() -> Result<Self, OpenGlError> {
+        Self::create_with_opts(&GpuOptions::default())
+    }
+
+    /// Create a headless OpenGL context with the given [`GpuOptions`].
+    ///
+    /// * `opts.display_api` controls which backend (EGL / GLX / …) to use.
+    /// * `opts.gl_api`      controls the API flavour (OpenGL / GLES) and
+    ///                      optional version.
+    pub fn create_with_opts(opts: &GpuOptions) -> Result<Self, OpenGlError> {
         let headless = HeadlessDisplay;
+
+        // ── choose DisplayApiPreference ───────────────────────────────────
+        #[cfg(target_os = "linux")]
+        let preference = {
+            use glutin::display::DisplayApiPreference;
+            // GLX variants need an error-hook registrar; provide a no-op one.
+            // XlibErrorHookRegistrar = Box<dyn Fn(Box<dyn Fn(*mut c_void, *mut c_void) -> bool + Send + Sync>)>
+            let noop_registrar = || -> Box<dyn Fn(Box<dyn Fn(*mut c_void, *mut c_void) -> bool + Send + Sync>)> {
+                Box::new(|_hook| {})
+            };
+            match opts.display_api {
+                DisplayApiHint::Egl => DisplayApiPreference::Egl,
+                DisplayApiHint::Glx => DisplayApiPreference::Glx(noop_registrar()),
+                DisplayApiHint::EglThenGlx => DisplayApiPreference::EglThenGlx(noop_registrar()),
+                DisplayApiHint::GlxThenEgl => DisplayApiPreference::GlxThenEgl(noop_registrar()),
+            }
+        };
+        #[cfg(not(target_os = "linux"))]
         let preference = DisplayApiPreference::Egl;
+
         let display = unsafe {
-            // get DisplayHandle then obtain RawDisplayHandle
             let dh = headless.display_handle().map_err(OpenGlError::from)?;
             let raw = dh.as_raw();
             Display::new(raw, preference).map_err(|e| OpenGlError::Other(Box::new(e)))?
@@ -75,29 +102,48 @@ impl OpenGLMode {
                 .ok_or_else(|| OpenGlError::Glutin("No GL config".to_string()))?
         };
 
-        let context_attributes = ContextAttributesBuilder::new().build(None);
+        // ── build ContextAttributes according to GlApiHint ───────────────
+        fn make_attrs(hint: GlApiHint) -> glutin::context::ContextAttributes {
+            match hint {
+                GlApiHint::Auto => ContextAttributesBuilder::new().build(None),
+                GlApiHint::OpenGl { major: 0, minor: 0 } => {
+                    ContextAttributesBuilder::new().with_context_api(ContextApi::OpenGl(None)).build(None)
+                }
+                GlApiHint::OpenGl { major, minor } => ContextAttributesBuilder::new()
+                    .with_context_api(ContextApi::OpenGl(Some(Version::new(major, minor))))
+                    .build(None),
+                GlApiHint::Gles { major: 0, minor: 0 } => {
+                    ContextAttributesBuilder::new().with_context_api(ContextApi::Gles(None)).build(None)
+                }
+                GlApiHint::Gles { major, minor } => ContextAttributesBuilder::new()
+                    .with_context_api(ContextApi::Gles(Some(Version::new(major, minor))))
+                    .build(None),
+            }
+        }
 
-        // Try to create a native GL context; if that fails, fall back to GLES.
-        let fallback_context_attributes = ContextAttributesBuilder::new().with_context_api(ContextApi::Gles(None)).build(None);
+        let context_attributes = make_attrs(opts.gl_api);
+
+        // Fallback: if the user asked for OpenGL desktop, try GLES next, and vice-versa.
+        let fallback_attributes = match opts.gl_api {
+            GlApiHint::Gles { .. } => ContextAttributesBuilder::new().with_context_api(ContextApi::OpenGl(None)).build(None),
+            _ => ContextAttributesBuilder::new().with_context_api(ContextApi::Gles(None)).build(None),
+        };
 
         let not_current = unsafe {
             match display.create_context(&config, &context_attributes) {
                 Ok(ctx) => ctx,
-                Err(_) => display.create_context(&config, &fallback_context_attributes).map_err(|e| OpenGlError::Other(Box::new(e)))?,
+                Err(_) => display.create_context(&config, &fallback_attributes).map_err(|e| OpenGlError::Other(Box::new(e)))?,
             }
         };
 
         // Create a small pbuffer surface and make the context current on it.
         let pbuffer = {
-            // build a 128x128 pbuffer surface
             let attrs = SurfaceAttributesBuilder::<PbufferSurface>::new()
                 .with_largest_pbuffer(false)
                 .build(NonZeroU32::new(128).expect("valid pbuffer width"), NonZeroU32::new(128).expect("valid pbuffer height"));
-
             unsafe { display.create_pbuffer_surface(&config, &attrs).map_err(|e| OpenGlError::Other(Box::new(e)))? }
         };
 
-        // Make the context current on the created pbuffer surface.
         let possibly_current = not_current.make_current(&pbuffer).map_err(|e| OpenGlError::Other(Box::new(e)))?;
 
         Ok(OpenGLMode {
@@ -118,10 +164,6 @@ impl HasDisplayHandle for HeadlessDisplay {
     fn display_handle(&self) -> Result<DisplayHandle<'_>, HandleError> {
         #[cfg(target_os = "linux")]
         {
-            // Request default X11 display (None) which EGL may accept for
-            // headless/offscreen contexts. This avoids constructing a
-            // WaylandDisplayHandle with a dangling pointer which can cause
-            // crashes in libwayland/libEGL when the display pointer is used.
             let raw = RawDisplayHandle::Xlib(XlibDisplayHandle::new(None, 0));
             unsafe { Ok(DisplayHandle::borrow_raw(raw)) }
         }
