@@ -1,6 +1,6 @@
 use std::cmp::Reverse;
 
-use hodow_core::{TestProgress, available_modes, list_all_functions, set_iterations, set_only_tests, set_skip_tests, test_all_extensions};
+use hodow_core::{TestProgress, available_modes, list_all_functions, set_iterations, set_only_features, set_only_tests, set_skip_tests, test_all_extensions};
 use indicatif::{MultiProgress, ProgressBar, ProgressStyle};
 use log::{error, info};
 
@@ -15,6 +15,10 @@ pub fn process_cpu(args: &CpuArgs) {
 
     if let Some(ref only) = args.test_function {
         set_only_tests(only.clone());
+    }
+
+    if !args.feature.is_empty() {
+        set_only_features(args.feature.clone());
     }
 
     if !args.skip.is_empty() {

@@ -68,6 +68,8 @@ static ITERATIONS: OnceCell<usize> = OnceCell::new();
 static SKIP_TESTS: OnceCell<HashSet<String>> = OnceCell::new();
 /// When set, only tests whose names appear in this set will be run.
 static ONLY_TESTS: OnceCell<HashSet<String>> = OnceCell::new();
+/// When set, only features whose names appear in this set will be run.
+static ONLY_FEATURES: OnceCell<HashSet<String>> = OnceCell::new();
 static STOP_REQUESTED: AtomicBool = AtomicBool::new(false);
 
 pub fn set_iterations(n: usize) {
@@ -87,6 +89,11 @@ pub fn set_only_tests(tests: Vec<String>) {
     let _ = ONLY_TESTS.set(tests.into_iter().collect());
 }
 
+/// When called, only the listed features will be executed; all others are skipped.
+pub fn set_only_features(features: Vec<String>) {
+    let _ = ONLY_FEATURES.set(features.into_iter().collect());
+}
+
 fn should_skip_test(name: &str) -> bool {
     // If an allow-list is set, skip everything not in it
     if let Some(only) = ONLY_TESTS.get()
@@ -95,6 +102,16 @@ fn should_skip_test(name: &str) -> bool {
         return true;
     }
     SKIP_TESTS.get().map(|s| s.contains(name)).unwrap_or(false)
+}
+
+pub fn should_skip_feature(name: &str) -> bool {
+    // If an allow-list is set, skip everything not in it
+    if let Some(only) = ONLY_FEATURES.get()
+        && !only.contains(name)
+    {
+        return true;
+    }
+    false
 }
 
 pub fn request_stop() {

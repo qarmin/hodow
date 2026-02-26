@@ -25,6 +25,12 @@ gpua *args:
 gpur *args:
     RUSTFLAGS="-C target-cpu=native" cargo +nightly run -p hodow_cli --features gpu --release -- -d gpu --time-limit 1000 {{args}}
 
+gui *args:
+    RUSTFLAGS="-C target-cpu=native" cargo +nightly run -p hodow_gui -- {{args}}
+
+guia *args:
+    RUSTFLAGS="-Zsanitizer=address" cargo +nightly run -p hodow_gui --target x86_64-unknown-linux-gnu --features gpu -- {{args}}
+
 gen-gl-table:
     python3 scripts/generate_gl_table.py
 

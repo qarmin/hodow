@@ -39,6 +39,10 @@ pub struct CpuArgs {
     #[arg(short = 't', long = "test-function", num_args = 1..)]
     pub test_function: Option<Vec<String>>,
 
+    /// Run only the specified feature(s) / extension(s) (e.g., sse2, avx2, avx512f)
+    #[arg(short = 'e', long = "feature", value_delimiter = ',', num_args = 1..)]
+    pub feature: Vec<String>,
+
     /// Comma-separated list of tests to skip
     #[arg(short = 's', long = "skip", value_delimiter = ',', num_args = 1..)]
     pub skip: Vec<String>,

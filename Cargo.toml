@@ -3,6 +3,7 @@ resolver = "2"
 members = [
     "hodow_core",
     "hodow_cli",
+    "hodow_gui",
 ]
 
 [workspace.package]

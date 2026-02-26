@@ -13,7 +13,7 @@ pub mod opengl;
 // Re-export main API
 pub use cpu::{
     ExtensionTest, FeatureStats, ProgressCallback, TestFunction, TestProgress, TestStatistics, available_modes, get_iterations, list_all_functions, request_stop, reset_stop_flag,
-    set_iterations, set_only_tests, set_skip_tests, should_stop, test_all_extensions,
+    set_iterations, set_only_features, set_only_tests, set_skip_tests, should_skip_feature, should_stop, test_all_extensions,
 };
 // Re-export OpenGL API only when the `gpu` feature is enabled
 #[cfg(feature = "gpu")]

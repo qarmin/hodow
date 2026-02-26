@@ -1,0 +1,344 @@
+import { VerticalBox, HorizontalBox, Button, LineEdit, TextEdit, CheckBox, ComboBox, ProgressIndicator, ScrollView, GroupBox } from "std-widgets.slint";
+
+export component AppWindow inherits Window {
+    title: "Hodow Test Suite";
+    preferred-width: 900px;
+    preferred-height: 700px;
+
+    in-out property <bool> is-cpu-mode: true;
+    in-out property <string> cpu-iterations: "1000";
+    in-out property <string> cpu-test-functions: "";
+    in-out property <string> cpu-features: "";
+    in-out property <string> cpu-skip-tests: "";
+    in-out property <bool> cpu-list-modes: false;
+    in-out property <bool> cpu-list-functions: false;
+
+    in-out property <bool> gpu-no-window: false;
+    in-out property <string> gpu-time-limit: "1000";
+    in-out property <string> gpu-frame-limit: "";
+    in-out property <int> gpu-display-api-index: 0;
+    in-out property <string> gpu-gl-api: "auto";
+    in-out property <bool> gpu-force-software: false;
+
+    in-out property <bool> tests-running: false;
+    in-out property <string> status-message: "Ready";
+
+    in-out property <int> overall-progress-current: 0;
+    in-out property <int> overall-progress-total: 0;
+    in-out property <int> feature-progress-current: 0;
+    in-out property <int> feature-progress-total: 0;
+    in-out property <string> current-feature-name: "";
+    in-out property <string> current-test-name: "";
+
+    in-out property <string> results-text: "";
+
+    callback start-tests();
+    callback stop-tests();
+    callback mode-changed(bool);
+
+    VerticalBox {
+        padding: 20px;
+        spacing: 15px;
+
+        Text {
+            text: "Hodow Test Suite";
+            font-size: 24px;
+            font-weight: 700;
+            horizontal-alignment: center;
+        }
+
+        GroupBox {
+            title: "Mode Selection";
+
+            HorizontalBox {
+                spacing: 20px;
+
+                HorizontalBox {
+                    spacing: 5px;
+
+                    Rectangle {
+                        width: 20px;
+                        height: 20px;
+                        border-radius: 10px;
+                        border-width: 2px;
+                        border-color: is-cpu-mode ? #3498db : #bdc3c7;
+                        background: is-cpu-mode ? #3498db : transparent;
+
+                        TouchArea {
+                            clicked => {
+                                is-cpu-mode = true;
+                                mode-changed(true);
+                            }
+                        }
+                    }
+
+                    Text {
+                        text: "CPU Tests";
+                        vertical-alignment: center;
+                    }
+                }
+
+                HorizontalBox {
+                    spacing: 5px;
+
+                    Rectangle {
+                        width: 20px;
+                        height: 20px;
+                        border-radius: 10px;
+                        border-width: 2px;
+                        border-color: !is-cpu-mode ? #3498db : #bdc3c7;
+                        background: !is-cpu-mode ? #3498db : transparent;
+
+                        TouchArea {
+                            clicked => {
+                                is-cpu-mode = false;
+                                mode-changed(false);
+                            }
+                        }
+                    }
+
+                    Text {
+                        text: "GPU Tests";
+                        vertical-alignment: center;
+                    }
+                }
+            }
+        }
+
+        if is-cpu-mode: GroupBox {
+            title: "CPU Options";
+
+            VerticalBox {
+                spacing: 10px;
+
+                HorizontalBox {
+                    Text {
+                        text: "Iterations:";
+                        vertical-alignment: center;
+                        width: 150px;
+                    }
+                    LineEdit {
+                        text <=> cpu-iterations;
+                        placeholder-text: "1000";
+                        enabled: !tests-running;
+                    }
+                }
+
+                HorizontalBox {
+                    Text {
+                        text: "Features:";
+                        vertical-alignment: center;
+                        width: 150px;
+                    }
+                    LineEdit {
+                        text <=> cpu-features;
+                        placeholder-text: "e.g., sse2,avx2,avx512f (optional - leave empty for all)";
+                        enabled: !tests-running;
+                    }
+                }
+
+                HorizontalBox {
+                    Text {
+                        text: "Test functions:";
+                        vertical-alignment: center;
+                        width: 150px;
+                    }
+                    LineEdit {
+                        text <=> cpu-test-functions;
+                        placeholder-text: "Comma-separated function names (optional)";
+                        enabled: !tests-running;
+                    }
+                }
+
+                HorizontalBox {
+                    Text {
+                        text: "Skip tests:";
+                        vertical-alignment: center;
+                        width: 150px;
+                    }
+                    LineEdit {
+                        text <=> cpu-skip-tests;
+                        placeholder-text: "Comma-separated test names (optional)";
+                        enabled: !tests-running;
+                    }
+                }
+
+                HorizontalBox {
+                    spacing: 20px;
+
+                    CheckBox {
+                        text: "List available modes";
+                        checked <=> cpu-list-modes;
+                        enabled: !tests-running;
+                    }
+
+                    CheckBox {
+                        text: "List all functions";
+                        checked <=> cpu-list-functions;
+                        enabled: !tests-running;
+                    }
+                }
+            }
+        }
+
+        if !is-cpu-mode: GroupBox {
+            title: "GPU Options";
+
+            VerticalBox {
+                spacing: 10px;
+
+                Text {
+                    text: "Note: GPU tests always run in headless mode in GUI (EventLoop limitation)";
+                    color: #e67e22;
+                    font-size: 11px;
+                    wrap: word-wrap;
+                }
+
+                HorizontalBox {
+                    Text {
+                        text: "Time limit (ms):";
+                        vertical-alignment: center;
+                        width: 150px;
+                    }
+                    LineEdit {
+                        text <=> gpu-time-limit;
+                        placeholder-text: "1000";
+                        enabled: !tests-running;
+                    }
+                }
+
+                HorizontalBox {
+                    Text {
+                        text: "Frame limit:";
+                        vertical-alignment: center;
+                        width: 150px;
+                    }
+                    LineEdit {
+                        text <=> gpu-frame-limit;
+                        placeholder-text: "Unlimited";
+                        enabled: !tests-running;
+                    }
+                }
+
+                HorizontalBox {
+                    Text {
+                        text: "Display API:";
+                        vertical-alignment: center;
+                        width: 150px;
+                    }
+                    ComboBox {
+                        model: ["egl", "glx", "egl-then-glx", "glx-then-egl"];
+                        current-index <=> gpu-display-api-index;
+                        enabled: !tests-running;
+                    }
+                }
+
+                HorizontalBox {
+                    Text {
+                        text: "GL API:";
+                        vertical-alignment: center;
+                        width: 150px;
+                    }
+                    LineEdit {
+                        text <=> gpu-gl-api;
+                        placeholder-text: "auto";
+                        enabled: !tests-running;
+                    }
+                }
+
+                CheckBox {
+                    text: "Force software rendering";
+                    checked <=> gpu-force-software;
+                    enabled: !tests-running;
+                }
+            }
+        }
+
+        GroupBox {
+            title: "Progress";
+
+            VerticalBox {
+                spacing: 10px;
+
+                HorizontalBox {
+                    Text {
+                        text: "Overall:";
+                        width: 100px;
+                    }
+                    ProgressIndicator {
+                        height: 20px;
+                        progress: overall-progress-total > 0 ? overall-progress-current / overall-progress-total : 0;
+                    }
+                    Text {
+                        text: overall-progress-current + " / " + overall-progress-total;
+                        width: 80px;
+                    }
+                }
+
+                HorizontalBox {
+                    Text {
+                        text: current-feature-name != "" ? current-feature-name : "Feature:";
+                        width: 100px;
+                    }
+                    ProgressIndicator {
+                        height: 20px;
+                        progress: feature-progress-total > 0 ? feature-progress-current / feature-progress-total : 0;
+                    }
+                    Text {
+                        text: feature-progress-current + " / " + feature-progress-total;
+                        width: 80px;
+                    }
+                }
+
+                HorizontalBox {
+                    Text {
+                        text: "Current test:";
+                        width: 100px;
+                    }
+                    Text {
+                        text: current-test-name;
+                        horizontal-alignment: left;
+                    }
+                }
+
+                Text {
+                    text: status-message;
+                    color: #7f8c8d;
+                    font-size: 12px;
+                }
+            }
+        }
+
+        HorizontalBox {
+            spacing: 10px;
+
+            Button {
+                text: "Start Tests";
+                enabled: !tests-running;
+                primary: true;
+                clicked => {
+                    start-tests();
+                }
+            }
+
+            Button {
+                text: "Stop Tests";
+                enabled: tests-running;
+                clicked => {
+                    stop-tests();
+                }
+            }
+        }
+
+        GroupBox {
+            title: "Results";
+
+            TextEdit {
+                height: 200px;
+                text: results-text != "" ? results-text : "No results yet. Start tests to see results.";
+                font-family: "monospace";
+                read-only: true;
+            }
+        }
+    }
+}

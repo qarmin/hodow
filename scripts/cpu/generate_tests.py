@@ -776,7 +776,7 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
         "#![allow(unreachable_code)]",
         "",
         "use crate::cpu::{ExtensionTest, FeatureStats, TestStatistics, ProgressCallback};",
-        "use crate::cpu::{reset_stop_flag, should_stop};",
+        "use crate::cpu::{reset_stop_flag, should_stop, should_skip_feature};",
         "",
         "/// Count how many CPU features/extensions are available on this machine",
         "pub fn count_available_features() -> usize {",
@@ -882,22 +882,24 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
 
             detect_fn = get_feature_detect_fn(arch, feature)
             lines.append(f"            if {detect_fn} {{")
-            lines.append("                if should_stop() {")
-            lines.append("                    return Ok(TestStatistics { features, was_cancelled: true });")
-            lines.append("                }")
-            lines.append(f"                let (r, s, e) = crate::cpu::auto_generated::{arch}::{ext}::{struct}::test_with_progress(")
+            lines.append(f"                if !should_skip_feature(\"{ext}\") {{")
+            lines.append("                    if should_stop() {")
+            lines.append("                        return Ok(TestStatistics { features, was_cancelled: true });")
+            lines.append("                    }")
+            lines.append(f"                    let (r, s, e) = crate::cpu::auto_generated::{arch}::{ext}::{struct}::test_with_progress(")
             lines.append("                    total_features,")
             lines.append("                    completed_features,")
             lines.append(f"                    crate::cpu::auto_generated::{arch}::{ext}::{struct}::get_tests().len(),")
             lines.append("                    progress_callback,")
-            lines.append("                )?;")
-            lines.append("                features.push(FeatureStats {")
-            lines.append(f"                    feature_name: crate::cpu::auto_generated::{arch}::{ext}::{struct}::get_name(),")
-            lines.append("                    tests_run: r,")
-            lines.append("                    tests_skipped: s,")
-            lines.append("                    tests_errored: e,")
-            lines.append("                });")
-            lines.append("                completed_features += 1;")
+            lines.append("                    )?;")
+            lines.append("                    features.push(FeatureStats {")
+            lines.append(f"                        feature_name: crate::cpu::auto_generated::{arch}::{ext}::{struct}::get_name(),")
+            lines.append("                        tests_run: r,")
+            lines.append("                        tests_skipped: s,")
+            lines.append("                        tests_errored: e,")
+            lines.append("                    });")
+            lines.append("                    completed_features += 1;")
+            lines.append("                }")
             lines.append("            }")
             # Close the cfg block if we opened it
             if feature not in UNSUPPORTED_FEATURES:
