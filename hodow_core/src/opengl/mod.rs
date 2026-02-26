@@ -64,11 +64,7 @@ impl std::str::FromStr for GlApiHint {
             return Ok(Self::Auto);
         }
         // Accept forms like "opengl", "opengl:3.3", "gles", "gles:3.0", "gles:2", "gl:4.6"
-        let (api_part, version_part) = if let Some(pos) = s.find(':') {
-            (&s[..pos], Some(&s[pos + 1..]))
-        } else {
-            (s, None)
-        };
+        let (api_part, version_part) = if let Some(pos) = s.find(':') { (&s[..pos], Some(&s[pos + 1..])) } else { (s, None) };
         let is_gles = matches!(api_part.to_ascii_lowercase().as_str(), "gles" | "es");
         let is_gl = matches!(api_part.to_ascii_lowercase().as_str(), "opengl" | "gl" | "desktop");
         if !is_gles && !is_gl {
@@ -77,16 +73,16 @@ impl std::str::FromStr for GlApiHint {
         let (major, minor) = if let Some(ver) = version_part {
             let parts: Vec<&str> = ver.splitn(2, '.').collect();
             let maj = parts[0].parse::<u8>().map_err(|_| format!("invalid major version in '{}'", s))?;
-            let min = if parts.len() > 1 { parts[1].parse::<u8>().map_err(|_| format!("invalid minor version in '{}'", s))? } else { 0 };
+            let min = if parts.len() > 1 {
+                parts[1].parse::<u8>().map_err(|_| format!("invalid minor version in '{}'", s))?
+            } else {
+                0
+            };
             (maj, min)
         } else {
             (0, 0) // 0,0 → "any version"
         };
-        if is_gles {
-            Ok(Self::Gles { major, minor })
-        } else {
-            Ok(Self::OpenGl { major, minor })
-        }
+        if is_gles { Ok(Self::Gles { major, minor }) } else { Ok(Self::OpenGl { major, minor }) }
     }
 }
 
@@ -103,6 +99,9 @@ pub struct GpuOptions {
     pub display_api: DisplayApiHint,
     /// Which GL API flavour (and optional version) to request
     pub gl_api: GlApiHint,
+    /// Force Mesa software rendering (sets LIBGL_ALWAYS_SOFTWARE=1 before EGL init).
+    /// Avoids hardware-driver crashes (e.g. Mesa gallium background-thread SEGV).
+    pub force_software: bool,
 }
 
 pub fn init_opengl(opts: &GpuOptions) -> Result<OpenGLMode, Box<dyn std::error::Error>> {

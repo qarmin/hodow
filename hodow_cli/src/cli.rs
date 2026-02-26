@@ -62,11 +62,16 @@ pub struct GpuArgs {
 
     /// Display/rendering backend to use.
     /// Possible values: egl (default), glx, egl-then-glx, glx-then-egl
-    #[arg(long = "display-api", value_name = "BACKEND")]
+    #[arg(short = 'a', long = "display-api", value_name = "BACKEND")]
     pub display_api: Option<String>,
 
     /// GL API flavour and optional version to request.
     /// Examples: auto (default), opengl, opengl:3.3, opengl:4.6, gles, gles:2.0, gles:3.0
-    #[arg(long = "gl-api", value_name = "API[:MAJOR.MINOR]")]
+    #[arg(short = 'g', long = "gl-api", value_name = "API[:MAJOR.MINOR]")]
     pub gl_api: Option<String>,
+
+    /// Force Mesa software rendering (sets LIBGL_ALWAYS_SOFTWARE=1).
+    /// Use this when the hardware GL driver crashes (e.g. Mesa gallium SEGV in headless mode).
+    #[arg(short = 's', long = "force-software")]
+    pub force_software: bool,
 }

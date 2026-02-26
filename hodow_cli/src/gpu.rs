@@ -37,6 +37,7 @@ pub fn process_gpu(args: &GpuArgs) {
             frame_limit: args.frame_limit,
             display_api,
             gl_api,
+            force_software: args.force_software,
         };
 
         if opts.no_window {
@@ -44,6 +45,9 @@ pub fn process_gpu(args: &GpuArgs) {
         }
         info!("Display backend: {:?}", opts.display_api);
         info!("GL API hint:     {:?}", opts.gl_api);
+        if opts.force_software {
+            info!("Force software rendering: enabled");
+        }
         if let Some(ms) = opts.time_limit_ms {
             info!("Per-test time limit: {}ms", ms);
         }

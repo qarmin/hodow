@@ -742,6 +742,7 @@ dependencies = [
  "rand",
  "raw-window-handle",
  "winit",
+ "x11-dl",
 ]
 
 [[package]]
