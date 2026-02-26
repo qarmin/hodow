@@ -815,14 +815,18 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
         "}",
         "",
         "/// Get list of available CPU features/extensions on this machine",
-        "pub fn available_modes() -> Vec<&'static str> {",
-        "    let mut modes = Vec::new();",
+        "/// Returns a sorted, deduplicated list with architecture prefixes",
+        "pub fn available_modes() -> Vec<String> {",
+        "    use std::collections::BTreeSet;",
+        "    let mut modes = BTreeSet::new();",
         "",
     ]
 
     # Generate available_modes
     for arch in sorted(all_data.keys()):
         arch_cfg = get_target_arch_cfg(arch)
+        # Simplify arch name for display
+        arch_display = arch.replace("_shared", "")
         lines.append(f"    #[cfg({arch_cfg})]")
         lines.append("    {")
 
@@ -839,14 +843,14 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
                 lines.append(f"        #[cfg(target_feature = \"{feature}\")]")
             detect_fn = get_feature_detect_fn(arch, feature)
             lines.append(f"        if {detect_fn} {{")
-            lines.append(f'            modes.push("{feature}");')
+            lines.append(f'            modes.insert(format!("{{}}:{{}}", "{arch_display}", "{feature}"));')
             lines.append("        }")
 
         lines.append("    }")
         lines.append("")
 
     lines += [
-        "    modes",
+        "    modes.into_iter().collect()",
         "}",
         "",
         "/// Test all available CPU extensions with progress callback",

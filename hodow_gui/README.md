@@ -33,9 +33,10 @@ cargo build -p hodow_gui --release
 1. Wybierz "CPU Tests" w sekcji Mode Selection
 2. Ustaw opcje:
    - **Iterations**: Liczba iteracji na test (domyślnie 1000)
+   - **Features**: Opcjonalnie ogranicz do konkretnych rozszerzeń (np. `sse2,avx2,avx512f`)
    - **Test functions**: Opcjonalnie podaj nazwy konkretnych funkcji do testowania (oddzielone przecinkami)
    - **Skip tests**: Opcjonalnie podaj nazwy testów do pominięcia (oddzielone przecinkami)
-   - **List available modes**: Zaznacz aby wyświetlić dostępne tryby CPU
+   - **List available modes**: Zaznacz aby wyświetlić dostępne tryby CPU (z prefiksem architektury)
    - **List all functions**: Zaznacz aby wyświetlić wszystkie dostępne funkcje testowe
 3. Kliknij "Start Tests"
 4. Obserwuj progress w czasie rzeczywistym

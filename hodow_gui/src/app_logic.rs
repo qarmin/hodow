@@ -320,6 +320,10 @@ fn clear_progress_display(ui_weak: &Weak<AppWindow>) {
         if let Some(ui) = ui_weak.upgrade() {
             ui.set_current_test_name("".into());
             ui.set_current_feature_name("".into());
+            ui.set_overall_progress_current(0);
+            ui.set_overall_progress_total(0);
+            ui.set_feature_progress_current(0);
+            ui.set_feature_progress_total(0);
         }
     })
     .ok();

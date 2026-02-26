@@ -452,16 +452,18 @@ pub fn count_available_features() -> usize {
 }
 
 /// Get list of available CPU features/extensions on this machine
-pub fn available_modes() -> Vec<&'static str> {
-    let mut modes = Vec::new();
+/// Returns a sorted, deduplicated list with architecture prefixes
+pub fn available_modes() -> Vec<String> {
+    use std::collections::BTreeSet;
+    let mut modes = BTreeSet::new();
 
     #[cfg(target_arch = "aarch64")]
     {
         if false /* no runtime detection available */ {
-            modes.push("mte");
+            modes.insert(format!("{}:{}", "aarch64", "mte"));
         }
         if false /* no runtime detection available */ {
-            modes.push("prefetch");
+            modes.insert(format!("{}:{}", "aarch64", "prefetch"));
         }
     }
 
@@ -469,7 +471,7 @@ pub fn available_modes() -> Vec<&'static str> {
     {
         #[cfg(target_feature = "neon")]
         if false /* feature detection not yet implemented */ {
-            modes.push("neon");
+            modes.insert(format!("{}:{}", "arm", "neon"));
         }
     }
 
@@ -480,340 +482,340 @@ pub fn available_modes() -> Vec<&'static str> {
     #[cfg(target_arch = "mips")]
     {
         if false /* no runtime detection available */ {
-            modes.push("msa");
+            modes.insert(format!("{}:{}", "mips", "msa"));
         }
     }
 
     #[cfg(all() /* nvptx not supported */)]
     {
         if false /* no runtime detection available */ {
-            modes.push("packed");
+            modes.insert(format!("{}:{}", "nvptx", "packed"));
         }
     }
 
     #[cfg(target_arch = "powerpc")]
     {
         if false /* no runtime detection available */ {
-            modes.push("altivec");
+            modes.insert(format!("{}:{}", "powerpc", "altivec"));
         }
         if false /* no runtime detection available */ {
-            modes.push("vsx");
+            modes.insert(format!("{}:{}", "powerpc", "vsx"));
         }
     }
 
     #[cfg(target_arch = "powerpc64")]
     {
         if false /* no runtime detection available */ {
-            modes.push("vsx");
+            modes.insert(format!("{}:{}", "powerpc64", "vsx"));
         }
     }
 
     #[cfg(target_arch = "riscv32")]
     {
         if false /* no runtime detection available */ {
-            modes.push("zk");
+            modes.insert(format!("{}:{}", "riscv32", "zk"));
         }
     }
 
     #[cfg(target_arch = "riscv64")]
     {
         if false /* no runtime detection available */ {
-            modes.push("zk");
+            modes.insert(format!("{}:{}", "riscv64", "zk"));
         }
     }
 
     #[cfg(any(target_arch = "riscv32", target_arch = "riscv64"))]
     {
         if false /* no runtime detection available */ {
-            modes.push("p");
+            modes.insert(format!("{}:{}", "riscv", "p"));
         }
         if false /* no runtime detection available */ {
-            modes.push("zb");
+            modes.insert(format!("{}:{}", "riscv", "zb"));
         }
         if false /* no runtime detection available */ {
-            modes.push("zk");
+            modes.insert(format!("{}:{}", "riscv", "zk"));
         }
     }
 
     #[cfg(target_arch = "s390x")]
     {
         if false /* no runtime detection available */ {
-            modes.push("vector");
+            modes.insert(format!("{}:{}", "s390x", "vector"));
         }
     }
 
     #[cfg(target_arch = "wasm32")]
     {
         if false /* no runtime detection available */ {
-            modes.push("atomic");
+            modes.insert(format!("{}:{}", "wasm32", "atomic"));
         }
         if false /* no runtime detection available */ {
-            modes.push("memory");
+            modes.insert(format!("{}:{}", "wasm32", "memory"));
         }
         if false /* no runtime detection available */ {
-            modes.push("relaxed_simd");
+            modes.insert(format!("{}:{}", "wasm32", "relaxed_simd"));
         }
         if false /* no runtime detection available */ {
-            modes.push("simd128");
+            modes.insert(format!("{}:{}", "wasm32", "simd128"));
         }
     }
 
     #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     {
         if false /* no runtime detection available */ {
-            modes.push("abm");
+            modes.insert(format!("{}:{}", "x86", "abm"));
         }
         #[cfg(target_feature = "adx")]
         if std::arch::is_x86_feature_detected!("adx") {
-            modes.push("adx");
+            modes.insert(format!("{}:{}", "x86", "adx"));
         }
         #[cfg(target_feature = "aes")]
         if std::arch::is_x86_feature_detected!("aes") {
-            modes.push("aes");
+            modes.insert(format!("{}:{}", "x86", "aes"));
         }
         #[cfg(target_feature = "avx")]
         if std::arch::is_x86_feature_detected!("avx") {
-            modes.push("avx");
+            modes.insert(format!("{}:{}", "x86", "avx"));
         }
         #[cfg(target_feature = "avx2")]
         if std::arch::is_x86_feature_detected!("avx2") {
-            modes.push("avx2");
+            modes.insert(format!("{}:{}", "x86", "avx2"));
         }
         #[cfg(target_feature = "avx512bf16")]
         if std::arch::is_x86_feature_detected!("avx512bf16") {
-            modes.push("avx512bf16");
+            modes.insert(format!("{}:{}", "x86", "avx512bf16"));
         }
         #[cfg(target_feature = "avx512bitalg")]
         if std::arch::is_x86_feature_detected!("avx512bitalg") {
-            modes.push("avx512bitalg");
+            modes.insert(format!("{}:{}", "x86", "avx512bitalg"));
         }
         #[cfg(target_feature = "avx512bw")]
         if std::arch::is_x86_feature_detected!("avx512bw") {
-            modes.push("avx512bw");
+            modes.insert(format!("{}:{}", "x86", "avx512bw"));
         }
         #[cfg(target_feature = "avx512cd")]
         if std::arch::is_x86_feature_detected!("avx512cd") {
-            modes.push("avx512cd");
+            modes.insert(format!("{}:{}", "x86", "avx512cd"));
         }
         #[cfg(target_feature = "avx512dq")]
         if std::arch::is_x86_feature_detected!("avx512dq") {
-            modes.push("avx512dq");
+            modes.insert(format!("{}:{}", "x86", "avx512dq"));
         }
         #[cfg(target_feature = "avx512f")]
         if std::arch::is_x86_feature_detected!("avx512f") {
-            modes.push("avx512f");
+            modes.insert(format!("{}:{}", "x86", "avx512f"));
         }
         #[cfg(target_feature = "avx512fp16")]
         if std::arch::is_x86_feature_detected!("avx512fp16") {
-            modes.push("avx512fp16");
+            modes.insert(format!("{}:{}", "x86", "avx512fp16"));
         }
         #[cfg(target_feature = "avx512ifma")]
         if std::arch::is_x86_feature_detected!("avx512ifma") {
-            modes.push("avx512ifma");
+            modes.insert(format!("{}:{}", "x86", "avx512ifma"));
         }
         #[cfg(target_feature = "avx512vbmi")]
         if std::arch::is_x86_feature_detected!("avx512vbmi") {
-            modes.push("avx512vbmi");
+            modes.insert(format!("{}:{}", "x86", "avx512vbmi"));
         }
         #[cfg(target_feature = "avx512vbmi2")]
         if std::arch::is_x86_feature_detected!("avx512vbmi2") {
-            modes.push("avx512vbmi2");
+            modes.insert(format!("{}:{}", "x86", "avx512vbmi2"));
         }
         #[cfg(target_feature = "avx512vnni")]
         if std::arch::is_x86_feature_detected!("avx512vnni") {
-            modes.push("avx512vnni");
+            modes.insert(format!("{}:{}", "x86", "avx512vnni"));
         }
         #[cfg(target_feature = "avx512vpopcntdq")]
         if std::arch::is_x86_feature_detected!("avx512vpopcntdq") {
-            modes.push("avx512vpopcntdq");
+            modes.insert(format!("{}:{}", "x86", "avx512vpopcntdq"));
         }
         #[cfg(target_feature = "avxneconvert")]
         if std::arch::is_x86_feature_detected!("avxneconvert") {
-            modes.push("avxneconvert");
+            modes.insert(format!("{}:{}", "x86", "avxneconvert"));
         }
         #[cfg(target_feature = "bmi1")]
         if std::arch::is_x86_feature_detected!("bmi1") {
-            modes.push("bmi1");
+            modes.insert(format!("{}:{}", "x86", "bmi1"));
         }
         #[cfg(target_feature = "bmi2")]
         if std::arch::is_x86_feature_detected!("bmi2") {
-            modes.push("bmi2");
+            modes.insert(format!("{}:{}", "x86", "bmi2"));
         }
         if false /* no runtime detection available */ {
-            modes.push("bswap");
+            modes.insert(format!("{}:{}", "x86", "bswap"));
         }
         if false /* no runtime detection available */ {
-            modes.push("bt");
+            modes.insert(format!("{}:{}", "x86", "bt"));
         }
         if false /* no runtime detection available */ {
-            modes.push("cpuid");
+            modes.insert(format!("{}:{}", "x86", "cpuid"));
         }
         if false /* no runtime detection available */ {
-            modes.push("eflags");
+            modes.insert(format!("{}:{}", "x86", "eflags"));
         }
         #[cfg(target_feature = "f16c")]
         if std::arch::is_x86_feature_detected!("f16c") {
-            modes.push("f16c");
+            modes.insert(format!("{}:{}", "x86", "f16c"));
         }
         #[cfg(target_feature = "fma")]
         if std::arch::is_x86_feature_detected!("fma") {
-            modes.push("fma");
+            modes.insert(format!("{}:{}", "x86", "fma"));
         }
         #[cfg(target_feature = "fxsr")]
         if std::arch::is_x86_feature_detected!("fxsr") {
-            modes.push("fxsr");
+            modes.insert(format!("{}:{}", "x86", "fxsr"));
         }
         #[cfg(target_feature = "gfni")]
         if std::arch::is_x86_feature_detected!("gfni") {
-            modes.push("gfni");
+            modes.insert(format!("{}:{}", "x86", "gfni"));
         }
         #[cfg(target_feature = "kl")]
         if std::arch::is_x86_feature_detected!("kl") {
-            modes.push("kl");
+            modes.insert(format!("{}:{}", "x86", "kl"));
         }
         #[cfg(target_feature = "pclmulqdq")]
         if std::arch::is_x86_feature_detected!("pclmulqdq") {
-            modes.push("pclmulqdq");
+            modes.insert(format!("{}:{}", "x86", "pclmulqdq"));
         }
         #[cfg(target_feature = "rdrand")]
         if std::arch::is_x86_feature_detected!("rdrand") {
-            modes.push("rdrand");
+            modes.insert(format!("{}:{}", "x86", "rdrand"));
         }
         if false /* no runtime detection available */ {
-            modes.push("rdtsc");
+            modes.insert(format!("{}:{}", "x86", "rdtsc"));
         }
         #[cfg(target_feature = "rtm")]
         if std::arch::is_x86_feature_detected!("rtm") {
-            modes.push("rtm");
+            modes.insert(format!("{}:{}", "x86", "rtm"));
         }
         #[cfg(target_feature = "sha")]
         if std::arch::is_x86_feature_detected!("sha") {
-            modes.push("sha");
+            modes.insert(format!("{}:{}", "x86", "sha"));
         }
         #[cfg(target_feature = "sse")]
         if std::arch::is_x86_feature_detected!("sse") {
-            modes.push("sse");
+            modes.insert(format!("{}:{}", "x86", "sse"));
         }
         #[cfg(target_feature = "sse2")]
         if std::arch::is_x86_feature_detected!("sse2") {
-            modes.push("sse2");
+            modes.insert(format!("{}:{}", "x86", "sse2"));
         }
         #[cfg(target_feature = "sse3")]
         if std::arch::is_x86_feature_detected!("sse3") {
-            modes.push("sse3");
+            modes.insert(format!("{}:{}", "x86", "sse3"));
         }
         #[cfg(target_feature = "sse4.1")]
         if std::arch::is_x86_feature_detected!("sse4.1") {
-            modes.push("sse4.1");
+            modes.insert(format!("{}:{}", "x86", "sse4.1"));
         }
         #[cfg(target_feature = "sse4.2")]
         if std::arch::is_x86_feature_detected!("sse4.2") {
-            modes.push("sse4.2");
+            modes.insert(format!("{}:{}", "x86", "sse4.2"));
         }
         #[cfg(target_feature = "sse4a")]
         if std::arch::is_x86_feature_detected!("sse4a") {
-            modes.push("sse4a");
+            modes.insert(format!("{}:{}", "x86", "sse4a"));
         }
         #[cfg(target_feature = "ssse3")]
         if std::arch::is_x86_feature_detected!("ssse3") {
-            modes.push("ssse3");
+            modes.insert(format!("{}:{}", "x86", "ssse3"));
         }
         #[cfg(target_feature = "tbm")]
         if std::arch::is_x86_feature_detected!("tbm") {
-            modes.push("tbm");
+            modes.insert(format!("{}:{}", "x86", "tbm"));
         }
         #[cfg(target_feature = "vaes")]
         if std::arch::is_x86_feature_detected!("vaes") {
-            modes.push("vaes");
+            modes.insert(format!("{}:{}", "x86", "vaes"));
         }
         #[cfg(target_feature = "vpclmulqdq")]
         if std::arch::is_x86_feature_detected!("vpclmulqdq") {
-            modes.push("vpclmulqdq");
+            modes.insert(format!("{}:{}", "x86", "vpclmulqdq"));
         }
         #[cfg(target_feature = "xsave")]
         if std::arch::is_x86_feature_detected!("xsave") {
-            modes.push("xsave");
+            modes.insert(format!("{}:{}", "x86", "xsave"));
         }
     }
 
     #[cfg(target_arch = "x86_64")]
     {
         if false /* no runtime detection available */ {
-            modes.push("abm");
+            modes.insert(format!("{}:{}", "x86_64", "abm"));
         }
         #[cfg(target_feature = "adx")]
         if std::arch::is_x86_feature_detected!("adx") {
-            modes.push("adx");
+            modes.insert(format!("{}:{}", "x86_64", "adx"));
         }
         #[cfg(target_feature = "avx")]
         if std::arch::is_x86_feature_detected!("avx") {
-            modes.push("avx");
+            modes.insert(format!("{}:{}", "x86_64", "avx"));
         }
         #[cfg(target_feature = "avx512bw")]
         if std::arch::is_x86_feature_detected!("avx512bw") {
-            modes.push("avx512bw");
+            modes.insert(format!("{}:{}", "x86_64", "avx512bw"));
         }
         #[cfg(target_feature = "avx512f")]
         if std::arch::is_x86_feature_detected!("avx512f") {
-            modes.push("avx512f");
+            modes.insert(format!("{}:{}", "x86_64", "avx512f"));
         }
         #[cfg(target_feature = "avx512fp16")]
         if std::arch::is_x86_feature_detected!("avx512fp16") {
-            modes.push("avx512fp16");
+            modes.insert(format!("{}:{}", "x86_64", "avx512fp16"));
         }
         #[cfg(target_feature = "bmi1")]
         if std::arch::is_x86_feature_detected!("bmi1") {
-            modes.push("bmi1");
+            modes.insert(format!("{}:{}", "x86_64", "bmi1"));
         }
         #[cfg(target_feature = "bmi2")]
         if std::arch::is_x86_feature_detected!("bmi2") {
-            modes.push("bmi2");
+            modes.insert(format!("{}:{}", "x86_64", "bmi2"));
         }
         if false /* no runtime detection available */ {
-            modes.push("bswap");
+            modes.insert(format!("{}:{}", "x86_64", "bswap"));
         }
         if false /* no runtime detection available */ {
-            modes.push("bt");
+            modes.insert(format!("{}:{}", "x86_64", "bt"));
         }
         #[cfg(target_feature = "cmpxchg16b")]
         if std::arch::is_x86_feature_detected!("cmpxchg16b") {
-            modes.push("cmpxchg16b");
+            modes.insert(format!("{}:{}", "x86_64", "cmpxchg16b"));
         }
         #[cfg(target_feature = "fxsr")]
         if std::arch::is_x86_feature_detected!("fxsr") {
-            modes.push("fxsr");
+            modes.insert(format!("{}:{}", "x86_64", "fxsr"));
         }
         #[cfg(target_feature = "rdrand")]
         if std::arch::is_x86_feature_detected!("rdrand") {
-            modes.push("rdrand");
+            modes.insert(format!("{}:{}", "x86_64", "rdrand"));
         }
         #[cfg(target_feature = "sse")]
         if std::arch::is_x86_feature_detected!("sse") {
-            modes.push("sse");
+            modes.insert(format!("{}:{}", "x86_64", "sse"));
         }
         #[cfg(target_feature = "sse2")]
         if std::arch::is_x86_feature_detected!("sse2") {
-            modes.push("sse2");
+            modes.insert(format!("{}:{}", "x86_64", "sse2"));
         }
         #[cfg(target_feature = "sse4.1")]
         if std::arch::is_x86_feature_detected!("sse4.1") {
-            modes.push("sse4.1");
+            modes.insert(format!("{}:{}", "x86_64", "sse4.1"));
         }
         #[cfg(target_feature = "sse4.2")]
         if std::arch::is_x86_feature_detected!("sse4.2") {
-            modes.push("sse4.2");
+            modes.insert(format!("{}:{}", "x86_64", "sse4.2"));
         }
         #[cfg(target_feature = "tbm")]
         if std::arch::is_x86_feature_detected!("tbm") {
-            modes.push("tbm");
+            modes.insert(format!("{}:{}", "x86_64", "tbm"));
         }
         #[cfg(target_feature = "xsave")]
         if std::arch::is_x86_feature_detected!("xsave") {
-            modes.push("xsave");
+            modes.insert(format!("{}:{}", "x86_64", "xsave"));
         }
     }
 
-    modes
+    modes.into_iter().collect()
 }
 
 /// Test all available CPU extensions with progress callback
