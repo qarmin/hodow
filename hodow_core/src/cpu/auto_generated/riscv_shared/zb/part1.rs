@@ -9,9 +9,9 @@ pub(super) fn test_orc_b() -> Result<(), String> {
     unsafe {
         let _result = orc_b(0usize);
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
@@ -28,9 +28,9 @@ pub(super) fn test_clmul() -> Result<(), String> {
     unsafe {
         let _result = clmul(0usize, 0usize);
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
@@ -47,9 +47,9 @@ pub(super) fn test_clmulh() -> Result<(), String> {
     unsafe {
         let _result = clmulh(0usize, 0usize);
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
@@ -66,9 +66,9 @@ pub(super) fn test_clmulr() -> Result<(), String> {
     unsafe {
         let _result = clmulr(0usize, 0usize);
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);

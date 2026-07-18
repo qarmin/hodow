@@ -1,7 +1,6 @@
 mod part1;
 
 use crate::cpu::auto_generated::x86::avx512bitalg::part1::*;
-
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct AVX512BITALG;
@@ -31,6 +30,12 @@ impl ExtensionTest for AVX512BITALG {
             (&test_mm_popcnt_epi8, "test_mm_popcnt_epi8"),
             (&test_mm_maskz_popcnt_epi8, "test_mm_maskz_popcnt_epi8"),
             (&test_mm_mask_popcnt_epi8, "test_mm_mask_popcnt_epi8"),
+            (&test_mm512_bitshuffle_epi64_mask, "test_mm512_bitshuffle_epi64_mask"),
+            (&test_mm512_mask_bitshuffle_epi64_mask, "test_mm512_mask_bitshuffle_epi64_mask"),
+            (&test_mm256_bitshuffle_epi64_mask, "test_mm256_bitshuffle_epi64_mask"),
+            (&test_mm256_mask_bitshuffle_epi64_mask, "test_mm256_mask_bitshuffle_epi64_mask"),
+            (&test_mm_bitshuffle_epi64_mask, "test_mm_bitshuffle_epi64_mask"),
+            (&test_mm_mask_bitshuffle_epi64_mask, "test_mm_mask_bitshuffle_epi64_mask"),
         ]
     }
 }

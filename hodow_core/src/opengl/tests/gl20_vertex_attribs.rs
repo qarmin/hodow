@@ -69,6 +69,9 @@ impl GLTest for GL20VertexAttribsTest {
             }
             gl::ValidateProgram(program);
             gl::UseProgram(program);
+            let mut vao = 0;
+            gl::GenVertexArrays(1, &mut vao);
+            gl::BindVertexArray(vao);
             let pos_loc = gl::GetAttribLocation(program, b"position\0".as_ptr() as *const gl::types::GLchar);
             let color_loc = gl::GetAttribLocation(program, b"color\0".as_ptr() as *const gl::types::GLchar);
             gl::VertexAttrib1f(2, 1.0);
@@ -84,8 +87,24 @@ impl GLTest for GL20VertexAttribsTest {
             gl::EnableVertexAttribArray(color_loc as u32);
             let vertices: [f32; 9] = [0.0, 0.5, 0.0, -0.5, -0.5, 0.0, 0.5, -0.5, 0.0];
             let colors: [f32; 12] = [1.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0];
-            gl::VertexAttribPointer(pos_loc as u32, 3, gl::FLOAT, gl::FALSE, 0, vertices.as_ptr() as *const _);
-            gl::VertexAttribPointer(color_loc as u32, 4, gl::FLOAT, gl::FALSE, 0, colors.as_ptr() as *const _);
+            let mut vbos = [0u32; 2];
+            gl::GenBuffers(2, vbos.as_mut_ptr());
+            gl::BindBuffer(gl::ARRAY_BUFFER, vbos[0]);
+            gl::BufferData(
+                gl::ARRAY_BUFFER,
+                std::mem::size_of_val(&vertices) as gl::types::GLsizeiptr,
+                vertices.as_ptr() as *const _,
+                gl::STATIC_DRAW,
+            );
+            gl::VertexAttribPointer(pos_loc as u32, 3, gl::FLOAT, gl::FALSE, 0, std::ptr::null());
+            gl::BindBuffer(gl::ARRAY_BUFFER, vbos[1]);
+            gl::BufferData(
+                gl::ARRAY_BUFFER,
+                std::mem::size_of_val(&colors) as gl::types::GLsizeiptr,
+                colors.as_ptr() as *const _,
+                gl::STATIC_DRAW,
+            );
+            gl::VertexAttribPointer(color_loc as u32, 4, gl::FLOAT, gl::FALSE, 0, std::ptr::null());
             let mut attrib_val: [f32; 4] = [0.0; 4];
             gl::GetVertexAttribfv(pos_loc as u32, gl::CURRENT_VERTEX_ATTRIB, attrib_val.as_mut_ptr());
             let mut attrib_enabled = 0;
@@ -99,8 +118,8 @@ impl GLTest for GL20VertexAttribsTest {
             gl::StencilMaskSeparate(gl::FRONT, 0xFF);
             gl::StencilMaskSeparate(gl::BACK, 0xFF);
             gl::BlendEquationSeparate(gl::FUNC_ADD, gl::FUNC_ADD);
-            let draw_buffers: [u32; 2] = [gl::COLOR_ATTACHMENT0, gl::COLOR_ATTACHMENT1];
-            gl::DrawBuffers(2, draw_buffers.as_ptr());
+            let draw_buffers: [u32; 1] = [gl::BACK];
+            gl::DrawBuffers(1, draw_buffers.as_ptr());
             gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT | gl::STENCIL_BUFFER_BIT);
             gl::DrawArrays(gl::TRIANGLES, 0, 3);
             gl::Flush();
@@ -113,6 +132,10 @@ impl GLTest for GL20VertexAttribsTest {
             gl::DeleteShader(vs);
             gl::DeleteShader(fs);
             gl::UseProgram(0);
+            gl::BindVertexArray(0);
+            gl::BindBuffer(gl::ARRAY_BUFFER, 0);
+            gl::DeleteBuffers(2, vbos.as_ptr());
+            gl::DeleteVertexArrays(1, &vao);
             gl::DeleteProgram(program);
             Ok("GL 2.0 vertex attributes and stencil operations tested successfully".to_string())
         }

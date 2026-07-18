@@ -12,6 +12,13 @@ FUNCTIONS_PER_PART = 50
 OUTPUT_DIR = Path("hodow_core/src/cpu/auto_generated")
 SIGNATURES_FILE = Path("hodow_core/src/cpu/signatures.txt")
 FUNCTIONS_FILE = Path("scripts/cpu/excluded_functions.txt")
+# Functions that fail *only* under Miri (foreign-function / inline-asm limitations) but
+# run fine on real hardware. They are generated and executed natively, but skipped when
+# the test binary is run under Miri via a `cfg!(miri)` guard.
+MIRI_ONLY_FILE = Path("scripts/cpu/miri_only_functions.txt")
+
+# Populated from MIRI_ONLY_FILE in main().
+MIRI_SKIP_FUNCTIONS: set[str] = set()
 
 
 # Ignored functions - that will not be tested
@@ -167,6 +174,30 @@ FIXED_INITS: dict[str, str] = {
     "u128":  "1u128",
     "Ordering": "core::sync::atomic::Ordering::Relaxed",
 }
+
+# Byte size of a pointee type, used to size pointer buffers large enough to hold a
+# full SIMD register. Intrinsics like `_mm512_loadu_epi8(*const i8)` read a whole
+# 512-bit vector through a pointer to a *small* element, so a 1-element buffer is an
+# out-of-bounds read. Sizing to at least a 512-bit register (64 bytes) is always safe.
+PTR_ELEM_BYTES: dict[str, int] = {
+    "i8": 1, "u8": 1, "i16": 2, "u16": 2, "i32": 4, "u32": 4, "f32": 4,
+    "i64": 8, "u64": 8, "f64": 8, "usize": 8, "isize": 8, "u128": 16, "i128": 16,
+    "__m128": 16, "__m128d": 16, "__m128i": 16, "__m128bh": 16,
+    "__m256": 32, "__m256d": 32, "__m256i": 32, "__m256bh": 32,
+    "__m512": 64, "__m512d": 64, "__m512i": 64, "__m512bh": 64,
+    "__mmask8": 1, "__mmask16": 2, "__mmask32": 4, "__mmask64": 8,
+}
+
+# Largest SIMD register width in bytes (AVX-512).
+MAX_SIMD_BYTES = 64
+
+
+def ptr_array_size(inner: str) -> int:
+    """Number of `inner`-typed elements needed for a buffer that can back any load/store
+    up to a 512-bit vector. Defaults to a full 64-byte register for unknown pointees."""
+    b = PTR_ELEM_BYTES.get(inner.strip(), 1)
+    return max(1, -(-MAX_SIMD_BYTES // b))  # ceil(64 / b)
+
 
 # Zeroed SIMD inits — used for gather/scatter offset/index params to avoid OOB reads
 ZERO_SIMD_INITS: dict[str, str] = {
@@ -371,13 +402,7 @@ def has_unstable_type(params: list | None, ret: str) -> bool:
 
 
 def skip_fuzz(name: str, params: list | None) -> bool:
-    return (            has_ptr(params) or
-            name in NO_FUZZ_FUNCTIONS)
-
-
-def skip_miri(name: str) -> bool:
-    """Check if function should be skipped in Miri (cfg(not(miri)))."""
-    return name in NO_MIRI_FUNCTIONS
+    return has_ptr(params) or name in NO_FUZZ_FUNCTIONS
 
 
 def const_val(cg_name: str) -> str:
@@ -540,30 +565,42 @@ def gen_fn(sig: dict, expected_values: dict[str, str] | None = None) -> str:
     lines = []
 
     lines.append(f"pub(super) fn {test}() -> Result<(), String> {{")
+    # Some intrinsics work on real hardware but cannot be executed under Miri (it can't
+    # call the LLVM foreign function / inline asm). Skip only under Miri; still run natively.
+    if name in MIRI_SKIP_FUNCTIONS:
+        lines.append("        if cfg!(miri) {")
+        lines.append("            return Ok(());")
+        lines.append("        }")
     lines.append("    unsafe {")
 
     is_gather = any(p in name.lower() for p in ("gather", "scatter"))
+    # xsave/fxsave/xrstor/fxrstor write the full processor state region (>= 512 bytes,
+    # up to a few KiB) through a `*mut u8`, far larger than a SIMD register.
+    is_state_save = "xsave" in name.lower() or "xrstor" in name.lower()
     ctr = [1]  # sequential counter, reset per-function for stable inputs
 
     if not complete:
         lines.append(f"        todo!(\"{name}\")")
     elif has_ptr(params):
-        # Build local buffers for pointer and reference arguments
-        # Gather/scatter: large array (safe for any valid offset) + zeroed SIMD offsets
-        array_size = 64 if is_gather else 1
+        # Build local buffers for pointer and reference arguments.
+        # Gather/scatter: large array (safe for any valid offset) + zeroed SIMD offsets.
+        # Otherwise: size each buffer to hold a full SIMD register so wide loads/stores
+        # through a small-element pointer (e.g. loadu_epi8) never read/write out of bounds.
         call_args: list[str] = []
         for pname, ptype in params:
             ref_inner = inner_ref_type(ptype)
             if "*const" in ptype:
                 inner = ptype.replace("*const", "").strip()
+                array_size = 4096 if is_state_save else (64 if is_gather else ptr_array_size(inner))
                 init = seq_init(inner, ctr)
-                lines.append(f"        let ptr_{pname} = [{init}; {array_size}];")
-                call_args.append(f"ptr_{pname}.as_ptr()")
+                lines.append(f"        let ptr_{pname} = crate::cpu::common::Aligned64([{init}; {array_size}]);")
+                call_args.append(f"ptr_{pname}.0.as_ptr()")
             elif "*mut" in ptype:
                 inner = ptype.replace("*mut", "").strip()
+                array_size = 4096 if is_state_save else (64 if is_gather else ptr_array_size(inner))
                 init = seq_init(inner, ctr)
-                lines.append(f"        let mut ptr_{pname} = [{init}; {array_size}];")
-                call_args.append(f"ptr_{pname}.as_mut_ptr()")
+                lines.append(f"        let mut ptr_{pname} = crate::cpu::common::Aligned64([{init}; {array_size}]);")
+                call_args.append(f"ptr_{pname}.0.as_mut_ptr()")
             elif ref_inner is not None:
                 # &T or &mut T — create a local variable
                 init = seq_init(ref_inner, ctr)
@@ -590,9 +627,9 @@ def gen_fn(sig: dict, expected_values: dict[str, str] | None = None) -> str:
     # Fuzzing block (still inside the single unsafe {})
     if not no_fuzz and complete:
         lines.append("")
-        lines.append("        if crate::get_fuzzing() {")
+        lines.append("        let total_iters = crate::cpu::get_iterations();")
+        lines.append("        if crate::get_fuzzing() && total_iters > 0 {")
         lines.append("            log::info!(\"Starting fuzzing\");")
-        lines.append("            let total_iters = crate::cpu::get_iterations();")
         lines.append("            for i in 0..total_iters {")
         lines.append("                if i % 1000 == 0 && crate::cpu::should_stop() {")
         lines.append("                    log::info!(\"Fuzzing stopped at iteration {}\", i);")
@@ -602,7 +639,10 @@ def gen_fn(sig: dict, expected_values: dict[str, str] | None = None) -> str:
         fuzz_args = [arg_expr(pt, random=True) for _, pt in params
                      if "*" not in pt and not pt.startswith("&")]
         fuzz_call = f"{name}{cs}({', '.join(fuzz_args)})"
-        lines.append(f"                let _ = {fuzz_call};")
+        if ret in ("()", ""):
+            lines.append(f"                {fuzz_call};")
+        else:
+            lines.append(f"                let _ = {fuzz_call};")
         lines.append("            }")
         lines.append("        }")
 
@@ -775,7 +815,7 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
         "#![allow(unused_imports)]",
         "#![allow(unreachable_code)]",
         "",
-        "use crate::cpu::{ExtensionTest, FeatureStats, TestStatistics, ProgressCallback};",
+        "use crate::cpu::{ExtensionTest, FeatureStats, TestStatistics, ProgressCallback, TestFunction};",
         "use crate::cpu::{reset_stop_flag, should_stop, should_skip_feature};",
         "",
         "/// Count how many CPU features/extensions are available on this machine",
@@ -885,8 +925,7 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
                 lines.append("        {")
 
             detect_fn = get_feature_detect_fn(arch, feature)
-            lines.append(f"            if {detect_fn} {{")
-            lines.append(f"                if !should_skip_feature(\"{ext}\") {{")
+            lines.append(f"            if {detect_fn} && !should_skip_feature(\"{ext}\") {{")
             lines.append("                    if should_stop() {")
             lines.append("                        return Ok(TestStatistics { features, was_cancelled: true });")
             lines.append("                    }")
@@ -903,7 +942,6 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
             lines.append("                        tests_errored: e,")
             lines.append("                    });")
             lines.append("                    completed_features += 1;")
-            lines.append("                }")
             lines.append("            }")
             # Close the cfg block if we opened it
             if feature not in UNSUPPORTED_FEATURES:
@@ -958,14 +996,57 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
     lines += [
         "    functions",
         "}",
+        "",
+        "/// Flat list of (test_name, test_fn) for every feature detected at runtime on this",
+        "/// machine, in the canonical execution order. Used by the isolated subprocess runner",
+        "/// so a crashing/hanging test can be attributed and skipped instead of aborting the run.",
+        "pub fn all_tests() -> Vec<(&'static str, &'static TestFunction)> {",
+        "    let mut tests: Vec<(&'static str, &'static TestFunction)> = Vec::new();",
+        "",
+    ]
+
+    for arch in sorted(all_data.keys()):
+        arch_cfg = get_target_arch_cfg(arch)
+        lines.append(f"    #[cfg({arch_cfg})]")
+        lines.append("    {")
+
+        for ext, funcs in sorted(all_data[arch].items()):
+            if ext in SKIP_EXTENSIONS:
+                continue
+            if not funcs:
+                continue
+
+            feature = ext_to_feature(ext)
+            struct = ext_to_struct(ext)
+
+            if feature not in UNSUPPORTED_FEATURES:
+                lines.append(f"        #[cfg(target_feature = \"{feature}\")]")
+            detect_fn = get_feature_detect_fn(arch, feature)
+            lines.append(f"        if {detect_fn} {{")
+            lines.append(f"            for &(f, n) in crate::cpu::auto_generated::{arch}::{ext}::{struct}::get_tests() {{")
+            lines.append("                tests.push((n, f));")
+            lines.append("            }")
+            lines.append("        }")
+            lines.append("")
+
+        lines.append("    }")
+        lines.append("")
+
+    lines += [
+        "    tests",
+        "}",
     ]
 
     return "\n".join(lines) + "\n"
 
 
 def main() -> None:
-    global IGNORED_FUNCTIONS
+    global IGNORED_FUNCTIONS, MIRI_SKIP_FUNCTIONS
     base = Path.cwd()
+
+    if MIRI_ONLY_FILE.exists():
+        with open(MIRI_ONLY_FILE) as f:
+            MIRI_SKIP_FUNCTIONS = {line.strip() for line in f if line.strip() and not line.startswith("#")}
 
     if FUNCTIONS_FILE.exists():
         with open(FUNCTIONS_FILE) as f:

@@ -1,7 +1,6 @@
 mod part1;
 
 use crate::cpu::auto_generated::wasm32::relaxed_simd::part1::*;
-
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct RELAXED_SIMD;

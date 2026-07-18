@@ -5,6 +5,8 @@ mod context;
 
 mod loader;
 
+pub mod memtest;
+
 mod test_trait;
 
 pub mod tests;

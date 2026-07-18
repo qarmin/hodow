@@ -18,7 +18,7 @@ impl GLTest for GL31UniformBlocksTest {
     fn run(&self) -> Result<String, Box<dyn Error>> {
         unsafe {
             let vs_source = b"
-                #version 140
+                #version 150
                 in vec3 position;
                 uniform MyBlock {
                     vec4 color;
@@ -29,7 +29,7 @@ impl GLTest for GL31UniformBlocksTest {
                 }
             \0";
             let fs_source = b"
-                #version 140
+                #version 150
                 out vec4 FragColor;
                 uniform MyBlock {
                     vec4 color;

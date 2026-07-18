@@ -13,9 +13,9 @@ pub(super) fn test_bextri_u32() -> Result<(), String> {
         let result = _bextri_u32::<0>(1u32);
         check_int_equality(result as i32, 0)?;
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
@@ -33,9 +33,9 @@ pub(super) fn test_blcfill_u32() -> Result<(), String> {
         let result = _blcfill_u32(1u32);
         check_int_equality(result as i32, 0)?;
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
@@ -53,9 +53,9 @@ pub(super) fn test_blci_u32() -> Result<(), String> {
         let result = _blci_u32(1u32);
         check_int_equality(result as i32, 0)?;
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
@@ -73,9 +73,9 @@ pub(super) fn test_blcic_u32() -> Result<(), String> {
         let result = _blcic_u32(1u32);
         check_int_equality(result as i32, 0)?;
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
@@ -93,9 +93,9 @@ pub(super) fn test_blcmsk_u32() -> Result<(), String> {
         let result = _blcmsk_u32(1u32);
         check_int_equality(result as i32, 0)?;
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
@@ -113,9 +113,9 @@ pub(super) fn test_blcs_u32() -> Result<(), String> {
         let result = _blcs_u32(1u32);
         check_int_equality(result as i32, 0)?;
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
@@ -133,9 +133,9 @@ pub(super) fn test_blsfill_u32() -> Result<(), String> {
         let result = _blsfill_u32(1u32);
         check_int_equality(result as i32, 0)?;
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
@@ -153,9 +153,9 @@ pub(super) fn test_blsic_u32() -> Result<(), String> {
         let result = _blsic_u32(1u32);
         check_int_equality(result as i32, 0)?;
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
@@ -173,9 +173,9 @@ pub(super) fn test_t1mskc_u32() -> Result<(), String> {
         let result = _t1mskc_u32(1u32);
         check_int_equality(result as i32, 0)?;
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
@@ -193,9 +193,9 @@ pub(super) fn test_tzmsk_u32() -> Result<(), String> {
         let result = _tzmsk_u32(1u32);
         check_int_equality(result as i32, 0)?;
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);

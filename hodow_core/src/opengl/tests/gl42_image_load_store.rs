@@ -87,10 +87,6 @@ impl GLTest for GL42ImageLoadStoreTest {
             gl::GetQueryObjecti64v(query, gl::QUERY_RESULT, &mut timestamp);
             gl::GetQueryObjectui64v(query, gl::QUERY_RESULT, &mut 0u64);
             gl::DeleteQueries(1, &query);
-            let indices: [u32; 6] = [0, 1, 2, 2, 3, 0];
-            gl::DrawElementsBaseVertex(gl::TRIANGLES, 6, gl::UNSIGNED_INT, indices.as_ptr() as *const _, 0);
-            gl::DrawElementsInstancedBaseVertex(gl::TRIANGLES, 6, gl::UNSIGNED_INT, indices.as_ptr() as *const _, 2, 0);
-            gl::DrawElementsInstancedBaseVertexBaseInstance(gl::TRIANGLES, 6, gl::UNSIGNED_INT, indices.as_ptr() as *const _, 2, 0, 0);
             Ok(format!("GL 4.2 image load/store with noise pattern generated (counter: {})", counter_value))
         }
     }

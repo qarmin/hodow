@@ -1,7 +1,6 @@
 mod part1;
 
 use crate::cpu::auto_generated::riscv32::zk::part1::*;
-
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct ZK;

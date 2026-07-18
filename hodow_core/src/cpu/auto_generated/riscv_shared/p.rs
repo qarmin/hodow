@@ -5,7 +5,6 @@ mod part3;
 use crate::cpu::auto_generated::riscv_shared::p::part1::*;
 use crate::cpu::auto_generated::riscv_shared::p::part2::*;
 use crate::cpu::auto_generated::riscv_shared::p::part3::*;
-
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct P;

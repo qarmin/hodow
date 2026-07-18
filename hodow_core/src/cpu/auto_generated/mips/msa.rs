@@ -1,4 +1,6 @@
 mod part1;
+mod part10;
+mod part11;
 mod part2;
 mod part3;
 mod part4;
@@ -7,8 +9,6 @@ mod part6;
 mod part7;
 mod part8;
 mod part9;
-mod part10;
-mod part11;
 
 use crate::cpu::auto_generated::mips::msa::part1::*;
 use crate::cpu::auto_generated::mips::msa::part2::*;
@@ -21,7 +21,6 @@ use crate::cpu::auto_generated::mips::msa::part8::*;
 use crate::cpu::auto_generated::mips::msa::part9::*;
 use crate::cpu::auto_generated::mips::msa::part10::*;
 use crate::cpu::auto_generated::mips::msa::part11::*;
-
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct MSA;

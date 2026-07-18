@@ -10,9 +10,9 @@ pub(super) fn test_cvtmask64_u64() -> Result<(), String> {
         let result = _cvtmask64_u64(create__mmask64_from(0x5555555555555555u64));
         check_int_equality(result as i32, 1431655765)?;
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
@@ -30,9 +30,9 @@ pub(super) fn test_cvtu64_mask64() -> Result<(), String> {
         let result = _cvtu64_mask64(1u64);
         check_int_equality(result as i32, 1)?;
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);

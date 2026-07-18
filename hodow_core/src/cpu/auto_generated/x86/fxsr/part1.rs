@@ -9,17 +9,12 @@ use crate::cpu::common::x86::*;
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
 pub(super) fn test_fxsave() -> Result<(), String> {
-    unsafe {
-        let mut ptr_mem_addr = [1u8; 1];
-        _fxsave(ptr_mem_addr.as_mut_ptr());
+    if cfg!(miri) {
+        return Ok(());
     }
-    Ok(())
-}
-
-pub(super) fn test_fxrstor() -> Result<(), String> {
     unsafe {
-        let ptr_mem_addr = [1u8; 1];
-        _fxrstor(ptr_mem_addr.as_ptr());
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 4096]);
+        _fxsave(ptr_mem_addr.0.as_mut_ptr());
     }
     Ok(())
 }

@@ -1,4 +1,4 @@
-use log::{error, info, warn};
+use log::{error, info};
 
 use crate::cli::GpuArgs;
 
@@ -14,7 +14,7 @@ pub fn process_gpu(args: &GpuArgs) {
             .as_deref()
             .map(|s| {
                 s.parse::<DisplayApiHint>().unwrap_or_else(|e| {
-                    warn!("Invalid --display-api value: {}. Falling back to EGL.", e);
+                    log::warn!("Invalid --display-api value: {}. Falling back to EGL.", e);
                     DisplayApiHint::Egl
                 })
             })
@@ -25,7 +25,7 @@ pub fn process_gpu(args: &GpuArgs) {
             .as_deref()
             .map(|s| {
                 s.parse::<GlApiHint>().unwrap_or_else(|e| {
-                    warn!("Invalid --gl-api value: {}. Falling back to auto.", e);
+                    log::warn!("Invalid --gl-api value: {}. Falling back to auto.", e);
                     GlApiHint::Auto
                 })
             })
@@ -39,6 +39,39 @@ pub fn process_gpu(args: &GpuArgs) {
             gl_api,
             force_software: args.force_software,
         };
+
+        if args.memtest {
+            let size_mb = args.memtest_mb.unwrap_or(64);
+            info!("Running GPU memory test ({} MB buffer)", size_mb);
+            match hodow_core::run_memtest(&opts, size_mb) {
+                Ok(report) => {
+                    info!("Buffer: {} MB, compute pass: {}", report.buffer_bytes / (1024 * 1024), report.compute_used);
+                    for p in &report.patterns {
+                        let errs = p.roundtrip_errors + p.compute_errors;
+                        if errs == 0 {
+                            info!("  [OK]    {:<14} no errors", p.name);
+                        } else {
+                            error!(
+                                "  [ERROR] {:<14} {} errors (roundtrip {}, compute {}); first {:?}",
+                                p.name, errs, p.roundtrip_errors, p.compute_errors, p.first_error
+                            );
+                        }
+                    }
+                    let total = report.total_errors();
+                    if total > 0 {
+                        error!("GPU memory test FAILED: {} bit errors", total);
+                        std::process::exit(1);
+                    }
+                    info!("GPU memory test passed: no bit errors across {} patterns", report.patterns.len());
+                    info!("Clean exit");
+                }
+                Err(e) => {
+                    error!("GPU memory test could not run: {}", e);
+                    std::process::exit(1);
+                }
+            }
+            return;
+        }
 
         if opts.no_window {
             info!("Running in headless mode (no window)");

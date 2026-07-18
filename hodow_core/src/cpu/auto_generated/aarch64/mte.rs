@@ -1,7 +1,6 @@
 mod part1;
 
 use crate::cpu::auto_generated::aarch64::mte::part1::*;
-
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct MTE;

@@ -8,6 +8,13 @@ use std::fmt::Debug;
 
 use rand::random;
 
+/// 64-byte aligned wrapper for pointer-backed test buffers. Aligned/streaming SIMD
+/// intrinsics (e.g. `_mm512_load_ps`, `_mm_stream_ps`) fault on under-aligned memory;
+/// a plain `[f32; N]` only guarantees the element's alignment. Aligning to 64 bytes
+/// satisfies every SIMD width up to AVX-512.
+#[repr(C, align(64))]
+pub struct Aligned64<T>(pub T);
+
 pub trait FloatLike: PartialEq + Debug + std::ops::Sub<Output = Self> + PartialOrd + Copy {
     fn is_infinite(self) -> bool;
     fn is_nan(self) -> bool;
@@ -56,11 +63,11 @@ pub fn check_float_array_equality<T: FloatLike + Debug>(a: &[T], b: &[T]) -> Res
     let eps = T::from_f64(0.001);
 
     for i in 0..a.len() {
-        if a[i].is_infinite() && !b[i].is_infinite() {
-            return Err(format!("Got {a:?}, expected {b:?} (One is infinite, other is not)"));
-        } else if a[i].is_nan() && !b[i].is_nan() {
+        if a[i].is_nan() != b[i].is_nan() {
             return Err(format!("Got {a:?}, expected {b:?} (One is NaN, other is not)"));
-        } else if (a[i] - b[i]).abs() > eps {
+        } else if a[i].is_infinite() != b[i].is_infinite() {
+            return Err(format!("Got {a:?}, expected {b:?} (One is infinite, other is not)"));
+        } else if !a[i].is_nan() && (a[i] - b[i]).abs() > eps {
             return Err(format!("Got {a:?}, expected {b:?} (Difference is too big)"));
         }
     }
@@ -87,11 +94,11 @@ pub fn check_float_equality<T: FloatLike + Debug>(a: T, b: T) -> Result<(), Stri
 
     let eps = T::from_f64(0.001);
 
-    if a.is_infinite() && !b.is_infinite() {
-        return Err(format!("Got {a:?}, expected {b:?} (One is infinite, other is not)"));
-    } else if a.is_nan() && !b.is_nan() {
+    if a.is_nan() != b.is_nan() {
         return Err(format!("Got {a:?}, expected {b:?} (One is NaN, other is not)"));
-    } else if (a - b).abs() > eps {
+    } else if a.is_infinite() != b.is_infinite() {
+        return Err(format!("Got {a:?}, expected {b:?} (One is infinite, other is not)"));
+    } else if !a.is_nan() && (a - b).abs() > eps {
         return Err(format!("Got {a:?}, expected {b:?} (Difference is too big)"));
     }
 
@@ -146,7 +153,7 @@ pub fn get_random_float32_array<const N: usize>() -> [f32; N] {
 pub fn get_random_float64_array<const N: usize>() -> [f64; N] {
     let mut arr = [0.0; N];
     for item in arr.iter_mut() {
-        *item = get_random_float() as f64;
+        *item = get_random_float64();
     }
     arr
 }

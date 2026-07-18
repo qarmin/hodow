@@ -13,9 +13,9 @@ pub(super) fn test_rdtsc() -> Result<(), String> {
         let result = _rdtsc();
         check_int_equality(result as i32, 0)?;
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
@@ -30,8 +30,8 @@ pub(super) fn test_rdtsc() -> Result<(), String> {
 
 pub(super) fn test_rdtscp() -> Result<(), String> {
     unsafe {
-        let mut ptr_aux = [1u32; 1];
-        let result = __rdtscp(ptr_aux.as_mut_ptr());
+        let mut ptr_aux = crate::cpu::common::Aligned64([1u32; 16]);
+        let result = __rdtscp(ptr_aux.0.as_mut_ptr());
         check_int_equality(result as i32, 0)?;
     }
     Ok(())

@@ -1,7 +1,6 @@
 mod part1;
 
 use crate::cpu::auto_generated::x86::adx::part1::*;
-
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct ADX;

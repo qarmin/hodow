@@ -9,15 +9,15 @@ pub(super) fn test_vec_xxpermdi() -> Result<(), String> {
     unsafe {
         vec_xxpermdi::<0>(0 /* T */, 0 /* T */);
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vec_xxpermdi::<0>(0 /* T */, 0 /* T */);
+                vec_xxpermdi::<0>(0 /* T */, 0 /* T */);
             }
         }
     }
@@ -28,15 +28,15 @@ pub(super) fn test_vec_mergee() -> Result<(), String> {
     unsafe {
         vec_mergee(0 /* T */, 0 /* T */);
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vec_mergee(0 /* T */, 0 /* T */);
+                vec_mergee(0 /* T */, 0 /* T */);
             }
         }
     }
@@ -47,15 +47,15 @@ pub(super) fn test_vec_mergeo() -> Result<(), String> {
     unsafe {
         vec_mergeo(0 /* T */, 0 /* T */);
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vec_mergeo(0 /* T */, 0 /* T */);
+                vec_mergeo(0 /* T */, 0 /* T */);
             }
         }
     }

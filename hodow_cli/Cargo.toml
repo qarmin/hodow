@@ -15,11 +15,16 @@ clap = { version = "4.3", features = ["derive"] }
 indicatif = "0.18.4"
 ctrlc = "3.4"
 
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
 [features]
 default = ["gpu"]
 miri_build = ["hodow_core/miri_build"]
 # Forward the gpu feature to the core crate so dependency-gated cfgs work
 gpu = ["hodow_core/gpu"]
+# Vulkan compute validation
+vulkan = ["hodow_core/vulkan"]
 
 [lints]
 workspace = true

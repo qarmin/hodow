@@ -7,7 +7,6 @@ use crate::cpu::auto_generated::x86::avx2::part1::*;
 use crate::cpu::auto_generated::x86::avx2::part2::*;
 use crate::cpu::auto_generated::x86::avx2::part3::*;
 use crate::cpu::auto_generated::x86::avx2::part4::*;
-
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct AVX2;
@@ -192,6 +191,7 @@ impl ExtensionTest for AVX2 {
             (&test_mm256_srlv_epi32, "test_mm256_srlv_epi32"),
             (&test_mm_srlv_epi64, "test_mm_srlv_epi64"),
             (&test_mm256_srlv_epi64, "test_mm256_srlv_epi64"),
+            (&test_mm256_stream_load_si256, "test_mm256_stream_load_si256"),
             (&test_mm256_sub_epi16, "test_mm256_sub_epi16"),
             (&test_mm256_sub_epi32, "test_mm256_sub_epi32"),
             (&test_mm256_sub_epi64, "test_mm256_sub_epi64"),

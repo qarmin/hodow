@@ -9,9 +9,9 @@ pub(super) fn test_xperm8() -> Result<(), String> {
     unsafe {
         let _result = xperm8(0usize, 0usize);
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
@@ -28,9 +28,9 @@ pub(super) fn test_xperm4() -> Result<(), String> {
     unsafe {
         let _result = xperm4(0usize, 0usize);
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
@@ -48,9 +48,9 @@ pub(super) fn test_sha256sig0() -> Result<(), String> {
         let result = sha256sig0(1u32);
         check_int_equality(result as i32, 0)?;
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
@@ -68,9 +68,9 @@ pub(super) fn test_sha256sig1() -> Result<(), String> {
         let result = sha256sig1(1u32);
         check_int_equality(result as i32, 0)?;
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
@@ -88,9 +88,9 @@ pub(super) fn test_sha256sum0() -> Result<(), String> {
         let result = sha256sum0(1u32);
         check_int_equality(result as i32, 0)?;
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
@@ -108,9 +108,9 @@ pub(super) fn test_sha256sum1() -> Result<(), String> {
         let result = sha256sum1(1u32);
         check_int_equality(result as i32, 0)?;
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
@@ -128,9 +128,9 @@ pub(super) fn test_sm4ed() -> Result<(), String> {
         let result = sm4ed::<0>(1u32, 2u32);
         check_int_equality(result as i32, 0)?;
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
@@ -148,9 +148,9 @@ pub(super) fn test_sm4ks() -> Result<(), String> {
         let result = sm4ks::<0>(1u32, 2u32);
         check_int_equality(result as i32, 0)?;
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
@@ -168,9 +168,9 @@ pub(super) fn test_sm3p0() -> Result<(), String> {
         let result = sm3p0(1u32);
         check_int_equality(result as i32, 0)?;
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
@@ -188,9 +188,9 @@ pub(super) fn test_sm3p1() -> Result<(), String> {
         let result = sm3p1(1u32);
         check_int_equality(result as i32, 0)?;
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);

@@ -20,9 +20,9 @@ impl GLTest for GL30AdvancedTest {
             let mut query = 0;
             gl::GenQueries(1, &mut query);
             gl::BeginQuery(gl::SAMPLES_PASSED, query);
+            gl::EndQuery(gl::SAMPLES_PASSED);
             gl::BeginConditionalRender(query, gl::QUERY_WAIT);
             gl::EndConditionalRender();
-            gl::EndQuery(gl::SAMPLES_PASSED);
             gl::DeleteQueries(1, &query);
             gl::Enablei(gl::BLEND, 0);
             gl::Disablei(gl::BLEND, 0);
@@ -52,8 +52,12 @@ impl GLTest for GL30AdvancedTest {
                 #version 130
                 in vec3 vPosition;
                 out vec4 FragColor;
+                uniform uint u1;
+                uniform uvec2 u2;
+                uniform uvec3 u3;
+                uniform uvec4 u4;
                 void main() {
-                    FragColor = vec4(vPosition, 1.0);
+                    FragColor = vec4(vPosition, 1.0) + float(u1 + u2.x + u3.x + u4.x);
                 }
             \0";
             let vs = gl::CreateShader(gl::VERTEX_SHADER);
@@ -106,16 +110,28 @@ impl GLTest for GL30AdvancedTest {
                 gl::FlushMappedBufferRange(gl::ARRAY_BUFFER, 0, 256);
                 gl::UnmapBuffer(gl::ARRAY_BUFFER);
             }
-            let mut uint_val = 0u32;
-            gl::GetUniformuiv(program, 0, &mut uint_val);
-            gl::Uniform1ui(0, 42);
-            gl::Uniform2ui(0, 1, 2);
-            gl::Uniform3ui(0, 1, 2, 3);
-            gl::Uniform4ui(0, 1, 2, 3, 4);
-            gl::Uniform1uiv(0, 1, [42u32].as_ptr());
-            gl::Uniform2uiv(0, 1, [1u32, 2].as_ptr());
-            gl::Uniform3uiv(0, 1, [1u32, 2, 3].as_ptr());
-            gl::Uniform4uiv(0, 1, [1u32, 2, 3, 4].as_ptr());
+            let loc1 = gl::GetUniformLocation(program, b"u1\0".as_ptr() as *const gl::types::GLchar);
+            let loc2 = gl::GetUniformLocation(program, b"u2\0".as_ptr() as *const gl::types::GLchar);
+            let loc3 = gl::GetUniformLocation(program, b"u3\0".as_ptr() as *const gl::types::GLchar);
+            let loc4 = gl::GetUniformLocation(program, b"u4\0".as_ptr() as *const gl::types::GLchar);
+            if loc1 != -1 {
+                let mut uint_val = 0u32;
+                gl::GetUniformuiv(program, loc1, &mut uint_val);
+                gl::Uniform1ui(loc1, 42);
+                gl::Uniform1uiv(loc1, 1, [42u32].as_ptr());
+            }
+            if loc2 != -1 {
+                gl::Uniform2ui(loc2, 1, 2);
+                gl::Uniform2uiv(loc2, 1, [1u32, 2].as_ptr());
+            }
+            if loc3 != -1 {
+                gl::Uniform3ui(loc3, 1, 2, 3);
+                gl::Uniform3uiv(loc3, 1, [1u32, 2, 3].as_ptr());
+            }
+            if loc4 != -1 {
+                gl::Uniform4ui(loc4, 1, 2, 3, 4);
+                gl::Uniform4uiv(loc4, 1, [1u32, 2, 3, 4].as_ptr());
+            }
             let mut fbo = 0;
             gl::GenFramebuffers(1, &mut fbo);
             gl::BindFramebuffer(gl::FRAMEBUFFER, fbo);
@@ -138,11 +154,11 @@ impl GLTest for GL30AdvancedTest {
             gl::RenderbufferStorage(gl::RENDERBUFFER, gl::RGBA8, 256, 256);
             gl::GetRenderbufferParameteriv(gl::RENDERBUFFER, gl::RENDERBUFFER_WIDTH, &mut params);
             gl::FramebufferRenderbuffer(gl::FRAMEBUFFER, gl::COLOR_ATTACHMENT0, gl::RENDERBUFFER, rbo);
-            gl::GenerateMipmap(gl::TEXTURE_2D);
             let mut texture = 0;
             gl::GenTextures(1, &mut texture);
             gl::BindTexture(gl::TEXTURE_2D, texture);
             gl::TexImage2D(gl::TEXTURE_2D, 0, gl::RGBA8 as i32, 256, 256, 0, gl::RGBA, gl::UNSIGNED_BYTE, std::ptr::null());
+            gl::GenerateMipmap(gl::TEXTURE_2D);
             gl::TexParameterIiv(gl::TEXTURE_2D, gl::TEXTURE_BORDER_COLOR, [0i32, 0, 0, 255].as_ptr());
             gl::TexParameterIuiv(gl::TEXTURE_2D, gl::TEXTURE_BORDER_COLOR, [0u32, 0, 0, 255].as_ptr());
             let mut border_color: [i32; 4] = [0; 4];

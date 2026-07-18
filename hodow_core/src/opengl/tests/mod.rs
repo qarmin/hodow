@@ -81,6 +81,7 @@ pub mod gl43_debug;
 pub mod gl44_batch_bind;
 pub mod gl45_dsa;
 pub mod gl45_dsa_extended;
+pub mod validation;
 
 use crate::opengl::test_trait::{GLTest, GLTestResult};
 
@@ -123,7 +124,72 @@ pub fn all_tests() -> Vec<&'static dyn GLTest> {
         &gl44_batch_bind::GL44BatchBindTest,
         &gl45_dsa::GL45DSATest,
         &gl45_dsa_extended::GL45DSAExtendedTest,
+        // Output-validating tests (analytical oracles, driver-independent).
+        &validation::ClearColorValidation,
+        &validation::RenderSolidValidation,
+        &validation::ComputeValidation,
+        &validation::BlendValidation,
     ]
+}
+
+/// Human-readable name for a GL error code.
+fn gl_error_name(e: u32) -> &'static str {
+    match e {
+        gl::INVALID_ENUM => "GL_INVALID_ENUM",
+        gl::INVALID_VALUE => "GL_INVALID_VALUE",
+        gl::INVALID_OPERATION => "GL_INVALID_OPERATION",
+        gl::INVALID_FRAMEBUFFER_OPERATION => "GL_INVALID_FRAMEBUFFER_OPERATION",
+        gl::OUT_OF_MEMORY => "GL_OUT_OF_MEMORY",
+        gl::STACK_OVERFLOW => "GL_STACK_OVERFLOW",
+        gl::STACK_UNDERFLOW => "GL_STACK_UNDERFLOW",
+        _ => "GL_ERROR",
+    }
+}
+
+/// Drain the GL error queue. Returns the first error found (formatted), or None. Used both to
+/// give each test a clean slate and to detect errors a test left behind even when it reported OK.
+///
+/// # Safety
+/// Requires a current GL context.
+unsafe fn drain_gl_errors() -> Option<String> {
+    let mut first = None;
+    loop {
+        let e = unsafe { gl::GetError() };
+        if e == gl::NO_ERROR {
+            break;
+        }
+        if first.is_none() {
+            first = Some(format!("{} (0x{e:04x})", gl_error_name(e)));
+        }
+    }
+    first
+}
+
+/// GL debug-output callback: logs driver diagnostics (which call errored and why). Only
+/// non-notification messages are logged to keep the output focused.
+extern "system" fn gl_debug_callback(_source: u32, _gltype: u32, _id: u32, severity: u32, _length: i32, message: *const std::os::raw::c_char, _user: *mut std::ffi::c_void) {
+    if severity == gl::DEBUG_SEVERITY_NOTIFICATION {
+        return;
+    }
+    let msg = unsafe { std::ffi::CStr::from_ptr(message) }.to_string_lossy();
+    log::warn!("[GL debug] {}", msg);
+}
+
+/// Enable synchronous GL debug output if the context supports it (GL 4.3 / KHR_debug).
+/// Synchronous mode makes the callback fire on the offending call, pinpointing errors.
+///
+/// # Safety
+/// Requires a current GL context.
+unsafe fn enable_gl_debug_output() {
+    unsafe {
+        let mut flags = 0i32;
+        gl::GetIntegerv(gl::CONTEXT_FLAGS, &mut flags);
+        gl::Enable(gl::DEBUG_OUTPUT);
+        gl::Enable(gl::DEBUG_OUTPUT_SYNCHRONOUS);
+        gl::DebugMessageCallback(Some(gl_debug_callback), std::ptr::null());
+        // Clear any error from unsupported enums on older contexts.
+        while gl::GetError() != gl::NO_ERROR {}
+    }
 }
 
 /// Run all GL tests with the provided options
@@ -148,16 +214,25 @@ pub fn test_all_gl(opts: &crate::opengl::GpuOptions) -> GLTestResult {
             }
         };
 
+        unsafe { enable_gl_debug_output() };
+
         for test in &tests {
             log::info!("Running GL test (headless): {} (GL {})", test.name(), test.gl_version());
-            match test.run() {
-                Ok(msg) => {
-                    log::info!("GL Test '{}' passed: {}", test.name(), msg);
-                    total_run += 1;
+            // Re-assert our debug callback each iteration: a test may install its own (e.g. the
+            // debug-output test), which would otherwise blind diagnostics for all later tests.
+            unsafe { enable_gl_debug_output() };
+            unsafe { drain_gl_errors() }; // clean slate so errors are attributed to this test
+            let outcome = test.run();
+            let gl_err = unsafe { drain_gl_errors() };
+            total_run += 1;
+            match (outcome, gl_err) {
+                (Ok(msg), None) => log::info!("GL Test '{}' passed: {}", test.name(), msg),
+                (Ok(_), Some(err)) => {
+                    log::error!("GL Test '{}' left a GL error: {}", test.name(), err);
+                    total_errors += 1;
                 }
-                Err(e) => {
+                (Err(e), _) => {
                     log::error!("GL Test '{}' failed: {}", test.name(), e);
-                    total_run += 1;
                     total_errors += 1;
                 }
             }
@@ -222,16 +297,19 @@ impl crate::opengl::gui::StatefulRunner for TestRunner {
         let test = self.tests[self.current_test_idx];
         let test_start = std::time::Instant::now();
 
-        match test.run() {
-            Ok(msg) => {
-                let elapsed_ms = test_start.elapsed().as_millis();
-                log::info!("GL Test '{}' passed in {}ms: {}", test.name(), elapsed_ms, msg);
-                self.total_run += 1;
+        unsafe { drain_gl_errors() }; // clean slate so errors are attributed to this test
+        let outcome = test.run();
+        let gl_err = unsafe { drain_gl_errors() };
+        let elapsed_ms = test_start.elapsed().as_millis();
+        self.total_run += 1;
+        match (outcome, gl_err) {
+            (Ok(msg), None) => log::info!("GL Test '{}' passed in {}ms: {}", test.name(), elapsed_ms, msg),
+            (Ok(_), Some(err)) => {
+                log::error!("GL Test '{}' left a GL error after {}ms: {}", test.name(), elapsed_ms, err);
+                self.total_errors += 1;
             }
-            Err(e) => {
-                let elapsed_ms = test_start.elapsed().as_millis();
+            (Err(e), _) => {
                 log::error!("GL Test '{}' failed after {}ms: {}", test.name(), elapsed_ms, e);
-                self.total_run += 1;
                 self.total_errors += 1;
             }
         }

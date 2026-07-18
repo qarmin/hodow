@@ -17,12 +17,18 @@ winit = { version = "0.30", optional = true }
 raw-window-handle = { version = "0.6.2", optional = true }
 x11-dl = { version = "2.20.0", optional = true }
 
+# Vulkan compute testing (pure-Rust: ash = libvulkan FFI, naga = WGSL->SPIR-V, no C deps)
+ash = { version = "0.38", optional = true }
+naga = { version = "29", optional = true, features = ["wgsl-in", "spv-out"] }
+
 [features]
 miri_build = []
 # Feature to enable OpenGL GPU support
 # Include `winit` (GUI) as part of the `gpu` feature so GUI compiles whenever gpu is enabled.
 # Keep GUI control at runtime via arguments.
 gpu = ["glutin", "glutin-winit", "glow", "gl", "raw-window-handle", "winit", "x11-dl"]
+# Vulkan compute validation (independent of the OpenGL `gpu` feature)
+vulkan = ["dep:ash", "dep:naga"]
 
 [lints]
 workspace = true

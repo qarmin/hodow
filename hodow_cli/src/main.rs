@@ -11,6 +11,9 @@ use log::info;
 mod cli;
 mod cpu;
 mod gpu;
+mod isolate;
+mod stress;
+mod vulkan;
 
 use crate::cli::{Cli, Commands};
 
@@ -71,20 +74,32 @@ pub fn print_statistics(stats: &TestStatistics) {
 fn main() {
     let cli = Cli::parse();
 
-    if cli.debug {
-        if !cfg!(feature = "miri_build") {
-            let config = ConfigBuilder::new().set_format_text(handsome_logger::FormatText::DefaultWithFileNameC.get(), None).build();
-            handsome_logger::TermLogger::init(config, Default::default(), Default::default()).expect("Failed to initialize logger");
-        } else {
-            let config = ConfigBuilder::new().set_format_text(handsome_logger::FormatText::LevelMessageC.get(), None).build();
-            handsome_logger::TermLogger::init(config, Default::default(), Default::default()).expect("Failed to initialize logger");
-        }
-    }
+    // Isolation workers speak a line protocol on stdout; any log output would corrupt it.
+    let is_worker = matches!(&cli.command, Commands::Cpu(a) if a.worker_start.is_some());
+
+    // The logger must always be initialized: all user-facing output (statistics,
+    // mode lists, errors) is emitted through the `log` macros. `--debug` only raises
+    // the verbosity; without it we still print Info-level output.
+    let level = if is_worker {
+        log::LevelFilter::Off
+    } else if cli.debug {
+        log::LevelFilter::Debug
+    } else {
+        log::LevelFilter::Info
+    };
+    let format = if cfg!(feature = "miri_build") {
+        handsome_logger::FormatText::LevelMessageC.get()
+    } else {
+        handsome_logger::FormatText::DefaultWithFileNameC.get()
+    };
+    let config = ConfigBuilder::new().set_level(level).set_format_text(format, None).build();
+    handsome_logger::TermLogger::init(config, Default::default(), Default::default()).expect("Failed to initialize logger");
 
     print_build_info();
 
     match &cli.command {
         Commands::Cpu(args) => cpu::process_cpu(args),
         Commands::Gpu(args) => gpu::process_gpu(args),
+        Commands::Vulkan(args) => vulkan::process_vulkan(args),
     }
 }

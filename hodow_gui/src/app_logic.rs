@@ -1,15 +1,16 @@
 use std::sync::{Arc, Mutex};
 use std::thread;
 
-use hodow_core::{TestProgress, TestStatistics, available_modes, list_all_functions, reset_stop_flag, set_iterations, set_only_features, set_only_tests, set_skip_tests, test_all_extensions};
+#[cfg(feature = "gpu")]
+use hodow_core::{DisplayApiHint, GlApiHint, GpuOptions, test_all_opengl};
+use hodow_core::{
+    TestProgress, TestStatistics, available_modes, list_all_functions, reset_stop_flag, set_iterations, set_only_features, set_only_tests, set_skip_tests, test_all_extensions,
+};
 use log::info;
 use slint::Weak;
 use tokio::sync::mpsc;
 
 use crate::AppWindow;
-
-#[cfg(feature = "gpu")]
-use hodow_core::{DisplayApiHint, GlApiHint, GpuOptions, test_all_opengl};
 
 pub enum ProgressUpdate {
     TestProgress(TestProgress),
@@ -191,11 +192,7 @@ fn handle_gpu_tests(ui_weak: Weak<AppWindow>, app_state: Arc<Mutex<AppState>>, u
 
         thread::spawn(move || {
             let time_limit_ms = time_limit_str.parse::<u64>().ok();
-            let frame_limit = if frame_limit_str.is_empty() {
-                None
-            } else {
-                frame_limit_str.parse::<u64>().ok()
-            };
+            let frame_limit = if frame_limit_str.is_empty() { None } else { frame_limit_str.parse::<u64>().ok() };
 
             let display_api = match display_api_index {
                 0 => DisplayApiHint::Egl,
@@ -207,7 +204,14 @@ fn handle_gpu_tests(ui_weak: Weak<AppWindow>, app_state: Arc<Mutex<AppState>>, u
 
             let gl_api = gl_api_str.parse::<GlApiHint>().unwrap_or(GlApiHint::Auto);
 
-            let opts = GpuOptions { no_window, time_limit_ms, frame_limit, display_api, gl_api, force_software };
+            let opts = GpuOptions {
+                no_window,
+                time_limit_ms,
+                frame_limit,
+                display_api,
+                gl_api,
+                force_software,
+            };
 
             update_ui_status(&ui_weak, "Running GPU tests...".to_string());
 
@@ -235,7 +239,7 @@ fn handle_gpu_tests(ui_weak: Weak<AppWindow>, app_state: Arc<Mutex<AppState>>, u
     #[cfg(not(feature = "gpu"))]
     {
         let _ = (ui_weak, app_state, ui);
-        error!("GPU feature not compiled in");
+        log::error!("GPU feature not compiled in");
     }
 }
 
@@ -253,7 +257,12 @@ fn display_cpu_statistics(ui_weak: &Weak<AppWindow>, mut stats: TestStatistics) 
 
     for feature in &stats.features {
         let total = feature.tests_run + feature.tests_skipped + feature.tests_errored;
-        writeln!(&mut text, "{:<30} {:>10} {:>10} {:>10} {:>10}", feature.feature_name, feature.tests_run, feature.tests_skipped, feature.tests_errored, total).ok();
+        writeln!(
+            &mut text,
+            "{:<30} {:>10} {:>10} {:>10} {:>10}",
+            feature.feature_name, feature.tests_run, feature.tests_skipped, feature.tests_errored, total
+        )
+        .ok();
     }
 
     writeln!(&mut text, "{}", "-".repeat(80)).ok();

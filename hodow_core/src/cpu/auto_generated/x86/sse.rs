@@ -3,7 +3,6 @@ mod part2;
 
 use crate::cpu::auto_generated::x86::sse::part1::*;
 use crate::cpu::auto_generated::x86::sse::part2::*;
-
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct SSE;
@@ -95,10 +94,20 @@ impl ExtensionTest for SSE {
             (&test_mm_load_ss, "test_mm_load_ss"),
             (&test_mm_load1_ps, "test_mm_load1_ps"),
             (&test_mm_load_ps1, "test_mm_load_ps1"),
+            (&test_mm_load_ps, "test_mm_load_ps"),
+            (&test_mm_loadu_ps, "test_mm_loadu_ps"),
+            (&test_mm_loadr_ps, "test_mm_loadr_ps"),
             (&test_mm_store_ss, "test_mm_store_ss"),
+            (&test_mm_store1_ps, "test_mm_store1_ps"),
+            (&test_mm_store_ps1, "test_mm_store_ps1"),
+            (&test_mm_store_ps, "test_mm_store_ps"),
+            (&test_mm_storeu_ps, "test_mm_storeu_ps"),
+            (&test_mm_storer_ps, "test_mm_storer_ps"),
             (&test_mm_move_ss, "test_mm_move_ss"),
+            (&test_mm_sfence, "test_mm_sfence"),
             (&test_mm_prefetch, "test_mm_prefetch"),
             (&test_mm_undefined_ps, "test_mm_undefined_ps"),
+            (&test_mm_stream_ps, "test_mm_stream_ps"),
         ]
     }
 }

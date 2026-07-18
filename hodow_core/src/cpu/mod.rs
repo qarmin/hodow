@@ -12,7 +12,7 @@ use once_cell::sync::OnceCell;
 pub mod auto_generated;
 pub(crate) mod common;
 
-pub use auto_generated::registry::{available_modes, count_available_features, list_all_functions, test_all_extensions};
+pub use auto_generated::registry::{all_tests, available_modes, count_available_features, list_all_functions, test_all_extensions};
 #[allow(unused_imports)]
 pub use auto_generated::*;
 

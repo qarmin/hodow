@@ -1,4 +1,12 @@
 mod part1;
+mod part10;
+mod part11;
+mod part12;
+mod part13;
+mod part14;
+mod part15;
+mod part16;
+mod part17;
 mod part2;
 mod part3;
 mod part4;
@@ -7,12 +15,6 @@ mod part6;
 mod part7;
 mod part8;
 mod part9;
-mod part10;
-mod part11;
-mod part12;
-mod part13;
-mod part14;
-mod part15;
 
 use crate::cpu::auto_generated::x86::avx512bw::part1::*;
 use crate::cpu::auto_generated::x86::avx512bw::part2::*;
@@ -29,7 +31,8 @@ use crate::cpu::auto_generated::x86::avx512bw::part12::*;
 use crate::cpu::auto_generated::x86::avx512bw::part13::*;
 use crate::cpu::auto_generated::x86::avx512bw::part14::*;
 use crate::cpu::auto_generated::x86::avx512bw::part15::*;
-
+use crate::cpu::auto_generated::x86::avx512bw::part16::*;
+use crate::cpu::auto_generated::x86::avx512bw::part17::*;
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct AVX512BW;
@@ -153,6 +156,9 @@ impl ExtensionTest for AVX512BW {
             (&test_mm256_maskz_mulhi_epi16, "test_mm256_maskz_mulhi_epi16"),
             (&test_mm_mask_mulhi_epi16, "test_mm_mask_mulhi_epi16"),
             (&test_mm_maskz_mulhi_epi16, "test_mm_maskz_mulhi_epi16"),
+            (&test_mm512_mulhrs_epi16, "test_mm512_mulhrs_epi16"),
+            (&test_mm512_mask_mulhrs_epi16, "test_mm512_mask_mulhrs_epi16"),
+            (&test_mm512_maskz_mulhrs_epi16, "test_mm512_maskz_mulhrs_epi16"),
             (&test_mm256_mask_mulhrs_epi16, "test_mm256_mask_mulhrs_epi16"),
             (&test_mm256_maskz_mulhrs_epi16, "test_mm256_maskz_mulhrs_epi16"),
             (&test_mm_mask_mulhrs_epi16, "test_mm_mask_mulhrs_epi16"),
@@ -452,6 +458,36 @@ impl ExtensionTest for AVX512BW {
             (&test_mm256_mask_reduce_or_epi8, "test_mm256_mask_reduce_or_epi8"),
             (&test_mm_reduce_or_epi8, "test_mm_reduce_or_epi8"),
             (&test_mm_mask_reduce_or_epi8, "test_mm_mask_reduce_or_epi8"),
+            (&test_mm512_loadu_epi16, "test_mm512_loadu_epi16"),
+            (&test_mm256_loadu_epi16, "test_mm256_loadu_epi16"),
+            (&test_mm_loadu_epi16, "test_mm_loadu_epi16"),
+            (&test_mm512_loadu_epi8, "test_mm512_loadu_epi8"),
+            (&test_mm256_loadu_epi8, "test_mm256_loadu_epi8"),
+            (&test_mm_loadu_epi8, "test_mm_loadu_epi8"),
+            (&test_mm512_storeu_epi16, "test_mm512_storeu_epi16"),
+            (&test_mm256_storeu_epi16, "test_mm256_storeu_epi16"),
+            (&test_mm_storeu_epi16, "test_mm_storeu_epi16"),
+            (&test_mm512_storeu_epi8, "test_mm512_storeu_epi8"),
+            (&test_mm256_storeu_epi8, "test_mm256_storeu_epi8"),
+            (&test_mm_storeu_epi8, "test_mm_storeu_epi8"),
+            (&test_mm512_mask_loadu_epi16, "test_mm512_mask_loadu_epi16"),
+            (&test_mm512_maskz_loadu_epi16, "test_mm512_maskz_loadu_epi16"),
+            (&test_mm512_mask_loadu_epi8, "test_mm512_mask_loadu_epi8"),
+            (&test_mm512_maskz_loadu_epi8, "test_mm512_maskz_loadu_epi8"),
+            (&test_mm256_mask_loadu_epi16, "test_mm256_mask_loadu_epi16"),
+            (&test_mm256_maskz_loadu_epi16, "test_mm256_maskz_loadu_epi16"),
+            (&test_mm256_mask_loadu_epi8, "test_mm256_mask_loadu_epi8"),
+            (&test_mm256_maskz_loadu_epi8, "test_mm256_maskz_loadu_epi8"),
+            (&test_mm_mask_loadu_epi16, "test_mm_mask_loadu_epi16"),
+            (&test_mm_maskz_loadu_epi16, "test_mm_maskz_loadu_epi16"),
+            (&test_mm_mask_loadu_epi8, "test_mm_mask_loadu_epi8"),
+            (&test_mm_maskz_loadu_epi8, "test_mm_maskz_loadu_epi8"),
+            (&test_mm512_mask_storeu_epi16, "test_mm512_mask_storeu_epi16"),
+            (&test_mm512_mask_storeu_epi8, "test_mm512_mask_storeu_epi8"),
+            (&test_mm256_mask_storeu_epi16, "test_mm256_mask_storeu_epi16"),
+            (&test_mm256_mask_storeu_epi8, "test_mm256_mask_storeu_epi8"),
+            (&test_mm_mask_storeu_epi16, "test_mm_mask_storeu_epi16"),
+            (&test_mm_mask_storeu_epi8, "test_mm_mask_storeu_epi8"),
             (&test_mm512_madd_epi16, "test_mm512_madd_epi16"),
             (&test_mm512_mask_madd_epi16, "test_mm512_mask_madd_epi16"),
             (&test_mm512_maskz_madd_epi16, "test_mm512_maskz_madd_epi16"),
@@ -508,6 +544,9 @@ impl ExtensionTest for AVX512BW {
             (&test_mm256_maskz_avg_epu8, "test_mm256_maskz_avg_epu8"),
             (&test_mm_mask_avg_epu8, "test_mm_mask_avg_epu8"),
             (&test_mm_maskz_avg_epu8, "test_mm_maskz_avg_epu8"),
+            (&test_mm512_sll_epi16, "test_mm512_sll_epi16"),
+            (&test_mm512_mask_sll_epi16, "test_mm512_mask_sll_epi16"),
+            (&test_mm512_maskz_sll_epi16, "test_mm512_maskz_sll_epi16"),
             (&test_mm256_mask_sll_epi16, "test_mm256_mask_sll_epi16"),
             (&test_mm256_maskz_sll_epi16, "test_mm256_maskz_sll_epi16"),
             (&test_mm_mask_sll_epi16, "test_mm_mask_sll_epi16"),
@@ -528,6 +567,9 @@ impl ExtensionTest for AVX512BW {
             (&test_mm_sllv_epi16, "test_mm_sllv_epi16"),
             (&test_mm_mask_sllv_epi16, "test_mm_mask_sllv_epi16"),
             (&test_mm_maskz_sllv_epi16, "test_mm_maskz_sllv_epi16"),
+            (&test_mm512_srl_epi16, "test_mm512_srl_epi16"),
+            (&test_mm512_mask_srl_epi16, "test_mm512_mask_srl_epi16"),
+            (&test_mm512_maskz_srl_epi16, "test_mm512_maskz_srl_epi16"),
             (&test_mm256_mask_srl_epi16, "test_mm256_mask_srl_epi16"),
             (&test_mm256_maskz_srl_epi16, "test_mm256_maskz_srl_epi16"),
             (&test_mm_mask_srl_epi16, "test_mm_mask_srl_epi16"),
@@ -548,6 +590,9 @@ impl ExtensionTest for AVX512BW {
             (&test_mm_srlv_epi16, "test_mm_srlv_epi16"),
             (&test_mm_mask_srlv_epi16, "test_mm_mask_srlv_epi16"),
             (&test_mm_maskz_srlv_epi16, "test_mm_maskz_srlv_epi16"),
+            (&test_mm512_sra_epi16, "test_mm512_sra_epi16"),
+            (&test_mm512_mask_sra_epi16, "test_mm512_mask_sra_epi16"),
+            (&test_mm512_maskz_sra_epi16, "test_mm512_maskz_sra_epi16"),
             (&test_mm256_mask_sra_epi16, "test_mm256_mask_sra_epi16"),
             (&test_mm256_maskz_sra_epi16, "test_mm256_maskz_sra_epi16"),
             (&test_mm_mask_sra_epi16, "test_mm_mask_sra_epi16"),
@@ -568,6 +613,27 @@ impl ExtensionTest for AVX512BW {
             (&test_mm_srav_epi16, "test_mm_srav_epi16"),
             (&test_mm_mask_srav_epi16, "test_mm_mask_srav_epi16"),
             (&test_mm_maskz_srav_epi16, "test_mm_maskz_srav_epi16"),
+            (&test_mm512_permutex2var_epi16, "test_mm512_permutex2var_epi16"),
+            (&test_mm512_mask_permutex2var_epi16, "test_mm512_mask_permutex2var_epi16"),
+            (&test_mm512_maskz_permutex2var_epi16, "test_mm512_maskz_permutex2var_epi16"),
+            (&test_mm512_mask2_permutex2var_epi16, "test_mm512_mask2_permutex2var_epi16"),
+            (&test_mm256_permutex2var_epi16, "test_mm256_permutex2var_epi16"),
+            (&test_mm256_mask_permutex2var_epi16, "test_mm256_mask_permutex2var_epi16"),
+            (&test_mm256_maskz_permutex2var_epi16, "test_mm256_maskz_permutex2var_epi16"),
+            (&test_mm256_mask2_permutex2var_epi16, "test_mm256_mask2_permutex2var_epi16"),
+            (&test_mm_permutex2var_epi16, "test_mm_permutex2var_epi16"),
+            (&test_mm_mask_permutex2var_epi16, "test_mm_mask_permutex2var_epi16"),
+            (&test_mm_maskz_permutex2var_epi16, "test_mm_maskz_permutex2var_epi16"),
+            (&test_mm_mask2_permutex2var_epi16, "test_mm_mask2_permutex2var_epi16"),
+            (&test_mm512_permutexvar_epi16, "test_mm512_permutexvar_epi16"),
+            (&test_mm512_mask_permutexvar_epi16, "test_mm512_mask_permutexvar_epi16"),
+            (&test_mm512_maskz_permutexvar_epi16, "test_mm512_maskz_permutexvar_epi16"),
+            (&test_mm256_permutexvar_epi16, "test_mm256_permutexvar_epi16"),
+            (&test_mm256_mask_permutexvar_epi16, "test_mm256_mask_permutexvar_epi16"),
+            (&test_mm256_maskz_permutexvar_epi16, "test_mm256_maskz_permutexvar_epi16"),
+            (&test_mm_permutexvar_epi16, "test_mm_permutexvar_epi16"),
+            (&test_mm_mask_permutexvar_epi16, "test_mm_mask_permutexvar_epi16"),
+            (&test_mm_maskz_permutexvar_epi16, "test_mm_maskz_permutexvar_epi16"),
             (&test_mm512_mask_blend_epi16, "test_mm512_mask_blend_epi16"),
             (&test_mm256_mask_blend_epi16, "test_mm256_mask_blend_epi16"),
             (&test_mm_mask_blend_epi16, "test_mm_mask_blend_epi16"),
@@ -690,6 +756,15 @@ impl ExtensionTest for AVX512BW {
             (&test_load_mask64, "test_load_mask64"),
             (&test_load_mask32, "test_load_mask32"),
             (&test_mm512_sad_epu8, "test_mm512_sad_epu8"),
+            (&test_mm512_dbsad_epu8, "test_mm512_dbsad_epu8"),
+            (&test_mm512_mask_dbsad_epu8, "test_mm512_mask_dbsad_epu8"),
+            (&test_mm512_maskz_dbsad_epu8, "test_mm512_maskz_dbsad_epu8"),
+            (&test_mm256_dbsad_epu8, "test_mm256_dbsad_epu8"),
+            (&test_mm256_mask_dbsad_epu8, "test_mm256_mask_dbsad_epu8"),
+            (&test_mm256_maskz_dbsad_epu8, "test_mm256_maskz_dbsad_epu8"),
+            (&test_mm_dbsad_epu8, "test_mm_dbsad_epu8"),
+            (&test_mm_mask_dbsad_epu8, "test_mm_mask_dbsad_epu8"),
+            (&test_mm_maskz_dbsad_epu8, "test_mm_maskz_dbsad_epu8"),
             (&test_mm512_movepi16_mask, "test_mm512_movepi16_mask"),
             (&test_mm256_movepi16_mask, "test_mm256_movepi16_mask"),
             (&test_mm_movepi16_mask, "test_mm_movepi16_mask"),
@@ -751,12 +826,18 @@ impl ExtensionTest for AVX512BW {
             (&test_mm256_cvtsepi16_epi8, "test_mm256_cvtsepi16_epi8"),
             (&test_mm256_mask_cvtsepi16_epi8, "test_mm256_mask_cvtsepi16_epi8"),
             (&test_mm256_maskz_cvtsepi16_epi8, "test_mm256_maskz_cvtsepi16_epi8"),
+            (&test_mm_cvtsepi16_epi8, "test_mm_cvtsepi16_epi8"),
+            (&test_mm_mask_cvtsepi16_epi8, "test_mm_mask_cvtsepi16_epi8"),
+            (&test_mm_maskz_cvtsepi16_epi8, "test_mm_maskz_cvtsepi16_epi8"),
             (&test_mm512_cvtusepi16_epi8, "test_mm512_cvtusepi16_epi8"),
             (&test_mm512_mask_cvtusepi16_epi8, "test_mm512_mask_cvtusepi16_epi8"),
             (&test_mm512_maskz_cvtusepi16_epi8, "test_mm512_maskz_cvtusepi16_epi8"),
             (&test_mm256_cvtusepi16_epi8, "test_mm256_cvtusepi16_epi8"),
             (&test_mm256_mask_cvtusepi16_epi8, "test_mm256_mask_cvtusepi16_epi8"),
             (&test_mm256_maskz_cvtusepi16_epi8, "test_mm256_maskz_cvtusepi16_epi8"),
+            (&test_mm_cvtusepi16_epi8, "test_mm_cvtusepi16_epi8"),
+            (&test_mm_mask_cvtusepi16_epi8, "test_mm_mask_cvtusepi16_epi8"),
+            (&test_mm_maskz_cvtusepi16_epi8, "test_mm_maskz_cvtusepi16_epi8"),
             (&test_mm512_cvtepi8_epi16, "test_mm512_cvtepi8_epi16"),
             (&test_mm512_mask_cvtepi8_epi16, "test_mm512_mask_cvtepi8_epi16"),
             (&test_mm512_maskz_cvtepi8_epi16, "test_mm512_maskz_cvtepi8_epi16"),
@@ -780,6 +861,15 @@ impl ExtensionTest for AVX512BW {
             (&test_mm256_maskz_alignr_epi8, "test_mm256_maskz_alignr_epi8"),
             (&test_mm_mask_alignr_epi8, "test_mm_mask_alignr_epi8"),
             (&test_mm_maskz_alignr_epi8, "test_mm_maskz_alignr_epi8"),
+            (&test_mm512_mask_cvtsepi16_storeu_epi8, "test_mm512_mask_cvtsepi16_storeu_epi8"),
+            (&test_mm256_mask_cvtsepi16_storeu_epi8, "test_mm256_mask_cvtsepi16_storeu_epi8"),
+            (&test_mm_mask_cvtsepi16_storeu_epi8, "test_mm_mask_cvtsepi16_storeu_epi8"),
+            (&test_mm512_mask_cvtepi16_storeu_epi8, "test_mm512_mask_cvtepi16_storeu_epi8"),
+            (&test_mm256_mask_cvtepi16_storeu_epi8, "test_mm256_mask_cvtepi16_storeu_epi8"),
+            (&test_mm_mask_cvtepi16_storeu_epi8, "test_mm_mask_cvtepi16_storeu_epi8"),
+            (&test_mm512_mask_cvtusepi16_storeu_epi8, "test_mm512_mask_cvtusepi16_storeu_epi8"),
+            (&test_mm256_mask_cvtusepi16_storeu_epi8, "test_mm256_mask_cvtusepi16_storeu_epi8"),
+            (&test_mm_mask_cvtusepi16_storeu_epi8, "test_mm_mask_cvtusepi16_storeu_epi8"),
         ]
     }
 }

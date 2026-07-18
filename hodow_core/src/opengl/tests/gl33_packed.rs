@@ -17,37 +17,6 @@ impl GLTest for GL33PackedTest {
 
     fn run(&self) -> Result<String, Box<dyn Error>> {
         unsafe {
-            const UNSIGNED_INT_2_10_10_10_REV: u32 = 0x8368;
-            gl::ColorP3ui(UNSIGNED_INT_2_10_10_10_REV, 0x3FF003FF);
-            gl::ColorP3uiv(UNSIGNED_INT_2_10_10_10_REV, [0x3FF003FF].as_ptr());
-            gl::ColorP4ui(UNSIGNED_INT_2_10_10_10_REV, 0x3FF003FF);
-            gl::ColorP4uiv(UNSIGNED_INT_2_10_10_10_REV, [0x3FF003FF].as_ptr());
-            gl::NormalP3ui(UNSIGNED_INT_2_10_10_10_REV, 0x3FF003FF);
-            gl::NormalP3uiv(UNSIGNED_INT_2_10_10_10_REV, [0x3FF003FF].as_ptr());
-            gl::SecondaryColorP3ui(UNSIGNED_INT_2_10_10_10_REV, 0x3FF003FF);
-            gl::SecondaryColorP3uiv(UNSIGNED_INT_2_10_10_10_REV, [0x3FF003FF].as_ptr());
-            gl::TexCoordP1ui(UNSIGNED_INT_2_10_10_10_REV, 0x3FF);
-            gl::TexCoordP1uiv(UNSIGNED_INT_2_10_10_10_REV, [0x3FF].as_ptr());
-            gl::TexCoordP2ui(UNSIGNED_INT_2_10_10_10_REV, 0x3FF003FF);
-            gl::TexCoordP2uiv(UNSIGNED_INT_2_10_10_10_REV, [0x3FF003FF].as_ptr());
-            gl::TexCoordP3ui(UNSIGNED_INT_2_10_10_10_REV, 0x3FF003FF);
-            gl::TexCoordP3uiv(UNSIGNED_INT_2_10_10_10_REV, [0x3FF003FF].as_ptr());
-            gl::TexCoordP4ui(UNSIGNED_INT_2_10_10_10_REV, 0x3FF003FF);
-            gl::TexCoordP4uiv(UNSIGNED_INT_2_10_10_10_REV, [0x3FF003FF].as_ptr());
-            gl::MultiTexCoordP1ui(gl::TEXTURE0, UNSIGNED_INT_2_10_10_10_REV, 0x3FF);
-            gl::MultiTexCoordP1uiv(gl::TEXTURE0, UNSIGNED_INT_2_10_10_10_REV, [0x3FF].as_ptr());
-            gl::MultiTexCoordP2ui(gl::TEXTURE0, UNSIGNED_INT_2_10_10_10_REV, 0x3FF003FF);
-            gl::MultiTexCoordP2uiv(gl::TEXTURE0, UNSIGNED_INT_2_10_10_10_REV, [0x3FF003FF].as_ptr());
-            gl::MultiTexCoordP3ui(gl::TEXTURE0, UNSIGNED_INT_2_10_10_10_REV, 0x3FF003FF);
-            gl::MultiTexCoordP3uiv(gl::TEXTURE0, UNSIGNED_INT_2_10_10_10_REV, [0x3FF003FF].as_ptr());
-            gl::MultiTexCoordP4ui(gl::TEXTURE0, UNSIGNED_INT_2_10_10_10_REV, 0x3FF003FF);
-            gl::MultiTexCoordP4uiv(gl::TEXTURE0, UNSIGNED_INT_2_10_10_10_REV, [0x3FF003FF].as_ptr());
-            gl::VertexP2ui(UNSIGNED_INT_2_10_10_10_REV, 0x3FF003FF);
-            gl::VertexP2uiv(UNSIGNED_INT_2_10_10_10_REV, [0x3FF003FF].as_ptr());
-            gl::VertexP3ui(UNSIGNED_INT_2_10_10_10_REV, 0x3FF003FF);
-            gl::VertexP3uiv(UNSIGNED_INT_2_10_10_10_REV, [0x3FF003FF].as_ptr());
-            gl::VertexP4ui(UNSIGNED_INT_2_10_10_10_REV, 0x3FF003FF);
-            gl::VertexP4uiv(UNSIGNED_INT_2_10_10_10_REV, [0x3FF003FF].as_ptr());
             let vs_source = b"
                 #version 330
                 in vec3 position;
@@ -76,6 +45,35 @@ impl GLTest for GL33PackedTest {
             gl::BindFragDataLocationIndexed(program, 0, 0, b"FragColor0\0".as_ptr() as *const gl::types::GLchar);
             gl::BindFragDataLocationIndexed(program, 0, 1, b"FragColor1\0".as_ptr() as *const gl::types::GLchar);
             gl::LinkProgram(program);
+            gl::UseProgram(program);
+
+            // Core-profile packed vertex formats: upload GL_UNSIGNED_INT_2_10_10_10_REV /
+            // GL_INT_2_10_10_10_REV data to a VBO and describe it with glVertexAttribPointer.
+            let packed: [u32; 4] = [0x3FF003FF, 0x3FF003FF, 0x3FF003FF, 0x3FF003FF];
+
+            let mut vao = 0u32;
+            gl::GenVertexArrays(1, &mut vao);
+            gl::BindVertexArray(vao);
+
+            let mut vbo = 0u32;
+            gl::GenBuffers(1, &mut vbo);
+            gl::BindBuffer(gl::ARRAY_BUFFER, vbo);
+            gl::BufferData(
+                gl::ARRAY_BUFFER,
+                (packed.len() * std::mem::size_of::<u32>()) as isize,
+                packed.as_ptr() as *const _,
+                gl::STATIC_DRAW,
+            );
+
+            gl::VertexAttribPointer(0, 4, gl::UNSIGNED_INT_2_10_10_10_REV, gl::TRUE, std::mem::size_of::<u32>() as i32, std::ptr::null());
+            gl::EnableVertexAttribArray(0);
+            gl::VertexAttribPointer(1, 4, gl::INT_2_10_10_10_REV, gl::TRUE, std::mem::size_of::<u32>() as i32, std::ptr::null());
+            gl::EnableVertexAttribArray(1);
+
+            gl::BindVertexArray(0);
+            gl::UseProgram(0);
+            gl::DeleteVertexArrays(1, &vao);
+            gl::DeleteBuffers(1, &vbo);
             gl::DeleteProgram(program);
             gl::DeleteShader(vs);
             gl::DeleteShader(fs);

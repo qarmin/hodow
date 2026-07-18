@@ -13,9 +13,9 @@ pub(super) fn test_xbegin() -> Result<(), String> {
         let result = _xbegin();
         check_int_equality(result as i32, 0)?;
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
@@ -32,15 +32,15 @@ pub(super) fn test_xend() -> Result<(), String> {
     unsafe {
         _xend();
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _xend();
+                _xend();
             }
         }
     }
@@ -51,15 +51,15 @@ pub(super) fn test_xabort() -> Result<(), String> {
     unsafe {
         _xabort::<0>();
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _xabort::<0>();
+                _xabort::<0>();
             }
         }
     }
@@ -71,9 +71,9 @@ pub(super) fn test_xtest() -> Result<(), String> {
         let result = _xtest();
         check_int_equality(result as i32, 0)?;
 
-        if crate::get_fuzzing() {
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
             log::info!("Starting fuzzing");
-            let total_iters = crate::cpu::get_iterations();
             for i in 0..total_iters {
                 if i % 1000 == 0 && crate::cpu::should_stop() {
                     log::info!("Fuzzing stopped at iteration {}", i);

@@ -17,7 +17,14 @@ pub enum Commands {
     Cpu(CpuArgs),
     /// Run OpenGL GPU tests
     Gpu(GpuArgs),
+    /// Run Vulkan compute validation on every Vulkan device
+    Vulkan(VulkanArgs),
 }
+
+// ── Vulkan ────────────────────────────────────────────────────────────────────
+
+#[derive(Args)]
+pub struct VulkanArgs {}
 
 // ── CPU ─────────────────────────────────────────────────────────────────────
 
@@ -46,6 +53,28 @@ pub struct CpuArgs {
     /// Comma-separated list of tests to skip
     #[arg(short = 's', long = "skip", value_delimiter = ',', num_args = 1..)]
     pub skip: Vec<String>,
+
+    /// Run each test in an isolated child process so a segfault/hang is reported as
+    /// CRASHED/TIMEOUT instead of aborting the whole run.
+    #[arg(short = 'i', long = "isolate")]
+    pub isolate: bool,
+
+    /// Per-test time limit in milliseconds for --isolate (default: 10000).
+    #[arg(long = "isolate-timeout", value_name = "MS")]
+    pub isolate_timeout_ms: Option<u64>,
+
+    /// Stress mode: run the deterministic tests on every core in parallel and compare
+    /// results across cores to surface a single faulty core or thermal instability.
+    #[arg(long = "stress")]
+    pub stress: bool,
+
+    /// Duration of --stress in seconds (default: 10).
+    #[arg(long = "stress-secs", value_name = "SECS")]
+    pub stress_secs: Option<u64>,
+
+    /// Internal: run as an isolation worker starting at the given test index. Hidden.
+    #[arg(long = "worker-start", value_name = "INDEX", hide = true)]
+    pub worker_start: Option<usize>,
 }
 
 // ── GPU ─────────────────────────────────────────────────────────────────────
@@ -78,4 +107,13 @@ pub struct GpuArgs {
     /// Use this when the hardware GL driver crashes (e.g. Mesa gallium SEGV in headless mode).
     #[arg(short = 's', long = "force-software")]
     pub force_software: bool,
+
+    /// Run a GPU memory test (bit-pattern upload/download + compute read-modify-write)
+    /// instead of the GL feature tests.
+    #[arg(short = 'm', long = "memtest")]
+    pub memtest: bool,
+
+    /// GPU memory test buffer size in megabytes (default: 64).
+    #[arg(long = "memtest-mb", value_name = "MB")]
+    pub memtest_mb: Option<usize>,
 }

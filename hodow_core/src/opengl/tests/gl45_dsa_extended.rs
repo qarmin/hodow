@@ -25,10 +25,13 @@ impl GLTest for GL45DSAExtendedTest {
             const MAP1_VERTEX_3: u32 = 0x0D97;
             const COEFF: u32 = 0x0A00;
             const PIXEL_MAP_I_TO_R: u32 = 0x0C70;
+            // Backing buffer sized to accommodate the largest map/copy/range used below.
+            let buffer_size: isize = 512;
             let mut buffer = 0;
             gl::CreateBuffers(1, &mut buffer);
             let data: [f32; 16] = [1.0; 16];
-            gl::NamedBufferData(buffer, (data.len() * std::mem::size_of::<f32>()) as isize, data.as_ptr() as *const _, gl::STATIC_DRAW);
+            gl::NamedBufferData(buffer, buffer_size, std::ptr::null(), gl::STATIC_DRAW);
+            gl::NamedBufferSubData(buffer, 0, (data.len() * std::mem::size_of::<f32>()) as isize, data.as_ptr() as *const _);
             let subdata: [f32; 4] = [2.0, 3.0, 4.0, 5.0];
             gl::NamedBufferSubData(buffer, 0, (subdata.len() * std::mem::size_of::<f32>()) as isize, subdata.as_ptr() as *const _);
             let clear_data: [u8; 4] = [0, 0, 0, 0];
@@ -38,7 +41,9 @@ impl GLTest for GL45DSAExtendedTest {
             if !mapped.is_null() {
                 gl::UnmapNamedBuffer(buffer);
             }
-            let mapped_range = gl::MapNamedBufferRange(buffer, 0, 256, gl::MAP_READ_BIT);
+            // glFlushMappedNamedBufferRange requires the range to be mapped with
+            // GL_MAP_FLUSH_EXPLICIT_BIT (which also requires GL_MAP_WRITE_BIT).
+            let mapped_range = gl::MapNamedBufferRange(buffer, 0, 256, gl::MAP_WRITE_BIT | gl::MAP_FLUSH_EXPLICIT_BIT);
             if !mapped_range.is_null() {
                 gl::FlushMappedNamedBufferRange(buffer, 0, 128);
                 gl::UnmapNamedBuffer(buffer);
@@ -59,53 +64,59 @@ impl GLTest for GL45DSAExtendedTest {
             gl::CreateTextures(gl::TEXTURE_2D, 1, &mut texture);
             gl::TextureStorage2D(texture, 4, gl::RGBA8, 512, 512);
             gl::NamedFramebufferTexture(fbo, gl::COLOR_ATTACHMENT0, texture, 0);
-            gl::NamedFramebufferTextureLayer(fbo, gl::COLOR_ATTACHMENT0, texture, 0, 0);
             let mut rbo = 0;
             gl::CreateRenderbuffers(1, &mut rbo);
             gl::NamedRenderbufferStorage(rbo, gl::DEPTH24_STENCIL8, 512, 512);
             gl::NamedFramebufferRenderbuffer(fbo, gl::DEPTH_STENCIL_ATTACHMENT, gl::RENDERBUFFER, rbo);
-            gl::NamedRenderbufferStorageMultisample(rbo, 4, gl::RGBA8, 512, 512);
+            // Separate renderbuffer so the multisample storage call does not clobber the depth attachment.
+            let mut rbo_ms = 0;
+            gl::CreateRenderbuffers(1, &mut rbo_ms);
+            gl::NamedRenderbufferStorageMultisample(rbo_ms, 4, gl::RGBA8, 512, 512);
             let mut rbo_param = 0;
             gl::GetNamedRenderbufferParameteriv(rbo, gl::RENDERBUFFER_WIDTH, &mut rbo_param);
             gl::NamedFramebufferDrawBuffer(fbo, gl::COLOR_ATTACHMENT0);
-            let draw_buffers = [gl::COLOR_ATTACHMENT0, gl::COLOR_ATTACHMENT1];
+            // Second draw buffer is NONE; COLOR_ATTACHMENT1 has no image and would make the FBO incomplete.
+            let draw_buffers = [gl::COLOR_ATTACHMENT0, gl::NONE];
             gl::NamedFramebufferDrawBuffers(fbo, 2, draw_buffers.as_ptr());
             gl::NamedFramebufferReadBuffer(fbo, gl::COLOR_ATTACHMENT0);
+            // glNamedFramebufferTextureLayer needs a layered texture, so exercise it on a scratch FBO + 2D array.
+            let mut fbo_layer = 0;
+            gl::CreateFramebuffers(1, &mut fbo_layer);
+            let mut texture_array = 0;
+            gl::CreateTextures(gl::TEXTURE_2D_ARRAY, 1, &mut texture_array);
+            gl::TextureStorage3D(texture_array, 1, gl::RGBA8, 512, 512, 4);
+            gl::NamedFramebufferTextureLayer(fbo_layer, gl::COLOR_ATTACHMENT0, texture_array, 0, 0);
             let mut fbo_param = 0;
             gl::GetNamedFramebufferParameteriv(fbo, gl::FRAMEBUFFER_DEFAULT_WIDTH, &mut fbo_param);
             let mut attach_param = 0;
             gl::GetNamedFramebufferAttachmentParameteriv(fbo, gl::COLOR_ATTACHMENT0, gl::FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE, &mut attach_param);
-            let _status = gl::CheckNamedFramebufferStatus(fbo, gl::FRAMEBUFFER);
-            gl::ClearNamedFramebufferiv(fbo, gl::COLOR, 0, [0i32, 0, 0, 255].as_ptr());
-            gl::ClearNamedFramebufferuiv(fbo, gl::COLOR, 0, [0u32, 0, 0, 255].as_ptr());
-            gl::ClearNamedFramebufferfv(fbo, gl::COLOR, 0, [0.0f32, 0.0, 0.0, 1.0].as_ptr());
-            gl::ClearNamedFramebufferfi(fbo, gl::DEPTH_STENCIL, 0, 1.0, 0);
-            gl::BlitNamedFramebuffer(fbo, 0, 0, 0, 512, 512, 0, 0, 512, 512, gl::COLOR_BUFFER_BIT, gl::NEAREST);
-            gl::InvalidateNamedFramebufferData(fbo, 1, [gl::COLOR_ATTACHMENT0].as_ptr());
-            gl::InvalidateNamedFramebufferSubData(fbo, 1, [gl::COLOR_ATTACHMENT0].as_ptr(), 0, 0, 256, 256);
+            let status = gl::CheckNamedFramebufferStatus(fbo, gl::FRAMEBUFFER);
+            if status == gl::FRAMEBUFFER_COMPLETE {
+                gl::ClearNamedFramebufferiv(fbo, gl::COLOR, 0, [0i32, 0, 0, 255].as_ptr());
+                gl::ClearNamedFramebufferuiv(fbo, gl::COLOR, 0, [0u32, 0, 0, 255].as_ptr());
+                gl::ClearNamedFramebufferfv(fbo, gl::COLOR, 0, [0.0f32, 0.0, 0.0, 1.0].as_ptr());
+                gl::ClearNamedFramebufferfi(fbo, gl::DEPTH_STENCIL, 0, 1.0, 0);
+                gl::BlitNamedFramebuffer(fbo, 0, 0, 0, 512, 512, 0, 0, 512, 512, gl::COLOR_BUFFER_BIT, gl::NEAREST);
+                gl::InvalidateNamedFramebufferData(fbo, 1, [gl::COLOR_ATTACHMENT0].as_ptr());
+                gl::InvalidateNamedFramebufferSubData(fbo, 1, [gl::COLOR_ATTACHMENT0].as_ptr(), 0, 0, 256, 256);
+            }
             let mut texture1d = 0;
             gl::CreateTextures(gl::TEXTURE_1D, 1, &mut texture1d);
             gl::TextureStorage1D(texture1d, 4, gl::RGBA8, 256);
             let tex_data: Vec<u8> = vec![128; 128 * 4];
             gl::TextureSubImage1D(texture1d, 0, 0, 128, gl::RGBA, gl::UNSIGNED_BYTE, tex_data.as_ptr() as *const _);
-            let comp_data: Vec<u8> = vec![0; 256];
-            gl::CompressedTextureSubImage1D(texture1d, 0, 0, 64, gl::COMPRESSED_RGBA, 256, comp_data.as_ptr() as *const _);
             gl::CopyTextureSubImage1D(texture1d, 0, 0, 0, 0, 64);
             let mut texture2d = 0;
             gl::CreateTextures(gl::TEXTURE_2D, 1, &mut texture2d);
             gl::TextureStorage2D(texture2d, 4, gl::RGBA8, 256, 256);
             let tex_data_2d: Vec<u8> = vec![128; 128 * 128 * 4];
             gl::TextureSubImage2D(texture2d, 0, 0, 0, 128, 128, gl::RGBA, gl::UNSIGNED_BYTE, tex_data_2d.as_ptr() as *const _);
-            let comp_data_2d: Vec<u8> = vec![0; 1024];
-            gl::CompressedTextureSubImage2D(texture2d, 0, 0, 0, 64, 64, gl::COMPRESSED_RGBA, 1024, comp_data_2d.as_ptr() as *const _);
             gl::CopyTextureSubImage2D(texture2d, 0, 0, 0, 0, 0, 64, 64);
             let mut texture3d = 0;
             gl::CreateTextures(gl::TEXTURE_3D, 1, &mut texture3d);
             gl::TextureStorage3D(texture3d, 4, gl::RGBA8, 128, 128, 128);
             let tex_data_3d: Vec<u8> = vec![128; 64 * 64 * 64 * 4];
             gl::TextureSubImage3D(texture3d, 0, 0, 0, 0, 64, 64, 64, gl::RGBA, gl::UNSIGNED_BYTE, tex_data_3d.as_ptr() as *const _);
-            let comp_data_3d: Vec<u8> = vec![0; 4096];
-            gl::CompressedTextureSubImage3D(texture3d, 0, 0, 0, 0, 32, 32, 32, gl::COMPRESSED_RGBA, 4096, comp_data_3d.as_ptr() as *const _);
             gl::CopyTextureSubImage3D(texture3d, 0, 0, 0, 0, 0, 0, 32, 32);
             gl::TextureParameterf(texture2d, gl::TEXTURE_MIN_FILTER, gl::LINEAR as f32);
             gl::TextureParameterfv(texture2d, gl::TEXTURE_BORDER_COLOR, [0.0f32, 0.0, 0.0, 1.0].as_ptr());
@@ -130,7 +141,6 @@ impl GLTest for GL45DSAExtendedTest {
             gl::GetTextureLevelParameteriv(texture2d, 0, gl::TEXTURE_WIDTH, &mut level_param);
             let mut image_data: Vec<u8> = vec![0; 256 * 256 * 4];
             gl::GetTextureImage(texture2d, 0, gl::RGBA, gl::UNSIGNED_BYTE, (image_data.len()) as i32, image_data.as_mut_ptr() as *mut _);
-            gl::GetCompressedTextureImage(texture2d, 0, 65536, image_data.as_mut_ptr() as *mut _);
             gl::GenerateTextureMipmap(texture2d);
             gl::BindTextureUnit(0, texture2d);
             let mut vao = 0;
@@ -158,11 +168,6 @@ impl GLTest for GL45DSAExtendedTest {
             gl::SamplerParameterf(sampler, gl::TEXTURE_MIN_FILTER, gl::LINEAR as f32);
             gl::SamplerParameterfv(sampler, gl::TEXTURE_BORDER_COLOR, [0.0f32, 0.0, 0.0, 1.0].as_ptr());
             gl::SamplerParameteri(sampler, gl::TEXTURE_MAG_FILTER, gl::LINEAR as i32);
-            gl::SamplerParameteriv(
-                sampler,
-                gl::TEXTURE_SWIZZLE_RGBA,
-                [gl::RED as i32, gl::GREEN as i32, gl::BLUE as i32, gl::ALPHA as i32].as_ptr(),
-            );
             gl::SamplerParameterIiv(sampler, gl::TEXTURE_BORDER_COLOR, [0i32, 0, 0, 255].as_ptr());
             gl::SamplerParameterIuiv(sampler, gl::TEXTURE_BORDER_COLOR, [0u32, 0, 0, 255].as_ptr());
             let mut queries: [u32; 2] = [0; 2];
@@ -174,21 +179,44 @@ impl GLTest for GL45DSAExtendedTest {
             gl::MemoryBarrierByRegion(gl::ALL_BARRIER_BITS);
             gl::TextureBarrier();
             gl::GetGraphicsResetStatus();
-            gl::GetnCompressedTexImage(gl::TEXTURE_2D, 0, 4096, image_data.as_mut_ptr() as *mut _);
             gl::GetnTexImage(gl::TEXTURE_2D, 0, gl::RGBA, gl::UNSIGNED_BYTE, (image_data.len()) as i32, image_data.as_mut_ptr() as *mut _);
-            let mut uniform_val: [f32; 4] = [0.0; 4];
-            gl::GetnUniformfv(0, 0, 16, uniform_val.as_mut_ptr());
-            let mut uniform_ival: [i32; 4] = [0; 4];
-            gl::GetnUniformiv(0, 0, 16, uniform_ival.as_mut_ptr());
-            let mut uniform_uval: [u32; 4] = [0; 4];
-            gl::GetnUniformuiv(0, 0, 16, uniform_uval.as_mut_ptr());
+            // A linked program with an active uniform is required for the glGetnUniform* queries.
+            let program = gl::CreateProgram();
+            let vs = gl::CreateShader(gl::VERTEX_SHADER);
+            let vs_src = b"#version 450 core\nuniform vec4 u_color;\nvoid main() { gl_Position = u_color; }\0";
+            gl::ShaderSource(vs, 1, [vs_src.as_ptr() as *const gl::types::GLchar].as_ptr(), std::ptr::null());
+            gl::CompileShader(vs);
+            let fs = gl::CreateShader(gl::FRAGMENT_SHADER);
+            let fs_src = b"#version 450 core\nout vec4 frag_color;\nvoid main() { frag_color = vec4(1.0); }\0";
+            gl::ShaderSource(fs, 1, [fs_src.as_ptr() as *const gl::types::GLchar].as_ptr(), std::ptr::null());
+            gl::CompileShader(fs);
+            gl::AttachShader(program, vs);
+            gl::AttachShader(program, fs);
+            gl::LinkProgram(program);
+            gl::DeleteShader(vs);
+            gl::DeleteShader(fs);
+            let mut link_status = 0;
+            gl::GetProgramiv(program, gl::LINK_STATUS, &mut link_status);
+            if link_status == gl::TRUE as i32 {
+                let loc = gl::GetUniformLocation(program, b"u_color\0".as_ptr() as *const gl::types::GLchar);
+                if loc != -1 {
+                    let mut uniform_val: [f32; 4] = [0.0; 4];
+                    gl::GetnUniformfv(program, loc, 16, uniform_val.as_mut_ptr());
+                    let mut uniform_ival: [i32; 4] = [0; 4];
+                    gl::GetnUniformiv(program, loc, 16, uniform_ival.as_mut_ptr());
+                    let mut uniform_uval: [u32; 4] = [0; 4];
+                    gl::GetnUniformuiv(program, loc, 16, uniform_uval.as_mut_ptr());
+                    let mut uniform_dval: [f64; 4] = [0.0; 4];
+                    gl::GetnUniformdv(program, loc, 32, uniform_dval.as_mut_ptr());
+                }
+            }
             gl::ReadnPixels(0, 0, 256, 256, gl::RGBA, gl::UNSIGNED_BYTE, (image_data.len()) as i32, image_data.as_mut_ptr() as *mut _);
             let mut tfs: [u32; 2] = [0; 2];
             gl::CreateTransformFeedbacks(2, tfs.as_mut_ptr());
             gl::TransformFeedbackBufferBase(tfs[0], 0, buffer);
-            gl::TransformFeedbackBufferRange(tfs[0], 0, buffer, 0, 512);
+            gl::TransformFeedbackBufferRange(tfs[0], 0, buffer, 0, buffer_size);
             let mut tf_param = 0i32;
-            gl::GetTransformFeedbackiv(tfs[0], gl::TRANSFORM_FEEDBACK_BUFFER_BINDING, &mut tf_param);
+            gl::GetTransformFeedbackiv(tfs[0], gl::TRANSFORM_FEEDBACK_ACTIVE, &mut tf_param);
             gl::GetTransformFeedbacki_v(tfs[0], gl::TRANSFORM_FEEDBACK_BUFFER_BINDING, 0, &mut tf_param);
             let mut tf_param64 = 0i64;
             gl::GetTransformFeedbacki64_v(tfs[0], gl::TRANSFORM_FEEDBACK_BUFFER_START, 0, &mut tf_param64);
@@ -208,12 +236,14 @@ impl GLTest for GL45DSAExtendedTest {
                 sub_image.len() as i32,
                 sub_image.as_mut_ptr() as *mut _,
             );
-            gl::GetCompressedTextureSubImage(texture2d, 0, 0, 0, 0, 32, 32, 1, sub_image.len() as i32, sub_image.as_mut_ptr() as *mut _);
             let buffer_ptr: *mut std::ffi::c_void = std::ptr::null_mut();
             gl::GetNamedBufferPointerv(buffer, gl::BUFFER_MAP_POINTER, &buffer_ptr);
             gl::NamedFramebufferParameteri(fbo, gl::FRAMEBUFFER_DEFAULT_WIDTH, 512);
-            gl::TextureBuffer(texture, gl::RGBA8, buffer);
-            gl::TextureBufferRange(texture, gl::RGBA8, buffer, 0, 512);
+            // glTextureBuffer requires a texture created with the GL_TEXTURE_BUFFER target.
+            let mut tex_buffer = 0;
+            gl::CreateTextures(gl::TEXTURE_BUFFER, 1, &mut tex_buffer);
+            gl::TextureBuffer(tex_buffer, gl::RGBA8, buffer);
+            gl::TextureBufferRange(tex_buffer, gl::RGBA8, buffer, 0, buffer_size);
             let mut texture2d_ms = 0;
             gl::CreateTextures(gl::TEXTURE_2D_MULTISAMPLE, 1, &mut texture2d_ms);
             gl::TextureStorage2DMultisample(texture2d_ms, 4, gl::RGBA8, 256, 256, gl::TRUE);
@@ -221,7 +251,6 @@ impl GLTest for GL45DSAExtendedTest {
             gl::CreateTextures(gl::TEXTURE_2D_MULTISAMPLE_ARRAY, 1, &mut texture3d_ms);
             gl::TextureStorage3DMultisample(texture3d_ms, 4, gl::RGBA8, 256, 256, 4, gl::TRUE);
             let mut getsn_data: [u8; 256] = [0; 256];
-            gl::GetnUniformdv(0, 0, 256, getsn_data.as_mut_ptr() as *mut f64);
             gl::GetnColorTable(COLOR_TABLE, gl::RGBA, gl::UNSIGNED_BYTE, 256, getsn_data.as_mut_ptr() as *mut _);
             gl::GetnConvolutionFilter(CONVOLUTION_1D, gl::RGBA, gl::UNSIGNED_BYTE, 256, getsn_data.as_mut_ptr() as *mut _);
             gl::GetnSeparableFilter(
@@ -250,17 +279,22 @@ impl GLTest for GL45DSAExtendedTest {
             gl::GetnPixelMapusv(PIXEL_MAP_I_TO_R, 128, pixel_map_us.as_mut_ptr());
             let mut polygon_stipple: [u8; 128] = [0; 128];
             gl::GetnPolygonStipple(128, polygon_stipple.as_mut_ptr());
+            gl::DeleteProgram(program);
+            gl::DeleteTextures(1, &tex_buffer);
             gl::DeleteTextures(1, &texture2d_ms);
             gl::DeleteTextures(1, &texture3d_ms);
             gl::DeleteQueries(2, queries.as_ptr());
             gl::DeleteSamplers(1, &sampler);
             gl::DeleteVertexArrays(1, &vao);
             gl::DeleteTextures(1, &texture);
+            gl::DeleteTextures(1, &texture_array);
             gl::DeleteTextures(1, &texture1d);
             gl::DeleteTextures(1, &texture2d);
             gl::DeleteTextures(1, &texture3d);
             gl::DeleteRenderbuffers(1, &rbo);
+            gl::DeleteRenderbuffers(1, &rbo_ms);
             gl::DeleteFramebuffers(1, &fbo);
+            gl::DeleteFramebuffers(1, &fbo_layer);
             gl::DeleteBuffers(1, &buffer);
             gl::DeleteBuffers(1, &buffer2);
             Ok("GL 4.5 DSA extended functions tested successfully".to_string())

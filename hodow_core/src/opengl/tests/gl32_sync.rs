@@ -37,8 +37,18 @@ impl GLTest for GL32SyncTest {
             gl::GenTextures(1, &mut texture);
             gl::BindTexture(gl::TEXTURE_2D_MULTISAMPLE, texture);
             gl::TexImage2DMultisample(gl::TEXTURE_2D_MULTISAMPLE, 4, gl::RGBA8, 256, 256, gl::TRUE);
+            let mut fbo = 0;
+            gl::GenFramebuffers(1, &mut fbo);
+            gl::BindFramebuffer(gl::FRAMEBUFFER, fbo);
+            gl::FramebufferTexture2D(gl::FRAMEBUFFER, gl::COLOR_ATTACHMENT0, gl::TEXTURE_2D_MULTISAMPLE, texture, 0);
+            let mut sample_count = 0;
+            gl::GetIntegerv(gl::SAMPLES, &mut sample_count);
             let mut samples = 0.0;
-            gl::GetMultisamplefv(gl::SAMPLE_POSITION, 0, &mut samples);
+            if sample_count > 0 {
+                gl::GetMultisamplefv(gl::SAMPLE_POSITION, 0, &mut samples);
+            }
+            gl::BindFramebuffer(gl::FRAMEBUFFER, 0);
+            gl::DeleteFramebuffers(1, &fbo);
             gl::SampleMaski(0, 0xFFFFFFFF);
             gl::BindTexture(gl::TEXTURE_2D_MULTISAMPLE, 0);
             let mut texture_3d = 0;
@@ -60,10 +70,50 @@ impl GLTest for GL32SyncTest {
             gl::DeleteBuffers(1, &buffer);
             gl::ProvokingVertex(gl::FIRST_VERTEX_CONVENTION);
             gl::ProvokingVertex(gl::LAST_VERTEX_CONVENTION);
+
+            let vs_source = b"#version 150\nin vec3 position;\nvoid main() { gl_Position = vec4(position, 1.0); }\n\0";
+            let fs_source = b"#version 150\nout vec4 frag_color;\nvoid main() { frag_color = vec4(1.0); }\n\0";
+            let vs = gl::CreateShader(gl::VERTEX_SHADER);
+            gl::ShaderSource(vs, 1, &(vs_source.as_ptr() as *const gl::types::GLchar), std::ptr::null());
+            gl::CompileShader(vs);
+            let fs = gl::CreateShader(gl::FRAGMENT_SHADER);
+            gl::ShaderSource(fs, 1, &(fs_source.as_ptr() as *const gl::types::GLchar), std::ptr::null());
+            gl::CompileShader(fs);
+            let program = gl::CreateProgram();
+            gl::AttachShader(program, vs);
+            gl::AttachShader(program, fs);
+            gl::BindAttribLocation(program, 0, b"position\0".as_ptr() as *const gl::types::GLchar);
+            gl::LinkProgram(program);
+            gl::UseProgram(program);
+
+            let mut vao = 0;
+            gl::GenVertexArrays(1, &mut vao);
+            gl::BindVertexArray(vao);
             let indices: [u32; 3] = [0, 1, 2];
-            gl::DrawElementsBaseVertex(gl::TRIANGLES, 3, gl::UNSIGNED_INT, indices.as_ptr() as *const _, 0);
-            gl::DrawRangeElementsBaseVertex(gl::TRIANGLES, 0, 2, 3, gl::UNSIGNED_INT, indices.as_ptr() as *const _, 0);
-            gl::DrawElementsInstancedBaseVertex(gl::TRIANGLES, 3, gl::UNSIGNED_INT, indices.as_ptr() as *const _, 1, 0);
+            let mut ebo = 0;
+            gl::GenBuffers(1, &mut ebo);
+            gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, ebo);
+            gl::BufferData(
+                gl::ELEMENT_ARRAY_BUFFER,
+                std::mem::size_of_val(&indices) as gl::types::GLsizeiptr,
+                indices.as_ptr() as *const _,
+                gl::STATIC_DRAW,
+            );
+
+            gl::DrawElementsBaseVertex(gl::TRIANGLES, 3, gl::UNSIGNED_INT, std::ptr::null(), 0);
+            gl::DrawRangeElementsBaseVertex(gl::TRIANGLES, 0, 2, 3, gl::UNSIGNED_INT, std::ptr::null(), 0);
+            gl::DrawElementsInstancedBaseVertex(gl::TRIANGLES, 3, gl::UNSIGNED_INT, std::ptr::null(), 1, 0);
+
+            gl::BindVertexArray(0);
+            gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, 0);
+            gl::DeleteBuffers(1, &ebo);
+            gl::DeleteVertexArrays(1, &vao);
+            gl::UseProgram(0);
+            gl::DetachShader(program, vs);
+            gl::DetachShader(program, fs);
+            gl::DeleteShader(vs);
+            gl::DeleteShader(fs);
+            gl::DeleteProgram(program);
             Ok("GL 3.2 sync objects and multisample textures tested successfully".to_string())
         }
     }

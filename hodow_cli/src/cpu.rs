@@ -13,6 +13,24 @@ pub fn process_cpu(args: &CpuArgs) {
         set_iterations(nv);
     }
 
+    // Isolation worker: run tests in a child process speaking the line protocol on stdout.
+    if let Some(start) = args.worker_start {
+        crate::isolate::run_worker(start);
+        return;
+    }
+
+    // Isolation parent: orchestrate worker subprocesses with per-test timeouts.
+    if args.isolate {
+        crate::isolate::run_isolated(args);
+        return;
+    }
+
+    // Stress mode: run the suite on every core in parallel and compare across cores.
+    if args.stress {
+        crate::stress::run_stress(args);
+        return;
+    }
+
     if let Some(ref only) = args.test_function {
         set_only_tests(only.clone());
     }

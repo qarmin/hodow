@@ -7,7 +7,6 @@ use crate::cpu::auto_generated::s390x::vector::part1::*;
 use crate::cpu::auto_generated::s390x::vector::part2::*;
 use crate::cpu::auto_generated::s390x::vector::part3::*;
 use crate::cpu::auto_generated::s390x::vector::part4::*;
-
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct VECTOR;

@@ -17,6 +17,10 @@ impl GLTest for GL43DebugTest {
 
     fn run(&self) -> Result<String, Box<dyn Error>> {
         unsafe {
+            // Core profile requires a non-zero VAO bound for all vertex-format/attrib/draw calls.
+            let mut vao = 0;
+            gl::GenVertexArrays(1, &mut vao);
+            gl::BindVertexArray(vao);
             gl::DebugMessageControl(gl::DONT_CARE, gl::DONT_CARE, gl::DONT_CARE, 0, std::ptr::null(), gl::TRUE);
             gl::DebugMessageInsert(
                 gl::DEBUG_SOURCE_APPLICATION,
@@ -64,17 +68,19 @@ impl GLTest for GL43DebugTest {
             let mut texture2 = 0;
             gl::GenTextures(1, &mut texture1);
             gl::GenTextures(1, &mut texture2);
+            // glCopyImageSubData needs complete, immutable textures with matching formats.
             gl::BindTexture(gl::TEXTURE_2D, texture1);
-            gl::TexImage2D(gl::TEXTURE_2D, 0, gl::RGBA8 as i32, 64, 64, 0, gl::RGBA, gl::UNSIGNED_BYTE, std::ptr::null());
+            gl::TexStorage2D(gl::TEXTURE_2D, 1, gl::RGBA8, 64, 64);
             gl::BindTexture(gl::TEXTURE_2D, texture2);
-            gl::TexImage2D(gl::TEXTURE_2D, 0, gl::RGBA8 as i32, 64, 64, 0, gl::RGBA, gl::UNSIGNED_BYTE, std::ptr::null());
+            gl::TexStorage2D(gl::TEXTURE_2D, 1, gl::RGBA8, 64, 64);
             gl::CopyImageSubData(texture1, gl::TEXTURE_2D, 0, 0, 0, 0, texture2, gl::TEXTURE_2D, 0, 0, 0, 0, 32, 32, 1);
             gl::BindTexture(gl::TEXTURE_2D, 0);
             let vs_source = b"
                 #version 430
                 layout(location = 0) in vec3 position;
+                layout(std430, binding = 0) buffer DataBlock { float data[]; } ssbo;
                 void main() {
-                    gl_Position = vec4(position, 1.0);
+                    gl_Position = vec4(position, 1.0) + ssbo.data[0];
                 }
             \0";
             let vs = gl::CreateShader(gl::VERTEX_SHADER);
@@ -117,11 +123,51 @@ impl GLTest for GL43DebugTest {
             gl::TexBufferRange(gl::TEXTURE_BUFFER, gl::RGBA8, buffer, 0, 512);
             gl::InvalidateTexImage(tbo, 0);
             gl::InvalidateTexSubImage(tbo, 0, 0, 0, 0, 32, 32, 1);
-            gl::MultiDrawArraysIndirect(gl::TRIANGLES, std::ptr::null(), 0, 0);
-            gl::MultiDrawElementsIndirect(gl::TRIANGLES, gl::UNSIGNED_INT, std::ptr::null(), 0, 0);
+            // MultiDraw*Indirect need a bound VAO, an active program, and a GL_DRAW_INDIRECT_BUFFER with valid commands.
+            // Rasterizer discard keeps the draws side-effect free without needing a fragment shader/complete FBO.
+            gl::BindBufferBase(gl::SHADER_STORAGE_BUFFER, 0, buffer);
+            gl::UseProgram(program);
+            gl::Enable(gl::RASTERIZER_DISCARD);
+            let mut draw_indirect = 0;
+            gl::GenBuffers(1, &mut draw_indirect);
+            gl::BindBuffer(gl::DRAW_INDIRECT_BUFFER, draw_indirect);
+            let arrays_cmd = [3u32, 1, 0, 0];
+            gl::BufferData(
+                gl::DRAW_INDIRECT_BUFFER,
+                (arrays_cmd.len() * std::mem::size_of::<u32>()) as isize,
+                arrays_cmd.as_ptr() as *const _,
+                gl::STATIC_DRAW,
+            );
+            gl::MultiDrawArraysIndirect(gl::TRIANGLES, std::ptr::null(), 1, 0);
+            let mut ibo = 0;
+            gl::GenBuffers(1, &mut ibo);
+            gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, ibo);
+            let indices = [0u32, 1, 2];
+            gl::BufferData(
+                gl::ELEMENT_ARRAY_BUFFER,
+                (indices.len() * std::mem::size_of::<u32>()) as isize,
+                indices.as_ptr() as *const _,
+                gl::STATIC_DRAW,
+            );
+            let elements_cmd = [3u32, 1, 0, 0, 0];
+            gl::BufferData(
+                gl::DRAW_INDIRECT_BUFFER,
+                (elements_cmd.len() * std::mem::size_of::<u32>()) as isize,
+                elements_cmd.as_ptr() as *const _,
+                gl::STATIC_DRAW,
+            );
+            gl::MultiDrawElementsIndirect(gl::TRIANGLES, gl::UNSIGNED_INT, std::ptr::null(), 1, 0);
+            gl::BindBuffer(gl::DRAW_INDIRECT_BUFFER, 0);
+            gl::BindBuffer(gl::ELEMENT_ARRAY_BUFFER, 0);
+            gl::Disable(gl::RASTERIZER_DISCARD);
+            gl::UseProgram(0);
+            gl::BindBufferBase(gl::SHADER_STORAGE_BUFFER, 0, 0);
             gl::BindTexture(gl::TEXTURE_BUFFER, 0);
             gl::BindTexture(gl::TEXTURE_2D, 0);
-            gl::ShaderStorageBlockBinding(program, 0, 0);
+            let ssbo_index = gl::GetProgramResourceIndex(program, gl::SHADER_STORAGE_BLOCK, b"DataBlock\0".as_ptr() as *const gl::types::GLchar);
+            if ssbo_index != gl::INVALID_INDEX {
+                gl::ShaderStorageBlockBinding(program, ssbo_index, 0);
+            }
             let mut texture_ms = 0;
             gl::GenTextures(1, &mut texture_ms);
             gl::BindTexture(gl::TEXTURE_2D_MULTISAMPLE, texture_ms);
@@ -148,12 +194,15 @@ impl GLTest for GL43DebugTest {
             ) {
             }
             gl::DebugMessageCallback(Some(debug_callback), std::ptr::null_mut());
-            let test_ptr: i32 = 42;
-            let ptr_addr = &test_ptr as *const i32 as *const std::ffi::c_void;
+            // glObjectPtrLabel / glGetObjectPtrLabel are only valid for sync objects, not
+            // arbitrary pointers - use a real fence sync.
+            let sync = gl::FenceSync(gl::SYNC_GPU_COMMANDS_COMPLETE, 0);
+            let ptr_addr = sync as *const std::ffi::c_void;
             gl::ObjectPtrLabel(ptr_addr, -1, b"TestPointer\0".as_ptr() as *const gl::types::GLchar);
             let mut ptr_label: [u8; 256] = [0; 256];
             let mut ptr_length = 0;
             gl::GetObjectPtrLabel(ptr_addr, 256, &mut ptr_length, ptr_label.as_mut_ptr() as *mut gl::types::GLchar);
+            gl::DeleteSync(sync);
             gl::DeleteProgram(program);
             gl::DeleteShader(vs);
             gl::DeleteFramebuffers(1, &fbo);
@@ -164,6 +213,10 @@ impl GLTest for GL43DebugTest {
             gl::DeleteTextures(1, &texture_3d_ms);
             gl::DeleteBuffers(1, &buffer);
             gl::DeleteBuffers(1, &vbo);
+            gl::DeleteBuffers(1, &draw_indirect);
+            gl::DeleteBuffers(1, &ibo);
+            gl::BindVertexArray(0);
+            gl::DeleteVertexArrays(1, &vao);
             Ok("GL 4.3 debug output and program introspection tested successfully".to_string())
         }
     }

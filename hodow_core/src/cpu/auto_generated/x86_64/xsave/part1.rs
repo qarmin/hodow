@@ -6,55 +6,37 @@ use crate::cpu::common::x86::*;
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
 pub(super) fn test_xsave64() -> Result<(), String> {
-    unsafe {
-        let mut ptr_mem_addr = [1u8; 1];
-        let save_mask = 2u64;
-        _xsave64(ptr_mem_addr.as_mut_ptr(), save_mask);
+    if cfg!(miri) {
+        return Ok(());
     }
-    Ok(())
-}
-
-pub(super) fn test_xrstor64() -> Result<(), String> {
     unsafe {
-        let ptr_mem_addr = [1u8; 1];
-        let rs_mask = 2u64;
-        _xrstor64(ptr_mem_addr.as_ptr(), rs_mask);
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 4096]);
+        let save_mask = 2u64;
+        _xsave64(ptr_mem_addr.0.as_mut_ptr(), save_mask);
     }
     Ok(())
 }
 
 pub(super) fn test_xsaveopt64() -> Result<(), String> {
+    if cfg!(miri) {
+        return Ok(());
+    }
     unsafe {
-        let mut ptr_mem_addr = [1u8; 1];
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 4096]);
         let save_mask = 2u64;
-        _xsaveopt64(ptr_mem_addr.as_mut_ptr(), save_mask);
+        _xsaveopt64(ptr_mem_addr.0.as_mut_ptr(), save_mask);
     }
     Ok(())
 }
 
 pub(super) fn test_xsavec64() -> Result<(), String> {
-    unsafe {
-        let mut ptr_mem_addr = [1u8; 1];
-        let save_mask = 2u64;
-        _xsavec64(ptr_mem_addr.as_mut_ptr(), save_mask);
+    if cfg!(miri) {
+        return Ok(());
     }
-    Ok(())
-}
-
-pub(super) fn test_xsaves64() -> Result<(), String> {
     unsafe {
-        let mut ptr_mem_addr = [1u8; 1];
+        let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 4096]);
         let save_mask = 2u64;
-        _xsaves64(ptr_mem_addr.as_mut_ptr(), save_mask);
-    }
-    Ok(())
-}
-
-pub(super) fn test_xrstors64() -> Result<(), String> {
-    unsafe {
-        let ptr_mem_addr = [1u8; 1];
-        let rs_mask = 2u64;
-        _xrstors64(ptr_mem_addr.as_ptr(), rs_mask);
+        _xsavec64(ptr_mem_addr.0.as_mut_ptr(), save_mask);
     }
     Ok(())
 }

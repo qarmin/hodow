@@ -47,9 +47,20 @@ impl GLTest for GL44BatchBindTest {
             gl::DeleteSamplers(4, samplers.as_ptr());
             let mut vbo: [u32; 4] = [0; 4];
             gl::GenBuffers(4, vbo.as_mut_ptr());
+            for &b in &vbo {
+                gl::BindBuffer(gl::ARRAY_BUFFER, b);
+                gl::BufferData(gl::ARRAY_BUFFER, 48, std::ptr::null(), gl::STATIC_DRAW);
+            }
+            gl::BindBuffer(gl::ARRAY_BUFFER, 0);
+            // glBindVertexBuffers requires a bound vertex array object (core profile).
+            let mut vao = 0u32;
+            gl::GenVertexArrays(1, &mut vao);
+            gl::BindVertexArray(vao);
             let offsets: [isize; 4] = [0, 0, 0, 0];
             let strides: [i32; 4] = [12, 12, 12, 12];
             gl::BindVertexBuffers(0, 4, vbo.as_ptr(), offsets.as_ptr(), strides.as_ptr());
+            gl::BindVertexArray(0);
+            gl::DeleteVertexArrays(1, &vao);
             gl::DeleteBuffers(4, vbo.as_ptr());
             Ok("GL 4.4 batch binding functions tested successfully".to_string())
         }

@@ -10,11 +10,8 @@ mod app_logic;
 slint::include_modules!();
 
 fn main() {
-    let config = ConfigBuilder::new()
-        .set_format_text(handsome_logger::FormatText::DefaultWithFileNameC.get(), None)
-        .build();
-    handsome_logger::TermLogger::init(config, Default::default(), Default::default())
-        .expect("Failed to initialize logger");
+    let config = ConfigBuilder::new().set_format_text(handsome_logger::FormatText::DefaultWithFileNameC.get(), None).build();
+    handsome_logger::TermLogger::init(config, Default::default(), Default::default()).expect("Failed to initialize logger");
 
     info!("Starting Hodow GUI");
 

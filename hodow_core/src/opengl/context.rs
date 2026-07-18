@@ -5,7 +5,7 @@ use std::num::NonZeroU32;
 use std::ptr::NonNull;
 use std::sync::Arc;
 
-use glutin::config::ConfigTemplateBuilder;
+use glutin::config::{ConfigSurfaceTypes, ConfigTemplateBuilder};
 use glutin::context::{ContextApi, ContextAttributesBuilder, PossiblyCurrentContext, Version};
 use glutin::display::{Display, DisplayApiPreference};
 use glutin::prelude::*;
@@ -138,10 +138,25 @@ impl OpenGLMode {
                     DisplayApiHint::GlxThenEgl => DisplayApiPreference::GlxThenEgl(noop_registrar()),
                 }
             };
-            let display = unsafe {
-                let dh = headless.display_handle().map_err(OpenGlError::from)?;
-                let raw = dh.as_raw();
-                Display::new(raw, preference).map_err(|e| OpenGlError::Other(Box::new(e)))?
+            // With no X server (and often no DRM node) the Xlib/GLX path cannot initialize.
+            // Fall back to EGL's device platform, which Mesa serves via surfaceless llvmpipe,
+            // so GPU tests still run in CI/containers/headless boxes.
+            let display = if raw_xlib_ptr.is_none() {
+                match create_egl_device_display() {
+                    Ok(d) => d,
+                    Err(e) => {
+                        log::warn!("EGL device platform unavailable ({e}); trying default EGL display");
+                        unsafe {
+                            let dh = headless.display_handle().map_err(OpenGlError::from)?;
+                            Display::new(dh.as_raw(), DisplayApiPreference::Egl).map_err(|e| OpenGlError::Other(Box::new(e)))?
+                        }
+                    }
+                }
+            } else {
+                unsafe {
+                    let dh = headless.display_handle().map_err(OpenGlError::from)?;
+                    Display::new(dh.as_raw(), preference).map_err(|e| OpenGlError::Other(Box::new(e)))?
+                }
             };
             let (inner, display) = finish_context_on_display(display, opts)?;
             Ok(OpenGLMode {
@@ -169,6 +184,38 @@ impl OpenGLMode {
     }
 }
 // ── helpers ──────────────────────────────────────────────────────────────────
+/// Create a glutin EGL display from the first available EGL device.
+///
+/// This uses `EGL_EXT_platform_device`, which does not need an X server or a window
+/// system. On machines without a GPU/DRM node Mesa still exposes a software (llvmpipe)
+/// device here, so tests can run fully headless.
+#[cfg(target_os = "linux")]
+fn create_egl_device_display() -> Result<Display, OpenGlError> {
+    use glutin::api::egl::device::Device;
+    use glutin::api::egl::display::Display as EglDisplay;
+
+    let devices: Vec<Device> = Device::query_devices().map_err(|e| OpenGlError::Other(Box::new(e)))?.collect();
+    // Prefer a device backed by a real DRM render node (hardware); fall back to the first
+    // (typically the software swrast device) when none is present.
+    let device = devices
+        .iter()
+        .find(|d| d.drm_render_device_node_path().is_some() || d.drm_device_node_path().is_some())
+        .or_else(|| devices.first())
+        .ok_or_else(|| OpenGlError::Glutin("no EGL devices available".into()))?;
+
+    log::info!(
+        "EGL device platform: name={:?} vendor={:?} drm={:?}",
+        device.name(),
+        device.vendor(),
+        device.drm_render_device_node_path().or_else(|| device.drm_device_node_path())
+    );
+
+    // SAFETY: `device` comes from `query_devices`, so the client extensions required by
+    // `with_device` have already been enumerated.
+    let egl_display = unsafe { EglDisplay::with_device(device, None).map_err(|e| OpenGlError::Other(Box::new(e)))? };
+    Ok(Display::Egl(egl_display))
+}
+
 /// A display handle that wraps an optional Xlib Display pointer.
 struct XlibBorrowedDisplay {
     ptr: Option<NonNull<std::ffi::c_void>>,
@@ -191,7 +238,9 @@ impl HasDisplayHandle for XlibBorrowedDisplay {
 /// Given an already-created glutin `Display`, pick a config, create a context
 /// and a pbuffer surface, then make it current.
 fn finish_context_on_display(display: Display, opts: &GpuOptions) -> Result<(Arc<PossiblyCurrentContext>, Display), OpenGlError> {
-    let template = ConfigTemplateBuilder::new().build();
+    // We render into a pbuffer, so only require pbuffer-capable configs. This is essential
+    // for the surfaceless/device EGL path, which offers no window-surface configs at all.
+    let template = ConfigTemplateBuilder::new().with_surface_type(ConfigSurfaceTypes::PBUFFER).build();
     let config = unsafe {
         display
             .find_configs(template)
