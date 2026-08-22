@@ -198,7 +198,7 @@ impl GLTest for GL45DSAExtendedTest {
             let mut link_status = 0;
             gl::GetProgramiv(program, gl::LINK_STATUS, &mut link_status);
             if link_status == gl::TRUE as i32 {
-                let loc = gl::GetUniformLocation(program, b"u_color\0".as_ptr() as *const gl::types::GLchar);
+                let loc = gl::GetUniformLocation(program, c"u_color".as_ptr());
                 if loc != -1 {
                     let mut uniform_val: [f32; 4] = [0.0; 4];
                     gl::GetnUniformfv(program, loc, 16, uniform_val.as_mut_ptr());

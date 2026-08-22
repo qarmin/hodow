@@ -79,13 +79,13 @@ impl GLTest for GL40TransformFeedbackTest {
             let mut num_subroutines = 0;
             gl::GetProgramStageiv(program, gl::VERTEX_SHADER, gl::ACTIVE_SUBROUTINES, &mut num_subroutines);
             if num_subroutines > 0 {
-                let red_index = gl::GetSubroutineIndex(program, gl::VERTEX_SHADER, b"redColor\0".as_ptr() as *const gl::types::GLchar);
+                let red_index = gl::GetSubroutineIndex(program, gl::VERTEX_SHADER, c"redColor".as_ptr());
                 let mut name: [u8; 256] = [0; 256];
                 let mut length = 0;
                 if red_index != gl::INVALID_INDEX {
                     gl::GetActiveSubroutineName(program, gl::VERTEX_SHADER, red_index, 256, &mut length, name.as_mut_ptr() as *mut gl::types::GLchar);
                 }
-                let loc = gl::GetSubroutineUniformLocation(program, gl::VERTEX_SHADER, b"getColor\0".as_ptr() as *const gl::types::GLchar);
+                let loc = gl::GetSubroutineUniformLocation(program, gl::VERTEX_SHADER, c"getColor".as_ptr());
                 if loc >= 0 {
                     let mut num_compat = 0;
                     gl::GetActiveSubroutineUniformiv(program, gl::VERTEX_SHADER, loc as u32, gl::NUM_COMPATIBLE_SUBROUTINES, &mut num_compat);

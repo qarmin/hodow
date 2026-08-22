@@ -17,7 +17,7 @@ impl GLTest for GL43AdvancedTest {
 
     fn run(&self) -> Result<String, Box<dyn Error>> {
         unsafe {
-            gl::PushDebugGroup(gl::DEBUG_SOURCE_APPLICATION, 1, -1, b"TestGroup\0".as_ptr() as *const gl::types::GLchar);
+            gl::PushDebugGroup(gl::DEBUG_SOURCE_APPLICATION, 1, -1, c"TestGroup".as_ptr());
             gl::PopDebugGroup();
             let mut texture = 0;
             gl::GenTextures(1, &mut texture);

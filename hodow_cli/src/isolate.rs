@@ -48,7 +48,7 @@ pub fn run_worker(start: usize) {
         let _ = writeln!(out, "START\t{i}\t{name}");
         let _ = out.flush();
 
-        let res = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| f()));
+        let res = std::panic::catch_unwind(std::panic::AssertUnwindSafe(f));
         match res {
             Ok(Ok(())) => {
                 let _ = writeln!(out, "DONE\t{i}\tOK");

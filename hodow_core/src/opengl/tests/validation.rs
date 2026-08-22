@@ -151,7 +151,7 @@ unsafe fn read_rgba8(w: i32, h: i32) -> Vec<u8> {
 
 /// Assert every pixel equals `expected` within `tol` per channel.
 fn expect_solid(pixels: &[u8], expected: [u8; 4], tol: u8) -> Result<(), Box<dyn Error>> {
-    for (i, px) in pixels.chunks_exact(4).enumerate() {
+    for (i, px) in pixels.as_chunks::<4>().0.iter().enumerate() {
         for c in 0..4 {
             if px[c].abs_diff(expected[c]) > tol {
                 return Err(format!(
@@ -241,7 +241,7 @@ impl GLTest for RenderSolidValidation {
                 }
             };
             gl::UseProgram(program);
-            let loc = gl::GetUniformLocation(program, b"uColor\0".as_ptr() as *const gl::types::GLchar);
+            let loc = gl::GetUniformLocation(program, c"uColor".as_ptr());
             // 0.25,0.5,0.75,1.0 all round-trip exactly in 8-bit unorm.
             gl::Uniform4f(loc, 0.25, 0.5, 0.75, 1.0);
 
@@ -355,7 +355,7 @@ impl GLTest for BlendValidation {
             gl::BindVertexArray(vao);
             let program = build_render_program(vs, fs)?;
             gl::UseProgram(program);
-            let loc = gl::GetUniformLocation(program, b"uColor\0".as_ptr() as *const gl::types::GLchar);
+            let loc = gl::GetUniformLocation(program, c"uColor".as_ptr());
 
             // dst = 40, src = 20 -> additive blend GL_ONE/GL_ONE -> 60 (exact in 8-bit).
             gl::ClearColor(40.0 / 255.0, 10.0 / 255.0, 0.0, 1.0);

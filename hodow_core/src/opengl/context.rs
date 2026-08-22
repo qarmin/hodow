@@ -3,7 +3,6 @@ use std::ffi::c_void;
 use std::fmt;
 use std::num::NonZeroU32;
 use std::ptr::NonNull;
-use std::sync::Arc;
 
 use glutin::config::{ConfigSurfaceTypes, ConfigTemplateBuilder};
 use glutin::context::{ContextApi, ContextAttributesBuilder, PossiblyCurrentContext, Version};
@@ -13,9 +12,13 @@ use glutin::surface::{PbufferSurface, SurfaceAttributesBuilder};
 use raw_window_handle::{DisplayHandle, HandleError, HasDisplayHandle, RawDisplayHandle, XlibDisplayHandle};
 
 use crate::opengl::{DisplayApiHint, GlApiHint, GpuOptions};
+
+/// GLX error hook registrar callback expected by `DisplayApiPreference::Glx`.
+type GlxErrorHookRegistrar = Box<dyn Fn(Box<dyn Fn(*mut c_void, *mut c_void) -> bool + Send + Sync>)>;
+
 /// Simple wrapper around a headless OpenGL context or similar.
 pub struct OpenGLMode {
-    pub(crate) inner: Arc<PossiblyCurrentContext>,
+    pub(crate) inner: PossiblyCurrentContext,
     pub(crate) display: Display,
     /// Keep the Xlib Display* alive for the lifetime of the OpenGL context.
     /// Mesa's gallium driver spawns background threads that dereference this
@@ -130,7 +133,7 @@ impl OpenGLMode {
             }
             let headless = XlibBorrowedDisplay { ptr: raw_xlib_ptr };
             let preference = {
-                let noop_registrar = || -> Box<dyn Fn(Box<dyn Fn(*mut c_void, *mut c_void) -> bool + Send + Sync>)> { Box::new(|_hook| {}) };
+                let noop_registrar = || -> GlxErrorHookRegistrar { Box::new(|_hook| {}) };
                 match opts.display_api {
                     DisplayApiHint::Egl => DisplayApiPreference::Egl,
                     DisplayApiHint::Glx => DisplayApiPreference::Glx(noop_registrar()),
@@ -237,7 +240,7 @@ impl HasDisplayHandle for XlibBorrowedDisplay {
 }
 /// Given an already-created glutin `Display`, pick a config, create a context
 /// and a pbuffer surface, then make it current.
-fn finish_context_on_display(display: Display, opts: &GpuOptions) -> Result<(Arc<PossiblyCurrentContext>, Display), OpenGlError> {
+fn finish_context_on_display(display: Display, opts: &GpuOptions) -> Result<(PossiblyCurrentContext, Display), OpenGlError> {
     // We render into a pbuffer, so only require pbuffer-capable configs. This is essential
     // for the surfaceless/device EGL path, which offers no window-surface configs at all.
     let template = ConfigTemplateBuilder::new().with_surface_type(ConfigSurfaceTypes::PBUFFER).build();
@@ -266,7 +269,7 @@ fn finish_context_on_display(display: Display, opts: &GpuOptions) -> Result<(Arc
         unsafe { display.create_pbuffer_surface(&config, &attrs).map_err(|e| OpenGlError::Other(Box::new(e)))? }
     };
     let possibly_current = not_current.make_current(&pbuffer).map_err(|e| OpenGlError::Other(Box::new(e)))?;
-    Ok((Arc::new(possibly_current), display))
+    Ok((possibly_current, display))
 }
 /// Build `ContextAttributes` from a `GlApiHint`.
 fn make_context_attrs(hint: GlApiHint) -> glutin::context::ContextAttributes {

@@ -50,9 +50,11 @@ pub fn compile_kernel_spirv() -> Result<Vec<u32>, String> {
     let mut validator = naga::valid::Validator::new(naga::valid::ValidationFlags::all(), naga::valid::Capabilities::empty());
     let info = validator.validate(&module).map_err(|e| format!("WGSL validation error: {e}"))?;
 
-    let mut options = naga::back::spv::Options::default();
     // Target Vulkan 1.1-era SPIR-V (1.3).
-    options.lang_version = (1, 3);
+    let options = naga::back::spv::Options {
+        lang_version: (1, 3),
+        ..Default::default()
+    };
     let spirv = naga::back::spv::write_vec(&module, &info, &options, None).map_err(|e| format!("SPIR-V generation error: {e}"))?;
     if spirv.first() != Some(&0x0723_0203) {
         return Err("naga produced invalid SPIR-V (bad magic number)".into());

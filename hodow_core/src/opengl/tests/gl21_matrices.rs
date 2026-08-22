@@ -53,27 +53,27 @@ impl GLTest for GL21MatricesTest {
             let mat3x4 = [1.0f32, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0];
             let mat4x2 = [1.0f32, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0];
             let mat4x3 = [1.0f32, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0];
-            let loc = gl::GetUniformLocation(program, b"matrix2x3\0".as_ptr() as *const gl::types::GLchar);
+            let loc = gl::GetUniformLocation(program, c"matrix2x3".as_ptr());
             if loc >= 0 {
                 gl::UniformMatrix2x3fv(loc, 1, gl::FALSE, mat2x3.as_ptr());
             }
-            let loc = gl::GetUniformLocation(program, b"matrix2x4\0".as_ptr() as *const gl::types::GLchar);
+            let loc = gl::GetUniformLocation(program, c"matrix2x4".as_ptr());
             if loc >= 0 {
                 gl::UniformMatrix2x4fv(loc, 1, gl::FALSE, mat2x4.as_ptr());
             }
-            let loc = gl::GetUniformLocation(program, b"matrix3x2\0".as_ptr() as *const gl::types::GLchar);
+            let loc = gl::GetUniformLocation(program, c"matrix3x2".as_ptr());
             if loc >= 0 {
                 gl::UniformMatrix3x2fv(loc, 1, gl::FALSE, mat3x2.as_ptr());
             }
-            let loc = gl::GetUniformLocation(program, b"matrix3x4\0".as_ptr() as *const gl::types::GLchar);
+            let loc = gl::GetUniformLocation(program, c"matrix3x4".as_ptr());
             if loc >= 0 {
                 gl::UniformMatrix3x4fv(loc, 1, gl::FALSE, mat3x4.as_ptr());
             }
-            let loc = gl::GetUniformLocation(program, b"matrix4x2\0".as_ptr() as *const gl::types::GLchar);
+            let loc = gl::GetUniformLocation(program, c"matrix4x2".as_ptr());
             if loc >= 0 {
                 gl::UniformMatrix4x2fv(loc, 1, gl::FALSE, mat4x2.as_ptr());
             }
-            let loc = gl::GetUniformLocation(program, b"matrix4x3\0".as_ptr() as *const gl::types::GLchar);
+            let loc = gl::GetUniformLocation(program, c"matrix4x3".as_ptr());
             if loc >= 0 {
                 gl::UniformMatrix4x3fv(loc, 1, gl::FALSE, mat4x3.as_ptr());
             }

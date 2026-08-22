@@ -95,7 +95,7 @@ impl GLTest for GL40TessellationTest {
                 gl::STATIC_DRAW,
             );
 
-            let pos_attr = gl::GetAttribLocation(program, b"position\0".as_ptr() as *const gl::types::GLchar) as u32;
+            let pos_attr = gl::GetAttribLocation(program, c"position".as_ptr()) as u32;
             gl::EnableVertexAttribArray(pos_attr);
             gl::VertexAttribPointer(pos_attr, 2, gl::FLOAT, gl::FALSE, 0, std::ptr::null());
 

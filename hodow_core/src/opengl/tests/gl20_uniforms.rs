@@ -68,61 +68,61 @@ impl GLTest for GL20UniformsTest {
                 gl::GetAttachedShaders(program, attached_count, &mut actual_count, shaders.as_mut_ptr());
             }
             gl::UseProgram(program);
-            let loc_float = gl::GetUniformLocation(program, b"uFloat1\0".as_ptr() as *const gl::types::GLchar);
+            let loc_float = gl::GetUniformLocation(program, c"uFloat1".as_ptr());
             if loc_float >= 0 {
                 gl::Uniform1f(loc_float, 1.0);
                 gl::Uniform1fv(loc_float, 1, [1.0f32].as_ptr());
                 let mut value = 0.0f32;
                 gl::GetUniformfv(program, loc_float, &mut value);
             }
-            let loc_vec2 = gl::GetUniformLocation(program, b"uVec2\0".as_ptr() as *const gl::types::GLchar);
+            let loc_vec2 = gl::GetUniformLocation(program, c"uVec2".as_ptr());
             if loc_vec2 >= 0 {
                 gl::Uniform2f(loc_vec2, 1.0, 2.0);
                 gl::Uniform2fv(loc_vec2, 1, [1.0f32, 2.0].as_ptr());
             }
-            let loc_vec3 = gl::GetUniformLocation(program, b"uVec3\0".as_ptr() as *const gl::types::GLchar);
+            let loc_vec3 = gl::GetUniformLocation(program, c"uVec3".as_ptr());
             if loc_vec3 >= 0 {
                 gl::Uniform3f(loc_vec3, 1.0, 2.0, 3.0);
                 gl::Uniform3fv(loc_vec3, 1, [1.0f32, 2.0, 3.0].as_ptr());
             }
-            let loc_vec4 = gl::GetUniformLocation(program, b"uVec4\0".as_ptr() as *const gl::types::GLchar);
+            let loc_vec4 = gl::GetUniformLocation(program, c"uVec4".as_ptr());
             if loc_vec4 >= 0 {
                 gl::Uniform4f(loc_vec4, 1.0, 2.0, 3.0, 4.0);
                 gl::Uniform4fv(loc_vec4, 1, [1.0f32, 2.0, 3.0, 4.0].as_ptr());
             }
-            let loc_int = gl::GetUniformLocation(program, b"uInt1\0".as_ptr() as *const gl::types::GLchar);
+            let loc_int = gl::GetUniformLocation(program, c"uInt1".as_ptr());
             if loc_int >= 0 {
                 gl::Uniform1i(loc_int, 42);
                 gl::Uniform1iv(loc_int, 1, [42i32].as_ptr());
                 let mut value = 0i32;
                 gl::GetUniformiv(program, loc_int, &mut value);
             }
-            let loc_ivec2 = gl::GetUniformLocation(program, b"uIVec2\0".as_ptr() as *const gl::types::GLchar);
+            let loc_ivec2 = gl::GetUniformLocation(program, c"uIVec2".as_ptr());
             if loc_ivec2 >= 0 {
                 gl::Uniform2i(loc_ivec2, 1, 2);
                 gl::Uniform2iv(loc_ivec2, 1, [1i32, 2].as_ptr());
             }
-            let loc_ivec3 = gl::GetUniformLocation(program, b"uIVec3\0".as_ptr() as *const gl::types::GLchar);
+            let loc_ivec3 = gl::GetUniformLocation(program, c"uIVec3".as_ptr());
             if loc_ivec3 >= 0 {
                 gl::Uniform3i(loc_ivec3, 1, 2, 3);
                 gl::Uniform3iv(loc_ivec3, 1, [1i32, 2, 3].as_ptr());
             }
-            let loc_ivec4 = gl::GetUniformLocation(program, b"uIVec4\0".as_ptr() as *const gl::types::GLchar);
+            let loc_ivec4 = gl::GetUniformLocation(program, c"uIVec4".as_ptr());
             if loc_ivec4 >= 0 {
                 gl::Uniform4i(loc_ivec4, 1, 2, 3, 4);
                 gl::Uniform4iv(loc_ivec4, 1, [1i32, 2, 3, 4].as_ptr());
             }
-            let loc_mat2 = gl::GetUniformLocation(program, b"uMat2\0".as_ptr() as *const gl::types::GLchar);
+            let loc_mat2 = gl::GetUniformLocation(program, c"uMat2".as_ptr());
             if loc_mat2 >= 0 {
                 let mat2: [f32; 4] = [1.0, 0.0, 0.0, 1.0];
                 gl::UniformMatrix2fv(loc_mat2, 1, gl::FALSE, mat2.as_ptr());
             }
-            let loc_mat3 = gl::GetUniformLocation(program, b"uMat3\0".as_ptr() as *const gl::types::GLchar);
+            let loc_mat3 = gl::GetUniformLocation(program, c"uMat3".as_ptr());
             if loc_mat3 >= 0 {
                 let mat3: [f32; 9] = [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0];
                 gl::UniformMatrix3fv(loc_mat3, 1, gl::FALSE, mat3.as_ptr());
             }
-            let loc_mat4 = gl::GetUniformLocation(program, b"uMat4\0".as_ptr() as *const gl::types::GLchar);
+            let loc_mat4 = gl::GetUniformLocation(program, c"uMat4".as_ptr());
             if loc_mat4 >= 0 {
                 let mat4: [f32; 16] = [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0];
                 gl::UniformMatrix4fv(loc_mat4, 1, gl::FALSE, mat4.as_ptr());

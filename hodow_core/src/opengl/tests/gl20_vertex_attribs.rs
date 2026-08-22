@@ -57,8 +57,8 @@ impl GLTest for GL20VertexAttribsTest {
             let program = gl::CreateProgram();
             gl::AttachShader(program, vs);
             gl::AttachShader(program, fs);
-            gl::BindAttribLocation(program, 0, b"position\0".as_ptr() as *const gl::types::GLchar);
-            gl::BindAttribLocation(program, 1, b"color\0".as_ptr() as *const gl::types::GLchar);
+            gl::BindAttribLocation(program, 0, c"position".as_ptr());
+            gl::BindAttribLocation(program, 1, c"color".as_ptr());
             gl::LinkProgram(program);
             gl::GetProgramiv(program, gl::LINK_STATUS, &mut status);
             if status == 0 {
@@ -72,8 +72,8 @@ impl GLTest for GL20VertexAttribsTest {
             let mut vao = 0;
             gl::GenVertexArrays(1, &mut vao);
             gl::BindVertexArray(vao);
-            let pos_loc = gl::GetAttribLocation(program, b"position\0".as_ptr() as *const gl::types::GLchar);
-            let color_loc = gl::GetAttribLocation(program, b"color\0".as_ptr() as *const gl::types::GLchar);
+            let pos_loc = gl::GetAttribLocation(program, c"position".as_ptr());
+            let color_loc = gl::GetAttribLocation(program, c"color".as_ptr());
             gl::VertexAttrib1f(2, 1.0);
             gl::VertexAttrib2f(2, 1.0, 0.5);
             gl::VertexAttrib3f(2, 1.0, 0.5, 0.25);

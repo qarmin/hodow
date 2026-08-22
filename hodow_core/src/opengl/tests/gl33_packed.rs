@@ -42,8 +42,8 @@ impl GLTest for GL33PackedTest {
             let program = gl::CreateProgram();
             gl::AttachShader(program, vs);
             gl::AttachShader(program, fs);
-            gl::BindFragDataLocationIndexed(program, 0, 0, b"FragColor0\0".as_ptr() as *const gl::types::GLchar);
-            gl::BindFragDataLocationIndexed(program, 0, 1, b"FragColor1\0".as_ptr() as *const gl::types::GLchar);
+            gl::BindFragDataLocationIndexed(program, 0, 0, c"FragColor0".as_ptr());
+            gl::BindFragDataLocationIndexed(program, 0, 1, c"FragColor1".as_ptr());
             gl::LinkProgram(program);
             gl::UseProgram(program);
 

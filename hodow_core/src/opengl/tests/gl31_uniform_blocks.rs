@@ -50,7 +50,7 @@ impl GLTest for GL31UniformBlocksTest {
             gl::AttachShader(program, fs);
             gl::LinkProgram(program);
             gl::UseProgram(program);
-            let block_index = gl::GetUniformBlockIndex(program, b"MyBlock\0".as_ptr() as *const gl::types::GLchar);
+            let block_index = gl::GetUniformBlockIndex(program, c"MyBlock".as_ptr());
             if block_index != gl::INVALID_INDEX {
                 let mut block_size = 0;
                 gl::GetActiveUniformBlockiv(program, block_index, gl::UNIFORM_BLOCK_DATA_SIZE, &mut block_size);
@@ -64,10 +64,7 @@ impl GLTest for GL31UniformBlocksTest {
                 let mut num_uniforms = 0;
                 gl::GetActiveUniformBlockiv(program, block_index, gl::UNIFORM_BLOCK_ACTIVE_UNIFORMS, &mut num_uniforms);
             }
-            let uniform_names = [
-                b"myBlock.color\0".as_ptr() as *const gl::types::GLchar,
-                b"myBlock.scale\0".as_ptr() as *const gl::types::GLchar,
-            ];
+            let uniform_names = [c"myBlock.color".as_ptr(), c"myBlock.scale".as_ptr()];
             let mut indices: [u32; 2] = [0; 2];
             gl::GetUniformIndices(program, 2, uniform_names.as_ptr(), indices.as_mut_ptr());
             if indices[0] != gl::INVALID_INDEX {

@@ -10,7 +10,7 @@ pub mod arm_shared;
 #[cfg(target_arch = "mips")]
 pub mod mips;
 
-#[cfg(all() /* nvptx not supported */)]
+// nvptx is not a standard rust target_arch, so this is always compiled
 pub mod nvptx;
 
 #[cfg(target_arch = "powerpc")]

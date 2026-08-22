@@ -28,7 +28,7 @@ impl GLTest for GL43DebugTest {
                 1,
                 gl::DEBUG_SEVERITY_NOTIFICATION,
                 -1,
-                b"Test marker\0".as_ptr() as *const gl::types::GLchar,
+                c"Test marker".as_ptr(),
             );
             let mut message_log: [u8; 1024] = [0; 1024];
             let mut sources: [u32; 10] = [0; 10];
@@ -50,7 +50,7 @@ impl GLTest for GL43DebugTest {
             gl::GenBuffers(1, &mut buffer);
             gl::BindBuffer(gl::UNIFORM_BUFFER, buffer);
             gl::BufferData(gl::UNIFORM_BUFFER, 1024, std::ptr::null(), gl::STATIC_DRAW);
-            gl::ObjectLabel(gl::BUFFER, buffer, -1, b"TestBuffer\0".as_ptr() as *const gl::types::GLchar);
+            gl::ObjectLabel(gl::BUFFER, buffer, -1, c"TestBuffer".as_ptr());
             let mut label: [u8; 256] = [0; 256];
             let mut length = 0;
             gl::GetObjectLabel(gl::BUFFER, buffer, 256, &mut length, label.as_mut_ptr() as *mut gl::types::GLchar);
@@ -91,15 +91,15 @@ impl GLTest for GL43DebugTest {
             gl::LinkProgram(program);
             let mut num_active = 0;
             gl::GetProgramInterfaceiv(program, gl::PROGRAM_INPUT, gl::ACTIVE_RESOURCES, &mut num_active);
-            let index = gl::GetProgramResourceIndex(program, gl::PROGRAM_INPUT, b"position\0".as_ptr() as *const gl::types::GLchar);
+            let index = gl::GetProgramResourceIndex(program, gl::PROGRAM_INPUT, c"position".as_ptr());
             if index != gl::INVALID_INDEX {
                 let props = [gl::TYPE, gl::LOCATION];
                 let mut values: [i32; 2] = [0; 2];
                 let mut written = 0;
                 gl::GetProgramResourceiv(program, gl::PROGRAM_INPUT, index, 2, props.as_ptr(), 2, &mut written, values.as_mut_ptr());
             }
-            let _location = gl::GetProgramResourceLocation(program, gl::PROGRAM_INPUT, b"position\0".as_ptr() as *const gl::types::GLchar);
-            let _location_index = gl::GetProgramResourceLocationIndex(program, gl::PROGRAM_OUTPUT, b"FragColor\0".as_ptr() as *const gl::types::GLchar);
+            let _location = gl::GetProgramResourceLocation(program, gl::PROGRAM_INPUT, c"position".as_ptr());
+            let _location_index = gl::GetProgramResourceLocationIndex(program, gl::PROGRAM_OUTPUT, c"FragColor".as_ptr());
             let mut name: [u8; 256] = [0; 256];
             if index != gl::INVALID_INDEX {
                 gl::GetProgramResourceName(program, gl::PROGRAM_INPUT, index, 256, &mut length, name.as_mut_ptr() as *mut gl::types::GLchar);
@@ -164,7 +164,7 @@ impl GLTest for GL43DebugTest {
             gl::BindBufferBase(gl::SHADER_STORAGE_BUFFER, 0, 0);
             gl::BindTexture(gl::TEXTURE_BUFFER, 0);
             gl::BindTexture(gl::TEXTURE_2D, 0);
-            let ssbo_index = gl::GetProgramResourceIndex(program, gl::SHADER_STORAGE_BLOCK, b"DataBlock\0".as_ptr() as *const gl::types::GLchar);
+            let ssbo_index = gl::GetProgramResourceIndex(program, gl::SHADER_STORAGE_BLOCK, c"DataBlock".as_ptr());
             if ssbo_index != gl::INVALID_INDEX {
                 gl::ShaderStorageBlockBinding(program, ssbo_index, 0);
             }
@@ -198,7 +198,7 @@ impl GLTest for GL43DebugTest {
             // arbitrary pointers - use a real fence sync.
             let sync = gl::FenceSync(gl::SYNC_GPU_COMMANDS_COMPLETE, 0);
             let ptr_addr = sync as *const std::ffi::c_void;
-            gl::ObjectPtrLabel(ptr_addr, -1, b"TestPointer\0".as_ptr() as *const gl::types::GLchar);
+            gl::ObjectPtrLabel(ptr_addr, -1, c"TestPointer".as_ptr());
             let mut ptr_label: [u8; 256] = [0; 256];
             let mut ptr_length = 0;
             gl::GetObjectPtrLabel(ptr_addr, 256, &mut ptr_length, ptr_label.as_mut_ptr() as *mut gl::types::GLchar);

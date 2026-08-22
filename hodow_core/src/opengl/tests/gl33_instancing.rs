@@ -71,8 +71,8 @@ impl GLTest for GL33InstancingTest {
             gl::BindVertexArray(0);
             gl::DeleteVertexArrays(1, &vao);
             gl::DeleteBuffers(1, &vbo);
-            gl::GetFragDataLocation(program, b"FragColor\0".as_ptr() as *const gl::types::GLchar);
-            gl::GetFragDataIndex(program, b"FragColor\0".as_ptr() as *const gl::types::GLchar);
+            gl::GetFragDataLocation(program, c"FragColor".as_ptr());
+            gl::GetFragDataIndex(program, c"FragColor".as_ptr());
             gl::UseProgram(0);
             gl::DeleteShader(vs);
             gl::DeleteShader(fs);

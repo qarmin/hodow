@@ -94,7 +94,7 @@ unsafe fn run_inner(count: usize) -> Result<MemtestReport, String> {
         let program = if compute_used { Some(build_compute(COMPUTE_SRC)?) } else { None };
         let u_count_loc = program.map(|p| {
             gl::UseProgram(p);
-            gl::GetUniformLocation(p, b"uCount\0".as_ptr() as *const gl::types::GLchar)
+            gl::GetUniformLocation(p, c"uCount".as_ptr())
         });
 
         let mut ssbo = 0u32;

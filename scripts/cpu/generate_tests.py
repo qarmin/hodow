@@ -743,8 +743,9 @@ def gen_ext_rs(arch: str, ext: str, funcs: list[dict], n_parts: int) -> str:
     return "\n".join(lines) + "\n"
 
 
-def get_target_arch_cfg(arch: str) -> str:
-    """Return the target_arch cfg expression for the given architecture."""
+def get_target_arch_cfg(arch: str) -> str | None:
+    """Return the target_arch cfg expression for the given architecture, or None if the
+    architecture has no real target_arch to gate on (always compiled)."""
     if arch == "x86":
         # x86 intrinsics work on both x86 and x86_64 (backward compatibility)
         return 'any(target_arch = "x86", target_arch = "x86_64")'
@@ -758,9 +759,18 @@ def get_target_arch_cfg(arch: str) -> str:
         # arm_shared works for both arm and aarch64
         return 'any(target_arch = "arm", target_arch = "aarch64")'
     elif arch == "nvptx":
-        # nvptx is not a standard rust target_arch, skip it
-        return 'all() /* nvptx not supported */'
+        # nvptx is not a standard rust target_arch, so there is nothing to gate on
+        return None
     return f"target_arch = \"{arch}\""
+
+
+def emit_arch_cfg(lines: list[str], arch_cfg: str | None, indent: str = "") -> None:
+    """Append either a `#[cfg(...)]` attribute line or, if the architecture has no real
+    target_arch (e.g. nvptx), an explanatory comment instead."""
+    if arch_cfg is None:
+        lines.append(f"{indent}// nvptx is not a standard rust target_arch, so this is always compiled")
+    else:
+        lines.append(f"{indent}#[cfg({arch_cfg})]")
 
 
 def gen_mod_rs_for_arch(exts: list[tuple[str, str]]) -> str:
@@ -781,8 +791,7 @@ def gen_root_mod_rs(archs: list[str]) -> str:
     """Generate root mod.rs for auto_generated/ directory."""
     lines = []
     for arch in sorted(archs):
-        cfg = get_target_arch_cfg(arch)
-        lines.append(f"#[cfg({cfg})]")
+        emit_arch_cfg(lines, get_target_arch_cfg(arch))
         lines.append(f"pub mod {arch};")
         lines.append("")
 
@@ -827,7 +836,7 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
     # Group by architecture
     for arch in sorted(all_data.keys()):
         arch_cfg = get_target_arch_cfg(arch)
-        lines.append(f"    #[cfg({arch_cfg})]")
+        emit_arch_cfg(lines, arch_cfg, "    ")
         lines.append("    {")
 
         for ext, funcs in sorted(all_data[arch].items()):
@@ -867,7 +876,7 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
         arch_cfg = get_target_arch_cfg(arch)
         # Simplify arch name for display
         arch_display = arch.replace("_shared", "")
-        lines.append(f"    #[cfg({arch_cfg})]")
+        emit_arch_cfg(lines, arch_cfg, "    ")
         lines.append("    {")
 
         for ext, funcs in sorted(all_data[arch].items()):
@@ -906,7 +915,7 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
     # Generate test_all_extensions
     for arch in sorted(all_data.keys()):
         arch_cfg = get_target_arch_cfg(arch)
-        lines.append(f"    #[cfg({arch_cfg})]")
+        emit_arch_cfg(lines, arch_cfg, "    ")
         lines.append("    {")
 
         for ext, funcs in sorted(all_data[arch].items()):
@@ -967,7 +976,7 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
     # Generate list_all_functions
     for arch in sorted(all_data.keys()):
         arch_cfg = get_target_arch_cfg(arch)
-        lines.append(f"    #[cfg({arch_cfg})]")
+        emit_arch_cfg(lines, arch_cfg, "    ")
         lines.append("    {")
 
         for ext, funcs in sorted(all_data[arch].items()):
@@ -1007,7 +1016,7 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
 
     for arch in sorted(all_data.keys()):
         arch_cfg = get_target_arch_cfg(arch)
-        lines.append(f"    #[cfg({arch_cfg})]")
+        emit_arch_cfg(lines, arch_cfg, "    ")
         lines.append("    {")
 
         for ext, funcs in sorted(all_data[arch].items()):

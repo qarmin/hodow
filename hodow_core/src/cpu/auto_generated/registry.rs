@@ -44,7 +44,7 @@ pub fn count_available_features() -> usize {
         }
     }
 
-    #[cfg(all() /* nvptx not supported */)]
+    // nvptx is not a standard rust target_arch, so this is always compiled
     {
         if false
         /* no runtime detection available */
@@ -532,7 +532,7 @@ pub fn available_modes() -> Vec<String> {
         }
     }
 
-    #[cfg(all() /* nvptx not supported */)]
+    // nvptx is not a standard rust target_arch, so this is always compiled
     {
         if false
         /* no runtime detection available */
@@ -1009,7 +1009,7 @@ pub fn test_all_extensions(progress_callback: Option<&ProgressCallback>) -> Resu
         }
     }
 
-    #[cfg(all() /* nvptx not supported */)]
+    // nvptx is not a standard rust target_arch, so this is always compiled
     {
         if false /* no runtime detection available */ && !should_skip_feature("packed") {
             if should_stop() {
@@ -2730,7 +2730,7 @@ pub fn list_all_functions() -> Vec<String> {
         }
     }
 
-    #[cfg(all() /* nvptx not supported */)]
+    // nvptx is not a standard rust target_arch, so this is always compiled
     {
         {
             for (_, name) in crate::cpu::auto_generated::nvptx::packed::PACKED::get_tests() {
@@ -3337,7 +3337,7 @@ pub fn all_tests() -> Vec<(&'static str, &'static TestFunction)> {
         }
     }
 
-    #[cfg(all() /* nvptx not supported */)]
+    // nvptx is not a standard rust target_arch, so this is always compiled
     {
         if false
         /* no runtime detection available */

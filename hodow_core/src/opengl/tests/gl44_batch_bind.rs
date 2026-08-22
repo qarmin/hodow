@@ -19,8 +19,8 @@ impl GLTest for GL44BatchBindTest {
         unsafe {
             let mut buffers: [u32; 4] = [0; 4];
             gl::GenBuffers(4, buffers.as_mut_ptr());
-            for i in 0..4 {
-                gl::BindBuffer(gl::UNIFORM_BUFFER, buffers[i]);
+            for &buffer in &buffers {
+                gl::BindBuffer(gl::UNIFORM_BUFFER, buffer);
                 gl::BufferStorage(gl::UNIFORM_BUFFER, 256, std::ptr::null(), gl::DYNAMIC_STORAGE_BIT);
             }
             gl::BindBuffer(gl::UNIFORM_BUFFER, 0);
@@ -31,8 +31,8 @@ impl GLTest for GL44BatchBindTest {
             gl::DeleteBuffers(4, buffers.as_ptr());
             let mut textures: [u32; 4] = [0; 4];
             gl::GenTextures(4, textures.as_mut_ptr());
-            for i in 0..4 {
-                gl::BindTexture(gl::TEXTURE_2D, textures[i]);
+            for &texture in &textures {
+                gl::BindTexture(gl::TEXTURE_2D, texture);
                 gl::TexImage2D(gl::TEXTURE_2D, 0, gl::RGBA8 as i32, 64, 64, 0, gl::RGBA, gl::UNSIGNED_BYTE, std::ptr::null());
             }
             gl::BindTexture(gl::TEXTURE_2D, 0);

@@ -88,7 +88,7 @@ pub fn run_stress(args: &CpuArgs) {
                     while Instant::now() < deadline && !stop.load(Ordering::Relaxed) {
                         for (name, f) in &tests {
                             tests_executed += 1;
-                            let res = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| f()));
+                            let res = std::panic::catch_unwind(std::panic::AssertUnwindSafe(f));
                             match res {
                                 Ok(Ok(())) => {}
                                 Ok(Err(e)) => failures.push((name, e)),

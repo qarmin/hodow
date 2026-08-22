@@ -69,11 +69,11 @@ impl GLTest for GL30AdvancedTest {
             let program = gl::CreateProgram();
             gl::AttachShader(program, vs);
             gl::AttachShader(program, fs);
-            let varyings = [b"vPosition\0".as_ptr() as *const gl::types::GLchar];
+            let varyings = [c"vPosition".as_ptr()];
             gl::TransformFeedbackVaryings(program, 1, varyings.as_ptr(), gl::INTERLEAVED_ATTRIBS);
             gl::LinkProgram(program);
             gl::UseProgram(program);
-            gl::BindFragDataLocation(program, 0, b"FragColor\0".as_ptr() as *const gl::types::GLchar);
+            gl::BindFragDataLocation(program, 0, c"FragColor".as_ptr());
             let mut name: [u8; 256] = [0; 256];
             let mut length = 0;
             let mut size = 0;
@@ -110,10 +110,10 @@ impl GLTest for GL30AdvancedTest {
                 gl::FlushMappedBufferRange(gl::ARRAY_BUFFER, 0, 256);
                 gl::UnmapBuffer(gl::ARRAY_BUFFER);
             }
-            let loc1 = gl::GetUniformLocation(program, b"u1\0".as_ptr() as *const gl::types::GLchar);
-            let loc2 = gl::GetUniformLocation(program, b"u2\0".as_ptr() as *const gl::types::GLchar);
-            let loc3 = gl::GetUniformLocation(program, b"u3\0".as_ptr() as *const gl::types::GLchar);
-            let loc4 = gl::GetUniformLocation(program, b"u4\0".as_ptr() as *const gl::types::GLchar);
+            let loc1 = gl::GetUniformLocation(program, c"u1".as_ptr());
+            let loc2 = gl::GetUniformLocation(program, c"u2".as_ptr());
+            let loc3 = gl::GetUniformLocation(program, c"u3".as_ptr());
+            let loc4 = gl::GetUniformLocation(program, c"u4".as_ptr());
             if loc1 != -1 {
                 let mut uint_val = 0u32;
                 gl::GetUniformuiv(program, loc1, &mut uint_val);

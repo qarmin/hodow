@@ -82,7 +82,7 @@ impl GLTest for GL32SyncTest {
             let program = gl::CreateProgram();
             gl::AttachShader(program, vs);
             gl::AttachShader(program, fs);
-            gl::BindAttribLocation(program, 0, b"position\0".as_ptr() as *const gl::types::GLchar);
+            gl::BindAttribLocation(program, 0, c"position".as_ptr());
             gl::LinkProgram(program);
             gl::UseProgram(program);
 
