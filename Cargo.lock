@@ -2036,7 +2036,6 @@ dependencies = [
  "glutin-winit",
  "log",
  "naga",
- "once_cell",
  "rand 0.10.2",
  "raw-window-handle",
  "winit",

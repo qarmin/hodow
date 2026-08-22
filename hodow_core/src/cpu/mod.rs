@@ -4,10 +4,10 @@
 #![allow(unused)]
 
 use std::collections::HashSet;
+use std::sync::OnceLock;
 use std::sync::atomic::{AtomicBool, Ordering};
 
 use log::{error, info};
-use once_cell::sync::OnceCell;
 
 pub mod auto_generated;
 pub(crate) mod common;
@@ -64,12 +64,12 @@ pub const DEFAULT_TEST_ITERATIONS: usize = 0;
 #[allow(dead_code)]
 pub const DEFAULT_TEST_ITERATIONS: usize = 0;
 
-static ITERATIONS: OnceCell<usize> = OnceCell::new();
-static SKIP_TESTS: OnceCell<HashSet<String>> = OnceCell::new();
+static ITERATIONS: OnceLock<usize> = OnceLock::new();
+static SKIP_TESTS: OnceLock<HashSet<String>> = OnceLock::new();
 /// When set, only tests whose names appear in this set will be run.
-static ONLY_TESTS: OnceCell<HashSet<String>> = OnceCell::new();
+static ONLY_TESTS: OnceLock<HashSet<String>> = OnceLock::new();
 /// When set, only features whose names appear in this set will be run.
-static ONLY_FEATURES: OnceCell<HashSet<String>> = OnceCell::new();
+static ONLY_FEATURES: OnceLock<HashSet<String>> = OnceLock::new();
 static STOP_REQUESTED: AtomicBool = AtomicBool::new(false);
 
 pub fn set_iterations(n: usize) {

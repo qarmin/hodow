@@ -3,7 +3,7 @@
 #![allow(unused_imports)]
 #![allow(clippy::macro_metavars_in_unsafe)]
 
-use once_cell::sync::OnceCell;
+use std::sync::OnceLock;
 
 pub mod cpu;
 
@@ -24,11 +24,11 @@ pub use opengl::memtest::{MemtestReport, run_memtest};
 #[cfg(feature = "gpu")]
 pub use opengl::{DisplayApiHint, GLTestResult, GlApiHint, GpuOptions, OpenGLMode, available_opengl_modes, init_opengl, test_all_opengl};
 
-static FUZZING: OnceCell<bool> = OnceCell::new();
+static FUZZING: OnceLock<bool> = OnceLock::new();
 
 pub fn get_fuzzing() -> bool {
     // Fuzzing is enabled by default; reading it must not mutate the cell, otherwise a
-    // later `set_fuzzing(false)` would be silently ignored (OnceCell only accepts the
+    // later `set_fuzzing(false)` would be silently ignored (OnceLock only accepts the
     // first write) and concurrent readers could race on the initializing write.
     *FUZZING.get().unwrap_or(&true)
 }
