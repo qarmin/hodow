@@ -2,6 +2,7 @@
 name = "hodow_core"
 version.workspace = true
 edition.workspace = true
+rust-version.workspace = true
 
 [dependencies]
 log.workspace = true
@@ -11,15 +12,15 @@ rand.workspace = true
 # Optional GPU dependencies
 glutin = { version = "0.32.3", optional = true }
 glutin-winit = { version = "0.5.0", default-features = false, features = ["egl", "x11", "wayland"], optional = true }
-glow = { version = "0.16.0", optional = true }
+glow = { version = "0.18.0", optional = true }
 gl = { version = "0.14", optional = true }
 winit = { version = "0.30", optional = true }
 raw-window-handle = { version = "0.6.2", optional = true }
-x11-dl = { version = "2.20.0", optional = true }
+x11-dl = { version = "2.21.0", optional = true }
 
 # Vulkan compute testing (pure-Rust: ash = libvulkan FFI, naga = WGSL->SPIR-V, no C deps)
 ash = { version = "0.38", optional = true }
-naga = { version = "29", optional = true, features = ["wgsl-in", "spv-out"] }
+naga = { version = "30", optional = true, features = ["wgsl-in", "spv-out"] }
 
 [features]
 miri_build = []
