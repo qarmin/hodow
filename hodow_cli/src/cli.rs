@@ -19,6 +19,28 @@ pub enum Commands {
     Gpu(GpuArgs),
     /// Run Vulkan compute validation on every Vulkan device
     Vulkan(VulkanArgs),
+    /// Run a persistent job-queue server with a web dashboard
+    #[cfg(feature = "serve")]
+    Serve(ServeArgs),
+}
+
+// ── Serve ───────────────────────────────────────────────────────────────────
+
+#[cfg(feature = "serve")]
+#[derive(Args)]
+pub struct ServeArgs {
+    /// Address to bind the HTTP server to (default: 0.0.0.0 - reachable on the LAN).
+    #[arg(long = "bind", value_name = "ADDR")]
+    pub bind: Option<String>,
+
+    /// Port to bind the HTTP server to (default: 7878).
+    #[arg(short = 'p', long = "port", value_name = "PORT")]
+    pub port: Option<u16>,
+
+    /// Directory holding the job queue/history (default: $XDG_DATA_HOME/hodow/serve or
+    /// ~/.local/share/hodow/serve).
+    #[arg(long = "data-dir", value_name = "DIR")]
+    pub data_dir: Option<std::path::PathBuf>,
 }
 
 // ── Vulkan ────────────────────────────────────────────────────────────────────
@@ -75,6 +97,12 @@ pub struct CpuArgs {
     /// Internal: run as an isolation worker starting at the given test index. Hidden.
     #[arg(long = "worker-start", value_name = "INDEX", hide = true)]
     pub worker_start: Option<usize>,
+
+    /// Submit this as a job to a running `hodow_cli serve` instead of running it locally
+    /// (e.g. --submit-to http://localhost:7878).
+    #[cfg(feature = "serve")]
+    #[arg(long = "submit-to", value_name = "URL")]
+    pub submit_to: Option<String>,
 }
 
 // ── GPU ─────────────────────────────────────────────────────────────────────

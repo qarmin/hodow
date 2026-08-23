@@ -12,6 +12,8 @@ mod cli;
 mod cpu;
 mod gpu;
 mod isolate;
+#[cfg(feature = "serve")]
+mod serve;
 mod stress;
 mod vulkan;
 
@@ -101,5 +103,7 @@ fn main() {
         Commands::Cpu(args) => cpu::process_cpu(args),
         Commands::Gpu(args) => gpu::process_gpu(args),
         Commands::Vulkan(args) => vulkan::process_vulkan(args),
+        #[cfg(feature = "serve")]
+        Commands::Serve(args) => serve::process_serve(args),
     }
 }

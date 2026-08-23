@@ -18,8 +18,15 @@ cpu *args:
 stress *args:
     RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --release -- -d cpu --stress {{args}}
 
+serve *args:
+    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli -- -d serve {{args}}
+
+# Submit a CPU job to a running `just serve` instance, e.g. `just submit -e avx2`.
+submit *args:
+    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli -- -d cpu --submit-to http://127.0.0.1:7878 {{args}}
+
 arm:
-    cargo zigbuild -p hodow_cli --target armv7-unknown-linux-gnueabihf.2.28 --features gpu
+    cargo zigbuild -p hodow_cli --target armv7-unknown-linux-gnueabihf.2.28 --no-default-features --features gpu
 
 gpu *args:
     RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features gpu -- -d gpu --time-limit 1000 {{args}}

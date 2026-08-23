@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>hodow - job queue</title>
+<style>
+  :root { color-scheme: dark light; }
+  body { font-family: system-ui, sans-serif; margin: 2rem; background: #14161a; color: #e6e6e6; }
+  h1 { font-size: 1.3rem; }
+  form { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; align-items: end; }
+  form label { display: flex; flex-direction: column; font-size: 0.75rem; color: #999; }
+  input { background: #1e2127; color: #e6e6e6; border: 1px solid #333; border-radius: 4px; padding: 0.35rem; }
+  button { background: #2d6cdf; color: white; border: none; border-radius: 4px; padding: 0.45rem 0.9rem; cursor: pointer; }
+  button.secondary { background: #444; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  th, td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid #2a2d33; }
+  tr.running { background: #22314a; }
+  tr.failed, tr.crashed, tr.interrupted { background: #3a2222; }
+  tr.succeeded { background: #1f3322; }
+  .status { font-weight: 600; }
+  .status.queued { color: #aaa; }
+  .status.running { color: #58a6ff; }
+  .status.succeeded { color: #3fb950; }
+  .status.failed, .status.crashed, .status.interrupted { color: #f85149; }
+  .status.cancelled { color: #999; }
+  pre#detail { background: #1e2127; padding: 1rem; max-height: 40vh; overflow: auto; border-radius: 6px; }
+</style>
+</head>
+<body>
+<h1>hodow - CPU job queue</h1>
+
+<form id="submit-form">
+  <label>test function(s), comma-sep <input name="test_function" placeholder="(all)"></label>
+  <label>feature(s), comma-sep <input name="feature" placeholder="sse2,avx2"></label>
+  <label>skip, comma-sep <input name="skip"></label>
+  <label>iterations <input name="iterations" type="number" min="0"></label>
+  <label>isolate timeout ms <input name="isolate_timeout_ms" type="number" min="1"></label>
+  <button type="submit">Submit CPU job</button>
+</form>
+
+<table id="jobs">
+  <thead><tr><th>id</th><th>status</th><th>spec</th><th>summary</th><th>submitted</th><th></th></tr></thead>
+  <tbody></tbody>
+</table>
+
+<h2>Detail</h2>
+<pre id="detail">Click a job row for details.</pre>
+
+<script>
+const tbody = document.querySelector('#jobs tbody');
+const detail = document.getElementById('detail');
+let jobs = {};
+
+function fmtTs(ms) {
+  return ms ? new Date(ms).toLocaleString() : '-';
+}
+
+function fmtSpec(kind) {
+  if (kind.kind !== 'cpu') return JSON.stringify(kind);
+  const s = kind.spec;
+  const bits = [];
+  if (s.test_function && s.test_function.length) bits.push('t=' + s.test_function.join(','));
+  if (s.feature && s.feature.length) bits.push('e=' + s.feature.join(','));
+  if (s.skip && s.skip.length) bits.push('s=' + s.skip.join(','));
+  if (s.iterations) bits.push('n=' + s.iterations);
+  return bits.length ? bits.join(' ') : '(all tests)';
+}
+
+function fmtSummary(sum) {
+  if (!sum || sum.total === 0) return '-';
+  return `${sum.passed}/${sum.total} passed` + (sum.failed ? `, ${sum.failed} failed` : '') +
+    (sum.crashed ? `, ${sum.crashed} crashed` : '') + (sum.timed_out ? `, ${sum.timed_out} timed out` : '');
+}
+
+function statusText(status) {
+  if (status.status === 'crashed') return `crashed (${status.culprit_test})`;
+  return status.status;
+}
+
+function render() {
+  const rows = Object.values(jobs).sort((a, b) => b.id - a.id);
+  tbody.innerHTML = '';
+  for (const j of rows) {
+    const tr = document.createElement('tr');
+    tr.className = j.status.status;
+    tr.innerHTML = `
+      <td>${j.id}</td>
+      <td class="status ${j.status.status}">${statusText(j.status)}</td>
+      <td>${fmtSpec(j.kind)}</td>
+      <td>${fmtSummary(j.summary)}</td>
+      <td>${fmtTs(j.submitted_at_ms)}</td>
+      <td>${j.status.status === 'queued' ? `<button class="secondary" data-cancel="${j.id}">cancel</button>` : ''}</td>
+    `;
+    tr.addEventListener('click', (e) => {
+      if (e.target.dataset.cancel) return;
+      showDetail(j.id);
+    });
+    tbody.appendChild(tr);
+  }
+  tbody.querySelectorAll('[data-cancel]').forEach((btn) => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      await fetch('/api/jobs/' + btn.dataset.cancel, { method: 'DELETE' });
+      refreshSnapshot();
+    });
+  });
+}
+
+async function showDetail(id) {
+  const res = await fetch('/api/jobs/' + id);
+  const data = await res.json();
+  detail.textContent = JSON.stringify(data, null, 2);
+}
+
+async function refreshSnapshot() {
+  const res = await fetch('/api/jobs');
+  const data = await res.json();
+  jobs = {};
+  for (const j of data.jobs) jobs[j.id] = j;
+  render();
+}
+
+document.getElementById('submit-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const f = new FormData(e.target);
+  const splitCsv = (v) => (v ? v.split(',').map((s) => s.trim()).filter(Boolean) : []);
+  const spec = {
+    test_function: splitCsv(f.get('test_function')) || null,
+    feature: splitCsv(f.get('feature')),
+    skip: splitCsv(f.get('skip')),
+    iterations: f.get('iterations') ? parseInt(f.get('iterations'), 10) : null,
+    isolate_timeout_ms: f.get('isolate_timeout_ms') ? parseInt(f.get('isolate_timeout_ms'), 10) : null,
+  };
+  if (spec.test_function.length === 0) spec.test_function = null;
+  await fetch('/api/jobs', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ kind: 'cpu', spec }),
+  });
+  e.target.reset();
+  refreshSnapshot();
+});
+
+function connectWs() {
+  const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+  const ws = new WebSocket(`${proto}://${location.host}/api/ws`);
+  ws.onmessage = (ev) => {
+    const msg = JSON.parse(ev.data);
+    if (msg.type === 'job_started') {
+      if (jobs[msg.id]) jobs[msg.id].status = { status: 'running' };
+    } else if (msg.type === 'job_finished') {
+      if (jobs[msg.id]) { jobs[msg.id].status = msg.status; jobs[msg.id].summary = msg.summary; }
+    } else if (msg.type === 'job_progress') {
+      // Live per-test progress isn't persisted into the row view; a full refresh after
+      // job_finished is enough for the table. Detail view re-fetches on click.
+    }
+    render();
+  };
+  ws.onclose = () => setTimeout(connectWs, 2000);
+}
+
+refreshSnapshot();
+connectWs();
+</script>
+</body>
+</html>
