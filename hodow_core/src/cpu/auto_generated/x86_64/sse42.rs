@@ -13,7 +13,7 @@ impl ExtensionTest for SSE42 {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_mm_crc32_u64, "test_mm_crc32_u64"),
+            (&test_x86_64_sse42_mm_crc32_u64, "test_x86_64_sse42_mm_crc32_u64"),
         ]
     }
 }

@@ -13,8 +13,8 @@ impl ExtensionTest for MEMORY {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_memory_size, "test_memory_size"),
-            (&test_memory_grow, "test_memory_grow"),
+            (&test_wasm32_memory_memory_size, "test_wasm32_memory_memory_size"),
+            (&test_wasm32_memory_memory_grow, "test_wasm32_memory_memory_grow"),
         ]
     }
 }

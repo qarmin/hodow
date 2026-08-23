@@ -8,7 +8,7 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_mm512_mask_cvt_roundepu64_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_mask_cvt_roundepu64_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -31,7 +31,7 @@ pub(super) fn test_mm512_mask_cvt_roundepu64_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_cvt_roundepu64_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_maskz_cvt_roundepu64_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -54,7 +54,7 @@ pub(super) fn test_mm512_maskz_cvt_roundepu64_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvtepu64_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_cvtepu64_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -77,7 +77,7 @@ pub(super) fn test_mm_cvtepu64_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cvtepu64_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_mask_cvtepu64_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -100,7 +100,7 @@ pub(super) fn test_mm_mask_cvtepu64_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_cvtepu64_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_maskz_cvtepu64_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -123,7 +123,7 @@ pub(super) fn test_mm_maskz_cvtepu64_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cvtepu64_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm256_cvtepu64_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -146,7 +146,7 @@ pub(super) fn test_mm256_cvtepu64_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cvtepu64_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm256_mask_cvtepu64_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -169,7 +169,7 @@ pub(super) fn test_mm256_mask_cvtepu64_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_cvtepu64_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm256_maskz_cvtepu64_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -192,7 +192,7 @@ pub(super) fn test_mm256_maskz_cvtepu64_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cvtepu64_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_cvtepu64_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -215,7 +215,7 @@ pub(super) fn test_mm512_cvtepu64_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cvtepu64_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_mask_cvtepu64_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -238,7 +238,7 @@ pub(super) fn test_mm512_mask_cvtepu64_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_cvtepu64_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_maskz_cvtepu64_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -261,7 +261,7 @@ pub(super) fn test_mm512_maskz_cvtepu64_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cvt_roundepu64_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_cvt_roundepu64_ps() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -284,7 +284,7 @@ pub(super) fn test_mm512_cvt_roundepu64_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cvt_roundepu64_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_mask_cvt_roundepu64_ps() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -307,7 +307,7 @@ pub(super) fn test_mm512_mask_cvt_roundepu64_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_cvt_roundepu64_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_maskz_cvt_roundepu64_ps() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -330,7 +330,7 @@ pub(super) fn test_mm512_maskz_cvt_roundepu64_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvtepu64_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_cvtepu64_ps() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -353,7 +353,7 @@ pub(super) fn test_mm_cvtepu64_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cvtepu64_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_mask_cvtepu64_ps() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -376,7 +376,7 @@ pub(super) fn test_mm_mask_cvtepu64_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_cvtepu64_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_maskz_cvtepu64_ps() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -399,7 +399,7 @@ pub(super) fn test_mm_maskz_cvtepu64_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cvtepu64_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm256_cvtepu64_ps() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -422,7 +422,7 @@ pub(super) fn test_mm256_cvtepu64_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cvtepu64_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm256_mask_cvtepu64_ps() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -445,7 +445,7 @@ pub(super) fn test_mm256_mask_cvtepu64_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_cvtepu64_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm256_maskz_cvtepu64_ps() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -468,7 +468,7 @@ pub(super) fn test_mm256_maskz_cvtepu64_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cvtepu64_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_cvtepu64_ps() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -491,7 +491,7 @@ pub(super) fn test_mm512_cvtepu64_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cvtepu64_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_mask_cvtepu64_ps() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -514,7 +514,7 @@ pub(super) fn test_mm512_mask_cvtepu64_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_cvtepu64_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_maskz_cvtepu64_ps() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -537,7 +537,7 @@ pub(super) fn test_mm512_maskz_cvtepu64_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cvt_roundpd_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_cvt_roundpd_epi64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -560,7 +560,7 @@ pub(super) fn test_mm512_cvt_roundpd_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cvt_roundpd_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_mask_cvt_roundpd_epi64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -583,7 +583,7 @@ pub(super) fn test_mm512_mask_cvt_roundpd_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_cvt_roundpd_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_maskz_cvt_roundpd_epi64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -606,7 +606,7 @@ pub(super) fn test_mm512_maskz_cvt_roundpd_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvtpd_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_cvtpd_epi64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -629,7 +629,7 @@ pub(super) fn test_mm_cvtpd_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cvtpd_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_mask_cvtpd_epi64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -652,7 +652,7 @@ pub(super) fn test_mm_mask_cvtpd_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_cvtpd_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_maskz_cvtpd_epi64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -675,7 +675,7 @@ pub(super) fn test_mm_maskz_cvtpd_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cvtpd_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm256_cvtpd_epi64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -698,7 +698,7 @@ pub(super) fn test_mm256_cvtpd_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cvtpd_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm256_mask_cvtpd_epi64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -721,7 +721,7 @@ pub(super) fn test_mm256_mask_cvtpd_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_cvtpd_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm256_maskz_cvtpd_epi64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -744,7 +744,7 @@ pub(super) fn test_mm256_maskz_cvtpd_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cvtpd_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_cvtpd_epi64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -767,7 +767,7 @@ pub(super) fn test_mm512_cvtpd_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cvtpd_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_mask_cvtpd_epi64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -790,7 +790,7 @@ pub(super) fn test_mm512_mask_cvtpd_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_cvtpd_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_maskz_cvtpd_epi64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -813,7 +813,7 @@ pub(super) fn test_mm512_maskz_cvtpd_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cvt_roundps_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_cvt_roundps_epi64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -836,7 +836,7 @@ pub(super) fn test_mm512_cvt_roundps_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cvt_roundps_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_mask_cvt_roundps_epi64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -859,7 +859,7 @@ pub(super) fn test_mm512_mask_cvt_roundps_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_cvt_roundps_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_maskz_cvt_roundps_epi64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -882,7 +882,7 @@ pub(super) fn test_mm512_maskz_cvt_roundps_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvtps_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_cvtps_epi64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -905,7 +905,7 @@ pub(super) fn test_mm_cvtps_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cvtps_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_mask_cvtps_epi64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -928,7 +928,7 @@ pub(super) fn test_mm_mask_cvtps_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_cvtps_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_maskz_cvtps_epi64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -951,7 +951,7 @@ pub(super) fn test_mm_maskz_cvtps_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cvtps_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm256_cvtps_epi64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -974,7 +974,7 @@ pub(super) fn test_mm256_cvtps_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cvtps_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm256_mask_cvtps_epi64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -997,7 +997,7 @@ pub(super) fn test_mm256_mask_cvtps_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_cvtps_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm256_maskz_cvtps_epi64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1020,7 +1020,7 @@ pub(super) fn test_mm256_maskz_cvtps_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cvtps_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_cvtps_epi64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1043,7 +1043,7 @@ pub(super) fn test_mm512_cvtps_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cvtps_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_mask_cvtps_epi64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1066,7 +1066,7 @@ pub(super) fn test_mm512_mask_cvtps_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_cvtps_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_maskz_cvtps_epi64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1089,7 +1089,7 @@ pub(super) fn test_mm512_maskz_cvtps_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cvt_roundpd_epu64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_cvt_roundpd_epu64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1112,7 +1112,7 @@ pub(super) fn test_mm512_cvt_roundpd_epu64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cvt_roundpd_epu64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_mask_cvt_roundpd_epu64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1135,7 +1135,7 @@ pub(super) fn test_mm512_mask_cvt_roundpd_epu64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_cvt_roundpd_epu64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_maskz_cvt_roundpd_epu64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }

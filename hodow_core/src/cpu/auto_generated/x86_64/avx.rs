@@ -13,8 +13,8 @@ impl ExtensionTest for AVX {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_mm256_insert_epi64, "test_mm256_insert_epi64"),
-            (&test_mm256_extract_epi64, "test_mm256_extract_epi64"),
+            (&test_x86_64_avx_mm256_insert_epi64, "test_x86_64_avx_mm256_insert_epi64"),
+            (&test_x86_64_avx_mm256_extract_epi64, "test_x86_64_avx_mm256_extract_epi64"),
         ]
     }
 }

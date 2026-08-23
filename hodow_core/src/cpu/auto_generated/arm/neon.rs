@@ -13,10 +13,10 @@ impl ExtensionTest for NEON {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_vsli_n_p64, "test_vsli_n_p64"),
-            (&test_vsliq_n_p64, "test_vsliq_n_p64"),
-            (&test_vsri_n_p64, "test_vsri_n_p64"),
-            (&test_vsriq_n_p64, "test_vsriq_n_p64"),
+            (&test_arm_neon_vsli_n_p64, "test_arm_neon_vsli_n_p64"),
+            (&test_arm_neon_vsliq_n_p64, "test_arm_neon_vsliq_n_p64"),
+            (&test_arm_neon_vsri_n_p64, "test_arm_neon_vsri_n_p64"),
+            (&test_arm_neon_vsriq_n_p64, "test_arm_neon_vsriq_n_p64"),
         ]
     }
 }

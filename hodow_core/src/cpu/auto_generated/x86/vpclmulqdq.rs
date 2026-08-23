@@ -13,8 +13,8 @@ impl ExtensionTest for VPCLMULQDQ {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_mm512_clmulepi64_epi128, "test_mm512_clmulepi64_epi128"),
-            (&test_mm256_clmulepi64_epi128, "test_mm256_clmulepi64_epi128"),
+            (&test_x86_vpclmulqdq_mm512_clmulepi64_epi128, "test_x86_vpclmulqdq_mm512_clmulepi64_epi128"),
+            (&test_x86_vpclmulqdq_mm256_clmulepi64_epi128, "test_x86_vpclmulqdq_mm256_clmulepi64_epi128"),
         ]
     }
 }

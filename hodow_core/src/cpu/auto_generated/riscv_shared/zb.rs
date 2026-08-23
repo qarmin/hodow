@@ -13,10 +13,10 @@ impl ExtensionTest for ZB {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_orc_b, "test_orc_b"),
-            (&test_clmul, "test_clmul"),
-            (&test_clmulh, "test_clmulh"),
-            (&test_clmulr, "test_clmulr"),
+            (&test_riscv_shared_zb_orc_b, "test_riscv_shared_zb_orc_b"),
+            (&test_riscv_shared_zb_clmul, "test_riscv_shared_zb_clmul"),
+            (&test_riscv_shared_zb_clmulh, "test_riscv_shared_zb_clmulh"),
+            (&test_riscv_shared_zb_clmulr, "test_riscv_shared_zb_clmulr"),
         ]
     }
 }

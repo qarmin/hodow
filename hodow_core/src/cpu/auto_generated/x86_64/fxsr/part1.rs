@@ -5,7 +5,7 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_fxsave64() -> Result<(), String> {
+pub(super) fn test_x86_64_fxsr_fxsave64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }

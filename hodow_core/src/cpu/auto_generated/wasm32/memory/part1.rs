@@ -5,7 +5,7 @@ use crate::cpu::common::arm::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_memory_size() -> Result<(), String> {
+pub(super) fn test_wasm32_memory_memory_size() -> Result<(), String> {
     unsafe {
         let _result = memory_size::<0>();
 
@@ -24,7 +24,7 @@ pub(super) fn test_memory_size() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_memory_grow() -> Result<(), String> {
+pub(super) fn test_wasm32_memory_memory_grow() -> Result<(), String> {
     unsafe {
         let _result = memory_grow::<0>(0usize);
 

@@ -5,7 +5,7 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_mulx_u64() -> Result<(), String> {
+pub(super) fn test_x86_64_bmi2_mulx_u64() -> Result<(), String> {
     unsafe {
         let a = 1u64;
         let b = 2u64;
@@ -16,7 +16,7 @@ pub(super) fn test_mulx_u64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_bzhi_u64() -> Result<(), String> {
+pub(super) fn test_x86_64_bmi2_bzhi_u64() -> Result<(), String> {
     unsafe {
         let result = _bzhi_u64(1u64, 2u32);
         check_int_equality(result as i32, 1)?;
@@ -36,7 +36,7 @@ pub(super) fn test_bzhi_u64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_pdep_u64() -> Result<(), String> {
+pub(super) fn test_x86_64_bmi2_pdep_u64() -> Result<(), String> {
     unsafe {
         let result = _pdep_u64(1u64, 2u64);
         check_int_equality(result as i32, 2)?;
@@ -56,7 +56,7 @@ pub(super) fn test_pdep_u64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_pext_u64() -> Result<(), String> {
+pub(super) fn test_x86_64_bmi2_pext_u64() -> Result<(), String> {
     unsafe {
         let result = _pext_u64(1u64, 2u64);
         check_int_equality(result as i32, 0)?;

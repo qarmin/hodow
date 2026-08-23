@@ -5,7 +5,7 @@ use crate::cpu::common::arm::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_smaqasu() -> Result<(), String> {
+pub(super) fn test_riscv_shared_p_smaqasu() -> Result<(), String> {
     unsafe {
         let _result = smaqasu(0usize, 0usize, 0usize);
 
@@ -24,7 +24,7 @@ pub(super) fn test_smaqasu() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_kaddh() -> Result<(), String> {
+pub(super) fn test_riscv_shared_p_kaddh() -> Result<(), String> {
     unsafe {
         let _result = kaddh(0usize, 0usize);
 
@@ -43,7 +43,7 @@ pub(super) fn test_kaddh() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_ksubh() -> Result<(), String> {
+pub(super) fn test_riscv_shared_p_ksubh() -> Result<(), String> {
     unsafe {
         let _result = ksubh(0usize, 0usize);
 
@@ -62,7 +62,7 @@ pub(super) fn test_ksubh() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_ukaddh() -> Result<(), String> {
+pub(super) fn test_riscv_shared_p_ukaddh() -> Result<(), String> {
     unsafe {
         let _result = ukaddh(0usize, 0usize);
 
@@ -81,7 +81,7 @@ pub(super) fn test_ukaddh() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_uksubh() -> Result<(), String> {
+pub(super) fn test_riscv_shared_p_uksubh() -> Result<(), String> {
     unsafe {
         let _result = uksubh(0usize, 0usize);
 

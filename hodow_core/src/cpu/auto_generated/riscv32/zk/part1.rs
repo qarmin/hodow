@@ -5,7 +5,7 @@ use crate::cpu::common::arm::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_aes32esi() -> Result<(), String> {
+pub(super) fn test_riscv32_zk_aes32esi() -> Result<(), String> {
     unsafe {
         let result = aes32esi::<0>(1u32, 2u32);
         check_int_equality(result as i32, 0)?;
@@ -25,7 +25,7 @@ pub(super) fn test_aes32esi() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_aes32esmi() -> Result<(), String> {
+pub(super) fn test_riscv32_zk_aes32esmi() -> Result<(), String> {
     unsafe {
         let result = aes32esmi::<0>(1u32, 2u32);
         check_int_equality(result as i32, 0)?;
@@ -45,7 +45,7 @@ pub(super) fn test_aes32esmi() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_aes32dsi() -> Result<(), String> {
+pub(super) fn test_riscv32_zk_aes32dsi() -> Result<(), String> {
     unsafe {
         let result = aes32dsi::<0>(1u32, 2u32);
         check_int_equality(result as i32, 0)?;
@@ -65,7 +65,7 @@ pub(super) fn test_aes32dsi() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_aes32dsmi() -> Result<(), String> {
+pub(super) fn test_riscv32_zk_aes32dsmi() -> Result<(), String> {
     unsafe {
         let result = aes32dsmi::<0>(1u32, 2u32);
         check_int_equality(result as i32, 0)?;
@@ -85,7 +85,7 @@ pub(super) fn test_aes32dsmi() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_zip() -> Result<(), String> {
+pub(super) fn test_riscv32_zk_zip() -> Result<(), String> {
     unsafe {
         let result = zip(1u32);
         check_int_equality(result as i32, 0)?;
@@ -105,7 +105,7 @@ pub(super) fn test_zip() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_unzip() -> Result<(), String> {
+pub(super) fn test_riscv32_zk_unzip() -> Result<(), String> {
     unsafe {
         let result = unzip(1u32);
         check_int_equality(result as i32, 0)?;
@@ -125,7 +125,7 @@ pub(super) fn test_unzip() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_sha512sig0h() -> Result<(), String> {
+pub(super) fn test_riscv32_zk_sha512sig0h() -> Result<(), String> {
     unsafe {
         let result = sha512sig0h(1u32, 2u32);
         check_int_equality(result as i32, 0)?;
@@ -145,7 +145,7 @@ pub(super) fn test_sha512sig0h() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_sha512sig0l() -> Result<(), String> {
+pub(super) fn test_riscv32_zk_sha512sig0l() -> Result<(), String> {
     unsafe {
         let result = sha512sig0l(1u32, 2u32);
         check_int_equality(result as i32, 0)?;
@@ -165,7 +165,7 @@ pub(super) fn test_sha512sig0l() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_sha512sig1h() -> Result<(), String> {
+pub(super) fn test_riscv32_zk_sha512sig1h() -> Result<(), String> {
     unsafe {
         let result = sha512sig1h(1u32, 2u32);
         check_int_equality(result as i32, 0)?;
@@ -185,7 +185,7 @@ pub(super) fn test_sha512sig1h() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_sha512sig1l() -> Result<(), String> {
+pub(super) fn test_riscv32_zk_sha512sig1l() -> Result<(), String> {
     unsafe {
         let result = sha512sig1l(1u32, 2u32);
         check_int_equality(result as i32, 0)?;
@@ -205,7 +205,7 @@ pub(super) fn test_sha512sig1l() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_sha512sum0r() -> Result<(), String> {
+pub(super) fn test_riscv32_zk_sha512sum0r() -> Result<(), String> {
     unsafe {
         let result = sha512sum0r(1u32, 2u32);
         check_int_equality(result as i32, 0)?;
@@ -225,7 +225,7 @@ pub(super) fn test_sha512sum0r() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_sha512sum1r() -> Result<(), String> {
+pub(super) fn test_riscv32_zk_sha512sum1r() -> Result<(), String> {
     unsafe {
         let result = sha512sum1r(1u32, 2u32);
         check_int_equality(result as i32, 0)?;

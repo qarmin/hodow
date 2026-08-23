@@ -8,7 +8,7 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_mm512_setr4_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_setr4_epi64() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i32_array(_mm512_setr4_epi64(1i64, 2i64, 3i64, 4i64));
         check_array_equality(&result, &[1, 0, 2, 0, 3, 0, 4, 0, 1, 0, 2, 0, 3, 0, 4, 0])?;
@@ -28,7 +28,7 @@ pub(super) fn test_mm512_setr4_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmplt_ps_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmplt_ps_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -51,7 +51,7 @@ pub(super) fn test_mm512_cmplt_ps_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmplt_ps_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmplt_ps_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -74,7 +74,7 @@ pub(super) fn test_mm512_cmplt_ps_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmplt_ps_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmplt_ps_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -97,7 +97,7 @@ pub(super) fn test_mm512_cmplt_ps_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmplt_ps_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmplt_ps_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -120,7 +120,7 @@ pub(super) fn test_mm512_cmplt_ps_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmplt_ps_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmplt_ps_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -143,7 +143,7 @@ pub(super) fn test_mm512_cmplt_ps_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmplt_ps_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmplt_ps_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -166,7 +166,7 @@ pub(super) fn test_mm512_cmplt_ps_mask_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmplt_ps_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmplt_ps_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -189,7 +189,7 @@ pub(super) fn test_mm512_cmplt_ps_mask_boundary_allones() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm512_cmplt_ps_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmplt_ps_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -212,7 +212,7 @@ pub(super) fn test_mm512_cmplt_ps_mask_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmplt_ps_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmplt_ps_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -235,7 +235,7 @@ pub(super) fn test_mm512_cmplt_ps_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmplt_ps_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmplt_ps_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -258,7 +258,7 @@ pub(super) fn test_mm512_cmplt_ps_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmplt_ps_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmplt_ps_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -281,7 +281,7 @@ pub(super) fn test_mm512_mask_cmplt_ps_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmplt_ps_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmplt_ps_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -304,7 +304,7 @@ pub(super) fn test_mm512_mask_cmplt_ps_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmplt_ps_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmplt_ps_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -327,7 +327,7 @@ pub(super) fn test_mm512_mask_cmplt_ps_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmplt_ps_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmplt_ps_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -350,7 +350,7 @@ pub(super) fn test_mm512_mask_cmplt_ps_mask_boundary_min() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmplt_ps_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmplt_ps_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -373,7 +373,7 @@ pub(super) fn test_mm512_mask_cmplt_ps_mask_boundary_max() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmplt_ps_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmplt_ps_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -396,7 +396,7 @@ pub(super) fn test_mm512_mask_cmplt_ps_mask_boundary_zero() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmplt_ps_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmplt_ps_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -419,7 +419,7 @@ pub(super) fn test_mm512_mask_cmplt_ps_mask_boundary_allones() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmplt_ps_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmplt_ps_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -442,7 +442,7 @@ pub(super) fn test_mm512_mask_cmplt_ps_mask_boundary_mixed() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmplt_ps_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmplt_ps_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -465,7 +465,7 @@ pub(super) fn test_mm512_mask_cmplt_ps_mask_asym_min_max() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmplt_ps_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmplt_ps_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -488,7 +488,7 @@ pub(super) fn test_mm512_mask_cmplt_ps_mask_asym_max_min() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnlt_ps_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnlt_ps_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -511,7 +511,7 @@ pub(super) fn test_mm512_cmpnlt_ps_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnlt_ps_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnlt_ps_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -534,7 +534,7 @@ pub(super) fn test_mm512_cmpnlt_ps_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnlt_ps_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnlt_ps_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -557,7 +557,7 @@ pub(super) fn test_mm512_cmpnlt_ps_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnlt_ps_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnlt_ps_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -580,7 +580,7 @@ pub(super) fn test_mm512_cmpnlt_ps_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnlt_ps_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnlt_ps_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -603,7 +603,7 @@ pub(super) fn test_mm512_cmpnlt_ps_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnlt_ps_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnlt_ps_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -626,7 +626,7 @@ pub(super) fn test_mm512_cmpnlt_ps_mask_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnlt_ps_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnlt_ps_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -649,7 +649,7 @@ pub(super) fn test_mm512_cmpnlt_ps_mask_boundary_allones() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnlt_ps_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnlt_ps_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -672,7 +672,7 @@ pub(super) fn test_mm512_cmpnlt_ps_mask_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnlt_ps_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnlt_ps_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -695,7 +695,7 @@ pub(super) fn test_mm512_cmpnlt_ps_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnlt_ps_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnlt_ps_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -718,7 +718,7 @@ pub(super) fn test_mm512_cmpnlt_ps_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnlt_ps_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnlt_ps_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -741,7 +741,7 @@ pub(super) fn test_mm512_mask_cmpnlt_ps_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnlt_ps_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnlt_ps_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -764,7 +764,7 @@ pub(super) fn test_mm512_mask_cmpnlt_ps_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnlt_ps_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnlt_ps_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -787,7 +787,7 @@ pub(super) fn test_mm512_mask_cmpnlt_ps_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnlt_ps_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnlt_ps_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -810,7 +810,7 @@ pub(super) fn test_mm512_mask_cmpnlt_ps_mask_boundary_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnlt_ps_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnlt_ps_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -833,7 +833,7 @@ pub(super) fn test_mm512_mask_cmpnlt_ps_mask_boundary_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnlt_ps_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnlt_ps_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -856,7 +856,7 @@ pub(super) fn test_mm512_mask_cmpnlt_ps_mask_boundary_zero() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnlt_ps_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnlt_ps_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -879,7 +879,7 @@ pub(super) fn test_mm512_mask_cmpnlt_ps_mask_boundary_allones() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnlt_ps_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnlt_ps_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -902,7 +902,7 @@ pub(super) fn test_mm512_mask_cmpnlt_ps_mask_boundary_mixed() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnlt_ps_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnlt_ps_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -925,7 +925,7 @@ pub(super) fn test_mm512_mask_cmpnlt_ps_mask_asym_min_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnlt_ps_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnlt_ps_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -948,7 +948,7 @@ pub(super) fn test_mm512_mask_cmpnlt_ps_mask_asym_max_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_cmple_ps_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmple_ps_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -971,7 +971,7 @@ pub(super) fn test_mm512_cmple_ps_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmple_ps_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmple_ps_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -994,7 +994,7 @@ pub(super) fn test_mm512_cmple_ps_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmple_ps_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmple_ps_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1017,7 +1017,7 @@ pub(super) fn test_mm512_cmple_ps_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmple_ps_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmple_ps_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1040,7 +1040,7 @@ pub(super) fn test_mm512_cmple_ps_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmple_ps_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmple_ps_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1063,7 +1063,7 @@ pub(super) fn test_mm512_cmple_ps_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmple_ps_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmple_ps_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1086,7 +1086,7 @@ pub(super) fn test_mm512_cmple_ps_mask_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmple_ps_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmple_ps_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1109,7 +1109,7 @@ pub(super) fn test_mm512_cmple_ps_mask_boundary_allones() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm512_cmple_ps_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmple_ps_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1132,7 +1132,7 @@ pub(super) fn test_mm512_cmple_ps_mask_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmple_ps_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmple_ps_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1155,7 +1155,7 @@ pub(super) fn test_mm512_cmple_ps_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmple_ps_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmple_ps_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1178,7 +1178,7 @@ pub(super) fn test_mm512_cmple_ps_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmple_ps_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmple_ps_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1201,7 +1201,7 @@ pub(super) fn test_mm512_mask_cmple_ps_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmple_ps_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmple_ps_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1224,7 +1224,7 @@ pub(super) fn test_mm512_mask_cmple_ps_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmple_ps_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmple_ps_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1247,7 +1247,7 @@ pub(super) fn test_mm512_mask_cmple_ps_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmple_ps_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmple_ps_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1270,7 +1270,7 @@ pub(super) fn test_mm512_mask_cmple_ps_mask_boundary_min() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmple_ps_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmple_ps_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1293,7 +1293,7 @@ pub(super) fn test_mm512_mask_cmple_ps_mask_boundary_max() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmple_ps_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmple_ps_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1316,7 +1316,7 @@ pub(super) fn test_mm512_mask_cmple_ps_mask_boundary_zero() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmple_ps_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmple_ps_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1339,7 +1339,7 @@ pub(super) fn test_mm512_mask_cmple_ps_mask_boundary_allones() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmple_ps_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmple_ps_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1362,7 +1362,7 @@ pub(super) fn test_mm512_mask_cmple_ps_mask_boundary_mixed() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmple_ps_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmple_ps_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1385,7 +1385,7 @@ pub(super) fn test_mm512_mask_cmple_ps_mask_asym_min_max() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmple_ps_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmple_ps_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1408,7 +1408,7 @@ pub(super) fn test_mm512_mask_cmple_ps_mask_asym_max_min() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnle_ps_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnle_ps_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1431,7 +1431,7 @@ pub(super) fn test_mm512_cmpnle_ps_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnle_ps_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnle_ps_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1454,7 +1454,7 @@ pub(super) fn test_mm512_cmpnle_ps_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnle_ps_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnle_ps_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1477,7 +1477,7 @@ pub(super) fn test_mm512_cmpnle_ps_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnle_ps_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnle_ps_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1500,7 +1500,7 @@ pub(super) fn test_mm512_cmpnle_ps_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnle_ps_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnle_ps_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1523,7 +1523,7 @@ pub(super) fn test_mm512_cmpnle_ps_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnle_ps_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnle_ps_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1546,7 +1546,7 @@ pub(super) fn test_mm512_cmpnle_ps_mask_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnle_ps_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnle_ps_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1569,7 +1569,7 @@ pub(super) fn test_mm512_cmpnle_ps_mask_boundary_allones() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnle_ps_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnle_ps_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1592,7 +1592,7 @@ pub(super) fn test_mm512_cmpnle_ps_mask_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnle_ps_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnle_ps_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1615,7 +1615,7 @@ pub(super) fn test_mm512_cmpnle_ps_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnle_ps_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnle_ps_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1638,7 +1638,7 @@ pub(super) fn test_mm512_cmpnle_ps_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnle_ps_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnle_ps_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1661,7 +1661,7 @@ pub(super) fn test_mm512_mask_cmpnle_ps_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnle_ps_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnle_ps_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1684,7 +1684,7 @@ pub(super) fn test_mm512_mask_cmpnle_ps_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnle_ps_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnle_ps_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1707,7 +1707,7 @@ pub(super) fn test_mm512_mask_cmpnle_ps_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnle_ps_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnle_ps_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1730,7 +1730,7 @@ pub(super) fn test_mm512_mask_cmpnle_ps_mask_boundary_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnle_ps_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnle_ps_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1753,7 +1753,7 @@ pub(super) fn test_mm512_mask_cmpnle_ps_mask_boundary_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnle_ps_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnle_ps_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1776,7 +1776,7 @@ pub(super) fn test_mm512_mask_cmpnle_ps_mask_boundary_zero() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnle_ps_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnle_ps_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1799,7 +1799,7 @@ pub(super) fn test_mm512_mask_cmpnle_ps_mask_boundary_allones() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnle_ps_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnle_ps_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1822,7 +1822,7 @@ pub(super) fn test_mm512_mask_cmpnle_ps_mask_boundary_mixed() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnle_ps_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnle_ps_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1845,7 +1845,7 @@ pub(super) fn test_mm512_mask_cmpnle_ps_mask_asym_min_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnle_ps_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnle_ps_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1868,7 +1868,7 @@ pub(super) fn test_mm512_mask_cmpnle_ps_mask_asym_max_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpeq_ps_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpeq_ps_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1891,7 +1891,7 @@ pub(super) fn test_mm512_cmpeq_ps_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpeq_ps_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpeq_ps_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1914,7 +1914,7 @@ pub(super) fn test_mm512_cmpeq_ps_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpeq_ps_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpeq_ps_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1937,7 +1937,7 @@ pub(super) fn test_mm512_cmpeq_ps_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpeq_ps_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpeq_ps_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1960,7 +1960,7 @@ pub(super) fn test_mm512_cmpeq_ps_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpeq_ps_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpeq_ps_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1983,7 +1983,7 @@ pub(super) fn test_mm512_cmpeq_ps_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpeq_ps_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpeq_ps_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2006,7 +2006,7 @@ pub(super) fn test_mm512_cmpeq_ps_mask_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpeq_ps_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpeq_ps_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2029,7 +2029,7 @@ pub(super) fn test_mm512_cmpeq_ps_mask_boundary_allones() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpeq_ps_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpeq_ps_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2052,7 +2052,7 @@ pub(super) fn test_mm512_cmpeq_ps_mask_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpeq_ps_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpeq_ps_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2075,7 +2075,7 @@ pub(super) fn test_mm512_cmpeq_ps_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpeq_ps_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpeq_ps_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2098,7 +2098,7 @@ pub(super) fn test_mm512_cmpeq_ps_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpeq_ps_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpeq_ps_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2121,7 +2121,7 @@ pub(super) fn test_mm512_mask_cmpeq_ps_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpeq_ps_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpeq_ps_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2144,7 +2144,7 @@ pub(super) fn test_mm512_mask_cmpeq_ps_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpeq_ps_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpeq_ps_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2167,7 +2167,7 @@ pub(super) fn test_mm512_mask_cmpeq_ps_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpeq_ps_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpeq_ps_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2190,7 +2190,7 @@ pub(super) fn test_mm512_mask_cmpeq_ps_mask_boundary_min() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpeq_ps_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpeq_ps_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2213,7 +2213,7 @@ pub(super) fn test_mm512_mask_cmpeq_ps_mask_boundary_max() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpeq_ps_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpeq_ps_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2236,7 +2236,7 @@ pub(super) fn test_mm512_mask_cmpeq_ps_mask_boundary_zero() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpeq_ps_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpeq_ps_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2259,7 +2259,7 @@ pub(super) fn test_mm512_mask_cmpeq_ps_mask_boundary_allones() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpeq_ps_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpeq_ps_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2282,7 +2282,7 @@ pub(super) fn test_mm512_mask_cmpeq_ps_mask_boundary_mixed() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpeq_ps_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpeq_ps_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2305,7 +2305,7 @@ pub(super) fn test_mm512_mask_cmpeq_ps_mask_asym_min_max() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpeq_ps_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpeq_ps_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2328,7 +2328,7 @@ pub(super) fn test_mm512_mask_cmpeq_ps_mask_asym_max_min() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpneq_ps_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpneq_ps_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2351,7 +2351,7 @@ pub(super) fn test_mm512_cmpneq_ps_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpneq_ps_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpneq_ps_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2374,7 +2374,7 @@ pub(super) fn test_mm512_cmpneq_ps_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpneq_ps_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpneq_ps_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2397,7 +2397,7 @@ pub(super) fn test_mm512_cmpneq_ps_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpneq_ps_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpneq_ps_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2420,7 +2420,7 @@ pub(super) fn test_mm512_cmpneq_ps_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpneq_ps_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpneq_ps_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2443,7 +2443,7 @@ pub(super) fn test_mm512_cmpneq_ps_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpneq_ps_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpneq_ps_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2466,7 +2466,7 @@ pub(super) fn test_mm512_cmpneq_ps_mask_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpneq_ps_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpneq_ps_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2489,7 +2489,7 @@ pub(super) fn test_mm512_cmpneq_ps_mask_boundary_allones() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpneq_ps_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpneq_ps_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2512,7 +2512,7 @@ pub(super) fn test_mm512_cmpneq_ps_mask_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpneq_ps_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpneq_ps_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2535,7 +2535,7 @@ pub(super) fn test_mm512_cmpneq_ps_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpneq_ps_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpneq_ps_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2558,7 +2558,7 @@ pub(super) fn test_mm512_cmpneq_ps_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpneq_ps_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpneq_ps_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2581,7 +2581,7 @@ pub(super) fn test_mm512_mask_cmpneq_ps_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpneq_ps_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpneq_ps_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2604,7 +2604,7 @@ pub(super) fn test_mm512_mask_cmpneq_ps_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpneq_ps_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpneq_ps_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2627,7 +2627,7 @@ pub(super) fn test_mm512_mask_cmpneq_ps_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpneq_ps_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpneq_ps_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2650,7 +2650,7 @@ pub(super) fn test_mm512_mask_cmpneq_ps_mask_boundary_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpneq_ps_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpneq_ps_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2673,7 +2673,7 @@ pub(super) fn test_mm512_mask_cmpneq_ps_mask_boundary_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpneq_ps_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpneq_ps_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2696,7 +2696,7 @@ pub(super) fn test_mm512_mask_cmpneq_ps_mask_boundary_zero() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpneq_ps_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpneq_ps_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2719,7 +2719,7 @@ pub(super) fn test_mm512_mask_cmpneq_ps_mask_boundary_allones() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpneq_ps_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpneq_ps_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2742,7 +2742,7 @@ pub(super) fn test_mm512_mask_cmpneq_ps_mask_boundary_mixed() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpneq_ps_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpneq_ps_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2765,7 +2765,7 @@ pub(super) fn test_mm512_mask_cmpneq_ps_mask_asym_min_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpneq_ps_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpneq_ps_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2788,7 +2788,7 @@ pub(super) fn test_mm512_mask_cmpneq_ps_mask_asym_max_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_ps_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_ps_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2811,7 +2811,7 @@ pub(super) fn test_mm512_cmp_ps_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_ps_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_ps_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2834,7 +2834,7 @@ pub(super) fn test_mm512_cmp_ps_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_ps_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_ps_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2857,7 +2857,7 @@ pub(super) fn test_mm512_cmp_ps_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_ps_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_ps_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2880,7 +2880,7 @@ pub(super) fn test_mm512_cmp_ps_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_ps_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_ps_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2903,7 +2903,7 @@ pub(super) fn test_mm512_cmp_ps_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_ps_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_ps_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2926,7 +2926,7 @@ pub(super) fn test_mm512_cmp_ps_mask_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_ps_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_ps_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2949,7 +2949,7 @@ pub(super) fn test_mm512_cmp_ps_mask_boundary_allones() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_ps_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_ps_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2972,7 +2972,7 @@ pub(super) fn test_mm512_cmp_ps_mask_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_ps_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_ps_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2995,7 +2995,7 @@ pub(super) fn test_mm512_cmp_ps_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_ps_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_ps_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3018,7 +3018,7 @@ pub(super) fn test_mm512_cmp_ps_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_ps_mask_imm_0() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_ps_mask_imm_0() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3041,7 +3041,7 @@ pub(super) fn test_mm512_cmp_ps_mask_imm_0() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_ps_mask_imm_1() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_ps_mask_imm_1() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3064,7 +3064,7 @@ pub(super) fn test_mm512_cmp_ps_mask_imm_1() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_ps_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_ps_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3087,7 +3087,7 @@ pub(super) fn test_mm512_mask_cmp_ps_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_ps_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_ps_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3110,7 +3110,7 @@ pub(super) fn test_mm512_mask_cmp_ps_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_ps_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_ps_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3133,7 +3133,7 @@ pub(super) fn test_mm512_mask_cmp_ps_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_ps_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_ps_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3156,7 +3156,7 @@ pub(super) fn test_mm512_mask_cmp_ps_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_ps_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_ps_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3179,7 +3179,7 @@ pub(super) fn test_mm512_mask_cmp_ps_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_ps_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_ps_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3202,7 +3202,7 @@ pub(super) fn test_mm512_mask_cmp_ps_mask_boundary_zero() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_ps_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_ps_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3225,7 +3225,7 @@ pub(super) fn test_mm512_mask_cmp_ps_mask_boundary_allones() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_ps_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_ps_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3248,7 +3248,7 @@ pub(super) fn test_mm512_mask_cmp_ps_mask_boundary_mixed() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_ps_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_ps_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3271,7 +3271,7 @@ pub(super) fn test_mm512_mask_cmp_ps_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_ps_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_ps_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3294,7 +3294,7 @@ pub(super) fn test_mm512_mask_cmp_ps_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_ps_mask_imm_0() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_ps_mask_imm_0() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3317,7 +3317,7 @@ pub(super) fn test_mm512_mask_cmp_ps_mask_imm_0() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_ps_mask_imm_1() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_ps_mask_imm_1() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3340,7 +3340,7 @@ pub(super) fn test_mm512_mask_cmp_ps_mask_imm_1() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cmp_ps_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cmp_ps_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3363,7 +3363,7 @@ pub(super) fn test_mm256_cmp_ps_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cmp_ps_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cmp_ps_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3386,7 +3386,7 @@ pub(super) fn test_mm256_cmp_ps_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cmp_ps_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cmp_ps_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3409,7 +3409,7 @@ pub(super) fn test_mm256_cmp_ps_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cmp_ps_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cmp_ps_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3432,7 +3432,7 @@ pub(super) fn test_mm256_cmp_ps_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cmp_ps_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cmp_ps_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3455,7 +3455,7 @@ pub(super) fn test_mm256_cmp_ps_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cmp_ps_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cmp_ps_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3478,7 +3478,7 @@ pub(super) fn test_mm256_cmp_ps_mask_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cmp_ps_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cmp_ps_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3501,7 +3501,7 @@ pub(super) fn test_mm256_cmp_ps_mask_boundary_allones() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cmp_ps_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cmp_ps_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3524,7 +3524,7 @@ pub(super) fn test_mm256_cmp_ps_mask_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cmp_ps_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cmp_ps_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3547,7 +3547,7 @@ pub(super) fn test_mm256_cmp_ps_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cmp_ps_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cmp_ps_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3570,7 +3570,7 @@ pub(super) fn test_mm256_cmp_ps_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cmp_ps_mask_imm_0() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cmp_ps_mask_imm_0() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3593,7 +3593,7 @@ pub(super) fn test_mm256_cmp_ps_mask_imm_0() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cmp_ps_mask_imm_1() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cmp_ps_mask_imm_1() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3616,7 +3616,7 @@ pub(super) fn test_mm256_cmp_ps_mask_imm_1() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cmp_ps_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cmp_ps_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3639,7 +3639,7 @@ pub(super) fn test_mm256_mask_cmp_ps_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cmp_ps_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cmp_ps_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3662,7 +3662,7 @@ pub(super) fn test_mm256_mask_cmp_ps_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cmp_ps_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cmp_ps_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3685,7 +3685,7 @@ pub(super) fn test_mm256_mask_cmp_ps_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cmp_ps_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cmp_ps_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3708,7 +3708,7 @@ pub(super) fn test_mm256_mask_cmp_ps_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cmp_ps_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cmp_ps_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3731,7 +3731,7 @@ pub(super) fn test_mm256_mask_cmp_ps_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cmp_ps_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cmp_ps_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3754,7 +3754,7 @@ pub(super) fn test_mm256_mask_cmp_ps_mask_boundary_zero() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cmp_ps_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cmp_ps_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3777,7 +3777,7 @@ pub(super) fn test_mm256_mask_cmp_ps_mask_boundary_allones() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cmp_ps_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cmp_ps_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3800,7 +3800,7 @@ pub(super) fn test_mm256_mask_cmp_ps_mask_boundary_mixed() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cmp_ps_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cmp_ps_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3823,7 +3823,7 @@ pub(super) fn test_mm256_mask_cmp_ps_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cmp_ps_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cmp_ps_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3846,7 +3846,7 @@ pub(super) fn test_mm256_mask_cmp_ps_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cmp_ps_mask_imm_0() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cmp_ps_mask_imm_0() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3869,7 +3869,7 @@ pub(super) fn test_mm256_mask_cmp_ps_mask_imm_0() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cmp_ps_mask_imm_1() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cmp_ps_mask_imm_1() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3892,7 +3892,7 @@ pub(super) fn test_mm256_mask_cmp_ps_mask_imm_1() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_ps_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_ps_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3915,7 +3915,7 @@ pub(super) fn test_mm_cmp_ps_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_ps_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_ps_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3938,7 +3938,7 @@ pub(super) fn test_mm_cmp_ps_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_ps_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_ps_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3961,7 +3961,7 @@ pub(super) fn test_mm_cmp_ps_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_ps_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_ps_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3984,7 +3984,7 @@ pub(super) fn test_mm_cmp_ps_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_ps_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_ps_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4007,7 +4007,7 @@ pub(super) fn test_mm_cmp_ps_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_ps_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_ps_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4030,7 +4030,7 @@ pub(super) fn test_mm_cmp_ps_mask_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_ps_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_ps_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4053,7 +4053,7 @@ pub(super) fn test_mm_cmp_ps_mask_boundary_allones() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_ps_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_ps_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4076,7 +4076,7 @@ pub(super) fn test_mm_cmp_ps_mask_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_ps_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_ps_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4099,7 +4099,7 @@ pub(super) fn test_mm_cmp_ps_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_ps_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_ps_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4122,7 +4122,7 @@ pub(super) fn test_mm_cmp_ps_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_ps_mask_imm_0() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_ps_mask_imm_0() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4145,7 +4145,7 @@ pub(super) fn test_mm_cmp_ps_mask_imm_0() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_ps_mask_imm_1() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_ps_mask_imm_1() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4168,7 +4168,7 @@ pub(super) fn test_mm_cmp_ps_mask_imm_1() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmp_ps_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cmp_ps_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4191,7 +4191,7 @@ pub(super) fn test_mm_mask_cmp_ps_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmp_ps_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cmp_ps_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4214,7 +4214,7 @@ pub(super) fn test_mm_mask_cmp_ps_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmp_ps_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cmp_ps_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4237,7 +4237,7 @@ pub(super) fn test_mm_mask_cmp_ps_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmp_ps_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cmp_ps_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4260,7 +4260,7 @@ pub(super) fn test_mm_mask_cmp_ps_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmp_ps_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cmp_ps_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4283,7 +4283,7 @@ pub(super) fn test_mm_mask_cmp_ps_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmp_ps_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cmp_ps_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4306,7 +4306,7 @@ pub(super) fn test_mm_mask_cmp_ps_mask_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmp_ps_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cmp_ps_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4329,7 +4329,7 @@ pub(super) fn test_mm_mask_cmp_ps_mask_boundary_allones() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmp_ps_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cmp_ps_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4352,7 +4352,7 @@ pub(super) fn test_mm_mask_cmp_ps_mask_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmp_ps_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cmp_ps_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4375,7 +4375,7 @@ pub(super) fn test_mm_mask_cmp_ps_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmp_ps_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cmp_ps_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4398,7 +4398,7 @@ pub(super) fn test_mm_mask_cmp_ps_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmp_ps_mask_imm_0() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cmp_ps_mask_imm_0() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4421,7 +4421,7 @@ pub(super) fn test_mm_mask_cmp_ps_mask_imm_0() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmp_ps_mask_imm_1() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cmp_ps_mask_imm_1() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4444,7 +4444,7 @@ pub(super) fn test_mm_mask_cmp_ps_mask_imm_1() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_round_ps_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_round_ps_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4467,7 +4467,7 @@ pub(super) fn test_mm512_cmp_round_ps_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_round_ps_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_round_ps_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4490,7 +4490,7 @@ pub(super) fn test_mm512_cmp_round_ps_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_round_ps_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_round_ps_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4513,7 +4513,7 @@ pub(super) fn test_mm512_cmp_round_ps_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_round_ps_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_round_ps_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4536,7 +4536,7 @@ pub(super) fn test_mm512_cmp_round_ps_mask_boundary_min() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_round_ps_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_round_ps_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4559,7 +4559,7 @@ pub(super) fn test_mm512_cmp_round_ps_mask_boundary_max() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_round_ps_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_round_ps_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4582,7 +4582,7 @@ pub(super) fn test_mm512_cmp_round_ps_mask_boundary_zero() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_round_ps_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_round_ps_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4605,7 +4605,7 @@ pub(super) fn test_mm512_cmp_round_ps_mask_boundary_allones() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_round_ps_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_round_ps_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4628,7 +4628,7 @@ pub(super) fn test_mm512_cmp_round_ps_mask_boundary_mixed() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_round_ps_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_round_ps_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4651,7 +4651,7 @@ pub(super) fn test_mm512_cmp_round_ps_mask_asym_min_max() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_round_ps_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_round_ps_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4674,7 +4674,7 @@ pub(super) fn test_mm512_cmp_round_ps_mask_asym_max_min() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_round_ps_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_round_ps_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4697,7 +4697,7 @@ pub(super) fn test_mm512_mask_cmp_round_ps_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_round_ps_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_round_ps_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4720,7 +4720,7 @@ pub(super) fn test_mm512_mask_cmp_round_ps_mask_normal2() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_round_ps_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_round_ps_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4743,7 +4743,7 @@ pub(super) fn test_mm512_mask_cmp_round_ps_mask_normal3() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_round_ps_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_round_ps_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4766,7 +4766,7 @@ pub(super) fn test_mm512_mask_cmp_round_ps_mask_boundary_min() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_round_ps_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_round_ps_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4789,7 +4789,7 @@ pub(super) fn test_mm512_mask_cmp_round_ps_mask_boundary_max() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_round_ps_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_round_ps_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4812,7 +4812,7 @@ pub(super) fn test_mm512_mask_cmp_round_ps_mask_boundary_zero() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_round_ps_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_round_ps_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4835,7 +4835,7 @@ pub(super) fn test_mm512_mask_cmp_round_ps_mask_boundary_allones() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_round_ps_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_round_ps_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4858,7 +4858,7 @@ pub(super) fn test_mm512_mask_cmp_round_ps_mask_boundary_mixed() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_round_ps_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_round_ps_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4881,7 +4881,7 @@ pub(super) fn test_mm512_mask_cmp_round_ps_mask_asym_min_max() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_round_ps_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_round_ps_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4904,7 +4904,7 @@ pub(super) fn test_mm512_mask_cmp_round_ps_mask_asym_max_min() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpord_ps_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpord_ps_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4927,7 +4927,7 @@ pub(super) fn test_mm512_cmpord_ps_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpord_ps_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpord_ps_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4950,7 +4950,7 @@ pub(super) fn test_mm512_cmpord_ps_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpord_ps_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpord_ps_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4973,7 +4973,7 @@ pub(super) fn test_mm512_cmpord_ps_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpord_ps_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpord_ps_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4996,7 +4996,7 @@ pub(super) fn test_mm512_cmpord_ps_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpord_ps_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpord_ps_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5019,7 +5019,7 @@ pub(super) fn test_mm512_cmpord_ps_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpord_ps_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpord_ps_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5042,7 +5042,7 @@ pub(super) fn test_mm512_cmpord_ps_mask_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpord_ps_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpord_ps_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5065,7 +5065,7 @@ pub(super) fn test_mm512_cmpord_ps_mask_boundary_allones() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpord_ps_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpord_ps_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5088,7 +5088,7 @@ pub(super) fn test_mm512_cmpord_ps_mask_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpord_ps_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpord_ps_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5111,7 +5111,7 @@ pub(super) fn test_mm512_cmpord_ps_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpord_ps_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpord_ps_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5134,7 +5134,7 @@ pub(super) fn test_mm512_cmpord_ps_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpord_ps_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpord_ps_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5157,7 +5157,7 @@ pub(super) fn test_mm512_mask_cmpord_ps_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpord_ps_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpord_ps_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5180,7 +5180,7 @@ pub(super) fn test_mm512_mask_cmpord_ps_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpord_ps_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpord_ps_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5203,7 +5203,7 @@ pub(super) fn test_mm512_mask_cmpord_ps_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpord_ps_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpord_ps_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5226,7 +5226,7 @@ pub(super) fn test_mm512_mask_cmpord_ps_mask_boundary_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpord_ps_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpord_ps_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5249,7 +5249,7 @@ pub(super) fn test_mm512_mask_cmpord_ps_mask_boundary_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpord_ps_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpord_ps_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5272,7 +5272,7 @@ pub(super) fn test_mm512_mask_cmpord_ps_mask_boundary_zero() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpord_ps_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpord_ps_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5295,7 +5295,7 @@ pub(super) fn test_mm512_mask_cmpord_ps_mask_boundary_allones() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpord_ps_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpord_ps_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5318,7 +5318,7 @@ pub(super) fn test_mm512_mask_cmpord_ps_mask_boundary_mixed() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpord_ps_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpord_ps_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5341,7 +5341,7 @@ pub(super) fn test_mm512_mask_cmpord_ps_mask_asym_min_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpord_ps_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpord_ps_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5364,7 +5364,7 @@ pub(super) fn test_mm512_mask_cmpord_ps_mask_asym_max_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpunord_ps_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpunord_ps_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5387,7 +5387,7 @@ pub(super) fn test_mm512_cmpunord_ps_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpunord_ps_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpunord_ps_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5410,7 +5410,7 @@ pub(super) fn test_mm512_cmpunord_ps_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpunord_ps_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpunord_ps_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5433,7 +5433,7 @@ pub(super) fn test_mm512_cmpunord_ps_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpunord_ps_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpunord_ps_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5456,7 +5456,7 @@ pub(super) fn test_mm512_cmpunord_ps_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpunord_ps_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpunord_ps_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5479,7 +5479,7 @@ pub(super) fn test_mm512_cmpunord_ps_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpunord_ps_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpunord_ps_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5502,7 +5502,7 @@ pub(super) fn test_mm512_cmpunord_ps_mask_boundary_zero() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpunord_ps_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpunord_ps_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5525,7 +5525,7 @@ pub(super) fn test_mm512_cmpunord_ps_mask_boundary_allones() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpunord_ps_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpunord_ps_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5548,7 +5548,7 @@ pub(super) fn test_mm512_cmpunord_ps_mask_boundary_mixed() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpunord_ps_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpunord_ps_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5571,7 +5571,7 @@ pub(super) fn test_mm512_cmpunord_ps_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpunord_ps_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpunord_ps_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5594,7 +5594,7 @@ pub(super) fn test_mm512_cmpunord_ps_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpunord_ps_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpunord_ps_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5617,7 +5617,7 @@ pub(super) fn test_mm512_mask_cmpunord_ps_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpunord_ps_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpunord_ps_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5640,7 +5640,7 @@ pub(super) fn test_mm512_mask_cmpunord_ps_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpunord_ps_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpunord_ps_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5663,7 +5663,7 @@ pub(super) fn test_mm512_mask_cmpunord_ps_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpunord_ps_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpunord_ps_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5686,7 +5686,7 @@ pub(super) fn test_mm512_mask_cmpunord_ps_mask_boundary_min() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpunord_ps_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpunord_ps_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5709,7 +5709,7 @@ pub(super) fn test_mm512_mask_cmpunord_ps_mask_boundary_max() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpunord_ps_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpunord_ps_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5732,7 +5732,7 @@ pub(super) fn test_mm512_mask_cmpunord_ps_mask_boundary_zero() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpunord_ps_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpunord_ps_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5755,7 +5755,7 @@ pub(super) fn test_mm512_mask_cmpunord_ps_mask_boundary_allones() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpunord_ps_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpunord_ps_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5778,7 +5778,7 @@ pub(super) fn test_mm512_mask_cmpunord_ps_mask_boundary_mixed() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpunord_ps_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpunord_ps_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5801,7 +5801,7 @@ pub(super) fn test_mm512_mask_cmpunord_ps_mask_asym_min_max() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpunord_ps_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpunord_ps_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5824,7 +5824,7 @@ pub(super) fn test_mm512_mask_cmpunord_ps_mask_asym_max_min() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_cmplt_pd_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmplt_pd_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5847,7 +5847,7 @@ pub(super) fn test_mm512_cmplt_pd_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmplt_pd_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmplt_pd_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5870,7 +5870,7 @@ pub(super) fn test_mm512_cmplt_pd_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmplt_pd_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmplt_pd_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5893,7 +5893,7 @@ pub(super) fn test_mm512_cmplt_pd_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmplt_pd_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmplt_pd_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5916,7 +5916,7 @@ pub(super) fn test_mm512_cmplt_pd_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmplt_pd_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmplt_pd_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5939,7 +5939,7 @@ pub(super) fn test_mm512_cmplt_pd_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmplt_pd_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmplt_pd_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5962,7 +5962,7 @@ pub(super) fn test_mm512_cmplt_pd_mask_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmplt_pd_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmplt_pd_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5985,7 +5985,7 @@ pub(super) fn test_mm512_cmplt_pd_mask_boundary_allones() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm512_cmplt_pd_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmplt_pd_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6008,7 +6008,7 @@ pub(super) fn test_mm512_cmplt_pd_mask_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmplt_pd_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmplt_pd_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6031,7 +6031,7 @@ pub(super) fn test_mm512_cmplt_pd_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmplt_pd_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmplt_pd_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6054,7 +6054,7 @@ pub(super) fn test_mm512_cmplt_pd_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmplt_pd_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmplt_pd_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6077,7 +6077,7 @@ pub(super) fn test_mm512_mask_cmplt_pd_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmplt_pd_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmplt_pd_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6100,7 +6100,7 @@ pub(super) fn test_mm512_mask_cmplt_pd_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmplt_pd_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmplt_pd_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6123,7 +6123,7 @@ pub(super) fn test_mm512_mask_cmplt_pd_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmplt_pd_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmplt_pd_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6146,7 +6146,7 @@ pub(super) fn test_mm512_mask_cmplt_pd_mask_boundary_min() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmplt_pd_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmplt_pd_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6169,7 +6169,7 @@ pub(super) fn test_mm512_mask_cmplt_pd_mask_boundary_max() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmplt_pd_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmplt_pd_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6192,7 +6192,7 @@ pub(super) fn test_mm512_mask_cmplt_pd_mask_boundary_zero() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmplt_pd_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmplt_pd_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6215,7 +6215,7 @@ pub(super) fn test_mm512_mask_cmplt_pd_mask_boundary_allones() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmplt_pd_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmplt_pd_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6238,7 +6238,7 @@ pub(super) fn test_mm512_mask_cmplt_pd_mask_boundary_mixed() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmplt_pd_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmplt_pd_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6261,7 +6261,7 @@ pub(super) fn test_mm512_mask_cmplt_pd_mask_asym_min_max() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmplt_pd_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmplt_pd_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6284,7 +6284,7 @@ pub(super) fn test_mm512_mask_cmplt_pd_mask_asym_max_min() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnlt_pd_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnlt_pd_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6307,7 +6307,7 @@ pub(super) fn test_mm512_cmpnlt_pd_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnlt_pd_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnlt_pd_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6330,7 +6330,7 @@ pub(super) fn test_mm512_cmpnlt_pd_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnlt_pd_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnlt_pd_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6353,7 +6353,7 @@ pub(super) fn test_mm512_cmpnlt_pd_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnlt_pd_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnlt_pd_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6376,7 +6376,7 @@ pub(super) fn test_mm512_cmpnlt_pd_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnlt_pd_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnlt_pd_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6399,7 +6399,7 @@ pub(super) fn test_mm512_cmpnlt_pd_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnlt_pd_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnlt_pd_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6422,7 +6422,7 @@ pub(super) fn test_mm512_cmpnlt_pd_mask_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnlt_pd_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnlt_pd_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6445,7 +6445,7 @@ pub(super) fn test_mm512_cmpnlt_pd_mask_boundary_allones() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnlt_pd_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnlt_pd_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6468,7 +6468,7 @@ pub(super) fn test_mm512_cmpnlt_pd_mask_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnlt_pd_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnlt_pd_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6491,7 +6491,7 @@ pub(super) fn test_mm512_cmpnlt_pd_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnlt_pd_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnlt_pd_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6514,7 +6514,7 @@ pub(super) fn test_mm512_cmpnlt_pd_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnlt_pd_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnlt_pd_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6537,7 +6537,7 @@ pub(super) fn test_mm512_mask_cmpnlt_pd_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnlt_pd_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnlt_pd_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6560,7 +6560,7 @@ pub(super) fn test_mm512_mask_cmpnlt_pd_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnlt_pd_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnlt_pd_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6583,7 +6583,7 @@ pub(super) fn test_mm512_mask_cmpnlt_pd_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnlt_pd_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnlt_pd_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6606,7 +6606,7 @@ pub(super) fn test_mm512_mask_cmpnlt_pd_mask_boundary_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnlt_pd_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnlt_pd_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6629,7 +6629,7 @@ pub(super) fn test_mm512_mask_cmpnlt_pd_mask_boundary_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnlt_pd_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnlt_pd_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6652,7 +6652,7 @@ pub(super) fn test_mm512_mask_cmpnlt_pd_mask_boundary_zero() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnlt_pd_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnlt_pd_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6675,7 +6675,7 @@ pub(super) fn test_mm512_mask_cmpnlt_pd_mask_boundary_allones() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnlt_pd_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnlt_pd_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6698,7 +6698,7 @@ pub(super) fn test_mm512_mask_cmpnlt_pd_mask_boundary_mixed() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnlt_pd_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnlt_pd_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6721,7 +6721,7 @@ pub(super) fn test_mm512_mask_cmpnlt_pd_mask_asym_min_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnlt_pd_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnlt_pd_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6744,7 +6744,7 @@ pub(super) fn test_mm512_mask_cmpnlt_pd_mask_asym_max_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_cmple_pd_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmple_pd_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6767,7 +6767,7 @@ pub(super) fn test_mm512_cmple_pd_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmple_pd_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmple_pd_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6790,7 +6790,7 @@ pub(super) fn test_mm512_cmple_pd_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmple_pd_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmple_pd_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6813,7 +6813,7 @@ pub(super) fn test_mm512_cmple_pd_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmple_pd_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmple_pd_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6836,7 +6836,7 @@ pub(super) fn test_mm512_cmple_pd_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmple_pd_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmple_pd_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6859,7 +6859,7 @@ pub(super) fn test_mm512_cmple_pd_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmple_pd_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmple_pd_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6882,7 +6882,7 @@ pub(super) fn test_mm512_cmple_pd_mask_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmple_pd_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmple_pd_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6905,7 +6905,7 @@ pub(super) fn test_mm512_cmple_pd_mask_boundary_allones() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm512_cmple_pd_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmple_pd_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6928,7 +6928,7 @@ pub(super) fn test_mm512_cmple_pd_mask_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmple_pd_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmple_pd_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6951,7 +6951,7 @@ pub(super) fn test_mm512_cmple_pd_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmple_pd_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmple_pd_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6974,7 +6974,7 @@ pub(super) fn test_mm512_cmple_pd_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmple_pd_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmple_pd_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6997,7 +6997,7 @@ pub(super) fn test_mm512_mask_cmple_pd_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmple_pd_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmple_pd_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7020,7 +7020,7 @@ pub(super) fn test_mm512_mask_cmple_pd_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmple_pd_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmple_pd_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7043,7 +7043,7 @@ pub(super) fn test_mm512_mask_cmple_pd_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmple_pd_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmple_pd_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7066,7 +7066,7 @@ pub(super) fn test_mm512_mask_cmple_pd_mask_boundary_min() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmple_pd_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmple_pd_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7089,7 +7089,7 @@ pub(super) fn test_mm512_mask_cmple_pd_mask_boundary_max() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmple_pd_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmple_pd_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7112,7 +7112,7 @@ pub(super) fn test_mm512_mask_cmple_pd_mask_boundary_zero() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmple_pd_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmple_pd_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7135,7 +7135,7 @@ pub(super) fn test_mm512_mask_cmple_pd_mask_boundary_allones() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmple_pd_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmple_pd_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7158,7 +7158,7 @@ pub(super) fn test_mm512_mask_cmple_pd_mask_boundary_mixed() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmple_pd_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmple_pd_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7181,7 +7181,7 @@ pub(super) fn test_mm512_mask_cmple_pd_mask_asym_min_max() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmple_pd_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmple_pd_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7204,7 +7204,7 @@ pub(super) fn test_mm512_mask_cmple_pd_mask_asym_max_min() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnle_pd_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnle_pd_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7227,7 +7227,7 @@ pub(super) fn test_mm512_cmpnle_pd_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnle_pd_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnle_pd_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7250,7 +7250,7 @@ pub(super) fn test_mm512_cmpnle_pd_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnle_pd_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnle_pd_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7273,7 +7273,7 @@ pub(super) fn test_mm512_cmpnle_pd_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnle_pd_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnle_pd_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7296,7 +7296,7 @@ pub(super) fn test_mm512_cmpnle_pd_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnle_pd_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnle_pd_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7319,7 +7319,7 @@ pub(super) fn test_mm512_cmpnle_pd_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnle_pd_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnle_pd_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7342,7 +7342,7 @@ pub(super) fn test_mm512_cmpnle_pd_mask_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnle_pd_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnle_pd_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7365,7 +7365,7 @@ pub(super) fn test_mm512_cmpnle_pd_mask_boundary_allones() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnle_pd_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnle_pd_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7388,7 +7388,7 @@ pub(super) fn test_mm512_cmpnle_pd_mask_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnle_pd_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnle_pd_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7411,7 +7411,7 @@ pub(super) fn test_mm512_cmpnle_pd_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpnle_pd_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpnle_pd_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7434,7 +7434,7 @@ pub(super) fn test_mm512_cmpnle_pd_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnle_pd_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnle_pd_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7457,7 +7457,7 @@ pub(super) fn test_mm512_mask_cmpnle_pd_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnle_pd_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnle_pd_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7480,7 +7480,7 @@ pub(super) fn test_mm512_mask_cmpnle_pd_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnle_pd_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnle_pd_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7503,7 +7503,7 @@ pub(super) fn test_mm512_mask_cmpnle_pd_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnle_pd_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnle_pd_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7526,7 +7526,7 @@ pub(super) fn test_mm512_mask_cmpnle_pd_mask_boundary_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnle_pd_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnle_pd_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7549,7 +7549,7 @@ pub(super) fn test_mm512_mask_cmpnle_pd_mask_boundary_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnle_pd_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnle_pd_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7572,7 +7572,7 @@ pub(super) fn test_mm512_mask_cmpnle_pd_mask_boundary_zero() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnle_pd_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnle_pd_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7595,7 +7595,7 @@ pub(super) fn test_mm512_mask_cmpnle_pd_mask_boundary_allones() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnle_pd_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnle_pd_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7618,7 +7618,7 @@ pub(super) fn test_mm512_mask_cmpnle_pd_mask_boundary_mixed() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnle_pd_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnle_pd_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7641,7 +7641,7 @@ pub(super) fn test_mm512_mask_cmpnle_pd_mask_asym_min_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpnle_pd_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpnle_pd_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7664,7 +7664,7 @@ pub(super) fn test_mm512_mask_cmpnle_pd_mask_asym_max_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpeq_pd_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpeq_pd_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7687,7 +7687,7 @@ pub(super) fn test_mm512_cmpeq_pd_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpeq_pd_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpeq_pd_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7710,7 +7710,7 @@ pub(super) fn test_mm512_cmpeq_pd_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpeq_pd_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpeq_pd_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7733,7 +7733,7 @@ pub(super) fn test_mm512_cmpeq_pd_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpeq_pd_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpeq_pd_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7756,7 +7756,7 @@ pub(super) fn test_mm512_cmpeq_pd_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpeq_pd_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpeq_pd_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7779,7 +7779,7 @@ pub(super) fn test_mm512_cmpeq_pd_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpeq_pd_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpeq_pd_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7802,7 +7802,7 @@ pub(super) fn test_mm512_cmpeq_pd_mask_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpeq_pd_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpeq_pd_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7825,7 +7825,7 @@ pub(super) fn test_mm512_cmpeq_pd_mask_boundary_allones() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpeq_pd_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpeq_pd_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7848,7 +7848,7 @@ pub(super) fn test_mm512_cmpeq_pd_mask_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpeq_pd_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpeq_pd_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7871,7 +7871,7 @@ pub(super) fn test_mm512_cmpeq_pd_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpeq_pd_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpeq_pd_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7894,7 +7894,7 @@ pub(super) fn test_mm512_cmpeq_pd_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpeq_pd_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpeq_pd_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7917,7 +7917,7 @@ pub(super) fn test_mm512_mask_cmpeq_pd_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpeq_pd_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpeq_pd_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7940,7 +7940,7 @@ pub(super) fn test_mm512_mask_cmpeq_pd_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpeq_pd_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpeq_pd_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7963,7 +7963,7 @@ pub(super) fn test_mm512_mask_cmpeq_pd_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpeq_pd_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpeq_pd_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7986,7 +7986,7 @@ pub(super) fn test_mm512_mask_cmpeq_pd_mask_boundary_min() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpeq_pd_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpeq_pd_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8009,7 +8009,7 @@ pub(super) fn test_mm512_mask_cmpeq_pd_mask_boundary_max() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpeq_pd_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpeq_pd_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8032,7 +8032,7 @@ pub(super) fn test_mm512_mask_cmpeq_pd_mask_boundary_zero() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpeq_pd_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpeq_pd_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8055,7 +8055,7 @@ pub(super) fn test_mm512_mask_cmpeq_pd_mask_boundary_allones() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpeq_pd_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpeq_pd_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8078,7 +8078,7 @@ pub(super) fn test_mm512_mask_cmpeq_pd_mask_boundary_mixed() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpeq_pd_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpeq_pd_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8101,7 +8101,7 @@ pub(super) fn test_mm512_mask_cmpeq_pd_mask_asym_min_max() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpeq_pd_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpeq_pd_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8124,7 +8124,7 @@ pub(super) fn test_mm512_mask_cmpeq_pd_mask_asym_max_min() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpneq_pd_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpneq_pd_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8147,7 +8147,7 @@ pub(super) fn test_mm512_cmpneq_pd_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpneq_pd_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpneq_pd_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8170,7 +8170,7 @@ pub(super) fn test_mm512_cmpneq_pd_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpneq_pd_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpneq_pd_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8193,7 +8193,7 @@ pub(super) fn test_mm512_cmpneq_pd_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpneq_pd_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpneq_pd_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8216,7 +8216,7 @@ pub(super) fn test_mm512_cmpneq_pd_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpneq_pd_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpneq_pd_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8239,7 +8239,7 @@ pub(super) fn test_mm512_cmpneq_pd_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpneq_pd_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpneq_pd_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8262,7 +8262,7 @@ pub(super) fn test_mm512_cmpneq_pd_mask_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpneq_pd_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpneq_pd_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8285,7 +8285,7 @@ pub(super) fn test_mm512_cmpneq_pd_mask_boundary_allones() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpneq_pd_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpneq_pd_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8308,7 +8308,7 @@ pub(super) fn test_mm512_cmpneq_pd_mask_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpneq_pd_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpneq_pd_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8331,7 +8331,7 @@ pub(super) fn test_mm512_cmpneq_pd_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpneq_pd_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpneq_pd_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8354,7 +8354,7 @@ pub(super) fn test_mm512_cmpneq_pd_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpneq_pd_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpneq_pd_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8377,7 +8377,7 @@ pub(super) fn test_mm512_mask_cmpneq_pd_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpneq_pd_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpneq_pd_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8400,7 +8400,7 @@ pub(super) fn test_mm512_mask_cmpneq_pd_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpneq_pd_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpneq_pd_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8423,7 +8423,7 @@ pub(super) fn test_mm512_mask_cmpneq_pd_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpneq_pd_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpneq_pd_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8446,7 +8446,7 @@ pub(super) fn test_mm512_mask_cmpneq_pd_mask_boundary_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpneq_pd_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpneq_pd_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8469,7 +8469,7 @@ pub(super) fn test_mm512_mask_cmpneq_pd_mask_boundary_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpneq_pd_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpneq_pd_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8492,7 +8492,7 @@ pub(super) fn test_mm512_mask_cmpneq_pd_mask_boundary_zero() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpneq_pd_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpneq_pd_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8515,7 +8515,7 @@ pub(super) fn test_mm512_mask_cmpneq_pd_mask_boundary_allones() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpneq_pd_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpneq_pd_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8538,7 +8538,7 @@ pub(super) fn test_mm512_mask_cmpneq_pd_mask_boundary_mixed() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpneq_pd_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpneq_pd_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8561,7 +8561,7 @@ pub(super) fn test_mm512_mask_cmpneq_pd_mask_asym_min_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpneq_pd_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpneq_pd_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8584,7 +8584,7 @@ pub(super) fn test_mm512_mask_cmpneq_pd_mask_asym_max_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_pd_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_pd_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8607,7 +8607,7 @@ pub(super) fn test_mm512_cmp_pd_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_pd_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_pd_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8630,7 +8630,7 @@ pub(super) fn test_mm512_cmp_pd_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_pd_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_pd_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8653,7 +8653,7 @@ pub(super) fn test_mm512_cmp_pd_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_pd_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_pd_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8676,7 +8676,7 @@ pub(super) fn test_mm512_cmp_pd_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_pd_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_pd_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8699,7 +8699,7 @@ pub(super) fn test_mm512_cmp_pd_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_pd_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_pd_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8722,7 +8722,7 @@ pub(super) fn test_mm512_cmp_pd_mask_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_pd_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_pd_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8745,7 +8745,7 @@ pub(super) fn test_mm512_cmp_pd_mask_boundary_allones() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_pd_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_pd_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8768,7 +8768,7 @@ pub(super) fn test_mm512_cmp_pd_mask_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_pd_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_pd_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8791,7 +8791,7 @@ pub(super) fn test_mm512_cmp_pd_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_pd_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_pd_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8814,7 +8814,7 @@ pub(super) fn test_mm512_cmp_pd_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_pd_mask_imm_0() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_pd_mask_imm_0() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8837,7 +8837,7 @@ pub(super) fn test_mm512_cmp_pd_mask_imm_0() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_pd_mask_imm_1() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_pd_mask_imm_1() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8860,7 +8860,7 @@ pub(super) fn test_mm512_cmp_pd_mask_imm_1() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_pd_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_pd_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8883,7 +8883,7 @@ pub(super) fn test_mm512_mask_cmp_pd_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_pd_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_pd_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8906,7 +8906,7 @@ pub(super) fn test_mm512_mask_cmp_pd_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_pd_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_pd_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8929,7 +8929,7 @@ pub(super) fn test_mm512_mask_cmp_pd_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_pd_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_pd_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8952,7 +8952,7 @@ pub(super) fn test_mm512_mask_cmp_pd_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_pd_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_pd_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8975,7 +8975,7 @@ pub(super) fn test_mm512_mask_cmp_pd_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_pd_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_pd_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -8998,7 +8998,7 @@ pub(super) fn test_mm512_mask_cmp_pd_mask_boundary_zero() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_pd_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_pd_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9021,7 +9021,7 @@ pub(super) fn test_mm512_mask_cmp_pd_mask_boundary_allones() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_pd_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_pd_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9044,7 +9044,7 @@ pub(super) fn test_mm512_mask_cmp_pd_mask_boundary_mixed() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_pd_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_pd_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9067,7 +9067,7 @@ pub(super) fn test_mm512_mask_cmp_pd_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_pd_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_pd_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9090,7 +9090,7 @@ pub(super) fn test_mm512_mask_cmp_pd_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_pd_mask_imm_0() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_pd_mask_imm_0() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9113,7 +9113,7 @@ pub(super) fn test_mm512_mask_cmp_pd_mask_imm_0() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_pd_mask_imm_1() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_pd_mask_imm_1() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9136,7 +9136,7 @@ pub(super) fn test_mm512_mask_cmp_pd_mask_imm_1() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cmp_pd_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cmp_pd_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9159,7 +9159,7 @@ pub(super) fn test_mm256_cmp_pd_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cmp_pd_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cmp_pd_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9182,7 +9182,7 @@ pub(super) fn test_mm256_cmp_pd_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cmp_pd_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cmp_pd_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9205,7 +9205,7 @@ pub(super) fn test_mm256_cmp_pd_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cmp_pd_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cmp_pd_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9228,7 +9228,7 @@ pub(super) fn test_mm256_cmp_pd_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cmp_pd_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cmp_pd_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9251,7 +9251,7 @@ pub(super) fn test_mm256_cmp_pd_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cmp_pd_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cmp_pd_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9274,7 +9274,7 @@ pub(super) fn test_mm256_cmp_pd_mask_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cmp_pd_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cmp_pd_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9297,7 +9297,7 @@ pub(super) fn test_mm256_cmp_pd_mask_boundary_allones() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cmp_pd_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cmp_pd_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9320,7 +9320,7 @@ pub(super) fn test_mm256_cmp_pd_mask_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cmp_pd_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cmp_pd_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9343,7 +9343,7 @@ pub(super) fn test_mm256_cmp_pd_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cmp_pd_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cmp_pd_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9366,7 +9366,7 @@ pub(super) fn test_mm256_cmp_pd_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cmp_pd_mask_imm_0() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cmp_pd_mask_imm_0() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9389,7 +9389,7 @@ pub(super) fn test_mm256_cmp_pd_mask_imm_0() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cmp_pd_mask_imm_1() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_cmp_pd_mask_imm_1() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9412,7 +9412,7 @@ pub(super) fn test_mm256_cmp_pd_mask_imm_1() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cmp_pd_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cmp_pd_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9435,7 +9435,7 @@ pub(super) fn test_mm256_mask_cmp_pd_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cmp_pd_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cmp_pd_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9458,7 +9458,7 @@ pub(super) fn test_mm256_mask_cmp_pd_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cmp_pd_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cmp_pd_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9481,7 +9481,7 @@ pub(super) fn test_mm256_mask_cmp_pd_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cmp_pd_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cmp_pd_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9504,7 +9504,7 @@ pub(super) fn test_mm256_mask_cmp_pd_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cmp_pd_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cmp_pd_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9527,7 +9527,7 @@ pub(super) fn test_mm256_mask_cmp_pd_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cmp_pd_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cmp_pd_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9550,7 +9550,7 @@ pub(super) fn test_mm256_mask_cmp_pd_mask_boundary_zero() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cmp_pd_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cmp_pd_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9573,7 +9573,7 @@ pub(super) fn test_mm256_mask_cmp_pd_mask_boundary_allones() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cmp_pd_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cmp_pd_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9596,7 +9596,7 @@ pub(super) fn test_mm256_mask_cmp_pd_mask_boundary_mixed() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cmp_pd_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cmp_pd_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9619,7 +9619,7 @@ pub(super) fn test_mm256_mask_cmp_pd_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cmp_pd_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cmp_pd_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9642,7 +9642,7 @@ pub(super) fn test_mm256_mask_cmp_pd_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cmp_pd_mask_imm_0() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cmp_pd_mask_imm_0() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9665,7 +9665,7 @@ pub(super) fn test_mm256_mask_cmp_pd_mask_imm_0() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_cmp_pd_mask_imm_1() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm256_mask_cmp_pd_mask_imm_1() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9688,7 +9688,7 @@ pub(super) fn test_mm256_mask_cmp_pd_mask_imm_1() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_pd_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_pd_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9711,7 +9711,7 @@ pub(super) fn test_mm_cmp_pd_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_pd_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_pd_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9734,7 +9734,7 @@ pub(super) fn test_mm_cmp_pd_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_pd_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_pd_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9757,7 +9757,7 @@ pub(super) fn test_mm_cmp_pd_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_pd_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_pd_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9780,7 +9780,7 @@ pub(super) fn test_mm_cmp_pd_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_pd_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_pd_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9803,7 +9803,7 @@ pub(super) fn test_mm_cmp_pd_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_pd_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_pd_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9826,7 +9826,7 @@ pub(super) fn test_mm_cmp_pd_mask_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_pd_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_pd_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9849,7 +9849,7 @@ pub(super) fn test_mm_cmp_pd_mask_boundary_allones() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_pd_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_pd_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9872,7 +9872,7 @@ pub(super) fn test_mm_cmp_pd_mask_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_pd_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_pd_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9895,7 +9895,7 @@ pub(super) fn test_mm_cmp_pd_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_pd_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_pd_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9918,7 +9918,7 @@ pub(super) fn test_mm_cmp_pd_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_pd_mask_imm_0() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_pd_mask_imm_0() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9941,7 +9941,7 @@ pub(super) fn test_mm_cmp_pd_mask_imm_0() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_pd_mask_imm_1() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_pd_mask_imm_1() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9964,7 +9964,7 @@ pub(super) fn test_mm_cmp_pd_mask_imm_1() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmp_pd_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cmp_pd_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -9987,7 +9987,7 @@ pub(super) fn test_mm_mask_cmp_pd_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmp_pd_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cmp_pd_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10010,7 +10010,7 @@ pub(super) fn test_mm_mask_cmp_pd_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmp_pd_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cmp_pd_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10033,7 +10033,7 @@ pub(super) fn test_mm_mask_cmp_pd_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmp_pd_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cmp_pd_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10056,7 +10056,7 @@ pub(super) fn test_mm_mask_cmp_pd_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmp_pd_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cmp_pd_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10079,7 +10079,7 @@ pub(super) fn test_mm_mask_cmp_pd_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmp_pd_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cmp_pd_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10102,7 +10102,7 @@ pub(super) fn test_mm_mask_cmp_pd_mask_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmp_pd_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cmp_pd_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10125,7 +10125,7 @@ pub(super) fn test_mm_mask_cmp_pd_mask_boundary_allones() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmp_pd_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cmp_pd_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10148,7 +10148,7 @@ pub(super) fn test_mm_mask_cmp_pd_mask_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmp_pd_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cmp_pd_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10171,7 +10171,7 @@ pub(super) fn test_mm_mask_cmp_pd_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmp_pd_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cmp_pd_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10194,7 +10194,7 @@ pub(super) fn test_mm_mask_cmp_pd_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmp_pd_mask_imm_0() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cmp_pd_mask_imm_0() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10217,7 +10217,7 @@ pub(super) fn test_mm_mask_cmp_pd_mask_imm_0() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cmp_pd_mask_imm_1() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cmp_pd_mask_imm_1() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10240,7 +10240,7 @@ pub(super) fn test_mm_mask_cmp_pd_mask_imm_1() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_round_pd_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_round_pd_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10263,7 +10263,7 @@ pub(super) fn test_mm512_cmp_round_pd_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_round_pd_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_round_pd_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10286,7 +10286,7 @@ pub(super) fn test_mm512_cmp_round_pd_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_round_pd_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_round_pd_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10309,7 +10309,7 @@ pub(super) fn test_mm512_cmp_round_pd_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_round_pd_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_round_pd_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10332,7 +10332,7 @@ pub(super) fn test_mm512_cmp_round_pd_mask_boundary_min() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_round_pd_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_round_pd_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10355,7 +10355,7 @@ pub(super) fn test_mm512_cmp_round_pd_mask_boundary_max() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_round_pd_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_round_pd_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10378,7 +10378,7 @@ pub(super) fn test_mm512_cmp_round_pd_mask_boundary_zero() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_round_pd_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_round_pd_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10401,7 +10401,7 @@ pub(super) fn test_mm512_cmp_round_pd_mask_boundary_allones() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_round_pd_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_round_pd_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10424,7 +10424,7 @@ pub(super) fn test_mm512_cmp_round_pd_mask_boundary_mixed() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_round_pd_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_round_pd_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10447,7 +10447,7 @@ pub(super) fn test_mm512_cmp_round_pd_mask_asym_min_max() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm512_cmp_round_pd_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmp_round_pd_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10470,7 +10470,7 @@ pub(super) fn test_mm512_cmp_round_pd_mask_asym_max_min() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_round_pd_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_round_pd_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10493,7 +10493,7 @@ pub(super) fn test_mm512_mask_cmp_round_pd_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_round_pd_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_round_pd_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10516,7 +10516,7 @@ pub(super) fn test_mm512_mask_cmp_round_pd_mask_normal2() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_round_pd_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_round_pd_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10539,7 +10539,7 @@ pub(super) fn test_mm512_mask_cmp_round_pd_mask_normal3() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_round_pd_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_round_pd_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10562,7 +10562,7 @@ pub(super) fn test_mm512_mask_cmp_round_pd_mask_boundary_min() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_round_pd_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_round_pd_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10585,7 +10585,7 @@ pub(super) fn test_mm512_mask_cmp_round_pd_mask_boundary_max() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_round_pd_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_round_pd_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10608,7 +10608,7 @@ pub(super) fn test_mm512_mask_cmp_round_pd_mask_boundary_zero() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_round_pd_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_round_pd_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10631,7 +10631,7 @@ pub(super) fn test_mm512_mask_cmp_round_pd_mask_boundary_allones() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_round_pd_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_round_pd_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10654,7 +10654,7 @@ pub(super) fn test_mm512_mask_cmp_round_pd_mask_boundary_mixed() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_round_pd_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_round_pd_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10677,7 +10677,7 @@ pub(super) fn test_mm512_mask_cmp_round_pd_mask_asym_min_max() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmp_round_pd_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmp_round_pd_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10700,7 +10700,7 @@ pub(super) fn test_mm512_mask_cmp_round_pd_mask_asym_max_min() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpord_pd_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpord_pd_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10723,7 +10723,7 @@ pub(super) fn test_mm512_cmpord_pd_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpord_pd_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpord_pd_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10746,7 +10746,7 @@ pub(super) fn test_mm512_cmpord_pd_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpord_pd_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpord_pd_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10769,7 +10769,7 @@ pub(super) fn test_mm512_cmpord_pd_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpord_pd_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpord_pd_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10792,7 +10792,7 @@ pub(super) fn test_mm512_cmpord_pd_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpord_pd_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpord_pd_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10815,7 +10815,7 @@ pub(super) fn test_mm512_cmpord_pd_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpord_pd_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpord_pd_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10838,7 +10838,7 @@ pub(super) fn test_mm512_cmpord_pd_mask_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpord_pd_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpord_pd_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10861,7 +10861,7 @@ pub(super) fn test_mm512_cmpord_pd_mask_boundary_allones() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpord_pd_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpord_pd_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10884,7 +10884,7 @@ pub(super) fn test_mm512_cmpord_pd_mask_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpord_pd_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpord_pd_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10907,7 +10907,7 @@ pub(super) fn test_mm512_cmpord_pd_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpord_pd_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpord_pd_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10930,7 +10930,7 @@ pub(super) fn test_mm512_cmpord_pd_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpord_pd_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpord_pd_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10953,7 +10953,7 @@ pub(super) fn test_mm512_mask_cmpord_pd_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpord_pd_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpord_pd_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10976,7 +10976,7 @@ pub(super) fn test_mm512_mask_cmpord_pd_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpord_pd_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpord_pd_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -10999,7 +10999,7 @@ pub(super) fn test_mm512_mask_cmpord_pd_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpord_pd_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpord_pd_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11022,7 +11022,7 @@ pub(super) fn test_mm512_mask_cmpord_pd_mask_boundary_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpord_pd_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpord_pd_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11045,7 +11045,7 @@ pub(super) fn test_mm512_mask_cmpord_pd_mask_boundary_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpord_pd_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpord_pd_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11068,7 +11068,7 @@ pub(super) fn test_mm512_mask_cmpord_pd_mask_boundary_zero() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpord_pd_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpord_pd_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11091,7 +11091,7 @@ pub(super) fn test_mm512_mask_cmpord_pd_mask_boundary_allones() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpord_pd_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpord_pd_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11114,7 +11114,7 @@ pub(super) fn test_mm512_mask_cmpord_pd_mask_boundary_mixed() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpord_pd_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpord_pd_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11137,7 +11137,7 @@ pub(super) fn test_mm512_mask_cmpord_pd_mask_asym_min_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpord_pd_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpord_pd_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11160,7 +11160,7 @@ pub(super) fn test_mm512_mask_cmpord_pd_mask_asym_max_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpunord_pd_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpunord_pd_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11183,7 +11183,7 @@ pub(super) fn test_mm512_cmpunord_pd_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpunord_pd_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpunord_pd_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11206,7 +11206,7 @@ pub(super) fn test_mm512_cmpunord_pd_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpunord_pd_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpunord_pd_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11229,7 +11229,7 @@ pub(super) fn test_mm512_cmpunord_pd_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpunord_pd_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpunord_pd_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11252,7 +11252,7 @@ pub(super) fn test_mm512_cmpunord_pd_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpunord_pd_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpunord_pd_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11275,7 +11275,7 @@ pub(super) fn test_mm512_cmpunord_pd_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpunord_pd_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpunord_pd_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11298,7 +11298,7 @@ pub(super) fn test_mm512_cmpunord_pd_mask_boundary_zero() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpunord_pd_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpunord_pd_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11321,7 +11321,7 @@ pub(super) fn test_mm512_cmpunord_pd_mask_boundary_allones() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpunord_pd_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpunord_pd_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11344,7 +11344,7 @@ pub(super) fn test_mm512_cmpunord_pd_mask_boundary_mixed() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpunord_pd_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpunord_pd_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11367,7 +11367,7 @@ pub(super) fn test_mm512_cmpunord_pd_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_cmpunord_pd_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_cmpunord_pd_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11390,7 +11390,7 @@ pub(super) fn test_mm512_cmpunord_pd_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpunord_pd_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpunord_pd_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11413,7 +11413,7 @@ pub(super) fn test_mm512_mask_cmpunord_pd_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpunord_pd_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpunord_pd_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11436,7 +11436,7 @@ pub(super) fn test_mm512_mask_cmpunord_pd_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpunord_pd_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpunord_pd_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11459,7 +11459,7 @@ pub(super) fn test_mm512_mask_cmpunord_pd_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpunord_pd_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpunord_pd_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11482,7 +11482,7 @@ pub(super) fn test_mm512_mask_cmpunord_pd_mask_boundary_min() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpunord_pd_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpunord_pd_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11505,7 +11505,7 @@ pub(super) fn test_mm512_mask_cmpunord_pd_mask_boundary_max() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpunord_pd_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpunord_pd_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11528,7 +11528,7 @@ pub(super) fn test_mm512_mask_cmpunord_pd_mask_boundary_zero() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpunord_pd_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpunord_pd_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11551,7 +11551,7 @@ pub(super) fn test_mm512_mask_cmpunord_pd_mask_boundary_allones() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpunord_pd_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpunord_pd_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11574,7 +11574,7 @@ pub(super) fn test_mm512_mask_cmpunord_pd_mask_boundary_mixed() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpunord_pd_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpunord_pd_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11597,7 +11597,7 @@ pub(super) fn test_mm512_mask_cmpunord_pd_mask_asym_min_max() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_cmpunord_pd_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm512_mask_cmpunord_pd_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11620,7 +11620,7 @@ pub(super) fn test_mm512_mask_cmpunord_pd_mask_asym_max_min() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_ss_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_ss_mask() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11643,7 +11643,7 @@ pub(super) fn test_mm_cmp_ss_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_ss_mask_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_ss_mask_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11666,7 +11666,7 @@ pub(super) fn test_mm_cmp_ss_mask_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_ss_mask_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_ss_mask_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11689,7 +11689,7 @@ pub(super) fn test_mm_cmp_ss_mask_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_ss_mask_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_ss_mask_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11712,7 +11712,7 @@ pub(super) fn test_mm_cmp_ss_mask_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_ss_mask_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_ss_mask_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11735,7 +11735,7 @@ pub(super) fn test_mm_cmp_ss_mask_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_ss_mask_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_ss_mask_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11758,7 +11758,7 @@ pub(super) fn test_mm_cmp_ss_mask_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_ss_mask_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_ss_mask_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11781,7 +11781,7 @@ pub(super) fn test_mm_cmp_ss_mask_boundary_allones() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_ss_mask_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_ss_mask_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11804,7 +11804,7 @@ pub(super) fn test_mm_cmp_ss_mask_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_ss_mask_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_ss_mask_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11827,7 +11827,7 @@ pub(super) fn test_mm_cmp_ss_mask_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_ss_mask_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_ss_mask_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11850,7 +11850,7 @@ pub(super) fn test_mm_cmp_ss_mask_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_ss_mask_imm_0() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_ss_mask_imm_0() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -11873,7 +11873,7 @@ pub(super) fn test_mm_cmp_ss_mask_imm_0() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cmp_ss_mask_imm_1() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cmp_ss_mask_imm_1() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }

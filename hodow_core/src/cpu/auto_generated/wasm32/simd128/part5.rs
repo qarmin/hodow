@@ -5,7 +5,7 @@ use crate::cpu::common::arm::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_u64x2_shr() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_u64x2_shr() -> Result<(), String> {
     unsafe {
         let _result = u64x2_shr(0 /* v128 */, 1u32);
 
@@ -24,7 +24,7 @@ pub(super) fn test_u64x2_shr() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i64x2_add() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i64x2_add() -> Result<(), String> {
     unsafe {
         let _result = i64x2_add(0 /* v128 */, 0 /* v128 */);
 
@@ -43,7 +43,7 @@ pub(super) fn test_i64x2_add() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i64x2_sub() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i64x2_sub() -> Result<(), String> {
     unsafe {
         let _result = i64x2_sub(0 /* v128 */, 0 /* v128 */);
 
@@ -62,7 +62,7 @@ pub(super) fn test_i64x2_sub() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i64x2_mul() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i64x2_mul() -> Result<(), String> {
     unsafe {
         let _result = i64x2_mul(0 /* v128 */, 0 /* v128 */);
 
@@ -81,7 +81,7 @@ pub(super) fn test_i64x2_mul() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i64x2_extmul_low_i32x4() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i64x2_extmul_low_i32x4() -> Result<(), String> {
     unsafe {
         let _result = i64x2_extmul_low_i32x4(0 /* v128 */, 0 /* v128 */);
 
@@ -100,7 +100,7 @@ pub(super) fn test_i64x2_extmul_low_i32x4() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i64x2_extmul_high_i32x4() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i64x2_extmul_high_i32x4() -> Result<(), String> {
     unsafe {
         let _result = i64x2_extmul_high_i32x4(0 /* v128 */, 0 /* v128 */);
 
@@ -119,7 +119,7 @@ pub(super) fn test_i64x2_extmul_high_i32x4() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i64x2_extmul_low_u32x4() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i64x2_extmul_low_u32x4() -> Result<(), String> {
     unsafe {
         let _result = i64x2_extmul_low_u32x4(0 /* v128 */, 0 /* v128 */);
 
@@ -138,7 +138,7 @@ pub(super) fn test_i64x2_extmul_low_u32x4() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i64x2_extmul_high_u32x4() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i64x2_extmul_high_u32x4() -> Result<(), String> {
     unsafe {
         let _result = i64x2_extmul_high_u32x4(0 /* v128 */, 0 /* v128 */);
 
@@ -157,7 +157,7 @@ pub(super) fn test_i64x2_extmul_high_u32x4() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f32x4_ceil() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f32x4_ceil() -> Result<(), String> {
     unsafe {
         let _result = f32x4_ceil(0 /* v128 */);
 
@@ -176,7 +176,7 @@ pub(super) fn test_f32x4_ceil() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f32x4_floor() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f32x4_floor() -> Result<(), String> {
     unsafe {
         let _result = f32x4_floor(0 /* v128 */);
 
@@ -195,7 +195,7 @@ pub(super) fn test_f32x4_floor() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f32x4_trunc() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f32x4_trunc() -> Result<(), String> {
     unsafe {
         let _result = f32x4_trunc(0 /* v128 */);
 
@@ -214,7 +214,7 @@ pub(super) fn test_f32x4_trunc() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f32x4_nearest() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f32x4_nearest() -> Result<(), String> {
     unsafe {
         let _result = f32x4_nearest(0 /* v128 */);
 
@@ -233,7 +233,7 @@ pub(super) fn test_f32x4_nearest() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f32x4_abs() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f32x4_abs() -> Result<(), String> {
     unsafe {
         let _result = f32x4_abs(0 /* v128 */);
 
@@ -252,7 +252,7 @@ pub(super) fn test_f32x4_abs() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f32x4_neg() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f32x4_neg() -> Result<(), String> {
     unsafe {
         let _result = f32x4_neg(0 /* v128 */);
 
@@ -271,7 +271,7 @@ pub(super) fn test_f32x4_neg() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f32x4_sqrt() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f32x4_sqrt() -> Result<(), String> {
     unsafe {
         let _result = f32x4_sqrt(0 /* v128 */);
 
@@ -290,7 +290,7 @@ pub(super) fn test_f32x4_sqrt() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f32x4_add() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f32x4_add() -> Result<(), String> {
     unsafe {
         let _result = f32x4_add(0 /* v128 */, 0 /* v128 */);
 
@@ -309,7 +309,7 @@ pub(super) fn test_f32x4_add() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f32x4_sub() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f32x4_sub() -> Result<(), String> {
     unsafe {
         let _result = f32x4_sub(0 /* v128 */, 0 /* v128 */);
 
@@ -328,7 +328,7 @@ pub(super) fn test_f32x4_sub() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f32x4_mul() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f32x4_mul() -> Result<(), String> {
     unsafe {
         let _result = f32x4_mul(0 /* v128 */, 0 /* v128 */);
 
@@ -347,7 +347,7 @@ pub(super) fn test_f32x4_mul() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f32x4_div() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f32x4_div() -> Result<(), String> {
     unsafe {
         let _result = f32x4_div(0 /* v128 */, 0 /* v128 */);
 
@@ -366,7 +366,7 @@ pub(super) fn test_f32x4_div() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f32x4_min() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f32x4_min() -> Result<(), String> {
     unsafe {
         let _result = f32x4_min(0 /* v128 */, 0 /* v128 */);
 
@@ -385,7 +385,7 @@ pub(super) fn test_f32x4_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f32x4_max() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f32x4_max() -> Result<(), String> {
     unsafe {
         let _result = f32x4_max(0 /* v128 */, 0 /* v128 */);
 
@@ -404,7 +404,7 @@ pub(super) fn test_f32x4_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f32x4_pmin() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f32x4_pmin() -> Result<(), String> {
     unsafe {
         let _result = f32x4_pmin(0 /* v128 */, 0 /* v128 */);
 
@@ -423,7 +423,7 @@ pub(super) fn test_f32x4_pmin() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f32x4_pmax() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f32x4_pmax() -> Result<(), String> {
     unsafe {
         let _result = f32x4_pmax(0 /* v128 */, 0 /* v128 */);
 
@@ -442,7 +442,7 @@ pub(super) fn test_f32x4_pmax() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f64x2_ceil() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f64x2_ceil() -> Result<(), String> {
     unsafe {
         let _result = f64x2_ceil(0 /* v128 */);
 
@@ -461,7 +461,7 @@ pub(super) fn test_f64x2_ceil() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f64x2_floor() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f64x2_floor() -> Result<(), String> {
     unsafe {
         let _result = f64x2_floor(0 /* v128 */);
 
@@ -480,7 +480,7 @@ pub(super) fn test_f64x2_floor() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f64x2_trunc() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f64x2_trunc() -> Result<(), String> {
     unsafe {
         let _result = f64x2_trunc(0 /* v128 */);
 
@@ -499,7 +499,7 @@ pub(super) fn test_f64x2_trunc() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f64x2_nearest() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f64x2_nearest() -> Result<(), String> {
     unsafe {
         let _result = f64x2_nearest(0 /* v128 */);
 
@@ -518,7 +518,7 @@ pub(super) fn test_f64x2_nearest() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f64x2_abs() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f64x2_abs() -> Result<(), String> {
     unsafe {
         let _result = f64x2_abs(0 /* v128 */);
 
@@ -537,7 +537,7 @@ pub(super) fn test_f64x2_abs() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f64x2_neg() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f64x2_neg() -> Result<(), String> {
     unsafe {
         let _result = f64x2_neg(0 /* v128 */);
 
@@ -556,7 +556,7 @@ pub(super) fn test_f64x2_neg() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f64x2_sqrt() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f64x2_sqrt() -> Result<(), String> {
     unsafe {
         let _result = f64x2_sqrt(0 /* v128 */);
 
@@ -575,7 +575,7 @@ pub(super) fn test_f64x2_sqrt() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f64x2_add() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f64x2_add() -> Result<(), String> {
     unsafe {
         let _result = f64x2_add(0 /* v128 */, 0 /* v128 */);
 
@@ -594,7 +594,7 @@ pub(super) fn test_f64x2_add() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f64x2_sub() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f64x2_sub() -> Result<(), String> {
     unsafe {
         let _result = f64x2_sub(0 /* v128 */, 0 /* v128 */);
 
@@ -613,7 +613,7 @@ pub(super) fn test_f64x2_sub() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f64x2_mul() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f64x2_mul() -> Result<(), String> {
     unsafe {
         let _result = f64x2_mul(0 /* v128 */, 0 /* v128 */);
 
@@ -632,7 +632,7 @@ pub(super) fn test_f64x2_mul() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f64x2_div() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f64x2_div() -> Result<(), String> {
     unsafe {
         let _result = f64x2_div(0 /* v128 */, 0 /* v128 */);
 
@@ -651,7 +651,7 @@ pub(super) fn test_f64x2_div() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f64x2_min() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f64x2_min() -> Result<(), String> {
     unsafe {
         let _result = f64x2_min(0 /* v128 */, 0 /* v128 */);
 
@@ -670,7 +670,7 @@ pub(super) fn test_f64x2_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f64x2_max() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f64x2_max() -> Result<(), String> {
     unsafe {
         let _result = f64x2_max(0 /* v128 */, 0 /* v128 */);
 
@@ -689,7 +689,7 @@ pub(super) fn test_f64x2_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f64x2_pmin() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f64x2_pmin() -> Result<(), String> {
     unsafe {
         let _result = f64x2_pmin(0 /* v128 */, 0 /* v128 */);
 
@@ -708,7 +708,7 @@ pub(super) fn test_f64x2_pmin() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f64x2_pmax() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f64x2_pmax() -> Result<(), String> {
     unsafe {
         let _result = f64x2_pmax(0 /* v128 */, 0 /* v128 */);
 
@@ -727,7 +727,7 @@ pub(super) fn test_f64x2_pmax() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i32x4_trunc_sat_f32x4() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i32x4_trunc_sat_f32x4() -> Result<(), String> {
     unsafe {
         let _result = i32x4_trunc_sat_f32x4(0 /* v128 */);
 
@@ -746,7 +746,7 @@ pub(super) fn test_i32x4_trunc_sat_f32x4() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_u32x4_trunc_sat_f32x4() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_u32x4_trunc_sat_f32x4() -> Result<(), String> {
     unsafe {
         let _result = u32x4_trunc_sat_f32x4(0 /* v128 */);
 
@@ -765,7 +765,7 @@ pub(super) fn test_u32x4_trunc_sat_f32x4() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f32x4_convert_i32x4() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f32x4_convert_i32x4() -> Result<(), String> {
     unsafe {
         let _result = f32x4_convert_i32x4(0 /* v128 */);
 
@@ -784,7 +784,7 @@ pub(super) fn test_f32x4_convert_i32x4() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f32x4_convert_u32x4() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f32x4_convert_u32x4() -> Result<(), String> {
     unsafe {
         let _result = f32x4_convert_u32x4(0 /* v128 */);
 
@@ -803,7 +803,7 @@ pub(super) fn test_f32x4_convert_u32x4() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i32x4_trunc_sat_f64x2_zero() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i32x4_trunc_sat_f64x2_zero() -> Result<(), String> {
     unsafe {
         let _result = i32x4_trunc_sat_f64x2_zero(0 /* v128 */);
 
@@ -822,7 +822,7 @@ pub(super) fn test_i32x4_trunc_sat_f64x2_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_u32x4_trunc_sat_f64x2_zero() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_u32x4_trunc_sat_f64x2_zero() -> Result<(), String> {
     unsafe {
         let _result = u32x4_trunc_sat_f64x2_zero(0 /* v128 */);
 
@@ -841,7 +841,7 @@ pub(super) fn test_u32x4_trunc_sat_f64x2_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f64x2_convert_low_i32x4() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f64x2_convert_low_i32x4() -> Result<(), String> {
     unsafe {
         let _result = f64x2_convert_low_i32x4(0 /* v128 */);
 
@@ -860,7 +860,7 @@ pub(super) fn test_f64x2_convert_low_i32x4() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f64x2_convert_low_u32x4() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f64x2_convert_low_u32x4() -> Result<(), String> {
     unsafe {
         let _result = f64x2_convert_low_u32x4(0 /* v128 */);
 
@@ -879,7 +879,7 @@ pub(super) fn test_f64x2_convert_low_u32x4() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f32x4_demote_f64x2_zero() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f32x4_demote_f64x2_zero() -> Result<(), String> {
     unsafe {
         let _result = f32x4_demote_f64x2_zero(0 /* v128 */);
 
@@ -898,7 +898,7 @@ pub(super) fn test_f32x4_demote_f64x2_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f64x2_promote_low_f32x4() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f64x2_promote_low_f32x4() -> Result<(), String> {
     unsafe {
         let _result = f64x2_promote_low_f32x4(0 /* v128 */);
 

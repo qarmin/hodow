@@ -793,9 +793,12 @@ def emit_check(lines: list[str], call: str, ret: str, expected: str | None = Non
         lines.append(f"        let _result = {call};")
 
 
-def test_name(func_name: str) -> str:
-    """test_ + strip leading underscores: _mm_add → test_mm_add"""
-    return "test_" + func_name.lstrip("_")
+def test_name(func_name: str, arch: str, ext: str) -> str:
+    """test_<arch>_<ext>_ + strip leading underscores, e.g. (x86, sse4a, _mm_add) →
+    test_x86_sse4a_mm_add. The arch/ext prefix makes which CPU feature a failing test
+    belongs to legible from the bare test name alone (e.g. in a log line), without having
+    to cross-reference the surrounding ExtensionTest grouping."""
+    return f"test_{arch}_{ext}_" + func_name.lstrip("_")
 
 
 def gen_fn_body(sig: dict, expected: str | None, param_overrides: dict[str, str] | None = None,
@@ -912,8 +915,8 @@ def gen_fn_body(sig: dict, expected: str | None, param_overrides: dict[str, str]
     return lines
 
 
-def gen_fn(sig: dict, expected_values: dict[str, str] | None = None) -> str:
-    test = test_name(sig["name"])
+def gen_fn(sig: dict, arch: str, ext: str, expected_values: dict[str, str] | None = None) -> str:
+    test = test_name(sig["name"], arch, ext)
     expected = (expected_values or {}).get(test)
     lines = [f"pub(super) fn {test}() -> Result<(), String> {{"]
     lines += gen_fn_body(sig, expected)
@@ -1010,15 +1013,15 @@ def expand_scenarios(sig: dict) -> list[tuple[str, dict[str, str], str | None]]:
     return scenarios
 
 
-def list_scenario_names(sig: dict) -> list[str]:
-    base = test_name(sig["name"])
+def list_scenario_names(sig: dict, arch: str, ext: str) -> list[str]:
+    base = test_name(sig["name"], arch, ext)
     return [base + (f"_{suffix}" if suffix else "") for suffix, _, _ in expand_scenarios(sig)]
 
 
-def gen_scenarios(sig: dict, expected_values: dict[str, str] | None = None) -> str:
+def gen_scenarios(sig: dict, arch: str, ext: str, expected_values: dict[str, str] | None = None) -> str:
     """Source for every scenario function of one pilot-scope base signature, joined the
     same way multiple gen_fn() outputs are joined by gen_part."""
-    base = test_name(sig["name"])
+    base = test_name(sig["name"], arch, ext)
     elem = sig_elem_type(sig)
     bodies = []
     for suffix, overrides, cg_override in expand_scenarios(sig):
@@ -1092,7 +1095,7 @@ def gen_part(funcs: list[dict], arch: str, ext: str, expected_values: dict[str, 
         "",
     ]
     bodies = [
-        gen_scenarios(sig, expected_values) if in_pilot_scope(arch, ext, sig["name"]) else gen_fn(sig, expected_values)
+        gen_scenarios(sig, arch, ext, expected_values) if in_pilot_scope(arch, ext, sig["name"]) else gen_fn(sig, arch, ext, expected_values)
         for sig in funcs
     ]
     return "\n".join(header) + "\n" + "\n\n".join(bodies) + "\n"
@@ -1122,10 +1125,10 @@ def gen_ext_rs(arch: str, ext: str, funcs: list[dict], n_parts: int) -> str:
     ]
     for sig in funcs:
         if in_pilot_scope(arch, ext, sig["name"]):
-            for tname in list_scenario_names(sig):
+            for tname in list_scenario_names(sig, arch, ext):
                 lines.append(f"            (&{tname}, \"{tname}\"),")
         else:
-            tname = test_name(sig["name"])
+            tname = test_name(sig["name"], arch, ext)
             lines.append(f"            (&{tname}, \"{tname}\"),")
     lines += ["        ]", "    }", "}"]
     return "\n".join(lines) + "\n"

@@ -8,7 +8,7 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_mm_maskz_fnmsub_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_fnmsub_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -31,7 +31,7 @@ pub(super) fn test_mm_maskz_fnmsub_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask3_fnmsub_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask3_fnmsub_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -54,7 +54,7 @@ pub(super) fn test_mm_mask3_fnmsub_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_fixupimm_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_fixupimm_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -77,7 +77,7 @@ pub(super) fn test_mm_fixupimm_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_fixupimm_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_fixupimm_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -100,7 +100,7 @@ pub(super) fn test_mm_mask_fixupimm_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_fixupimm_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_fixupimm_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -123,7 +123,7 @@ pub(super) fn test_mm_maskz_fixupimm_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_fixupimm_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_fixupimm_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -146,7 +146,7 @@ pub(super) fn test_mm_fixupimm_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_fixupimm_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_fixupimm_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -169,7 +169,7 @@ pub(super) fn test_mm_mask_fixupimm_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_fixupimm_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_fixupimm_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -192,7 +192,7 @@ pub(super) fn test_mm_maskz_fixupimm_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_fixupimm_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_fixupimm_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -215,7 +215,7 @@ pub(super) fn test_mm_fixupimm_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_fixupimm_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_fixupimm_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -238,7 +238,7 @@ pub(super) fn test_mm_mask_fixupimm_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_fixupimm_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_fixupimm_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -261,7 +261,7 @@ pub(super) fn test_mm_maskz_fixupimm_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_fixupimm_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_fixupimm_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -284,7 +284,7 @@ pub(super) fn test_mm_fixupimm_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_fixupimm_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_fixupimm_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -307,7 +307,7 @@ pub(super) fn test_mm_mask_fixupimm_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_fixupimm_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_fixupimm_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -330,7 +330,7 @@ pub(super) fn test_mm_maskz_fixupimm_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cvtss_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtss_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -353,7 +353,7 @@ pub(super) fn test_mm_mask_cvtss_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_cvtss_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_cvtss_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -376,7 +376,7 @@ pub(super) fn test_mm_maskz_cvtss_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cvtsd_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvtsd_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -399,7 +399,7 @@ pub(super) fn test_mm_mask_cvtsd_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_cvtsd_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_cvtsd_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -422,7 +422,7 @@ pub(super) fn test_mm_maskz_cvtsd_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvt_roundss_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvt_roundss_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -445,7 +445,7 @@ pub(super) fn test_mm_cvt_roundss_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cvt_roundss_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvt_roundss_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -468,7 +468,7 @@ pub(super) fn test_mm_mask_cvt_roundss_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_cvt_roundss_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_cvt_roundss_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -491,7 +491,7 @@ pub(super) fn test_mm_maskz_cvt_roundss_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvt_roundsd_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvt_roundsd_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -514,7 +514,7 @@ pub(super) fn test_mm_cvt_roundsd_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_cvt_roundsd_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_cvt_roundsd_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -537,7 +537,7 @@ pub(super) fn test_mm_mask_cvt_roundsd_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_cvt_roundsd_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_cvt_roundsd_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -560,7 +560,7 @@ pub(super) fn test_mm_maskz_cvt_roundsd_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvt_roundss_si32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvt_roundss_si32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -583,7 +583,7 @@ pub(super) fn test_mm_cvt_roundss_si32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvt_roundss_i32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvt_roundss_i32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -606,7 +606,7 @@ pub(super) fn test_mm_cvt_roundss_i32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvt_roundss_u32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvt_roundss_u32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -629,7 +629,7 @@ pub(super) fn test_mm_cvt_roundss_u32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvtss_i32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvtss_i32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -652,7 +652,7 @@ pub(super) fn test_mm_cvtss_i32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvtss_u32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvtss_u32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -675,7 +675,7 @@ pub(super) fn test_mm_cvtss_u32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvt_roundsd_si32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvt_roundsd_si32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -698,7 +698,7 @@ pub(super) fn test_mm_cvt_roundsd_si32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvt_roundsd_i32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvt_roundsd_i32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -721,7 +721,7 @@ pub(super) fn test_mm_cvt_roundsd_i32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvt_roundsd_u32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvt_roundsd_u32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -744,7 +744,7 @@ pub(super) fn test_mm_cvt_roundsd_u32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvtsd_i32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvtsd_i32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -767,7 +767,7 @@ pub(super) fn test_mm_cvtsd_i32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvtsd_u32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvtsd_u32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -790,7 +790,7 @@ pub(super) fn test_mm_cvtsd_u32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvt_roundi32_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvt_roundi32_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -813,7 +813,7 @@ pub(super) fn test_mm_cvt_roundi32_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvt_roundsi32_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvt_roundsi32_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -836,7 +836,7 @@ pub(super) fn test_mm_cvt_roundsi32_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvt_roundu32_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvt_roundu32_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -859,7 +859,7 @@ pub(super) fn test_mm_cvt_roundu32_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvti32_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvti32_ss() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_cvti32_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), 5i32));
         check_float_array_equality(&result, &[5.0, 2.0, 3.0, 4.0])?;
@@ -879,7 +879,7 @@ pub(super) fn test_mm_cvti32_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvti32_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvti32_sd() -> Result<(), String> {
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_cvti32_sd(create__m128d_from([1.0, 2.0]), 3i32));
         check_float_array_equality(&result, &[3.0, 2.0])?;
@@ -899,7 +899,7 @@ pub(super) fn test_mm_cvti32_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvtt_roundss_si32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvtt_roundss_si32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -922,7 +922,7 @@ pub(super) fn test_mm_cvtt_roundss_si32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvtt_roundss_i32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvtt_roundss_i32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -945,7 +945,7 @@ pub(super) fn test_mm_cvtt_roundss_i32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvtt_roundss_u32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvtt_roundss_u32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -968,7 +968,7 @@ pub(super) fn test_mm_cvtt_roundss_u32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvttss_i32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvttss_i32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -991,7 +991,7 @@ pub(super) fn test_mm_cvttss_i32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvttss_u32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvttss_u32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1014,7 +1014,7 @@ pub(super) fn test_mm_cvttss_u32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvtt_roundsd_si32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvtt_roundsd_si32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1037,7 +1037,7 @@ pub(super) fn test_mm_cvtt_roundsd_si32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvtt_roundsd_i32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvtt_roundsd_i32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1060,7 +1060,7 @@ pub(super) fn test_mm_cvtt_roundsd_i32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvtt_roundsd_u32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvtt_roundsd_u32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1083,7 +1083,7 @@ pub(super) fn test_mm_cvtt_roundsd_u32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvttsd_i32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvttsd_i32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1106,7 +1106,7 @@ pub(super) fn test_mm_cvttsd_i32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvttsd_u32() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvttsd_u32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1129,7 +1129,7 @@ pub(super) fn test_mm_cvttsd_u32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvtu32_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_cvtu32_ss() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_cvtu32_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), 5u32));
         check_float_array_equality(&result, &[5.0, 2.0, 3.0, 4.0])?;

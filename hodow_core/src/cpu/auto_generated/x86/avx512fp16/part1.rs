@@ -8,7 +8,7 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_mm_cvtsi128_si16() -> Result<(), String> {
+pub(super) fn test_x86_avx512fp16_mm_cvtsi128_si16() -> Result<(), String> {
     unsafe {
         let result = _mm_cvtsi128_si16(create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 0)?;
@@ -28,7 +28,7 @@ pub(super) fn test_mm_cvtsi128_si16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvtsi16_si128() -> Result<(), String> {
+pub(super) fn test_x86_avx512fp16_mm_cvtsi16_si128() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_cvtsi16_si128(1i16));
         check_array_equality(&result, &[0i32; 4])?;

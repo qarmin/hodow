@@ -8,7 +8,7 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_mm_sha1msg1_epu32() -> Result<(), String> {
+pub(super) fn test_x86_sha_mm_sha1msg1_epu32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -31,7 +31,7 @@ pub(super) fn test_mm_sha1msg1_epu32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sha1msg2_epu32() -> Result<(), String> {
+pub(super) fn test_x86_sha_mm_sha1msg2_epu32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -54,7 +54,7 @@ pub(super) fn test_mm_sha1msg2_epu32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sha1nexte_epu32() -> Result<(), String> {
+pub(super) fn test_x86_sha_mm_sha1nexte_epu32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -77,7 +77,7 @@ pub(super) fn test_mm_sha1nexte_epu32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sha1rnds4_epu32() -> Result<(), String> {
+pub(super) fn test_x86_sha_mm_sha1rnds4_epu32() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -100,7 +100,7 @@ pub(super) fn test_mm_sha1rnds4_epu32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sha256msg1_epu32() -> Result<(), String> {
+pub(super) fn test_x86_sha_mm_sha256msg1_epu32() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_sha256msg1_epu32(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[67141633, 100712450, 134283267, 167854084])?;
@@ -120,7 +120,7 @@ pub(super) fn test_mm_sha256msg1_epu32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sha256msg2_epu32() -> Result<(), String> {
+pub(super) fn test_x86_sha_mm_sha256msg2_epu32() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_sha256msg2_epu32(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[221185, 327682, -603938596, 536953158])?;
@@ -140,7 +140,7 @@ pub(super) fn test_mm_sha256msg2_epu32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sha256rnds2_epu32() -> Result<(), String> {
+pub(super) fn test_x86_sha_mm_sha256rnds2_epu32() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_sha256rnds2_epu32(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8]), create__m128i_from_i32_array([9, 10, 11, 12])));
         check_array_equality(&result, &[415236881, 1178701972, 419439380, 1689133364])?;

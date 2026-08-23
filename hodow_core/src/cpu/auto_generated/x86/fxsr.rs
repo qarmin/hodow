@@ -13,7 +13,7 @@ impl ExtensionTest for FXSR {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_fxsave, "test_fxsave"),
+            (&test_x86_fxsr_fxsave, "test_x86_fxsr_fxsave"),
         ]
     }
 }

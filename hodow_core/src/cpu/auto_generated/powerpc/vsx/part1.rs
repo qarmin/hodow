@@ -5,7 +5,7 @@ use crate::cpu::common::arm::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_vec_xxpermdi() -> Result<(), String> {
+pub(super) fn test_powerpc_vsx_vec_xxpermdi() -> Result<(), String> {
     unsafe {
         vec_xxpermdi::<0>(0 /* T */, 0 /* T */);
 
@@ -24,7 +24,7 @@ pub(super) fn test_vec_xxpermdi() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_mergee() -> Result<(), String> {
+pub(super) fn test_powerpc_vsx_vec_mergee() -> Result<(), String> {
     unsafe {
         vec_mergee(0 /* T */, 0 /* T */);
 
@@ -43,7 +43,7 @@ pub(super) fn test_vec_mergee() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_mergeo() -> Result<(), String> {
+pub(super) fn test_powerpc_vsx_vec_mergeo() -> Result<(), String> {
     unsafe {
         vec_mergeo(0 /* T */, 0 /* T */);
 

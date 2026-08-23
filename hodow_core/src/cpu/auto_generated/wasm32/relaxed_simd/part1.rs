@@ -5,7 +5,7 @@ use crate::cpu::common::arm::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_i8x16_relaxed_swizzle() -> Result<(), String> {
+pub(super) fn test_wasm32_relaxed_simd_i8x16_relaxed_swizzle() -> Result<(), String> {
     unsafe {
         let _result = i8x16_relaxed_swizzle(0 /* v128 */, 0 /* v128 */);
 
@@ -24,7 +24,7 @@ pub(super) fn test_i8x16_relaxed_swizzle() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i32x4_relaxed_trunc_f32x4() -> Result<(), String> {
+pub(super) fn test_wasm32_relaxed_simd_i32x4_relaxed_trunc_f32x4() -> Result<(), String> {
     unsafe {
         let _result = i32x4_relaxed_trunc_f32x4(0 /* v128 */);
 
@@ -43,7 +43,7 @@ pub(super) fn test_i32x4_relaxed_trunc_f32x4() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_u32x4_relaxed_trunc_f32x4() -> Result<(), String> {
+pub(super) fn test_wasm32_relaxed_simd_u32x4_relaxed_trunc_f32x4() -> Result<(), String> {
     unsafe {
         let _result = u32x4_relaxed_trunc_f32x4(0 /* v128 */);
 
@@ -62,7 +62,7 @@ pub(super) fn test_u32x4_relaxed_trunc_f32x4() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i32x4_relaxed_trunc_f64x2_zero() -> Result<(), String> {
+pub(super) fn test_wasm32_relaxed_simd_i32x4_relaxed_trunc_f64x2_zero() -> Result<(), String> {
     unsafe {
         let _result = i32x4_relaxed_trunc_f64x2_zero(0 /* v128 */);
 
@@ -81,7 +81,7 @@ pub(super) fn test_i32x4_relaxed_trunc_f64x2_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_u32x4_relaxed_trunc_f64x2_zero() -> Result<(), String> {
+pub(super) fn test_wasm32_relaxed_simd_u32x4_relaxed_trunc_f64x2_zero() -> Result<(), String> {
     unsafe {
         let _result = u32x4_relaxed_trunc_f64x2_zero(0 /* v128 */);
 
@@ -100,7 +100,7 @@ pub(super) fn test_u32x4_relaxed_trunc_f64x2_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f32x4_relaxed_madd() -> Result<(), String> {
+pub(super) fn test_wasm32_relaxed_simd_f32x4_relaxed_madd() -> Result<(), String> {
     unsafe {
         let _result = f32x4_relaxed_madd(0 /* v128 */, 0 /* v128 */, 0 /* v128 */);
 
@@ -119,7 +119,7 @@ pub(super) fn test_f32x4_relaxed_madd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f32x4_relaxed_nmadd() -> Result<(), String> {
+pub(super) fn test_wasm32_relaxed_simd_f32x4_relaxed_nmadd() -> Result<(), String> {
     unsafe {
         let _result = f32x4_relaxed_nmadd(0 /* v128 */, 0 /* v128 */, 0 /* v128 */);
 
@@ -138,7 +138,7 @@ pub(super) fn test_f32x4_relaxed_nmadd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f64x2_relaxed_madd() -> Result<(), String> {
+pub(super) fn test_wasm32_relaxed_simd_f64x2_relaxed_madd() -> Result<(), String> {
     unsafe {
         let _result = f64x2_relaxed_madd(0 /* v128 */, 0 /* v128 */, 0 /* v128 */);
 
@@ -157,7 +157,7 @@ pub(super) fn test_f64x2_relaxed_madd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f64x2_relaxed_nmadd() -> Result<(), String> {
+pub(super) fn test_wasm32_relaxed_simd_f64x2_relaxed_nmadd() -> Result<(), String> {
     unsafe {
         let _result = f64x2_relaxed_nmadd(0 /* v128 */, 0 /* v128 */, 0 /* v128 */);
 
@@ -176,7 +176,7 @@ pub(super) fn test_f64x2_relaxed_nmadd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i8x16_relaxed_laneselect() -> Result<(), String> {
+pub(super) fn test_wasm32_relaxed_simd_i8x16_relaxed_laneselect() -> Result<(), String> {
     unsafe {
         let _result = i8x16_relaxed_laneselect(0 /* v128 */, 0 /* v128 */, 0 /* v128 */);
 
@@ -195,7 +195,7 @@ pub(super) fn test_i8x16_relaxed_laneselect() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i16x8_relaxed_laneselect() -> Result<(), String> {
+pub(super) fn test_wasm32_relaxed_simd_i16x8_relaxed_laneselect() -> Result<(), String> {
     unsafe {
         let _result = i16x8_relaxed_laneselect(0 /* v128 */, 0 /* v128 */, 0 /* v128 */);
 
@@ -214,7 +214,7 @@ pub(super) fn test_i16x8_relaxed_laneselect() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i32x4_relaxed_laneselect() -> Result<(), String> {
+pub(super) fn test_wasm32_relaxed_simd_i32x4_relaxed_laneselect() -> Result<(), String> {
     unsafe {
         let _result = i32x4_relaxed_laneselect(0 /* v128 */, 0 /* v128 */, 0 /* v128 */);
 
@@ -233,7 +233,7 @@ pub(super) fn test_i32x4_relaxed_laneselect() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i64x2_relaxed_laneselect() -> Result<(), String> {
+pub(super) fn test_wasm32_relaxed_simd_i64x2_relaxed_laneselect() -> Result<(), String> {
     unsafe {
         let _result = i64x2_relaxed_laneselect(0 /* v128 */, 0 /* v128 */, 0 /* v128 */);
 
@@ -252,7 +252,7 @@ pub(super) fn test_i64x2_relaxed_laneselect() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f32x4_relaxed_min() -> Result<(), String> {
+pub(super) fn test_wasm32_relaxed_simd_f32x4_relaxed_min() -> Result<(), String> {
     unsafe {
         let _result = f32x4_relaxed_min(0 /* v128 */, 0 /* v128 */);
 
@@ -271,7 +271,7 @@ pub(super) fn test_f32x4_relaxed_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f32x4_relaxed_max() -> Result<(), String> {
+pub(super) fn test_wasm32_relaxed_simd_f32x4_relaxed_max() -> Result<(), String> {
     unsafe {
         let _result = f32x4_relaxed_max(0 /* v128 */, 0 /* v128 */);
 
@@ -290,7 +290,7 @@ pub(super) fn test_f32x4_relaxed_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f64x2_relaxed_min() -> Result<(), String> {
+pub(super) fn test_wasm32_relaxed_simd_f64x2_relaxed_min() -> Result<(), String> {
     unsafe {
         let _result = f64x2_relaxed_min(0 /* v128 */, 0 /* v128 */);
 
@@ -309,7 +309,7 @@ pub(super) fn test_f64x2_relaxed_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f64x2_relaxed_max() -> Result<(), String> {
+pub(super) fn test_wasm32_relaxed_simd_f64x2_relaxed_max() -> Result<(), String> {
     unsafe {
         let _result = f64x2_relaxed_max(0 /* v128 */, 0 /* v128 */);
 
@@ -328,7 +328,7 @@ pub(super) fn test_f64x2_relaxed_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i16x8_relaxed_q15mulr() -> Result<(), String> {
+pub(super) fn test_wasm32_relaxed_simd_i16x8_relaxed_q15mulr() -> Result<(), String> {
     unsafe {
         let _result = i16x8_relaxed_q15mulr(0 /* v128 */, 0 /* v128 */);
 
@@ -347,7 +347,7 @@ pub(super) fn test_i16x8_relaxed_q15mulr() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i16x8_relaxed_dot_i8x16_i7x16() -> Result<(), String> {
+pub(super) fn test_wasm32_relaxed_simd_i16x8_relaxed_dot_i8x16_i7x16() -> Result<(), String> {
     unsafe {
         let _result = i16x8_relaxed_dot_i8x16_i7x16(0 /* v128 */, 0 /* v128 */);
 
@@ -366,7 +366,7 @@ pub(super) fn test_i16x8_relaxed_dot_i8x16_i7x16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i32x4_relaxed_dot_i8x16_i7x16_add() -> Result<(), String> {
+pub(super) fn test_wasm32_relaxed_simd_i32x4_relaxed_dot_i8x16_i7x16_add() -> Result<(), String> {
     unsafe {
         let _result = i32x4_relaxed_dot_i8x16_i7x16_add(0 /* v128 */, 0 /* v128 */, 0 /* v128 */);
 

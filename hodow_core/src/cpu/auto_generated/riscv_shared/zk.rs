@@ -13,16 +13,16 @@ impl ExtensionTest for ZK {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_xperm8, "test_xperm8"),
-            (&test_xperm4, "test_xperm4"),
-            (&test_sha256sig0, "test_sha256sig0"),
-            (&test_sha256sig1, "test_sha256sig1"),
-            (&test_sha256sum0, "test_sha256sum0"),
-            (&test_sha256sum1, "test_sha256sum1"),
-            (&test_sm4ed, "test_sm4ed"),
-            (&test_sm4ks, "test_sm4ks"),
-            (&test_sm3p0, "test_sm3p0"),
-            (&test_sm3p1, "test_sm3p1"),
+            (&test_riscv_shared_zk_xperm8, "test_riscv_shared_zk_xperm8"),
+            (&test_riscv_shared_zk_xperm4, "test_riscv_shared_zk_xperm4"),
+            (&test_riscv_shared_zk_sha256sig0, "test_riscv_shared_zk_sha256sig0"),
+            (&test_riscv_shared_zk_sha256sig1, "test_riscv_shared_zk_sha256sig1"),
+            (&test_riscv_shared_zk_sha256sum0, "test_riscv_shared_zk_sha256sum0"),
+            (&test_riscv_shared_zk_sha256sum1, "test_riscv_shared_zk_sha256sum1"),
+            (&test_riscv_shared_zk_sm4ed, "test_riscv_shared_zk_sm4ed"),
+            (&test_riscv_shared_zk_sm4ks, "test_riscv_shared_zk_sm4ks"),
+            (&test_riscv_shared_zk_sm3p0, "test_riscv_shared_zk_sm3p0"),
+            (&test_riscv_shared_zk_sm3p1, "test_riscv_shared_zk_sm3p1"),
         ]
     }
 }

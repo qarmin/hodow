@@ -5,7 +5,7 @@ use crate::cpu::common::arm::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_orc_b() -> Result<(), String> {
+pub(super) fn test_riscv_shared_zb_orc_b() -> Result<(), String> {
     unsafe {
         let _result = orc_b(0usize);
 
@@ -24,7 +24,7 @@ pub(super) fn test_orc_b() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_clmul() -> Result<(), String> {
+pub(super) fn test_riscv_shared_zb_clmul() -> Result<(), String> {
     unsafe {
         let _result = clmul(0usize, 0usize);
 
@@ -43,7 +43,7 @@ pub(super) fn test_clmul() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_clmulh() -> Result<(), String> {
+pub(super) fn test_riscv_shared_zb_clmulh() -> Result<(), String> {
     unsafe {
         let _result = clmulh(0usize, 0usize);
 
@@ -62,7 +62,7 @@ pub(super) fn test_clmulh() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_clmulr() -> Result<(), String> {
+pub(super) fn test_riscv_shared_zb_clmulr() -> Result<(), String> {
     unsafe {
         let _result = clmulr(0usize, 0usize);
 

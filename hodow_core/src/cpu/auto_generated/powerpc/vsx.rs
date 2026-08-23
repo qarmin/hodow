@@ -13,9 +13,9 @@ impl ExtensionTest for VSX {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_vec_xxpermdi, "test_vec_xxpermdi"),
-            (&test_vec_mergee, "test_vec_mergee"),
-            (&test_vec_mergeo, "test_vec_mergeo"),
+            (&test_powerpc_vsx_vec_xxpermdi, "test_powerpc_vsx_vec_xxpermdi"),
+            (&test_powerpc_vsx_vec_mergee, "test_powerpc_vsx_vec_mergee"),
+            (&test_powerpc_vsx_vec_mergeo, "test_powerpc_vsx_vec_mergeo"),
         ]
     }
 }

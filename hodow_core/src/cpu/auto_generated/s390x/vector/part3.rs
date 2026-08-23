@@ -5,7 +5,7 @@ use crate::cpu::common::arm::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_vec_madd() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_madd() -> Result<(), String> {
     unsafe {
         let _result = vec_madd(0 /* T */, 0 /* T */, 0 /* T */);
 
@@ -24,7 +24,7 @@ pub(super) fn test_vec_madd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_msub() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_msub() -> Result<(), String> {
     unsafe {
         let _result = vec_msub(0 /* T */, 0 /* T */, 0 /* T */);
 
@@ -43,7 +43,7 @@ pub(super) fn test_vec_msub() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_meadd() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_meadd() -> Result<(), String> {
     unsafe {
         let _result = vec_meadd(0 /* T */, 0 /* T */, 0 /* Result */);
 
@@ -62,7 +62,7 @@ pub(super) fn test_vec_meadd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_moadd() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_moadd() -> Result<(), String> {
     unsafe {
         let _result = vec_moadd(0 /* T */, 0 /* T */, 0 /* Result */);
 
@@ -81,7 +81,7 @@ pub(super) fn test_vec_moadd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_mhadd() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_mhadd() -> Result<(), String> {
     unsafe {
         let _result = vec_mhadd(0 /* T */, 0 /* T */, 0 /* Result */);
 
@@ -100,7 +100,7 @@ pub(super) fn test_vec_mhadd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_mladd() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_mladd() -> Result<(), String> {
     unsafe {
         let _result = vec_mladd(0 /* T */, 0 /* T */, 0 /* Result */);
 
@@ -119,7 +119,7 @@ pub(super) fn test_vec_mladd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_checksum() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_checksum() -> Result<(), String> {
     unsafe {
         let _result = vec_checksum(0 /* vector_unsigned_int */, 0 /* vector_unsigned_int */);
 
@@ -138,7 +138,7 @@ pub(super) fn test_vec_checksum() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_mule() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_mule() -> Result<(), String> {
     unsafe {
         let _result = vec_mule(0 /* T */, 0 /* T */);
 
@@ -157,7 +157,7 @@ pub(super) fn test_vec_mule() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_mulo() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_mulo() -> Result<(), String> {
     unsafe {
         let _result = vec_mulo(0 /* T */, 0 /* T */);
 
@@ -176,7 +176,7 @@ pub(super) fn test_vec_mulo() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_mulh() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_mulh() -> Result<(), String> {
     unsafe {
         let _result = vec_mulh(0 /* T */, 0 /* T */);
 
@@ -195,7 +195,7 @@ pub(super) fn test_vec_mulh() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_gfmsum() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_gfmsum() -> Result<(), String> {
     unsafe {
         let _result = vec_gfmsum(0 /* T */, 0 /* T */);
 
@@ -214,7 +214,7 @@ pub(super) fn test_vec_gfmsum() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_gfmsum_accum() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_gfmsum_accum() -> Result<(), String> {
     unsafe {
         let _result = vec_gfmsum_accum(0 /* T */, 0 /* T */, 0 /* Result */);
 
@@ -233,7 +233,7 @@ pub(super) fn test_vec_gfmsum_accum() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_gfmsum_128() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_gfmsum_128() -> Result<(), String> {
     unsafe {
         let _result = vec_gfmsum_128(0 /* vector_unsigned_long_long */, 0 /* vector_unsigned_long_long */);
 
@@ -252,7 +252,7 @@ pub(super) fn test_vec_gfmsum_128() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_gfmsum_accum_128() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_gfmsum_accum_128() -> Result<(), String> {
     unsafe {
         let _result = vec_gfmsum_accum_128(0 /* vector_unsigned_long_long */, 0 /* vector_unsigned_long_long */, 0 /* vector_unsigned_char */);
 
@@ -271,7 +271,7 @@ pub(super) fn test_vec_gfmsum_accum_128() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_bperm_u128() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_bperm_u128() -> Result<(), String> {
     unsafe {
         let _result = vec_bperm_u128(0 /* vector_unsigned_char */, 0 /* vector_unsigned_char */);
 
@@ -290,7 +290,7 @@ pub(super) fn test_vec_bperm_u128() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_gather_element() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_gather_element() -> Result<(), String> {
     unsafe {
         let _result = vec_gather_element::<0>(0 /* T */, 0 /* Offset */, 0 /* Element */);
 
@@ -309,7 +309,7 @@ pub(super) fn test_vec_gather_element() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_sel() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_sel() -> Result<(), String> {
     unsafe {
         let _result = vec_sel(0 /* T */, 0 /* T */, 0 /* U */);
 
@@ -328,7 +328,7 @@ pub(super) fn test_vec_sel() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_fp_test_data_class() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_fp_test_data_class() -> Result<(), String> {
     unsafe {
         let a = 0 /* T */;
         let mut ptr_c = crate::cpu::common::Aligned64([1i32; 16]);
@@ -337,7 +337,7 @@ pub(super) fn test_vec_fp_test_data_class() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_all_nan() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_all_nan() -> Result<(), String> {
     unsafe {
         let result = vec_all_nan(0 /* T */);
         check_int_equality(result as i32, 0)?;
@@ -357,7 +357,7 @@ pub(super) fn test_vec_all_nan() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_all_numeric() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_all_numeric() -> Result<(), String> {
     unsafe {
         let result = vec_all_numeric(0 /* T */);
         check_int_equality(result as i32, 0)?;
@@ -377,7 +377,7 @@ pub(super) fn test_vec_all_numeric() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_any_nan() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_any_nan() -> Result<(), String> {
     unsafe {
         let result = vec_any_nan(0 /* T */);
         check_int_equality(result as i32, 0)?;
@@ -397,7 +397,7 @@ pub(super) fn test_vec_any_nan() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_any_numeric() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_any_numeric() -> Result<(), String> {
     unsafe {
         let result = vec_any_numeric(0 /* T */);
         check_int_equality(result as i32, 0)?;
@@ -417,7 +417,7 @@ pub(super) fn test_vec_any_numeric() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_test_mask() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_test_mask() -> Result<(), String> {
     unsafe {
         let result = vec_test_mask(0 /* T */, 0 /* Mask */);
         check_int_equality(result as i32, 0)?;
@@ -437,7 +437,7 @@ pub(super) fn test_vec_test_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_search_string_cc() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_search_string_cc() -> Result<(), String> {
     unsafe {
         vec_search_string_cc(0 /* T */, 0 /* T */, 0 /* vector_unsigned_char */);
 
@@ -456,7 +456,7 @@ pub(super) fn test_vec_search_string_cc() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_search_string_until_zero_cc() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_search_string_until_zero_cc() -> Result<(), String> {
     unsafe {
         vec_search_string_until_zero_cc(0 /* T */, 0 /* T */, 0 /* vector_unsigned_char */);
 
@@ -475,7 +475,7 @@ pub(super) fn test_vec_search_string_until_zero_cc() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_doublee() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_doublee() -> Result<(), String> {
     unsafe {
         let _result = vec_doublee(0 /* vector_float */);
 
@@ -494,7 +494,7 @@ pub(super) fn test_vec_doublee() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_floate() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_floate() -> Result<(), String> {
     unsafe {
         let _result = vec_floate(0 /* vector_double */);
 
@@ -513,7 +513,7 @@ pub(super) fn test_vec_floate() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_float() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_float() -> Result<(), String> {
     unsafe {
         let _result = vec_float(0 /* VectorFloat */);
 
@@ -532,7 +532,7 @@ pub(super) fn test_vec_float() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_double() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_double() -> Result<(), String> {
     unsafe {
         let _result = vec_double(0 /* VectorDouble */);
 
@@ -551,7 +551,7 @@ pub(super) fn test_vec_double() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_extend_s64() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_extend_s64() -> Result<(), String> {
     unsafe {
         let _result = vec_extend_s64(0 /* VectorExtendSigned64 */);
 
@@ -570,7 +570,7 @@ pub(super) fn test_vec_extend_s64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_signed() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_signed() -> Result<(), String> {
     unsafe {
         let _result = vec_signed(0 /* T */);
 
@@ -589,7 +589,7 @@ pub(super) fn test_vec_signed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_unsigned() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_unsigned() -> Result<(), String> {
     unsafe {
         let _result = vec_unsigned(0 /* T */);
 
@@ -608,7 +608,7 @@ pub(super) fn test_vec_unsigned() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_cp_until_zero() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_cp_until_zero() -> Result<(), String> {
     unsafe {
         let _result = vec_cp_until_zero(0 /* T */);
 
@@ -627,7 +627,7 @@ pub(super) fn test_vec_cp_until_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_cp_until_zero_cc() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_cp_until_zero_cc() -> Result<(), String> {
     unsafe {
         vec_cp_until_zero_cc(0 /* T */);
 
@@ -646,7 +646,7 @@ pub(super) fn test_vec_cp_until_zero_cc() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_msum_u128() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_msum_u128() -> Result<(), String> {
     unsafe {
         let _result = vec_msum_u128::<0>(0 /* vector_unsigned_long_long */, 0 /* vector_unsigned_long_long */, 0 /* vector_unsigned_char */);
 
@@ -665,7 +665,7 @@ pub(super) fn test_vec_msum_u128() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_sld() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_sld() -> Result<(), String> {
     unsafe {
         let _result = vec_sld::<0>(0 /* T */, 0 /* T */);
 
@@ -684,7 +684,7 @@ pub(super) fn test_vec_sld() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_sldw() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_sldw() -> Result<(), String> {
     unsafe {
         let _result = vec_sldw::<0>(0 /* T */, 0 /* T */);
 
@@ -703,7 +703,7 @@ pub(super) fn test_vec_sldw() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_sldb() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_sldb() -> Result<(), String> {
     unsafe {
         let _result = vec_sldb::<0>(0 /* T */, 0 /* T */);
 
@@ -722,7 +722,7 @@ pub(super) fn test_vec_sldb() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_srdb() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_srdb() -> Result<(), String> {
     unsafe {
         let _result = vec_srdb::<0>(0 /* T */, 0 /* T */);
 
@@ -741,7 +741,7 @@ pub(super) fn test_vec_srdb() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_cmprg() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_cmprg() -> Result<(), String> {
     unsafe {
         let _result = vec_cmprg(0 /* T */, 0 /* T */, 0 /* T */);
 
@@ -760,7 +760,7 @@ pub(super) fn test_vec_cmprg() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_cmpnrg() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_cmpnrg() -> Result<(), String> {
     unsafe {
         let _result = vec_cmpnrg(0 /* T */, 0 /* T */, 0 /* T */);
 
@@ -779,7 +779,7 @@ pub(super) fn test_vec_cmpnrg() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_cmprg_idx() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_cmprg_idx() -> Result<(), String> {
     unsafe {
         let _result = vec_cmprg_idx(0 /* T */, 0 /* T */, 0 /* T */);
 
@@ -798,7 +798,7 @@ pub(super) fn test_vec_cmprg_idx() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_cmpnrg_idx() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_cmpnrg_idx() -> Result<(), String> {
     unsafe {
         let _result = vec_cmpnrg_idx(0 /* T */, 0 /* T */, 0 /* T */);
 
@@ -817,7 +817,7 @@ pub(super) fn test_vec_cmpnrg_idx() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_cmprg_cc() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_cmprg_cc() -> Result<(), String> {
     unsafe {
         let a = 0 /* T */;
         let b = 0 /* T */;
@@ -828,7 +828,7 @@ pub(super) fn test_vec_cmprg_cc() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_cmpnrg_cc() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_cmpnrg_cc() -> Result<(), String> {
     unsafe {
         let a = 0 /* T */;
         let b = 0 /* T */;
@@ -839,7 +839,7 @@ pub(super) fn test_vec_cmpnrg_cc() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_cmprg_idx_cc() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_cmprg_idx_cc() -> Result<(), String> {
     unsafe {
         let a = 0 /* T */;
         let b = 0 /* T */;
@@ -850,7 +850,7 @@ pub(super) fn test_vec_cmprg_idx_cc() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_cmpnrg_idx_cc() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_cmpnrg_idx_cc() -> Result<(), String> {
     unsafe {
         let a = 0 /* T */;
         let b = 0 /* T */;
@@ -861,7 +861,7 @@ pub(super) fn test_vec_cmpnrg_idx_cc() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_cmprg_or_0_idx() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_cmprg_or_0_idx() -> Result<(), String> {
     unsafe {
         let _result = vec_cmprg_or_0_idx(0 /* T */, 0 /* T */, 0 /* T */);
 
@@ -880,7 +880,7 @@ pub(super) fn test_vec_cmprg_or_0_idx() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_cmpnrg_or_0_idx() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_cmpnrg_or_0_idx() -> Result<(), String> {
     unsafe {
         let _result = vec_cmpnrg_or_0_idx(0 /* T */, 0 /* T */, 0 /* T */);
 
@@ -899,7 +899,7 @@ pub(super) fn test_vec_cmpnrg_or_0_idx() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_cmprg_or_0_idx_cc() -> Result<(), String> {
+pub(super) fn test_s390x_vector_vec_cmprg_or_0_idx_cc() -> Result<(), String> {
     unsafe {
         let a = 0 /* T */;
         let b = 0 /* T */;

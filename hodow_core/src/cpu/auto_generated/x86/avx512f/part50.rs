@@ -8,7 +8,7 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_mm_mask3_fnmsub_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask3_fnmsub_ss() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_mask3_fnmsub_ss(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0]), create__m128_from([9.0, 10.0, 11.0, 12.0]), create__mmask8_from(0b01010101)));
         check_float_array_equality(&result, &[-14.0, 10.0, 11.0, 12.0])?;
@@ -28,7 +28,7 @@ pub(super) fn test_mm_mask3_fnmsub_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_fnmsub_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_fnmsub_sd() -> Result<(), String> {
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_mask_fnmsub_sd(create__m128d_from([1.0, 2.0]), create__mmask8_from(0b01010101), create__m128d_from([3.0, 4.0]), create__m128d_from([5.0, 6.0])));
         check_float_array_equality(&result, &[-8.0, 2.0])?;
@@ -48,7 +48,7 @@ pub(super) fn test_mm_mask_fnmsub_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_fnmsub_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_fnmsub_sd() -> Result<(), String> {
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_maskz_fnmsub_sd(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]), create__m128d_from([5.0, 6.0])));
         check_float_array_equality(&result, &[-8.0, 2.0])?;
@@ -68,7 +68,7 @@ pub(super) fn test_mm_maskz_fnmsub_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask3_fnmsub_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask3_fnmsub_sd() -> Result<(), String> {
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_mask3_fnmsub_sd(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]), create__m128d_from([5.0, 6.0]), create__mmask8_from(0b01010101)));
         check_float_array_equality(&result, &[-8.0, 6.0])?;
@@ -88,7 +88,7 @@ pub(super) fn test_mm_mask3_fnmsub_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_add_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_add_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -111,7 +111,7 @@ pub(super) fn test_mm_add_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_add_round_ss_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_add_round_ss_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -134,7 +134,7 @@ pub(super) fn test_mm_add_round_ss_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_add_round_ss_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_add_round_ss_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -157,7 +157,7 @@ pub(super) fn test_mm_add_round_ss_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_add_round_ss_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_add_round_ss_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -180,7 +180,7 @@ pub(super) fn test_mm_add_round_ss_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_add_round_ss_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_add_round_ss_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -203,7 +203,7 @@ pub(super) fn test_mm_add_round_ss_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_add_round_ss_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_add_round_ss_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -226,7 +226,7 @@ pub(super) fn test_mm_add_round_ss_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_add_round_ss_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_add_round_ss_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -249,7 +249,7 @@ pub(super) fn test_mm_add_round_ss_boundary_allones() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_add_round_ss_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_add_round_ss_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -272,7 +272,7 @@ pub(super) fn test_mm_add_round_ss_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_add_round_ss_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_add_round_ss_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -295,7 +295,7 @@ pub(super) fn test_mm_add_round_ss_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_add_round_ss_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_add_round_ss_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -318,7 +318,7 @@ pub(super) fn test_mm_add_round_ss_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_add_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_add_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -341,7 +341,7 @@ pub(super) fn test_mm_mask_add_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_add_round_ss_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_add_round_ss_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -364,7 +364,7 @@ pub(super) fn test_mm_mask_add_round_ss_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_add_round_ss_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_add_round_ss_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -387,7 +387,7 @@ pub(super) fn test_mm_mask_add_round_ss_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_add_round_ss_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_add_round_ss_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -410,7 +410,7 @@ pub(super) fn test_mm_mask_add_round_ss_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_add_round_ss_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_add_round_ss_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -433,7 +433,7 @@ pub(super) fn test_mm_mask_add_round_ss_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_add_round_ss_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_add_round_ss_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -456,7 +456,7 @@ pub(super) fn test_mm_mask_add_round_ss_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_add_round_ss_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_add_round_ss_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -479,7 +479,7 @@ pub(super) fn test_mm_mask_add_round_ss_boundary_allones() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_add_round_ss_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_add_round_ss_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -502,7 +502,7 @@ pub(super) fn test_mm_mask_add_round_ss_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_add_round_ss_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_add_round_ss_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -525,7 +525,7 @@ pub(super) fn test_mm_mask_add_round_ss_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_add_round_ss_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_add_round_ss_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -548,7 +548,7 @@ pub(super) fn test_mm_mask_add_round_ss_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_add_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_add_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -571,7 +571,7 @@ pub(super) fn test_mm_maskz_add_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_add_round_ss_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_add_round_ss_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -594,7 +594,7 @@ pub(super) fn test_mm_maskz_add_round_ss_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_add_round_ss_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_add_round_ss_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -617,7 +617,7 @@ pub(super) fn test_mm_maskz_add_round_ss_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_add_round_ss_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_add_round_ss_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -640,7 +640,7 @@ pub(super) fn test_mm_maskz_add_round_ss_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_add_round_ss_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_add_round_ss_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -663,7 +663,7 @@ pub(super) fn test_mm_maskz_add_round_ss_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_add_round_ss_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_add_round_ss_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -686,7 +686,7 @@ pub(super) fn test_mm_maskz_add_round_ss_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_add_round_ss_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_add_round_ss_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -709,7 +709,7 @@ pub(super) fn test_mm_maskz_add_round_ss_boundary_allones() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_add_round_ss_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_add_round_ss_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -732,7 +732,7 @@ pub(super) fn test_mm_maskz_add_round_ss_boundary_mixed() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_add_round_ss_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_add_round_ss_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -755,7 +755,7 @@ pub(super) fn test_mm_maskz_add_round_ss_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_add_round_ss_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_add_round_ss_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -778,7 +778,7 @@ pub(super) fn test_mm_maskz_add_round_ss_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_add_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_add_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -801,7 +801,7 @@ pub(super) fn test_mm_add_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_add_round_sd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_add_round_sd_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -824,7 +824,7 @@ pub(super) fn test_mm_add_round_sd_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_add_round_sd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_add_round_sd_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -847,7 +847,7 @@ pub(super) fn test_mm_add_round_sd_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_add_round_sd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_add_round_sd_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -870,7 +870,7 @@ pub(super) fn test_mm_add_round_sd_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_add_round_sd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_add_round_sd_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -893,7 +893,7 @@ pub(super) fn test_mm_add_round_sd_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_add_round_sd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_add_round_sd_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -916,7 +916,7 @@ pub(super) fn test_mm_add_round_sd_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_add_round_sd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_add_round_sd_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -939,7 +939,7 @@ pub(super) fn test_mm_add_round_sd_boundary_allones() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_add_round_sd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_add_round_sd_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -962,7 +962,7 @@ pub(super) fn test_mm_add_round_sd_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_add_round_sd_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_add_round_sd_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -985,7 +985,7 @@ pub(super) fn test_mm_add_round_sd_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_add_round_sd_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_add_round_sd_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1008,7 +1008,7 @@ pub(super) fn test_mm_add_round_sd_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_add_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_add_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1031,7 +1031,7 @@ pub(super) fn test_mm_mask_add_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_add_round_sd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_add_round_sd_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1054,7 +1054,7 @@ pub(super) fn test_mm_mask_add_round_sd_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_add_round_sd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_add_round_sd_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1077,7 +1077,7 @@ pub(super) fn test_mm_mask_add_round_sd_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_add_round_sd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_add_round_sd_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1100,7 +1100,7 @@ pub(super) fn test_mm_mask_add_round_sd_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_add_round_sd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_add_round_sd_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1123,7 +1123,7 @@ pub(super) fn test_mm_mask_add_round_sd_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_add_round_sd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_add_round_sd_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1146,7 +1146,7 @@ pub(super) fn test_mm_mask_add_round_sd_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_add_round_sd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_add_round_sd_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1169,7 +1169,7 @@ pub(super) fn test_mm_mask_add_round_sd_boundary_allones() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_add_round_sd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_add_round_sd_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1192,7 +1192,7 @@ pub(super) fn test_mm_mask_add_round_sd_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_add_round_sd_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_add_round_sd_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1215,7 +1215,7 @@ pub(super) fn test_mm_mask_add_round_sd_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_add_round_sd_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_add_round_sd_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1238,7 +1238,7 @@ pub(super) fn test_mm_mask_add_round_sd_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_add_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_add_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1261,7 +1261,7 @@ pub(super) fn test_mm_maskz_add_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_add_round_sd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_add_round_sd_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1284,7 +1284,7 @@ pub(super) fn test_mm_maskz_add_round_sd_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_add_round_sd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_add_round_sd_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1307,7 +1307,7 @@ pub(super) fn test_mm_maskz_add_round_sd_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_add_round_sd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_add_round_sd_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1330,7 +1330,7 @@ pub(super) fn test_mm_maskz_add_round_sd_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_add_round_sd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_add_round_sd_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1353,7 +1353,7 @@ pub(super) fn test_mm_maskz_add_round_sd_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_add_round_sd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_add_round_sd_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1376,7 +1376,7 @@ pub(super) fn test_mm_maskz_add_round_sd_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_add_round_sd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_add_round_sd_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1399,7 +1399,7 @@ pub(super) fn test_mm_maskz_add_round_sd_boundary_allones() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_add_round_sd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_add_round_sd_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1422,7 +1422,7 @@ pub(super) fn test_mm_maskz_add_round_sd_boundary_mixed() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_add_round_sd_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_add_round_sd_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1445,7 +1445,7 @@ pub(super) fn test_mm_maskz_add_round_sd_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_add_round_sd_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_add_round_sd_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1468,7 +1468,7 @@ pub(super) fn test_mm_maskz_add_round_sd_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sub_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_sub_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1491,7 +1491,7 @@ pub(super) fn test_mm_sub_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sub_round_ss_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_sub_round_ss_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1514,7 +1514,7 @@ pub(super) fn test_mm_sub_round_ss_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sub_round_ss_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_sub_round_ss_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1537,7 +1537,7 @@ pub(super) fn test_mm_sub_round_ss_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sub_round_ss_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_sub_round_ss_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1560,7 +1560,7 @@ pub(super) fn test_mm_sub_round_ss_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sub_round_ss_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_sub_round_ss_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1583,7 +1583,7 @@ pub(super) fn test_mm_sub_round_ss_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sub_round_ss_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_sub_round_ss_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1606,7 +1606,7 @@ pub(super) fn test_mm_sub_round_ss_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sub_round_ss_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_sub_round_ss_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1629,7 +1629,7 @@ pub(super) fn test_mm_sub_round_ss_boundary_allones() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sub_round_ss_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_sub_round_ss_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1652,7 +1652,7 @@ pub(super) fn test_mm_sub_round_ss_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sub_round_ss_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_sub_round_ss_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1675,7 +1675,7 @@ pub(super) fn test_mm_sub_round_ss_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sub_round_ss_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_sub_round_ss_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1698,7 +1698,7 @@ pub(super) fn test_mm_sub_round_ss_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_sub_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_sub_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1721,7 +1721,7 @@ pub(super) fn test_mm_mask_sub_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_sub_round_ss_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_sub_round_ss_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1744,7 +1744,7 @@ pub(super) fn test_mm_mask_sub_round_ss_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_sub_round_ss_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_sub_round_ss_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1767,7 +1767,7 @@ pub(super) fn test_mm_mask_sub_round_ss_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_sub_round_ss_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_sub_round_ss_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1790,7 +1790,7 @@ pub(super) fn test_mm_mask_sub_round_ss_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_sub_round_ss_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_sub_round_ss_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1813,7 +1813,7 @@ pub(super) fn test_mm_mask_sub_round_ss_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_sub_round_ss_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_sub_round_ss_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1836,7 +1836,7 @@ pub(super) fn test_mm_mask_sub_round_ss_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_sub_round_ss_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_sub_round_ss_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1859,7 +1859,7 @@ pub(super) fn test_mm_mask_sub_round_ss_boundary_allones() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_sub_round_ss_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_sub_round_ss_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1882,7 +1882,7 @@ pub(super) fn test_mm_mask_sub_round_ss_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_sub_round_ss_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_sub_round_ss_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1905,7 +1905,7 @@ pub(super) fn test_mm_mask_sub_round_ss_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_sub_round_ss_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_sub_round_ss_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1928,7 +1928,7 @@ pub(super) fn test_mm_mask_sub_round_ss_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_sub_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_sub_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1951,7 +1951,7 @@ pub(super) fn test_mm_maskz_sub_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_sub_round_ss_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_sub_round_ss_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1974,7 +1974,7 @@ pub(super) fn test_mm_maskz_sub_round_ss_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_sub_round_ss_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_sub_round_ss_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1997,7 +1997,7 @@ pub(super) fn test_mm_maskz_sub_round_ss_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_sub_round_ss_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_sub_round_ss_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2020,7 +2020,7 @@ pub(super) fn test_mm_maskz_sub_round_ss_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_sub_round_ss_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_sub_round_ss_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2043,7 +2043,7 @@ pub(super) fn test_mm_maskz_sub_round_ss_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_sub_round_ss_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_sub_round_ss_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2066,7 +2066,7 @@ pub(super) fn test_mm_maskz_sub_round_ss_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_sub_round_ss_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_sub_round_ss_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2089,7 +2089,7 @@ pub(super) fn test_mm_maskz_sub_round_ss_boundary_allones() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_sub_round_ss_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_sub_round_ss_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2112,7 +2112,7 @@ pub(super) fn test_mm_maskz_sub_round_ss_boundary_mixed() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_sub_round_ss_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_sub_round_ss_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2135,7 +2135,7 @@ pub(super) fn test_mm_maskz_sub_round_ss_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_sub_round_ss_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_sub_round_ss_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2158,7 +2158,7 @@ pub(super) fn test_mm_maskz_sub_round_ss_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sub_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_sub_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2181,7 +2181,7 @@ pub(super) fn test_mm_sub_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sub_round_sd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_sub_round_sd_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2204,7 +2204,7 @@ pub(super) fn test_mm_sub_round_sd_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sub_round_sd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_sub_round_sd_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2227,7 +2227,7 @@ pub(super) fn test_mm_sub_round_sd_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sub_round_sd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_sub_round_sd_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2250,7 +2250,7 @@ pub(super) fn test_mm_sub_round_sd_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sub_round_sd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_sub_round_sd_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2273,7 +2273,7 @@ pub(super) fn test_mm_sub_round_sd_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sub_round_sd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_sub_round_sd_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2296,7 +2296,7 @@ pub(super) fn test_mm_sub_round_sd_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sub_round_sd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_sub_round_sd_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2319,7 +2319,7 @@ pub(super) fn test_mm_sub_round_sd_boundary_allones() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sub_round_sd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_sub_round_sd_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2342,7 +2342,7 @@ pub(super) fn test_mm_sub_round_sd_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sub_round_sd_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_sub_round_sd_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2365,7 +2365,7 @@ pub(super) fn test_mm_sub_round_sd_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sub_round_sd_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_sub_round_sd_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2388,7 +2388,7 @@ pub(super) fn test_mm_sub_round_sd_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_sub_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_sub_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2411,7 +2411,7 @@ pub(super) fn test_mm_mask_sub_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_sub_round_sd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_sub_round_sd_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2434,7 +2434,7 @@ pub(super) fn test_mm_mask_sub_round_sd_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_sub_round_sd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_sub_round_sd_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2457,7 +2457,7 @@ pub(super) fn test_mm_mask_sub_round_sd_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_sub_round_sd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_sub_round_sd_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2480,7 +2480,7 @@ pub(super) fn test_mm_mask_sub_round_sd_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_sub_round_sd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_sub_round_sd_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2503,7 +2503,7 @@ pub(super) fn test_mm_mask_sub_round_sd_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_sub_round_sd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_sub_round_sd_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2526,7 +2526,7 @@ pub(super) fn test_mm_mask_sub_round_sd_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_sub_round_sd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_sub_round_sd_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2549,7 +2549,7 @@ pub(super) fn test_mm_mask_sub_round_sd_boundary_allones() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_sub_round_sd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_sub_round_sd_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2572,7 +2572,7 @@ pub(super) fn test_mm_mask_sub_round_sd_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_sub_round_sd_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_sub_round_sd_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2595,7 +2595,7 @@ pub(super) fn test_mm_mask_sub_round_sd_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_sub_round_sd_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_sub_round_sd_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2618,7 +2618,7 @@ pub(super) fn test_mm_mask_sub_round_sd_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_sub_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_sub_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2641,7 +2641,7 @@ pub(super) fn test_mm_maskz_sub_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_sub_round_sd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_sub_round_sd_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2664,7 +2664,7 @@ pub(super) fn test_mm_maskz_sub_round_sd_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_sub_round_sd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_sub_round_sd_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2687,7 +2687,7 @@ pub(super) fn test_mm_maskz_sub_round_sd_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_sub_round_sd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_sub_round_sd_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2710,7 +2710,7 @@ pub(super) fn test_mm_maskz_sub_round_sd_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_sub_round_sd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_sub_round_sd_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2733,7 +2733,7 @@ pub(super) fn test_mm_maskz_sub_round_sd_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_sub_round_sd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_sub_round_sd_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2756,7 +2756,7 @@ pub(super) fn test_mm_maskz_sub_round_sd_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_sub_round_sd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_sub_round_sd_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2779,7 +2779,7 @@ pub(super) fn test_mm_maskz_sub_round_sd_boundary_allones() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_sub_round_sd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_sub_round_sd_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2802,7 +2802,7 @@ pub(super) fn test_mm_maskz_sub_round_sd_boundary_mixed() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_sub_round_sd_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_sub_round_sd_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2825,7 +2825,7 @@ pub(super) fn test_mm_maskz_sub_round_sd_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_sub_round_sd_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_sub_round_sd_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2848,7 +2848,7 @@ pub(super) fn test_mm_maskz_sub_round_sd_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mul_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mul_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2871,7 +2871,7 @@ pub(super) fn test_mm_mul_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mul_round_ss_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mul_round_ss_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2894,7 +2894,7 @@ pub(super) fn test_mm_mul_round_ss_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mul_round_ss_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mul_round_ss_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2917,7 +2917,7 @@ pub(super) fn test_mm_mul_round_ss_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mul_round_ss_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mul_round_ss_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2940,7 +2940,7 @@ pub(super) fn test_mm_mul_round_ss_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mul_round_ss_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mul_round_ss_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2963,7 +2963,7 @@ pub(super) fn test_mm_mul_round_ss_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mul_round_ss_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mul_round_ss_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2986,7 +2986,7 @@ pub(super) fn test_mm_mul_round_ss_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mul_round_ss_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mul_round_ss_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3009,7 +3009,7 @@ pub(super) fn test_mm_mul_round_ss_boundary_allones() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mul_round_ss_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mul_round_ss_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3032,7 +3032,7 @@ pub(super) fn test_mm_mul_round_ss_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mul_round_ss_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mul_round_ss_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3055,7 +3055,7 @@ pub(super) fn test_mm_mul_round_ss_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mul_round_ss_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mul_round_ss_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3078,7 +3078,7 @@ pub(super) fn test_mm_mul_round_ss_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_mul_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_mul_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3101,7 +3101,7 @@ pub(super) fn test_mm_mask_mul_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_mul_round_ss_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_mul_round_ss_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3124,7 +3124,7 @@ pub(super) fn test_mm_mask_mul_round_ss_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_mul_round_ss_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_mul_round_ss_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3147,7 +3147,7 @@ pub(super) fn test_mm_mask_mul_round_ss_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_mul_round_ss_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_mul_round_ss_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3170,7 +3170,7 @@ pub(super) fn test_mm_mask_mul_round_ss_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_mul_round_ss_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_mul_round_ss_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3193,7 +3193,7 @@ pub(super) fn test_mm_mask_mul_round_ss_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_mul_round_ss_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_mul_round_ss_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3216,7 +3216,7 @@ pub(super) fn test_mm_mask_mul_round_ss_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_mul_round_ss_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_mul_round_ss_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3239,7 +3239,7 @@ pub(super) fn test_mm_mask_mul_round_ss_boundary_allones() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_mul_round_ss_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_mul_round_ss_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3262,7 +3262,7 @@ pub(super) fn test_mm_mask_mul_round_ss_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_mul_round_ss_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_mul_round_ss_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3285,7 +3285,7 @@ pub(super) fn test_mm_mask_mul_round_ss_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_mul_round_ss_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_mul_round_ss_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3308,7 +3308,7 @@ pub(super) fn test_mm_mask_mul_round_ss_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_mul_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_mul_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3331,7 +3331,7 @@ pub(super) fn test_mm_maskz_mul_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_mul_round_ss_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_mul_round_ss_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3354,7 +3354,7 @@ pub(super) fn test_mm_maskz_mul_round_ss_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_mul_round_ss_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_mul_round_ss_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3377,7 +3377,7 @@ pub(super) fn test_mm_maskz_mul_round_ss_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_mul_round_ss_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_mul_round_ss_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3400,7 +3400,7 @@ pub(super) fn test_mm_maskz_mul_round_ss_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_mul_round_ss_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_mul_round_ss_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3423,7 +3423,7 @@ pub(super) fn test_mm_maskz_mul_round_ss_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_mul_round_ss_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_mul_round_ss_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3446,7 +3446,7 @@ pub(super) fn test_mm_maskz_mul_round_ss_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_mul_round_ss_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_mul_round_ss_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3469,7 +3469,7 @@ pub(super) fn test_mm_maskz_mul_round_ss_boundary_allones() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_mul_round_ss_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_mul_round_ss_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3492,7 +3492,7 @@ pub(super) fn test_mm_maskz_mul_round_ss_boundary_mixed() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_mul_round_ss_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_mul_round_ss_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3515,7 +3515,7 @@ pub(super) fn test_mm_maskz_mul_round_ss_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_mul_round_ss_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_mul_round_ss_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3538,7 +3538,7 @@ pub(super) fn test_mm_maskz_mul_round_ss_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mul_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mul_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3561,7 +3561,7 @@ pub(super) fn test_mm_mul_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mul_round_sd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mul_round_sd_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3584,7 +3584,7 @@ pub(super) fn test_mm_mul_round_sd_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mul_round_sd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mul_round_sd_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3607,7 +3607,7 @@ pub(super) fn test_mm_mul_round_sd_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mul_round_sd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mul_round_sd_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3630,7 +3630,7 @@ pub(super) fn test_mm_mul_round_sd_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mul_round_sd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mul_round_sd_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3653,7 +3653,7 @@ pub(super) fn test_mm_mul_round_sd_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mul_round_sd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mul_round_sd_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3676,7 +3676,7 @@ pub(super) fn test_mm_mul_round_sd_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mul_round_sd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mul_round_sd_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3699,7 +3699,7 @@ pub(super) fn test_mm_mul_round_sd_boundary_allones() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mul_round_sd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mul_round_sd_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3722,7 +3722,7 @@ pub(super) fn test_mm_mul_round_sd_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mul_round_sd_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mul_round_sd_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3745,7 +3745,7 @@ pub(super) fn test_mm_mul_round_sd_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mul_round_sd_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mul_round_sd_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3768,7 +3768,7 @@ pub(super) fn test_mm_mul_round_sd_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_mul_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_mul_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3791,7 +3791,7 @@ pub(super) fn test_mm_mask_mul_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_mul_round_sd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_mul_round_sd_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3814,7 +3814,7 @@ pub(super) fn test_mm_mask_mul_round_sd_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_mul_round_sd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_mul_round_sd_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3837,7 +3837,7 @@ pub(super) fn test_mm_mask_mul_round_sd_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_mul_round_sd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_mul_round_sd_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3860,7 +3860,7 @@ pub(super) fn test_mm_mask_mul_round_sd_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_mul_round_sd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_mul_round_sd_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3883,7 +3883,7 @@ pub(super) fn test_mm_mask_mul_round_sd_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_mul_round_sd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_mul_round_sd_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3906,7 +3906,7 @@ pub(super) fn test_mm_mask_mul_round_sd_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_mul_round_sd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_mul_round_sd_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3929,7 +3929,7 @@ pub(super) fn test_mm_mask_mul_round_sd_boundary_allones() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_mul_round_sd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_mul_round_sd_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3952,7 +3952,7 @@ pub(super) fn test_mm_mask_mul_round_sd_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_mul_round_sd_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_mul_round_sd_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3975,7 +3975,7 @@ pub(super) fn test_mm_mask_mul_round_sd_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_mul_round_sd_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_mul_round_sd_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3998,7 +3998,7 @@ pub(super) fn test_mm_mask_mul_round_sd_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_mul_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_mul_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4021,7 +4021,7 @@ pub(super) fn test_mm_maskz_mul_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_mul_round_sd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_mul_round_sd_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4044,7 +4044,7 @@ pub(super) fn test_mm_maskz_mul_round_sd_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_mul_round_sd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_mul_round_sd_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4067,7 +4067,7 @@ pub(super) fn test_mm_maskz_mul_round_sd_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_mul_round_sd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_mul_round_sd_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4090,7 +4090,7 @@ pub(super) fn test_mm_maskz_mul_round_sd_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_mul_round_sd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_mul_round_sd_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4113,7 +4113,7 @@ pub(super) fn test_mm_maskz_mul_round_sd_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_mul_round_sd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_mul_round_sd_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4136,7 +4136,7 @@ pub(super) fn test_mm_maskz_mul_round_sd_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_mul_round_sd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_mul_round_sd_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4159,7 +4159,7 @@ pub(super) fn test_mm_maskz_mul_round_sd_boundary_allones() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_mul_round_sd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_mul_round_sd_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4182,7 +4182,7 @@ pub(super) fn test_mm_maskz_mul_round_sd_boundary_mixed() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_mul_round_sd_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_mul_round_sd_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4205,7 +4205,7 @@ pub(super) fn test_mm_maskz_mul_round_sd_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_mul_round_sd_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_mul_round_sd_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4228,7 +4228,7 @@ pub(super) fn test_mm_maskz_mul_round_sd_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_div_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_div_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4251,7 +4251,7 @@ pub(super) fn test_mm_div_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_div_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_div_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4274,7 +4274,7 @@ pub(super) fn test_mm_mask_div_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_div_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_div_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4297,7 +4297,7 @@ pub(super) fn test_mm_maskz_div_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_div_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_div_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4320,7 +4320,7 @@ pub(super) fn test_mm_div_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_div_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_div_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4343,7 +4343,7 @@ pub(super) fn test_mm_mask_div_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_div_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_div_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4366,7 +4366,7 @@ pub(super) fn test_mm_maskz_div_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_max_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_max_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4389,7 +4389,7 @@ pub(super) fn test_mm_max_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_max_round_ss_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_max_round_ss_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4412,7 +4412,7 @@ pub(super) fn test_mm_max_round_ss_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_max_round_ss_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_max_round_ss_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4435,7 +4435,7 @@ pub(super) fn test_mm_max_round_ss_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_max_round_ss_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_max_round_ss_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4458,7 +4458,7 @@ pub(super) fn test_mm_max_round_ss_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_max_round_ss_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_max_round_ss_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4481,7 +4481,7 @@ pub(super) fn test_mm_max_round_ss_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_max_round_ss_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_max_round_ss_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4504,7 +4504,7 @@ pub(super) fn test_mm_max_round_ss_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_max_round_ss_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_max_round_ss_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4527,7 +4527,7 @@ pub(super) fn test_mm_max_round_ss_boundary_allones() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_max_round_ss_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_max_round_ss_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4550,7 +4550,7 @@ pub(super) fn test_mm_max_round_ss_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_max_round_ss_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_max_round_ss_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4573,7 +4573,7 @@ pub(super) fn test_mm_max_round_ss_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_max_round_ss_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_max_round_ss_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4596,7 +4596,7 @@ pub(super) fn test_mm_max_round_ss_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_max_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4619,7 +4619,7 @@ pub(super) fn test_mm_mask_max_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_max_round_ss_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_round_ss_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4642,7 +4642,7 @@ pub(super) fn test_mm_mask_max_round_ss_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_max_round_ss_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_round_ss_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4665,7 +4665,7 @@ pub(super) fn test_mm_mask_max_round_ss_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_max_round_ss_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_round_ss_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4688,7 +4688,7 @@ pub(super) fn test_mm_mask_max_round_ss_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_max_round_ss_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_round_ss_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4711,7 +4711,7 @@ pub(super) fn test_mm_mask_max_round_ss_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_max_round_ss_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_round_ss_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4734,7 +4734,7 @@ pub(super) fn test_mm_mask_max_round_ss_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_max_round_ss_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_round_ss_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4757,7 +4757,7 @@ pub(super) fn test_mm_mask_max_round_ss_boundary_allones() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_max_round_ss_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_round_ss_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4780,7 +4780,7 @@ pub(super) fn test_mm_mask_max_round_ss_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_max_round_ss_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_round_ss_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4803,7 +4803,7 @@ pub(super) fn test_mm_mask_max_round_ss_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_max_round_ss_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_round_ss_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4826,7 +4826,7 @@ pub(super) fn test_mm_mask_max_round_ss_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_max_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4849,7 +4849,7 @@ pub(super) fn test_mm_maskz_max_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_max_round_ss_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_round_ss_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4872,7 +4872,7 @@ pub(super) fn test_mm_maskz_max_round_ss_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_max_round_ss_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_round_ss_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4895,7 +4895,7 @@ pub(super) fn test_mm_maskz_max_round_ss_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_max_round_ss_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_round_ss_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4918,7 +4918,7 @@ pub(super) fn test_mm_maskz_max_round_ss_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_max_round_ss_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_round_ss_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4941,7 +4941,7 @@ pub(super) fn test_mm_maskz_max_round_ss_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_max_round_ss_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_round_ss_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4964,7 +4964,7 @@ pub(super) fn test_mm_maskz_max_round_ss_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_max_round_ss_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_round_ss_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4987,7 +4987,7 @@ pub(super) fn test_mm_maskz_max_round_ss_boundary_allones() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_max_round_ss_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_round_ss_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5010,7 +5010,7 @@ pub(super) fn test_mm_maskz_max_round_ss_boundary_mixed() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_max_round_ss_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_round_ss_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5033,7 +5033,7 @@ pub(super) fn test_mm_maskz_max_round_ss_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_max_round_ss_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_round_ss_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5056,7 +5056,7 @@ pub(super) fn test_mm_maskz_max_round_ss_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_max_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_max_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5079,7 +5079,7 @@ pub(super) fn test_mm_max_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_max_round_sd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_max_round_sd_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5102,7 +5102,7 @@ pub(super) fn test_mm_max_round_sd_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_max_round_sd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_max_round_sd_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5125,7 +5125,7 @@ pub(super) fn test_mm_max_round_sd_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_max_round_sd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_max_round_sd_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5148,7 +5148,7 @@ pub(super) fn test_mm_max_round_sd_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_max_round_sd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_max_round_sd_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5171,7 +5171,7 @@ pub(super) fn test_mm_max_round_sd_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_max_round_sd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_max_round_sd_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5194,7 +5194,7 @@ pub(super) fn test_mm_max_round_sd_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_max_round_sd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_max_round_sd_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5217,7 +5217,7 @@ pub(super) fn test_mm_max_round_sd_boundary_allones() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_max_round_sd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_max_round_sd_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5240,7 +5240,7 @@ pub(super) fn test_mm_max_round_sd_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_max_round_sd_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_max_round_sd_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5263,7 +5263,7 @@ pub(super) fn test_mm_max_round_sd_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_max_round_sd_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_max_round_sd_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5286,7 +5286,7 @@ pub(super) fn test_mm_max_round_sd_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_max_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5309,7 +5309,7 @@ pub(super) fn test_mm_mask_max_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_max_round_sd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_round_sd_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5332,7 +5332,7 @@ pub(super) fn test_mm_mask_max_round_sd_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_max_round_sd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_round_sd_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5355,7 +5355,7 @@ pub(super) fn test_mm_mask_max_round_sd_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_max_round_sd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_round_sd_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5378,7 +5378,7 @@ pub(super) fn test_mm_mask_max_round_sd_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_max_round_sd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_round_sd_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5401,7 +5401,7 @@ pub(super) fn test_mm_mask_max_round_sd_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_max_round_sd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_round_sd_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5424,7 +5424,7 @@ pub(super) fn test_mm_mask_max_round_sd_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_max_round_sd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_round_sd_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5447,7 +5447,7 @@ pub(super) fn test_mm_mask_max_round_sd_boundary_allones() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_max_round_sd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_round_sd_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5470,7 +5470,7 @@ pub(super) fn test_mm_mask_max_round_sd_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_max_round_sd_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_round_sd_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5493,7 +5493,7 @@ pub(super) fn test_mm_mask_max_round_sd_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_max_round_sd_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_max_round_sd_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5516,7 +5516,7 @@ pub(super) fn test_mm_mask_max_round_sd_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_max_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5539,7 +5539,7 @@ pub(super) fn test_mm_maskz_max_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_max_round_sd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_round_sd_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5562,7 +5562,7 @@ pub(super) fn test_mm_maskz_max_round_sd_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_max_round_sd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_round_sd_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5585,7 +5585,7 @@ pub(super) fn test_mm_maskz_max_round_sd_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_max_round_sd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_round_sd_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5608,7 +5608,7 @@ pub(super) fn test_mm_maskz_max_round_sd_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_max_round_sd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_round_sd_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5631,7 +5631,7 @@ pub(super) fn test_mm_maskz_max_round_sd_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_max_round_sd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_round_sd_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5654,7 +5654,7 @@ pub(super) fn test_mm_maskz_max_round_sd_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_max_round_sd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_round_sd_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5677,7 +5677,7 @@ pub(super) fn test_mm_maskz_max_round_sd_boundary_allones() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_max_round_sd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_round_sd_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5700,7 +5700,7 @@ pub(super) fn test_mm_maskz_max_round_sd_boundary_mixed() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_max_round_sd_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_round_sd_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5723,7 +5723,7 @@ pub(super) fn test_mm_maskz_max_round_sd_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_max_round_sd_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_max_round_sd_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5746,7 +5746,7 @@ pub(super) fn test_mm_maskz_max_round_sd_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_min_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_min_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5769,7 +5769,7 @@ pub(super) fn test_mm_min_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_min_round_ss_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_min_round_ss_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5792,7 +5792,7 @@ pub(super) fn test_mm_min_round_ss_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_min_round_ss_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_min_round_ss_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5815,7 +5815,7 @@ pub(super) fn test_mm_min_round_ss_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_min_round_ss_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_min_round_ss_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5838,7 +5838,7 @@ pub(super) fn test_mm_min_round_ss_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_min_round_ss_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_min_round_ss_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5861,7 +5861,7 @@ pub(super) fn test_mm_min_round_ss_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_min_round_ss_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_min_round_ss_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5884,7 +5884,7 @@ pub(super) fn test_mm_min_round_ss_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_min_round_ss_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_min_round_ss_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5907,7 +5907,7 @@ pub(super) fn test_mm_min_round_ss_boundary_allones() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_min_round_ss_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_min_round_ss_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5930,7 +5930,7 @@ pub(super) fn test_mm_min_round_ss_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_min_round_ss_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_min_round_ss_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5953,7 +5953,7 @@ pub(super) fn test_mm_min_round_ss_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_min_round_ss_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_min_round_ss_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5976,7 +5976,7 @@ pub(super) fn test_mm_min_round_ss_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_min_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_min_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -5999,7 +5999,7 @@ pub(super) fn test_mm_mask_min_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_min_round_ss_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_min_round_ss_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6022,7 +6022,7 @@ pub(super) fn test_mm_mask_min_round_ss_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_min_round_ss_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_min_round_ss_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6045,7 +6045,7 @@ pub(super) fn test_mm_mask_min_round_ss_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_min_round_ss_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_min_round_ss_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6068,7 +6068,7 @@ pub(super) fn test_mm_mask_min_round_ss_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_min_round_ss_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_min_round_ss_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6091,7 +6091,7 @@ pub(super) fn test_mm_mask_min_round_ss_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_min_round_ss_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_min_round_ss_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6114,7 +6114,7 @@ pub(super) fn test_mm_mask_min_round_ss_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_min_round_ss_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_min_round_ss_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6137,7 +6137,7 @@ pub(super) fn test_mm_mask_min_round_ss_boundary_allones() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_min_round_ss_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_min_round_ss_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6160,7 +6160,7 @@ pub(super) fn test_mm_mask_min_round_ss_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_min_round_ss_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_min_round_ss_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6183,7 +6183,7 @@ pub(super) fn test_mm_mask_min_round_ss_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_min_round_ss_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_min_round_ss_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6206,7 +6206,7 @@ pub(super) fn test_mm_mask_min_round_ss_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_min_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_min_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6229,7 +6229,7 @@ pub(super) fn test_mm_maskz_min_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_min_round_ss_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_min_round_ss_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6252,7 +6252,7 @@ pub(super) fn test_mm_maskz_min_round_ss_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_min_round_ss_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_min_round_ss_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6275,7 +6275,7 @@ pub(super) fn test_mm_maskz_min_round_ss_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_min_round_ss_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_min_round_ss_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6298,7 +6298,7 @@ pub(super) fn test_mm_maskz_min_round_ss_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_min_round_ss_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_min_round_ss_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6321,7 +6321,7 @@ pub(super) fn test_mm_maskz_min_round_ss_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_min_round_ss_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_min_round_ss_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6344,7 +6344,7 @@ pub(super) fn test_mm_maskz_min_round_ss_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_min_round_ss_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_min_round_ss_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6367,7 +6367,7 @@ pub(super) fn test_mm_maskz_min_round_ss_boundary_allones() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_min_round_ss_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_min_round_ss_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6390,7 +6390,7 @@ pub(super) fn test_mm_maskz_min_round_ss_boundary_mixed() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_min_round_ss_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_min_round_ss_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6413,7 +6413,7 @@ pub(super) fn test_mm_maskz_min_round_ss_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_min_round_ss_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_min_round_ss_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6436,7 +6436,7 @@ pub(super) fn test_mm_maskz_min_round_ss_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_min_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_min_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6459,7 +6459,7 @@ pub(super) fn test_mm_min_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_min_round_sd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_min_round_sd_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6482,7 +6482,7 @@ pub(super) fn test_mm_min_round_sd_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_min_round_sd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_min_round_sd_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6505,7 +6505,7 @@ pub(super) fn test_mm_min_round_sd_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_min_round_sd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_min_round_sd_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6528,7 +6528,7 @@ pub(super) fn test_mm_min_round_sd_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_min_round_sd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_min_round_sd_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6551,7 +6551,7 @@ pub(super) fn test_mm_min_round_sd_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_min_round_sd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_min_round_sd_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6574,7 +6574,7 @@ pub(super) fn test_mm_min_round_sd_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_min_round_sd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_min_round_sd_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6597,7 +6597,7 @@ pub(super) fn test_mm_min_round_sd_boundary_allones() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_min_round_sd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_min_round_sd_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6620,7 +6620,7 @@ pub(super) fn test_mm_min_round_sd_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_min_round_sd_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_min_round_sd_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6643,7 +6643,7 @@ pub(super) fn test_mm_min_round_sd_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_min_round_sd_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_min_round_sd_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6666,7 +6666,7 @@ pub(super) fn test_mm_min_round_sd_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_min_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_min_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6689,7 +6689,7 @@ pub(super) fn test_mm_mask_min_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_min_round_sd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_min_round_sd_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6712,7 +6712,7 @@ pub(super) fn test_mm_mask_min_round_sd_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_min_round_sd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_min_round_sd_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6735,7 +6735,7 @@ pub(super) fn test_mm_mask_min_round_sd_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_min_round_sd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_min_round_sd_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6758,7 +6758,7 @@ pub(super) fn test_mm_mask_min_round_sd_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_min_round_sd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_min_round_sd_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6781,7 +6781,7 @@ pub(super) fn test_mm_mask_min_round_sd_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_min_round_sd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_min_round_sd_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6804,7 +6804,7 @@ pub(super) fn test_mm_mask_min_round_sd_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_min_round_sd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_min_round_sd_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6827,7 +6827,7 @@ pub(super) fn test_mm_mask_min_round_sd_boundary_allones() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_min_round_sd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_min_round_sd_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6850,7 +6850,7 @@ pub(super) fn test_mm_mask_min_round_sd_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_min_round_sd_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_min_round_sd_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6873,7 +6873,7 @@ pub(super) fn test_mm_mask_min_round_sd_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_min_round_sd_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_min_round_sd_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6896,7 +6896,7 @@ pub(super) fn test_mm_mask_min_round_sd_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_min_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_min_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6919,7 +6919,7 @@ pub(super) fn test_mm_maskz_min_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_min_round_sd_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_min_round_sd_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6942,7 +6942,7 @@ pub(super) fn test_mm_maskz_min_round_sd_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_min_round_sd_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_min_round_sd_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6965,7 +6965,7 @@ pub(super) fn test_mm_maskz_min_round_sd_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_min_round_sd_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_min_round_sd_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -6988,7 +6988,7 @@ pub(super) fn test_mm_maskz_min_round_sd_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_min_round_sd_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_min_round_sd_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7011,7 +7011,7 @@ pub(super) fn test_mm_maskz_min_round_sd_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_min_round_sd_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_min_round_sd_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7034,7 +7034,7 @@ pub(super) fn test_mm_maskz_min_round_sd_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_min_round_sd_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_min_round_sd_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7057,7 +7057,7 @@ pub(super) fn test_mm_maskz_min_round_sd_boundary_allones() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_min_round_sd_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_min_round_sd_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7080,7 +7080,7 @@ pub(super) fn test_mm_maskz_min_round_sd_boundary_mixed() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_min_round_sd_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_min_round_sd_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7103,7 +7103,7 @@ pub(super) fn test_mm_maskz_min_round_sd_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_min_round_sd_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_min_round_sd_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7126,7 +7126,7 @@ pub(super) fn test_mm_maskz_min_round_sd_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sqrt_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_sqrt_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7149,7 +7149,7 @@ pub(super) fn test_mm_sqrt_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_sqrt_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_sqrt_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7172,7 +7172,7 @@ pub(super) fn test_mm_mask_sqrt_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_sqrt_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_sqrt_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7195,7 +7195,7 @@ pub(super) fn test_mm_maskz_sqrt_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_sqrt_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_sqrt_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7218,7 +7218,7 @@ pub(super) fn test_mm_sqrt_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_sqrt_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_sqrt_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7241,7 +7241,7 @@ pub(super) fn test_mm_mask_sqrt_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_sqrt_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_sqrt_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7264,7 +7264,7 @@ pub(super) fn test_mm_maskz_sqrt_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_getexp_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_getexp_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7287,7 +7287,7 @@ pub(super) fn test_mm_getexp_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_getexp_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_mask_getexp_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7310,7 +7310,7 @@ pub(super) fn test_mm_mask_getexp_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_getexp_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_maskz_getexp_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -7333,7 +7333,7 @@ pub(super) fn test_mm_maskz_getexp_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_getexp_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512f_mm_getexp_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }

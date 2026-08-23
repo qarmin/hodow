@@ -8,7 +8,7 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_cpuid_count() -> Result<(), String> {
+pub(super) fn test_x86_cpuid_cpuid_count() -> Result<(), String> {
     unsafe {
         let _result = __cpuid_count(1u32, 2u32);
 
@@ -27,7 +27,7 @@ pub(super) fn test_cpuid_count() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_cpuid() -> Result<(), String> {
+pub(super) fn test_x86_cpuid_cpuid() -> Result<(), String> {
     unsafe {
         let _result = __cpuid(1u32);
 
@@ -46,7 +46,7 @@ pub(super) fn test_cpuid() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_get_cpuid_max() -> Result<(), String> {
+pub(super) fn test_x86_cpuid_get_cpuid_max() -> Result<(), String> {
     unsafe {
         __get_cpuid_max(1u32);
 

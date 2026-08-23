@@ -8,7 +8,7 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_xsave() -> Result<(), String> {
+pub(super) fn test_x86_xsave_xsave() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -20,7 +20,7 @@ pub(super) fn test_xsave() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_xgetbv() -> Result<(), String> {
+pub(super) fn test_x86_xsave_xgetbv() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -43,7 +43,7 @@ pub(super) fn test_xgetbv() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_xsaveopt() -> Result<(), String> {
+pub(super) fn test_x86_xsave_xsaveopt() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -55,7 +55,7 @@ pub(super) fn test_xsaveopt() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_xsavec() -> Result<(), String> {
+pub(super) fn test_x86_xsave_xsavec() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }

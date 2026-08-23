@@ -13,10 +13,10 @@ impl ExtensionTest for XSAVE {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_xsave, "test_xsave"),
-            (&test_xgetbv, "test_xgetbv"),
-            (&test_xsaveopt, "test_xsaveopt"),
-            (&test_xsavec, "test_xsavec"),
+            (&test_x86_xsave_xsave, "test_x86_xsave_xsave"),
+            (&test_x86_xsave_xgetbv, "test_x86_xsave_xgetbv"),
+            (&test_x86_xsave_xsaveopt, "test_x86_xsave_xsaveopt"),
+            (&test_x86_xsave_xsavec, "test_x86_xsave_xsavec"),
         ]
     }
 }

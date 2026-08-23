@@ -8,7 +8,7 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_bittest() -> Result<(), String> {
+pub(super) fn test_x86_bt_bittest() -> Result<(), String> {
     unsafe {
         let ptr_p = crate::cpu::common::Aligned64([1i32; 16]);
         let b = 2i32;
@@ -18,7 +18,7 @@ pub(super) fn test_bittest() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_bittestandset() -> Result<(), String> {
+pub(super) fn test_x86_bt_bittestandset() -> Result<(), String> {
     unsafe {
         let mut ptr_p = crate::cpu::common::Aligned64([1i32; 16]);
         let b = 2i32;
@@ -28,7 +28,7 @@ pub(super) fn test_bittestandset() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_bittestandreset() -> Result<(), String> {
+pub(super) fn test_x86_bt_bittestandreset() -> Result<(), String> {
     unsafe {
         let mut ptr_p = crate::cpu::common::Aligned64([1i32; 16]);
         let b = 2i32;
@@ -38,7 +38,7 @@ pub(super) fn test_bittestandreset() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_bittestandcomplement() -> Result<(), String> {
+pub(super) fn test_x86_bt_bittestandcomplement() -> Result<(), String> {
     unsafe {
         let mut ptr_p = crate::cpu::common::Aligned64([1i32; 16]);
         let b = 2i32;

@@ -13,9 +13,9 @@ impl ExtensionTest for CPUID {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_cpuid_count, "test_cpuid_count"),
-            (&test_cpuid, "test_cpuid"),
-            (&test_get_cpuid_max, "test_get_cpuid_max"),
+            (&test_x86_cpuid_cpuid_count, "test_x86_cpuid_cpuid_count"),
+            (&test_x86_cpuid_cpuid, "test_x86_cpuid_cpuid"),
+            (&test_x86_cpuid_get_cpuid_max, "test_x86_cpuid_get_cpuid_max"),
         ]
     }
 }

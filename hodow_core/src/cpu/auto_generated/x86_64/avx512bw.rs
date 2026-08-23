@@ -13,8 +13,8 @@ impl ExtensionTest for AVX512BW {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_cvtmask64_u64, "test_cvtmask64_u64"),
-            (&test_cvtu64_mask64, "test_cvtu64_mask64"),
+            (&test_x86_64_avx512bw_cvtmask64_u64, "test_x86_64_avx512bw_cvtmask64_u64"),
+            (&test_x86_64_avx512bw_cvtu64_mask64, "test_x86_64_avx512bw_cvtu64_mask64"),
         ]
     }
 }

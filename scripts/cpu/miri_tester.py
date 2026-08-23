@@ -46,7 +46,11 @@ class FatalBatchError(Exception):
 
 
 def load_excluded_functions(base: Path) -> set[str]:
-    """Load excluded function names from excluded_functions.txt."""
+    """Load excluded function names from excluded_functions.txt, as the bare intrinsic
+    name suffix (e.g. "mm_add_epi32", no leading underscore, no "test_"/arch/ext prefix).
+    Generated test names are `test_<arch>_<ext>_<func-without-leading-underscore>`, so a
+    real test name is matched against this by suffix (see is_excluded()), not equality -
+    the arch/ext portion in between isn't known here."""
     excluded_path = base / "scripts" / "cpu" / "excluded_functions.txt"
     excluded = set()
 
@@ -59,16 +63,19 @@ def load_excluded_functions(base: Path) -> set[str]:
             # Skip empty lines and comment lines
             if not line or line.startswith('#'):
                 continue
-            # Extract function name (format: _mm_function_name or test_function_name)
-            if line.startswith('_') or line.startswith('test_'):
-                # Convert intrinsic name to test name if needed
-                if line.startswith('_'):
-                    test_name = f"test{line}"
-                else:
-                    test_name = line
-                excluded.add(test_name)
+            if line.startswith('_'):
+                excluded.add(line.lstrip('_'))
+            elif line.startswith('test_'):
+                # Legacy entries written as a full old-style test name; strip the prefix.
+                excluded.add(line[len('test_'):])
 
     return excluded
+
+
+def is_excluded(test_function: str, excluded: set[str]) -> bool:
+    """True if `test_function` (a real generated name, test_<arch>_<ext>_<func>) matches
+    one of the bare intrinsic-name suffixes in `excluded` at an underscore boundary."""
+    return any(test_function == f"test_{suffix}" or test_function.endswith(f"_{suffix}") for suffix in excluded)
 
 
 def get_all_test_functions(base: Path) -> list[str]:
@@ -337,7 +344,7 @@ def main() -> int:
     print(f"Found {len(all_test_functions)} test functions")
 
     # Filter out excluded functions
-    test_functions = [t for t in all_test_functions if t not in excluded]
+    test_functions = [t for t in all_test_functions if not is_excluded(t, excluded)]
     num_filtered = len(all_test_functions) - len(test_functions)
 
     if num_filtered > 0:

@@ -13,8 +13,8 @@ impl ExtensionTest for SSE41 {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_mm_extract_epi64, "test_mm_extract_epi64"),
-            (&test_mm_insert_epi64, "test_mm_insert_epi64"),
+            (&test_x86_64_sse41_mm_extract_epi64, "test_x86_64_sse41_mm_extract_epi64"),
+            (&test_x86_64_sse41_mm_insert_epi64, "test_x86_64_sse41_mm_insert_epi64"),
         ]
     }
 }

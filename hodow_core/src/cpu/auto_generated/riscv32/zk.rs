@@ -13,18 +13,18 @@ impl ExtensionTest for ZK {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_aes32esi, "test_aes32esi"),
-            (&test_aes32esmi, "test_aes32esmi"),
-            (&test_aes32dsi, "test_aes32dsi"),
-            (&test_aes32dsmi, "test_aes32dsmi"),
-            (&test_zip, "test_zip"),
-            (&test_unzip, "test_unzip"),
-            (&test_sha512sig0h, "test_sha512sig0h"),
-            (&test_sha512sig0l, "test_sha512sig0l"),
-            (&test_sha512sig1h, "test_sha512sig1h"),
-            (&test_sha512sig1l, "test_sha512sig1l"),
-            (&test_sha512sum0r, "test_sha512sum0r"),
-            (&test_sha512sum1r, "test_sha512sum1r"),
+            (&test_riscv32_zk_aes32esi, "test_riscv32_zk_aes32esi"),
+            (&test_riscv32_zk_aes32esmi, "test_riscv32_zk_aes32esmi"),
+            (&test_riscv32_zk_aes32dsi, "test_riscv32_zk_aes32dsi"),
+            (&test_riscv32_zk_aes32dsmi, "test_riscv32_zk_aes32dsmi"),
+            (&test_riscv32_zk_zip, "test_riscv32_zk_zip"),
+            (&test_riscv32_zk_unzip, "test_riscv32_zk_unzip"),
+            (&test_riscv32_zk_sha512sig0h, "test_riscv32_zk_sha512sig0h"),
+            (&test_riscv32_zk_sha512sig0l, "test_riscv32_zk_sha512sig0l"),
+            (&test_riscv32_zk_sha512sig1h, "test_riscv32_zk_sha512sig1h"),
+            (&test_riscv32_zk_sha512sig1l, "test_riscv32_zk_sha512sig1l"),
+            (&test_riscv32_zk_sha512sum0r, "test_riscv32_zk_sha512sum0r"),
+            (&test_riscv32_zk_sha512sum1r, "test_riscv32_zk_sha512sum1r"),
         ]
     }
 }

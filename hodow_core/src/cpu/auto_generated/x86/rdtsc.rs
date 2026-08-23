@@ -13,8 +13,8 @@ impl ExtensionTest for RDTSC {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_rdtsc, "test_rdtsc"),
-            (&test_rdtscp, "test_rdtscp"),
+            (&test_x86_rdtsc_rdtsc, "test_x86_rdtsc_rdtsc"),
+            (&test_x86_rdtsc_rdtscp, "test_x86_rdtsc_rdtscp"),
         ]
     }
 }

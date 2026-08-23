@@ -8,7 +8,7 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_mm512_madd52hi_epu64() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_madd52hi_epu64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -31,7 +31,7 @@ pub(super) fn test_mm512_madd52hi_epu64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_madd52hi_epu64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_madd52hi_epu64_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -54,7 +54,7 @@ pub(super) fn test_mm512_madd52hi_epu64_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_madd52hi_epu64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_madd52hi_epu64_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -77,7 +77,7 @@ pub(super) fn test_mm512_madd52hi_epu64_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_madd52hi_epu64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_madd52hi_epu64_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -100,7 +100,7 @@ pub(super) fn test_mm512_madd52hi_epu64_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_madd52hi_epu64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_madd52hi_epu64_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -123,7 +123,7 @@ pub(super) fn test_mm512_madd52hi_epu64_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_madd52hi_epu64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_madd52hi_epu64_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -146,7 +146,7 @@ pub(super) fn test_mm512_madd52hi_epu64_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_madd52hi_epu64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_madd52hi_epu64_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -169,7 +169,7 @@ pub(super) fn test_mm512_madd52hi_epu64_boundary_allones() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_madd52hi_epu64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_madd52hi_epu64_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -192,7 +192,7 @@ pub(super) fn test_mm512_madd52hi_epu64_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_madd52hi_epu64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_madd52hi_epu64_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -215,7 +215,7 @@ pub(super) fn test_mm512_madd52hi_epu64_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_madd52hi_epu64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_madd52hi_epu64_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -238,7 +238,7 @@ pub(super) fn test_mm512_madd52hi_epu64_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_madd52hi_epu64() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_mask_madd52hi_epu64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -261,7 +261,7 @@ pub(super) fn test_mm512_mask_madd52hi_epu64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_madd52hi_epu64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_mask_madd52hi_epu64_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -284,7 +284,7 @@ pub(super) fn test_mm512_mask_madd52hi_epu64_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_madd52hi_epu64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_mask_madd52hi_epu64_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -307,7 +307,7 @@ pub(super) fn test_mm512_mask_madd52hi_epu64_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_madd52hi_epu64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_mask_madd52hi_epu64_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -330,7 +330,7 @@ pub(super) fn test_mm512_mask_madd52hi_epu64_boundary_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_madd52hi_epu64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_mask_madd52hi_epu64_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -353,7 +353,7 @@ pub(super) fn test_mm512_mask_madd52hi_epu64_boundary_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_madd52hi_epu64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_mask_madd52hi_epu64_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -376,7 +376,7 @@ pub(super) fn test_mm512_mask_madd52hi_epu64_boundary_zero() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_madd52hi_epu64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_mask_madd52hi_epu64_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -399,7 +399,7 @@ pub(super) fn test_mm512_mask_madd52hi_epu64_boundary_allones() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_madd52hi_epu64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_mask_madd52hi_epu64_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -422,7 +422,7 @@ pub(super) fn test_mm512_mask_madd52hi_epu64_boundary_mixed() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_madd52hi_epu64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_mask_madd52hi_epu64_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -445,7 +445,7 @@ pub(super) fn test_mm512_mask_madd52hi_epu64_asym_min_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_madd52hi_epu64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_mask_madd52hi_epu64_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -468,7 +468,7 @@ pub(super) fn test_mm512_mask_madd52hi_epu64_asym_max_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_madd52hi_epu64() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_maskz_madd52hi_epu64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -491,7 +491,7 @@ pub(super) fn test_mm512_maskz_madd52hi_epu64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_madd52hi_epu64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_maskz_madd52hi_epu64_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -514,7 +514,7 @@ pub(super) fn test_mm512_maskz_madd52hi_epu64_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_madd52hi_epu64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_maskz_madd52hi_epu64_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -537,7 +537,7 @@ pub(super) fn test_mm512_maskz_madd52hi_epu64_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_madd52hi_epu64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_maskz_madd52hi_epu64_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -560,7 +560,7 @@ pub(super) fn test_mm512_maskz_madd52hi_epu64_boundary_min() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_madd52hi_epu64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_maskz_madd52hi_epu64_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -583,7 +583,7 @@ pub(super) fn test_mm512_maskz_madd52hi_epu64_boundary_max() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_madd52hi_epu64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_maskz_madd52hi_epu64_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -606,7 +606,7 @@ pub(super) fn test_mm512_maskz_madd52hi_epu64_boundary_zero() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_madd52hi_epu64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_maskz_madd52hi_epu64_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -629,7 +629,7 @@ pub(super) fn test_mm512_maskz_madd52hi_epu64_boundary_allones() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_madd52hi_epu64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_maskz_madd52hi_epu64_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -652,7 +652,7 @@ pub(super) fn test_mm512_maskz_madd52hi_epu64_boundary_mixed() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_madd52hi_epu64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_maskz_madd52hi_epu64_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -675,7 +675,7 @@ pub(super) fn test_mm512_maskz_madd52hi_epu64_asym_min_max() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_madd52hi_epu64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_maskz_madd52hi_epu64_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -698,7 +698,7 @@ pub(super) fn test_mm512_maskz_madd52hi_epu64_asym_max_min() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_madd52lo_epu64() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_madd52lo_epu64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -721,7 +721,7 @@ pub(super) fn test_mm512_madd52lo_epu64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_madd52lo_epu64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_madd52lo_epu64_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -744,7 +744,7 @@ pub(super) fn test_mm512_madd52lo_epu64_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_madd52lo_epu64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_madd52lo_epu64_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -767,7 +767,7 @@ pub(super) fn test_mm512_madd52lo_epu64_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_madd52lo_epu64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_madd52lo_epu64_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -790,7 +790,7 @@ pub(super) fn test_mm512_madd52lo_epu64_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_madd52lo_epu64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_madd52lo_epu64_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -813,7 +813,7 @@ pub(super) fn test_mm512_madd52lo_epu64_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_madd52lo_epu64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_madd52lo_epu64_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -836,7 +836,7 @@ pub(super) fn test_mm512_madd52lo_epu64_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_madd52lo_epu64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_madd52lo_epu64_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -859,7 +859,7 @@ pub(super) fn test_mm512_madd52lo_epu64_boundary_allones() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm512_madd52lo_epu64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_madd52lo_epu64_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -882,7 +882,7 @@ pub(super) fn test_mm512_madd52lo_epu64_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_madd52lo_epu64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_madd52lo_epu64_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -905,7 +905,7 @@ pub(super) fn test_mm512_madd52lo_epu64_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_madd52lo_epu64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_madd52lo_epu64_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -928,7 +928,7 @@ pub(super) fn test_mm512_madd52lo_epu64_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_madd52lo_epu64() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_mask_madd52lo_epu64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -951,7 +951,7 @@ pub(super) fn test_mm512_mask_madd52lo_epu64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_madd52lo_epu64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_mask_madd52lo_epu64_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -974,7 +974,7 @@ pub(super) fn test_mm512_mask_madd52lo_epu64_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_madd52lo_epu64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_mask_madd52lo_epu64_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -997,7 +997,7 @@ pub(super) fn test_mm512_mask_madd52lo_epu64_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_madd52lo_epu64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_mask_madd52lo_epu64_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1020,7 +1020,7 @@ pub(super) fn test_mm512_mask_madd52lo_epu64_boundary_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_madd52lo_epu64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_mask_madd52lo_epu64_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1043,7 +1043,7 @@ pub(super) fn test_mm512_mask_madd52lo_epu64_boundary_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_madd52lo_epu64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_mask_madd52lo_epu64_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1066,7 +1066,7 @@ pub(super) fn test_mm512_mask_madd52lo_epu64_boundary_zero() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_madd52lo_epu64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_mask_madd52lo_epu64_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1089,7 +1089,7 @@ pub(super) fn test_mm512_mask_madd52lo_epu64_boundary_allones() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_madd52lo_epu64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_mask_madd52lo_epu64_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1112,7 +1112,7 @@ pub(super) fn test_mm512_mask_madd52lo_epu64_boundary_mixed() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_madd52lo_epu64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_mask_madd52lo_epu64_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1135,7 +1135,7 @@ pub(super) fn test_mm512_mask_madd52lo_epu64_asym_min_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_madd52lo_epu64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_mask_madd52lo_epu64_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1158,7 +1158,7 @@ pub(super) fn test_mm512_mask_madd52lo_epu64_asym_max_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_madd52lo_epu64() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_maskz_madd52lo_epu64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1181,7 +1181,7 @@ pub(super) fn test_mm512_maskz_madd52lo_epu64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_madd52lo_epu64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_maskz_madd52lo_epu64_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1204,7 +1204,7 @@ pub(super) fn test_mm512_maskz_madd52lo_epu64_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_madd52lo_epu64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_maskz_madd52lo_epu64_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1227,7 +1227,7 @@ pub(super) fn test_mm512_maskz_madd52lo_epu64_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_madd52lo_epu64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_maskz_madd52lo_epu64_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1250,7 +1250,7 @@ pub(super) fn test_mm512_maskz_madd52lo_epu64_boundary_min() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_madd52lo_epu64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_maskz_madd52lo_epu64_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1273,7 +1273,7 @@ pub(super) fn test_mm512_maskz_madd52lo_epu64_boundary_max() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_madd52lo_epu64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_maskz_madd52lo_epu64_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1296,7 +1296,7 @@ pub(super) fn test_mm512_maskz_madd52lo_epu64_boundary_zero() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_madd52lo_epu64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_maskz_madd52lo_epu64_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1319,7 +1319,7 @@ pub(super) fn test_mm512_maskz_madd52lo_epu64_boundary_allones() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_madd52lo_epu64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_maskz_madd52lo_epu64_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1342,7 +1342,7 @@ pub(super) fn test_mm512_maskz_madd52lo_epu64_boundary_mixed() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_madd52lo_epu64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_maskz_madd52lo_epu64_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1365,7 +1365,7 @@ pub(super) fn test_mm512_maskz_madd52lo_epu64_asym_min_max() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_madd52lo_epu64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm512_maskz_madd52lo_epu64_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1388,7 +1388,7 @@ pub(super) fn test_mm512_maskz_madd52lo_epu64_asym_max_min() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_madd52hi_epu64() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_madd52hi_epu64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1411,7 +1411,7 @@ pub(super) fn test_mm256_madd52hi_epu64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_madd52hi_epu64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_madd52hi_epu64_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1434,7 +1434,7 @@ pub(super) fn test_mm256_madd52hi_epu64_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_madd52hi_epu64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_madd52hi_epu64_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1457,7 +1457,7 @@ pub(super) fn test_mm256_madd52hi_epu64_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_madd52hi_epu64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_madd52hi_epu64_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1480,7 +1480,7 @@ pub(super) fn test_mm256_madd52hi_epu64_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_madd52hi_epu64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_madd52hi_epu64_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1503,7 +1503,7 @@ pub(super) fn test_mm256_madd52hi_epu64_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_madd52hi_epu64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_madd52hi_epu64_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1526,7 +1526,7 @@ pub(super) fn test_mm256_madd52hi_epu64_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_madd52hi_epu64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_madd52hi_epu64_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1549,7 +1549,7 @@ pub(super) fn test_mm256_madd52hi_epu64_boundary_allones() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm256_madd52hi_epu64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_madd52hi_epu64_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1572,7 +1572,7 @@ pub(super) fn test_mm256_madd52hi_epu64_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_madd52hi_epu64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_madd52hi_epu64_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1595,7 +1595,7 @@ pub(super) fn test_mm256_madd52hi_epu64_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_madd52hi_epu64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_madd52hi_epu64_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1618,7 +1618,7 @@ pub(super) fn test_mm256_madd52hi_epu64_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_madd52hi_epu64() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_mask_madd52hi_epu64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1641,7 +1641,7 @@ pub(super) fn test_mm256_mask_madd52hi_epu64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_madd52hi_epu64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_mask_madd52hi_epu64_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1664,7 +1664,7 @@ pub(super) fn test_mm256_mask_madd52hi_epu64_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_madd52hi_epu64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_mask_madd52hi_epu64_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1687,7 +1687,7 @@ pub(super) fn test_mm256_mask_madd52hi_epu64_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_madd52hi_epu64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_mask_madd52hi_epu64_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1710,7 +1710,7 @@ pub(super) fn test_mm256_mask_madd52hi_epu64_boundary_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_madd52hi_epu64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_mask_madd52hi_epu64_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1733,7 +1733,7 @@ pub(super) fn test_mm256_mask_madd52hi_epu64_boundary_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_madd52hi_epu64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_mask_madd52hi_epu64_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1756,7 +1756,7 @@ pub(super) fn test_mm256_mask_madd52hi_epu64_boundary_zero() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_madd52hi_epu64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_mask_madd52hi_epu64_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1779,7 +1779,7 @@ pub(super) fn test_mm256_mask_madd52hi_epu64_boundary_allones() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_madd52hi_epu64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_mask_madd52hi_epu64_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1802,7 +1802,7 @@ pub(super) fn test_mm256_mask_madd52hi_epu64_boundary_mixed() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_madd52hi_epu64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_mask_madd52hi_epu64_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1825,7 +1825,7 @@ pub(super) fn test_mm256_mask_madd52hi_epu64_asym_min_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_madd52hi_epu64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_mask_madd52hi_epu64_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1848,7 +1848,7 @@ pub(super) fn test_mm256_mask_madd52hi_epu64_asym_max_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_madd52hi_epu64() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_maskz_madd52hi_epu64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1871,7 +1871,7 @@ pub(super) fn test_mm256_maskz_madd52hi_epu64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_madd52hi_epu64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_maskz_madd52hi_epu64_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1894,7 +1894,7 @@ pub(super) fn test_mm256_maskz_madd52hi_epu64_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_madd52hi_epu64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_maskz_madd52hi_epu64_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1917,7 +1917,7 @@ pub(super) fn test_mm256_maskz_madd52hi_epu64_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_madd52hi_epu64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_maskz_madd52hi_epu64_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1940,7 +1940,7 @@ pub(super) fn test_mm256_maskz_madd52hi_epu64_boundary_min() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_madd52hi_epu64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_maskz_madd52hi_epu64_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1963,7 +1963,7 @@ pub(super) fn test_mm256_maskz_madd52hi_epu64_boundary_max() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_madd52hi_epu64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_maskz_madd52hi_epu64_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1986,7 +1986,7 @@ pub(super) fn test_mm256_maskz_madd52hi_epu64_boundary_zero() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_madd52hi_epu64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_maskz_madd52hi_epu64_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2009,7 +2009,7 @@ pub(super) fn test_mm256_maskz_madd52hi_epu64_boundary_allones() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_madd52hi_epu64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_maskz_madd52hi_epu64_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2032,7 +2032,7 @@ pub(super) fn test_mm256_maskz_madd52hi_epu64_boundary_mixed() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_madd52hi_epu64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_maskz_madd52hi_epu64_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2055,7 +2055,7 @@ pub(super) fn test_mm256_maskz_madd52hi_epu64_asym_min_max() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_madd52hi_epu64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_maskz_madd52hi_epu64_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2078,7 +2078,7 @@ pub(super) fn test_mm256_maskz_madd52hi_epu64_asym_max_min() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_madd52lo_epu64() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_madd52lo_epu64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2101,7 +2101,7 @@ pub(super) fn test_mm256_madd52lo_epu64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_madd52lo_epu64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_madd52lo_epu64_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2124,7 +2124,7 @@ pub(super) fn test_mm256_madd52lo_epu64_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_madd52lo_epu64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_madd52lo_epu64_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2147,7 +2147,7 @@ pub(super) fn test_mm256_madd52lo_epu64_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_madd52lo_epu64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_madd52lo_epu64_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2170,7 +2170,7 @@ pub(super) fn test_mm256_madd52lo_epu64_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_madd52lo_epu64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_madd52lo_epu64_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2193,7 +2193,7 @@ pub(super) fn test_mm256_madd52lo_epu64_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_madd52lo_epu64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_madd52lo_epu64_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2216,7 +2216,7 @@ pub(super) fn test_mm256_madd52lo_epu64_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_madd52lo_epu64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_madd52lo_epu64_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2239,7 +2239,7 @@ pub(super) fn test_mm256_madd52lo_epu64_boundary_allones() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm256_madd52lo_epu64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_madd52lo_epu64_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2262,7 +2262,7 @@ pub(super) fn test_mm256_madd52lo_epu64_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_madd52lo_epu64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_madd52lo_epu64_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2285,7 +2285,7 @@ pub(super) fn test_mm256_madd52lo_epu64_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_madd52lo_epu64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_madd52lo_epu64_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2308,7 +2308,7 @@ pub(super) fn test_mm256_madd52lo_epu64_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_madd52lo_epu64() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_mask_madd52lo_epu64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2331,7 +2331,7 @@ pub(super) fn test_mm256_mask_madd52lo_epu64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_madd52lo_epu64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_mask_madd52lo_epu64_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2354,7 +2354,7 @@ pub(super) fn test_mm256_mask_madd52lo_epu64_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_madd52lo_epu64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_mask_madd52lo_epu64_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2377,7 +2377,7 @@ pub(super) fn test_mm256_mask_madd52lo_epu64_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_madd52lo_epu64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_mask_madd52lo_epu64_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2400,7 +2400,7 @@ pub(super) fn test_mm256_mask_madd52lo_epu64_boundary_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_madd52lo_epu64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_mask_madd52lo_epu64_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2423,7 +2423,7 @@ pub(super) fn test_mm256_mask_madd52lo_epu64_boundary_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_madd52lo_epu64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_mask_madd52lo_epu64_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2446,7 +2446,7 @@ pub(super) fn test_mm256_mask_madd52lo_epu64_boundary_zero() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_madd52lo_epu64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_mask_madd52lo_epu64_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2469,7 +2469,7 @@ pub(super) fn test_mm256_mask_madd52lo_epu64_boundary_allones() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_madd52lo_epu64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_mask_madd52lo_epu64_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2492,7 +2492,7 @@ pub(super) fn test_mm256_mask_madd52lo_epu64_boundary_mixed() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_madd52lo_epu64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_mask_madd52lo_epu64_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2515,7 +2515,7 @@ pub(super) fn test_mm256_mask_madd52lo_epu64_asym_min_max() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_madd52lo_epu64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_mask_madd52lo_epu64_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2538,7 +2538,7 @@ pub(super) fn test_mm256_mask_madd52lo_epu64_asym_max_min() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_madd52lo_epu64() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_maskz_madd52lo_epu64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2561,7 +2561,7 @@ pub(super) fn test_mm256_maskz_madd52lo_epu64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_madd52lo_epu64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_maskz_madd52lo_epu64_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2584,7 +2584,7 @@ pub(super) fn test_mm256_maskz_madd52lo_epu64_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_madd52lo_epu64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_maskz_madd52lo_epu64_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2607,7 +2607,7 @@ pub(super) fn test_mm256_maskz_madd52lo_epu64_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_madd52lo_epu64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_maskz_madd52lo_epu64_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2630,7 +2630,7 @@ pub(super) fn test_mm256_maskz_madd52lo_epu64_boundary_min() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_madd52lo_epu64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_maskz_madd52lo_epu64_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2653,7 +2653,7 @@ pub(super) fn test_mm256_maskz_madd52lo_epu64_boundary_max() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_madd52lo_epu64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_maskz_madd52lo_epu64_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2676,7 +2676,7 @@ pub(super) fn test_mm256_maskz_madd52lo_epu64_boundary_zero() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_madd52lo_epu64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_maskz_madd52lo_epu64_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2699,7 +2699,7 @@ pub(super) fn test_mm256_maskz_madd52lo_epu64_boundary_allones() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_madd52lo_epu64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_maskz_madd52lo_epu64_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2722,7 +2722,7 @@ pub(super) fn test_mm256_maskz_madd52lo_epu64_boundary_mixed() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_madd52lo_epu64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_maskz_madd52lo_epu64_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2745,7 +2745,7 @@ pub(super) fn test_mm256_maskz_madd52lo_epu64_asym_min_max() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_madd52lo_epu64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm256_maskz_madd52lo_epu64_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2768,7 +2768,7 @@ pub(super) fn test_mm256_maskz_madd52lo_epu64_asym_max_min() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm_madd52hi_epu64() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_madd52hi_epu64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2791,7 +2791,7 @@ pub(super) fn test_mm_madd52hi_epu64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_madd52hi_epu64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_madd52hi_epu64_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2814,7 +2814,7 @@ pub(super) fn test_mm_madd52hi_epu64_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_madd52hi_epu64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_madd52hi_epu64_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2837,7 +2837,7 @@ pub(super) fn test_mm_madd52hi_epu64_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_madd52hi_epu64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_madd52hi_epu64_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2860,7 +2860,7 @@ pub(super) fn test_mm_madd52hi_epu64_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_madd52hi_epu64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_madd52hi_epu64_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2883,7 +2883,7 @@ pub(super) fn test_mm_madd52hi_epu64_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_madd52hi_epu64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_madd52hi_epu64_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2906,7 +2906,7 @@ pub(super) fn test_mm_madd52hi_epu64_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_madd52hi_epu64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_madd52hi_epu64_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2929,7 +2929,7 @@ pub(super) fn test_mm_madd52hi_epu64_boundary_allones() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_madd52hi_epu64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_madd52hi_epu64_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2952,7 +2952,7 @@ pub(super) fn test_mm_madd52hi_epu64_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_madd52hi_epu64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_madd52hi_epu64_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2975,7 +2975,7 @@ pub(super) fn test_mm_madd52hi_epu64_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_madd52hi_epu64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_madd52hi_epu64_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2998,7 +2998,7 @@ pub(super) fn test_mm_madd52hi_epu64_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_madd52hi_epu64() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_mask_madd52hi_epu64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3021,7 +3021,7 @@ pub(super) fn test_mm_mask_madd52hi_epu64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_madd52hi_epu64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_mask_madd52hi_epu64_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3044,7 +3044,7 @@ pub(super) fn test_mm_mask_madd52hi_epu64_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_madd52hi_epu64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_mask_madd52hi_epu64_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3067,7 +3067,7 @@ pub(super) fn test_mm_mask_madd52hi_epu64_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_madd52hi_epu64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_mask_madd52hi_epu64_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3090,7 +3090,7 @@ pub(super) fn test_mm_mask_madd52hi_epu64_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_madd52hi_epu64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_mask_madd52hi_epu64_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3113,7 +3113,7 @@ pub(super) fn test_mm_mask_madd52hi_epu64_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_madd52hi_epu64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_mask_madd52hi_epu64_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3136,7 +3136,7 @@ pub(super) fn test_mm_mask_madd52hi_epu64_boundary_zero() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_mask_madd52hi_epu64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_mask_madd52hi_epu64_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3159,7 +3159,7 @@ pub(super) fn test_mm_mask_madd52hi_epu64_boundary_allones() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm_mask_madd52hi_epu64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_mask_madd52hi_epu64_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3182,7 +3182,7 @@ pub(super) fn test_mm_mask_madd52hi_epu64_boundary_mixed() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_madd52hi_epu64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_mask_madd52hi_epu64_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3205,7 +3205,7 @@ pub(super) fn test_mm_mask_madd52hi_epu64_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_madd52hi_epu64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_mask_madd52hi_epu64_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3228,7 +3228,7 @@ pub(super) fn test_mm_mask_madd52hi_epu64_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_madd52hi_epu64() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_maskz_madd52hi_epu64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3251,7 +3251,7 @@ pub(super) fn test_mm_maskz_madd52hi_epu64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_madd52hi_epu64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_maskz_madd52hi_epu64_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3274,7 +3274,7 @@ pub(super) fn test_mm_maskz_madd52hi_epu64_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_madd52hi_epu64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_maskz_madd52hi_epu64_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3297,7 +3297,7 @@ pub(super) fn test_mm_maskz_madd52hi_epu64_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_madd52hi_epu64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_maskz_madd52hi_epu64_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3320,7 +3320,7 @@ pub(super) fn test_mm_maskz_madd52hi_epu64_boundary_min() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_madd52hi_epu64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_maskz_madd52hi_epu64_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3343,7 +3343,7 @@ pub(super) fn test_mm_maskz_madd52hi_epu64_boundary_max() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_madd52hi_epu64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_maskz_madd52hi_epu64_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3366,7 +3366,7 @@ pub(super) fn test_mm_maskz_madd52hi_epu64_boundary_zero() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_madd52hi_epu64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_maskz_madd52hi_epu64_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3389,7 +3389,7 @@ pub(super) fn test_mm_maskz_madd52hi_epu64_boundary_allones() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_madd52hi_epu64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_maskz_madd52hi_epu64_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3412,7 +3412,7 @@ pub(super) fn test_mm_maskz_madd52hi_epu64_boundary_mixed() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_madd52hi_epu64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_maskz_madd52hi_epu64_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3435,7 +3435,7 @@ pub(super) fn test_mm_maskz_madd52hi_epu64_asym_min_max() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_madd52hi_epu64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_maskz_madd52hi_epu64_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3458,7 +3458,7 @@ pub(super) fn test_mm_maskz_madd52hi_epu64_asym_max_min() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_madd52lo_epu64() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_madd52lo_epu64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3481,7 +3481,7 @@ pub(super) fn test_mm_madd52lo_epu64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_madd52lo_epu64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_madd52lo_epu64_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3504,7 +3504,7 @@ pub(super) fn test_mm_madd52lo_epu64_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_madd52lo_epu64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_madd52lo_epu64_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3527,7 +3527,7 @@ pub(super) fn test_mm_madd52lo_epu64_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_madd52lo_epu64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_madd52lo_epu64_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3550,7 +3550,7 @@ pub(super) fn test_mm_madd52lo_epu64_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_madd52lo_epu64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_madd52lo_epu64_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3573,7 +3573,7 @@ pub(super) fn test_mm_madd52lo_epu64_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_madd52lo_epu64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_madd52lo_epu64_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3596,7 +3596,7 @@ pub(super) fn test_mm_madd52lo_epu64_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_madd52lo_epu64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_madd52lo_epu64_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3619,7 +3619,7 @@ pub(super) fn test_mm_madd52lo_epu64_boundary_allones() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_madd52lo_epu64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_madd52lo_epu64_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3642,7 +3642,7 @@ pub(super) fn test_mm_madd52lo_epu64_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_madd52lo_epu64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_madd52lo_epu64_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3665,7 +3665,7 @@ pub(super) fn test_mm_madd52lo_epu64_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_madd52lo_epu64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_madd52lo_epu64_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3688,7 +3688,7 @@ pub(super) fn test_mm_madd52lo_epu64_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_madd52lo_epu64() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_mask_madd52lo_epu64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3711,7 +3711,7 @@ pub(super) fn test_mm_mask_madd52lo_epu64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_madd52lo_epu64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_mask_madd52lo_epu64_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3734,7 +3734,7 @@ pub(super) fn test_mm_mask_madd52lo_epu64_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_madd52lo_epu64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_mask_madd52lo_epu64_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3757,7 +3757,7 @@ pub(super) fn test_mm_mask_madd52lo_epu64_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_madd52lo_epu64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_mask_madd52lo_epu64_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3780,7 +3780,7 @@ pub(super) fn test_mm_mask_madd52lo_epu64_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_madd52lo_epu64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_mask_madd52lo_epu64_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3803,7 +3803,7 @@ pub(super) fn test_mm_mask_madd52lo_epu64_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_madd52lo_epu64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_mask_madd52lo_epu64_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3826,7 +3826,7 @@ pub(super) fn test_mm_mask_madd52lo_epu64_boundary_zero() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_mask_madd52lo_epu64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_mask_madd52lo_epu64_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3849,7 +3849,7 @@ pub(super) fn test_mm_mask_madd52lo_epu64_boundary_allones() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm_mask_madd52lo_epu64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_mask_madd52lo_epu64_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3872,7 +3872,7 @@ pub(super) fn test_mm_mask_madd52lo_epu64_boundary_mixed() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_madd52lo_epu64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_mask_madd52lo_epu64_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3895,7 +3895,7 @@ pub(super) fn test_mm_mask_madd52lo_epu64_asym_min_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_madd52lo_epu64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_mask_madd52lo_epu64_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3918,7 +3918,7 @@ pub(super) fn test_mm_mask_madd52lo_epu64_asym_max_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_madd52lo_epu64() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_maskz_madd52lo_epu64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3941,7 +3941,7 @@ pub(super) fn test_mm_maskz_madd52lo_epu64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_madd52lo_epu64_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_maskz_madd52lo_epu64_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3964,7 +3964,7 @@ pub(super) fn test_mm_maskz_madd52lo_epu64_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_madd52lo_epu64_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_maskz_madd52lo_epu64_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -3987,7 +3987,7 @@ pub(super) fn test_mm_maskz_madd52lo_epu64_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_madd52lo_epu64_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_maskz_madd52lo_epu64_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4010,7 +4010,7 @@ pub(super) fn test_mm_maskz_madd52lo_epu64_boundary_min() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_madd52lo_epu64_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_maskz_madd52lo_epu64_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4033,7 +4033,7 @@ pub(super) fn test_mm_maskz_madd52lo_epu64_boundary_max() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_madd52lo_epu64_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_maskz_madd52lo_epu64_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4056,7 +4056,7 @@ pub(super) fn test_mm_maskz_madd52lo_epu64_boundary_zero() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_madd52lo_epu64_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_maskz_madd52lo_epu64_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4079,7 +4079,7 @@ pub(super) fn test_mm_maskz_madd52lo_epu64_boundary_allones() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_madd52lo_epu64_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_maskz_madd52lo_epu64_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4102,7 +4102,7 @@ pub(super) fn test_mm_maskz_madd52lo_epu64_boundary_mixed() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_madd52lo_epu64_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_maskz_madd52lo_epu64_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -4125,7 +4125,7 @@ pub(super) fn test_mm_maskz_madd52lo_epu64_asym_min_max() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_madd52lo_epu64_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512ifma_mm_maskz_madd52lo_epu64_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }

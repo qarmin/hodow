@@ -8,7 +8,7 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_mm512_permutex2var_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_permutex2var_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -31,7 +31,7 @@ pub(super) fn test_mm512_permutex2var_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_permutex2var_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_mask_permutex2var_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -54,7 +54,7 @@ pub(super) fn test_mm512_mask_permutex2var_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_permutex2var_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_maskz_permutex2var_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -77,7 +77,7 @@ pub(super) fn test_mm512_maskz_permutex2var_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask2_permutex2var_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_mask2_permutex2var_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -100,7 +100,7 @@ pub(super) fn test_mm512_mask2_permutex2var_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_permutex2var_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_permutex2var_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -123,7 +123,7 @@ pub(super) fn test_mm256_permutex2var_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_permutex2var_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_mask_permutex2var_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -146,7 +146,7 @@ pub(super) fn test_mm256_mask_permutex2var_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_permutex2var_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_maskz_permutex2var_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -169,7 +169,7 @@ pub(super) fn test_mm256_maskz_permutex2var_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask2_permutex2var_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_mask2_permutex2var_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -192,7 +192,7 @@ pub(super) fn test_mm256_mask2_permutex2var_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_permutex2var_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_permutex2var_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -215,7 +215,7 @@ pub(super) fn test_mm_permutex2var_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_permutex2var_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_mask_permutex2var_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -238,7 +238,7 @@ pub(super) fn test_mm_mask_permutex2var_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_permutex2var_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_maskz_permutex2var_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -261,7 +261,7 @@ pub(super) fn test_mm_maskz_permutex2var_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask2_permutex2var_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_mask2_permutex2var_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -284,7 +284,7 @@ pub(super) fn test_mm_mask2_permutex2var_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_permutexvar_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_permutexvar_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -307,7 +307,7 @@ pub(super) fn test_mm512_permutexvar_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_permutexvar_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_mask_permutexvar_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -330,7 +330,7 @@ pub(super) fn test_mm512_mask_permutexvar_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_permutexvar_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_maskz_permutexvar_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -353,7 +353,7 @@ pub(super) fn test_mm512_maskz_permutexvar_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_permutexvar_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_permutexvar_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -376,7 +376,7 @@ pub(super) fn test_mm256_permutexvar_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_permutexvar_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_mask_permutexvar_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -399,7 +399,7 @@ pub(super) fn test_mm256_mask_permutexvar_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_permutexvar_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_maskz_permutexvar_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -422,7 +422,7 @@ pub(super) fn test_mm256_maskz_permutexvar_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_permutexvar_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_permutexvar_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -445,7 +445,7 @@ pub(super) fn test_mm_permutexvar_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_permutexvar_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_mask_permutexvar_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -468,7 +468,7 @@ pub(super) fn test_mm_mask_permutexvar_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_permutexvar_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_maskz_permutexvar_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -491,7 +491,7 @@ pub(super) fn test_mm_maskz_permutexvar_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_multishift_epi64_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_multishift_epi64_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -514,7 +514,7 @@ pub(super) fn test_mm512_multishift_epi64_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_multishift_epi64_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_multishift_epi64_epi8_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -537,7 +537,7 @@ pub(super) fn test_mm512_multishift_epi64_epi8_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_multishift_epi64_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_multishift_epi64_epi8_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -560,7 +560,7 @@ pub(super) fn test_mm512_multishift_epi64_epi8_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_multishift_epi64_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_multishift_epi64_epi8_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -583,7 +583,7 @@ pub(super) fn test_mm512_multishift_epi64_epi8_boundary_min() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_multishift_epi64_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_multishift_epi64_epi8_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -606,7 +606,7 @@ pub(super) fn test_mm512_multishift_epi64_epi8_boundary_max() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_multishift_epi64_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_multishift_epi64_epi8_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -629,7 +629,7 @@ pub(super) fn test_mm512_multishift_epi64_epi8_boundary_zero() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm512_multishift_epi64_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_multishift_epi64_epi8_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -652,7 +652,7 @@ pub(super) fn test_mm512_multishift_epi64_epi8_boundary_allones() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_mm512_multishift_epi64_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_multishift_epi64_epi8_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -675,7 +675,7 @@ pub(super) fn test_mm512_multishift_epi64_epi8_boundary_mixed() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm512_multishift_epi64_epi8_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_multishift_epi64_epi8_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -698,7 +698,7 @@ pub(super) fn test_mm512_multishift_epi64_epi8_asym_min_max() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_multishift_epi64_epi8_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_multishift_epi64_epi8_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -721,7 +721,7 @@ pub(super) fn test_mm512_multishift_epi64_epi8_asym_max_min() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_multishift_epi64_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_mask_multishift_epi64_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -744,7 +744,7 @@ pub(super) fn test_mm512_mask_multishift_epi64_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_multishift_epi64_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_mask_multishift_epi64_epi8_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -767,7 +767,7 @@ pub(super) fn test_mm512_mask_multishift_epi64_epi8_normal2() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_multishift_epi64_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_mask_multishift_epi64_epi8_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -790,7 +790,7 @@ pub(super) fn test_mm512_mask_multishift_epi64_epi8_normal3() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_multishift_epi64_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_mask_multishift_epi64_epi8_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -813,7 +813,7 @@ pub(super) fn test_mm512_mask_multishift_epi64_epi8_boundary_min() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_multishift_epi64_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_mask_multishift_epi64_epi8_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -836,7 +836,7 @@ pub(super) fn test_mm512_mask_multishift_epi64_epi8_boundary_max() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_multishift_epi64_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_mask_multishift_epi64_epi8_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -859,7 +859,7 @@ pub(super) fn test_mm512_mask_multishift_epi64_epi8_boundary_zero() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_multishift_epi64_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_mask_multishift_epi64_epi8_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -882,7 +882,7 @@ pub(super) fn test_mm512_mask_multishift_epi64_epi8_boundary_allones() -> Result
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_multishift_epi64_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_mask_multishift_epi64_epi8_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -905,7 +905,7 @@ pub(super) fn test_mm512_mask_multishift_epi64_epi8_boundary_mixed() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_multishift_epi64_epi8_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_mask_multishift_epi64_epi8_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -928,7 +928,7 @@ pub(super) fn test_mm512_mask_multishift_epi64_epi8_asym_min_max() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_multishift_epi64_epi8_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_mask_multishift_epi64_epi8_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -951,7 +951,7 @@ pub(super) fn test_mm512_mask_multishift_epi64_epi8_asym_max_min() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_multishift_epi64_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_maskz_multishift_epi64_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -974,7 +974,7 @@ pub(super) fn test_mm512_maskz_multishift_epi64_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_multishift_epi64_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_maskz_multishift_epi64_epi8_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -997,7 +997,7 @@ pub(super) fn test_mm512_maskz_multishift_epi64_epi8_normal2() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_multishift_epi64_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_maskz_multishift_epi64_epi8_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1020,7 +1020,7 @@ pub(super) fn test_mm512_maskz_multishift_epi64_epi8_normal3() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_multishift_epi64_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_maskz_multishift_epi64_epi8_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1043,7 +1043,7 @@ pub(super) fn test_mm512_maskz_multishift_epi64_epi8_boundary_min() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_multishift_epi64_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_maskz_multishift_epi64_epi8_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1066,7 +1066,7 @@ pub(super) fn test_mm512_maskz_multishift_epi64_epi8_boundary_max() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_multishift_epi64_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_maskz_multishift_epi64_epi8_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1089,7 +1089,7 @@ pub(super) fn test_mm512_maskz_multishift_epi64_epi8_boundary_zero() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_multishift_epi64_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_maskz_multishift_epi64_epi8_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1112,7 +1112,7 @@ pub(super) fn test_mm512_maskz_multishift_epi64_epi8_boundary_allones() -> Resul
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_multishift_epi64_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_maskz_multishift_epi64_epi8_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1135,7 +1135,7 @@ pub(super) fn test_mm512_maskz_multishift_epi64_epi8_boundary_mixed() -> Result<
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_multishift_epi64_epi8_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_maskz_multishift_epi64_epi8_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1158,7 +1158,7 @@ pub(super) fn test_mm512_maskz_multishift_epi64_epi8_asym_min_max() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_multishift_epi64_epi8_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm512_maskz_multishift_epi64_epi8_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1181,7 +1181,7 @@ pub(super) fn test_mm512_maskz_multishift_epi64_epi8_asym_max_min() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_mm256_multishift_epi64_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_multishift_epi64_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1204,7 +1204,7 @@ pub(super) fn test_mm256_multishift_epi64_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_multishift_epi64_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_multishift_epi64_epi8_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1227,7 +1227,7 @@ pub(super) fn test_mm256_multishift_epi64_epi8_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_multishift_epi64_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_multishift_epi64_epi8_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1250,7 +1250,7 @@ pub(super) fn test_mm256_multishift_epi64_epi8_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_multishift_epi64_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_multishift_epi64_epi8_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1273,7 +1273,7 @@ pub(super) fn test_mm256_multishift_epi64_epi8_boundary_min() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_multishift_epi64_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_multishift_epi64_epi8_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1296,7 +1296,7 @@ pub(super) fn test_mm256_multishift_epi64_epi8_boundary_max() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_multishift_epi64_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_multishift_epi64_epi8_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1319,7 +1319,7 @@ pub(super) fn test_mm256_multishift_epi64_epi8_boundary_zero() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm256_multishift_epi64_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_multishift_epi64_epi8_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1342,7 +1342,7 @@ pub(super) fn test_mm256_multishift_epi64_epi8_boundary_allones() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_mm256_multishift_epi64_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_multishift_epi64_epi8_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1365,7 +1365,7 @@ pub(super) fn test_mm256_multishift_epi64_epi8_boundary_mixed() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm256_multishift_epi64_epi8_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_multishift_epi64_epi8_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1388,7 +1388,7 @@ pub(super) fn test_mm256_multishift_epi64_epi8_asym_min_max() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_multishift_epi64_epi8_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_multishift_epi64_epi8_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1411,7 +1411,7 @@ pub(super) fn test_mm256_multishift_epi64_epi8_asym_max_min() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_multishift_epi64_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_mask_multishift_epi64_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1434,7 +1434,7 @@ pub(super) fn test_mm256_mask_multishift_epi64_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_multishift_epi64_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_mask_multishift_epi64_epi8_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1457,7 +1457,7 @@ pub(super) fn test_mm256_mask_multishift_epi64_epi8_normal2() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_multishift_epi64_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_mask_multishift_epi64_epi8_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1480,7 +1480,7 @@ pub(super) fn test_mm256_mask_multishift_epi64_epi8_normal3() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_multishift_epi64_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_mask_multishift_epi64_epi8_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1503,7 +1503,7 @@ pub(super) fn test_mm256_mask_multishift_epi64_epi8_boundary_min() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_multishift_epi64_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_mask_multishift_epi64_epi8_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1526,7 +1526,7 @@ pub(super) fn test_mm256_mask_multishift_epi64_epi8_boundary_max() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_multishift_epi64_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_mask_multishift_epi64_epi8_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1549,7 +1549,7 @@ pub(super) fn test_mm256_mask_multishift_epi64_epi8_boundary_zero() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_multishift_epi64_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_mask_multishift_epi64_epi8_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1572,7 +1572,7 @@ pub(super) fn test_mm256_mask_multishift_epi64_epi8_boundary_allones() -> Result
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_multishift_epi64_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_mask_multishift_epi64_epi8_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1595,7 +1595,7 @@ pub(super) fn test_mm256_mask_multishift_epi64_epi8_boundary_mixed() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_multishift_epi64_epi8_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_mask_multishift_epi64_epi8_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1618,7 +1618,7 @@ pub(super) fn test_mm256_mask_multishift_epi64_epi8_asym_min_max() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_multishift_epi64_epi8_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_mask_multishift_epi64_epi8_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1641,7 +1641,7 @@ pub(super) fn test_mm256_mask_multishift_epi64_epi8_asym_max_min() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_multishift_epi64_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_maskz_multishift_epi64_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1664,7 +1664,7 @@ pub(super) fn test_mm256_maskz_multishift_epi64_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_multishift_epi64_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_maskz_multishift_epi64_epi8_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1687,7 +1687,7 @@ pub(super) fn test_mm256_maskz_multishift_epi64_epi8_normal2() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_multishift_epi64_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_maskz_multishift_epi64_epi8_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1710,7 +1710,7 @@ pub(super) fn test_mm256_maskz_multishift_epi64_epi8_normal3() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_multishift_epi64_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_maskz_multishift_epi64_epi8_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1733,7 +1733,7 @@ pub(super) fn test_mm256_maskz_multishift_epi64_epi8_boundary_min() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_multishift_epi64_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_maskz_multishift_epi64_epi8_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1756,7 +1756,7 @@ pub(super) fn test_mm256_maskz_multishift_epi64_epi8_boundary_max() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_multishift_epi64_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_maskz_multishift_epi64_epi8_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1779,7 +1779,7 @@ pub(super) fn test_mm256_maskz_multishift_epi64_epi8_boundary_zero() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_multishift_epi64_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_maskz_multishift_epi64_epi8_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1802,7 +1802,7 @@ pub(super) fn test_mm256_maskz_multishift_epi64_epi8_boundary_allones() -> Resul
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_multishift_epi64_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_maskz_multishift_epi64_epi8_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1825,7 +1825,7 @@ pub(super) fn test_mm256_maskz_multishift_epi64_epi8_boundary_mixed() -> Result<
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_multishift_epi64_epi8_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_maskz_multishift_epi64_epi8_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1848,7 +1848,7 @@ pub(super) fn test_mm256_maskz_multishift_epi64_epi8_asym_min_max() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_multishift_epi64_epi8_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm256_maskz_multishift_epi64_epi8_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1871,7 +1871,7 @@ pub(super) fn test_mm256_maskz_multishift_epi64_epi8_asym_max_min() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_mm_multishift_epi64_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_multishift_epi64_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1894,7 +1894,7 @@ pub(super) fn test_mm_multishift_epi64_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_multishift_epi64_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_multishift_epi64_epi8_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1917,7 +1917,7 @@ pub(super) fn test_mm_multishift_epi64_epi8_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_multishift_epi64_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_multishift_epi64_epi8_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1940,7 +1940,7 @@ pub(super) fn test_mm_multishift_epi64_epi8_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_multishift_epi64_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_multishift_epi64_epi8_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1963,7 +1963,7 @@ pub(super) fn test_mm_multishift_epi64_epi8_boundary_min() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_multishift_epi64_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_multishift_epi64_epi8_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1986,7 +1986,7 @@ pub(super) fn test_mm_multishift_epi64_epi8_boundary_max() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_multishift_epi64_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_multishift_epi64_epi8_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2009,7 +2009,7 @@ pub(super) fn test_mm_multishift_epi64_epi8_boundary_zero() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm_multishift_epi64_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_multishift_epi64_epi8_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2032,7 +2032,7 @@ pub(super) fn test_mm_multishift_epi64_epi8_boundary_allones() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm_multishift_epi64_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_multishift_epi64_epi8_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2055,7 +2055,7 @@ pub(super) fn test_mm_multishift_epi64_epi8_boundary_mixed() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm_multishift_epi64_epi8_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_multishift_epi64_epi8_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2078,7 +2078,7 @@ pub(super) fn test_mm_multishift_epi64_epi8_asym_min_max() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_multishift_epi64_epi8_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_multishift_epi64_epi8_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2101,7 +2101,7 @@ pub(super) fn test_mm_multishift_epi64_epi8_asym_max_min() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_multishift_epi64_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_mask_multishift_epi64_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2124,7 +2124,7 @@ pub(super) fn test_mm_mask_multishift_epi64_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_multishift_epi64_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_mask_multishift_epi64_epi8_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2147,7 +2147,7 @@ pub(super) fn test_mm_mask_multishift_epi64_epi8_normal2() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_multishift_epi64_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_mask_multishift_epi64_epi8_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2170,7 +2170,7 @@ pub(super) fn test_mm_mask_multishift_epi64_epi8_normal3() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_multishift_epi64_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_mask_multishift_epi64_epi8_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2193,7 +2193,7 @@ pub(super) fn test_mm_mask_multishift_epi64_epi8_boundary_min() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm_mask_multishift_epi64_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_mask_multishift_epi64_epi8_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2216,7 +2216,7 @@ pub(super) fn test_mm_mask_multishift_epi64_epi8_boundary_max() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm_mask_multishift_epi64_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_mask_multishift_epi64_epi8_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2239,7 +2239,7 @@ pub(super) fn test_mm_mask_multishift_epi64_epi8_boundary_zero() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_mm_mask_multishift_epi64_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_mask_multishift_epi64_epi8_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2262,7 +2262,7 @@ pub(super) fn test_mm_mask_multishift_epi64_epi8_boundary_allones() -> Result<()
     Ok(())
 }
 
-pub(super) fn test_mm_mask_multishift_epi64_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_mask_multishift_epi64_epi8_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2285,7 +2285,7 @@ pub(super) fn test_mm_mask_multishift_epi64_epi8_boundary_mixed() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_mm_mask_multishift_epi64_epi8_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_mask_multishift_epi64_epi8_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2308,7 +2308,7 @@ pub(super) fn test_mm_mask_multishift_epi64_epi8_asym_min_max() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm_mask_multishift_epi64_epi8_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_mask_multishift_epi64_epi8_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2331,7 +2331,7 @@ pub(super) fn test_mm_mask_multishift_epi64_epi8_asym_max_min() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_multishift_epi64_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_maskz_multishift_epi64_epi8() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2354,7 +2354,7 @@ pub(super) fn test_mm_maskz_multishift_epi64_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_multishift_epi64_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_maskz_multishift_epi64_epi8_normal2() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2377,7 +2377,7 @@ pub(super) fn test_mm_maskz_multishift_epi64_epi8_normal2() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_multishift_epi64_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_maskz_multishift_epi64_epi8_normal3() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2400,7 +2400,7 @@ pub(super) fn test_mm_maskz_multishift_epi64_epi8_normal3() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_multishift_epi64_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_maskz_multishift_epi64_epi8_boundary_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2423,7 +2423,7 @@ pub(super) fn test_mm_maskz_multishift_epi64_epi8_boundary_min() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_multishift_epi64_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_maskz_multishift_epi64_epi8_boundary_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2446,7 +2446,7 @@ pub(super) fn test_mm_maskz_multishift_epi64_epi8_boundary_max() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_multishift_epi64_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_maskz_multishift_epi64_epi8_boundary_zero() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2469,7 +2469,7 @@ pub(super) fn test_mm_maskz_multishift_epi64_epi8_boundary_zero() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_multishift_epi64_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_maskz_multishift_epi64_epi8_boundary_allones() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2492,7 +2492,7 @@ pub(super) fn test_mm_maskz_multishift_epi64_epi8_boundary_allones() -> Result<(
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_multishift_epi64_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_maskz_multishift_epi64_epi8_boundary_mixed() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2515,7 +2515,7 @@ pub(super) fn test_mm_maskz_multishift_epi64_epi8_boundary_mixed() -> Result<(),
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_multishift_epi64_epi8_asym_min_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_maskz_multishift_epi64_epi8_asym_min_max() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -2538,7 +2538,7 @@ pub(super) fn test_mm_maskz_multishift_epi64_epi8_asym_min_max() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_multishift_epi64_epi8_asym_max_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512vbmi_mm_maskz_multishift_epi64_epi8_asym_max_min() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }

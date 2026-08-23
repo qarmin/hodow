@@ -13,9 +13,9 @@ impl ExtensionTest for XSAVE {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_xsave64, "test_xsave64"),
-            (&test_xsaveopt64, "test_xsaveopt64"),
-            (&test_xsavec64, "test_xsavec64"),
+            (&test_x86_64_xsave_xsave64, "test_x86_64_xsave_xsave64"),
+            (&test_x86_64_xsave_xsaveopt64, "test_x86_64_xsave_xsaveopt64"),
+            (&test_x86_64_xsave_xsavec64, "test_x86_64_xsave_xsavec64"),
         ]
     }
 }

@@ -13,8 +13,8 @@ impl ExtensionTest for ABM {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_lzcnt_u32, "test_lzcnt_u32"),
-            (&test_popcnt32, "test_popcnt32"),
+            (&test_x86_abm_lzcnt_u32, "test_x86_abm_lzcnt_u32"),
+            (&test_x86_abm_popcnt32, "test_x86_abm_popcnt32"),
         ]
     }
 }

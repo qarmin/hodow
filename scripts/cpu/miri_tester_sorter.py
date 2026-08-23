@@ -3,8 +3,32 @@ from pathlib import Path
 import re
 import sys
 
+sys.path.insert(0, str(Path(__file__).parent))
+import generate_tests as gen  # noqa: E402
+
 # keep the regex for exact matches as a fallback, but we'll also match more loosely
 ALIGNMENT_RE = re.compile(r"undefined behavior: accessing memory with alignment \d+, but alignment \d+ is required", re.IGNORECASE)
+
+
+def build_test_to_func_map() -> dict[str, str]:
+    """Maps every generated test name (base *and* scenario-suffixed, exactly as
+    generate_tests.py would emit them) back to the bare intrinsic name (with its leading
+    underscore(s)) it was generated from - needed because a real test name is
+    `test_<arch>_<ext>_<func>`, and <arch>/<ext> can themselves contain underscores
+    (e.g. "riscv_shared"), so it can't be reconstructed by just stripping "test_"."""
+    mapping: dict[str, str] = {}
+    sigs_file = Path.cwd() / gen.SIGNATURES_FILE
+    if not sigs_file.exists():
+        return mapping
+    all_sigs = gen.parse_signatures(sigs_file)
+    for (arch, ext), funcs in all_sigs.items():
+        for sig in funcs:
+            if gen.in_pilot_scope(arch, ext, sig["name"]):
+                for tname in gen.list_scenario_names(sig, arch, ext):
+                    mapping[tname] = sig["name"]
+            else:
+                mapping[gen.test_name(sig["name"], arch, ext)] = sig["name"]
+    return mapping
 
 
 def canonical_message(msg: str) -> str:
@@ -53,7 +77,7 @@ def color_header(s: str) -> str:
     return s
 
 
-def print_group(key: str, tests: list, first: bool):
+def print_group(key: str, tests: list, first: bool, test_to_func: dict[str, str]):
     """Print a group with the header on its own line and function names below.
 
     If not the first printed group, print a blank line before the header to separate groups.
@@ -61,11 +85,15 @@ def print_group(key: str, tests: list, first: bool):
     # Remove duplicates and sort
     tests_unique = sorted(set(tests))
 
-    # Convert test_* to _* format (remove 'test' prefix)
     functions = []
     for test in tests_unique:
-        if test.startswith('test_'):
-            functions.append('_' + test[5:])  # Remove 'test_' and add '_'
+        func = test_to_func.get(test)
+        if func is not None:
+            functions.append(func)
+        elif test.startswith('test_'):
+            # Unknown test name (e.g. signatures.txt changed since); fall back to the old
+            # naive strip so the tool still produces *something* usable, flagged for review.
+            functions.append('_' + test[5:] + "  # UNRECOGNIZED - verify manually")
         else:
             functions.append(test)
 
@@ -87,10 +115,12 @@ def main():
         key = canonical_message(msg)
         groups.setdefault(key, []).append(test)
 
+    test_to_func = build_test_to_func_map()
+
     # Print all groups consistently (no special canonical ordering).
     first_printed = False
     for key in sorted(groups.keys()):
-        print_group(key, groups[key], first_printed)
+        print_group(key, groups[key], first_printed, test_to_func)
         first_printed = True
 
 

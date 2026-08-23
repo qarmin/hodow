@@ -5,7 +5,7 @@ use crate::cpu::common::arm::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_vec_xl_len() -> Result<(), String> {
+pub(super) fn test_powerpc64_vsx_vec_xl_len() -> Result<(), String> {
     unsafe {
         vec_xl_len(0 /* T */, 0usize);
 
@@ -24,7 +24,7 @@ pub(super) fn test_vec_xl_len() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_xst_len() -> Result<(), String> {
+pub(super) fn test_powerpc64_vsx_vec_xst_len() -> Result<(), String> {
     unsafe {
         vec_xst_len(0 /* T */, 0 /* Out */, 0usize);
 

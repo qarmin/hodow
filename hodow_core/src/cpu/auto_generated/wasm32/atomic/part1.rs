@@ -5,7 +5,7 @@ use crate::cpu::common::arm::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_memory_atomic_wait32() -> Result<(), String> {
+pub(super) fn test_wasm32_atomic_memory_atomic_wait32() -> Result<(), String> {
     unsafe {
         let mut ptr_ptr = crate::cpu::common::Aligned64([1i32; 16]);
         let expression = 2i32;
@@ -16,7 +16,7 @@ pub(super) fn test_memory_atomic_wait32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_memory_atomic_wait64() -> Result<(), String> {
+pub(super) fn test_wasm32_atomic_memory_atomic_wait64() -> Result<(), String> {
     unsafe {
         let mut ptr_ptr = crate::cpu::common::Aligned64([1i64; 8]);
         let expression = 2i64;
@@ -27,7 +27,7 @@ pub(super) fn test_memory_atomic_wait64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_memory_atomic_notify() -> Result<(), String> {
+pub(super) fn test_wasm32_atomic_memory_atomic_notify() -> Result<(), String> {
     unsafe {
         let mut ptr_ptr = crate::cpu::common::Aligned64([1i32; 16]);
         let waiters = 2u32;

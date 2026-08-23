@@ -8,7 +8,7 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_mm_clmulepi64_si128() -> Result<(), String> {
+pub(super) fn test_x86_pclmulqdq_mm_clmulepi64_si128() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_clmulepi64_si128::<0>(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[5, 12, 12, 0])?;

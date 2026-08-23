@@ -8,7 +8,7 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_store_mask8() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_store_mask8() -> Result<(), String> {
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([create__mmask8_from(0b01010101); 64]);
         let a = create__mmask8_from(0b01010101);
@@ -17,7 +17,7 @@ pub(super) fn test_store_mask8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_movepi32_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_movepi32_mask() -> Result<(), String> {
     unsafe {
         let result = _mm_movepi32_mask(create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 0)?;
@@ -37,7 +37,7 @@ pub(super) fn test_mm_movepi32_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_movepi32_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm256_movepi32_mask() -> Result<(), String> {
     unsafe {
         let result = _mm256_movepi32_mask(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 0)?;
@@ -57,7 +57,7 @@ pub(super) fn test_mm256_movepi32_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_movepi32_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_movepi32_mask() -> Result<(), String> {
     unsafe {
         let result = _mm512_movepi32_mask(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
         check_int_equality(result as i32, 0)?;
@@ -77,7 +77,7 @@ pub(super) fn test_mm512_movepi32_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_movepi64_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_movepi64_mask() -> Result<(), String> {
     unsafe {
         let result = _mm_movepi64_mask(create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 0)?;
@@ -97,7 +97,7 @@ pub(super) fn test_mm_movepi64_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_movepi64_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm256_movepi64_mask() -> Result<(), String> {
     unsafe {
         let result = _mm256_movepi64_mask(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 0)?;
@@ -117,7 +117,7 @@ pub(super) fn test_mm256_movepi64_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_movepi64_mask() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_movepi64_mask() -> Result<(), String> {
     unsafe {
         let result = _mm512_movepi64_mask(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
         check_int_equality(result as i32, 0)?;
@@ -137,7 +137,7 @@ pub(super) fn test_mm512_movepi64_mask() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_movm_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_movm_epi32() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_movm_epi32(create__mmask8_from(0b01010101)));
         check_array_equality(&result, &[-1, 0, -1, 0])?;
@@ -157,7 +157,7 @@ pub(super) fn test_mm_movm_epi32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_movm_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm256_movm_epi32() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i32_array(_mm256_movm_epi32(create__mmask8_from(0b01010101)));
         check_array_equality(&result, &[-1, 0, -1, 0, -1, 0, -1, 0])?;
@@ -177,7 +177,7 @@ pub(super) fn test_mm256_movm_epi32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_movm_epi32() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_movm_epi32() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i32_array(_mm512_movm_epi32(create__mmask16_from(0b0101010101010101)));
         check_array_equality(&result, &[-1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0, -1, 0])?;
@@ -197,7 +197,7 @@ pub(super) fn test_mm512_movm_epi32() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_movm_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_movm_epi64() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_movm_epi64(create__mmask8_from(0b01010101)));
         check_array_equality(&result, &[-1, -1, 0, 0])?;
@@ -217,7 +217,7 @@ pub(super) fn test_mm_movm_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_movm_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm256_movm_epi64() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i32_array(_mm256_movm_epi64(create__mmask8_from(0b01010101)));
         check_array_equality(&result, &[-1, -1, 0, 0, -1, -1, 0, 0])?;
@@ -237,7 +237,7 @@ pub(super) fn test_mm256_movm_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_movm_epi64() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_movm_epi64() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i32_array(_mm512_movm_epi64(create__mmask8_from(0b01010101)));
         check_array_equality(&result, &[-1, -1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 0, -1, -1, 0, 0])?;
@@ -257,7 +257,7 @@ pub(super) fn test_mm512_movm_epi64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_range_round_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_range_round_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -280,7 +280,7 @@ pub(super) fn test_mm512_range_round_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_range_round_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_mask_range_round_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -303,7 +303,7 @@ pub(super) fn test_mm512_mask_range_round_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_range_round_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_maskz_range_round_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -326,7 +326,7 @@ pub(super) fn test_mm512_maskz_range_round_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_range_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_range_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -349,7 +349,7 @@ pub(super) fn test_mm_range_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_range_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_mask_range_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -372,7 +372,7 @@ pub(super) fn test_mm_mask_range_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_range_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_maskz_range_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -395,7 +395,7 @@ pub(super) fn test_mm_maskz_range_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_range_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm256_range_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -418,7 +418,7 @@ pub(super) fn test_mm256_range_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_range_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm256_mask_range_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -441,7 +441,7 @@ pub(super) fn test_mm256_mask_range_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_range_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm256_maskz_range_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -464,7 +464,7 @@ pub(super) fn test_mm256_maskz_range_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_range_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_range_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -487,7 +487,7 @@ pub(super) fn test_mm512_range_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_range_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_mask_range_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -510,7 +510,7 @@ pub(super) fn test_mm512_mask_range_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_range_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_maskz_range_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -533,7 +533,7 @@ pub(super) fn test_mm512_maskz_range_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_range_round_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_range_round_ps() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -556,7 +556,7 @@ pub(super) fn test_mm512_range_round_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_range_round_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_mask_range_round_ps() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -579,7 +579,7 @@ pub(super) fn test_mm512_mask_range_round_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_range_round_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_maskz_range_round_ps() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -602,7 +602,7 @@ pub(super) fn test_mm512_maskz_range_round_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_range_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_range_ps() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -625,7 +625,7 @@ pub(super) fn test_mm_range_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_range_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_mask_range_ps() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -648,7 +648,7 @@ pub(super) fn test_mm_mask_range_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_range_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_maskz_range_ps() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -671,7 +671,7 @@ pub(super) fn test_mm_maskz_range_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_range_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm256_range_ps() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -694,7 +694,7 @@ pub(super) fn test_mm256_range_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_range_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm256_mask_range_ps() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -717,7 +717,7 @@ pub(super) fn test_mm256_mask_range_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_maskz_range_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm256_maskz_range_ps() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -740,7 +740,7 @@ pub(super) fn test_mm256_maskz_range_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_range_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_range_ps() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -763,7 +763,7 @@ pub(super) fn test_mm512_range_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_range_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_mask_range_ps() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -786,7 +786,7 @@ pub(super) fn test_mm512_mask_range_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_range_ps() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_maskz_range_ps() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -809,7 +809,7 @@ pub(super) fn test_mm512_maskz_range_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_range_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_range_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -832,7 +832,7 @@ pub(super) fn test_mm_range_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_range_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_mask_range_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -855,7 +855,7 @@ pub(super) fn test_mm_mask_range_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_range_round_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_maskz_range_round_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -878,7 +878,7 @@ pub(super) fn test_mm_maskz_range_round_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_range_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_mask_range_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -901,7 +901,7 @@ pub(super) fn test_mm_mask_range_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_range_sd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_maskz_range_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -924,7 +924,7 @@ pub(super) fn test_mm_maskz_range_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_range_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_range_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -947,7 +947,7 @@ pub(super) fn test_mm_range_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_range_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_mask_range_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -970,7 +970,7 @@ pub(super) fn test_mm_mask_range_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_range_round_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_maskz_range_round_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -993,7 +993,7 @@ pub(super) fn test_mm_maskz_range_round_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_range_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_mask_range_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1016,7 +1016,7 @@ pub(super) fn test_mm_mask_range_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_maskz_range_ss() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm_maskz_range_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1039,7 +1039,7 @@ pub(super) fn test_mm_maskz_range_ss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_reduce_round_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_reduce_round_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1062,7 +1062,7 @@ pub(super) fn test_mm512_reduce_round_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_mask_reduce_round_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_mask_reduce_round_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -1085,7 +1085,7 @@ pub(super) fn test_mm512_mask_reduce_round_pd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm512_maskz_reduce_round_pd() -> Result<(), String> {
+pub(super) fn test_x86_avx512dq_mm512_maskz_reduce_round_pd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }

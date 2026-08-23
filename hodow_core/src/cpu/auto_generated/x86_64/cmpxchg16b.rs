@@ -13,7 +13,7 @@ impl ExtensionTest for CMPXCHG16B {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_cmpxchg16b, "test_cmpxchg16b"),
+            (&test_x86_64_cmpxchg16b_cmpxchg16b, "test_x86_64_cmpxchg16b_cmpxchg16b"),
         ]
     }
 }

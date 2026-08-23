@@ -5,7 +5,7 @@ use crate::cpu::common::arm::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_vec_cmpeq() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_cmpeq() -> Result<(), String> {
     unsafe {
         vec_cmpeq(0 /* T */, 0 /* U */);
 
@@ -24,7 +24,7 @@ pub(super) fn test_vec_cmpeq() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_cmpne() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_cmpne() -> Result<(), String> {
     unsafe {
         vec_cmpne(0 /* T */, 0 /* U */);
 
@@ -43,7 +43,7 @@ pub(super) fn test_vec_cmpne() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_cmpb() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_cmpb() -> Result<(), String> {
     unsafe {
         let _result = vec_cmpb(0 /* vector_float */, 0 /* vector_float */);
 
@@ -62,7 +62,7 @@ pub(super) fn test_vec_cmpb() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_ceil() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_ceil() -> Result<(), String> {
     unsafe {
         let _result = vec_ceil(0 /* vector_float */);
 
@@ -81,7 +81,7 @@ pub(super) fn test_vec_ceil() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_avg() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_avg() -> Result<(), String> {
     unsafe {
         vec_avg(0 /* T */, 0 /* U */);
 
@@ -100,7 +100,7 @@ pub(super) fn test_vec_avg() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_andc() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_andc() -> Result<(), String> {
     unsafe {
         vec_andc(0 /* T */, 0 /* U */);
 
@@ -119,7 +119,7 @@ pub(super) fn test_vec_andc() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_orc() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_orc() -> Result<(), String> {
     unsafe {
         vec_orc(0 /* T */, 0 /* U */);
 
@@ -138,7 +138,7 @@ pub(super) fn test_vec_orc() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_and() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_and() -> Result<(), String> {
     unsafe {
         vec_and(0 /* T */, 0 /* U */);
 
@@ -157,7 +157,7 @@ pub(super) fn test_vec_and() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_or() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_or() -> Result<(), String> {
     unsafe {
         vec_or(0 /* T */, 0 /* U */);
 
@@ -176,7 +176,7 @@ pub(super) fn test_vec_or() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_nand() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_nand() -> Result<(), String> {
     unsafe {
         vec_nand(0 /* T */, 0 /* U */);
 
@@ -195,7 +195,7 @@ pub(super) fn test_vec_nand() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_nor() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_nor() -> Result<(), String> {
     unsafe {
         vec_nor(0 /* T */, 0 /* U */);
 
@@ -214,7 +214,7 @@ pub(super) fn test_vec_nor() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_xor() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_xor() -> Result<(), String> {
     unsafe {
         vec_xor(0 /* T */, 0 /* U */);
 
@@ -233,7 +233,7 @@ pub(super) fn test_vec_xor() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_adds() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_adds() -> Result<(), String> {
     unsafe {
         vec_adds(0 /* T */, 0 /* U */);
 
@@ -252,7 +252,7 @@ pub(super) fn test_vec_adds() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_addc() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_addc() -> Result<(), String> {
     unsafe {
         let _result = vec_addc(0 /* vector_unsigned_int */, 0 /* vector_unsigned_int */);
 
@@ -271,7 +271,7 @@ pub(super) fn test_vec_addc() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_abs() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_abs() -> Result<(), String> {
     unsafe {
         vec_abs(0 /* T */);
 
@@ -290,7 +290,7 @@ pub(super) fn test_vec_abs() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_abss() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_abss() -> Result<(), String> {
     unsafe {
         vec_abss(0 /* T */);
 
@@ -309,7 +309,7 @@ pub(super) fn test_vec_abss() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_rl() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_rl() -> Result<(), String> {
     unsafe {
         vec_rl(0 /* T */, 0 /* Shift */);
 
@@ -328,7 +328,7 @@ pub(super) fn test_vec_rl() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_round() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_round() -> Result<(), String> {
     unsafe {
         vec_round(0 /* T */);
 
@@ -347,7 +347,7 @@ pub(super) fn test_vec_round() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_splat() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_splat() -> Result<(), String> {
     unsafe {
         vec_splat::<0>(0 /* T */);
 
@@ -366,7 +366,7 @@ pub(super) fn test_vec_splat() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_splats() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_splats() -> Result<(), String> {
     unsafe {
         vec_splats(0 /* T */);
 
@@ -385,7 +385,7 @@ pub(super) fn test_vec_splats() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_sub() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_sub() -> Result<(), String> {
     unsafe {
         vec_sub(0 /* T */, 0 /* U */);
 
@@ -404,7 +404,7 @@ pub(super) fn test_vec_sub() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_subc() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_subc() -> Result<(), String> {
     unsafe {
         vec_subc(0 /* T */, 0 /* U */);
 
@@ -423,7 +423,7 @@ pub(super) fn test_vec_subc() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_subs() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_subs() -> Result<(), String> {
     unsafe {
         vec_subs(0 /* T */, 0 /* U */);
 
@@ -442,7 +442,7 @@ pub(super) fn test_vec_subs() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_min() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_min() -> Result<(), String> {
     unsafe {
         vec_min(0 /* T */, 0 /* U */);
 
@@ -461,7 +461,7 @@ pub(super) fn test_vec_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_max() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_max() -> Result<(), String> {
     unsafe {
         vec_max(0 /* T */, 0 /* U */);
 
@@ -480,7 +480,7 @@ pub(super) fn test_vec_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_mfvscr() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_mfvscr() -> Result<(), String> {
     unsafe {
         let _result = vec_mfvscr();
 
@@ -499,7 +499,7 @@ pub(super) fn test_vec_mfvscr() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_add() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_add() -> Result<(), String> {
     unsafe {
         vec_add(0 /* T */, 0 /* U */);
 
@@ -518,7 +518,7 @@ pub(super) fn test_vec_add() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_adde() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_adde() -> Result<(), String> {
     unsafe {
         vec_adde(0 /* T */, 0 /* T */, 0 /* T */);
 
@@ -537,7 +537,7 @@ pub(super) fn test_vec_adde() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_ctf() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_ctf() -> Result<(), String> {
     unsafe {
         vec_ctf::<0>(0 /* T */);
 
@@ -556,7 +556,7 @@ pub(super) fn test_vec_ctf() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_cts() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_cts() -> Result<(), String> {
     unsafe {
         let _result = vec_cts::<0>(0 /* vector_float */);
 
@@ -575,7 +575,7 @@ pub(super) fn test_vec_cts() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_ctu() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_ctu() -> Result<(), String> {
     unsafe {
         let _result = vec_ctu::<0>(0 /* vector_float */);
 
@@ -594,7 +594,7 @@ pub(super) fn test_vec_ctu() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_perm() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_perm() -> Result<(), String> {
     unsafe {
         vec_perm(0 /* T */, 0 /* T */, 0 /* vector_unsigned_char */);
 
@@ -613,7 +613,7 @@ pub(super) fn test_vec_perm() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_sum2s() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_sum2s() -> Result<(), String> {
     unsafe {
         let _result = vec_sum2s(0 /* vector_signed_int */, 0 /* vector_signed_int */);
 
@@ -632,7 +632,7 @@ pub(super) fn test_vec_sum2s() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_mule() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_mule() -> Result<(), String> {
     unsafe {
         vec_mule(0 /* T */, 0 /* T */);
 
@@ -651,7 +651,7 @@ pub(super) fn test_vec_mule() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_mulo() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_mulo() -> Result<(), String> {
     unsafe {
         vec_mulo(0 /* T */, 0 /* T */);
 
@@ -670,7 +670,7 @@ pub(super) fn test_vec_mulo() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_mul() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_mul() -> Result<(), String> {
     unsafe {
         vec_mul(0 /* T */, 0 /* T */);
 
@@ -689,7 +689,7 @@ pub(super) fn test_vec_mul() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_madds() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_madds() -> Result<(), String> {
     unsafe {
         let _result = vec_madds(0 /* vector_signed_short */, 0 /* vector_signed_short */, 0 /* vector_signed_short */);
 
@@ -708,7 +708,7 @@ pub(super) fn test_vec_madds() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_mladd() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_mladd() -> Result<(), String> {
     unsafe {
         vec_mladd(0 /* T */, 0 /* U */, 0 /* U */);
 
@@ -727,7 +727,7 @@ pub(super) fn test_vec_mladd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_mradds() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_mradds() -> Result<(), String> {
     unsafe {
         let _result = vec_mradds(0 /* vector_signed_short */, 0 /* vector_signed_short */, 0 /* vector_signed_short */);
 
@@ -746,7 +746,7 @@ pub(super) fn test_vec_mradds() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_msum() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_msum() -> Result<(), String> {
     unsafe {
         vec_msum(0 /* T */, 0 /* B */, 0 /* U */);
 
@@ -765,7 +765,7 @@ pub(super) fn test_vec_msum() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_msums() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_msums() -> Result<(), String> {
     unsafe {
         vec_msums(0 /* T */, 0 /* T */, 0 /* U */);
 
@@ -784,7 +784,7 @@ pub(super) fn test_vec_msums() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_madd() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_madd() -> Result<(), String> {
     unsafe {
         let _result = vec_madd(0 /* vector_float */, 0 /* vector_float */, 0 /* vector_float */);
 
@@ -803,7 +803,7 @@ pub(super) fn test_vec_madd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_nmsub() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_nmsub() -> Result<(), String> {
     unsafe {
         let _result = vec_nmsub(0 /* vector_float */, 0 /* vector_float */, 0 /* vector_float */);
 
@@ -822,7 +822,7 @@ pub(super) fn test_vec_nmsub() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_sel() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_sel() -> Result<(), String> {
     unsafe {
         vec_sel(0 /* T */, 0 /* T */, 0 /* U */);
 
@@ -841,7 +841,7 @@ pub(super) fn test_vec_sel() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_sum4s() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_sum4s() -> Result<(), String> {
     unsafe {
         vec_sum4s(0 /* T */, 0 /* U */);
 
@@ -860,7 +860,7 @@ pub(super) fn test_vec_sum4s() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_all_eq() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_all_eq() -> Result<(), String> {
     unsafe {
         vec_all_eq(0 /* T */, 0 /* U */);
 
@@ -879,7 +879,7 @@ pub(super) fn test_vec_all_eq() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_any_eq() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_any_eq() -> Result<(), String> {
     unsafe {
         vec_any_eq(0 /* T */, 0 /* U */);
 
@@ -898,7 +898,7 @@ pub(super) fn test_vec_any_eq() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_all_ge() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_all_ge() -> Result<(), String> {
     unsafe {
         vec_all_ge(0 /* T */, 0 /* U */);
 
@@ -917,7 +917,7 @@ pub(super) fn test_vec_all_ge() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_any_ge() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_any_ge() -> Result<(), String> {
     unsafe {
         vec_any_ge(0 /* T */, 0 /* U */);
 
@@ -936,7 +936,7 @@ pub(super) fn test_vec_any_ge() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_all_gt() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_all_gt() -> Result<(), String> {
     unsafe {
         vec_all_gt(0 /* T */, 0 /* U */);
 

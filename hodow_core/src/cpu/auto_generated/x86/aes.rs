@@ -13,12 +13,12 @@ impl ExtensionTest for AES {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_mm_aesdec_si128, "test_mm_aesdec_si128"),
-            (&test_mm_aesdeclast_si128, "test_mm_aesdeclast_si128"),
-            (&test_mm_aesenc_si128, "test_mm_aesenc_si128"),
-            (&test_mm_aesenclast_si128, "test_mm_aesenclast_si128"),
-            (&test_mm_aesimc_si128, "test_mm_aesimc_si128"),
-            (&test_mm_aeskeygenassist_si128, "test_mm_aeskeygenassist_si128"),
+            (&test_x86_aes_mm_aesdec_si128, "test_x86_aes_mm_aesdec_si128"),
+            (&test_x86_aes_mm_aesdeclast_si128, "test_x86_aes_mm_aesdeclast_si128"),
+            (&test_x86_aes_mm_aesenc_si128, "test_x86_aes_mm_aesenc_si128"),
+            (&test_x86_aes_mm_aesenclast_si128, "test_x86_aes_mm_aesenclast_si128"),
+            (&test_x86_aes_mm_aesimc_si128, "test_x86_aes_mm_aesimc_si128"),
+            (&test_x86_aes_mm_aeskeygenassist_si128, "test_x86_aes_mm_aeskeygenassist_si128"),
         ]
     }
 }

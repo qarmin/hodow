@@ -13,7 +13,7 @@ impl ExtensionTest for PCLMULQDQ {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_mm_clmulepi64_si128, "test_mm_clmulepi64_si128"),
+            (&test_x86_pclmulqdq_mm_clmulepi64_si128, "test_x86_pclmulqdq_mm_clmulepi64_si128"),
         ]
     }
 }

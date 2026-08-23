@@ -8,7 +8,7 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_mm256_reduce_add_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_add_epi16() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_add_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 36)?;
@@ -28,7 +28,7 @@ pub(super) fn test_mm256_reduce_add_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_add_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_add_epi16_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_add_epi16(create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, -8)?;
@@ -48,7 +48,7 @@ pub(super) fn test_mm256_reduce_add_epi16_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_add_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_add_epi16_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_add_epi16(create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]));
         check_int_equality(result as i32, 13600)?;
@@ -68,7 +68,7 @@ pub(super) fn test_mm256_reduce_add_epi16_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_add_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_add_epi16_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_add_epi16(create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]));
         check_int_equality(result as i32, 0)?;
@@ -88,7 +88,7 @@ pub(super) fn test_mm256_reduce_add_epi16_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_add_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_add_epi16_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_add_epi16(create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]));
         check_int_equality(result as i32, -16)?;
@@ -108,7 +108,7 @@ pub(super) fn test_mm256_reduce_add_epi16_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_add_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_add_epi16_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_add_epi16(create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -128,7 +128,7 @@ pub(super) fn test_mm256_reduce_add_epi16_boundary_zero() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_add_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_add_epi16_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_add_epi16(create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -16)?;
@@ -148,7 +148,7 @@ pub(super) fn test_mm256_reduce_add_epi16_boundary_allones() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_add_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_add_epi16_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_add_epi16(create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]));
         check_int_equality(result as i32, -8)?;
@@ -168,7 +168,7 @@ pub(super) fn test_mm256_reduce_add_epi16_boundary_mixed() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_add_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_add_epi16() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_add_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 36)?;
@@ -188,7 +188,7 @@ pub(super) fn test_mm256_mask_reduce_add_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_add_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_add_epi16_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_add_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, 24)?;
@@ -208,7 +208,7 @@ pub(super) fn test_mm256_mask_reduce_add_epi16_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_add_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_add_epi16_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_add_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]));
         check_int_equality(result as i32, 6400)?;
@@ -228,7 +228,7 @@ pub(super) fn test_mm256_mask_reduce_add_epi16_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_add_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_add_epi16_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_add_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]));
         check_int_equality(result as i32, 0)?;
@@ -248,7 +248,7 @@ pub(super) fn test_mm256_mask_reduce_add_epi16_boundary_min() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_add_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_add_epi16_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_add_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]));
         check_int_equality(result as i32, -8)?;
@@ -268,7 +268,7 @@ pub(super) fn test_mm256_mask_reduce_add_epi16_boundary_max() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_add_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_add_epi16_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_add_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -288,7 +288,7 @@ pub(super) fn test_mm256_mask_reduce_add_epi16_boundary_zero() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_add_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_add_epi16_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_add_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -8)?;
@@ -308,7 +308,7 @@ pub(super) fn test_mm256_mask_reduce_add_epi16_boundary_allones() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_add_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_add_epi16_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_add_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]));
         check_int_equality(result as i32, 0)?;
@@ -328,7 +328,7 @@ pub(super) fn test_mm256_mask_reduce_add_epi16_boundary_mixed() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_add_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_add_epi16() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_add_epi16(create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 10)?;
@@ -348,7 +348,7 @@ pub(super) fn test_mm_reduce_add_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_add_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_add_epi16_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_add_epi16(create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, -4)?;
@@ -368,7 +368,7 @@ pub(super) fn test_mm_reduce_add_epi16_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_add_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_add_epi16_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_add_epi16(create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]));
         check_int_equality(result as i32, 3600)?;
@@ -388,7 +388,7 @@ pub(super) fn test_mm_reduce_add_epi16_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_add_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_add_epi16_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_add_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]));
         check_int_equality(result as i32, 0)?;
@@ -408,7 +408,7 @@ pub(super) fn test_mm_reduce_add_epi16_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_add_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_add_epi16_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_add_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]));
         check_int_equality(result as i32, -8)?;
@@ -428,7 +428,7 @@ pub(super) fn test_mm_reduce_add_epi16_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_add_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_add_epi16_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_add_epi16(create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -448,7 +448,7 @@ pub(super) fn test_mm_reduce_add_epi16_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_add_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_add_epi16_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_add_epi16(create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -8)?;
@@ -468,7 +468,7 @@ pub(super) fn test_mm_reduce_add_epi16_boundary_allones() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_add_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_add_epi16_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_add_epi16(create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]));
         check_int_equality(result as i32, -4)?;
@@ -488,7 +488,7 @@ pub(super) fn test_mm_reduce_add_epi16_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_add_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_add_epi16() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_add_epi16(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 10)?;
@@ -508,7 +508,7 @@ pub(super) fn test_mm_mask_reduce_add_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_add_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_add_epi16_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_add_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, 12)?;
@@ -528,7 +528,7 @@ pub(super) fn test_mm_mask_reduce_add_epi16_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_add_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_add_epi16_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_add_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]));
         check_int_equality(result as i32, 1600)?;
@@ -548,7 +548,7 @@ pub(super) fn test_mm_mask_reduce_add_epi16_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_add_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_add_epi16_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_add_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]));
         check_int_equality(result as i32, 0)?;
@@ -568,7 +568,7 @@ pub(super) fn test_mm_mask_reduce_add_epi16_boundary_min() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_add_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_add_epi16_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_add_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]));
         check_int_equality(result as i32, -4)?;
@@ -588,7 +588,7 @@ pub(super) fn test_mm_mask_reduce_add_epi16_boundary_max() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_add_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_add_epi16_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_add_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -608,7 +608,7 @@ pub(super) fn test_mm_mask_reduce_add_epi16_boundary_zero() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_add_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_add_epi16_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_add_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -4)?;
@@ -628,7 +628,7 @@ pub(super) fn test_mm_mask_reduce_add_epi16_boundary_allones() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_add_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_add_epi16_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_add_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]));
         check_int_equality(result as i32, 0)?;
@@ -648,7 +648,7 @@ pub(super) fn test_mm_mask_reduce_add_epi16_boundary_mixed() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_add_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_add_epi8() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_add_epi8(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 36)?;
@@ -668,7 +668,7 @@ pub(super) fn test_mm256_reduce_add_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_add_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_add_epi8_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_add_epi8(create__m256i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, -16)?;
@@ -688,7 +688,7 @@ pub(super) fn test_mm256_reduce_add_epi8_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_add_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_add_epi8_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_add_epi8(create__m256i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128]));
         check_int_equality(result as i32, 64)?;
@@ -708,7 +708,7 @@ pub(super) fn test_mm256_reduce_add_epi8_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_add_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_add_epi8_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_add_epi8(create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]));
         check_int_equality(result as i32, 0)?;
@@ -728,7 +728,7 @@ pub(super) fn test_mm256_reduce_add_epi8_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_add_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_add_epi8_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_add_epi8(create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]));
         check_int_equality(result as i32, -32)?;
@@ -748,7 +748,7 @@ pub(super) fn test_mm256_reduce_add_epi8_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_add_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_add_epi8_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_add_epi8(create__m256i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -768,7 +768,7 @@ pub(super) fn test_mm256_reduce_add_epi8_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_add_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_add_epi8_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_add_epi8(create__m256i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -32)?;
@@ -788,7 +788,7 @@ pub(super) fn test_mm256_reduce_add_epi8_boundary_allones() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_add_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_add_epi8_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_add_epi8(create__m256i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]));
         check_int_equality(result as i32, -16)?;
@@ -808,7 +808,7 @@ pub(super) fn test_mm256_reduce_add_epi8_boundary_mixed() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_add_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_add_epi8() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_add_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 36)?;
@@ -828,7 +828,7 @@ pub(super) fn test_mm256_mask_reduce_add_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_add_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_add_epi8_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_add_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, 48)?;
@@ -848,7 +848,7 @@ pub(super) fn test_mm256_mask_reduce_add_epi8_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_add_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_add_epi8_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_add_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128]));
         check_int_equality(result as i32, 0)?;
@@ -868,7 +868,7 @@ pub(super) fn test_mm256_mask_reduce_add_epi8_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_add_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_add_epi8_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_add_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]));
         check_int_equality(result as i32, 0)?;
@@ -888,7 +888,7 @@ pub(super) fn test_mm256_mask_reduce_add_epi8_boundary_min() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_add_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_add_epi8_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_add_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]));
         check_int_equality(result as i32, -16)?;
@@ -908,7 +908,7 @@ pub(super) fn test_mm256_mask_reduce_add_epi8_boundary_max() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_add_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_add_epi8_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_add_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -928,7 +928,7 @@ pub(super) fn test_mm256_mask_reduce_add_epi8_boundary_zero() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_add_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_add_epi8_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_add_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -16)?;
@@ -948,7 +948,7 @@ pub(super) fn test_mm256_mask_reduce_add_epi8_boundary_allones() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_add_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_add_epi8_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_add_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]));
         check_int_equality(result as i32, 0)?;
@@ -968,7 +968,7 @@ pub(super) fn test_mm256_mask_reduce_add_epi8_boundary_mixed() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_add_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_add_epi8() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_add_epi8(create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 10)?;
@@ -988,7 +988,7 @@ pub(super) fn test_mm_reduce_add_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_add_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_add_epi8_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_add_epi8(create__m128i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, -8)?;
@@ -1008,7 +1008,7 @@ pub(super) fn test_mm_reduce_add_epi8_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_add_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_add_epi8_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_add_epi8(create__m128i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64]));
         check_int_equality(result as i32, 32)?;
@@ -1028,7 +1028,7 @@ pub(super) fn test_mm_reduce_add_epi8_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_add_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_add_epi8_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_add_epi8(create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]));
         check_int_equality(result as i32, 0)?;
@@ -1048,7 +1048,7 @@ pub(super) fn test_mm_reduce_add_epi8_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_add_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_add_epi8_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_add_epi8(create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]));
         check_int_equality(result as i32, -16)?;
@@ -1068,7 +1068,7 @@ pub(super) fn test_mm_reduce_add_epi8_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_add_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_add_epi8_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_add_epi8(create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -1088,7 +1088,7 @@ pub(super) fn test_mm_reduce_add_epi8_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_add_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_add_epi8_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_add_epi8(create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -16)?;
@@ -1108,7 +1108,7 @@ pub(super) fn test_mm_reduce_add_epi8_boundary_allones() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_add_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_add_epi8_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_add_epi8(create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]));
         check_int_equality(result as i32, -8)?;
@@ -1128,7 +1128,7 @@ pub(super) fn test_mm_reduce_add_epi8_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_add_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_add_epi8() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_add_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 10)?;
@@ -1148,7 +1148,7 @@ pub(super) fn test_mm_mask_reduce_add_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_add_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_add_epi8_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_add_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, 24)?;
@@ -1168,7 +1168,7 @@ pub(super) fn test_mm_mask_reduce_add_epi8_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_add_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_add_epi8_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_add_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64]));
         check_int_equality(result as i32, 0)?;
@@ -1188,7 +1188,7 @@ pub(super) fn test_mm_mask_reduce_add_epi8_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_add_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_add_epi8_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_add_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]));
         check_int_equality(result as i32, 0)?;
@@ -1208,7 +1208,7 @@ pub(super) fn test_mm_mask_reduce_add_epi8_boundary_min() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_add_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_add_epi8_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_add_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]));
         check_int_equality(result as i32, -8)?;
@@ -1228,7 +1228,7 @@ pub(super) fn test_mm_mask_reduce_add_epi8_boundary_max() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_add_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_add_epi8_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_add_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -1248,7 +1248,7 @@ pub(super) fn test_mm_mask_reduce_add_epi8_boundary_zero() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_add_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_add_epi8_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_add_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -8)?;
@@ -1268,7 +1268,7 @@ pub(super) fn test_mm_mask_reduce_add_epi8_boundary_allones() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_add_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_add_epi8_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_add_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]));
         check_int_equality(result as i32, 0)?;
@@ -1288,7 +1288,7 @@ pub(super) fn test_mm_mask_reduce_add_epi8_boundary_mixed() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_and_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_and_epi16() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_and_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 0)?;
@@ -1308,7 +1308,7 @@ pub(super) fn test_mm256_reduce_and_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_and_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_and_epi16() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_and_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 0)?;
@@ -1328,7 +1328,7 @@ pub(super) fn test_mm256_mask_reduce_and_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_and_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_and_epi16() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_and_epi16(create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 0)?;
@@ -1348,7 +1348,7 @@ pub(super) fn test_mm_reduce_and_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_and_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_and_epi16() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_and_epi16(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 0)?;
@@ -1368,7 +1368,7 @@ pub(super) fn test_mm_mask_reduce_and_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_and_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_and_epi8() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_and_epi8(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 0)?;
@@ -1388,7 +1388,7 @@ pub(super) fn test_mm256_reduce_and_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_and_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_and_epi8() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_and_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 0)?;
@@ -1408,7 +1408,7 @@ pub(super) fn test_mm256_mask_reduce_and_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_and_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_and_epi8() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_and_epi8(create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 0)?;
@@ -1428,7 +1428,7 @@ pub(super) fn test_mm_reduce_and_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_and_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_and_epi8() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_and_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 0)?;
@@ -1448,7 +1448,7 @@ pub(super) fn test_mm_mask_reduce_and_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epi16() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 8)?;
@@ -1468,7 +1468,7 @@ pub(super) fn test_mm256_reduce_max_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epi16_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epi16(create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, 6)?;
@@ -1488,7 +1488,7 @@ pub(super) fn test_mm256_reduce_max_epi16_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epi16_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epi16(create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]));
         check_int_equality(result as i32, 1600)?;
@@ -1508,7 +1508,7 @@ pub(super) fn test_mm256_reduce_max_epi16_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epi16_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epi16(create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]));
         check_int_equality(result as i32, -32768)?;
@@ -1528,7 +1528,7 @@ pub(super) fn test_mm256_reduce_max_epi16_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epi16_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epi16(create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]));
         check_int_equality(result as i32, 32767)?;
@@ -1548,7 +1548,7 @@ pub(super) fn test_mm256_reduce_max_epi16_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epi16_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epi16(create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -1568,7 +1568,7 @@ pub(super) fn test_mm256_reduce_max_epi16_boundary_zero() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epi16_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epi16(create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -1)?;
@@ -1588,7 +1588,7 @@ pub(super) fn test_mm256_reduce_max_epi16_boundary_allones() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epi16_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epi16(create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]));
         check_int_equality(result as i32, 32767)?;
@@ -1608,7 +1608,7 @@ pub(super) fn test_mm256_reduce_max_epi16_boundary_mixed() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epi16() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 8)?;
@@ -1628,7 +1628,7 @@ pub(super) fn test_mm256_mask_reduce_max_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epi16_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, 6)?;
@@ -1648,7 +1648,7 @@ pub(super) fn test_mm256_mask_reduce_max_epi16_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epi16_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]));
         check_int_equality(result as i32, 1500)?;
@@ -1668,7 +1668,7 @@ pub(super) fn test_mm256_mask_reduce_max_epi16_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epi16_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]));
         check_int_equality(result as i32, -32768)?;
@@ -1688,7 +1688,7 @@ pub(super) fn test_mm256_mask_reduce_max_epi16_boundary_min() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epi16_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]));
         check_int_equality(result as i32, 32767)?;
@@ -1708,7 +1708,7 @@ pub(super) fn test_mm256_mask_reduce_max_epi16_boundary_max() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epi16_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -1728,7 +1728,7 @@ pub(super) fn test_mm256_mask_reduce_max_epi16_boundary_zero() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epi16_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -1)?;
@@ -1748,7 +1748,7 @@ pub(super) fn test_mm256_mask_reduce_max_epi16_boundary_allones() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epi16_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]));
         check_int_equality(result as i32, 0)?;
@@ -1768,7 +1768,7 @@ pub(super) fn test_mm256_mask_reduce_max_epi16_boundary_mixed() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epi16() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epi16(create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 4)?;
@@ -1788,7 +1788,7 @@ pub(super) fn test_mm_reduce_max_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epi16_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epi16(create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, 6)?;
@@ -1808,7 +1808,7 @@ pub(super) fn test_mm_reduce_max_epi16_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epi16_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epi16(create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]));
         check_int_equality(result as i32, 800)?;
@@ -1828,7 +1828,7 @@ pub(super) fn test_mm_reduce_max_epi16_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epi16_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]));
         check_int_equality(result as i32, -32768)?;
@@ -1848,7 +1848,7 @@ pub(super) fn test_mm_reduce_max_epi16_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epi16_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]));
         check_int_equality(result as i32, 32767)?;
@@ -1868,7 +1868,7 @@ pub(super) fn test_mm_reduce_max_epi16_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epi16_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epi16(create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -1888,7 +1888,7 @@ pub(super) fn test_mm_reduce_max_epi16_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epi16_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epi16(create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -1)?;
@@ -1908,7 +1908,7 @@ pub(super) fn test_mm_reduce_max_epi16_boundary_allones() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epi16_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epi16(create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]));
         check_int_equality(result as i32, 32767)?;
@@ -1928,7 +1928,7 @@ pub(super) fn test_mm_reduce_max_epi16_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epi16() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epi16(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 4)?;
@@ -1948,7 +1948,7 @@ pub(super) fn test_mm_mask_reduce_max_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epi16_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, 6)?;
@@ -1968,7 +1968,7 @@ pub(super) fn test_mm_mask_reduce_max_epi16_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epi16_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]));
         check_int_equality(result as i32, 700)?;
@@ -1988,7 +1988,7 @@ pub(super) fn test_mm_mask_reduce_max_epi16_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epi16_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]));
         check_int_equality(result as i32, -32768)?;
@@ -2008,7 +2008,7 @@ pub(super) fn test_mm_mask_reduce_max_epi16_boundary_min() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epi16_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]));
         check_int_equality(result as i32, 32767)?;
@@ -2028,7 +2028,7 @@ pub(super) fn test_mm_mask_reduce_max_epi16_boundary_max() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epi16_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -2048,7 +2048,7 @@ pub(super) fn test_mm_mask_reduce_max_epi16_boundary_zero() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epi16_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -1)?;
@@ -2068,7 +2068,7 @@ pub(super) fn test_mm_mask_reduce_max_epi16_boundary_allones() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epi16_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]));
         check_int_equality(result as i32, 0)?;
@@ -2088,7 +2088,7 @@ pub(super) fn test_mm_mask_reduce_max_epi16_boundary_mixed() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epi8() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epi8(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 8)?;
@@ -2108,7 +2108,7 @@ pub(super) fn test_mm256_reduce_max_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epi8_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epi8(create__m256i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, 6)?;
@@ -2128,7 +2128,7 @@ pub(super) fn test_mm256_reduce_max_epi8_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epi8_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epi8(create__m256i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128]));
         check_int_equality(result as i32, 120)?;
@@ -2148,7 +2148,7 @@ pub(super) fn test_mm256_reduce_max_epi8_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epi8_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epi8(create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]));
         check_int_equality(result as i32, -128)?;
@@ -2168,7 +2168,7 @@ pub(super) fn test_mm256_reduce_max_epi8_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epi8_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epi8(create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]));
         check_int_equality(result as i32, 127)?;
@@ -2188,7 +2188,7 @@ pub(super) fn test_mm256_reduce_max_epi8_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epi8_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epi8(create__m256i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -2208,7 +2208,7 @@ pub(super) fn test_mm256_reduce_max_epi8_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epi8_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epi8(create__m256i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -1)?;
@@ -2228,7 +2228,7 @@ pub(super) fn test_mm256_reduce_max_epi8_boundary_allones() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epi8_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epi8(create__m256i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]));
         check_int_equality(result as i32, 127)?;
@@ -2248,7 +2248,7 @@ pub(super) fn test_mm256_reduce_max_epi8_boundary_mixed() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epi8() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 8)?;
@@ -2268,7 +2268,7 @@ pub(super) fn test_mm256_mask_reduce_max_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epi8_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, 6)?;
@@ -2288,7 +2288,7 @@ pub(super) fn test_mm256_mask_reduce_max_epi8_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epi8_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128]));
         check_int_equality(result as i32, 108)?;
@@ -2308,7 +2308,7 @@ pub(super) fn test_mm256_mask_reduce_max_epi8_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epi8_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]));
         check_int_equality(result as i32, -128)?;
@@ -2328,7 +2328,7 @@ pub(super) fn test_mm256_mask_reduce_max_epi8_boundary_min() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epi8_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]));
         check_int_equality(result as i32, 127)?;
@@ -2348,7 +2348,7 @@ pub(super) fn test_mm256_mask_reduce_max_epi8_boundary_max() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epi8_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -2368,7 +2368,7 @@ pub(super) fn test_mm256_mask_reduce_max_epi8_boundary_zero() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epi8_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -1)?;
@@ -2388,7 +2388,7 @@ pub(super) fn test_mm256_mask_reduce_max_epi8_boundary_allones() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epi8_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]));
         check_int_equality(result as i32, 0)?;
@@ -2408,7 +2408,7 @@ pub(super) fn test_mm256_mask_reduce_max_epi8_boundary_mixed() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epi8() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epi8(create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 4)?;
@@ -2428,7 +2428,7 @@ pub(super) fn test_mm_reduce_max_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epi8_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epi8(create__m128i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, 6)?;
@@ -2448,7 +2448,7 @@ pub(super) fn test_mm_reduce_max_epi8_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epi8_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epi8(create__m128i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64]));
         check_int_equality(result as i32, 120)?;
@@ -2468,7 +2468,7 @@ pub(super) fn test_mm_reduce_max_epi8_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epi8_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epi8(create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]));
         check_int_equality(result as i32, -128)?;
@@ -2488,7 +2488,7 @@ pub(super) fn test_mm_reduce_max_epi8_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epi8_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epi8(create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]));
         check_int_equality(result as i32, 127)?;
@@ -2508,7 +2508,7 @@ pub(super) fn test_mm_reduce_max_epi8_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epi8_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epi8(create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -2528,7 +2528,7 @@ pub(super) fn test_mm_reduce_max_epi8_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epi8_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epi8(create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -1)?;
@@ -2548,7 +2548,7 @@ pub(super) fn test_mm_reduce_max_epi8_boundary_allones() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epi8_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epi8(create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]));
         check_int_equality(result as i32, 127)?;
@@ -2568,7 +2568,7 @@ pub(super) fn test_mm_reduce_max_epi8_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epi8() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 4)?;
@@ -2588,7 +2588,7 @@ pub(super) fn test_mm_mask_reduce_max_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epi8_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, 6)?;
@@ -2608,7 +2608,7 @@ pub(super) fn test_mm_mask_reduce_max_epi8_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epi8_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64]));
         check_int_equality(result as i32, 100)?;
@@ -2628,7 +2628,7 @@ pub(super) fn test_mm_mask_reduce_max_epi8_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epi8_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]));
         check_int_equality(result as i32, -128)?;
@@ -2648,7 +2648,7 @@ pub(super) fn test_mm_mask_reduce_max_epi8_boundary_min() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epi8_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]));
         check_int_equality(result as i32, 127)?;
@@ -2668,7 +2668,7 @@ pub(super) fn test_mm_mask_reduce_max_epi8_boundary_max() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epi8_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -2688,7 +2688,7 @@ pub(super) fn test_mm_mask_reduce_max_epi8_boundary_zero() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epi8_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -1)?;
@@ -2708,7 +2708,7 @@ pub(super) fn test_mm_mask_reduce_max_epi8_boundary_allones() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epi8_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]));
         check_int_equality(result as i32, 0)?;
@@ -2728,7 +2728,7 @@ pub(super) fn test_mm_mask_reduce_max_epi8_boundary_mixed() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epu16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epu16() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epu16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 8)?;
@@ -2748,7 +2748,7 @@ pub(super) fn test_mm256_reduce_max_epu16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epu16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epu16_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epu16(create__m256i_from_u16_array([0, 65535, 2, 65533, 4, 65531, 6, 65529, 0, 65535, 2, 65533, 4, 65531, 6, 65529]));
         check_int_equality(result as i32, 65535)?;
@@ -2768,7 +2768,7 @@ pub(super) fn test_mm256_reduce_max_epu16_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epu16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epu16_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epu16(create__m256i_from_u16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]));
         check_int_equality(result as i32, 1600)?;
@@ -2788,7 +2788,7 @@ pub(super) fn test_mm256_reduce_max_epu16_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epu16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epu16_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epu16(create__m256i_from_u16_array([u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN]));
         check_int_equality(result as i32, 0)?;
@@ -2808,7 +2808,7 @@ pub(super) fn test_mm256_reduce_max_epu16_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epu16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epu16_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epu16(create__m256i_from_u16_array([u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX]));
         check_int_equality(result as i32, 65535)?;
@@ -2828,7 +2828,7 @@ pub(super) fn test_mm256_reduce_max_epu16_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epu16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epu16_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epu16(create__m256i_from_u16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -2848,7 +2848,7 @@ pub(super) fn test_mm256_reduce_max_epu16_boundary_zero() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epu16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epu16_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epu16(create__m256i_from_u16_array([u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX]));
         check_int_equality(result as i32, 65535)?;
@@ -2868,7 +2868,7 @@ pub(super) fn test_mm256_reduce_max_epu16_boundary_allones() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epu16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epu16_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epu16(create__m256i_from_u16_array([u16::MIN, u16::MAX, 0, u16::MAX, u16::MIN, u16::MAX, 0, u16::MAX, u16::MIN, u16::MAX, 0, u16::MAX, u16::MIN, u16::MAX, 0, u16::MAX]));
         check_int_equality(result as i32, 65535)?;
@@ -2888,7 +2888,7 @@ pub(super) fn test_mm256_reduce_max_epu16_boundary_mixed() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epu16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epu16() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epu16(create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 8)?;
@@ -2908,7 +2908,7 @@ pub(super) fn test_mm256_mask_reduce_max_epu16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epu16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epu16_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epu16(create__mmask16_from(0b0101010101010101), create__m256i_from_u16_array([0, 65535, 2, 65533, 4, 65531, 6, 65529, 0, 65535, 2, 65533, 4, 65531, 6, 65529]));
         check_int_equality(result as i32, 6)?;
@@ -2928,7 +2928,7 @@ pub(super) fn test_mm256_mask_reduce_max_epu16_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epu16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epu16_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epu16(create__mmask16_from(0b0101010101010101), create__m256i_from_u16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]));
         check_int_equality(result as i32, 1500)?;
@@ -2948,7 +2948,7 @@ pub(super) fn test_mm256_mask_reduce_max_epu16_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epu16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epu16_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epu16(create__mmask16_from(0b0101010101010101), create__m256i_from_u16_array([u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN]));
         check_int_equality(result as i32, 0)?;
@@ -2968,7 +2968,7 @@ pub(super) fn test_mm256_mask_reduce_max_epu16_boundary_min() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epu16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epu16_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epu16(create__mmask16_from(0b0101010101010101), create__m256i_from_u16_array([u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX]));
         check_int_equality(result as i32, 65535)?;
@@ -2988,7 +2988,7 @@ pub(super) fn test_mm256_mask_reduce_max_epu16_boundary_max() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epu16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epu16_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epu16(create__mmask16_from(0b0101010101010101), create__m256i_from_u16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -3008,7 +3008,7 @@ pub(super) fn test_mm256_mask_reduce_max_epu16_boundary_zero() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epu16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epu16_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epu16(create__mmask16_from(0b0101010101010101), create__m256i_from_u16_array([u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX]));
         check_int_equality(result as i32, 65535)?;
@@ -3028,7 +3028,7 @@ pub(super) fn test_mm256_mask_reduce_max_epu16_boundary_allones() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epu16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epu16_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epu16(create__mmask16_from(0b0101010101010101), create__m256i_from_u16_array([u16::MIN, u16::MAX, 0, u16::MAX, u16::MIN, u16::MAX, 0, u16::MAX, u16::MIN, u16::MAX, 0, u16::MAX, u16::MIN, u16::MAX, 0, u16::MAX]));
         check_int_equality(result as i32, 0)?;
@@ -3048,7 +3048,7 @@ pub(super) fn test_mm256_mask_reduce_max_epu16_boundary_mixed() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epu16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epu16() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epu16(create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 4)?;
@@ -3068,7 +3068,7 @@ pub(super) fn test_mm_reduce_max_epu16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epu16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epu16_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epu16(create__m128i_from_u16_array([0, 65535, 2, 65533, 4, 65531, 6, 65529]));
         check_int_equality(result as i32, 65535)?;
@@ -3088,7 +3088,7 @@ pub(super) fn test_mm_reduce_max_epu16_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epu16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epu16_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epu16(create__m128i_from_u16_array([100, 200, 300, 400, 500, 600, 700, 800]));
         check_int_equality(result as i32, 800)?;
@@ -3108,7 +3108,7 @@ pub(super) fn test_mm_reduce_max_epu16_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epu16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epu16_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epu16(create__m128i_from_u16_array([u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN]));
         check_int_equality(result as i32, 0)?;
@@ -3128,7 +3128,7 @@ pub(super) fn test_mm_reduce_max_epu16_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epu16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epu16_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epu16(create__m128i_from_u16_array([u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX]));
         check_int_equality(result as i32, 65535)?;
@@ -3148,7 +3148,7 @@ pub(super) fn test_mm_reduce_max_epu16_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epu16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epu16_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epu16(create__m128i_from_u16_array([0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -3168,7 +3168,7 @@ pub(super) fn test_mm_reduce_max_epu16_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epu16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epu16_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epu16(create__m128i_from_u16_array([u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX]));
         check_int_equality(result as i32, 65535)?;
@@ -3188,7 +3188,7 @@ pub(super) fn test_mm_reduce_max_epu16_boundary_allones() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epu16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epu16_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epu16(create__m128i_from_u16_array([u16::MIN, u16::MAX, 0, u16::MAX, u16::MIN, u16::MAX, 0, u16::MAX]));
         check_int_equality(result as i32, 65535)?;
@@ -3208,7 +3208,7 @@ pub(super) fn test_mm_reduce_max_epu16_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epu16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epu16() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epu16(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 4)?;
@@ -3228,7 +3228,7 @@ pub(super) fn test_mm_mask_reduce_max_epu16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epu16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epu16_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epu16(create__mmask8_from(0b01010101), create__m128i_from_u16_array([0, 65535, 2, 65533, 4, 65531, 6, 65529]));
         check_int_equality(result as i32, 6)?;
@@ -3248,7 +3248,7 @@ pub(super) fn test_mm_mask_reduce_max_epu16_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epu16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epu16_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epu16(create__mmask8_from(0b01010101), create__m128i_from_u16_array([100, 200, 300, 400, 500, 600, 700, 800]));
         check_int_equality(result as i32, 700)?;
@@ -3268,7 +3268,7 @@ pub(super) fn test_mm_mask_reduce_max_epu16_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epu16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epu16_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epu16(create__mmask8_from(0b01010101), create__m128i_from_u16_array([u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN]));
         check_int_equality(result as i32, 0)?;
@@ -3288,7 +3288,7 @@ pub(super) fn test_mm_mask_reduce_max_epu16_boundary_min() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epu16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epu16_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epu16(create__mmask8_from(0b01010101), create__m128i_from_u16_array([u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX]));
         check_int_equality(result as i32, 65535)?;
@@ -3308,7 +3308,7 @@ pub(super) fn test_mm_mask_reduce_max_epu16_boundary_max() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epu16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epu16_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epu16(create__mmask8_from(0b01010101), create__m128i_from_u16_array([0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -3328,7 +3328,7 @@ pub(super) fn test_mm_mask_reduce_max_epu16_boundary_zero() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epu16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epu16_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epu16(create__mmask8_from(0b01010101), create__m128i_from_u16_array([u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX]));
         check_int_equality(result as i32, 65535)?;
@@ -3348,7 +3348,7 @@ pub(super) fn test_mm_mask_reduce_max_epu16_boundary_allones() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epu16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epu16_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epu16(create__mmask8_from(0b01010101), create__m128i_from_u16_array([u16::MIN, u16::MAX, 0, u16::MAX, u16::MIN, u16::MAX, 0, u16::MAX]));
         check_int_equality(result as i32, 0)?;
@@ -3368,7 +3368,7 @@ pub(super) fn test_mm_mask_reduce_max_epu16_boundary_mixed() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epu8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epu8() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epu8(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 8)?;
@@ -3388,7 +3388,7 @@ pub(super) fn test_mm256_reduce_max_epu8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epu8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epu8_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epu8(create__m256i_from_u8_array([0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249]));
         check_int_equality(result as i32, 255)?;
@@ -3408,7 +3408,7 @@ pub(super) fn test_mm256_reduce_max_epu8_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epu8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epu8_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epu8(create__m256i_from_u8_array([100, 200, 44, 144, 244, 88, 188, 32, 132, 232, 76, 176, 20, 120, 220, 64, 164, 8, 108, 208, 52, 152, 252, 96, 196, 40, 140, 240, 84, 184, 28, 128]));
         check_int_equality(result as i32, 252)?;
@@ -3428,7 +3428,7 @@ pub(super) fn test_mm256_reduce_max_epu8_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epu8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epu8_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epu8(create__m256i_from_u8_array([u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN]));
         check_int_equality(result as i32, 0)?;
@@ -3448,7 +3448,7 @@ pub(super) fn test_mm256_reduce_max_epu8_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epu8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epu8_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epu8(create__m256i_from_u8_array([u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX]));
         check_int_equality(result as i32, 255)?;
@@ -3468,7 +3468,7 @@ pub(super) fn test_mm256_reduce_max_epu8_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epu8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epu8_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epu8(create__m256i_from_u8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -3488,7 +3488,7 @@ pub(super) fn test_mm256_reduce_max_epu8_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epu8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epu8_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epu8(create__m256i_from_u8_array([u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX]));
         check_int_equality(result as i32, 255)?;
@@ -3508,7 +3508,7 @@ pub(super) fn test_mm256_reduce_max_epu8_boundary_allones() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_max_epu8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_max_epu8_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_max_epu8(create__m256i_from_u8_array([u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX]));
         check_int_equality(result as i32, 255)?;
@@ -3528,7 +3528,7 @@ pub(super) fn test_mm256_reduce_max_epu8_boundary_mixed() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epu8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epu8() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epu8(create__mmask32_from(0x55555555u32), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 8)?;
@@ -3548,7 +3548,7 @@ pub(super) fn test_mm256_mask_reduce_max_epu8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epu8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epu8_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epu8(create__mmask32_from(0x55555555u32), create__m256i_from_u8_array([0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249]));
         check_int_equality(result as i32, 6)?;
@@ -3568,7 +3568,7 @@ pub(super) fn test_mm256_mask_reduce_max_epu8_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epu8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epu8_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epu8(create__mmask32_from(0x55555555u32), create__m256i_from_u8_array([100, 200, 44, 144, 244, 88, 188, 32, 132, 232, 76, 176, 20, 120, 220, 64, 164, 8, 108, 208, 52, 152, 252, 96, 196, 40, 140, 240, 84, 184, 28, 128]));
         check_int_equality(result as i32, 252)?;
@@ -3588,7 +3588,7 @@ pub(super) fn test_mm256_mask_reduce_max_epu8_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epu8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epu8_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epu8(create__mmask32_from(0x55555555u32), create__m256i_from_u8_array([u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN]));
         check_int_equality(result as i32, 0)?;
@@ -3608,7 +3608,7 @@ pub(super) fn test_mm256_mask_reduce_max_epu8_boundary_min() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epu8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epu8_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epu8(create__mmask32_from(0x55555555u32), create__m256i_from_u8_array([u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX]));
         check_int_equality(result as i32, 255)?;
@@ -3628,7 +3628,7 @@ pub(super) fn test_mm256_mask_reduce_max_epu8_boundary_max() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epu8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epu8_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epu8(create__mmask32_from(0x55555555u32), create__m256i_from_u8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -3648,7 +3648,7 @@ pub(super) fn test_mm256_mask_reduce_max_epu8_boundary_zero() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epu8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epu8_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epu8(create__mmask32_from(0x55555555u32), create__m256i_from_u8_array([u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX]));
         check_int_equality(result as i32, 255)?;
@@ -3668,7 +3668,7 @@ pub(super) fn test_mm256_mask_reduce_max_epu8_boundary_allones() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_max_epu8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_max_epu8_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_max_epu8(create__mmask32_from(0x55555555u32), create__m256i_from_u8_array([u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX]));
         check_int_equality(result as i32, 0)?;
@@ -3688,7 +3688,7 @@ pub(super) fn test_mm256_mask_reduce_max_epu8_boundary_mixed() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epu8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epu8() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epu8(create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 4)?;
@@ -3708,7 +3708,7 @@ pub(super) fn test_mm_reduce_max_epu8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epu8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epu8_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epu8(create__m128i_from_i8_array([((0u8) as i8), ((255u8) as i8), ((2u8) as i8), ((253u8) as i8), ((4u8) as i8), ((251u8) as i8), ((6u8) as i8), ((249u8) as i8), ((0u8) as i8), ((255u8) as i8), ((2u8) as i8), ((253u8) as i8), ((4u8) as i8), ((251u8) as i8), ((6u8) as i8), ((249u8) as i8)]));
         check_int_equality(result as i32, 255)?;
@@ -3728,7 +3728,7 @@ pub(super) fn test_mm_reduce_max_epu8_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epu8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epu8_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epu8(create__m128i_from_i8_array([((100u8) as i8), ((200u8) as i8), ((44u8) as i8), ((144u8) as i8), ((244u8) as i8), ((88u8) as i8), ((188u8) as i8), ((32u8) as i8), ((132u8) as i8), ((232u8) as i8), ((76u8) as i8), ((176u8) as i8), ((20u8) as i8), ((120u8) as i8), ((220u8) as i8), ((64u8) as i8)]));
         check_int_equality(result as i32, 244)?;
@@ -3748,7 +3748,7 @@ pub(super) fn test_mm_reduce_max_epu8_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epu8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epu8_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epu8(create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8)]));
         check_int_equality(result as i32, 0)?;
@@ -3768,7 +3768,7 @@ pub(super) fn test_mm_reduce_max_epu8_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epu8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epu8_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epu8(create__m128i_from_i8_array([((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8)]));
         check_int_equality(result as i32, 255)?;
@@ -3788,7 +3788,7 @@ pub(super) fn test_mm_reduce_max_epu8_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epu8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epu8_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epu8(create__m128i_from_i8_array([((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8)]));
         check_int_equality(result as i32, 0)?;
@@ -3808,7 +3808,7 @@ pub(super) fn test_mm_reduce_max_epu8_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epu8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epu8_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epu8(create__m128i_from_i8_array([((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8)]));
         check_int_equality(result as i32, 255)?;
@@ -3828,7 +3828,7 @@ pub(super) fn test_mm_reduce_max_epu8_boundary_allones() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_max_epu8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_max_epu8_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_max_epu8(create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8)]));
         check_int_equality(result as i32, 255)?;
@@ -3848,7 +3848,7 @@ pub(super) fn test_mm_reduce_max_epu8_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epu8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epu8() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epu8(create__mmask16_from(0b0101010101010101), create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 4)?;
@@ -3868,7 +3868,7 @@ pub(super) fn test_mm_mask_reduce_max_epu8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epu8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epu8_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epu8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([((0u8) as i8), ((255u8) as i8), ((2u8) as i8), ((253u8) as i8), ((4u8) as i8), ((251u8) as i8), ((6u8) as i8), ((249u8) as i8), ((0u8) as i8), ((255u8) as i8), ((2u8) as i8), ((253u8) as i8), ((4u8) as i8), ((251u8) as i8), ((6u8) as i8), ((249u8) as i8)]));
         check_int_equality(result as i32, 6)?;
@@ -3888,7 +3888,7 @@ pub(super) fn test_mm_mask_reduce_max_epu8_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epu8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epu8_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epu8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([((100u8) as i8), ((200u8) as i8), ((44u8) as i8), ((144u8) as i8), ((244u8) as i8), ((88u8) as i8), ((188u8) as i8), ((32u8) as i8), ((132u8) as i8), ((232u8) as i8), ((76u8) as i8), ((176u8) as i8), ((20u8) as i8), ((120u8) as i8), ((220u8) as i8), ((64u8) as i8)]));
         check_int_equality(result as i32, 244)?;
@@ -3908,7 +3908,7 @@ pub(super) fn test_mm_mask_reduce_max_epu8_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epu8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epu8_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epu8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8)]));
         check_int_equality(result as i32, 0)?;
@@ -3928,7 +3928,7 @@ pub(super) fn test_mm_mask_reduce_max_epu8_boundary_min() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epu8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epu8_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epu8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8)]));
         check_int_equality(result as i32, 255)?;
@@ -3948,7 +3948,7 @@ pub(super) fn test_mm_mask_reduce_max_epu8_boundary_max() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epu8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epu8_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epu8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8)]));
         check_int_equality(result as i32, 0)?;
@@ -3968,7 +3968,7 @@ pub(super) fn test_mm_mask_reduce_max_epu8_boundary_zero() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epu8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epu8_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epu8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8)]));
         check_int_equality(result as i32, 255)?;
@@ -3988,7 +3988,7 @@ pub(super) fn test_mm_mask_reduce_max_epu8_boundary_allones() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_max_epu8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_max_epu8_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_max_epu8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8)]));
         check_int_equality(result as i32, 0)?;
@@ -4008,7 +4008,7 @@ pub(super) fn test_mm_mask_reduce_max_epu8_boundary_mixed() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epi16() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 0)?;
@@ -4028,7 +4028,7 @@ pub(super) fn test_mm256_reduce_min_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epi16_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epi16(create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, -7)?;
@@ -4048,7 +4048,7 @@ pub(super) fn test_mm256_reduce_min_epi16_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epi16_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epi16(create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]));
         check_int_equality(result as i32, 100)?;
@@ -4068,7 +4068,7 @@ pub(super) fn test_mm256_reduce_min_epi16_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epi16_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epi16(create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]));
         check_int_equality(result as i32, -32768)?;
@@ -4088,7 +4088,7 @@ pub(super) fn test_mm256_reduce_min_epi16_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epi16_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epi16(create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]));
         check_int_equality(result as i32, 32767)?;
@@ -4108,7 +4108,7 @@ pub(super) fn test_mm256_reduce_min_epi16_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epi16_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epi16(create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -4128,7 +4128,7 @@ pub(super) fn test_mm256_reduce_min_epi16_boundary_zero() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epi16_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epi16(create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -1)?;
@@ -4148,7 +4148,7 @@ pub(super) fn test_mm256_reduce_min_epi16_boundary_allones() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epi16_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epi16(create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]));
         check_int_equality(result as i32, -32768)?;
@@ -4168,7 +4168,7 @@ pub(super) fn test_mm256_reduce_min_epi16_boundary_mixed() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epi16() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 1)?;
@@ -4188,7 +4188,7 @@ pub(super) fn test_mm256_mask_reduce_min_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epi16_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, 0)?;
@@ -4208,7 +4208,7 @@ pub(super) fn test_mm256_mask_reduce_min_epi16_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epi16_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]));
         check_int_equality(result as i32, 100)?;
@@ -4228,7 +4228,7 @@ pub(super) fn test_mm256_mask_reduce_min_epi16_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epi16_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]));
         check_int_equality(result as i32, -32768)?;
@@ -4248,7 +4248,7 @@ pub(super) fn test_mm256_mask_reduce_min_epi16_boundary_min() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epi16_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]));
         check_int_equality(result as i32, 32767)?;
@@ -4268,7 +4268,7 @@ pub(super) fn test_mm256_mask_reduce_min_epi16_boundary_max() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epi16_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -4288,7 +4288,7 @@ pub(super) fn test_mm256_mask_reduce_min_epi16_boundary_zero() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epi16_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -1)?;
@@ -4308,7 +4308,7 @@ pub(super) fn test_mm256_mask_reduce_min_epi16_boundary_allones() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epi16_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]));
         check_int_equality(result as i32, -32768)?;
@@ -4328,7 +4328,7 @@ pub(super) fn test_mm256_mask_reduce_min_epi16_boundary_mixed() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epi16() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epi16(create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 0)?;
@@ -4348,7 +4348,7 @@ pub(super) fn test_mm_reduce_min_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epi16_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epi16(create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, -7)?;
@@ -4368,7 +4368,7 @@ pub(super) fn test_mm_reduce_min_epi16_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epi16_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epi16(create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]));
         check_int_equality(result as i32, 100)?;
@@ -4388,7 +4388,7 @@ pub(super) fn test_mm_reduce_min_epi16_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epi16_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epi16(create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]));
         check_int_equality(result as i32, -32768)?;
@@ -4408,7 +4408,7 @@ pub(super) fn test_mm_reduce_min_epi16_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epi16_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epi16(create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]));
         check_int_equality(result as i32, 32767)?;
@@ -4428,7 +4428,7 @@ pub(super) fn test_mm_reduce_min_epi16_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epi16_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epi16(create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -4448,7 +4448,7 @@ pub(super) fn test_mm_reduce_min_epi16_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epi16_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epi16(create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -1)?;
@@ -4468,7 +4468,7 @@ pub(super) fn test_mm_reduce_min_epi16_boundary_allones() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epi16_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epi16(create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]));
         check_int_equality(result as i32, -32768)?;
@@ -4488,7 +4488,7 @@ pub(super) fn test_mm_reduce_min_epi16_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epi16() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epi16(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 1)?;
@@ -4508,7 +4508,7 @@ pub(super) fn test_mm_mask_reduce_min_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epi16_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, 0)?;
@@ -4528,7 +4528,7 @@ pub(super) fn test_mm_mask_reduce_min_epi16_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epi16_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800]));
         check_int_equality(result as i32, 100)?;
@@ -4548,7 +4548,7 @@ pub(super) fn test_mm_mask_reduce_min_epi16_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epi16_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]));
         check_int_equality(result as i32, -32768)?;
@@ -4568,7 +4568,7 @@ pub(super) fn test_mm_mask_reduce_min_epi16_boundary_min() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epi16_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]));
         check_int_equality(result as i32, 32767)?;
@@ -4588,7 +4588,7 @@ pub(super) fn test_mm_mask_reduce_min_epi16_boundary_max() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epi16_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -4608,7 +4608,7 @@ pub(super) fn test_mm_mask_reduce_min_epi16_boundary_zero() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epi16_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -1)?;
@@ -4628,7 +4628,7 @@ pub(super) fn test_mm_mask_reduce_min_epi16_boundary_allones() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epi16_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epi16(create__mmask8_from(0b01010101), create__m128i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]));
         check_int_equality(result as i32, -32768)?;
@@ -4648,7 +4648,7 @@ pub(super) fn test_mm_mask_reduce_min_epi16_boundary_mixed() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epi8() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epi8(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 0)?;
@@ -4668,7 +4668,7 @@ pub(super) fn test_mm256_reduce_min_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epi8_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epi8(create__m256i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, -7)?;
@@ -4688,7 +4688,7 @@ pub(super) fn test_mm256_reduce_min_epi8_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epi8_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epi8(create__m256i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128]));
         check_int_equality(result as i32, -128)?;
@@ -4708,7 +4708,7 @@ pub(super) fn test_mm256_reduce_min_epi8_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epi8_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epi8(create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]));
         check_int_equality(result as i32, -128)?;
@@ -4728,7 +4728,7 @@ pub(super) fn test_mm256_reduce_min_epi8_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epi8_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epi8(create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]));
         check_int_equality(result as i32, 127)?;
@@ -4748,7 +4748,7 @@ pub(super) fn test_mm256_reduce_min_epi8_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epi8_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epi8(create__m256i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -4768,7 +4768,7 @@ pub(super) fn test_mm256_reduce_min_epi8_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epi8_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epi8(create__m256i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -1)?;
@@ -4788,7 +4788,7 @@ pub(super) fn test_mm256_reduce_min_epi8_boundary_allones() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epi8_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epi8(create__m256i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]));
         check_int_equality(result as i32, -128)?;
@@ -4808,7 +4808,7 @@ pub(super) fn test_mm256_reduce_min_epi8_boundary_mixed() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epi8() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 0)?;
@@ -4828,7 +4828,7 @@ pub(super) fn test_mm256_mask_reduce_min_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epi8_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, 0)?;
@@ -4848,7 +4848,7 @@ pub(super) fn test_mm256_mask_reduce_min_epi8_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epi8_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64, -92, 8, 108, -48, 52, -104, -4, 96, -60, 40, -116, -16, 84, -72, 28, -128]));
         check_int_equality(result as i32, -124)?;
@@ -4868,7 +4868,7 @@ pub(super) fn test_mm256_mask_reduce_min_epi8_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epi8_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]));
         check_int_equality(result as i32, -128)?;
@@ -4888,7 +4888,7 @@ pub(super) fn test_mm256_mask_reduce_min_epi8_boundary_min() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epi8_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]));
         check_int_equality(result as i32, 127)?;
@@ -4908,7 +4908,7 @@ pub(super) fn test_mm256_mask_reduce_min_epi8_boundary_max() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epi8_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -4928,7 +4928,7 @@ pub(super) fn test_mm256_mask_reduce_min_epi8_boundary_zero() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epi8_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -1)?;
@@ -4948,7 +4948,7 @@ pub(super) fn test_mm256_mask_reduce_min_epi8_boundary_allones() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epi8_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epi8(create__mmask32_from(0x55555555u32), create__m256i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]));
         check_int_equality(result as i32, -128)?;
@@ -4968,7 +4968,7 @@ pub(super) fn test_mm256_mask_reduce_min_epi8_boundary_mixed() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epi8() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epi8(create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 0)?;
@@ -4988,7 +4988,7 @@ pub(super) fn test_mm_reduce_min_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epi8_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epi8(create__m128i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, -7)?;
@@ -5008,7 +5008,7 @@ pub(super) fn test_mm_reduce_min_epi8_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epi8_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epi8(create__m128i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64]));
         check_int_equality(result as i32, -124)?;
@@ -5028,7 +5028,7 @@ pub(super) fn test_mm_reduce_min_epi8_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epi8_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epi8(create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]));
         check_int_equality(result as i32, -128)?;
@@ -5048,7 +5048,7 @@ pub(super) fn test_mm_reduce_min_epi8_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epi8_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epi8(create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]));
         check_int_equality(result as i32, 127)?;
@@ -5068,7 +5068,7 @@ pub(super) fn test_mm_reduce_min_epi8_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epi8_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epi8(create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -5088,7 +5088,7 @@ pub(super) fn test_mm_reduce_min_epi8_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epi8_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epi8(create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -1)?;
@@ -5108,7 +5108,7 @@ pub(super) fn test_mm_reduce_min_epi8_boundary_allones() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epi8_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epi8(create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]));
         check_int_equality(result as i32, -128)?;
@@ -5128,7 +5128,7 @@ pub(super) fn test_mm_reduce_min_epi8_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epi8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epi8() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 0)?;
@@ -5148,7 +5148,7 @@ pub(super) fn test_mm_mask_reduce_min_epi8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epi8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epi8_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, 0)?;
@@ -5168,7 +5168,7 @@ pub(super) fn test_mm_mask_reduce_min_epi8_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epi8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epi8_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([100, -56, 44, -112, -12, 88, -68, 32, -124, -24, 76, -80, 20, 120, -36, 64]));
         check_int_equality(result as i32, -124)?;
@@ -5188,7 +5188,7 @@ pub(super) fn test_mm_mask_reduce_min_epi8_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epi8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epi8_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN, i8::MIN]));
         check_int_equality(result as i32, -128)?;
@@ -5208,7 +5208,7 @@ pub(super) fn test_mm_mask_reduce_min_epi8_boundary_min() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epi8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epi8_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX, i8::MAX]));
         check_int_equality(result as i32, 127)?;
@@ -5228,7 +5228,7 @@ pub(super) fn test_mm_mask_reduce_min_epi8_boundary_max() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epi8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epi8_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -5248,7 +5248,7 @@ pub(super) fn test_mm_mask_reduce_min_epi8_boundary_zero() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epi8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epi8_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, -1)?;
@@ -5268,7 +5268,7 @@ pub(super) fn test_mm_mask_reduce_min_epi8_boundary_allones() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epi8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epi8_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epi8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1, i8::MIN, i8::MAX, 0, -1]));
         check_int_equality(result as i32, -128)?;
@@ -5288,7 +5288,7 @@ pub(super) fn test_mm_mask_reduce_min_epi8_boundary_mixed() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epu16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epu16() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epu16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 0)?;
@@ -5308,7 +5308,7 @@ pub(super) fn test_mm256_reduce_min_epu16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epu16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epu16_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epu16(create__m256i_from_u16_array([0, 65535, 2, 65533, 4, 65531, 6, 65529, 0, 65535, 2, 65533, 4, 65531, 6, 65529]));
         check_int_equality(result as i32, 0)?;
@@ -5328,7 +5328,7 @@ pub(super) fn test_mm256_reduce_min_epu16_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epu16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epu16_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epu16(create__m256i_from_u16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]));
         check_int_equality(result as i32, 100)?;
@@ -5348,7 +5348,7 @@ pub(super) fn test_mm256_reduce_min_epu16_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epu16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epu16_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epu16(create__m256i_from_u16_array([u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN]));
         check_int_equality(result as i32, 0)?;
@@ -5368,7 +5368,7 @@ pub(super) fn test_mm256_reduce_min_epu16_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epu16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epu16_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epu16(create__m256i_from_u16_array([u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX]));
         check_int_equality(result as i32, 65535)?;
@@ -5388,7 +5388,7 @@ pub(super) fn test_mm256_reduce_min_epu16_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epu16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epu16_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epu16(create__m256i_from_u16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -5408,7 +5408,7 @@ pub(super) fn test_mm256_reduce_min_epu16_boundary_zero() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epu16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epu16_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epu16(create__m256i_from_u16_array([u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX]));
         check_int_equality(result as i32, 65535)?;
@@ -5428,7 +5428,7 @@ pub(super) fn test_mm256_reduce_min_epu16_boundary_allones() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epu16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epu16_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epu16(create__m256i_from_u16_array([u16::MIN, u16::MAX, 0, u16::MAX, u16::MIN, u16::MAX, 0, u16::MAX, u16::MIN, u16::MAX, 0, u16::MAX, u16::MIN, u16::MAX, 0, u16::MAX]));
         check_int_equality(result as i32, 0)?;
@@ -5448,7 +5448,7 @@ pub(super) fn test_mm256_reduce_min_epu16_boundary_mixed() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epu16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epu16() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epu16(create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 1)?;
@@ -5468,7 +5468,7 @@ pub(super) fn test_mm256_mask_reduce_min_epu16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epu16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epu16_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epu16(create__mmask16_from(0b0101010101010101), create__m256i_from_u16_array([0, 65535, 2, 65533, 4, 65531, 6, 65529, 0, 65535, 2, 65533, 4, 65531, 6, 65529]));
         check_int_equality(result as i32, 0)?;
@@ -5488,7 +5488,7 @@ pub(super) fn test_mm256_mask_reduce_min_epu16_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epu16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epu16_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epu16(create__mmask16_from(0b0101010101010101), create__m256i_from_u16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]));
         check_int_equality(result as i32, 100)?;
@@ -5508,7 +5508,7 @@ pub(super) fn test_mm256_mask_reduce_min_epu16_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epu16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epu16_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epu16(create__mmask16_from(0b0101010101010101), create__m256i_from_u16_array([u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN]));
         check_int_equality(result as i32, 0)?;
@@ -5528,7 +5528,7 @@ pub(super) fn test_mm256_mask_reduce_min_epu16_boundary_min() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epu16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epu16_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epu16(create__mmask16_from(0b0101010101010101), create__m256i_from_u16_array([u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX]));
         check_int_equality(result as i32, 65535)?;
@@ -5548,7 +5548,7 @@ pub(super) fn test_mm256_mask_reduce_min_epu16_boundary_max() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epu16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epu16_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epu16(create__mmask16_from(0b0101010101010101), create__m256i_from_u16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -5568,7 +5568,7 @@ pub(super) fn test_mm256_mask_reduce_min_epu16_boundary_zero() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epu16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epu16_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epu16(create__mmask16_from(0b0101010101010101), create__m256i_from_u16_array([u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX]));
         check_int_equality(result as i32, 65535)?;
@@ -5588,7 +5588,7 @@ pub(super) fn test_mm256_mask_reduce_min_epu16_boundary_allones() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epu16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epu16_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epu16(create__mmask16_from(0b0101010101010101), create__m256i_from_u16_array([u16::MIN, u16::MAX, 0, u16::MAX, u16::MIN, u16::MAX, 0, u16::MAX, u16::MIN, u16::MAX, 0, u16::MAX, u16::MIN, u16::MAX, 0, u16::MAX]));
         check_int_equality(result as i32, 0)?;
@@ -5608,7 +5608,7 @@ pub(super) fn test_mm256_mask_reduce_min_epu16_boundary_mixed() -> Result<(), St
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epu16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epu16() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epu16(create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 0)?;
@@ -5628,7 +5628,7 @@ pub(super) fn test_mm_reduce_min_epu16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epu16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epu16_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epu16(create__m128i_from_u16_array([0, 65535, 2, 65533, 4, 65531, 6, 65529]));
         check_int_equality(result as i32, 0)?;
@@ -5648,7 +5648,7 @@ pub(super) fn test_mm_reduce_min_epu16_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epu16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epu16_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epu16(create__m128i_from_u16_array([100, 200, 300, 400, 500, 600, 700, 800]));
         check_int_equality(result as i32, 100)?;
@@ -5668,7 +5668,7 @@ pub(super) fn test_mm_reduce_min_epu16_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epu16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epu16_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epu16(create__m128i_from_u16_array([u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN]));
         check_int_equality(result as i32, 0)?;
@@ -5688,7 +5688,7 @@ pub(super) fn test_mm_reduce_min_epu16_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epu16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epu16_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epu16(create__m128i_from_u16_array([u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX]));
         check_int_equality(result as i32, 65535)?;
@@ -5708,7 +5708,7 @@ pub(super) fn test_mm_reduce_min_epu16_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epu16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epu16_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epu16(create__m128i_from_u16_array([0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -5728,7 +5728,7 @@ pub(super) fn test_mm_reduce_min_epu16_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epu16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epu16_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epu16(create__m128i_from_u16_array([u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX]));
         check_int_equality(result as i32, 65535)?;
@@ -5748,7 +5748,7 @@ pub(super) fn test_mm_reduce_min_epu16_boundary_allones() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epu16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epu16_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epu16(create__m128i_from_u16_array([u16::MIN, u16::MAX, 0, u16::MAX, u16::MIN, u16::MAX, 0, u16::MAX]));
         check_int_equality(result as i32, 0)?;
@@ -5768,7 +5768,7 @@ pub(super) fn test_mm_reduce_min_epu16_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epu16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epu16() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epu16(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 1)?;
@@ -5788,7 +5788,7 @@ pub(super) fn test_mm_mask_reduce_min_epu16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epu16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epu16_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epu16(create__mmask8_from(0b01010101), create__m128i_from_u16_array([0, 65535, 2, 65533, 4, 65531, 6, 65529]));
         check_int_equality(result as i32, 0)?;
@@ -5808,7 +5808,7 @@ pub(super) fn test_mm_mask_reduce_min_epu16_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epu16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epu16_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epu16(create__mmask8_from(0b01010101), create__m128i_from_u16_array([100, 200, 300, 400, 500, 600, 700, 800]));
         check_int_equality(result as i32, 100)?;
@@ -5828,7 +5828,7 @@ pub(super) fn test_mm_mask_reduce_min_epu16_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epu16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epu16_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epu16(create__mmask8_from(0b01010101), create__m128i_from_u16_array([u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN, u16::MIN]));
         check_int_equality(result as i32, 0)?;
@@ -5848,7 +5848,7 @@ pub(super) fn test_mm_mask_reduce_min_epu16_boundary_min() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epu16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epu16_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epu16(create__mmask8_from(0b01010101), create__m128i_from_u16_array([u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX]));
         check_int_equality(result as i32, 65535)?;
@@ -5868,7 +5868,7 @@ pub(super) fn test_mm_mask_reduce_min_epu16_boundary_max() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epu16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epu16_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epu16(create__mmask8_from(0b01010101), create__m128i_from_u16_array([0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -5888,7 +5888,7 @@ pub(super) fn test_mm_mask_reduce_min_epu16_boundary_zero() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epu16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epu16_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epu16(create__mmask8_from(0b01010101), create__m128i_from_u16_array([u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX, u16::MAX]));
         check_int_equality(result as i32, 65535)?;
@@ -5908,7 +5908,7 @@ pub(super) fn test_mm_mask_reduce_min_epu16_boundary_allones() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epu16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epu16_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epu16(create__mmask8_from(0b01010101), create__m128i_from_u16_array([u16::MIN, u16::MAX, 0, u16::MAX, u16::MIN, u16::MAX, 0, u16::MAX]));
         check_int_equality(result as i32, 0)?;
@@ -5928,7 +5928,7 @@ pub(super) fn test_mm_mask_reduce_min_epu16_boundary_mixed() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epu8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epu8() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epu8(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 0)?;
@@ -5948,7 +5948,7 @@ pub(super) fn test_mm256_reduce_min_epu8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epu8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epu8_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epu8(create__m256i_from_u8_array([0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249]));
         check_int_equality(result as i32, 0)?;
@@ -5968,7 +5968,7 @@ pub(super) fn test_mm256_reduce_min_epu8_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epu8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epu8_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epu8(create__m256i_from_u8_array([100, 200, 44, 144, 244, 88, 188, 32, 132, 232, 76, 176, 20, 120, 220, 64, 164, 8, 108, 208, 52, 152, 252, 96, 196, 40, 140, 240, 84, 184, 28, 128]));
         check_int_equality(result as i32, 8)?;
@@ -5988,7 +5988,7 @@ pub(super) fn test_mm256_reduce_min_epu8_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epu8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epu8_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epu8(create__m256i_from_u8_array([u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN]));
         check_int_equality(result as i32, 0)?;
@@ -6008,7 +6008,7 @@ pub(super) fn test_mm256_reduce_min_epu8_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epu8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epu8_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epu8(create__m256i_from_u8_array([u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX]));
         check_int_equality(result as i32, 255)?;
@@ -6028,7 +6028,7 @@ pub(super) fn test_mm256_reduce_min_epu8_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epu8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epu8_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epu8(create__m256i_from_u8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -6048,7 +6048,7 @@ pub(super) fn test_mm256_reduce_min_epu8_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epu8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epu8_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epu8(create__m256i_from_u8_array([u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX]));
         check_int_equality(result as i32, 255)?;
@@ -6068,7 +6068,7 @@ pub(super) fn test_mm256_reduce_min_epu8_boundary_allones() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_min_epu8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_min_epu8_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_min_epu8(create__m256i_from_u8_array([u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX]));
         check_int_equality(result as i32, 0)?;
@@ -6088,7 +6088,7 @@ pub(super) fn test_mm256_reduce_min_epu8_boundary_mixed() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epu8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epu8() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epu8(create__mmask32_from(0x55555555u32), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 0)?;
@@ -6108,7 +6108,7 @@ pub(super) fn test_mm256_mask_reduce_min_epu8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epu8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epu8_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epu8(create__mmask32_from(0x55555555u32), create__m256i_from_u8_array([0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249, 0, 255, 2, 253, 4, 251, 6, 249]));
         check_int_equality(result as i32, 0)?;
@@ -6128,7 +6128,7 @@ pub(super) fn test_mm256_mask_reduce_min_epu8_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epu8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epu8_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epu8(create__mmask32_from(0x55555555u32), create__m256i_from_u8_array([100, 200, 44, 144, 244, 88, 188, 32, 132, 232, 76, 176, 20, 120, 220, 64, 164, 8, 108, 208, 52, 152, 252, 96, 196, 40, 140, 240, 84, 184, 28, 128]));
         check_int_equality(result as i32, 20)?;
@@ -6148,7 +6148,7 @@ pub(super) fn test_mm256_mask_reduce_min_epu8_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epu8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epu8_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epu8(create__mmask32_from(0x55555555u32), create__m256i_from_u8_array([u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN, u8::MIN]));
         check_int_equality(result as i32, 0)?;
@@ -6168,7 +6168,7 @@ pub(super) fn test_mm256_mask_reduce_min_epu8_boundary_min() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epu8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epu8_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epu8(create__mmask32_from(0x55555555u32), create__m256i_from_u8_array([u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX]));
         check_int_equality(result as i32, 255)?;
@@ -6188,7 +6188,7 @@ pub(super) fn test_mm256_mask_reduce_min_epu8_boundary_max() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epu8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epu8_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epu8(create__mmask32_from(0x55555555u32), create__m256i_from_u8_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -6208,7 +6208,7 @@ pub(super) fn test_mm256_mask_reduce_min_epu8_boundary_zero() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epu8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epu8_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epu8(create__mmask32_from(0x55555555u32), create__m256i_from_u8_array([u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX, u8::MAX]));
         check_int_equality(result as i32, 255)?;
@@ -6228,7 +6228,7 @@ pub(super) fn test_mm256_mask_reduce_min_epu8_boundary_allones() -> Result<(), S
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_min_epu8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_min_epu8_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_min_epu8(create__mmask32_from(0x55555555u32), create__m256i_from_u8_array([u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX, u8::MIN, u8::MAX, 0, u8::MAX]));
         check_int_equality(result as i32, 0)?;
@@ -6248,7 +6248,7 @@ pub(super) fn test_mm256_mask_reduce_min_epu8_boundary_mixed() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epu8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epu8() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epu8(create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 0)?;
@@ -6268,7 +6268,7 @@ pub(super) fn test_mm_reduce_min_epu8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epu8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epu8_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epu8(create__m128i_from_i8_array([((0u8) as i8), ((255u8) as i8), ((2u8) as i8), ((253u8) as i8), ((4u8) as i8), ((251u8) as i8), ((6u8) as i8), ((249u8) as i8), ((0u8) as i8), ((255u8) as i8), ((2u8) as i8), ((253u8) as i8), ((4u8) as i8), ((251u8) as i8), ((6u8) as i8), ((249u8) as i8)]));
         check_int_equality(result as i32, 0)?;
@@ -6288,7 +6288,7 @@ pub(super) fn test_mm_reduce_min_epu8_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epu8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epu8_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epu8(create__m128i_from_i8_array([((100u8) as i8), ((200u8) as i8), ((44u8) as i8), ((144u8) as i8), ((244u8) as i8), ((88u8) as i8), ((188u8) as i8), ((32u8) as i8), ((132u8) as i8), ((232u8) as i8), ((76u8) as i8), ((176u8) as i8), ((20u8) as i8), ((120u8) as i8), ((220u8) as i8), ((64u8) as i8)]));
         check_int_equality(result as i32, 20)?;
@@ -6308,7 +6308,7 @@ pub(super) fn test_mm_reduce_min_epu8_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epu8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epu8_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epu8(create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8)]));
         check_int_equality(result as i32, 0)?;
@@ -6328,7 +6328,7 @@ pub(super) fn test_mm_reduce_min_epu8_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epu8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epu8_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epu8(create__m128i_from_i8_array([((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8)]));
         check_int_equality(result as i32, 255)?;
@@ -6348,7 +6348,7 @@ pub(super) fn test_mm_reduce_min_epu8_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epu8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epu8_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epu8(create__m128i_from_i8_array([((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8)]));
         check_int_equality(result as i32, 0)?;
@@ -6368,7 +6368,7 @@ pub(super) fn test_mm_reduce_min_epu8_boundary_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epu8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epu8_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epu8(create__m128i_from_i8_array([((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8)]));
         check_int_equality(result as i32, 255)?;
@@ -6388,7 +6388,7 @@ pub(super) fn test_mm_reduce_min_epu8_boundary_allones() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_reduce_min_epu8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_reduce_min_epu8_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm_reduce_min_epu8(create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8)]));
         check_int_equality(result as i32, 0)?;
@@ -6408,7 +6408,7 @@ pub(super) fn test_mm_reduce_min_epu8_boundary_mixed() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epu8() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epu8() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epu8(create__mmask16_from(0b0101010101010101), create__m128i_from_i32_array([1, 2, 3, 4]));
         check_int_equality(result as i32, 0)?;
@@ -6428,7 +6428,7 @@ pub(super) fn test_mm_mask_reduce_min_epu8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epu8_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epu8_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epu8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([((0u8) as i8), ((255u8) as i8), ((2u8) as i8), ((253u8) as i8), ((4u8) as i8), ((251u8) as i8), ((6u8) as i8), ((249u8) as i8), ((0u8) as i8), ((255u8) as i8), ((2u8) as i8), ((253u8) as i8), ((4u8) as i8), ((251u8) as i8), ((6u8) as i8), ((249u8) as i8)]));
         check_int_equality(result as i32, 0)?;
@@ -6448,7 +6448,7 @@ pub(super) fn test_mm_mask_reduce_min_epu8_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epu8_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epu8_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epu8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([((100u8) as i8), ((200u8) as i8), ((44u8) as i8), ((144u8) as i8), ((244u8) as i8), ((88u8) as i8), ((188u8) as i8), ((32u8) as i8), ((132u8) as i8), ((232u8) as i8), ((76u8) as i8), ((176u8) as i8), ((20u8) as i8), ((120u8) as i8), ((220u8) as i8), ((64u8) as i8)]));
         check_int_equality(result as i32, 20)?;
@@ -6468,7 +6468,7 @@ pub(super) fn test_mm_mask_reduce_min_epu8_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epu8_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epu8_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epu8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8), ((u8::MIN) as i8)]));
         check_int_equality(result as i32, 0)?;
@@ -6488,7 +6488,7 @@ pub(super) fn test_mm_mask_reduce_min_epu8_boundary_min() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epu8_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epu8_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epu8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8)]));
         check_int_equality(result as i32, 255)?;
@@ -6508,7 +6508,7 @@ pub(super) fn test_mm_mask_reduce_min_epu8_boundary_max() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epu8_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epu8_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epu8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8)]));
         check_int_equality(result as i32, 0)?;
@@ -6528,7 +6528,7 @@ pub(super) fn test_mm_mask_reduce_min_epu8_boundary_zero() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epu8_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epu8_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epu8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8), ((u8::MAX) as i8)]));
         check_int_equality(result as i32, 255)?;
@@ -6548,7 +6548,7 @@ pub(super) fn test_mm_mask_reduce_min_epu8_boundary_allones() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm_mask_reduce_min_epu8_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm_mask_reduce_min_epu8_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm_mask_reduce_min_epu8(create__mmask16_from(0b0101010101010101), create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8)]));
         check_int_equality(result as i32, 0)?;
@@ -6568,7 +6568,7 @@ pub(super) fn test_mm_mask_reduce_min_epu8_boundary_mixed() -> Result<(), String
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_mul_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_mul_epi16() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_mul_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, 0)?;
@@ -6588,7 +6588,7 @@ pub(super) fn test_mm256_reduce_mul_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_mul_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_mul_epi16_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_mul_epi16(create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, 0)?;
@@ -6608,7 +6608,7 @@ pub(super) fn test_mm256_reduce_mul_epi16_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_mul_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_mul_epi16_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_mul_epi16(create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]));
         check_int_equality(result as i32, 0)?;
@@ -6628,7 +6628,7 @@ pub(super) fn test_mm256_reduce_mul_epi16_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_mul_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_mul_epi16_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_mul_epi16(create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]));
         check_int_equality(result as i32, 0)?;
@@ -6648,7 +6648,7 @@ pub(super) fn test_mm256_reduce_mul_epi16_boundary_min() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_mul_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_mul_epi16_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_mul_epi16(create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]));
         check_int_equality(result as i32, 1)?;
@@ -6668,7 +6668,7 @@ pub(super) fn test_mm256_reduce_mul_epi16_boundary_max() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_mul_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_mul_epi16_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_mul_epi16(create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -6688,7 +6688,7 @@ pub(super) fn test_mm256_reduce_mul_epi16_boundary_zero() -> Result<(), String> 
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_mul_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_mul_epi16_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_mul_epi16(create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, 1)?;
@@ -6708,7 +6708,7 @@ pub(super) fn test_mm256_reduce_mul_epi16_boundary_allones() -> Result<(), Strin
     Ok(())
 }
 
-pub(super) fn test_mm256_reduce_mul_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_reduce_mul_epi16_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm256_reduce_mul_epi16(create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]));
         check_int_equality(result as i32, 0)?;
@@ -6728,7 +6728,7 @@ pub(super) fn test_mm256_reduce_mul_epi16_boundary_mixed() -> Result<(), String>
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_mul_epi16() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_mul_epi16() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_mul_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
         check_int_equality(result as i32, -25216)?;
@@ -6748,7 +6748,7 @@ pub(super) fn test_mm256_mask_reduce_mul_epi16() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_mul_epi16_normal2() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_mul_epi16_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_mul_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
         check_int_equality(result as i32, 0)?;
@@ -6768,7 +6768,7 @@ pub(super) fn test_mm256_mask_reduce_mul_epi16_normal2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_mul_epi16_normal3() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_mul_epi16_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_mul_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]));
         check_int_equality(result as i32, 0)?;
@@ -6788,7 +6788,7 @@ pub(super) fn test_mm256_mask_reduce_mul_epi16_normal3() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_mul_epi16_boundary_min() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_mul_epi16_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_mul_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN, i16::MIN]));
         check_int_equality(result as i32, 0)?;
@@ -6808,7 +6808,7 @@ pub(super) fn test_mm256_mask_reduce_mul_epi16_boundary_min() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_mul_epi16_boundary_max() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_mul_epi16_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_mul_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX, i16::MAX]));
         check_int_equality(result as i32, 1)?;
@@ -6828,7 +6828,7 @@ pub(super) fn test_mm256_mask_reduce_mul_epi16_boundary_max() -> Result<(), Stri
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_mul_epi16_boundary_zero() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_mul_epi16_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_mul_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
         check_int_equality(result as i32, 0)?;
@@ -6848,7 +6848,7 @@ pub(super) fn test_mm256_mask_reduce_mul_epi16_boundary_zero() -> Result<(), Str
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_mul_epi16_boundary_allones() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_mul_epi16_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_mul_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
         check_int_equality(result as i32, 1)?;
@@ -6868,7 +6868,7 @@ pub(super) fn test_mm256_mask_reduce_mul_epi16_boundary_allones() -> Result<(), 
     Ok(())
 }
 
-pub(super) fn test_mm256_mask_reduce_mul_epi16_boundary_mixed() -> Result<(), String> {
+pub(super) fn test_x86_avx512bw_mm256_mask_reduce_mul_epi16_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm256_mask_reduce_mul_epi16(create__mmask16_from(0b0101010101010101), create__m256i_from_i16_array([i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1, i16::MIN, i16::MAX, 0, -1]));
         check_int_equality(result as i32, 0)?;

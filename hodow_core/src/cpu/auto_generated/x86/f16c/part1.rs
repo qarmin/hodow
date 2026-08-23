@@ -8,7 +8,7 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_mm_cvtph_ps() -> Result<(), String> {
+pub(super) fn test_x86_f16c_mm_cvtph_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_cvtph_ps(create__m128i_from_i32_array([1, 2, 3, 4])));
         check_float_array_equality(&result, &[0.0f32; 4])?;
@@ -28,7 +28,7 @@ pub(super) fn test_mm_cvtph_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cvtph_ps() -> Result<(), String> {
+pub(super) fn test_x86_f16c_mm256_cvtph_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_cvtph_ps(create__m128i_from_i32_array([1, 2, 3, 4])));
         check_float_array_equality(&result, &[0.0f32; 8])?;
@@ -48,7 +48,7 @@ pub(super) fn test_mm256_cvtph_ps() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_cvtps_ph() -> Result<(), String> {
+pub(super) fn test_x86_f16c_mm_cvtps_ph() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -71,7 +71,7 @@ pub(super) fn test_mm_cvtps_ph() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm256_cvtps_ph() -> Result<(), String> {
+pub(super) fn test_x86_f16c_mm256_cvtps_ph() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }

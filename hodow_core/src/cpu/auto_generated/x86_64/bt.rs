@@ -13,10 +13,10 @@ impl ExtensionTest for BT {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_bittest64, "test_bittest64"),
-            (&test_bittestandset64, "test_bittestandset64"),
-            (&test_bittestandreset64, "test_bittestandreset64"),
-            (&test_bittestandcomplement64, "test_bittestandcomplement64"),
+            (&test_x86_64_bt_bittest64, "test_x86_64_bt_bittest64"),
+            (&test_x86_64_bt_bittestandset64, "test_x86_64_bt_bittestandset64"),
+            (&test_x86_64_bt_bittestandreset64, "test_x86_64_bt_bittestandreset64"),
+            (&test_x86_64_bt_bittestandcomplement64, "test_x86_64_bt_bittestandcomplement64"),
         ]
     }
 }

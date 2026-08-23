@@ -13,17 +13,17 @@ impl ExtensionTest for KL {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_mm_loadiwkey, "test_mm_loadiwkey"),
-            (&test_mm_encodekey128_u32, "test_mm_encodekey128_u32"),
-            (&test_mm_encodekey256_u32, "test_mm_encodekey256_u32"),
-            (&test_mm_aesenc128kl_u8, "test_mm_aesenc128kl_u8"),
-            (&test_mm_aesdec128kl_u8, "test_mm_aesdec128kl_u8"),
-            (&test_mm_aesenc256kl_u8, "test_mm_aesenc256kl_u8"),
-            (&test_mm_aesdec256kl_u8, "test_mm_aesdec256kl_u8"),
-            (&test_mm_aesencwide128kl_u8, "test_mm_aesencwide128kl_u8"),
-            (&test_mm_aesdecwide128kl_u8, "test_mm_aesdecwide128kl_u8"),
-            (&test_mm_aesencwide256kl_u8, "test_mm_aesencwide256kl_u8"),
-            (&test_mm_aesdecwide256kl_u8, "test_mm_aesdecwide256kl_u8"),
+            (&test_x86_kl_mm_loadiwkey, "test_x86_kl_mm_loadiwkey"),
+            (&test_x86_kl_mm_encodekey128_u32, "test_x86_kl_mm_encodekey128_u32"),
+            (&test_x86_kl_mm_encodekey256_u32, "test_x86_kl_mm_encodekey256_u32"),
+            (&test_x86_kl_mm_aesenc128kl_u8, "test_x86_kl_mm_aesenc128kl_u8"),
+            (&test_x86_kl_mm_aesdec128kl_u8, "test_x86_kl_mm_aesdec128kl_u8"),
+            (&test_x86_kl_mm_aesenc256kl_u8, "test_x86_kl_mm_aesenc256kl_u8"),
+            (&test_x86_kl_mm_aesdec256kl_u8, "test_x86_kl_mm_aesdec256kl_u8"),
+            (&test_x86_kl_mm_aesencwide128kl_u8, "test_x86_kl_mm_aesencwide128kl_u8"),
+            (&test_x86_kl_mm_aesdecwide128kl_u8, "test_x86_kl_mm_aesdecwide128kl_u8"),
+            (&test_x86_kl_mm_aesencwide256kl_u8, "test_x86_kl_mm_aesencwide256kl_u8"),
+            (&test_x86_kl_mm_aesdecwide256kl_u8, "test_x86_kl_mm_aesdecwide256kl_u8"),
         ]
     }
 }

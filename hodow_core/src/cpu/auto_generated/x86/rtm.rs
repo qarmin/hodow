@@ -13,10 +13,10 @@ impl ExtensionTest for RTM {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_xbegin, "test_xbegin"),
-            (&test_xend, "test_xend"),
-            (&test_xabort, "test_xabort"),
-            (&test_xtest, "test_xtest"),
+            (&test_x86_rtm_xbegin, "test_x86_rtm_xbegin"),
+            (&test_x86_rtm_xend, "test_x86_rtm_xend"),
+            (&test_x86_rtm_xabort, "test_x86_rtm_xabort"),
+            (&test_x86_rtm_xtest, "test_x86_rtm_xtest"),
         ]
     }
 }

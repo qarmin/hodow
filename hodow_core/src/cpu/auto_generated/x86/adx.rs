@@ -13,9 +13,9 @@ impl ExtensionTest for ADX {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_addcarry_u32, "test_addcarry_u32"),
-            (&test_addcarryx_u32, "test_addcarryx_u32"),
-            (&test_subborrow_u32, "test_subborrow_u32"),
+            (&test_x86_adx_addcarry_u32, "test_x86_adx_addcarry_u32"),
+            (&test_x86_adx_addcarryx_u32, "test_x86_adx_addcarryx_u32"),
+            (&test_x86_adx_subborrow_u32, "test_x86_adx_subborrow_u32"),
         ]
     }
 }

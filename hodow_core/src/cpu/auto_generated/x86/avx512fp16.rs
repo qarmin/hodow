@@ -13,8 +13,8 @@ impl ExtensionTest for AVX512FP16 {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_mm_cvtsi128_si16, "test_mm_cvtsi128_si16"),
-            (&test_mm_cvtsi16_si128, "test_mm_cvtsi16_si128"),
+            (&test_x86_avx512fp16_mm_cvtsi128_si16, "test_x86_avx512fp16_mm_cvtsi128_si16"),
+            (&test_x86_avx512fp16_mm_cvtsi16_si128, "test_x86_avx512fp16_mm_cvtsi16_si128"),
         ]
     }
 }

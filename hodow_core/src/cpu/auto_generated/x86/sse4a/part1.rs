@@ -8,7 +8,7 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_mm_extract_si64() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_extract_si64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -31,7 +31,7 @@ pub(super) fn test_mm_extract_si64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_extracti_si64() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_extracti_si64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -54,7 +54,7 @@ pub(super) fn test_mm_extracti_si64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_insert_si64() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_insert_si64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -77,7 +77,7 @@ pub(super) fn test_mm_insert_si64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_inserti_si64() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_inserti_si64() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -100,7 +100,7 @@ pub(super) fn test_mm_inserti_si64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_stream_sd() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_stream_sd() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -112,7 +112,7 @@ pub(super) fn test_mm_stream_sd() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_mm_stream_ss() -> Result<(), String> {
+pub(super) fn test_x86_sse4a_mm_stream_ss() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }

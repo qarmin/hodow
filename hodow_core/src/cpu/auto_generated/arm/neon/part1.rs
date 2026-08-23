@@ -5,7 +5,7 @@ use crate::cpu::common::arm::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_vsli_n_p64() -> Result<(), String> {
+pub(super) fn test_arm_neon_vsli_n_p64() -> Result<(), String> {
     unsafe {
         let _result = vsli_n_p64::<0>(0 /* poly64x1_t */, 0 /* poly64x1_t */);
 
@@ -24,7 +24,7 @@ pub(super) fn test_vsli_n_p64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vsliq_n_p64() -> Result<(), String> {
+pub(super) fn test_arm_neon_vsliq_n_p64() -> Result<(), String> {
     unsafe {
         let _result = vsliq_n_p64::<0>(0 /* poly64x2_t */, 0 /* poly64x2_t */);
 
@@ -43,7 +43,7 @@ pub(super) fn test_vsliq_n_p64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vsri_n_p64() -> Result<(), String> {
+pub(super) fn test_arm_neon_vsri_n_p64() -> Result<(), String> {
     unsafe {
         let _result = vsri_n_p64::<0>(0 /* poly64x1_t */, 0 /* poly64x1_t */);
 
@@ -62,7 +62,7 @@ pub(super) fn test_vsri_n_p64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vsriq_n_p64() -> Result<(), String> {
+pub(super) fn test_arm_neon_vsriq_n_p64() -> Result<(), String> {
     unsafe {
         let _result = vsriq_n_p64::<0>(0 /* poly64x2_t */, 0 /* poly64x2_t */);
 

@@ -13,7 +13,7 @@ impl ExtensionTest for BSWAP {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_bswap, "test_bswap"),
+            (&test_x86_bswap_bswap, "test_x86_bswap_bswap"),
         ]
     }
 }

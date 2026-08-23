@@ -13,10 +13,10 @@ impl ExtensionTest for RDRAND {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_rdrand16_step, "test_rdrand16_step"),
-            (&test_rdrand32_step, "test_rdrand32_step"),
-            (&test_rdseed16_step, "test_rdseed16_step"),
-            (&test_rdseed32_step, "test_rdseed32_step"),
+            (&test_x86_rdrand_rdrand16_step, "test_x86_rdrand_rdrand16_step"),
+            (&test_x86_rdrand_rdrand32_step, "test_x86_rdrand_rdrand32_step"),
+            (&test_x86_rdrand_rdseed16_step, "test_x86_rdrand_rdseed16_step"),
+            (&test_x86_rdrand_rdseed32_step, "test_x86_rdrand_rdseed32_step"),
         ]
     }
 }

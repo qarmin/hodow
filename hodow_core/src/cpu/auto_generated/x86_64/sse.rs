@@ -13,9 +13,9 @@ impl ExtensionTest for SSE {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_mm_cvtss_si64, "test_mm_cvtss_si64"),
-            (&test_mm_cvttss_si64, "test_mm_cvttss_si64"),
-            (&test_mm_cvtsi64_ss, "test_mm_cvtsi64_ss"),
+            (&test_x86_64_sse_mm_cvtss_si64, "test_x86_64_sse_mm_cvtss_si64"),
+            (&test_x86_64_sse_mm_cvttss_si64, "test_x86_64_sse_mm_cvttss_si64"),
+            (&test_x86_64_sse_mm_cvtsi64_ss, "test_x86_64_sse_mm_cvtsi64_ss"),
         ]
     }
 }

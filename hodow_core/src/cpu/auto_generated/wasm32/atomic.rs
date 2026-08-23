@@ -13,9 +13,9 @@ impl ExtensionTest for ATOMIC {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_memory_atomic_wait32, "test_memory_atomic_wait32"),
-            (&test_memory_atomic_wait64, "test_memory_atomic_wait64"),
-            (&test_memory_atomic_notify, "test_memory_atomic_notify"),
+            (&test_wasm32_atomic_memory_atomic_wait32, "test_wasm32_atomic_memory_atomic_wait32"),
+            (&test_wasm32_atomic_memory_atomic_wait64, "test_wasm32_atomic_memory_atomic_wait64"),
+            (&test_wasm32_atomic_memory_atomic_notify, "test_wasm32_atomic_memory_atomic_notify"),
         ]
     }
 }

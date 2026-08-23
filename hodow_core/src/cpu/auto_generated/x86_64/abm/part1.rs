@@ -5,7 +5,7 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_lzcnt_u64() -> Result<(), String> {
+pub(super) fn test_x86_64_abm_lzcnt_u64() -> Result<(), String> {
     unsafe {
         let result = _lzcnt_u64(1u64);
         check_int_equality(result as i32, 0)?;
@@ -25,7 +25,7 @@ pub(super) fn test_lzcnt_u64() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_popcnt64() -> Result<(), String> {
+pub(super) fn test_x86_64_abm_popcnt64() -> Result<(), String> {
     unsafe {
         let result = _popcnt64(1i64);
         check_int_equality(result as i32, 0)?;

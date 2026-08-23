@@ -13,7 +13,7 @@ impl ExtensionTest for PREFETCH {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_prefetch, "test_prefetch"),
+            (&test_aarch64_prefetch_prefetch, "test_aarch64_prefetch_prefetch"),
         ]
     }
 }

@@ -8,7 +8,7 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_xbegin() -> Result<(), String> {
+pub(super) fn test_x86_rtm_xbegin() -> Result<(), String> {
     unsafe {
         let result = _xbegin();
         check_int_equality(result as i32, 0)?;
@@ -28,7 +28,7 @@ pub(super) fn test_xbegin() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_xend() -> Result<(), String> {
+pub(super) fn test_x86_rtm_xend() -> Result<(), String> {
     unsafe {
         _xend();
 
@@ -47,7 +47,7 @@ pub(super) fn test_xend() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_xabort() -> Result<(), String> {
+pub(super) fn test_x86_rtm_xabort() -> Result<(), String> {
     unsafe {
         _xabort::<0>();
 
@@ -66,7 +66,7 @@ pub(super) fn test_xabort() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_xtest() -> Result<(), String> {
+pub(super) fn test_x86_rtm_xtest() -> Result<(), String> {
     unsafe {
         let result = _xtest();
         check_int_equality(result as i32, 0)?;

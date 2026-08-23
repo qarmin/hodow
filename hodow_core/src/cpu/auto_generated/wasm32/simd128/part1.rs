@@ -5,7 +5,7 @@ use crate::cpu::common::arm::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_v128_load() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_v128_load() -> Result<(), String> {
     unsafe {
         let ptr_m = crate::cpu::common::Aligned64([0 /* v128 */; 64]);
         let _result = v128_load(ptr_m.0.as_ptr());
@@ -13,7 +13,7 @@ pub(super) fn test_v128_load() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i16x8_load_extend_i8x8() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i16x8_load_extend_i8x8() -> Result<(), String> {
     unsafe {
         let ptr_m = crate::cpu::common::Aligned64([1i8; 64]);
         let _result = i16x8_load_extend_i8x8(ptr_m.0.as_ptr());
@@ -21,7 +21,7 @@ pub(super) fn test_i16x8_load_extend_i8x8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i16x8_load_extend_u8x8() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i16x8_load_extend_u8x8() -> Result<(), String> {
     unsafe {
         let ptr_m = crate::cpu::common::Aligned64([1u8; 64]);
         let _result = i16x8_load_extend_u8x8(ptr_m.0.as_ptr());
@@ -29,7 +29,7 @@ pub(super) fn test_i16x8_load_extend_u8x8() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i32x4_load_extend_i16x4() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i32x4_load_extend_i16x4() -> Result<(), String> {
     unsafe {
         let ptr_m = crate::cpu::common::Aligned64([1i16; 32]);
         let _result = i32x4_load_extend_i16x4(ptr_m.0.as_ptr());
@@ -37,7 +37,7 @@ pub(super) fn test_i32x4_load_extend_i16x4() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i32x4_load_extend_u16x4() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i32x4_load_extend_u16x4() -> Result<(), String> {
     unsafe {
         let ptr_m = crate::cpu::common::Aligned64([1u16; 32]);
         let _result = i32x4_load_extend_u16x4(ptr_m.0.as_ptr());
@@ -45,7 +45,7 @@ pub(super) fn test_i32x4_load_extend_u16x4() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i64x2_load_extend_i32x2() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i64x2_load_extend_i32x2() -> Result<(), String> {
     unsafe {
         let ptr_m = crate::cpu::common::Aligned64([1i32; 16]);
         let _result = i64x2_load_extend_i32x2(ptr_m.0.as_ptr());
@@ -53,7 +53,7 @@ pub(super) fn test_i64x2_load_extend_i32x2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i64x2_load_extend_u32x2() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i64x2_load_extend_u32x2() -> Result<(), String> {
     unsafe {
         let ptr_m = crate::cpu::common::Aligned64([1u32; 16]);
         let _result = i64x2_load_extend_u32x2(ptr_m.0.as_ptr());
@@ -61,7 +61,7 @@ pub(super) fn test_i64x2_load_extend_u32x2() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_v128_load8_splat() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_v128_load8_splat() -> Result<(), String> {
     unsafe {
         let ptr_m = crate::cpu::common::Aligned64([1u8; 64]);
         let _result = v128_load8_splat(ptr_m.0.as_ptr());
@@ -69,7 +69,7 @@ pub(super) fn test_v128_load8_splat() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_v128_load16_splat() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_v128_load16_splat() -> Result<(), String> {
     unsafe {
         let ptr_m = crate::cpu::common::Aligned64([1u16; 32]);
         let _result = v128_load16_splat(ptr_m.0.as_ptr());
@@ -77,7 +77,7 @@ pub(super) fn test_v128_load16_splat() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_v128_load32_splat() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_v128_load32_splat() -> Result<(), String> {
     unsafe {
         let ptr_m = crate::cpu::common::Aligned64([1u32; 16]);
         let _result = v128_load32_splat(ptr_m.0.as_ptr());
@@ -85,7 +85,7 @@ pub(super) fn test_v128_load32_splat() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_v128_load64_splat() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_v128_load64_splat() -> Result<(), String> {
     unsafe {
         let ptr_m = crate::cpu::common::Aligned64([1u64; 8]);
         let _result = v128_load64_splat(ptr_m.0.as_ptr());
@@ -93,7 +93,7 @@ pub(super) fn test_v128_load64_splat() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_v128_load32_zero() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_v128_load32_zero() -> Result<(), String> {
     unsafe {
         let ptr_m = crate::cpu::common::Aligned64([1u32; 16]);
         let _result = v128_load32_zero(ptr_m.0.as_ptr());
@@ -101,7 +101,7 @@ pub(super) fn test_v128_load32_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_v128_load64_zero() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_v128_load64_zero() -> Result<(), String> {
     unsafe {
         let ptr_m = crate::cpu::common::Aligned64([1u64; 8]);
         let _result = v128_load64_zero(ptr_m.0.as_ptr());
@@ -109,7 +109,7 @@ pub(super) fn test_v128_load64_zero() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_v128_store() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_v128_store() -> Result<(), String> {
     unsafe {
         let mut ptr_m = crate::cpu::common::Aligned64([0 /* v128 */; 64]);
         let a = 0 /* v128 */;
@@ -118,7 +118,7 @@ pub(super) fn test_v128_store() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_v128_load8_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_v128_load8_lane() -> Result<(), String> {
     unsafe {
         let v = 0 /* v128 */;
         let ptr_m = crate::cpu::common::Aligned64([1u8; 64]);
@@ -127,7 +127,7 @@ pub(super) fn test_v128_load8_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_v128_load16_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_v128_load16_lane() -> Result<(), String> {
     unsafe {
         let v = 0 /* v128 */;
         let ptr_m = crate::cpu::common::Aligned64([1u16; 32]);
@@ -136,7 +136,7 @@ pub(super) fn test_v128_load16_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_v128_load32_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_v128_load32_lane() -> Result<(), String> {
     unsafe {
         let v = 0 /* v128 */;
         let ptr_m = crate::cpu::common::Aligned64([1u32; 16]);
@@ -145,7 +145,7 @@ pub(super) fn test_v128_load32_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_v128_load64_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_v128_load64_lane() -> Result<(), String> {
     unsafe {
         let v = 0 /* v128 */;
         let ptr_m = crate::cpu::common::Aligned64([1u64; 8]);
@@ -154,7 +154,7 @@ pub(super) fn test_v128_load64_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_v128_store8_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_v128_store8_lane() -> Result<(), String> {
     unsafe {
         let v = 0 /* v128 */;
         let mut ptr_m = crate::cpu::common::Aligned64([1u8; 64]);
@@ -163,7 +163,7 @@ pub(super) fn test_v128_store8_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_v128_store16_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_v128_store16_lane() -> Result<(), String> {
     unsafe {
         let v = 0 /* v128 */;
         let mut ptr_m = crate::cpu::common::Aligned64([1u16; 32]);
@@ -172,7 +172,7 @@ pub(super) fn test_v128_store16_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_v128_store32_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_v128_store32_lane() -> Result<(), String> {
     unsafe {
         let v = 0 /* v128 */;
         let mut ptr_m = crate::cpu::common::Aligned64([1u32; 16]);
@@ -181,7 +181,7 @@ pub(super) fn test_v128_store32_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_v128_store64_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_v128_store64_lane() -> Result<(), String> {
     unsafe {
         let v = 0 /* v128 */;
         let mut ptr_m = crate::cpu::common::Aligned64([1u64; 8]);
@@ -190,7 +190,7 @@ pub(super) fn test_v128_store64_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i8x16_shuffle() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i8x16_shuffle() -> Result<(), String> {
     unsafe {
         let _result = i8x16_shuffle::<0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0>(0 /* v128 */, 0 /* v128 */);
 
@@ -209,7 +209,7 @@ pub(super) fn test_i8x16_shuffle() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i16x8_shuffle() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i16x8_shuffle() -> Result<(), String> {
     unsafe {
         let _result = i16x8_shuffle::<0, 0, 0, 0, 0, 0, 0, 0>(0 /* v128 */, 0 /* v128 */);
 
@@ -228,7 +228,7 @@ pub(super) fn test_i16x8_shuffle() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i32x4_shuffle() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i32x4_shuffle() -> Result<(), String> {
     unsafe {
         let _result = i32x4_shuffle::<0, 0, 0, 0>(0 /* v128 */, 0 /* v128 */);
 
@@ -247,7 +247,7 @@ pub(super) fn test_i32x4_shuffle() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i64x2_shuffle() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i64x2_shuffle() -> Result<(), String> {
     unsafe {
         let _result = i64x2_shuffle::<0, 0>(0 /* v128 */, 0 /* v128 */);
 
@@ -266,7 +266,7 @@ pub(super) fn test_i64x2_shuffle() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i8x16_extract_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i8x16_extract_lane() -> Result<(), String> {
     unsafe {
         let result = i8x16_extract_lane::<0>(0 /* v128 */);
         check_int_equality(result as i32, 0)?;
@@ -286,7 +286,7 @@ pub(super) fn test_i8x16_extract_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_u8x16_extract_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_u8x16_extract_lane() -> Result<(), String> {
     unsafe {
         let result = u8x16_extract_lane::<0>(0 /* v128 */);
         check_int_equality(result as i32, 0)?;
@@ -306,7 +306,7 @@ pub(super) fn test_u8x16_extract_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i8x16_replace_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i8x16_replace_lane() -> Result<(), String> {
     unsafe {
         let _result = i8x16_replace_lane::<0>(0 /* v128 */, 1i8);
 
@@ -325,7 +325,7 @@ pub(super) fn test_i8x16_replace_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_u8x16_replace_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_u8x16_replace_lane() -> Result<(), String> {
     unsafe {
         let _result = u8x16_replace_lane::<0>(0 /* v128 */, 1u8);
 
@@ -344,7 +344,7 @@ pub(super) fn test_u8x16_replace_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i16x8_extract_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i16x8_extract_lane() -> Result<(), String> {
     unsafe {
         let result = i16x8_extract_lane::<0>(0 /* v128 */);
         check_int_equality(result as i32, 0)?;
@@ -364,7 +364,7 @@ pub(super) fn test_i16x8_extract_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_u16x8_extract_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_u16x8_extract_lane() -> Result<(), String> {
     unsafe {
         let result = u16x8_extract_lane::<0>(0 /* v128 */);
         check_int_equality(result as i32, 0)?;
@@ -384,7 +384,7 @@ pub(super) fn test_u16x8_extract_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i16x8_replace_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i16x8_replace_lane() -> Result<(), String> {
     unsafe {
         let _result = i16x8_replace_lane::<0>(0 /* v128 */, 1i16);
 
@@ -403,7 +403,7 @@ pub(super) fn test_i16x8_replace_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_u16x8_replace_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_u16x8_replace_lane() -> Result<(), String> {
     unsafe {
         let _result = u16x8_replace_lane::<0>(0 /* v128 */, 1u16);
 
@@ -422,7 +422,7 @@ pub(super) fn test_u16x8_replace_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i32x4_extract_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i32x4_extract_lane() -> Result<(), String> {
     unsafe {
         let result = i32x4_extract_lane::<0>(0 /* v128 */);
         check_int_equality(result as i32, 0)?;
@@ -442,7 +442,7 @@ pub(super) fn test_i32x4_extract_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_u32x4_extract_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_u32x4_extract_lane() -> Result<(), String> {
     unsafe {
         let result = u32x4_extract_lane::<0>(0 /* v128 */);
         check_int_equality(result as i32, 0)?;
@@ -462,7 +462,7 @@ pub(super) fn test_u32x4_extract_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i32x4_replace_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i32x4_replace_lane() -> Result<(), String> {
     unsafe {
         let _result = i32x4_replace_lane::<0>(0 /* v128 */, 1i32);
 
@@ -481,7 +481,7 @@ pub(super) fn test_i32x4_replace_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_u32x4_replace_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_u32x4_replace_lane() -> Result<(), String> {
     unsafe {
         let _result = u32x4_replace_lane::<0>(0 /* v128 */, 1u32);
 
@@ -500,7 +500,7 @@ pub(super) fn test_u32x4_replace_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i64x2_extract_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i64x2_extract_lane() -> Result<(), String> {
     unsafe {
         let result = i64x2_extract_lane::<0>(0 /* v128 */);
         check_int_equality(result as i32, 0)?;
@@ -520,7 +520,7 @@ pub(super) fn test_i64x2_extract_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_u64x2_extract_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_u64x2_extract_lane() -> Result<(), String> {
     unsafe {
         let result = u64x2_extract_lane::<0>(0 /* v128 */);
         check_int_equality(result as i32, 0)?;
@@ -540,7 +540,7 @@ pub(super) fn test_u64x2_extract_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i64x2_replace_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i64x2_replace_lane() -> Result<(), String> {
     unsafe {
         let _result = i64x2_replace_lane::<0>(0 /* v128 */, 1i64);
 
@@ -559,7 +559,7 @@ pub(super) fn test_i64x2_replace_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_u64x2_replace_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_u64x2_replace_lane() -> Result<(), String> {
     unsafe {
         let _result = u64x2_replace_lane::<0>(0 /* v128 */, 1u64);
 
@@ -578,7 +578,7 @@ pub(super) fn test_u64x2_replace_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f32x4_extract_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f32x4_extract_lane() -> Result<(), String> {
     unsafe {
         let _result = f32x4_extract_lane::<0>(0 /* v128 */);
 
@@ -597,7 +597,7 @@ pub(super) fn test_f32x4_extract_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f32x4_replace_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f32x4_replace_lane() -> Result<(), String> {
     unsafe {
         let _result = f32x4_replace_lane::<0>(0 /* v128 */, 1.0f32);
 
@@ -616,7 +616,7 @@ pub(super) fn test_f32x4_replace_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f64x2_extract_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f64x2_extract_lane() -> Result<(), String> {
     unsafe {
         let _result = f64x2_extract_lane::<0>(0 /* v128 */);
 
@@ -635,7 +635,7 @@ pub(super) fn test_f64x2_extract_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_f64x2_replace_lane() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_f64x2_replace_lane() -> Result<(), String> {
     unsafe {
         let _result = f64x2_replace_lane::<0>(0 /* v128 */, 1.0f64);
 
@@ -654,7 +654,7 @@ pub(super) fn test_f64x2_replace_lane() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i8x16_swizzle() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i8x16_swizzle() -> Result<(), String> {
     unsafe {
         let _result = i8x16_swizzle(0 /* v128 */, 0 /* v128 */);
 
@@ -673,7 +673,7 @@ pub(super) fn test_i8x16_swizzle() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i8x16_splat() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i8x16_splat() -> Result<(), String> {
     unsafe {
         let _result = i8x16_splat(1i8);
 
@@ -692,7 +692,7 @@ pub(super) fn test_i8x16_splat() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_u8x16_splat() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_u8x16_splat() -> Result<(), String> {
     unsafe {
         let _result = u8x16_splat(1u8);
 
@@ -711,7 +711,7 @@ pub(super) fn test_u8x16_splat() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_i16x8_splat() -> Result<(), String> {
+pub(super) fn test_wasm32_simd128_i16x8_splat() -> Result<(), String> {
     unsafe {
         let _result = i16x8_splat(1i16);
 

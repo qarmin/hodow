@@ -13,8 +13,8 @@ impl ExtensionTest for VSX {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_vec_xl_len, "test_vec_xl_len"),
-            (&test_vec_xst_len, "test_vec_xst_len"),
+            (&test_powerpc64_vsx_vec_xl_len, "test_powerpc64_vsx_vec_xl_len"),
+            (&test_powerpc64_vsx_vec_xst_len, "test_powerpc64_vsx_vec_xst_len"),
         ]
     }
 }

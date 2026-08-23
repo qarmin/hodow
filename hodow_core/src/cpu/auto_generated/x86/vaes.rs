@@ -13,14 +13,14 @@ impl ExtensionTest for VAES {
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
         &[
-            (&test_mm256_aesenc_epi128, "test_mm256_aesenc_epi128"),
-            (&test_mm256_aesenclast_epi128, "test_mm256_aesenclast_epi128"),
-            (&test_mm256_aesdec_epi128, "test_mm256_aesdec_epi128"),
-            (&test_mm256_aesdeclast_epi128, "test_mm256_aesdeclast_epi128"),
-            (&test_mm512_aesenc_epi128, "test_mm512_aesenc_epi128"),
-            (&test_mm512_aesenclast_epi128, "test_mm512_aesenclast_epi128"),
-            (&test_mm512_aesdec_epi128, "test_mm512_aesdec_epi128"),
-            (&test_mm512_aesdeclast_epi128, "test_mm512_aesdeclast_epi128"),
+            (&test_x86_vaes_mm256_aesenc_epi128, "test_x86_vaes_mm256_aesenc_epi128"),
+            (&test_x86_vaes_mm256_aesenclast_epi128, "test_x86_vaes_mm256_aesenclast_epi128"),
+            (&test_x86_vaes_mm256_aesdec_epi128, "test_x86_vaes_mm256_aesdec_epi128"),
+            (&test_x86_vaes_mm256_aesdeclast_epi128, "test_x86_vaes_mm256_aesdeclast_epi128"),
+            (&test_x86_vaes_mm512_aesenc_epi128, "test_x86_vaes_mm512_aesenc_epi128"),
+            (&test_x86_vaes_mm512_aesenclast_epi128, "test_x86_vaes_mm512_aesenclast_epi128"),
+            (&test_x86_vaes_mm512_aesdec_epi128, "test_x86_vaes_mm512_aesdec_epi128"),
+            (&test_x86_vaes_mm512_aesdeclast_epi128, "test_x86_vaes_mm512_aesdeclast_epi128"),
         ]
     }
 }

@@ -62,6 +62,14 @@ Feature flags: `gpu` (OpenGL path, includes `winit`/`glutin`/`glow`), `vulkan` (
 regeneration must stay idempotent/diff-clean. To change generated test behavior, edit the generator (or one
 of the exclusion lists below) and re-run it.
 
+Generated test functions are named `test_<arch>_<ext>_<intrinsic-without-leading-underscore>` (via
+`test_name()`), e.g. `test_x86_sse4a_mm_extracti_si64` or `test_x86_avx512f_mm512_add_epi32` - the
+arch/ext prefix makes which CPU feature a failing test belongs to legible from the bare name alone
+(useful in a bare log line, without cross-referencing the surrounding `ExtensionTest` grouping).
+Two auxiliary Miri-workflow scripts (`scripts/cpu/miri_tester.py`'s exclusion-suffix matching,
+`scripts/cpu/miri_tester_sorter.py`'s `build_test_to_func_map()`) reconstruct the bare intrinsic
+name back from a real test name for this reason - update both if the naming scheme changes again.
+
 - `scripts/cpu/excluded_functions.txt` - functions never generated at all (unsupported on the dev machine,
   or genuinely unsafe to call with arbitrary data, e.g. `xrstor`/`xsetbv`).
 - `scripts/cpu/miri_only_functions.txt` - functions generated and run natively, but skipped under Miri via a

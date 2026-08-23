@@ -5,7 +5,7 @@ use crate::cpu::common::arm::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_vec_any_gt() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_any_gt() -> Result<(), String> {
     unsafe {
         vec_any_gt(0 /* T */, 0 /* U */);
 
@@ -24,7 +24,7 @@ pub(super) fn test_vec_any_gt() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_all_in() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_all_in() -> Result<(), String> {
     unsafe {
         let _result = vec_all_in(0 /* vector_float */, 0 /* vector_float */);
 
@@ -43,7 +43,7 @@ pub(super) fn test_vec_all_in() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_all_le() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_all_le() -> Result<(), String> {
     unsafe {
         vec_all_le(0 /* U */, 0 /* T */);
 
@@ -62,7 +62,7 @@ pub(super) fn test_vec_all_le() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_any_le() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_any_le() -> Result<(), String> {
     unsafe {
         vec_any_le(0 /* U */, 0 /* T */);
 
@@ -81,7 +81,7 @@ pub(super) fn test_vec_any_le() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_all_lt() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_all_lt() -> Result<(), String> {
     unsafe {
         vec_all_lt(0 /* U */, 0 /* T */);
 
@@ -100,7 +100,7 @@ pub(super) fn test_vec_all_lt() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_any_lt() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_any_lt() -> Result<(), String> {
     unsafe {
         vec_any_lt(0 /* U */, 0 /* T */);
 
@@ -119,7 +119,7 @@ pub(super) fn test_vec_any_lt() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_all_nan() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_all_nan() -> Result<(), String> {
     unsafe {
         let _result = vec_all_nan(0 /* vector_float */);
 
@@ -138,7 +138,7 @@ pub(super) fn test_vec_all_nan() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_any_nan() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_any_nan() -> Result<(), String> {
     unsafe {
         let _result = vec_any_nan(0 /* vector_float */);
 
@@ -157,7 +157,7 @@ pub(super) fn test_vec_any_nan() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_all_ne() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_all_ne() -> Result<(), String> {
     unsafe {
         vec_all_ne(0 /* T */, 0 /* U */);
 
@@ -176,7 +176,7 @@ pub(super) fn test_vec_all_ne() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_any_ne() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_any_ne() -> Result<(), String> {
     unsafe {
         vec_any_ne(0 /* T */, 0 /* U */);
 
@@ -195,7 +195,7 @@ pub(super) fn test_vec_any_ne() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_all_nge() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_all_nge() -> Result<(), String> {
     unsafe {
         let _result = vec_all_nge(0 /* vector_float */, 0 /* vector_float */);
 
@@ -214,7 +214,7 @@ pub(super) fn test_vec_all_nge() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_all_ngt() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_all_ngt() -> Result<(), String> {
     unsafe {
         let _result = vec_all_ngt(0 /* vector_float */, 0 /* vector_float */);
 
@@ -233,7 +233,7 @@ pub(super) fn test_vec_all_ngt() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_all_nle() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_all_nle() -> Result<(), String> {
     unsafe {
         let _result = vec_all_nle(0 /* vector_float */, 0 /* vector_float */);
 
@@ -252,7 +252,7 @@ pub(super) fn test_vec_all_nle() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_all_nlt() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_all_nlt() -> Result<(), String> {
     unsafe {
         let _result = vec_all_nlt(0 /* vector_float */, 0 /* vector_float */);
 
@@ -271,7 +271,7 @@ pub(super) fn test_vec_all_nlt() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_all_numeric() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_all_numeric() -> Result<(), String> {
     unsafe {
         let _result = vec_all_numeric(0 /* vector_float */);
 
@@ -290,7 +290,7 @@ pub(super) fn test_vec_all_numeric() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_any_nge() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_any_nge() -> Result<(), String> {
     unsafe {
         let _result = vec_any_nge(0 /* vector_float */, 0 /* vector_float */);
 
@@ -309,7 +309,7 @@ pub(super) fn test_vec_any_nge() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_any_ngt() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_any_ngt() -> Result<(), String> {
     unsafe {
         let _result = vec_any_ngt(0 /* vector_float */, 0 /* vector_float */);
 
@@ -328,7 +328,7 @@ pub(super) fn test_vec_any_ngt() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_any_nle() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_any_nle() -> Result<(), String> {
     unsafe {
         let _result = vec_any_nle(0 /* vector_float */, 0 /* vector_float */);
 
@@ -347,7 +347,7 @@ pub(super) fn test_vec_any_nle() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_any_nlt() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_any_nlt() -> Result<(), String> {
     unsafe {
         let _result = vec_any_nlt(0 /* vector_float */, 0 /* vector_float */);
 
@@ -366,7 +366,7 @@ pub(super) fn test_vec_any_nlt() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_any_numeric() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_any_numeric() -> Result<(), String> {
     unsafe {
         let _result = vec_any_numeric(0 /* vector_float */);
 
@@ -385,7 +385,7 @@ pub(super) fn test_vec_any_numeric() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_cntlz() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_cntlz() -> Result<(), String> {
     unsafe {
         vec_cntlz(0 /* T */);
 
@@ -404,7 +404,7 @@ pub(super) fn test_vec_cntlz() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_vec_any_out() -> Result<(), String> {
+pub(super) fn test_powerpc_altivec_vec_any_out() -> Result<(), String> {
     unsafe {
         let _result = vec_any_out(0 /* vector_float */);
 

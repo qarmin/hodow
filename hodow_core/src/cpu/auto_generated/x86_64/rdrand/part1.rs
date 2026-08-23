@@ -5,7 +5,7 @@ use crate::cpu::common::x86::*;
 #[allow(unused_imports)]
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
-pub(super) fn test_rdrand64_step() -> Result<(), String> {
+pub(super) fn test_x86_64_rdrand_rdrand64_step() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
@@ -17,7 +17,7 @@ pub(super) fn test_rdrand64_step() -> Result<(), String> {
     Ok(())
 }
 
-pub(super) fn test_rdseed64_step() -> Result<(), String> {
+pub(super) fn test_x86_64_rdrand_rdseed64_step() -> Result<(), String> {
         if cfg!(miri) {
             return Ok(());
         }
