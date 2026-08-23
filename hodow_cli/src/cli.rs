@@ -11,7 +11,7 @@ pub struct Cli {
     pub command: Commands,
 }
 
-#[derive(Subcommand)]
+#[derive(Subcommand, Debug)]
 pub enum Commands {
     /// Run CPU SIMD instruction-set tests
     Cpu(CpuArgs),
@@ -27,7 +27,7 @@ pub enum Commands {
 // ── Serve ───────────────────────────────────────────────────────────────────
 
 #[cfg(feature = "serve")]
-#[derive(Args)]
+#[derive(Args, Debug)]
 pub struct ServeArgs {
     /// Address to bind the HTTP server to (default: 0.0.0.0 - reachable on the LAN).
     #[arg(long = "bind", value_name = "ADDR")]
@@ -45,7 +45,7 @@ pub struct ServeArgs {
 
 // ── Vulkan ────────────────────────────────────────────────────────────────────
 
-#[derive(Args)]
+#[derive(Args, Debug)]
 pub struct VulkanArgs {
     /// Submit this as a job to a running `hodow_cli serve` instead of running it locally.
     #[cfg(feature = "serve")]
@@ -55,7 +55,7 @@ pub struct VulkanArgs {
 
 // ── CPU ─────────────────────────────────────────────────────────────────────
 
-#[derive(Args)]
+#[derive(Args, Debug)]
 pub struct CpuArgs {
     /// Number of iterations per test
     #[arg(short = 'n', long = "iterations")]
@@ -112,7 +112,7 @@ pub struct CpuArgs {
 
 // ── GPU ─────────────────────────────────────────────────────────────────────
 
-#[derive(Args)]
+#[derive(Args, Debug)]
 pub struct GpuArgs {
     /// Run without creating a visible window (headless / offscreen)
     #[arg(short = 'w', long = "no-window")]

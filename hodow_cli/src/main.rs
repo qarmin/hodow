@@ -32,6 +32,18 @@ fn print_build_info() {
     log::info!("Build info: {}", info);
 }
 
+/// Parses a RUST_LOG value into a single global level. Accepts a bare level ("debug"), or
+/// the common env_logger "target=level[,target=level...]" shorthand - since this project's
+/// logger only supports one global level (not per-target filtering), the most verbose
+/// level mentioned anywhere in the value wins.
+fn parse_rust_log_level(s: &str) -> Option<log::LevelFilter> {
+    use std::str::FromStr;
+    if let Ok(l) = log::LevelFilter::from_str(s.trim()) {
+        return Some(l);
+    }
+    s.split(',').filter_map(|part| part.rsplit('=').next()).filter_map(|lvl| log::LevelFilter::from_str(lvl.trim()).ok()).max()
+}
+
 pub fn setup_ctrlc_handler() {
     ctrlc::set_handler(move || {
         info!("\n[Ctrl+C] Stopping tests gracefully...");
@@ -80,12 +92,16 @@ fn main() {
     let is_worker = matches!(&cli.command, Commands::Cpu(a) if a.worker_start.is_some());
 
     // The logger must always be initialized: all user-facing output (statistics,
-    // mode lists, errors) is emitted through the `log` macros. `--debug` only raises
-    // the verbosity; without it we still print Info-level output.
+    // mode lists, errors) is emitted through the `log` macros. `--debug` always wins;
+    // otherwise honor the standard RUST_LOG env var (a bare level, or the common
+    // env_logger "target=level[,target=level...]" shorthand - we only support a single
+    // global level, so the most verbose requested level wins); default Info.
     let level = if is_worker {
         log::LevelFilter::Off
     } else if cli.debug {
         log::LevelFilter::Debug
+    } else if let Ok(rust_log) = std::env::var("RUST_LOG") {
+        parse_rust_log_level(&rust_log).unwrap_or(log::LevelFilter::Info)
     } else {
         log::LevelFilter::Info
     };
@@ -110,6 +126,9 @@ fn main() {
     handsome_logger::TermLogger::init(config, Default::default(), Default::default()).expect("Failed to initialize logger");
 
     print_build_info();
+    if !is_worker {
+        info!("Running: {:?}", cli.command);
+    }
 
     match &cli.command {
         Commands::Cpu(args) => cpu::process_cpu(args),
