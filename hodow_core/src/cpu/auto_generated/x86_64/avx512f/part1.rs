@@ -46,9 +46,9 @@ pub(super) fn test_mm_cvtss_i64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvtss_u64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_cvtss_u64(create__m128_from([1.0, 2.0, 3.0, 4.0]));
         check_int_equality(result as i32, 1)?;
@@ -69,9 +69,9 @@ pub(super) fn test_mm_cvtss_u64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvtsd_u64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_cvtsd_u64(create__m128d_from([1.0, 2.0]));
         check_int_equality(result as i32, 1)?;
@@ -172,9 +172,9 @@ pub(super) fn test_mm_cvtu64_sd() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvttsd_i64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_cvttsd_i64(create__m128d_from([1.0, 2.0]));
         check_int_equality(result as i32, 1)?;
@@ -195,9 +195,9 @@ pub(super) fn test_mm_cvttsd_i64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvttsd_u64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_cvttsd_u64(create__m128d_from([1.0, 2.0]));
         check_int_equality(result as i32, 1)?;
@@ -218,9 +218,9 @@ pub(super) fn test_mm_cvttsd_u64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvttss_i64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_cvttss_i64(create__m128_from([1.0, 2.0, 3.0, 4.0]));
         check_int_equality(result as i32, 1)?;
@@ -241,9 +241,9 @@ pub(super) fn test_mm_cvttss_i64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvttss_u64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_cvttss_u64(create__m128_from([1.0, 2.0, 3.0, 4.0]));
         check_int_equality(result as i32, 1)?;
@@ -264,9 +264,9 @@ pub(super) fn test_mm_cvttss_u64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvt_roundi64_sd() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_cvt_roundi64_sd::<8>(create__m128d_from([1.0, 2.0]), 3i64));
         check_float_array_equality(&result, &[3.0, 2.0])?;
@@ -287,9 +287,9 @@ pub(super) fn test_mm_cvt_roundi64_sd() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvt_roundsi64_sd() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_cvt_roundsi64_sd::<8>(create__m128d_from([1.0, 2.0]), 3i64));
         check_float_array_equality(&result, &[3.0, 2.0])?;
@@ -310,9 +310,9 @@ pub(super) fn test_mm_cvt_roundsi64_sd() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvt_roundi64_ss() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_cvt_roundi64_ss::<8>(create__m128_from([1.0, 2.0, 3.0, 4.0]), 5i64));
         check_float_array_equality(&result, &[5.0, 2.0, 3.0, 4.0])?;
@@ -333,9 +333,9 @@ pub(super) fn test_mm_cvt_roundi64_ss() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvt_roundu64_sd() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128d_to_f64_array(_mm_cvt_roundu64_sd::<8>(create__m128d_from([1.0, 2.0]), 3u64));
         check_float_array_equality(&result, &[3.0, 2.0])?;
@@ -356,9 +356,9 @@ pub(super) fn test_mm_cvt_roundu64_sd() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvt_roundsi64_ss() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_cvt_roundsi64_ss::<8>(create__m128_from([1.0, 2.0, 3.0, 4.0]), 5i64));
         check_float_array_equality(&result, &[5.0, 2.0, 3.0, 4.0])?;
@@ -379,9 +379,9 @@ pub(super) fn test_mm_cvt_roundsi64_ss() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvt_roundu64_ss() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_cvt_roundu64_ss::<8>(create__m128_from([1.0, 2.0, 3.0, 4.0]), 5u64));
         check_float_array_equality(&result, &[5.0, 2.0, 3.0, 4.0])?;
@@ -402,9 +402,9 @@ pub(super) fn test_mm_cvt_roundu64_ss() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvt_roundsd_si64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_cvt_roundsd_si64::<8>(create__m128d_from([1.0, 2.0]));
         check_int_equality(result as i32, 1)?;
@@ -425,9 +425,9 @@ pub(super) fn test_mm_cvt_roundsd_si64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvt_roundsd_i64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_cvt_roundsd_i64::<8>(create__m128d_from([1.0, 2.0]));
         check_int_equality(result as i32, 1)?;
@@ -448,9 +448,9 @@ pub(super) fn test_mm_cvt_roundsd_i64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvt_roundsd_u64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_cvt_roundsd_u64::<8>(create__m128d_from([1.0, 2.0]));
         check_int_equality(result as i32, 1)?;
@@ -471,9 +471,9 @@ pub(super) fn test_mm_cvt_roundsd_u64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvt_roundss_si64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_cvt_roundss_si64::<8>(create__m128_from([1.0, 2.0, 3.0, 4.0]));
         check_int_equality(result as i32, 1)?;
@@ -494,9 +494,9 @@ pub(super) fn test_mm_cvt_roundss_si64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvt_roundss_i64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_cvt_roundss_i64::<8>(create__m128_from([1.0, 2.0, 3.0, 4.0]));
         check_int_equality(result as i32, 1)?;
@@ -517,9 +517,9 @@ pub(super) fn test_mm_cvt_roundss_i64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvt_roundss_u64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_cvt_roundss_u64::<8>(create__m128_from([1.0, 2.0, 3.0, 4.0]));
         check_int_equality(result as i32, 1)?;
@@ -540,9 +540,9 @@ pub(super) fn test_mm_cvt_roundss_u64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvtt_roundsd_si64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_cvtt_roundsd_si64::<8>(create__m128d_from([1.0, 2.0]));
         check_int_equality(result as i32, 1)?;
@@ -563,9 +563,9 @@ pub(super) fn test_mm_cvtt_roundsd_si64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvtt_roundsd_i64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_cvtt_roundsd_i64::<8>(create__m128d_from([1.0, 2.0]));
         check_int_equality(result as i32, 1)?;
@@ -586,9 +586,9 @@ pub(super) fn test_mm_cvtt_roundsd_i64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvtt_roundsd_u64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_cvtt_roundsd_u64::<8>(create__m128d_from([1.0, 2.0]));
         check_int_equality(result as i32, 1)?;
@@ -609,9 +609,9 @@ pub(super) fn test_mm_cvtt_roundsd_u64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvtt_roundss_i64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_cvtt_roundss_i64::<8>(create__m128_from([1.0, 2.0, 3.0, 4.0]));
         check_int_equality(result as i32, 1)?;
@@ -632,9 +632,9 @@ pub(super) fn test_mm_cvtt_roundss_i64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvtt_roundss_si64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_cvtt_roundss_si64::<8>(create__m128_from([1.0, 2.0, 3.0, 4.0]));
         check_int_equality(result as i32, 1)?;
@@ -655,9 +655,9 @@ pub(super) fn test_mm_cvtt_roundss_si64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvtt_roundss_u64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_cvtt_roundss_u64::<8>(create__m128_from([1.0, 2.0, 3.0, 4.0]));
         check_int_equality(result as i32, 1)?;

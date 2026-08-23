@@ -3,6 +3,7 @@ mod part2;
 
 use crate::cpu::auto_generated::x86::sse41::part1::*;
 use crate::cpu::auto_generated::x86::sse41::part2::*;
+
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct SSE41;

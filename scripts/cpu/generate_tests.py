@@ -270,6 +270,193 @@ INT_RETURNS = {
 
 
 # ---------------------------------------------------------------------------
+# Multi-scenario pilot (x86 SSE2/AVX2 arithmetic/shift/compare/blend).
+#
+# Today every function gets exactly one deterministic scenario (ascending
+# 1,2,3,4... via seq_init) and const-generic/immediate params are pinned to a
+# single fixed value (const_val, almost always 0). That means shift/compare/
+# blend intrinsics barely exercise real behavior beyond "doesn't crash", and
+# nothing checks overflow/NaN/boundary behavior. This section adds, for a
+# narrow pilot scope, several additional named scenarios per function:
+# normal-but-different-shaped inputs, boundary values (uniform-per-lane and
+# mixed-per-lane), an asymmetric MIN/MAX pair between the first two operands,
+# and immediate-value variants — as an axis independent from the value axis.
+#
+# Promoting beyond the pilot later is a one-line change: widen
+# PILOT_SOURCE_BLOCKS/PILOT_NAME_REGEX, or make in_pilot_scope always True.
+# ---------------------------------------------------------------------------
+
+PILOT_SOURCE_BLOCKS: set[tuple[str, str]] = {("x86", "sse2"), ("x86", "avx2")}
+PILOT_NAME_REGEX = re.compile(
+    r"_adds?_|_subs?_|_mul|_madd|_avg_|_sad_|_abs_|_sign_|"
+    r"_sll|_srl|_sra|_shift|_bslli|_bsrli|"
+    r"_cmp|_comi|_ucomi|_blend|_min_|_max_"
+)
+
+
+def in_pilot_scope(arch: str, ext: str, func_name: str) -> bool:
+    return (arch, ext) in PILOT_SOURCE_BLOCKS and bool(PILOT_NAME_REGEX.search(func_name))
+
+
+# Function-name suffix → actual per-lane element type. __m128i/__m256i/__m512i
+# etc. are otherwise always treated as i32/f32/f64 lanes regardless of the
+# intrinsic's real width (harmless for one ascending-sequence scenario, but
+# wrong for a boundary scenario: "all lanes = i8::MIN" built through an i32
+# view would produce a different, meaningless bit pattern).
+ELEM_SUFFIX_MAP: list[tuple[str, str]] = [
+    (r"epi8\b|_pi8\b", "i8"), (r"epu8\b|_pu8\b", "u8"),
+    (r"epi16\b|_pi16\b", "i16"), (r"epu16\b", "u16"),
+    (r"epi32\b|_pi32\b", "i32"), (r"epu32\b", "u32"),
+    (r"epi64\b", "i64"), (r"epu64\b", "u64"),
+    (r"_ps\b|_ss\b", "f32"), (r"_pd\b|_sd\b", "f64"),
+]
+_VEC_TYPE_DEFAULT_ELEM = {
+    "__m128i": "i32", "__m256i": "i32", "__m512i": "i32",
+    "__m128": "f32", "__m256": "f32", "__m512": "f32",
+    "__m128d": "f64", "__m256d": "f64", "__m512d": "f64",
+}
+
+
+def detect_elem_type(func_name: str, ptype: str) -> str:
+    """Resolve the real per-lane scalar type a vector parameter is operated on as,
+    from the intrinsic's name. Falls back to today's generic default (i32/f32/f64)
+    for names this doesn't recognize, preserving existing behavior."""
+    for pattern, elem in ELEM_SUFFIX_MAP:
+        if re.search(pattern, func_name):
+            return elem
+    return _VEC_TYPE_DEFAULT_ELEM.get(ptype, "i32")
+
+
+# (vector_type, elem_type) -> (creator_fn, creator_container_elem, unpacker_fn, lane_count)
+# `creator_container_elem` differs from `elem_type` only where values.rs has no dedicated
+# creator for that exact width/signedness (e.g. no create__m128i_from_u8_array) — in that
+# case we build the array in the nearest same-width container and reinterpret-cast each
+# literal, which is exactly what the intrinsic's own bit-reinterpretation already relies on.
+WIDTH_AWARE_VEC_INFO: dict[tuple[str, str], tuple[str, str, str, int]] = {
+    ("__m128i", "i8"):  ("create__m128i_from_i8_array",  "i8",  "unpack__m128i_to_i8_array",  16),
+    ("__m128i", "u8"):  ("create__m128i_from_i8_array",  "i8",  "unpack__m128i_to_u8_array",  16),
+    ("__m128i", "i16"): ("create__m128i_from_i16_array", "i16", "unpack__m128i_to_i16_array", 8),
+    ("__m128i", "u16"): ("create__m128i_from_u16_array", "u16", "unpack__m128i_to_u16_array", 8),
+    ("__m128i", "i32"): ("create__m128i_from_i32_array", "i32", "unpack__m128i_to_i32_array", 4),
+    ("__m128i", "u32"): ("create__m128i_from_u32_array", "u32", "unpack__m128i_to_u32_array", 4),
+    ("__m128i", "i64"): ("create__m128i_from_i64_array", "i64", "unpack__m128i_to_i64_array", 2),
+    ("__m128i", "u64"): ("create__m128i_from_i64_array", "i64", "unpack__m128i_to_u64_array", 2),
+    ("__m256i", "i8"):  ("create__m256i_from_i8_array",  "i8",  "unpack__m256i_to_i8_array",  32),
+    ("__m256i", "u8"):  ("create__m256i_from_u8_array",  "u8",  "unpack__m256i_to_u8_array",  32),
+    ("__m256i", "i16"): ("create__m256i_from_i16_array", "i16", "unpack__m256i_to_i16_array", 16),
+    ("__m256i", "u16"): ("create__m256i_from_u16_array", "u16", "unpack__m256i_to_u16_array", 16),
+    ("__m256i", "i32"): ("create__m256i_from_i32_array", "i32", "unpack__m256i_to_i32_array", 8),
+    ("__m256i", "u32"): ("create__m256i_from_u32_array", "u32", "unpack__m256i_to_u32_array", 8),
+    ("__m256i", "i64"): ("create__m256i_from",           "i64", "unpack__m256i_to_i64_array", 4),
+    ("__m256i", "u64"): ("create__m256i_from",           "i64", "unpack__m256i_to_u64_array", 4),
+    ("__m512i", "i8"):  ("create__m512i_from_i8_array",  "i8",  "unpack__m512i_to_i8_array",  64),
+    ("__m512i", "u8"):  ("create__m512i_from_u8_array",  "u8",  "unpack__m512i_to_u8_array",  64),
+    ("__m512i", "i16"): ("create__m512i_from_i16_array", "i16", "unpack__m512i_to_i16_array", 32),
+    ("__m512i", "u16"): ("create__m512i_from_u16_array", "u16", "unpack__m512i_to_u16_array", 32),
+    ("__m512i", "i32"): ("create__m512i_from_i32_array", "i32", "unpack__m512i_to_i32_array", 16),
+    ("__m512i", "u32"): ("create__m512i_from_u32_array", "u32", "unpack__m512i_to_u32_array", 16),
+    ("__m512i", "i64"): ("create__m512i_from",           "i64", "unpack__m512i_to_i64_array", 8),
+    ("__m512i", "u64"): ("create__m512i_from",           "i64", "unpack__m512i_to_u64_array", 8),
+    ("__m128",  "f32"): ("create__m128_from",  "f32", "unpack__m128_to_f32_array",  4),
+    ("__m256",  "f32"): ("create__m256_from",  "f32", "unpack__m256_to_f32_array",  8),
+    ("__m512",  "f32"): ("create__m512_from",  "f32", "unpack__m512_to_f32_array",  16),
+    ("__m128d", "f64"): ("create__m128d_from", "f64", "unpack__m128d_to_f64_array", 2),
+    ("__m256d", "f64"): ("create__m256d_from", "f64", "unpack__m256d_to_f64_array", 4),
+    ("__m512d", "f64"): ("create__m512d_from", "f64", "unpack__m512d_to_f64_array", 8),
+}
+
+
+def _typed_lit(elem: str, kind: str) -> str:
+    """A self-typed Rust literal expression of type `elem` for one of a small set of
+    semantic value 'kinds' shared by every boundary/normal scenario builder below."""
+    if elem in ("f32", "f64"):
+        return {
+            "min": f"{elem}::MIN", "max": f"{elem}::MAX", "zero": "0.0",
+            "allones": f"{elem}::NAN", "pos_inf": f"{elem}::INFINITY",
+            "neg_inf": f"{elem}::NEG_INFINITY", "neg_zero": "-0.0",
+            "denormal": f"{elem}::MIN_POSITIVE / 2.0",
+        }[kind]
+    if kind == "min":
+        return f"{elem}::MIN"
+    if kind == "max":
+        return f"{elem}::MAX"
+    if kind == "zero":
+        return "0"
+    if kind == "allones":
+        # Bit pattern of all-1s: MAX for unsigned (wraps), -1 for signed.
+        return f"{elem}::MAX" if elem.startswith("u") else "-1"
+    raise ValueError(f"unknown literal kind {kind!r}")
+
+
+def lane_lit(elem: str, container: str, kind: str) -> str:
+    """A literal of `kind` (typed as `elem`'s domain), reinterpreted into `container`'s
+    type when the creator function needs a different (but bit-compatible) container."""
+    val = _typed_lit(elem, kind)
+    if container == elem:
+        return val
+    # Bare numeric literals (e.g. "0", "-1") need an explicit type before the cast, or
+    # rustc's literal-fallback inference can try to type them directly as the (narrower)
+    # `container`, tripping the overflowing-literal lint. Already-qualified constants
+    # (e.g. "u8::MAX") are unambiguous as-is.
+    if "::" not in val and elem not in ("f32", "f64"):
+        val = f"{val}i32"
+    return f"(({val}) as {container})"
+
+
+def boundary_lane_values(elem: str, container: str, lane_count: int, kind: str) -> list[str]:
+    """5 uniform-per-lane boundary scenarios share this: every lane gets the same
+    literal, except 'mixed' which rotates a small set of interesting values."""
+    if kind != "mixed":
+        return [lane_lit(elem, container, kind)] * lane_count
+    if elem in ("f32", "f64"):
+        cycle = ["pos_inf", "neg_inf", "neg_zero", "denormal"]
+    else:
+        cycle = ["min", "max", "zero", "allones"]
+    return [lane_lit(elem, container, cycle[i % len(cycle)]) for i in range(lane_count)]
+
+
+def normal_lane_values(elem: str, container: str, lane_count: int, scenario: str, offset: int) -> list[str]:
+    """3 'normal' scenarios (non-boundary, non-graniczny), independent of the ascending
+    seq_init counter used by the base 'normal1' scenario. Values are computed and wrapped
+    to the element's representable range in Python (not via a runtime Rust `+`), so the
+    generated literals never trip Rust's compile-time overflow check on narrow int types."""
+    is_float = elem in ("f32", "f64")
+    is_unsigned = not is_float and elem.startswith("u")
+    bits = 0 if is_float else int(elem[1:])
+    vals: list[str] = []
+
+    def wrap_int(n: int) -> int:
+        if is_unsigned:
+            return n % (1 << bits)
+        lo, hi = -(1 << (bits - 1)), (1 << (bits - 1)) - 1
+        span = hi - lo + 1
+        return ((n - lo) % span) + lo
+
+    for i in range(lane_count):
+        if scenario == "normal2":
+            if is_float:
+                base = [0.0, -1.0, 2.0, -3.0, 4.0, -5.0, 6.0, -7.0]
+                vals.append(f"{base[i % len(base)] + offset}{elem}")
+            else:
+                base = [0, -1, 2, -3, 4, -5, 6, -7]
+                vals.append(str(wrap_int(base[i % len(base)] + offset)))
+        elif scenario == "normal3":
+            if is_float:
+                vals.append(f"{float((i + 1) * 100 + offset)}{elem}")
+            else:
+                vals.append(str(wrap_int((i + 1) * 100 + offset)))
+        else:
+            raise ValueError(scenario)
+    if container == elem:
+        return vals
+    # Disambiguate the bare integer literal's own type before casting (otherwise rustc's
+    # literal-fallback inference can try to type it directly as `container`, tripping the
+    # overflowing-literal lint for values outside that narrower type's range).
+    suffix = "" if is_float else "i32"
+    return [f"(({v}{suffix}) as {container})" for v in vals]
+
+
+# ---------------------------------------------------------------------------
 # Parsing
 # ---------------------------------------------------------------------------
 
@@ -421,6 +608,36 @@ def const_suffix(cg: list) -> str:
     return f"::<{', '.join(const_val(n) for n, _ in cg)}>" if cg else ""
 
 
+def immediate_catalog(func_name: str, cg_name: str, elem_type: str) -> list[tuple[str, str]]:
+    """Immediate-axis scenarios for a const-generic parameter: (suffix, literal) pairs.
+    Independent from the value axis (see gen_scenarios) — runtime args stay at 'normal1'
+    while these vary the immediate, so the two axes are additive, not multiplied."""
+    upper = cg_name.upper()
+    if upper in ("SCALE", "SAE", "ROUNDING"):
+        return []  # required literal, no interesting variation to add
+    lane_bits = {"i8": 8, "u8": 8, "i16": 16, "u16": 16,
+                 "i32": 32, "u32": 32, "i64": 64, "u64": 64}.get(elem_type, 32)
+    if re.search(r"srli|slli|srai|sll|srl|sra|bslli|bsrli", func_name):
+        w = lane_bits
+        return [("imm_0", "0"), ("imm_1", "1"), ("imm_width_m1", str(w - 1)), ("imm_width", str(w))]
+    if re.search(r"\bcmp_(ps|pd|sd|ss)", func_name):
+        return [("imm_eq", "0"), ("imm_lt", "1"), ("imm_le", "2"), ("imm_neq", "4"), ("imm_ge", "13")]
+    if re.search(r"blend", func_name):
+        # Immediates here are unsigned bitmasks checked at compile time via
+        # static_assert_uimm_bits!(NAME, N) — derive N from the const-generic's own
+        # name (IMM4 -> 4 bits, IMM8 -> 8 bits, ...) so "all bits set"/"alternating"
+        # literals never exceed the function's actual valid range.
+        bits_m = re.search(r"IMM(\d+)", upper)
+        max_bits = int(bits_m.group(1)) if bits_m else 8
+        allones = (1 << max_bits) - 1
+        alt = sum(1 << i for i in range(max_bits) if i % 2 == 0)
+        return [("imm_0", "0"), ("imm_allones", str(allones)), ("imm_alt", str(alt))]
+    # Generic fallback (shuffle/permute/insert-lane style immediates outside the
+    # pilot's regex today): stick to small non-negative literals only, since we don't
+    # know whether the target's static_assert_uimm_bits! would reject a negative value.
+    return [("imm_0", "0"), ("imm_1", "1")]
+
+
 def inner_ref_type(ptype: str) -> str | None:
     """If ptype is '&T' or '&mut T', return T. Else None."""
     pt = ptype.strip()
@@ -506,9 +723,31 @@ def _adjust_expected_for_ret(expected: str, ret: str) -> str:
     return s
 
 
-def emit_check(lines: list[str], call: str, ret: str, expected: str | None = None) -> None:
-    """Append lines that call `call` and check its result."""
-    if expected is not None:
+def emit_check(lines: list[str], call: str, ret: str, expected: str | None = None,
+               width_override: tuple[str, str, int] | None = None) -> None:
+    """Append lines that call `call` and check its result.
+
+    `width_override`, if given as (unpacker_fn, container_elem, lane_count), replaces the
+    generic UNPACK_INFO-driven unpack for a vector return — used for pilot-scope functions
+    so e.g. an `_epi8`-returning `__m128i` is unpacked per real 8-bit lane instead of the
+    generic (still bit-correct, but far less readable) 4-lane i32 view every other function
+    still uses."""
+    if width_override is not None and ret in UNPACK_INFO:
+        fn, container, size = width_override
+        is_float = container in ("f32", "f64")
+        zero = "0.0" if is_float else "0"
+        lines.append(f"        let result = {fn}({call});")
+        if expected is not None:
+            adj_expected = _adjust_expected_for_ret(expected, ret)
+            if is_float:
+                lines.append(f"        check_float_array_equality(&result, &{adj_expected})?;")
+            else:
+                lines.append(f"        check_array_equality(&result, &{adj_expected})?;")
+        elif is_float:
+            lines.append(f"        check_float_array_equality(&result, &[{zero}; {size}])?;")
+        else:
+            lines.append(f"        check_array_equality(&result, &[{zero}; {size}])?;")
+    elif expected is not None:
         # User-supplied expected value: emit check based on return type
         if ret in UNPACK_INFO:
             fn, _, _ = UNPACK_INFO[ret]
@@ -551,20 +790,33 @@ def test_name(func_name: str) -> str:
     return "test_" + func_name.lstrip("_")
 
 
-def gen_fn(sig: dict, expected_values: dict[str, str] | None = None) -> str:
+def gen_fn_body(sig: dict, expected: str | None, param_overrides: dict[str, str] | None = None,
+                 cg_override: str | None = None, elem_type: str | None = None) -> list[str]:
+    """Core per-scenario body (everything between the fn signature and its closing brace).
+    With no overrides and no `elem_type` this reproduces exactly the single deterministic
+    scenario every function got before scenario expansion existed — byte-identical output,
+    so functions outside the pilot scope are completely unaffected by this refactor.
+
+    `elem_type`, when given (pilot-scope functions only), also makes the RETURN value
+    unpack per its real lane width (e.g. `_epi8` -> 16 `i8` lanes) instead of the generic
+    4-lane `i32`/`f32`/`f64` view every function used before — the same fix in spirit as
+    the width-aware INPUT construction, so captured expected values stay readable."""
     name = sig["name"]
-    test = test_name(name)
-    expected = (expected_values or {}).get(test)
     params: list = sig["params"] or []
     ret: str = sig["return_type"] or "()"
     cg: list = sig["const_generics"]
     complete: bool = sig["is_complete"]
-    cs = const_suffix(cg)
+    cs = f"::<{cg_override}>" if cg_override is not None else const_suffix(cg)
     no_fuzz = skip_fuzz(name, params)
+    overrides = param_overrides or {}
+    width_override = None
+    if elem_type is not None:
+        entry = WIDTH_AWARE_VEC_INFO.get((ret, elem_type))
+        if entry is not None:
+            _creator, container, unpacker, lanes = entry
+            width_override = (unpacker, container, lanes)
 
-    lines = []
-
-    lines.append(f"pub(super) fn {test}() -> Result<(), String> {{")
+    lines: list[str] = []
     # Some intrinsics work on real hardware but cannot be executed under Miri (it can't
     # call the LLVM foreign function / inline asm). Skip only under Miri; still run natively.
     if name in MIRI_SKIP_FUNCTIONS:
@@ -592,37 +844,39 @@ def gen_fn(sig: dict, expected_values: dict[str, str] | None = None) -> str:
             if "*const" in ptype:
                 inner = ptype.replace("*const", "").strip()
                 array_size = 4096 if is_state_save else (64 if is_gather else ptr_array_size(inner))
-                init = seq_init(inner, ctr)
+                init = overrides[pname] if pname in overrides else seq_init(inner, ctr)
                 lines.append(f"        let ptr_{pname} = crate::cpu::common::Aligned64([{init}; {array_size}]);")
                 call_args.append(f"ptr_{pname}.0.as_ptr()")
             elif "*mut" in ptype:
                 inner = ptype.replace("*mut", "").strip()
                 array_size = 4096 if is_state_save else (64 if is_gather else ptr_array_size(inner))
-                init = seq_init(inner, ctr)
+                init = overrides[pname] if pname in overrides else seq_init(inner, ctr)
                 lines.append(f"        let mut ptr_{pname} = crate::cpu::common::Aligned64([{init}; {array_size}]);")
                 call_args.append(f"ptr_{pname}.0.as_mut_ptr()")
             elif ref_inner is not None:
                 # &T or &mut T — create a local variable
-                init = seq_init(ref_inner, ctr)
+                init = overrides[pname] if pname in overrides else seq_init(ref_inner, ctr)
                 is_mut = ptype.strip().startswith("&mut")
                 mut_kw = "mut " if is_mut else ""
                 lines.append(f"        let {mut_kw}ref_{pname} = {init};")
                 ref_kw = "&mut " if is_mut else "&"
                 call_args.append(f"{ref_kw}ref_{pname}")
             else:
-                # Gather/scatter: zeroed SIMD for index/offset params (all read from base+0)
-                if is_gather:
+                if pname in overrides:
+                    init = overrides[pname]
+                elif is_gather:
+                    # Gather/scatter: zeroed SIMD for index/offset params (all read from base+0)
                     init = ZERO_SIMD_INITS.get(ptype, FIXED_INITS.get(ptype, f"0 /* {ptype} */"))
                 else:
                     init = seq_init(ptype, ctr)
                 lines.append(f"        let {pname} = {init};")
                 call_args.append(pname)
         call = f"{name}{cs}({', '.join(call_args)})"
-        emit_check(lines, call, ret, expected)
+        emit_check(lines, call, ret, expected, width_override)
     else:
-        call_args = [seq_init(pt, ctr) for _, pt in params]
+        call_args = [overrides[pname] if pname in overrides else seq_init(pt, ctr) for pname, pt in params]
         call = f"{name}{cs}({', '.join(call_args)})"
-        emit_check(lines, call, ret, expected)
+        emit_check(lines, call, ret, expected, width_override)
 
     # Fuzzing block (still inside the single unsafe {})
     if not no_fuzz and complete:
@@ -646,8 +900,127 @@ def gen_fn(sig: dict, expected_values: dict[str, str] | None = None) -> str:
         lines.append("            }")
         lines.append("        }")
 
-    lines += ["    }", "    Ok(())", "}"]
+    lines.append("    }")
+    return lines
+
+
+def gen_fn(sig: dict, expected_values: dict[str, str] | None = None) -> str:
+    test = test_name(sig["name"])
+    expected = (expected_values or {}).get(test)
+    lines = [f"pub(super) fn {test}() -> Result<(), String> {{"]
+    lines += gen_fn_body(sig, expected)
+    lines += ["    Ok(())", "}"]
     return "\n".join(lines)
+
+
+# Vector types with a WIDTH_AWARE_VEC_INFO entry (any element type) — used to find the
+# value-axis-eligible parameters of a pilot-scope function.
+_WIDTHED_VEC_TYPES = {"__m128i", "__m256i", "__m512i", "__m128", "__m256", "__m512", "__m128d", "__m256d", "__m512d"}
+
+
+def _value_params(sig: dict) -> list[tuple[int, str, str]]:
+    """(index, name, type) of non-pointer/non-reference parameters, in declaration order."""
+    params = sig["params"] or []
+    return [(i, pname, ptype.strip()) for i, (pname, ptype) in enumerate(params)
+            if "*" not in ptype and not ptype.strip().startswith("&")]
+
+
+def sig_elem_type(sig: dict) -> str:
+    """The per-lane element type used consistently across EVERY scenario (including
+    normal1) of a pilot-scope function — detected from its first vector value-parameter,
+    or its return type for functions that take no vector param (e.g. pure predicates)."""
+    widthed = [(i, pname, ptype) for i, pname, ptype in _value_params(sig) if ptype in _WIDTHED_VEC_TYPES]
+    if widthed:
+        return detect_elem_type(sig["name"], widthed[0][2])
+    ret = (sig["return_type"] or "()").strip()
+    if ret in _VEC_TYPE_DEFAULT_ELEM:
+        return detect_elem_type(sig["name"], ret)
+    return "i32"
+
+
+def _build_value_scenarios(sig: dict) -> list[tuple[str, dict[str, str]]]:
+    """(suffix, param_overrides) pairs for the value axis: 2 extra 'normal' scenarios,
+    5 uniform/mixed boundary scenarios, and (for 2+ value params) 2 asymmetric MIN/MAX
+    pairs between the first two value params. 'normal1' itself is the no-override base
+    scenario and is not produced here."""
+    widthed = [(i, pname, ptype) for i, pname, ptype in _value_params(sig) if ptype in _WIDTHED_VEC_TYPES]
+    if not widthed:
+        return []
+
+    elem = sig_elem_type(sig)
+    scenarios: list[tuple[str, dict[str, str]]] = []
+
+    def overrides_for(lane_fn) -> dict[str, str]:
+        ov = {}
+        for pos, (_idx, pname, ptype) in enumerate(widthed):
+            creator, container, _unpacker, lanes = WIDTH_AWARE_VEC_INFO[(ptype, elem)]
+            ov[pname] = f"{creator}([{', '.join(lane_fn(pos, lanes, container))}])"
+        return ov
+
+    scenarios.append(("normal2", overrides_for(lambda pos, lanes, container: normal_lane_values(elem, container, lanes, "normal2", pos * 10))))
+    scenarios.append(("normal3", overrides_for(lambda pos, lanes, container: normal_lane_values(elem, container, lanes, "normal3", pos * 10))))
+    for kind, suffix in (("min", "boundary_min"), ("max", "boundary_max"), ("zero", "boundary_zero"),
+                         ("allones", "boundary_allones"), ("mixed", "boundary_mixed")):
+        scenarios.append((suffix, overrides_for(lambda pos, lanes, container, kind=kind: boundary_lane_values(elem, container, lanes, kind))))
+
+    if len(widthed) >= 2:
+        _idx0, pname0, ptype0 = widthed[0]
+        _idx1, pname1, ptype1 = widthed[1]
+        creator0, container0, _u0, lanes0 = WIDTH_AWARE_VEC_INFO[(ptype0, elem)]
+        creator1, container1, _u1, lanes1 = WIDTH_AWARE_VEC_INFO[(ptype1, elem)]
+        for suffix, (kind0, kind1) in (("asym_min_max", ("min", "max")), ("asym_max_min", ("max", "min"))):
+            ov = {
+                pname0: f"{creator0}([{', '.join(boundary_lane_values(elem, container0, lanes0, kind0))}])",
+                pname1: f"{creator1}([{', '.join(boundary_lane_values(elem, container1, lanes1, kind1))}])",
+            }
+            scenarios.append((suffix, ov))
+    return scenarios
+
+
+def _build_immediate_scenarios(sig: dict) -> list[tuple[str, str]]:
+    """(suffix, literal) pairs for the immediate axis. Runtime values stay at 'normal1'
+    (empty param_overrides) here — this axis is additive with the value axis, not a
+    cartesian product with it (see expand_scenarios)."""
+    cg: list = sig["const_generics"]
+    if len(cg) != 1:
+        # Pilot-scope functions have at most one const generic; multi-cg functions
+        # (none in scope today) keep their single default-pinned scenario only.
+        return []
+    cg_name, _cg_type = cg[0]
+    return immediate_catalog(sig["name"], cg_name, sig_elem_type(sig))
+
+
+def expand_scenarios(sig: dict) -> list[tuple[str, dict[str, str], str | None]]:
+    """All scenarios for a pilot-scope function as (suffix, param_overrides, cg_override).
+    'normal1' (suffix='', no overrides) is always first, so it renders under exactly
+    today's function name."""
+    scenarios: list[tuple[str, dict[str, str], str | None]] = [("", {}, None)]
+    for suffix, overrides in _build_value_scenarios(sig):
+        scenarios.append((suffix, overrides, None))
+    for suffix, literal in _build_immediate_scenarios(sig):
+        scenarios.append((suffix, {}, literal))
+    return scenarios
+
+
+def list_scenario_names(sig: dict) -> list[str]:
+    base = test_name(sig["name"])
+    return [base + (f"_{suffix}" if suffix else "") for suffix, _, _ in expand_scenarios(sig)]
+
+
+def gen_scenarios(sig: dict, expected_values: dict[str, str] | None = None) -> str:
+    """Source for every scenario function of one pilot-scope base signature, joined the
+    same way multiple gen_fn() outputs are joined by gen_part."""
+    base = test_name(sig["name"])
+    elem = sig_elem_type(sig)
+    bodies = []
+    for suffix, overrides, cg_override in expand_scenarios(sig):
+        tname = base + (f"_{suffix}" if suffix else "")
+        expected = (expected_values or {}).get(tname)
+        lines = [f"pub(super) fn {tname}() -> Result<(), String> {{"]
+        lines += gen_fn_body(sig, expected, overrides or None, cg_override, elem)
+        lines += ["    Ok(())", "}"]
+        bodies.append("\n".join(lines))
+    return "\n\n".join(bodies)
 
 
 def get_arch_import(arch: str) -> str:
@@ -710,7 +1083,10 @@ def gen_part(funcs: list[dict], arch: str, ext: str, expected_values: dict[str, 
         "use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};",
         "",
     ]
-    bodies = [gen_fn(sig, expected_values) for sig in funcs]
+    bodies = [
+        gen_scenarios(sig, expected_values) if in_pilot_scope(arch, ext, sig["name"]) else gen_fn(sig, expected_values)
+        for sig in funcs
+    ]
     return "\n".join(header) + "\n" + "\n\n".join(bodies) + "\n"
 
 
@@ -737,8 +1113,12 @@ def gen_ext_rs(arch: str, ext: str, funcs: list[dict], n_parts: int) -> str:
         "        &[",
     ]
     for sig in funcs:
-        tname = test_name(sig["name"])
-        lines.append(f"            (&{tname}, \"{tname}\"),")
+        if in_pilot_scope(arch, ext, sig["name"]):
+            for tname in list_scenario_names(sig):
+                lines.append(f"            (&{tname}, \"{tname}\"),")
+        else:
+            tname = test_name(sig["name"])
+            lines.append(f"            (&{tname}, \"{tname}\"),")
     lines += ["        ]", "    }", "}"]
     return "\n".join(lines) + "\n"
 
@@ -1006,11 +1386,13 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
         "    functions",
         "}",
         "",
-        "/// Flat list of (test_name, test_fn) for every feature detected at runtime on this",
-        "/// machine, in the canonical execution order. Used by the isolated subprocess runner",
-        "/// so a crashing/hanging test can be attributed and skipped instead of aborting the run.",
-        "pub fn all_tests() -> Vec<(&'static str, &'static TestFunction)> {",
-        "    let mut tests: Vec<(&'static str, &'static TestFunction)> = Vec::new();",
+        "/// Flat list of (test_name, feature, test_fn) for every feature detected at runtime",
+        "/// on this machine, in the canonical execution order. Used by the isolated subprocess",
+        "/// runner (so a crashing/hanging test can be attributed and skipped instead of",
+        "/// aborting the run) and by the stress runner. `feature` is the extension name (e.g.",
+        "/// \"sse2\", \"avx2\") a caller can filter on without re-detecting it per test.",
+        "pub fn all_tests() -> Vec<(&'static str, &'static str, &'static TestFunction)> {",
+        "    let mut tests: Vec<(&'static str, &'static str, &'static TestFunction)> = Vec::new();",
         "",
     ]
 
@@ -1033,7 +1415,7 @@ def gen_registry_rs(all_data: dict[str, dict[str, list[dict]]]) -> str:
             detect_fn = get_feature_detect_fn(arch, feature)
             lines.append(f"        if {detect_fn} {{")
             lines.append(f"            for &(f, n) in crate::cpu::auto_generated::{arch}::{ext}::{struct}::get_tests() {{")
-            lines.append("                tests.push((n, f));")
+            lines.append(f"                tests.push((n, \"{ext}\", f));")
             lines.append("            }")
             lines.append("        }")
             lines.append("")

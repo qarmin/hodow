@@ -9,9 +9,9 @@ use crate::cpu::common::x86::*;
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
 pub(super) fn test_mm_loadu_si16() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
         let result = unpack__m128i_to_i32_array(_mm_loadu_si16(ptr_mem_addr.0.as_ptr()));
@@ -21,9 +21,9 @@ pub(super) fn test_mm_loadu_si16() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_loadu_si32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
         let result = unpack__m128i_to_i32_array(_mm_loadu_si32(ptr_mem_addr.0.as_ptr()));
@@ -33,9 +33,9 @@ pub(super) fn test_mm_loadu_si32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_loadu_si64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 64]);
         let result = unpack__m128i_to_i32_array(_mm_loadu_si64(ptr_mem_addr.0.as_ptr()));

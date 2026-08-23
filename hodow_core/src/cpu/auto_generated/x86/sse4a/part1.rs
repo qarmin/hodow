@@ -9,9 +9,9 @@ use crate::cpu::common::x86::*;
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
 pub(super) fn test_mm_extract_si64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_extract_si64(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[1, 0, 0, 0])?;
@@ -32,9 +32,9 @@ pub(super) fn test_mm_extract_si64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_extracti_si64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_extracti_si64::<0, 0>(create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[1, 2, 3, 4])?;
@@ -55,9 +55,9 @@ pub(super) fn test_mm_extracti_si64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_insert_si64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_insert_si64(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[5, 2, 0, 0])?;
@@ -78,14 +78,11 @@ pub(super) fn test_mm_insert_si64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_inserti_si64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_inserti_si64::<0, 0>(
-            create__m128i_from_i32_array([1, 2, 3, 4]),
-            create__m128i_from_i32_array([5, 6, 7, 8]),
-        ));
+        let result = unpack__m128i_to_i32_array(_mm_inserti_si64::<0, 0>(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[5, 6, 7, 8])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -104,9 +101,9 @@ pub(super) fn test_mm_inserti_si64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_stream_sd() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_p = crate::cpu::common::Aligned64([1.0f64; 8]);
         let a = create__m128d_from([2.0, 3.0]);
@@ -116,9 +113,9 @@ pub(super) fn test_mm_stream_sd() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_stream_ss() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_p = crate::cpu::common::Aligned64([1.0f32; 16]);
         let a = create__m128_from([2.0, 3.0, 4.0, 5.0]);

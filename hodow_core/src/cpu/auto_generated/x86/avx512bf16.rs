@@ -1,6 +1,7 @@
 mod part1;
 
 use crate::cpu::auto_generated::x86::avx512bf16::part1::*;
+
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct AVX512BF16;

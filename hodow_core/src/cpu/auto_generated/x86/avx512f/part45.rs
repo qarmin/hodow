@@ -9,9 +9,9 @@ use crate::cpu::common::x86::*;
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
 pub(super) fn test_mm_mask_cvtepi64_storeu_epi16() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -22,9 +22,9 @@ pub(super) fn test_mm_mask_cvtepi64_storeu_epi16() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cvtsepi64_storeu_epi16() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -35,9 +35,9 @@ pub(super) fn test_mm512_mask_cvtsepi64_storeu_epi16() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mask_cvtsepi64_storeu_epi16() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -48,9 +48,9 @@ pub(super) fn test_mm256_mask_cvtsepi64_storeu_epi16() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_mask_cvtsepi64_storeu_epi16() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -61,9 +61,9 @@ pub(super) fn test_mm_mask_cvtsepi64_storeu_epi16() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cvtusepi64_storeu_epi16() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -74,9 +74,9 @@ pub(super) fn test_mm512_mask_cvtusepi64_storeu_epi16() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mask_cvtusepi64_storeu_epi16() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -87,9 +87,9 @@ pub(super) fn test_mm256_mask_cvtusepi64_storeu_epi16() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_mask_cvtusepi64_storeu_epi16() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i16; 32]);
         let k = create__mmask8_from(0b01010101);
@@ -100,9 +100,9 @@ pub(super) fn test_mm_mask_cvtusepi64_storeu_epi16() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cvtepi64_storeu_epi8() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -113,9 +113,9 @@ pub(super) fn test_mm512_mask_cvtepi64_storeu_epi8() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mask_cvtepi64_storeu_epi8() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -126,9 +126,9 @@ pub(super) fn test_mm256_mask_cvtepi64_storeu_epi8() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_mask_cvtepi64_storeu_epi8() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -139,9 +139,9 @@ pub(super) fn test_mm_mask_cvtepi64_storeu_epi8() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cvtsepi64_storeu_epi8() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -152,9 +152,9 @@ pub(super) fn test_mm512_mask_cvtsepi64_storeu_epi8() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mask_cvtsepi64_storeu_epi8() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -165,9 +165,9 @@ pub(super) fn test_mm256_mask_cvtsepi64_storeu_epi8() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_mask_cvtsepi64_storeu_epi8() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -178,9 +178,9 @@ pub(super) fn test_mm_mask_cvtsepi64_storeu_epi8() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cvtusepi64_storeu_epi8() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -191,9 +191,9 @@ pub(super) fn test_mm512_mask_cvtusepi64_storeu_epi8() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mask_cvtusepi64_storeu_epi8() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -204,9 +204,9 @@ pub(super) fn test_mm256_mask_cvtusepi64_storeu_epi8() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_mask_cvtusepi64_storeu_epi8() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i8; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -217,9 +217,9 @@ pub(super) fn test_mm_mask_cvtusepi64_storeu_epi8() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cvtepi64_storeu_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -230,9 +230,9 @@ pub(super) fn test_mm512_mask_cvtepi64_storeu_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mask_cvtepi64_storeu_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -243,9 +243,9 @@ pub(super) fn test_mm256_mask_cvtepi64_storeu_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_mask_cvtepi64_storeu_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -256,9 +256,9 @@ pub(super) fn test_mm_mask_cvtepi64_storeu_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cvtsepi64_storeu_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -269,9 +269,9 @@ pub(super) fn test_mm512_mask_cvtsepi64_storeu_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mask_cvtsepi64_storeu_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -282,9 +282,9 @@ pub(super) fn test_mm256_mask_cvtsepi64_storeu_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_mask_cvtsepi64_storeu_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -295,9 +295,9 @@ pub(super) fn test_mm_mask_cvtsepi64_storeu_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cvtusepi64_storeu_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -308,9 +308,9 @@ pub(super) fn test_mm512_mask_cvtusepi64_storeu_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mask_cvtusepi64_storeu_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -321,9 +321,9 @@ pub(super) fn test_mm256_mask_cvtusepi64_storeu_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_mask_cvtusepi64_storeu_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let k = create__mmask8_from(0b01010101);
@@ -334,9 +334,9 @@ pub(super) fn test_mm_mask_cvtusepi64_storeu_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_storeu_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let a = create__m512i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
@@ -346,9 +346,9 @@ pub(super) fn test_mm512_storeu_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_storeu_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let a = create__m256i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9]);
@@ -358,9 +358,9 @@ pub(super) fn test_mm256_storeu_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_storeu_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let a = create__m128i_from_i32_array([2, 3, 4, 5]);
@@ -370,9 +370,9 @@ pub(super) fn test_mm_storeu_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_loadu_epi64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
         let result = unpack__m512i_to_i32_array(_mm512_loadu_epi64(ptr_mem_addr.0.as_ptr()));
@@ -382,9 +382,9 @@ pub(super) fn test_mm512_loadu_epi64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_loadu_epi64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
         let result = unpack__m256i_to_i32_array(_mm256_loadu_epi64(ptr_mem_addr.0.as_ptr()));
@@ -394,9 +394,9 @@ pub(super) fn test_mm256_loadu_epi64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_loadu_epi64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
         let result = unpack__m128i_to_i32_array(_mm_loadu_epi64(ptr_mem_addr.0.as_ptr()));
@@ -406,9 +406,9 @@ pub(super) fn test_mm_loadu_epi64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_storeu_epi64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
         let a = create__m512i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
@@ -418,9 +418,9 @@ pub(super) fn test_mm512_storeu_epi64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_storeu_epi64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
         let a = create__m256i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9]);
@@ -430,9 +430,9 @@ pub(super) fn test_mm256_storeu_epi64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_storeu_epi64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
         let a = create__m128i_from_i32_array([2, 3, 4, 5]);
@@ -460,9 +460,9 @@ pub(super) fn test_mm512_storeu_si512() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_loadu_pd() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
         let result = unpack__m512d_to_f64_array(_mm512_loadu_pd(ptr_mem_addr.0.as_ptr()));
@@ -472,9 +472,9 @@ pub(super) fn test_mm512_loadu_pd() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_storeu_pd() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
         let a = create__m512d_from([2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0]);
@@ -484,9 +484,9 @@ pub(super) fn test_mm512_storeu_pd() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_loadu_ps() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
         let result = unpack__m512_to_f32_array(_mm512_loadu_ps(ptr_mem_addr.0.as_ptr()));
@@ -496,9 +496,9 @@ pub(super) fn test_mm512_loadu_ps() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_storeu_ps() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
         let a = create__m512_from([2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0]);
@@ -526,9 +526,9 @@ pub(super) fn test_mm512_store_si512() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_load_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let result = unpack__m512i_to_i32_array(_mm512_load_epi32(ptr_mem_addr.0.as_ptr()));
@@ -538,9 +538,9 @@ pub(super) fn test_mm512_load_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_load_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let result = unpack__m256i_to_i32_array(_mm256_load_epi32(ptr_mem_addr.0.as_ptr()));
@@ -550,9 +550,9 @@ pub(super) fn test_mm256_load_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_load_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let result = unpack__m128i_to_i32_array(_mm_load_epi32(ptr_mem_addr.0.as_ptr()));
@@ -562,9 +562,9 @@ pub(super) fn test_mm_load_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_store_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let a = create__m512i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]);
@@ -574,9 +574,9 @@ pub(super) fn test_mm512_store_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_store_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let a = create__m256i_from_i32_array([2, 3, 4, 5, 6, 7, 8, 9]);
@@ -586,9 +586,9 @@ pub(super) fn test_mm256_store_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_store_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let a = create__m128i_from_i32_array([2, 3, 4, 5]);
@@ -598,9 +598,9 @@ pub(super) fn test_mm_store_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_load_epi64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
         let result = unpack__m512i_to_i32_array(_mm512_load_epi64(ptr_mem_addr.0.as_ptr()));
@@ -610,9 +610,9 @@ pub(super) fn test_mm512_load_epi64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_load_epi64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
         let result = unpack__m256i_to_i32_array(_mm256_load_epi64(ptr_mem_addr.0.as_ptr()));

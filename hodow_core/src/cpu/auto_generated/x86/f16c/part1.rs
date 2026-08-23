@@ -49,9 +49,9 @@ pub(super) fn test_mm256_cvtph_ps() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvtps_ph() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_cvtps_ph::<0>(create__m128_from([1.0, 2.0, 3.0, 4.0])));
         check_array_equality(&result, &[1073757184, 1140867584, 0, 0])?;
@@ -72,9 +72,9 @@ pub(super) fn test_mm_cvtps_ph() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_cvtps_ph() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm256_cvtps_ph::<0>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
         check_array_equality(&result, &[1073757184, 1140867584, 1174422784, 1207977728])?;

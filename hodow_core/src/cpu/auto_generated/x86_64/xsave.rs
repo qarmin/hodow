@@ -1,6 +1,7 @@
 mod part1;
 
 use crate::cpu::auto_generated::x86_64::xsave::part1::*;
+
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct XSAVE;
@@ -11,6 +12,10 @@ impl ExtensionTest for XSAVE {
     }
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
-        &[(&test_xsave64, "test_xsave64"), (&test_xsaveopt64, "test_xsaveopt64"), (&test_xsavec64, "test_xsavec64")]
+        &[
+            (&test_xsave64, "test_xsave64"),
+            (&test_xsaveopt64, "test_xsaveopt64"),
+            (&test_xsavec64, "test_xsavec64"),
+        ]
     }
 }

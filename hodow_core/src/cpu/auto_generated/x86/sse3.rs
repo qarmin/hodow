@@ -1,6 +1,7 @@
 mod part1;
 
 use crate::cpu::auto_generated::x86::sse3::part1::*;
+
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct SSE3;

@@ -1,3 +1,5 @@
+
+
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct PACKED;
@@ -8,6 +10,7 @@ impl ExtensionTest for PACKED {
     }
 
     fn get_tests() -> &'static [(&'static TestFunction, &'static str)] {
-        &[]
+        &[
+        ]
     }
 }

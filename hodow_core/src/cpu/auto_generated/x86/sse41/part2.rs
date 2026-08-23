@@ -30,10 +30,7 @@ pub(super) fn test_mm_mullo_epi32() -> Result<(), String> {
 
 pub(super) fn test_mm_mpsadbw_epu8() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_mpsadbw_epu8::<0>(
-            create__m128i_from_i32_array([1, 2, 3, 4]),
-            create__m128i_from_i32_array([5, 6, 7, 8]),
-        ));
+        let result = unpack__m128i_to_i32_array(_mm_mpsadbw_epu8::<0>(create__m128i_from_i32_array([1, 2, 3, 4]), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[458756, 458759, 524291, 524296])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -172,9 +169,9 @@ pub(super) fn test_mm_test_mix_ones_zeros() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_stream_load_si128() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let ptr_mem_addr = crate::cpu::common::Aligned64([create__m128i_from_i32_array([1, 2, 3, 4]); 4]);
         let result = unpack__m128i_to_i32_array(_mm_stream_load_si128(ptr_mem_addr.0.as_ptr()));

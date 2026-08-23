@@ -5,6 +5,7 @@ mod part3;
 use crate::cpu::auto_generated::x86::avx512vbmi2::part1::*;
 use crate::cpu::auto_generated::x86::avx512vbmi2::part2::*;
 use crate::cpu::auto_generated::x86::avx512vbmi2::part3::*;
+
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct AVX512VBMI2;

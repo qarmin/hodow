@@ -10,12 +10,7 @@ use crate::cpu::common::{check_array_equality, check_float_array_equality, check
 
 pub(super) fn test_mm_loadiwkey() -> Result<(), String> {
     unsafe {
-        _mm_loadiwkey(
-            1u32,
-            create__m128i_from_i32_array([2, 3, 4, 5]),
-            create__m128i_from_i32_array([6, 7, 8, 9]),
-            create__m128i_from_i32_array([10, 11, 12, 13]),
-        );
+        _mm_loadiwkey(1u32, create__m128i_from_i32_array([2, 3, 4, 5]), create__m128i_from_i32_array([6, 7, 8, 9]), create__m128i_from_i32_array([10, 11, 12, 13]));
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {

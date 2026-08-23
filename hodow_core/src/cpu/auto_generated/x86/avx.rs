@@ -7,6 +7,7 @@ use crate::cpu::auto_generated::x86::avx::part1::*;
 use crate::cpu::auto_generated::x86::avx::part2::*;
 use crate::cpu::auto_generated::x86::avx::part3::*;
 use crate::cpu::auto_generated::x86::avx::part4::*;
+
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct AVX;

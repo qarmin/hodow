@@ -18,6 +18,7 @@ pub struct Aligned64<T>(pub T);
 pub trait FloatLike: PartialEq + Debug + std::ops::Sub<Output = Self> + PartialOrd + Copy {
     fn is_infinite(self) -> bool;
     fn is_nan(self) -> bool;
+    fn is_sign_positive(self) -> bool;
     fn abs(self) -> Self;
     fn from_f64(f: f64) -> Self;
 }
@@ -28,6 +29,9 @@ impl FloatLike for f32 {
     }
     fn is_nan(self) -> bool {
         f32::is_nan(self)
+    }
+    fn is_sign_positive(self) -> bool {
+        f32::is_sign_positive(self)
     }
     fn abs(self) -> Self {
         f32::abs(self)
@@ -43,6 +47,9 @@ impl FloatLike for f64 {
     }
     fn is_nan(self) -> bool {
         f64::is_nan(self)
+    }
+    fn is_sign_positive(self) -> bool {
+        f64::is_sign_positive(self)
     }
     fn abs(self) -> Self {
         f64::abs(self)
@@ -67,6 +74,8 @@ pub fn check_float_array_equality<T: FloatLike + Debug>(a: &[T], b: &[T]) -> Res
             return Err(format!("Got {a:?}, expected {b:?} (One is NaN, other is not)"));
         } else if a[i].is_infinite() != b[i].is_infinite() {
             return Err(format!("Got {a:?}, expected {b:?} (One is infinite, other is not)"));
+        } else if a[i].is_infinite() && b[i].is_infinite() && a[i].is_sign_positive() != b[i].is_sign_positive() {
+            return Err(format!("Got {a:?}, expected {b:?} (Infinite but signs differ)"));
         } else if !a[i].is_nan() && (a[i] - b[i]).abs() > eps {
             return Err(format!("Got {a:?}, expected {b:?} (Difference is too big)"));
         }

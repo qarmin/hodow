@@ -9,9 +9,9 @@ use crate::cpu::common::x86::*;
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
 pub(super) fn test_xsave() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 4096]);
         let save_mask = 2u64;
@@ -21,9 +21,9 @@ pub(super) fn test_xsave() -> Result<(), String> {
 }
 
 pub(super) fn test_xgetbv() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = _xgetbv(1u32);
         check_int_equality(result as i32, 674)?;
@@ -44,9 +44,9 @@ pub(super) fn test_xgetbv() -> Result<(), String> {
 }
 
 pub(super) fn test_xsaveopt() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 4096]);
         let save_mask = 2u64;
@@ -56,9 +56,9 @@ pub(super) fn test_xsaveopt() -> Result<(), String> {
 }
 
 pub(super) fn test_xsavec() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1u8; 4096]);
         let save_mask = 2u64;

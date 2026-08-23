@@ -609,9 +609,9 @@ pub(super) fn test_mm256_setr_m128i() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_loadu2_m128() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let ptr_hiaddr = crate::cpu::common::Aligned64([1.0f32; 16]);
         let ptr_loaddr = crate::cpu::common::Aligned64([2.0f32; 16]);
@@ -622,9 +622,9 @@ pub(super) fn test_mm256_loadu2_m128() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_loadu2_m128d() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let ptr_hiaddr = crate::cpu::common::Aligned64([1.0f64; 8]);
         let ptr_loaddr = crate::cpu::common::Aligned64([2.0f64; 8]);
@@ -645,9 +645,9 @@ pub(super) fn test_mm256_loadu2_m128i() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_storeu2_m128() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_hiaddr = crate::cpu::common::Aligned64([1.0f32; 16]);
         let mut ptr_loaddr = crate::cpu::common::Aligned64([2.0f32; 16]);
@@ -658,9 +658,9 @@ pub(super) fn test_mm256_storeu2_m128() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_storeu2_m128d() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_hiaddr = crate::cpu::common::Aligned64([1.0f64; 8]);
         let mut ptr_loaddr = crate::cpu::common::Aligned64([2.0f64; 8]);

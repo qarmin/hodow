@@ -9,6 +9,7 @@ use crate::cpu::auto_generated::wasm32::simd128::part2::*;
 use crate::cpu::auto_generated::wasm32::simd128::part3::*;
 use crate::cpu::auto_generated::wasm32::simd128::part4::*;
 use crate::cpu::auto_generated::wasm32::simd128::part5::*;
+
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct SIMD128;

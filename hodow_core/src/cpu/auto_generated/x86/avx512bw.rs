@@ -1,12 +1,4 @@
 mod part1;
-mod part10;
-mod part11;
-mod part12;
-mod part13;
-mod part14;
-mod part15;
-mod part16;
-mod part17;
 mod part2;
 mod part3;
 mod part4;
@@ -15,6 +7,14 @@ mod part6;
 mod part7;
 mod part8;
 mod part9;
+mod part10;
+mod part11;
+mod part12;
+mod part13;
+mod part14;
+mod part15;
+mod part16;
+mod part17;
 
 use crate::cpu::auto_generated::x86::avx512bw::part1::*;
 use crate::cpu::auto_generated::x86::avx512bw::part2::*;
@@ -33,6 +33,7 @@ use crate::cpu::auto_generated::x86::avx512bw::part14::*;
 use crate::cpu::auto_generated::x86::avx512bw::part15::*;
 use crate::cpu::auto_generated::x86::avx512bw::part16::*;
 use crate::cpu::auto_generated::x86::avx512bw::part17::*;
+
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct AVX512BW;

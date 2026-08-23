@@ -1,6 +1,7 @@
 mod part1;
 
 use crate::cpu::auto_generated::riscv_shared::zb::part1::*;
+
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct ZB;

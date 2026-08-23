@@ -343,11 +343,7 @@ pub(super) fn test_mm512_cvtepi16_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm512_mask_cvtepi16_epi8() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm512_mask_cvtepi16_epi8(
-            create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]),
-            create__mmask32_from(0x55555555u32),
-            create__m512i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]),
-        ));
+        let result = unpack__m256i_to_i32_array(_mm512_mask_cvtepi16_epi8(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask32_from(0x55555555u32), create__m512i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24])));
         check_array_equality(&result, &[655369, 786443, 917517, 1048591, 1179665, 1310739, 1441813, 1572887])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -367,10 +363,7 @@ pub(super) fn test_mm512_mask_cvtepi16_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm512_maskz_cvtepi16_epi8() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm512_maskz_cvtepi16_epi8(
-            create__mmask32_from(0x55555555u32),
-            create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]),
-        ));
+        let result = unpack__m256i_to_i32_array(_mm512_maskz_cvtepi16_epi8(create__mmask32_from(0x55555555u32), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[131073, 262147, 393221, 524295, 655369, 786443, 917517, 1048591])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -410,11 +403,7 @@ pub(super) fn test_mm256_cvtepi16_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm256_mask_cvtepi16_epi8() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm256_mask_cvtepi16_epi8(
-            create__m128i_from_i32_array([1, 2, 3, 4]),
-            create__mmask16_from(0b0101010101010101),
-            create__m256i_from_i32_array([5, 6, 7, 8, 9, 10, 11, 12]),
-        ));
+        let result = unpack__m128i_to_i32_array(_mm256_mask_cvtepi16_epi8(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([5, 6, 7, 8, 9, 10, 11, 12])));
         check_array_equality(&result, &[393221, 524295, 655369, 786443])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -434,10 +423,7 @@ pub(super) fn test_mm256_mask_cvtepi16_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm256_maskz_cvtepi16_epi8() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm256_maskz_cvtepi16_epi8(
-            create__mmask16_from(0b0101010101010101),
-            create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]),
-        ));
+        let result = unpack__m128i_to_i32_array(_mm256_maskz_cvtepi16_epi8(create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
         check_array_equality(&result, &[131073, 262147, 393221, 524295])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -477,11 +463,7 @@ pub(super) fn test_mm_cvtepi16_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_cvtepi16_epi8() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_mask_cvtepi16_epi8(
-            create__m128i_from_i32_array([1, 2, 3, 4]),
-            create__mmask8_from(0b01010101),
-            create__m128i_from_i32_array([5, 6, 7, 8]),
-        ));
+        let result = unpack__m128i_to_i32_array(_mm_mask_cvtepi16_epi8(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[393221, 524295, 0, 0])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -541,11 +523,7 @@ pub(super) fn test_mm512_cvtsepi16_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm512_mask_cvtsepi16_epi8() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm512_mask_cvtsepi16_epi8(
-            create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]),
-            create__mmask32_from(0x55555555u32),
-            create__m512i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]),
-        ));
+        let result = unpack__m256i_to_i32_array(_mm512_mask_cvtsepi16_epi8(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask32_from(0x55555555u32), create__m512i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24])));
         check_array_equality(&result, &[655369, 786443, 917517, 1048591, 1179665, 1310739, 1441813, 1572887])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -565,10 +543,7 @@ pub(super) fn test_mm512_mask_cvtsepi16_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm512_maskz_cvtsepi16_epi8() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm512_maskz_cvtsepi16_epi8(
-            create__mmask32_from(0x55555555u32),
-            create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]),
-        ));
+        let result = unpack__m256i_to_i32_array(_mm512_maskz_cvtsepi16_epi8(create__mmask32_from(0x55555555u32), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[131073, 262147, 393221, 524295, 655369, 786443, 917517, 1048591])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -608,11 +583,7 @@ pub(super) fn test_mm256_cvtsepi16_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm256_mask_cvtsepi16_epi8() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm256_mask_cvtsepi16_epi8(
-            create__m128i_from_i32_array([1, 2, 3, 4]),
-            create__mmask16_from(0b0101010101010101),
-            create__m256i_from_i32_array([5, 6, 7, 8, 9, 10, 11, 12]),
-        ));
+        let result = unpack__m128i_to_i32_array(_mm256_mask_cvtsepi16_epi8(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([5, 6, 7, 8, 9, 10, 11, 12])));
         check_array_equality(&result, &[393221, 524295, 655369, 786443])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -632,10 +603,7 @@ pub(super) fn test_mm256_mask_cvtsepi16_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm256_maskz_cvtsepi16_epi8() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm256_maskz_cvtsepi16_epi8(
-            create__mmask16_from(0b0101010101010101),
-            create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]),
-        ));
+        let result = unpack__m128i_to_i32_array(_mm256_maskz_cvtsepi16_epi8(create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
         check_array_equality(&result, &[131073, 262147, 393221, 524295])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -654,9 +622,9 @@ pub(super) fn test_mm256_maskz_cvtsepi16_epi8() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvtsepi16_epi8() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_cvtsepi16_epi8(create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[131073, 262147, 0, 0])?;
@@ -677,15 +645,11 @@ pub(super) fn test_mm_cvtsepi16_epi8() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_mask_cvtsepi16_epi8() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_mask_cvtsepi16_epi8(
-            create__m128i_from_i32_array([1, 2, 3, 4]),
-            create__mmask8_from(0b01010101),
-            create__m128i_from_i32_array([5, 6, 7, 8]),
-        ));
+        let result = unpack__m128i_to_i32_array(_mm_mask_cvtsepi16_epi8(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[393221, 524295, 0, 0])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -704,9 +668,9 @@ pub(super) fn test_mm_mask_cvtsepi16_epi8() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_maskz_cvtsepi16_epi8() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_maskz_cvtsepi16_epi8(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[131073, 262147, 0, 0])?;
@@ -728,9 +692,7 @@ pub(super) fn test_mm_maskz_cvtsepi16_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm512_cvtusepi16_epi8() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm512_cvtusepi16_epi8(create__m512i_from_i32_array([
-            1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-        ])));
+        let result = unpack__m256i_to_i32_array(_mm512_cvtusepi16_epi8(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[131073, 262147, 393221, 524295, 655369, 786443, 917517, 1048591])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -750,11 +712,7 @@ pub(super) fn test_mm512_cvtusepi16_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm512_mask_cvtusepi16_epi8() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm512_mask_cvtusepi16_epi8(
-            create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]),
-            create__mmask32_from(0x55555555u32),
-            create__m512i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]),
-        ));
+        let result = unpack__m256i_to_i32_array(_mm512_mask_cvtusepi16_epi8(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask32_from(0x55555555u32), create__m512i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24])));
         check_array_equality(&result, &[655369, 786443, 917517, 1048591, 1179665, 1310739, 1441813, 1572887])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -774,10 +732,7 @@ pub(super) fn test_mm512_mask_cvtusepi16_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm512_maskz_cvtusepi16_epi8() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm512_maskz_cvtusepi16_epi8(
-            create__mmask32_from(0x55555555u32),
-            create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]),
-        ));
+        let result = unpack__m256i_to_i32_array(_mm512_maskz_cvtusepi16_epi8(create__mmask32_from(0x55555555u32), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])));
         check_array_equality(&result, &[131073, 262147, 393221, 524295, 655369, 786443, 917517, 1048591])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -817,11 +772,7 @@ pub(super) fn test_mm256_cvtusepi16_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm256_mask_cvtusepi16_epi8() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm256_mask_cvtusepi16_epi8(
-            create__m128i_from_i32_array([1, 2, 3, 4]),
-            create__mmask16_from(0b0101010101010101),
-            create__m256i_from_i32_array([5, 6, 7, 8, 9, 10, 11, 12]),
-        ));
+        let result = unpack__m128i_to_i32_array(_mm256_mask_cvtusepi16_epi8(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([5, 6, 7, 8, 9, 10, 11, 12])));
         check_array_equality(&result, &[393221, 524295, 655369, 786443])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -841,10 +792,7 @@ pub(super) fn test_mm256_mask_cvtusepi16_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm256_maskz_cvtusepi16_epi8() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm256_maskz_cvtusepi16_epi8(
-            create__mmask16_from(0b0101010101010101),
-            create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]),
-        ));
+        let result = unpack__m128i_to_i32_array(_mm256_maskz_cvtusepi16_epi8(create__mmask16_from(0b0101010101010101), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
         check_array_equality(&result, &[131073, 262147, 393221, 524295])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -863,9 +811,9 @@ pub(super) fn test_mm256_maskz_cvtusepi16_epi8() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cvtusepi16_epi8() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_cvtusepi16_epi8(create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[131073, 262147, 0, 0])?;
@@ -886,15 +834,11 @@ pub(super) fn test_mm_cvtusepi16_epi8() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_mask_cvtusepi16_epi8() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_mask_cvtusepi16_epi8(
-            create__m128i_from_i32_array([1, 2, 3, 4]),
-            create__mmask8_from(0b01010101),
-            create__m128i_from_i32_array([5, 6, 7, 8]),
-        ));
+        let result = unpack__m128i_to_i32_array(_mm_mask_cvtusepi16_epi8(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[393221, 524295, 0, 0])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -913,9 +857,9 @@ pub(super) fn test_mm_mask_cvtusepi16_epi8() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_maskz_cvtusepi16_epi8() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_maskz_cvtusepi16_epi8(create__mmask8_from(0b01010101), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[131073, 262147, 0, 0])?;
@@ -957,11 +901,7 @@ pub(super) fn test_mm512_cvtepi8_epi16() -> Result<(), String> {
 
 pub(super) fn test_mm512_mask_cvtepi8_epi16() -> Result<(), String> {
     unsafe {
-        let result = unpack__m512i_to_i32_array(_mm512_mask_cvtepi8_epi16(
-            create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]),
-            create__mmask32_from(0x55555555u32),
-            create__m256i_from_i32_array([17, 18, 19, 20, 21, 22, 23, 24]),
-        ));
+        let result = unpack__m512i_to_i32_array(_mm512_mask_cvtepi8_epi16(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]), create__mmask32_from(0x55555555u32), create__m256i_from_i32_array([17, 18, 19, 20, 21, 22, 23, 24])));
         check_array_equality(&result, &[17, 0, 18, 0, 19, 0, 20, 0, 21, 0, 22, 0, 23, 0, 24, 0])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -981,10 +921,7 @@ pub(super) fn test_mm512_mask_cvtepi8_epi16() -> Result<(), String> {
 
 pub(super) fn test_mm512_maskz_cvtepi8_epi16() -> Result<(), String> {
     unsafe {
-        let result = unpack__m512i_to_i32_array(_mm512_maskz_cvtepi8_epi16(
-            create__mmask32_from(0x55555555u32),
-            create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]),
-        ));
+        let result = unpack__m512i_to_i32_array(_mm512_maskz_cvtepi8_epi16(create__mmask32_from(0x55555555u32), create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8])));
         check_array_equality(&result, &[1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0, 7, 0, 8, 0])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -1004,11 +941,7 @@ pub(super) fn test_mm512_maskz_cvtepi8_epi16() -> Result<(), String> {
 
 pub(super) fn test_mm256_mask_cvtepi8_epi16() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_mask_cvtepi8_epi16(
-            create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]),
-            create__mmask16_from(0b0101010101010101),
-            create__m128i_from_i32_array([9, 10, 11, 12]),
-        ));
+        let result = unpack__m256i_to_i32_array(_mm256_mask_cvtepi8_epi16(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__mmask16_from(0b0101010101010101), create__m128i_from_i32_array([9, 10, 11, 12])));
         check_array_equality(&result, &[9, 0, 10, 0, 11, 0, 12, 0])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -1028,10 +961,7 @@ pub(super) fn test_mm256_mask_cvtepi8_epi16() -> Result<(), String> {
 
 pub(super) fn test_mm256_maskz_cvtepi8_epi16() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_maskz_cvtepi8_epi16(
-            create__mmask16_from(0b0101010101010101),
-            create__m128i_from_i32_array([1, 2, 3, 4]),
-        ));
+        let result = unpack__m256i_to_i32_array(_mm256_maskz_cvtepi8_epi16(create__mmask16_from(0b0101010101010101), create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[1, 0, 2, 0, 3, 0, 4, 0])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -1051,11 +981,7 @@ pub(super) fn test_mm256_maskz_cvtepi8_epi16() -> Result<(), String> {
 
 pub(super) fn test_mm_mask_cvtepi8_epi16() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_mask_cvtepi8_epi16(
-            create__m128i_from_i32_array([1, 2, 3, 4]),
-            create__mmask8_from(0b01010101),
-            create__m128i_from_i32_array([5, 6, 7, 8]),
-        ));
+        let result = unpack__m128i_to_i32_array(_mm_mask_cvtepi8_epi16(create__m128i_from_i32_array([1, 2, 3, 4]), create__mmask8_from(0b01010101), create__m128i_from_i32_array([5, 6, 7, 8])));
         check_array_equality(&result, &[5, 0, 6, 0])?;
 
         let total_iters = crate::cpu::get_iterations();

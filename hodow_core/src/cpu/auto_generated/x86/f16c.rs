@@ -1,6 +1,7 @@
 mod part1;
 
 use crate::cpu::auto_generated::x86::f16c::part1::*;
+
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct F16C;

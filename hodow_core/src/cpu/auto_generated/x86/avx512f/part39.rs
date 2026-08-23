@@ -29,14 +29,11 @@ pub(super) fn test_mm512_setr4_epi64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_cmplt_ps_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_cmplt_ps_mask(
-            create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-            create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]),
-        );
+        let result = _mm512_cmplt_ps_mask(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]));
         check_int_equality(result as i32, 65535)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -55,15 +52,11 @@ pub(super) fn test_mm512_cmplt_ps_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cmplt_ps_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_mask_cmplt_ps_mask(
-            create__mmask16_from(0b0101010101010101),
-            create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-            create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]),
-        );
+        let result = _mm512_mask_cmplt_ps_mask(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]));
         check_int_equality(result as i32, 21845)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -82,14 +75,11 @@ pub(super) fn test_mm512_mask_cmplt_ps_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_cmpnlt_ps_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_cmpnlt_ps_mask(
-            create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-            create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]),
-        );
+        let result = _mm512_cmpnlt_ps_mask(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -108,15 +98,11 @@ pub(super) fn test_mm512_cmpnlt_ps_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cmpnlt_ps_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_mask_cmpnlt_ps_mask(
-            create__mmask16_from(0b0101010101010101),
-            create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-            create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]),
-        );
+        let result = _mm512_mask_cmpnlt_ps_mask(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -135,14 +121,11 @@ pub(super) fn test_mm512_mask_cmpnlt_ps_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_cmple_ps_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_cmple_ps_mask(
-            create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-            create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]),
-        );
+        let result = _mm512_cmple_ps_mask(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]));
         check_int_equality(result as i32, 65535)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -161,15 +144,11 @@ pub(super) fn test_mm512_cmple_ps_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cmple_ps_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_mask_cmple_ps_mask(
-            create__mmask16_from(0b0101010101010101),
-            create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-            create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]),
-        );
+        let result = _mm512_mask_cmple_ps_mask(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]));
         check_int_equality(result as i32, 21845)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -188,14 +167,11 @@ pub(super) fn test_mm512_mask_cmple_ps_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_cmpnle_ps_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_cmpnle_ps_mask(
-            create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-            create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]),
-        );
+        let result = _mm512_cmpnle_ps_mask(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -214,15 +190,11 @@ pub(super) fn test_mm512_cmpnle_ps_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cmpnle_ps_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_mask_cmpnle_ps_mask(
-            create__mmask16_from(0b0101010101010101),
-            create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-            create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]),
-        );
+        let result = _mm512_mask_cmpnle_ps_mask(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -241,14 +213,11 @@ pub(super) fn test_mm512_mask_cmpnle_ps_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_cmpeq_ps_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_cmpeq_ps_mask(
-            create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-            create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]),
-        );
+        let result = _mm512_cmpeq_ps_mask(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -267,15 +236,11 @@ pub(super) fn test_mm512_cmpeq_ps_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cmpeq_ps_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_mask_cmpeq_ps_mask(
-            create__mmask16_from(0b0101010101010101),
-            create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-            create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]),
-        );
+        let result = _mm512_mask_cmpeq_ps_mask(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -294,14 +259,11 @@ pub(super) fn test_mm512_mask_cmpeq_ps_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_cmpneq_ps_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_cmpneq_ps_mask(
-            create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-            create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]),
-        );
+        let result = _mm512_cmpneq_ps_mask(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]));
         check_int_equality(result as i32, 65535)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -320,15 +282,11 @@ pub(super) fn test_mm512_cmpneq_ps_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cmpneq_ps_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_mask_cmpneq_ps_mask(
-            create__mmask16_from(0b0101010101010101),
-            create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-            create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]),
-        );
+        let result = _mm512_mask_cmpneq_ps_mask(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]));
         check_int_equality(result as i32, 21845)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -347,14 +305,11 @@ pub(super) fn test_mm512_mask_cmpneq_ps_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_cmp_ps_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_cmp_ps_mask::<0>(
-            create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-            create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]),
-        );
+        let result = _mm512_cmp_ps_mask::<0>(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -373,15 +328,11 @@ pub(super) fn test_mm512_cmp_ps_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cmp_ps_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_mask_cmp_ps_mask::<0>(
-            create__mmask16_from(0b0101010101010101),
-            create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-            create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]),
-        );
+        let result = _mm512_mask_cmp_ps_mask::<0>(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -400,14 +351,11 @@ pub(super) fn test_mm512_mask_cmp_ps_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_cmp_ps_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm256_cmp_ps_mask::<0>(
-            create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm256_cmp_ps_mask::<0>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -426,15 +374,11 @@ pub(super) fn test_mm256_cmp_ps_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mask_cmp_ps_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm256_mask_cmp_ps_mask::<0>(
-            create__mmask8_from(0b01010101),
-            create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm256_mask_cmp_ps_mask::<0>(create__mmask8_from(0b01010101), create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -453,9 +397,9 @@ pub(super) fn test_mm256_mask_cmp_ps_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cmp_ps_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_cmp_ps_mask::<0>(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0]));
         check_int_equality(result as i32, 0)?;
@@ -476,15 +420,11 @@ pub(super) fn test_mm_cmp_ps_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_mask_cmp_ps_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm_mask_cmp_ps_mask::<0>(
-            create__mmask8_from(0b01010101),
-            create__m128_from([1.0, 2.0, 3.0, 4.0]),
-            create__m128_from([5.0, 6.0, 7.0, 8.0]),
-        );
+        let result = _mm_mask_cmp_ps_mask::<0>(create__mmask8_from(0b01010101), create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -503,14 +443,11 @@ pub(super) fn test_mm_mask_cmp_ps_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_cmp_round_ps_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_cmp_round_ps_mask::<0, 8>(
-            create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-            create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]),
-        );
+        let result = _mm512_cmp_round_ps_mask::<0, 8>(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -529,15 +466,11 @@ pub(super) fn test_mm512_cmp_round_ps_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cmp_round_ps_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_mask_cmp_round_ps_mask::<0, 8>(
-            create__mmask16_from(0b0101010101010101),
-            create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-            create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]),
-        );
+        let result = _mm512_mask_cmp_round_ps_mask::<0, 8>(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -556,14 +489,11 @@ pub(super) fn test_mm512_mask_cmp_round_ps_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_cmpord_ps_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_cmpord_ps_mask(
-            create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-            create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]),
-        );
+        let result = _mm512_cmpord_ps_mask(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]));
         check_int_equality(result as i32, 65535)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -582,15 +512,11 @@ pub(super) fn test_mm512_cmpord_ps_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cmpord_ps_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_mask_cmpord_ps_mask(
-            create__mmask16_from(0b0101010101010101),
-            create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-            create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]),
-        );
+        let result = _mm512_mask_cmpord_ps_mask(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]));
         check_int_equality(result as i32, 21845)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -609,14 +535,11 @@ pub(super) fn test_mm512_mask_cmpord_ps_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_cmpunord_ps_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_cmpunord_ps_mask(
-            create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-            create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]),
-        );
+        let result = _mm512_cmpunord_ps_mask(create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -635,15 +558,11 @@ pub(super) fn test_mm512_cmpunord_ps_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cmpunord_ps_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_mask_cmpunord_ps_mask(
-            create__mmask16_from(0b0101010101010101),
-            create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-            create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]),
-        );
+        let result = _mm512_mask_cmpunord_ps_mask(create__mmask16_from(0b0101010101010101), create__m512_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]), create__m512_from([17.0, 18.0, 19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0, 29.0, 30.0, 31.0, 32.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -662,14 +581,11 @@ pub(super) fn test_mm512_mask_cmpunord_ps_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_cmplt_pd_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_cmplt_pd_mask(
-            create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm512_cmplt_pd_mask(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 255)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -688,15 +604,11 @@ pub(super) fn test_mm512_cmplt_pd_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cmplt_pd_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_mask_cmplt_pd_mask(
-            create__mmask8_from(0b01010101),
-            create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm512_mask_cmplt_pd_mask(create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 85)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -715,14 +627,11 @@ pub(super) fn test_mm512_mask_cmplt_pd_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_cmpnlt_pd_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_cmpnlt_pd_mask(
-            create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm512_cmpnlt_pd_mask(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -741,15 +650,11 @@ pub(super) fn test_mm512_cmpnlt_pd_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cmpnlt_pd_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_mask_cmpnlt_pd_mask(
-            create__mmask8_from(0b01010101),
-            create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm512_mask_cmpnlt_pd_mask(create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -768,14 +673,11 @@ pub(super) fn test_mm512_mask_cmpnlt_pd_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_cmple_pd_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_cmple_pd_mask(
-            create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm512_cmple_pd_mask(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 255)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -794,15 +696,11 @@ pub(super) fn test_mm512_cmple_pd_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cmple_pd_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_mask_cmple_pd_mask(
-            create__mmask8_from(0b01010101),
-            create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm512_mask_cmple_pd_mask(create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 85)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -821,14 +719,11 @@ pub(super) fn test_mm512_mask_cmple_pd_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_cmpnle_pd_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_cmpnle_pd_mask(
-            create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm512_cmpnle_pd_mask(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -847,15 +742,11 @@ pub(super) fn test_mm512_cmpnle_pd_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cmpnle_pd_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_mask_cmpnle_pd_mask(
-            create__mmask8_from(0b01010101),
-            create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm512_mask_cmpnle_pd_mask(create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -874,14 +765,11 @@ pub(super) fn test_mm512_mask_cmpnle_pd_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_cmpeq_pd_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_cmpeq_pd_mask(
-            create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm512_cmpeq_pd_mask(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -900,15 +788,11 @@ pub(super) fn test_mm512_cmpeq_pd_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cmpeq_pd_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_mask_cmpeq_pd_mask(
-            create__mmask8_from(0b01010101),
-            create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm512_mask_cmpeq_pd_mask(create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -927,14 +811,11 @@ pub(super) fn test_mm512_mask_cmpeq_pd_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_cmpneq_pd_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_cmpneq_pd_mask(
-            create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm512_cmpneq_pd_mask(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 255)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -953,15 +834,11 @@ pub(super) fn test_mm512_cmpneq_pd_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cmpneq_pd_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_mask_cmpneq_pd_mask(
-            create__mmask8_from(0b01010101),
-            create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm512_mask_cmpneq_pd_mask(create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 85)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -980,14 +857,11 @@ pub(super) fn test_mm512_mask_cmpneq_pd_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_cmp_pd_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_cmp_pd_mask::<0>(
-            create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm512_cmp_pd_mask::<0>(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -1006,15 +880,11 @@ pub(super) fn test_mm512_cmp_pd_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cmp_pd_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_mask_cmp_pd_mask::<0>(
-            create__mmask8_from(0b01010101),
-            create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm512_mask_cmp_pd_mask::<0>(create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -1033,9 +903,9 @@ pub(super) fn test_mm512_mask_cmp_pd_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_cmp_pd_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm256_cmp_pd_mask::<0>(create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]));
         check_int_equality(result as i32, 0)?;
@@ -1056,15 +926,11 @@ pub(super) fn test_mm256_cmp_pd_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mask_cmp_pd_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm256_mask_cmp_pd_mask::<0>(
-            create__mmask8_from(0b01010101),
-            create__m256d_from([1.0, 2.0, 3.0, 4.0]),
-            create__m256d_from([5.0, 6.0, 7.0, 8.0]),
-        );
+        let result = _mm256_mask_cmp_pd_mask::<0>(create__mmask8_from(0b01010101), create__m256d_from([1.0, 2.0, 3.0, 4.0]), create__m256d_from([5.0, 6.0, 7.0, 8.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -1083,9 +949,9 @@ pub(super) fn test_mm256_mask_cmp_pd_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cmp_pd_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_cmp_pd_mask::<0>(create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
         check_int_equality(result as i32, 0)?;
@@ -1106,9 +972,9 @@ pub(super) fn test_mm_cmp_pd_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_mask_cmp_pd_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_mask_cmp_pd_mask::<0>(create__mmask8_from(0b01010101), create__m128d_from([1.0, 2.0]), create__m128d_from([3.0, 4.0]));
         check_int_equality(result as i32, 0)?;
@@ -1129,14 +995,11 @@ pub(super) fn test_mm_mask_cmp_pd_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_cmp_round_pd_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_cmp_round_pd_mask::<0, 8>(
-            create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm512_cmp_round_pd_mask::<0, 8>(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -1155,15 +1018,11 @@ pub(super) fn test_mm512_cmp_round_pd_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cmp_round_pd_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_mask_cmp_round_pd_mask::<0, 8>(
-            create__mmask8_from(0b01010101),
-            create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm512_mask_cmp_round_pd_mask::<0, 8>(create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -1182,14 +1041,11 @@ pub(super) fn test_mm512_mask_cmp_round_pd_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_cmpord_pd_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_cmpord_pd_mask(
-            create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm512_cmpord_pd_mask(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 255)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -1208,15 +1064,11 @@ pub(super) fn test_mm512_cmpord_pd_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cmpord_pd_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_mask_cmpord_pd_mask(
-            create__mmask8_from(0b01010101),
-            create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm512_mask_cmpord_pd_mask(create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 85)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -1235,14 +1087,11 @@ pub(super) fn test_mm512_mask_cmpord_pd_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_cmpunord_pd_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_cmpunord_pd_mask(
-            create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm512_cmpunord_pd_mask(create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -1261,15 +1110,11 @@ pub(super) fn test_mm512_cmpunord_pd_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_cmpunord_pd_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
-        let result = _mm512_mask_cmpunord_pd_mask(
-            create__mmask8_from(0b01010101),
-            create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm512_mask_cmpunord_pd_mask(create__mmask8_from(0b01010101), create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m512d_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -1288,9 +1133,9 @@ pub(super) fn test_mm512_mask_cmpunord_pd_mask() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_cmp_ss_mask() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = _mm_cmp_ss_mask::<0>(create__m128_from([1.0, 2.0, 3.0, 4.0]), create__m128_from([5.0, 6.0, 7.0, 8.0]));
         check_int_equality(result as i32, 0)?;

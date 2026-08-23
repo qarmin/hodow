@@ -1,6 +1,7 @@
 mod part1;
 
 use crate::cpu::auto_generated::x86::gfni::part1::*;
+
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct GFNI;

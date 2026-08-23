@@ -86,9 +86,9 @@ pub(super) fn test_mm_cvttsd_si64x() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_stream_si64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1i64; 8]);
         let a = 2i64;

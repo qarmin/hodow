@@ -150,12 +150,7 @@ pub(super) fn test_mm_cmpistra() -> Result<(), String> {
 
 pub(super) fn test_mm_cmpestrm() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_i32_array(_mm_cmpestrm::<0>(
-            create__m128i_from_i32_array([1, 2, 3, 4]),
-            5i32,
-            create__m128i_from_i32_array([6, 7, 8, 9]),
-            10i32,
-        ));
+        let result = unpack__m128i_to_i32_array(_mm_cmpestrm::<0>(create__m128i_from_i32_array([1, 2, 3, 4]), 5i32, create__m128i_from_i32_array([6, 7, 8, 9]), 10i32));
         check_array_equality(&result, &[750, 0, 0, 0])?;
 
         let total_iters = crate::cpu::get_iterations();

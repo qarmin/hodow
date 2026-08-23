@@ -575,9 +575,9 @@ pub(super) fn test_mm_load_ps1() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_load_ps() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let ptr_p = crate::cpu::common::Aligned64([1.0f32; 16]);
         let result = unpack__m128_to_f32_array(_mm_load_ps(ptr_p.0.as_ptr()));
@@ -587,9 +587,9 @@ pub(super) fn test_mm_load_ps() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_loadu_ps() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let ptr_p = crate::cpu::common::Aligned64([1.0f32; 16]);
         let result = unpack__m128_to_f32_array(_mm_loadu_ps(ptr_p.0.as_ptr()));
@@ -599,9 +599,9 @@ pub(super) fn test_mm_loadu_ps() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_loadr_ps() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let ptr_p = crate::cpu::common::Aligned64([1.0f32; 16]);
         let result = unpack__m128_to_f32_array(_mm_loadr_ps(ptr_p.0.as_ptr()));
@@ -620,9 +620,9 @@ pub(super) fn test_mm_store_ss() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_store1_ps() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_p = crate::cpu::common::Aligned64([1.0f32; 16]);
         let a = create__m128_from([2.0, 3.0, 4.0, 5.0]);
@@ -632,9 +632,9 @@ pub(super) fn test_mm_store1_ps() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_store_ps1() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_p = crate::cpu::common::Aligned64([1.0f32; 16]);
         let a = create__m128_from([2.0, 3.0, 4.0, 5.0]);
@@ -644,9 +644,9 @@ pub(super) fn test_mm_store_ps1() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_store_ps() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_p = crate::cpu::common::Aligned64([1.0f32; 16]);
         let a = create__m128_from([2.0, 3.0, 4.0, 5.0]);
@@ -656,9 +656,9 @@ pub(super) fn test_mm_store_ps() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_storeu_ps() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_p = crate::cpu::common::Aligned64([1.0f32; 16]);
         let a = create__m128_from([2.0, 3.0, 4.0, 5.0]);
@@ -668,9 +668,9 @@ pub(super) fn test_mm_storeu_ps() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_storer_ps() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_p = crate::cpu::common::Aligned64([1.0f32; 16]);
         let a = create__m128_from([2.0, 3.0, 4.0, 5.0]);
@@ -700,9 +700,9 @@ pub(super) fn test_mm_move_ss() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_sfence() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         _mm_sfence();
 
@@ -750,9 +750,9 @@ pub(super) fn test_mm_undefined_ps() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_stream_ps() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
         let a = create__m128_from([2.0, 3.0, 4.0, 5.0]);

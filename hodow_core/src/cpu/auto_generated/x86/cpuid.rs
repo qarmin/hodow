@@ -1,6 +1,7 @@
 mod part1;
 
 use crate::cpu::auto_generated::x86::cpuid::part1::*;
+
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct CPUID;

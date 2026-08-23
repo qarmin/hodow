@@ -15,6 +15,7 @@ use crate::cpu::auto_generated::x86::avx512dq::part5::*;
 use crate::cpu::auto_generated::x86::avx512dq::part6::*;
 use crate::cpu::auto_generated::x86::avx512dq::part7::*;
 use crate::cpu::auto_generated::x86::avx512dq::part8::*;
+
 use crate::cpu::{ExtensionTest, TestFunction};
 
 pub struct AVX512DQ;

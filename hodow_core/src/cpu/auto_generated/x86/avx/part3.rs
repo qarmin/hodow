@@ -128,9 +128,9 @@ pub(super) fn test_mm256_lddqu_si256() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_stream_si256() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]); 2]);
         let a = create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]);
@@ -140,9 +140,9 @@ pub(super) fn test_mm256_stream_si256() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_stream_pd() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f64; 8]);
         let a = create__m256d_from([2.0, 3.0, 4.0, 5.0]);
@@ -152,9 +152,9 @@ pub(super) fn test_mm256_stream_pd() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_stream_ps() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_mem_addr = crate::cpu::common::Aligned64([1.0f32; 16]);
         let a = create__m256_from([2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0]);
@@ -225,10 +225,7 @@ pub(super) fn test_mm256_unpackhi_pd() -> Result<(), String> {
 
 pub(super) fn test_mm256_unpackhi_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_unpackhi_ps(
-            create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        ));
+        let result = unpack__m256_to_f32_array(_mm256_unpackhi_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
         check_float_array_equality(&result, &[3.0, 11.0, 4.0, 12.0, 7.0, 15.0, 8.0, 16.0])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -268,10 +265,7 @@ pub(super) fn test_mm256_unpacklo_pd() -> Result<(), String> {
 
 pub(super) fn test_mm256_unpacklo_ps() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256_to_f32_array(_mm256_unpacklo_ps(
-            create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        ));
+        let result = unpack__m256_to_f32_array(_mm256_unpacklo_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0])));
         check_float_array_equality(&result, &[1.0, 9.0, 2.0, 10.0, 5.0, 13.0, 6.0, 14.0])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -291,10 +285,7 @@ pub(super) fn test_mm256_unpacklo_ps() -> Result<(), String> {
 
 pub(super) fn test_mm256_testz_si256() -> Result<(), String> {
     unsafe {
-        let result = _mm256_testz_si256(
-            create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]),
-            create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]),
-        );
+        let result = _mm256_testz_si256(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -314,10 +305,7 @@ pub(super) fn test_mm256_testz_si256() -> Result<(), String> {
 
 pub(super) fn test_mm256_testc_si256() -> Result<(), String> {
     unsafe {
-        let result = _mm256_testc_si256(
-            create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]),
-            create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]),
-        );
+        let result = _mm256_testc_si256(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -337,10 +325,7 @@ pub(super) fn test_mm256_testc_si256() -> Result<(), String> {
 
 pub(super) fn test_mm256_testnzc_si256() -> Result<(), String> {
     unsafe {
-        let result = _mm256_testnzc_si256(
-            create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]),
-            create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]),
-        );
+        let result = _mm256_testnzc_si256(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), create__m256i_from_i32_array([9, 10, 11, 12, 13, 14, 15, 16]));
         check_int_equality(result as i32, 1)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -480,10 +465,7 @@ pub(super) fn test_mm_testnzc_pd() -> Result<(), String> {
 
 pub(super) fn test_mm256_testz_ps() -> Result<(), String> {
     unsafe {
-        let result = _mm256_testz_ps(
-            create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm256_testz_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 1)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -503,10 +485,7 @@ pub(super) fn test_mm256_testz_ps() -> Result<(), String> {
 
 pub(super) fn test_mm256_testc_ps() -> Result<(), String> {
     unsafe {
-        let result = _mm256_testc_ps(
-            create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm256_testc_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 1)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -526,10 +505,7 @@ pub(super) fn test_mm256_testc_ps() -> Result<(), String> {
 
 pub(super) fn test_mm256_testnzc_ps() -> Result<(), String> {
     unsafe {
-        let result = _mm256_testnzc_ps(
-            create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]),
-            create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]),
-        );
+        let result = _mm256_testnzc_ps(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]), create__m256_from([9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]));
         check_int_equality(result as i32, 0)?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -740,16 +716,7 @@ pub(super) fn test_mm256_set_ps() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm256_set_ps(
-                    rand::random::<f32>(),
-                    rand::random::<f32>(),
-                    rand::random::<f32>(),
-                    rand::random::<f32>(),
-                    rand::random::<f32>(),
-                    rand::random::<f32>(),
-                    rand::random::<f32>(),
-                    rand::random::<f32>(),
-                );
+                let _ = _mm256_set_ps(rand::random::<f32>(), rand::random::<f32>(), rand::random::<f32>(), rand::random::<f32>(), rand::random::<f32>(), rand::random::<f32>(), rand::random::<f32>(), rand::random::<f32>());
             }
         }
     }
@@ -758,10 +725,7 @@ pub(super) fn test_mm256_set_ps() -> Result<(), String> {
 
 pub(super) fn test_mm256_set_epi8() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_set_epi8(
-            1i8, 2i8, 3i8, 4i8, 5i8, 6i8, 7i8, 8i8, 9i8, 10i8, 11i8, 12i8, 13i8, 14i8, 15i8, 16i8, 17i8, 18i8, 19i8, 20i8, 21i8, 22i8, 23i8, 24i8, 25i8, 26i8, 27i8, 28i8, 29i8,
-            30i8, 31i8, 32i8,
-        ));
+        let result = unpack__m256i_to_i32_array(_mm256_set_epi8(1i8, 2i8, 3i8, 4i8, 5i8, 6i8, 7i8, 8i8, 9i8, 10i8, 11i8, 12i8, 13i8, 14i8, 15i8, 16i8, 17i8, 18i8, 19i8, 20i8, 21i8, 22i8, 23i8, 24i8, 25i8, 26i8, 27i8, 28i8, 29i8, 30i8, 31i8, 32i8));
         check_array_equality(&result, &[488513312, 421141276, 353769240, 286397204, 219025168, 151653132, 84281096, 16909060])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -772,40 +736,7 @@ pub(super) fn test_mm256_set_epi8() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm256_set_epi8(
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                );
+                let _ = _mm256_set_epi8(rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>());
             }
         }
     }
@@ -814,9 +745,7 @@ pub(super) fn test_mm256_set_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm256_set_epi16() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_set_epi16(
-            1i16, 2i16, 3i16, 4i16, 5i16, 6i16, 7i16, 8i16, 9i16, 10i16, 11i16, 12i16, 13i16, 14i16, 15i16, 16i16,
-        ));
+        let result = unpack__m256i_to_i32_array(_mm256_set_epi16(1i16, 2i16, 3i16, 4i16, 5i16, 6i16, 7i16, 8i16, 9i16, 10i16, 11i16, 12i16, 13i16, 14i16, 15i16, 16i16));
         check_array_equality(&result, &[983056, 851982, 720908, 589834, 458760, 327686, 196612, 65538])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -827,24 +756,7 @@ pub(super) fn test_mm256_set_epi16() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm256_set_epi16(
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                );
+                let _ = _mm256_set_epi16(rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>());
             }
         }
     }
@@ -864,16 +776,7 @@ pub(super) fn test_mm256_set_epi32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm256_set_epi32(
-                    rand::random::<i32>(),
-                    rand::random::<i32>(),
-                    rand::random::<i32>(),
-                    rand::random::<i32>(),
-                    rand::random::<i32>(),
-                    rand::random::<i32>(),
-                    rand::random::<i32>(),
-                    rand::random::<i32>(),
-                );
+                let _ = _mm256_set_epi32(rand::random::<i32>(), rand::random::<i32>(), rand::random::<i32>(), rand::random::<i32>(), rand::random::<i32>(), rand::random::<i32>(), rand::random::<i32>(), rand::random::<i32>());
             }
         }
     }
@@ -933,16 +836,7 @@ pub(super) fn test_mm256_setr_ps() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm256_setr_ps(
-                    rand::random::<f32>(),
-                    rand::random::<f32>(),
-                    rand::random::<f32>(),
-                    rand::random::<f32>(),
-                    rand::random::<f32>(),
-                    rand::random::<f32>(),
-                    rand::random::<f32>(),
-                    rand::random::<f32>(),
-                );
+                let _ = _mm256_setr_ps(rand::random::<f32>(), rand::random::<f32>(), rand::random::<f32>(), rand::random::<f32>(), rand::random::<f32>(), rand::random::<f32>(), rand::random::<f32>(), rand::random::<f32>());
             }
         }
     }
@@ -951,10 +845,7 @@ pub(super) fn test_mm256_setr_ps() -> Result<(), String> {
 
 pub(super) fn test_mm256_setr_epi8() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_setr_epi8(
-            1i8, 2i8, 3i8, 4i8, 5i8, 6i8, 7i8, 8i8, 9i8, 10i8, 11i8, 12i8, 13i8, 14i8, 15i8, 16i8, 17i8, 18i8, 19i8, 20i8, 21i8, 22i8, 23i8, 24i8, 25i8, 26i8, 27i8, 28i8, 29i8,
-            30i8, 31i8, 32i8,
-        ));
+        let result = unpack__m256i_to_i32_array(_mm256_setr_epi8(1i8, 2i8, 3i8, 4i8, 5i8, 6i8, 7i8, 8i8, 9i8, 10i8, 11i8, 12i8, 13i8, 14i8, 15i8, 16i8, 17i8, 18i8, 19i8, 20i8, 21i8, 22i8, 23i8, 24i8, 25i8, 26i8, 27i8, 28i8, 29i8, 30i8, 31i8, 32i8));
         check_array_equality(&result, &[67305985, 134678021, 202050057, 269422093, 336794129, 404166165, 471538201, 538910237])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -965,40 +856,7 @@ pub(super) fn test_mm256_setr_epi8() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm256_setr_epi8(
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                    rand::random::<i8>(),
-                );
+                let _ = _mm256_setr_epi8(rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>(), rand::random::<i8>());
             }
         }
     }
@@ -1007,9 +865,7 @@ pub(super) fn test_mm256_setr_epi8() -> Result<(), String> {
 
 pub(super) fn test_mm256_setr_epi16() -> Result<(), String> {
     unsafe {
-        let result = unpack__m256i_to_i32_array(_mm256_setr_epi16(
-            1i16, 2i16, 3i16, 4i16, 5i16, 6i16, 7i16, 8i16, 9i16, 10i16, 11i16, 12i16, 13i16, 14i16, 15i16, 16i16,
-        ));
+        let result = unpack__m256i_to_i32_array(_mm256_setr_epi16(1i16, 2i16, 3i16, 4i16, 5i16, 6i16, 7i16, 8i16, 9i16, 10i16, 11i16, 12i16, 13i16, 14i16, 15i16, 16i16));
         check_array_equality(&result, &[131073, 262147, 393221, 524295, 655369, 786443, 917517, 1048591])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -1020,24 +876,7 @@ pub(super) fn test_mm256_setr_epi16() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm256_setr_epi16(
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                    rand::random::<i16>(),
-                );
+                let _ = _mm256_setr_epi16(rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>(), rand::random::<i16>());
             }
         }
     }
@@ -1057,16 +896,7 @@ pub(super) fn test_mm256_setr_epi32() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = _mm256_setr_epi32(
-                    rand::random::<i32>(),
-                    rand::random::<i32>(),
-                    rand::random::<i32>(),
-                    rand::random::<i32>(),
-                    rand::random::<i32>(),
-                    rand::random::<i32>(),
-                    rand::random::<i32>(),
-                    rand::random::<i32>(),
-                );
+                let _ = _mm256_setr_epi32(rand::random::<i32>(), rand::random::<i32>(), rand::random::<i32>(), rand::random::<i32>(), rand::random::<i32>(), rand::random::<i32>(), rand::random::<i32>(), rand::random::<i32>());
             }
         }
     }

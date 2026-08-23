@@ -254,11 +254,7 @@ pub(super) fn test_vec_gfmsum_128() -> Result<(), String> {
 
 pub(super) fn test_vec_gfmsum_accum_128() -> Result<(), String> {
     unsafe {
-        let _result = vec_gfmsum_accum_128(
-            0, /* vector_unsigned_long_long */
-            0, /* vector_unsigned_long_long */
-            0, /* vector_unsigned_char */
-        );
+        let _result = vec_gfmsum_accum_128(0 /* vector_unsigned_long_long */, 0 /* vector_unsigned_long_long */, 0 /* vector_unsigned_char */);
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -268,11 +264,7 @@ pub(super) fn test_vec_gfmsum_accum_128() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vec_gfmsum_accum_128(
-                    0, /* vector_unsigned_long_long */
-                    0, /* vector_unsigned_long_long */
-                    0, /* vector_unsigned_char */
-                );
+                let _ = vec_gfmsum_accum_128(0 /* vector_unsigned_long_long */, 0 /* vector_unsigned_long_long */, 0 /* vector_unsigned_char */);
             }
         }
     }
@@ -656,11 +648,7 @@ pub(super) fn test_vec_cp_until_zero_cc() -> Result<(), String> {
 
 pub(super) fn test_vec_msum_u128() -> Result<(), String> {
     unsafe {
-        let _result = vec_msum_u128::<0>(
-            0, /* vector_unsigned_long_long */
-            0, /* vector_unsigned_long_long */
-            0, /* vector_unsigned_char */
-        );
+        let _result = vec_msum_u128::<0>(0 /* vector_unsigned_long_long */, 0 /* vector_unsigned_long_long */, 0 /* vector_unsigned_char */);
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -670,11 +658,7 @@ pub(super) fn test_vec_msum_u128() -> Result<(), String> {
                     log::info!("Fuzzing stopped at iteration {}", i);
                     break;
                 }
-                let _ = vec_msum_u128::<0>(
-                    0, /* vector_unsigned_long_long */
-                    0, /* vector_unsigned_long_long */
-                    0, /* vector_unsigned_char */
-                );
+                let _ = vec_msum_u128::<0>(0 /* vector_unsigned_long_long */, 0 /* vector_unsigned_long_long */, 0 /* vector_unsigned_char */);
             }
         }
     }

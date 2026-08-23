@@ -9,9 +9,9 @@ use crate::cpu::common::x86::*;
 use crate::cpu::common::{check_array_equality, check_float_array_equality, check_int_equality};
 
 pub(super) fn test_mm512_i32scatter_ps() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_slice = crate::cpu::common::Aligned64([1.0f32; 64]);
         let offsets = create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
@@ -22,9 +22,9 @@ pub(super) fn test_mm512_i32scatter_ps() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_i32scatter_ps() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_slice = crate::cpu::common::Aligned64([1.0f32; 64]);
         let mask = create__mmask16_from(0b0101010101010101);
@@ -36,9 +36,9 @@ pub(super) fn test_mm512_mask_i32scatter_ps() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_i64scatter_ps() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_slice = crate::cpu::common::Aligned64([1.0f32; 64]);
         let offsets = create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
@@ -49,9 +49,9 @@ pub(super) fn test_mm512_i64scatter_ps() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_i64scatter_ps() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_slice = crate::cpu::common::Aligned64([1.0f32; 64]);
         let mask = create__mmask8_from(0b01010101);
@@ -63,9 +63,9 @@ pub(super) fn test_mm512_mask_i64scatter_ps() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_i32scatter_epi64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_slice = crate::cpu::common::Aligned64([1i64; 64]);
         let offsets = create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]);
@@ -76,9 +76,9 @@ pub(super) fn test_mm512_i32scatter_epi64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_i32scatter_epi64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_slice = crate::cpu::common::Aligned64([1i64; 64]);
         let mask = create__mmask8_from(0b01010101);
@@ -90,9 +90,9 @@ pub(super) fn test_mm512_mask_i32scatter_epi64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_i64scatter_epi64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_slice = crate::cpu::common::Aligned64([1i64; 64]);
         let offsets = create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
@@ -103,9 +103,9 @@ pub(super) fn test_mm512_i64scatter_epi64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_i64scatter_epi64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_slice = crate::cpu::common::Aligned64([1i64; 64]);
         let mask = create__mmask8_from(0b01010101);
@@ -117,9 +117,9 @@ pub(super) fn test_mm512_mask_i64scatter_epi64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_i32scatter_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_slice = crate::cpu::common::Aligned64([1i32; 64]);
         let offsets = create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
@@ -130,9 +130,9 @@ pub(super) fn test_mm512_i32scatter_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_i32scatter_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_slice = crate::cpu::common::Aligned64([1i32; 64]);
         let mask = create__mmask16_from(0b0101010101010101);
@@ -144,9 +144,9 @@ pub(super) fn test_mm512_mask_i32scatter_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_i64scatter_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_slice = crate::cpu::common::Aligned64([1i32; 64]);
         let offsets = create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
@@ -157,9 +157,9 @@ pub(super) fn test_mm512_i64scatter_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_i64scatter_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_slice = crate::cpu::common::Aligned64([1i32; 64]);
         let mask = create__mmask8_from(0b01010101);
@@ -171,9 +171,9 @@ pub(super) fn test_mm512_mask_i64scatter_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_i32logather_epi64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let vindex = create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
         let ptr_base_addr = crate::cpu::common::Aligned64([1i64; 64]);
@@ -184,9 +184,9 @@ pub(super) fn test_mm512_i32logather_epi64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_i32logather_epi64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let src = create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
         let k = create__mmask8_from(0b01010101);
@@ -199,9 +199,9 @@ pub(super) fn test_mm512_mask_i32logather_epi64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_i32logather_pd() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let vindex = create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
         let ptr_base_addr = crate::cpu::common::Aligned64([1.0f64; 64]);
@@ -212,9 +212,9 @@ pub(super) fn test_mm512_i32logather_pd() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_i32logather_pd() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let src = create__m512d_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]);
         let k = create__mmask8_from(0b01010101);
@@ -227,9 +227,9 @@ pub(super) fn test_mm512_mask_i32logather_pd() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_i32loscatter_epi64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i64; 64]);
         let vindex = create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
@@ -240,9 +240,9 @@ pub(super) fn test_mm512_i32loscatter_epi64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_i32loscatter_epi64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i64; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -254,9 +254,9 @@ pub(super) fn test_mm512_mask_i32loscatter_epi64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_i32loscatter_pd() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f64; 64]);
         let vindex = create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
@@ -267,9 +267,9 @@ pub(super) fn test_mm512_i32loscatter_pd() -> Result<(), String> {
 }
 
 pub(super) fn test_mm512_mask_i32loscatter_pd() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f64; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -281,9 +281,9 @@ pub(super) fn test_mm512_mask_i32loscatter_pd() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_i32scatter_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i32; 64]);
         let vindex = create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]);
@@ -294,9 +294,9 @@ pub(super) fn test_mm256_i32scatter_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mask_i32scatter_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i32; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -308,9 +308,9 @@ pub(super) fn test_mm256_mask_i32scatter_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_i32scatter_epi64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_slice = crate::cpu::common::Aligned64([1i64; 64]);
         let offsets = create__m128i_from_i32_array([0, 0, 0, 0]);
@@ -321,9 +321,9 @@ pub(super) fn test_mm256_i32scatter_epi64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mask_i32scatter_epi64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i64; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -335,9 +335,9 @@ pub(super) fn test_mm256_mask_i32scatter_epi64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_i32scatter_pd() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f64; 64]);
         let vindex = create__m128i_from_i32_array([0, 0, 0, 0]);
@@ -348,9 +348,9 @@ pub(super) fn test_mm256_i32scatter_pd() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mask_i32scatter_pd() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f64; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -362,9 +362,9 @@ pub(super) fn test_mm256_mask_i32scatter_pd() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_i32scatter_ps() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f32; 64]);
         let vindex = create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]);
@@ -375,9 +375,9 @@ pub(super) fn test_mm256_i32scatter_ps() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mask_i32scatter_ps() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f32; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -389,9 +389,9 @@ pub(super) fn test_mm256_mask_i32scatter_ps() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_i64scatter_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i32; 64]);
         let vindex = create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]);
@@ -402,9 +402,9 @@ pub(super) fn test_mm256_i64scatter_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mask_i64scatter_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i32; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -416,9 +416,9 @@ pub(super) fn test_mm256_mask_i64scatter_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_i64scatter_epi64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i64; 64]);
         let vindex = create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]);
@@ -429,9 +429,9 @@ pub(super) fn test_mm256_i64scatter_epi64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mask_i64scatter_epi64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i64; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -443,9 +443,9 @@ pub(super) fn test_mm256_mask_i64scatter_epi64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_i64scatter_pd() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f64; 64]);
         let vindex = create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]);
@@ -456,9 +456,9 @@ pub(super) fn test_mm256_i64scatter_pd() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mask_i64scatter_pd() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f64; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -470,9 +470,9 @@ pub(super) fn test_mm256_mask_i64scatter_pd() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_i64scatter_ps() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f32; 64]);
         let vindex = create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]);
@@ -483,9 +483,9 @@ pub(super) fn test_mm256_i64scatter_ps() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mask_i64scatter_ps() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f32; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -497,9 +497,9 @@ pub(super) fn test_mm256_mask_i64scatter_ps() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mmask_i32gather_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let src = create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]);
         let k = create__mmask8_from(0b01010101);
@@ -512,9 +512,9 @@ pub(super) fn test_mm256_mmask_i32gather_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mmask_i32gather_epi64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let src = create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]);
         let k = create__mmask8_from(0b01010101);
@@ -527,9 +527,9 @@ pub(super) fn test_mm256_mmask_i32gather_epi64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mmask_i32gather_pd() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let src = create__m256d_from([1.0, 2.0, 3.0, 4.0]);
         let k = create__mmask8_from(0b01010101);
@@ -542,9 +542,9 @@ pub(super) fn test_mm256_mmask_i32gather_pd() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mmask_i32gather_ps() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let src = create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]);
         let k = create__mmask8_from(0b01010101);
@@ -557,9 +557,9 @@ pub(super) fn test_mm256_mmask_i32gather_ps() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mmask_i64gather_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let src = create__m128i_from_i32_array([0, 0, 0, 0]);
         let k = create__mmask8_from(0b01010101);
@@ -572,9 +572,9 @@ pub(super) fn test_mm256_mmask_i64gather_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mmask_i64gather_epi64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let src = create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]);
         let k = create__mmask8_from(0b01010101);
@@ -587,9 +587,9 @@ pub(super) fn test_mm256_mmask_i64gather_epi64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mmask_i64gather_pd() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let src = create__m256d_from([1.0, 2.0, 3.0, 4.0]);
         let k = create__mmask8_from(0b01010101);
@@ -602,9 +602,9 @@ pub(super) fn test_mm256_mmask_i64gather_pd() -> Result<(), String> {
 }
 
 pub(super) fn test_mm256_mmask_i64gather_ps() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let src = create__m128_from([1.0, 2.0, 3.0, 4.0]);
         let k = create__mmask8_from(0b01010101);
@@ -617,9 +617,9 @@ pub(super) fn test_mm256_mmask_i64gather_ps() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_i32scatter_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i32; 64]);
         let vindex = create__m128i_from_i32_array([0, 0, 0, 0]);
@@ -630,9 +630,9 @@ pub(super) fn test_mm_i32scatter_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_mask_i32scatter_epi32() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i32; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -644,9 +644,9 @@ pub(super) fn test_mm_mask_i32scatter_epi32() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_i32scatter_epi64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i64; 64]);
         let vindex = create__m128i_from_i32_array([0, 0, 0, 0]);
@@ -657,9 +657,9 @@ pub(super) fn test_mm_i32scatter_epi64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_mask_i32scatter_epi64() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1i64; 64]);
         let k = create__mmask8_from(0b01010101);
@@ -671,9 +671,9 @@ pub(super) fn test_mm_mask_i32scatter_epi64() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_i32scatter_pd() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f64; 64]);
         let vindex = create__m128i_from_i32_array([0, 0, 0, 0]);
@@ -684,9 +684,9 @@ pub(super) fn test_mm_i32scatter_pd() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_mask_i32scatter_pd() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let mut ptr_base_addr = crate::cpu::common::Aligned64([1.0f64; 64]);
         let k = create__mmask8_from(0b01010101);

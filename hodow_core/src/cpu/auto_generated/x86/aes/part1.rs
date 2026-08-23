@@ -109,9 +109,9 @@ pub(super) fn test_mm_aesimc_si128() -> Result<(), String> {
 }
 
 pub(super) fn test_mm_aeskeygenassist_si128() -> Result<(), String> {
-    if cfg!(miri) {
-        return Ok(());
-    }
+        if cfg!(miri) {
+            return Ok(());
+        }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_aeskeygenassist_si128::<0>(create__m128i_from_i32_array([1, 2, 3, 4])));
         check_array_equality(&result, &[1667457911, 2003002211, 1667458034, -228367517])?;
