@@ -29,7 +29,7 @@ fn print_build_info() {
         let _ = write!(&mut info, ", profile={}", profile);
     }
 
-    log::info!("Build info: {}", info);
+    log::debug!("Build info: {}", info);
 }
 
 /// Parses a RUST_LOG value into a single global level. Accepts a bare level ("debug"), or
