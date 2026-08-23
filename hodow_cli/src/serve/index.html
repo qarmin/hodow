@@ -9,6 +9,8 @@
   h1 { font-size: 1.3rem; }
   form { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; align-items: end; }
   form label { display: flex; flex-direction: column; font-size: 0.75rem; color: #999; }
+  form .fields { display: contents; }
+  form .fields[hidden] { display: none; }
   input { background: #1e2127; color: #e6e6e6; border: 1px solid #333; border-radius: 4px; padding: 0.35rem; }
   button { background: #2d6cdf; color: white; border: none; border-radius: 4px; padding: 0.45rem 0.9rem; cursor: pointer; }
   button.secondary { background: #444; }
@@ -27,15 +29,39 @@
 </style>
 </head>
 <body>
-<h1>hodow - CPU job queue</h1>
+<h1>hodow - job queue</h1>
 
 <form id="submit-form">
-  <label>test function(s), comma-sep <input name="test_function" placeholder="(all)"></label>
-  <label>feature(s), comma-sep <input name="feature" placeholder="sse2,avx2"></label>
-  <label>skip, comma-sep <input name="skip"></label>
-  <label>iterations <input name="iterations" type="number" min="0"></label>
-  <label>isolate timeout ms <input name="isolate_timeout_ms" type="number" min="1"></label>
-  <button type="submit">Submit CPU job</button>
+  <label>kind
+    <select name="kind" id="kind-select">
+      <option value="cpu">cpu</option>
+      <option value="gpu">gpu</option>
+      <option value="vulkan">vulkan</option>
+    </select>
+  </label>
+
+  <span class="fields kind-cpu">
+    <label>test function(s), comma-sep <input name="test_function" placeholder="(all)"></label>
+    <label>feature(s), comma-sep <input name="feature" placeholder="sse2,avx2"></label>
+    <label>skip, comma-sep <input name="skip"></label>
+    <label>iterations <input name="iterations" type="number" min="0"></label>
+    <label>isolate timeout ms <input name="isolate_timeout_ms" type="number" min="1"></label>
+  </span>
+
+  <span class="fields kind-gpu" hidden>
+    <label>no window <input name="no_window" type="checkbox"></label>
+    <label>time limit ms <input name="time_limit_ms" type="number" min="1"></label>
+    <label>frame limit <input name="frame_limit" type="number" min="1"></label>
+    <label>display api <input name="display_api" placeholder="egl"></label>
+    <label>gl api <input name="gl_api" placeholder="auto"></label>
+    <label>force software <input name="force_software" type="checkbox"></label>
+    <label>memtest <input name="memtest" type="checkbox"></label>
+    <label>memtest MB <input name="memtest_mb" type="number" min="1"></label>
+  </span>
+
+  <span class="fields kind-vulkan" hidden></span>
+
+  <button type="submit">Submit job</button>
 </form>
 
 <table id="jobs">
@@ -56,14 +82,24 @@ function fmtTs(ms) {
 }
 
 function fmtSpec(kind) {
-  if (kind.kind !== 'cpu') return JSON.stringify(kind);
   const s = kind.spec;
-  const bits = [];
-  if (s.test_function && s.test_function.length) bits.push('t=' + s.test_function.join(','));
-  if (s.feature && s.feature.length) bits.push('e=' + s.feature.join(','));
-  if (s.skip && s.skip.length) bits.push('s=' + s.skip.join(','));
-  if (s.iterations) bits.push('n=' + s.iterations);
-  return bits.length ? bits.join(' ') : '(all tests)';
+  if (kind.kind === 'cpu') {
+    const bits = [];
+    if (s.test_function && s.test_function.length) bits.push('t=' + s.test_function.join(','));
+    if (s.feature && s.feature.length) bits.push('e=' + s.feature.join(','));
+    if (s.skip && s.skip.length) bits.push('s=' + s.skip.join(','));
+    if (s.iterations) bits.push('n=' + s.iterations);
+    return 'cpu ' + (bits.length ? bits.join(' ') : '(all tests)');
+  }
+  if (kind.kind === 'gpu') {
+    const bits = [];
+    if (s.memtest) bits.push('memtest');
+    if (s.gl_api) bits.push('gl_api=' + s.gl_api);
+    if (s.display_api) bits.push('display_api=' + s.display_api);
+    if (s.force_software) bits.push('force_software');
+    return 'gpu ' + (bits.length ? bits.join(' ') : '(default)');
+  }
+  return 'vulkan';
 }
 
 function fmtSummary(sum) {
@@ -73,7 +109,7 @@ function fmtSummary(sum) {
 }
 
 function statusText(status) {
-  if (status.status === 'crashed') return `crashed (${status.culprit_test})`;
+  if (status.status === 'crashed') return status.culprit_test ? `crashed (${status.culprit_test})` : 'crashed';
   return status.status;
 }
 
@@ -120,24 +156,55 @@ async function refreshSnapshot() {
   render();
 }
 
+const kindSelect = document.getElementById('kind-select');
+function updateVisibleFields() {
+  document.querySelectorAll('#submit-form .fields').forEach((el) => {
+    el.hidden = !el.classList.contains('kind-' + kindSelect.value);
+  });
+}
+kindSelect.addEventListener('change', updateVisibleFields);
+updateVisibleFields();
+
+function buildSpec(kind, f) {
+  const splitCsv = (v) => (v ? v.split(',').map((s) => s.trim()).filter(Boolean) : []);
+  const int = (name) => (f.get(name) ? parseInt(f.get(name), 10) : null);
+  if (kind === 'cpu') {
+    const testFn = splitCsv(f.get('test_function'));
+    return {
+      test_function: testFn.length ? testFn : null,
+      feature: splitCsv(f.get('feature')),
+      skip: splitCsv(f.get('skip')),
+      iterations: int('iterations'),
+      isolate_timeout_ms: int('isolate_timeout_ms'),
+    };
+  }
+  if (kind === 'gpu') {
+    return {
+      no_window: f.get('no_window') === 'on',
+      time_limit_ms: int('time_limit_ms'),
+      frame_limit: int('frame_limit'),
+      display_api: f.get('display_api') || null,
+      gl_api: f.get('gl_api') || null,
+      force_software: f.get('force_software') === 'on',
+      memtest: f.get('memtest') === 'on',
+      memtest_mb: int('memtest_mb'),
+    };
+  }
+  return {};
+}
+
 document.getElementById('submit-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const f = new FormData(e.target);
-  const splitCsv = (v) => (v ? v.split(',').map((s) => s.trim()).filter(Boolean) : []);
-  const spec = {
-    test_function: splitCsv(f.get('test_function')) || null,
-    feature: splitCsv(f.get('feature')),
-    skip: splitCsv(f.get('skip')),
-    iterations: f.get('iterations') ? parseInt(f.get('iterations'), 10) : null,
-    isolate_timeout_ms: f.get('isolate_timeout_ms') ? parseInt(f.get('isolate_timeout_ms'), 10) : null,
-  };
-  if (spec.test_function.length === 0) spec.test_function = null;
+  const kind = f.get('kind');
+  const spec = buildSpec(kind, f);
   await fetch('/api/jobs', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ kind: 'cpu', spec }),
+    body: JSON.stringify({ kind, spec }),
   });
   e.target.reset();
+  updateVisibleFields();
   refreshSnapshot();
 });
 

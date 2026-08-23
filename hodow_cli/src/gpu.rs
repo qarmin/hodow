@@ -3,6 +3,11 @@ use log::{error, info};
 use crate::cli::GpuArgs;
 
 pub fn process_gpu(args: &GpuArgs) {
+    #[cfg(feature = "serve")]
+    if let Some(ref url) = args.submit_to {
+        return submit_to_server(args, url);
+    }
+
     info!("GPU mode requested. Running OpenGL tests...");
 
     #[cfg(feature = "gpu")]
@@ -113,5 +118,34 @@ pub fn process_gpu(args: &GpuArgs) {
              Re-compile with `--features gpu` to enable OpenGL tests."
         );
         std::process::exit(1);
+    }
+}
+
+/// POSTs this invocation's args as a job to a running `hodow_cli serve` instead of running
+/// them locally. The server runs Gpu jobs as a whole-process subprocess (see
+/// `serve::executor::run_subprocess_job`), so it never runs GL calls in its own process.
+#[cfg(feature = "serve")]
+fn submit_to_server(args: &GpuArgs, base_url: &str) {
+    let spec = serde_json::json!({
+        "no_window": args.no_window,
+        "time_limit_ms": args.time_limit_ms,
+        "frame_limit": args.frame_limit,
+        "display_api": args.display_api,
+        "gl_api": args.gl_api,
+        "force_software": args.force_software,
+        "memtest": args.memtest,
+        "memtest_mb": args.memtest_mb,
+    });
+    let body = serde_json::json!({ "kind": "gpu", "spec": spec });
+    let url = format!("{}/api/jobs", base_url.trim_end_matches('/'));
+    match ureq::post(&url).send_json(&body) {
+        Ok(mut resp) => match resp.body_mut().read_to_string() {
+            Ok(text) => info!("Submitted job to {url}: {text}"),
+            Err(e) => error!("Job submitted but failed to read response: {e}"),
+        },
+        Err(e) => {
+            error!("Failed to submit job to {url}: {e}");
+            std::process::exit(1);
+        }
     }
 }

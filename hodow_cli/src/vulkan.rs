@@ -1,6 +1,11 @@
 use crate::cli::VulkanArgs;
 
 pub fn process_vulkan(_args: &VulkanArgs) {
+    #[cfg(feature = "serve")]
+    if let Some(ref url) = _args.submit_to {
+        return submit_to_server(url);
+    }
+
     #[cfg(feature = "vulkan")]
     {
         use log::{error, info};
@@ -48,5 +53,26 @@ pub fn process_vulkan(_args: &VulkanArgs) {
         let _ = _args;
         log::error!("Vulkan requested but the binary was compiled without the `vulkan` feature. Re-compile with `--features vulkan`.");
         std::process::exit(1);
+    }
+}
+
+/// POSTs a Vulkan job to a running `hodow_cli serve` instead of running it locally. The
+/// server runs it as a whole-process subprocess (see `serve::executor::run_subprocess_job`),
+/// so it never calls into the Vulkan loader from its own process.
+#[cfg(feature = "serve")]
+fn submit_to_server(base_url: &str) {
+    use log::{error, info};
+
+    let body = serde_json::json!({ "kind": "vulkan", "spec": {} });
+    let url = format!("{}/api/jobs", base_url.trim_end_matches('/'));
+    match ureq::post(&url).send_json(&body) {
+        Ok(mut resp) => match resp.body_mut().read_to_string() {
+            Ok(text) => info!("Submitted job to {url}: {text}"),
+            Err(e) => error!("Job submitted but failed to read response: {e}"),
+        },
+        Err(e) => {
+            error!("Failed to submit job to {url}: {e}");
+            std::process::exit(1);
+        }
     }
 }

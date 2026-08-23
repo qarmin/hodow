@@ -28,18 +28,50 @@ pub struct CpuJobSpec {
     pub isolate_timeout_ms: Option<u64>,
 }
 
-/// The kind of work a job represents. Only `Cpu` exists today; `Gpu`/`Vulkan` variants can
-/// be added later without touching `JobRecord`/`JobStatus`/the persistence layer.
+/// Same argument surface as `GpuArgs`.
+#[derive(Serialize, Deserialize, Clone, Debug, Default)]
+pub struct GpuJobSpec {
+    #[serde(default)]
+    pub no_window: bool,
+    #[serde(default)]
+    pub time_limit_ms: Option<u64>,
+    #[serde(default)]
+    pub frame_limit: Option<u64>,
+    #[serde(default)]
+    pub display_api: Option<String>,
+    #[serde(default)]
+    pub gl_api: Option<String>,
+    #[serde(default)]
+    pub force_software: bool,
+    #[serde(default)]
+    pub memtest: bool,
+    #[serde(default)]
+    pub memtest_mb: Option<usize>,
+}
+
+/// `VulkanArgs` has no fields today; kept as its own (empty) type rather than `()` so a
+/// future field addition doesn't need a `JobKind` shape change.
+#[derive(Serialize, Deserialize, Clone, Debug, Default)]
+pub struct VulkanJobSpec {}
+
+/// The kind of work a job represents. `Gpu`/`Vulkan` jobs run as a whole-process subprocess
+/// (see `executor::run_subprocess_job`) rather than per-test isolation like `Cpu` - neither
+/// `hodow_core::test_all_opengl` nor `run_compute_validation` have a per-test crash-isolation
+/// entry point today (unlike the CPU suite's `all_tests()`/`isolate.rs`), so a crash/hang is
+/// attributed to the whole job, not a specific test.
 #[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(tag = "kind", content = "spec", rename_all = "snake_case")]
 pub enum JobKind {
     Cpu(CpuJobSpec),
+    Gpu(GpuJobSpec),
+    Vulkan(VulkanJobSpec),
 }
 
 /// Terminal (and non-terminal) states a job can be in. Three distinct failure-ish states
-/// matter: `Failed` (ran fine, wrong result), `Crashed` (a specific test took the isolate
-/// worker down - the culprit is known), and `Interrupted` (the *server process itself* died
-/// before the job finished - detected at startup, see `store::Store::open`).
+/// matter: `Failed` (ran fine, wrong result), `Crashed` (something took the job's process
+/// down - for `Cpu` jobs the specific culprit test is known via isolate.rs; for `Gpu`/
+/// `Vulkan` jobs only the whole-job outcome is), and `Interrupted` (the *server process
+/// itself* died before the job finished - detected at startup, see `store::Store::open`).
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 #[serde(tag = "status", rename_all = "snake_case")]
 pub enum JobStatus {
@@ -47,7 +79,7 @@ pub enum JobStatus {
     Running,
     Succeeded,
     Failed,
-    Crashed { culprit_index: usize, culprit_test: String },
+    Crashed { culprit_index: Option<usize>, culprit_test: Option<String> },
     Interrupted,
     Cancelled,
 }

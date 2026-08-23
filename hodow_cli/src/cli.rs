@@ -46,7 +46,12 @@ pub struct ServeArgs {
 // ── Vulkan ────────────────────────────────────────────────────────────────────
 
 #[derive(Args)]
-pub struct VulkanArgs {}
+pub struct VulkanArgs {
+    /// Submit this as a job to a running `hodow_cli serve` instead of running it locally.
+    #[cfg(feature = "serve")]
+    #[arg(long = "submit-to", value_name = "URL")]
+    pub submit_to: Option<String>,
+}
 
 // ── CPU ─────────────────────────────────────────────────────────────────────
 
@@ -144,4 +149,9 @@ pub struct GpuArgs {
     /// GPU memory test buffer size in megabytes (default: 64).
     #[arg(long = "memtest-mb", value_name = "MB")]
     pub memtest_mb: Option<usize>,
+
+    /// Submit this as a job to a running `hodow_cli serve` instead of running it locally.
+    #[cfg(feature = "serve")]
+    #[arg(long = "submit-to", value_name = "URL")]
+    pub submit_to: Option<String>,
 }
