@@ -13,7 +13,8 @@ heavily on AI-assisted code generation (see README.md "AI Usage").
 
 - `hodow_core` - library: CPU test registry (`cpu/`), OpenGL test suite (`opengl/`, behind `gpu` feature),
   Vulkan compute validation (`vulkan/`, behind `vulkan` feature).
-- `hodow_cli` - CLI binary (`clap`), default features `["gpu"]`. Subcommands: `cpu`, `gpu`, `vulkan`.
+- `hodow_cli` - CLI binary (`clap`), default features `["gpu", "serve"]`. Subcommands: `cpu`, `gpu`,
+  `vulkan`, `serve` (behind the `serve` feature - see "Job-queue server" below).
 - `hodow_gui` - Slint-based GUI binary wrapping the same `hodow_core` API.
 - `archs/`, `winit/`, `glutin/` at the repo root are vendored upstream source checkouts kept for local
   reference only - they are git-ignored and not part of the workspace/build.
@@ -24,6 +25,8 @@ heavily on AI-assisted code generation (see README.md "AI Usage").
 - `just cpu` / `just gpu` / `just vulkan` / `just gui` - run each subsystem (debug). `*r` suffix (`gpur`, ...)
   = release. `*a` suffix (`gpua`, `sanitizer`, `guia`) = build under `-Zsanitizer=address`.
 - `just stress` - CPU stress test across all cores (release).
+- `just serve` - run the CPU job-queue server + web dashboard (default `0.0.0.0:7878`, no auth).
+- `just submit -e avx2 ...` - submit a CPU job (same flags as `just cpu`) to a running `just serve`.
 - `just memtest` - GPU memory test.
 - `just miri` - run CPU tests under Miri (`miri_build` feature).
 - `just clippy` - clippy on `hodow_cli` with all features/targets.
@@ -62,6 +65,22 @@ of the exclusion lists below) and re-run it.
   expected values on real hardware -> regenerate -> run. If it segfaults, it belongs back in
   `excluded_functions.txt`.
 
+### Multi-scenario pilot (x86 SSE2/AVX2 only)
+
+For functions in `PILOT_SOURCE_BLOCKS`/matching `PILOT_NAME_REGEX` in `generate_tests.py` (today:
+`(x86, sse2)` + `(x86, avx2)`, arithmetic/shift/compare/blend/min/max by name), the generator emits
+several *scenario* functions per intrinsic instead of one: `test_foo` (the original ascending-sequence
+scenario, unchanged name/behavior), `test_foo_normal2`/`_normal3` (other deterministic non-boundary
+inputs), `test_foo_boundary_min/max/zero/allones/mixed` (uniform-per-lane and mixed-per-lane extreme
+values, per-lane-width-aware via `WIDTH_AWARE_VEC_INFO`/`detect_elem_type` - not the generic i32/f32/f64
+view every other function still uses), `test_foo_asym_min_max`/`_asym_max_min` (opposite extremes on the
+first two operands, e.g. catching `u32::MIN + u32::MAX`-style overflow bugs), and for functions with a
+const-generic (shift amount, blend mask, compare predicate) `test_foo_imm_*` variants that vary the
+immediate instead of the runtime values. All scenario-function names still match `test_\w+`, so
+`capture_expected.py` needs no changes - just run it after regenerating to populate the new entries.
+Promoting beyond the pilot to more source blocks/architectures is a one-line change to
+`PILOT_SOURCE_BLOCKS`/`PILOT_NAME_REGEX`/`in_pilot_scope`.
+
 ## GPU (OpenGL) testing
 
 - Each test implements the `GLTest` trait (`hodow_core/src/opengl/test_trait.rs`) in its own file under
@@ -81,3 +100,34 @@ of the exclusion lists below) and re-run it.
 FFI, `naga` to compile a WGSL kernel to SPIR-V at runtime, no C dependencies. It enumerates every physical
 device, dispatches, and checks the SSBO result against an analytical oracle. Missing loader/ICD/driver is a
 clean "unavailable" skip (exit 0), distinct from a real `init_error`.
+
+## Job-queue server (`hodow_cli serve`, feature `serve`)
+
+`hodow_cli/src/serve/` is a persistent, remotely-controllable CPU job queue + web dashboard, living
+entirely inside the `hodow_cli` binary crate (no separate workspace member), behind the `serve` Cargo
+feature (default-on; excluded from the `just arm` cross-build). `hodow_cli serve` builds a `tokio`
+runtime and blocks on an `axum` server for the process lifetime (`0.0.0.0:7878` by default -
+**deliberately no authentication**; pass `--bind 127.0.0.1` to restrict it to localhost). A separate
+`hodow_cli cpu ... --submit-to http://host:port` (or `just submit ...`) POSTs a `CpuJobSpec` to
+`/api/jobs` instead of running locally.
+
+- `serve/model.rs` - `JobKind`/`CpuJobSpec`/`JobStatus`/`JobRecord`/`JobEvent` (serde only, no
+  tokio/axum - unit-testable standalone).
+- `serve/store.rs` - persistence: `<data-dir>/index.json` (one `JobRecord` per job, atomic
+  write-tmp+rename, loaded in full at startup) + `<data-dir>/jobs/<id>.jsonl` (append-only per-job
+  event log, read only on demand). No embedded database (keeps the no-native-C-deps constraint). Any
+  job found `Running` at startup - the server died before it could finish - is reclassified
+  `Interrupted` right there, before serving any traffic.
+- `serve/executor.rs` - one FIFO queue, one job at a time, on a plain OS thread (not a tokio task).
+  Every job runs through `isolate::run_isolated_core` (the same per-test subprocess isolation `cpu
+  --isolate` uses), so a genuine hardware crash/hang during a job can never take the server process
+  down. `stress` jobs are intentionally unsupported (it runs in-process with no subprocess isolation).
+- `serve/ws.rs` / `serve/routes.rs` / `serve/index.html` - a `tokio::sync::broadcast` fan-out, the
+  REST+websocket API (`POST /api/jobs`, `GET /api/jobs`, `GET/DELETE /api/jobs/{id}`, `GET /api/ws`),
+  and a single self-contained static dashboard page (`include_str!`'d, vanilla JS, no build step).
+
+`isolate.rs`'s `run_isolated`/`run_worker` filter the test list by the same `-t`/`-e`/`-s` state as the
+plain (non-isolated) run path (via `hodow_core::should_skip_test_or_feature`, using the `(name, feature,
+fn)` triples `all_tests()` now returns) - both the isolate parent and worker recompute the same filtered
+list independently and deterministically, so index-based crash/timeout attribution stays consistent
+between the two processes.
