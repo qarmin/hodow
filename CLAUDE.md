@@ -65,10 +65,12 @@ of the exclusion lists below) and re-run it.
   expected values on real hardware -> regenerate -> run. If it segfaults, it belongs back in
   `excluded_functions.txt`.
 
-### Multi-scenario pilot (x86 SSE2/AVX2 only)
+### Multi-scenario expansion (x86/x86_64, arithmetic/shift/compare/blend/min/max)
 
-For functions in `PILOT_SOURCE_BLOCKS`/matching `PILOT_NAME_REGEX` in `generate_tests.py` (today:
-`(x86, sse2)` + `(x86, avx2)`, arithmetic/shift/compare/blend/min/max by name), the generator emits
+For every x86/x86_64 function whose name matches `PILOT_NAME_REGEX` in `generate_tests.py`
+(arithmetic/shift/compare/blend/min/max by name - started as a narrow SSE2/AVX2-only pilot,
+widened to the whole x86/x86_64 ISA once validated; see git history for the pilot-scoped
+version), the generator emits
 several *scenario* functions per intrinsic instead of one: `test_foo` (the original ascending-sequence
 scenario, unchanged name/behavior), `test_foo_normal2`/`_normal3` (other deterministic non-boundary
 inputs), `test_foo_boundary_min/max/zero/allones/mixed` (uniform-per-lane and mixed-per-lane extreme
@@ -78,8 +80,8 @@ first two operands, e.g. catching `u32::MIN + u32::MAX`-style overflow bugs), an
 const-generic (shift amount, blend mask, compare predicate) `test_foo_imm_*` variants that vary the
 immediate instead of the runtime values. All scenario-function names still match `test_\w+`, so
 `capture_expected.py` needs no changes - just run it after regenerating to populate the new entries.
-Promoting beyond the pilot to more source blocks/architectures is a one-line change to
-`PILOT_SOURCE_BLOCKS`/`PILOT_NAME_REGEX`/`in_pilot_scope`.
+Widening further to non-arithmetic categories or to other architectures is a
+`PILOT_NAME_REGEX`/`in_pilot_scope` change.
 
 ## GPU (OpenGL) testing
 

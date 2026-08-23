@@ -1285,7 +1285,7 @@ pub(super) fn test_mm_adds_epu8() -> Result<(), String> {
 
 pub(super) fn test_mm_adds_epu8_normal2() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_u8_array(_mm_adds_epu8(create__m128i_from_i8_array([((0i32) as i8), ((255i32) as i8), ((2i32) as i8), ((253i32) as i8), ((4i32) as i8), ((251i32) as i8), ((6i32) as i8), ((249i32) as i8), ((0i32) as i8), ((255i32) as i8), ((2i32) as i8), ((253i32) as i8), ((4i32) as i8), ((251i32) as i8), ((6i32) as i8), ((249i32) as i8)]), create__m128i_from_i8_array([((10i32) as i8), ((9i32) as i8), ((12i32) as i8), ((7i32) as i8), ((14i32) as i8), ((5i32) as i8), ((16i32) as i8), ((3i32) as i8), ((10i32) as i8), ((9i32) as i8), ((12i32) as i8), ((7i32) as i8), ((14i32) as i8), ((5i32) as i8), ((16i32) as i8), ((3i32) as i8)])));
+        let result = unpack__m128i_to_u8_array(_mm_adds_epu8(create__m128i_from_i8_array([((0u8) as i8), ((255u8) as i8), ((2u8) as i8), ((253u8) as i8), ((4u8) as i8), ((251u8) as i8), ((6u8) as i8), ((249u8) as i8), ((0u8) as i8), ((255u8) as i8), ((2u8) as i8), ((253u8) as i8), ((4u8) as i8), ((251u8) as i8), ((6u8) as i8), ((249u8) as i8)]), create__m128i_from_i8_array([((10u8) as i8), ((9u8) as i8), ((12u8) as i8), ((7u8) as i8), ((14u8) as i8), ((5u8) as i8), ((16u8) as i8), ((3u8) as i8), ((10u8) as i8), ((9u8) as i8), ((12u8) as i8), ((7u8) as i8), ((14u8) as i8), ((5u8) as i8), ((16u8) as i8), ((3u8) as i8)])));
         check_array_equality(&result, &[10, 255, 14, 255, 18, 255, 22, 252, 10, 255, 14, 255, 18, 255, 22, 252])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -1305,7 +1305,7 @@ pub(super) fn test_mm_adds_epu8_normal2() -> Result<(), String> {
 
 pub(super) fn test_mm_adds_epu8_normal3() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_u8_array(_mm_adds_epu8(create__m128i_from_i8_array([((100i32) as i8), ((200i32) as i8), ((44i32) as i8), ((144i32) as i8), ((244i32) as i8), ((88i32) as i8), ((188i32) as i8), ((32i32) as i8), ((132i32) as i8), ((232i32) as i8), ((76i32) as i8), ((176i32) as i8), ((20i32) as i8), ((120i32) as i8), ((220i32) as i8), ((64i32) as i8)]), create__m128i_from_i8_array([((110i32) as i8), ((210i32) as i8), ((54i32) as i8), ((154i32) as i8), ((254i32) as i8), ((98i32) as i8), ((198i32) as i8), ((42i32) as i8), ((142i32) as i8), ((242i32) as i8), ((86i32) as i8), ((186i32) as i8), ((30i32) as i8), ((130i32) as i8), ((230i32) as i8), ((74i32) as i8)])));
+        let result = unpack__m128i_to_u8_array(_mm_adds_epu8(create__m128i_from_i8_array([((100u8) as i8), ((200u8) as i8), ((44u8) as i8), ((144u8) as i8), ((244u8) as i8), ((88u8) as i8), ((188u8) as i8), ((32u8) as i8), ((132u8) as i8), ((232u8) as i8), ((76u8) as i8), ((176u8) as i8), ((20u8) as i8), ((120u8) as i8), ((220u8) as i8), ((64u8) as i8)]), create__m128i_from_i8_array([((110u8) as i8), ((210u8) as i8), ((54u8) as i8), ((154u8) as i8), ((254u8) as i8), ((98u8) as i8), ((198u8) as i8), ((42u8) as i8), ((142u8) as i8), ((242u8) as i8), ((86u8) as i8), ((186u8) as i8), ((30u8) as i8), ((130u8) as i8), ((230u8) as i8), ((74u8) as i8)])));
         check_array_equality(&result, &[210, 255, 98, 255, 255, 186, 255, 74, 255, 255, 162, 255, 50, 250, 255, 138])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -1365,7 +1365,7 @@ pub(super) fn test_mm_adds_epu8_boundary_max() -> Result<(), String> {
 
 pub(super) fn test_mm_adds_epu8_boundary_zero() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_u8_array(_mm_adds_epu8(create__m128i_from_i8_array([((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8)]), create__m128i_from_i8_array([((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8)])));
+        let result = unpack__m128i_to_u8_array(_mm_adds_epu8(create__m128i_from_i8_array([((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8)]), create__m128i_from_i8_array([((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8)])));
         check_array_equality(&result, &[0; 16])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -1405,7 +1405,7 @@ pub(super) fn test_mm_adds_epu8_boundary_allones() -> Result<(), String> {
 
 pub(super) fn test_mm_adds_epu8_boundary_mixed() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_u8_array(_mm_adds_epu8(create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8)]), create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8)])));
+        let result = unpack__m128i_to_u8_array(_mm_adds_epu8(create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8)]), create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8)])));
         check_array_equality(&result, &[0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -1685,7 +1685,7 @@ pub(super) fn test_mm_avg_epu8() -> Result<(), String> {
 
 pub(super) fn test_mm_avg_epu8_normal2() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_u8_array(_mm_avg_epu8(create__m128i_from_i8_array([((0i32) as i8), ((255i32) as i8), ((2i32) as i8), ((253i32) as i8), ((4i32) as i8), ((251i32) as i8), ((6i32) as i8), ((249i32) as i8), ((0i32) as i8), ((255i32) as i8), ((2i32) as i8), ((253i32) as i8), ((4i32) as i8), ((251i32) as i8), ((6i32) as i8), ((249i32) as i8)]), create__m128i_from_i8_array([((10i32) as i8), ((9i32) as i8), ((12i32) as i8), ((7i32) as i8), ((14i32) as i8), ((5i32) as i8), ((16i32) as i8), ((3i32) as i8), ((10i32) as i8), ((9i32) as i8), ((12i32) as i8), ((7i32) as i8), ((14i32) as i8), ((5i32) as i8), ((16i32) as i8), ((3i32) as i8)])));
+        let result = unpack__m128i_to_u8_array(_mm_avg_epu8(create__m128i_from_i8_array([((0u8) as i8), ((255u8) as i8), ((2u8) as i8), ((253u8) as i8), ((4u8) as i8), ((251u8) as i8), ((6u8) as i8), ((249u8) as i8), ((0u8) as i8), ((255u8) as i8), ((2u8) as i8), ((253u8) as i8), ((4u8) as i8), ((251u8) as i8), ((6u8) as i8), ((249u8) as i8)]), create__m128i_from_i8_array([((10u8) as i8), ((9u8) as i8), ((12u8) as i8), ((7u8) as i8), ((14u8) as i8), ((5u8) as i8), ((16u8) as i8), ((3u8) as i8), ((10u8) as i8), ((9u8) as i8), ((12u8) as i8), ((7u8) as i8), ((14u8) as i8), ((5u8) as i8), ((16u8) as i8), ((3u8) as i8)])));
         check_array_equality(&result, &[5, 132, 7, 130, 9, 128, 11, 126, 5, 132, 7, 130, 9, 128, 11, 126])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -1705,7 +1705,7 @@ pub(super) fn test_mm_avg_epu8_normal2() -> Result<(), String> {
 
 pub(super) fn test_mm_avg_epu8_normal3() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_u8_array(_mm_avg_epu8(create__m128i_from_i8_array([((100i32) as i8), ((200i32) as i8), ((44i32) as i8), ((144i32) as i8), ((244i32) as i8), ((88i32) as i8), ((188i32) as i8), ((32i32) as i8), ((132i32) as i8), ((232i32) as i8), ((76i32) as i8), ((176i32) as i8), ((20i32) as i8), ((120i32) as i8), ((220i32) as i8), ((64i32) as i8)]), create__m128i_from_i8_array([((110i32) as i8), ((210i32) as i8), ((54i32) as i8), ((154i32) as i8), ((254i32) as i8), ((98i32) as i8), ((198i32) as i8), ((42i32) as i8), ((142i32) as i8), ((242i32) as i8), ((86i32) as i8), ((186i32) as i8), ((30i32) as i8), ((130i32) as i8), ((230i32) as i8), ((74i32) as i8)])));
+        let result = unpack__m128i_to_u8_array(_mm_avg_epu8(create__m128i_from_i8_array([((100u8) as i8), ((200u8) as i8), ((44u8) as i8), ((144u8) as i8), ((244u8) as i8), ((88u8) as i8), ((188u8) as i8), ((32u8) as i8), ((132u8) as i8), ((232u8) as i8), ((76u8) as i8), ((176u8) as i8), ((20u8) as i8), ((120u8) as i8), ((220u8) as i8), ((64u8) as i8)]), create__m128i_from_i8_array([((110u8) as i8), ((210u8) as i8), ((54u8) as i8), ((154u8) as i8), ((254u8) as i8), ((98u8) as i8), ((198u8) as i8), ((42u8) as i8), ((142u8) as i8), ((242u8) as i8), ((86u8) as i8), ((186u8) as i8), ((30u8) as i8), ((130u8) as i8), ((230u8) as i8), ((74u8) as i8)])));
         check_array_equality(&result, &[105, 205, 49, 149, 249, 93, 193, 37, 137, 237, 81, 181, 25, 125, 225, 69])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -1765,7 +1765,7 @@ pub(super) fn test_mm_avg_epu8_boundary_max() -> Result<(), String> {
 
 pub(super) fn test_mm_avg_epu8_boundary_zero() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_u8_array(_mm_avg_epu8(create__m128i_from_i8_array([((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8)]), create__m128i_from_i8_array([((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8)])));
+        let result = unpack__m128i_to_u8_array(_mm_avg_epu8(create__m128i_from_i8_array([((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8)]), create__m128i_from_i8_array([((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8)])));
         check_array_equality(&result, &[0; 16])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -1805,7 +1805,7 @@ pub(super) fn test_mm_avg_epu8_boundary_allones() -> Result<(), String> {
 
 pub(super) fn test_mm_avg_epu8_boundary_mixed() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_u8_array(_mm_avg_epu8(create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8)]), create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8)])));
+        let result = unpack__m128i_to_u8_array(_mm_avg_epu8(create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8)]), create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8)])));
         check_array_equality(&result, &[0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -2485,7 +2485,7 @@ pub(super) fn test_mm_max_epu8() -> Result<(), String> {
 
 pub(super) fn test_mm_max_epu8_normal2() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_u8_array(_mm_max_epu8(create__m128i_from_i8_array([((0i32) as i8), ((255i32) as i8), ((2i32) as i8), ((253i32) as i8), ((4i32) as i8), ((251i32) as i8), ((6i32) as i8), ((249i32) as i8), ((0i32) as i8), ((255i32) as i8), ((2i32) as i8), ((253i32) as i8), ((4i32) as i8), ((251i32) as i8), ((6i32) as i8), ((249i32) as i8)]), create__m128i_from_i8_array([((10i32) as i8), ((9i32) as i8), ((12i32) as i8), ((7i32) as i8), ((14i32) as i8), ((5i32) as i8), ((16i32) as i8), ((3i32) as i8), ((10i32) as i8), ((9i32) as i8), ((12i32) as i8), ((7i32) as i8), ((14i32) as i8), ((5i32) as i8), ((16i32) as i8), ((3i32) as i8)])));
+        let result = unpack__m128i_to_u8_array(_mm_max_epu8(create__m128i_from_i8_array([((0u8) as i8), ((255u8) as i8), ((2u8) as i8), ((253u8) as i8), ((4u8) as i8), ((251u8) as i8), ((6u8) as i8), ((249u8) as i8), ((0u8) as i8), ((255u8) as i8), ((2u8) as i8), ((253u8) as i8), ((4u8) as i8), ((251u8) as i8), ((6u8) as i8), ((249u8) as i8)]), create__m128i_from_i8_array([((10u8) as i8), ((9u8) as i8), ((12u8) as i8), ((7u8) as i8), ((14u8) as i8), ((5u8) as i8), ((16u8) as i8), ((3u8) as i8), ((10u8) as i8), ((9u8) as i8), ((12u8) as i8), ((7u8) as i8), ((14u8) as i8), ((5u8) as i8), ((16u8) as i8), ((3u8) as i8)])));
         check_array_equality(&result, &[10, 255, 12, 253, 14, 251, 16, 249, 10, 255, 12, 253, 14, 251, 16, 249])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -2505,7 +2505,7 @@ pub(super) fn test_mm_max_epu8_normal2() -> Result<(), String> {
 
 pub(super) fn test_mm_max_epu8_normal3() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_u8_array(_mm_max_epu8(create__m128i_from_i8_array([((100i32) as i8), ((200i32) as i8), ((44i32) as i8), ((144i32) as i8), ((244i32) as i8), ((88i32) as i8), ((188i32) as i8), ((32i32) as i8), ((132i32) as i8), ((232i32) as i8), ((76i32) as i8), ((176i32) as i8), ((20i32) as i8), ((120i32) as i8), ((220i32) as i8), ((64i32) as i8)]), create__m128i_from_i8_array([((110i32) as i8), ((210i32) as i8), ((54i32) as i8), ((154i32) as i8), ((254i32) as i8), ((98i32) as i8), ((198i32) as i8), ((42i32) as i8), ((142i32) as i8), ((242i32) as i8), ((86i32) as i8), ((186i32) as i8), ((30i32) as i8), ((130i32) as i8), ((230i32) as i8), ((74i32) as i8)])));
+        let result = unpack__m128i_to_u8_array(_mm_max_epu8(create__m128i_from_i8_array([((100u8) as i8), ((200u8) as i8), ((44u8) as i8), ((144u8) as i8), ((244u8) as i8), ((88u8) as i8), ((188u8) as i8), ((32u8) as i8), ((132u8) as i8), ((232u8) as i8), ((76u8) as i8), ((176u8) as i8), ((20u8) as i8), ((120u8) as i8), ((220u8) as i8), ((64u8) as i8)]), create__m128i_from_i8_array([((110u8) as i8), ((210u8) as i8), ((54u8) as i8), ((154u8) as i8), ((254u8) as i8), ((98u8) as i8), ((198u8) as i8), ((42u8) as i8), ((142u8) as i8), ((242u8) as i8), ((86u8) as i8), ((186u8) as i8), ((30u8) as i8), ((130u8) as i8), ((230u8) as i8), ((74u8) as i8)])));
         check_array_equality(&result, &[110, 210, 54, 154, 254, 98, 198, 42, 142, 242, 86, 186, 30, 130, 230, 74])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -2565,7 +2565,7 @@ pub(super) fn test_mm_max_epu8_boundary_max() -> Result<(), String> {
 
 pub(super) fn test_mm_max_epu8_boundary_zero() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_u8_array(_mm_max_epu8(create__m128i_from_i8_array([((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8)]), create__m128i_from_i8_array([((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8)])));
+        let result = unpack__m128i_to_u8_array(_mm_max_epu8(create__m128i_from_i8_array([((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8)]), create__m128i_from_i8_array([((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8)])));
         check_array_equality(&result, &[0; 16])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -2605,7 +2605,7 @@ pub(super) fn test_mm_max_epu8_boundary_allones() -> Result<(), String> {
 
 pub(super) fn test_mm_max_epu8_boundary_mixed() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_u8_array(_mm_max_epu8(create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8)]), create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8)])));
+        let result = unpack__m128i_to_u8_array(_mm_max_epu8(create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8)]), create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8)])));
         check_array_equality(&result, &[0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -2885,7 +2885,7 @@ pub(super) fn test_mm_min_epu8() -> Result<(), String> {
 
 pub(super) fn test_mm_min_epu8_normal2() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_u8_array(_mm_min_epu8(create__m128i_from_i8_array([((0i32) as i8), ((255i32) as i8), ((2i32) as i8), ((253i32) as i8), ((4i32) as i8), ((251i32) as i8), ((6i32) as i8), ((249i32) as i8), ((0i32) as i8), ((255i32) as i8), ((2i32) as i8), ((253i32) as i8), ((4i32) as i8), ((251i32) as i8), ((6i32) as i8), ((249i32) as i8)]), create__m128i_from_i8_array([((10i32) as i8), ((9i32) as i8), ((12i32) as i8), ((7i32) as i8), ((14i32) as i8), ((5i32) as i8), ((16i32) as i8), ((3i32) as i8), ((10i32) as i8), ((9i32) as i8), ((12i32) as i8), ((7i32) as i8), ((14i32) as i8), ((5i32) as i8), ((16i32) as i8), ((3i32) as i8)])));
+        let result = unpack__m128i_to_u8_array(_mm_min_epu8(create__m128i_from_i8_array([((0u8) as i8), ((255u8) as i8), ((2u8) as i8), ((253u8) as i8), ((4u8) as i8), ((251u8) as i8), ((6u8) as i8), ((249u8) as i8), ((0u8) as i8), ((255u8) as i8), ((2u8) as i8), ((253u8) as i8), ((4u8) as i8), ((251u8) as i8), ((6u8) as i8), ((249u8) as i8)]), create__m128i_from_i8_array([((10u8) as i8), ((9u8) as i8), ((12u8) as i8), ((7u8) as i8), ((14u8) as i8), ((5u8) as i8), ((16u8) as i8), ((3u8) as i8), ((10u8) as i8), ((9u8) as i8), ((12u8) as i8), ((7u8) as i8), ((14u8) as i8), ((5u8) as i8), ((16u8) as i8), ((3u8) as i8)])));
         check_array_equality(&result, &[0, 9, 2, 7, 4, 5, 6, 3, 0, 9, 2, 7, 4, 5, 6, 3])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -2905,7 +2905,7 @@ pub(super) fn test_mm_min_epu8_normal2() -> Result<(), String> {
 
 pub(super) fn test_mm_min_epu8_normal3() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_u8_array(_mm_min_epu8(create__m128i_from_i8_array([((100i32) as i8), ((200i32) as i8), ((44i32) as i8), ((144i32) as i8), ((244i32) as i8), ((88i32) as i8), ((188i32) as i8), ((32i32) as i8), ((132i32) as i8), ((232i32) as i8), ((76i32) as i8), ((176i32) as i8), ((20i32) as i8), ((120i32) as i8), ((220i32) as i8), ((64i32) as i8)]), create__m128i_from_i8_array([((110i32) as i8), ((210i32) as i8), ((54i32) as i8), ((154i32) as i8), ((254i32) as i8), ((98i32) as i8), ((198i32) as i8), ((42i32) as i8), ((142i32) as i8), ((242i32) as i8), ((86i32) as i8), ((186i32) as i8), ((30i32) as i8), ((130i32) as i8), ((230i32) as i8), ((74i32) as i8)])));
+        let result = unpack__m128i_to_u8_array(_mm_min_epu8(create__m128i_from_i8_array([((100u8) as i8), ((200u8) as i8), ((44u8) as i8), ((144u8) as i8), ((244u8) as i8), ((88u8) as i8), ((188u8) as i8), ((32u8) as i8), ((132u8) as i8), ((232u8) as i8), ((76u8) as i8), ((176u8) as i8), ((20u8) as i8), ((120u8) as i8), ((220u8) as i8), ((64u8) as i8)]), create__m128i_from_i8_array([((110u8) as i8), ((210u8) as i8), ((54u8) as i8), ((154u8) as i8), ((254u8) as i8), ((98u8) as i8), ((198u8) as i8), ((42u8) as i8), ((142u8) as i8), ((242u8) as i8), ((86u8) as i8), ((186u8) as i8), ((30u8) as i8), ((130u8) as i8), ((230u8) as i8), ((74u8) as i8)])));
         check_array_equality(&result, &[100, 200, 44, 144, 244, 88, 188, 32, 132, 232, 76, 176, 20, 120, 220, 64])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -2965,7 +2965,7 @@ pub(super) fn test_mm_min_epu8_boundary_max() -> Result<(), String> {
 
 pub(super) fn test_mm_min_epu8_boundary_zero() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_u8_array(_mm_min_epu8(create__m128i_from_i8_array([((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8)]), create__m128i_from_i8_array([((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8)])));
+        let result = unpack__m128i_to_u8_array(_mm_min_epu8(create__m128i_from_i8_array([((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8)]), create__m128i_from_i8_array([((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8)])));
         check_array_equality(&result, &[0; 16])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -3005,7 +3005,7 @@ pub(super) fn test_mm_min_epu8_boundary_allones() -> Result<(), String> {
 
 pub(super) fn test_mm_min_epu8_boundary_mixed() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_u8_array(_mm_min_epu8(create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8)]), create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8)])));
+        let result = unpack__m128i_to_u8_array(_mm_min_epu8(create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8)]), create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8)])));
         check_array_equality(&result, &[0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255, 0, 255])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -3885,7 +3885,7 @@ pub(super) fn test_mm_sad_epu8() -> Result<(), String> {
 
 pub(super) fn test_mm_sad_epu8_normal2() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_u8_array(_mm_sad_epu8(create__m128i_from_i8_array([((0i32) as i8), ((255i32) as i8), ((2i32) as i8), ((253i32) as i8), ((4i32) as i8), ((251i32) as i8), ((6i32) as i8), ((249i32) as i8), ((0i32) as i8), ((255i32) as i8), ((2i32) as i8), ((253i32) as i8), ((4i32) as i8), ((251i32) as i8), ((6i32) as i8), ((249i32) as i8)]), create__m128i_from_i8_array([((10i32) as i8), ((9i32) as i8), ((12i32) as i8), ((7i32) as i8), ((14i32) as i8), ((5i32) as i8), ((16i32) as i8), ((3i32) as i8), ((10i32) as i8), ((9i32) as i8), ((12i32) as i8), ((7i32) as i8), ((14i32) as i8), ((5i32) as i8), ((16i32) as i8), ((3i32) as i8)])));
+        let result = unpack__m128i_to_u8_array(_mm_sad_epu8(create__m128i_from_i8_array([((0u8) as i8), ((255u8) as i8), ((2u8) as i8), ((253u8) as i8), ((4u8) as i8), ((251u8) as i8), ((6u8) as i8), ((249u8) as i8), ((0u8) as i8), ((255u8) as i8), ((2u8) as i8), ((253u8) as i8), ((4u8) as i8), ((251u8) as i8), ((6u8) as i8), ((249u8) as i8)]), create__m128i_from_i8_array([((10u8) as i8), ((9u8) as i8), ((12u8) as i8), ((7u8) as i8), ((14u8) as i8), ((5u8) as i8), ((16u8) as i8), ((3u8) as i8), ((10u8) as i8), ((9u8) as i8), ((12u8) as i8), ((7u8) as i8), ((14u8) as i8), ((5u8) as i8), ((16u8) as i8), ((3u8) as i8)])));
         check_array_equality(&result, &[0, 4, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -3905,7 +3905,7 @@ pub(super) fn test_mm_sad_epu8_normal2() -> Result<(), String> {
 
 pub(super) fn test_mm_sad_epu8_normal3() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_u8_array(_mm_sad_epu8(create__m128i_from_i8_array([((100i32) as i8), ((200i32) as i8), ((44i32) as i8), ((144i32) as i8), ((244i32) as i8), ((88i32) as i8), ((188i32) as i8), ((32i32) as i8), ((132i32) as i8), ((232i32) as i8), ((76i32) as i8), ((176i32) as i8), ((20i32) as i8), ((120i32) as i8), ((220i32) as i8), ((64i32) as i8)]), create__m128i_from_i8_array([((110i32) as i8), ((210i32) as i8), ((54i32) as i8), ((154i32) as i8), ((254i32) as i8), ((98i32) as i8), ((198i32) as i8), ((42i32) as i8), ((142i32) as i8), ((242i32) as i8), ((86i32) as i8), ((186i32) as i8), ((30i32) as i8), ((130i32) as i8), ((230i32) as i8), ((74i32) as i8)])));
+        let result = unpack__m128i_to_u8_array(_mm_sad_epu8(create__m128i_from_i8_array([((100u8) as i8), ((200u8) as i8), ((44u8) as i8), ((144u8) as i8), ((244u8) as i8), ((88u8) as i8), ((188u8) as i8), ((32u8) as i8), ((132u8) as i8), ((232u8) as i8), ((76u8) as i8), ((176u8) as i8), ((20u8) as i8), ((120u8) as i8), ((220u8) as i8), ((64u8) as i8)]), create__m128i_from_i8_array([((110u8) as i8), ((210u8) as i8), ((54u8) as i8), ((154u8) as i8), ((254u8) as i8), ((98u8) as i8), ((198u8) as i8), ((42u8) as i8), ((142u8) as i8), ((242u8) as i8), ((86u8) as i8), ((186u8) as i8), ((30u8) as i8), ((130u8) as i8), ((230u8) as i8), ((74u8) as i8)])));
         check_array_equality(&result, &[80, 0, 0, 0, 0, 0, 0, 0, 80, 0, 0, 0, 0, 0, 0, 0])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -3965,7 +3965,7 @@ pub(super) fn test_mm_sad_epu8_boundary_max() -> Result<(), String> {
 
 pub(super) fn test_mm_sad_epu8_boundary_zero() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_u8_array(_mm_sad_epu8(create__m128i_from_i8_array([((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8)]), create__m128i_from_i8_array([((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8)])));
+        let result = unpack__m128i_to_u8_array(_mm_sad_epu8(create__m128i_from_i8_array([((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8)]), create__m128i_from_i8_array([((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8)])));
         check_array_equality(&result, &[0; 16])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -4005,7 +4005,7 @@ pub(super) fn test_mm_sad_epu8_boundary_allones() -> Result<(), String> {
 
 pub(super) fn test_mm_sad_epu8_boundary_mixed() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_u8_array(_mm_sad_epu8(create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8)]), create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8)])));
+        let result = unpack__m128i_to_u8_array(_mm_sad_epu8(create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8)]), create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8)])));
         check_array_equality(&result, &[0; 16])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -5285,7 +5285,7 @@ pub(super) fn test_mm_subs_epu8() -> Result<(), String> {
 
 pub(super) fn test_mm_subs_epu8_normal2() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_u8_array(_mm_subs_epu8(create__m128i_from_i8_array([((0i32) as i8), ((255i32) as i8), ((2i32) as i8), ((253i32) as i8), ((4i32) as i8), ((251i32) as i8), ((6i32) as i8), ((249i32) as i8), ((0i32) as i8), ((255i32) as i8), ((2i32) as i8), ((253i32) as i8), ((4i32) as i8), ((251i32) as i8), ((6i32) as i8), ((249i32) as i8)]), create__m128i_from_i8_array([((10i32) as i8), ((9i32) as i8), ((12i32) as i8), ((7i32) as i8), ((14i32) as i8), ((5i32) as i8), ((16i32) as i8), ((3i32) as i8), ((10i32) as i8), ((9i32) as i8), ((12i32) as i8), ((7i32) as i8), ((14i32) as i8), ((5i32) as i8), ((16i32) as i8), ((3i32) as i8)])));
+        let result = unpack__m128i_to_u8_array(_mm_subs_epu8(create__m128i_from_i8_array([((0u8) as i8), ((255u8) as i8), ((2u8) as i8), ((253u8) as i8), ((4u8) as i8), ((251u8) as i8), ((6u8) as i8), ((249u8) as i8), ((0u8) as i8), ((255u8) as i8), ((2u8) as i8), ((253u8) as i8), ((4u8) as i8), ((251u8) as i8), ((6u8) as i8), ((249u8) as i8)]), create__m128i_from_i8_array([((10u8) as i8), ((9u8) as i8), ((12u8) as i8), ((7u8) as i8), ((14u8) as i8), ((5u8) as i8), ((16u8) as i8), ((3u8) as i8), ((10u8) as i8), ((9u8) as i8), ((12u8) as i8), ((7u8) as i8), ((14u8) as i8), ((5u8) as i8), ((16u8) as i8), ((3u8) as i8)])));
         check_array_equality(&result, &[0, 246, 0, 246, 0, 246, 0, 246, 0, 246, 0, 246, 0, 246, 0, 246])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -5305,7 +5305,7 @@ pub(super) fn test_mm_subs_epu8_normal2() -> Result<(), String> {
 
 pub(super) fn test_mm_subs_epu8_normal3() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_u8_array(_mm_subs_epu8(create__m128i_from_i8_array([((100i32) as i8), ((200i32) as i8), ((44i32) as i8), ((144i32) as i8), ((244i32) as i8), ((88i32) as i8), ((188i32) as i8), ((32i32) as i8), ((132i32) as i8), ((232i32) as i8), ((76i32) as i8), ((176i32) as i8), ((20i32) as i8), ((120i32) as i8), ((220i32) as i8), ((64i32) as i8)]), create__m128i_from_i8_array([((110i32) as i8), ((210i32) as i8), ((54i32) as i8), ((154i32) as i8), ((254i32) as i8), ((98i32) as i8), ((198i32) as i8), ((42i32) as i8), ((142i32) as i8), ((242i32) as i8), ((86i32) as i8), ((186i32) as i8), ((30i32) as i8), ((130i32) as i8), ((230i32) as i8), ((74i32) as i8)])));
+        let result = unpack__m128i_to_u8_array(_mm_subs_epu8(create__m128i_from_i8_array([((100u8) as i8), ((200u8) as i8), ((44u8) as i8), ((144u8) as i8), ((244u8) as i8), ((88u8) as i8), ((188u8) as i8), ((32u8) as i8), ((132u8) as i8), ((232u8) as i8), ((76u8) as i8), ((176u8) as i8), ((20u8) as i8), ((120u8) as i8), ((220u8) as i8), ((64u8) as i8)]), create__m128i_from_i8_array([((110u8) as i8), ((210u8) as i8), ((54u8) as i8), ((154u8) as i8), ((254u8) as i8), ((98u8) as i8), ((198u8) as i8), ((42u8) as i8), ((142u8) as i8), ((242u8) as i8), ((86u8) as i8), ((186u8) as i8), ((30u8) as i8), ((130u8) as i8), ((230u8) as i8), ((74u8) as i8)])));
         check_array_equality(&result, &[0; 16])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -5365,7 +5365,7 @@ pub(super) fn test_mm_subs_epu8_boundary_max() -> Result<(), String> {
 
 pub(super) fn test_mm_subs_epu8_boundary_zero() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_u8_array(_mm_subs_epu8(create__m128i_from_i8_array([((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8)]), create__m128i_from_i8_array([((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8), ((0i32) as i8)])));
+        let result = unpack__m128i_to_u8_array(_mm_subs_epu8(create__m128i_from_i8_array([((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8)]), create__m128i_from_i8_array([((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8), ((0u8) as i8)])));
         check_array_equality(&result, &[0; 16])?;
 
         let total_iters = crate::cpu::get_iterations();
@@ -5405,7 +5405,7 @@ pub(super) fn test_mm_subs_epu8_boundary_allones() -> Result<(), String> {
 
 pub(super) fn test_mm_subs_epu8_boundary_mixed() -> Result<(), String> {
     unsafe {
-        let result = unpack__m128i_to_u8_array(_mm_subs_epu8(create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8)]), create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0i32) as i8), ((u8::MAX) as i8)])));
+        let result = unpack__m128i_to_u8_array(_mm_subs_epu8(create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8)]), create__m128i_from_i8_array([((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8), ((u8::MIN) as i8), ((u8::MAX) as i8), ((0u8) as i8), ((u8::MAX) as i8)])));
         check_array_equality(&result, &[0; 16])?;
 
         let total_iters = crate::cpu::get_iterations();

@@ -270,23 +270,26 @@ INT_RETURNS = {
 
 
 # ---------------------------------------------------------------------------
-# Multi-scenario pilot (x86 SSE2/AVX2 arithmetic/shift/compare/blend).
+# Multi-scenario expansion (x86/x86_64 arithmetic/shift/compare/blend).
 #
-# Today every function gets exactly one deterministic scenario (ascending
-# 1,2,3,4... via seq_init) and const-generic/immediate params are pinned to a
+# Every function used to get exactly one deterministic scenario (ascending
+# 1,2,3,4... via seq_init) and const-generic/immediate params were pinned to a
 # single fixed value (const_val, almost always 0). That means shift/compare/
-# blend intrinsics barely exercise real behavior beyond "doesn't crash", and
-# nothing checks overflow/NaN/boundary behavior. This section adds, for a
-# narrow pilot scope, several additional named scenarios per function:
-# normal-but-different-shaped inputs, boundary values (uniform-per-lane and
-# mixed-per-lane), an asymmetric MIN/MAX pair between the first two operands,
-# and immediate-value variants — as an axis independent from the value axis.
+# blend intrinsics barely exercised real behavior beyond "doesn't crash", and
+# nothing checked overflow/NaN/boundary behavior. This section adds, for
+# every x86/x86_64 function whose name matches PILOT_NAME_REGEX (started as a
+# narrow SSE2/AVX2-only pilot, now widened to the whole ISA - see git history
+# for the pilot-scoped version), several additional named scenarios per
+# function: normal-but-different-shaped inputs, boundary values (uniform-per-
+# lane and mixed-per-lane), an asymmetric MIN/MAX pair between the first two
+# operands, and immediate-value variants — as an axis independent from the
+# value axis.
 #
-# Promoting beyond the pilot later is a one-line change: widen
-# PILOT_SOURCE_BLOCKS/PILOT_NAME_REGEX, or make in_pilot_scope always True.
+# Widening further to non-arithmetic categories (shuffle/permute/insert,
+# gather/scatter, ...) is a PILOT_NAME_REGEX change, or drop the name filter
+# entirely for `in_pilot_scope` to always return True on x86/x86_64.
 # ---------------------------------------------------------------------------
 
-PILOT_SOURCE_BLOCKS: set[tuple[str, str]] = {("x86", "sse2"), ("x86", "avx2")}
 PILOT_NAME_REGEX = re.compile(
     r"_adds?_|_subs?_|_mul|_madd|_avg_|_sad_|_abs_|_sign_|"
     r"_sll|_srl|_sra|_shift|_bslli|_bsrli|"
@@ -295,7 +298,7 @@ PILOT_NAME_REGEX = re.compile(
 
 
 def in_pilot_scope(arch: str, ext: str, func_name: str) -> bool:
-    return (arch, ext) in PILOT_SOURCE_BLOCKS and bool(PILOT_NAME_REGEX.search(func_name))
+    return arch in ("x86", "x86_64") and bool(PILOT_NAME_REGEX.search(func_name))
 
 
 # Function-name suffix → actual per-lane element type. __m128i/__m256i/__m512i
@@ -397,9 +400,11 @@ def lane_lit(elem: str, container: str, kind: str) -> str:
     # Bare numeric literals (e.g. "0", "-1") need an explicit type before the cast, or
     # rustc's literal-fallback inference can try to type them directly as the (narrower)
     # `container`, tripping the overflowing-literal lint. Already-qualified constants
-    # (e.g. "u8::MAX") are unambiguous as-is.
+    # (e.g. "u8::MAX") are unambiguous as-is. Suffix with `elem` itself (not a fixed
+    # "i32") since a wrapped/computed value can legitimately need the full width of a
+    # 64-bit type - "i32" would itself overflow for e.g. a u64 value near u64::MAX.
     if "::" not in val and elem not in ("f32", "f64"):
-        val = f"{val}i32"
+        val = f"{val}{elem}"
     return f"(({val}) as {container})"
 
 
@@ -451,8 +456,11 @@ def normal_lane_values(elem: str, container: str, lane_count: int, scenario: str
         return vals
     # Disambiguate the bare integer literal's own type before casting (otherwise rustc's
     # literal-fallback inference can try to type it directly as `container`, tripping the
-    # overflowing-literal lint for values outside that narrower type's range).
-    suffix = "" if is_float else "i32"
+    # overflowing-literal lint for values outside that narrower type's range). Suffix with
+    # `elem` itself, not a fixed "i32" - values are already wrapped into elem's own valid
+    # range above, but a fixed narrower suffix (e.g. "i32" for a u64 elem) can itself be
+    # too small to hold them.
+    suffix = "" if is_float else elem
     return [f"(({v}{suffix}) as {container})" for v in vals]
 
 

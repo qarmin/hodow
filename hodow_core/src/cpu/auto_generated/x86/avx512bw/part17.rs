@@ -188,6 +188,226 @@ pub(super) fn test_mm512_bslli_epi128() -> Result<(), String> {
     Ok(())
 }
 
+pub(super) fn test_mm512_bslli_epi128_normal2() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m512i_to_i32_array(_mm512_bslli_epi128::<0>(create__m512i_from_i32_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7])));
+        check_array_equality(&result, &[0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7])?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_bslli_epi128::<0>(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_bslli_epi128_normal3() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m512i_to_i32_array(_mm512_bslli_epi128::<0>(create__m512i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600])));
+        check_array_equality(&result, &[100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600])?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_bslli_epi128::<0>(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_bslli_epi128_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m512i_to_i32_array(_mm512_bslli_epi128::<0>(create__m512i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN])));
+        check_array_equality(&result, &[-2147483648, -2147483648, -2147483648, -2147483648, -2147483648, -2147483648, -2147483648, -2147483648, -2147483648, -2147483648, -2147483648, -2147483648, -2147483648, -2147483648, -2147483648, -2147483648])?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_bslli_epi128::<0>(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_bslli_epi128_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m512i_to_i32_array(_mm512_bslli_epi128::<0>(create__m512i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
+        check_array_equality(&result, &[2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647])?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_bslli_epi128::<0>(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_bslli_epi128_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m512i_to_i32_array(_mm512_bslli_epi128::<0>(create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])));
+        check_array_equality(&result, &[0; 16])?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_bslli_epi128::<0>(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_bslli_epi128_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m512i_to_i32_array(_mm512_bslli_epi128::<0>(create__m512i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])));
+        check_array_equality(&result, &[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_bslli_epi128::<0>(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_bslli_epi128_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m512i_to_i32_array(_mm512_bslli_epi128::<0>(create__m512i_from_i32_array([i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1])));
+        check_array_equality(&result, &[-2147483648, 2147483647, 0, -1, -2147483648, 2147483647, 0, -1, -2147483648, 2147483647, 0, -1, -2147483648, 2147483647, 0, -1])?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_bslli_epi128::<0>(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_bslli_epi128_imm_0() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m512i_to_i32_array(_mm512_bslli_epi128::<0>(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_bslli_epi128::<0>(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_bslli_epi128_imm_1() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m512i_to_i32_array(_mm512_bslli_epi128::<1>(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[256, 512, 768, 1024, 1280, 1536, 1792, 2048, 2304, 2560, 2816, 3072, 3328, 3584, 3840, 4096])?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_bslli_epi128::<1>(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_bslli_epi128_imm_width_m1() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m512i_to_i32_array(_mm512_bslli_epi128::<31>(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[0; 16])?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_bslli_epi128::<31>(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_bslli_epi128_imm_width() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m512i_to_i32_array(_mm512_bslli_epi128::<32>(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[0; 16])?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_bslli_epi128::<32>(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
 pub(super) fn test_mm512_bsrli_epi128() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i32_array(_mm512_bsrli_epi128::<0>(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])));
@@ -202,6 +422,226 @@ pub(super) fn test_mm512_bsrli_epi128() -> Result<(), String> {
                     break;
                 }
                 let _ = _mm512_bsrli_epi128::<0>(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_bsrli_epi128_normal2() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m512i_to_i32_array(_mm512_bsrli_epi128::<0>(create__m512i_from_i32_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7])));
+        check_array_equality(&result, &[0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7])?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_bsrli_epi128::<0>(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_bsrli_epi128_normal3() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m512i_to_i32_array(_mm512_bsrli_epi128::<0>(create__m512i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600])));
+        check_array_equality(&result, &[100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600])?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_bsrli_epi128::<0>(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_bsrli_epi128_boundary_min() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m512i_to_i32_array(_mm512_bsrli_epi128::<0>(create__m512i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN])));
+        check_array_equality(&result, &[-2147483648, -2147483648, -2147483648, -2147483648, -2147483648, -2147483648, -2147483648, -2147483648, -2147483648, -2147483648, -2147483648, -2147483648, -2147483648, -2147483648, -2147483648, -2147483648])?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_bsrli_epi128::<0>(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_bsrli_epi128_boundary_max() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m512i_to_i32_array(_mm512_bsrli_epi128::<0>(create__m512i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX])));
+        check_array_equality(&result, &[2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647, 2147483647])?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_bsrli_epi128::<0>(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_bsrli_epi128_boundary_zero() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m512i_to_i32_array(_mm512_bsrli_epi128::<0>(create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])));
+        check_array_equality(&result, &[0; 16])?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_bsrli_epi128::<0>(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_bsrli_epi128_boundary_allones() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m512i_to_i32_array(_mm512_bsrli_epi128::<0>(create__m512i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])));
+        check_array_equality(&result, &[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1])?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_bsrli_epi128::<0>(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_bsrli_epi128_boundary_mixed() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m512i_to_i32_array(_mm512_bsrli_epi128::<0>(create__m512i_from_i32_array([i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1])));
+        check_array_equality(&result, &[-2147483648, 2147483647, 0, -1, -2147483648, 2147483647, 0, -1, -2147483648, 2147483647, 0, -1, -2147483648, 2147483647, 0, -1])?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_bsrli_epi128::<0>(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_bsrli_epi128_imm_0() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m512i_to_i32_array(_mm512_bsrli_epi128::<0>(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_bsrli_epi128::<0>(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_bsrli_epi128_imm_1() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m512i_to_i32_array(_mm512_bsrli_epi128::<1>(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[33554432, 50331648, 67108864, 0, 100663296, 117440512, 134217728, 0, 167772160, 184549376, 201326592, 0, 234881024, 251658240, 268435456, 0])?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_bsrli_epi128::<1>(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_bsrli_epi128_imm_width_m1() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m512i_to_i32_array(_mm512_bsrli_epi128::<31>(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[0; 16])?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_bsrli_epi128::<31>(create_random__m512i());
+            }
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn test_mm512_bsrli_epi128_imm_width() -> Result<(), String> {
+    unsafe {
+        let result = unpack__m512i_to_i32_array(_mm512_bsrli_epi128::<32>(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16])));
+        check_array_equality(&result, &[0; 16])?;
+
+        let total_iters = crate::cpu::get_iterations();
+        if crate::get_fuzzing() && total_iters > 0 {
+            log::info!("Starting fuzzing");
+            for i in 0..total_iters {
+                if i % 1000 == 0 && crate::cpu::should_stop() {
+                    log::info!("Fuzzing stopped at iteration {}", i);
+                    break;
+                }
+                let _ = _mm512_bsrli_epi128::<32>(create_random__m512i());
             }
         }
     }
