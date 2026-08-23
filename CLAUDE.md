@@ -25,8 +25,16 @@ heavily on AI-assisted code generation (see README.md "AI Usage").
 - `just cpu` / `just gpu` / `just vulkan` / `just gui` - run each subsystem (debug). `*r` suffix (`gpur`, ...)
   = release. `*a` suffix (`gpua`, `sanitizer`, `guia`) = build under `-Zsanitizer=address`.
 - `just stress` - CPU stress test across all cores (release).
-- `just serve` - run the CPU job-queue server + web dashboard (default `0.0.0.0:7878`, no auth).
-- `just submit -e avx2 ...` - submit a CPU job (same flags as `just cpu`) to a running `just serve`.
+- `just serve` / `just server` - run the job-queue server + web dashboard (default `0.0.0.0:7878`,
+  no auth); `server` is release-profile, for an instance you actually leave running.
+- `just submit -e avx2 ...` / `just submit-gpu ...` / `just submit-vulkan` / `just submit-stress
+  --stress-secs 30` - submit a job of the given kind to a running server. **All of these, plus
+  `cpu`/`gpu`/`vulkan`/`stress`/`serve`/`server`, are pinned to the exact same `--features vulkan`**
+  (on top of the `gpu`+`serve` defaults) deliberately - `cargo run` rebuilding `hodow_cli` with a
+  *different* feature set while a `serve`/`server` instance is running unlinks the very binary that
+  instance's `current_exe()` points at, silently breaking every subprocess it spawns afterward
+  ("No such file or directory"). Keep any new recipe that runs `hodow_cli` in the default
+  debug/release profile on this same feature set.
 - `just memtest` - GPU memory test.
 - `just miri` - run CPU tests under Miri (`miri_build` feature).
 - `just clippy` - clippy on `hodow_cli` with all features/targets.

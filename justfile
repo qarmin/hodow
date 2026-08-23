@@ -12,36 +12,64 @@ miri *args:
 clippy:
     RUSTFLAGS="-C target-cpu=native" cargo clippy -p hodow_cli --all-features --all-targets
 
+# All recipes below that run `hodow_cli` in the *default* debug profile (no --release, no
+# --target) share the same on-disk binary at target/debug/hodow_cli. If one of them rebuilds
+# it with a DIFFERENT --features set while `just serve` is running off that same binary,
+# cargo's write-then-rename unlinks the inode the server's `current_exe()` pointed at - every
+# subsequent subprocess job it spawns (isolate worker, gpu/vulkan/stress subprocess) then
+# fails with "No such file or directory", since the resolved path gets a stale/deleted
+# reference. Keeping every one of them on the exact same `--features vulkan` (i.e.
+# gpu+serve+vulkan, matching `serve`/`server`) means `cargo run` is always a no-op rebuild
+# check while a server from this justfile is up. The same reasoning applies to the
+# --release group (`stress`, `server`, `gpur`, `memtest`) sharing target/release/hodow_cli.
+
 cpu *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli -- -d cpu {{args}}
+    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- -d cpu {{args}}
 
 stress *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --release -- -d cpu --stress {{args}}
+    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan --release -- -d cpu --stress {{args}}
 
 serve *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli -- -d serve {{args}}
+    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- -d serve {{args}}
+
+# Same as `serve`, but release-profile - use for a long-lived instance you actually want
+# to leave running (debug-profile CPU/stress jobs are noticeably slower).
+server *args:
+    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan --release -- -d serve {{args}}
 
 # Submit a CPU job to a running `just serve` instance, e.g. `just submit -e avx2`.
 submit *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli -- -d cpu --submit-to http://127.0.0.1:7878 {{args}}
+    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- -d cpu --submit-to http://127.0.0.1:7878 {{args}}
+
+# Submit a stress job to a running `just server` instance, e.g. `just submit-stress --stress-secs 30`.
+submit-stress *args:
+    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan --release -- -d cpu --stress --submit-to http://127.0.0.1:7878 {{args}}
+
+# Submit a GPU job, e.g. `just submit-gpu --memtest`.
+submit-gpu *args:
+    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- -d gpu --submit-to http://127.0.0.1:7878 {{args}}
+
+# Submit a Vulkan compute-validation job.
+submit-vulkan *args:
+    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- -d vulkan --submit-to http://127.0.0.1:7878 {{args}}
 
 arm:
     cargo zigbuild -p hodow_cli --target armv7-unknown-linux-gnueabihf.2.28 --no-default-features --features gpu
 
 gpu *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features gpu -- -d gpu --time-limit 1000 {{args}}
+    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- -d gpu --time-limit 1000 {{args}}
 
 vulkan *args:
     RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan -- -d vulkan {{args}}
 
 memtest *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features gpu --release -- -d gpu --memtest {{args}}
+    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan --release -- -d gpu --memtest {{args}}
 
 gpua *args:
     RUSTFLAGS="-Zsanitizer=address" cargo +{{NIGHTLY}} run -p hodow_cli --target x86_64-unknown-linux-gnu --features gpu -- -d gpu --time-limit 1000 {{args}}
 
 gpur *args:
-    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features gpu --release -- -d gpu --time-limit 1000 {{args}}
+    RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_cli --features vulkan --release -- -d gpu --time-limit 1000 {{args}}
 
 gui *args:
     RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} run -p hodow_gui -- {{args}}
