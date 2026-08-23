@@ -56,7 +56,7 @@ pub fn run_stress(args: &CpuArgs) {
     // legitimately fails when the shared entropy source saturates under heavy multi-core load,
     // so they would produce false "failures" that mask a real faulty-core signal. Exclude them.
     let all = hodow_core::all_tests();
-    let excluded = all.iter().filter(|(n, _)| is_nondeterministic(n)).count();
+    let excluded = all.iter().filter(|(n, _, _)| is_nondeterministic(n)).count();
     let test_count = all.len() - excluded;
     if test_count == 0 {
         info!("No deterministic CPU tests available for this target.");
@@ -80,7 +80,11 @@ pub fn run_stress(args: &CpuArgs) {
                 scope.spawn(move || {
                     let pinned = pin_current_thread(core);
                     // Each thread resolves its own test list (identical order, deterministic).
-                    let tests: Vec<_> = hodow_core::all_tests().into_iter().filter(|(n, _)| !is_nondeterministic(n)).collect();
+                    let tests: Vec<_> = hodow_core::all_tests()
+                        .into_iter()
+                        .filter(|(n, _, _)| !is_nondeterministic(n))
+                        .map(|(n, _feature, f)| (n, f))
+                        .collect();
                     let mut iterations = 0u64;
                     let mut tests_executed = 0u64;
                     let mut failures: Vec<(&'static str, String)> = Vec::new();

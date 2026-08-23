@@ -9,8 +9,27 @@ use crate::cli::CpuArgs;
 use crate::setup_ctrlc_handler;
 
 pub fn process_cpu(args: &CpuArgs) {
+    #[cfg(feature = "serve")]
+    if let Some(ref url) = args.submit_to {
+        return submit_to_server(args, url);
+    }
+
     if let Some(nv) = args.iterations {
         set_iterations(nv);
+    }
+
+    // Filters must be set before any run mode below (including the isolation worker/parent
+    // and stress paths) so `-t`/`-e`/`-s` apply uniformly regardless of how the suite runs.
+    if let Some(ref only) = args.test_function {
+        set_only_tests(only.clone());
+    }
+
+    if !args.feature.is_empty() {
+        set_only_features(args.feature.clone());
+    }
+
+    if !args.skip.is_empty() {
+        set_skip_tests(args.skip.clone());
     }
 
     // Isolation worker: run tests in a child process speaking the line protocol on stdout.
@@ -29,18 +48,6 @@ pub fn process_cpu(args: &CpuArgs) {
     if args.stress {
         crate::stress::run_stress(args);
         return;
-    }
-
-    if let Some(ref only) = args.test_function {
-        set_only_tests(only.clone());
-    }
-
-    if !args.feature.is_empty() {
-        set_only_features(args.feature.clone());
-    }
-
-    if !args.skip.is_empty() {
-        set_skip_tests(args.skip.clone());
     }
 
     if args.list_modes {
@@ -127,6 +134,32 @@ pub fn process_cpu(args: &CpuArgs) {
             multi.clear().ok();
 
             error!("Error: Running tests failed: {}", e);
+            std::process::exit(1);
+        }
+    }
+}
+
+/// POSTs this invocation's args as a job to a running `hodow_cli serve` instead of running
+/// them locally. `-i`/`--isolate`/`--stress`/`--worker-start`/list-* flags don't apply here -
+/// the server always runs queued jobs through its own isolate-based executor.
+#[cfg(feature = "serve")]
+fn submit_to_server(args: &CpuArgs, base_url: &str) {
+    let spec = serde_json::json!({
+        "iterations": args.iterations,
+        "test_function": args.test_function,
+        "feature": args.feature,
+        "skip": args.skip,
+        "isolate_timeout_ms": args.isolate_timeout_ms,
+    });
+    let body = serde_json::json!({ "kind": "cpu", "spec": spec });
+    let url = format!("{}/api/jobs", base_url.trim_end_matches('/'));
+    match ureq::post(&url).send_json(&body) {
+        Ok(mut resp) => match resp.body_mut().read_to_string() {
+            Ok(text) => info!("Submitted job to {url}: {text}"),
+            Err(e) => error!("Job submitted but failed to read response: {e}"),
+        },
+        Err(e) => {
+            error!("Failed to submit job to {url}: {e}");
             std::process::exit(1);
         }
     }

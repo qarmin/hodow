@@ -28,7 +28,7 @@ use crate::cli::CpuArgs;
 const DEFAULT_TIMEOUT_MS: u64 = 10_000;
 
 #[derive(Clone, PartialEq)]
-enum Outcome {
+pub(crate) enum Outcome {
     Pending,
     Pass,
     Fail(String),
@@ -37,9 +37,22 @@ enum Outcome {
     Crashed,
 }
 
-/// Worker: run every test from `start` onward, streaming the line protocol on stdout.
+/// The filtered test list (name, fn) both the worker and the parent must agree on, so
+/// index-based progress/crash-attribution stays consistent between the two processes. Both
+/// sides compute this independently from the same `-t`/`-e`/`-s` filter state (set on
+/// `CpuArgs` before either the worker or the parent branch runs, see `process_cpu`), so the
+/// filtered order is deterministic and identical in both.
+fn filtered_tests() -> Vec<(&'static str, &'static hodow_core::TestFunction)> {
+    hodow_core::all_tests()
+        .into_iter()
+        .filter(|(name, feature, _)| !hodow_core::should_skip_test_or_feature(name, feature))
+        .map(|(name, _feature, f)| (name, f))
+        .collect()
+}
+
+/// Worker: run every (filtered) test from `start` onward, streaming the line protocol on stdout.
 pub fn run_worker(start: usize) {
-    let tests = hodow_core::all_tests();
+    let tests = filtered_tests();
     let stdout = std::io::stdout();
     let mut out = stdout.lock();
 
@@ -73,12 +86,24 @@ fn sanitize(s: &str) -> String {
 
 /// Parent: orchestrate isolated workers and aggregate a report.
 pub fn run_isolated(args: &CpuArgs) {
-    // Build the (name-only) list; the fn pointers are only ever executed in the child.
-    let names: Vec<&'static str> = hodow_core::all_tests().iter().map(|(n, _)| *n).collect();
+    let Some((names, outcome)) = run_isolated_core(args, |_, _, _| {}) else {
+        return;
+    };
+    print_report(&names, &outcome);
+}
+
+/// Core orchestration loop, reusable by both the plain CLI path above and the server's job
+/// executor. `on_event` is called once per test as soon as its outcome is finalized (in
+/// execution order, which may skip indices when a crash/timeout forces a respawn past the
+/// culprit — the respawn logic below still eventually finalizes every index). Returns
+/// `None` if there are no tests to run for this target/filter, else `(names, outcomes)`.
+pub(crate) fn run_isolated_core(args: &CpuArgs, mut on_event: impl FnMut(usize, &'static str, &Outcome)) -> Option<(Vec<&'static str>, Vec<Outcome>)> {
+    // Build the (name-only) filtered list; the fn pointers are only ever executed in the child.
+    let names: Vec<&'static str> = filtered_tests().iter().map(|(n, _)| *n).collect();
     let total = names.len();
     if total == 0 {
         info!("No CPU tests available for this target.");
-        return;
+        return None;
     }
 
     let timeout = Duration::from_millis(args.isolate_timeout_ms.unwrap_or(DEFAULT_TIMEOUT_MS));
@@ -95,11 +120,23 @@ pub fn run_isolated(args: &CpuArgs) {
         if let Some(n) = args.iterations {
             cmd.arg("--iterations").arg(n.to_string());
         }
+        if let Some(ref only) = args.test_function {
+            cmd.arg("--test-function");
+            for t in only {
+                cmd.arg(t);
+            }
+        }
+        if !args.feature.is_empty() {
+            cmd.arg("--feature").arg(args.feature.join(","));
+        }
+        if !args.skip.is_empty() {
+            cmd.arg("--skip").arg(args.skip.join(","));
+        }
         let mut child = match cmd.stdout(Stdio::piped()).stderr(Stdio::null()).spawn() {
             Ok(c) => c,
             Err(e) => {
                 info!("Failed to spawn worker: {e}");
-                return;
+                return None;
             }
         };
 
@@ -134,6 +171,7 @@ pub fn run_isolated(args: &CpuArgs) {
                                     "ERR" => Outcome::Fail(parts.next().unwrap_or("").to_string()),
                                     other => Outcome::Fail(other.to_string()),
                                 };
+                                on_event(i, names[i], &outcome[i]);
                                 in_flight = None;
                                 advanced_to = i + 1;
                             }
@@ -150,6 +188,7 @@ pub fn run_isolated(args: &CpuArgs) {
                     if culprit < total {
                         info!("TIMEOUT after {} ms: {}", timeout.as_millis(), names[culprit]);
                         outcome[culprit] = Outcome::Timeout;
+                        on_event(culprit, names[culprit], &outcome[culprit]);
                         advanced_to = culprit + 1;
                     }
                     let _ = child.kill();
@@ -169,6 +208,7 @@ pub fn run_isolated(args: &CpuArgs) {
         {
             info!("CRASHED: {}", names[culprit]);
             outcome[culprit] = Outcome::Crashed;
+            on_event(culprit, names[culprit], &outcome[culprit]);
             advanced_to = culprit + 1;
         }
 
@@ -177,12 +217,13 @@ pub fn run_isolated(args: &CpuArgs) {
         if next == prev_next && next < total {
             if outcome[next] == Outcome::Pending {
                 outcome[next] = Outcome::Crashed;
+                on_event(next, names[next], &outcome[next]);
             }
             next += 1;
         }
     }
 
-    print_report(&names, &outcome);
+    Some((names, outcome))
 }
 
 fn print_report(names: &[&'static str], outcome: &[Outcome]) {

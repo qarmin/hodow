@@ -114,6 +114,13 @@ pub fn should_skip_feature(name: &str) -> bool {
     false
 }
 
+/// Combined `-t`/`-e`/`-s` filter check for callers that only have a flat
+/// `(test_name, feature, fn)` list (e.g. the isolated-subprocess and stress runners), which
+/// can't go through `ExtensionTest::test_with_progress`'s per-extension dispatch.
+pub fn should_skip_test_or_feature(name: &str, feature: &str) -> bool {
+    should_skip_test(name) || should_skip_feature(feature)
+}
+
 pub fn request_stop() {
     STOP_REQUESTED.store(true, Ordering::Relaxed);
 }
