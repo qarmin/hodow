@@ -388,7 +388,7 @@ pub(super) fn test_wasm32_simd128_i32x4_all_true() -> Result<(), String> {
 pub(super) fn test_wasm32_simd128_i32x4_bitmask() -> Result<(), String> {
     unsafe {
         let result = i32x4_bitmask(0 /* v128 */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: i32x4_bitmask(0 /* v128 */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -826,7 +826,7 @@ pub(super) fn test_wasm32_simd128_i64x2_all_true() -> Result<(), String> {
 pub(super) fn test_wasm32_simd128_i64x2_bitmask() -> Result<(), String> {
     unsafe {
         let result = i64x2_bitmask(0 /* v128 */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: i64x2_bitmask(0 /* v128 */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {

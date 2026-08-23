@@ -11,7 +11,7 @@ use crate::cpu::common::{check_array_equality, check_float_array_equality, check
 pub(super) fn test_x86_rdtsc_rdtsc() -> Result<(), String> {
     unsafe {
         let result = _rdtsc();
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _rdtsc()"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -32,7 +32,7 @@ pub(super) fn test_x86_rdtsc_rdtscp() -> Result<(), String> {
     unsafe {
         let mut ptr_aux = crate::cpu::common::Aligned64([1u32; 16]);
         let result = __rdtscp(ptr_aux.0.as_mut_ptr());
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: __rdtscp(ptr_aux.0.as_mut_ptr())"))?;
     }
     Ok(())
 }

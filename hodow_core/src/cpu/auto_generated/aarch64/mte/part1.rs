@@ -27,7 +27,7 @@ pub(super) fn test_aarch64_mte_arm_mte_exclude_tag() -> Result<(), String> {
         let ptr_src = crate::cpu::common::Aligned64([0 /* T */; 64]);
         let excluded = 1u64;
         let result = __arm_mte_exclude_tag(ptr_src.0.as_ptr(), excluded);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: __arm_mte_exclude_tag(ptr_src.0.as_ptr(), excluded)"))?;
     }
     Ok(())
 }
@@ -53,7 +53,7 @@ pub(super) fn test_aarch64_mte_arm_mte_ptrdiff() -> Result<(), String> {
         let ptr_a = crate::cpu::common::Aligned64([0 /* T */; 64]);
         let ptr_b = crate::cpu::common::Aligned64([0 /* U */; 64]);
         let result = __arm_mte_ptrdiff(ptr_a.0.as_ptr(), ptr_b.0.as_ptr());
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: __arm_mte_ptrdiff(ptr_a.0.as_ptr(), ptr_b.0.as_ptr())"))?;
     }
     Ok(())
 }

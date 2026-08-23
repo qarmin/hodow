@@ -8,7 +8,7 @@ use crate::cpu::common::{check_array_equality, check_float_array_equality, check
 pub(super) fn test_riscv32_zk_aes32esi() -> Result<(), String> {
     unsafe {
         let result = aes32esi::<0>(1u32, 2u32);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: aes32esi::<0>(1u32, 2u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -28,7 +28,7 @@ pub(super) fn test_riscv32_zk_aes32esi() -> Result<(), String> {
 pub(super) fn test_riscv32_zk_aes32esmi() -> Result<(), String> {
     unsafe {
         let result = aes32esmi::<0>(1u32, 2u32);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: aes32esmi::<0>(1u32, 2u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -48,7 +48,7 @@ pub(super) fn test_riscv32_zk_aes32esmi() -> Result<(), String> {
 pub(super) fn test_riscv32_zk_aes32dsi() -> Result<(), String> {
     unsafe {
         let result = aes32dsi::<0>(1u32, 2u32);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: aes32dsi::<0>(1u32, 2u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -68,7 +68,7 @@ pub(super) fn test_riscv32_zk_aes32dsi() -> Result<(), String> {
 pub(super) fn test_riscv32_zk_aes32dsmi() -> Result<(), String> {
     unsafe {
         let result = aes32dsmi::<0>(1u32, 2u32);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: aes32dsmi::<0>(1u32, 2u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -88,7 +88,7 @@ pub(super) fn test_riscv32_zk_aes32dsmi() -> Result<(), String> {
 pub(super) fn test_riscv32_zk_zip() -> Result<(), String> {
     unsafe {
         let result = zip(1u32);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: zip(1u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -108,7 +108,7 @@ pub(super) fn test_riscv32_zk_zip() -> Result<(), String> {
 pub(super) fn test_riscv32_zk_unzip() -> Result<(), String> {
     unsafe {
         let result = unzip(1u32);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: unzip(1u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -128,7 +128,7 @@ pub(super) fn test_riscv32_zk_unzip() -> Result<(), String> {
 pub(super) fn test_riscv32_zk_sha512sig0h() -> Result<(), String> {
     unsafe {
         let result = sha512sig0h(1u32, 2u32);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: sha512sig0h(1u32, 2u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -148,7 +148,7 @@ pub(super) fn test_riscv32_zk_sha512sig0h() -> Result<(), String> {
 pub(super) fn test_riscv32_zk_sha512sig0l() -> Result<(), String> {
     unsafe {
         let result = sha512sig0l(1u32, 2u32);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: sha512sig0l(1u32, 2u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -168,7 +168,7 @@ pub(super) fn test_riscv32_zk_sha512sig0l() -> Result<(), String> {
 pub(super) fn test_riscv32_zk_sha512sig1h() -> Result<(), String> {
     unsafe {
         let result = sha512sig1h(1u32, 2u32);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: sha512sig1h(1u32, 2u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -188,7 +188,7 @@ pub(super) fn test_riscv32_zk_sha512sig1h() -> Result<(), String> {
 pub(super) fn test_riscv32_zk_sha512sig1l() -> Result<(), String> {
     unsafe {
         let result = sha512sig1l(1u32, 2u32);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: sha512sig1l(1u32, 2u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -208,7 +208,7 @@ pub(super) fn test_riscv32_zk_sha512sig1l() -> Result<(), String> {
 pub(super) fn test_riscv32_zk_sha512sum0r() -> Result<(), String> {
     unsafe {
         let result = sha512sum0r(1u32, 2u32);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: sha512sum0r(1u32, 2u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -228,7 +228,7 @@ pub(super) fn test_riscv32_zk_sha512sum0r() -> Result<(), String> {
 pub(super) fn test_riscv32_zk_sha512sum1r() -> Result<(), String> {
     unsafe {
         let result = sha512sum1r(1u32, 2u32);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: sha512sum1r(1u32, 2u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {

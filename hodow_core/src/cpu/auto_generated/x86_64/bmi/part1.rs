@@ -8,7 +8,7 @@ use crate::cpu::common::{check_array_equality, check_float_array_equality, check
 pub(super) fn test_x86_64_bmi_bextr_u64() -> Result<(), String> {
     unsafe {
         let result = _bextr_u64(1u64, 2u32, 3u32);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _bextr_u64(1u64, 2u32, 3u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -28,7 +28,7 @@ pub(super) fn test_x86_64_bmi_bextr_u64() -> Result<(), String> {
 pub(super) fn test_x86_64_bmi_bextr2_u64() -> Result<(), String> {
     unsafe {
         let result = _bextr2_u64(1u64, 2u64);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _bextr2_u64(1u64, 2u64)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -48,7 +48,7 @@ pub(super) fn test_x86_64_bmi_bextr2_u64() -> Result<(), String> {
 pub(super) fn test_x86_64_bmi_andn_u64() -> Result<(), String> {
     unsafe {
         let result = _andn_u64(1u64, 2u64);
-        check_int_equality(result as i32, 2)?;
+        check_int_equality(result as i32, 2).map_err(|e| format!("{e} | call: _andn_u64(1u64, 2u64)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -68,7 +68,7 @@ pub(super) fn test_x86_64_bmi_andn_u64() -> Result<(), String> {
 pub(super) fn test_x86_64_bmi_blsi_u64() -> Result<(), String> {
     unsafe {
         let result = _blsi_u64(1u64);
-        check_int_equality(result as i32, 1)?;
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _blsi_u64(1u64)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -88,7 +88,7 @@ pub(super) fn test_x86_64_bmi_blsi_u64() -> Result<(), String> {
 pub(super) fn test_x86_64_bmi_blsmsk_u64() -> Result<(), String> {
     unsafe {
         let result = _blsmsk_u64(1u64);
-        check_int_equality(result as i32, 1)?;
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _blsmsk_u64(1u64)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -108,7 +108,7 @@ pub(super) fn test_x86_64_bmi_blsmsk_u64() -> Result<(), String> {
 pub(super) fn test_x86_64_bmi_blsr_u64() -> Result<(), String> {
     unsafe {
         let result = _blsr_u64(1u64);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _blsr_u64(1u64)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -128,7 +128,7 @@ pub(super) fn test_x86_64_bmi_blsr_u64() -> Result<(), String> {
 pub(super) fn test_x86_64_bmi_tzcnt_u64() -> Result<(), String> {
     unsafe {
         let result = _tzcnt_u64(1u64);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _tzcnt_u64(1u64)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -148,7 +148,7 @@ pub(super) fn test_x86_64_bmi_tzcnt_u64() -> Result<(), String> {
 pub(super) fn test_x86_64_bmi_mm_tzcnt_64() -> Result<(), String> {
     unsafe {
         let result = _mm_tzcnt_64(1u64);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_tzcnt_64(1u64)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {

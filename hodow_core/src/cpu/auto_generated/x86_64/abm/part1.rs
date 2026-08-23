@@ -8,7 +8,7 @@ use crate::cpu::common::{check_array_equality, check_float_array_equality, check
 pub(super) fn test_x86_64_abm_lzcnt_u64() -> Result<(), String> {
     unsafe {
         let result = _lzcnt_u64(1u64);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _lzcnt_u64(1u64)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -28,7 +28,7 @@ pub(super) fn test_x86_64_abm_lzcnt_u64() -> Result<(), String> {
 pub(super) fn test_x86_64_abm_popcnt64() -> Result<(), String> {
     unsafe {
         let result = _popcnt64(1i64);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _popcnt64(1i64)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {

@@ -8,7 +8,7 @@ use crate::cpu::common::{check_array_equality, check_float_array_equality, check
 pub(super) fn test_x86_64_avx512bw_cvtmask64_u64() -> Result<(), String> {
     unsafe {
         let result = _cvtmask64_u64(create__mmask64_from(0x5555555555555555u64));
-        check_int_equality(result as i32, 1431655765)?;
+        check_int_equality(result as i32, 1431655765).map_err(|e| format!("{e} | call: _cvtmask64_u64(create__mmask64_from(0x5555555555555555u64))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -28,7 +28,7 @@ pub(super) fn test_x86_64_avx512bw_cvtmask64_u64() -> Result<(), String> {
 pub(super) fn test_x86_64_avx512bw_cvtu64_mask64() -> Result<(), String> {
     unsafe {
         let result = _cvtu64_mask64(1u64);
-        check_int_equality(result as i32, 1)?;
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _cvtu64_mask64(1u64)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {

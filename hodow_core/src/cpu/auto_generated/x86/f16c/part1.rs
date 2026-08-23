@@ -11,7 +11,7 @@ use crate::cpu::common::{check_array_equality, check_float_array_equality, check
 pub(super) fn test_x86_f16c_mm_cvtph_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m128_to_f32_array(_mm_cvtph_ps(create__m128i_from_i32_array([1, 2, 3, 4])));
-        check_float_array_equality(&result, &[0.0f32; 4])?;
+        check_float_array_equality(&result, &[0.0f32; 4]).map_err(|e| format!("{e} | call: _mm_cvtph_ps(create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -31,7 +31,7 @@ pub(super) fn test_x86_f16c_mm_cvtph_ps() -> Result<(), String> {
 pub(super) fn test_x86_f16c_mm256_cvtph_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m256_to_f32_array(_mm256_cvtph_ps(create__m128i_from_i32_array([1, 2, 3, 4])));
-        check_float_array_equality(&result, &[0.0f32; 8])?;
+        check_float_array_equality(&result, &[0.0f32; 8]).map_err(|e| format!("{e} | call: _mm256_cvtph_ps(create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -54,7 +54,7 @@ pub(super) fn test_x86_f16c_mm_cvtps_ph() -> Result<(), String> {
         }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_cvtps_ph::<0>(create__m128_from([1.0, 2.0, 3.0, 4.0])));
-        check_array_equality(&result, &[1073757184, 1140867584, 0, 0])?;
+        check_array_equality(&result, &[1073757184, 1140867584, 0, 0]).map_err(|e| format!("{e} | call: _mm_cvtps_ph::<0>(create__m128_from([1.0, 2.0, 3.0, 4.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -77,7 +77,7 @@ pub(super) fn test_x86_f16c_mm256_cvtps_ph() -> Result<(), String> {
         }
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm256_cvtps_ph::<0>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0])));
-        check_array_equality(&result, &[1073757184, 1140867584, 1174422784, 1207977728])?;
+        check_array_equality(&result, &[1073757184, 1140867584, 1174422784, 1207977728]).map_err(|e| format!("{e} | call: _mm256_cvtps_ph::<0>(create__m256_from([1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {

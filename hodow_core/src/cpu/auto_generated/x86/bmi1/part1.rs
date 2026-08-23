@@ -11,7 +11,7 @@ use crate::cpu::common::{check_array_equality, check_float_array_equality, check
 pub(super) fn test_x86_bmi1_bextr_u32() -> Result<(), String> {
     unsafe {
         let result = _bextr_u32(1u32, 2u32, 3u32);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _bextr_u32(1u32, 2u32, 3u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -31,7 +31,7 @@ pub(super) fn test_x86_bmi1_bextr_u32() -> Result<(), String> {
 pub(super) fn test_x86_bmi1_bextr2_u32() -> Result<(), String> {
     unsafe {
         let result = _bextr2_u32(1u32, 2u32);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _bextr2_u32(1u32, 2u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -51,7 +51,7 @@ pub(super) fn test_x86_bmi1_bextr2_u32() -> Result<(), String> {
 pub(super) fn test_x86_bmi1_andn_u32() -> Result<(), String> {
     unsafe {
         let result = _andn_u32(1u32, 2u32);
-        check_int_equality(result as i32, 2)?;
+        check_int_equality(result as i32, 2).map_err(|e| format!("{e} | call: _andn_u32(1u32, 2u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -71,7 +71,7 @@ pub(super) fn test_x86_bmi1_andn_u32() -> Result<(), String> {
 pub(super) fn test_x86_bmi1_blsi_u32() -> Result<(), String> {
     unsafe {
         let result = _blsi_u32(1u32);
-        check_int_equality(result as i32, 1)?;
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _blsi_u32(1u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -91,7 +91,7 @@ pub(super) fn test_x86_bmi1_blsi_u32() -> Result<(), String> {
 pub(super) fn test_x86_bmi1_blsmsk_u32() -> Result<(), String> {
     unsafe {
         let result = _blsmsk_u32(1u32);
-        check_int_equality(result as i32, 1)?;
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _blsmsk_u32(1u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -111,7 +111,7 @@ pub(super) fn test_x86_bmi1_blsmsk_u32() -> Result<(), String> {
 pub(super) fn test_x86_bmi1_blsr_u32() -> Result<(), String> {
     unsafe {
         let result = _blsr_u32(1u32);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _blsr_u32(1u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -131,7 +131,7 @@ pub(super) fn test_x86_bmi1_blsr_u32() -> Result<(), String> {
 pub(super) fn test_x86_bmi1_tzcnt_u16() -> Result<(), String> {
     unsafe {
         let result = _tzcnt_u16(1u16);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _tzcnt_u16(1u16)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -151,7 +151,7 @@ pub(super) fn test_x86_bmi1_tzcnt_u16() -> Result<(), String> {
 pub(super) fn test_x86_bmi1_tzcnt_u32() -> Result<(), String> {
     unsafe {
         let result = _tzcnt_u32(1u32);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _tzcnt_u32(1u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -171,7 +171,7 @@ pub(super) fn test_x86_bmi1_tzcnt_u32() -> Result<(), String> {
 pub(super) fn test_x86_bmi1_mm_tzcnt_32() -> Result<(), String> {
     unsafe {
         let result = _mm_tzcnt_32(1u32);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_tzcnt_32(1u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {

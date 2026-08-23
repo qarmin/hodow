@@ -731,6 +731,20 @@ def _adjust_expected_for_ret(expected: str, ret: str) -> str:
     return s
 
 
+def rust_str_lit(s: str) -> str:
+    """Escape `s` for embedding as the body of a Rust `"..."` string literal."""
+    return s.replace("\\", "\\\\").replace('"', '\\"')
+
+
+def _checked(check_call: str, call: str) -> str:
+    """Wraps a `check_*_equality(...)` call (no trailing `?`) so a failure's error also
+    reports the exact call - including every input literal - that produced it. The check
+    functions themselves only ever see the computed result and expected value; without
+    this, a failing test's message shows two outputs (Got/expected) with no way to tell
+    what input produced them."""
+    return f'{check_call}.map_err(|e| format!("{{e}} | call: {rust_str_lit(call)}"))?;'
+
+
 def emit_check(lines: list[str], call: str, ret: str, expected: str | None = None,
                width_override: tuple[str, str, int] | None = None) -> None:
     """Append lines that call `call` and check its result.
@@ -748,13 +762,13 @@ def emit_check(lines: list[str], call: str, ret: str, expected: str | None = Non
         if expected is not None:
             adj_expected = _adjust_expected_for_ret(expected, ret)
             if is_float:
-                lines.append(f"        check_float_array_equality(&result, &{adj_expected})?;")
+                lines.append("        " + _checked(f"check_float_array_equality(&result, &{adj_expected})", call))
             else:
-                lines.append(f"        check_array_equality(&result, &{adj_expected})?;")
+                lines.append("        " + _checked(f"check_array_equality(&result, &{adj_expected})", call))
         elif is_float:
-            lines.append(f"        check_float_array_equality(&result, &[{zero}; {size}])?;")
+            lines.append("        " + _checked(f"check_float_array_equality(&result, &[{zero}; {size}])", call))
         else:
-            lines.append(f"        check_array_equality(&result, &[{zero}; {size}])?;")
+            lines.append("        " + _checked(f"check_array_equality(&result, &[{zero}; {size}])", call))
     elif expected is not None:
         # User-supplied expected value: emit check based on return type
         if ret in UNPACK_INFO:
@@ -764,12 +778,12 @@ def emit_check(lines: list[str], call: str, ret: str, expected: str | None = Non
             # choose float-array vs generic-array comparator
             elem = _elem_type_for_unpack(ret)
             if elem in ("f32", "f64"):
-                lines.append(f"        check_float_array_equality(&result, &{adj_expected})?;")
+                lines.append("        " + _checked(f"check_float_array_equality(&result, &{adj_expected})", call))
             else:
-                lines.append(f"        check_array_equality(&result, &{adj_expected})?;")
+                lines.append("        " + _checked(f"check_array_equality(&result, &{adj_expected})", call))
         elif ret in INT_RETURNS:
             lines.append(f"        let result = {call};")
-            lines.append(f"        check_int_equality(result as i32, {expected})?;")
+            lines.append("        " + _checked(f"check_int_equality(result as i32, {expected})", call))
         elif ret in ("()", ""):
             lines.append(f"        {call};")
         else:
@@ -780,12 +794,12 @@ def emit_check(lines: list[str], call: str, ret: str, expected: str | None = Non
         # choose comparator based on element type
         elem = _elem_type_for_unpack(ret)
         if elem in ("f32", "f64"):
-            lines.append(f"        check_float_array_equality(&result, &[{zero}; {size}])?;")
+            lines.append("        " + _checked(f"check_float_array_equality(&result, &[{zero}; {size}])", call))
         else:
-            lines.append(f"        check_array_equality(&result, &[{zero}; {size}])?;")
+            lines.append("        " + _checked(f"check_array_equality(&result, &[{zero}; {size}])", call))
     elif ret in INT_RETURNS:
         lines.append(f"        let result = {call};")
-        lines.append(f"        check_int_equality(result as i32, 0)?;")
+        lines.append("        " + _checked("check_int_equality(result as i32, 0)", call))
     elif ret in ("()", ""):
         lines.append(f"        {call};")
     else:

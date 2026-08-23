@@ -33,7 +33,7 @@ pub(super) fn test_x86_kl_mm_encodekey128_u32() -> Result<(), String> {
         let key = create__m128i_from_i32_array([2, 3, 4, 5]);
         let mut ptr_handle = crate::cpu::common::Aligned64([6u8; 64]);
         let result = _mm_encodekey128_u32(key_params, key, ptr_handle.0.as_mut_ptr());
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_encodekey128_u32(key_params, key, ptr_handle.0.as_mut_ptr())"))?;
     }
     Ok(())
 }
@@ -45,7 +45,7 @@ pub(super) fn test_x86_kl_mm_encodekey256_u32() -> Result<(), String> {
         let key_hi = create__m128i_from_i32_array([6, 7, 8, 9]);
         let mut ptr_handle = crate::cpu::common::Aligned64([10u8; 64]);
         let result = _mm_encodekey256_u32(key_params, key_lo, key_hi, ptr_handle.0.as_mut_ptr());
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_encodekey256_u32(key_params, key_lo, key_hi, ptr_handle.0.as_mut_ptr())"))?;
     }
     Ok(())
 }
@@ -56,7 +56,7 @@ pub(super) fn test_x86_kl_mm_aesenc128kl_u8() -> Result<(), String> {
         let input = create__m128i_from_i32_array([5, 6, 7, 8]);
         let ptr_handle = crate::cpu::common::Aligned64([9u8; 64]);
         let result = _mm_aesenc128kl_u8(ptr_output.0.as_mut_ptr(), input, ptr_handle.0.as_ptr());
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_aesenc128kl_u8(ptr_output.0.as_mut_ptr(), input, ptr_handle.0.as_ptr())"))?;
     }
     Ok(())
 }
@@ -67,7 +67,7 @@ pub(super) fn test_x86_kl_mm_aesdec128kl_u8() -> Result<(), String> {
         let input = create__m128i_from_i32_array([5, 6, 7, 8]);
         let ptr_handle = crate::cpu::common::Aligned64([9u8; 64]);
         let result = _mm_aesdec128kl_u8(ptr_output.0.as_mut_ptr(), input, ptr_handle.0.as_ptr());
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_aesdec128kl_u8(ptr_output.0.as_mut_ptr(), input, ptr_handle.0.as_ptr())"))?;
     }
     Ok(())
 }
@@ -78,7 +78,7 @@ pub(super) fn test_x86_kl_mm_aesenc256kl_u8() -> Result<(), String> {
         let input = create__m128i_from_i32_array([5, 6, 7, 8]);
         let ptr_handle = crate::cpu::common::Aligned64([9u8; 64]);
         let result = _mm_aesenc256kl_u8(ptr_output.0.as_mut_ptr(), input, ptr_handle.0.as_ptr());
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_aesenc256kl_u8(ptr_output.0.as_mut_ptr(), input, ptr_handle.0.as_ptr())"))?;
     }
     Ok(())
 }
@@ -89,7 +89,7 @@ pub(super) fn test_x86_kl_mm_aesdec256kl_u8() -> Result<(), String> {
         let input = create__m128i_from_i32_array([5, 6, 7, 8]);
         let ptr_handle = crate::cpu::common::Aligned64([9u8; 64]);
         let result = _mm_aesdec256kl_u8(ptr_output.0.as_mut_ptr(), input, ptr_handle.0.as_ptr());
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_aesdec256kl_u8(ptr_output.0.as_mut_ptr(), input, ptr_handle.0.as_ptr())"))?;
     }
     Ok(())
 }
@@ -100,7 +100,7 @@ pub(super) fn test_x86_kl_mm_aesencwide128kl_u8() -> Result<(), String> {
         let ptr_input = crate::cpu::common::Aligned64([create__m128i_from_i32_array([5, 6, 7, 8]); 4]);
         let ptr_handle = crate::cpu::common::Aligned64([9u8; 64]);
         let result = _mm_aesencwide128kl_u8(ptr_output.0.as_mut_ptr(), ptr_input.0.as_ptr(), ptr_handle.0.as_ptr());
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_aesencwide128kl_u8(ptr_output.0.as_mut_ptr(), ptr_input.0.as_ptr(), ptr_handle.0.as_ptr())"))?;
     }
     Ok(())
 }
@@ -111,7 +111,7 @@ pub(super) fn test_x86_kl_mm_aesdecwide128kl_u8() -> Result<(), String> {
         let ptr_input = crate::cpu::common::Aligned64([create__m128i_from_i32_array([5, 6, 7, 8]); 4]);
         let ptr_handle = crate::cpu::common::Aligned64([9u8; 64]);
         let result = _mm_aesdecwide128kl_u8(ptr_output.0.as_mut_ptr(), ptr_input.0.as_ptr(), ptr_handle.0.as_ptr());
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_aesdecwide128kl_u8(ptr_output.0.as_mut_ptr(), ptr_input.0.as_ptr(), ptr_handle.0.as_ptr())"))?;
     }
     Ok(())
 }
@@ -122,7 +122,7 @@ pub(super) fn test_x86_kl_mm_aesencwide256kl_u8() -> Result<(), String> {
         let ptr_input = crate::cpu::common::Aligned64([create__m128i_from_i32_array([5, 6, 7, 8]); 4]);
         let ptr_handle = crate::cpu::common::Aligned64([9u8; 64]);
         let result = _mm_aesencwide256kl_u8(ptr_output.0.as_mut_ptr(), ptr_input.0.as_ptr(), ptr_handle.0.as_ptr());
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_aesencwide256kl_u8(ptr_output.0.as_mut_ptr(), ptr_input.0.as_ptr(), ptr_handle.0.as_ptr())"))?;
     }
     Ok(())
 }
@@ -133,7 +133,7 @@ pub(super) fn test_x86_kl_mm_aesdecwide256kl_u8() -> Result<(), String> {
         let ptr_input = crate::cpu::common::Aligned64([create__m128i_from_i32_array([5, 6, 7, 8]); 4]);
         let ptr_handle = crate::cpu::common::Aligned64([9u8; 64]);
         let result = _mm_aesdecwide256kl_u8(ptr_output.0.as_mut_ptr(), ptr_input.0.as_ptr(), ptr_handle.0.as_ptr());
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_aesdecwide256kl_u8(ptr_output.0.as_mut_ptr(), ptr_input.0.as_ptr(), ptr_handle.0.as_ptr())"))?;
     }
     Ok(())
 }

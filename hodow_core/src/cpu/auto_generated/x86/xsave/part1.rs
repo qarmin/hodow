@@ -26,7 +26,7 @@ pub(super) fn test_x86_xsave_xgetbv() -> Result<(), String> {
         }
     unsafe {
         let result = _xgetbv(1u32);
-        check_int_equality(result as i32, 674)?;
+        check_int_equality(result as i32, 674).map_err(|e| format!("{e} | call: _xgetbv(1u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {

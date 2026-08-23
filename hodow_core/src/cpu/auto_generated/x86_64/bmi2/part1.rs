@@ -11,7 +11,7 @@ pub(super) fn test_x86_64_bmi2_mulx_u64() -> Result<(), String> {
         let b = 2u64;
         let mut ref_hi = 3u64;
         let result = _mulx_u64(a, b, &mut ref_hi);
-        check_int_equality(result as i32, 2)?;
+        check_int_equality(result as i32, 2).map_err(|e| format!("{e} | call: _mulx_u64(a, b, &mut ref_hi)"))?;
     }
     Ok(())
 }
@@ -19,7 +19,7 @@ pub(super) fn test_x86_64_bmi2_mulx_u64() -> Result<(), String> {
 pub(super) fn test_x86_64_bmi2_bzhi_u64() -> Result<(), String> {
     unsafe {
         let result = _bzhi_u64(1u64, 2u32);
-        check_int_equality(result as i32, 1)?;
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _bzhi_u64(1u64, 2u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -39,7 +39,7 @@ pub(super) fn test_x86_64_bmi2_bzhi_u64() -> Result<(), String> {
 pub(super) fn test_x86_64_bmi2_pdep_u64() -> Result<(), String> {
     unsafe {
         let result = _pdep_u64(1u64, 2u64);
-        check_int_equality(result as i32, 2)?;
+        check_int_equality(result as i32, 2).map_err(|e| format!("{e} | call: _pdep_u64(1u64, 2u64)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -59,7 +59,7 @@ pub(super) fn test_x86_64_bmi2_pdep_u64() -> Result<(), String> {
 pub(super) fn test_x86_64_bmi2_pext_u64() -> Result<(), String> {
     unsafe {
         let result = _pext_u64(1u64, 2u64);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _pext_u64(1u64, 2u64)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {

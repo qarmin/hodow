@@ -8,7 +8,7 @@ use crate::cpu::common::{check_array_equality, check_float_array_equality, check
 pub(super) fn test_x86_64_avx_mm256_insert_epi64() -> Result<(), String> {
     unsafe {
         let result = unpack__m256i_to_i32_array(_mm256_insert_epi64::<0>(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), 9i64));
-        check_array_equality(&result, &[9, 0, 3, 4, 5, 6, 7, 8])?;
+        check_array_equality(&result, &[9, 0, 3, 4, 5, 6, 7, 8]).map_err(|e| format!("{e} | call: _mm256_insert_epi64::<0>(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]), 9i64)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -28,7 +28,7 @@ pub(super) fn test_x86_64_avx_mm256_insert_epi64() -> Result<(), String> {
 pub(super) fn test_x86_64_avx_mm256_extract_epi64() -> Result<(), String> {
     unsafe {
         let result = _mm256_extract_epi64::<0>(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]));
-        check_int_equality(result as i32, 1)?;
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm256_extract_epi64::<0>(create__m256i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {

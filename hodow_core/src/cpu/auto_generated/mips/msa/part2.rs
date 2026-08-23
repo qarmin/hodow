@@ -692,7 +692,7 @@ pub(super) fn test_mips_msa_msa_bnegi_d() -> Result<(), String> {
 pub(super) fn test_mips_msa_msa_bnz_b() -> Result<(), String> {
     unsafe {
         let result = __msa_bnz_b(0 /* v16u8 */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: __msa_bnz_b(0 /* v16u8 */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -712,7 +712,7 @@ pub(super) fn test_mips_msa_msa_bnz_b() -> Result<(), String> {
 pub(super) fn test_mips_msa_msa_bnz_h() -> Result<(), String> {
     unsafe {
         let result = __msa_bnz_h(0 /* v8u16 */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: __msa_bnz_h(0 /* v8u16 */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -732,7 +732,7 @@ pub(super) fn test_mips_msa_msa_bnz_h() -> Result<(), String> {
 pub(super) fn test_mips_msa_msa_bnz_w() -> Result<(), String> {
     unsafe {
         let result = __msa_bnz_w(0 /* v4u32 */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: __msa_bnz_w(0 /* v4u32 */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -752,7 +752,7 @@ pub(super) fn test_mips_msa_msa_bnz_w() -> Result<(), String> {
 pub(super) fn test_mips_msa_msa_bnz_d() -> Result<(), String> {
     unsafe {
         let result = __msa_bnz_d(0 /* v2u64 */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: __msa_bnz_d(0 /* v2u64 */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -772,7 +772,7 @@ pub(super) fn test_mips_msa_msa_bnz_d() -> Result<(), String> {
 pub(super) fn test_mips_msa_msa_bnz_v() -> Result<(), String> {
     unsafe {
         let result = __msa_bnz_v(0 /* v16u8 */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: __msa_bnz_v(0 /* v16u8 */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {

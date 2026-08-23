@@ -11,7 +11,7 @@ use crate::cpu::common::{check_array_equality, check_float_array_equality, check
 pub(super) fn test_x86_avx512fp16_mm_cvtsi128_si16() -> Result<(), String> {
     unsafe {
         let result = _mm_cvtsi128_si16(create__m128i_from_i32_array([1, 2, 3, 4]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm_cvtsi128_si16(create__m128i_from_i32_array([1, 2, 3, 4]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -31,7 +31,7 @@ pub(super) fn test_x86_avx512fp16_mm_cvtsi128_si16() -> Result<(), String> {
 pub(super) fn test_x86_avx512fp16_mm_cvtsi16_si128() -> Result<(), String> {
     unsafe {
         let result = unpack__m128i_to_i32_array(_mm_cvtsi16_si128(1i16));
-        check_array_equality(&result, &[0i32; 4])?;
+        check_array_equality(&result, &[0i32; 4]).map_err(|e| format!("{e} | call: _mm_cvtsi16_si128(1i16)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {

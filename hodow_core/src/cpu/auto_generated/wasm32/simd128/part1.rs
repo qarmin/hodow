@@ -269,7 +269,7 @@ pub(super) fn test_wasm32_simd128_i64x2_shuffle() -> Result<(), String> {
 pub(super) fn test_wasm32_simd128_i8x16_extract_lane() -> Result<(), String> {
     unsafe {
         let result = i8x16_extract_lane::<0>(0 /* v128 */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: i8x16_extract_lane::<0>(0 /* v128 */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -289,7 +289,7 @@ pub(super) fn test_wasm32_simd128_i8x16_extract_lane() -> Result<(), String> {
 pub(super) fn test_wasm32_simd128_u8x16_extract_lane() -> Result<(), String> {
     unsafe {
         let result = u8x16_extract_lane::<0>(0 /* v128 */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: u8x16_extract_lane::<0>(0 /* v128 */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -347,7 +347,7 @@ pub(super) fn test_wasm32_simd128_u8x16_replace_lane() -> Result<(), String> {
 pub(super) fn test_wasm32_simd128_i16x8_extract_lane() -> Result<(), String> {
     unsafe {
         let result = i16x8_extract_lane::<0>(0 /* v128 */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: i16x8_extract_lane::<0>(0 /* v128 */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -367,7 +367,7 @@ pub(super) fn test_wasm32_simd128_i16x8_extract_lane() -> Result<(), String> {
 pub(super) fn test_wasm32_simd128_u16x8_extract_lane() -> Result<(), String> {
     unsafe {
         let result = u16x8_extract_lane::<0>(0 /* v128 */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: u16x8_extract_lane::<0>(0 /* v128 */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -425,7 +425,7 @@ pub(super) fn test_wasm32_simd128_u16x8_replace_lane() -> Result<(), String> {
 pub(super) fn test_wasm32_simd128_i32x4_extract_lane() -> Result<(), String> {
     unsafe {
         let result = i32x4_extract_lane::<0>(0 /* v128 */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: i32x4_extract_lane::<0>(0 /* v128 */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -445,7 +445,7 @@ pub(super) fn test_wasm32_simd128_i32x4_extract_lane() -> Result<(), String> {
 pub(super) fn test_wasm32_simd128_u32x4_extract_lane() -> Result<(), String> {
     unsafe {
         let result = u32x4_extract_lane::<0>(0 /* v128 */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: u32x4_extract_lane::<0>(0 /* v128 */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -503,7 +503,7 @@ pub(super) fn test_wasm32_simd128_u32x4_replace_lane() -> Result<(), String> {
 pub(super) fn test_wasm32_simd128_i64x2_extract_lane() -> Result<(), String> {
     unsafe {
         let result = i64x2_extract_lane::<0>(0 /* v128 */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: i64x2_extract_lane::<0>(0 /* v128 */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -523,7 +523,7 @@ pub(super) fn test_wasm32_simd128_i64x2_extract_lane() -> Result<(), String> {
 pub(super) fn test_wasm32_simd128_u64x2_extract_lane() -> Result<(), String> {
     unsafe {
         let result = u64x2_extract_lane::<0>(0 /* v128 */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: u64x2_extract_lane::<0>(0 /* v128 */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {

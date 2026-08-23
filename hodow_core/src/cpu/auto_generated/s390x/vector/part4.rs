@@ -285,7 +285,7 @@ pub(super) fn test_s390x_vector_vec_cmpne_or_0_idx_cc() -> Result<(), String> {
 pub(super) fn test_s390x_vector_vec_all_eq() -> Result<(), String> {
     unsafe {
         let result = vec_all_eq(0 /* T */, 0 /* T */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: vec_all_eq(0 /* T */, 0 /* T */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -305,7 +305,7 @@ pub(super) fn test_s390x_vector_vec_all_eq() -> Result<(), String> {
 pub(super) fn test_s390x_vector_vec_all_ne() -> Result<(), String> {
     unsafe {
         let result = vec_all_ne(0 /* T */, 0 /* T */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: vec_all_ne(0 /* T */, 0 /* T */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -325,7 +325,7 @@ pub(super) fn test_s390x_vector_vec_all_ne() -> Result<(), String> {
 pub(super) fn test_s390x_vector_vec_any_eq() -> Result<(), String> {
     unsafe {
         let result = vec_any_eq(0 /* T */, 0 /* T */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: vec_any_eq(0 /* T */, 0 /* T */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -345,7 +345,7 @@ pub(super) fn test_s390x_vector_vec_any_eq() -> Result<(), String> {
 pub(super) fn test_s390x_vector_vec_any_ne() -> Result<(), String> {
     unsafe {
         let result = vec_any_ne(0 /* T */, 0 /* T */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: vec_any_ne(0 /* T */, 0 /* T */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -365,7 +365,7 @@ pub(super) fn test_s390x_vector_vec_any_ne() -> Result<(), String> {
 pub(super) fn test_s390x_vector_vec_all_lt() -> Result<(), String> {
     unsafe {
         let result = vec_all_lt(0 /* T */, 0 /* T */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: vec_all_lt(0 /* T */, 0 /* T */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -385,7 +385,7 @@ pub(super) fn test_s390x_vector_vec_all_lt() -> Result<(), String> {
 pub(super) fn test_s390x_vector_vec_all_le() -> Result<(), String> {
     unsafe {
         let result = vec_all_le(0 /* T */, 0 /* T */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: vec_all_le(0 /* T */, 0 /* T */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -405,7 +405,7 @@ pub(super) fn test_s390x_vector_vec_all_le() -> Result<(), String> {
 pub(super) fn test_s390x_vector_vec_all_gt() -> Result<(), String> {
     unsafe {
         let result = vec_all_gt(0 /* T */, 0 /* T */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: vec_all_gt(0 /* T */, 0 /* T */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -425,7 +425,7 @@ pub(super) fn test_s390x_vector_vec_all_gt() -> Result<(), String> {
 pub(super) fn test_s390x_vector_vec_all_ge() -> Result<(), String> {
     unsafe {
         let result = vec_all_ge(0 /* T */, 0 /* T */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: vec_all_ge(0 /* T */, 0 /* T */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -445,7 +445,7 @@ pub(super) fn test_s390x_vector_vec_all_ge() -> Result<(), String> {
 pub(super) fn test_s390x_vector_vec_all_nlt() -> Result<(), String> {
     unsafe {
         let result = vec_all_nlt(0 /* T */, 0 /* T */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: vec_all_nlt(0 /* T */, 0 /* T */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -465,7 +465,7 @@ pub(super) fn test_s390x_vector_vec_all_nlt() -> Result<(), String> {
 pub(super) fn test_s390x_vector_vec_all_nle() -> Result<(), String> {
     unsafe {
         let result = vec_all_nle(0 /* T */, 0 /* T */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: vec_all_nle(0 /* T */, 0 /* T */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -485,7 +485,7 @@ pub(super) fn test_s390x_vector_vec_all_nle() -> Result<(), String> {
 pub(super) fn test_s390x_vector_vec_all_ngt() -> Result<(), String> {
     unsafe {
         let result = vec_all_ngt(0 /* T */, 0 /* T */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: vec_all_ngt(0 /* T */, 0 /* T */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -505,7 +505,7 @@ pub(super) fn test_s390x_vector_vec_all_ngt() -> Result<(), String> {
 pub(super) fn test_s390x_vector_vec_all_nge() -> Result<(), String> {
     unsafe {
         let result = vec_all_nge(0 /* T */, 0 /* T */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: vec_all_nge(0 /* T */, 0 /* T */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -525,7 +525,7 @@ pub(super) fn test_s390x_vector_vec_all_nge() -> Result<(), String> {
 pub(super) fn test_s390x_vector_vec_any_lt() -> Result<(), String> {
     unsafe {
         let result = vec_any_lt(0 /* T */, 0 /* T */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: vec_any_lt(0 /* T */, 0 /* T */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -545,7 +545,7 @@ pub(super) fn test_s390x_vector_vec_any_lt() -> Result<(), String> {
 pub(super) fn test_s390x_vector_vec_any_le() -> Result<(), String> {
     unsafe {
         let result = vec_any_le(0 /* T */, 0 /* T */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: vec_any_le(0 /* T */, 0 /* T */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -565,7 +565,7 @@ pub(super) fn test_s390x_vector_vec_any_le() -> Result<(), String> {
 pub(super) fn test_s390x_vector_vec_any_gt() -> Result<(), String> {
     unsafe {
         let result = vec_any_gt(0 /* T */, 0 /* T */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: vec_any_gt(0 /* T */, 0 /* T */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -585,7 +585,7 @@ pub(super) fn test_s390x_vector_vec_any_gt() -> Result<(), String> {
 pub(super) fn test_s390x_vector_vec_any_ge() -> Result<(), String> {
     unsafe {
         let result = vec_any_ge(0 /* T */, 0 /* T */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: vec_any_ge(0 /* T */, 0 /* T */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -605,7 +605,7 @@ pub(super) fn test_s390x_vector_vec_any_ge() -> Result<(), String> {
 pub(super) fn test_s390x_vector_vec_any_nlt() -> Result<(), String> {
     unsafe {
         let result = vec_any_nlt(0 /* T */, 0 /* T */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: vec_any_nlt(0 /* T */, 0 /* T */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -625,7 +625,7 @@ pub(super) fn test_s390x_vector_vec_any_nlt() -> Result<(), String> {
 pub(super) fn test_s390x_vector_vec_any_nle() -> Result<(), String> {
     unsafe {
         let result = vec_any_nle(0 /* T */, 0 /* T */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: vec_any_nle(0 /* T */, 0 /* T */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -645,7 +645,7 @@ pub(super) fn test_s390x_vector_vec_any_nle() -> Result<(), String> {
 pub(super) fn test_s390x_vector_vec_any_ngt() -> Result<(), String> {
     unsafe {
         let result = vec_any_ngt(0 /* T */, 0 /* T */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: vec_any_ngt(0 /* T */, 0 /* T */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -665,7 +665,7 @@ pub(super) fn test_s390x_vector_vec_any_ngt() -> Result<(), String> {
 pub(super) fn test_s390x_vector_vec_any_nge() -> Result<(), String> {
     unsafe {
         let result = vec_any_nge(0 /* T */, 0 /* T */);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: vec_any_nge(0 /* T */, 0 /* T */)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {

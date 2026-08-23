@@ -13,7 +13,7 @@ pub(super) fn test_x86_bt_bittest() -> Result<(), String> {
         let ptr_p = crate::cpu::common::Aligned64([1i32; 16]);
         let b = 2i32;
         let result = _bittest(ptr_p.0.as_ptr(), b);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _bittest(ptr_p.0.as_ptr(), b)"))?;
     }
     Ok(())
 }
@@ -23,7 +23,7 @@ pub(super) fn test_x86_bt_bittestandset() -> Result<(), String> {
         let mut ptr_p = crate::cpu::common::Aligned64([1i32; 16]);
         let b = 2i32;
         let result = _bittestandset(ptr_p.0.as_mut_ptr(), b);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _bittestandset(ptr_p.0.as_mut_ptr(), b)"))?;
     }
     Ok(())
 }
@@ -33,7 +33,7 @@ pub(super) fn test_x86_bt_bittestandreset() -> Result<(), String> {
         let mut ptr_p = crate::cpu::common::Aligned64([1i32; 16]);
         let b = 2i32;
         let result = _bittestandreset(ptr_p.0.as_mut_ptr(), b);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _bittestandreset(ptr_p.0.as_mut_ptr(), b)"))?;
     }
     Ok(())
 }
@@ -43,7 +43,7 @@ pub(super) fn test_x86_bt_bittestandcomplement() -> Result<(), String> {
         let mut ptr_p = crate::cpu::common::Aligned64([1i32; 16]);
         let b = 2i32;
         let result = _bittestandcomplement(ptr_p.0.as_mut_ptr(), b);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _bittestandcomplement(ptr_p.0.as_mut_ptr(), b)"))?;
     }
     Ok(())
 }

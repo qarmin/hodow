@@ -11,7 +11,7 @@ use crate::cpu::common::{check_array_equality, check_float_array_equality, check
 pub(super) fn test_x86_abm_lzcnt_u32() -> Result<(), String> {
     unsafe {
         let result = _lzcnt_u32(1u32);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _lzcnt_u32(1u32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -31,7 +31,7 @@ pub(super) fn test_x86_abm_lzcnt_u32() -> Result<(), String> {
 pub(super) fn test_x86_abm_popcnt32() -> Result<(), String> {
     unsafe {
         let result = _popcnt32(1i32);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _popcnt32(1i32)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {

@@ -11,7 +11,7 @@ use crate::cpu::common::{check_array_equality, check_float_array_equality, check
 pub(super) fn test_x86_rtm_xbegin() -> Result<(), String> {
     unsafe {
         let result = _xbegin();
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _xbegin()"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -69,7 +69,7 @@ pub(super) fn test_x86_rtm_xabort() -> Result<(), String> {
 pub(super) fn test_x86_rtm_xtest() -> Result<(), String> {
     unsafe {
         let result = _xtest();
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _xtest()"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {

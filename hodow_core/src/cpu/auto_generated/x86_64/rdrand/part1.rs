@@ -12,7 +12,7 @@ pub(super) fn test_x86_64_rdrand_rdrand64_step() -> Result<(), String> {
     unsafe {
         let mut ref_val = 1u64;
         let result = _rdrand64_step(&mut ref_val);
-        check_int_equality(result as i32, 1)?;
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _rdrand64_step(&mut ref_val)"))?;
     }
     Ok(())
 }
@@ -24,7 +24,7 @@ pub(super) fn test_x86_64_rdrand_rdseed64_step() -> Result<(), String> {
     unsafe {
         let mut ref_val = 1u64;
         let result = _rdseed64_step(&mut ref_val);
-        check_int_equality(result as i32, 1)?;
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _rdseed64_step(&mut ref_val)"))?;
     }
     Ok(())
 }

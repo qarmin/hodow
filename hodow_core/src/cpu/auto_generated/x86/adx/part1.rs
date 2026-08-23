@@ -15,7 +15,7 @@ pub(super) fn test_x86_adx_addcarry_u32() -> Result<(), String> {
         let b = 3u32;
         let mut ref_out = 4u32;
         let result = _addcarry_u32(c_in, a, b, &mut ref_out);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _addcarry_u32(c_in, a, b, &mut ref_out)"))?;
     }
     Ok(())
 }
@@ -27,7 +27,7 @@ pub(super) fn test_x86_adx_addcarryx_u32() -> Result<(), String> {
         let b = 3u32;
         let mut ref_out = 4u32;
         let result = _addcarryx_u32(c_in, a, b, &mut ref_out);
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _addcarryx_u32(c_in, a, b, &mut ref_out)"))?;
     }
     Ok(())
 }
@@ -39,7 +39,7 @@ pub(super) fn test_x86_adx_subborrow_u32() -> Result<(), String> {
         let b = 3u32;
         let mut ref_out = 4u32;
         let result = _subborrow_u32(c_in, a, b, &mut ref_out);
-        check_int_equality(result as i32, 1)?;
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _subborrow_u32(c_in, a, b, &mut ref_out)"))?;
     }
     Ok(())
 }

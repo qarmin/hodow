@@ -8,7 +8,7 @@ use crate::cpu::common::{check_array_equality, check_float_array_equality, check
 pub(super) fn test_x86_64_sse42_mm_crc32_u64() -> Result<(), String> {
     unsafe {
         let result = _mm_crc32_u64(1u64, 2u64);
-        check_int_equality(result as i32, -616265879)?;
+        check_int_equality(result as i32, -616265879).map_err(|e| format!("{e} | call: _mm_crc32_u64(1u64, 2u64)"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {

@@ -178,7 +178,7 @@ pub(super) fn test_x86_avx512f_mm512_i32logather_epi64() -> Result<(), String> {
         let vindex = create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
         let ptr_base_addr = crate::cpu::common::Aligned64([1i64; 64]);
         let result = unpack__m512i_to_i32_array(_mm512_i32logather_epi64::<1>(vindex, ptr_base_addr.0.as_ptr()));
-        check_array_equality(&result, &[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0])?;
+        check_array_equality(&result, &[1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0]).map_err(|e| format!("{e} | call: _mm512_i32logather_epi64::<1>(vindex, ptr_base_addr.0.as_ptr())"))?;
     }
     Ok(())
 }
@@ -193,7 +193,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_i32logather_epi64() -> Result<(), Stri
         let vindex = create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
         let ptr_base_addr = crate::cpu::common::Aligned64([1i64; 64]);
         let result = unpack__m512i_to_i32_array(_mm512_mask_i32logather_epi64::<1>(src, k, vindex, ptr_base_addr.0.as_ptr()));
-        check_array_equality(&result, &[1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0])?;
+        check_array_equality(&result, &[1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0]).map_err(|e| format!("{e} | call: _mm512_mask_i32logather_epi64::<1>(src, k, vindex, ptr_base_addr.0.as_ptr())"))?;
     }
     Ok(())
 }
@@ -206,7 +206,7 @@ pub(super) fn test_x86_avx512f_mm512_i32logather_pd() -> Result<(), String> {
         let vindex = create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
         let ptr_base_addr = crate::cpu::common::Aligned64([1.0f64; 64]);
         let result = unpack__m512d_to_f64_array(_mm512_i32logather_pd::<1>(vindex, ptr_base_addr.0.as_ptr()));
-        check_float_array_equality(&result, &[1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0])?;
+        check_float_array_equality(&result, &[1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]).map_err(|e| format!("{e} | call: _mm512_i32logather_pd::<1>(vindex, ptr_base_addr.0.as_ptr())"))?;
     }
     Ok(())
 }
@@ -221,7 +221,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_i32logather_pd() -> Result<(), String>
         let vindex = create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
         let ptr_base_addr = crate::cpu::common::Aligned64([1.0f64; 64]);
         let result = unpack__m512d_to_f64_array(_mm512_mask_i32logather_pd::<1>(src, k, vindex, ptr_base_addr.0.as_ptr()));
-        check_float_array_equality(&result, &[1.0, 2.0, 1.0, 4.0, 1.0, 6.0, 1.0, 8.0])?;
+        check_float_array_equality(&result, &[1.0, 2.0, 1.0, 4.0, 1.0, 6.0, 1.0, 8.0]).map_err(|e| format!("{e} | call: _mm512_mask_i32logather_pd::<1>(src, k, vindex, ptr_base_addr.0.as_ptr())"))?;
     }
     Ok(())
 }
@@ -506,7 +506,7 @@ pub(super) fn test_x86_avx512f_mm256_mmask_i32gather_epi32() -> Result<(), Strin
         let vindex = create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]);
         let ptr_base_addr = crate::cpu::common::Aligned64([1i32; 64]);
         let result = unpack__m256i_to_i32_array(_mm256_mmask_i32gather_epi32::<1>(src, k, vindex, ptr_base_addr.0.as_ptr()));
-        check_array_equality(&result, &[1, 0, 1, 0, 1, 0, 1, 0])?;
+        check_array_equality(&result, &[1, 0, 1, 0, 1, 0, 1, 0]).map_err(|e| format!("{e} | call: _mm256_mmask_i32gather_epi32::<1>(src, k, vindex, ptr_base_addr.0.as_ptr())"))?;
     }
     Ok(())
 }
@@ -521,7 +521,7 @@ pub(super) fn test_x86_avx512f_mm256_mmask_i32gather_epi64() -> Result<(), Strin
         let vindex = create__m128i_from_i32_array([0, 0, 0, 0]);
         let ptr_base_addr = crate::cpu::common::Aligned64([1i64; 64]);
         let result = unpack__m256i_to_i32_array(_mm256_mmask_i32gather_epi64::<1>(src, k, vindex, ptr_base_addr.0.as_ptr()));
-        check_array_equality(&result, &[1, 0, 0, 0, 1, 0, 0, 0])?;
+        check_array_equality(&result, &[1, 0, 0, 0, 1, 0, 0, 0]).map_err(|e| format!("{e} | call: _mm256_mmask_i32gather_epi64::<1>(src, k, vindex, ptr_base_addr.0.as_ptr())"))?;
     }
     Ok(())
 }
@@ -536,7 +536,7 @@ pub(super) fn test_x86_avx512f_mm256_mmask_i32gather_pd() -> Result<(), String> 
         let vindex = create__m128i_from_i32_array([0, 0, 0, 0]);
         let ptr_base_addr = crate::cpu::common::Aligned64([1.0f64; 64]);
         let result = unpack__m256d_to_f64_array(_mm256_mmask_i32gather_pd::<1>(src, k, vindex, ptr_base_addr.0.as_ptr()));
-        check_float_array_equality(&result, &[1.0, 2.0, 1.0, 4.0])?;
+        check_float_array_equality(&result, &[1.0, 2.0, 1.0, 4.0]).map_err(|e| format!("{e} | call: _mm256_mmask_i32gather_pd::<1>(src, k, vindex, ptr_base_addr.0.as_ptr())"))?;
     }
     Ok(())
 }
@@ -551,7 +551,7 @@ pub(super) fn test_x86_avx512f_mm256_mmask_i32gather_ps() -> Result<(), String> 
         let vindex = create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]);
         let ptr_base_addr = crate::cpu::common::Aligned64([1.0f32; 64]);
         let result = unpack__m256_to_f32_array(_mm256_mmask_i32gather_ps::<1>(src, k, vindex, ptr_base_addr.0.as_ptr()));
-        check_float_array_equality(&result, &[1.0, 2.0, 1.0, 4.0, 1.0, 6.0, 1.0, 8.0])?;
+        check_float_array_equality(&result, &[1.0, 2.0, 1.0, 4.0, 1.0, 6.0, 1.0, 8.0]).map_err(|e| format!("{e} | call: _mm256_mmask_i32gather_ps::<1>(src, k, vindex, ptr_base_addr.0.as_ptr())"))?;
     }
     Ok(())
 }
@@ -566,7 +566,7 @@ pub(super) fn test_x86_avx512f_mm256_mmask_i64gather_epi32() -> Result<(), Strin
         let vindex = create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]);
         let ptr_base_addr = crate::cpu::common::Aligned64([1i32; 64]);
         let result = unpack__m128i_to_i32_array(_mm256_mmask_i64gather_epi32::<1>(src, k, vindex, ptr_base_addr.0.as_ptr()));
-        check_array_equality(&result, &[1, 0, 1, 0])?;
+        check_array_equality(&result, &[1, 0, 1, 0]).map_err(|e| format!("{e} | call: _mm256_mmask_i64gather_epi32::<1>(src, k, vindex, ptr_base_addr.0.as_ptr())"))?;
     }
     Ok(())
 }
@@ -581,7 +581,7 @@ pub(super) fn test_x86_avx512f_mm256_mmask_i64gather_epi64() -> Result<(), Strin
         let vindex = create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]);
         let ptr_base_addr = crate::cpu::common::Aligned64([1i64; 64]);
         let result = unpack__m256i_to_i32_array(_mm256_mmask_i64gather_epi64::<1>(src, k, vindex, ptr_base_addr.0.as_ptr()));
-        check_array_equality(&result, &[1, 0, 0, 0, 1, 0, 0, 0])?;
+        check_array_equality(&result, &[1, 0, 0, 0, 1, 0, 0, 0]).map_err(|e| format!("{e} | call: _mm256_mmask_i64gather_epi64::<1>(src, k, vindex, ptr_base_addr.0.as_ptr())"))?;
     }
     Ok(())
 }
@@ -596,7 +596,7 @@ pub(super) fn test_x86_avx512f_mm256_mmask_i64gather_pd() -> Result<(), String> 
         let vindex = create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]);
         let ptr_base_addr = crate::cpu::common::Aligned64([1.0f64; 64]);
         let result = unpack__m256d_to_f64_array(_mm256_mmask_i64gather_pd::<1>(src, k, vindex, ptr_base_addr.0.as_ptr()));
-        check_float_array_equality(&result, &[1.0, 2.0, 1.0, 4.0])?;
+        check_float_array_equality(&result, &[1.0, 2.0, 1.0, 4.0]).map_err(|e| format!("{e} | call: _mm256_mmask_i64gather_pd::<1>(src, k, vindex, ptr_base_addr.0.as_ptr())"))?;
     }
     Ok(())
 }
@@ -611,7 +611,7 @@ pub(super) fn test_x86_avx512f_mm256_mmask_i64gather_ps() -> Result<(), String> 
         let vindex = create__m256i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0]);
         let ptr_base_addr = crate::cpu::common::Aligned64([1.0f32; 64]);
         let result = unpack__m128_to_f32_array(_mm256_mmask_i64gather_ps::<1>(src, k, vindex, ptr_base_addr.0.as_ptr()));
-        check_float_array_equality(&result, &[1.0, 2.0, 1.0, 4.0])?;
+        check_float_array_equality(&result, &[1.0, 2.0, 1.0, 4.0]).map_err(|e| format!("{e} | call: _mm256_mmask_i64gather_ps::<1>(src, k, vindex, ptr_base_addr.0.as_ptr())"))?;
     }
     Ok(())
 }

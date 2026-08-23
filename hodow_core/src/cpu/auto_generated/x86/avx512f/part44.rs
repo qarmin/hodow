@@ -467,7 +467,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_max_pd_boundary_mixed() -> Resu
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epi32() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epi32(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 1)?;
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm512_reduce_min_epi32(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -487,7 +487,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epi32() -> Result<(), String> {
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epi32_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epi32(create__m512i_from_i32_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
-        check_int_equality(result as i32, -7)?;
+        check_int_equality(result as i32, -7).map_err(|e| format!("{e} | call: _mm512_reduce_min_epi32(create__m512i_from_i32_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -507,7 +507,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epi32_normal2() -> Result<(), St
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epi32_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epi32(create__m512i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]));
-        check_int_equality(result as i32, 100)?;
+        check_int_equality(result as i32, 100).map_err(|e| format!("{e} | call: _mm512_reduce_min_epi32(create__m512i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -527,7 +527,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epi32_normal3() -> Result<(), St
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epi32_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epi32(create__m512i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]));
-        check_int_equality(result as i32, -2147483648)?;
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm512_reduce_min_epi32(create__m512i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -547,7 +547,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epi32_boundary_min() -> Result<(
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epi32_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epi32(create__m512i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]));
-        check_int_equality(result as i32, 2147483647)?;
+        check_int_equality(result as i32, 2147483647).map_err(|e| format!("{e} | call: _mm512_reduce_min_epi32(create__m512i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -567,7 +567,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epi32_boundary_max() -> Result<(
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epi32_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epi32(create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_min_epi32(create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -587,7 +587,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epi32_boundary_zero() -> Result<
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epi32_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epi32(create__m512i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
-        check_int_equality(result as i32, -1)?;
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_reduce_min_epi32(create__m512i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -607,7 +607,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epi32_boundary_allones() -> Resu
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epi32_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epi32(create__m512i_from_i32_array([i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1]));
-        check_int_equality(result as i32, -2147483648)?;
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm512_reduce_min_epi32(create__m512i_from_i32_array([i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -627,7 +627,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epi32_boundary_mixed() -> Result
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi32() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 1)?;
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -647,7 +647,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi32() -> Result<(), Strin
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi32_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([0, -1, 2, -3, 4, -5, 6, -7, 0, -1, 2, -3, 4, -5, 6, -7]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -667,7 +667,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi32_normal2() -> Result<(
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi32_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]));
-        check_int_equality(result as i32, 100)?;
+        check_int_equality(result as i32, 100).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -687,7 +687,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi32_normal3() -> Result<(
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi32_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]));
-        check_int_equality(result as i32, -2147483648)?;
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN, i32::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -707,7 +707,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi32_boundary_min() -> Res
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi32_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]));
-        check_int_equality(result as i32, 2147483647)?;
+        check_int_equality(result as i32, 2147483647).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX, i32::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -727,7 +727,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi32_boundary_max() -> Res
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi32_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -747,7 +747,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi32_boundary_zero() -> Re
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi32_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]));
-        check_int_equality(result as i32, -1)?;
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -767,7 +767,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi32_boundary_allones() ->
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi32_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1]));
-        check_int_equality(result as i32, -2147483648)?;
+        check_int_equality(result as i32, -2147483648).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1, i32::MIN, i32::MAX, 0, -1]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -787,7 +787,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi32_boundary_mixed() -> R
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epi64() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epi64(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 1)?;
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm512_reduce_min_epi64(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -807,7 +807,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epi64() -> Result<(), String> {
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epi64_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epi64(create__m512i_from([0, -1, 2, -3, 4, -5, 6, -7]));
-        check_int_equality(result as i32, -7)?;
+        check_int_equality(result as i32, -7).map_err(|e| format!("{e} | call: _mm512_reduce_min_epi64(create__m512i_from([0, -1, 2, -3, 4, -5, 6, -7]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -827,7 +827,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epi64_normal2() -> Result<(), St
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epi64_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epi64(create__m512i_from([100, 200, 300, 400, 500, 600, 700, 800]));
-        check_int_equality(result as i32, 100)?;
+        check_int_equality(result as i32, 100).map_err(|e| format!("{e} | call: _mm512_reduce_min_epi64(create__m512i_from([100, 200, 300, 400, 500, 600, 700, 800]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -847,7 +847,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epi64_normal3() -> Result<(), St
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epi64_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epi64(create__m512i_from([i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_min_epi64(create__m512i_from([i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -867,7 +867,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epi64_boundary_min() -> Result<(
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epi64_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epi64(create__m512i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX]));
-        check_int_equality(result as i32, -1)?;
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_reduce_min_epi64(create__m512i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -887,7 +887,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epi64_boundary_max() -> Result<(
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epi64_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epi64(create__m512i_from([0, 0, 0, 0, 0, 0, 0, 0]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_min_epi64(create__m512i_from([0, 0, 0, 0, 0, 0, 0, 0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -907,7 +907,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epi64_boundary_zero() -> Result<
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epi64_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epi64(create__m512i_from([-1, -1, -1, -1, -1, -1, -1, -1]));
-        check_int_equality(result as i32, -1)?;
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_reduce_min_epi64(create__m512i_from([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -927,7 +927,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epi64_boundary_allones() -> Resu
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epi64_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epi64(create__m512i_from([i64::MIN, i64::MAX, 0, -1, i64::MIN, i64::MAX, 0, -1]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_min_epi64(create__m512i_from([i64::MIN, i64::MAX, 0, -1, i64::MIN, i64::MAX, 0, -1]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -947,7 +947,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epi64_boundary_mixed() -> Result
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi64() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epi64(create__mmask8_from(0b01010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 1)?;
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epi64(create__mmask8_from(0b01010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -967,7 +967,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi64() -> Result<(), Strin
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi64_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epi64(create__mmask8_from(0b01010101), create__m512i_from([0, -1, 2, -3, 4, -5, 6, -7]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epi64(create__mmask8_from(0b01010101), create__m512i_from([0, -1, 2, -3, 4, -5, 6, -7]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -987,7 +987,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi64_normal2() -> Result<(
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi64_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epi64(create__mmask8_from(0b01010101), create__m512i_from([100, 200, 300, 400, 500, 600, 700, 800]));
-        check_int_equality(result as i32, 100)?;
+        check_int_equality(result as i32, 100).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epi64(create__mmask8_from(0b01010101), create__m512i_from([100, 200, 300, 400, 500, 600, 700, 800]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1007,7 +1007,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi64_normal3() -> Result<(
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi64_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epi64(create__mmask8_from(0b01010101), create__m512i_from([i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epi64(create__mmask8_from(0b01010101), create__m512i_from([i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN, i64::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1027,7 +1027,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi64_boundary_min() -> Res
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi64_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epi64(create__mmask8_from(0b01010101), create__m512i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX]));
-        check_int_equality(result as i32, -1)?;
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epi64(create__mmask8_from(0b01010101), create__m512i_from([i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX, i64::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1047,7 +1047,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi64_boundary_max() -> Res
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi64_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epi64(create__mmask8_from(0b01010101), create__m512i_from([0, 0, 0, 0, 0, 0, 0, 0]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epi64(create__mmask8_from(0b01010101), create__m512i_from([0, 0, 0, 0, 0, 0, 0, 0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1067,7 +1067,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi64_boundary_zero() -> Re
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi64_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epi64(create__mmask8_from(0b01010101), create__m512i_from([-1, -1, -1, -1, -1, -1, -1, -1]));
-        check_int_equality(result as i32, -1)?;
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epi64(create__mmask8_from(0b01010101), create__m512i_from([-1, -1, -1, -1, -1, -1, -1, -1]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1087,7 +1087,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi64_boundary_allones() ->
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi64_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epi64(create__mmask8_from(0b01010101), create__m512i_from([i64::MIN, i64::MAX, 0, -1, i64::MIN, i64::MAX, 0, -1]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epi64(create__mmask8_from(0b01010101), create__m512i_from([i64::MIN, i64::MAX, 0, -1, i64::MIN, i64::MAX, 0, -1]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1107,7 +1107,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epi64_boundary_mixed() -> R
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epu32() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epu32(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 1)?;
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm512_reduce_min_epu32(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1127,7 +1127,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epu32() -> Result<(), String> {
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epu32_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epu32(create__m512i_from_u32_array([0, 4294967295, 2, 4294967293, 4, 4294967291, 6, 4294967289, 0, 4294967295, 2, 4294967293, 4, 4294967291, 6, 4294967289]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_min_epu32(create__m512i_from_u32_array([0, 4294967295, 2, 4294967293, 4, 4294967291, 6, 4294967289, 0, 4294967295, 2, 4294967293, 4, 4294967291, 6, 4294967289]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1147,7 +1147,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epu32_normal2() -> Result<(), St
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epu32_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epu32(create__m512i_from_u32_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]));
-        check_int_equality(result as i32, 100)?;
+        check_int_equality(result as i32, 100).map_err(|e| format!("{e} | call: _mm512_reduce_min_epu32(create__m512i_from_u32_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1167,7 +1167,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epu32_normal3() -> Result<(), St
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epu32_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epu32(create__m512i_from_u32_array([u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_min_epu32(create__m512i_from_u32_array([u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1187,7 +1187,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epu32_boundary_min() -> Result<(
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epu32_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epu32(create__m512i_from_u32_array([u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX]));
-        check_int_equality(result as i32, -1)?;
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_reduce_min_epu32(create__m512i_from_u32_array([u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1207,7 +1207,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epu32_boundary_max() -> Result<(
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epu32_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epu32(create__m512i_from_u32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_min_epu32(create__m512i_from_u32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1227,7 +1227,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epu32_boundary_zero() -> Result<
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epu32_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epu32(create__m512i_from_u32_array([u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX]));
-        check_int_equality(result as i32, -1)?;
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_reduce_min_epu32(create__m512i_from_u32_array([u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1247,7 +1247,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epu32_boundary_allones() -> Resu
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epu32_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epu32(create__m512i_from_u32_array([u32::MIN, u32::MAX, 0, u32::MAX, u32::MIN, u32::MAX, 0, u32::MAX, u32::MIN, u32::MAX, 0, u32::MAX, u32::MIN, u32::MAX, 0, u32::MAX]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_min_epu32(create__m512i_from_u32_array([u32::MIN, u32::MAX, 0, u32::MAX, u32::MIN, u32::MAX, 0, u32::MAX, u32::MIN, u32::MAX, 0, u32::MAX, u32::MIN, u32::MAX, 0, u32::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1267,7 +1267,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epu32_boundary_mixed() -> Result
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu32() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epu32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 1)?;
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epu32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1287,7 +1287,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu32() -> Result<(), Strin
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu32_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epu32(create__mmask16_from(0b0101010101010101), create__m512i_from_u32_array([0, 4294967295, 2, 4294967293, 4, 4294967291, 6, 4294967289, 0, 4294967295, 2, 4294967293, 4, 4294967291, 6, 4294967289]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epu32(create__mmask16_from(0b0101010101010101), create__m512i_from_u32_array([0, 4294967295, 2, 4294967293, 4, 4294967291, 6, 4294967289, 0, 4294967295, 2, 4294967293, 4, 4294967291, 6, 4294967289]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1307,7 +1307,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu32_normal2() -> Result<(
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu32_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epu32(create__mmask16_from(0b0101010101010101), create__m512i_from_u32_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]));
-        check_int_equality(result as i32, 100)?;
+        check_int_equality(result as i32, 100).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epu32(create__mmask16_from(0b0101010101010101), create__m512i_from_u32_array([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1327,7 +1327,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu32_normal3() -> Result<(
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu32_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epu32(create__mmask16_from(0b0101010101010101), create__m512i_from_u32_array([u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epu32(create__mmask16_from(0b0101010101010101), create__m512i_from_u32_array([u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN, u32::MIN]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1347,7 +1347,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu32_boundary_min() -> Res
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu32_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epu32(create__mmask16_from(0b0101010101010101), create__m512i_from_u32_array([u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX]));
-        check_int_equality(result as i32, -1)?;
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epu32(create__mmask16_from(0b0101010101010101), create__m512i_from_u32_array([u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1367,7 +1367,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu32_boundary_max() -> Res
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu32_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epu32(create__mmask16_from(0b0101010101010101), create__m512i_from_u32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epu32(create__mmask16_from(0b0101010101010101), create__m512i_from_u32_array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1387,7 +1387,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu32_boundary_zero() -> Re
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu32_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epu32(create__mmask16_from(0b0101010101010101), create__m512i_from_u32_array([u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX]));
-        check_int_equality(result as i32, -1)?;
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epu32(create__mmask16_from(0b0101010101010101), create__m512i_from_u32_array([u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX, u32::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1407,7 +1407,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu32_boundary_allones() ->
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu32_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epu32(create__mmask16_from(0b0101010101010101), create__m512i_from_u32_array([u32::MIN, u32::MAX, 0, u32::MAX, u32::MIN, u32::MAX, 0, u32::MAX, u32::MIN, u32::MAX, 0, u32::MAX, u32::MIN, u32::MAX, 0, u32::MAX]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epu32(create__mmask16_from(0b0101010101010101), create__m512i_from_u32_array([u32::MIN, u32::MAX, 0, u32::MAX, u32::MIN, u32::MAX, 0, u32::MAX, u32::MIN, u32::MAX, 0, u32::MAX, u32::MIN, u32::MAX, 0, u32::MAX]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1427,7 +1427,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu32_boundary_mixed() -> R
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epu64() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epu64(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 1)?;
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm512_reduce_min_epu64(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1447,7 +1447,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epu64() -> Result<(), String> {
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epu64_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epu64(create__m512i_from([((0u64) as i64), ((18446744073709551615u64) as i64), ((2u64) as i64), ((18446744073709551613u64) as i64), ((4u64) as i64), ((18446744073709551611u64) as i64), ((6u64) as i64), ((18446744073709551609u64) as i64)]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_min_epu64(create__m512i_from([((0u64) as i64), ((18446744073709551615u64) as i64), ((2u64) as i64), ((18446744073709551613u64) as i64), ((4u64) as i64), ((18446744073709551611u64) as i64), ((6u64) as i64), ((18446744073709551609u64) as i64)]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1467,7 +1467,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epu64_normal2() -> Result<(), St
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epu64_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epu64(create__m512i_from([((100u64) as i64), ((200u64) as i64), ((300u64) as i64), ((400u64) as i64), ((500u64) as i64), ((600u64) as i64), ((700u64) as i64), ((800u64) as i64)]));
-        check_int_equality(result as i32, 100)?;
+        check_int_equality(result as i32, 100).map_err(|e| format!("{e} | call: _mm512_reduce_min_epu64(create__m512i_from([((100u64) as i64), ((200u64) as i64), ((300u64) as i64), ((400u64) as i64), ((500u64) as i64), ((600u64) as i64), ((700u64) as i64), ((800u64) as i64)]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1487,7 +1487,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epu64_normal3() -> Result<(), St
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epu64_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epu64(create__m512i_from([((u64::MIN) as i64), ((u64::MIN) as i64), ((u64::MIN) as i64), ((u64::MIN) as i64), ((u64::MIN) as i64), ((u64::MIN) as i64), ((u64::MIN) as i64), ((u64::MIN) as i64)]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_min_epu64(create__m512i_from([((u64::MIN) as i64), ((u64::MIN) as i64), ((u64::MIN) as i64), ((u64::MIN) as i64), ((u64::MIN) as i64), ((u64::MIN) as i64), ((u64::MIN) as i64), ((u64::MIN) as i64)]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1507,7 +1507,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epu64_boundary_min() -> Result<(
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epu64_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epu64(create__m512i_from([((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64)]));
-        check_int_equality(result as i32, -1)?;
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_reduce_min_epu64(create__m512i_from([((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64)]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1527,7 +1527,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epu64_boundary_max() -> Result<(
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epu64_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epu64(create__m512i_from([((0u64) as i64), ((0u64) as i64), ((0u64) as i64), ((0u64) as i64), ((0u64) as i64), ((0u64) as i64), ((0u64) as i64), ((0u64) as i64)]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_min_epu64(create__m512i_from([((0u64) as i64), ((0u64) as i64), ((0u64) as i64), ((0u64) as i64), ((0u64) as i64), ((0u64) as i64), ((0u64) as i64), ((0u64) as i64)]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1547,7 +1547,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epu64_boundary_zero() -> Result<
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epu64_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epu64(create__m512i_from([((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64)]));
-        check_int_equality(result as i32, -1)?;
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_reduce_min_epu64(create__m512i_from([((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64)]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1567,7 +1567,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epu64_boundary_allones() -> Resu
 pub(super) fn test_x86_avx512f_mm512_reduce_min_epu64_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_min_epu64(create__m512i_from([((u64::MIN) as i64), ((u64::MAX) as i64), ((0u64) as i64), ((u64::MAX) as i64), ((u64::MIN) as i64), ((u64::MAX) as i64), ((0u64) as i64), ((u64::MAX) as i64)]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_min_epu64(create__m512i_from([((u64::MIN) as i64), ((u64::MAX) as i64), ((0u64) as i64), ((u64::MAX) as i64), ((u64::MIN) as i64), ((u64::MAX) as i64), ((0u64) as i64), ((u64::MAX) as i64)]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1587,7 +1587,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_min_epu64_boundary_mixed() -> Result
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu64() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epu64(create__mmask8_from(0b01010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 1)?;
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epu64(create__mmask8_from(0b01010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1607,7 +1607,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu64() -> Result<(), Strin
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu64_normal2() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epu64(create__mmask8_from(0b01010101), create__m512i_from([((0u64) as i64), ((18446744073709551615u64) as i64), ((2u64) as i64), ((18446744073709551613u64) as i64), ((4u64) as i64), ((18446744073709551611u64) as i64), ((6u64) as i64), ((18446744073709551609u64) as i64)]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epu64(create__mmask8_from(0b01010101), create__m512i_from([((0u64) as i64), ((18446744073709551615u64) as i64), ((2u64) as i64), ((18446744073709551613u64) as i64), ((4u64) as i64), ((18446744073709551611u64) as i64), ((6u64) as i64), ((18446744073709551609u64) as i64)]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1627,7 +1627,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu64_normal2() -> Result<(
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu64_normal3() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epu64(create__mmask8_from(0b01010101), create__m512i_from([((100u64) as i64), ((200u64) as i64), ((300u64) as i64), ((400u64) as i64), ((500u64) as i64), ((600u64) as i64), ((700u64) as i64), ((800u64) as i64)]));
-        check_int_equality(result as i32, 100)?;
+        check_int_equality(result as i32, 100).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epu64(create__mmask8_from(0b01010101), create__m512i_from([((100u64) as i64), ((200u64) as i64), ((300u64) as i64), ((400u64) as i64), ((500u64) as i64), ((600u64) as i64), ((700u64) as i64), ((800u64) as i64)]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1647,7 +1647,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu64_normal3() -> Result<(
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu64_boundary_min() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epu64(create__mmask8_from(0b01010101), create__m512i_from([((u64::MIN) as i64), ((u64::MIN) as i64), ((u64::MIN) as i64), ((u64::MIN) as i64), ((u64::MIN) as i64), ((u64::MIN) as i64), ((u64::MIN) as i64), ((u64::MIN) as i64)]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epu64(create__mmask8_from(0b01010101), create__m512i_from([((u64::MIN) as i64), ((u64::MIN) as i64), ((u64::MIN) as i64), ((u64::MIN) as i64), ((u64::MIN) as i64), ((u64::MIN) as i64), ((u64::MIN) as i64), ((u64::MIN) as i64)]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1667,7 +1667,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu64_boundary_min() -> Res
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu64_boundary_max() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epu64(create__mmask8_from(0b01010101), create__m512i_from([((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64)]));
-        check_int_equality(result as i32, -1)?;
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epu64(create__mmask8_from(0b01010101), create__m512i_from([((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64)]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1687,7 +1687,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu64_boundary_max() -> Res
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu64_boundary_zero() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epu64(create__mmask8_from(0b01010101), create__m512i_from([((0u64) as i64), ((0u64) as i64), ((0u64) as i64), ((0u64) as i64), ((0u64) as i64), ((0u64) as i64), ((0u64) as i64), ((0u64) as i64)]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epu64(create__mmask8_from(0b01010101), create__m512i_from([((0u64) as i64), ((0u64) as i64), ((0u64) as i64), ((0u64) as i64), ((0u64) as i64), ((0u64) as i64), ((0u64) as i64), ((0u64) as i64)]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1707,7 +1707,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu64_boundary_zero() -> Re
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu64_boundary_allones() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epu64(create__mmask8_from(0b01010101), create__m512i_from([((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64)]));
-        check_int_equality(result as i32, -1)?;
+        check_int_equality(result as i32, -1).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epu64(create__mmask8_from(0b01010101), create__m512i_from([((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64), ((u64::MAX) as i64)]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -1727,7 +1727,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu64_boundary_allones() ->
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_epu64_boundary_mixed() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_min_epu64(create__mmask8_from(0b01010101), create__m512i_from([((u64::MIN) as i64), ((u64::MAX) as i64), ((0u64) as i64), ((u64::MAX) as i64), ((u64::MIN) as i64), ((u64::MAX) as i64), ((0u64) as i64), ((u64::MAX) as i64)]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_mask_reduce_min_epu64(create__mmask8_from(0b01010101), create__m512i_from([((u64::MIN) as i64), ((u64::MAX) as i64), ((0u64) as i64), ((u64::MAX) as i64), ((u64::MIN) as i64), ((u64::MAX) as i64), ((0u64) as i64), ((u64::MAX) as i64)]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2355,7 +2355,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_min_pd_boundary_mixed() -> Resu
 pub(super) fn test_x86_avx512f_mm512_reduce_and_epi32() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_and_epi32(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 0)?;
+        check_int_equality(result as i32, 0).map_err(|e| format!("{e} | call: _mm512_reduce_and_epi32(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2375,7 +2375,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_and_epi32() -> Result<(), String> {
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_and_epi32() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_and_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 1)?;
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm512_mask_reduce_and_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2395,7 +2395,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_and_epi32() -> Result<(), Strin
 pub(super) fn test_x86_avx512f_mm512_reduce_and_epi64() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_and_epi64(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 1)?;
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm512_reduce_and_epi64(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2415,7 +2415,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_and_epi64() -> Result<(), String> {
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_and_epi64() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_and_epi64(create__mmask8_from(0b01010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 1)?;
+        check_int_equality(result as i32, 1).map_err(|e| format!("{e} | call: _mm512_mask_reduce_and_epi64(create__mmask8_from(0b01010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2435,7 +2435,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_and_epi64() -> Result<(), Strin
 pub(super) fn test_x86_avx512f_mm512_reduce_or_epi32() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_or_epi32(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 31)?;
+        check_int_equality(result as i32, 31).map_err(|e| format!("{e} | call: _mm512_reduce_or_epi32(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2455,7 +2455,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_or_epi32() -> Result<(), String> {
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_or_epi32() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_or_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 15)?;
+        check_int_equality(result as i32, 15).map_err(|e| format!("{e} | call: _mm512_mask_reduce_or_epi32(create__mmask16_from(0b0101010101010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2475,7 +2475,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_or_epi32() -> Result<(), String
 pub(super) fn test_x86_avx512f_mm512_reduce_or_epi64() -> Result<(), String> {
     unsafe {
         let result = _mm512_reduce_or_epi64(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 15)?;
+        check_int_equality(result as i32, 15).map_err(|e| format!("{e} | call: _mm512_reduce_or_epi64(create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2495,7 +2495,7 @@ pub(super) fn test_x86_avx512f_mm512_reduce_or_epi64() -> Result<(), String> {
 pub(super) fn test_x86_avx512f_mm512_mask_reduce_or_epi64() -> Result<(), String> {
     unsafe {
         let result = _mm512_mask_reduce_or_epi64(create__mmask8_from(0b01010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]));
-        check_int_equality(result as i32, 13)?;
+        check_int_equality(result as i32, 13).map_err(|e| format!("{e} | call: _mm512_mask_reduce_or_epi64(create__mmask8_from(0b01010101), create__m512i_from_i32_array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]))"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2515,7 +2515,7 @@ pub(super) fn test_x86_avx512f_mm512_mask_reduce_or_epi64() -> Result<(), String
 pub(super) fn test_x86_avx512f_mm512_undefined_pd() -> Result<(), String> {
     unsafe {
         let result = unpack__m512d_to_f64_array(_mm512_undefined_pd());
-        check_float_array_equality(&result, &[0.0f64; 8])?;
+        check_float_array_equality(&result, &[0.0f64; 8]).map_err(|e| format!("{e} | call: _mm512_undefined_pd()"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2535,7 +2535,7 @@ pub(super) fn test_x86_avx512f_mm512_undefined_pd() -> Result<(), String> {
 pub(super) fn test_x86_avx512f_mm512_undefined_ps() -> Result<(), String> {
     unsafe {
         let result = unpack__m512_to_f32_array(_mm512_undefined_ps());
-        check_float_array_equality(&result, &[0.0f32; 16])?;
+        check_float_array_equality(&result, &[0.0f32; 16]).map_err(|e| format!("{e} | call: _mm512_undefined_ps()"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2555,7 +2555,7 @@ pub(super) fn test_x86_avx512f_mm512_undefined_ps() -> Result<(), String> {
 pub(super) fn test_x86_avx512f_mm512_undefined_epi32() -> Result<(), String> {
     unsafe {
         let result = unpack__m512i_to_i32_array(_mm512_undefined_epi32());
-        check_array_equality(&result, &[0i32; 16])?;
+        check_array_equality(&result, &[0i32; 16]).map_err(|e| format!("{e} | call: _mm512_undefined_epi32()"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2575,7 +2575,7 @@ pub(super) fn test_x86_avx512f_mm512_undefined_epi32() -> Result<(), String> {
 pub(super) fn test_x86_avx512f_mm512_undefined() -> Result<(), String> {
     unsafe {
         let result = unpack__m512_to_f32_array(_mm512_undefined());
-        check_float_array_equality(&result, &[0.0f32; 16])?;
+        check_float_array_equality(&result, &[0.0f32; 16]).map_err(|e| format!("{e} | call: _mm512_undefined()"))?;
 
         let total_iters = crate::cpu::get_iterations();
         if crate::get_fuzzing() && total_iters > 0 {
@@ -2599,7 +2599,7 @@ pub(super) fn test_x86_avx512f_mm512_loadu_epi32() -> Result<(), String> {
     unsafe {
         let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let result = unpack__m512i_to_i32_array(_mm512_loadu_epi32(ptr_mem_addr.0.as_ptr()));
-        check_array_equality(&result, &[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])?;
+        check_array_equality(&result, &[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]).map_err(|e| format!("{e} | call: _mm512_loadu_epi32(ptr_mem_addr.0.as_ptr())"))?;
     }
     Ok(())
 }
@@ -2611,7 +2611,7 @@ pub(super) fn test_x86_avx512f_mm256_loadu_epi32() -> Result<(), String> {
     unsafe {
         let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let result = unpack__m256i_to_i32_array(_mm256_loadu_epi32(ptr_mem_addr.0.as_ptr()));
-        check_array_equality(&result, &[1, 1, 1, 1, 1, 1, 1, 1])?;
+        check_array_equality(&result, &[1, 1, 1, 1, 1, 1, 1, 1]).map_err(|e| format!("{e} | call: _mm256_loadu_epi32(ptr_mem_addr.0.as_ptr())"))?;
     }
     Ok(())
 }
@@ -2623,7 +2623,7 @@ pub(super) fn test_x86_avx512f_mm_loadu_epi32() -> Result<(), String> {
     unsafe {
         let ptr_mem_addr = crate::cpu::common::Aligned64([1i32; 16]);
         let result = unpack__m128i_to_i32_array(_mm_loadu_epi32(ptr_mem_addr.0.as_ptr()));
-        check_array_equality(&result, &[1, 1, 1, 1])?;
+        check_array_equality(&result, &[1, 1, 1, 1]).map_err(|e| format!("{e} | call: _mm_loadu_epi32(ptr_mem_addr.0.as_ptr())"))?;
     }
     Ok(())
 }
