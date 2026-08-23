@@ -25,6 +25,28 @@ use ws::Broadcaster;
 pub struct AppState {
     pub store: Store,
     pub bus: Broadcaster,
+    pub capabilities: Capabilities,
+}
+
+#[derive(serde::Serialize, Clone)]
+pub struct Capabilities {
+    /// "arch:feature" strings for every CPU extension detected as available at runtime on
+    /// this machine (e.g. "x86:avx512f") - same data `hodow_cli cpu -l` prints.
+    pub cpu_modes: Vec<String>,
+    /// Total number of registered CPU test functions for those detected extensions - i.e.
+    /// how many tests a filter-less `Cpu` job actually runs here.
+    pub cpu_test_count: usize,
+    pub gpu_compiled: bool,
+    pub vulkan_compiled: bool,
+}
+
+fn detect_capabilities() -> Capabilities {
+    Capabilities {
+        cpu_modes: hodow_core::available_modes(),
+        cpu_test_count: hodow_core::list_all_functions().len(),
+        gpu_compiled: cfg!(feature = "gpu"),
+        vulkan_compiled: cfg!(feature = "vulkan"),
+    }
 }
 
 const DEFAULT_PORT: u16 = 7878;
@@ -51,7 +73,17 @@ pub fn process_serve(args: &ServeArgs) {
     };
     info!("Job queue/history: {}", dir.display());
 
-    let state = Arc::new(AppState { store, bus: Broadcaster::new() });
+    let capabilities = detect_capabilities();
+    info!(
+        "CPU: {} extension(s) detected on this machine ({}), {} test(s) available. GPU support compiled in: {}. Vulkan support compiled in: {}.",
+        capabilities.cpu_modes.len(),
+        capabilities.cpu_modes.join(", "),
+        capabilities.cpu_test_count,
+        capabilities.gpu_compiled,
+        capabilities.vulkan_compiled,
+    );
+
+    let state = Arc::new(AppState { store, bus: Broadcaster::new(), capabilities });
 
     // Defaults to 0.0.0.0 (LAN-reachable) - deliberately no authentication; run with
     // --bind 127.0.0.1 if you want it restricted to this machine only.

@@ -60,6 +60,7 @@
 </head>
 <body>
 <h1>hodow - job queue</h1>
+<p id="capabilities" style="color:#999; font-size:0.85rem; margin-top:-0.4rem;">Loading detected capabilities…</p>
 
 <form id="submit-form">
   <label>kind
@@ -409,6 +410,21 @@ function connectWs() {
   ws.onclose = () => setTimeout(connectWs, 2000);
 }
 
+async function loadCapabilities() {
+  const el = document.getElementById('capabilities');
+  try {
+    const res = await fetch('/api/info');
+    const c = await res.json();
+    const gpu = c.gpu_compiled ? 'gpu ✓' : 'gpu ✗ (not compiled in)';
+    const vulkan = c.vulkan_compiled ? 'vulkan ✓' : 'vulkan ✗ (not compiled in)';
+    el.textContent = `CPU: ${c.cpu_modes.length} extension(s) detected on this machine, ${c.cpu_test_count} test(s) available - ${gpu} - ${vulkan}`;
+    el.title = c.cpu_modes.join(', ');
+  } catch {
+    el.textContent = '';
+  }
+}
+
+loadCapabilities();
 refreshSnapshot();
 connectWs();
 </script>

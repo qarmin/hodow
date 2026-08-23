@@ -18,6 +18,7 @@ static INDEX_HTML: &str = include_str!("index.html");
 pub fn router(state: Arc<AppState>) -> Router {
     Router::new()
         .route("/", get(index))
+        .route("/api/info", get(info))
         .route("/api/jobs", get(snapshot).post(submit_job))
         .route("/api/jobs/{id}", get(job_detail).delete(cancel_job))
         .route("/api/ws", get(ws_handler))
@@ -26,6 +27,10 @@ pub fn router(state: Arc<AppState>) -> Router {
 
 async fn index() -> Html<&'static str> {
     Html(INDEX_HTML)
+}
+
+async fn info(State(state): State<Arc<AppState>>) -> Json<super::Capabilities> {
+    Json(state.capabilities.clone())
 }
 
 async fn submit_job(State(state): State<Arc<AppState>>, Json(kind): Json<JobKind>) -> Result<Json<serde_json::Value>, StatusCode> {

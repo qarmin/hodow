@@ -141,9 +141,13 @@ a job to `/api/jobs` instead of running locally.
   crash). A `Stress` job's subprocess timeout is its own requested `stress_secs` plus a margin, not
   the fixed `SUBPROCESS_JOB_TIMEOUT` Gpu/Vulkan get.
 - `serve/ws.rs` / `serve/routes.rs` / `serve/index.html` - a `tokio::sync::broadcast` fan-out, the
-  REST+websocket API (`POST /api/jobs`, `GET /api/jobs`, `GET/DELETE /api/jobs/{id}`, `GET /api/ws`),
-  and a single self-contained static dashboard page (`include_str!`'d, vanilla JS, no build step)
-  with a kind selector (cpu/gpu/vulkan/stress) that shows the matching fields.
+  REST+websocket API (`POST /api/jobs`, `GET /api/jobs`, `GET/DELETE /api/jobs/{id}`, `GET /api/ws`,
+  `GET /api/info`), and a single self-contained static dashboard page (`include_str!`'d, vanilla JS,
+  no build step) with a kind selector (cpu/gpu/vulkan/stress) that shows the matching fields, a
+  filterable/searchable per-test outcome table in the job detail view (issues-only by default - a
+  full CPU suite run has ~19k test events, so showing them all unfiltered isn't useful), and a
+  capabilities line (detected CPU extensions + test count, gpu/vulkan compiled-in) sourced from
+  `AppState::capabilities` (computed once at startup, logged there too).
 
 `isolate.rs`'s `run_isolated`/`run_worker` filter the test list by the same `-t`/`-e`/`-s` state as the
 plain (non-isolated) run path (via `hodow_core::should_skip_test_or_feature`, using the `(name, feature,
