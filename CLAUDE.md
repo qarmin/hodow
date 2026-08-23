@@ -105,17 +105,18 @@ clean "unavailable" skip (exit 0), distinct from a real `init_error`.
 
 ## Job-queue server (`hodow_cli serve`, feature `serve`)
 
-`hodow_cli/src/serve/` is a persistent, remotely-controllable Cpu/Gpu/Vulkan job queue + web
-dashboard, living entirely inside the `hodow_cli` binary crate (no separate workspace member),
+`hodow_cli/src/serve/` is a persistent, remotely-controllable Cpu/Gpu/Vulkan/Stress job queue +
+web dashboard, living entirely inside the `hodow_cli` binary crate (no separate workspace member),
 behind the `serve` Cargo feature (default-on; excluded from the `just arm` cross-build).
 `hodow_cli serve` builds a `tokio` runtime and blocks on an `axum` server for the process lifetime
 (`0.0.0.0:7878` by default - **deliberately no authentication**; pass `--bind 127.0.0.1` to
 restrict it to localhost). A separate `hodow_cli cpu|gpu|vulkan ... --submit-to http://host:port`
-(or `just submit ...` for CPU) POSTs a job to `/api/jobs` instead of running locally.
+(`hodow_cli cpu --stress ... --submit-to` for a stress job; `just submit ...` for plain CPU) POSTs
+a job to `/api/jobs` instead of running locally.
 
-- `serve/model.rs` - `JobKind` (`Cpu`/`Gpu`/`Vulkan`, each with its own spec mirroring
-  `CpuArgs`/`GpuArgs`/`VulkanArgs`)/`JobStatus`/`JobRecord`/`JobEvent` (serde only, no tokio/axum -
-  unit-testable standalone).
+- `serve/model.rs` - `JobKind` (`Cpu`/`Gpu`/`Vulkan`/`Stress`, each with its own spec mirroring
+  `CpuArgs`/`GpuArgs`/`VulkanArgs`/the `stress_secs` field `stress::run_stress` reads)/`JobStatus`/
+  `JobRecord`/`JobEvent` (serde only, no tokio/axum - unit-testable standalone).
 - `serve/store.rs` - persistence: `<data-dir>/index.json` (one `JobRecord` per job, atomic
   write-tmp+rename, loaded in full at startup) + `<data-dir>/jobs/<id>.jsonl` (append-only per-job
   event log, read only on demand). No embedded database (keeps the no-native-C-deps constraint). Any
@@ -124,16 +125,17 @@ restrict it to localhost). A separate `hodow_cli cpu|gpu|vulkan ... --submit-to 
 - `serve/executor.rs` - one FIFO queue, one job at a time, on a plain OS thread (not a tokio task).
   `Cpu` jobs run through `isolate::run_isolated_core` (the same per-test subprocess isolation `cpu
   --isolate` uses), so a genuine hardware crash/hang can never take the server process down. `Gpu`/
-  `Vulkan` jobs have no per-test isolation entry point in `hodow_core` today, so they instead run as
-  a **whole-process** subprocess (`run_subprocess_job`, spawns `hodow_cli gpu|vulkan ...` and
-  classifies exit code/signal/timeout) - still safe for the server, just coarser-grained (no
-  specific-test culprit on crash). `stress` jobs are unsupported for the same reason `Gpu`/`Vulkan`
-  needed the subprocess wrapper - it runs in-process with no isolation - and could get one the same
-  way if wanted later.
+  `Vulkan`/`Stress` jobs have no per-test isolation entry point in `hodow_core` today, so they
+  instead run as a **whole-process** subprocess (`run_subprocess_job`, spawns `hodow_cli
+  gpu|vulkan|cpu --stress ...` and classifies exit code/signal/timeout by parsing the (ANSI-
+  stripped, since `handsome_logger` colorizes even through a pipe - see `strip_ansi`) summary line
+  each prints) - still safe for the server, just coarser-grained (no specific-test culprit on
+  crash). A `Stress` job's subprocess timeout is its own requested `stress_secs` plus a margin, not
+  the fixed `SUBPROCESS_JOB_TIMEOUT` Gpu/Vulkan get.
 - `serve/ws.rs` / `serve/routes.rs` / `serve/index.html` - a `tokio::sync::broadcast` fan-out, the
   REST+websocket API (`POST /api/jobs`, `GET /api/jobs`, `GET/DELETE /api/jobs/{id}`, `GET /api/ws`),
   and a single self-contained static dashboard page (`include_str!`'d, vanilla JS, no build step)
-  with a kind selector (cpu/gpu/vulkan) that shows the matching fields.
+  with a kind selector (cpu/gpu/vulkan/stress) that shows the matching fields.
 
 `isolate.rs`'s `run_isolated`/`run_worker` filter the test list by the same `-t`/`-e`/`-s` state as the
 plain (non-isolated) run path (via `hodow_core::should_skip_test_or_feature`, using the `(name, feature,

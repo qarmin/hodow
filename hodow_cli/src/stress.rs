@@ -14,7 +14,7 @@ use log::{error, info};
 
 use crate::cli::CpuArgs;
 
-const DEFAULT_STRESS_SECS: u64 = 10;
+pub(crate) const DEFAULT_STRESS_SECS: u64 = 10;
 
 struct CoreResult {
     core: usize,

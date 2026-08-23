@@ -37,6 +37,7 @@
       <option value="cpu">cpu</option>
       <option value="gpu">gpu</option>
       <option value="vulkan">vulkan</option>
+      <option value="stress">stress</option>
     </select>
   </label>
 
@@ -60,6 +61,10 @@
   </span>
 
   <span class="fields kind-vulkan" hidden></span>
+
+  <span class="fields kind-stress" hidden>
+    <label>stress duration (secs) <input name="stress_secs" type="number" min="1" placeholder="10"></label>
+  </span>
 
   <button type="submit">Submit job</button>
 </form>
@@ -98,6 +103,9 @@ function fmtSpec(kind) {
     if (s.display_api) bits.push('display_api=' + s.display_api);
     if (s.force_software) bits.push('force_software');
     return 'gpu ' + (bits.length ? bits.join(' ') : '(default)');
+  }
+  if (kind.kind === 'stress') {
+    return 'stress ' + (s.stress_secs ? s.stress_secs + 's' : '(default 10s)');
   }
   return 'vulkan';
 }
@@ -189,6 +197,9 @@ function buildSpec(kind, f) {
       memtest: f.get('memtest') === 'on',
       memtest_mb: int('memtest_mb'),
     };
+  }
+  if (kind === 'stress') {
+    return { stress_secs: int('stress_secs') };
   }
   return {};
 }

@@ -144,14 +144,18 @@ pub fn process_cpu(args: &CpuArgs) {
 /// the server always runs queued jobs through its own isolate-based executor.
 #[cfg(feature = "serve")]
 fn submit_to_server(args: &CpuArgs, base_url: &str) {
-    let spec = serde_json::json!({
-        "iterations": args.iterations,
-        "test_function": args.test_function,
-        "feature": args.feature,
-        "skip": args.skip,
-        "isolate_timeout_ms": args.isolate_timeout_ms,
-    });
-    let body = serde_json::json!({ "kind": "cpu", "spec": spec });
+    let body = if args.stress {
+        serde_json::json!({ "kind": "stress", "spec": { "stress_secs": args.stress_secs } })
+    } else {
+        let spec = serde_json::json!({
+            "iterations": args.iterations,
+            "test_function": args.test_function,
+            "feature": args.feature,
+            "skip": args.skip,
+            "isolate_timeout_ms": args.isolate_timeout_ms,
+        });
+        serde_json::json!({ "kind": "cpu", "spec": spec })
+    };
     let url = format!("{}/api/jobs", base_url.trim_end_matches('/'));
     match ureq::post(&url).send_json(&body) {
         Ok(mut resp) => match resp.body_mut().read_to_string() {

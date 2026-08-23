@@ -6,16 +6,12 @@
 //! cheap to respawn (see `isolate.rs`'s module docs: one worker runs every test in-process,
 //! a fresh one is only spawned when the current one actually crashes).
 //!
-//! `Gpu`/`Vulkan` jobs run as a **whole-process** subprocess instead (`run_subprocess_job`):
-//! neither `test_all_opengl` nor `run_compute_validation` has a per-test crash-isolation
-//! entry point like the CPU suite's `all_tests()`, so a crash/hang there is attributed to
-//! the whole job rather than a specific test - still enough to guarantee the server process
-//! itself is never at risk, just coarser-grained than the CPU path.
-//!
-//! `stress` jobs are deliberately NOT supported here: `stress::run_stress` runs entirely
-//! in-process across pinned threads with no subprocess isolation, so a real crash there
-//! would kill the server. If stress-as-a-job is wanted later, it needs the same whole-
-//! process wrapping `Gpu`/`Vulkan` jobs get here.
+//! `Gpu`/`Vulkan`/`Stress` jobs run as a **whole-process** subprocess instead
+//! (`run_subprocess_job`): none of `test_all_opengl`, `run_compute_validation`, or
+//! `stress::run_stress` has a per-test crash-isolation entry point like the CPU suite's
+//! `all_tests()`, so a crash/hang there is attributed to the whole job rather than a
+//! specific test - still enough to guarantee the server process itself is never at risk,
+//! just coarser-grained than the CPU path.
 //!
 //! Runs on a plain OS thread (not a tokio task) since it's a blocking loop; `Store`/
 //! `Broadcaster` are safe to call from here because they're guarded by `std::sync`
@@ -34,13 +30,16 @@ use crate::cli::CpuArgs;
 use crate::isolate::{Outcome, run_isolated_core};
 
 use super::AppState;
-use super::model::{GpuJobSpec, JobId, JobKind, JobStatus, JobSummary, TestOutcome, VulkanJobSpec};
+use super::model::{GpuJobSpec, JobId, JobKind, JobStatus, JobSummary, StressJobSpec, TestOutcome, VulkanJobSpec};
 use super::ws::WsMessage;
 
 const POLL_INTERVAL: Duration = Duration::from_millis(500);
 /// Whole-job timeout for Gpu/Vulkan jobs, which have no internal per-test isolation to fall
 /// back on - a genuinely hung driver call would otherwise block the executor forever.
 const SUBPROCESS_JOB_TIMEOUT: Duration = Duration::from_secs(300);
+/// Extra time given to a Stress job on top of its own requested duration, to distinguish a
+/// merely-slow-but-finishing run from a genuine hang.
+const STRESS_TIMEOUT_MARGIN: Duration = Duration::from_secs(60);
 
 pub fn spawn_executor(state: Arc<AppState>) {
     thread::spawn(move || {
@@ -66,6 +65,7 @@ fn run_job(state: &AppState, id: JobId) {
         JobKind::Cpu(spec) => run_cpu_job(state, id, &spec),
         JobKind::Gpu(spec) => run_subprocess_job(&gpu_argv(&spec), parse_gpu_summary),
         JobKind::Vulkan(spec) => run_subprocess_job(&vulkan_argv(&spec), parse_vulkan_summary),
+        JobKind::Stress(spec) => run_subprocess_job_with_timeout(&stress_argv(&spec), parse_stress_summary, stress_timeout(&spec)),
     };
 
     info!("serve: job {id} finished: {status:?}");
@@ -174,8 +174,45 @@ fn vulkan_argv(_spec: &VulkanJobSpec) -> Vec<String> {
     vec!["vulkan".to_string()]
 }
 
+fn stress_argv(spec: &StressJobSpec) -> Vec<String> {
+    let mut argv = vec!["cpu".to_string(), "--stress".to_string()];
+    if let Some(secs) = spec.stress_secs {
+        argv.push("--stress-secs".into());
+        argv.push(secs.to_string());
+    }
+    argv
+}
+
+fn stress_timeout(spec: &StressJobSpec) -> Duration {
+    Duration::from_secs(spec.stress_secs.unwrap_or(crate::stress::DEFAULT_STRESS_SECS)) + STRESS_TIMEOUT_MARGIN
+}
+
+/// Strips ANSI escape sequences (`\x1b[...m`) from log output before parsing it for
+/// numbers - `handsome_logger` colorizes even when writing to a pipe, and a raw digit-scan
+/// would otherwise pick up stray digits from color codes like `\x1b[34m` as if they were
+/// part of the actual summary line.
+fn strip_ansi(s: &str) -> String {
+    let mut out = String::with_capacity(s.len());
+    let mut chars = s.chars();
+    while let Some(c) = chars.next() {
+        if c == '\u{1b}' {
+            if chars.next() == Some('[') {
+                for c2 in chars.by_ref() {
+                    if c2.is_ascii_alphabetic() {
+                        break;
+                    }
+                }
+            }
+        } else {
+            out.push(c);
+        }
+    }
+    out
+}
+
 /// "GL tests finished. Run: 40, Skipped: 0, Errors: 0"
 fn parse_gpu_summary(stdout: &str) -> JobSummary {
+    let stdout = strip_ansi(stdout);
     for line in stdout.lines() {
         if let Some(rest) = line.split_once("Run: ").map(|(_, r)| r) {
             let nums: Vec<usize> = rest.split(|c: char| !c.is_ascii_digit()).filter(|s| !s.is_empty()).filter_map(|s| s.parse().ok()).collect();
@@ -187,11 +224,14 @@ fn parse_gpu_summary(stdout: &str) -> JobSummary {
     JobSummary::default()
 }
 
-/// "Vulkan validation finished: 2 device(s), 0 error(s)"
+/// "Vulkan validation finished: 2 device(s), 0 error(s)". Sliced to after the "finished: "
+/// marker (like parse_gpu_summary's "Run: ") so the log line's own timestamp/file:line
+/// prefix digits are never in scope for the number scan.
 fn parse_vulkan_summary(stdout: &str) -> JobSummary {
+    let stdout = strip_ansi(stdout);
     for line in stdout.lines() {
-        if line.contains("device(s)") && line.contains("error(s)") {
-            let nums: Vec<usize> = line.split(|c: char| !c.is_ascii_digit()).filter(|s| !s.is_empty()).filter_map(|s| s.parse().ok()).collect();
+        if let Some(rest) = line.split_once("finished: ").map(|(_, r)| r) {
+            let nums: Vec<usize> = rest.split(|c: char| !c.is_ascii_digit()).filter(|s| !s.is_empty()).filter_map(|s| s.parse().ok()).collect();
             if let [devices, errors] = nums[..] {
                 return JobSummary { total: devices, passed: devices.saturating_sub(errors), failed: errors, ..Default::default() };
             }
@@ -200,12 +240,33 @@ fn parse_vulkan_summary(stdout: &str) -> JobSummary {
     JobSummary::default()
 }
 
+/// "... - TOTAL            123          45" (see stress.rs's `report()`: core/pinned/
+/// iterations columns are blank on the TOTAL row, only tests_executed and failures are
+/// present). Sliced to after "TOTAL" itself so the log line's timestamp/file:line prefix
+/// digits are never in scope for the number scan.
+fn parse_stress_summary(stdout: &str) -> JobSummary {
+    let stdout = strip_ansi(stdout);
+    for line in stdout.lines() {
+        if let Some(rest) = line.split_once("TOTAL").map(|(_, r)| r) {
+            let nums: Vec<usize> = rest.split_whitespace().filter_map(|s| s.parse().ok()).collect();
+            if let [executed, failed] = nums[..] {
+                return JobSummary { total: executed, passed: executed.saturating_sub(failed), failed, ..Default::default() };
+            }
+        }
+    }
+    JobSummary::default()
+}
+
 /// Runs `hodow_cli <argv>` as a whole subprocess and classifies the outcome: a clean exit
 /// (any code) is `Succeeded`/`Failed` depending on whether it reported errors; dying to a
-/// signal or exceeding `SUBPROCESS_JOB_TIMEOUT` is `Crashed` (no per-test culprit - see
-/// module docs). This is the safety boundary for `Gpu`/`Vulkan` jobs: whatever happens to
-/// the child, this function always returns rather than propagating a crash to the caller.
+/// signal or exceeding `timeout` is `Crashed` (no per-test culprit - see module docs). This
+/// is the safety boundary for `Gpu`/`Vulkan`/`Stress` jobs: whatever happens to the child,
+/// this function always returns rather than propagating a crash to the caller.
 fn run_subprocess_job(argv: &[String], parse_summary: fn(&str) -> JobSummary) -> (JobStatus, JobSummary) {
+    run_subprocess_job_with_timeout(argv, parse_summary, SUBPROCESS_JOB_TIMEOUT)
+}
+
+fn run_subprocess_job_with_timeout(argv: &[String], parse_summary: fn(&str) -> JobSummary, timeout: Duration) -> (JobStatus, JobSummary) {
     let exe = match std::env::current_exe() {
         Ok(e) => e,
         Err(e) => {
@@ -232,7 +293,7 @@ fn run_subprocess_job(argv: &[String], parse_summary: fn(&str) -> JobSummary) ->
         let _ = tx.send(buf);
     });
 
-    let status = match child.wait_timeout(SUBPROCESS_JOB_TIMEOUT) {
+    let status = match child.wait_timeout(timeout) {
         Some(exit) => exit,
         None => {
             let _ = child.kill();

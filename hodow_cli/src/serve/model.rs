@@ -54,17 +54,25 @@ pub struct GpuJobSpec {
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]
 pub struct VulkanJobSpec {}
 
-/// The kind of work a job represents. `Gpu`/`Vulkan` jobs run as a whole-process subprocess
-/// (see `executor::run_subprocess_job`) rather than per-test isolation like `Cpu` - neither
-/// `hodow_core::test_all_opengl` nor `run_compute_validation` have a per-test crash-isolation
-/// entry point today (unlike the CPU suite's `all_tests()`/`isolate.rs`), so a crash/hang is
-/// attributed to the whole job, not a specific test.
+/// Same argument surface as `stress::run_stress` reads off `CpuArgs` (just `stress_secs`).
+#[derive(Serialize, Deserialize, Clone, Debug, Default)]
+pub struct StressJobSpec {
+    #[serde(default)]
+    pub stress_secs: Option<u64>,
+}
+
+/// The kind of work a job represents. `Gpu`/`Vulkan`/`Stress` jobs run as a whole-process
+/// subprocess (see `executor::run_subprocess_job`) rather than per-test isolation like `Cpu`:
+/// none of `test_all_opengl`, `run_compute_validation`, or `stress::run_stress` have a
+/// per-test crash-isolation entry point today (unlike the CPU suite's `all_tests()`/
+/// `isolate.rs`), so a crash/hang is attributed to the whole job, not a specific test.
 #[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(tag = "kind", content = "spec", rename_all = "snake_case")]
 pub enum JobKind {
     Cpu(CpuJobSpec),
     Gpu(GpuJobSpec),
     Vulkan(VulkanJobSpec),
+    Stress(StressJobSpec),
 }
 
 /// Terminal (and non-terminal) states a job can be in. Three distinct failure-ish states
