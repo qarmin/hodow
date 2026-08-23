@@ -94,7 +94,19 @@ fn main() {
     } else {
         handsome_logger::FormatText::DefaultWithFileNameC.get()
     };
-    let config = ConfigBuilder::new().set_level(level).set_format_text(format, None).build();
+    let config = ConfigBuilder::new()
+        .set_level(level)
+        .set_format_text(format, None)
+        // Dependency crates (notably the websocket stack the `serve` subcommand pulls in)
+        // log their own protocol-internal chatter (ping/pong, close frames, ...) at Debug -
+        // useful for debugging *those* crates, never for debugging hodow. Only this
+        // project's own targets get the full level; every third-party crate is capped at
+        // Info regardless of `--debug`.
+        .set_message_filtering(Some(|record: &log::Record| {
+            let target = record.target();
+            target.starts_with("hodow_cli") || target.starts_with("hodow_core") || record.level() <= log::Level::Info
+        }))
+        .build();
     handsome_logger::TermLogger::init(config, Default::default(), Default::default()).expect("Failed to initialize logger");
 
     print_build_info();
