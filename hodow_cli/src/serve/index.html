@@ -5,27 +5,57 @@
 <title>hodow - job queue</title>
 <style>
   :root { color-scheme: dark light; }
+  * { box-sizing: border-box; }
   body { font-family: system-ui, sans-serif; margin: 2rem; background: #14161a; color: #e6e6e6; }
   h1 { font-size: 1.3rem; }
+  h2 { font-size: 1.05rem; margin-top: 2rem; }
+  a { color: #58a6ff; }
   form { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; align-items: end; }
   form label { display: flex; flex-direction: column; font-size: 0.75rem; color: #999; }
   form .fields { display: contents; }
   form .fields[hidden] { display: none; }
-  input { background: #1e2127; color: #e6e6e6; border: 1px solid #333; border-radius: 4px; padding: 0.35rem; }
+  input, select { background: #1e2127; color: #e6e6e6; border: 1px solid #333; border-radius: 4px; padding: 0.35rem; }
   button { background: #2d6cdf; color: white; border: none; border-radius: 4px; padding: 0.45rem 0.9rem; cursor: pointer; }
   button.secondary { background: #444; }
+  button.link { background: none; color: #58a6ff; padding: 0; text-decoration: underline; }
   table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
   th, td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid #2a2d33; }
+  #jobs tbody tr { cursor: pointer; }
+  #jobs tbody tr:hover { filter: brightness(1.15); }
   tr.running { background: #22314a; }
   tr.failed, tr.crashed, tr.interrupted { background: #3a2222; }
   tr.succeeded { background: #1f3322; }
-  .status { font-weight: 600; }
-  .status.queued { color: #aaa; }
-  .status.running { color: #58a6ff; }
-  .status.succeeded { color: #3fb950; }
-  .status.failed, .status.crashed, .status.interrupted { color: #f85149; }
-  .status.cancelled { color: #999; }
-  pre#detail { background: #1e2127; padding: 1rem; max-height: 40vh; overflow: auto; border-radius: 6px; }
+  .badge { display: inline-block; font-weight: 600; font-size: 0.75rem; padding: 0.15rem 0.55rem; border-radius: 999px; white-space: nowrap; }
+  .badge.queued { background: #333; color: #ccc; }
+  .badge.running { background: #1c3a63; color: #79b8ff; }
+  .badge.succeeded { background: #113322; color: #56d364; }
+  .badge.failed, .badge.crashed, .badge.interrupted { background: #4a1c1c; color: #ff7b72; }
+  .badge.cancelled { background: #333; color: #999; }
+  .badge.pass { background: #113322; color: #56d364; }
+  .badge.fail { background: #4a1c1c; color: #ff7b72; }
+  .badge.panic { background: #4a1c1c; color: #ffa657; }
+  .badge.timeout { background: #4a3a1c; color: #ffa657; }
+  .badge.count { background: #262a33; color: #ccc; margin-left: 0.4rem; }
+  .stat-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.6rem 0 1rem; }
+  .stat { background: #1e2127; border-radius: 6px; padding: 0.4rem 0.8rem; font-size: 0.85rem; }
+  .stat b { font-size: 1.05rem; display: block; }
+  #detail-panel { background: #191b20; border: 1px solid #262a33; border-radius: 8px; padding: 1.2rem; }
+  #detail-empty { color: #888; }
+  .detail-header { display: flex; align-items: baseline; gap: 0.7rem; flex-wrap: wrap; margin-bottom: 0.3rem; }
+  .detail-header h3 { margin: 0; font-size: 1.1rem; }
+  .detail-meta { color: #999; font-size: 0.82rem; margin-bottom: 0.6rem; }
+  .detail-spec { font-family: ui-monospace, monospace; font-size: 0.85rem; color: #c9d1d9; background: #10131a; padding: 0.5rem 0.7rem; border-radius: 6px; margin-bottom: 0.8rem; }
+  .filter-bar { display: flex; gap: 0.5rem; align-items: center; margin: 0.8rem 0; flex-wrap: wrap; }
+  .filter-bar select, .filter-bar input { padding: 0.3rem 0.5rem; font-size: 0.85rem; }
+  .filter-bar .hint { color: #888; font-size: 0.8rem; margin-left: auto; }
+  #events-table-wrap { max-height: 55vh; overflow: auto; border: 1px solid #262a33; border-radius: 6px; }
+  #events-table { font-size: 0.85rem; }
+  #events-table th { position: sticky; top: 0; background: #1e2127; }
+  #events-table td.name { font-family: ui-monospace, monospace; }
+  #events-table td.msg { font-family: ui-monospace, monospace; color: #ffa19b; max-width: 40vw; overflow-wrap: anywhere; }
+  #events-truncated { color: #888; font-size: 0.8rem; padding: 0.5rem; }
+  details#raw-json summary { cursor: pointer; color: #888; font-size: 0.8rem; margin-top: 0.8rem; }
+  details#raw-json pre { background: #10131a; padding: 0.8rem; border-radius: 6px; max-height: 30vh; overflow: auto; font-size: 0.78rem; }
 </style>
 </head>
 <body>
@@ -75,15 +105,32 @@
 </table>
 
 <h2>Detail</h2>
-<pre id="detail">Click a job row for details.</pre>
+<div id="detail-panel">
+  <p id="detail-empty">Click a job row for details.</p>
+</div>
 
 <script>
 const tbody = document.querySelector('#jobs tbody');
-const detail = document.getElementById('detail');
+const detailPanel = document.getElementById('detail-panel');
 let jobs = {};
+let currentDetail = null; // { id, record, events } of the job currently shown, for live filter re-render
+const MAX_RENDERED_ROWS = 1500;
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
 
 function fmtTs(ms) {
   return ms ? new Date(ms).toLocaleString() : '-';
+}
+
+function fmtDuration(startMs, endMs) {
+  if (!startMs) return '-';
+  const end = endMs || Date.now();
+  const secs = Math.round((end - startMs) / 1000);
+  if (secs < 60) return `${secs}s`;
+  const m = Math.floor(secs / 60), s = secs % 60;
+  return `${m}m ${s}s`;
 }
 
 function fmtSpec(kind) {
@@ -117,7 +164,7 @@ function fmtSummary(sum) {
 }
 
 function statusText(status) {
-  if (status.status === 'crashed') return status.culprit_test ? `crashed (${status.culprit_test})` : 'crashed';
+  if (status.status === 'crashed') return status.culprit_test ? `crashed (${esc(status.culprit_test)})` : 'crashed';
   return status.status;
 }
 
@@ -129,9 +176,9 @@ function render() {
     tr.className = j.status.status;
     tr.innerHTML = `
       <td>${j.id}</td>
-      <td class="status ${j.status.status}">${statusText(j.status)}</td>
-      <td>${fmtSpec(j.kind)}</td>
-      <td>${fmtSummary(j.summary)}</td>
+      <td><span class="badge ${j.status.status}">${statusText(j.status)}</span></td>
+      <td>${esc(fmtSpec(j.kind))}</td>
+      <td>${esc(fmtSummary(j.summary))}</td>
       <td>${fmtTs(j.submitted_at_ms)}</td>
       <td>${j.status.status === 'queued' ? `<button class="secondary" data-cancel="${j.id}">cancel</button>` : ''}</td>
     `;
@@ -148,12 +195,137 @@ function render() {
       refreshSnapshot();
     });
   });
+  // If the currently-open detail job just changed status/summary (e.g. via websocket), refresh it too.
+  if (currentDetail && jobs[currentDetail.id]) {
+    showDetail(currentDetail.id, /* preserveFilters */ true);
+  }
 }
 
-async function showDetail(id) {
+// Normalizes a TestOutcome (either the bare string "Pass"/"Panic"/"Timeout"/"Crashed", or
+// the object shape {"Fail": "message"} serde emits for the one variant carrying data) into
+// {kind, message}.
+function normalizeOutcome(outcome) {
+  if (typeof outcome === 'string') return { kind: outcome, message: null };
+  const key = Object.keys(outcome)[0];
+  return { kind: key, message: outcome[key] };
+}
+
+function outcomeBadgeClass(kind) {
+  return { Pass: 'pass', Fail: 'fail', Panic: 'panic', Timeout: 'timeout', Crashed: 'fail' }[kind] || 'fail';
+}
+
+async function showDetail(id, preserveFilters) {
   const res = await fetch('/api/jobs/' + id);
+  if (!res.ok) return;
   const data = await res.json();
-  detail.textContent = JSON.stringify(data, null, 2);
+  const filterSel = document.getElementById('event-filter');
+  const searchInp = document.getElementById('event-search');
+  const outcomeFilter = preserveFilters && filterSel ? filterSel.value : 'issues';
+  const search = preserveFilters && searchInp ? searchInp.value : '';
+  currentDetail = { id, record: data.record, events: data.events };
+  renderDetail(outcomeFilter, search);
+}
+
+function renderDetail(outcomeFilter, search) {
+  if (!currentDetail) return;
+  const { id, record, events } = currentDetail;
+  const testEvents = events.filter((e) => e.type === 'test').map((e) => ({ ...e, o: normalizeOutcome(e.outcome) }));
+  const s = record.summary || {};
+  const issues = s.failed + s.panicked + s.timed_out + s.crashed;
+
+  const statusBadge = `<span class="badge ${record.status.status}">${esc(statusText(record.status))}</span>`;
+  const duration = fmtDuration(record.started_at_ms, record.finished_at_ms);
+
+  let html = `
+    <div class="detail-header"><h3>Job #${id}</h3>${statusBadge}</div>
+    <div class="detail-meta">
+      submitted ${fmtTs(record.submitted_at_ms)} &middot;
+      started ${fmtTs(record.started_at_ms)} &middot;
+      finished ${fmtTs(record.finished_at_ms)} &middot;
+      duration ${duration}
+    </div>
+    <div class="detail-spec">${esc(fmtSpec(record.kind))}</div>
+  `;
+
+  if (s.total > 0) {
+    html += `<div class="stat-row">
+      <div class="stat"><b>${s.total}</b>total</div>
+      <div class="stat"><b style="color:#56d364">${s.passed}</b>passed</div>
+      <div class="stat"><b style="color:${s.failed ? '#ff7b72' : '#666'}">${s.failed}</b>failed</div>
+      <div class="stat"><b style="color:${s.panicked ? '#ffa657' : '#666'}">${s.panicked}</b>panicked</div>
+      <div class="stat"><b style="color:${s.timed_out ? '#ffa657' : '#666'}">${s.timed_out}</b>timed out</div>
+      <div class="stat"><b style="color:${s.crashed ? '#ff7b72' : '#666'}">${s.crashed}</b>crashed</div>
+    </div>`;
+  }
+
+  if (testEvents.length > 0) {
+    html += `
+      <div class="filter-bar">
+        <select id="event-filter">
+          <option value="issues">Issues only (fail/panic/timeout/crash)</option>
+          <option value="all">All tests</option>
+          <option value="pass">Passed only</option>
+        </select>
+        <input id="event-search" type="search" placeholder="filter by test name…" style="min-width: 220px">
+        <span class="hint" id="event-count-hint"></span>
+      </div>
+      <div id="events-table-wrap">
+        <table id="events-table">
+          <thead><tr><th>#</th><th>test</th><th>outcome</th><th>message</th></tr></thead>
+          <tbody id="events-tbody"></tbody>
+        </table>
+        <div id="events-truncated"></div>
+      </div>
+    `;
+  } else if (record.status.status === 'crashed') {
+    html += `<p style="color:#888">This job kind runs as a whole process rather than per-test, so a crash isn't attributed to a specific test - check the process's own log output.</p>`;
+  } else if (issues === 0 && s.total === 0) {
+    html += `<p style="color:#888">No tests ran (empty filter match, or job hasn't produced per-test events).</p>`;
+  }
+
+  html += `<details id="raw-json"><summary>raw JSON</summary><pre>${esc(JSON.stringify({ record, events }, null, 2))}</pre></details>`;
+
+  detailPanel.innerHTML = html;
+
+  if (testEvents.length > 0) {
+    const filterSel = document.getElementById('event-filter');
+    const searchInp = document.getElementById('event-search');
+    filterSel.value = outcomeFilter || 'issues';
+    searchInp.value = search || '';
+    const rerender = () => renderEventRows(testEvents, filterSel.value, searchInp.value);
+    filterSel.addEventListener('change', rerender);
+    searchInp.addEventListener('input', rerender);
+    rerender();
+  }
+}
+
+function renderEventRows(testEvents, outcomeFilter, search) {
+  const needle = (search || '').trim().toLowerCase();
+  let matched = testEvents.filter((e) => {
+    if (outcomeFilter === 'pass' && e.o.kind !== 'Pass') return false;
+    if (outcomeFilter === 'issues' && e.o.kind === 'Pass') return false;
+    if (needle && !e.name.toLowerCase().includes(needle)) return false;
+    return true;
+  });
+
+  const countHint = document.getElementById('event-count-hint');
+  countHint.textContent = `${matched.length} of ${testEvents.length} tests`;
+
+  const shown = matched.slice(0, MAX_RENDERED_ROWS);
+  const tbodyEl = document.getElementById('events-tbody');
+  tbodyEl.innerHTML = shown.map((e) => `
+    <tr>
+      <td>${e.idx}</td>
+      <td class="name">${esc(e.name)}</td>
+      <td><span class="badge ${outcomeBadgeClass(e.o.kind)}">${esc(e.o.kind)}</span></td>
+      <td class="msg">${e.o.message ? esc(e.o.message) : ''}</td>
+    </tr>
+  `).join('');
+
+  const truncEl = document.getElementById('events-truncated');
+  truncEl.textContent = matched.length > MAX_RENDERED_ROWS
+    ? `Showing first ${MAX_RENDERED_ROWS} of ${matched.length} matches - refine the filter to see more specific results.`
+    : '';
 }
 
 async function refreshSnapshot() {
@@ -230,7 +402,7 @@ function connectWs() {
       if (jobs[msg.id]) { jobs[msg.id].status = msg.status; jobs[msg.id].summary = msg.summary; }
     } else if (msg.type === 'job_progress') {
       // Live per-test progress isn't persisted into the row view; a full refresh after
-      // job_finished is enough for the table. Detail view re-fetches on click.
+      // job_finished is enough for the table. Detail view re-fetches on click/refresh.
     }
     render();
   };
