@@ -1,0 +1,12 @@
+#version 310 es
+layout (local_size_x = 1) in;
+layout(binding = 2) readonly uniform Constants {
+    uint u_baseVal;
+};
+layout(binding = 1) writeonly buffer Output {
+    uint values[];
+};
+void main (void) {
+    uint offset = gl_NumWorkGroups.x*gl_NumWorkGroups.y*gl_WorkGroupID.z + gl_NumWorkGroups.x*gl_WorkGroupID.y + gl_WorkGroupID.x;
+    values[offset] = u_baseVal + offset;
+}

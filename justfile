@@ -1,5 +1,12 @@
 NIGHTLY := "nightly-2026-08-21"
 
+# Developer-only tools for hodow_cts, built once under tmp/ (git-ignored). Neither is
+# needed to build or run hodow_cts - only to regenerate shaders and to compare verdicts
+# against upstream. See hodow_cts/README.md, "Working on the port".
+DEQP_VK := "tmp/VK-GL-CTS/build-vk-headless/external/vulkancts/modules/vulkan/deqp-vk"
+GLSLANG := "tmp/VK-GL-CTS/tmpbuild-glslang/StandAlone/glslang"
+CTS_DIR := "tmp/VK-GL-CTS"
+
 check:
     RUSTFLAGS="-C target-cpu=native" cargo +{{NIGHTLY}} check -p hodow_cli --message-format short
 
@@ -79,6 +86,172 @@ guia *args:
 
 gen-gl-table:
     python3 scripts/generate_gl_table.py
+
+# --- hodow_cts (Vulkan CTS port) --------------------------------------------------
+# hodow_cts is a separate binary target, so the shared-binary hazard described above
+# does not apply to it: rebuilding it never touches target/{debug,release}/hodow_cli.
+
+# Run the ported conformance tests, e.g. `just cts --case 'dEQP-VK.compute.*'`.
+cts *args:
+    cargo run -p hodow_cts -- {{args}}
+
+ctsr *args:
+    cargo run -p hodow_cts --release -- {{args}}
+
+# What is implemented. Does not touch Vulkan, so it works with no driver at all.
+cts-list:
+    @cargo run -q -p hodow_cts -- --list
+
+# Run on a software driver instead of the GPU (containers, or to compare the GPU's
+# results against a reference implementation). Prefers Mesa's lavapipe, then
+# SwiftShader. ICD locations differ between distros and Mesa versions, so they are
+# searched for rather than hardcoded.
+cts-sw *args:
+    #!/usr/bin/env bash
+    set -uo pipefail
+
+    icd_dirs=(
+        /usr/share/vulkan/icd.d
+        /usr/local/share/vulkan/icd.d
+        /etc/vulkan/icd.d
+        /usr/lib/x86_64-linux-gnu/vulkan/icd.d
+        /usr/lib/vulkan/icd.d
+        "${XDG_DATA_HOME:-$HOME/.local/share}/vulkan/icd.d"
+    )
+
+    found=()
+    for d in "${icd_dirs[@]}"; do
+        [ -d "$d" ] || continue
+        while IFS= read -r f; do found+=("$f"); done < <(find "$d" -maxdepth 1 -name '*.json' 2>/dev/null)
+    done
+    # SwiftShader ships with Chrome/Playwright; handy when Mesa has no software driver.
+    while IFS= read -r f; do found+=("$f"); done < <(
+        find /opt/ms-playwright /opt/google/chrome -maxdepth 4 -name 'vk_swiftshader_icd.json' 2>/dev/null
+    )
+
+    pick=""
+    for pattern in lvp swiftshader; do
+        for f in "${found[@]:-}"; do
+            [ -n "$f" ] || continue
+            if printf '%s' "$f" | grep -qi "$pattern"; then pick="$f"; break 2; fi
+        done
+    done
+
+    if [ -z "$pick" ]; then
+        echo "no software Vulkan driver found." >&2
+        echo >&2
+        echo "ICD manifests visible on this system:" >&2
+        if [ "${#found[@]}" -eq 0 ] || [ -z "${found[0]:-}" ]; then
+            echo "  (none - searched: ${icd_dirs[*]})" >&2
+        else
+            printf '  %s\n' "${found[@]}" >&2
+        fi
+        echo >&2
+        echo "mesa-vulkan-drivers should provide lavapipe. Find where it put it with:" >&2
+        echo "  dpkg -L mesa-vulkan-drivers | grep -i icd" >&2
+        echo >&2
+        echo "Then run it directly, e.g.:" >&2
+        echo "  VK_ICD_FILENAMES=<that path> just cts" >&2
+        exit 1
+    fi
+
+    echo "using software driver: $pick"
+    VK_ICD_FILENAMES="$pick" cargo run -p hodow_cts -- {{args}}
+
+# Regenerate SPIR-V + parameter constants from shaders/manifest/. Needs glslang.
+cts-shaders:
+    python3 hodow_cts/scripts/compile_shaders.py --glslang {{GLSLANG}}
+
+# Compare every implemented case against upstream deqp-vk on the same driver.
+# This is the acceptance gate for a ported group.
+cts-diff *args:
+    python3 hodow_cts/scripts/diff_vs_deqp.py --deqp-vk {{DEQP_VK}} {{args}}
+
+# How much of the upstream suite is implemented, against several denominators.
+cts-coverage:
+    @python3 hodow_cts/scripts/coverage.py
+
+# Which ported upstream files has Khronos changed since the pinned revision?
+cts-drift:
+    python3 hodow_cts/scripts/vendor_upstream.py --cts-dir {{CTS_DIR}} --check
+
+# Re-vendor the upstream sources and re-pin the revision, then read `git diff`.
+cts-sync:
+    python3 hodow_cts/scripts/vendor_upstream.py --cts-dir {{CTS_DIR}} --sync
+
+cts-clippy:
+    cargo clippy -p hodow_cts --all-targets
+
+# Everything, with labelled results. Steps needing developer-only tools are skipped
+# with a note rather than failing, so this works on a machine that only has Rust.
+cts-verify:
+    #!/usr/bin/env bash
+    set -uo pipefail
+    fail=0
+    step() { printf '\n\033[1m=== %s ===\033[0m\n' "$*"; }
+    ok()   { printf '  \033[32mOK\033[0m   %s\n' "$*"; }
+    bad()  { printf '  \033[31mFAIL\033[0m %s\n' "$*"; fail=1; }
+    skip() { printf '  \033[33mSKIP\033[0m %s\n' "$*"; }
+
+    step "1/6  build"
+    if cargo build -p hodow_cts 2>&1 | tail -3; then ok "builds"; else bad "build failed"; fi
+
+    step "2/6  clippy + unit tests"
+    n=$(cargo clippy -p hodow_cts --all-targets 2>&1 | grep -cE '^warning: [^`]' || true)
+    [ "$n" -eq 0 ] && ok "clippy clean" || bad "$n clippy warning(s)"
+    if cargo test -q -p hodow_cts 2>&1 | grep -q 'result: FAILED'; then
+        bad "unit tests failed (de::Random vs upstream)"
+    else
+        ok "unit tests pass (de::Random matches upstream bit for bit)"
+    fi
+
+    step "3/6  generated shaders are up to date"
+    if [ -x "{{GLSLANG}}" ]; then
+        if python3 hodow_cts/scripts/compile_shaders.py --check --glslang {{GLSLANG}}; then
+            ok "manifest and generated Rust agree"
+        else
+            bad "generated shaders are stale - run 'just cts-shaders'"
+        fi
+    else
+        skip "glslang not built ({{GLSLANG}}) - see hodow_cts/README.md"
+    fi
+
+    step "4/6  upstream drift"
+    if [ -d "{{CTS_DIR}}/.git" ]; then
+        python3 hodow_cts/scripts/vendor_upstream.py --cts-dir {{CTS_DIR}} --check | tail -2
+        ok "drift report printed above"
+    else
+        skip "no VK-GL-CTS checkout at {{CTS_DIR}}"
+    fi
+
+    step "5/6  run the tests"
+    cargo run -q -p hodow_cts -- --output /tmp/hodow_cts_verify.jsonl
+    run_rc=$?
+    # Exit 2 is "no Vulkan driver here", not "a test failed". Reporting the two the
+    # same way is exactly the false accusation this project exists to avoid.
+    have_vulkan=1
+    case "$run_rc" in
+        0) ok "all cases passed on this device" ;;
+        2) have_vulkan=0; skip "no Vulkan driver - nothing ran. Try 'just cts-sw' for a software one." ;;
+        *) bad "some cases did not pass - see output above" ;;
+    esac
+
+    step "6/6  differential comparison against upstream deqp-vk"
+    if [ "$have_vulkan" -eq 0 ]; then
+        skip "needs a working driver; both binaries have to run on the same one"
+    elif [ -x "{{DEQP_VK}}" ]; then
+        if python3 hodow_cts/scripts/diff_vs_deqp.py --deqp-vk {{DEQP_VK}}; then
+            ok "every case agrees with upstream"
+        else
+            bad "a case disagrees with upstream - that is a bug in the port"
+        fi
+    else
+        skip "deqp-vk not built ({{DEQP_VK}}) - see hodow_cts/README.md"
+    fi
+
+    printf '\n'
+    [ "$fail" -eq 0 ] && printf '\033[32mall checks passed\033[0m\n' || printf '\033[31msomething needs attention (see FAIL above)\033[0m\n'
+    exit "$fail"
 
 upgrade:
     cargo upgrade --incompatible

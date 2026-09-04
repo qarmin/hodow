@@ -16,6 +16,9 @@ heavily on AI-assisted code generation (see README.md "AI Usage").
 - `hodow_cli` - CLI binary (`clap`), default features `["gpu", "serve"]`. Subcommands: `cpu`, `gpu`,
   `vulkan`, `serve` (behind the `serve` feature - see "Job-queue server" below).
 - `hodow_gui` - Slint-based GUI binary wrapping the same `hodow_core` API.
+- `hodow_cts` - a Rust rewrite of the Khronos Vulkan CTS (VK-GL-CTS). Standalone: it does **not**
+  depend on `hodow_core` or `hodow_cli` and nothing in it should ever `use hodow_core::`. See
+  "hodow_cts" below and `hodow_cts/README.md`.
 - `archs/`, `winit/`, `glutin/` at the repo root are vendored upstream source checkouts kept for local
   reference only - they are git-ignored and not part of the workspace/build.
 
@@ -45,6 +48,15 @@ heavily on AI-assisted code generation (see README.md "AI Usage").
 - `just test-gpu-all` / `just test-gpu-window` / `just test-gpu-matrix` - exercise the full matrix of
   display-api x gl-api x software/hardware combinations.
 - `just gen-gl-table` - regenerate `hodow_core/src/opengl/FUNCTIONS_TABLE.md`.
+- `just cts` / `ctsr` / `cts-list` / `cts-sw` - run the Vulkan CTS port (debug / release / list
+  cases without touching Vulkan / run on a software driver). `just cts-verify` runs every check
+  and prints labelled results - that is the one command to reach for.
+- `just cts-shaders` / `cts-diff` / `cts-drift` / `cts-sync` - regenerate SPIR-V, compare
+  verdicts against upstream `deqp-vk`, report upstream drift, re-vendor upstream sources.
+- `just cts-coverage` - how many upstream cases are implemented, against three denominators.
+  Report this after every batch of newly ported tests; a single percentage is misleading,
+  since against the whole suite it is negligible by construction while against the group
+  being worked on it is the number that says whether that group is done.
 
 Almost every recipe pins the nightly toolchain via the `NIGHTLY` variable at the top of `justfile` (a dated
 nightly, e.g. `nightly-2026-08-21`) rather than a floating `+nightly` - bump that one variable to move the
@@ -156,6 +168,31 @@ a job to `/api/jobs` instead of running locally.
   full CPU suite run has ~19k test events, so showing them all unfiltered isn't useful), and a
   capabilities line (detected CPU extensions + test count, gpu/vulkan compiled-in) sourced from
   `AppState::capabilities` (computed once at startup, logged there too).
+
+## hodow_cts (Vulkan CTS port)
+
+A rewrite of VK-GL-CTS in Rust, pinned to upstream `cf7edb26` (`hodow_cts/upstream/COMMIT`).
+Upstream has ~1.68M test cases; this is a framework plus a hand-picked, growing subset.
+Full detail is in `hodow_cts/README.md`. The rules that are easy to break:
+
+- **Ported code keeps the upstream C++ shape** - same `checkSupport`/`initPrograms`/`iterate`
+  split, same operation order, same names. Idiomatic Rust only where it removes a real hazard
+  (`Drop` for handles, `Result` at boundaries). The project re-syncs with upstream periodically,
+  and a refactor that reads better but no longer lines up with the C++ makes that harder.
+- **`hodow_cts/shaders/manifest/*.toml` is the only place a test parameter is written down.**
+  `scripts/compile_shaders.py` substitutes it into the GLSL *and* emits it as the Rust constant
+  the test reads, so shader and host cannot drift. Never hand-edit `src/generated/`.
+- **glslang and `deqp-vk` are developer tools, never build or runtime dependencies.** SPIR-V is
+  committed as Rust `u32` arrays. Drivers only ever consume SPIR-V, so compiling GLSL ahead of
+  time costs nothing in coverage. The binary must keep linking only libc/libgcc.
+- **A ported group is not done until `just cts-diff` agrees with upstream.** Its limit, found by
+  negative control: it only catches divergences that change a verdict, so a parameter the test is
+  agnostic to can drift unnoticed. `--validation` is the second axis (off by default - the layer
+  changes driver behaviour, so a run with it on is not a conformance run).
+- **"No driver" must never be reported as a failure.** `hodow_cts` exits 2 for that, distinct
+  from a test failure, so nothing blames a case that was never given a chance to run.
+- Add every ported upstream file to `hodow_cts/upstream/FILES.txt`; one that is missing silently
+  stops being tracked for re-sync.
 
 `isolate.rs`'s `run_isolated`/`run_worker` filter the test list by the same `-t`/`-e`/`-s` state as the
 plain (non-isolated) run path (via `hodow_core::should_skip_test_or_feature`, using the `(name, feature,

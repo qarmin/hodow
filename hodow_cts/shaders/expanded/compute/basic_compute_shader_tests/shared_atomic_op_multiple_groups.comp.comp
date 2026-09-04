@@ -1,0 +1,19 @@
+#version 310 es
+layout (local_size_x = 3, local_size_y = 4, local_size_z = 1) in;
+layout(binding = 0) writeonly buffer Output {
+    uint values[504];
+} sb_out;
+
+shared uint count;
+
+void main (void) {
+    uint localSize  = gl_WorkGroupSize.x*gl_WorkGroupSize.y*gl_WorkGroupSize.z;
+    uint globalNdx  = gl_NumWorkGroups.x*gl_NumWorkGroups.y*gl_WorkGroupID.z + gl_NumWorkGroups.x*gl_WorkGroupID.y + gl_WorkGroupID.x;
+    uint globalOffs = localSize*globalNdx;
+
+    count = 0u;
+    memoryBarrierShared();
+    barrier();
+    uint oldVal = atomicAdd(count, 1u);
+    sb_out.values[globalOffs+oldVal] = oldVal+1u;
+}

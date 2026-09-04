@@ -7,3 +7,5 @@ archs/
 __pycache__/
 winit
 glutin
+___*
+core.*

@@ -1,0 +1,18 @@
+#version 310 es
+#extension GL_OES_shader_image_atomic : require
+layout (local_size_x = 8) in;
+layout(binding = 1, r32ui) coherent uniform highp uimage2D u_dstImg;
+layout(binding = 0) readonly buffer Input {
+    uint values[32768];
+} sb_in;
+
+void main (void) {
+    uint stride = gl_NumWorkGroups.x*gl_WorkGroupSize.x;
+    uint value  = sb_in.values[gl_GlobalInvocationID.y*stride + gl_GlobalInvocationID.x];
+
+    if (gl_LocalInvocationIndex == 0u)
+        imageStore(u_dstImg, ivec2(gl_WorkGroupID.xy), uvec4(0));
+    memoryBarrierImage();
+    barrier();
+    imageAtomicAdd(u_dstImg, ivec2(gl_WorkGroupID.xy), value);
+}

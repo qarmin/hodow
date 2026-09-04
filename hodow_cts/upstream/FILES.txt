@@ -1,0 +1,46 @@
+# Upstream VK-GL-CTS files that hodow_cts has ported.
+#
+# Paths are relative to a VK-GL-CTS checkout. `scripts/vendor_upstream.py --sync`
+# copies each one into this directory verbatim (Apache-2.0 section 4 requires the
+# copyright notices to be kept), and `--check` reports which of them upstream has
+# changed since the revision in COMMIT.
+#
+# Add a line here as soon as a file is ported. A ported file that is missing from this
+# list will silently stop being tracked for re-sync, which is the one failure mode this
+# whole mechanism exists to prevent.
+
+# --- tests -----------------------------------------------------------------------
+external/vulkancts/modules/vulkan/compute/vktComputeBasicComputeShaderTests.cpp
+external/vulkancts/modules/vulkan/compute/vktComputeTests.cpp
+external/vulkancts/modules/vulkan/compute/vktComputeZeroInitializeWorkgroupMemoryTests.cpp
+external/vulkancts/modules/vulkan/compute/vktComputeIndirectComputeDispatchTests.cpp
+external/vulkancts/modules/vulkan/api/vktApiSmokeTests.cpp
+
+# --- vulkan framework (vk::) -------------------------------------------------------
+external/vulkancts/framework/vulkan/vkBuilderUtil.cpp
+external/vulkancts/framework/vulkan/vkBuilderUtil.hpp
+external/vulkancts/framework/vulkan/vkCmdUtil.cpp
+external/vulkancts/framework/vulkan/vkCmdUtil.hpp
+external/vulkancts/framework/vulkan/vkMemUtil.cpp
+external/vulkancts/framework/vulkan/vkMemUtil.hpp
+external/vulkancts/framework/vulkan/vkObjUtil.cpp
+external/vulkancts/framework/vulkan/vkObjUtil.hpp
+external/vulkancts/framework/vulkan/vkBarrierUtil.cpp
+external/vulkancts/framework/vulkan/vkBarrierUtil.hpp
+external/vulkancts/framework/vulkan/vkRef.hpp
+external/vulkancts/framework/vulkan/vkRefUtil.hpp
+external/vulkancts/framework/vulkan/vkBufferWithMemory.hpp
+external/vulkancts/framework/vulkan/vkImageWithMemory.hpp
+external/vulkancts/framework/vulkan/vkImageUtil.hpp
+external/vulkancts/framework/vulkan/vkImageUtil.cpp
+external/vulkancts/framework/vulkan/vkComputePipelineConstructionUtil.hpp
+
+# --- test framework (vkt::) --------------------------------------------------------
+external/vulkancts/modules/vulkan/vktTestCase.hpp
+
+# --- common framework (tcu::, de::) ------------------------------------------------
+framework/common/tcuTestCase.hpp
+framework/common/tcuVector.hpp
+framework/delibs/debase/deRandom.c
+framework/delibs/debase/deRandom.h
+framework/delibs/decpp/deRandom.hpp

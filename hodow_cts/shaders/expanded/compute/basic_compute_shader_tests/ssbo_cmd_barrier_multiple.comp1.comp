@@ -1,0 +1,13 @@
+#version 310 es
+layout (local_size_x = 1) in;
+layout(binding = 1) readonly buffer Input {
+    uint values[];
+};
+layout(binding = 0) coherent buffer Output {
+    uint sum;
+};
+void main (void) {
+    uint offset = gl_NumWorkGroups.x*gl_NumWorkGroups.y*gl_WorkGroupID.z + gl_NumWorkGroups.x*gl_WorkGroupID.y + gl_WorkGroupID.x;
+    uint value  = values[offset];
+    atomicAdd(sum, value);
+}
