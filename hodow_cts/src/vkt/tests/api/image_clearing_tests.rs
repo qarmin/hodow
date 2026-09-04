@@ -320,6 +320,11 @@ pub struct ClearColorImageCase {
     allocation_kind: AllocationKind,
     sample_count: vk::SampleCountFlags,
     multiple_subresource_range: bool,
+    /// `TestParams::generalLayout` - clears in VK_IMAGE_LAYOUT_GENERAL instead of
+    /// TRANSFER_DST_OPTIMAL. Upstream turns it on for a deterministic ~40% slice of the
+    /// matrix without changing the case name, so it cannot be seen in a verdict diff;
+    /// it still picks a different driver path, which is the whole point of the flag.
+    general_layout: bool,
 }
 
 impl TestCase for ClearColorImageCase {
@@ -448,17 +453,23 @@ impl TestInstance for ClearColorImageInstance<'_> {
         let full_range = make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, p.image_layer_count);
         let clear_range = make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, clear_base, p.clear_layer_range.layer_count);
 
+        let used_layout = if p.general_layout {
+            vk::ImageLayout::GENERAL
+        } else {
+            vk::ImageLayout::TRANSFER_DST_OPTIMAL
+        };
+
         let cmd_pool = make_command_pool(vk_device, queue_family_index)?;
         let cmd_buffer = allocate_command_buffer(vk_device, *cmd_pool, vk::CommandBufferLevel::PRIMARY)?;
 
         begin_command_buffer(vk_device, *cmd_buffer)?;
         unsafe {
-            // UNDEFINED -> TRANSFER_DST for the whole image.
+            // UNDEFINED -> the clear layout for the whole image.
             let to_dst = make_image_memory_barrier(
                 vk::AccessFlags::empty(),
                 vk::AccessFlags::TRANSFER_WRITE,
                 vk::ImageLayout::UNDEFINED,
-                vk::ImageLayout::TRANSFER_DST_OPTIMAL,
+                used_layout,
                 image.get(),
                 full_range,
             );
@@ -475,13 +486,13 @@ impl TestInstance for ClearColorImageInstance<'_> {
             // Initialise every layer to the init value, so a clear that touches layers
             // outside its range is caught.
             let init = make_clear_color_value(p.image_format, [0.0; 4]).ok_or_else(|| TestError::NotSupported("format has no tcu mapping".to_string()))?;
-            vk_device.cmd_clear_color_image(*cmd_buffer, image.get(), vk::ImageLayout::TRANSFER_DST_OPTIMAL, &init.to_vk(), &[full_range]);
+            vk_device.cmd_clear_color_image(*cmd_buffer, image.get(), used_layout, &init.to_vk(), &[full_range]);
 
             let between = make_image_memory_barrier(
                 vk::AccessFlags::TRANSFER_WRITE,
                 vk::AccessFlags::TRANSFER_WRITE,
-                vk::ImageLayout::TRANSFER_DST_OPTIMAL,
-                vk::ImageLayout::TRANSFER_DST_OPTIMAL,
+                used_layout,
+                used_layout,
                 image.get(),
                 full_range,
             );
@@ -501,15 +512,15 @@ impl TestInstance for ClearColorImageInstance<'_> {
                 let half = clear_count / 2;
                 let a = make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, clear_base, half);
                 let b = make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, clear_base + half, clear_count - half);
-                vk_device.cmd_clear_color_image(*cmd_buffer, image.get(), vk::ImageLayout::TRANSFER_DST_OPTIMAL, &p.clear_color.to_vk(), &[a, b]);
+                vk_device.cmd_clear_color_image(*cmd_buffer, image.get(), used_layout, &p.clear_color.to_vk(), &[a, b]);
             } else {
-                vk_device.cmd_clear_color_image(*cmd_buffer, image.get(), vk::ImageLayout::TRANSFER_DST_OPTIMAL, &p.clear_color.to_vk(), &[clear_range]);
+                vk_device.cmd_clear_color_image(*cmd_buffer, image.get(), used_layout, &p.clear_color.to_vk(), &[clear_range]);
             }
 
             let to_src = make_image_memory_barrier(
                 vk::AccessFlags::TRANSFER_WRITE,
                 vk::AccessFlags::TRANSFER_READ,
-                vk::ImageLayout::TRANSFER_DST_OPTIMAL,
+                used_layout,
                 vk::ImageLayout::TRANSFER_SRC_OPTIMAL,
                 image.get(),
                 full_range,
@@ -1061,13 +1072,15 @@ fn add_clear_depth_stencil_image_tests(group: &mut tcu::TestCaseGroup, allocatio
 }
 
 fn add_clear_color_image_tests(group: &mut tcu::TestCaseGroup, allocation_kind: AllocationKind) {
-    for image_type in [vk::ImageType::_1D, vk::ImageType::_2D, vk::ImageType::_3D] {
+    // The loop indices are load-bearing: `generalLayout` is chosen from their sum, so
+    // they have to count positions in the full arrays, not cases actually emitted.
+    for (image_type_index, image_type) in [vk::ImageType::_1D, vk::ImageType::_2D, vk::ImageType::_3D].into_iter().enumerate() {
         let mut image_type_group = tcu::TestCaseGroup::new(image_type_case_name(image_type));
 
-        for tiling in [vk::ImageTiling::OPTIMAL, vk::ImageTiling::LINEAR] {
+        for (image_tiling_index, tiling) in [vk::ImageTiling::OPTIMAL, vk::ImageTiling::LINEAR].into_iter().enumerate() {
             let mut tiling_group = tcu::TestCaseGroup::new(image_tiling_case_name(tiling));
 
-            for layer_params in IMAGE_LAYER_PARAMS_TO_TEST {
+            for (image_layer_params_index, layer_params) in IMAGE_LAYER_PARAMS_TO_TEST.iter().enumerate() {
                 // 3D ARRAY images are not supported
                 if layer_params.image_layer_count > 1 && image_type == vk::ImageType::_3D {
                     continue;
@@ -1078,7 +1091,7 @@ fn add_clear_color_image_tests(group: &mut tcu::TestCaseGroup, allocation_kind: 
                 }
                 let mut layers_group = tcu::TestCaseGroup::new(layer_params.test_name);
 
-                for &dimensions in IMAGE_DIMENSIONS {
+                for (image_dimensions_index, &dimensions) in IMAGE_DIMENSIONS.iter().enumerate() {
                     if image_type == vk::ImageType::_1D && dimensions[1] > 1 {
                         continue;
                     }
@@ -1090,11 +1103,11 @@ fn add_clear_color_image_tests(group: &mut tcu::TestCaseGroup, allocation_kind: 
                     }
                     let dimensions_string = extent_to_string(dimensions, image_type);
 
-                    for &(format, format_name) in COLOR_IMAGE_FORMATS_TO_TEST {
+                    for (image_format_index, &(format, format_name)) in COLOR_IMAGE_FORMATS_TO_TEST.iter().enumerate() {
                         let Some(tcu_format) = map_vk_format(format) else { continue };
                         let channel_class = tcu_format.channel_class();
 
-                        for color_params in CLEAR_COLORS_TO_TEST {
+                        for (clear_color_index, color_params) in CLEAR_COLORS_TO_TEST.iter().enumerate() {
                             if let Some(wanted) = color_params.match_texture_channel_class
                                 && channel_class != wanted
                             {
@@ -1112,6 +1125,10 @@ fn add_clear_color_image_tests(group: &mut tcu::TestCaseGroup, allocation_kind: 
 
                             let test_case_name = format!("{format_name}{dimensions_string}{}", color_params.test_name_suffix);
 
+                            // Some cases will use the general layout.
+                            let general_layout = image_type == vk::ImageType::_2D
+                                && (image_type_index + image_tiling_index + image_layer_params_index + image_dimensions_index + image_format_index + clear_color_index) % 5 > 2;
+
                             let make = |name: String, multiple_subresource_range: bool, sample_count: vk::SampleCountFlags| {
                                 Box::new(ClearColorImageCase {
                                     name,
@@ -1126,6 +1143,7 @@ fn add_clear_color_image_tests(group: &mut tcu::TestCaseGroup, allocation_kind: 
                                     allocation_kind,
                                     sample_count,
                                     multiple_subresource_range,
+                                    general_layout,
                                 }) as Box<dyn TestCase>
                             };
 
