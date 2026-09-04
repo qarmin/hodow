@@ -26,6 +26,7 @@ Usage:
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import shutil
 import subprocess
@@ -81,8 +82,15 @@ def substitute(template: str, values: dict, where: str) -> str:
     return SUBST_RE.sub(repl, template)
 
 
-def compile_glsl(glslang: str, source: str, stage: str, where: str) -> list[int]:
-    """Runs glslang and returns the SPIR-V as a list of 32-bit words."""
+def compile_glsl(glslang: str, source: str, stage: str, where: str, spirv_version: str | None) -> list[int]:
+    """Runs glslang and returns the SPIR-V as a list of 32-bit words.
+
+    `spirv_version` mirrors the `vk::SPIRV_VERSION_*` a test group passes upstream.
+    It has to be per-group, not global: GL_EXT_shared_memory_block needs SPIR-V 1.4,
+    while raising the floor for every group would silently change the SPIR-V already
+    generated for the others - and the whole point of this file is that regeneration
+    stays diff-clean.
+    """
     import tempfile
 
     with tempfile.TemporaryDirectory() as td:
@@ -91,11 +99,11 @@ def compile_glsl(glslang: str, source: str, stage: str, where: str) -> list[int]
         src_path.write_text(source)
 
         # -V targets Vulkan SPIR-V, which is what deqp asks glslang for.
-        result = subprocess.run(
-            [glslang, "-V", "--target-env", "vulkan1.1", str(src_path), "-o", str(spv_path)],
-            capture_output=True,
-            text=True,
-        )
+        cmd = [glslang, "-V", "--target-env", "vulkan1.1"]
+        if spirv_version:
+            cmd += ["--target-env", spirv_version]
+        cmd += [str(src_path), "-o", str(spv_path)]
+        result = subprocess.run(cmd, capture_output=True, text=True)
         if result.returncode != 0:
             raise SystemExit(f"{where}: glslang failed\n{result.stdout}\n{result.stderr}")
 
@@ -107,6 +115,41 @@ def compile_glsl(glslang: str, source: str, stage: str, where: str) -> list[int]
     if not words or words[0] != 0x07230203:
         raise SystemExit(f"{where}: output is not SPIR-V (bad magic)")
     return words
+
+
+# Cache of compiled SPIR-V, keyed by exactly the inputs that determine the output.
+_SPIRV_CACHE: dict[tuple[str, str, str | None], list[int]] = {}
+
+
+def warm_spirv_cache(glslang: str, jobs: list[tuple[str, str, str | None]], where_of: dict) -> None:
+    """Compiles every shader up front, in parallel.
+
+    glslang is a separate process per shader; regenerating everything is several
+    thousand of them, and run back to back the spawn cost dominates. The emit loop
+    below stays serial so the generated file is byte-for-byte order-independent of
+    how the pool happened to schedule things.
+    """
+    from concurrent.futures import ThreadPoolExecutor
+
+    unique = {(j[0], j[1], j[2]) for j in jobs}
+    if not unique:
+        return
+
+    def run(key):
+        source, stage, spv = key
+        return key, compile_glsl(glslang, source, stage, where_of.get(key, "?"), spv)
+
+    workers = min(32, (os.cpu_count() or 4))
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        for key, words in pool.map(run, sorted(unique)):
+            _SPIRV_CACHE[key] = words
+
+
+def compile_glsl_cached(glslang: str, source: str, stage: str, where: str, spirv_version: str | None) -> list[int]:
+    key = (source, stage, spirv_version)
+    if key not in _SPIRV_CACHE:
+        _SPIRV_CACHE[key] = compile_glsl(glslang, source, stage, where, spirv_version)
+    return _SPIRV_CACHE[key]
 
 
 def rust_param_value(spec: dict, where: str) -> str:
@@ -199,6 +242,30 @@ def main() -> int:
         print(f"error: no manifests in {MANIFEST_DIR}", file=sys.stderr)
         return 2
 
+    # Pre-pass: expand every shader and compile them all in parallel, so the emit pass
+    # below only ever reads from the cache.
+    prescan: list[tuple[str, str, str | None]] = []
+    where_of: dict = {}
+    for manifest_path in manifests:
+        m = tomllib.loads(manifest_path.read_text())
+        default_spv = m.get("spirv_version")
+        for case in m["case"]:
+            where = f"{manifest_path.name}:{case['name']}"
+            params = case.get("params", {})
+            raw = {k: rust_param_raw(v, where) for k, v in params.items()}
+            env = dict(raw)
+            env.update(evaluate_derived(raw, case.get("derived", {})))
+            for program in case["programs"]:
+                tpl = TEMPLATE_DIR / program["template"]
+                if not tpl.exists():
+                    raise SystemExit(f"{where}: missing template {tpl}")
+                src = substitute(tpl.read_text(), env, where)
+                key = (src, program["stage"], program.get("spirv_version", default_spv))
+                prescan.append(key)
+                where_of[key] = where
+    print(f"compiling {len(set(prescan))} distinct shaders on {min(32, os.cpu_count() or 4)} threads...", file=sys.stderr)
+    warm_spirv_cache(args.glslang, prescan, where_of)
+
     out = [
         "// @generated by hodow_cts/scripts/compile_shaders.py - do not hand-edit.",
         "//",
@@ -228,6 +295,8 @@ def main() -> int:
         module = manifest_path.stem
         rust_module = manifest["rust_module"]
         upstream = manifest["upstream_source"]
+        # Optional, e.g. spirv_version = "spirv1.4" for groups that need it.
+        spirv_version = manifest.get("spirv_version")
 
         out.append(f"/// Cases for `{rust_module}`.")
         out.append(f"/// Upstream: `{upstream}`")
@@ -266,7 +335,7 @@ def main() -> int:
                 expanded_path.parent.mkdir(parents=True, exist_ok=True)
                 expanded_path.write_text(source)
 
-                words = compile_glsl(args.glslang, source, stage, where)
+                words = compile_glsl_cached(args.glslang, source, stage, where, program.get("spirv_version", spirv_version))
                 total_words += len(words)
 
                 spv_sym = f"SPV_{const}_{pname.upper()}"

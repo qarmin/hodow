@@ -1,0 +1,20 @@
+#version 450
+#extension GL_EXT_shared_memory_block : enable
+#extension GL_EXT_shader_explicit_arithmetic_types : enable
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+shared A { vec4 v[3]; } a;
+shared B { vec3 v[3]; } b;
+layout(set = 0, binding = 0) buffer Result { uint result; };
+void read(int index) {
+  if (b.v == vec3[](vec3(1), vec3(2), vec3(3)))
+    result = index;
+}
+void write(int index) {
+  if (index == 0)
+    a.v = vec4[](vec4(1, 1, 1, 999), vec4(2, 2, 2, 999), vec4(3, 3, 3, 999));
+}
+void main() {
+  int index = int(gl_LocalInvocationIndex);
+  a.v = vec4[](vec4(1, 1, 1, 999), vec4(2, 2, 2, 999), vec4(3, 3, 3, 999));
+  read(index);
+}

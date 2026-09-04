@@ -15,6 +15,7 @@
 use std::ffi::{CStr, CString};
 
 use vulkanalia::prelude::v1_0::*;
+use vulkanalia::vk::InstanceV1_1;
 
 use crate::tcu::TestError;
 use crate::vk::VkResultExt;
@@ -73,11 +74,37 @@ impl<'a> Context<'a> {
         let extension_names: Vec<CString> = available_extensions.iter().filter_map(|n| CString::new(n.as_str()).ok()).collect();
         let extension_ptrs: Vec<*const i8> = extension_names.iter().map(|n| n.as_ptr()).collect();
 
+        // Enable the extension feature structs too, not just the core features.
+        //
+        // `checkSupport` queries the *physical device*, so without this a case whose
+        // extension is advertised would be let through and then run against a device
+        // where the corresponding feature bit was never turned on - the shader's
+        // capability is unenabled, and the verdict becomes meaningless. Upstream's
+        // DefaultDevice enables everything the device reports; this does the same for
+        // the feature structs the ported groups need, by querying the chain and
+        // handing the very same chain back to vkCreateDevice.
+        let mut vulkan_11_features = vk::PhysicalDeviceVulkan11Features::default();
+        let mut vulkan_12_features = vk::PhysicalDeviceVulkan12Features::default();
+        let mut float16_int8_features = vk::PhysicalDeviceShaderFloat16Int8Features::default();
+        let mut zero_init_features = vk::PhysicalDeviceZeroInitializeWorkgroupMemoryFeatures::default();
+        let mut wmel_features = vk::PhysicalDeviceWorkgroupMemoryExplicitLayoutFeaturesKHR::default();
+
+        let mut features2 = vk::PhysicalDeviceFeatures2::builder()
+            .push_next(&mut vulkan_11_features)
+            .push_next(&mut vulkan_12_features)
+            .push_next(&mut float16_int8_features)
+            .push_next(&mut zero_init_features)
+            .push_next(&mut wmel_features);
+
+        unsafe { instance.get_physical_device_features2(physical_device, &mut features2) };
+
         let queue_infos = [queue_info];
+        // `enabled_features` must stay unset: the core features travel inside the
+        // features2 chain instead, and Vulkan forbids providing both.
         let info = vk::DeviceCreateInfo::builder()
             .queue_create_infos(&queue_infos)
             .enabled_extension_names(&extension_ptrs)
-            .enabled_features(&device_features);
+            .push_next(&mut features2);
 
         let device = unsafe { instance.create_device(physical_device, &info, None) }.vk_check("vkCreateDevice")?;
 
@@ -147,10 +174,18 @@ impl<'a> Context<'a> {
     /// that lacks an extension is not a device that failed a test.
     pub fn require_device_functionality(&self, extension: &str) -> Result<(), TestError> {
         if self.device_extensions.iter().any(|e| e == extension) {
-            Ok(())
-        } else {
-            Err(TestError::NotSupported(format!("{extension} is not supported by this implementation")))
+            return Ok(());
         }
+        // An extension promoted into core need not be advertised any more, and upstream
+        // treats that as supported. Without this a 1.2+ driver that dropped the string
+        // would get NotSupported here and a real verdict from deqp-vk - a difference
+        // that says nothing about the driver.
+        if let Some(promoted_in) = promoted_to_core_version(extension)
+            && self.device_properties.api_version >= promoted_in
+        {
+            return Ok(());
+        }
+        Err(TestError::NotSupported(format!("{extension} is not supported by this implementation")))
     }
 
     /// `Context::getDeviceExtensions`
@@ -192,6 +227,18 @@ impl Drop for Context<'_> {
             self.device.destroy_device(None);
         }
     }
+}
+
+/// The core version an extension was promoted into, for the extensions the ported
+/// tests ask for. Kept as an explicit table rather than derived from vk.xml: the list
+/// is short, and a wrong entry here silently turns a real verdict into NotSupported.
+fn promoted_to_core_version(extension: &str) -> Option<u32> {
+    Some(match extension {
+        "VK_KHR_spirv_1_4" | "VK_KHR_shader_float16_int8" | "VK_KHR_8bit_storage" | "VK_KHR_16bit_storage" => vk::make_version(1, 2, 0),
+        "VK_KHR_zero_initialize_workgroup_memory" | "VK_KHR_shader_terminate_invocation" => vk::make_version(1, 3, 0),
+        "VK_KHR_device_group" | "VK_KHR_storage_buffer_storage_class" => vk::make_version(1, 1, 0),
+        _ => return None,
+    })
 }
 
 /// Picks the physical device the run targets. Mirrors `--deqp-vk-device-id`, which is

@@ -1,0 +1,21 @@
+#version 450
+#extension GL_EXT_null_initializer : enable
+#extension GL_EXT_shader_explicit_arithmetic_types : enable
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(set = 0, binding = 0) buffer A  { uint a[]; } a;
+shared float64_t wg_mem0 = {};
+shared float64_t wg_mem1 = {};
+shared float64_t wg_mem2 = {};
+shared float64_t wg_mem3 = {};
+shared float64_t wg_mem4 = {};
+shared float64_t wg_mem5 = {};
+shared float64_t wg_mem6 = {};
+void main() {
+  a.a[0] = (int64_t(wg_mem0) ==  0) ? 0 : 1;
+  a.a[1] = (int64_t(wg_mem1) ==  0) ? 0 : 1;
+  a.a[2] = (int64_t(wg_mem2) ==  0) ? 0 : 1;
+  a.a[3] = (int64_t(wg_mem3) ==  0) ? 0 : 1;
+  a.a[4] = (int64_t(wg_mem4) ==  0) ? 0 : 1;
+  a.a[5] = (int64_t(wg_mem5) ==  0) ? 0 : 1;
+  a.a[6] = (int64_t(wg_mem6) ==  0) ? 0 : 1;
+}

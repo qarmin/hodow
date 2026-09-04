@@ -1,0 +1,10 @@
+#version 310 es
+layout (local_size_x = 1) in;
+layout(binding = 1, r32ui) readonly uniform highp uimage2D u_img;
+layout(binding = 0) coherent buffer Output {
+    uint sum;
+};
+void main (void) {
+    uint value = imageLoad(u_img, ivec2(gl_WorkGroupID.xy)).x;
+    atomicAdd(sum, value);
+}

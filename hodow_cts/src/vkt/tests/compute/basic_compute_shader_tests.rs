@@ -1677,9 +1677,11 @@ pub fn create_basic_compute_shader_tests(construction_type: ComputePipelineConst
     add(Box::new(compute_basic::SHARED_ATOMIC_OP_MULTIPLE_INVOCATIONS));
     add(Box::new(compute_basic::SHARED_ATOMIC_OP_MULTIPLE_GROUPS));
 
-    // Image to SSBO copy, SSBO to image copy. image_atomic_op and image_barrier are
-    // not ported yet, nor are the Amber-driven cases.
+    // Image to SSBO copy and SSBO to image copy live in their own module because they
+    // need the image side of the vk layer; the remaining non-Amber cases (image atomic
+    // ops, image barriers, robustness, indirect-after-base-dispatch) in a third.
     super::basic_compute_image_tests::add_basic_compute_image_tests(&mut basic_compute_tests);
+    super::basic_compute_extra_tests::add_basic_compute_extra_tests(&mut basic_compute_tests);
 
     basic_compute_tests
 }

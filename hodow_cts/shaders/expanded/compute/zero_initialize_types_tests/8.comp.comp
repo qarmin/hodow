@@ -1,0 +1,23 @@
+#version 450
+#extension GL_EXT_null_initializer : enable
+#extension GL_EXT_shader_explicit_arithmetic_types : enable
+
+layout(constant_id = 0) const uint specId0 = 1;
+
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(set = 0, binding = 0) buffer A { uint a[]; } a;
+
+struct Sa {
+  i64vec2 a;
+  int64_t b[specId0];
+};
+shared Sa wg_mem = {};
+
+void main() {
+uint idx = 0;
+a.a[idx++] = wg_mem.a.x == 0 ? 0 : 1;
+a.a[idx++] = wg_mem.a.y == 0 ? 0 : 1;
+for (uint i = 0; i < specId0; ++i) {
+  a.a[idx++] = wg_mem.b[i] == 0 ? 0 : 1;
+}
+}

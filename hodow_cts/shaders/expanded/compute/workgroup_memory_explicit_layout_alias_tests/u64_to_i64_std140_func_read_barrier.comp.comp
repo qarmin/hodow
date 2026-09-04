@@ -1,0 +1,17 @@
+#version 450
+#extension GL_EXT_shared_memory_block : enable
+#extension GL_EXT_shader_explicit_arithmetic_types : enable
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(std140)shared A { uint64_t v; } a;
+layout(std140)shared B { int64_t v; } b;
+layout(set = 0, binding = 0) buffer Result { uint result; };
+void read(int index) {
+  if (b.v == int64_t(-2UL))
+    result = index;
+}
+void main() {
+  int index = int(gl_LocalInvocationIndex);
+  a.v = uint64_t(0xFFFFFFFFFFFFFFFEUL);
+  barrier();
+  read(index);
+}

@@ -1,0 +1,29 @@
+#version 450
+#extension GL_EXT_null_initializer : enable
+#extension GL_EXT_shader_explicit_arithmetic_types : enable
+layout(local_size_x = 4, local_size_y = 1, local_size_z = 1) in;
+layout(set = 0, binding = 0) buffer A  { uint a[]; } a;
+shared i8vec4 wg_mem0 = {};
+shared i8vec4 wg_mem1 = {};
+shared i8vec4 wg_mem2 = {};
+shared i8vec4 wg_mem3 = {};
+shared i8vec4 wg_mem4 = {};
+shared i8vec4 wg_mem5 = {};
+shared i8vec4 wg_mem6 = {};
+shared i8vec4 wg_mem7 = {};
+shared i8vec4 wg_mem8 = {};
+shared i8vec4 wg_mem9 = {};
+shared i8vec4 wg_mem10 = {};
+void main() {
+  a.a[0 + gl_LocalInvocationID.x] = (int(wg_mem0[gl_LocalInvocationID.x]) ==  0) ? 0 : 1;
+  a.a[4 + gl_LocalInvocationID.x] = (int(wg_mem1[gl_LocalInvocationID.x]) ==  0) ? 0 : 1;
+  a.a[8 + gl_LocalInvocationID.x] = (int(wg_mem2[gl_LocalInvocationID.x]) ==  0) ? 0 : 1;
+  a.a[12 + gl_LocalInvocationID.x] = (int(wg_mem3[gl_LocalInvocationID.x]) ==  0) ? 0 : 1;
+  a.a[16 + gl_LocalInvocationID.x] = (int(wg_mem4[gl_LocalInvocationID.x]) ==  0) ? 0 : 1;
+  a.a[20 + gl_LocalInvocationID.x] = (int(wg_mem5[gl_LocalInvocationID.x]) ==  0) ? 0 : 1;
+  a.a[24 + gl_LocalInvocationID.x] = (int(wg_mem6[gl_LocalInvocationID.x]) ==  0) ? 0 : 1;
+  a.a[28 + gl_LocalInvocationID.x] = (int(wg_mem7[gl_LocalInvocationID.x]) ==  0) ? 0 : 1;
+  a.a[32 + gl_LocalInvocationID.x] = (int(wg_mem8[gl_LocalInvocationID.x]) ==  0) ? 0 : 1;
+  a.a[36 + gl_LocalInvocationID.x] = (int(wg_mem9[gl_LocalInvocationID.x]) ==  0) ? 0 : 1;
+  a.a[40 + gl_LocalInvocationID.x] = (int(wg_mem10[gl_LocalInvocationID.x]) ==  0) ? 0 : 1;
+}

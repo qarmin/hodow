@@ -1,0 +1,52 @@
+#version 450
+#extension GL_EXT_null_initializer : enable
+#extension GL_EXT_shader_explicit_arithmetic_types : enable
+
+layout(constant_id = 0) const uint specId0 = 1;
+layout(constant_id = 1) const uint specId1 = 1;
+layout(constant_id = 2) const uint specId2 = 1;
+layout(constant_id = 3) const uint specId3 = 1;
+layout(constant_id = 4) const uint specId4 = 1;
+
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(set = 0, binding = 0) buffer A { uint a[]; } a;
+
+struct Sa {
+  uint a;
+};
+struct Sb {
+  Sa a[specId0];
+  uint b;
+};
+struct Sc {
+  Sb b[specId1];
+  uint c;
+};
+struct Sd {
+  Sc c[specId2];
+  uint d;
+};
+struct Se {
+  Sd d[specId3];
+  uint e;
+};
+shared Se wg_mem[specId4] = {};
+
+void main() {
+uint idx = 0;
+for (uint i1 = 0; i1 < specId4; ++i1) {
+  a.a[idx++] = wg_mem[i1].e;
+  for (uint i2 = 0; i2 < specId3; ++i2) {
+    a.a[idx++] = wg_mem[i1].d[i2].d;
+    for (uint i3 = 0; i3 < specId2; ++i3) {
+      a.a[idx++] = wg_mem[i1].d[i2].c[i3].c;
+      for (uint i4 = 0; i4 < specId1; ++i4) {
+        a.a[idx++] = wg_mem[i1].d[i2].c[i3].b[i4].b;
+        for (uint i5 = 0; i5 < specId0; ++i5) {
+          a.a[idx++] = wg_mem[i1].d[i2].c[i3].b[i4].a[i5].a;
+        }
+      }
+    }
+  }
+}
+}

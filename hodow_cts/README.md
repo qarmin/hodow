@@ -16,9 +16,13 @@ hand-picked, growing subset, currently:
 
 | group | cases | not ported yet |
 |---|---|---|
-| `dEQP-VK.compute.pipeline.basic.*` | 40 of 80 | `image_atomic_op`/`image_barrier` (4), Amber-driven (3), `replicated_composites_*` (21), some needing extensions or several queues |
-| `dEQP-VK.compute.pipeline.indirect_dispatch.*` | 24 of 36 | `_device_address` variants (VK_KHR_device_address_commands) |
-| `dEQP-VK.compute.pipeline.zero_initialize_workgroup_memory.*` | 553 of 646 | `types`, `composites`, `shared_memory_blocks` - each a table of per-case GLSL |
+| `dEQP-VK.compute.pipeline.zero_initialize_workgroup_memory.*` | **646 of 646** | - |
+| `dEQP-VK.compute.pipeline.builtin_var.*` | **11 of 11** | - |
+| `dEQP-VK.compute.pipeline.device_group.*` | **3 of 3** | - |
+| `dEQP-VK.compute.pipeline.64b_indexing.*` | **5 of 5** | - |
+| `dEQP-VK.compute.pipeline.workgroup_memory_explicit_layout.*` | 3821 of 3827 | `copy_memory`, `zero_ext` (Amber-driven) |
+| `dEQP-VK.compute.pipeline.indirect_dispatch.*` | 24 of 36 | `_device_address` variants |
+| `dEQP-VK.compute.pipeline.basic.*` | 49 of 80 | Amber-driven (3), `replicated_composites_*` (21), `secondary_compute_only_queue`, misc |
 | `dEQP-VK.api.smoke.*` | 0 of 6 | needs the reference rasteriser - see below |
 
 Run `hodow_cts --list` for the exact set, or `just cts-coverage` for the numbers above
