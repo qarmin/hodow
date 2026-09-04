@@ -43,8 +43,8 @@ def enum_variants(hpp: str, name: str) -> list[str]:
     return out
 
 
-def swizzle_table(cpp: str) -> dict[str, list[str]]:
-    """Reads getChannelReadSwizzle into `order -> [4 components]`.
+def swizzle_table(cpp: str, which: str = "Read") -> dict[str, list[str]]:
+    """Reads getChannel{Read,Write}Swizzle into `order -> [4 components]`.
 
     The declarations wrap across lines, so the block is flattened before matching.
     Getting this wrong once already shipped a table where RGBA carried R's swizzle -
@@ -53,10 +53,10 @@ def swizzle_table(cpp: str) -> dict[str, list[str]]:
     assertions, not warnings.
     """
     blk = re.search(
-        r"const TextureSwizzle &getChannelReadSwizzle\(TextureFormat::ChannelOrder order\).*?\n\}", cpp, re.S
+        r"const TextureSwizzle &getChannel" + which + r"Swizzle\(TextureFormat::ChannelOrder order\).*?\n\}", cpp, re.S
     )
     if not blk:
-        raise SystemExit("could not find getChannelReadSwizzle")
+        raise SystemExit(f"could not find getChannel{which}Swizzle")
     flat = re.sub(r"\s+", " ", blk.group(0))
 
     consts: dict[str, list[str]] = {}
