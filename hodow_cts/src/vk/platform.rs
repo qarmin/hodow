@@ -71,7 +71,7 @@ impl Platform {
         // available (vktTestCase.cpp getMaximumFrameworkVulkanVersion); hardcoding 1.1
         // here meant a 1.3 driver never exposed its 1.3 core commands.
         let loader_version = unsafe { entry.enumerate_instance_version() }.unwrap_or(MINIMUM_API_VERSION);
-        let api_version = loader_version.min(MAXIMUM_API_VERSION).max(MINIMUM_API_VERSION);
+        let api_version = loader_version.clamp(MINIMUM_API_VERSION, MAXIMUM_API_VERSION);
 
         let app_info = vk::ApplicationInfo::builder()
             .application_name(b"hodow_cts\0")
