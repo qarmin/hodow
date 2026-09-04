@@ -29,6 +29,7 @@ use crate::vk::image_util::{ImageWithMemory, make_image_memory_barrier, make_ima
 use crate::vk::mem_util::{MemoryRequirement, flush_alloc, invalidate_alloc};
 use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool};
 use crate::vk::programs::BinaryCollection;
+use crate::vk::ref_util::Unique;
 use crate::vkt::{Context, TestCase, TestInstance};
 
 /// `defaultSize`
@@ -460,7 +461,7 @@ impl TestInstance for CopyBufferToImageInstance<'_> {
         let buffer_size = u64::from(p.src_buffer_size) * texel_size as u64;
         let source_info = make_buffer_create_info(buffer_size, vk::BufferUsageFlags::TRANSFER_SRC);
         let source_buffer = unsafe { vk_device.create_buffer(&source_info, None) }.vk_check("vkCreateBuffer")?;
-        let source_buffer = crate::vk::ref_util::Unique::new(vk_device, source_buffer);
+        let source_buffer = Unique::new(vk_device, source_buffer);
         let source_alloc = bind_buffer_memory(self.context, *source_buffer, p.allocation_kind)?;
         unsafe { std::ptr::copy_nonoverlapping(source_level.data().as_ptr(), source_alloc.get_host_ptr(), source_level.data().len()) };
         flush_alloc(vk_device, &source_alloc)?;
@@ -1000,5 +1001,656 @@ pub fn add_buffer_to_image_groups(
             general_layout,
         },
     );
+    parent.add_child(group);
+}
+
+// ---------------------------------------------------------------------------------
+// CopyImageToBuffer - the same machinery with source and destination swapped.
+// ---------------------------------------------------------------------------------
+
+/// `CopyImageToBuffer::copyRegionToTextureLevel`
+fn copy_region_to_buffer_level(src: &ConstPixelBufferAccess<'_>, dst: &mut PixelBufferAccess<'_>, region: BufferImageCopy, texel_size: usize) {
+    let row_length = if region.buffer_row_length == 0 {
+        region.image_extent[0]
+    } else {
+        region.buffer_row_length
+    };
+    let image_height = if region.buffer_image_height == 0 {
+        region.image_extent[1]
+    } else {
+        region.buffer_image_height
+    };
+
+    let texel_offset = (region.buffer_offset / texel_size as u64) as u32;
+
+    for z in 0..region.image_extent[2] {
+        for y in 0..region.image_extent[1] {
+            let texel_index = texel_offset + (z * image_height + y) * row_length;
+            let src_z = (region.image_offset[2] as u32) + z + region.base_array_layer;
+            let src_y = (region.image_offset[1] as u32) + y;
+            let src_x = region.image_offset[0] as u32;
+            dst.copy_texels_from_position(src, (src_x, src_y, src_z), texel_index as usize, region.image_extent[0] as usize);
+        }
+    }
+}
+
+/// `CopyImageToBufferTestCase`
+pub struct CopyImageToBufferCase {
+    name: String,
+    src: ImageParms,
+    dst_buffer_size: u32,
+    dst_fill_mode: FillMode,
+    regions: Vec<BufferImageCopy>,
+    allocation_kind: AllocationKind,
+    command_variant: CopyCommandVariant,
+    queue_selection: QueueSelection,
+    general_layout: bool,
+    needs_maintenance5: bool,
+    needs_maintenance11: bool,
+}
+
+impl TestCase for CopyImageToBufferCase {
+    fn name(&self) -> &str {
+        &self.name
+    }
+
+    fn check_support(&self, context: &Context<'_>) -> Result<(), TestError> {
+        if self.command_variant == CopyCommandVariant::CopyCommands2 {
+            context.require_device_functionality("VK_KHR_copy_commands2")?;
+        }
+        if self.allocation_kind == AllocationKind::Dedicated {
+            context.require_device_functionality("VK_KHR_dedicated_allocation")?;
+        }
+        if self.needs_maintenance5 {
+            context.require_device_functionality("VK_KHR_maintenance5")?;
+        }
+        if self.needs_maintenance11 {
+            context.require_device_functionality("VK_KHR_maintenance11")?;
+        }
+        select_queue(context, self.queue_selection)?;
+
+        let usage = vk::ImageUsageFlags::TRANSFER_SRC | vk::ImageUsageFlags::TRANSFER_DST;
+        let properties = unsafe {
+            context.get_instance().get_physical_device_image_format_properties(
+                context.get_physical_device(),
+                self.src.format,
+                self.src.image_type,
+                self.src.tiling,
+                usage,
+                self.src.create_flags(),
+            )
+        }
+        .map_err(|_| TestError::NotSupported("Format does not support the required parameters".to_string()))?;
+
+        if properties.max_array_layers < self.src.array_size() {
+            return Err(TestError::NotSupported("maxArrayLayers too small".to_string()));
+        }
+        Ok(())
+    }
+
+    fn programs(&self) -> BinaryCollection {
+        BinaryCollection::new(&[])
+    }
+
+    fn create_instance<'a>(&'a self, context: &'a Context<'a>) -> Box<dyn TestInstance + 'a> {
+        Box::new(CopyImageToBufferInstance { context, params: self })
+    }
+}
+
+struct CopyImageToBufferInstance<'a> {
+    context: &'a Context<'a>,
+    params: &'a CopyImageToBufferCase,
+}
+
+impl TestInstance for CopyImageToBufferInstance<'_> {
+    fn iterate(&mut self) -> TestOutcome {
+        let p = self.params;
+        let vk_device = self.context.get_device();
+        let allocator = self.context.get_default_allocator();
+
+        let (queue, queue_family_index) = select_queue(self.context, p.queue_selection)?;
+        let mut families = vec![self.context.get_universal_queue_family_index()];
+        if queue_family_index != families[0] {
+            families.push(queue_family_index);
+        }
+
+        let texture_format = map_vk_format(p.src.format).ok_or_else(|| TestError::NotSupported("format has no tcu mapping".to_string()))?;
+        let texel_size = texture_format.pixel_size().ok_or_else(|| TestError::NotSupported("format has no pixel size".to_string()))? as usize;
+
+        let mut source_level = TextureLevel::new(texture_format, p.src.extent[0], p.src.extent[1], p.src.extent[2])?;
+        generate_buffer(&mut source_level.get_access(), p.src.extent[0], p.src.extent[1], p.src.extent[2], p.src.fill_mode);
+
+        let mut destination_level = TextureLevel::new(texture_format, p.dst_buffer_size, 1, 1)?;
+        generate_buffer(&mut destination_level.get_access(), p.dst_buffer_size, 1, 1, p.dst_fill_mode);
+
+        let mut expected_level = TextureLevel::new(texture_format, p.dst_buffer_size, 1, 1)?;
+        expected_level.data_mut().copy_from_slice(destination_level.data());
+        {
+            let source_access = source_level.get_const_access();
+            let mut expected_access = expected_level.get_access();
+            for region in &p.regions {
+                copy_region_to_buffer_level(&source_access, &mut expected_access, *region, texel_size);
+            }
+        }
+
+        // Source image.
+        let image_info = vk::ImageCreateInfo {
+            s_type: vk::StructureType::IMAGE_CREATE_INFO,
+            next: std::ptr::null(),
+            flags: p.src.create_flags(),
+            image_type: p.src.image_type,
+            format: p.src.format,
+            extent: p.src.extent_3d(),
+            mip_levels: 1,
+            array_layers: p.src.array_size(),
+            samples: vk::SampleCountFlags::_1,
+            tiling: p.src.tiling,
+            usage: vk::ImageUsageFlags::TRANSFER_SRC | vk::ImageUsageFlags::TRANSFER_DST,
+            sharing_mode: vk::SharingMode::EXCLUSIVE,
+            queue_family_index_count: 0,
+            queue_family_indices: std::ptr::null(),
+            initial_layout: vk::ImageLayout::UNDEFINED,
+        };
+        let source = if p.allocation_kind == AllocationKind::Dedicated {
+            ImageWithMemory::new_dedicated(vk_device, allocator, image_info, MemoryRequirement::ANY)?
+        } else {
+            ImageWithMemory::new(vk_device, allocator, image_info, MemoryRequirement::ANY)?
+        };
+
+        // Destination buffer, pre-filled so a region the copy must not touch is checked.
+        let buffer_bytes = u64::from(p.dst_buffer_size) * texel_size as u64;
+        let dst_info = staging_buffer_create_info(buffer_bytes, vk::BufferUsageFlags::TRANSFER_DST, &families);
+        let destination = unsafe { vk_device.create_buffer(&dst_info, None) }.vk_check("vkCreateBuffer")?;
+        let destination = Unique::new(vk_device, destination);
+        let destination_alloc = bind_buffer_memory(self.context, *destination, p.allocation_kind)?;
+        unsafe { std::ptr::copy_nonoverlapping(destination_level.data().as_ptr(), destination_alloc.get_host_ptr(), destination_level.data().len()) };
+        flush_alloc(vk_device, &destination_alloc)?;
+
+        upload_image(self.context, &source_level.get_const_access(), source.get(), &p.src, p.general_layout, &families)?;
+
+        let cmd_pool = make_command_pool(vk_device, queue_family_index)?;
+        let cmd_buffer = allocate_command_buffer(vk_device, *cmd_pool, vk::CommandBufferLevel::PRIMARY)?;
+
+        let layout = if p.general_layout {
+            vk::ImageLayout::GENERAL
+        } else {
+            vk::ImageLayout::TRANSFER_SRC_OPTIMAL
+        };
+        let old_layout = if p.general_layout {
+            vk::ImageLayout::GENERAL
+        } else {
+            vk::ImageLayout::TRANSFER_DST_OPTIMAL
+        };
+        let range = make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, p.src.array_size());
+
+        begin_command_buffer(vk_device, *cmd_buffer)?;
+        unsafe {
+            let barrier = make_image_memory_barrier(vk::AccessFlags::TRANSFER_WRITE, vk::AccessFlags::TRANSFER_READ, old_layout, layout, source.get(), range);
+            vk_device.cmd_pipeline_barrier(
+                *cmd_buffer,
+                vk::PipelineStageFlags::TRANSFER,
+                vk::PipelineStageFlags::TRANSFER,
+                vk::DependencyFlags::empty(),
+                &[] as &[vk::MemoryBarrier],
+                &[] as &[vk::BufferMemoryBarrier],
+                &[barrier],
+            );
+
+            let copies: Vec<vk::BufferImageCopy> = p.regions.iter().map(|r| r.to_vk()).collect();
+            if p.command_variant == CopyCommandVariant::CopyCommands2 {
+                let copies2: Vec<vk::BufferImageCopy2> = copies
+                    .iter()
+                    .map(|c| vk::BufferImageCopy2 {
+                        s_type: vk::StructureType::BUFFER_IMAGE_COPY_2,
+                        next: std::ptr::null(),
+                        buffer_offset: c.buffer_offset,
+                        buffer_row_length: c.buffer_row_length,
+                        buffer_image_height: c.buffer_image_height,
+                        image_subresource: c.image_subresource,
+                        image_offset: c.image_offset,
+                        image_extent: c.image_extent,
+                    })
+                    .collect();
+                let info = vk::CopyImageToBufferInfo2 {
+                    s_type: vk::StructureType::COPY_IMAGE_TO_BUFFER_INFO_2,
+                    next: std::ptr::null(),
+                    src_image: source.get(),
+                    src_image_layout: layout,
+                    dst_buffer: *destination,
+                    region_count: copies2.len() as u32,
+                    regions: copies2.as_ptr(),
+                };
+                vk_device.cmd_copy_image_to_buffer2(*cmd_buffer, &info);
+            } else {
+                vk_device.cmd_copy_image_to_buffer(*cmd_buffer, source.get(), layout, *destination, &copies);
+            }
+        }
+        end_command_buffer(vk_device, *cmd_buffer)?;
+        submit_commands_and_wait(vk_device, queue, *cmd_buffer)?;
+
+        invalidate_alloc(vk_device, &destination_alloc)?;
+        // Copied out of the mapping in one go; scattered reads through host-visible
+        // device memory cost an order of magnitude more.
+        let result = unsafe { std::slice::from_raw_parts(destination_alloc.get_host_ptr().cast_const(), destination_level.data().len()) }.to_vec();
+        let result_access = ConstPixelBufferAccess::new(texture_format, [p.dst_buffer_size, 1, 1], &result);
+
+        Ok(check_test_result(&expected_level.get_const_access(), &result_access))
+    }
+}
+
+/// `add2dImageToBufferTests`' format list, crossed with both tilings.
+static IMAGE_TO_BUFFER_FORMATS_2D: &[vk::Format] = &[vk::Format::R8G8B8A8_UNORM, vk::Format::R8_UNORM, vk::Format::R32G32B32_UINT, vk::Format::R32G32B32_SFLOAT];
+
+/// `getFormatCaseName` for the formats above - the enum name lowercased, minus the
+/// VK_FORMAT_ prefix.
+fn image_to_buffer_format_name(format: vk::Format) -> &'static str {
+    match format {
+        vk::Format::R8_UNORM => "r8_unorm",
+        vk::Format::R32G32B32_UINT => "r32g32b32_uint",
+        vk::Format::R32G32B32_SFLOAT => "r32g32b32_sfloat",
+        _ => "r8g8b8a8_unorm",
+    }
+}
+
+/// `add1dImageToBufferTests`, minus the compressed mip_copies cases.
+fn add_1d_image_to_buffer_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+    let format = vk::Format::R8G8B8A8_UNORM;
+    let Some(tcu_format) = map_vk_format(format) else { return };
+    let Some(pixel_size) = tcu_format.pixel_size() else { return };
+
+    let make = |name: &str, extent: [u32; 3], fill: FillMode, dst_buffer_size: u32, regions: Vec<BufferImageCopy>, needs_maintenance5: bool| {
+        Box::new(CopyImageToBufferCase {
+            name: name.to_string(),
+            src: ImageParms {
+                image_type: vk::ImageType::_1D,
+                format,
+                extent,
+                tiling: vk::ImageTiling::OPTIMAL,
+                fill_mode: fill,
+            },
+            dst_buffer_size,
+            dst_fill_mode: fill,
+            regions,
+            allocation_kind: gp.allocation_kind,
+            command_variant: gp.command_variant,
+            queue_selection: gp.queue_selection,
+            general_layout: gp.general_layout,
+            needs_maintenance5,
+            needs_maintenance11: false,
+        }) as Box<dyn TestCase>
+    };
+
+    let region = |buffer_offset: u64, image_height: u32, base_layer: u32, layer_count: u32| BufferImageCopy {
+        buffer_offset,
+        buffer_row_length: 0,
+        buffer_image_height: image_height,
+        base_array_layer: base_layer,
+        layer_count,
+        image_offset: [0, 0, 0],
+        image_extent: DEFAULT_1D_EXTENT,
+    };
+
+    group.add_child(make(
+        "tightly_sized_buffer",
+        DEFAULT_1D_EXTENT,
+        FillMode::Gradient,
+        DEFAULT_SIZE,
+        vec![region(0, 0, 0, 1)],
+        false,
+    ));
+
+    let larger = DEFAULT_SIZE + 1;
+    group.add_child(make("larger_buffer", DEFAULT_1D_EXTENT, FillMode::Gradient, larger, vec![region(0, larger, 0, 1)], false));
+
+    let array_layers = 16u32;
+    let array_extent = [DEFAULT_SIZE, 1, array_layers];
+
+    group.add_child(make(
+        "array_tightly_sized_buffer",
+        array_extent,
+        FillMode::Gradient,
+        DEFAULT_SIZE * array_layers,
+        (0..array_layers).map(|n| region(u64::from(DEFAULT_SIZE * pixel_size * n), DEFAULT_SIZE, n, 1)).collect(),
+        false,
+    ));
+
+    group.add_child(make(
+        "array_larger_buffer",
+        array_extent,
+        FillMode::Gradient,
+        larger * array_layers,
+        (0..array_layers).map(|n| region(u64::from(larger * pixel_size * n), larger, n, 1)).collect(),
+        false,
+    ));
+
+    for (name, base_layer) in [("array_all_remaining_layers", 0u32), ("array_not_all_remaining_layers", 2)] {
+        group.add_child(make(
+            name,
+            array_extent,
+            FillMode::Red,
+            DEFAULT_SIZE * array_layers,
+            vec![region(0, 0, base_layer, REMAINING_ARRAY_LAYERS)],
+            true,
+        ));
+    }
+}
+
+/// `add2dImageToBufferTests`, minus the compressed mip_copies cases and `padding_bytes`
+/// (which needs FILL_MODE_RANDOM_GRAY).
+fn add_2d_image_to_buffer_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+    for &format in IMAGE_TO_BUFFER_FORMATS_2D {
+        for tiling in [vk::ImageTiling::OPTIMAL, vk::ImageTiling::LINEAR] {
+            let Some(tcu_format) = map_vk_format(format) else { continue };
+            let Some(pixel_size) = tcu_format.pixel_size() else { continue };
+
+            let suffix = format!(
+                "{}{}",
+                if format == vk::Format::R8G8B8A8_UNORM {
+                    String::new()
+                } else {
+                    format!("_{}", image_to_buffer_format_name(format))
+                },
+                if tiling == vk::ImageTiling::LINEAR { "_linear" } else { "" }
+            );
+
+            let make =
+                |name: String, extent: [u32; 3], fill: FillMode, dst_buffer_size: u32, regions: Vec<BufferImageCopy>, needs_maintenance5: bool, needs_maintenance11: bool| {
+                    Box::new(CopyImageToBufferCase {
+                        name,
+                        src: ImageParms {
+                            image_type: vk::ImageType::_2D,
+                            format,
+                            extent,
+                            tiling,
+                            fill_mode: fill,
+                        },
+                        dst_buffer_size,
+                        dst_fill_mode: fill,
+                        regions,
+                        allocation_kind: gp.allocation_kind,
+                        command_variant: gp.command_variant,
+                        queue_selection: gp.queue_selection,
+                        general_layout: gp.general_layout,
+                        needs_maintenance5,
+                        needs_maintenance11,
+                    }) as Box<dyn TestCase>
+                };
+
+            let region =
+                |buffer_offset: u64, row_length: u32, image_height: u32, base_layer: u32, layer_count: u32, image_offset: [i32; 3], image_extent: [u32; 3]| BufferImageCopy {
+                    buffer_offset,
+                    buffer_row_length: row_length,
+                    buffer_image_height: image_height,
+                    base_array_layer: base_layer,
+                    layer_count,
+                    image_offset,
+                    image_extent,
+                };
+
+            group.add_child(make(
+                format!("whole{suffix}"),
+                DEFAULT_EXTENT,
+                FillMode::Gradient,
+                DEFAULT_SIZE * DEFAULT_SIZE,
+                vec![region(0, 0, 0, 0, 1, [0, 0, 0], DEFAULT_EXTENT)],
+                false,
+                false,
+            ));
+
+            {
+                let bw = DEFAULT_SIZE + 1;
+                let bh = DEFAULT_SIZE + 1;
+                group.add_child(make(
+                    format!("whole_unaligned{suffix}"),
+                    DEFAULT_EXTENT,
+                    FillMode::Gradient,
+                    bw * bh,
+                    vec![region(0, bw, bh, 0, 1, [0, 0, 0], DEFAULT_EXTENT)],
+                    false,
+                    false,
+                ));
+            }
+
+            {
+                let offset = u64::from(round_up(DEFAULT_SIZE * DEFAULT_HALF_SIZE, pixel_size));
+                group.add_child(make(
+                    format!("buffer_offset{suffix}"),
+                    DEFAULT_EXTENT,
+                    FillMode::Gradient,
+                    DEFAULT_SIZE * DEFAULT_SIZE,
+                    vec![region(
+                        offset,
+                        0,
+                        0,
+                        0,
+                        1,
+                        [DEFAULT_QUARTER_SIZE as i32, DEFAULT_QUARTER_SIZE as i32, 0],
+                        DEFAULT_HALF_EXTENT,
+                    )],
+                    false,
+                    false,
+                ));
+            }
+
+            if gp.queue_selection != QueueSelection::ComputeOnly {
+                let offset = u64::from(round_up(DEFAULT_SIZE * DEFAULT_HALF_SIZE + 1, pixel_size));
+                group.add_child(make(
+                    format!("buffer_offset_relaxed{suffix}"),
+                    DEFAULT_EXTENT,
+                    FillMode::Gradient,
+                    DEFAULT_SIZE * DEFAULT_SIZE,
+                    vec![region(
+                        offset,
+                        0,
+                        0,
+                        0,
+                        1,
+                        [DEFAULT_QUARTER_SIZE as i32, DEFAULT_QUARTER_SIZE as i32, 0],
+                        DEFAULT_HALF_EXTENT,
+                    )],
+                    false,
+                    gp.queue_selection == QueueSelection::TransferOnly,
+                ));
+            }
+
+            {
+                // The buffer offset walks forward in fixed steps while the copied width
+                // shrinks; the divisor advances once per step, so the body sees 1, 2, 3...
+                let buffer_size = u64::from(pixel_size) * u64::from(DEFAULT_SIZE * DEFAULT_SIZE);
+                let offset_size = u64::from(pixel_size) * u64::from(DEFAULT_QUARTER_SIZE * DEFAULT_QUARTER_SIZE);
+                let mut regions = Vec::new();
+                let mut divisor = 1u32;
+                let mut offset = 0u64;
+                while offset < buffer_size - offset_size {
+                    regions.push(region(
+                        offset,
+                        DEFAULT_QUARTER_SIZE,
+                        DEFAULT_QUARTER_SIZE,
+                        0,
+                        1,
+                        [0, 0, 0],
+                        [DEFAULT_QUARTER_SIZE / divisor, DEFAULT_QUARTER_SIZE, 1],
+                    ));
+                    offset += offset_size;
+                    divisor += 1;
+                }
+                group.add_child(make(
+                    format!("regions{suffix}"),
+                    DEFAULT_EXTENT,
+                    FillMode::Gradient,
+                    DEFAULT_SIZE * DEFAULT_SIZE,
+                    regions,
+                    false,
+                    false,
+                ));
+            }
+
+            group.add_child(make(
+                format!("tightly_sized_buffer{suffix}"),
+                DEFAULT_EXTENT,
+                FillMode::Gradient,
+                (DEFAULT_HALF_SIZE - 1) * DEFAULT_SIZE + DEFAULT_HALF_SIZE,
+                vec![region(
+                    0,
+                    DEFAULT_SIZE,
+                    DEFAULT_SIZE,
+                    0,
+                    1,
+                    [DEFAULT_QUARTER_SIZE as i32, DEFAULT_QUARTER_SIZE as i32, 0],
+                    DEFAULT_HALF_EXTENT,
+                )],
+                false,
+                false,
+            ));
+
+            {
+                let bh = DEFAULT_SIZE + 1;
+                group.add_child(make(
+                    format!("larger_buffer{suffix}"),
+                    DEFAULT_EXTENT,
+                    FillMode::Gradient,
+                    bh * DEFAULT_SIZE,
+                    vec![region(0, DEFAULT_SIZE, bh, 0, 1, [0, 0, 0], DEFAULT_EXTENT)],
+                    false,
+                    false,
+                ));
+            }
+
+            {
+                // Here the offset is a texel count as well as a byte offset: upstream adds
+                // it to `dst.buffer.size`, which is measured in texels.
+                let offset = round_up(DEFAULT_QUARTER_SIZE, pixel_size);
+                group.add_child(make(
+                    format!("tightly_sized_buffer_offset{suffix}"),
+                    DEFAULT_EXTENT,
+                    FillMode::Gradient,
+                    (DEFAULT_HALF_SIZE - 1) * DEFAULT_SIZE + DEFAULT_HALF_SIZE + offset,
+                    vec![region(
+                        u64::from(offset),
+                        DEFAULT_SIZE,
+                        DEFAULT_SIZE,
+                        0,
+                        1,
+                        [DEFAULT_QUARTER_SIZE as i32, DEFAULT_QUARTER_SIZE as i32, 0],
+                        DEFAULT_HALF_EXTENT,
+                    )],
+                    false,
+                    false,
+                ));
+            }
+
+            let array_layers = 16u32;
+            let array_extent = [DEFAULT_HALF_SIZE, DEFAULT_HALF_SIZE, array_layers];
+
+            group.add_child(make(
+                format!("array{suffix}"),
+                array_extent,
+                FillMode::Gradient,
+                DEFAULT_HALF_SIZE * DEFAULT_HALF_SIZE * array_layers,
+                (0..array_layers)
+                    .map(|n| {
+                        region(
+                            u64::from(DEFAULT_HALF_SIZE * DEFAULT_HALF_SIZE * pixel_size * n),
+                            0,
+                            0,
+                            n,
+                            1,
+                            [0, 0, 0],
+                            DEFAULT_HALF_EXTENT,
+                        )
+                    })
+                    .collect(),
+                false,
+                false,
+            ));
+
+            {
+                let bh = DEFAULT_HALF_SIZE + 1;
+                group.add_child(make(
+                    format!("array_larger_buffer{suffix}"),
+                    array_extent,
+                    FillMode::Gradient,
+                    DEFAULT_HALF_SIZE * bh * array_layers,
+                    (0..array_layers)
+                        .map(|n| {
+                            region(
+                                u64::from(DEFAULT_HALF_SIZE * bh * pixel_size * n),
+                                DEFAULT_HALF_SIZE,
+                                bh,
+                                n,
+                                1,
+                                [0, 0, 0],
+                                DEFAULT_HALF_EXTENT,
+                            )
+                        })
+                        .collect(),
+                    false,
+                    false,
+                ));
+            }
+
+            group.add_child(make(
+                format!("array_tightly_sized_buffer{suffix}"),
+                array_extent,
+                FillMode::Gradient,
+                DEFAULT_HALF_SIZE * DEFAULT_HALF_SIZE * array_layers,
+                (0..array_layers)
+                    .map(|n| {
+                        region(
+                            u64::from(DEFAULT_HALF_SIZE * DEFAULT_HALF_SIZE * pixel_size * n),
+                            DEFAULT_HALF_SIZE,
+                            DEFAULT_HALF_SIZE,
+                            n,
+                            1,
+                            [0, 0, 0],
+                            DEFAULT_HALF_EXTENT,
+                        )
+                    })
+                    .collect(),
+                false,
+                false,
+            ));
+
+            for (name, base_layer) in [("array_all_remaining_layers", 0u32), ("array_not_all_remaining_layers", 2)] {
+                group.add_child(make(
+                    format!("{name}{suffix}"),
+                    array_extent,
+                    FillMode::Red,
+                    DEFAULT_HALF_SIZE * DEFAULT_HALF_SIZE * array_layers,
+                    vec![region(0, 0, 0, base_layer, REMAINING_ARRAY_LAYERS, [0, 0, 0], DEFAULT_HALF_EXTENT)],
+                    true,
+                    false,
+                ));
+            }
+
+            // `padding_bytes` is not registered: it fills the destination with
+            // FILL_MODE_RANDOM_GRAY, which is not ported yet.
+        }
+    }
+}
+
+/// The `image_to_buffer*` groups of `createCopiesAndBlittingTests`.
+pub fn add_image_to_buffer_groups(
+    parent: &mut tcu::TestCaseGroup,
+    name: &str,
+    allocation_kind: AllocationKind,
+    command_variant: CopyCommandVariant,
+    queue_selection: QueueSelection,
+    general_layout: bool,
+) {
+    let gp = GroupParams {
+        allocation_kind,
+        command_variant,
+        queue_selection,
+        general_layout,
+    };
+    let mut group = tcu::TestCaseGroup::new(name);
+    let mut images_1d = tcu::TestCaseGroup::new("1d_images");
+    add_1d_image_to_buffer_tests(&mut images_1d, &gp);
+    group.add_child(images_1d);
+    let mut images_2d = tcu::TestCaseGroup::new("2d_images");
+    add_2d_image_to_buffer_tests(&mut images_2d, &gp);
+    group.add_child(images_2d);
+    // 3d_images is entirely compressed mip_copies upstream, so nothing is registered.
     parent.add_child(group);
 }

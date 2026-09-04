@@ -1022,6 +1022,20 @@ impl PixelBufferAccess<'_> {
         }
     }
 
+    /// The mirror of `copy_texels_from`: a run taken from an (x, y, z) position in a
+    /// multi-dimensional source into a flat index here. `tcu::getSubregion` on the
+    /// source side rather than the destination side, which is the only difference
+    /// between upstream's two copyRegionToTextureLevel directions.
+    pub fn copy_texels_from_position(&mut self, src: &ConstPixelBufferAccess<'_>, src_pos: (u32, u32, u32), dst_texel: usize, count: usize) {
+        let pixel_size = self.pixel_size();
+        let [sw, sh, _] = src.size();
+        let src_index = ((src_pos.2 as usize * sh as usize) + src_pos.1 as usize) * sw as usize + src_pos.0 as usize;
+        let src_off = src_index * pixel_size;
+        let dst_off = dst_texel * pixel_size;
+        let bytes = count * pixel_size;
+        self.data[dst_off..dst_off + bytes].copy_from_slice(&src.raw()[src_off..src_off + bytes]);
+    }
+
     /// Raw texel-run copy. Both sides are tightly packed and share a format, which is
     /// all `tcu::copy` amounts to for the buffer/image copy tests.
     pub fn copy_texels_from(&mut self, src: &ConstPixelBufferAccess<'_>, src_texel: usize, dst: (u32, u32, u32), count: usize) {

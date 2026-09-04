@@ -633,13 +633,17 @@ pub fn create_buffer_copy_tests() -> tcu::TestCaseGroup {
             if general_layout && kind_name != "core" {
                 continue;
             }
-            // copy_commands2 has no buffer_to_image group upstream.
-            if command_variant == CopyCommandVariant::CopyCommands2 {
-                continue;
-            }
             super::copies_image_tests::add_buffer_to_image_groups(
                 &mut kind_group,
                 &format!("buffer_to_image{suffix}"),
+                allocation_kind,
+                command_variant,
+                queue_selection,
+                general_layout,
+            );
+            super::copies_image_tests::add_image_to_buffer_groups(
+                &mut kind_group,
+                &format!("image_to_buffer{suffix}"),
                 allocation_kind,
                 command_variant,
                 queue_selection,
