@@ -1686,15 +1686,37 @@ pub struct ImageCopy {
     pub dst_offset: [i32; 3],
     pub extent: [u32; 3],
     pub aspect_mask: vk::ImageAspectFlags,
+    pub src_base_layer: u32,
+    pub src_layer_count: u32,
+    pub dst_base_layer: u32,
+    pub dst_layer_count: u32,
 }
 
 impl ImageCopy {
+    /// The offsets and extent as `copyRegionToTextureLevel` adjusts them.
+    ///
+    /// A 2D array layer and a 3D slice are the same axis in the host reference, so when
+    /// one side addresses a layer through the subresource and the other through the z
+    /// offset, upstream aligns them by copying the addressed side's z onto the other.
+    fn adjusted(self) -> ([i32; 3], [i32; 3], [u32; 3]) {
+        let (mut src_offset, mut dst_offset, mut extent) = (self.src_offset, self.dst_offset, self.extent);
+        if self.dst_base_layer > self.src_base_layer {
+            dst_offset[2] = src_offset[2];
+            extent[2] = extent[2].max(self.src_layer_count);
+        }
+        if self.dst_base_layer < self.src_base_layer {
+            src_offset[2] = dst_offset[2];
+            extent[2] = extent[2].max(self.src_layer_count);
+        }
+        (src_offset, dst_offset, extent)
+    }
+
     fn to_vk(self) -> vk::ImageCopy {
         let layers = vk::ImageSubresourceLayers {
             aspect_mask: self.aspect_mask,
             mip_level: 0,
-            base_array_layer: 0,
-            layer_count: 1,
+            base_array_layer: self.src_base_layer,
+            layer_count: self.src_layer_count,
         };
         vk::ImageCopy {
             src_subresource: layers,
@@ -1703,7 +1725,12 @@ impl ImageCopy {
                 y: self.src_offset[1],
                 z: self.src_offset[2],
             },
-            dst_subresource: layers,
+            dst_subresource: vk::ImageSubresourceLayers {
+                aspect_mask: self.aspect_mask,
+                mip_level: 0,
+                base_array_layer: self.dst_base_layer,
+                layer_count: self.dst_layer_count,
+            },
             dst_offset: vk::Offset3D {
                 x: self.dst_offset[0],
                 y: self.dst_offset[1],
@@ -1841,11 +1868,12 @@ impl TestInstance for CopyImageToImageInstance<'_> {
             let source_access = source_level.get_const_access();
             let mut expected_access = expected_level.get_access();
             for r in &p.regions {
+                let (src_offset, dst_offset, extent) = r.adjusted();
                 expected_access.copy_region_from(
                     &source_access,
-                    (r.src_offset[0] as u32, r.src_offset[1] as u32, r.src_offset[2] as u32),
-                    (r.dst_offset[0] as u32, r.dst_offset[1] as u32, r.dst_offset[2] as u32),
-                    (r.extent[0], r.extent[1], r.extent[2]),
+                    (src_offset[0] as u32, src_offset[1] as u32, src_offset[2] as u32),
+                    (dst_offset[0] as u32, dst_offset[1] as u32, dst_offset[2] as u32),
+                    (extent[0], extent[1], extent[2]),
                 );
             }
         }
@@ -1999,6 +2027,10 @@ fn add_image_to_image_simple_tests(group: &mut tcu::TestCaseGroup, gp: &GroupPar
         dst_offset,
         extent,
         aspect_mask: vk::ImageAspectFlags::COLOR,
+        src_base_layer: 0,
+        src_layer_count: 1,
+        dst_base_layer: 0,
+        dst_layer_count: 1,
     };
 
     // The destination defaults to FILL_MODE_WHITE and the source to FILL_MODE_GRADIENT
@@ -2095,13 +2127,126 @@ fn add_image_to_image_simple_tests(group: &mut tcu::TestCaseGroup, gp: &GroupPar
                 dst_offset: [DEFAULT_QUARTER_SIZE as i32, (DEFAULT_QUARTER_SIZE / 2) as i32, 0],
                 extent: [DEFAULT_QUARTER_SIZE / 2, DEFAULT_QUARTER_SIZE / 2, 1],
                 aspect_mask: aspect,
+                src_base_layer: 0,
+                src_layer_count: 1,
+                dst_base_layer: 0,
+                dst_layer_count: 1,
             }],
             false,
         ));
     }
 }
 
-/// The `image_to_image*` groups, `simple_tests` only so far.
+/// `addImageToImage3dImagesTests`
+fn add_image_to_image_3d_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+    const SLICES_LAYERS: u32 = 16;
+    let extent = [DEFAULT_HALF_SIZE, DEFAULT_HALF_SIZE, SLICES_LAYERS];
+
+    let parms = |image_type: vk::ImageType, fill: FillMode| ImageParms {
+        image_type,
+        format: vk::Format::R8G8B8A8_UINT,
+        extent,
+        tiling: vk::ImageTiling::OPTIMAL,
+        fill_mode: fill,
+    };
+    let make = |name: &str, src_type: vk::ImageType, dst_type: vk::ImageType, regions: Vec<ImageCopy>| {
+        Box::new(CopyImageToImageCase {
+            name: name.to_string(),
+            src: parms(src_type, FillMode::Gradient),
+            dst: parms(dst_type, FillMode::White),
+            regions,
+            clear_destination_with_red: false,
+            allocation_kind: gp.allocation_kind,
+            command_variant: gp.command_variant,
+            queue_selection: gp.queue_selection,
+            general_layout: gp.general_layout,
+        }) as Box<dyn TestCase>
+    };
+    let copy = |src_offset: [i32; 3], dst_offset: [i32; 3], extent: [u32; 3], src_base: u32, src_count: u32, dst_base: u32, dst_count: u32| ImageCopy {
+        src_offset,
+        dst_offset,
+        extent,
+        aspect_mask: vk::ImageAspectFlags::COLOR,
+        src_base_layer: src_base,
+        src_layer_count: src_count,
+        dst_base_layer: dst_base,
+        dst_layer_count: dst_count,
+    };
+    let half = [DEFAULT_HALF_SIZE, DEFAULT_HALF_SIZE, 1];
+
+    group.add_child(make(
+        "3d_to_2d_by_slices",
+        vk::ImageType::_3D,
+        vk::ImageType::_2D,
+        (0..SLICES_LAYERS).map(|n| copy([0, 0, n as i32], [0, 0, 0], half, 0, 1, n, 1)).collect(),
+    ));
+
+    group.add_child(make(
+        "2d_to_3d_by_layers",
+        vk::ImageType::_2D,
+        vk::ImageType::_3D,
+        (0..SLICES_LAYERS).map(|n| copy([0, 0, 0], [0, 0, n as i32], half, n, 1, 0, 1)).collect(),
+    ));
+
+    group.add_child(make(
+        "3d_to_2d_whole",
+        vk::ImageType::_3D,
+        vk::ImageType::_2D,
+        vec![copy([0, 0, 0], [0, 0, 0], extent, 0, 1, 0, SLICES_LAYERS)],
+    ));
+
+    group.add_child(make(
+        "2d_to_3d_whole",
+        vk::ImageType::_2D,
+        vk::ImageType::_3D,
+        vec![copy([0, 0, 0], [0, 0, 0], extent, 0, SLICES_LAYERS, 0, 1)],
+    ));
+
+    // The regions shrink as the slice index grows, so each one starts further into the
+    // source and covers less of it.
+    let region_width = DEFAULT_HALF_SIZE / SLICES_LAYERS - 1;
+    let region_height = DEFAULT_HALF_SIZE / SLICES_LAYERS - 1;
+
+    group.add_child(make(
+        "3d_to_2d_regions",
+        vk::ImageType::_3D,
+        vk::ImageType::_2D,
+        (0..SLICES_LAYERS)
+            .map(|n| {
+                copy(
+                    [0, (region_height * n) as i32, n as i32],
+                    [(region_width * n) as i32, 0, 0],
+                    [DEFAULT_HALF_SIZE - region_width * n, DEFAULT_HALF_SIZE - region_height * n, 1],
+                    0,
+                    1,
+                    n,
+                    1,
+                )
+            })
+            .collect(),
+    ));
+
+    group.add_child(make(
+        "2d_to_3d_regions",
+        vk::ImageType::_2D,
+        vk::ImageType::_3D,
+        (0..SLICES_LAYERS)
+            .map(|n| {
+                copy(
+                    [(region_width * n) as i32, 0, 0],
+                    [0, (region_height * n) as i32, n as i32],
+                    [DEFAULT_HALF_SIZE - region_width * n, DEFAULT_HALF_SIZE - region_height * n, 1],
+                    n,
+                    1,
+                    0,
+                    1,
+                )
+            })
+            .collect(),
+    ));
+}
+
+/// The `image_to_image*` groups.
 pub fn add_image_to_image_groups(
     parent: &mut tcu::TestCaseGroup,
     name: &str,
@@ -2120,7 +2265,15 @@ pub fn add_image_to_image_groups(
     let mut simple = tcu::TestCaseGroup::new("simple_tests");
     add_image_to_image_simple_tests(&mut simple, &gp);
     group.add_child(simple);
-    // all_formats needs a compressed-format model in tcu; dimensions, array, cube and
-    // 3d_images are not ported yet either.
+
+    // `image_to_image_general_layout` goes through addCopyImageToImageTestsSimpleOnly
+    // upstream, so it gets simple_tests and nothing else.
+    if !general_layout {
+        let mut images_3d = tcu::TestCaseGroup::new("3d_images");
+        add_image_to_image_3d_tests(&mut images_3d, &gp);
+        group.add_child(images_3d);
+    }
+    // all_formats needs a compressed-format model in tcu; dimensions, array and cube
+    // are not ported yet either.
     parent.add_child(group);
 }
