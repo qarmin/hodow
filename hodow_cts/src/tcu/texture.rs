@@ -103,6 +103,7 @@ impl ChannelOrder {
     /// `tcu::getNumUsedChannels`
     pub fn num_used_channels(self) -> u32 {
         match self {
+            // @generated:num_used_channels
             Self::R => 1,
             Self::A => 1,
             Self::I => 1,
@@ -149,6 +150,7 @@ impl ChannelType {
     /// handles those.
     pub fn channel_size(self) -> Option<u32> {
         match self {
+            // @generated:channel_size
             Self::SNORM_INT8 => Some(1),
             Self::SNORM_INT16 => Some(2),
             Self::SNORM_INT32 => Some(4),

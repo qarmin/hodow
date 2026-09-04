@@ -138,8 +138,22 @@ def main() -> int:
         j = text.index(end_marker, i)
         return text[:i] + "\n" + new_body + "\n" + text[j:]
 
+    def arms_from(table: dict[str, int], variants: list[str], optional: bool) -> str:
+        lines = []
+        for v in variants:
+            if v in table:
+                value = f"Some({table[v]})" if optional else str(table[v])
+                lines.append(f"            Self::{v} => {value},")
+        return "\n".join(lines)
+
     out = existing
     out = replace_block(out, "// @generated:map_vk_format", "        _ => None,", "\n".join(arms))
+    out = replace_block(
+        out, "// @generated:num_used_channels", "        }\n    }", arms_from(num_channels, orders, optional=False)
+    )
+    out = replace_block(
+        out, "// @generated:channel_size", "            _ => None,", arms_from(channel_size, types, optional=True)
+    )
     OUT.write_text(out)
 
     subprocess.run(["rustfmt", "--edition", "2024", str(OUT)], cwd=CRATE_DIR, check=False)
