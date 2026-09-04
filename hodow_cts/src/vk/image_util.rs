@@ -152,6 +152,19 @@ impl<'a> ImageWithMemory<'a> {
         Ok(Self { image, allocation })
     }
 
+    /// `allocateAndBindImageMemory` with `ALLOCATION_KIND_DEDICATED`.
+    pub fn new_dedicated(device: &'a Device, allocator: &SimpleAllocator, image_create_info: vk::ImageCreateInfo, requirement: MemoryRequirement) -> Result<Self, TestError> {
+        let image = unsafe { device.create_image(&image_create_info, None) }.vk_check("vkCreateImage")?;
+        let image = Unique::new(device, image);
+
+        let req = unsafe { device.get_image_memory_requirements(*image) };
+        let allocation = allocator.allocate_dedicated_image(device, req, requirement, *image)?;
+
+        unsafe { device.bind_image_memory(*image, allocation.get_memory(), allocation.get_offset()) }.vk_check("vkBindImageMemory")?;
+
+        Ok(Self { image, allocation })
+    }
+
     pub fn get(&self) -> vk::Image {
         *self.image
     }

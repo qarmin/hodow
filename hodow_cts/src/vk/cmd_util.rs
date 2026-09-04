@@ -49,3 +49,34 @@ pub fn submit_commands_and_wait(device: &Device, queue: vk::Queue, cmd_buffer: v
     unsafe { device.destroy_fence(fence, None) };
     result
 }
+
+/// `vk::beginRenderPass`
+pub fn begin_render_pass(
+    device: &Device,
+    cmd_buffer: vk::CommandBuffer,
+    render_pass: vk::RenderPass,
+    framebuffer: vk::Framebuffer,
+    render_area: vk::Rect2D,
+    clear_value: vk::ClearValue,
+) {
+    let clear_values = [clear_value];
+    let info = vk::RenderPassBeginInfo::builder()
+        .render_pass(render_pass)
+        .framebuffer(framebuffer)
+        .render_area(render_area)
+        .clear_values(&clear_values);
+    unsafe { device.cmd_begin_render_pass(cmd_buffer, &info, vk::SubpassContents::INLINE) };
+}
+
+/// `vk::endRenderPass`
+pub fn end_render_pass(device: &Device, cmd_buffer: vk::CommandBuffer) {
+    unsafe { device.cmd_end_render_pass(cmd_buffer) };
+}
+
+/// `vk::makeRect2D`
+pub fn make_rect_2d(x: i32, y: i32, width: u32, height: u32) -> vk::Rect2D {
+    vk::Rect2D {
+        offset: vk::Offset2D { x, y },
+        extent: vk::Extent2D { width, height },
+    }
+}

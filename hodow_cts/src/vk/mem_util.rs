@@ -189,6 +189,47 @@ impl SimpleAllocator {
         })
     }
 
+    /// `SimpleAllocator::allocate` with a `VkMemoryDedicatedAllocateInfo` naming an
+    /// image. The image twin of `allocate_dedicated_buffer`, and needed for the same
+    /// reason: without it the `dedicated_allocation` half of a test group allocates
+    /// exactly like the `core` half and the two test the same thing.
+    pub fn allocate_dedicated_image<'a>(
+        &self,
+        device: &'a Device,
+        req: vk::MemoryRequirements,
+        requirement: MemoryRequirement,
+        image: vk::Image,
+    ) -> Result<Allocation<'a>, TestError> {
+        let memory_type_index = self.select_matching_memory_type(req.memory_type_bits, requirement)?;
+
+        let mut dedicated = vk::MemoryDedicatedAllocateInfo::builder().image(image);
+        let info = vk::MemoryAllocateInfo::builder()
+            .allocation_size(req.size)
+            .memory_type_index(memory_type_index)
+            .push_next(&mut dedicated);
+
+        let memory = unsafe { device.allocate_memory(&info, None) }.vk_check("vkAllocateMemory")?;
+
+        let host_ptr = if requirement.contains(MemoryRequirement::HOST_VISIBLE) {
+            match unsafe { device.map_memory(memory, 0, vk::WHOLE_SIZE, vk::MemoryMapFlags::empty()) } {
+                Ok(ptr) => ptr.cast::<u8>(),
+                Err(e) => {
+                    unsafe { device.free_memory(memory, None) };
+                    return Err(TestError::ResourceError(format!("vkMapMemory failed: {e}")));
+                }
+            }
+        } else {
+            std::ptr::null_mut()
+        };
+
+        Ok(Allocation {
+            device,
+            memory,
+            offset: 0,
+            host_ptr,
+        })
+    }
+
     /// `vk::selectMatchingMemoryType`
     fn select_matching_memory_type(&self, allowed_mem_type_bits: u32, requirement: MemoryRequirement) -> Result<u32, TestError> {
         let compatible_mem_types = allowed_mem_type_bits & ((1u32 << self.memory_properties.memory_type_count).wrapping_sub(1));

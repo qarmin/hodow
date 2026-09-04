@@ -93,6 +93,25 @@ pub fn make_descriptor_set<'a>(device: &'a Device, pool: vk::DescriptorPool, lay
     Ok(UniqueDescriptorSet::new(device, pool, sets[0]))
 }
 
+/// `vk::makeFramebuffer`
+pub fn make_framebuffer<'a>(
+    device: &'a Device,
+    render_pass: vk::RenderPass,
+    attachments: &[vk::ImageView],
+    width: u32,
+    height: u32,
+    layers: u32,
+) -> Result<Unique<'a, vk::Framebuffer>, TestError> {
+    let info = vk::FramebufferCreateInfo::builder()
+        .render_pass(render_pass)
+        .attachments(attachments)
+        .width(width)
+        .height(height)
+        .layers(layers);
+    let framebuffer = unsafe { device.create_framebuffer(&info, None) }.vk_check("vkCreateFramebuffer")?;
+    Ok(Unique::new(device, framebuffer))
+}
+
 /// `vk::BufferWithMemory` - a buffer plus the allocation backing it, bound together.
 pub struct BufferWithMemory<'a> {
     buffer: Unique<'a, vk::Buffer>,
