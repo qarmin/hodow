@@ -15,11 +15,16 @@ use std::ffi::CStr;
 
 use vulkanalia::loader::{LIBRARY, LibloadingLoader};
 use vulkanalia::prelude::v1_0::*;
-use vulkanalia::vk::ExtDebugUtilsExtensionInstanceCommands;
+use vulkanalia::vk::{EntryV1_1, ExtDebugUtilsExtensionInstanceCommands};
 
-/// The minimum instance API version hodow_cts asks for. Individual tests raise their
-/// own requirements from `check_support`; 1.1 is what the currently ported set needs.
-pub const REQUIRED_API_VERSION: u32 = vk::make_version(1, 1, 0);
+/// The minimum instance API version hodow_cts needs at all.
+pub const MINIMUM_API_VERSION: u32 = vk::make_version(1, 1, 0);
+
+/// The highest version these bindings know about. Asking for more than the loader
+/// supports fails instance creation, and asking for less means the loader never
+/// resolves the newer core entry points - `vkCmdBeginRendering` and friends then come
+/// back null and vulkanalia installs a stub that aborts the process when called.
+pub const MAXIMUM_API_VERSION: u32 = vk::make_version(1, 4, 0);
 
 const VALIDATION_LAYER: &[u8] = b"VK_LAYER_KHRONOS_validation\0";
 
@@ -62,12 +67,18 @@ impl Platform {
         let loader = unsafe { LibloadingLoader::new(LIBRARY) }.map_err(|e| PlatformError::Unavailable(format!("could not load {LIBRARY}: {e}")))?;
         let entry = unsafe { Entry::new(loader) }.map_err(|e| PlatformError::Unavailable(format!("no Vulkan entry point: {e}")))?;
 
+        // Upstream calls vkEnumerateInstanceVersion and runs at the highest version
+        // available (vktTestCase.cpp getMaximumFrameworkVulkanVersion); hardcoding 1.1
+        // here meant a 1.3 driver never exposed its 1.3 core commands.
+        let loader_version = unsafe { entry.enumerate_instance_version() }.unwrap_or(MINIMUM_API_VERSION);
+        let api_version = loader_version.min(MAXIMUM_API_VERSION).max(MINIMUM_API_VERSION);
+
         let app_info = vk::ApplicationInfo::builder()
             .application_name(b"hodow_cts\0")
             .application_version(vk::make_version(0, 1, 0))
             .engine_name(b"hodow_cts\0")
             .engine_version(vk::make_version(0, 1, 0))
-            .api_version(REQUIRED_API_VERSION);
+            .api_version(api_version);
 
         let mut layers: Vec<*const i8> = Vec::new();
         let mut extensions: Vec<*const i8> = Vec::new();

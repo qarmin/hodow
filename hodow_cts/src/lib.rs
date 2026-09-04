@@ -29,6 +29,7 @@ pub fn create_test_hierarchy() -> tcu::TestCaseGroup {
     let mut root = tcu::TestCaseGroup::new("dEQP-VK");
     root.add_child(vkt::tests::api::create_tests());
     root.add_child(vkt::tests::compute::create_tests());
+    root.add_child(vkt::tests::memory::create_tests());
     root
 }
 

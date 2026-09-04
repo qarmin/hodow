@@ -16,14 +16,13 @@ hand-picked, growing subset, currently:
 
 | group | cases | not ported yet |
 |---|---|---|
-| `dEQP-VK.compute.pipeline.zero_initialize_workgroup_memory.*` | **646 of 646** | - |
-| `dEQP-VK.compute.pipeline.builtin_var.*` | **11 of 11** | - |
-| `dEQP-VK.compute.pipeline.device_group.*` | **3 of 3** | - |
-| `dEQP-VK.compute.pipeline.64b_indexing.*` | **5 of 5** | - |
-| `dEQP-VK.compute.pipeline.workgroup_memory_explicit_layout.*` | 3821 of 3827 | `copy_memory`, `zero_ext` (Amber-driven) |
-| `dEQP-VK.compute.pipeline.indirect_dispatch.*` | 24 of 36 | `_device_address` variants |
-| `dEQP-VK.compute.pipeline.basic.*` | 49 of 80 | Amber-driven (3), `replicated_composites_*` (21), `secondary_compute_only_queue`, misc |
-| `dEQP-VK.api.smoke.*` | 0 of 6 | needs the reference rasteriser - see below |
+| `dEQP-VK.api.*` | 15080 of 267497 | `copy_and_blit`, `image_clearing`, `smoke`, `descriptor_set`, `external`, ... |
+| `dEQP-VK.memory.*` | 5472 of 6363 | `pipeline_barrier`, `requirements`, `external_memory_*`, `device_memory_report` |
+| `dEQP-VK.compute.*` | 4559 of 60811 | `cooperative_matrix`, the Amber-driven cases, `replicated_composites_*` |
+
+Complete groups: `compute.pipeline.zero_initialize_workgroup_memory`, `.builtin_var`,
+`.device_group`, `.64b_indexing`, and every `memory.mapping` / `memory.binding` /
+`memory.allocation` sub-group.
 
 Run `hodow_cts --list` for the exact set, or `just cts-coverage` for the numbers above
 computed from the binary itself. Every implemented case is verified to give the same
