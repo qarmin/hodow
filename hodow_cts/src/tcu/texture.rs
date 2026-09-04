@@ -101,31 +101,30 @@ pub enum ChannelType {
 
 impl ChannelOrder {
     /// `tcu::getNumUsedChannels`
-    pub fn num_used_channels(self) -> Option<u32> {
+    pub fn num_used_channels(self) -> u32 {
         match self {
-            Self::R => Some(1),
-            Self::A => Some(1),
-            Self::I => Some(1),
-            Self::L => Some(1),
-            Self::LA => Some(2),
-            Self::RG => Some(2),
-            Self::RA => Some(2),
-            Self::RGB => Some(3),
-            Self::RGBA => Some(4),
-            Self::ARGB => Some(4),
-            Self::ABGR => Some(4),
-            Self::BGR => Some(3),
-            Self::BGRA => Some(4),
-            Self::sR => Some(1),
-            Self::sRG => Some(2),
-            Self::sRGB => Some(3),
-            Self::sRGBA => Some(4),
-            Self::sBGR => Some(3),
-            Self::sBGRA => Some(4),
-            Self::D => Some(1),
-            Self::S => Some(1),
-            Self::DS => Some(2),
-            _ => None,
+            Self::R => 1,
+            Self::A => 1,
+            Self::I => 1,
+            Self::L => 1,
+            Self::LA => 2,
+            Self::RG => 2,
+            Self::RA => 2,
+            Self::RGB => 3,
+            Self::RGBA => 4,
+            Self::ARGB => 4,
+            Self::ABGR => 4,
+            Self::BGR => 3,
+            Self::BGRA => 4,
+            Self::sR => 1,
+            Self::sRG => 2,
+            Self::sRGB => 3,
+            Self::sRGBA => 4,
+            Self::sBGR => 3,
+            Self::sBGRA => 4,
+            Self::D => 1,
+            Self::S => 1,
+            Self::DS => 2,
         }
     }
 
@@ -278,7 +277,7 @@ impl TextureFormat {
         };
         match packed {
             Some(n) => Some(n),
-            None => Some(self.order.num_used_channels()? * self.type_.channel_size()?),
+            None => Some(self.order.num_used_channels() * self.type_.channel_size()?),
         }
     }
 

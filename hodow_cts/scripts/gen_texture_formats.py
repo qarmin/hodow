@@ -130,6 +130,9 @@ def main() -> int:
         print("error: src/tcu/texture.rs missing; this script only refreshes the tables", file=sys.stderr)
         return 2
 
+    # num_used_channels is total over ChannelOrder, so it returns a plain u32; only
+    # channel_size is partial (packed types have no per-channel size). Keep that in
+    # mind when regenerating - emitting Option there would reintroduce a dead arm.
     def replace_block(text: str, start_marker: str, end_marker: str, new_body: str) -> str:
         i = text.index(start_marker) + len(start_marker)
         j = text.index(end_marker, i)
