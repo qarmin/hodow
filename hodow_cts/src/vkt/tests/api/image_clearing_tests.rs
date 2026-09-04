@@ -10,7 +10,8 @@
 //
 // Modifications: rewritten in Rust for hodow_cts.
 //
-// Ported so far: clear_color_image and clear_depth_stencil_image. The case count comes from the format x dimension x
+// The whole group: clear_color_image, clear_depth_stencil_image and the four
+// attachment-clear groups. The case count comes from the format x dimension x
 // layer-range x tiling matrix, not from volume of code, and no shader is involved
 // anywhere - every case hands back an empty BinaryCollection.
 
@@ -54,9 +55,6 @@ struct LayerRange {
 /// `ImageLayerParams`
 struct ImageLayerParams {
     image_layer_count: u32,
-    /// Read only by the attachment-clear cases, which are not ported; kept so this
-    /// table still lines up line-for-line with upstream's.
-    #[allow(dead_code)]
     image_view_range: LayerRange,
     clear_layer_range: LayerRange,
     two_step: bool,
@@ -324,11 +322,25 @@ pub struct ClearColorImageCase {
     allocation_kind: AllocationKind,
     sample_count: vk::SampleCountFlags,
     multiple_subresource_range: bool,
+    /// `TestParams::create2DArrayCompatible` - another silent, name-invisible parameter,
+    /// set for a deterministic slice of the 3D cases.
+    create_2d_array_compatible: bool,
     /// `TestParams::generalLayout` - clears in VK_IMAGE_LAYOUT_GENERAL instead of
     /// TRANSFER_DST_OPTIMAL. Upstream turns it on for a deterministic ~40% slice of the
     /// matrix without changing the case name, so it cannot be seen in a verdict diff;
     /// it still picks a different driver path, which is the whole point of the flag.
     general_layout: bool,
+}
+
+impl ClearColorImageCase {
+    /// `getImageCreateFlags`
+    fn image_create_flags(&self) -> vk::ImageCreateFlags {
+        if self.create_2d_array_compatible {
+            vk::ImageCreateFlags::_2D_ARRAY_COMPATIBLE
+        } else {
+            vk::ImageCreateFlags::empty()
+        }
+    }
 }
 
 impl TestCase for ClearColorImageCase {
@@ -364,7 +376,7 @@ impl TestCase for ClearColorImageCase {
         // question than the test goes on to ask.
         let usage = get_image_usage_flags(self.image_format, get_is_attachment_format(context, self.image_format, self.image_tiling));
         let properties = unsafe {
-            instance.get_physical_device_image_format_properties(physical_device, self.image_format, self.image_type, self.image_tiling, usage, vk::ImageCreateFlags::empty())
+            instance.get_physical_device_image_format_properties(physical_device, self.image_format, self.image_type, self.image_tiling, usage, self.image_create_flags())
         }
         .map_err(|_| TestError::NotSupported("Format not supported".to_string()))?;
 
@@ -397,12 +409,7 @@ impl TestInstance for ClearColorImageInstance<'_> {
     fn iterate(&mut self) -> TestOutcome {
         let p = self.params;
 
-        // Multisampled images cannot be cleared with vkCmdClearColorImage and cannot be
-        // read back directly; upstream resolves them through an attachment path that is
-        // not ported. Refusing loudly beats reporting a pass for something never run.
-        if p.sample_count != vk::SampleCountFlags::_1 {
-            return Err(TestError::NotPorted("multisampled clear_color_image".to_string()));
-        }
+        let is_ms = p.sample_count != vk::SampleCountFlags::_1;
 
         let vk_device = self.context.get_device();
         let allocator = self.context.get_default_allocator();
@@ -415,7 +422,7 @@ impl TestInstance for ClearColorImageInstance<'_> {
         let image_info = vk::ImageCreateInfo {
             s_type: vk::StructureType::IMAGE_CREATE_INFO,
             next: std::ptr::null(),
-            flags: vk::ImageCreateFlags::empty(),
+            flags: p.image_create_flags(),
             image_type: p.image_type,
             format: p.image_format,
             extent: vk::Extent3D {
@@ -441,6 +448,24 @@ impl TestInstance for ClearColorImageInstance<'_> {
         } else {
             ImageWithMemory::new(vk_device, allocator, image_info, MemoryRequirement::ANY)?
         };
+
+        // `m_multisampleImage` - the image the clear under test actually lands on when
+        // the case is multisampled. It cannot be read back directly, so it is resolved
+        // into the single-sample image above, which is what gets copied out.
+        let multisample_image = if is_ms {
+            let ms_info = vk::ImageCreateInfo {
+                samples: p.sample_count,
+                ..image_info
+            };
+            Some(if p.allocation_kind == AllocationKind::Dedicated {
+                ImageWithMemory::new_dedicated(vk_device, allocator, ms_info, MemoryRequirement::ANY)?
+            } else {
+                ImageWithMemory::new(vk_device, allocator, ms_info, MemoryRequirement::ANY)?
+            })
+        } else {
+            None
+        };
+        let cleared_image = multisample_image.as_ref().map_or_else(|| image.get(), ImageWithMemory::get);
 
         // How many layers the clear actually covers, resolving REMAINING_ARRAY_LAYERS.
         let clear_base = p.clear_layer_range.base_array_layer;
@@ -473,49 +498,85 @@ impl TestInstance for ClearColorImageInstance<'_> {
         let cmd_pool = make_command_pool(vk_device, queue_family_index)?;
         let cmd_buffer = allocate_command_buffer(vk_device, *cmd_pool, vk::CommandBufferLevel::PRIMARY)?;
 
+        let barrier = |target: vk::Image, src_access, dst_access, old: vk::ImageLayout, new: vk::ImageLayout, src_stage, dst_stage| unsafe {
+            let b = make_image_memory_barrier(src_access, dst_access, old, new, target, full_range);
+            vk_device.cmd_pipeline_barrier(
+                *cmd_buffer,
+                src_stage,
+                dst_stage,
+                vk::DependencyFlags::empty(),
+                &[] as &[vk::MemoryBarrier],
+                &[] as &[vk::BufferMemoryBarrier],
+                &[b],
+            );
+        };
+
         begin_command_buffer(vk_device, *cmd_buffer)?;
         unsafe {
-            // UNDEFINED -> the clear layout for the whole image.
-            let to_dst = make_image_memory_barrier(
-                vk::AccessFlags::empty(),
-                vk::AccessFlags::TRANSFER_WRITE,
-                vk::ImageLayout::UNDEFINED,
-                used_layout,
-                image.get(),
-                full_range,
-            );
-            vk_device.cmd_pipeline_barrier(
-                *cmd_buffer,
-                vk::PipelineStageFlags::TOP_OF_PIPE,
-                vk::PipelineStageFlags::TRANSFER,
-                vk::DependencyFlags::empty(),
-                &[] as &[vk::MemoryBarrier],
-                &[] as &[vk::BufferMemoryBarrier],
-                &[to_dst],
-            );
-
-            // Initialise every layer to the init value, so a clear that touches layers
-            // outside its range is caught.
             let init = make_clear_color_value(p.image_format, [0.0; 4]).ok_or_else(|| TestError::NotSupported("format has no tcu mapping".to_string()))?;
-            vk_device.cmd_clear_color_image(*cmd_buffer, image.get(), used_layout, &init.to_vk(), &[full_range]);
 
-            let between = make_image_memory_barrier(
-                vk::AccessFlags::TRANSFER_WRITE,
-                vk::AccessFlags::TRANSFER_WRITE,
-                used_layout,
-                used_layout,
-                image.get(),
-                full_range,
-            );
-            vk_device.cmd_pipeline_barrier(
-                *cmd_buffer,
-                vk::PipelineStageFlags::TRANSFER,
-                vk::PipelineStageFlags::TRANSFER,
-                vk::DependencyFlags::empty(),
-                &[] as &[vk::MemoryBarrier],
-                &[] as &[vk::BufferMemoryBarrier],
-                &[between],
-            );
+            if is_ms {
+                barrier(
+                    cleared_image,
+                    vk::AccessFlags::empty(),
+                    vk::AccessFlags::TRANSFER_WRITE,
+                    vk::ImageLayout::UNDEFINED,
+                    used_layout,
+                    vk::PipelineStageFlags::TOP_OF_PIPE,
+                    vk::PipelineStageFlags::ALL_COMMANDS,
+                );
+
+                // `preClearMultisampleImage`. Upstream notes it would rather stage the
+                // init value through a buffer, as the single-sample path does, but
+                // vkCmdCopyBufferToImage does not accept a multisample image - so the
+                // very command under test is also the only way to prime it.
+                vk_device.cmd_clear_color_image(*cmd_buffer, cleared_image, used_layout, &init.to_vk(), &[full_range]);
+
+                barrier(
+                    cleared_image,
+                    vk::AccessFlags::TRANSFER_WRITE,
+                    vk::AccessFlags::TRANSFER_WRITE,
+                    used_layout,
+                    used_layout,
+                    vk::PipelineStageFlags::TRANSFER,
+                    vk::PipelineStageFlags::TRANSFER,
+                );
+
+                // This will prepare the single-sample image for the resolve call.
+                barrier(
+                    image.get(),
+                    vk::AccessFlags::empty(),
+                    vk::AccessFlags::TRANSFER_WRITE,
+                    vk::ImageLayout::UNDEFINED,
+                    used_layout,
+                    vk::PipelineStageFlags::TOP_OF_PIPE,
+                    vk::PipelineStageFlags::ALL_COMMANDS,
+                );
+            } else {
+                barrier(
+                    image.get(),
+                    vk::AccessFlags::empty(),
+                    vk::AccessFlags::TRANSFER_WRITE,
+                    vk::ImageLayout::UNDEFINED,
+                    used_layout,
+                    vk::PipelineStageFlags::TOP_OF_PIPE,
+                    vk::PipelineStageFlags::TRANSFER,
+                );
+
+                // Initialise every layer to the init value, so a clear that touches
+                // layers outside its range is caught.
+                vk_device.cmd_clear_color_image(*cmd_buffer, image.get(), used_layout, &init.to_vk(), &[full_range]);
+
+                barrier(
+                    image.get(),
+                    vk::AccessFlags::TRANSFER_WRITE,
+                    vk::AccessFlags::TRANSFER_WRITE,
+                    used_layout,
+                    used_layout,
+                    vk::PipelineStageFlags::TRANSFER,
+                    vk::PipelineStageFlags::TRANSFER,
+                );
+            }
 
             // The clear under test. `multiple_subresource_range` splits the same range
             // into two calls, which is what that variant exists to exercise.
@@ -523,27 +584,45 @@ impl TestInstance for ClearColorImageInstance<'_> {
                 let half = clear_count / 2;
                 let a = make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, clear_base, half);
                 let b = make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, clear_base + half, clear_count - half);
-                vk_device.cmd_clear_color_image(*cmd_buffer, image.get(), used_layout, &p.clear_color.to_vk(), &[a, b]);
+                vk_device.cmd_clear_color_image(*cmd_buffer, cleared_image, used_layout, &p.clear_color.to_vk(), &[a, b]);
             } else {
-                vk_device.cmd_clear_color_image(*cmd_buffer, image.get(), used_layout, &p.clear_color.to_vk(), &[clear_range]);
+                vk_device.cmd_clear_color_image(*cmd_buffer, cleared_image, used_layout, &p.clear_color.to_vk(), &[clear_range]);
             }
 
-            let to_src = make_image_memory_barrier(
+            if is_ms {
+                barrier(
+                    cleared_image,
+                    vk::AccessFlags::TRANSFER_WRITE,
+                    vk::AccessFlags::TRANSFER_READ,
+                    used_layout,
+                    vk::ImageLayout::GENERAL,
+                    vk::PipelineStageFlags::TRANSFER,
+                    vk::PipelineStageFlags::TRANSFER,
+                );
+
+                let resolve_layers = make_image_subresource_layers(vk::ImageAspectFlags::COLOR, 0, 0, p.image_layer_count);
+                let resolve_region = vk::ImageResolve {
+                    src_subresource: resolve_layers,
+                    src_offset: vk::Offset3D { x: 0, y: 0, z: 0 },
+                    dst_subresource: resolve_layers,
+                    dst_offset: vk::Offset3D { x: 0, y: 0, z: 0 },
+                    extent: vk::Extent3D {
+                        width: p.image_extent[0],
+                        height: p.image_extent[1],
+                        depth: p.image_extent[2],
+                    },
+                };
+                vk_device.cmd_resolve_image(*cmd_buffer, cleared_image, vk::ImageLayout::GENERAL, image.get(), used_layout, &[resolve_region]);
+            }
+
+            barrier(
+                image.get(),
                 vk::AccessFlags::TRANSFER_WRITE,
                 vk::AccessFlags::TRANSFER_READ,
                 used_layout,
                 vk::ImageLayout::TRANSFER_SRC_OPTIMAL,
-                image.get(),
-                full_range,
-            );
-            vk_device.cmd_pipeline_barrier(
-                *cmd_buffer,
                 vk::PipelineStageFlags::TRANSFER,
                 vk::PipelineStageFlags::TRANSFER,
-                vk::DependencyFlags::empty(),
-                &[] as &[vk::MemoryBarrier],
-                &[] as &[vk::BufferMemoryBarrier],
-                &[to_src],
             );
 
             let layers = make_image_subresource_layers(vk::ImageAspectFlags::COLOR, 0, 0, p.image_layer_count);
@@ -1063,6 +1142,7 @@ pub struct ClearAttachmentCase {
     separate_depth_stencil_layout_mode: SeparateDepthStencilLayoutMode,
     general_layout: bool,
     clear_type: ClearType,
+    sample_count: vk::SampleCountFlags,
 }
 
 impl ClearAttachmentCase {
@@ -1146,6 +1226,10 @@ impl TestCase for ClearAttachmentCase {
             return Err(TestError::NotSupported("Device does not support enough image array layers".to_string()));
         }
 
+        if !properties.sample_counts.contains(self.sample_count) {
+            return Err(TestError::NotSupported("Device does not support sample count under test".to_string()));
+        }
+
         if properties.max_extent.depth <= 1 && is_attachment_format {
             context.require_device_functionality("VK_KHR_create_renderpass2")?;
         }
@@ -1173,7 +1257,13 @@ struct ClearAttachmentInstance<'a> {
 
 /// `ImageClearingTestInstance::createRenderPass`, restricted to the single-sample
 /// attachment the ported cases use.
-fn create_render_pass<'a>(device: &'a Device, format: vk::Format, general_layout: bool, mode: SeparateDepthStencilLayoutMode) -> Result<Unique<'a, vk::RenderPass>, TestError> {
+fn create_render_pass<'a>(
+    device: &'a Device,
+    format: vk::Format,
+    general_layout: bool,
+    mode: SeparateDepthStencilLayoutMode,
+    sample_count: vk::SampleCountFlags,
+) -> Result<Unique<'a, vk::RenderPass>, TestError> {
     if mode == SeparateDepthStencilLayoutMode::None {
         let image_layout = if general_layout {
             vk::ImageLayout::GENERAL
@@ -1185,7 +1275,7 @@ fn create_render_pass<'a>(device: &'a Device, format: vk::Format, general_layout
 
         let attachment_desc = vk::AttachmentDescription::builder()
             .format(format)
-            .samples(vk::SampleCountFlags::_1)
+            .samples(sample_count)
             .load_op(vk::AttachmentLoadOp::CLEAR)
             .store_op(vk::AttachmentStoreOp::STORE)
             .stencil_load_op(vk::AttachmentLoadOp::CLEAR)
@@ -1193,19 +1283,35 @@ fn create_render_pass<'a>(device: &'a Device, format: vk::Format, general_layout
             .initial_layout(image_layout)
             .final_layout(image_layout);
 
-        let attachment_ref = vk::AttachmentReference::builder().attachment(0).layout(image_layout);
+        // `attachmentResolveDesc` - referenced only when the case is multisampled.
+        let attachment_resolve_desc = vk::AttachmentDescription::builder()
+            .format(format)
+            .samples(vk::SampleCountFlags::_1)
+            .load_op(vk::AttachmentLoadOp::DONT_CARE)
+            .store_op(vk::AttachmentStoreOp::STORE)
+            .stencil_load_op(vk::AttachmentLoadOp::DONT_CARE)
+            .stencil_store_op(vk::AttachmentStoreOp::DONT_CARE)
+            .initial_layout(image_layout)
+            .final_layout(image_layout);
 
-        let attachments = [attachment_desc];
-        let color_refs = [attachment_ref];
+        let is_ms = sample_count != vk::SampleCountFlags::_1;
+        let attachments: Vec<vk::AttachmentDescription> = if is_ms {
+            vec![attachment_desc.build(), attachment_resolve_desc.build()]
+        } else {
+            vec![attachment_desc.build()]
+        };
+        let color_refs = [vk::AttachmentReference::builder().attachment(0).layout(image_layout).build()];
+        let resolve_refs = [vk::AttachmentReference::builder().attachment(1).layout(image_layout).build()];
 
         let subpass = if is_depth_stencil_format(format) {
             vk::SubpassDescription::builder()
                 .pipeline_bind_point(vk::PipelineBindPoint::GRAPHICS)
                 .depth_stencil_attachment(&color_refs[0])
         } else {
-            vk::SubpassDescription::builder()
+            let builder = vk::SubpassDescription::builder()
                 .pipeline_bind_point(vk::PipelineBindPoint::GRAPHICS)
-                .color_attachments(&color_refs)
+                .color_attachments(&color_refs);
+            if is_ms { builder.resolve_attachments(&resolve_refs) } else { builder }
         };
         let subpasses = [subpass];
 
@@ -1338,11 +1444,39 @@ impl TestInstance for ClearAttachmentInstance<'_> {
         let view_range = make_image_subresource_range(p.full_aspect_mask(), 0, 1, p.image_view_layer_range.base_array_layer, p.image_view_layer_range.layer_count);
         let image_view = make_image_view(vk_device, image.get(), p.image_view_type(), p.image_format, view_range)?;
 
-        let render_pass = create_render_pass(vk_device, p.image_format, p.general_layout, p.separate_depth_stencil_layout_mode)?;
+        // `m_multisampleImage` - the attachment the subpass renders to; the
+        // single-sample image above becomes its resolve target and is what gets read
+        // back, so verification is unchanged.
+        let is_ms = p.sample_count != vk::SampleCountFlags::_1;
+        let multisample_image = if is_ms {
+            let ms_info = vk::ImageCreateInfo {
+                samples: p.sample_count,
+                ..image_info
+            };
+            Some(if p.allocation_kind == AllocationKind::Dedicated {
+                ImageWithMemory::new_dedicated(vk_device, allocator, ms_info, MemoryRequirement::ANY)?
+            } else {
+                ImageWithMemory::new(vk_device, allocator, ms_info, MemoryRequirement::ANY)?
+            })
+        } else {
+            None
+        };
+        let multisample_view = match &multisample_image {
+            Some(ms) => Some(make_image_view(vk_device, ms.get(), p.image_view_type(), p.image_format, view_range)?),
+            None => None,
+        };
+
+        let render_pass = create_render_pass(vk_device, p.image_format, p.general_layout, p.separate_depth_stencil_layout_mode, p.sample_count)?;
+        // Attachment 0 is the one the subpass renders to, so the multisample view goes
+        // first and the single-sample view is the resolve attachment behind it.
+        let attachment_views: Vec<vk::ImageView> = match &multisample_view {
+            Some(ms_view) => vec![ms_view.get(), image_view.get()],
+            None => vec![image_view.get()],
+        };
         let framebuffer = make_framebuffer(
             vk_device,
             render_pass.get(),
-            &[image_view.get()],
+            &attachment_views,
             p.image_extent[0],
             p.image_extent[1],
             p.image_view_layer_range.layer_count,
@@ -1436,6 +1570,28 @@ impl TestInstance for ClearAttachmentInstance<'_> {
                 &[] as &[vk::BufferMemoryBarrier],
                 &[to_attachment],
             );
+
+            // `pipelineMultisampleImageBarrier` - the same transition for the attachment
+            // the subpass actually renders to.
+            if let Some(ms) = &multisample_image {
+                let ms_barrier = make_image_memory_barrier(
+                    vk::AccessFlags::empty(),
+                    access_mask,
+                    vk::ImageLayout::UNDEFINED,
+                    attachment_layout,
+                    ms.get(),
+                    barrier_range,
+                );
+                vk_device.cmd_pipeline_barrier(
+                    *cmd_buffer,
+                    vk::PipelineStageFlags::TOP_OF_PIPE,
+                    vk::PipelineStageFlags::ALL_COMMANDS,
+                    vk::DependencyFlags::empty(),
+                    &[] as &[vk::MemoryBarrier],
+                    &[] as &[vk::BufferMemoryBarrier],
+                    &[ms_barrier],
+                );
+            }
 
             begin_render_pass(
                 vk_device,
@@ -1661,6 +1817,10 @@ fn add_clear_color_image_tests(group: &mut tcu::TestCaseGroup, allocation_kind: 
 
                             let test_case_name = format!("{format_name}{dimensions_string}{}", color_params.test_name_suffix);
 
+                            // Randomly set VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT for some of the tests
+                            let create_2d_array_compatible = image_type == vk::ImageType::_3D
+                                && (image_type_index + image_tiling_index + image_layer_params_index + image_dimensions_index + image_format_index + clear_color_index) % 7 > 3;
+
                             // Some cases will use the general layout.
                             let general_layout = image_type == vk::ImageType::_2D
                                 && (image_type_index + image_tiling_index + image_layer_params_index + image_dimensions_index + image_format_index + clear_color_index) % 5 > 2;
@@ -1679,6 +1839,7 @@ fn add_clear_color_image_tests(group: &mut tcu::TestCaseGroup, allocation_kind: 
                                     allocation_kind,
                                     sample_count,
                                     multiple_subresource_range,
+                                    create_2d_array_compatible,
                                     general_layout,
                                 }) as Box<dyn TestCase>
                             };
@@ -1698,13 +1859,37 @@ fn add_clear_color_image_tests(group: &mut tcu::TestCaseGroup, allocation_kind: 
                                 layers_group.add_child(make(format!("{test_case_name}_multiple_subresourcerange"), true, vk::SampleCountFlags::_1));
                             }
 
-                            // The `_sample_count_N` variants are not registered. A
-                            // multisampled image cannot be cleared with
-                            // vkCmdClearColorImage; upstream clears it through a render
-                            // pass and resolves, which needs a framework layer that is
-                            // not ported. Leaving them out means a comparison against
-                            // deqp-vk reports them as missing, rather than this port
-                            // reporting a verdict for something it never ran.
+                            // Upstream's sample-count loop is commented out; only
+                            // VK_SAMPLE_COUNT_4_BIT is registered, and only here.
+                            // The 64-bit formats take upstream's `else` branch, which
+                            // registers the base case alone.
+                            if !is_64_format(tcu_format) && image_type == vk::ImageType::_2D && tiling == vk::ImageTiling::OPTIMAL && dimensions[0] == 256 {
+                                let sample_count = vk::SampleCountFlags::_4;
+
+                                // Decrease the number of layers to make these tests faster.
+                                const MAX_LAYERS: u32 = 8;
+                                let cap = |value: u32, max: u32| if value != REMAINING_ARRAY_LAYERS { value.min(max) } else { value };
+
+                                layers_group.add_child(Box::new(ClearColorImageCase {
+                                    name: format!("{test_case_name}_{}", sample_count_name(sample_count)),
+                                    image_type,
+                                    image_format: format,
+                                    image_tiling: tiling,
+                                    image_extent: dimensions,
+                                    image_layer_count: cap(layer_params.image_layer_count, MAX_LAYERS),
+                                    clear_layer_range: LayerRange {
+                                        base_array_layer: cap(layer_params.clear_layer_range.base_array_layer, MAX_LAYERS - 1),
+                                        layer_count: cap(layer_params.clear_layer_range.layer_count, MAX_LAYERS),
+                                    },
+                                    clear_color,
+                                    expected_color,
+                                    allocation_kind,
+                                    sample_count,
+                                    multiple_subresource_range: false,
+                                    create_2d_array_compatible: false,
+                                    general_layout,
+                                }) as Box<dyn TestCase>);
+                            }
                         }
                     }
                 }
@@ -1716,10 +1901,25 @@ fn add_clear_color_image_tests(group: &mut tcu::TestCaseGroup, allocation_kind: 
     }
 }
 
+/// `sampleCountsToTest`
+static SAMPLE_COUNTS_TO_TEST: [vk::SampleCountFlags; 6] = [
+    vk::SampleCountFlags::_2,
+    vk::SampleCountFlags::_4,
+    vk::SampleCountFlags::_8,
+    vk::SampleCountFlags::_16,
+    vk::SampleCountFlags::_32,
+    vk::SampleCountFlags::_64,
+];
+
 /// `numOfAttachmentLayerParamsToTest` - the attachment groups drop the two
 /// `remaining_array_layers` entries, so `VK_REMAINING_ARRAY_LAYERS` never reaches the
 /// layer arithmetic here.
 const NUM_OF_ATTACHMENT_LAYER_PARAMS_TO_TEST: usize = IMAGE_LAYER_PARAMS_TO_TEST.len() - 2;
+
+/// `getSampleCountName`
+fn sample_count_name(count: vk::SampleCountFlags) -> String {
+    format!("sample_count_{}", count.bits())
+}
 
 /// `is64Format`
 fn is_64_format(tcu_format: tcu::TextureFormat) -> bool {
@@ -1783,9 +1983,10 @@ fn add_clear_attachment_tests(
                     let test_case_name = format!("{format_name}{dimensions_string}{}", color_params.test_name_suffix);
                     let general_layout = (image_format_index + image_dimensions_index + clear_color_index) % 5 > 2;
 
-                    let make = |name: String, clear_type: ClearType| {
+                    let make = |name: String, clear_type: ClearType, sample_count: vk::SampleCountFlags| {
                         Box::new(ClearAttachmentCase {
                             name,
+                            sample_count,
                             image_format: format,
                             image_extent: dimensions,
                             image_layer_count: layer_params.image_layer_count,
@@ -1802,14 +2003,17 @@ fn add_clear_attachment_tests(
                         }) as Box<dyn TestCase>
                     };
 
-                    color_layers_group.add_child(make(test_case_name.clone(), ClearType::FullClear));
+                    color_layers_group.add_child(make(test_case_name.clone(), ClearType::FullClear, vk::SampleCountFlags::_1));
                     if dimensions[0] > 1 {
-                        partial_color_layers_group.add_child(make(test_case_name, ClearType::PartialClear));
+                        partial_color_layers_group.add_child(make(test_case_name.clone(), ClearType::PartialClear, vk::SampleCountFlags::_1));
                     }
 
-                    // The multisampled colour attachment variants are not registered,
-                    // for the same reason as the multisampled image clears: they need a
-                    // resolve attachment this port does not build.
+                    // Clear Multisample Color Attachment. No partial twin upstream.
+                    if !layer_params.is_cube && layer_params.clear_layer_range.layer_count != REMAINING_ARRAY_LAYERS && dimensions[0] > dimensions[1] {
+                        for sample_count in SAMPLE_COUNTS_TO_TEST {
+                            color_layers_group.add_child(make(format!("{test_case_name}_{}", sample_count_name(sample_count)), ClearType::FullClear, sample_count));
+                        }
+                    }
                 }
             }
         }
@@ -1855,9 +2059,10 @@ fn add_clear_attachment_tests(
                     };
                     let test_case_name = format!("{format_name}{suffix}{dimensions_string}");
 
-                    let make = |name: String, clear_type: ClearType| {
+                    let make = |name: String, clear_type: ClearType, sample_count: vk::SampleCountFlags| {
                         Box::new(ClearAttachmentCase {
                             name,
+                            sample_count,
                             image_format: format,
                             image_extent: dimensions,
                             image_layer_count: layer_params.image_layer_count,
@@ -1880,9 +2085,9 @@ fn add_clear_attachment_tests(
                         }) as Box<dyn TestCase>
                     };
 
-                    ds_layers_group.add_child(make(test_case_name.clone(), ClearType::FullClear));
+                    ds_layers_group.add_child(make(test_case_name.clone(), ClearType::FullClear, vk::SampleCountFlags::_1));
                     if dimensions[0] > 1 {
-                        partial_ds_layers_group.add_child(make(test_case_name, ClearType::PartialClear));
+                        partial_ds_layers_group.add_child(make(test_case_name, ClearType::PartialClear, vk::SampleCountFlags::_1));
                     }
                 }
             }
