@@ -146,6 +146,49 @@ impl SimpleAllocator {
         })
     }
 
+    /// `SimpleAllocator::allocate` with a `VkMemoryDedicatedAllocateInfo` chained in.
+    ///
+    /// This is what the `dedicated_allocation` variants of the copy tests are about:
+    /// the same allocation, but the driver is told up front that it backs exactly one
+    /// buffer. Going through the plain path would silently test the suballocated case
+    /// twice.
+    pub fn allocate_dedicated_buffer<'a>(
+        &self,
+        device: &'a Device,
+        req: vk::MemoryRequirements,
+        requirement: MemoryRequirement,
+        buffer: vk::Buffer,
+    ) -> Result<Allocation<'a>, TestError> {
+        let memory_type_index = self.select_matching_memory_type(req.memory_type_bits, requirement)?;
+
+        let mut dedicated = vk::MemoryDedicatedAllocateInfo::builder().buffer(buffer);
+        let info = vk::MemoryAllocateInfo::builder()
+            .allocation_size(req.size)
+            .memory_type_index(memory_type_index)
+            .push_next(&mut dedicated);
+
+        let memory = unsafe { device.allocate_memory(&info, None) }.vk_check("vkAllocateMemory")?;
+
+        let host_ptr = if requirement.contains(MemoryRequirement::HOST_VISIBLE) {
+            match unsafe { device.map_memory(memory, 0, vk::WHOLE_SIZE, vk::MemoryMapFlags::empty()) } {
+                Ok(p) => p.cast::<u8>(),
+                Err(e) => {
+                    unsafe { device.free_memory(memory, None) };
+                    return Err(TestError::ResourceError(format!("vkMapMemory failed: {e}")));
+                }
+            }
+        } else {
+            std::ptr::null_mut()
+        };
+
+        Ok(Allocation {
+            device,
+            memory,
+            offset: 0,
+            host_ptr,
+        })
+    }
+
     /// `vk::selectMatchingMemoryType`
     fn select_matching_memory_type(&self, allowed_mem_type_bits: u32, requirement: MemoryRequirement) -> Result<u32, TestError> {
         let compatible_mem_types = allowed_mem_type_bits & ((1u32 << self.memory_properties.memory_type_count).wrapping_sub(1));

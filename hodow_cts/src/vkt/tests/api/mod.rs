@@ -12,6 +12,7 @@
 // None of the ported groups here uses a shader, so every case hands back an empty
 // `BinaryCollection` and nothing in this subtree has a manifest entry.
 
+pub mod copies_buffer_tests;
 pub mod feature_info_tests;
 pub mod object_tests;
 
@@ -25,6 +26,8 @@ use crate::tcu::TestCaseGroup;
 /// instead of as passing.
 pub fn create_tests() -> TestCaseGroup {
     let mut api_tests = TestCaseGroup::new("api");
+
+    api_tests.add_child(copies_buffer_tests::create_buffer_copy_tests());
 
     for group in object_tests::create_object_groups() {
         api_tests.add_child(group);

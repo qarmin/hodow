@@ -17,6 +17,13 @@ external/vulkancts/modules/vulkan/compute/vktComputeIndirectComputeDispatchTests
 external/vulkancts/modules/vulkan/compute/vktComputeWorkgroupMemoryExplicitLayoutTests.cpp
 external/vulkancts/modules/vulkan/compute/vktComputeShaderBuiltinVarTests.cpp
 external/vulkancts/modules/vulkan/api/vktApiSmokeTests.cpp
+external/vulkancts/modules/vulkan/api/vktApiCopyBufferToBufferTests.cpp
+external/vulkancts/modules/vulkan/api/vktApiCopiesAndBlittingTests.cpp
+external/vulkancts/modules/vulkan/api/vktApiCopiesAndBlittingUtil.cpp
+external/vulkancts/modules/vulkan/api/vktApiCopiesAndBlittingUtil.hpp
+external/vulkancts/modules/vulkan/api/vktApiFeatureInfo.cpp
+external/vulkancts/modules/vulkan/memory/vktMemoryMappingTests.cpp
+framework/common/tcuTextureUtil.cpp
 
 # --- vulkan framework (vk::) -------------------------------------------------------
 external/vulkancts/framework/vulkan/vkBuilderUtil.cpp
