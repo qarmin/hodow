@@ -81,7 +81,7 @@ fn is_combined_depth_stencil_type(type_: ChannelType) -> bool {
 }
 
 /// `tcu::getChannelBitDepth` - the full 48-type table, extracted from upstream.
-fn get_channel_bit_depth(type_: ChannelType) -> [i32; 4] {
+pub fn get_channel_bit_depth(type_: ChannelType) -> [i32; 4] {
     use ChannelType::*;
     match type_ {
         SNORM_INT8 => [8, 8, 8, 8],
@@ -161,17 +161,17 @@ fn swizzle_bit_depth(chn_bits: [i32; 4], order: ChannelOrder) -> [i32; 4] {
 }
 
 /// `tcu::getTextureFormatBitDepth`
-fn get_texture_format_bit_depth(format: TextureFormat) -> [i32; 4] {
+pub fn get_texture_format_bit_depth(format: TextureFormat) -> [i32; 4] {
     swizzle_bit_depth(get_channel_bit_depth(format.type_), format.order)
 }
 
 /// `tcu::getTextureFormatMantissaBitDepth`
-fn get_texture_format_mantissa_bit_depth(format: TextureFormat) -> [i32; 4] {
+pub fn get_texture_format_mantissa_bit_depth(format: TextureFormat) -> [i32; 4] {
     swizzle_bit_depth(get_channel_mantissa_bit_depth(format.type_), format.order)
 }
 
 /// `tcu::getTextureFormatChannelMask`
-fn get_texture_format_channel_mask(format: TextureFormat) -> [bool; 4] {
+pub fn get_texture_format_channel_mask(format: TextureFormat) -> [bool; 4] {
     let map = get_channel_read_swizzle(format.order);
     [map[0].index().is_some(), map[1].index().is_some(), map[2].index().is_some(), map[3].index().is_some()]
 }
@@ -190,12 +190,12 @@ fn linear_channel_to_srgb(cl: f32) -> f32 {
 }
 
 /// `tcu::linearToSRGB`
-fn linear_to_srgb(cl: [f32; 4]) -> [f32; 4] {
+pub fn linear_to_srgb(cl: [f32; 4]) -> [f32; 4] {
     [linear_channel_to_srgb(cl[0]), linear_channel_to_srgb(cl[1]), linear_channel_to_srgb(cl[2]), cl[3]]
 }
 
 /// `tcu::getFormatMaxUintValue`
-fn get_format_max_uint_value(format: TextureFormat) -> [u32; 4] {
+pub fn get_format_max_uint_value(format: TextureFormat) -> [u32; 4] {
     use ChannelOrder::{BGRA, RGBA};
     use ChannelType::*;
     if matches!(format.order, RGBA | BGRA) && matches!(format.type_, UNSIGNED_INT_1010102_REV | USCALED_INT_1010102_REV) {
@@ -210,7 +210,7 @@ fn get_format_max_uint_value(format: TextureFormat) -> [u32; 4] {
 }
 
 /// `tcu::getFormatMaxIntValue`
-fn get_format_max_int_value(format: TextureFormat) -> [i32; 4] {
+pub fn get_format_max_int_value(format: TextureFormat) -> [i32; 4] {
     use ChannelOrder::{BGRA, RGBA};
     use ChannelType::*;
     if matches!(format.order, RGBA | BGRA) && matches!(format.type_, SIGNED_INT_1010102_REV | SSCALED_INT_1010102_REV) {
@@ -225,12 +225,12 @@ fn get_format_max_int_value(format: TextureFormat) -> [i32; 4] {
 }
 
 /// `tcu::hasDepthComponent`
-fn has_depth_component(order: ChannelOrder) -> bool {
+pub fn has_depth_component(order: ChannelOrder) -> bool {
     matches!(order, ChannelOrder::D | ChannelOrder::DS)
 }
 
 /// `tcu::hasStencilComponent`
-fn has_stencil_component(order: ChannelOrder) -> bool {
+pub fn has_stencil_component(order: ChannelOrder) -> bool {
     matches!(order, ChannelOrder::S | ChannelOrder::DS)
 }
 
@@ -410,19 +410,26 @@ fn channel_to_int64(value: &[u8], type_: ChannelType) -> i64 {
 
 /// `tcu::ConstPixelBufferAccess`, narrowed to the tightly-packed, non-YCbCr case that
 /// `readImage` produces (so the pitch is derived rather than carried).
-struct ConstPixelBufferAccess<'a> {
+pub struct ConstPixelBufferAccess<'a> {
     format: TextureFormat,
     size: [u32; 3],
     data: &'a [u8],
 }
 
+impl<'a> ConstPixelBufferAccess<'a> {
+    /// Wraps tightly-packed texel data of `size` in `format`.
+    pub fn new(format: TextureFormat, size: [u32; 3], data: &'a [u8]) -> Self {
+        Self { format, size, data }
+    }
+}
+
 impl ConstPixelBufferAccess<'_> {
-    fn get_format(&self) -> TextureFormat {
+    pub fn get_format(&self) -> TextureFormat {
         self.format
     }
 
     /// `ConstPixelBufferAccess::getPixelPtr`
-    fn pixel(&self, x: u32, y: u32, z: u32) -> &[u8] {
+    pub fn pixel(&self, x: u32, y: u32, z: u32) -> &[u8] {
         let pixel_size = pixel_size_of(self.format);
         let row_pitch = pixel_size * self.size[0] as usize;
         let slice_pitch = row_pitch * self.size[1] as usize;
@@ -431,7 +438,7 @@ impl ConstPixelBufferAccess<'_> {
     }
 
     /// `ConstPixelBufferAccess::getPixel`
-    fn get_pixel(&self, x: u32, y: u32, z: u32) -> [f32; 4] {
+    pub fn get_pixel(&self, x: u32, y: u32, z: u32) -> [f32; 4] {
         use ChannelType::*;
         let p = self.pixel(x, y, z);
 
@@ -498,7 +505,7 @@ impl ConstPixelBufferAccess<'_> {
     }
 
     /// `ConstPixelBufferAccess::getPixelInt64`
-    fn get_pixel_int64(&self, x: u32, y: u32, z: u32) -> [i64; 4] {
+    pub fn get_pixel_int64(&self, x: u32, y: u32, z: u32) -> [i64; 4] {
         use ChannelType::*;
         let p = self.pixel(x, y, z);
 
@@ -539,13 +546,13 @@ impl ConstPixelBufferAccess<'_> {
     }
 
     /// `ConstPixelBufferAccess::getPixelUint64`
-    fn get_pixel_uint64(&self, x: u32, y: u32, z: u32) -> [u64; 4] {
+    pub fn get_pixel_uint64(&self, x: u32, y: u32, z: u32) -> [u64; 4] {
         let v = self.get_pixel_int64(x, y, z);
         [v[0] as u64, v[1] as u64, v[2] as u64, v[3] as u64]
     }
 
     /// `ConstPixelBufferAccess::getPixDepth`
-    fn get_pix_depth(&self, x: u32, y: u32, z: u32) -> f32 {
+    pub fn get_pix_depth(&self, x: u32, y: u32, z: u32) -> f32 {
         use ChannelType::*;
         let p = self.pixel(x, y, z);
         match self.format.type_ {
@@ -557,7 +564,7 @@ impl ConstPixelBufferAccess<'_> {
     }
 
     /// `ConstPixelBufferAccess::getPixStencil`
-    fn get_pix_stencil(&self, x: u32, y: u32, z: u32) -> u32 {
+    pub fn get_pix_stencil(&self, x: u32, y: u32, z: u32) -> u32 {
         use ChannelType::*;
         let p = self.pixel(x, y, z);
         match self.format.type_ {

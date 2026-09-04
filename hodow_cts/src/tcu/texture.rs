@@ -192,43 +192,55 @@ impl ChannelType {
     pub fn channel_class(self) -> TextureChannelClass {
         use ChannelType::*;
         match self {
-            SNORM_INT8 | SNORM_INT16 | SNORM_INT32 | SNORM_INT_1010102_REV | SSCALED_INT8 | SSCALED_INT16 | SSCALED_INT_1010102_REV => TextureChannelClass::SignedFixedPoint,
-
-            UNORM_INT8
-            | UNORM_INT16
-            | UNORM_INT24
-            | UNORM_INT32
-            | UNORM_BYTE_44
-            | UNORM_SHORT_565
-            | UNORM_SHORT_555
-            | UNORM_SHORT_4444
-            | UNORM_SHORT_5551
-            | UNORM_SHORT_1555
-            | UNORM_INT_101010
-            | UNORM_INT_1010102_REV
-            | UNORM_SHORT_10
-            | UNORM_SHORT_12
-            | USCALED_INT8
-            | USCALED_INT16
-            | USCALED_INT_1010102_REV
-            | UNSIGNED_INT_16_8_8
-            | UNSIGNED_INT_24_8
-            | UNSIGNED_INT_24_8_REV => TextureChannelClass::UnsignedFixedPoint,
-
-            SIGNED_INT8 | SIGNED_INT16 | SIGNED_INT32 | SIGNED_INT64 | SIGNED_INT_1010102_REV => TextureChannelClass::SignedInteger,
-
-            UNSIGNED_BYTE_44
-            | UNSIGNED_SHORT_565
-            | UNSIGNED_SHORT_4444
-            | UNSIGNED_SHORT_5551
-            | UNSIGNED_INT8
-            | UNSIGNED_INT16
-            | UNSIGNED_INT24
-            | UNSIGNED_INT32
-            | UNSIGNED_INT64
-            | UNSIGNED_INT_1010102_REV => TextureChannelClass::UnsignedInteger,
-
-            HALF_FLOAT | FLOAT | FLOAT64 | UNSIGNED_INT_11F_11F_10F_REV | UNSIGNED_INT_999_E5_REV | FLOAT_UNSIGNED_INT_24_8_REV => TextureChannelClass::FloatingPoint,
+            // @generated:channel_class
+            SNORM_INT8 => TextureChannelClass::SignedFixedPoint,
+            SNORM_INT16 => TextureChannelClass::SignedFixedPoint,
+            SNORM_INT32 => TextureChannelClass::SignedFixedPoint,
+            UNORM_INT8 => TextureChannelClass::UnsignedFixedPoint,
+            UNORM_INT16 => TextureChannelClass::UnsignedFixedPoint,
+            UNORM_INT24 => TextureChannelClass::UnsignedFixedPoint,
+            UNORM_INT32 => TextureChannelClass::UnsignedFixedPoint,
+            UNORM_BYTE_44 => TextureChannelClass::UnsignedFixedPoint,
+            UNORM_SHORT_565 => TextureChannelClass::UnsignedFixedPoint,
+            UNORM_SHORT_555 => TextureChannelClass::UnsignedFixedPoint,
+            UNORM_SHORT_4444 => TextureChannelClass::UnsignedFixedPoint,
+            UNORM_SHORT_5551 => TextureChannelClass::UnsignedFixedPoint,
+            UNORM_SHORT_1555 => TextureChannelClass::UnsignedFixedPoint,
+            UNORM_INT_101010 => TextureChannelClass::UnsignedFixedPoint,
+            SNORM_INT_1010102_REV => TextureChannelClass::SignedFixedPoint,
+            UNORM_INT_1010102_REV => TextureChannelClass::UnsignedFixedPoint,
+            UNSIGNED_BYTE_44 => TextureChannelClass::UnsignedInteger,
+            UNSIGNED_SHORT_565 => TextureChannelClass::UnsignedInteger,
+            UNSIGNED_SHORT_4444 => TextureChannelClass::UnsignedInteger,
+            UNSIGNED_SHORT_5551 => TextureChannelClass::UnsignedInteger,
+            SIGNED_INT_1010102_REV => TextureChannelClass::SignedInteger,
+            UNSIGNED_INT_1010102_REV => TextureChannelClass::UnsignedInteger,
+            UNSIGNED_INT_11F_11F_10F_REV => TextureChannelClass::FloatingPoint,
+            UNSIGNED_INT_999_E5_REV => TextureChannelClass::FloatingPoint,
+            UNSIGNED_INT_16_8_8 => TextureChannelClass::Last,
+            UNSIGNED_INT_24_8 => TextureChannelClass::Last,
+            UNSIGNED_INT_24_8_REV => TextureChannelClass::Last,
+            SIGNED_INT8 => TextureChannelClass::SignedInteger,
+            SIGNED_INT16 => TextureChannelClass::SignedInteger,
+            SIGNED_INT32 => TextureChannelClass::SignedInteger,
+            SIGNED_INT64 => TextureChannelClass::SignedInteger,
+            UNSIGNED_INT8 => TextureChannelClass::UnsignedInteger,
+            UNSIGNED_INT16 => TextureChannelClass::UnsignedInteger,
+            UNSIGNED_INT24 => TextureChannelClass::UnsignedInteger,
+            UNSIGNED_INT32 => TextureChannelClass::UnsignedInteger,
+            UNSIGNED_INT64 => TextureChannelClass::UnsignedInteger,
+            HALF_FLOAT => TextureChannelClass::FloatingPoint,
+            FLOAT => TextureChannelClass::FloatingPoint,
+            FLOAT64 => TextureChannelClass::FloatingPoint,
+            FLOAT_UNSIGNED_INT_24_8_REV => TextureChannelClass::Last,
+            UNORM_SHORT_10 => TextureChannelClass::UnsignedFixedPoint,
+            UNORM_SHORT_12 => TextureChannelClass::UnsignedFixedPoint,
+            USCALED_INT8 => TextureChannelClass::UnsignedInteger,
+            USCALED_INT16 => TextureChannelClass::UnsignedInteger,
+            SSCALED_INT8 => TextureChannelClass::SignedInteger,
+            SSCALED_INT16 => TextureChannelClass::SignedInteger,
+            USCALED_INT_1010102_REV => TextureChannelClass::UnsignedInteger,
+            SSCALED_INT_1010102_REV => TextureChannelClass::SignedInteger,
         }
     }
 }
@@ -241,6 +253,10 @@ pub enum TextureChannelClass {
     SignedInteger,
     UnsignedInteger,
     FloatingPoint,
+    /// `TEXTURECHANNELCLASS_LAST` - upstream's sentinel. The combined depth/stencil
+    /// types return it because their two aspects have different classes, and the clear
+    /// colour table uses it to mean "no channel-class filter".
+    Last,
 }
 
 /// `tcu::TextureFormat`

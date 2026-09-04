@@ -14,6 +14,8 @@
 
 pub mod copies_buffer_tests;
 pub mod feature_info_tests;
+pub mod image_clearing_formats;
+pub mod image_clearing_tests;
 pub mod object_tests;
 
 use crate::tcu::TestCaseGroup;
@@ -28,6 +30,7 @@ pub fn create_tests() -> TestCaseGroup {
     let mut api_tests = TestCaseGroup::new("api");
 
     api_tests.add_child(copies_buffer_tests::create_buffer_copy_tests());
+    api_tests.add_child(image_clearing_tests::create_image_clearing_tests());
 
     for group in object_tests::create_object_groups() {
         api_tests.add_child(group);
