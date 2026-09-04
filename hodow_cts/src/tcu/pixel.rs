@@ -1078,23 +1078,81 @@ fn linear_interpolate(t: f32, min_val: f32, max_val: f32) -> f32 {
     min_val + (max_val - min_val) * t
 }
 
-/// `tcu::fillWithComponentGradients2` - the `GRADIENT_STYLE_NEW` fill, dispatched on
-/// dimensionality exactly as `fillWithComponentGradientsStyled` does.
+/// `tcu::GradientStyle`
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum GradientStyle {
+    New,
+    Pyramid,
+}
+
+/// `tcu::fillWithComponentGradients2`
 pub fn fill_with_component_gradients2(access: &mut PixelBufferAccess<'_>, min_val: [f32; 4], max_val: [f32; 4]) {
+    fill_with_component_gradients_styled(access, min_val, max_val, GradientStyle::New);
+}
+
+/// `tcu::fillWithComponentGradients3`
+pub fn fill_with_component_gradients3(access: &mut PixelBufferAccess<'_>, min_val: [f32; 4], max_val: [f32; 4]) {
+    fill_with_component_gradients_styled(access, min_val, max_val, GradientStyle::Pyramid);
+}
+
+/// `tcu::fillWithComponentGradientsStyled`, dispatched on dimensionality exactly as
+/// upstream does. Only the 2D fill actually reads the style: the 1D one ignores it, and
+/// the 3D one treats anything that is not `New` as the old per-axis ramp.
+pub fn fill_with_component_gradients_styled(access: &mut PixelBufferAccess<'_>, min_val: [f32; 4], max_val: [f32; 4], style: GradientStyle) {
     let [width, height, depth] = access.size();
 
     if height == 1 && depth == 1 {
         for x in 0..width {
             let s = (x as f32 + 0.5) / width as f32;
+            // All four channels ramp the same way here. The 2D and 3D variants mirror
+            // some of them, which is what this looked like it should do too - but
+            // upstream's 1D fill does not, and a reference that disagrees is invisible
+            // to a verdict diff because both sides of the comparison come from it.
             let color = [
                 linear_interpolate(s, min_val[0], max_val[0]),
-                linear_interpolate(1.0 - s, min_val[1], max_val[1]),
+                linear_interpolate(s, min_val[1], max_val[1]),
                 linear_interpolate(s, min_val[2], max_val[2]),
-                linear_interpolate(1.0 - s, min_val[3], max_val[3]),
+                linear_interpolate(s, min_val[3], max_val[3]),
             ];
             access.set_pixel(color, x, 0, 0);
         }
     } else if depth == 1 {
+        if style == GradientStyle::Pyramid {
+            let xedge = (width as f32 * 0.6).floor() as u32;
+            let yedge = (height as f32 * 0.6).floor() as u32;
+            for y in 0..height {
+                for x in 0..width {
+                    let s = (x as f32 + 0.5) / width as f32;
+                    let t = (y as f32 + 0.5) / height as f32;
+
+                    let (mut cr, mut cg, mut cb, mut ca) = if x < xedge {
+                        (s * 0.4, s * 0.4, (1.0 - s) * 0.4, (1.0 - s) * 0.4)
+                    } else {
+                        ((1.0 - s) * 0.6, (1.0 - s) * 0.6, s * 0.6 - 0.2, s * 0.6 - 0.2)
+                    };
+                    if y < yedge {
+                        cr += t * 0.4;
+                        cg += (1.0 - t) * 0.4;
+                        cb += t * 0.4;
+                        ca += (1.0 - t) * 0.4;
+                    } else {
+                        cr += (1.0 - t) * 0.6;
+                        cg += t * 0.6 - 0.2;
+                        cb += (1.0 - t) * 0.6;
+                        ca += t * 0.6 - 0.2;
+                    }
+
+                    let color = [
+                        linear_interpolate(cr, min_val[0], max_val[0]),
+                        linear_interpolate(cg, min_val[1], max_val[1]),
+                        linear_interpolate(cb, min_val[2], max_val[2]),
+                        linear_interpolate(ca, min_val[3], max_val[3]),
+                    ];
+                    access.set_pixel(color, x, y, 0);
+                }
+            }
+            return;
+        }
         for y in 0..height {
             for x in 0..width {
                 let s = (x as f32 + 0.5) / width as f32;
@@ -1115,12 +1173,23 @@ pub fn fill_with_component_gradients2(access: &mut PixelBufferAccess<'_>, min_va
                     let s = (x as f32 + 0.5) / width as f32;
                     let t = (y as f32 + 0.5) / height as f32;
                     let p = (z as f32 + 0.5) / depth as f32;
-                    let color = [
-                        linear_interpolate((s + t + p) / 3.0, min_val[0], max_val[0]),
-                        linear_interpolate((s + (1.0 - (t + p) * 0.5) * 2.0) / 3.0, min_val[1], max_val[1]),
-                        linear_interpolate(((1.0 - (s + t) * 0.5) * 2.0 + p) / 3.0, min_val[2], max_val[2]),
-                        linear_interpolate(1.0 - (s + t + p) / 3.0, min_val[3], max_val[3]),
-                    ];
+                    let color = if style == GradientStyle::New {
+                        // R, G, B and A all depend on every coordinate.
+                        [
+                            linear_interpolate((s + t + p) / 3.0, min_val[0], max_val[0]),
+                            linear_interpolate((s + (1.0 - (t + p) * 0.5) * 2.0) / 3.0, min_val[1], max_val[1]),
+                            linear_interpolate(((1.0 - (s + t) * 0.5) * 2.0 + p) / 3.0, min_val[2], max_val[2]),
+                            linear_interpolate(1.0 - (s + t + p) / 3.0, min_val[3], max_val[3]),
+                        ]
+                    } else {
+                        // Each of R, G and B only depends on X, Y and Z respectively.
+                        [
+                            linear_interpolate(s, min_val[0], max_val[0]),
+                            linear_interpolate(t, min_val[1], max_val[1]),
+                            linear_interpolate(p, min_val[2], max_val[2]),
+                            linear_interpolate(1.0 - (s + t + p) / 3.0, min_val[3], max_val[3]),
+                        ]
+                    };
                     access.set_pixel(color, x, y, z);
                 }
             }
