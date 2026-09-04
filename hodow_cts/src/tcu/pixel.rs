@@ -823,28 +823,175 @@ fn unorm_float_to_channel(src: f32, bits: i32) -> u32 {
     int_val.min(max_val)
 }
 
-/// The packed half of `PixelBufferAccess::setPixel`, for the two types a ported test
-/// writes. The rest of upstream's packed switch is deliberately absent - see
-/// `is_writable_channel_type`.
+/// `tcu::snormFloatToChannel`
+fn snorm_float_to_channel(src: f32, bits: i32) -> u32 {
+    let range = ((1u32 << (bits - 1)) - 1) as i32;
+    let mask = (1u64 << bits) - 1;
+    let int_val = convert_sat_rte(src * range as f32, i32::MIN as i64, i32::MAX as i64) as i32;
+    (int_val.clamp(-range, range) as u32) & mask as u32
+}
+
+/// `tcu::uintToChannel`
+fn uint_to_channel(src: u32, bits: i32) -> u32 {
+    src.min((1u32 << bits) - 1)
+}
+
+/// `tcu::intToChannel`
+fn int_to_channel(src: i32, bits: i32) -> u32 {
+    let min_val = -((1i32) << (bits - 1));
+    let max_val = (1i32 << (bits - 1)) - 1;
+    let mask = (1u32 << bits) - 1;
+    (src.clamp(min_val, max_val) as u32) & mask
+}
+
+/// `tcu::Float<uint32_t, ExponentBits, MantissaBits, Bias>` built from an f32, for the
+/// unsigned small floats packed into 11F_11F_10F. Round to nearest, ties to even, with
+/// denormals - matching the read path's `float_bits_to_f32`, which is its inverse.
+fn f32_to_small_float_bits(value: f32, exp_bits: i32, mantissa_bits: i32, bias: i32) -> u32 {
+    // Negative and NaN both clamp to zero: these formats carry no sign bit.
+    if value.is_nan() || value <= 0.0 {
+        return 0;
+    }
+
+    let bits = value.to_bits();
+    let exp = ((bits >> 23) & 0xFF) as i32;
+    let mantissa = bits & 0x007F_FFFF;
+    let max_exp = (1 << exp_bits) - 1;
+
+    if exp == 0xFF {
+        // Infinity, since NaN was handled above.
+        return (max_exp as u32) << mantissa_bits;
+    }
+
+    let unbiased = exp - 127 + bias;
+    if unbiased >= max_exp {
+        return (max_exp as u32) << mantissa_bits;
+    }
+
+    let drop = 23 - mantissa_bits;
+    let (mut out, rem, halfway) = if unbiased <= 0 {
+        // Denormal: the implicit leading one comes back and the whole thing shifts down.
+        let shift = (drop + 1 - unbiased) as u32;
+        if shift >= 32 {
+            return 0;
+        }
+        let m = mantissa | 0x0080_0000;
+        (m >> shift, m & ((1u32 << shift) - 1), 1u32 << (shift - 1))
+    } else {
+        (
+            ((unbiased as u32) << mantissa_bits) | (mantissa >> drop),
+            mantissa & ((1u32 << drop) - 1),
+            1u32 << (drop - 1),
+        )
+    };
+    if rem > halfway || (rem == halfway && (out & 1) != 0) {
+        out += 1;
+    }
+    out
+}
+
+/// `tcu::packRGB999E5` - the shared-exponent encoder, the inverse of `unpack_rgb999e5`.
+fn pack_rgb999e5(color: [f32; 4]) -> u32 {
+    const M_BITS: i32 = 9;
+    const E_BITS: i32 = 5;
+    const E_BIAS: i32 = 15;
+    const E_MAX: i32 = (1 << E_BITS) - 1;
+    let max_val = (((1 << M_BITS) - 1) * (1i64 << (E_MAX - E_BIAS))) as f32 / (1 << M_BITS) as f32;
+
+    let rc = color[0].clamp(0.0, max_val);
+    let gc = color[1].clamp(0.0, max_val);
+    let bc = color[2].clamp(0.0, max_val);
+    let maxc = rc.max(gc).max(bc);
+
+    let log2c = maxc.log2();
+    let floorc = if log2c.is_infinite() { i32::MIN } else { log2c.floor() as i32 };
+    let mut exps = floorc.max(-E_BIAS - 1) + 1 + E_BIAS;
+    let mut e = 2f32.powi(exps - E_BIAS - M_BITS);
+    let maxs = (maxc / e + 0.5).floor() as i32;
+
+    if maxs == (1 << M_BITS) {
+        exps += 1;
+        e *= 2.0;
+    }
+
+    let rs = (rc / e + 0.5).floor() as u32;
+    let gs = (gc / e + 0.5).floor() as u32;
+    let bs = (bc / e + 0.5).floor() as u32;
+
+    rs | (gs << 9) | (bs << 18) | ((exps as u32) << 27)
+}
+
+/// The packed half of `PixelBufferAccess::setPixel`.
+///
 fn set_packed_pixel(dst: &mut [u8], color: [f32; 4], format: TextureFormat) {
     use ChannelType::*;
+    // The write swizzle runs RGBA -> order, the opposite direction from the read path's
+    // order -> RGBA.
+    let sw = swizzle_ge(color, ChannelOrder::RGBA, format.order);
     let pn = |v: f32, offs: u32, bits: i32| unorm_float_to_channel(v, bits) << offs;
+    let ps = |v: f32, offs: u32, bits: i32| snorm_float_to_channel(v, bits) << offs;
+    let pu = |v: f32, offs: u32, bits: i32| uint_to_channel(v as u32, bits) << offs;
+    let pi = |v: f32, offs: u32, bits: i32| int_to_channel(v as i32, bits) << offs;
+
+    let write16 = |dst: &mut [u8], v: u32| dst[..2].copy_from_slice(&(v as u16).to_le_bytes());
+    let write32 = |dst: &mut [u8], v: u32| dst[..4].copy_from_slice(&v.to_le_bytes());
+
     match format.type_ {
         UNORM_BYTE_44 => dst[0] = (pn(color[0], 4, 4) | pn(color[1], 0, 4)) as u8,
-        UNORM_SHORT_4444 => {
-            // The write swizzle here runs RGBA -> order, the opposite direction from
-            // the read path's order -> RGBA.
-            let sw = swizzle_ge(color, ChannelOrder::RGBA, format.order);
-            let v = (pn(sw[0], 12, 4) | pn(sw[1], 8, 4) | pn(sw[2], 4, 4) | pn(sw[3], 0, 4)) as u16;
-            dst[..2].copy_from_slice(&v.to_le_bytes());
+        UNSIGNED_BYTE_44 => dst[0] = (pu(color[0], 4, 4) | pu(color[1], 0, 4)) as u8,
+        UNORM_INT_101010 => write32(dst, pn(color[0], 22, 10) | pn(color[1], 12, 10) | pn(color[2], 2, 10)),
+        UNORM_SHORT_565 => write16(dst, pn(sw[0], 11, 5) | pn(sw[1], 5, 6) | pn(sw[2], 0, 5)),
+        UNSIGNED_SHORT_565 => write16(dst, pu(sw[0], 11, 5) | pu(sw[1], 5, 6) | pu(sw[2], 0, 5)),
+        UNORM_SHORT_555 => write16(dst, pn(sw[0], 10, 5) | pn(sw[1], 5, 5) | pn(sw[2], 0, 5)),
+        UNORM_SHORT_4444 => write16(dst, pn(sw[0], 12, 4) | pn(sw[1], 8, 4) | pn(sw[2], 4, 4) | pn(sw[3], 0, 4)),
+        UNSIGNED_SHORT_4444 => write16(dst, pu(sw[0], 12, 4) | pu(sw[1], 8, 4) | pu(sw[2], 4, 4) | pu(sw[3], 0, 4)),
+        UNORM_SHORT_5551 => write16(dst, pn(sw[0], 11, 5) | pn(sw[1], 6, 5) | pn(sw[2], 1, 5) | pn(sw[3], 0, 1)),
+        UNORM_SHORT_1555 => write16(dst, pn(sw[0], 15, 1) | pn(sw[1], 10, 5) | pn(sw[2], 5, 5) | pn(sw[3], 0, 5)),
+        UNSIGNED_SHORT_5551 => write16(dst, pu(sw[0], 11, 5) | pu(sw[1], 6, 5) | pu(sw[2], 1, 5) | pu(sw[3], 0, 1)),
+        UNORM_INT_1010102_REV => write32(dst, pn(sw[0], 0, 10) | pn(sw[1], 10, 10) | pn(sw[2], 20, 10) | pn(sw[3], 30, 2)),
+        SNORM_INT_1010102_REV => write32(dst, ps(sw[0], 0, 10) | ps(sw[1], 10, 10) | ps(sw[2], 20, 10) | ps(sw[3], 30, 2)),
+        UNSIGNED_INT_1010102_REV | USCALED_INT_1010102_REV => {
+            write32(dst, pu(sw[0], 0, 10) | pu(sw[1], 10, 10) | pu(sw[2], 20, 10) | pu(sw[3], 30, 2));
         }
+        SIGNED_INT_1010102_REV | SSCALED_INT_1010102_REV => {
+            write32(dst, pi(sw[0], 0, 10) | pi(sw[1], 10, 10) | pi(sw[2], 20, 10) | pi(sw[3], 30, 2));
+        }
+        // These two take the unswizzled colour: upstream packs the channels in the
+        // order the format name reverses, so the bit positions already carry it.
+        UNSIGNED_INT_11F_11F_10F_REV => {
+            let v = f32_to_small_float_bits(color[0], 5, 6, 15) | (f32_to_small_float_bits(color[1], 5, 6, 15) << 11) | (f32_to_small_float_bits(color[2], 5, 5, 15) << 22);
+            write32(dst, v);
+        }
+        UNSIGNED_INT_999_E5_REV => write32(dst, pack_rgb999e5(color)),
         other => unreachable!("set_packed_pixel reached {other:?}; TextureLevel::new should have refused it"),
     }
 }
 
 /// The packed types `set_packed_pixel` can store.
 fn is_packed_writable(type_: ChannelType) -> bool {
-    matches!(type_, ChannelType::UNORM_BYTE_44 | ChannelType::UNORM_SHORT_4444)
+    use ChannelType::*;
+    matches!(
+        type_,
+        UNORM_BYTE_44
+            | UNSIGNED_BYTE_44
+            | UNORM_INT_101010
+            | UNORM_SHORT_565
+            | UNSIGNED_SHORT_565
+            | UNORM_SHORT_555
+            | UNORM_SHORT_4444
+            | UNSIGNED_SHORT_4444
+            | UNORM_SHORT_5551
+            | UNORM_SHORT_1555
+            | UNSIGNED_SHORT_5551
+            | UNORM_INT_1010102_REV
+            | SNORM_INT_1010102_REV
+            | UNSIGNED_INT_1010102_REV
+            | USCALED_INT_1010102_REV
+            | SIGNED_INT_1010102_REV
+            | SSCALED_INT_1010102_REV
+            | UNSIGNED_INT_11F_11F_10F_REV
+            | UNSIGNED_INT_999_E5_REV
+    )
 }
 
 /// `tcu::floatToChannel`, restricted to the non-packed channel types.
@@ -1319,8 +1466,51 @@ mod write_tests {
     /// what keeps a silent approximation out of a comparison.
     #[test]
     fn unported_packed_formats_are_refused_up_front() {
-        let f = TextureFormat::new(ChannelOrder::RGB, ChannelType::UNORM_SHORT_565);
+        // A combined depth/stencil type has no generic write path here.
+        let f = TextureFormat::new(ChannelOrder::DS, ChannelType::UNSIGNED_INT_24_8_REV);
         assert!(matches!(TextureLevel::new(f, 1, 1, 1), Err(TestError::NotPorted(_))));
+    }
+
+    /// The two float packings, each checked against the read path that decodes them.
+    #[test]
+    fn float_packed_formats_roundtrip() {
+        let f11 = TextureFormat::new(ChannelOrder::RGB, ChannelType::UNSIGNED_INT_11F_11F_10F_REV);
+        for v in [0.0f32, 0.5, 1.0, 2.0, 64.0] {
+            let got = roundtrip(f11, [v, v, v, 1.0]);
+            assert!((got[0] - v).abs() <= v * 0.02, "11F red {v}: {got:?}");
+            assert!((got[2] - v).abs() <= v * 0.05, "10F blue {v}: {got:?}");
+        }
+
+        let e5 = TextureFormat::new(ChannelOrder::RGB, ChannelType::UNSIGNED_INT_999_E5_REV);
+        for v in [0.0f32, 0.25, 1.0, 8.0, 100.0] {
+            let got = roundtrip(e5, [v, v * 0.5, v * 0.25, 1.0]);
+            assert!((got[0] - v).abs() <= v * 0.01, "999E5 red {v}: {got:?}");
+        }
+    }
+
+    /// The packed types that do have a write path, round-tripped through the read path.
+    ///
+    /// Only the orders whose swizzle is defined in both directions are listed. `swizzleGe`
+    /// knows RGBA <-> {ARGB, ABGR, BGRA} but not RGBA -> BGR, so writing a BGR-ordered
+    /// packed pixel leaves the channels unswizzled while reading one swaps them. That
+    /// asymmetry is upstream's, and it is invisible to the tests that write these formats
+    /// because they compare raw bytes rather than decoded colours.
+    #[test]
+    fn packed_write_paths_roundtrip() {
+        let cases: &[(ChannelOrder, ChannelType, [f32; 4])] = &[
+            (ChannelOrder::RGB, ChannelType::UNORM_SHORT_565, [1.0, 0.0, 1.0, 1.0]),
+            (ChannelOrder::RGBA, ChannelType::UNORM_SHORT_5551, [1.0, 0.0, 1.0, 1.0]),
+            (ChannelOrder::ARGB, ChannelType::UNORM_SHORT_1555, [1.0, 0.0, 1.0, 1.0]),
+            (ChannelOrder::ABGR, ChannelType::UNORM_INT_1010102_REV, [1.0, 0.0, 1.0, 1.0]),
+            (ChannelOrder::BGRA, ChannelType::UNORM_INT_1010102_REV, [1.0, 0.0, 1.0, 1.0]),
+        ];
+        for &(order, type_, color) in cases {
+            let f = TextureFormat::new(order, type_);
+            let got = roundtrip(f, color);
+            for c in 0..4 {
+                assert!((got[c] - color[c]).abs() < 0.02, "{order:?}/{type_:?} channel {c}: {got:?} vs {color:?}");
+            }
+        }
     }
 
     /// The two packed types that do have a write path, checked against the read path

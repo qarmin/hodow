@@ -20,6 +20,7 @@ use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::DeviceV1_3;
 
 use super::copies_buffer_tests::{AllocationKind, CopyCommandVariant, QueueSelection, bind_buffer_memory, select_queue};
+use super::copy_format_lists::COLOR_IMAGE_FORMATS_TO_TEST;
 use crate::tcu::pixel::{
     ConstPixelBufferAccess, PixelBufferAccess, TextureLevel, fill_with_component_gradients2, fill_with_component_gradients3, get_texture_format_bit_depth, has_depth_component,
     has_stencil_component,
@@ -2522,6 +2523,137 @@ fn add_image_to_image_dimensions_tests(group: &mut tcu::TestCaseGroup, gp: &Grou
     }
 }
 
+/// `VK_FORMAT_ASTC_12x12_SRGB_BLOCK`, upstream's `VK_CORE_FORMAT_LAST` minus one.
+const LAST_CORE_FORMAT: i32 = 184;
+
+/// `vk::isSupportedByFramework`
+///
+/// Two rules, both needed: anything past the core format range is out (which is how the
+/// ycbcr-adjacent r10x6/r12x4 packings and the a4r4g4b4 pair fall away), and the
+/// 64-bit-per-channel formats are rejected by name even though they sit inside it.
+fn is_supported_by_framework(format: vk::Format) -> bool {
+    if matches!(format, vk::Format::A8_UNORM | vk::Format::A1B5G5R5_UNORM_PACK16) {
+        return true;
+    }
+    if format == vk::Format::UNDEFINED || format.as_raw() > LAST_CORE_FORMAT {
+        return false;
+    }
+    !matches!(
+        format,
+        vk::Format::R64_UINT
+            | vk::Format::R64_SINT
+            | vk::Format::R64_SFLOAT
+            | vk::Format::R64G64_UINT
+            | vk::Format::R64G64_SINT
+            | vk::Format::R64G64_SFLOAT
+            | vk::Format::R64G64B64_UINT
+            | vk::Format::R64G64B64_SINT
+            | vk::Format::R64G64B64_SFLOAT
+            | vk::Format::R64G64B64A64_UINT
+            | vk::Format::R64G64B64A64_SINT
+            | vk::Format::R64G64B64A64_SFLOAT
+    )
+}
+
+/// `dedicatedAllocationImageToImageFormatsToTest` - the same fourteen formats the
+/// dimensions table uses. `isAllowedImageToImageAllFormatsColorSrcFormatTests` narrows
+/// the all_formats matrix to these whenever the allocation is dedicated, which is why
+/// the dedicated_allocation and copy_commands2 groups are a fraction of core's size.
+static DEDICATED_ALLOCATION_FORMATS: &[vk::Format] = &[
+    vk::Format::R4G4_UNORM_PACK8,
+    vk::Format::R8_SRGB,
+    vk::Format::R4G4B4A4_UNORM_PACK16,
+    vk::Format::R16_SFLOAT,
+    vk::Format::R8G8B8_UNORM,
+    vk::Format::B8G8R8_SRGB,
+    vk::Format::R8G8B8A8_UNORM,
+    vk::Format::R32_SFLOAT,
+    vk::Format::R16G16B16_UNORM,
+    vk::Format::R16G16B16_SFLOAT,
+    vk::Format::R16G16B16A16_UNORM,
+    vk::Format::R32G32B32_UINT,
+    vk::Format::R32G32B32_SFLOAT,
+    vk::Format::R32G32B32A32_UINT,
+];
+
+/// `addImageToImageAllFormatsColorTests`' 1D-to-1D block.
+///
+/// The destination format is the source format here: upstream passes a null compatible
+/// list, which it reads as "copy the destination format from the source". The
+/// cross-format pairs only appear in the 2D blocks.
+fn add_image_to_image_all_formats_color_1d(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+    const SRC_LAYOUTS: [vk::ImageLayout; 2] = [vk::ImageLayout::TRANSFER_SRC_OPTIMAL, vk::ImageLayout::GENERAL];
+    const DST_LAYOUTS: [vk::ImageLayout; 2] = [vk::ImageLayout::TRANSFER_DST_OPTIMAL, vk::ImageLayout::GENERAL];
+
+    // `for (i = defaultQuarterSize; i < defaultSize; i += defaultSize / 2)` - two
+    // quarter-width regions landing at a quarter and three quarters across.
+    let mut regions = Vec::new();
+    let mut i = DEFAULT_QUARTER_SIZE;
+    while i < DEFAULT_SIZE {
+        regions.push(ImageCopy {
+            src_offset: [0, 0, 0],
+            dst_offset: [i as i32, 0, 0],
+            extent: [DEFAULT_QUARTER_SIZE, 1, 1],
+            aspect_mask: vk::ImageAspectFlags::COLOR,
+            src_base_layer: 0,
+            src_layer_count: 1,
+            dst_base_layer: 0,
+            dst_layer_count: 1,
+        });
+        i += DEFAULT_SIZE / 2;
+    }
+
+    for compatible in COLOR_IMAGE_FORMATS_TO_TEST {
+        for entry in *compatible {
+            // The compressed formats need a block model in tcu that is not ported, so
+            // they are absent rather than answered with a verdict.
+            if entry.compressed || !is_supported_by_framework(entry.format) {
+                continue;
+            }
+            if gp.allocation_kind == AllocationKind::Dedicated && !DEDICATED_ALLOCATION_FORMATS.contains(&entry.format) {
+                continue;
+            }
+            let mut src_group = tcu::TestCaseGroup::new(entry.name);
+            let mut dst_group = tcu::TestCaseGroup::new(entry.name);
+
+            for src_layout in SRC_LAYOUTS {
+                for dst_layout in DST_LAYOUTS {
+                    dst_group.add_child(Box::new(CopyImageToImageCase {
+                        name: format!("{}_{}", image_layout_case_name(src_layout), image_layout_case_name(dst_layout)),
+                        src: ImageParms {
+                            image_type: vk::ImageType::_1D,
+                            format: entry.format,
+                            extent: DEFAULT_1D_EXTENT,
+                            tiling: vk::ImageTiling::OPTIMAL,
+                            fill_mode: FillMode::White,
+                            create_flags: None,
+                        },
+                        dst: ImageParms {
+                            image_type: vk::ImageType::_1D,
+                            format: entry.format,
+                            extent: DEFAULT_1D_EXTENT,
+                            tiling: vk::ImageTiling::OPTIMAL,
+                            fill_mode: FillMode::Gradient,
+                            create_flags: None,
+                        },
+                        regions: regions.clone(),
+                        clear_destination_with_red: false,
+                        needs_maintenance5: false,
+                        src_operation_layout: Some(src_layout),
+                        dst_operation_layout: Some(dst_layout),
+                        allocation_kind: gp.allocation_kind,
+                        command_variant: gp.command_variant,
+                        queue_selection: gp.queue_selection,
+                        general_layout: gp.general_layout,
+                    }) as Box<dyn TestCase>);
+                }
+            }
+            src_group.add_child(dst_group);
+            group.add_child(src_group);
+        }
+    }
+}
+
 /// The `image_to_image*` groups.
 pub fn add_image_to_image_groups(
     parent: &mut tcu::TestCaseGroup,
@@ -2548,6 +2680,14 @@ pub fn add_image_to_image_groups(
         let mut images_3d = tcu::TestCaseGroup::new("3d_images");
         add_image_to_image_3d_tests(&mut images_3d, &gp);
         group.add_child(images_3d);
+
+        let mut all_formats = tcu::TestCaseGroup::new("all_formats");
+        let mut color = tcu::TestCaseGroup::new("color");
+        let mut d1_to_1d = tcu::TestCaseGroup::new("1d_to_1d");
+        add_image_to_image_all_formats_color_1d(&mut d1_to_1d, &gp);
+        color.add_child(d1_to_1d);
+        all_formats.add_child(color);
+        group.add_child(all_formats);
 
         let mut dimensions = tcu::TestCaseGroup::new("dimensions");
         add_image_to_image_dimensions_tests(&mut dimensions, &gp);
