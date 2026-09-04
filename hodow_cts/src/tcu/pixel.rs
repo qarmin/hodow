@@ -1036,6 +1036,32 @@ impl PixelBufferAccess<'_> {
         self.data[dst_off..dst_off + bytes].copy_from_slice(&src.raw()[src_off..src_off + bytes]);
     }
 
+    /// A 3D region copied verbatim, byte for byte.
+    ///
+    /// `vkCmdCopyImage` acts like a memcpy even between different formats, as long as
+    /// they are size-compatible, so upstream imposes the source format on the
+    /// destination access and copies. That is only sound when the two texel sizes
+    /// match, which size-compatibility guarantees - asserted here rather than assumed.
+    pub fn copy_region_from(&mut self, src: &ConstPixelBufferAccess<'_>, src_pos: (u32, u32, u32), dst_pos: (u32, u32, u32), extent: (u32, u32, u32)) {
+        let pixel_size = self.pixel_size();
+        assert_eq!(
+            pixel_size,
+            src.format().pixel_size().expect("source format has a pixel size") as usize,
+            "copy_region_from needs size-compatible formats"
+        );
+        let [sw, sh, _] = src.size();
+        let [dw, dh, _] = self.size();
+
+        for z in 0..extent.2 {
+            for y in 0..extent.1 {
+                let s = (((src_pos.2 + z) as usize * sh as usize) + (src_pos.1 + y) as usize) * sw as usize + src_pos.0 as usize;
+                let d = (((dst_pos.2 + z) as usize * dh as usize) + (dst_pos.1 + y) as usize) * dw as usize + dst_pos.0 as usize;
+                let bytes = extent.0 as usize * pixel_size;
+                self.data[d * pixel_size..d * pixel_size + bytes].copy_from_slice(&src.raw()[s * pixel_size..s * pixel_size + bytes]);
+            }
+        }
+    }
+
     /// Raw texel-run copy. Both sides are tightly packed and share a format, which is
     /// all `tcu::copy` amounts to for the buffer/image copy tests.
     pub fn copy_texels_from(&mut self, src: &ConstPixelBufferAccess<'_>, src_texel: usize, dst: (u32, u32, u32), count: usize) {

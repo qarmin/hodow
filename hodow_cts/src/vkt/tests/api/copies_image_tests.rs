@@ -20,7 +20,9 @@ use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::DeviceV1_3;
 
 use super::copies_buffer_tests::{AllocationKind, CopyCommandVariant, QueueSelection, bind_buffer_memory, select_queue};
-use crate::tcu::pixel::{ConstPixelBufferAccess, PixelBufferAccess, TextureLevel, fill_with_component_gradients2, get_texture_format_bit_depth};
+use crate::tcu::pixel::{
+    ConstPixelBufferAccess, PixelBufferAccess, TextureLevel, fill_with_component_gradients2, get_texture_format_bit_depth, has_depth_component, has_stencil_component,
+};
 use crate::tcu::texture::TextureChannelClass;
 use crate::tcu::{self, TestError, TestOutcome, TestStatus, map_vk_format};
 use crate::vk::VkResultExt;
@@ -54,6 +56,7 @@ fn round_up(value: u32, alignment: u32) -> u32 {
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum FillMode {
     Gradient,
+    White,
     Red,
 }
 
@@ -91,6 +94,21 @@ impl ImageParms {
             vk::ImageCreateFlags::empty()
         }
     }
+}
+
+/// `vk::getAspectFlags`
+fn get_aspect_flags(format: vk::Format) -> vk::ImageAspectFlags {
+    let Some(f) = map_vk_format(format) else {
+        return vk::ImageAspectFlags::COLOR;
+    };
+    let mut mask = vk::ImageAspectFlags::empty();
+    if has_depth_component(f.order) {
+        mask |= vk::ImageAspectFlags::DEPTH;
+    }
+    if has_stencil_component(f.order) {
+        mask |= vk::ImageAspectFlags::STENCIL;
+    }
+    if mask.is_empty() { vk::ImageAspectFlags::COLOR } else { mask }
 }
 
 /// `CopyRegion::bufferImageCopy`
@@ -151,12 +169,12 @@ fn generate_buffer(access: &mut PixelBufferAccess<'_>, width: u32, height: u32, 
 
     match mode {
         FillMode::Gradient => fill_with_component_gradients2(access, [0.0; 4], max_value),
-        FillMode::Red => {
-            let red = [max_value[0], 0.0, 0.0, max_value[3]];
+        FillMode::White | FillMode::Red => {
+            let color = if mode == FillMode::White { max_value } else { [max_value[0], 0.0, 0.0, max_value[3]] };
             for z in 0..depth {
                 for y in 0..height {
                     for x in 0..width {
-                        access.set_pixel(red, x, y, z);
+                        access.set_pixel(color, x, y, z);
                     }
                 }
             }
@@ -227,7 +245,8 @@ fn upload_image(context: &Context<'_>, src: &ConstPixelBufferAccess<'_>, image: 
         vk::ImageLayout::TRANSFER_DST_OPTIMAL
     };
     let extent = parms.extent_3d();
-    let range = make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, parms.array_size());
+    let aspect = get_aspect_flags(parms.format);
+    let range = make_image_subresource_range(aspect, 0, 1, 0, parms.array_size());
 
     let cmd_pool = make_command_pool(vk_device, queue_family_index)?;
     let cmd_buffer = allocate_command_buffer(vk_device, *cmd_pool, vk::CommandBufferLevel::PRIMARY)?;
@@ -249,7 +268,7 @@ fn upload_image(context: &Context<'_>, src: &ConstPixelBufferAccess<'_>, image: 
             buffer_row_length: extent.width,
             buffer_image_height: extent.height,
             image_subresource: vk::ImageSubresourceLayers {
-                aspect_mask: vk::ImageAspectFlags::COLOR,
+                aspect_mask: aspect,
                 mip_level: 0,
                 base_array_layer: 0,
                 layer_count: parms.array_size(),
@@ -299,7 +318,8 @@ fn read_image(context: &Context<'_>, image: vk::Image, parms: &ImageParms, dst: 
         vk::ImageLayout::TRANSFER_DST_OPTIMAL
     };
     let extent = parms.extent_3d();
-    let range = make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, parms.array_size());
+    let aspect = get_aspect_flags(parms.format);
+    let range = make_image_subresource_range(aspect, 0, 1, 0, parms.array_size());
 
     let cmd_pool = make_command_pool(vk_device, queue_family_index)?;
     let cmd_buffer = allocate_command_buffer(vk_device, *cmd_pool, vk::CommandBufferLevel::PRIMARY)?;
@@ -321,7 +341,7 @@ fn read_image(context: &Context<'_>, image: vk::Image, parms: &ImageParms, dst: 
             buffer_row_length: extent.width,
             buffer_image_height: extent.height,
             image_subresource: vk::ImageSubresourceLayers {
-                aspect_mask: vk::ImageAspectFlags::COLOR,
+                aspect_mask: aspect,
                 mip_level: 0,
                 base_array_layer: 0,
                 layer_count: parms.array_size(),
@@ -1652,5 +1672,455 @@ pub fn add_image_to_buffer_groups(
     add_2d_image_to_buffer_tests(&mut images_2d, &gp);
     group.add_child(images_2d);
     // 3d_images is entirely compressed mip_copies upstream, so nothing is registered.
+    parent.add_child(group);
+}
+
+// ---------------------------------------------------------------------------------
+// CopyImageToImage
+// ---------------------------------------------------------------------------------
+
+/// `CopyRegion::imageCopy`
+#[derive(Clone, Copy)]
+pub struct ImageCopy {
+    pub src_offset: [i32; 3],
+    pub dst_offset: [i32; 3],
+    pub extent: [u32; 3],
+    pub aspect_mask: vk::ImageAspectFlags,
+}
+
+impl ImageCopy {
+    fn to_vk(self) -> vk::ImageCopy {
+        let layers = vk::ImageSubresourceLayers {
+            aspect_mask: self.aspect_mask,
+            mip_level: 0,
+            base_array_layer: 0,
+            layer_count: 1,
+        };
+        vk::ImageCopy {
+            src_subresource: layers,
+            src_offset: vk::Offset3D {
+                x: self.src_offset[0],
+                y: self.src_offset[1],
+                z: self.src_offset[2],
+            },
+            dst_subresource: layers,
+            dst_offset: vk::Offset3D {
+                x: self.dst_offset[0],
+                y: self.dst_offset[1],
+                z: self.dst_offset[2],
+            },
+            extent: vk::Extent3D {
+                width: self.extent[0],
+                height: self.extent[1],
+                depth: self.extent[2],
+            },
+        }
+    }
+}
+
+/// `CopyImageToImageTestCase`
+pub struct CopyImageToImageCase {
+    name: String,
+    src: ImageParms,
+    dst: ImageParms,
+    regions: Vec<ImageCopy>,
+    /// `TestParams::clearDestinationWithRed` - the destination is cleared to opaque red
+    /// on the device and filled red on the host, so a copy that writes outside its
+    /// region is caught against a known background rather than a gradient.
+    clear_destination_with_red: bool,
+    allocation_kind: AllocationKind,
+    command_variant: CopyCommandVariant,
+    queue_selection: QueueSelection,
+    general_layout: bool,
+}
+
+impl TestCase for CopyImageToImageCase {
+    fn name(&self) -> &str {
+        &self.name
+    }
+
+    fn check_support(&self, context: &Context<'_>) -> Result<(), TestError> {
+        if self.command_variant == CopyCommandVariant::CopyCommands2 {
+            context.require_device_functionality("VK_KHR_copy_commands2")?;
+        }
+        if self.allocation_kind == AllocationKind::Dedicated {
+            context.require_device_functionality("VK_KHR_dedicated_allocation")?;
+        }
+        select_queue(context, self.queue_selection)?;
+
+        let usage = vk::ImageUsageFlags::TRANSFER_SRC | vk::ImageUsageFlags::TRANSFER_DST;
+        for parms in [&self.src, &self.dst] {
+            let props = unsafe {
+                context.get_instance().get_physical_device_image_format_properties(
+                    context.get_physical_device(),
+                    parms.format,
+                    parms.image_type,
+                    parms.tiling,
+                    usage,
+                    parms.create_flags(),
+                )
+            }
+            .map_err(|_| TestError::NotSupported("Format does not support the required parameters".to_string()))?;
+
+            if props.max_array_layers < parms.array_size() {
+                return Err(TestError::NotSupported("maxArrayLayers too small".to_string()));
+            }
+        }
+        Ok(())
+    }
+
+    fn programs(&self) -> BinaryCollection {
+        BinaryCollection::new(&[])
+    }
+
+    fn create_instance<'a>(&'a self, context: &'a Context<'a>) -> Box<dyn TestInstance + 'a> {
+        Box::new(CopyImageToImageInstance { context, params: self })
+    }
+}
+
+struct CopyImageToImageInstance<'a> {
+    context: &'a Context<'a>,
+    params: &'a CopyImageToImageCase,
+}
+
+impl CopyImageToImageInstance<'_> {
+    fn make_image(&self, parms: &ImageParms) -> Result<ImageWithMemory<'_>, TestError> {
+        let vk_device = self.context.get_device();
+        let allocator = self.context.get_default_allocator();
+        let info = vk::ImageCreateInfo {
+            s_type: vk::StructureType::IMAGE_CREATE_INFO,
+            next: std::ptr::null(),
+            flags: parms.create_flags(),
+            image_type: parms.image_type,
+            format: parms.format,
+            extent: parms.extent_3d(),
+            mip_levels: 1,
+            array_layers: parms.array_size(),
+            samples: vk::SampleCountFlags::_1,
+            tiling: parms.tiling,
+            usage: vk::ImageUsageFlags::TRANSFER_SRC | vk::ImageUsageFlags::TRANSFER_DST,
+            sharing_mode: vk::SharingMode::EXCLUSIVE,
+            queue_family_index_count: 0,
+            queue_family_indices: std::ptr::null(),
+            initial_layout: vk::ImageLayout::UNDEFINED,
+        };
+        if self.params.allocation_kind == AllocationKind::Dedicated {
+            ImageWithMemory::new_dedicated(vk_device, allocator, info, MemoryRequirement::ANY)
+        } else {
+            ImageWithMemory::new(vk_device, allocator, info, MemoryRequirement::ANY)
+        }
+    }
+}
+
+impl TestInstance for CopyImageToImageInstance<'_> {
+    fn iterate(&mut self) -> TestOutcome {
+        let p = self.params;
+        let vk_device = self.context.get_device();
+
+        let (queue, queue_family_index) = select_queue(self.context, p.queue_selection)?;
+        let mut families = vec![self.context.get_universal_queue_family_index()];
+        if queue_family_index != families[0] {
+            families.push(queue_family_index);
+        }
+
+        let src_format = map_vk_format(p.src.format).ok_or_else(|| TestError::NotSupported("format has no tcu mapping".to_string()))?;
+        let dst_format = map_vk_format(p.dst.format).ok_or_else(|| TestError::NotSupported("format has no tcu mapping".to_string()))?;
+
+        let mut source_level = TextureLevel::new(src_format, p.src.extent[0], p.src.extent[1], p.src.extent[2])?;
+        generate_buffer(&mut source_level.get_access(), p.src.extent[0], p.src.extent[1], p.src.extent[2], p.src.fill_mode);
+
+        let dst_fill = if p.clear_destination_with_red { FillMode::Red } else { p.dst.fill_mode };
+        let mut destination_level = TextureLevel::new(dst_format, p.dst.extent[0], p.dst.extent[1], p.dst.extent[2])?;
+        generate_buffer(&mut destination_level.get_access(), p.dst.extent[0], p.dst.extent[1], p.dst.extent[2], dst_fill);
+
+        // `generateExpectedResult`. The copy is a memcpy even across formats, so the
+        // expected level is viewed in the *source* format while the region lands.
+        let mut expected_level = TextureLevel::new(src_format, p.dst.extent[0], p.dst.extent[1], p.dst.extent[2])?;
+        expected_level.data_mut().copy_from_slice(destination_level.data());
+        {
+            let source_access = source_level.get_const_access();
+            let mut expected_access = expected_level.get_access();
+            for r in &p.regions {
+                expected_access.copy_region_from(
+                    &source_access,
+                    (r.src_offset[0] as u32, r.src_offset[1] as u32, r.src_offset[2] as u32),
+                    (r.dst_offset[0] as u32, r.dst_offset[1] as u32, r.dst_offset[2] as u32),
+                    (r.extent[0], r.extent[1], r.extent[2]),
+                );
+            }
+        }
+
+        let source = self.make_image(&p.src)?;
+        let destination = self.make_image(&p.dst)?;
+
+        upload_image(self.context, &source_level.get_const_access(), source.get(), &p.src, p.general_layout, &families)?;
+        upload_image(self.context, &destination_level.get_const_access(), destination.get(), &p.dst, p.general_layout, &families)?;
+
+        let cmd_pool = make_command_pool(vk_device, queue_family_index)?;
+        let cmd_buffer = allocate_command_buffer(vk_device, *cmd_pool, vk::CommandBufferLevel::PRIMARY)?;
+
+        let src_layout = if p.general_layout {
+            vk::ImageLayout::GENERAL
+        } else {
+            vk::ImageLayout::TRANSFER_SRC_OPTIMAL
+        };
+        let dst_layout = if p.general_layout {
+            vk::ImageLayout::GENERAL
+        } else {
+            vk::ImageLayout::TRANSFER_DST_OPTIMAL
+        };
+        let uploaded = if p.general_layout {
+            vk::ImageLayout::GENERAL
+        } else {
+            vk::ImageLayout::TRANSFER_DST_OPTIMAL
+        };
+        let src_range = make_image_subresource_range(get_aspect_flags(p.src.format), 0, 1, 0, p.src.array_size());
+        let dst_range = make_image_subresource_range(get_aspect_flags(p.dst.format), 0, 1, 0, p.dst.array_size());
+
+        begin_command_buffer(vk_device, *cmd_buffer)?;
+        unsafe {
+            let barriers = [
+                make_image_memory_barrier(
+                    vk::AccessFlags::TRANSFER_WRITE,
+                    vk::AccessFlags::TRANSFER_READ,
+                    uploaded,
+                    src_layout,
+                    source.get(),
+                    src_range,
+                ),
+                make_image_memory_barrier(
+                    vk::AccessFlags::TRANSFER_WRITE,
+                    vk::AccessFlags::TRANSFER_WRITE,
+                    uploaded,
+                    dst_layout,
+                    destination.get(),
+                    dst_range,
+                ),
+            ];
+            vk_device.cmd_pipeline_barrier(
+                *cmd_buffer,
+                vk::PipelineStageFlags::TRANSFER,
+                vk::PipelineStageFlags::TRANSFER,
+                vk::DependencyFlags::empty(),
+                &[] as &[vk::MemoryBarrier],
+                &[] as &[vk::BufferMemoryBarrier],
+                &barriers,
+            );
+
+            if p.clear_destination_with_red {
+                let clear = vk::ClearColorValue { float32: [1.0, 0.0, 0.0, 1.0] };
+                let range = make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, 1);
+                vk_device.cmd_clear_color_image(*cmd_buffer, destination.get(), dst_layout, &clear, &[range]);
+
+                let after_clear = make_image_memory_barrier(
+                    vk::AccessFlags::TRANSFER_WRITE,
+                    vk::AccessFlags::TRANSFER_WRITE,
+                    dst_layout,
+                    dst_layout,
+                    destination.get(),
+                    dst_range,
+                );
+                vk_device.cmd_pipeline_barrier(
+                    *cmd_buffer,
+                    vk::PipelineStageFlags::TRANSFER,
+                    vk::PipelineStageFlags::TRANSFER,
+                    vk::DependencyFlags::empty(),
+                    &[] as &[vk::MemoryBarrier],
+                    &[] as &[vk::BufferMemoryBarrier],
+                    &[after_clear],
+                );
+            }
+
+            let copies: Vec<vk::ImageCopy> = p.regions.iter().map(|r| r.to_vk()).collect();
+            if p.command_variant == CopyCommandVariant::CopyCommands2 {
+                let copies2: Vec<vk::ImageCopy2> = copies
+                    .iter()
+                    .map(|c| vk::ImageCopy2 {
+                        s_type: vk::StructureType::IMAGE_COPY_2,
+                        next: std::ptr::null(),
+                        src_subresource: c.src_subresource,
+                        src_offset: c.src_offset,
+                        dst_subresource: c.dst_subresource,
+                        dst_offset: c.dst_offset,
+                        extent: c.extent,
+                    })
+                    .collect();
+                let info = vk::CopyImageInfo2 {
+                    s_type: vk::StructureType::COPY_IMAGE_INFO_2,
+                    next: std::ptr::null(),
+                    src_image: source.get(),
+                    src_image_layout: src_layout,
+                    dst_image: destination.get(),
+                    dst_image_layout: dst_layout,
+                    region_count: copies2.len() as u32,
+                    regions: copies2.as_ptr(),
+                };
+                vk_device.cmd_copy_image2(*cmd_buffer, &info);
+            } else {
+                vk_device.cmd_copy_image(*cmd_buffer, source.get(), src_layout, destination.get(), dst_layout, &copies);
+            }
+        }
+        end_command_buffer(vk_device, *cmd_buffer)?;
+        submit_commands_and_wait(vk_device, queue, *cmd_buffer)?;
+
+        // Read back in the destination's own format, then compare the raw bytes -
+        // upstream's bitwiseCompare, which is what makes a cross-format copy checkable.
+        let mut result_level = TextureLevel::new(dst_format, p.dst.extent[0], p.dst.extent[1], p.dst.extent[2])?;
+        read_image(self.context, destination.get(), &p.dst, &mut result_level, p.general_layout, &families)?;
+
+        Ok(check_test_result(&expected_level.get_const_access(), &result_level.get_const_access()))
+    }
+}
+
+/// `addImageToImageSimpleTests`
+fn add_image_to_image_simple_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+    let parms = |format: vk::Format, extent: [u32; 3], tiling: vk::ImageTiling, fill: FillMode| ImageParms {
+        image_type: vk::ImageType::_2D,
+        format,
+        extent,
+        tiling,
+        fill_mode: fill,
+    };
+    let make = |name: String, src: ImageParms, dst: ImageParms, regions: Vec<ImageCopy>, clear: bool| {
+        Box::new(CopyImageToImageCase {
+            name,
+            src,
+            dst,
+            regions,
+            clear_destination_with_red: clear,
+            allocation_kind: gp.allocation_kind,
+            command_variant: gp.command_variant,
+            queue_selection: gp.queue_selection,
+            general_layout: gp.general_layout,
+        }) as Box<dyn TestCase>
+    };
+    let color = |src_offset: [i32; 3], dst_offset: [i32; 3], extent: [u32; 3]| ImageCopy {
+        src_offset,
+        dst_offset,
+        extent,
+        aspect_mask: vk::ImageAspectFlags::COLOR,
+    };
+
+    // The destination defaults to FILL_MODE_WHITE and the source to FILL_MODE_GRADIENT
+    // in TestParams' constructor, which is where these two come from.
+    const SRC_FILL: FillMode = FillMode::Gradient;
+    const DST_FILL: FillMode = FillMode::White;
+
+    let suffix = |format: vk::Format, tiling: vk::ImageTiling| {
+        format!(
+            "{}{}",
+            if format == vk::Format::R8G8B8A8_UINT {
+                String::new()
+            } else {
+                format!("_{}", image_to_buffer_format_name(format))
+            },
+            if tiling == vk::ImageTiling::LINEAR { "_linear" } else { "" }
+        )
+    };
+    static SIMPLE_FORMATS: &[vk::Format] = &[vk::Format::R8G8B8A8_UINT, vk::Format::R32G32B32_UINT, vk::Format::R32G32B32_SFLOAT];
+
+    for &format in SIMPLE_FORMATS {
+        for tiling in [vk::ImageTiling::OPTIMAL, vk::ImageTiling::LINEAR] {
+            group.add_child(make(
+                format!("whole_image{}", suffix(format, tiling)),
+                parms(format, DEFAULT_EXTENT, tiling, SRC_FILL),
+                parms(format, DEFAULT_EXTENT, tiling, DST_FILL),
+                vec![color([0, 0, 0], [0, 0, 0], DEFAULT_EXTENT)],
+                false,
+            ));
+        }
+    }
+
+    // A copy is a memcpy even across formats, so this pair only has to be size
+    // compatible - 32 bits either way.
+    group.add_child(make(
+        "whole_image_diff_format".to_string(),
+        parms(vk::Format::R8G8B8A8_UINT, DEFAULT_EXTENT, vk::ImageTiling::OPTIMAL, SRC_FILL),
+        parms(vk::Format::R32_UINT, DEFAULT_EXTENT, vk::ImageTiling::OPTIMAL, DST_FILL),
+        vec![color([0, 0, 0], [0, 0, 0], DEFAULT_EXTENT)],
+        false,
+    ));
+
+    for &format in SIMPLE_FORMATS {
+        for tiling in [vk::ImageTiling::OPTIMAL, vk::ImageTiling::LINEAR] {
+            group.add_child(make(
+                format!("partial_image{}", suffix(format, tiling)),
+                parms(format, DEFAULT_EXTENT, tiling, SRC_FILL),
+                parms(format, DEFAULT_EXTENT, tiling, DST_FILL),
+                vec![color(
+                    [0, 0, 0],
+                    [DEFAULT_QUARTER_SIZE as i32, (DEFAULT_QUARTER_SIZE / 2) as i32, 0],
+                    [DEFAULT_QUARTER_SIZE / 2, DEFAULT_QUARTER_SIZE / 2, 1],
+                )],
+                false,
+            ));
+        }
+    }
+
+    // The pot/npot matrix is not registered for a transfer-only queue upstream.
+    if gp.queue_selection != QueueSelection::TransferOnly {
+        for (format_name, format1, format2) in [
+            ("diff_format", vk::Format::R32_UINT, vk::Format::R8G8B8A8_UNORM),
+            ("same_format", vk::Format::R8G8B8A8_UNORM, vk::Format::R8G8B8A8_UNORM),
+        ] {
+            for (clear_name, clear) in [("clear", true), ("noclear", false)] {
+                for (extent_name, extent) in [("npot", [65u32, 63, 1]), ("pot", [64, 64, 1])] {
+                    let region = if extent_name == "pot" {
+                        color([16, 16, 0], [0, 0, 0], [32, 32, 1])
+                    } else {
+                        color([34, 34, 0], [0, 0, 0], [31, 29, 1])
+                    };
+                    group.add_child(make(
+                        format!("partial_image_{extent_name}_{format_name}_{clear_name}"),
+                        parms(format1, extent, vk::ImageTiling::OPTIMAL, SRC_FILL),
+                        parms(format2, extent, vk::ImageTiling::OPTIMAL, DST_FILL),
+                        vec![region],
+                        clear,
+                    ));
+                }
+            }
+        }
+    }
+
+    for (name, format, aspect) in [
+        ("depth", vk::Format::D32_SFLOAT, vk::ImageAspectFlags::DEPTH),
+        ("stencil", vk::Format::S8_UINT, vk::ImageAspectFlags::STENCIL),
+    ] {
+        group.add_child(make(
+            name.to_string(),
+            parms(format, DEFAULT_EXTENT, vk::ImageTiling::OPTIMAL, SRC_FILL),
+            parms(format, DEFAULT_EXTENT, vk::ImageTiling::OPTIMAL, DST_FILL),
+            vec![ImageCopy {
+                src_offset: [0, 0, 0],
+                dst_offset: [DEFAULT_QUARTER_SIZE as i32, (DEFAULT_QUARTER_SIZE / 2) as i32, 0],
+                extent: [DEFAULT_QUARTER_SIZE / 2, DEFAULT_QUARTER_SIZE / 2, 1],
+                aspect_mask: aspect,
+            }],
+            false,
+        ));
+    }
+}
+
+/// The `image_to_image*` groups, `simple_tests` only so far.
+pub fn add_image_to_image_groups(
+    parent: &mut tcu::TestCaseGroup,
+    name: &str,
+    allocation_kind: AllocationKind,
+    command_variant: CopyCommandVariant,
+    queue_selection: QueueSelection,
+    general_layout: bool,
+) {
+    let gp = GroupParams {
+        allocation_kind,
+        command_variant,
+        queue_selection,
+        general_layout,
+    };
+    let mut group = tcu::TestCaseGroup::new(name);
+    let mut simple = tcu::TestCaseGroup::new("simple_tests");
+    add_image_to_image_simple_tests(&mut simple, &gp);
+    group.add_child(simple);
+    // all_formats needs a compressed-format model in tcu; dimensions, array, cube and
+    // 3d_images are not ported yet either.
     parent.add_child(group);
 }

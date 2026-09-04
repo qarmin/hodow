@@ -651,6 +651,30 @@ pub fn create_buffer_copy_tests() -> tcu::TestCaseGroup {
             );
         }
 
+        // image_to_image does not get the same queue matrix as the buffer/image
+        // groups: upstream registers general_layout under core only, and the
+        // transfer queue only under copy_commands2.
+        for (suffix, queue_selection, general_layout) in [
+            ("", QueueSelection::Universal, false),
+            ("_general_layout", QueueSelection::Universal, true),
+            ("_transfer_queue", QueueSelection::TransferOnly, false),
+        ] {
+            let registered = matches!(
+                (kind_name, suffix),
+                ("core", "" | "_general_layout") | ("dedicated_allocation", "") | ("copy_commands2", "" | "_transfer_queue")
+            );
+            if registered {
+                super::copies_image_tests::add_image_to_image_groups(
+                    &mut kind_group,
+                    &format!("image_to_image{suffix}"),
+                    allocation_kind,
+                    command_variant,
+                    queue_selection,
+                    general_layout,
+                );
+            }
+        }
+
         // buffer_to_buffer_with_offset exists only under `core` upstream.
         if kind_name == "core" {
             add_copy_buffer_to_buffer_offset_tests(&mut kind_group);
