@@ -20,16 +20,19 @@ pub struct CaseResult {
     pub name: String,
     pub status: TestResult,
     pub message: String,
-    pub duration_ms: u64,
+    /// Microseconds, not milliseconds: most cases finish in well under 1 ms, so a
+    /// millisecond field reports 0 for almost the whole suite and says nothing about
+    /// which case is the slow one.
+    pub duration_us: u64,
 }
 
 impl CaseResult {
-    pub fn from_status(name: impl Into<String>, status: &TestStatus, duration_ms: u64) -> Self {
+    pub fn from_status(name: impl Into<String>, status: &TestStatus, duration_us: u64) -> Self {
         Self {
             name: name.into(),
             status: status.code(),
             message: status.description().to_string(),
-            duration_ms,
+            duration_us,
         }
     }
 }

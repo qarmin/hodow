@@ -95,7 +95,8 @@ pub fn run_isolated(case_names: &[String], options: &IsolateOptions, mut on_resu
                     name,
                     status,
                     message,
-                    duration_ms: 0,
+                    // The case never returned, so there is nothing to have measured.
+                    duration_us: 0,
                 };
                 summary.record(result.status);
                 on_result(&result);

@@ -166,7 +166,13 @@ fn print_case(result: &CaseResult) {
         TestResult::Fail => "FAIL",
         other => other.as_str(),
     };
-    println!("{}: {marker} ({})", result.name, result.message);
+    println!("{}: {marker} ({}) [{}]", result.name, result.message, format_duration(result.duration_us));
+}
+
+/// A fixed unit throughout, so the column can be scanned for the slow case rather than
+/// read one line at a time.
+fn format_duration(duration_us: u64) -> String {
+    format!("{:.3} ms", duration_us as f64 / 1000.0)
 }
 
 fn run_in_process(selected: &[&FlatCase], args: &Args) -> Result<Summary, Box<dyn std::error::Error>> {

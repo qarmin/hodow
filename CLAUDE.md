@@ -50,7 +50,11 @@ heavily on AI-assisted code generation (see README.md "AI Usage").
 - `just gen-gl-table` - regenerate `hodow_core/src/opengl/FUNCTIONS_TABLE.md`.
 - `just cts` / `ctsr` / `cts-list` / `cts-sw` - run the Vulkan CTS port (debug / release / list
   cases without touching Vulkan / run on a software driver). `just cts-verify` runs every check
-  and prints labelled results - that is the one command to reach for.
+  and prints labelled results - that is the one command to reach for. The three run recipes
+  go through `hodow_cts/scripts/run_cts.sh`, which tees output to
+  `tmp/cts-logs/<timestamp>.log` (newest also at `tmp/cts-last.log`) and records the args,
+  the effective `VK_ICD_FILENAMES` and the commit - **read `tmp/cts-last.log` to see a run
+  someone else did**. The exit code stays the test binary's, so 2 still means "no driver".
 - `just cts-shaders` / `cts-diff` / `cts-drift` / `cts-sync` - regenerate SPIR-V, compare
   verdicts against upstream `deqp-vk`, report upstream drift, re-vendor upstream sources.
 - `just cts-coverage` - how many upstream cases are implemented, against three denominators.

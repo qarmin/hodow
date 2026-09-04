@@ -100,7 +100,7 @@ pub fn execute_selected(
             _ => status,
         };
 
-        let result = CaseResult::from_status(&flat.full_name, &status, started.elapsed().as_millis() as u64);
+        let result = CaseResult::from_status(&flat.full_name, &status, started.elapsed().as_micros() as u64);
         summary.record(result.status);
         writer.write_case(&result)?;
         on_result(&result);

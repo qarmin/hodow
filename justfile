@@ -91,12 +91,17 @@ gen-gl-table:
 # hodow_cts is a separate binary target, so the shared-binary hazard described above
 # does not apply to it: rebuilding it never touches target/{debug,release}/hodow_cli.
 
+# `cts`, `ctsr` and `cts-sw` tee their output to `tmp/cts-logs/<timestamp>.log` and
+# point `tmp/cts-last.log` at the newest run, so results stay readable after the
+# terminal scrolls and can be handed to someone who did not run them. The exit code
+# stays the test binary's - 2 still means "no Vulkan driver", not a test failure.
+
 # Run the ported conformance tests, e.g. `just cts --case 'dEQP-VK.compute.*'`.
 cts *args:
-    cargo run -p hodow_cts -- {{args}}
+    @hodow_cts/scripts/run_cts.sh debug "" {{args}}
 
 ctsr *args:
-    cargo run -p hodow_cts --release -- {{args}}
+    @hodow_cts/scripts/run_cts.sh release "" {{args}}
 
 # What is implemented. Does not touch Vulkan, so it works with no driver at all.
 cts-list:
@@ -156,7 +161,7 @@ cts-sw *args:
     fi
 
     echo "using software driver: $pick"
-    VK_ICD_FILENAMES="$pick" cargo run -p hodow_cts -- {{args}}
+    hodow_cts/scripts/run_cts.sh debug "$pick" {{args}}
 
 # Regenerate SPIR-V + parameter constants from shaders/manifest/. Needs glslang.
 cts-shaders:
