@@ -68,6 +68,11 @@ pub struct ImageParms {
     pub extent: [u32; 3],
     pub tiling: vk::ImageTiling,
     pub fill_mode: FillMode,
+    /// `ImageParms::createFlags`. Upstream defaults it to a sentinel meaning "derive
+    /// from the type and layer count"; `None` is that sentinel. The cube tests set it
+    /// explicitly, because a six-layer 2D image would otherwise always be made
+    /// cube-compatible and the array side of a cube-to-array copy must not be.
+    pub create_flags: Option<vk::ImageCreateFlags>,
 }
 
 impl ImageParms {
@@ -88,6 +93,9 @@ impl ImageParms {
     /// `getCreateFlags` - a 2D image whose layer count is a multiple of six is made
     /// cube-compatible, which upstream relies on for the cube array cases.
     fn create_flags(&self) -> vk::ImageCreateFlags {
+        if let Some(flags) = self.create_flags {
+            return flags;
+        }
         if self.image_type == vk::ImageType::_2D && self.extent[2].is_multiple_of(6) {
             vk::ImageCreateFlags::CUBE_COMPATIBLE
         } else {
@@ -615,6 +623,7 @@ fn add_1d_buffer_to_image_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams
                         extent,
                         tiling,
                         fill_mode: dst_fill_mode,
+                        create_flags: None,
                     },
                     regions,
                     allocation_kind: gp.allocation_kind,
@@ -734,6 +743,7 @@ fn add_2d_buffer_to_image_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams
                     extent,
                     tiling,
                     fill_mode: fill,
+                    create_flags: None,
                 },
                 regions,
                 allocation_kind: gp.allocation_kind,
@@ -1287,6 +1297,7 @@ fn add_1d_image_to_buffer_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams
                 extent,
                 tiling: vk::ImageTiling::OPTIMAL,
                 fill_mode: fill,
+                create_flags: None,
             },
             dst_buffer_size,
             dst_fill_mode: fill,
@@ -1383,6 +1394,7 @@ fn add_2d_image_to_buffer_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams
                             extent,
                             tiling,
                             fill_mode: fill,
+                            create_flags: None,
                         },
                         dst_buffer_size,
                         dst_fill_mode: fill,
@@ -2012,6 +2024,7 @@ fn add_image_to_image_simple_tests(group: &mut tcu::TestCaseGroup, gp: &GroupPar
         extent,
         tiling,
         fill_mode: fill,
+        create_flags: None,
     };
     let make = |name: String, src: ImageParms, dst: ImageParms, regions: Vec<ImageCopy>, clear: bool| {
         Box::new(CopyImageToImageCase {
@@ -2153,6 +2166,7 @@ fn add_image_to_image_3d_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams)
         extent,
         tiling: vk::ImageTiling::OPTIMAL,
         fill_mode: fill,
+        create_flags: None,
     };
     let make = |name: &str, src_type: vk::ImageType, dst_type: vk::ImageType, regions: Vec<ImageCopy>| {
         Box::new(CopyImageToImageCase {
@@ -2265,6 +2279,7 @@ fn add_image_to_image_array_tests(group: &mut tcu::TestCaseGroup, gp: &GroupPara
         extent,
         tiling: vk::ImageTiling::OPTIMAL,
         fill_mode: fill,
+        create_flags: None,
     };
     let make = |name: &str, dst_fill: FillMode, regions: Vec<ImageCopy>, needs_maintenance5: bool| {
         Box::new(CopyImageToImageCase {
@@ -2315,6 +2330,55 @@ fn add_image_to_image_array_tests(group: &mut tcu::TestCaseGroup, gp: &GroupPara
     }
 }
 
+/// `addImageToImageCubeTests`
+///
+/// Structurally the array tests with six layers, but the create flags are set
+/// explicitly on each side: a six-layer 2D image would otherwise always be derived as
+/// cube-compatible, and the array half of a cube-to-array copy must not be.
+fn add_image_to_image_cube_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+    const ARRAY_LAYERS: u32 = 6;
+    let extent = [DEFAULT_HALF_SIZE, DEFAULT_HALF_SIZE, ARRAY_LAYERS];
+    let half = [DEFAULT_HALF_SIZE, DEFAULT_HALF_SIZE, 1];
+
+    let parms = |cube: bool, fill: FillMode| ImageParms {
+        image_type: vk::ImageType::_2D,
+        format: vk::Format::R8G8B8A8_UINT,
+        extent,
+        tiling: vk::ImageTiling::OPTIMAL,
+        fill_mode: fill,
+        create_flags: Some(if cube { vk::ImageCreateFlags::CUBE_COMPATIBLE } else { vk::ImageCreateFlags::empty() }),
+    };
+    let make = |name: &str, src_cube: bool, dst_cube: bool, regions: Vec<ImageCopy>| {
+        Box::new(CopyImageToImageCase {
+            name: name.to_string(),
+            src: parms(src_cube, FillMode::Gradient),
+            dst: parms(dst_cube, FillMode::Gradient),
+            regions,
+            clear_destination_with_red: false,
+            needs_maintenance5: false,
+            allocation_kind: gp.allocation_kind,
+            command_variant: gp.command_variant,
+            queue_selection: gp.queue_selection,
+            general_layout: gp.general_layout,
+        }) as Box<dyn TestCase>
+    };
+    let copy = |src_base: u32, src_count: u32, dst_base: u32, dst_count: u32| ImageCopy {
+        src_offset: [0, 0, 0],
+        dst_offset: [0, 0, 0],
+        extent: half,
+        aspect_mask: vk::ImageAspectFlags::COLOR,
+        src_base_layer: src_base,
+        src_layer_count: src_count,
+        dst_base_layer: dst_base,
+        dst_layer_count: dst_count,
+    };
+
+    for (name, src_cube, dst_cube) in [("cube_to_array", true, false), ("array_to_cube", false, true), ("cube_to_cube", true, true)] {
+        group.add_child(make(&format!("{name}_layers"), src_cube, dst_cube, (0..ARRAY_LAYERS).map(|n| copy(n, 1, n, 1)).collect()));
+        group.add_child(make(&format!("{name}_whole"), src_cube, dst_cube, vec![copy(0, ARRAY_LAYERS, 0, ARRAY_LAYERS)]));
+    }
+}
+
 /// The `image_to_image*` groups.
 pub fn add_image_to_image_groups(
     parent: &mut tcu::TestCaseGroup,
@@ -2341,6 +2405,10 @@ pub fn add_image_to_image_groups(
         let mut images_3d = tcu::TestCaseGroup::new("3d_images");
         add_image_to_image_3d_tests(&mut images_3d, &gp);
         group.add_child(images_3d);
+
+        let mut cube = tcu::TestCaseGroup::new("cube");
+        add_image_to_image_cube_tests(&mut cube, &gp);
+        group.add_child(cube);
 
         let mut array = tcu::TestCaseGroup::new("array");
         add_image_to_image_array_tests(&mut array, &gp);
