@@ -1,0 +1,673 @@
+// SPDX-License-Identifier: Apache-2.0
+//
+// Derived from VK-GL-CTS:
+//   external/vulkancts/modules/vulkan/api/vktApiCopyBufferToImageTests.cpp
+//   external/vulkancts/modules/vulkan/api/vktApiCopiesAndBlittingUtil.cpp
+// Upstream revision: see hodow_cts/upstream/COMMIT
+//
+// Copyright (c) 2016 The Khronos Group Inc.
+// Licensed under the Apache License, Version 2.0 (see LICENSE at the repo root).
+//
+// Modifications: rewritten in Rust for hodow_cts.
+//
+// These tests compare against a reference image built on the host with a threshold of
+// zero, so every byte of the source data and of the expected result has to be produced
+// the same way twice - once uploaded to the driver, once computed here.
+
+use vulkanalia::prelude::v1_0::*;
+// vkCmdCopyBufferToImage2 is core in 1.3; the copy_commands2 group also accepts the
+// KHR alias, but vulkanalia exposes the promoted name.
+use vulkanalia::vk::DeviceV1_3;
+
+use super::copies_buffer_tests::{AllocationKind, CopyCommandVariant, QueueSelection, bind_buffer_memory, select_queue_family};
+use crate::tcu::pixel::{ConstPixelBufferAccess, PixelBufferAccess, TextureLevel, fill_with_component_gradients2, get_texture_format_bit_depth};
+use crate::tcu::texture::TextureChannelClass;
+use crate::tcu::{self, TestError, TestOutcome, TestStatus, map_vk_format};
+use crate::vk::VkResultExt;
+use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
+use crate::vk::image_util::{ImageWithMemory, make_image_memory_barrier, make_image_subresource_range};
+use crate::vk::mem_util::{MemoryRequirement, flush_alloc, invalidate_alloc};
+use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool};
+use crate::vk::programs::BinaryCollection;
+use crate::vkt::{Context, TestCase, TestInstance};
+
+/// `defaultSize`
+const DEFAULT_SIZE: u32 = 64;
+/// `default1dExtent`
+const DEFAULT_1D_EXTENT: [u32; 3] = [DEFAULT_SIZE, 1, 1];
+
+/// `FillMode`, narrowed to the modes the ported groups use.
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum FillMode {
+    Gradient,
+    Red,
+}
+
+/// `ImageParms`
+#[derive(Clone, Copy)]
+pub struct ImageParms {
+    pub image_type: vk::ImageType,
+    pub format: vk::Format,
+    pub extent: [u32; 3],
+    pub tiling: vk::ImageTiling,
+    pub fill_mode: FillMode,
+}
+
+impl ImageParms {
+    /// `getArraySize`
+    fn array_size(&self) -> u32 {
+        if self.image_type != vk::ImageType::_3D { self.extent[2] } else { 1 }
+    }
+
+    /// `getExtent3D`
+    fn extent_3d(&self) -> vk::Extent3D {
+        vk::Extent3D {
+            width: self.extent[0],
+            height: if self.image_type != vk::ImageType::_1D { self.extent[1] } else { 1 },
+            depth: if self.image_type == vk::ImageType::_3D { self.extent[2] } else { 1 },
+        }
+    }
+
+    /// `getCreateFlags` - a 2D image whose layer count is a multiple of six is made
+    /// cube-compatible, which upstream relies on for the cube array cases.
+    fn create_flags(&self) -> vk::ImageCreateFlags {
+        if self.image_type == vk::ImageType::_2D && self.extent[2].is_multiple_of(6) {
+            vk::ImageCreateFlags::CUBE_COMPATIBLE
+        } else {
+            vk::ImageCreateFlags::empty()
+        }
+    }
+}
+
+/// `CopyRegion::bufferImageCopy`
+#[derive(Clone, Copy)]
+pub struct BufferImageCopy {
+    pub buffer_offset: u64,
+    pub buffer_row_length: u32,
+    pub buffer_image_height: u32,
+    pub base_array_layer: u32,
+    pub layer_count: u32,
+    pub image_offset: [i32; 3],
+    pub image_extent: [u32; 3],
+}
+
+impl BufferImageCopy {
+    fn to_vk(self) -> vk::BufferImageCopy {
+        vk::BufferImageCopy {
+            buffer_offset: self.buffer_offset,
+            buffer_row_length: self.buffer_row_length,
+            buffer_image_height: self.buffer_image_height,
+            image_subresource: vk::ImageSubresourceLayers {
+                aspect_mask: vk::ImageAspectFlags::COLOR,
+                mip_level: 0,
+                base_array_layer: self.base_array_layer,
+                layer_count: self.layer_count,
+            },
+            image_offset: vk::Offset3D {
+                x: self.image_offset[0],
+                y: self.image_offset[1],
+                z: self.image_offset[2],
+            },
+            image_extent: vk::Extent3D {
+                width: self.image_extent[0],
+                height: self.image_extent[1],
+                depth: self.image_extent[2],
+            },
+        }
+    }
+}
+
+/// `CopiesAndBlittingTestInstance::generateBuffer`
+fn generate_buffer(access: &mut PixelBufferAccess<'_>, width: u32, height: u32, depth: u32, mode: FillMode) {
+    let format = access.format();
+    let channel_class = format.channel_class();
+    let mut max_value = [1.0f32; 4];
+
+    if matches!(channel_class, TextureChannelClass::SignedInteger | TextureChannelClass::UnsignedInteger) {
+        // The tcu::Vectors we use as pixels are 32-bit, so clamp to that.
+        let bits = get_texture_format_bit_depth(format);
+        let sign_bit = i32::from(channel_class == TextureChannelClass::SignedInteger);
+        for i in 0..4 {
+            let b = bits[i].min(32);
+            if b != 0 {
+                max_value[i] = ((1u64 << (b - sign_bit)) - 1) as f32;
+            }
+        }
+    }
+
+    match mode {
+        FillMode::Gradient => fill_with_component_gradients2(access, [0.0; 4], max_value),
+        FillMode::Red => {
+            let red = [max_value[0], 0.0, 0.0, max_value[3]];
+            for z in 0..depth {
+                for y in 0..height {
+                    for x in 0..width {
+                        access.set_pixel(red, x, y, z);
+                    }
+                }
+            }
+        }
+    }
+}
+
+/// `CopyBufferToImage::copyRegionToTextureLevel`
+fn copy_region_to_texture_level(src: &ConstPixelBufferAccess<'_>, dst: &mut PixelBufferAccess<'_>, region: BufferImageCopy, texel_size: usize) {
+    let row_length = if region.buffer_row_length == 0 {
+        region.image_extent[0]
+    } else {
+        region.buffer_row_length
+    };
+    let image_height = if region.buffer_image_height == 0 {
+        region.image_extent[1]
+    } else {
+        region.buffer_image_height
+    };
+
+    let texel_offset = (region.buffer_offset / texel_size as u64) as u32;
+
+    for z in 0..region.image_extent[2] {
+        for y in 0..region.image_extent[1] {
+            let texel_index = texel_offset + (z * image_height + y) * row_length;
+            let dst_z = (region.image_offset[2] as u32) + z + region.base_array_layer;
+            let dst_y = (region.image_offset[1] as u32) + y;
+            let dst_x = region.image_offset[0] as u32;
+            dst.copy_texels_from(src, texel_index as usize, (dst_x, dst_y, dst_z), region.image_extent[0] as usize);
+        }
+    }
+}
+
+/// `CopiesAndBlittingTestInstance::uploadImage`, colour aspect and one mip level.
+#[allow(clippy::too_many_arguments)]
+fn upload_image(context: &Context<'_>, src: &ConstPixelBufferAccess<'_>, image: vk::Image, parms: &ImageParms, general_layout: bool) -> Result<(), TestError> {
+    let vk_device = context.get_device();
+    let queue = context.get_universal_queue();
+    let queue_family_index = context.get_universal_queue_family_index();
+
+    let bytes = src.raw().len() as u64;
+    let staging = BufferWithMemory::new(
+        vk_device,
+        context.get_default_allocator(),
+        make_buffer_create_info(bytes, vk::BufferUsageFlags::TRANSFER_SRC),
+        MemoryRequirement::HOST_VISIBLE,
+    )?;
+    unsafe { std::ptr::copy_nonoverlapping(src.raw().as_ptr(), staging.get_allocation().get_host_ptr(), bytes as usize) };
+    flush_alloc(vk_device, staging.get_allocation())?;
+
+    let layout = if general_layout {
+        vk::ImageLayout::GENERAL
+    } else {
+        vk::ImageLayout::TRANSFER_DST_OPTIMAL
+    };
+    let extent = parms.extent_3d();
+    let range = make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, parms.array_size());
+
+    let cmd_pool = make_command_pool(vk_device, queue_family_index)?;
+    let cmd_buffer = allocate_command_buffer(vk_device, *cmd_pool, vk::CommandBufferLevel::PRIMARY)?;
+    begin_command_buffer(vk_device, *cmd_buffer)?;
+    unsafe {
+        let pre = make_image_memory_barrier(vk::AccessFlags::empty(), vk::AccessFlags::TRANSFER_WRITE, vk::ImageLayout::UNDEFINED, layout, image, range);
+        vk_device.cmd_pipeline_barrier(
+            *cmd_buffer,
+            vk::PipelineStageFlags::HOST,
+            vk::PipelineStageFlags::TRANSFER,
+            vk::DependencyFlags::empty(),
+            &[] as &[vk::MemoryBarrier],
+            &[] as &[vk::BufferMemoryBarrier],
+            &[pre],
+        );
+
+        let region = vk::BufferImageCopy {
+            buffer_offset: 0,
+            buffer_row_length: extent.width,
+            buffer_image_height: extent.height,
+            image_subresource: vk::ImageSubresourceLayers {
+                aspect_mask: vk::ImageAspectFlags::COLOR,
+                mip_level: 0,
+                base_array_layer: 0,
+                layer_count: parms.array_size(),
+            },
+            image_offset: vk::Offset3D { x: 0, y: 0, z: 0 },
+            image_extent: extent,
+        };
+        vk_device.cmd_copy_buffer_to_image(*cmd_buffer, staging.get(), image, layout, &[region]);
+
+        let post = make_image_memory_barrier(vk::AccessFlags::TRANSFER_WRITE, vk::AccessFlags::TRANSFER_WRITE, layout, layout, image, range);
+        vk_device.cmd_pipeline_barrier(
+            *cmd_buffer,
+            vk::PipelineStageFlags::TRANSFER,
+            vk::PipelineStageFlags::TRANSFER,
+            vk::DependencyFlags::empty(),
+            &[] as &[vk::MemoryBarrier],
+            &[] as &[vk::BufferMemoryBarrier],
+            &[post],
+        );
+    }
+    end_command_buffer(vk_device, *cmd_buffer)?;
+    submit_commands_and_wait(vk_device, queue, *cmd_buffer)
+}
+
+/// `CopiesAndBlittingTestInstance::readImage`, colour aspect and one mip level.
+fn read_image(context: &Context<'_>, image: vk::Image, parms: &ImageParms, dst: &mut TextureLevel, general_layout: bool) -> Result<(), TestError> {
+    let vk_device = context.get_device();
+    let queue = context.get_universal_queue();
+    let queue_family_index = context.get_universal_queue_family_index();
+
+    let bytes = dst.data().len() as u64;
+    let staging = BufferWithMemory::new(
+        vk_device,
+        context.get_default_allocator(),
+        make_buffer_create_info(bytes, vk::BufferUsageFlags::TRANSFER_DST),
+        MemoryRequirement::HOST_VISIBLE,
+    )?;
+
+    let src_layout = if general_layout {
+        vk::ImageLayout::GENERAL
+    } else {
+        vk::ImageLayout::TRANSFER_SRC_OPTIMAL
+    };
+    let old_layout = if general_layout {
+        vk::ImageLayout::GENERAL
+    } else {
+        vk::ImageLayout::TRANSFER_DST_OPTIMAL
+    };
+    let extent = parms.extent_3d();
+    let range = make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, parms.array_size());
+
+    let cmd_pool = make_command_pool(vk_device, queue_family_index)?;
+    let cmd_buffer = allocate_command_buffer(vk_device, *cmd_pool, vk::CommandBufferLevel::PRIMARY)?;
+    begin_command_buffer(vk_device, *cmd_buffer)?;
+    unsafe {
+        let pre = make_image_memory_barrier(vk::AccessFlags::TRANSFER_WRITE, vk::AccessFlags::TRANSFER_READ, old_layout, src_layout, image, range);
+        vk_device.cmd_pipeline_barrier(
+            *cmd_buffer,
+            vk::PipelineStageFlags::TRANSFER,
+            vk::PipelineStageFlags::TRANSFER,
+            vk::DependencyFlags::empty(),
+            &[] as &[vk::MemoryBarrier],
+            &[] as &[vk::BufferMemoryBarrier],
+            &[pre],
+        );
+
+        let region = vk::BufferImageCopy {
+            buffer_offset: 0,
+            buffer_row_length: extent.width,
+            buffer_image_height: extent.height,
+            image_subresource: vk::ImageSubresourceLayers {
+                aspect_mask: vk::ImageAspectFlags::COLOR,
+                mip_level: 0,
+                base_array_layer: 0,
+                layer_count: parms.array_size(),
+            },
+            image_offset: vk::Offset3D { x: 0, y: 0, z: 0 },
+            image_extent: extent,
+        };
+        vk_device.cmd_copy_image_to_buffer(*cmd_buffer, image, src_layout, staging.get(), &[region]);
+    }
+    end_command_buffer(vk_device, *cmd_buffer)?;
+    submit_commands_and_wait(vk_device, queue, *cmd_buffer)?;
+
+    invalidate_alloc(vk_device, staging.get_allocation())?;
+    unsafe { std::ptr::copy_nonoverlapping(staging.get_allocation().get_host_ptr().cast_const(), dst.data_mut().as_mut_ptr(), bytes as usize) };
+    Ok(())
+}
+
+/// `CopiesAndBlittingTestInstance::checkTestResult` - the copy tests compare exactly,
+/// so any difference at all is a failure.
+fn check_test_result(expected: &ConstPixelBufferAccess<'_>, result: &ConstPixelBufferAccess<'_>) -> TestStatus {
+    if expected.raw() == result.raw() {
+        return TestStatus::pass("CopiesAndBlitting test");
+    }
+    let at = expected.raw().iter().zip(result.raw()).position(|(a, b)| a != b).unwrap_or(0);
+    TestStatus::fail(format!("CopiesAndBlitting test: first difference at byte {at}"))
+}
+
+/// `TestParams`, narrowed to what the buffer-to-image cases carry.
+pub struct CopyBufferToImageCase {
+    name: String,
+    src_buffer_size: u32,
+    src_fill_mode: FillMode,
+    dst: ImageParms,
+    regions: Vec<BufferImageCopy>,
+    allocation_kind: AllocationKind,
+    command_variant: CopyCommandVariant,
+    queue_selection: QueueSelection,
+    general_layout: bool,
+    /// Set when a region asks for `VK_REMAINING_ARRAY_LAYERS`, which only became legal
+    /// for a copy subresource with VK_KHR_maintenance5.
+    needs_maintenance5: bool,
+}
+
+impl TestCase for CopyBufferToImageCase {
+    fn name(&self) -> &str {
+        &self.name
+    }
+
+    fn check_support(&self, context: &Context<'_>) -> Result<(), TestError> {
+        if self.command_variant == CopyCommandVariant::CopyCommands2 {
+            context.require_device_functionality("VK_KHR_copy_commands2")?;
+        }
+        if self.allocation_kind == AllocationKind::Dedicated {
+            context.require_device_functionality("VK_KHR_dedicated_allocation")?;
+        }
+        if self.needs_maintenance5 {
+            context.require_device_functionality("VK_KHR_maintenance5")?;
+        }
+        select_queue_family(context, self.queue_selection)?;
+
+        let usage = vk::ImageUsageFlags::TRANSFER_SRC | vk::ImageUsageFlags::TRANSFER_DST;
+        let properties = unsafe {
+            context.get_instance().get_physical_device_image_format_properties(
+                context.get_physical_device(),
+                self.dst.format,
+                self.dst.image_type,
+                self.dst.tiling,
+                usage,
+                self.dst.create_flags(),
+            )
+        }
+        .map_err(|_| TestError::NotSupported("Format does not support the required parameters".to_string()))?;
+
+        if properties.max_array_layers < self.dst.array_size() {
+            return Err(TestError::NotSupported("maxArrayLayers too small".to_string()));
+        }
+        Ok(())
+    }
+
+    fn programs(&self) -> BinaryCollection {
+        BinaryCollection::new(&[])
+    }
+
+    fn create_instance<'a>(&'a self, context: &'a Context<'a>) -> Box<dyn TestInstance + 'a> {
+        Box::new(CopyBufferToImageInstance { context, params: self })
+    }
+}
+
+struct CopyBufferToImageInstance<'a> {
+    context: &'a Context<'a>,
+    params: &'a CopyBufferToImageCase,
+}
+
+impl TestInstance for CopyBufferToImageInstance<'_> {
+    fn iterate(&mut self) -> TestOutcome {
+        let p = self.params;
+        let vk_device = self.context.get_device();
+        let allocator = self.context.get_default_allocator();
+
+        let texture_format = map_vk_format(p.dst.format).ok_or_else(|| TestError::NotSupported("format has no tcu mapping".to_string()))?;
+        let texel_size = texture_format.pixel_size().ok_or_else(|| TestError::NotSupported("format has no pixel size".to_string()))? as usize;
+
+        // Host-side source data, expected result, and the image's starting contents.
+        let mut source_level = TextureLevel::new(texture_format, p.src_buffer_size, 1, 1)?;
+        generate_buffer(&mut source_level.get_access(), p.src_buffer_size, 1, 1, p.src_fill_mode);
+
+        let mut destination_level = TextureLevel::new(texture_format, p.dst.extent[0], p.dst.extent[1], p.dst.extent[2])?;
+        generate_buffer(&mut destination_level.get_access(), p.dst.extent[0], p.dst.extent[1], p.dst.extent[2], p.dst.fill_mode);
+
+        // `generateExpectedResult` - start from the destination contents, then replay
+        // each region on the host.
+        let mut expected_level = TextureLevel::new(texture_format, p.dst.extent[0], p.dst.extent[1], p.dst.extent[2])?;
+        expected_level.data_mut().copy_from_slice(destination_level.data());
+        {
+            let source_access = source_level.get_const_access();
+            let mut expected_access = expected_level.get_access();
+            for region in &p.regions {
+                copy_region_to_texture_level(&source_access, &mut expected_access, *region, texel_size);
+            }
+        }
+
+        // Source buffer.
+        let buffer_size = u64::from(p.src_buffer_size) * texel_size as u64;
+        let source_info = make_buffer_create_info(buffer_size, vk::BufferUsageFlags::TRANSFER_SRC);
+        let source_buffer = unsafe { vk_device.create_buffer(&source_info, None) }.vk_check("vkCreateBuffer")?;
+        let source_buffer = crate::vk::ref_util::Unique::new(vk_device, source_buffer);
+        let source_alloc = bind_buffer_memory(self.context, *source_buffer, p.allocation_kind)?;
+        unsafe { std::ptr::copy_nonoverlapping(source_level.data().as_ptr(), source_alloc.get_host_ptr(), source_level.data().len()) };
+        flush_alloc(vk_device, &source_alloc)?;
+
+        // Destination image.
+        let image_info = vk::ImageCreateInfo {
+            s_type: vk::StructureType::IMAGE_CREATE_INFO,
+            next: std::ptr::null(),
+            flags: p.dst.create_flags(),
+            image_type: p.dst.image_type,
+            format: p.dst.format,
+            extent: p.dst.extent_3d(),
+            mip_levels: 1,
+            array_layers: p.dst.array_size(),
+            samples: vk::SampleCountFlags::_1,
+            tiling: p.dst.tiling,
+            usage: vk::ImageUsageFlags::TRANSFER_SRC | vk::ImageUsageFlags::TRANSFER_DST,
+            sharing_mode: vk::SharingMode::EXCLUSIVE,
+            queue_family_index_count: 0,
+            queue_family_indices: std::ptr::null(),
+            initial_layout: vk::ImageLayout::UNDEFINED,
+        };
+        let destination = if p.allocation_kind == AllocationKind::Dedicated {
+            ImageWithMemory::new_dedicated(vk_device, allocator, image_info, MemoryRequirement::ANY)?
+        } else {
+            ImageWithMemory::new(vk_device, allocator, image_info, MemoryRequirement::ANY)?
+        };
+
+        upload_image(self.context, &destination_level.get_const_access(), destination.get(), &p.dst, p.general_layout)?;
+
+        // The copy under test.
+        let queue_family_index = select_queue_family(self.context, p.queue_selection)?;
+        let queue = unsafe { vk_device.get_device_queue(queue_family_index, 0) };
+        let cmd_pool = make_command_pool(vk_device, queue_family_index)?;
+        let cmd_buffer = allocate_command_buffer(vk_device, *cmd_pool, vk::CommandBufferLevel::PRIMARY)?;
+
+        let layout = if p.general_layout {
+            vk::ImageLayout::GENERAL
+        } else {
+            vk::ImageLayout::TRANSFER_DST_OPTIMAL
+        };
+        let range = make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, p.dst.array_size());
+
+        begin_command_buffer(vk_device, *cmd_buffer)?;
+        unsafe {
+            let barrier = make_image_memory_barrier(vk::AccessFlags::TRANSFER_WRITE, vk::AccessFlags::TRANSFER_WRITE, layout, layout, destination.get(), range);
+            vk_device.cmd_pipeline_barrier(
+                *cmd_buffer,
+                vk::PipelineStageFlags::TRANSFER,
+                vk::PipelineStageFlags::TRANSFER,
+                vk::DependencyFlags::empty(),
+                &[] as &[vk::MemoryBarrier],
+                &[] as &[vk::BufferMemoryBarrier],
+                &[barrier],
+            );
+
+            let copies: Vec<vk::BufferImageCopy> = p.regions.iter().map(|r| r.to_vk()).collect();
+            if p.command_variant == CopyCommandVariant::CopyCommands2 {
+                let copies2: Vec<vk::BufferImageCopy2> = copies
+                    .iter()
+                    .map(|c| vk::BufferImageCopy2 {
+                        s_type: vk::StructureType::BUFFER_IMAGE_COPY_2,
+                        next: std::ptr::null(),
+                        buffer_offset: c.buffer_offset,
+                        buffer_row_length: c.buffer_row_length,
+                        buffer_image_height: c.buffer_image_height,
+                        image_subresource: c.image_subresource,
+                        image_offset: c.image_offset,
+                        image_extent: c.image_extent,
+                    })
+                    .collect();
+                let info = vk::CopyBufferToImageInfo2 {
+                    s_type: vk::StructureType::COPY_BUFFER_TO_IMAGE_INFO_2,
+                    next: std::ptr::null(),
+                    src_buffer: *source_buffer,
+                    dst_image: destination.get(),
+                    dst_image_layout: layout,
+                    region_count: copies2.len() as u32,
+                    regions: copies2.as_ptr(),
+                };
+                vk_device.cmd_copy_buffer_to_image2(*cmd_buffer, &info);
+            } else {
+                vk_device.cmd_copy_buffer_to_image(*cmd_buffer, *source_buffer, destination.get(), layout, &copies);
+            }
+        }
+        end_command_buffer(vk_device, *cmd_buffer)?;
+        submit_commands_and_wait(vk_device, queue, *cmd_buffer)?;
+
+        let mut result_level = TextureLevel::new(texture_format, p.dst.extent[0], p.dst.extent[1], p.dst.extent[2])?;
+        read_image(self.context, destination.get(), &p.dst, &mut result_level, p.general_layout)?;
+
+        Ok(check_test_result(&expected_level.get_const_access(), &result_level.get_const_access()))
+    }
+}
+
+/// `restrictedFormatList` - deliberately short, so the matrix does not explode. The
+/// 96-bit format appears twice because some implementations do not support it natively
+/// with optimal tiling and take a different path for linear.
+static RESTRICTED_FORMAT_LIST: &[(vk::Format, vk::ImageTiling, &str)] = &[
+    (vk::Format::R8G8B8A8_UNORM, vk::ImageTiling::OPTIMAL, ""),
+    (vk::Format::R8G8B8A8_UINT, vk::ImageTiling::OPTIMAL, "_rgba8_uint"),
+    (vk::Format::R32G32B32_SFLOAT, vk::ImageTiling::OPTIMAL, "_rgb32_sfloat"),
+    (vk::Format::R32G32B32_SFLOAT, vk::ImageTiling::LINEAR, "_rgb32_sfloat_linear"),
+];
+
+/// `VK_REMAINING_ARRAY_LAYERS`
+const REMAINING_ARRAY_LAYERS: u32 = u32::MAX;
+
+struct GroupParams {
+    allocation_kind: AllocationKind,
+    command_variant: CopyCommandVariant,
+    queue_selection: QueueSelection,
+    general_layout: bool,
+}
+
+/// `add1dBufferToImageTests`
+fn add_1d_buffer_to_image_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+    let image_type = vk::ImageType::_1D;
+
+    for &(format, tiling, suffix) in RESTRICTED_FORMAT_LIST {
+        let Some(tcu_format) = map_vk_format(format) else { continue };
+        let Some(pixel_size) = tcu_format.pixel_size() else { continue };
+
+        let make =
+            |name: String, src_buffer_size: u32, src_fill_mode: FillMode, dst_fill_mode: FillMode, extent: [u32; 3], regions: Vec<BufferImageCopy>, needs_maintenance5: bool| {
+                Box::new(CopyBufferToImageCase {
+                    name,
+                    src_buffer_size,
+                    src_fill_mode,
+                    dst: ImageParms {
+                        image_type,
+                        format,
+                        extent,
+                        tiling,
+                        fill_mode: dst_fill_mode,
+                    },
+                    regions,
+                    allocation_kind: gp.allocation_kind,
+                    command_variant: gp.command_variant,
+                    queue_selection: gp.queue_selection,
+                    general_layout: gp.general_layout,
+                    needs_maintenance5,
+                }) as Box<dyn TestCase>
+            };
+
+        let whole_1d = |buffer_image_height: u32, buffer_offset: u64, base_array_layer: u32, layer_count: u32| BufferImageCopy {
+            buffer_offset,
+            buffer_row_length: 0,
+            buffer_image_height,
+            base_array_layer,
+            layer_count,
+            image_offset: [0, 0, 0],
+            image_extent: DEFAULT_1D_EXTENT,
+        };
+
+        group.add_child(make(
+            format!("tightly_sized_buffer{suffix}"),
+            DEFAULT_SIZE,
+            FillMode::Gradient,
+            FillMode::Gradient,
+            DEFAULT_1D_EXTENT,
+            vec![whole_1d(0, 0, 0, 1)],
+            false,
+        ));
+
+        group.add_child(make(
+            format!("larger_buffer{suffix}"),
+            DEFAULT_SIZE + 1,
+            FillMode::Gradient,
+            FillMode::Gradient,
+            DEFAULT_1D_EXTENT,
+            vec![whole_1d(DEFAULT_SIZE + 1, 0, 0, 1)],
+            false,
+        ));
+
+        {
+            let array_layers = 16u32;
+            let regions = (0..array_layers).map(|n| whole_1d(0, u64::from(DEFAULT_SIZE * pixel_size * n), n, 1)).collect();
+            group.add_child(make(
+                format!("array_tightly_sized_buffer{suffix}"),
+                DEFAULT_SIZE * array_layers,
+                FillMode::Gradient,
+                FillMode::Gradient,
+                [DEFAULT_SIZE, 1, array_layers],
+                regions,
+                false,
+            ));
+        }
+
+        // Both sides are filled red, so the reference stays correct however many layers
+        // the driver writes - which is what lets upstream keep the host-side replay of
+        // a VK_REMAINING_ARRAY_LAYERS region down to a single layer.
+        for (name, base_layer) in [("array_all_remaining_layers", 0u32), ("array_not_all_remaining_layers", 2)] {
+            group.add_child(make(
+                format!("{name}{suffix}"),
+                DEFAULT_SIZE * 16,
+                FillMode::Red,
+                FillMode::Red,
+                [DEFAULT_SIZE, 1, 16],
+                vec![whole_1d(0, 0, base_layer, REMAINING_ARRAY_LAYERS)],
+                true,
+            ));
+        }
+
+        {
+            let array_layers = 16u32;
+            let regions = (0..array_layers)
+                .map(|n| whole_1d(DEFAULT_SIZE + 1, u64::from(DEFAULT_SIZE * pixel_size * n), n, 1))
+                .collect();
+            group.add_child(make(
+                format!("array_larger_buffer{suffix}"),
+                DEFAULT_SIZE * array_layers,
+                FillMode::Gradient,
+                FillMode::Gradient,
+                [DEFAULT_SIZE, 1, array_layers],
+                regions,
+                false,
+            ));
+        }
+    }
+}
+
+/// `addCopyBufferToImageTests`
+fn add_copy_buffer_to_image_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+    let mut images_1d = tcu::TestCaseGroup::new("1d_images");
+    add_1d_buffer_to_image_tests(&mut images_1d, gp);
+    group.add_child(images_1d);
+    // 2d_images and 3d_images are not ported yet.
+}
+
+/// The `buffer_to_image*` groups of `createCopiesAndBlittingTests`.
+pub fn add_buffer_to_image_groups(
+    parent: &mut tcu::TestCaseGroup,
+    name: &str,
+    allocation_kind: AllocationKind,
+    command_variant: CopyCommandVariant,
+    queue_selection: QueueSelection,
+    general_layout: bool,
+) {
+    let mut group = tcu::TestCaseGroup::new(name);
+    add_copy_buffer_to_image_tests(
+        &mut group,
+        &GroupParams {
+            allocation_kind,
+            command_variant,
+            queue_selection,
+            general_layout,
+        },
+    );
+    parent.add_child(group);
+}

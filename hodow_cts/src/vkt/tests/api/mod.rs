@@ -13,6 +13,7 @@
 // `BinaryCollection` and nothing in this subtree has a manifest entry.
 
 pub mod copies_buffer_tests;
+pub mod copies_image_tests;
 pub mod feature_info_tests;
 pub mod image_clearing_formats;
 pub mod image_clearing_tests;

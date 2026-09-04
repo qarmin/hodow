@@ -47,6 +47,7 @@ pub enum AllocationKind {
 pub enum QueueSelection {
     Universal,
     TransferOnly,
+    ComputeOnly,
 }
 
 /// The extension flag that picks `vkCmdCopyBuffer2` over `vkCmdCopyBuffer`.
@@ -125,7 +126,7 @@ fn generate_filled_buffer(size: u64) -> Vec<u8> {
 /// transfer-only variants; hodow_cts has one device, so a driver with no
 /// transfer-only family reports NotSupported - which is the same verdict upstream
 /// gives, since it cannot create that device either.
-fn select_queue_family(context: &Context<'_>, selection: QueueSelection) -> Result<u32, TestError> {
+pub(crate) fn select_queue_family(context: &Context<'_>, selection: QueueSelection) -> Result<u32, TestError> {
     match selection {
         QueueSelection::Universal => Ok(context.get_universal_queue_family_index()),
         QueueSelection::TransferOnly => {
@@ -138,13 +139,21 @@ fn select_queue_family(context: &Context<'_>, selection: QueueSelection) -> Resu
                 .map(|i| i as u32)
                 .ok_or_else(|| TestError::NotSupported("No transfer-only queue family".to_string()))
         }
+        QueueSelection::ComputeOnly => {
+            let families = unsafe { context.get_instance().get_physical_device_queue_family_properties(context.get_physical_device()) };
+            families
+                .iter()
+                .position(|f| f.queue_flags.contains(vk::QueueFlags::COMPUTE) && !f.queue_flags.contains(vk::QueueFlags::GRAPHICS))
+                .map(|i| i as u32)
+                .ok_or_else(|| TestError::NotSupported("No compute-only queue family".to_string()))
+        }
     }
 }
 
 /// Allocates and binds host-visible memory for `buffer`, honouring the allocation
 /// kind: DEDICATED chains a VkMemoryDedicatedAllocateInfo, which is the whole point of
 /// the `dedicated_allocation` group.
-fn bind_buffer_memory<'a>(context: &'a Context<'a>, buffer: vk::Buffer, allocation_kind: AllocationKind) -> Result<Allocation<'a>, TestError> {
+pub(crate) fn bind_buffer_memory<'a>(context: &'a Context<'a>, buffer: vk::Buffer, allocation_kind: AllocationKind) -> Result<Allocation<'a>, TestError> {
     let vk_device = context.get_device();
     let req = unsafe { vk_device.get_buffer_memory_requirements(buffer) };
 
@@ -620,6 +629,30 @@ pub fn create_buffer_copy_tests() -> tcu::TestCaseGroup {
         let mut b2b_transfer = tcu::TestCaseGroup::new("buffer_to_buffer_transfer_queue");
         add_copy_buffer_to_buffer_tests(&mut b2b_transfer, allocation_kind, QueueSelection::TransferOnly, command_variant);
         kind_group.add_child(b2b_transfer);
+
+        for (suffix, queue_selection, general_layout) in [
+            ("", QueueSelection::Universal, false),
+            ("_transfer_queue", QueueSelection::TransferOnly, false),
+            ("_compute_queue", QueueSelection::ComputeOnly, false),
+            ("_general_layout", QueueSelection::Universal, true),
+        ] {
+            // Upstream registers general_layout under `core` only.
+            if general_layout && kind_name != "core" {
+                continue;
+            }
+            // copy_commands2 has no buffer_to_image group upstream.
+            if command_variant == CopyCommandVariant::CopyCommands2 {
+                continue;
+            }
+            super::copies_image_tests::add_buffer_to_image_groups(
+                &mut kind_group,
+                &format!("buffer_to_image{suffix}"),
+                allocation_kind,
+                command_variant,
+                queue_selection,
+                general_layout,
+            );
+        }
 
         // buffer_to_buffer_with_offset exists only under `core` upstream.
         if kind_name == "core" {
