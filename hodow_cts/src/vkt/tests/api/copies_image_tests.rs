@@ -1759,6 +1759,7 @@ pub struct CopyImageToImageCase {
     command_variant: CopyCommandVariant,
     queue_selection: QueueSelection,
     general_layout: bool,
+    needs_maintenance5: bool,
 }
 
 impl TestCase for CopyImageToImageCase {
@@ -1772,6 +1773,9 @@ impl TestCase for CopyImageToImageCase {
         }
         if self.allocation_kind == AllocationKind::Dedicated {
             context.require_device_functionality("VK_KHR_dedicated_allocation")?;
+        }
+        if self.needs_maintenance5 {
+            context.require_device_functionality("VK_KHR_maintenance5")?;
         }
         select_queue(context, self.queue_selection)?;
 
@@ -2016,6 +2020,7 @@ fn add_image_to_image_simple_tests(group: &mut tcu::TestCaseGroup, gp: &GroupPar
             dst,
             regions,
             clear_destination_with_red: clear,
+            needs_maintenance5: false,
             allocation_kind: gp.allocation_kind,
             command_variant: gp.command_variant,
             queue_selection: gp.queue_selection,
@@ -2156,6 +2161,7 @@ fn add_image_to_image_3d_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams)
             dst: parms(dst_type, FillMode::White),
             regions,
             clear_destination_with_red: false,
+            needs_maintenance5: false,
             allocation_kind: gp.allocation_kind,
             command_variant: gp.command_variant,
             queue_selection: gp.queue_selection,
@@ -2246,6 +2252,69 @@ fn add_image_to_image_3d_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams)
     ));
 }
 
+/// `addImageToImageArrayTests`, minus the mipmap cases (which need
+/// CopyImageToImageMipmap, a separate instance).
+fn add_image_to_image_array_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+    const ARRAY_LAYERS: u32 = 16;
+    let extent = [DEFAULT_HALF_SIZE, DEFAULT_HALF_SIZE, ARRAY_LAYERS];
+    let half = [DEFAULT_HALF_SIZE, DEFAULT_HALF_SIZE, 1];
+
+    let parms = |fill: FillMode| ImageParms {
+        image_type: vk::ImageType::_2D,
+        format: vk::Format::R8G8B8A8_UINT,
+        extent,
+        tiling: vk::ImageTiling::OPTIMAL,
+        fill_mode: fill,
+    };
+    let make = |name: &str, dst_fill: FillMode, regions: Vec<ImageCopy>, needs_maintenance5: bool| {
+        Box::new(CopyImageToImageCase {
+            name: name.to_string(),
+            src: parms(FillMode::Gradient),
+            dst: parms(dst_fill),
+            regions,
+            clear_destination_with_red: false,
+            needs_maintenance5,
+            allocation_kind: gp.allocation_kind,
+            command_variant: gp.command_variant,
+            queue_selection: gp.queue_selection,
+            general_layout: gp.general_layout,
+        }) as Box<dyn TestCase>
+    };
+    let copy = |src_base: u32, src_count: u32, dst_base: u32, dst_count: u32| ImageCopy {
+        src_offset: [0, 0, 0],
+        dst_offset: [0, 0, 0],
+        extent: half,
+        aspect_mask: vk::ImageAspectFlags::COLOR,
+        src_base_layer: src_base,
+        src_layer_count: src_count,
+        dst_base_layer: dst_base,
+        dst_layer_count: dst_count,
+    };
+
+    // Every case here fills *both* images with the same gradient, so the copy cannot
+    // change the destination whatever layers it touches. That is load-bearing, not
+    // incidental: the host replay works from the z offsets, which are zero, while the
+    // device selects the layer through the subresource - so a differently filled
+    // destination would disagree from the second layer on.
+    group.add_child(make(
+        "array_to_array_layers",
+        FillMode::Gradient,
+        (0..ARRAY_LAYERS).map(|n| copy(n, 1, n, 1)).collect(),
+        false,
+    ));
+
+    group.add_child(make("array_to_array_whole", FillMode::Gradient, vec![copy(0, ARRAY_LAYERS, 0, ARRAY_LAYERS)], false));
+
+    // Only the `whole` variant is gated to the universal queue upstream; `partial`
+    // is registered for every queue selection.
+    for (name, base, universal_only) in [("array_to_array_whole_remaining_layers", 0u32, true), ("array_to_array_partial_remaining_layers", 3, false)] {
+        if universal_only && gp.queue_selection != QueueSelection::Universal {
+            continue;
+        }
+        group.add_child(make(name, FillMode::Gradient, vec![copy(base, REMAINING_ARRAY_LAYERS, base, REMAINING_ARRAY_LAYERS)], true));
+    }
+}
+
 /// The `image_to_image*` groups.
 pub fn add_image_to_image_groups(
     parent: &mut tcu::TestCaseGroup,
@@ -2272,6 +2341,10 @@ pub fn add_image_to_image_groups(
         let mut images_3d = tcu::TestCaseGroup::new("3d_images");
         add_image_to_image_3d_tests(&mut images_3d, &gp);
         group.add_child(images_3d);
+
+        let mut array = tcu::TestCaseGroup::new("array");
+        add_image_to_image_array_tests(&mut array, &gp);
+        group.add_child(array);
     }
     // all_formats needs a compressed-format model in tcu; dimensions, array and cube
     // are not ported yet either.
