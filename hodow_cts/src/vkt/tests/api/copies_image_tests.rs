@@ -33,8 +33,21 @@ use crate::vkt::{Context, TestCase, TestInstance};
 
 /// `defaultSize`
 const DEFAULT_SIZE: u32 = 64;
+/// `defaultHalfSize`
+const DEFAULT_HALF_SIZE: u32 = DEFAULT_SIZE / 2;
+/// `defaultQuarterSize`
+const DEFAULT_QUARTER_SIZE: u32 = DEFAULT_SIZE / 4;
 /// `default1dExtent`
 const DEFAULT_1D_EXTENT: [u32; 3] = [DEFAULT_SIZE, 1, 1];
+/// `defaultExtent`
+const DEFAULT_EXTENT: [u32; 3] = [DEFAULT_SIZE, DEFAULT_SIZE, 1];
+/// `defaultHalfExtent`
+const DEFAULT_HALF_EXTENT: [u32; 3] = [DEFAULT_HALF_SIZE, DEFAULT_HALF_SIZE, 1];
+
+/// `de::roundUp`
+fn round_up(value: u32, alignment: u32) -> u32 {
+    value.div_ceil(alignment) * alignment
+}
 
 /// `FillMode`, narrowed to the modes the ported groups use.
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -335,6 +348,9 @@ pub struct CopyBufferToImageCase {
     /// Set when a region asks for `VK_REMAINING_ARRAY_LAYERS`, which only became legal
     /// for a copy subresource with VK_KHR_maintenance5.
     needs_maintenance5: bool,
+    /// Set for the relaxed buffer offset on a transfer-only queue, where the loosened
+    /// alignment rule comes from VK_KHR_maintenance11.
+    needs_maintenance11: bool,
 }
 
 impl TestCase for CopyBufferToImageCase {
@@ -351,6 +367,9 @@ impl TestCase for CopyBufferToImageCase {
         }
         if self.needs_maintenance5 {
             context.require_device_functionality("VK_KHR_maintenance5")?;
+        }
+        if self.needs_maintenance11 {
+            context.require_device_functionality("VK_KHR_maintenance11")?;
         }
         select_queue_family(context, self.queue_selection)?;
 
@@ -562,6 +581,7 @@ fn add_1d_buffer_to_image_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams
                     queue_selection: gp.queue_selection,
                     general_layout: gp.general_layout,
                     needs_maintenance5,
+                    needs_maintenance11: false,
                 }) as Box<dyn TestCase>
             };
 
@@ -642,12 +662,303 @@ fn add_1d_buffer_to_image_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams
     }
 }
 
+/// `add2dBufferToImageTests`'s format list. Longer than the 1D one: R8_UNORM covers
+/// the single-byte texel path and R64_UINT the 64-bit one.
+static RESTRICTED_FORMAT_LIST_2D: &[(vk::Format, vk::ImageTiling, &str)] = &[
+    (vk::Format::R8G8B8A8_UNORM, vk::ImageTiling::OPTIMAL, ""),
+    (vk::Format::R8_UNORM, vk::ImageTiling::OPTIMAL, "_r8_unorm"),
+    (vk::Format::R8_UNORM, vk::ImageTiling::LINEAR, "_r8_unorm_linear"),
+    (vk::Format::R8G8B8A8_UINT, vk::ImageTiling::OPTIMAL, "_rgba8_uint"),
+    (vk::Format::R32G32B32_SFLOAT, vk::ImageTiling::OPTIMAL, "_rgb32_sfloat"),
+    (vk::Format::R32G32B32_SFLOAT, vk::ImageTiling::LINEAR, "_rgb32_sfloat_linear"),
+    (vk::Format::R64_UINT, vk::ImageTiling::OPTIMAL, "_r64_uint"),
+];
+
+/// `add2dBufferToImageTests`
+fn add_2d_buffer_to_image_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+    let image_type = vk::ImageType::_2D;
+
+    for &(format, tiling, suffix) in RESTRICTED_FORMAT_LIST_2D {
+        let Some(tcu_format) = map_vk_format(format) else { continue };
+        let Some(pixel_size) = tcu_format.pixel_size() else { continue };
+
+        let make = |name: String, src_buffer_size: u32, fill: FillMode, extent: [u32; 3], regions: Vec<BufferImageCopy>, needs_maintenance5: bool, needs_maintenance11: bool| {
+            Box::new(CopyBufferToImageCase {
+                name,
+                src_buffer_size,
+                src_fill_mode: fill,
+                dst: ImageParms {
+                    image_type,
+                    format,
+                    extent,
+                    tiling,
+                    fill_mode: fill,
+                },
+                regions,
+                allocation_kind: gp.allocation_kind,
+                command_variant: gp.command_variant,
+                queue_selection: gp.queue_selection,
+                general_layout: gp.general_layout,
+                needs_maintenance5,
+                needs_maintenance11,
+            }) as Box<dyn TestCase>
+        };
+
+        let region = |buffer_offset: u64, row_length: u32, image_height: u32, base_layer: u32, layer_count: u32, image_offset: [i32; 3], image_extent: [u32; 3]| BufferImageCopy {
+            buffer_offset,
+            buffer_row_length: row_length,
+            buffer_image_height: image_height,
+            base_array_layer: base_layer,
+            layer_count,
+            image_offset,
+            image_extent,
+        };
+
+        group.add_child(make(
+            format!("whole{suffix}"),
+            DEFAULT_SIZE * DEFAULT_SIZE,
+            FillMode::Gradient,
+            DEFAULT_EXTENT,
+            vec![region(0, 0, 0, 0, 1, [0, 0, 0], DEFAULT_EXTENT)],
+            false,
+            false,
+        ));
+
+        {
+            let buffer_width = DEFAULT_SIZE + 1;
+            let buffer_height = DEFAULT_SIZE + 1;
+            group.add_child(make(
+                format!("whole_unaligned{suffix}"),
+                buffer_width * buffer_height,
+                FillMode::Gradient,
+                DEFAULT_EXTENT,
+                vec![region(0, buffer_width, buffer_height, 0, 1, [0, 0, 0], DEFAULT_EXTENT)],
+                false,
+                false,
+            ));
+        }
+
+        {
+            // Upstream's loop shrinks each region as it walks right; `divisor` is
+            // post-incremented inside the step expression, so the body always sees the
+            // value the condition was tested with.
+            let mut regions = Vec::new();
+            let mut divisor = 1u32;
+            let mut offset = 0u32;
+            while offset + DEFAULT_QUARTER_SIZE / divisor < DEFAULT_SIZE && DEFAULT_QUARTER_SIZE > divisor {
+                let side = DEFAULT_QUARTER_SIZE / divisor;
+                regions.push(region(0, 0, 0, 0, 1, [offset as i32, DEFAULT_HALF_SIZE as i32, 0], [side, side, 1]));
+                offset += side;
+                divisor += 1;
+            }
+            group.add_child(make(
+                format!("regions{suffix}"),
+                DEFAULT_SIZE * DEFAULT_SIZE,
+                FillMode::Gradient,
+                DEFAULT_EXTENT,
+                regions,
+                false,
+                false,
+            ));
+        }
+
+        {
+            let offset = u64::from(round_up(DEFAULT_QUARTER_SIZE, pixel_size));
+            let row = DEFAULT_HALF_SIZE + DEFAULT_QUARTER_SIZE;
+            group.add_child(make(
+                format!("buffer_offset{suffix}"),
+                DEFAULT_SIZE * DEFAULT_SIZE,
+                FillMode::Gradient,
+                DEFAULT_EXTENT,
+                vec![region(
+                    offset,
+                    row,
+                    row,
+                    0,
+                    1,
+                    [DEFAULT_QUARTER_SIZE as i32, DEFAULT_QUARTER_SIZE as i32, 0],
+                    DEFAULT_HALF_EXTENT,
+                )],
+                false,
+                false,
+            ));
+        }
+
+        // The relaxed-offset case is not registered for a compute queue upstream, which
+        // is the whole of the 115-vs-108 difference between those groups.
+        if gp.queue_selection != QueueSelection::ComputeOnly {
+            let offset = u64::from(round_up(DEFAULT_QUARTER_SIZE + 1, pixel_size));
+            let row = DEFAULT_HALF_SIZE + DEFAULT_QUARTER_SIZE;
+            group.add_child(make(
+                format!("buffer_offset_relaxed{suffix}"),
+                DEFAULT_SIZE * DEFAULT_SIZE,
+                FillMode::Gradient,
+                DEFAULT_EXTENT,
+                vec![region(
+                    offset,
+                    row,
+                    row,
+                    0,
+                    1,
+                    [DEFAULT_QUARTER_SIZE as i32, DEFAULT_QUARTER_SIZE as i32, 0],
+                    DEFAULT_HALF_EXTENT,
+                )],
+                false,
+                gp.queue_selection == QueueSelection::TransferOnly,
+            ));
+        }
+
+        group.add_child(make(
+            format!("tightly_sized_buffer{suffix}"),
+            (DEFAULT_HALF_SIZE - 1) * DEFAULT_SIZE + DEFAULT_HALF_SIZE,
+            FillMode::Gradient,
+            DEFAULT_EXTENT,
+            vec![region(
+                0,
+                DEFAULT_SIZE,
+                DEFAULT_SIZE,
+                0,
+                1,
+                [DEFAULT_QUARTER_SIZE as i32, DEFAULT_QUARTER_SIZE as i32, 0],
+                DEFAULT_HALF_EXTENT,
+            )],
+            false,
+            false,
+        ));
+
+        {
+            let buffer_image_height = DEFAULT_SIZE + 1;
+            group.add_child(make(
+                format!("larger_buffer{suffix}"),
+                DEFAULT_SIZE * buffer_image_height,
+                FillMode::Gradient,
+                DEFAULT_EXTENT,
+                vec![region(0, DEFAULT_SIZE, buffer_image_height, 0, 1, [0, 0, 0], DEFAULT_HALF_EXTENT)],
+                false,
+                false,
+            ));
+        }
+
+        group.add_child(make(
+            format!("tightly_sized_buffer_offset{suffix}"),
+            (DEFAULT_HALF_SIZE - 1) * DEFAULT_SIZE + DEFAULT_HALF_SIZE + DEFAULT_QUARTER_SIZE,
+            FillMode::Gradient,
+            DEFAULT_EXTENT,
+            vec![region(
+                u64::from(DEFAULT_QUARTER_SIZE * pixel_size),
+                DEFAULT_SIZE,
+                DEFAULT_SIZE,
+                0,
+                1,
+                [DEFAULT_QUARTER_SIZE as i32, DEFAULT_QUARTER_SIZE as i32, 0],
+                DEFAULT_HALF_EXTENT,
+            )],
+            false,
+            false,
+        ));
+
+        let array_layers = 16u32;
+        let array_extent = [DEFAULT_HALF_SIZE, DEFAULT_HALF_SIZE, array_layers];
+
+        {
+            let regions = (0..array_layers)
+                .map(|n| {
+                    region(
+                        u64::from(DEFAULT_HALF_SIZE * DEFAULT_HALF_SIZE * pixel_size * n),
+                        0,
+                        0,
+                        n,
+                        1,
+                        [0, 0, 0],
+                        DEFAULT_HALF_EXTENT,
+                    )
+                })
+                .collect();
+            group.add_child(make(
+                format!("array{suffix}"),
+                DEFAULT_HALF_SIZE * DEFAULT_HALF_SIZE * array_layers,
+                FillMode::Gradient,
+                array_extent,
+                regions,
+                false,
+                false,
+            ));
+        }
+
+        {
+            let buffer_image_height = DEFAULT_HALF_SIZE + 1;
+            let regions = (0..array_layers)
+                .map(|n| {
+                    region(
+                        u64::from(DEFAULT_HALF_SIZE * buffer_image_height * pixel_size * n),
+                        DEFAULT_HALF_SIZE,
+                        buffer_image_height,
+                        n,
+                        1,
+                        [0, 0, 0],
+                        DEFAULT_HALF_EXTENT,
+                    )
+                })
+                .collect();
+            group.add_child(make(
+                format!("array_larger_buffer{suffix}"),
+                DEFAULT_HALF_SIZE * buffer_image_height * array_layers,
+                FillMode::Gradient,
+                array_extent,
+                regions,
+                false,
+                false,
+            ));
+        }
+
+        {
+            let regions = (0..array_layers)
+                .map(|n| {
+                    region(
+                        u64::from(DEFAULT_HALF_SIZE * DEFAULT_HALF_SIZE * pixel_size * n),
+                        DEFAULT_HALF_SIZE,
+                        DEFAULT_HALF_SIZE,
+                        n,
+                        1,
+                        [0, 0, 0],
+                        DEFAULT_HALF_EXTENT,
+                    )
+                })
+                .collect();
+            group.add_child(make(
+                format!("array_tightly_sized_buffer{suffix}"),
+                DEFAULT_HALF_SIZE * DEFAULT_HALF_SIZE * array_layers,
+                FillMode::Gradient,
+                array_extent,
+                regions,
+                false,
+                false,
+            ));
+        }
+
+        for (name, base_layer) in [("array_all_remaining_layers", 0u32), ("array_not_all_remaining_layers", 2)] {
+            group.add_child(make(
+                format!("{name}{suffix}"),
+                DEFAULT_HALF_SIZE * DEFAULT_HALF_SIZE * array_layers,
+                FillMode::Red,
+                array_extent,
+                vec![region(0, 0, 0, base_layer, REMAINING_ARRAY_LAYERS, [0, 0, 0], DEFAULT_HALF_EXTENT)],
+                true,
+                false,
+            ));
+        }
+    }
+}
+
 /// `addCopyBufferToImageTests`
 fn add_copy_buffer_to_image_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
     let mut images_1d = tcu::TestCaseGroup::new("1d_images");
     add_1d_buffer_to_image_tests(&mut images_1d, gp);
     group.add_child(images_1d);
-    // 2d_images and 3d_images are not ported yet.
+    let mut images_2d = tcu::TestCaseGroup::new("2d_images");
+    add_2d_buffer_to_image_tests(&mut images_2d, gp);
+    group.add_child(images_2d);
+    // 3d_images is not ported yet.
 }
 
 /// The `buffer_to_image*` groups of `createCopiesAndBlittingTests`.
