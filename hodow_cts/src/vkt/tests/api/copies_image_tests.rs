@@ -21,7 +21,8 @@ use vulkanalia::vk::DeviceV1_3;
 
 use super::copies_buffer_tests::{AllocationKind, CopyCommandVariant, QueueSelection, bind_buffer_memory, select_queue};
 use crate::tcu::pixel::{
-    ConstPixelBufferAccess, PixelBufferAccess, TextureLevel, fill_with_component_gradients2, get_texture_format_bit_depth, has_depth_component, has_stencil_component,
+    ConstPixelBufferAccess, PixelBufferAccess, TextureLevel, fill_with_component_gradients2, fill_with_component_gradients3, get_texture_format_bit_depth, has_depth_component,
+    has_stencil_component,
 };
 use crate::tcu::texture::TextureChannelClass;
 use crate::tcu::{self, TestError, TestOutcome, TestStatus, map_vk_format};
@@ -56,6 +57,7 @@ fn round_up(value: u32, alignment: u32) -> u32 {
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum FillMode {
     Gradient,
+    Pyramid,
     White,
     Red,
 }
@@ -177,6 +179,7 @@ fn generate_buffer(access: &mut PixelBufferAccess<'_>, width: u32, height: u32, 
 
     match mode {
         FillMode::Gradient => fill_with_component_gradients2(access, [0.0; 4], max_value),
+        FillMode::Pyramid => fill_with_component_gradients3(access, [0.0; 4], max_value),
         FillMode::White | FillMode::Red => {
             let color = if mode == FillMode::White { max_value } else { [max_value[0], 0.0, 0.0, max_value[3]] };
             for z in 0..depth {
@@ -1772,6 +1775,11 @@ pub struct CopyImageToImageCase {
     queue_selection: QueueSelection,
     general_layout: bool,
     needs_maintenance5: bool,
+    /// `ImageParms::operationLayout` per side. The all_formats and dimensions groups
+    /// vary these independently, which is the whole of their `<src>_<dst>` name suffix;
+    /// `None` means the default for that side, or GENERAL when the group asks for it.
+    src_operation_layout: Option<vk::ImageLayout>,
+    dst_operation_layout: Option<vk::ImageLayout>,
 }
 
 impl TestCase for CopyImageToImageCase {
@@ -1807,6 +1815,26 @@ impl TestCase for CopyImageToImageCase {
 
             if props.max_array_layers < parms.array_size() {
                 return Err(TestError::NotSupported("maxArrayLayers too small".to_string()));
+            }
+        }
+
+        // The dimensions group asks for images up to 32768 wide, which most
+        // implementations cannot create. Checked against the device limits, the way
+        // upstream does, rather than left for image creation to fail on.
+        let limits = context.get_device_properties().limits;
+        for (parms, side) in [(&self.src, "src"), (&self.dst, "dst")] {
+            let too_big = match parms.image_type {
+                vk::ImageType::_1D => parms.extent[0] > limits.max_image_dimension_1d,
+                vk::ImageType::_2D => parms.extent[0] > limits.max_image_dimension_2d || parms.extent[1] > limits.max_image_dimension_2d,
+                _ => parms.extent.iter().any(|&d| d > limits.max_image_dimension_3d),
+            };
+            if too_big {
+                let kind = match parms.image_type {
+                    vk::ImageType::_1D => "1D",
+                    vk::ImageType::_2D => "2D",
+                    _ => "3D",
+                };
+                return Err(TestError::NotSupported(format!("Requested {kind} {side} image dimensions not supported")));
             }
         }
         Ok(())
@@ -1903,16 +1931,16 @@ impl TestInstance for CopyImageToImageInstance<'_> {
         let cmd_pool = make_command_pool(vk_device, queue_family_index)?;
         let cmd_buffer = allocate_command_buffer(vk_device, *cmd_pool, vk::CommandBufferLevel::PRIMARY)?;
 
-        let src_layout = if p.general_layout {
+        let src_layout = p.src_operation_layout.unwrap_or(if p.general_layout {
             vk::ImageLayout::GENERAL
         } else {
             vk::ImageLayout::TRANSFER_SRC_OPTIMAL
-        };
-        let dst_layout = if p.general_layout {
+        });
+        let dst_layout = p.dst_operation_layout.unwrap_or(if p.general_layout {
             vk::ImageLayout::GENERAL
         } else {
             vk::ImageLayout::TRANSFER_DST_OPTIMAL
-        };
+        });
         let uploaded = if p.general_layout {
             vk::ImageLayout::GENERAL
         } else {
@@ -2034,6 +2062,8 @@ fn add_image_to_image_simple_tests(group: &mut tcu::TestCaseGroup, gp: &GroupPar
             regions,
             clear_destination_with_red: clear,
             needs_maintenance5: false,
+            src_operation_layout: None,
+            dst_operation_layout: None,
             allocation_kind: gp.allocation_kind,
             command_variant: gp.command_variant,
             queue_selection: gp.queue_selection,
@@ -2176,6 +2206,8 @@ fn add_image_to_image_3d_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams)
             regions,
             clear_destination_with_red: false,
             needs_maintenance5: false,
+            src_operation_layout: None,
+            dst_operation_layout: None,
             allocation_kind: gp.allocation_kind,
             command_variant: gp.command_variant,
             queue_selection: gp.queue_selection,
@@ -2289,6 +2321,8 @@ fn add_image_to_image_array_tests(group: &mut tcu::TestCaseGroup, gp: &GroupPara
             regions,
             clear_destination_with_red: false,
             needs_maintenance5,
+            src_operation_layout: None,
+            dst_operation_layout: None,
             allocation_kind: gp.allocation_kind,
             command_variant: gp.command_variant,
             queue_selection: gp.queue_selection,
@@ -2356,6 +2390,8 @@ fn add_image_to_image_cube_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParam
             regions,
             clear_destination_with_red: false,
             needs_maintenance5: false,
+            src_operation_layout: None,
+            dst_operation_layout: None,
             allocation_kind: gp.allocation_kind,
             command_variant: gp.command_variant,
             queue_selection: gp.queue_selection,
@@ -2376,6 +2412,113 @@ fn add_image_to_image_cube_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParam
     for (name, src_cube, dst_cube) in [("cube_to_array", true, false), ("array_to_cube", false, true), ("cube_to_cube", true, true)] {
         group.add_child(make(&format!("{name}_layers"), src_cube, dst_cube, (0..ARRAY_LAYERS).map(|n| copy(n, 1, n, 1)).collect()));
         group.add_child(make(&format!("{name}_whole"), src_cube, dst_cube, vec![copy(0, ARRAY_LAYERS, 0, ARRAY_LAYERS)]));
+    }
+}
+
+/// `addImageToImageDimensionsTests`' format table: one entry per texel-block size, two
+/// compatible formats each.
+static DIMENSION_TEST_FORMATS: &[&[(vk::Format, &str)]] = &[
+    &[(vk::Format::R4G4_UNORM_PACK8, "r4g4_unorm_pack8"), (vk::Format::R8_SRGB, "r8_srgb")],
+    &[(vk::Format::R4G4B4A4_UNORM_PACK16, "r4g4b4a4_unorm_pack16"), (vk::Format::R16_SFLOAT, "r16_sfloat")],
+    &[(vk::Format::R8G8B8_UNORM, "r8g8b8_unorm"), (vk::Format::B8G8R8_SRGB, "b8g8r8_srgb")],
+    &[(vk::Format::R8G8B8A8_UNORM, "r8g8b8a8_unorm"), (vk::Format::R32_SFLOAT, "r32_sfloat")],
+    &[(vk::Format::R16G16B16_UNORM, "r16g16b16_unorm"), (vk::Format::R16G16B16_SFLOAT, "r16g16b16_sfloat")],
+    // R64_SFLOAT and the wider 64-bit-per-channel formats below are dropped by
+    // isSupportedByFramework, which is why these groups are one-sided.
+    &[(vk::Format::R16G16B16A16_UNORM, "r16g16b16a16_unorm")],
+    &[(vk::Format::R32G32B32_UINT, "r32g32b32_uint"), (vk::Format::R32G32B32_SFLOAT, "r32g32b32_sfloat")],
+    &[(vk::Format::R32G32B32A32_UINT, "r32g32b32a32_uint")],
+];
+
+/// `imageDimensions` - a large power-of-two axis against a small one, both ways round
+/// and with a non-power-of-two variant.
+static IMAGE_DIMENSIONS_2D: &[[u32; 2]] = &[
+    [4096, 4],
+    [8192, 4],
+    [16384, 4],
+    [32768, 4],
+    [4096, 6],
+    [8192, 6],
+    [16384, 6],
+    [32768, 6],
+    [4, 4096],
+    [4, 8192],
+    [4, 16384],
+    [4, 32768],
+    [6, 4096],
+    [6, 8192],
+    [6, 16384],
+    [6, 32768],
+];
+
+/// `getImageLayoutCaseName`
+fn image_layout_case_name(layout: vk::ImageLayout) -> &'static str {
+    if layout == vk::ImageLayout::GENERAL { "general" } else { "optimal" }
+}
+
+/// `addImageToImageDimensionsTests`
+fn add_image_to_image_dimensions_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+    const SRC_LAYOUTS: [vk::ImageLayout; 2] = [vk::ImageLayout::TRANSFER_SRC_OPTIMAL, vk::ImageLayout::GENERAL];
+    const DST_LAYOUTS: [vk::ImageLayout; 2] = [vk::ImageLayout::TRANSFER_DST_OPTIMAL, vk::ImageLayout::GENERAL];
+
+    for &[width, height] in IMAGE_DIMENSIONS_2D {
+        let extent = [width, height, 1];
+        let mut size_group = tcu::TestCaseGroup::new(format!("src{width}x{height}_dst{width}x{height}"));
+
+        for compatible in DIMENSION_TEST_FORMATS {
+            for &(src_format, src_name) in *compatible {
+                let mut src_group = tcu::TestCaseGroup::new(src_name);
+
+                for &(dst_format, dst_name) in *compatible {
+                    let mut dst_group = tcu::TestCaseGroup::new(dst_name);
+
+                    for src_layout in SRC_LAYOUTS {
+                        for dst_layout in DST_LAYOUTS {
+                            dst_group.add_child(Box::new(CopyImageToImageCase {
+                                name: format!("{}_{}", image_layout_case_name(src_layout), image_layout_case_name(dst_layout)),
+                                src: ImageParms {
+                                    image_type: vk::ImageType::_2D,
+                                    format: src_format,
+                                    extent,
+                                    tiling: vk::ImageTiling::OPTIMAL,
+                                    fill_mode: FillMode::Pyramid,
+                                    create_flags: None,
+                                },
+                                dst: ImageParms {
+                                    image_type: vk::ImageType::_2D,
+                                    format: dst_format,
+                                    extent,
+                                    tiling: vk::ImageTiling::OPTIMAL,
+                                    fill_mode: FillMode::White,
+                                    create_flags: None,
+                                },
+                                regions: vec![ImageCopy {
+                                    src_offset: [0, 0, 0],
+                                    dst_offset: [0, 0, 0],
+                                    extent,
+                                    aspect_mask: vk::ImageAspectFlags::COLOR,
+                                    src_base_layer: 0,
+                                    src_layer_count: 1,
+                                    dst_base_layer: 0,
+                                    dst_layer_count: 1,
+                                }],
+                                clear_destination_with_red: false,
+                                needs_maintenance5: false,
+                                src_operation_layout: Some(src_layout),
+                                dst_operation_layout: Some(dst_layout),
+                                allocation_kind: gp.allocation_kind,
+                                command_variant: gp.command_variant,
+                                queue_selection: gp.queue_selection,
+                                general_layout: gp.general_layout,
+                            }) as Box<dyn TestCase>);
+                        }
+                    }
+                    src_group.add_child(dst_group);
+                }
+                size_group.add_child(src_group);
+            }
+        }
+        group.add_child(size_group);
     }
 }
 
@@ -2405,6 +2548,10 @@ pub fn add_image_to_image_groups(
         let mut images_3d = tcu::TestCaseGroup::new("3d_images");
         add_image_to_image_3d_tests(&mut images_3d, &gp);
         group.add_child(images_3d);
+
+        let mut dimensions = tcu::TestCaseGroup::new("dimensions");
+        add_image_to_image_dimensions_tests(&mut dimensions, &gp);
+        group.add_child(dimensions);
 
         let mut cube = tcu::TestCaseGroup::new("cube");
         add_image_to_image_cube_tests(&mut cube, &gp);

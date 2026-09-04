@@ -816,6 +816,37 @@ fn convert_sat_rte(f: f32, min_val: i64, max_val: i64) -> i64 {
     int_val.clamp(min_val, max_val)
 }
 
+/// `tcu::unormFloatToChannel`
+fn unorm_float_to_channel(src: f32, bits: i32) -> u32 {
+    let max_val = (1u32 << bits) - 1;
+    let int_val = convert_sat_rte(src * max_val as f32, 0, u32::MAX as i64) as u32;
+    int_val.min(max_val)
+}
+
+/// The packed half of `PixelBufferAccess::setPixel`, for the two types a ported test
+/// writes. The rest of upstream's packed switch is deliberately absent - see
+/// `is_writable_channel_type`.
+fn set_packed_pixel(dst: &mut [u8], color: [f32; 4], format: TextureFormat) {
+    use ChannelType::*;
+    let pn = |v: f32, offs: u32, bits: i32| unorm_float_to_channel(v, bits) << offs;
+    match format.type_ {
+        UNORM_BYTE_44 => dst[0] = (pn(color[0], 4, 4) | pn(color[1], 0, 4)) as u8,
+        UNORM_SHORT_4444 => {
+            // The write swizzle here runs RGBA -> order, the opposite direction from
+            // the read path's order -> RGBA.
+            let sw = swizzle_ge(color, ChannelOrder::RGBA, format.order);
+            let v = (pn(sw[0], 12, 4) | pn(sw[1], 8, 4) | pn(sw[2], 4, 4) | pn(sw[3], 0, 4)) as u16;
+            dst[..2].copy_from_slice(&v.to_le_bytes());
+        }
+        other => unreachable!("set_packed_pixel reached {other:?}; TextureLevel::new should have refused it"),
+    }
+}
+
+/// The packed types `set_packed_pixel` can store.
+fn is_packed_writable(type_: ChannelType) -> bool {
+    matches!(type_, ChannelType::UNORM_BYTE_44 | ChannelType::UNORM_SHORT_4444)
+}
+
 /// `tcu::floatToChannel`, restricted to the non-packed channel types.
 ///
 /// The packed types are written through a separate switch in upstream's `setPixel`;
@@ -859,6 +890,9 @@ fn float_to_channel(dst: &mut [u8], src: f32, type_: ChannelType) {
 /// Whether `float_to_channel` can store this type at all.
 fn is_writable_channel_type(type_: ChannelType) -> bool {
     use ChannelType::*;
+    if is_packed_writable(type_) {
+        return true;
+    }
     matches!(
         type_,
         SNORM_INT8
@@ -1009,6 +1043,14 @@ impl PixelBufferAccess<'_> {
 
     /// `tcu::PixelBufferAccess::setPixel`, generic path only.
     pub fn set_pixel(&mut self, color: [f32; 4], x: u32, y: u32, z: u32) {
+        if is_packed_writable(self.format.type_) {
+            let base = self.pixel_offset(x, y, z);
+            let size = self.pixel_size();
+            let format = self.format;
+            set_packed_pixel(&mut self.data[base..base + size], color, format);
+            return;
+        }
+
         let num_channels = self.format.order.num_used_channels() as usize;
         let map = get_channel_write_swizzle(self.format.order);
         let channel_size = self.format.type_.channel_size().expect("non-packed, checked in TextureLevel::new") as usize;
@@ -1273,12 +1315,32 @@ mod write_tests {
         }
     }
 
-    /// A packed format has no generic write path upstream either; refusing at
-    /// construction is what keeps a silent approximation out of a comparison.
+    /// A packed type with no ported write path is refused at construction, which is
+    /// what keeps a silent approximation out of a comparison.
     #[test]
-    fn packed_formats_are_refused_up_front() {
-        let f = TextureFormat::new(ChannelOrder::RGBA, ChannelType::UNORM_SHORT_4444);
+    fn unported_packed_formats_are_refused_up_front() {
+        let f = TextureFormat::new(ChannelOrder::RGB, ChannelType::UNORM_SHORT_565);
         assert!(matches!(TextureLevel::new(f, 1, 1, 1), Err(TestError::NotPorted(_))));
+    }
+
+    /// The two packed types that do have a write path, checked against the read path
+    /// they have to be the exact inverse of.
+    #[test]
+    fn ported_packed_formats_roundtrip() {
+        let f44 = TextureFormat::new(ChannelOrder::RG, ChannelType::UNORM_BYTE_44);
+        let got = roundtrip(f44, [1.0, 0.0, 0.0, 1.0]);
+        assert!((got[0] - 1.0).abs() < 1e-6 && got[1] == 0.0, "{got:?}");
+
+        let f4444 = TextureFormat::new(ChannelOrder::RGBA, ChannelType::UNORM_SHORT_4444);
+        let got = roundtrip(f4444, [1.0, 0.0, 1.0, 0.0]);
+        assert_eq!([got[0], got[1], got[2], got[3]], [1.0, 0.0, 1.0, 0.0]);
+
+        // BGRA stores blue first, so a red input must land in the low nibble group.
+        let bgra = TextureFormat::new(ChannelOrder::BGRA, ChannelType::UNORM_SHORT_4444);
+        let mut level = TextureLevel::new(bgra, 1, 1, 1).unwrap();
+        level.get_access().set_pixel([1.0, 0.0, 0.0, 1.0], 0, 0, 0);
+        let got = level.get_const_access().get_pixel(0, 0, 0);
+        assert_eq!([got[0], got[1], got[2], got[3]], [1.0, 0.0, 0.0, 1.0], "BGRA must read back what it was given");
     }
 
     /// The 1D gradient is the branch the buffer source data uses; check it is a real
