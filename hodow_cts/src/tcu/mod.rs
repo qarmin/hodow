@@ -7,6 +7,7 @@
 // would produce a verdict indistinguishable from a real driver bug.
 
 pub mod defs;
+pub mod pixel;
 pub mod random;
 pub mod test_case;
 pub mod texture;

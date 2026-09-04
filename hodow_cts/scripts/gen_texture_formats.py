@@ -43,6 +43,48 @@ def enum_variants(hpp: str, name: str) -> list[str]:
     return out
 
 
+def swizzle_table(cpp: str) -> dict[str, list[str]]:
+    """Reads getChannelReadSwizzle into `order -> [4 components]`.
+
+    The declarations wrap across lines, so the block is flattened before matching.
+    Getting this wrong once already shipped a table where RGBA carried R's swizzle -
+    every colour channel but red read back as zero - so both the "every `return` names
+    a constant we found" and "every ChannelOrder is covered" checks below are
+    assertions, not warnings.
+    """
+    blk = re.search(
+        r"const TextureSwizzle &getChannelReadSwizzle\(TextureFormat::ChannelOrder order\).*?\n\}", cpp, re.S
+    )
+    if not blk:
+        raise SystemExit("could not find getChannelReadSwizzle")
+    flat = re.sub(r"\s+", " ", blk.group(0))
+
+    consts: dict[str, list[str]] = {}
+    for m in re.finditer(r"static const TextureSwizzle (\w+) = \{ ?\{(.*?)\} ?\};", flat):
+        comps = [c.strip().replace("TextureSwizzle::CHANNEL_", "") for c in m.group(2).split(",")]
+        if len(comps) != 4:
+            raise SystemExit(f"swizzle {m.group(1)} has {len(comps)} components")
+        consts[m.group(1)] = comps
+
+    table: dict[str, list[str]] = {}
+    pending: list[str] = []
+    for line in blk.group(0).split("\n"):
+        c = re.search(r"case TextureFormat::(\w+):", line)
+        if c:
+            pending.append(c.group(1))
+            continue
+        r = re.search(r"return (\w+);", line)
+        if r and pending:
+            if r.group(1) not in consts:
+                raise SystemExit(f"`return {r.group(1)};` has no matching constant - extraction is broken")
+            for k in pending:
+                table[k] = consts[r.group(1)]
+            pending = []
+        elif "default" in line:
+            pending = []
+    return table
+
+
 def switch_table(cpp: str, signature: str) -> dict[str, int]:
     """Reads a `case TextureFormat::X: return N;` switch into a dict."""
     m = re.search(re.escape(signature) + r".*?\n\{.*?\n\}", cpp, re.S)
