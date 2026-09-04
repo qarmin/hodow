@@ -16,9 +16,9 @@ hand-picked, growing subset, currently:
 
 | group | cases | not ported yet |
 |---|---|---|
-| `dEQP-VK.compute.pipeline.basic.*` | 40 of 80 | `image_atomic_op`/`image_barrier` (4), Amber-driven cases (3), `replicated_composites_*` (21), and some needing extensions or several queues |
-| `dEQP-VK.compute.pipeline.indirect_dispatch.*` | 12 of 36 | `gen_in_compute` group, `_device_address` variants |
-| `dEQP-VK.compute.pipeline.zero_initialize_workgroup_memory.*` | 515 of 646 | `types`, `composites`, `max_workgroup_memory`, `repeat_pipeline`, `shared_memory_blocks` - each a table of per-case GLSL |
+| `dEQP-VK.compute.pipeline.basic.*` | 40 of 80 | `image_atomic_op`/`image_barrier` (4), Amber-driven (3), `replicated_composites_*` (21), some needing extensions or several queues |
+| `dEQP-VK.compute.pipeline.indirect_dispatch.*` | 24 of 36 | `_device_address` variants (VK_KHR_device_address_commands) |
+| `dEQP-VK.compute.pipeline.zero_initialize_workgroup_memory.*` | 553 of 646 | `types`, `composites`, `shared_memory_blocks` - each a table of per-case GLSL |
 | `dEQP-VK.api.smoke.*` | 0 of 6 | needs the reference rasteriser - see below |
 
 Run `hodow_cts --list` for the exact set, or `just cts-coverage` for the numbers above

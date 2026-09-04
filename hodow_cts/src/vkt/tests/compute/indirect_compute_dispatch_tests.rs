@@ -115,7 +115,10 @@ impl TestCase for IndirectDispatchUploadCase {
 struct GenerateResources<'a> {
     pipeline: ComputePipelineWrapper<'a>,
     set: UniqueDescriptorSet<'a>,
+    // Never read: held only so their Drop runs at the right time, after `set`.
+    #[allow(dead_code)]
     pool: Unique<'a, vk::DescriptorPool>,
+    #[allow(dead_code)]
     layout: Unique<'a, vk::DescriptorSetLayout>,
 }
 
@@ -219,7 +222,12 @@ impl TestInstance for IndirectDispatchInstanceBufferUpload<'_> {
             gen_pipeline.set_descriptor_set_layout(*gen_layout);
             gen_pipeline.build_pipeline()?;
 
-            Some(GenerateResources { pipeline: gen_pipeline, set: gen_set, pool: gen_pool, layout: gen_layout })
+            Some(GenerateResources {
+                pipeline: gen_pipeline,
+                set: gen_set,
+                pool: gen_pool,
+                layout: gen_layout,
+            })
         } else {
             None
         };
@@ -230,10 +238,17 @@ impl TestInstance for IndirectDispatchInstanceBufferUpload<'_> {
         // `fillIndirectBufferData` for the generate variant: a compute shader writes
         // the commands, and the barrier is what the driver must honour before reading
         // them as an indirect command.
-        if let Some(gen) = &gen_resources {
-            gen.pipeline.bind(*cmd_buffer);
+        if let Some(generate) = &gen_resources {
+            generate.pipeline.bind(*cmd_buffer);
             unsafe {
-                vkdi.cmd_bind_descriptor_sets(*cmd_buffer, vk::PipelineBindPoint::COMPUTE, gen.pipeline.get_pipeline_layout(), 0, &[*gen.set], &[]);
+                vkdi.cmd_bind_descriptor_sets(
+                    *cmd_buffer,
+                    vk::PipelineBindPoint::COMPUTE,
+                    generate.pipeline.get_pipeline_layout(),
+                    0,
+                    &[*generate.set],
+                    &[],
+                );
                 vkdi.cmd_dispatch(*cmd_buffer, 1, 1, 1);
 
                 let buffer_barrier = make_buffer_memory_barrier(
@@ -356,13 +371,19 @@ pub fn create_indirect_compute_dispatch_tests(construction_type: ComputePipeline
 
     let mut group_buffer_upload = tcu::TestCaseGroup::new("upload_buffer");
     for params in cases {
-        group_buffer_upload.add_child(Box::new(IndirectDispatchUploadCase { params, fill_mode: FillMode::Upload }) as Box<dyn TestCase>);
+        group_buffer_upload.add_child(Box::new(IndirectDispatchUploadCase {
+            params,
+            fill_mode: FillMode::Upload,
+        }) as Box<dyn TestCase>);
     }
     tests.add_child(group_buffer_upload);
 
     let mut group_buffer_generate = tcu::TestCaseGroup::new("gen_in_compute");
     for params in cases {
-        group_buffer_generate.add_child(Box::new(IndirectDispatchUploadCase { params, fill_mode: FillMode::GenerateInCompute }) as Box<dyn TestCase>);
+        group_buffer_generate.add_child(Box::new(IndirectDispatchUploadCase {
+            params,
+            fill_mode: FillMode::GenerateInCompute,
+        }) as Box<dyn TestCase>);
     }
     tests.add_child(group_buffer_generate);
 

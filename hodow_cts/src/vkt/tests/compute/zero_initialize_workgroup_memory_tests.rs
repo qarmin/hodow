@@ -295,7 +295,6 @@ fn add_max_workgroups_tests(group: &mut tcu::TestCaseGroup, programs: BinaryColl
     group.add_child(Box::new(MaxWorkgroupsCase { name: "z", dim: Dim::Z, programs }) as Box<dyn TestCase>);
 }
 
-
 // ---------------------------------------------------------------------------------
 // MaxWorkgroupMemoryTest
 // ---------------------------------------------------------------------------------
@@ -321,7 +320,10 @@ impl TestCase for MaxWorkgroupMemoryCase {
     }
 
     fn create_instance<'a>(&'a self, context: &'a Context<'a>) -> Box<dyn TestInstance + 'a> {
-        Box::new(MaxWorkgroupMemoryInstance { context, num_workgroups: self.num_workgroups })
+        Box::new(MaxWorkgroupMemoryInstance {
+            context,
+            num_workgroups: self.num_workgroups,
+        })
     }
 }
 
@@ -359,7 +361,11 @@ impl TestInstance for MaxWorkgroupMemoryInstance<'_> {
 /// `AddMaxWorkgroupMemoryTests`
 fn add_max_workgroup_memory_tests(group: &mut tcu::TestCaseGroup, programs: BinaryCollection) {
     for num_wg in [1u32, 2, 4, 16, 64, 128] {
-        group.add_child(Box::new(MaxWorkgroupMemoryCase { name: num_wg.to_string(), num_workgroups: num_wg, programs }) as Box<dyn TestCase>);
+        group.add_child(Box::new(MaxWorkgroupMemoryCase {
+            name: num_wg.to_string(),
+            num_workgroups: num_wg,
+            programs,
+        }) as Box<dyn TestCase>);
     }
 }
 
@@ -390,7 +396,12 @@ impl TestCase for RepeatedPipelineCase {
     }
 
     fn create_instance<'a>(&'a self, context: &'a Context<'a>) -> Box<dyn TestInstance + 'a> {
-        Box::new(RepeatedPipelineInstance { context, x_size: self.x_size, odd: self.odd, repeat: self.repeat })
+        Box::new(RepeatedPipelineInstance {
+            context,
+            x_size: self.x_size,
+            odd: self.odd,
+            repeat: self.repeat,
+        })
     }
 }
 
@@ -412,8 +423,18 @@ impl TestInstance for RepeatedPipelineInstance<'_> {
         let size = buffer_size as u64;
 
         let usage = vk::BufferUsageFlags::STORAGE_BUFFER | vk::BufferUsageFlags::TRANSFER_DST | vk::BufferUsageFlags::TRANSFER_SRC;
-        let buffer0 = BufferWithMemory::new(vk, allocator, make_buffer_create_info(size, usage), MemoryRequirement::HOST_VISIBLE | MemoryRequirement::CACHED)?;
-        let buffer1 = BufferWithMemory::new(vk, allocator, make_buffer_create_info(size, usage), MemoryRequirement::HOST_VISIBLE | MemoryRequirement::CACHED)?;
+        let buffer0 = BufferWithMemory::new(
+            vk,
+            allocator,
+            make_buffer_create_info(size, usage),
+            MemoryRequirement::HOST_VISIBLE | MemoryRequirement::CACHED,
+        )?;
+        let buffer1 = BufferWithMemory::new(
+            vk,
+            allocator,
+            make_buffer_create_info(size, usage),
+            MemoryRequirement::HOST_VISIBLE | MemoryRequirement::CACHED,
+        )?;
 
         let ptr0 = buffer0.get_allocation().get_host_ptr().cast::<u32>();
         let ptr1 = buffer1.get_allocation().get_host_ptr().cast::<u32>();
@@ -433,7 +454,11 @@ impl TestInstance for RepeatedPipelineInstance<'_> {
         let descriptor_set = make_descriptor_set(vk, *descriptor_pool, *descriptor_set_layout)?;
 
         let spec_values = [self.x_size];
-        let entries = vec![vk::SpecializationMapEntry { constant_id: 0, offset: 0, size: std::mem::size_of::<u32>() }];
+        let entries = vec![vk::SpecializationMapEntry {
+            constant_id: 0,
+            offset: 0,
+            size: std::mem::size_of::<u32>(),
+        }];
         let spec_bytes: Vec<u8> = spec_values.iter().flat_map(|v| v.to_ne_bytes()).collect();
 
         flush_alloc(vk, buffer0.get_allocation())?;
@@ -504,7 +529,13 @@ fn add_repeated_pipeline_tests(group: &mut tcu::TestCaseGroup, even: BinaryColle
             for repeat in [2u32, 4, 8, 16] {
                 let name = format!("x_{x}_{}_repeat_{repeat}", if odd == 1 { "odd" } else { "even" });
                 let programs = if odd == 1 { odd_programs } else { even };
-                group.add_child(Box::new(RepeatedPipelineCase { name, x_size: x, odd, repeat, programs }) as Box<dyn TestCase>);
+                group.add_child(Box::new(RepeatedPipelineCase {
+                    name,
+                    x_size: x,
+                    odd,
+                    repeat,
+                    programs,
+                }) as Box<dyn TestCase>);
             }
         }
     }
