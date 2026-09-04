@@ -31,6 +31,11 @@ pub struct Context<'a> {
     device: Device,
     universal_queue: vk::Queue,
     universal_queue_family_index: u32,
+    /// `Context::getComputeQueue` / `getTransferQueue`, absent when the device has no
+    /// such family. A queue may only be fetched from a family the device was *created*
+    /// with, so these are resolved once here rather than on demand in a test.
+    compute_queue: Option<(vk::Queue, u32)>,
+    transfer_queue: Option<(vk::Queue, u32)>,
     default_allocator: SimpleAllocator,
     device_properties: vk::PhysicalDeviceProperties,
     device_features: vk::PhysicalDeviceFeatures,
@@ -53,10 +58,33 @@ impl<'a> Context<'a> {
             .position(|f| f.queue_flags.contains(vk::QueueFlags::GRAPHICS) && f.queue_flags.contains(vk::QueueFlags::COMPUTE))
             .ok_or_else(|| TestError::NotSupported("no queue family supports both graphics and compute".to_string()))? as u32;
 
+        // `findQueueFamilyIndexWithCapsNoThrow(COMPUTE, excluding GRAPHICS)` and its
+        // transfer twin, matching upstream's DefaultDevice exactly - a case that is
+        // NotSupported here has to be NotSupported there.
+        let compute_queue_family_index = queue_families
+            .iter()
+            .position(|f| f.queue_flags.contains(vk::QueueFlags::COMPUTE) && !f.queue_flags.contains(vk::QueueFlags::GRAPHICS))
+            .map(|i| i as u32);
+        let transfer_queue_family_index = queue_families
+            .iter()
+            .position(|f| f.queue_flags.contains(vk::QueueFlags::TRANSFER) && !f.queue_flags.contains(vk::QueueFlags::GRAPHICS) && !f.queue_flags.contains(vk::QueueFlags::COMPUTE))
+            .map(|i| i as u32);
+
+        // Every family a test may later ask a queue from has to be requested here.
+        // vkGetDeviceQueue on a family the device was not created with is undefined
+        // behaviour, and in practice segfaults rather than returning an error.
+        let mut families = vec![universal_queue_family_index];
+        for extra in [compute_queue_family_index, transfer_queue_family_index].into_iter().flatten() {
+            if !families.contains(&extra) {
+                families.push(extra);
+            }
+        }
+
         let priorities = [1.0f32];
-        let queue_info = vk::DeviceQueueCreateInfo::builder()
-            .queue_family_index(universal_queue_family_index)
-            .queue_priorities(&priorities);
+        let queue_infos: Vec<vk::DeviceQueueCreateInfo> = families
+            .iter()
+            .map(|&family| vk::DeviceQueueCreateInfo::builder().queue_family_index(family).queue_priorities(&priorities).build())
+            .collect();
 
         let device_features = unsafe { instance.get_physical_device_features(physical_device) };
 
@@ -98,7 +126,6 @@ impl<'a> Context<'a> {
 
         unsafe { instance.get_physical_device_features2(physical_device, &mut features2) };
 
-        let queue_infos = [queue_info];
         // `enabled_features` must stay unset: the core features travel inside the
         // features2 chain instead, and Vulkan forbids providing both.
         let info = vk::DeviceCreateInfo::builder()
@@ -109,6 +136,8 @@ impl<'a> Context<'a> {
         let device = unsafe { instance.create_device(physical_device, &info, None) }.vk_check("vkCreateDevice")?;
 
         let universal_queue = unsafe { device.get_device_queue(universal_queue_family_index, 0) };
+        let compute_queue = compute_queue_family_index.map(|i| (unsafe { device.get_device_queue(i, 0) }, i));
+        let transfer_queue = transfer_queue_family_index.map(|i| (unsafe { device.get_device_queue(i, 0) }, i));
         let memory_properties = unsafe { instance.get_physical_device_memory_properties(physical_device) };
         let device_properties = unsafe { instance.get_physical_device_properties(physical_device) };
 
@@ -118,6 +147,8 @@ impl<'a> Context<'a> {
             device,
             universal_queue,
             universal_queue_family_index,
+            compute_queue,
+            transfer_queue,
             default_allocator: SimpleAllocator::new(memory_properties),
             device_properties,
             device_features,
@@ -145,6 +176,17 @@ impl<'a> Context<'a> {
     /// `Context::getUniversalQueue`
     pub fn get_universal_queue(&self) -> vk::Queue {
         self.universal_queue
+    }
+
+    /// `Context::getComputeQueue` with its family index, or `None` when the device has
+    /// no compute-only family.
+    pub fn get_compute_queue(&self) -> Option<(vk::Queue, u32)> {
+        self.compute_queue
+    }
+
+    /// `Context::getTransferQueue` with its family index.
+    pub fn get_transfer_queue(&self) -> Option<(vk::Queue, u32)> {
+        self.transfer_queue
     }
 
     /// `Context::getUniversalQueueFamilyIndex`

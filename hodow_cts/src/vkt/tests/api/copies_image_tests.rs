@@ -19,7 +19,7 @@ use vulkanalia::prelude::v1_0::*;
 // KHR alias, but vulkanalia exposes the promoted name.
 use vulkanalia::vk::DeviceV1_3;
 
-use super::copies_buffer_tests::{AllocationKind, CopyCommandVariant, QueueSelection, bind_buffer_memory, select_queue_family};
+use super::copies_buffer_tests::{AllocationKind, CopyCommandVariant, QueueSelection, bind_buffer_memory, select_queue};
 use crate::tcu::pixel::{ConstPixelBufferAccess, PixelBufferAccess, TextureLevel, fill_with_component_gradients2, get_texture_format_bit_depth};
 use crate::tcu::texture::TextureChannelClass;
 use crate::tcu::{self, TestError, TestOutcome, TestStatus, map_vk_format};
@@ -189,9 +189,23 @@ fn copy_region_to_texture_level(src: &ConstPixelBufferAccess<'_>, dst: &mut Pixe
     }
 }
 
+/// `m_queueFamilyIndices` as a buffer create info: upstream switches the staging
+/// buffers to CONCURRENT sharing whenever a second queue family is in play. Sharing
+/// mode is not verdict-visible on a correct driver, but it can change which internal
+/// path a driver takes, so it is worth matching rather than always using EXCLUSIVE.
+fn staging_buffer_create_info(size: u64, usage: vk::BufferUsageFlags, families: &[u32]) -> vk::BufferCreateInfo {
+    let mut info = make_buffer_create_info(size, usage);
+    if families.len() > 1 {
+        info.sharing_mode = vk::SharingMode::CONCURRENT;
+        info.queue_family_index_count = families.len() as u32;
+        info.queue_family_indices = families.as_ptr();
+    }
+    info
+}
+
 /// `CopiesAndBlittingTestInstance::uploadImage`, colour aspect and one mip level.
 #[allow(clippy::too_many_arguments)]
-fn upload_image(context: &Context<'_>, src: &ConstPixelBufferAccess<'_>, image: vk::Image, parms: &ImageParms, general_layout: bool) -> Result<(), TestError> {
+fn upload_image(context: &Context<'_>, src: &ConstPixelBufferAccess<'_>, image: vk::Image, parms: &ImageParms, general_layout: bool, families: &[u32]) -> Result<(), TestError> {
     let vk_device = context.get_device();
     let queue = context.get_universal_queue();
     let queue_family_index = context.get_universal_queue_family_index();
@@ -200,7 +214,7 @@ fn upload_image(context: &Context<'_>, src: &ConstPixelBufferAccess<'_>, image: 
     let staging = BufferWithMemory::new(
         vk_device,
         context.get_default_allocator(),
-        make_buffer_create_info(bytes, vk::BufferUsageFlags::TRANSFER_SRC),
+        staging_buffer_create_info(bytes, vk::BufferUsageFlags::TRANSFER_SRC, families),
         MemoryRequirement::HOST_VISIBLE,
     )?;
     unsafe { std::ptr::copy_nonoverlapping(src.raw().as_ptr(), staging.get_allocation().get_host_ptr(), bytes as usize) };
@@ -260,7 +274,7 @@ fn upload_image(context: &Context<'_>, src: &ConstPixelBufferAccess<'_>, image: 
 }
 
 /// `CopiesAndBlittingTestInstance::readImage`, colour aspect and one mip level.
-fn read_image(context: &Context<'_>, image: vk::Image, parms: &ImageParms, dst: &mut TextureLevel, general_layout: bool) -> Result<(), TestError> {
+fn read_image(context: &Context<'_>, image: vk::Image, parms: &ImageParms, dst: &mut TextureLevel, general_layout: bool, families: &[u32]) -> Result<(), TestError> {
     let vk_device = context.get_device();
     let queue = context.get_universal_queue();
     let queue_family_index = context.get_universal_queue_family_index();
@@ -269,7 +283,7 @@ fn read_image(context: &Context<'_>, image: vk::Image, parms: &ImageParms, dst: 
     let staging = BufferWithMemory::new(
         vk_device,
         context.get_default_allocator(),
-        make_buffer_create_info(bytes, vk::BufferUsageFlags::TRANSFER_DST),
+        staging_buffer_create_info(bytes, vk::BufferUsageFlags::TRANSFER_DST, families),
         MemoryRequirement::HOST_VISIBLE,
     )?;
 
@@ -371,7 +385,7 @@ impl TestCase for CopyBufferToImageCase {
         if self.needs_maintenance11 {
             context.require_device_functionality("VK_KHR_maintenance11")?;
         }
-        select_queue_family(context, self.queue_selection)?;
+        select_queue(context, self.queue_selection)?;
 
         let usage = vk::ImageUsageFlags::TRANSFER_SRC | vk::ImageUsageFlags::TRANSFER_DST;
         let properties = unsafe {
@@ -411,6 +425,14 @@ impl TestInstance for CopyBufferToImageInstance<'_> {
         let p = self.params;
         let vk_device = self.context.get_device();
         let allocator = self.context.get_default_allocator();
+
+        // `m_queueFamilyIndices` - the universal queue always, plus the copy's own queue
+        // when it is a different family.
+        let (queue, queue_family_index) = select_queue(self.context, p.queue_selection)?;
+        let mut families = vec![self.context.get_universal_queue_family_index()];
+        if queue_family_index != families[0] {
+            families.push(queue_family_index);
+        }
 
         let texture_format = map_vk_format(p.dst.format).ok_or_else(|| TestError::NotSupported("format has no tcu mapping".to_string()))?;
         let texel_size = texture_format.pixel_size().ok_or_else(|| TestError::NotSupported("format has no pixel size".to_string()))? as usize;
@@ -467,11 +489,9 @@ impl TestInstance for CopyBufferToImageInstance<'_> {
             ImageWithMemory::new(vk_device, allocator, image_info, MemoryRequirement::ANY)?
         };
 
-        upload_image(self.context, &destination_level.get_const_access(), destination.get(), &p.dst, p.general_layout)?;
+        upload_image(self.context, &destination_level.get_const_access(), destination.get(), &p.dst, p.general_layout, &families)?;
 
         // The copy under test.
-        let queue_family_index = select_queue_family(self.context, p.queue_selection)?;
-        let queue = unsafe { vk_device.get_device_queue(queue_family_index, 0) };
         let cmd_pool = make_command_pool(vk_device, queue_family_index)?;
         let cmd_buffer = allocate_command_buffer(vk_device, *cmd_pool, vk::CommandBufferLevel::PRIMARY)?;
 
@@ -528,7 +548,7 @@ impl TestInstance for CopyBufferToImageInstance<'_> {
         submit_commands_and_wait(vk_device, queue, *cmd_buffer)?;
 
         let mut result_level = TextureLevel::new(texture_format, p.dst.extent[0], p.dst.extent[1], p.dst.extent[2])?;
-        read_image(self.context, destination.get(), &p.dst, &mut result_level, p.general_layout)?;
+        read_image(self.context, destination.get(), &p.dst, &mut result_level, p.general_layout, &families)?;
 
         Ok(check_test_result(&expected_level.get_const_access(), &result_level.get_const_access()))
     }

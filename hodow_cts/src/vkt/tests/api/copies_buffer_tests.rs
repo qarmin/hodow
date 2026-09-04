@@ -126,27 +126,21 @@ fn generate_filled_buffer(size: u64) -> Vec<u8> {
 /// transfer-only variants; hodow_cts has one device, so a driver with no
 /// transfer-only family reports NotSupported - which is the same verdict upstream
 /// gives, since it cannot create that device either.
-pub(crate) fn select_queue_family(context: &Context<'_>, selection: QueueSelection) -> Result<u32, TestError> {
+/// The queue a case runs its copy on, with its family index.
+///
+/// It has to come from the Context rather than a fresh `vkGetDeviceQueue`: a queue may
+/// only be fetched from a family the device was *created* with, and asking for one from
+/// any other family is undefined behaviour that segfaults in practice rather than
+/// returning an error.
+pub(crate) fn select_queue(context: &Context<'_>, selection: QueueSelection) -> Result<(vk::Queue, u32), TestError> {
     match selection {
-        QueueSelection::Universal => Ok(context.get_universal_queue_family_index()),
-        QueueSelection::TransferOnly => {
-            let families = unsafe { context.get_instance().get_physical_device_queue_family_properties(context.get_physical_device()) };
-            families
-                .iter()
-                .position(|f| {
-                    f.queue_flags.contains(vk::QueueFlags::TRANSFER) && !f.queue_flags.contains(vk::QueueFlags::GRAPHICS) && !f.queue_flags.contains(vk::QueueFlags::COMPUTE)
-                })
-                .map(|i| i as u32)
-                .ok_or_else(|| TestError::NotSupported("No transfer-only queue family".to_string()))
-        }
-        QueueSelection::ComputeOnly => {
-            let families = unsafe { context.get_instance().get_physical_device_queue_family_properties(context.get_physical_device()) };
-            families
-                .iter()
-                .position(|f| f.queue_flags.contains(vk::QueueFlags::COMPUTE) && !f.queue_flags.contains(vk::QueueFlags::GRAPHICS))
-                .map(|i| i as u32)
-                .ok_or_else(|| TestError::NotSupported("No compute-only queue family".to_string()))
-        }
+        QueueSelection::Universal => Ok((context.get_universal_queue(), context.get_universal_queue_family_index())),
+        QueueSelection::TransferOnly => context
+            .get_transfer_queue()
+            .ok_or_else(|| TestError::NotSupported("No transfer-only queue family".to_string())),
+        QueueSelection::ComputeOnly => context
+            .get_compute_queue()
+            .ok_or_else(|| TestError::NotSupported("No compute-only queue family".to_string())),
     }
 }
 
@@ -194,7 +188,7 @@ impl TestCase for BufferToBufferCase {
         if self.allocation_kind == AllocationKind::Dedicated {
             context.require_device_functionality("VK_KHR_dedicated_allocation")?;
         }
-        select_queue_family(context, self.queue_selection)?;
+        select_queue(context, self.queue_selection)?;
         Ok(())
     }
 
@@ -215,8 +209,7 @@ struct BufferToBufferInstance<'a> {
 impl TestInstance for BufferToBufferInstance<'_> {
     fn iterate(&mut self) -> TestOutcome {
         let vk_device = self.context.get_device();
-        let queue_family_index = select_queue_family(self.context, self.params.queue_selection)?;
-        let queue = unsafe { vk_device.get_device_queue(queue_family_index, 0) };
+        let (queue, queue_family_index) = select_queue(self.context, self.params.queue_selection)?;
 
         // Create source buffer
         let source = unsafe { vk_device.create_buffer(&make_buffer_create_info(self.params.src_size, vk::BufferUsageFlags::TRANSFER_SRC), None) }.vk_check("vkCreateBuffer")?;
