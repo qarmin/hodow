@@ -50,6 +50,9 @@ external/vulkancts/modules/vulkan/vktTestCase.hpp
 # --- common framework (tcu::, de::) ------------------------------------------------
 framework/common/tcuTestCase.hpp
 framework/common/tcuVector.hpp
+framework/common/tcuTexture.hpp
+framework/common/tcuTexture.cpp
+external/vulkancts/framework/vulkan/vkImageUtil.cpp
 framework/delibs/debase/deRandom.c
 framework/delibs/debase/deRandom.h
 framework/delibs/decpp/deRandom.hpp
