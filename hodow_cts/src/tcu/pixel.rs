@@ -234,6 +234,35 @@ pub fn has_stencil_component(order: ChannelOrder) -> bool {
     matches!(order, ChannelOrder::S | ChannelOrder::DS)
 }
 
+/// `tcu::getEffectiveDepthStencilTextureFormat`
+///
+/// Only the format half of upstream's `toSamplerAccess` - the pointer/pitch fixup it
+/// also does is unnecessary here, because `get_pix_depth`/`get_pix_stencil` already
+/// decode the combined types in place. What is needed is the format the *threshold*
+/// is computed from: a combined type has no channel class of its own (it reports
+/// `Last`), so comparing against it would fall off the end of the switch.
+pub fn get_effective_depth_stencil_texture_format(base: TextureFormat, mode: DepthStencilMode) -> TextureFormat {
+    if base.order != ChannelOrder::DS && !matches!(base.type_, ChannelType::UNSIGNED_INT_24_8_REV) {
+        return base;
+    }
+    match (base.type_, mode) {
+        (ChannelType::UNSIGNED_INT_16_8_8, DepthStencilMode::Depth) => TextureFormat::new(ChannelOrder::D, ChannelType::UNORM_INT16),
+        (ChannelType::UNSIGNED_INT_24_8, DepthStencilMode::Depth) | (ChannelType::UNSIGNED_INT_24_8_REV, DepthStencilMode::Depth) => {
+            TextureFormat::new(ChannelOrder::D, ChannelType::UNORM_INT24)
+        }
+        (ChannelType::FLOAT_UNSIGNED_INT_24_8_REV, DepthStencilMode::Depth) => TextureFormat::new(ChannelOrder::D, ChannelType::FLOAT),
+        (_, DepthStencilMode::Stencil) => TextureFormat::new(ChannelOrder::S, ChannelType::UNSIGNED_INT8),
+        _ => base,
+    }
+}
+
+/// `tcu::Sampler::DepthStencilMode`
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum DepthStencilMode {
+    Depth,
+    Stencil,
+}
+
 fn rd_u8(p: &[u8]) -> u8 {
     p[0]
 }
@@ -420,6 +449,11 @@ impl<'a> ConstPixelBufferAccess<'a> {
     /// Wraps tightly-packed texel data of `size` in `format`.
     pub fn new(format: TextureFormat, size: [u32; 3], data: &'a [u8]) -> Self {
         Self { format, size, data }
+    }
+
+    /// `getFormat`
+    pub fn format(&self) -> TextureFormat {
+        self.format
     }
 }
 

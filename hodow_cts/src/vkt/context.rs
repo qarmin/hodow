@@ -235,6 +235,7 @@ impl Drop for Context<'_> {
 fn promoted_to_core_version(extension: &str) -> Option<u32> {
     Some(match extension {
         "VK_KHR_spirv_1_4" | "VK_KHR_shader_float16_int8" | "VK_KHR_8bit_storage" | "VK_KHR_16bit_storage" => vk::make_version(1, 2, 0),
+        "VK_KHR_separate_depth_stencil_layouts" | "VK_KHR_create_renderpass2" => vk::make_version(1, 2, 0),
         "VK_KHR_zero_initialize_workgroup_memory" | "VK_KHR_shader_terminate_invocation" => vk::make_version(1, 3, 0),
         "VK_KHR_device_group" | "VK_KHR_storage_buffer_storage_class" | "VK_KHR_dedicated_allocation" => vk::make_version(1, 1, 0),
         "VK_KHR_copy_commands2" => vk::make_version(1, 3, 0),

@@ -144,3 +144,14 @@ pub static COLOR_IMAGE_FORMATS_TO_TEST: &[(vk::Format, &str)] = &[
     (vk::Format::A4R4G4B4_UNORM_PACK16, "a4r4g4b4_unorm_pack16"),
     (vk::Format::A4B4G4R4_UNORM_PACK16, "a4b4g4r4_unorm_pack16"),
 ];
+
+/// `depthStencilImageFormatsToTest`, paired with the name each case is registered under.
+pub static DEPTH_STENCIL_IMAGE_FORMATS_TO_TEST: &[(vk::Format, &str)] = &[
+    (vk::Format::D16_UNORM, "d16_unorm"),
+    (vk::Format::X8_D24_UNORM_PACK32, "x8_d24_unorm_pack32"),
+    (vk::Format::D32_SFLOAT, "d32_sfloat"),
+    (vk::Format::S8_UINT, "s8_uint"),
+    (vk::Format::D16_UNORM_S8_UINT, "d16_unorm_s8_uint"),
+    (vk::Format::D24_UNORM_S8_UINT, "d24_unorm_s8_uint"),
+    (vk::Format::D32_SFLOAT_S8_UINT, "d32_sfloat_s8_uint"),
+];
