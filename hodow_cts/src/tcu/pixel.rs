@@ -1225,6 +1225,54 @@ impl PixelBufferAccess<'_> {
         self.data[dst_off..dst_off + bytes].copy_from_slice(&src.raw()[src_off..src_off + bytes]);
     }
 
+    /// `PixelBufferAccess::setPixDepth`
+    ///
+    /// Only the combined types need a case of their own; a depth-only format falls
+    /// through to the ordinary channel encoder.
+    pub fn set_pix_depth(&mut self, depth: f32, x: u32, y: u32, z: u32) {
+        use ChannelType::*;
+        let base = self.pixel_offset(x, y, z);
+        let type_ = self.format.type_;
+        let dst = &mut self.data[base..];
+        match type_ {
+            UNSIGNED_INT_16_8_8 => {
+                let v = convert_sat_rte(depth * 65535.0, 0, 65535) as u16;
+                dst[2..4].copy_from_slice(&v.to_le_bytes());
+            }
+            UNSIGNED_INT_24_8 => {
+                let v = convert_sat_rte(depth * 16_777_215.0, 0, u32::MAX as i64) as u32;
+                dst[1..4].copy_from_slice(&v.to_le_bytes()[..3]);
+            }
+            UNSIGNED_INT_24_8_REV => {
+                let v = convert_sat_rte(depth * 16_777_215.0, 0, u32::MAX as i64) as u32;
+                dst[0..3].copy_from_slice(&v.to_le_bytes()[..3]);
+            }
+            FLOAT_UNSIGNED_INT_24_8_REV => dst[..4].copy_from_slice(&depth.to_le_bytes()),
+            other => {
+                let size = other.channel_size().expect("a depth-only format has a channel size") as usize;
+                float_to_channel(&mut dst[..size], depth, other);
+            }
+        }
+    }
+
+    /// `PixelBufferAccess::setPixStencil`
+    pub fn set_pix_stencil(&mut self, stencil: u32, x: u32, y: u32, z: u32) {
+        use ChannelType::*;
+        let base = self.pixel_offset(x, y, z);
+        let type_ = self.format.type_;
+        let value = stencil.min(255) as u8;
+        let dst = &mut self.data[base..];
+        match type_ {
+            UNSIGNED_INT_16_8_8 | UNSIGNED_INT_24_8 => dst[0] = value,
+            UNSIGNED_INT_24_8_REV => dst[3] = value,
+            FLOAT_UNSIGNED_INT_24_8_REV => dst[4] = value,
+            other => {
+                let size = other.channel_size().expect("a stencil-only format has a channel size") as usize;
+                float_to_channel(&mut dst[..size], f32::from(value), other);
+            }
+        }
+    }
+
     /// Fills a texel with a repeated byte, the last one replaced. `FILL_MODE_RANDOM_GRAY`
     /// writes the raw bytes rather than a colour for the float formats, so this bypasses
     /// the channel encoders entirely.
@@ -1276,6 +1324,55 @@ fn linear_interpolate(t: f32, min_val: f32, max_val: f32) -> f32 {
     min_val + (max_val - min_val) * t
 }
 
+/// The four per-channel interpolation coefficients at one texel, factored out of the
+/// fill loops so the combined depth/stencil branch can read the same ones.
+fn gradient_coefficients(x: u32, y: u32, z: u32, width: u32, height: u32, depth: u32, style: GradientStyle) -> [f32; 4] {
+    let s = (x as f32 + 0.5) / width as f32;
+
+    if height == 1 && depth == 1 {
+        return [s; 4];
+    }
+
+    let t = (y as f32 + 0.5) / height as f32;
+
+    if depth == 1 {
+        if style == GradientStyle::Pyramid {
+            let xedge = (width as f32 * 0.6).floor() as u32;
+            let yedge = (height as f32 * 0.6).floor() as u32;
+            let (mut cr, mut cg, mut cb, mut ca) = if x < xedge {
+                (s * 0.4, s * 0.4, (1.0 - s) * 0.4, (1.0 - s) * 0.4)
+            } else {
+                ((1.0 - s) * 0.6, (1.0 - s) * 0.6, s * 0.6 - 0.2, s * 0.6 - 0.2)
+            };
+            if y < yedge {
+                cr += t * 0.4;
+                cg += (1.0 - t) * 0.4;
+                cb += t * 0.4;
+                ca += (1.0 - t) * 0.4;
+            } else {
+                cr += (1.0 - t) * 0.6;
+                cg += t * 0.6 - 0.2;
+                cb += (1.0 - t) * 0.6;
+                ca += t * 0.6 - 0.2;
+            }
+            return [cr, cg, cb, ca];
+        }
+        return [(s + t) * 0.5, (s + (1.0 - t)) * 0.5, ((1.0 - s) + t) * 0.5, ((1.0 - s) + (1.0 - t)) * 0.5];
+    }
+
+    let p = (z as f32 + 0.5) / depth as f32;
+    if style == GradientStyle::New {
+        [
+            (s + t + p) / 3.0,
+            (s + (1.0 - (t + p) * 0.5) * 2.0) / 3.0,
+            ((1.0 - (s + t) * 0.5) * 2.0 + p) / 3.0,
+            1.0 - (s + t + p) / 3.0,
+        ]
+    } else {
+        [s, t, p, 1.0 - (s + t + p) / 3.0]
+    }
+}
+
 /// `tcu::GradientStyle`
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum GradientStyle {
@@ -1299,97 +1396,29 @@ pub fn fill_with_component_gradients3(access: &mut PixelBufferAccess<'_>, min_va
 pub fn fill_with_component_gradients_styled(access: &mut PixelBufferAccess<'_>, min_val: [f32; 4], max_val: [f32; 4], style: GradientStyle) {
     let [width, height, depth] = access.size();
 
-    if height == 1 && depth == 1 {
-        for x in 0..width {
-            let s = (x as f32 + 0.5) / width as f32;
-            // All four channels ramp the same way here. The 2D and 3D variants mirror
-            // some of them, which is what this looked like it should do too - but
-            // upstream's 1D fill does not, and a reference that disagrees is invisible
-            // to a verdict diff because both sides of the comparison come from it.
-            let color = [
-                linear_interpolate(s, min_val[0], max_val[0]),
-                linear_interpolate(s, min_val[1], max_val[1]),
-                linear_interpolate(s, min_val[2], max_val[2]),
-                linear_interpolate(s, min_val[3], max_val[3]),
-            ];
-            access.set_pixel(color, x, 0, 0);
-        }
-    } else if depth == 1 {
-        if style == GradientStyle::Pyramid {
-            let xedge = (width as f32 * 0.6).floor() as u32;
-            let yedge = (height as f32 * 0.6).floor() as u32;
-            for y in 0..height {
-                for x in 0..width {
-                    let s = (x as f32 + 0.5) / width as f32;
-                    let t = (y as f32 + 0.5) / height as f32;
-
-                    let (mut cr, mut cg, mut cb, mut ca) = if x < xedge {
-                        (s * 0.4, s * 0.4, (1.0 - s) * 0.4, (1.0 - s) * 0.4)
-                    } else {
-                        ((1.0 - s) * 0.6, (1.0 - s) * 0.6, s * 0.6 - 0.2, s * 0.6 - 0.2)
-                    };
-                    if y < yedge {
-                        cr += t * 0.4;
-                        cg += (1.0 - t) * 0.4;
-                        cb += t * 0.4;
-                        ca += (1.0 - t) * 0.4;
-                    } else {
-                        cr += (1.0 - t) * 0.6;
-                        cg += t * 0.6 - 0.2;
-                        cb += (1.0 - t) * 0.6;
-                        ca += t * 0.6 - 0.2;
-                    }
-
-                    let color = [
-                        linear_interpolate(cr, min_val[0], max_val[0]),
-                        linear_interpolate(cg, min_val[1], max_val[1]),
-                        linear_interpolate(cb, min_val[2], max_val[2]),
-                        linear_interpolate(ca, min_val[3], max_val[3]),
-                    ];
-                    access.set_pixel(color, x, y, 0);
-                }
-            }
-            return;
-        }
-        for y in 0..height {
-            for x in 0..width {
-                let s = (x as f32 + 0.5) / width as f32;
-                let t = (y as f32 + 0.5) / height as f32;
-                let color = [
-                    linear_interpolate((s + t) * 0.5, min_val[0], max_val[0]),
-                    linear_interpolate((s + (1.0 - t)) * 0.5, min_val[1], max_val[1]),
-                    linear_interpolate(((1.0 - s) + t) * 0.5, min_val[2], max_val[2]),
-                    linear_interpolate(((1.0 - s) + (1.0 - t)) * 0.5, min_val[3], max_val[3]),
-                ];
-                access.set_pixel(color, x, y, 0);
-            }
-        }
-    } else {
+    // Upstream recurses into the effective depth and stencil accesses, the stencil one
+    // with the bounds swizzled so that channel 0 carries what was the alpha bound. Both
+    // fills share the geometry, so both read the channel-0 coefficient - which is what
+    // this writes directly rather than building a strided sub-access to recurse into.
+    if is_combined_depth_stencil_type(access.format().type_) {
         for z in 0..depth {
             for y in 0..height {
                 for x in 0..width {
-                    let s = (x as f32 + 0.5) / width as f32;
-                    let t = (y as f32 + 0.5) / height as f32;
-                    let p = (z as f32 + 0.5) / depth as f32;
-                    let color = if style == GradientStyle::New {
-                        // R, G, B and A all depend on every coordinate.
-                        [
-                            linear_interpolate((s + t + p) / 3.0, min_val[0], max_val[0]),
-                            linear_interpolate((s + (1.0 - (t + p) * 0.5) * 2.0) / 3.0, min_val[1], max_val[1]),
-                            linear_interpolate(((1.0 - (s + t) * 0.5) * 2.0 + p) / 3.0, min_val[2], max_val[2]),
-                            linear_interpolate(1.0 - (s + t + p) / 3.0, min_val[3], max_val[3]),
-                        ]
-                    } else {
-                        // Each of R, G and B only depends on X, Y and Z respectively.
-                        [
-                            linear_interpolate(s, min_val[0], max_val[0]),
-                            linear_interpolate(t, min_val[1], max_val[1]),
-                            linear_interpolate(p, min_val[2], max_val[2]),
-                            linear_interpolate(1.0 - (s + t + p) / 3.0, min_val[3], max_val[3]),
-                        ]
-                    };
-                    access.set_pixel(color, x, y, z);
+                    let coef = gradient_coefficients(x, y, z, width, height, depth, style)[0];
+                    access.set_pix_depth(linear_interpolate(coef, min_val[0], max_val[0]), x, y, z);
+                    access.set_pix_stencil(linear_interpolate(coef, min_val[3], max_val[3]) as u32, x, y, z);
                 }
+            }
+        }
+        return;
+    }
+
+    for z in 0..depth {
+        for y in 0..height {
+            for x in 0..width {
+                let c = gradient_coefficients(x, y, z, width, height, depth, style);
+                let color = std::array::from_fn(|i| linear_interpolate(c[i], min_val[i], max_val[i]));
+                access.set_pixel(color, x, y, z);
             }
         }
     }
