@@ -41,6 +41,9 @@ pub fn get_uncompressed_format(format: vk::Format) -> Option<TextureFormat> {
         vk::Format::ETC2_R8G8B8_SRGB_BLOCK => TextureFormat::new(sRGB, UNORM_INT8),
         vk::Format::ETC2_R8G8B8A1_UNORM_BLOCK | vk::Format::ETC2_R8G8B8A8_UNORM_BLOCK => TextureFormat::new(RGBA, UNORM_INT8),
         vk::Format::ETC2_R8G8B8A1_SRGB_BLOCK | vk::Format::ETC2_R8G8B8A8_SRGB_BLOCK => TextureFormat::new(sRGBA, UNORM_INT8),
+        vk::Format::BC6H_UFLOAT_BLOCK | vk::Format::BC6H_SFLOAT_BLOCK => TextureFormat::new(RGB, HALF_FLOAT),
+        vk::Format::BC7_SRGB_BLOCK => TextureFormat::new(sRGBA, UNORM_INT8),
+        vk::Format::BC7_UNORM_BLOCK => TextureFormat::new(RGBA, UNORM_INT8),
         vk::Format::BC4_UNORM_BLOCK | vk::Format::BC4_SNORM_BLOCK => TextureFormat::new(R, FLOAT),
         vk::Format::BC5_UNORM_BLOCK | vk::Format::BC5_SNORM_BLOCK => TextureFormat::new(RG, FLOAT),
         vk::Format::BC1_RGB_SRGB_BLOCK | vk::Format::BC1_RGBA_SRGB_BLOCK | vk::Format::BC2_SRGB_BLOCK | vk::Format::BC3_SRGB_BLOCK => TextureFormat::new(sRGBA, UNORM_INT8),
@@ -669,7 +672,854 @@ fn decompress_eac11(dst: &mut BlockOut<'_>, src: &[u8], channels: usize, signed_
     }
 }
 
-/// `decompressBlock`, narrowed to the BC1-BC5 and ETC2/EAC families.
+// ---------------------------------------------------------------------------------
+// BC6H and BC7
+// ---------------------------------------------------------------------------------
+
+const EP_BITS: [u8; 14] = [10, 7, 11, 11, 11, 9, 8, 8, 8, 6, 10, 11, 12, 16];
+
+const PARTITIONS2: [[u8; 16]; 64] = [
+    [0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1],
+    [0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+    [0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
+    [0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1],
+    [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1],
+    [0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1],
+    [0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1],
+    [0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
+    [0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1],
+    [0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0],
+    [0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0],
+    [0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0],
+    [0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1],
+    [0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0],
+    [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0],
+    [0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0],
+    [0, 0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0],
+    [0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0],
+    [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0],
+    [0, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0],
+    [0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0],
+    [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+    [0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1],
+    [0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0],
+    [0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0],
+    [0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0],
+    [0, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0],
+    [0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1],
+    [0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1, 0, 1],
+    [0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0],
+    [0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0],
+    [0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 0],
+    [0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0],
+    [0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0],
+    [0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1],
+    [0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1],
+    [0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0],
+    [0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0],
+    [0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0],
+    [0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1],
+    [0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1],
+    [0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0],
+    [0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 0],
+    [0, 1, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1],
+    [0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1],
+    [0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1],
+    [0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1],
+    [0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1],
+    [0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0],
+    [0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0],
+    [0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1],
+];
+
+const PARTITIONS3: [[u8; 16]; 64] = [
+    [0, 0, 1, 1, 0, 0, 1, 1, 0, 2, 2, 1, 2, 2, 2, 2],
+    [0, 0, 0, 1, 0, 0, 1, 1, 2, 2, 1, 1, 2, 2, 2, 1],
+    [0, 0, 0, 0, 2, 0, 0, 1, 2, 2, 1, 1, 2, 2, 1, 1],
+    [0, 2, 2, 2, 0, 0, 2, 2, 0, 0, 1, 1, 0, 1, 1, 1],
+    [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 2, 1, 1, 2, 2],
+    [0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 2, 2, 0, 0, 2, 2],
+    [0, 0, 2, 2, 0, 0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 1, 1, 0, 0, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1],
+    [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2],
+    [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2],
+    [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2],
+    [0, 0, 1, 2, 0, 0, 1, 2, 0, 0, 1, 2, 0, 0, 1, 2],
+    [0, 1, 1, 2, 0, 1, 1, 2, 0, 1, 1, 2, 0, 1, 1, 2],
+    [0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 2, 0, 1, 2, 2],
+    [0, 0, 1, 1, 0, 1, 1, 2, 1, 1, 2, 2, 1, 2, 2, 2],
+    [0, 0, 1, 1, 2, 0, 0, 1, 2, 2, 0, 0, 2, 2, 2, 0],
+    [0, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 2, 1, 1, 2, 2],
+    [0, 1, 1, 1, 0, 0, 1, 1, 2, 0, 0, 1, 2, 2, 0, 0],
+    [0, 0, 0, 0, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2],
+    [0, 0, 2, 2, 0, 0, 2, 2, 0, 0, 2, 2, 1, 1, 1, 1],
+    [0, 1, 1, 1, 0, 1, 1, 1, 0, 2, 2, 2, 0, 2, 2, 2],
+    [0, 0, 0, 1, 0, 0, 0, 1, 2, 2, 2, 1, 2, 2, 2, 1],
+    [0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 2, 2, 0, 1, 2, 2],
+    [0, 0, 0, 0, 1, 1, 0, 0, 2, 2, 1, 0, 2, 2, 1, 0],
+    [0, 1, 2, 2, 0, 1, 2, 2, 0, 0, 1, 1, 0, 0, 0, 0],
+    [0, 0, 1, 2, 0, 0, 1, 2, 1, 1, 2, 2, 2, 2, 2, 2],
+    [0, 1, 1, 0, 1, 2, 2, 1, 1, 2, 2, 1, 0, 1, 1, 0],
+    [0, 0, 0, 0, 0, 1, 1, 0, 1, 2, 2, 1, 1, 2, 2, 1],
+    [0, 0, 2, 2, 1, 1, 0, 2, 1, 1, 0, 2, 0, 0, 2, 2],
+    [0, 1, 1, 0, 0, 1, 1, 0, 2, 0, 0, 2, 2, 2, 2, 2],
+    [0, 0, 1, 1, 0, 1, 2, 2, 0, 1, 2, 2, 0, 0, 1, 1],
+    [0, 0, 0, 0, 2, 0, 0, 0, 2, 2, 1, 1, 2, 2, 2, 1],
+    [0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 2, 2, 1, 2, 2, 2],
+    [0, 2, 2, 2, 0, 0, 2, 2, 0, 0, 1, 2, 0, 0, 1, 1],
+    [0, 0, 1, 1, 0, 0, 1, 2, 0, 0, 2, 2, 0, 2, 2, 2],
+    [0, 1, 2, 0, 0, 1, 2, 0, 0, 1, 2, 0, 0, 1, 2, 0],
+    [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 0, 0, 0, 0],
+    [0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0],
+    [0, 1, 2, 0, 2, 0, 1, 2, 1, 2, 0, 1, 0, 1, 2, 0],
+    [0, 0, 1, 1, 2, 2, 0, 0, 1, 1, 2, 2, 0, 0, 1, 1],
+    [0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 0, 0, 0, 0, 1, 1],
+    [0, 1, 0, 1, 0, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2],
+    [0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 2, 1, 2, 1, 2, 1],
+    [0, 0, 2, 2, 1, 1, 2, 2, 0, 0, 2, 2, 1, 1, 2, 2],
+    [0, 0, 2, 2, 0, 0, 1, 1, 0, 0, 2, 2, 0, 0, 1, 1],
+    [0, 2, 2, 0, 1, 2, 2, 1, 0, 2, 2, 0, 1, 2, 2, 1],
+    [0, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 0, 1, 0, 1],
+    [0, 0, 0, 0, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1],
+    [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 2, 2, 2, 2],
+    [0, 2, 2, 2, 0, 1, 1, 1, 0, 2, 2, 2, 0, 1, 1, 1],
+    [0, 0, 0, 2, 1, 1, 1, 2, 0, 0, 0, 2, 1, 1, 1, 2],
+    [0, 0, 0, 0, 2, 1, 1, 2, 2, 1, 1, 2, 2, 1, 1, 2],
+    [0, 2, 2, 2, 0, 1, 1, 1, 0, 1, 1, 1, 0, 2, 2, 2],
+    [0, 0, 0, 2, 1, 1, 1, 2, 1, 1, 1, 2, 0, 0, 0, 2],
+    [0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 2, 2, 2, 2],
+    [0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 2, 2, 1, 1, 2],
+    [0, 1, 1, 0, 0, 1, 1, 0, 2, 2, 2, 2, 2, 2, 2, 2],
+    [0, 0, 2, 2, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 2, 2],
+    [0, 0, 2, 2, 1, 1, 2, 2, 1, 1, 2, 2, 0, 0, 2, 2],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 2],
+    [0, 0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 1],
+    [0, 2, 2, 2, 1, 2, 2, 2, 0, 2, 2, 2, 1, 2, 2, 2],
+    [0, 1, 0, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+    [0, 1, 1, 1, 2, 0, 1, 1, 2, 2, 0, 1, 2, 2, 2, 0],
+];
+
+const ANCHOR_INDICES_SECOND_SUBSET2: [u8; 64] = [
+    15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 2, 8, 2, 2, 8, 8, 15, 2, 8, 2, 2, 8, 8, 2, 2, 15, 15, 6, 8, 2, 8, 15, 15, 2, 8, 2, 2, 2, 15, 15, 6, 6, 2,
+    6, 8, 15, 15, 2, 2, 15, 15, 15, 15, 15, 2, 2, 15,
+];
+
+const ANCHOR_INDICES_SECOND_SUBSET3: [u8; 64] = [
+    3, 3, 15, 15, 8, 3, 15, 15, 8, 8, 6, 6, 6, 5, 3, 3, 3, 3, 8, 15, 3, 3, 6, 10, 5, 8, 8, 6, 8, 5, 15, 15, 8, 15, 3, 5, 6, 10, 8, 15, 15, 3, 15, 5, 15, 15, 15, 15, 3, 15, 5, 5,
+    5, 8, 5, 10, 5, 10, 8, 13, 15, 12, 3, 3,
+];
+
+const ANCHOR_INDICES_THIRD_SUBSET: [u8; 64] = [
+    15, 8, 8, 3, 15, 15, 3, 8, 15, 15, 15, 15, 15, 15, 15, 8, 15, 8, 15, 3, 15, 8, 15, 8, 3, 15, 6, 10, 15, 15, 10, 8, 15, 3, 15, 10, 10, 8, 9, 10, 6, 15, 8, 15, 3, 6, 6, 8, 15,
+    3, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 3, 15, 15, 8,
+];
+
+const WEIGHTS2: [u16; 4] = [0, 21, 43, 64];
+
+const WEIGHTS3: [u16; 8] = [0, 9, 18, 27, 37, 46, 55, 64];
+
+const WEIGHTS4: [u16; 16] = [0, 4, 9, 13, 17, 21, 26, 30, 34, 38, 43, 47, 51, 55, 60, 64];
+
+/// `extractModeBc6` - -1 for an illegal mode, which decodes to opaque black.
+fn extract_mode_bc6(src: u8) -> i32 {
+    if matches!(src & 0x1f, 0x13 | 0x17 | 0x1b | 0x1f) {
+        return -1;
+    }
+    match src & 0x3 {
+        0 => 0,
+        1 => 1,
+        2 => 2 + i32::from((src >> 2) & 0x7),
+        _ => 10 + i32::from((src >> 2) & 0x7),
+    }
+}
+
+/// `extractModeBc7` - the mode is unary-coded in the first byte.
+fn extract_mode_bc7(src: u8) -> i32 {
+    (0..8).find(|i| src & (1 << i) != 0).unwrap_or(-1)
+}
+
+fn low_bit_mask(bits: u32) -> u32 {
+    if bits >= 32 { u32::MAX } else { (1u32 << bits) - 1 }
+}
+
+/// `getBits128` - `first > last` names the field the other way round and asks for its
+/// bits reversed, which several BC6H modes rely on.
+fn get_bits128(low: u64, high: u64, first: u32, last: u32) -> u32 {
+    let d = [low, high];
+    let reverse = first > last;
+    let (first, last) = if reverse { (last, first) } else { (first, last) };
+
+    let element_first = (first / 64) as usize;
+    let element_last = (last / 64) as usize;
+
+    let mut ret = if element_first == element_last {
+        let shift = first % 64;
+        let len = last - first + 1;
+        ((d[element_first] >> shift) as u32) & low_bit_mask(len)
+    } else {
+        let len0 = 64 - first;
+        let data0 = ((low >> first) as u32) & low_bit_mask(len0);
+        let len1 = last - 63;
+        let data1 = (high as u32) & low_bit_mask(len1);
+        (data1 << len0) | data0
+    };
+
+    if reverse {
+        let len = last - first + 1;
+        let orig = ret;
+        ret = 0;
+        for i in 0..len {
+            ret |= ((orig >> (len - 1 - i)) & 1) << i;
+        }
+    }
+    ret
+}
+
+/// `signExtend`
+fn sign_extend(value: i32, src_bits: u32, dst_bits: u32) -> i32 {
+    if value & (1 << (src_bits - 1)) == 0 {
+        return value;
+    }
+    let dst_mask = ((1u64 << dst_bits) - 1) as u32 as i32;
+    let extended_bits = (0xffff_ffffu32 << src_bits) as i32;
+    (value | extended_bits) & dst_mask
+}
+
+/// `unquantize`
+fn unquantize(x: i32, mode: usize, has_sign: bool) -> i32 {
+    let ep_bits = i32::from(EP_BITS[mode]);
+    if has_sign {
+        if ep_bits >= 16 {
+            return x;
+        }
+        let s = x < 0;
+        let mut x = x.abs();
+        if x == 0 {
+            x = 0;
+        } else if x >= (1 << (ep_bits - 1)) - 1 {
+            x = 0x7fff;
+        } else {
+            x = ((x << 15) + 0x4000) >> (ep_bits - 1);
+        }
+        if s { -x } else { x }
+    } else if ep_bits >= 15 {
+        x
+    } else if x == 0 {
+        0
+    } else if x == (1 << ep_bits) - 1 {
+        0xffff
+    } else {
+        ((x << 15) + 0x4000) >> (ep_bits - 1)
+    }
+}
+
+/// `interpolate`
+fn interpolate(a: i32, b: i32, index: u32, index_precision: u32) -> i32 {
+    let weight = i32::from(match index_precision {
+        2 => WEIGHTS2[index as usize],
+        3 => WEIGHTS3[index as usize],
+        _ => WEIGHTS4[index as usize],
+    });
+    ((64 - weight) * a + weight * b + 32) >> 6
+}
+
+/// `finishUnquantize`
+fn finish_unquantize(x: i32, has_sign: bool) -> i16 {
+    let mut x = x;
+    if has_sign {
+        x = if x < 0 { -(((-x) * 31) >> 5) } else { (x * 31) >> 5 };
+        if x < 0 {
+            x = (-x) | 0x8000;
+        }
+    } else {
+        x = (x * 31) / 64;
+    }
+    x as i16
+}
+
+/// `decompressBc6H`
+fn decompress_bc6h(dst: &mut BlockOut<'_>, src: &[u8], has_sign: bool) {
+    let mode = extract_mode_bc6(src[0]);
+    let mut r = [0i32; 4];
+    let mut g = [0i32; 4];
+    let mut b = [0i32; 4];
+    let mut delta_bits_r = 0u32;
+    let mut delta_bits_g = 0u32;
+    let mut delta_bits_b = 0u32;
+    let low = get_64bit_block_le(src, 0);
+    let high = get_64bit_block_le(src, 1);
+    let d = if mode < 10 { get_bits128(low, high, 77, 81) } else { 0 } as usize;
+    let num_regions = if mode > 9 { 1u32 } else { 2 };
+    let num_endpoints = (num_regions * 2) as usize;
+    let transformed = mode != 9 && mode != 10;
+    let color_index_bc = if mode < 10 { 3u32 } else { 4 };
+    let mut color_index_data = high >> (if mode < 10 { 18 } else { 1 });
+    let anchor_index = [0u32, u32::from(ANCHOR_INDICES_SECOND_SUBSET2[d])];
+
+    match mode {
+        0 => {
+            g[2] |= (get_bits128(low, high, 2, 2) as i32) << 4;
+            b[2] |= (get_bits128(low, high, 3, 3) as i32) << 4;
+            b[3] |= (get_bits128(low, high, 4, 4) as i32) << 4;
+            r[0] |= get_bits128(low, high, 5, 14) as i32;
+            g[0] |= get_bits128(low, high, 15, 24) as i32;
+            b[0] |= get_bits128(low, high, 25, 34) as i32;
+            r[1] |= get_bits128(low, high, 35, 39) as i32;
+            g[3] |= (get_bits128(low, high, 40, 40) as i32) << 4;
+            g[2] |= get_bits128(low, high, 41, 44) as i32;
+            g[1] |= get_bits128(low, high, 45, 49) as i32;
+            b[3] |= get_bits128(low, high, 50, 50) as i32;
+            g[3] |= get_bits128(low, high, 51, 54) as i32;
+            b[1] |= get_bits128(low, high, 55, 59) as i32;
+            b[3] |= (get_bits128(low, high, 60, 60) as i32) << 1;
+            b[2] |= get_bits128(low, high, 61, 64) as i32;
+            r[2] |= get_bits128(low, high, 65, 69) as i32;
+            b[3] |= (get_bits128(low, high, 70, 70) as i32) << 2;
+            r[3] |= get_bits128(low, high, 71, 75) as i32;
+            b[3] |= (get_bits128(low, high, 76, 76) as i32) << 3;
+            delta_bits_r = 5;
+            delta_bits_g = 5;
+            delta_bits_b = 5;
+        }
+        1 => {
+            g[2] |= (get_bits128(low, high, 2, 2) as i32) << 5;
+            g[3] |= (get_bits128(low, high, 3, 3) as i32) << 4;
+            g[3] |= (get_bits128(low, high, 4, 4) as i32) << 5;
+            r[0] |= get_bits128(low, high, 5, 11) as i32;
+            b[3] |= get_bits128(low, high, 12, 12) as i32;
+            b[3] |= (get_bits128(low, high, 13, 13) as i32) << 1;
+            b[2] |= (get_bits128(low, high, 14, 14) as i32) << 4;
+            g[0] |= get_bits128(low, high, 15, 21) as i32;
+            b[2] |= (get_bits128(low, high, 22, 22) as i32) << 5;
+            b[3] |= (get_bits128(low, high, 23, 23) as i32) << 2;
+            g[2] |= (get_bits128(low, high, 24, 24) as i32) << 4;
+            b[0] |= get_bits128(low, high, 25, 31) as i32;
+            b[3] |= (get_bits128(low, high, 32, 32) as i32) << 3;
+            b[3] |= (get_bits128(low, high, 33, 33) as i32) << 5;
+            b[3] |= (get_bits128(low, high, 34, 34) as i32) << 4;
+            r[1] |= get_bits128(low, high, 35, 40) as i32;
+            g[2] |= get_bits128(low, high, 41, 44) as i32;
+            g[1] |= get_bits128(low, high, 45, 50) as i32;
+            g[3] |= get_bits128(low, high, 51, 54) as i32;
+            b[1] |= get_bits128(low, high, 55, 60) as i32;
+            b[2] |= get_bits128(low, high, 61, 64) as i32;
+            r[2] |= get_bits128(low, high, 65, 70) as i32;
+            r[3] |= get_bits128(low, high, 71, 76) as i32;
+            delta_bits_r = 6;
+            delta_bits_g = 6;
+            delta_bits_b = 6;
+        }
+        2 => {
+            r[0] |= get_bits128(low, high, 5, 14) as i32;
+            g[0] |= get_bits128(low, high, 15, 24) as i32;
+            b[0] |= get_bits128(low, high, 25, 34) as i32;
+            r[1] |= get_bits128(low, high, 35, 39) as i32;
+            r[0] |= (get_bits128(low, high, 40, 40) as i32) << 10;
+            g[2] |= get_bits128(low, high, 41, 44) as i32;
+            g[1] |= get_bits128(low, high, 45, 48) as i32;
+            g[0] |= (get_bits128(low, high, 49, 49) as i32) << 10;
+            b[3] |= get_bits128(low, high, 50, 50) as i32;
+            g[3] |= get_bits128(low, high, 51, 54) as i32;
+            b[1] |= get_bits128(low, high, 55, 58) as i32;
+            b[0] |= (get_bits128(low, high, 59, 59) as i32) << 10;
+            b[3] |= (get_bits128(low, high, 60, 60) as i32) << 1;
+            b[2] |= get_bits128(low, high, 61, 64) as i32;
+            r[2] |= get_bits128(low, high, 65, 69) as i32;
+            b[3] |= (get_bits128(low, high, 70, 70) as i32) << 2;
+            r[3] |= get_bits128(low, high, 71, 75) as i32;
+            b[3] |= (get_bits128(low, high, 76, 76) as i32) << 3;
+            delta_bits_r = 5;
+            delta_bits_g = 4;
+            delta_bits_b = 4;
+        }
+        3 => {
+            r[0] |= get_bits128(low, high, 5, 14) as i32;
+            g[0] |= get_bits128(low, high, 15, 24) as i32;
+            b[0] |= get_bits128(low, high, 25, 34) as i32;
+            r[1] |= get_bits128(low, high, 35, 38) as i32;
+            r[0] |= (get_bits128(low, high, 39, 39) as i32) << 10;
+            g[3] |= (get_bits128(low, high, 40, 40) as i32) << 4;
+            g[2] |= get_bits128(low, high, 41, 44) as i32;
+            g[1] |= get_bits128(low, high, 45, 49) as i32;
+            g[0] |= (get_bits128(low, high, 50, 50) as i32) << 10;
+            g[3] |= get_bits128(low, high, 51, 54) as i32;
+            b[1] |= get_bits128(low, high, 55, 58) as i32;
+            b[0] |= (get_bits128(low, high, 59, 59) as i32) << 10;
+            b[3] |= (get_bits128(low, high, 60, 60) as i32) << 1;
+            b[2] |= get_bits128(low, high, 61, 64) as i32;
+            r[2] |= get_bits128(low, high, 65, 68) as i32;
+            b[3] |= get_bits128(low, high, 69, 69) as i32;
+            b[3] |= (get_bits128(low, high, 70, 70) as i32) << 2;
+            r[3] |= get_bits128(low, high, 71, 74) as i32;
+            g[2] |= (get_bits128(low, high, 75, 75) as i32) << 4;
+            b[3] |= (get_bits128(low, high, 76, 76) as i32) << 3;
+            delta_bits_r = 4;
+            delta_bits_b = 4;
+            delta_bits_g = 5;
+        }
+        4 => {
+            r[0] |= get_bits128(low, high, 5, 14) as i32;
+            g[0] |= get_bits128(low, high, 15, 24) as i32;
+            b[0] |= get_bits128(low, high, 25, 34) as i32;
+            r[1] |= get_bits128(low, high, 35, 38) as i32;
+            r[0] |= (get_bits128(low, high, 39, 39) as i32) << 10;
+            b[2] |= (get_bits128(low, high, 40, 40) as i32) << 4;
+            g[2] |= get_bits128(low, high, 41, 44) as i32;
+            g[1] |= get_bits128(low, high, 45, 48) as i32;
+            g[0] |= (get_bits128(low, high, 49, 49) as i32) << 10;
+            b[3] |= get_bits128(low, high, 50, 50) as i32;
+            g[3] |= get_bits128(low, high, 51, 54) as i32;
+            b[1] |= get_bits128(low, high, 55, 59) as i32;
+            b[0] |= (get_bits128(low, high, 60, 60) as i32) << 10;
+            b[2] |= get_bits128(low, high, 61, 64) as i32;
+            r[2] |= get_bits128(low, high, 65, 68) as i32;
+            b[3] |= (get_bits128(low, high, 69, 69) as i32) << 1;
+            b[3] |= (get_bits128(low, high, 70, 70) as i32) << 2;
+            r[3] |= get_bits128(low, high, 71, 74) as i32;
+            b[3] |= (get_bits128(low, high, 75, 75) as i32) << 4;
+            b[3] |= (get_bits128(low, high, 76, 76) as i32) << 3;
+            delta_bits_r = 4;
+            delta_bits_g = 4;
+            delta_bits_b = 5;
+        }
+        5 => {
+            r[0] |= get_bits128(low, high, 5, 13) as i32;
+            b[2] |= (get_bits128(low, high, 14, 14) as i32) << 4;
+            g[0] |= get_bits128(low, high, 15, 23) as i32;
+            g[2] |= (get_bits128(low, high, 24, 24) as i32) << 4;
+            b[0] |= get_bits128(low, high, 25, 33) as i32;
+            b[3] |= (get_bits128(low, high, 34, 34) as i32) << 4;
+            r[1] |= get_bits128(low, high, 35, 39) as i32;
+            g[3] |= (get_bits128(low, high, 40, 40) as i32) << 4;
+            g[2] |= get_bits128(low, high, 41, 44) as i32;
+            g[1] |= get_bits128(low, high, 45, 49) as i32;
+            b[3] |= get_bits128(low, high, 50, 50) as i32;
+            g[3] |= get_bits128(low, high, 51, 54) as i32;
+            b[1] |= get_bits128(low, high, 55, 59) as i32;
+            b[3] |= (get_bits128(low, high, 60, 60) as i32) << 1;
+            b[2] |= get_bits128(low, high, 61, 64) as i32;
+            r[2] |= get_bits128(low, high, 65, 69) as i32;
+            b[3] |= (get_bits128(low, high, 70, 70) as i32) << 2;
+            r[3] |= get_bits128(low, high, 71, 75) as i32;
+            b[3] |= (get_bits128(low, high, 76, 76) as i32) << 3;
+            delta_bits_r = 5;
+            delta_bits_g = 5;
+            delta_bits_b = 5;
+        }
+        6 => {
+            r[0] |= get_bits128(low, high, 5, 12) as i32;
+            g[3] |= (get_bits128(low, high, 13, 13) as i32) << 4;
+            b[2] |= (get_bits128(low, high, 14, 14) as i32) << 4;
+            g[0] |= get_bits128(low, high, 15, 22) as i32;
+            b[3] |= (get_bits128(low, high, 23, 23) as i32) << 2;
+            g[2] |= (get_bits128(low, high, 24, 24) as i32) << 4;
+            b[0] |= get_bits128(low, high, 25, 32) as i32;
+            b[3] |= (get_bits128(low, high, 33, 33) as i32) << 3;
+            b[3] |= (get_bits128(low, high, 34, 34) as i32) << 4;
+            r[1] |= get_bits128(low, high, 35, 40) as i32;
+            g[2] |= get_bits128(low, high, 41, 44) as i32;
+            g[1] |= get_bits128(low, high, 45, 49) as i32;
+            b[3] |= get_bits128(low, high, 50, 50) as i32;
+            g[3] |= get_bits128(low, high, 51, 54) as i32;
+            b[1] |= get_bits128(low, high, 55, 59) as i32;
+            b[3] |= (get_bits128(low, high, 60, 60) as i32) << 1;
+            b[2] |= get_bits128(low, high, 61, 64) as i32;
+            r[2] |= get_bits128(low, high, 65, 70) as i32;
+            r[3] |= get_bits128(low, high, 71, 76) as i32;
+            delta_bits_r = 6;
+            delta_bits_g = 5;
+            delta_bits_b = 5;
+        }
+        7 => {
+            r[0] |= get_bits128(low, high, 5, 12) as i32;
+            b[3] |= get_bits128(low, high, 13, 13) as i32;
+            b[2] |= (get_bits128(low, high, 14, 14) as i32) << 4;
+            g[0] |= get_bits128(low, high, 15, 22) as i32;
+            g[2] |= (get_bits128(low, high, 23, 23) as i32) << 5;
+            g[2] |= (get_bits128(low, high, 24, 24) as i32) << 4;
+            b[0] |= get_bits128(low, high, 25, 32) as i32;
+            g[3] |= (get_bits128(low, high, 33, 33) as i32) << 5;
+            b[3] |= (get_bits128(low, high, 34, 34) as i32) << 4;
+            r[1] |= get_bits128(low, high, 35, 39) as i32;
+            g[3] |= (get_bits128(low, high, 40, 40) as i32) << 4;
+            g[2] |= get_bits128(low, high, 41, 44) as i32;
+            g[1] |= get_bits128(low, high, 45, 50) as i32;
+            g[3] |= get_bits128(low, high, 51, 54) as i32;
+            b[1] |= get_bits128(low, high, 55, 59) as i32;
+            b[3] |= (get_bits128(low, high, 60, 60) as i32) << 1;
+            b[2] |= get_bits128(low, high, 61, 64) as i32;
+            r[2] |= get_bits128(low, high, 65, 69) as i32;
+            b[3] |= (get_bits128(low, high, 70, 70) as i32) << 2;
+            r[3] |= get_bits128(low, high, 71, 75) as i32;
+            b[3] |= (get_bits128(low, high, 76, 76) as i32) << 3;
+            delta_bits_r = 5;
+            delta_bits_b = 5;
+            delta_bits_g = 6;
+        }
+        8 => {
+            r[0] |= get_bits128(low, high, 5, 12) as i32;
+            b[3] |= (get_bits128(low, high, 13, 13) as i32) << 1;
+            b[2] |= (get_bits128(low, high, 14, 14) as i32) << 4;
+            g[0] |= get_bits128(low, high, 15, 22) as i32;
+            b[2] |= (get_bits128(low, high, 23, 23) as i32) << 5;
+            g[2] |= (get_bits128(low, high, 24, 24) as i32) << 4;
+            b[0] |= get_bits128(low, high, 25, 32) as i32;
+            b[3] |= (get_bits128(low, high, 33, 33) as i32) << 5;
+            b[3] |= (get_bits128(low, high, 34, 34) as i32) << 4;
+            r[1] |= get_bits128(low, high, 35, 39) as i32;
+            g[3] |= (get_bits128(low, high, 40, 40) as i32) << 4;
+            g[2] |= get_bits128(low, high, 41, 44) as i32;
+            g[1] |= get_bits128(low, high, 45, 49) as i32;
+            b[3] |= get_bits128(low, high, 50, 50) as i32;
+            g[3] |= get_bits128(low, high, 51, 54) as i32;
+            b[1] |= get_bits128(low, high, 55, 60) as i32;
+            b[2] |= get_bits128(low, high, 61, 64) as i32;
+            r[2] |= get_bits128(low, high, 65, 69) as i32;
+            b[3] |= (get_bits128(low, high, 70, 70) as i32) << 2;
+            r[3] |= get_bits128(low, high, 71, 75) as i32;
+            b[3] |= (get_bits128(low, high, 76, 76) as i32) << 3;
+            delta_bits_r = 5;
+            delta_bits_g = 5;
+            delta_bits_b = 6;
+        }
+        9 => {
+            r[0] |= get_bits128(low, high, 5, 10) as i32;
+            g[3] |= (get_bits128(low, high, 11, 11) as i32) << 4;
+            b[3] |= get_bits128(low, high, 12, 13) as i32;
+            b[2] |= (get_bits128(low, high, 14, 14) as i32) << 4;
+            g[0] |= get_bits128(low, high, 15, 20) as i32;
+            g[2] |= (get_bits128(low, high, 21, 21) as i32) << 5;
+            b[2] |= (get_bits128(low, high, 22, 22) as i32) << 5;
+            b[3] |= (get_bits128(low, high, 23, 23) as i32) << 2;
+            g[2] |= (get_bits128(low, high, 24, 24) as i32) << 4;
+            b[0] |= get_bits128(low, high, 25, 30) as i32;
+            g[3] |= (get_bits128(low, high, 31, 31) as i32) << 5;
+            b[3] |= (get_bits128(low, high, 32, 32) as i32) << 3;
+            b[3] |= (get_bits128(low, high, 33, 33) as i32) << 5;
+            b[3] |= (get_bits128(low, high, 34, 34) as i32) << 4;
+            r[1] |= get_bits128(low, high, 35, 40) as i32;
+            g[2] |= get_bits128(low, high, 41, 44) as i32;
+            g[1] |= get_bits128(low, high, 45, 50) as i32;
+            g[3] |= get_bits128(low, high, 51, 54) as i32;
+            b[1] |= get_bits128(low, high, 55, 60) as i32;
+            b[2] |= get_bits128(low, high, 61, 64) as i32;
+            r[2] |= get_bits128(low, high, 65, 70) as i32;
+            r[3] |= get_bits128(low, high, 71, 76) as i32;
+            delta_bits_r = 6;
+            delta_bits_g = 6;
+            delta_bits_b = 6;
+        }
+        10 => {
+            r[0] |= get_bits128(low, high, 5, 14) as i32;
+            g[0] |= get_bits128(low, high, 15, 24) as i32;
+            b[0] |= get_bits128(low, high, 25, 34) as i32;
+            r[1] |= get_bits128(low, high, 35, 44) as i32;
+            g[1] |= get_bits128(low, high, 45, 54) as i32;
+            b[1] |= get_bits128(low, high, 55, 64) as i32;
+            delta_bits_r = 10;
+            delta_bits_g = 10;
+            delta_bits_b = 10;
+        }
+        11 => {
+            r[0] |= get_bits128(low, high, 5, 14) as i32;
+            g[0] |= get_bits128(low, high, 15, 24) as i32;
+            b[0] |= get_bits128(low, high, 25, 34) as i32;
+            r[1] |= get_bits128(low, high, 35, 43) as i32;
+            r[0] |= (get_bits128(low, high, 44, 44) as i32) << 10;
+            g[1] |= get_bits128(low, high, 45, 53) as i32;
+            g[0] |= (get_bits128(low, high, 54, 54) as i32) << 10;
+            b[1] |= get_bits128(low, high, 55, 63) as i32;
+            b[0] |= (get_bits128(low, high, 64, 64) as i32) << 10;
+            delta_bits_r = 9;
+            delta_bits_g = 9;
+            delta_bits_b = 9;
+        }
+        12 => {
+            r[0] |= get_bits128(low, high, 5, 14) as i32;
+            g[0] |= get_bits128(low, high, 15, 24) as i32;
+            b[0] |= get_bits128(low, high, 25, 34) as i32;
+            r[1] |= get_bits128(low, high, 35, 42) as i32;
+            r[0] |= (get_bits128(low, high, 44, 43) as i32) << 10;
+            g[1] |= get_bits128(low, high, 45, 52) as i32;
+            g[0] |= (get_bits128(low, high, 54, 53) as i32) << 10;
+            b[1] |= get_bits128(low, high, 55, 62) as i32;
+            b[0] |= (get_bits128(low, high, 64, 63) as i32) << 10;
+            delta_bits_r = 8;
+            delta_bits_g = 8;
+            delta_bits_b = 8;
+        }
+        13 => {
+            r[0] |= get_bits128(low, high, 5, 14) as i32;
+            g[0] |= get_bits128(low, high, 15, 24) as i32;
+            b[0] |= get_bits128(low, high, 25, 34) as i32;
+            r[1] |= get_bits128(low, high, 35, 38) as i32;
+            r[0] |= (get_bits128(low, high, 44, 39) as i32) << 10;
+            g[1] |= get_bits128(low, high, 45, 48) as i32;
+            g[0] |= (get_bits128(low, high, 54, 49) as i32) << 10;
+            b[1] |= get_bits128(low, high, 55, 58) as i32;
+            b[0] |= (get_bits128(low, high, 64, 59) as i32) << 10;
+            delta_bits_r = 4;
+            delta_bits_g = 4;
+            delta_bits_b = 4;
+        }
+        _ => {}
+    }
+
+    if mode != -1 {
+        let mode_ndx = mode as usize;
+        let ep_bits = u32::from(EP_BITS[mode_ndx]);
+
+        if has_sign {
+            r[0] = sign_extend(r[0], ep_bits, 32);
+            g[0] = sign_extend(g[0], ep_bits, 32);
+            b[0] = sign_extend(b[0], ep_bits, 32);
+        }
+
+        if transformed {
+            let mask = low_bit_mask(ep_bits) as i32;
+            for i in 1..num_endpoints {
+                r[i] = sign_extend(r[i], delta_bits_r, 32);
+                r[i] = (r[0] + r[i]) & mask;
+                g[i] = sign_extend(g[i], delta_bits_g, 32);
+                g[i] = (g[0] + g[i]) & mask;
+                b[i] = sign_extend(b[i], delta_bits_b, 32);
+                b[i] = (b[0] + b[i]) & mask;
+            }
+        }
+
+        if has_sign {
+            for i in 1..4 {
+                r[i] = sign_extend(r[i], ep_bits, 32);
+                g[i] = sign_extend(g[i], ep_bits, 32);
+                b[i] = sign_extend(b[i], ep_bits, 32);
+            }
+        }
+
+        for i in 0..num_endpoints {
+            r[i] = unquantize(r[i], mode_ndx, has_sign);
+            g[i] = unquantize(g[i], mode_ndx, has_sign);
+            b[i] = unquantize(b[i], mode_ndx, has_sign);
+        }
+    }
+
+    for i in 0..16u32 {
+        let subset_index = if num_regions == 1 { 0 } else { usize::from(PARTITIONS2[d][i as usize]) };
+        let bits = if i == anchor_index[subset_index] { color_index_bc - 1 } else { color_index_bc };
+        let color_index = (color_index_data & u64::from(low_bit_mask(bits))) as u32;
+        let r16 = finish_unquantize(interpolate(r[2 * subset_index], r[2 * subset_index + 1], color_index, color_index_bc), has_sign);
+        let g16 = finish_unquantize(interpolate(g[2 * subset_index], g[2 * subset_index + 1], color_index, color_index_bc), has_sign);
+        let b16 = finish_unquantize(interpolate(b[2 * subset_index], b[2 * subset_index + 1], color_index, color_index_bc), has_sign);
+        let y = (i / 4) as usize;
+        let x = (i % 4) as usize;
+
+        if mode == -1 {
+            dst.write_bytes(x, y, &[0u8; 6]);
+        } else {
+            let mut bytes = [0u8; 6];
+            bytes[0..2].copy_from_slice(&r16.to_ne_bytes());
+            bytes[2..4].copy_from_slice(&g16.to_ne_bytes());
+            bytes[4..6].copy_from_slice(&b16.to_ne_bytes());
+            dst.write_bytes(x, y, &bytes);
+        }
+
+        color_index_data >>= bits;
+    }
+}
+
+/// `decompressBc7`
+// The endpoint loops index by (endpoint, component) exactly as upstream does; the
+// iterator forms clippy suggests lose that correspondence for no gain.
+#[allow(clippy::needless_range_loop)]
+fn decompress_bc7(dst: &mut BlockOut<'_>, src: &[u8]) {
+    const SUBSETS: [u32; 8] = [3, 2, 3, 2, 1, 1, 1, 2];
+    const PARTITION_BITS: [u32; 8] = [4, 6, 6, 6, 0, 0, 0, 6];
+    // r, g, b, a, p
+    const ENDPOINT_BITS: [[u32; 5]; 8] = [
+        [4, 4, 4, 0, 1],
+        [6, 6, 6, 0, 1],
+        [5, 5, 5, 0, 0],
+        [7, 7, 7, 0, 1],
+        [5, 5, 5, 6, 0],
+        [7, 7, 7, 8, 0],
+        [7, 7, 7, 7, 1],
+        [5, 5, 5, 5, 1],
+    ];
+    const INDEX_BITS: [u32; 8] = [3, 3, 2, 2, 2, 2, 4, 2];
+
+    let low = get_64bit_block_le(src, 0);
+    let high = get_64bit_block_le(src, 1);
+    let mode = extract_mode_bc7(src[0]);
+    let mut num_subsets = 1u32;
+    let mut offset = (mode + 1) as u32;
+    let mut rotation = 0u32;
+    let mut idx_mode = 0u32;
+    let mut endpoints = [[0u32; 5]; 6];
+    let mut partition_set_id = 0usize;
+
+    // Decode partition data from explicit partition bits
+    if matches!(mode, 0 | 1 | 2 | 3 | 7) {
+        let m = mode as usize;
+        num_subsets = SUBSETS[m];
+        partition_set_id = get_bits128(low, high, offset, offset + PARTITION_BITS[m] - 1) as usize;
+        offset += PARTITION_BITS[m];
+    }
+
+    // Extract rotation bits
+    if mode == 4 || mode == 5 {
+        rotation = get_bits128(low, high, offset, offset + 1);
+        offset += 2;
+        if mode == 4 {
+            idx_mode = get_bits128(low, high, offset, offset);
+            offset += 1;
+        }
+    }
+
+    let num_endpoints = (num_subsets * 2) as usize;
+
+    // Extract raw, compressed endpoint bits
+    for cpnt in 0..5 {
+        for ep in 0..num_endpoints {
+            if mode == 1 && cpnt == 4 && ep > 1 {
+                continue; // Mode 1 has shared P bits
+            }
+            let n = if mode == -1 { 0 } else { ENDPOINT_BITS[mode as usize][cpnt] };
+            if n > 0 {
+                endpoints[ep][cpnt] = get_bits128(low, high, offset, offset + n - 1);
+            }
+            offset += n;
+        }
+    }
+
+    // Decode endpoints
+    if matches!(mode, 0 | 1 | 3 | 6 | 7) {
+        // First handle modes that have P-bits
+        for ep in endpoints.iter_mut().take(num_endpoints) {
+            for cpnt in 0..4 {
+                ep[cpnt] <<= 1;
+            }
+        }
+
+        if mode == 1 {
+            // P-bit is shared
+            let pbit_zero = endpoints[0][4];
+            let pbit_one = endpoints[1][4];
+
+            for cpnt in 0..3 {
+                endpoints[0][cpnt] |= pbit_zero;
+                endpoints[1][cpnt] |= pbit_zero;
+                endpoints[2][cpnt] |= pbit_one;
+                endpoints[3][cpnt] |= pbit_one;
+            }
+        } else {
+            // Unique p-bit per endpoint
+            for ep in endpoints.iter_mut().take(num_endpoints) {
+                for cpnt in 0..4 {
+                    ep[cpnt] |= ep[4];
+                }
+            }
+        }
+    }
+
+    if mode != -1 {
+        let bits = ENDPOINT_BITS[mode as usize];
+        for ep in endpoints.iter_mut().take(num_endpoints) {
+            // Left shift endpoint components so that their MSB lies in bit 7
+            for cpnt in 0..4 {
+                ep[cpnt] <<= 8 - (bits[cpnt] + bits[4]);
+            }
+            // Replicate each component's MSB into the LSBs revealed by the left-shift above
+            for cpnt in 0..4 {
+                ep[cpnt] |= ep[cpnt] >> (bits[cpnt] + bits[4]);
+            }
+        }
+
+        // If this mode does not explicitly define the alpha component set alpha equal to 1.0
+        if mode < 4 {
+            for ep in endpoints.iter_mut().take(num_endpoints) {
+                ep[3] = 255;
+            }
+        }
+    }
+
+    let mut color_idx_offset = offset + if mode == 4 && idx_mode != 0 { 31 } else { 0 };
+    let mut alpha_idx_offset = offset + if mode == 5 || (mode == 4 && idx_mode == 0) { 31 } else { 0 };
+
+    for pixel in 0..16u32 {
+        let y = (pixel / 4) as usize;
+        let x = (pixel % 4) as usize;
+
+        if mode == -1 {
+            dst.write_u32(x, y, 0);
+            continue;
+        }
+
+        let subset_index = match num_subsets {
+            2 => usize::from(PARTITIONS2[partition_set_id][pixel as usize]),
+            3 => usize::from(PARTITIONS3[partition_set_id][pixel as usize]),
+            _ => 0,
+        };
+
+        let anchor_index = if num_subsets == 2 && subset_index == 1 {
+            u32::from(ANCHOR_INDICES_SECOND_SUBSET2[partition_set_id])
+        } else if num_subsets == 3 && subset_index == 1 {
+            u32::from(ANCHOR_INDICES_SECOND_SUBSET3[partition_set_id])
+        } else if num_subsets == 3 && subset_index == 2 {
+            u32::from(ANCHOR_INDICES_THIRD_SUBSET[partition_set_id])
+        } else {
+            0
+        };
+
+        let endpoint_start = endpoints[2 * subset_index];
+        let endpoint_end = endpoints[2 * subset_index + 1];
+
+        let color_interpolation_bits = INDEX_BITS[mode as usize] + idx_mode;
+        let color_index_bits = color_interpolation_bits - u32::from(anchor_index == pixel);
+        let alpha_interpolation_bits = if mode == 4 {
+            3 - idx_mode
+        } else if mode == 5 {
+            2
+        } else {
+            color_interpolation_bits
+        };
+        let alpha_index_bits = alpha_interpolation_bits - u32::from(anchor_index == pixel);
+        let color_idx = get_bits128(low, high, color_idx_offset, color_idx_offset + color_index_bits - 1);
+        let alpha_idx = if mode == 4 || mode == 5 {
+            get_bits128(low, high, alpha_idx_offset, alpha_idx_offset + alpha_index_bits - 1)
+        } else {
+            color_idx
+        };
+        let r = interpolate(endpoint_start[0] as i32, endpoint_end[0] as i32, color_idx, color_interpolation_bits) as u32;
+        let g = interpolate(endpoint_start[1] as i32, endpoint_end[1] as i32, color_idx, color_interpolation_bits) as u32;
+        let b = interpolate(endpoint_start[2] as i32, endpoint_end[2] as i32, color_idx, color_interpolation_bits) as u32;
+        let a = interpolate(endpoint_start[3] as i32, endpoint_end[3] as i32, alpha_idx, alpha_interpolation_bits) as u32;
+
+        color_idx_offset += color_index_bits;
+        alpha_idx_offset += alpha_index_bits;
+
+        let packed = match rotation {
+            1 if mode == 4 || mode == 5 => a | (g << 8) | (b << 16) | (r << 24),
+            2 if mode == 4 || mode == 5 => r | (a << 8) | (b << 16) | (g << 24),
+            3 if mode == 4 || mode == 5 => r | (g << 8) | (a << 16) | (b << 24),
+            _ => r | (g << 8) | (b << 16) | (a << 24),
+        };
+        dst.write_u32(x, y, packed);
+    }
+}
+
+/// `decompressBlock`, narrowed to the BC and ETC2/EAC families.
 fn decompress_block(dst: &mut BlockOut<'_>, format: vk::Format, src: &[u8]) {
     match format {
         vk::Format::BC1_RGB_UNORM_BLOCK | vk::Format::BC1_RGB_SRGB_BLOCK => decompress_bc1(dst, src, false),
@@ -690,6 +1540,9 @@ fn decompress_block(dst: &mut BlockOut<'_>, format: vk::Format, src: &[u8]) {
         vk::Format::EAC_R11_SNORM_BLOCK => decompress_eac11(dst, src, 1, true),
         vk::Format::EAC_R11G11_UNORM_BLOCK => decompress_eac11(dst, src, 2, false),
         vk::Format::EAC_R11G11_SNORM_BLOCK => decompress_eac11(dst, src, 2, true),
+        vk::Format::BC6H_UFLOAT_BLOCK => decompress_bc6h(dst, src, false),
+        vk::Format::BC6H_SFLOAT_BLOCK => decompress_bc6h(dst, src, true),
+        vk::Format::BC7_UNORM_BLOCK | vk::Format::BC7_SRGB_BLOCK => decompress_bc7(dst, src),
         other => unreachable!("decompress_block called for {other:?}"),
     }
 }

@@ -82,19 +82,47 @@ fn get_compressed_format_threshold(format: vk::Format) -> [f32; 4] {
         vk::Format::ETC2_R8G8B8_UNORM_BLOCK | vk::Format::ETC2_R8G8B8_SRGB_BLOCK => ([8, 8, 8, 0], false),
         vk::Format::ETC2_R8G8B8A1_UNORM_BLOCK | vk::Format::ETC2_R8G8B8A1_SRGB_BLOCK => ([8, 8, 8, 1], false),
         vk::Format::ETC2_R8G8B8A8_UNORM_BLOCK | vk::Format::ETC2_R8G8B8A8_SRGB_BLOCK => ([8, 8, 8, 8], false),
+        vk::Format::BC7_UNORM_BLOCK | vk::Format::BC7_SRGB_BLOCK => ([5, 5, 5, 1], false),
+        // BC6H is a float format; its threshold is a flat tolerance rather than a
+        // per-channel bit depth.
+        vk::Format::BC6H_SFLOAT_BLOCK => return [0.01; 4],
+        vk::Format::BC6H_UFLOAT_BLOCK => return [0.005; 4],
         other => unreachable!("no compressed threshold for {other:?}"),
     };
     let range = if is_signed { 2.0 } else { 1.0 };
     std::array::from_fn(|i| if bit_depth[i] == 0 { 1.0 } else { range / ((1i32 << bit_depth[i]) - 1) as f32 })
 }
 
-/// Whether the decoded source has to be clamped before it can be the reference: a
-/// signed block format blitted into an unsigned destination is clamped on the device,
-/// and the software sampler does not do that on its own.
-fn needs_source_clamp(compressed_format: vk::Format, result_format: TextureFormat) -> bool {
+/// The clamping `checkCompressedNearestFilteredResult` applies before comparing. The
+/// decoded source is not what the device sampled wherever the device clamps on the way
+/// in, and the software sampler does not clamp on its own.
+struct CompressedClamp {
+    /// The range to clamp the decoded source into, if any.
+    source: Option<(f32, f32)>,
+    /// Whether the result also has to be clamped to <-1;1>.
+    result: bool,
+}
+
+fn compressed_source_clamp(compressed_format: vk::Format, result_format: TextureFormat) -> CompressedClamp {
+    let mut source = None;
+    let mut result = false;
+
+    if matches!(compressed_format, vk::Format::BC6H_SFLOAT_BLOCK | vk::Format::BC6H_UFLOAT_BLOCK) {
+        if result_format.type_ == ChannelType::UNSIGNED_INT_11F_11F_10F_REV {
+            // Random BC6H data reaches outside <-1;1>, which the device clamps; this
+            // format also carries less precision for big numbers than the framework's
+            // own arithmetic, so the result needs clamping too.
+            result = true;
+            let min = if compressed_format == vk::Format::BC6H_SFLOAT_BLOCK { 0.0 } else { -1.0 };
+            source = Some((min, 1.0));
+        } else if !matches!(result_format.type_, ChannelType::FLOAT | ChannelType::HALF_FLOAT) {
+            source = Some((-1.0, 1.0));
+        }
+    }
+
     let signed_block = matches!(
         compressed_format,
-        vk::Format::BC4_SNORM_BLOCK | vk::Format::BC5_SNORM_BLOCK | vk::Format::EAC_R11_SNORM_BLOCK | vk::Format::EAC_R11G11_SNORM_BLOCK
+        vk::Format::BC4_SNORM_BLOCK | vk::Format::BC5_SNORM_BLOCK | vk::Format::BC6H_SFLOAT_BLOCK | vk::Format::EAC_R11_SNORM_BLOCK | vk::Format::EAC_R11G11_SNORM_BLOCK
     );
     let unsigned_result = matches!(
         result_format.type_,
@@ -113,7 +141,11 @@ fn needs_source_clamp(compressed_format: vk::Format, result_format: TextureForma
             | ChannelType::UNSIGNED_INT_11F_11F_10F_REV
             | ChannelType::UNSIGNED_INT_999_E5_REV
     );
-    signed_block && unsigned_result
+    if unsigned_result && signed_block {
+        source = Some((0.0, 1.0));
+    }
+
+    CompressedClamp { source, result }
 }
 
 /// A copy of `source` with every channel clamped into `[min, max]`.
@@ -144,8 +176,56 @@ fn make_compressed_source(format: vk::Format, width: u32, height: u32, depth: u3
     let blocks = width.div_ceil(get_block_width(format)) * height.div_ceil(get_block_height(format)) * depth.div_ceil(get_block_depth(format));
     let mut data = vec![0u8; (blocks * get_block_size_in_bytes(format)) as usize];
     let mut random = Random::new(123);
-    for byte in data.iter_mut() {
-        *byte = (random.get_uint32() & 0xFF) as u8;
+
+    if matches!(format, vk::Format::BC6H_UFLOAT_BLOCK | vk::Format::BC6H_SFLOAT_BLOCK) {
+        // A compressed floating-point image cannot hold both big and small values at
+        // once, so the source is built out of a set of predefined blocks that are
+        // known to decode into the range the comparison expects.
+        let valid_blocks: &[[u32; 4]] = if format == vk::Format::BC6H_UFLOAT_BLOCK {
+            // values from <0; 1>
+            &[
+                [1686671500, 3957317723, 3010132342, 2420137890],
+                [3538027716, 298848033, 1925786021, 2022072301],
+                [2614043466, 1636155440, 1023731774, 1894349986],
+                [3433039318, 1294346072, 1587319645, 1738449906],
+                [1386298160, 1639492154, 1273285776, 361562050],
+                [1310110688, 526460754, 3630858047, 537617591],
+                [3270356556, 2432993217, 2415924417, 1792488857],
+                [1204947583, 353249154, 3739153467, 2068076443],
+            ]
+        } else {
+            // values from <-1; 1>
+            &[
+                [2120678840, 3264271120, 4065378848, 3479743703],
+                [1479697556, 3480872527, 3369382558, 568252340],
+                [1301480032, 1607738094, 3055221704, 3663953681],
+                [3531657186, 2285472028, 1429601507, 1969308187],
+                [73229044, 650504649, 1120954865, 2626631975],
+                [3872486086, 15326178, 2565171269, 2857722432],
+                [1301480032, 1607738094, 3055221704, 3663953681],
+                [73229044, 650504649, 1120954865, 2626631975],
+            ]
+        };
+
+        for block in data.chunks_mut(16) {
+            let selected = random.get_uint32() as usize % valid_blocks.len();
+            for (word, out) in valid_blocks[selected].iter().zip(block.chunks_mut(4)) {
+                out.copy_from_slice(&word.to_ne_bytes());
+            }
+        }
+    } else {
+        for byte in data.iter_mut() {
+            *byte = (random.get_uint32() & 0xFF) as u8;
+        }
+
+        // BC7 encodes the block mode in the first byte; 0x00 is an invalid mode.
+        if matches!(format, vk::Format::BC7_UNORM_BLOCK | vk::Format::BC7_SRGB_BLOCK) {
+            for block in data.chunks_mut(16) {
+                if block[0] == 0x00 {
+                    block[0] = 0x01;
+                }
+            }
+        }
     }
 
     let uncompressed = get_uncompressed_format(format).ok_or_else(|| TestError::NotSupported(format!("no decoder for {format:?}")))?;
@@ -966,11 +1046,14 @@ impl BlittingImages<'_> {
         let src_max_diff: [f32; 4] = std::array::from_fn(|i| ACCEPTED_ERROR + compressed_threshold[i]);
         let dst_max_diff: [f32; 4] = std::array::from_fn(|i| ACCEPTED_ERROR + result_threshold[i]);
 
-        // A signed block format blitted into an unsigned one is clamped on the host
-        // too, since that is what the device does on the way in.
-        let clamped = needs_source_clamp(format, result.format()).then(|| clamp_source(source, 0.0, 1.0));
-        let clamped_access = clamped.as_ref().map(TextureLevel::get_const_access);
-        let source = clamped_access.as_ref().unwrap_or(source);
+        let clamp = compressed_source_clamp(format, result.format());
+        let clamped_src = clamp.source.map(|(min, max)| clamp_source(source, min, max));
+        let clamped_src_access = clamped_src.as_ref().map(TextureLevel::get_const_access);
+        let source = clamped_src_access.as_ref().unwrap_or(source);
+
+        let clamped_result = clamp.result.then(|| clamp_source(result, -1.0, 1.0));
+        let clamped_result_access = clamped_result.as_ref().map(TextureLevel::get_const_access);
+        let result = clamped_result_access.as_ref().unwrap_or(result);
 
         let (st, dt) = (self.params.src.image_type, self.params.dst.image_type);
         float_nearest_blit_compare(source, result, src_max_diff, dst_max_diff, &self.params.regions, st, dt)
@@ -989,6 +1072,26 @@ impl BlittingImages<'_> {
         let dst_max_diff = get_format_threshold(result.format());
         let scale = if self.params.filter == vk::Filter::CUBIC_EXT { 1.5 } else { 1.0 };
         let threshold: [f32; 4] = std::array::from_fn(|i| (src_max_diff[i] + dst_max_diff[i]) * scale + ACCEPTED_ERROR);
+
+        // Random BC6H data carries large colour values, and a filtered blit into a
+        // format that accepts them can drift far from the reference. Values that big
+        // are dropped from the comparison by clamping both sides into the same range.
+        let filtered_range = matches!(format, vk::Format::BC6H_SFLOAT_BLOCK | vk::Format::BC6H_UFLOAT_BLOCK)
+            .then(|| match result.format().type_ {
+                ChannelType::FLOAT | ChannelType::HALF_FLOAT => Some((-10.0, 10.0)),
+                ChannelType::UNSIGNED_INT_11F_11F_10F_REV => Some((0.0, 1.0)),
+                _ => None,
+            })
+            .flatten();
+
+        if let Some((min, max)) = filtered_range {
+            let filtered_result = clamp_source(result, min, max);
+            let filtered_clamped = clamp_source(clamped_expected, min, max);
+            let filtered_unclamped = clamp_source(unclamped_expected, min, max);
+            let result = filtered_result.get_const_access();
+            return float_threshold_compare(&filtered_clamped.get_const_access(), &result, threshold)
+                || float_threshold_compare(&filtered_unclamped.get_const_access(), &result, threshold);
+        }
 
         float_threshold_compare(clamped_expected, result, threshold) || float_threshold_compare(unclamped_expected, result, threshold)
     }
