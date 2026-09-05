@@ -54,6 +54,9 @@ impl std::error::Error for PlatformError {}
 pub struct Platform {
     pub entry: Entry,
     pub instance: Instance,
+    /// `Context::getUsedApiVersion` - what the instance was created at, which is the
+    /// loader's version clamped to what these bindings know.
+    pub api_version: u32,
     debug_messenger: Option<vk::DebugUtilsMessengerEXT>,
 }
 
@@ -112,7 +115,12 @@ impl Platform {
 
         let debug_messenger = if validation { Some(create_debug_messenger(&instance)?) } else { None };
 
-        Ok(Self { entry, instance, debug_messenger })
+        Ok(Self {
+            entry,
+            instance,
+            api_version,
+            debug_messenger,
+        })
     }
 
     /// `vk::enumeratePhysicalDevices`

@@ -164,6 +164,12 @@ impl<'a> Context<'a> {
     }
 
     /// `Context::getInstanceInterface`
+    /// The loader, instance and API version the whole run shares. A test that builds
+    /// its own instance or device starts from here.
+    pub fn get_platform(&self) -> &Platform {
+        self.platform
+    }
+
     pub fn get_instance(&self) -> &Instance {
         &self.platform.instance
     }

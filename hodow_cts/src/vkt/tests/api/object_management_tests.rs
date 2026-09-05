@@ -17,14 +17,13 @@
 // `create_object`, both dispatching on it. The per-object bodies are otherwise a
 // line-by-line transcription and stay in upstream's order.
 //
-// Not ported here: `Instance`, `Device` and `DeviceGroup`, which create their own
-// instance and device rather than using the context's; and with them the
-// `multithreaded_per_thread_device`, `private_data`, `single_alloc_callbacks` and
-// `alloc_callback_fail*` variants, each of which needs a second device - the
-// alloc-callback ones want it created through the callbacks.
+// Not ported here: the `multithreaded_per_thread_device`, `private_data`,
+// `single_alloc_callbacks` and `alloc_callback_fail*` variants. Each needs upstream's
+// `EnvClone` - a whole second environment whose instance and device are themselves
+// built by the case, rather than the context's.
 
 use vulkanalia::prelude::v1_0::*;
-use vulkanalia::vk::Handle as VkHandle;
+use vulkanalia::vk::{Handle as VkHandle, InstanceV1_1};
 
 use crate::tcu::{self, TestError, TestOutcome, TestStatus};
 use crate::vk::VkResultExt;
@@ -38,6 +37,11 @@ use crate::vkt::{Context, TestCase, TestInstance};
 
 /// `Environment`
 struct Environment<'a> {
+    /// `Environment::vkp` - needed only by the object kinds that build their own
+    /// instance.
+    entry: &'a vulkanalia::Entry,
+    /// `Environment::apiVersion`
+    api_version: u32,
     device: &'a Device,
     queue_family_index: u32,
     programs: BinaryCollection,
@@ -52,6 +56,8 @@ struct Environment<'a> {
 impl<'a> Environment<'a> {
     fn new(context: &'a Context<'a>, max_resource_consumers: u32) -> Self {
         Self {
+            entry: &context.get_platform().entry,
+            api_version: context.get_platform().api_version,
             device: context.get_device(),
             queue_family_index: context.get_universal_queue_family_index(),
             programs: crate::generated::shaders::api_object_management::OBJECT_MANAGEMENT.programs,
@@ -196,9 +202,21 @@ struct CommandBufferParams {
     level: vk::CommandBufferLevel,
 }
 
+/// `Device::Parameters` / `DeviceGroup::Parameters`
+#[derive(Clone, Copy)]
+struct DeviceParams {
+    /// `deviceGroupIndex`, only read by the device-group case.
+    device_group_index: usize,
+    device_index: usize,
+    queue_flags: vk::QueueFlags,
+}
+
 /// The object kinds this file creates, each carrying its upstream `Parameters`.
 #[derive(Clone)]
 enum ObjectParams {
+    Instance,
+    Device(DeviceParams),
+    DeviceGroup(DeviceParams),
     DeviceMemory(DeviceMemoryParams),
     Buffer(BufferParams),
     BufferView(BufferViewParams),
@@ -228,6 +246,31 @@ enum ObjectParams {
 // Object handles
 // ---------------------------------------------------------------------------------
 
+/// `InstanceWrapper` - vulkanalia's instance is a value with its own dispatch table,
+/// so the RAII wrapper owns the value rather than a bare handle.
+struct UniqueInstance<'a> {
+    instance: vulkanalia::Instance,
+    allocator: Option<&'a vk::AllocationCallbacks>,
+}
+
+impl Drop for UniqueInstance<'_> {
+    fn drop(&mut self) {
+        unsafe { self.instance.destroy_instance(self.allocator) };
+    }
+}
+
+/// `DeviceWrapper`
+struct UniqueDevice<'a> {
+    device: vulkanalia::Device,
+    allocator: Option<&'a vk::AllocationCallbacks>,
+}
+
+impl Drop for UniqueDevice<'_> {
+    fn drop(&mut self) {
+        unsafe { self.device.destroy_device(self.allocator) };
+    }
+}
+
 /// A created object, owning its handle. Upstream's `Dependency<Case>` holds one of
 /// these per dependency and destroys them in reverse declaration order.
 ///
@@ -235,6 +278,11 @@ enum ObjectParams {
 /// handle is never read back out - the value is here to be dropped.
 #[expect(dead_code, reason = "the wrapped handle is the RAII guard, not a value to read")]
 enum Owned<'a> {
+    // Boxed: vulkanalia's instance and device carry their whole dispatch table, so
+    // an unboxed arm would make every `Owned` kilobytes wide, and `max_concurrent`
+    // holds thousands of them.
+    Instance(Box<UniqueInstance<'a>>),
+    Device(Box<UniqueDevice<'a>>),
     Buffer(Unique<'a, vk::Buffer>),
     BufferView(Unique<'a, vk::BufferView>),
     CommandBuffer(UniqueCommandBuffer<'a>),
@@ -259,8 +307,13 @@ enum Owned<'a> {
 }
 
 /// The bare handle of an `Owned`, for the dependency that needs to name it.
-#[derive(Clone, Copy)]
+///
+/// Vulkan's instance and device are value types in vulkanalia - a handle plus its own
+/// dispatch table - so what travels here is a clone of that value, not a raw handle.
+/// Cloning does not duplicate the Vulkan object; the `Owned` still destroys it once.
+#[derive(Clone)]
 enum Handle {
+    Instance(Box<vulkanalia::Instance>),
     Buffer(vk::Buffer),
     CommandPool(vk::CommandPool),
     DescriptorPool(vk::DescriptorPool),
@@ -280,6 +333,7 @@ enum Handle {
 impl Owned<'_> {
     fn handle(&self) -> Handle {
         match self {
+            Owned::Instance(h) => Handle::Instance(Box::new(h.instance.clone())),
             Owned::Buffer(h) => Handle::Buffer(h.get()),
             Owned::CommandPool(h) => Handle::CommandPool(h.get()),
             Owned::DescriptorPool(h) => Handle::DescriptorPool(h.get()),
@@ -338,6 +392,13 @@ struct Resources<'a> {
     bindings: Vec<Binding>,
     /// The SPIR-V a shader module is built from, as `ShaderModule::Resources::binary`.
     binary: &'static [u32],
+    /// `Device::Resources::instance` - a clone of the instance the device is made on.
+    instance: Option<vulkanalia::Instance>,
+    /// `DeviceGroup::Resources::physicalDevices`; the plain device case keeps the one
+    /// it picked here too.
+    physical_devices: Vec<vk::PhysicalDevice>,
+    /// `Device::Resources::queueFamilyIndex`
+    device_queue_family_index: u32,
 }
 
 impl Drop for Resources<'_> {
@@ -365,6 +426,9 @@ impl<'a> Resources<'a> {
             immutable_samplers: Vec::new(),
             bindings: Vec::new(),
             binary: &[],
+            instance: None,
+            physical_devices: Vec::new(),
+            device_queue_family_index: u32::MAX,
         }
     }
 
@@ -398,6 +462,36 @@ impl<'a> Resources<'a> {
         let mut res = Resources::empty();
 
         match params {
+            // `Device::Resources` - a private instance, then the physical device and
+            // a queue family that has every requested capability.
+            ObjectParams::Device(p) => {
+                let Handle::Instance(instance) = res.add(env, &ObjectParams::Instance)? else {
+                    unreachable!("instance dependency")
+                };
+                let physical_devices = unsafe { instance.enumerate_physical_devices() }.vk_check("vkEnumeratePhysicalDevices")?;
+                if physical_devices.len() <= p.device_index {
+                    return Err(TestError::NotSupported("Device not found".to_string()));
+                }
+                res.physical_devices = vec![physical_devices[p.device_index]];
+                res.device_queue_family_index = find_queue_family(&instance, res.physical_devices[0], p.queue_flags)?;
+                res.instance = Some(*instance);
+            }
+            ObjectParams::DeviceGroup(p) => {
+                let Handle::Instance(instance) = res.add(env, &ObjectParams::Instance)? else {
+                    unreachable!("instance dependency")
+                };
+                let groups = unsafe { instance.enumerate_physical_device_groups() }.vk_check("vkEnumeratePhysicalDeviceGroups")?;
+                if groups.len() <= p.device_group_index {
+                    return Err(TestError::NotSupported("Device Group not found".to_string()));
+                }
+                let group = groups[p.device_group_index];
+                res.physical_devices = group.physical_devices[..group.physical_device_count as usize].to_vec();
+                if res.physical_devices.len() <= p.device_index {
+                    return Err(TestError::NotSupported("Device not found".to_string()));
+                }
+                res.device_queue_family_index = find_queue_family(&instance, res.physical_devices[p.device_index], p.queue_flags)?;
+                res.instance = Some(*instance);
+            }
             ObjectParams::BufferView(p) => {
                 res.buffer = expect_handle!(res.add(env, &ObjectParams::Buffer(p.buffer))?, Buffer);
                 let memory_params = Self::memory_params(unsafe { device.get_buffer_memory_requirements(res.buffer) });
@@ -582,6 +676,40 @@ fn create_object<'a>(env: &Environment<'a>, res: &Resources<'a>, params: &Object
     let queue_families = [env.queue_family_index];
 
     Ok(match params {
+        ObjectParams::Instance => {
+            // Both extension names upstream ever asks for here - device-group creation
+            // and physical-device-properties2 - are core from 1.1, and the instance is
+            // never older than that, so `isCoreInstanceExtension` drops both and the
+            // list is always empty.
+            let app_info = vk::ApplicationInfo::builder().api_version(env.api_version);
+            let info = vk::InstanceCreateInfo::builder().application_info(&app_info);
+            let instance = unsafe { env.entry.create_instance(&info, allocator) }.vk_check("vkCreateInstance")?;
+            Owned::Instance(Box::new(UniqueInstance { instance, allocator }))
+        }
+        ObjectParams::Device(_) => {
+            let instance = res.instance.as_ref().expect("device resources create an instance");
+            let physical_device = res.physical_devices[0];
+            Owned::Device(Box::new(create_test_device(
+                env,
+                instance,
+                physical_device,
+                res.device_queue_family_index,
+                None,
+                allocator,
+            )?))
+        }
+        ObjectParams::DeviceGroup(p) => {
+            let instance = res.instance.as_ref().expect("device-group resources create an instance");
+            let physical_device = res.physical_devices[p.device_index];
+            Owned::Device(Box::new(create_test_device(
+                env,
+                instance,
+                physical_device,
+                res.device_queue_family_index,
+                Some(&res.physical_devices),
+                allocator,
+            )?))
+        }
         ObjectParams::DeviceMemory(p) => {
             let info = vk::MemoryAllocateInfo::builder().allocation_size(p.size).memory_type_index(p.memory_type_index);
             Owned::DeviceMemory(Unique::with_allocator(
@@ -811,6 +939,73 @@ fn create_object<'a>(env: &Environment<'a>, res: &Resources<'a>, params: &Object
             Owned::CommandBuffer(UniqueCommandBuffer::new(device, res.command_pool, buffers[0]))
         }
     })
+}
+
+/// The last queue family with every requested capability - upstream keeps overwriting
+/// as it scans, so the highest matching index wins.
+fn find_queue_family(instance: &vulkanalia::Instance, physical_device: vk::PhysicalDevice, queue_flags: vk::QueueFlags) -> Result<u32, TestError> {
+    let properties = unsafe { instance.get_physical_device_queue_family_properties(physical_device) };
+    properties
+        .iter()
+        .enumerate()
+        .rfind(|(_, family)| family.queue_flags.contains(queue_flags))
+        .map(|(index, _)| index as u32)
+        .ok_or_else(|| TestError::NotSupported("Matching queue not found".to_string()))
+}
+
+/// `Device::create` and `DeviceGroup::create` - the same device, with the group's
+/// physical devices chained in for the latter.
+fn create_test_device<'a>(
+    env: &Environment<'a>,
+    instance: &vulkanalia::Instance,
+    physical_device: vk::PhysicalDevice,
+    queue_family_index: u32,
+    group: Option<&[vk::PhysicalDevice]>,
+    allocator: Option<&'a vk::AllocationCallbacks>,
+) -> Result<UniqueDevice<'a>, TestError> {
+    let queue_priority = [1.0f32];
+    let queues = [vk::DeviceQueueCreateInfo::builder()
+        .queue_family_index(queue_family_index)
+        .queue_priorities(&queue_priority)
+        .build()];
+
+    if let Some(physical_devices) = group {
+        // The group variant enables no extra features and takes pEnabledFeatures.
+        let enabled_features = unsafe { instance.get_physical_device_features(physical_device) };
+        let mut group_info = vk::DeviceGroupDeviceCreateInfo::builder().physical_devices(physical_devices).build();
+        let info = vk::DeviceCreateInfo::builder()
+            .queue_create_infos(&queues)
+            .enabled_features(&enabled_features)
+            .push_next(&mut group_info);
+        let device = unsafe { instance.create_device(physical_device, &info, allocator) }.vk_check("vkCreateDevice")?;
+        return Ok(UniqueDevice { device, allocator });
+    }
+
+    // Everything the physical device supports is enabled, with pipeline-creation cache
+    // control on top so the pipeline-cache cases have it - from 1.3 that lives in the
+    // Vulkan 1.3 feature struct instead of its own extension.
+    let mut extensions: Vec<*const i8> = Vec::new();
+    let mut cache_control = vk::PhysicalDevicePipelineCreationCacheControlFeatures::default();
+    let mut vulkan13 = vk::PhysicalDeviceVulkan13Features::default();
+    let pre_1_3 = env.api_version < vk::make_version(1, 3, 0);
+    if pre_1_3 {
+        extensions.push(vk::EXT_PIPELINE_CREATION_CACHE_CONTROL_EXTENSION.name.as_ptr());
+    }
+
+    let mut enabled_features = vk::PhysicalDeviceFeatures2::default();
+    if pre_1_3 {
+        enabled_features.next = (&raw mut cache_control).cast();
+    } else {
+        enabled_features.next = (&raw mut vulkan13).cast();
+    }
+    unsafe { instance.get_physical_device_features2(physical_device, &mut enabled_features) };
+
+    let info = vk::DeviceCreateInfo::builder()
+        .queue_create_infos(&queues)
+        .enabled_extension_names(&extensions)
+        .push_next(&mut enabled_features);
+    let device = unsafe { instance.create_device(physical_device, &info, allocator) }.vk_check("vkCreateDevice")?;
+    Ok(UniqueDevice { device, allocator })
 }
 
 /// `RenderPass::create` - `makeRenderPass` with a colour and a depth/stencil
@@ -1056,6 +1251,14 @@ impl TestCase for ObjectManagementCase {
                     return Err(TestError::NotSupported("imageCubeArray feature is not supported by this implementation".to_string()));
                 }
             }
+            // `checkDeviceGroupSupport` - the group has to exist before the case can
+            // ask for a device in it.
+            ObjectParams::DeviceGroup(p) => {
+                let groups = unsafe { context.get_instance().enumerate_physical_device_groups() }.vk_check("vkEnumeratePhysicalDeviceGroups")?;
+                if groups.len() <= p.device_group_index {
+                    return Err(TestError::NotSupported("Device Group not found".to_string()));
+                }
+            }
             // `checkPipelineCacheControlSupport`
             ObjectParams::MergedPipelineCache { .. } if !context.is_device_functionality_supported("VK_EXT_pipeline_creation_cache_control") => {
                 return Err(TestError::NotSupported("pipelineCreationCacheControl not supported by this implementation".to_string()));
@@ -1151,8 +1354,14 @@ fn default_test_thread_count() -> u32 {
     std::thread::available_parallelism().map_or(2, |n| n.get() as u32).clamp(2, 8)
 }
 
-/// `getCreateCount` - how many objects each thread creates and destroys.
-const CREATE_COUNT: u32 = 100;
+/// `getCreateCount` - how many objects each thread creates and destroys. Creating a
+/// device or an instance takes far longer than anything else, so those get fewer.
+fn create_count(params: &ObjectParams) -> u32 {
+    match params {
+        ObjectParams::Instance | ObjectParams::Device(_) | ObjectParams::DeviceGroup(_) => 20,
+        _ => 100,
+    }
+}
 
 /// `ThreadGroup::run` over one `CreateThread` per resource set.
 ///
@@ -1160,7 +1369,8 @@ const CREATE_COUNT: u32 = 100;
 /// fifth of the way so the threads are inside the driver at the same time.
 fn run_create_threads<'a>(num_threads: u32, env: &Environment<'a>, resources: impl Iterator<Item = &'a Resources<'a>>, params: &ObjectParams) -> Result<(), TestError> {
     let barrier = std::sync::Barrier::new(num_threads as usize);
-    let iters_between_syncs = CREATE_COUNT / 5;
+    let create_count = create_count(params);
+    let iters_between_syncs = create_count / 5;
     let resources: Vec<&Resources<'a>> = resources.collect();
 
     std::thread::scope(|scope| {
@@ -1169,7 +1379,7 @@ fn run_create_threads<'a>(num_threads: u32, env: &Environment<'a>, resources: im
             .map(|res| {
                 let barrier = &barrier;
                 scope.spawn(move || -> Result<(), TestError> {
-                    for iter_ndx in 0..CREATE_COUNT {
+                    for iter_ndx in 0..create_count {
                         if iter_ndx.is_multiple_of(iters_between_syncs) {
                             barrier.wait();
                         }
@@ -1203,6 +1413,8 @@ impl PlatformMemoryLimits {
     const DEVICE_PAGE_TABLE_HIERARCHY_LEVELS: u32 = 3;
 }
 
+const MAX_CONCURRENT_INSTANCES: u32 = 32;
+const MAX_CONCURRENT_DEVICES: u32 = 32;
 const MAX_CONCURRENT_SYNC_PRIMITIVES: u32 = 100;
 const MAX_CONCURRENT_PIPELINE_CACHES: u32 = 128;
 const MAX_CONCURRENT_QUERY_POOLS: u32 = 8192;
@@ -1272,6 +1484,12 @@ fn compute_system_memory_usage(context: &Context<'_>, params: &ObjectParams) -> 
 fn get_max_concurrent(context: &Context<'_>, params: &ObjectParams) -> Result<u32, TestError> {
     let limits = context.get_device_properties().limits;
     let (hard_limit, device_memory_usage) = match params {
+        ObjectParams::Instance => (MAX_CONCURRENT_INSTANCES, 0),
+        ObjectParams::Device(_) => (MAX_CONCURRENT_DEVICES, 0),
+        ObjectParams::DeviceGroup(p) => {
+            let groups = unsafe { context.get_instance().enumerate_physical_device_groups() }.vk_check("vkEnumeratePhysicalDeviceGroups")?;
+            (MAX_CONCURRENT_DEVICES / groups[p.device_group_index].physical_device_count, 0)
+        }
         ObjectParams::DeviceMemory(p) => (limits.max_memory_allocation_count.min(DEFAULT_MAX_CONCURRENT_OBJECTS), p.size + get_page_table_size(p.size)),
         ObjectParams::Buffer(_) | ObjectParams::Image(_) => {
             // The object has to exist before its memory requirements can be asked for.
@@ -1356,7 +1574,18 @@ fn all_cases() -> Vec<(&'static str, ObjectParams)> {
     };
     let single_ubo_desc_layout = DescriptorSetLayoutParams::single(0, vk::DescriptorType::UNIFORM_BUFFER, 1, vk::ShaderStageFlags::VERTEX, false);
 
+    // `deviceIndex` and `deviceGroupIndex` come from the command line upstream; this
+    // port always runs on the first of each.
+    let device_params = DeviceParams {
+        device_group_index: 0,
+        device_index: 0,
+        queue_flags: vk::QueueFlags::GRAPHICS,
+    };
+
     vec![
+        ("instance", ObjectParams::Instance),
+        ("device", ObjectParams::Device(device_params)),
+        ("device_group", ObjectParams::DeviceGroup(device_params)),
         ("device_memory_small", ObjectParams::DeviceMemory(DeviceMemoryParams { size: 1024, memory_type_index: 0 })),
         (
             "buffer_uniform_small",
@@ -1540,6 +1769,11 @@ pub fn create_object_management_tests() -> tcu::TestCaseGroup {
             // upstream leaves out the object kinds that would allocate from a shared
             // one on several threads at once.
             if variant == Variant::MultithreadedSharedResources && matches!(params, ObjectParams::CommandBuffer(_) | ObjectParams::DescriptorSet(_)) {
+                continue;
+            }
+            // An instance has no resources to share, so the two shared-resource
+            // variants have nothing to say about it and upstream leaves it out.
+            if matches!(variant, Variant::MultipleSharedResources | Variant::MultithreadedSharedResources) && matches!(params, ObjectParams::Instance) {
                 continue;
             }
             group.add_child(Box::new(ObjectManagementCase { name, params, variant }) as Box<dyn TestCase>);
