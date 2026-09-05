@@ -209,6 +209,12 @@ impl<'a> Context<'a> {
         &self.device_features
     }
 
+    /// `Context::isDeviceFunctionalitySupported` - the same question without the
+    /// NotSupported, for the checks that accept any of several extensions.
+    pub fn is_device_functionality_supported(&self, extension: &str) -> bool {
+        self.require_device_functionality(extension).is_ok()
+    }
+
     /// `Context::requireDeviceFunctionality`
     ///
     /// Upstream throws NotSupportedError here; returning it has the same effect, since

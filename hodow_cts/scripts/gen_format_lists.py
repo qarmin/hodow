@@ -174,6 +174,17 @@ def main() -> int:
     lines.append("    pub name: &'static str,")
     lines.append("}")
     lines.append("")
+    # `formats::bufferViewAccessFormats` - the format list the texel-buffer access
+    # tests loop over.
+    bv_formats = read_group(header_text, "bufferViewAccessFormats")
+    print(f"bufferViewAccessFormats: {len(bv_formats)} formats")
+    lines.append("/// `formats::bufferViewAccessFormats`, paired with the case name.")
+    lines.append("pub static BUFFER_VIEW_ACCESS_FORMATS: &[(vk::Format, &str)] = &[")
+    for f in bv_formats:
+        lines.append(f'    (vk::Format::{rust_name(f)}, "{case_name(f)}"),')
+    lines.append("];")
+    lines.append("")
+
     for group in BLIT_GROUPS:
         fmts = read_group(header_text, group)
         print(f"{group}: {len(fmts)} formats")

@@ -169,6 +169,12 @@ def rust_param_value(spec: dict, where: str) -> str:
         return f"{value}{ty}"
     if ty == "bool":
         return "true" if value else "false"
+    # A GLSL fragment - a type prefix, a layout qualifier, a function name. Carried into
+    # the Rust as well as the shader so the host can pick the program that matches the
+    # format it is about to bind, instead of trusting an index.
+    if ty == "str":
+        escaped = value.replace("\\", "\\\\").replace('"', '\\"')
+        return f'"{escaped}"'
     # `enum:Axis` -> `Axis::X`. Upstream carries these as real enums (BufferType,
     # MaxWorkGroupSizeTest::Axis), and keeping them enums here means a typo in the
     # manifest is a compile error rather than a silently wrong test.

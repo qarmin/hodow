@@ -1,0 +1,225 @@
+# Shader manifest for dEQP-VK.api.buffer_view.access.* (the all-formats cases).
+#
+# One compute shader, sixteen variants. The GLSL differs only in four tokens - the
+# sampler type, the storage-image layout qualifier, the fetch function and the scalar
+# prefix - so those are the manifest's parameters, and they are emitted into the Rust as
+# well. The host picks its program by matching the qualifier it computes for the format
+# it is about to bind, so a manifest entry that does not describe a real format cannot
+# be reached by accident.
+#
+# The uniform variants have no layout qualifier and so are shared by every format of
+# their scalar class; the storage ones need the qualifier and are shared by the formats
+# that map to it.
+
+upstream_source = "external/vulkancts/modules/vulkan/api/vktApiBufferViewAccessTests.cpp"
+rust_module = "api/buffer_view_access_tests"
+
+# --- uniform texel buffers: texelFetch on a textureBuffer ---------------------------
+[[case]]
+name = "uniform_float"
+rust_const = "BV_UNIFORM_FLOAT"
+rust_type = "BufferViewAccessProgram"
+programs = [{ name = "comp", template = "api/buffer_view_access.comp", stage = "comp" }]
+[case.params]
+storage_type = { type = "str", value = "textureBuffer " }
+extra_option = { type = "str", value = "" }
+fmt_layout = { type = "str", value = "" }
+op_name = { type = "str", value = "texelFetch" }
+in_format = { type = "str", value = "" }
+out_format = { type = "str", value = "" }
+
+[[case]]
+name = "uniform_int"
+rust_const = "BV_UNIFORM_INT"
+rust_type = "BufferViewAccessProgram"
+programs = [{ name = "comp", template = "api/buffer_view_access.comp", stage = "comp" }]
+[case.params]
+storage_type = { type = "str", value = "textureBuffer " }
+extra_option = { type = "str", value = "" }
+fmt_layout = { type = "str", value = "" }
+op_name = { type = "str", value = "texelFetch" }
+in_format = { type = "str", value = "i" }
+out_format = { type = "str", value = "i" }
+
+[[case]]
+name = "uniform_uint"
+rust_const = "BV_UNIFORM_UINT"
+rust_type = "BufferViewAccessProgram"
+programs = [{ name = "comp", template = "api/buffer_view_access.comp", stage = "comp" }]
+[case.params]
+storage_type = { type = "str", value = "textureBuffer " }
+extra_option = { type = "str", value = "" }
+fmt_layout = { type = "str", value = "" }
+op_name = { type = "str", value = "texelFetch" }
+in_format = { type = "str", value = "u" }
+out_format = { type = "str", value = "u" }
+
+[[case]]
+name = "uniform_sscaled"
+rust_const = "BV_UNIFORM_SSCALED"
+rust_type = "BufferViewAccessProgram"
+programs = [{ name = "comp", template = "api/buffer_view_access.comp", stage = "comp" }]
+[case.params]
+storage_type = { type = "str", value = "textureBuffer " }
+extra_option = { type = "str", value = "" }
+fmt_layout = { type = "str", value = "" }
+op_name = { type = "str", value = "texelFetch" }
+in_format = { type = "str", value = "" }
+out_format = { type = "str", value = "i" }
+
+[[case]]
+name = "uniform_uscaled"
+rust_const = "BV_UNIFORM_USCALED"
+rust_type = "BufferViewAccessProgram"
+programs = [{ name = "comp", template = "api/buffer_view_access.comp", stage = "comp" }]
+[case.params]
+storage_type = { type = "str", value = "textureBuffer " }
+extra_option = { type = "str", value = "" }
+fmt_layout = { type = "str", value = "" }
+op_name = { type = "str", value = "texelFetch" }
+in_format = { type = "str", value = "" }
+out_format = { type = "str", value = "u" }
+
+# --- storage texel buffers: imageLoad on a format-qualified imageBuffer -------------
+[[case]]
+name = "storage_rgb10_a2"
+rust_const = "BV_STORAGE_RGB10_A2"
+rust_type = "BufferViewAccessProgram"
+programs = [{ name = "comp", template = "api/buffer_view_access.comp", stage = "comp" }]
+[case.params]
+storage_type = { type = "str", value = "imageBuffer " }
+extra_option = { type = "str", value = "readonly " }
+fmt_layout = { type = "str", value = ", rgb10_a2" }
+op_name = { type = "str", value = "imageLoad" }
+in_format = { type = "str", value = "" }
+out_format = { type = "str", value = "" }
+
+[[case]]
+name = "storage_rgb10_a2ui"
+rust_const = "BV_STORAGE_RGB10_A2UI"
+rust_type = "BufferViewAccessProgram"
+programs = [{ name = "comp", template = "api/buffer_view_access.comp", stage = "comp" }]
+[case.params]
+storage_type = { type = "str", value = "imageBuffer " }
+extra_option = { type = "str", value = "readonly " }
+fmt_layout = { type = "str", value = ", rgb10_a2ui" }
+op_name = { type = "str", value = "imageLoad" }
+in_format = { type = "str", value = "u" }
+out_format = { type = "str", value = "u" }
+
+[[case]]
+name = "storage_rgba16"
+rust_const = "BV_STORAGE_RGBA16"
+rust_type = "BufferViewAccessProgram"
+programs = [{ name = "comp", template = "api/buffer_view_access.comp", stage = "comp" }]
+[case.params]
+storage_type = { type = "str", value = "imageBuffer " }
+extra_option = { type = "str", value = "readonly " }
+fmt_layout = { type = "str", value = ", rgba16" }
+op_name = { type = "str", value = "imageLoad" }
+in_format = { type = "str", value = "" }
+out_format = { type = "str", value = "" }
+
+[[case]]
+name = "storage_rgba16_snorm"
+rust_const = "BV_STORAGE_RGBA16_SNORM"
+rust_type = "BufferViewAccessProgram"
+programs = [{ name = "comp", template = "api/buffer_view_access.comp", stage = "comp" }]
+[case.params]
+storage_type = { type = "str", value = "imageBuffer " }
+extra_option = { type = "str", value = "readonly " }
+fmt_layout = { type = "str", value = ", rgba16_snorm" }
+op_name = { type = "str", value = "imageLoad" }
+in_format = { type = "str", value = "" }
+out_format = { type = "str", value = "" }
+
+[[case]]
+name = "storage_rgba16f"
+rust_const = "BV_STORAGE_RGBA16F"
+rust_type = "BufferViewAccessProgram"
+programs = [{ name = "comp", template = "api/buffer_view_access.comp", stage = "comp" }]
+[case.params]
+storage_type = { type = "str", value = "imageBuffer " }
+extra_option = { type = "str", value = "readonly " }
+fmt_layout = { type = "str", value = ", rgba16f" }
+op_name = { type = "str", value = "imageLoad" }
+in_format = { type = "str", value = "" }
+out_format = { type = "str", value = "" }
+
+[[case]]
+name = "storage_rgba16i"
+rust_const = "BV_STORAGE_RGBA16I"
+rust_type = "BufferViewAccessProgram"
+programs = [{ name = "comp", template = "api/buffer_view_access.comp", stage = "comp" }]
+[case.params]
+storage_type = { type = "str", value = "imageBuffer " }
+extra_option = { type = "str", value = "readonly " }
+fmt_layout = { type = "str", value = ", rgba16i" }
+op_name = { type = "str", value = "imageLoad" }
+in_format = { type = "str", value = "i" }
+out_format = { type = "str", value = "i" }
+
+[[case]]
+name = "storage_rgba16ui"
+rust_const = "BV_STORAGE_RGBA16UI"
+rust_type = "BufferViewAccessProgram"
+programs = [{ name = "comp", template = "api/buffer_view_access.comp", stage = "comp" }]
+[case.params]
+storage_type = { type = "str", value = "imageBuffer " }
+extra_option = { type = "str", value = "readonly " }
+fmt_layout = { type = "str", value = ", rgba16ui" }
+op_name = { type = "str", value = "imageLoad" }
+in_format = { type = "str", value = "u" }
+out_format = { type = "str", value = "u" }
+
+[[case]]
+name = "storage_rgba8"
+rust_const = "BV_STORAGE_RGBA8"
+rust_type = "BufferViewAccessProgram"
+programs = [{ name = "comp", template = "api/buffer_view_access.comp", stage = "comp" }]
+[case.params]
+storage_type = { type = "str", value = "imageBuffer " }
+extra_option = { type = "str", value = "readonly " }
+fmt_layout = { type = "str", value = ", rgba8" }
+op_name = { type = "str", value = "imageLoad" }
+in_format = { type = "str", value = "" }
+out_format = { type = "str", value = "" }
+
+[[case]]
+name = "storage_rgba8_snorm"
+rust_const = "BV_STORAGE_RGBA8_SNORM"
+rust_type = "BufferViewAccessProgram"
+programs = [{ name = "comp", template = "api/buffer_view_access.comp", stage = "comp" }]
+[case.params]
+storage_type = { type = "str", value = "imageBuffer " }
+extra_option = { type = "str", value = "readonly " }
+fmt_layout = { type = "str", value = ", rgba8_snorm" }
+op_name = { type = "str", value = "imageLoad" }
+in_format = { type = "str", value = "" }
+out_format = { type = "str", value = "" }
+
+[[case]]
+name = "storage_rgba8i"
+rust_const = "BV_STORAGE_RGBA8I"
+rust_type = "BufferViewAccessProgram"
+programs = [{ name = "comp", template = "api/buffer_view_access.comp", stage = "comp" }]
+[case.params]
+storage_type = { type = "str", value = "imageBuffer " }
+extra_option = { type = "str", value = "readonly " }
+fmt_layout = { type = "str", value = ", rgba8i" }
+op_name = { type = "str", value = "imageLoad" }
+in_format = { type = "str", value = "i" }
+out_format = { type = "str", value = "i" }
+
+[[case]]
+name = "storage_rgba8ui"
+rust_const = "BV_STORAGE_RGBA8UI"
+rust_type = "BufferViewAccessProgram"
+programs = [{ name = "comp", template = "api/buffer_view_access.comp", stage = "comp" }]
+[case.params]
+storage_type = { type = "str", value = "imageBuffer " }
+extra_option = { type = "str", value = "readonly " }
+fmt_layout = { type = "str", value = ", rgba8ui" }
+op_name = { type = "str", value = "imageLoad" }
+in_format = { type = "str", value = "u" }
+out_format = { type = "str", value = "u" }

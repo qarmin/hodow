@@ -1161,7 +1161,12 @@ fn create_buffer_view_tests() -> tcu::TestCaseGroup {
 
     let mut buffer_view_group = tcu::TestCaseGroup::new("buffer_view");
     buffer_view_group.add_child(buffer_view_tests);
-    // `buffer_view.access` is not ported - see the note at the top of this file.
+
+    // `buffer_view.access`'s all-formats half, which reads the view from a compute
+    // shader. Its memory-test half renders through the view and is not ported.
+    let mut access = tcu::TestCaseGroup::new("access");
+    super::buffer_view_access_tests::add_buffer_view_all_formats_tests(&mut access);
+    buffer_view_group.add_child(access);
     buffer_view_group
 }
 

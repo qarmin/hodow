@@ -200,3 +200,101 @@ pub fn get_stencil_copy_format(combined_format: vk::Format) -> Option<crate::tcu
         _ => None,
     }
 }
+
+/// `vkt::image::isPackedType`
+///
+/// A packed channel type stores several components in one machine word, so its shader
+/// format qualifier cannot be built from the order and the per-channel size.
+pub fn is_packed_type(format: crate::tcu::TextureFormat) -> bool {
+    use crate::tcu::texture::ChannelType::*;
+    matches!(
+        format.type_,
+        UNORM_BYTE_44
+            | UNORM_SHORT_565
+            | UNORM_SHORT_555
+            | UNORM_SHORT_4444
+            | UNORM_SHORT_5551
+            | UNORM_SHORT_1555
+            | UNORM_INT_101010
+            | SNORM_INT_1010102_REV
+            | UNORM_INT_1010102_REV
+            | UNSIGNED_BYTE_44
+            | UNSIGNED_SHORT_565
+            | UNSIGNED_SHORT_4444
+            | UNSIGNED_SHORT_5551
+            | SIGNED_INT_1010102_REV
+            | UNSIGNED_INT_1010102_REV
+            | USCALED_INT_1010102_REV
+            | SSCALED_INT_1010102_REV
+            | UNSIGNED_INT_11F_11F_10F_REV
+            | UNSIGNED_INT_999_E5_REV
+            | UNSIGNED_INT_16_8_8
+            | UNSIGNED_INT_24_8
+            | UNSIGNED_INT_24_8_REV
+            | FLOAT_UNSIGNED_INT_24_8_REV
+    )
+}
+
+/// `vkt::image::getShaderImageFormatQualifier`
+///
+/// The GLSL layout qualifier a storage image of this format must be declared with.
+/// `None` where upstream would DE_FATAL - a format that has no qualifier is one no
+/// ported test may declare.
+pub fn get_shader_image_format_qualifier(format: crate::tcu::TextureFormat, vk_format: vk::Format) -> Option<String> {
+    use crate::tcu::texture::ChannelOrder::*;
+    use crate::tcu::texture::ChannelType::*;
+
+    if is_packed_type(format) {
+        return match vk_format {
+            vk::Format::B10G11R11_UFLOAT_PACK32 => Some("r11f_g11f_b10f".to_string()),
+            vk::Format::A2B10G10R10_UNORM_PACK32 | vk::Format::A2R10G10B10_UNORM_PACK32 => Some("rgb10_a2".to_string()),
+            vk::Format::A2B10G10R10_UINT_PACK32 | vk::Format::A2R10G10B10_UINT_PACK32 => Some("rgb10_a2ui".to_string()),
+            _ => None,
+        };
+    }
+
+    let order_part = match format.order {
+        R | A | I | sR => "r",
+        RG | RA | sRG => "rg",
+        RGB | BGR | sRGB | sBGR => "rgb",
+        RGBA | BGRA | ARGB | ABGR | sRGBA | sBGRA => "rgba",
+        _ => return None,
+    };
+
+    let type_part = match format.type_ {
+        FLOAT => "32f",
+        HALF_FLOAT => "16f",
+        UNSIGNED_INT64 => "64ui",
+        UNSIGNED_INT32 => "32ui",
+        USCALED_INT16 | UNSIGNED_INT16 => "16ui",
+        USCALED_INT8 | UNSIGNED_INT8 => "8ui",
+        SIGNED_INT64 => "64i",
+        SIGNED_INT32 => "32i",
+        SSCALED_INT16 | SIGNED_INT16 => "16i",
+        SSCALED_INT8 | SIGNED_INT8 => "8i",
+        UNORM_INT16 => "16",
+        UNORM_INT8 => "8",
+        SNORM_INT16 => "16_snorm",
+        SNORM_INT8 => "8_snorm",
+        _ => return None,
+    };
+
+    Some(format!("{order_part}{type_part}"))
+}
+
+/// `vkt::api::isSupportedImageLoadStore`
+pub fn is_supported_image_load_store(format: crate::tcu::TextureFormat, vk_format: vk::Format) -> bool {
+    use crate::tcu::texture::ChannelOrder;
+    use crate::tcu::texture::ChannelType::*;
+
+    if is_packed_type(format) {
+        return matches!(vk_format, vk::Format::A2B10G10R10_UNORM_PACK32 | vk::Format::A2B10G10R10_UINT_PACK32);
+    }
+    if format.order != ChannelOrder::RGBA {
+        return false;
+    }
+    matches!(
+        format.type_,
+        FLOAT | HALF_FLOAT | UNSIGNED_INT32 | UNSIGNED_INT16 | UNSIGNED_INT8 | SIGNED_INT32 | SIGNED_INT16 | SIGNED_INT8 | UNORM_INT16 | UNORM_INT8 | SNORM_INT16 | SNORM_INT8
+    )
+}
