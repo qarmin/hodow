@@ -21,6 +21,7 @@ pub mod copy_format_lists;
 pub mod depth_stencil_msaa_copy_tests;
 pub mod ds_color_copy_tests;
 pub mod feature_info_tests;
+pub mod feature_struct_list;
 pub mod image_clearing_formats;
 pub mod image_clearing_tests;
 pub mod object_tests;

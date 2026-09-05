@@ -67,3 +67,6 @@ framework/delibs/debase/deRandom.c
 framework/delibs/debase/deRandom.h
 framework/delibs/decpp/deRandom.hpp
 external/vulkancts/modules/vulkan/pipeline/vktPipelineImageUtil.cpp
+external/vulkancts/framework/vulkan/generated/vulkan/vkDeviceFeatures2.inl
+external/vulkancts/framework/vulkan/generated/vulkan/vkStructTypes.inl
+external/vulkancts/framework/vulkan/generated/vulkan/vkBasicTypes.inl

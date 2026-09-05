@@ -19,15 +19,16 @@
 //   format_properties                              225
 //   image_format_properties                       1186
 //   unsupported_image_usage                       2220
-//   get_physical_device_properties2               2027 of 2216
+//   get_physical_device_properties2               2209 of 2216
 //   image_format_properties2                      1186
 //   extended_flags_image_format_properties2       1186
 //   sparse_image_format_properties2               1110
 //   extended_flags_sparse_image_format_properties2 1110
 //
-// Not ported: `get_physical_device_properties2.features.*` (188 cases) and
-// `.properties.basic`, which enumerate every extension feature/property struct from
-// upstream's generated `vkDeviceFeatures2.inl`; `extension_core_versions`,
+// Not ported: `get_physical_device_properties2.properties.basic`, which enumerates
+// every extension property struct from upstream's generated table, the six
+// `features.*` cases upstream hand-writes rather than generates;
+// `extension_core_versions`,
 // `vulkan1p2`/`1p3`/`1p4`, the three `*_limits_validation` groups, `profiles` and
 // `subgroup_features`. `android` is Android-only upstream and has no mustpass entry.
 
@@ -36,6 +37,7 @@ use std::ffi::c_void;
 use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::InstanceV1_1;
 
+use super::feature_struct_list::{FEATURE_STRUCTS, FeatureStruct};
 use crate::tcu::{TestCaseGroup, TestError, TestOutcome, TestResult, TestStatus};
 use crate::vk::programs::BinaryCollection;
 use crate::vkt::{Context, TestCase, TestInstance};
@@ -2850,6 +2852,98 @@ impl TestInstance for FunctionInstance<'_> {
 }
 
 // ---------------------------------------------------------------------------------
+// get_physical_device_properties2.features
+// ---------------------------------------------------------------------------------
+
+/// `testPhysicalDeviceFeature*` - one case per VkPhysicalDevice*Features struct.
+///
+/// The struct is never declared, only described: `feature_struct_list.rs` carries its
+/// sType, its size and its VkBool32 members, and the query works on raw bytes. That
+/// keeps the case list tied to the registry rather than to whatever subset of these
+/// structs vulkanalia happens to define.
+struct PhysicalDeviceFeatureCase {
+    spec: &'static FeatureStruct,
+}
+
+impl TestCase for PhysicalDeviceFeatureCase {
+    fn name(&self) -> &str {
+        self.spec.name
+    }
+
+    fn check_support(&self, _context: &Context<'_>) -> Result<(), TestError> {
+        Ok(())
+    }
+
+    fn programs(&self) -> BinaryCollection {
+        NO_PROGRAMS
+    }
+
+    fn create_instance<'a>(&'a self, context: &'a Context<'a>) -> Box<dyn TestInstance + 'a> {
+        Box::new(PhysicalDeviceFeatureInstance { context, spec: self.spec })
+    }
+}
+
+struct PhysicalDeviceFeatureInstance<'a> {
+    context: &'a Context<'a>,
+    spec: &'static FeatureStruct,
+}
+
+impl TestInstance for PhysicalDeviceFeatureInstance<'_> {
+    fn iterate(&mut self) -> TestOutcome {
+        let spec = self.spec;
+        let context = self.context;
+
+        // `checkExtension(properties, ...)` reads the raw device extension list, so
+        // this deliberately does not go through `isDeviceFunctionalitySupported` and
+        // its promotion fallback - the core version is the other half of the condition.
+        let extensions = context.get_device_extensions();
+        let by_extension = spec.extensions.iter().any(|wanted| extensions.iter().any(|have| have == wanted));
+        let (major, minor, _) = context.api_version();
+        let by_version = spec.api_version.is_some_and(|(want_major, want_minor)| (major, minor) >= (want_major, want_minor));
+        if !by_extension && !by_version {
+            return Ok(TestStatus::pass("Querying not supported"));
+        }
+
+        // Two queries into memory pre-filled differently, so a field the driver leaves
+        // alone shows up as a mismatch instead of as agreement on garbage.
+        let mut answers: [Vec<u8>; 2] = [vec![0x00; spec.size], vec![0xFF; spec.size]];
+        for buffer in &mut answers {
+            buffer[0..4].copy_from_slice(&spec.s_type.to_ne_bytes());
+            buffer[8..16].fill(0);
+
+            let mut features2 = vk::PhysicalDeviceFeatures2 {
+                s_type: vk::StructureType::PHYSICAL_DEVICE_FEATURES_2,
+                next: buffer.as_mut_ptr().cast::<c_void>(),
+                // `deMemset(&extFeatures.features, 0xcd, ...)` - the query overwrites it.
+                features: unsafe {
+                    std::mem::transmute::<[u8; std::mem::size_of::<vk::PhysicalDeviceFeatures>()], vk::PhysicalDeviceFeatures>(
+                        [0xcd; std::mem::size_of::<vk::PhysicalDeviceFeatures>()],
+                    )
+                },
+            };
+            unsafe { context.get_instance().get_physical_device_features2(context.get_physical_device(), &mut features2) };
+        }
+
+        for (index, field) in spec.fields.iter().enumerate() {
+            let at = 16 + 4 * index;
+            let first = u32::from_ne_bytes(answers[0][at..at + 4].try_into().expect("four bytes"));
+            let second = u32::from_ne_bytes(answers[1][at..at + 4].try_into().expect("four bytes"));
+            if first != second {
+                return Ok(TestStatus::fail(format!("Mismatch between {} ({field})", spec.struct_name)));
+            }
+        }
+        Ok(TestStatus::pass("Querying succeeded"))
+    }
+}
+
+/// `addSeparateFeatureTests`
+fn add_separate_feature_tests(group: &mut TestCaseGroup) {
+    for spec in FEATURE_STRUCTS {
+        group.add_child(Box::new(PhysicalDeviceFeatureCase { spec }) as Box<dyn TestCase>);
+    }
+}
+
+// ---------------------------------------------------------------------------------
 // get_physical_device_properties2.pnext_format_properties
 // ---------------------------------------------------------------------------------
 
@@ -3202,11 +3296,19 @@ fn add_function_case_in_new_subgroup(group: &mut TestCaseGroup, subgroup_name: &
     group.add_child(subgroup);
 }
 
-/// The `get_physical_device_properties2` group, minus the `features` sub-group and
-/// `properties.basic` - both of those walk upstream's generated per-extension
-/// feature/property struct tables, which are not ported.
+/// The `get_physical_device_properties2` group, minus `properties.basic`, which walks
+/// upstream's generated per-extension property struct table.
 fn create_extended_properties_tests() -> TestCaseGroup {
     let mut extended_properties_tests = TestCaseGroup::new("get_physical_device_properties2");
+
+    {
+        let mut subgroup = TestCaseGroup::new("features");
+        // `core`, the four `create_device_with_promoted*_structures` cases and
+        // `shader_subgroup_rotate_property_consistency_khr` are hand-written upstream
+        // rather than generated, and are not ported.
+        add_separate_feature_tests(&mut subgroup);
+        extended_properties_tests.add_child(subgroup);
+    }
 
     add_function_case_in_new_subgroup(&mut extended_properties_tests, "format_properties", device_format_properties2);
     add_function_case_in_new_subgroup(&mut extended_properties_tests, "queue_family_properties", device_queue_family_properties2);
