@@ -20,7 +20,7 @@ use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::DeviceV1_3;
 
 use super::copies_buffer_tests::{AllocationKind, CopyCommandVariant, QueueSelection, bind_buffer_memory, select_queue};
-use super::copy_format_lists::{COLOR_IMAGE_FORMATS_TO_TEST, CopyFormat, SIGNED_AND_UNSIGNED_FLOAT_FORMATS};
+use super::copy_format_lists::{COLOR_IMAGE_FORMATS_TO_TEST, CopyFormat, DEPTH_AND_STENCIL_FORMATS, SIGNED_AND_UNSIGNED_FLOAT_FORMATS};
 use crate::tcu::pixel::{
     ConstPixelBufferAccess, PixelBufferAccess, TextureLevel, fill_with_component_gradients2, fill_with_component_gradients3, get_texture_format_bit_depth, has_depth_component,
     has_stencil_component,
@@ -2988,6 +2988,66 @@ fn add_image_to_image_all_formats_block(group: &mut tcu::TestCaseGroup, gp: &Gro
     }
 }
 
+/// `addImageToImageAllFormatsDepthStencilTests`, single-aspect formats only.
+///
+/// A combined depth/stencil image cannot be staged with one buffer-to-image copy - a
+/// copy region names exactly one aspect - so the three combined formats and their
+/// `_separate_layouts` siblings need a per-aspect upload path that is not ported yet
+/// and are absent rather than answered.
+fn add_image_to_image_all_formats_depth_stencil(group: &mut tcu::TestCaseGroup, gp: &GroupParams, block: &AllFormatsBlock) {
+    const SRC_LAYOUTS: [vk::ImageLayout; 2] = [vk::ImageLayout::TRANSFER_SRC_OPTIMAL, vk::ImageLayout::GENERAL];
+    const DST_LAYOUTS: [vk::ImageLayout; 2] = [vk::ImageLayout::TRANSFER_DST_OPTIMAL, vk::ImageLayout::GENERAL];
+
+    for &(format, name) in DEPTH_AND_STENCIL_FORMATS {
+        let aspects = get_aspect_flags(format);
+        let has_depth = aspects.contains(vk::ImageAspectFlags::DEPTH);
+        let has_stencil = aspects.contains(vk::ImageAspectFlags::STENCIL);
+        if has_depth && has_stencil {
+            continue;
+        }
+
+        // One region per aspect present, for each of the block's geometries.
+        let aspect = if has_depth { vk::ImageAspectFlags::DEPTH } else { vk::ImageAspectFlags::STENCIL };
+        let regions: Vec<ImageCopy> = block.regions.iter().map(|r| ImageCopy { aspect_mask: aspect, ..*r }).collect();
+
+        let mut format_group = tcu::TestCaseGroup::new(format!("{name}_{name}"));
+        for src_layout in SRC_LAYOUTS {
+            for dst_layout in DST_LAYOUTS {
+                format_group.add_child(Box::new(CopyImageToImageCase {
+                    name: format!("{}_{}", image_layout_case_name(src_layout), image_layout_case_name(dst_layout)),
+                    src: ImageParms {
+                        image_type: block.src_type,
+                        format,
+                        extent: block.src_extent,
+                        tiling: vk::ImageTiling::OPTIMAL,
+                        fill_mode: FillMode::Gradient,
+                        create_flags: None,
+                    },
+                    dst: ImageParms {
+                        image_type: block.dst_type,
+                        format,
+                        extent: block.dst_extent,
+                        tiling: vk::ImageTiling::OPTIMAL,
+                        fill_mode: FillMode::Gradient,
+                        create_flags: None,
+                    },
+                    regions: regions.clone(),
+                    clear_destination_with_red: false,
+                    needs_maintenance5: block.needs_maintenance5,
+                    needs_maintenance1: block.needs_maintenance1,
+                    src_operation_layout: Some(src_layout),
+                    dst_operation_layout: Some(dst_layout),
+                    allocation_kind: gp.allocation_kind,
+                    command_variant: gp.command_variant,
+                    queue_selection: gp.queue_selection,
+                    general_layout: gp.general_layout,
+                }) as Box<dyn TestCase>);
+            }
+        }
+        group.add_child(format_group);
+    }
+}
+
 /// The `image_to_image*` groups.
 pub fn add_image_to_image_groups(
     parent: &mut tcu::TestCaseGroup,
@@ -3023,6 +3083,14 @@ pub fn add_image_to_image_groups(
             color.add_child(sub);
         }
         all_formats.add_child(color);
+
+        let mut depth_stencil = tcu::TestCaseGroup::new("depth_stencil");
+        for (name, block) in all_formats_same_format_blocks() {
+            let mut sub = tcu::TestCaseGroup::new(name);
+            add_image_to_image_all_formats_depth_stencil(&mut sub, &gp, &block);
+            depth_stencil.add_child(sub);
+        }
+        all_formats.add_child(depth_stencil);
         group.add_child(all_formats);
 
         let mut dimensions = tcu::TestCaseGroup::new("dimensions");

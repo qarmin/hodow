@@ -1063,6 +1063,17 @@ pub static COLOR_IMAGE_FORMATS_TO_TEST: &[&[CopyFormat]] = &[
     ],
 ];
 
+/// `formats::depthAndStencilFormats`, paired with the case name.
+pub static DEPTH_AND_STENCIL_FORMATS: &[(vk::Format, &str)] = &[
+    (vk::Format::D16_UNORM, "d16_unorm"),
+    (vk::Format::X8_D24_UNORM_PACK32, "x8_d24_unorm_pack32"),
+    (vk::Format::D32_SFLOAT, "d32_sfloat"),
+    (vk::Format::S8_UINT, "s8_uint"),
+    (vk::Format::D16_UNORM_S8_UINT, "d16_unorm_s8_uint"),
+    (vk::Format::D24_UNORM_S8_UINT, "d24_unorm_s8_uint"),
+    (vk::Format::D32_SFLOAT_S8_UINT, "d32_sfloat_s8_uint"),
+];
+
 /// `formats::signedAndUnsignedFloatFormats`
 pub static SIGNED_AND_UNSIGNED_FLOAT_FORMATS: &[vk::Format] = &[
     vk::Format::R16_SFLOAT,

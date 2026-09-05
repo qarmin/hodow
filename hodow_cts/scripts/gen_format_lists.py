@@ -136,6 +136,15 @@ def main() -> int:
     # generating byte patterns that read back as NaN in a float format.
     float_formats = read_group(header_text, "signedAndUnsignedFloatFormats")
     print(f"signedAndUnsignedFloatFormats: {len(float_formats)} formats")
+    ds_formats = read_group(header_text, "depthAndStencilFormats")
+    print(f"depthAndStencilFormats: {len(ds_formats)} formats")
+    lines.append("/// `formats::depthAndStencilFormats`, paired with the case name.")
+    lines.append("pub static DEPTH_AND_STENCIL_FORMATS: &[(vk::Format, &str)] = &[")
+    for f in ds_formats:
+        lines.append(f'    (vk::Format::{rust_name(f)}, "{case_name(f)}"),')
+    lines.append("];")
+    lines.append("")
+
     lines.append("/// `formats::signedAndUnsignedFloatFormats`")
     lines.append("pub static SIGNED_AND_UNSIGNED_FLOAT_FORMATS: &[vk::Format] = &[")
     for f in float_formats:
