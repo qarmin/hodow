@@ -81,8 +81,13 @@ impl_device_object!(vk::Image, destroy_image);
 impl_device_object!(vk::ImageView, destroy_image_view);
 impl_device_object!(vk::Pipeline, destroy_pipeline);
 impl_device_object!(vk::PipelineLayout, destroy_pipeline_layout);
+impl_device_object!(vk::PipelineCache, destroy_pipeline_cache);
+impl_device_object!(vk::QueryPool, destroy_query_pool);
 impl_device_object!(vk::RenderPass, destroy_render_pass);
+impl_device_object!(vk::Sampler, destroy_sampler);
+impl_device_object!(vk::Semaphore, destroy_semaphore);
 impl_device_object!(vk::ShaderModule, destroy_shader_module);
+impl_device_object!(vk::Event, destroy_event);
 
 /// A descriptor set needs its pool to be freed, so it cannot use the blanket
 /// `DeviceObject` impl. Upstream wraps it in `Unique<VkDescriptorSet>` with a

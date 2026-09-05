@@ -23,9 +23,8 @@
 // per upstream class, `check_support` / `programs` / `create_instance` in that order,
 // and `iterate` doing the same operations in the same sequence with the same names.
 //
-// Not ported here: `buffer_view.access` (needs the graphics pipeline and the
-// `tcu::TextureFormat` pixel-access machinery, neither of which exists in this port
-// yet), `object_management` and `device_init`.
+// Not ported here: `device_init`. `object_management` lives in its own module, and
+// `buffer_view.access` in `buffer_view_access_tests`.
 
 // Indexed loops and the wide tuple types below mirror the upstream C++; keeping the
 // shape is what makes this file diffable against it.

@@ -24,6 +24,7 @@ pub mod feature_info_tests;
 pub mod feature_struct_list;
 pub mod image_clearing_formats;
 pub mod image_clearing_tests;
+pub mod object_management_tests;
 pub mod object_tests;
 pub mod resolve_image_tests;
 
@@ -41,6 +42,8 @@ pub fn create_tests() -> TestCaseGroup {
     api_tests.add_child(copies_buffer_tests::create_buffer_copy_tests());
     api_tests.add_child(ds_color_copy_tests::create_ds_color_copy_tests());
     api_tests.add_child(image_clearing_tests::create_image_clearing_tests());
+
+    api_tests.add_child(object_management_tests::create_object_management_tests());
 
     for group in object_tests::create_object_groups() {
         api_tests.add_child(group);
