@@ -548,3 +548,94 @@ input_component_count = { type = "u32", value = 4 }
 output_component_count = { type = "u32", value = 4 }
 output_attachment_index = { type = "u32", value = 0 }
 multisample = { type = "bool", value = true }
+
+[[case]]
+name = "ds_no_write"
+rust_const = "RENDER_PASS_DS_NO_WRITE"
+rust_type = "DepthProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_no_write.frag", stage = "frag" },
+]
+[case.params]
+write_depth = { type = "bool", value = false }
+depth_true = { type = "u32", value = 0 }
+depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_write_0_255"
+rust_const = "RENDER_PASS_DS_WRITE_0_255"
+rust_type = "DepthProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_255.frag", stage = "frag" },
+]
+[case.params]
+write_depth = { type = "bool", value = true }
+depth_true = { type = "u32", value = 0 }
+depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_write_0_128"
+rust_const = "RENDER_PASS_DS_WRITE_0_128"
+rust_type = "DepthProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_128.frag", stage = "frag" },
+]
+[case.params]
+write_depth = { type = "bool", value = true }
+depth_true = { type = "u32", value = 0 }
+depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_write_255_0"
+rust_const = "RENDER_PASS_DS_WRITE_255_0"
+rust_type = "DepthProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_0.frag", stage = "frag" },
+]
+[case.params]
+write_depth = { type = "bool", value = true }
+depth_true = { type = "u32", value = 255 }
+depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_write_255_128"
+rust_const = "RENDER_PASS_DS_WRITE_255_128"
+rust_type = "DepthProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_128.frag", stage = "frag" },
+]
+[case.params]
+write_depth = { type = "bool", value = true }
+depth_true = { type = "u32", value = 255 }
+depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_write_128_0"
+rust_const = "RENDER_PASS_DS_WRITE_128_0"
+rust_type = "DepthProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_0.frag", stage = "frag" },
+]
+[case.params]
+write_depth = { type = "bool", value = true }
+depth_true = { type = "u32", value = 128 }
+depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_write_128_255"
+rust_const = "RENDER_PASS_DS_WRITE_128_255"
+rust_type = "DepthProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_255.frag", stage = "frag" },
+]
+[case.params]
+write_depth = { type = "bool", value = true }
+depth_true = { type = "u32", value = 128 }
+depth_false = { type = "u32", value = 255 }

@@ -88,6 +88,25 @@ def fragment_shader(channel_class: str, input_component_count: int, output_compo
     return "\n".join(out) + "\n"
 
 
+def depth_fragment_shader(write_depth: bool, depth_true: int, depth_false: int) -> str:
+    """`createSubpassShaders` for a subpass whose only attachment is depth/stencil.
+
+    There is no colour output, and gl_FragDepth is written only where the layout lets
+    the subpass write depth - the `_depth_read_only` variants leave main() empty. The
+    stencil value does not come from the shader at all; it is the pipeline's stencil
+    reference with STENCIL_OP_REPLACE.
+    """
+    out = ["#version 450", "void main (void) {"]
+    if write_depth:
+        index = 0 + 1  # subpassNdx + 1
+        out.append(
+            f"\tgl_FragDepth = ((int(gl_FragCoord.x) % 2 == {index % 2}) {bool_op(index)} "
+            f"(int(gl_FragCoord.y) % 2 == {(index // 2) % 2}) ? {depth_true}.0f/255.0f : {depth_false}.0f/255.0f);"
+        )
+    out.append("}")
+    return "\n".join(out) + "\n"
+
+
 def read_core_color_formats() -> list[str]:
     """The `CORE_COLOR_FORMATS` case names, so the variant set is driven by the same
     list the Rust side registers from."""
@@ -200,6 +219,39 @@ def main() -> int:
             f'output_component_count = {{ type = "u32", value = {v["output_count"]} }}',
             f'output_attachment_index = {{ type = "u32", value = {v["attachment_index"]} }}',
             f'multisample = {{ type = "bool", value = {"true" if v["multisample"] else "false"} }}',
+            "",
+        ]
+
+    # The depth/stencil branch: a subpass whose only attachment is depth/stencil has no
+    # colour output at all, and writes gl_FragDepth from the same grid. The two depth
+    # values are whichever pair `TestConfig`'s shuffle of DEPTH_VALUES landed on, so a
+    # variant is generated for every ordered pair and the host picks by value rather
+    # than by reproducing the shuffle here.
+    depth_values = [0, 255, 128]
+    ds_variants = [{"name": "ds_no_write", "write_depth": False, "d_true": 0, "d_false": 0}]
+    for d_true in depth_values:
+        for d_false in depth_values:
+            if d_true == d_false:
+                continue
+            ds_variants.append({"name": f"ds_write_{d_true}_{d_false}", "write_depth": True, "d_true": d_true, "d_false": d_false})
+
+    for v in ds_variants:
+        frag = SRC_DIR / f"{v['name']}.frag"
+        frag.write_text(depth_fragment_shader(v["write_depth"], v["d_true"], v["d_false"]))
+
+        lines += [
+            "[[case]]",
+            f'name = "{v["name"]}"',
+            f'rust_const = "RENDER_PASS_{v["name"].upper()}"',
+            'rust_type = "DepthProgram"',
+            "programs = [",
+            '    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },',
+            f'    {{ name = "0-frag", template = "renderpass/generated/{v["name"]}.frag", stage = "frag" }},',
+            "]",
+            "[case.params]",
+            f'write_depth = {{ type = "bool", value = {"true" if v["write_depth"] else "false"} }}',
+            f'depth_true = {{ type = "u32", value = {v["d_true"]} }}',
+            f'depth_false = {{ type = "u32", value = {v["d_false"]} }}',
             "",
         ]
 

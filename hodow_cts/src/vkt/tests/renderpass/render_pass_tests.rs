@@ -35,7 +35,7 @@ use crate::tcu::{self, TestError, TestStatus, map_vk_format};
 use crate::vk::VkResultExt;
 use crate::vk::builder_util::{DescriptorPoolBuilder, DescriptorSetLayoutBuilder};
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
-use crate::vk::image_util::{ImageWithMemory, make_image_memory_barrier, make_image_subresource_range, make_image_view};
+use crate::vk::image_util::{ImageWithMemory, get_depth_copy_format, get_stencil_copy_format, make_image_memory_barrier, make_image_subresource_range, make_image_view};
 use crate::vk::mem_util::{MemoryRequirement, invalidate_alloc};
 use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_descriptor_set, make_framebuffer, make_pipeline_layout};
 use crate::vk::programs::{BinaryCollection, create_shader_module};
@@ -248,6 +248,27 @@ static ALL_INPUT_PROGRAMS: &[&InputProgram] = &[
     &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_SELF_DEP_UINT4_MS,
 ];
 
+/// Every depth/stencil entry the generator emitted.
+static ALL_DEPTH_PROGRAMS: &[&DepthProgram] = &[
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_NO_WRITE,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_WRITE_0_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_WRITE_0_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_WRITE_255_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_WRITE_255_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_WRITE_128_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_WRITE_128_255,
+];
+
+/// The manifest declares the depth/stencil cases with this. `write_depth` is false
+/// for the `_depth_read_only` layouts, where the subpass may not write depth at all.
+pub struct DepthProgram {
+    pub name: &'static str,
+    pub write_depth: bool,
+    pub depth_true: u32,
+    pub depth_false: u32,
+    pub programs: BinaryCollection,
+}
+
 /// The manifest declares the input-attachment cases with this: the subpass-0 and
 /// subpass-1 shaders together, plus what the generator built them for.
 pub struct InputProgram {
@@ -345,15 +366,33 @@ struct ClearValue {
 }
 
 impl ClearValue {
-    /// `randomColorClearValue`, for `useFormatCompCount == false`.
+    /// `randomClearValue`.
     ///
-    /// Upstream writes a per-format "unused" filler into the channels the format does
-    /// not have - INT_MIN, UINT_MAX or NaN - and the reference ignores them. Only
-    /// which channels are used and what the rng said is kept here.
+    /// For a colour format upstream writes a per-format "unused" filler into the
+    /// channels the format does not have - INT_MIN, UINT_MAX or NaN - and the
+    /// reference ignores them, so only which channels are used and what the rng said
+    /// is kept. For depth/stencil the two channels are depth and stencil, in that
+    /// order in the value but *stencil first* in the rng, which is the order upstream
+    /// draws them and therefore the order everything after it depends on.
     fn random(format: TextureFormat, rng: &mut Random) -> Self {
+        if format.order.has_depth() || format.order.has_stencil() {
+            let stencil = format.order.has_stencil().then(|| rng.get_bool());
+            let depth = format.order.has_depth().then(|| rng.get_bool());
+            return Self {
+                channels: [depth, stencil, None, None],
+            };
+        }
         let mask = get_texture_format_channel_mask(format);
         let channels = std::array::from_fn(|i| if mask[i] { Some(rng.get_bool()) } else { None });
         Self { channels }
+    }
+
+    /// The `VkClearDepthStencilValue` this stands for.
+    fn to_vk_depth_stencil(self, depth_values: [u8; 2]) -> vk::ClearDepthStencilValue {
+        vk::ClearDepthStencilValue {
+            depth: f32::from(depth_values[usize::from(self.channels[0].unwrap_or(false))]) / 255.0,
+            stencil: if self.channels[1].unwrap_or(false) { 0xFF } else { 0x0 },
+        }
     }
 
     /// `clearValueToPixelValue`
@@ -438,11 +477,20 @@ struct ColorClear {
     color: ClearValue,
 }
 
-/// `SubpassRenderInfo`, narrowed to a single-subpass colour-only render pass.
+/// `DepthStencilClear` - where the clear applies, and the value in the same tri-state
+/// form the colour clears use.
+struct DepthStencilClear {
+    offset: [u32; 2],
+    size: [u32; 2],
+    value: ClearValue,
+}
+
+/// `SubpassRenderInfo`
 struct SubpassRenderInfo {
     viewport_offset: [u32; 2],
     viewport_size: [u32; 2],
     color_clears: Vec<ColorClear>,
+    depth_stencil_clear: Option<DepthStencilClear>,
     render_quad: Option<RenderQuad>,
 }
 
@@ -458,6 +506,7 @@ fn initialize_subpass_render_info(rng: &mut Random, render_pass: &RenderPassDesc
         ];
 
         let mut color_clears = Vec::new();
+        let mut depth_stencil_clear = None;
         let mut render_quad = None;
 
         if config.render_types.contains(RenderTypes::CLEAR) {
@@ -473,6 +522,22 @@ fn initialize_subpass_render_info(rng: &mut Random, render_pass: &RenderPassDesc
                     offset,
                     size,
                     color: ClearValue::random(format, rng),
+                });
+            }
+
+            if subpass.depth_stencil_attachment.attachment != ATTACHMENT_UNUSED {
+                let attachment = render_pass.attachments[subpass.depth_stencil_attachment.attachment as usize];
+                let size = [viewport_size[0] * 2 / 3, viewport_size[1] * 2 / 3];
+                let count = subpass.color_attachments.len() as u32;
+                let offset = [
+                    viewport_offset[0] + (count % 2) * (viewport_size[0] / 3),
+                    viewport_offset[1] + ((count / 2) % 2) * (viewport_size[1] / 3),
+                ];
+                let format = map_vk_format(attachment.format).expect("a depth/stencil attachment format maps");
+                depth_stencil_clear = Some(DepthStencilClear {
+                    offset,
+                    size,
+                    value: ClearValue::random(format, rng),
                 });
             }
         }
@@ -501,6 +566,7 @@ fn initialize_subpass_render_info(rng: &mut Random, render_pass: &RenderPassDesc
             viewport_offset,
             viewport_size,
             color_clears,
+            depth_stencil_clear,
             render_quad,
         });
     }
@@ -557,10 +623,57 @@ fn render_reference_values(
             attachment_used[attachment_index] = true;
         }
 
+        // Apply load op to the depth/stencil attachment if it was used for the first
+        // time. Depth and stencil have their own load ops and their own channel.
+        if subpass.depth_stencil_attachment.attachment != ATTACHMENT_UNUSED {
+            let attachment_index = subpass.depth_stencil_attachment.attachment as usize;
+
+            if !attachment_used[attachment_index] {
+                let attachment = render_pass.attachments[attachment_index];
+                let format = map_vk_format(attachment.format).expect("a depth/stencil attachment format maps");
+                let reference = &mut reference_attachments[attachment_index];
+
+                if format.order.has_depth() {
+                    if attachment.load_op == vk::AttachmentLoadOp::CLEAR {
+                        let clear = render_pass_clear_values[attachment_index].expect("a CLEAR load op has a clear value");
+                        clear_reference_channel(reference, target_size, render_pos, render_size, 0, clear.channels[0]);
+                    } else if attachment.load_op == vk::AttachmentLoadOp::DONT_CARE {
+                        clear_reference_channel(reference, target_size, render_pos, render_size, 0, None);
+                    }
+                }
+
+                if format.order.has_stencil() {
+                    if attachment.stencil_load_op == vk::AttachmentLoadOp::CLEAR {
+                        let clear = render_pass_clear_values[attachment_index].expect("a CLEAR stencil load op has a clear value");
+                        clear_reference_channel(reference, target_size, render_pos, render_size, 1, clear.channels[1]);
+                    } else if attachment.stencil_load_op == vk::AttachmentLoadOp::DONT_CARE {
+                        clear_reference_channel(reference, target_size, render_pos, render_size, 1, None);
+                    }
+                }
+
+                attachment_used[attachment_index] = true;
+            }
+        }
+
         for (color_clear_ndx, color_clear) in render_info.color_clears.iter().enumerate() {
             let attachment_index = subpass.color_attachments[color_clear_ndx].attachment as usize;
             let reference = &mut reference_attachments[attachment_index];
             clear_reference_values(reference, target_size, color_clear.offset, color_clear.size, color_clear.color.to_pixel_value());
+        }
+
+        if let Some(DepthStencilClear { offset, size, value: clear }) = render_info.depth_stencil_clear {
+            let attachment_index = subpass.depth_stencil_attachment.attachment as usize;
+            let attachment = render_pass.attachments[attachment_index];
+            let format = map_vk_format(attachment.format).expect("a depth/stencil attachment format maps");
+            let layout = subpass.depth_stencil_attachment.layout;
+            let reference = &mut reference_attachments[attachment_index];
+
+            if format.order.has_depth() && layout != vk::ImageLayout::DEPTH_STENCIL_READ_ONLY_OPTIMAL && layout != vk::ImageLayout::DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL {
+                clear_reference_channel(reference, target_size, offset, size, 0, clear.channels[0]);
+            }
+            if format.order.has_stencil() && layout != vk::ImageLayout::DEPTH_STENCIL_READ_ONLY_OPTIMAL && layout != vk::ImageLayout::DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL {
+                clear_reference_channel(reference, target_size, offset, size, 1, clear.channels[1]);
+            }
         }
 
         if let Some(render_quad) = render_info.render_quad {
@@ -602,6 +715,39 @@ fn render_reference_values(
                                     let at = (x + y * target_size[0] as i32) as usize;
                                     reference[at].set_value(comp_ndx, perform_bool_op(op, bool_x, bool_y));
                                 }
+                            }
+                        }
+                    }
+                }
+                // The draw writes depth from the shader and stencil from the pipeline's
+                // stencil reference, each only where the layout allows it.
+                if subpass.depth_stencil_attachment.attachment != ATTACHMENT_UNUSED {
+                    let attachment_index = subpass.depth_stencil_attachment.attachment as usize;
+                    let layout = subpass.depth_stencil_attachment.layout;
+                    let attachment = render_pass.attachments[attachment_index];
+                    let format = map_vk_format(attachment.format).expect("a depth/stencil attachment format maps");
+                    let reference = &mut reference_attachments[attachment_index];
+
+                    for y in pos_a[1]..pos_b[1] {
+                        for x in pos_a[0]..pos_b[0] {
+                            let at = (x + y * target_size[0] as i32) as usize;
+
+                            if format.order.has_depth()
+                                && layout != vk::ImageLayout::DEPTH_STENCIL_READ_ONLY_OPTIMAL
+                                && layout != vk::ImageLayout::DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL
+                            {
+                                let index = subpass_ndx + 1;
+                                let op = bool_op_from_index(index);
+                                let bool_x = x % 2 == (index % 2) as i32;
+                                let bool_y = y % 2 == ((index / 2) % 2) as i32;
+                                reference[at].set_value(0, perform_bool_op(op, bool_x, bool_y));
+                            }
+
+                            if format.order.has_stencil()
+                                && layout != vk::ImageLayout::DEPTH_STENCIL_READ_ONLY_OPTIMAL
+                                && layout != vk::ImageLayout::DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL
+                            {
+                                reference[at].set_value(1, subpass_ndx % 2 == 0);
                             }
                         }
                     }
@@ -716,6 +862,10 @@ struct AttachmentResources<'a> {
     /// A multisampled attachment cannot be copied to a buffer, so it is resolved into
     /// this single-sampled image first.
     resolve_image: Option<ImageWithMemory<'a>>,
+    /// A combined depth/stencil attachment is read back one aspect at a time, so the
+    /// stencil aspect gets a buffer of its own.
+    secondary_buffer: Option<BufferWithMemory<'a>>,
+    aspect: vk::ImageAspectFlags,
 }
 
 /// `RenderPassTestCase`
@@ -792,26 +942,15 @@ impl TestCase for RenderPassTestCase {
     }
 
     fn programs(&self) -> BinaryCollection {
-        let format = map_vk_format(self.config.render_pass.attachments[0].format).expect("checked in check_support");
-        let program = grid_program_for(attachment_type_name(format));
-        program.programs
+        match depth_programs_for(&self.config) {
+            Some(program) => program.programs,
+            None => programs_for_config(&self.config).programs,
+        }
     }
 
     fn create_instance<'a>(&'a self, context: &'a Context<'a>) -> Box<dyn TestInstance + 'a> {
         Box::new(RenderPassTestInstance { context, config: &self.config })
     }
-}
-
-/// The manifest entry whose shader was built for this GLSL type.
-fn grid_program_for(attachment_type: &str) -> &'static GridProgram {
-    use crate::generated::shaders::renderpass_render_pass as p;
-    let program = match attachment_type {
-        "ivec4" => &p::RENDER_PASS_GRID_SINT,
-        "uvec4" => &p::RENDER_PASS_GRID_UINT,
-        _ => &p::RENDER_PASS_GRID_FLOAT,
-    };
-    debug_assert_eq!(program.attachment_type, attachment_type);
-    program
 }
 
 /// `RenderPassTestInstance`
@@ -917,25 +1056,50 @@ impl TestInstance for RenderPassTestInstance<'_> {
             config.render_size,
         );
 
-        for (attachment_ndx, attachment) in render_pass_info.attachments.iter().enumerate() {
-            if attachment.store_op != vk::AttachmentStoreOp::STORE {
-                continue;
-            }
-
-            let format = map_vk_format(attachment.format).expect("checked in check_support");
-            invalidate_alloc(device, resources[attachment_ndx].buffer.get_allocation())?;
+        let read_back = |buffer: &BufferWithMemory<'_>, format: TextureFormat| -> Result<TextureLevel, TestError> {
+            invalidate_alloc(device, buffer.get_allocation())?;
             let mut level = TextureLevel::new(format, config.target_size[0], config.target_size[1], 1)?;
             let len = level.data().len();
-            unsafe {
-                std::ptr::copy_nonoverlapping(
-                    resources[attachment_ndx].buffer.get_allocation().get_host_ptr().cast_const(),
-                    level.data_mut().as_mut_ptr(),
-                    len,
-                )
-            };
+            unsafe { std::ptr::copy_nonoverlapping(buffer.get_allocation().get_host_ptr().cast_const(), level.data_mut().as_mut_ptr(), len) };
+            Ok(level)
+        };
 
-            if !verify_color_attachment(&reference_values[attachment_ndx], &level.get_const_access()) {
-                return Ok(TestStatus::fail("Result verification failed"));
+        for (attachment_ndx, attachment) in render_pass_info.attachments.iter().enumerate() {
+            let format = map_vk_format(attachment.format).expect("checked in check_support");
+            let resource = &resources[attachment_ndx];
+            let reference = &reference_values[attachment_ndx];
+
+            if format.order.has_depth() || format.order.has_stencil() {
+                // Depth and stencil have their own store ops, so each aspect is
+                // verified only if its own said STORE, and a combined format reads
+                // each out of its own buffer in its own copy format.
+                if format.order.has_depth() && attachment.store_op == vk::AttachmentStoreOp::STORE {
+                    let depth_format = if resource.secondary_buffer.is_some() {
+                        get_depth_copy_format(attachment.format).expect("checked at creation")
+                    } else {
+                        format
+                    };
+                    let level = read_back(&resource.buffer, depth_format)?;
+                    if !verify_depth_attachment(reference, &level.get_const_access(), config.depth_values, required_depth_epsilon(attachment.format)) {
+                        return Ok(TestStatus::fail("Result verification failed"));
+                    }
+                }
+
+                if format.order.has_stencil() && attachment.stencil_store_op == vk::AttachmentStoreOp::STORE {
+                    let (buffer, stencil_format) = match &resource.secondary_buffer {
+                        Some(secondary) => (secondary, get_stencil_copy_format(attachment.format).expect("checked at creation")),
+                        None => (&resource.buffer, format),
+                    };
+                    let level = read_back(buffer, stencil_format)?;
+                    if !verify_stencil_attachment(reference, &level.get_const_access()) {
+                        return Ok(TestStatus::fail("Result verification failed"));
+                    }
+                }
+            } else if attachment.store_op == vk::AttachmentStoreOp::STORE {
+                let level = read_back(&resource.buffer, format)?;
+                if !verify_color_attachment(reference, &level.get_const_access()) {
+                    return Ok(TestStatus::fail("Result verification failed"));
+                }
             }
         }
 
@@ -1029,6 +1193,7 @@ impl RenderPassTestInstance<'_> {
         };
         let color_references: Vec<Vec<vk::AttachmentReference>> = render_pass_info.subpasses.iter().map(|s| s.color_attachments.iter().map(to_reference).collect()).collect();
         let input_references: Vec<Vec<vk::AttachmentReference>> = render_pass_info.subpasses.iter().map(|s| s.input_attachments.iter().map(to_reference).collect()).collect();
+        let ds_references: Vec<vk::AttachmentReference> = render_pass_info.subpasses.iter().map(|s| to_reference(&s.depth_stencil_attachment)).collect();
 
         let subpasses: Vec<vk::SubpassDescription> = render_pass_info
             .subpasses
@@ -1042,7 +1207,11 @@ impl RenderPassTestInstance<'_> {
                 color_attachment_count: color_references[ndx].len() as u32,
                 color_attachments: color_references[ndx].as_ptr(),
                 resolve_attachments: std::ptr::null(),
-                depth_stencil_attachment: std::ptr::null(),
+                depth_stencil_attachment: if render_pass_info.subpasses[ndx].depth_stencil_attachment.attachment == ATTACHMENT_UNUSED {
+                    std::ptr::null()
+                } else {
+                    &ds_references[ndx]
+                },
                 preserve_attachment_count: 0,
                 preserve_attachments: std::ptr::null(),
             })
@@ -1128,6 +1297,7 @@ impl RenderPassTestInstance<'_> {
         let render_pass_info = &self.config.render_pass;
         let color_references2: Vec<Vec<vk::AttachmentReference2>> = render_pass_info.subpasses.iter().map(|s| s.color_attachments.iter().map(to_reference2).collect()).collect();
         let input_references2: Vec<Vec<vk::AttachmentReference2>> = render_pass_info.subpasses.iter().map(|s| s.input_attachments.iter().map(to_reference2).collect()).collect();
+        let ds_references2: Vec<vk::AttachmentReference2> = render_pass_info.subpasses.iter().map(|s| to_reference2(&s.depth_stencil_attachment)).collect();
 
         let subpasses2: Vec<vk::SubpassDescription2> = (0..render_pass_info.subpasses.len())
             .map(|ndx| vk::SubpassDescription2 {
@@ -1141,7 +1311,11 @@ impl RenderPassTestInstance<'_> {
                 color_attachment_count: color_references2[ndx].len() as u32,
                 color_attachments: color_references2[ndx].as_ptr(),
                 resolve_attachments: std::ptr::null(),
-                depth_stencil_attachment: std::ptr::null(),
+                depth_stencil_attachment: if render_pass_info.subpasses[ndx].depth_stencil_attachment.attachment == ATTACHMENT_UNUSED {
+                    std::ptr::null()
+                } else {
+                    &ds_references2[ndx]
+                },
                 preserve_attachment_count: 0,
                 preserve_attachments: std::ptr::null(),
             })
@@ -1187,6 +1361,7 @@ impl RenderPassTestInstance<'_> {
         let allocator = self.context.get_default_allocator();
         let target_size = self.config.target_size;
         let format = map_vk_format(attachment.format).expect("checked in check_support");
+        let aspect = attachment_aspect(format);
 
         let image_info = vk::ImageCreateInfo {
             s_type: vk::StructureType::IMAGE_CREATE_INFO,
@@ -1221,17 +1396,29 @@ impl RenderPassTestInstance<'_> {
             image.get(),
             vk::ImageViewType::_2D,
             attachment.format,
-            make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, 1),
+            make_image_subresource_range(aspect, 0, 1, 0, 1),
         )?;
 
-        let pixel_size = format.pixel_size().ok_or_else(|| TestError::NotPorted(format!("no pixel size for {format:?}")))? as u64;
-        let buffer_size = pixel_size * u64::from(target_size[0]) * u64::from(target_size[1]);
-        let buffer = BufferWithMemory::new(
-            device,
-            allocator,
-            make_buffer_create_info(buffer_size, vk::BufferUsageFlags::TRANSFER_DST),
-            MemoryRequirement::HOST_VISIBLE,
-        )?;
+        // The readback format is not always the attachment's: a combined depth/stencil
+        // attachment is copied out one aspect at a time, and each aspect has its own.
+        let make_buffer = |format: TextureFormat| -> Result<BufferWithMemory<'_>, TestError> {
+            let pixel_size = format.pixel_size().ok_or_else(|| TestError::NotPorted(format!("no pixel size for {format:?}")))? as u64;
+            let buffer_size = pixel_size * u64::from(target_size[0]) * u64::from(target_size[1]);
+            BufferWithMemory::new(
+                device,
+                allocator,
+                make_buffer_create_info(buffer_size, vk::BufferUsageFlags::TRANSFER_DST),
+                MemoryRequirement::HOST_VISIBLE,
+            )
+        };
+
+        let (buffer, secondary_buffer) = if format.order.has_depth() && format.order.has_stencil() {
+            let depth_format = get_depth_copy_format(attachment.format).ok_or_else(|| TestError::NotPorted("no depth copy format".to_string()))?;
+            let stencil_format = get_stencil_copy_format(attachment.format).ok_or_else(|| TestError::NotPorted("no stencil copy format".to_string()))?;
+            (make_buffer(depth_format)?, Some(make_buffer(stencil_format)?))
+        } else {
+            (make_buffer(format)?, None)
+        };
 
         let resolve_image = if attachment.samples == vk::SampleCountFlags::_1 {
             None
@@ -1252,6 +1439,8 @@ impl RenderPassTestInstance<'_> {
             view,
             buffer,
             resolve_image,
+            secondary_buffer,
+            aspect,
         })
     }
 
@@ -1371,6 +1560,31 @@ impl RenderPassTestInstance<'_> {
         let blend_attachments = vec![vk::PipelineColorBlendAttachmentState::builder().color_write_mask(vk::ColorComponentFlags::all()).build(); subpass.color_attachments.len()];
         let color_blend = vk::PipelineColorBlendStateCreateInfo::builder().attachments(&blend_attachments);
 
+        // `writeDepth` / `writeStencil` - the read-only layouts turn each off.
+        let ds_layout = (subpass.depth_stencil_attachment.attachment != ATTACHMENT_UNUSED).then_some(subpass.depth_stencil_attachment.layout);
+        let write_depth = ds_layout.is_some_and(|l| l != vk::ImageLayout::DEPTH_STENCIL_READ_ONLY_OPTIMAL && l != vk::ImageLayout::DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL);
+        let write_stencil = ds_layout.is_some_and(|l| l != vk::ImageLayout::DEPTH_STENCIL_READ_ONLY_OPTIMAL && l != vk::ImageLayout::DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL);
+        let stencil_op = if write_stencil { vk::StencilOp::REPLACE } else { vk::StencilOp::KEEP };
+        let stencil_state = vk::StencilOpState {
+            fail_op: stencil_op,
+            pass_op: stencil_op,
+            depth_fail_op: stencil_op,
+            compare_op: vk::CompareOp::ALWAYS,
+            compare_mask: !0,
+            write_mask: !0,
+            reference: if subpass_ndx.is_multiple_of(2) { !0 } else { 0 },
+        };
+        let depth_stencil = vk::PipelineDepthStencilStateCreateInfo::builder()
+            .depth_test_enable(write_depth)
+            .depth_write_enable(write_depth)
+            .depth_compare_op(vk::CompareOp::ALWAYS)
+            .depth_bounds_test_enable(false)
+            .stencil_test_enable(write_stencil)
+            .front(stencil_state)
+            .back(stencil_state)
+            .min_depth_bounds(0.0)
+            .max_depth_bounds(1.0);
+
         let info = vk::GraphicsPipelineCreateInfo::builder()
             .stages(&stages)
             .vertex_input_state(&vertex_input)
@@ -1378,6 +1592,7 @@ impl RenderPassTestInstance<'_> {
             .viewport_state(&viewport_state)
             .rasterization_state(&rasterization)
             .multisample_state(&multisample)
+            .depth_stencil_state(&depth_stencil)
             .color_blend_state(&color_blend)
             .layout(layout)
             .render_pass(render_pass)
@@ -1405,7 +1620,7 @@ impl RenderPassTestInstance<'_> {
                     vk::ImageLayout::UNDEFINED,
                     vk::ImageLayout::TRANSFER_DST_OPTIMAL,
                     resource.image.get(),
-                    make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, 1),
+                    make_image_subresource_range(resource.aspect, 0, 1, 0, 1),
                 )
             })
             .collect();
@@ -1427,9 +1642,14 @@ impl RenderPassTestInstance<'_> {
         for (attachment_ndx, (resource, clear)) in resources.iter().zip(clear_values).enumerate() {
             let Some(clear) = clear else { continue };
             let format = map_vk_format(render_pass_info.attachments[attachment_ndx].format).expect("checked in check_support");
-            let range = make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, 1);
+            let range = make_image_subresource_range(resource.aspect, 0, 1, 0, 1);
             unsafe {
-                device.cmd_clear_color_image(command_buffer, resource.image.get(), vk::ImageLayout::TRANSFER_DST_OPTIMAL, &clear.to_vk(format), &[range]);
+                if format.order.has_depth() || format.order.has_stencil() {
+                    let value = clear.to_vk_depth_stencil(self.config.depth_values);
+                    device.cmd_clear_depth_stencil_image(command_buffer, resource.image.get(), vk::ImageLayout::TRANSFER_DST_OPTIMAL, &value, &[range]);
+                } else {
+                    device.cmd_clear_color_image(command_buffer, resource.image.get(), vk::ImageLayout::TRANSFER_DST_OPTIMAL, &clear.to_vk(format), &[range]);
+                }
             }
         }
 
@@ -1446,11 +1666,14 @@ impl RenderPassTestInstance<'_> {
                 };
                 make_image_memory_barrier(
                     src_access,
-                    vk::AccessFlags::COLOR_ATTACHMENT_READ | vk::AccessFlags::COLOR_ATTACHMENT_WRITE,
+                    vk::AccessFlags::COLOR_ATTACHMENT_READ
+                        | vk::AccessFlags::COLOR_ATTACHMENT_WRITE
+                        | vk::AccessFlags::DEPTH_STENCIL_ATTACHMENT_READ
+                        | vk::AccessFlags::DEPTH_STENCIL_ATTACHMENT_WRITE,
                     old_layout,
                     render_pass_info.attachments[attachment_ndx].initial_layout,
                     resource.image.get(),
-                    make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, 1),
+                    make_image_subresource_range(resource.aspect, 0, 1, 0, 1),
                 )
             })
             .collect();
@@ -1459,7 +1682,7 @@ impl RenderPassTestInstance<'_> {
             device.cmd_pipeline_barrier(
                 command_buffer,
                 vk::PipelineStageFlags::TRANSFER,
-                vk::PipelineStageFlags::COLOR_ATTACHMENT_OUTPUT,
+                vk::PipelineStageFlags::COLOR_ATTACHMENT_OUTPUT | vk::PipelineStageFlags::EARLY_FRAGMENT_TESTS,
                 vk::DependencyFlags::empty(),
                 &[] as &[vk::MemoryBarrier],
                 &[] as &[vk::BufferMemoryBarrier],
@@ -1490,7 +1713,13 @@ impl RenderPassTestInstance<'_> {
             .map(|(ndx, attachment)| match render_pass_clear_values[ndx] {
                 Some(clear) => {
                     let format = map_vk_format(attachment.format).expect("checked in check_support");
-                    vk::ClearValue { color: clear.to_vk(format) }
+                    if format.order.has_depth() || format.order.has_stencil() {
+                        vk::ClearValue {
+                            depth_stencil: clear.to_vk_depth_stencil(config.depth_values),
+                        }
+                    } else {
+                        vk::ClearValue { color: clear.to_vk(format) }
+                    }
                 }
                 None => vk::ClearValue {
                     color: vk::ClearColorValue { float32: [0.0; 4] },
@@ -1560,6 +1789,43 @@ impl RenderPassTestInstance<'_> {
                     })
                     .collect();
                 unsafe { device.cmd_clear_attachments(command_buffer, &attachments, &rects) };
+            }
+
+            if let Some(DepthStencilClear { offset, size, value: clear }) = render_info.depth_stencil_clear {
+                let attachment_index = subpass.depth_stencil_attachment.attachment as usize;
+                let format = map_vk_format(render_pass_info.attachments[attachment_index].format).expect("checked in check_support");
+                let layout = subpass.depth_stencil_attachment.layout;
+
+                let mut aspect_mask = vk::ImageAspectFlags::empty();
+                if format.order.has_depth() && layout != vk::ImageLayout::DEPTH_STENCIL_READ_ONLY_OPTIMAL && layout != vk::ImageLayout::DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL {
+                    aspect_mask |= vk::ImageAspectFlags::DEPTH;
+                }
+                if format.order.has_stencil() && layout != vk::ImageLayout::DEPTH_STENCIL_READ_ONLY_OPTIMAL && layout != vk::ImageLayout::DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL
+                {
+                    aspect_mask |= vk::ImageAspectFlags::STENCIL;
+                }
+
+                if !aspect_mask.is_empty() {
+                    let attachments = [vk::ClearAttachment {
+                        aspect_mask,
+                        color_attachment: 0,
+                        clear_value: vk::ClearValue {
+                            depth_stencil: clear.to_vk_depth_stencil(config.depth_values),
+                        },
+                    }];
+                    let rects = [vk::ClearRect {
+                        rect: vk::Rect2D {
+                            offset: vk::Offset2D {
+                                x: offset[0] as i32,
+                                y: offset[1] as i32,
+                            },
+                            extent: vk::Extent2D { width: size[0], height: size[1] },
+                        },
+                        base_array_layer: 0,
+                        layer_count: 1,
+                    }];
+                    unsafe { device.cmd_clear_attachments(command_buffer, &attachments, &rects) };
+                }
             }
 
             if render_info.render_quad.is_some()
@@ -1682,40 +1948,53 @@ impl RenderPassTestInstance<'_> {
                 }
                 None => resource.image.get(),
             };
-            let region = vk::BufferImageCopy {
-                buffer_offset: 0,
-                buffer_row_length: 0,
-                buffer_image_height: 0,
-                image_subresource: vk::ImageSubresourceLayers {
-                    aspect_mask: vk::ImageAspectFlags::COLOR,
-                    mip_level: 0,
-                    base_array_layer: 0,
-                    layer_count: 1,
-                },
-                image_offset: vk::Offset3D { x: 0, y: 0, z: 0 },
-                image_extent: vk::Extent3D {
-                    width: target_size[0],
-                    height: target_size[1],
-                    depth: 1,
-                },
+            // A combined depth/stencil attachment is copied one aspect at a time, into
+            // its own buffer; everything else is one copy of its single aspect.
+            let copies: Vec<(vk::ImageAspectFlags, vk::Buffer)> = match &resource.secondary_buffer {
+                Some(secondary) => vec![(vk::ImageAspectFlags::DEPTH, resource.buffer.get()), (vk::ImageAspectFlags::STENCIL, secondary.get())],
+                None => vec![(resource.aspect, resource.buffer.get())],
             };
-            unsafe {
-                device.cmd_copy_image_to_buffer(command_buffer, source, vk::ImageLayout::TRANSFER_SRC_OPTIMAL, resource.buffer.get(), &[region]);
+
+            for (aspect_mask, buffer) in copies {
+                let region = vk::BufferImageCopy {
+                    buffer_offset: 0,
+                    buffer_row_length: 0,
+                    buffer_image_height: 0,
+                    image_subresource: vk::ImageSubresourceLayers {
+                        aspect_mask,
+                        mip_level: 0,
+                        base_array_layer: 0,
+                        layer_count: 1,
+                    },
+                    image_offset: vk::Offset3D { x: 0, y: 0, z: 0 },
+                    image_extent: vk::Extent3D {
+                        width: target_size[0],
+                        height: target_size[1],
+                        depth: 1,
+                    },
+                };
+                unsafe {
+                    device.cmd_copy_image_to_buffer(command_buffer, source, vk::ImageLayout::TRANSFER_SRC_OPTIMAL, buffer, &[region]);
+                }
             }
         }
 
         let to_host: Vec<vk::BufferMemoryBarrier> = resources
             .iter()
-            .map(|resource| {
-                vk::BufferMemoryBarrier::builder()
-                    .src_access_mask(vk::AccessFlags::TRANSFER_WRITE)
-                    .dst_access_mask(vk::AccessFlags::HOST_READ)
-                    .src_queue_family_index(queue_index)
-                    .dst_queue_family_index(queue_index)
-                    .buffer(resource.buffer.get())
-                    .offset(0)
-                    .size(vk::WHOLE_SIZE)
-                    .build()
+            .flat_map(|resource| {
+                std::iter::once(resource.buffer.get())
+                    .chain(resource.secondary_buffer.as_ref().map(|b| b.get()))
+                    .map(move |buffer| {
+                        vk::BufferMemoryBarrier::builder()
+                            .src_access_mask(vk::AccessFlags::TRANSFER_WRITE)
+                            .dst_access_mask(vk::AccessFlags::HOST_READ)
+                            .src_queue_family_index(queue_index)
+                            .dst_queue_family_index(queue_index)
+                            .buffer(buffer)
+                            .offset(0)
+                            .size(vk::WHOLE_SIZE)
+                            .build()
+                    })
             })
             .collect();
 
@@ -2018,6 +2297,7 @@ pub fn create_render_pass_groups() -> Vec<tcu::TestCaseGroup> {
                 let mut kind_group = tcu::TestCaseGroup::new(kind_name);
                 let mut formats = tcu::TestCaseGroup::new("formats");
                 add_format_tests(&mut formats, allocation_kind, render_pass_type);
+                add_depth_stencil_format_tests(&mut formats, allocation_kind, render_pass_type);
                 kind_group.add_child(formats);
                 group.add_child(kind_group);
             }
@@ -2046,7 +2326,39 @@ impl<'a> RenderPassTestInstance<'a> {
     /// attachment's channel class and count; one that does not needs only the grid
     /// shader, which the input entries also carry, so a single entry covers both.
     fn programs_for_case(&self) -> &'static InputProgram {
-        let render_pass_info = &self.config.render_pass;
+        programs_for_config(self.config)
+    }
+}
+
+/// The depth/stencil family, for a subpass whose only attachment is depth/stencil.
+/// `None` when the case has a colour attachment and therefore uses the other family.
+fn depth_programs_for(config: &TestConfig) -> Option<&'static DepthProgram> {
+    let subpass = config.render_pass.subpasses.first()?;
+    if !subpass.color_attachments.is_empty() || subpass.depth_stencil_attachment.attachment == ATTACHMENT_UNUSED {
+        return None;
+    }
+
+    let layout = subpass.depth_stencil_attachment.layout;
+    let write_depth = layout != vk::ImageLayout::DEPTH_STENCIL_READ_ONLY_OPTIMAL && layout != vk::ImageLayout::DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL;
+
+    // The two depth values the shader bakes in are whichever pair the config's shuffle
+    // produced, so the lookup is by value rather than by reproducing the shuffle.
+    let (depth_true, depth_false) = if write_depth {
+        (u32::from(config.depth_values[1]), u32::from(config.depth_values[0]))
+    } else {
+        (0, 0)
+    };
+
+    ALL_DEPTH_PROGRAMS
+        .iter()
+        .copied()
+        .find(|p| p.write_depth == write_depth && p.depth_true == depth_true && p.depth_false == depth_false)
+}
+
+/// `createSubpassShaders` for the colour families, keyed off the description.
+fn programs_for_config(config: &TestConfig) -> &'static InputProgram {
+    {
+        let render_pass_info = &config.render_pass;
         let format = map_vk_format(render_pass_info.attachments[0].format).expect("checked in check_support");
         let class = match format.channel_class() {
             TextureChannelClass::SignedInteger => "sint",
@@ -2088,7 +2400,9 @@ impl<'a> RenderPassTestInstance<'a> {
         debug_assert_eq!(program.attachment_type, attachment_type_name(format));
         program
     }
+}
 
+impl<'a> RenderPassTestInstance<'a> {
     fn create_subpass_renderer(
         &'a self,
         subpass_ndx: usize,
@@ -2100,8 +2414,14 @@ impl<'a> RenderPassTestInstance<'a> {
     ) -> Result<SubpassRenderer<'a>, TestError> {
         let device = self.context.get_device();
 
-        let vertex_module = create_shader_module(device, programs.programs.get(&format!("{subpass_ndx}-vert"))?)?;
-        let fragment_module = create_shader_module(device, programs.programs.get(&format!("{subpass_ndx}-frag"))?)?;
+        // A depth/stencil-only subpass takes its shaders from the other family: no
+        // colour output, and gl_FragDepth instead.
+        let collection = match depth_programs_for(self.config) {
+            Some(program) => program.programs,
+            None => programs.programs,
+        };
+        let vertex_module = create_shader_module(device, collection.get(&format!("{subpass_ndx}-vert"))?)?;
+        let fragment_module = create_shader_module(device, collection.get(&format!("{subpass_ndx}-frag"))?)?;
 
         let (descriptor_set_layout, descriptor_pool, descriptor_set) = if subpass.input_attachments.is_empty() {
             (None, None, None)
@@ -2248,5 +2568,192 @@ fn add_self_dep_cases(
 
         let name = format!("self_dep_{render_type_name}{}{sample_suffix}", if use_input_aspect { "_use_input_aspect" } else { "" });
         store_op_group.add_child(Box::new(RenderPassTestCase { name, config }) as Box<dyn TestCase>);
+    }
+}
+
+/// `clearReferenceValues` / `markUndefined` restricted to one channel, which is what
+/// the depth/stencil paths need: depth and stencil have separate load ops and separate
+/// read-only layouts, so they are set independently.
+fn clear_reference_channel(reference: &mut [PixelValue], target_size: [u32; 2], offset: [u32; 2], size: [u32; 2], channel: usize, value: Option<bool>) {
+    for y in offset[1]..offset[1] + size[1] {
+        for x in offset[0]..offset[0] + size[0] {
+            let at = (x + y * target_size[0]) as usize;
+            match value {
+                Some(v) => reference[at].set_value(channel, v),
+                None => reference[at].set_undefined(channel),
+            }
+        }
+    }
+}
+
+/// `getImageAspectFlags` - which aspects an attachment of this format has.
+fn attachment_aspect(format: TextureFormat) -> vk::ImageAspectFlags {
+    let mut aspect = vk::ImageAspectFlags::empty();
+    if format.order.has_depth() {
+        aspect |= vk::ImageAspectFlags::DEPTH;
+    }
+    if format.order.has_stencil() {
+        aspect |= vk::ImageAspectFlags::STENCIL;
+    }
+    if aspect.is_empty() { vk::ImageAspectFlags::COLOR } else { aspect }
+}
+
+/// `requiredDepthEpsilon` - a unorm depth value that goes into the buffer and back can
+/// lose precision, so the comparison needs slack rather than an exact match.
+fn required_depth_epsilon(format: vk::Format) -> f32 {
+    let unorm_bits = match format {
+        vk::Format::D16_UNORM | vk::Format::D16_UNORM_S8_UINT => 16,
+        vk::Format::X8_D24_UNORM_PACK32 | vk::Format::D24_UNORM_S8_UINT => 24,
+        _ => 0,
+    };
+
+    if unorm_bits > 0 {
+        1.0 / ((1u32 << unorm_bits) - 1) as f32
+    } else {
+        // A float depth format keeps the value exactly.
+        0.0
+    }
+}
+
+fn depths_equal(a: f32, b: f32, epsilon: f32) -> bool {
+    (a - b).abs() <= epsilon
+}
+
+/// `verifyDepthAttachment`
+fn verify_depth_attachment(reference: &[PixelValue], result: &ConstPixelBufferAccess<'_>, depth_values: [u8; 2], epsilon: f32) -> bool {
+    let [width, height, _] = result.size();
+    let mut ok = true;
+
+    for y in 0..height {
+        for x in 0..width {
+            let result_depth = result.get_pix_depth(x, y, 0);
+            if let Some(value) = reference[(x + y * width) as usize].get_value(0) {
+                let expected = f32::from(depth_values[usize::from(value)]) / 255.0;
+                if !depths_equal(result_depth, expected, epsilon) {
+                    ok = false;
+                }
+            }
+        }
+    }
+
+    ok
+}
+
+/// `verifyStencilAttachment`
+fn verify_stencil_attachment(reference: &[PixelValue], result: &ConstPixelBufferAccess<'_>) -> bool {
+    let [width, height, _] = result.size();
+    let mut ok = true;
+
+    for y in 0..height {
+        for x in 0..width {
+            let result_stencil = result.get_pix_stencil(x, y, 0);
+            if let Some(value) = reference[(x + y * width) as usize].get_value(1)
+                && ((value && result_stencil != 0xFF) || (!value && result_stencil != 0x0))
+            {
+                ok = false;
+            }
+        }
+    }
+
+    ok
+}
+
+/// `s_coreDepthStencilFormats`, paired with `formatToName`.
+pub static CORE_DEPTH_STENCIL_FORMATS: &[(vk::Format, &str)] = &[
+    (vk::Format::D16_UNORM, "d16_unorm"),
+    (vk::Format::X8_D24_UNORM_PACK32, "x8_d24_unorm_pack32"),
+    (vk::Format::D32_SFLOAT, "d32_sfloat"),
+    (vk::Format::D24_UNORM_S8_UINT, "d24_unorm_s8_uint"),
+    (vk::Format::D32_SFLOAT_S8_UINT, "d32_sfloat_s8_uint"),
+];
+
+/// The depth/stencil half of `addFormatTests`, without its `input` branch: one
+/// attachment used as the subpass's depth/stencil attachment and nothing else.
+///
+/// A combined format also gets the two read-only layouts, where the subpass may write
+/// only one of the two aspects. Upstream skips those for a CLEAR load op, because the
+/// render pass would then clear an aspect the subpass cannot write.
+fn add_depth_stencil_format_tests(group: &mut tcu::TestCaseGroup, allocation_kind: AllocationKind, render_pass_type: RenderPassType) {
+    const TARGET_SIZE: [u32; 2] = [64, 64];
+    const RENDER_POS: [u32; 2] = [0, 0];
+    const RENDER_SIZE: [u32; 2] = [64, 64];
+
+    let load_ops = [
+        ("clear", vk::AttachmentLoadOp::CLEAR),
+        ("load", vk::AttachmentLoadOp::LOAD),
+        ("dont_care", vk::AttachmentLoadOp::DONT_CARE),
+    ];
+    let render_types = [
+        ("clear", RenderTypes::CLEAR),
+        ("draw", RenderTypes::DRAW),
+        ("clear_draw", RenderTypes::CLEAR.or(RenderTypes::DRAW)),
+    ];
+
+    for &(vk_format, format_name) in CORE_DEPTH_STENCIL_FORMATS {
+        let format = map_vk_format(vk_format).expect("a core depth/stencil format maps");
+        let is_depth_attachment = format.order.has_depth();
+        let is_stencil_attachment = format.order.has_stencil();
+        let mut format_group = tcu::TestCaseGroup::new(format_name);
+
+        for (load_op_name, load_op) in load_ops {
+            let mut load_op_group = tcu::TestCaseGroup::new(load_op_name);
+
+            for (render_type_name, render_type) in render_types {
+                let make_attachment = || Attachment {
+                    format: vk_format,
+                    samples: vk::SampleCountFlags::_1,
+                    load_op: if is_depth_attachment { load_op } else { vk::AttachmentLoadOp::DONT_CARE },
+                    store_op: if is_depth_attachment {
+                        vk::AttachmentStoreOp::STORE
+                    } else {
+                        vk::AttachmentStoreOp::DONT_CARE
+                    },
+                    stencil_load_op: if is_stencil_attachment { load_op } else { vk::AttachmentLoadOp::DONT_CARE },
+                    stencil_store_op: if is_stencil_attachment {
+                        vk::AttachmentStoreOp::STORE
+                    } else {
+                        vk::AttachmentStoreOp::DONT_CARE
+                    },
+                    initial_layout: vk::ImageLayout::DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+                    final_layout: vk::ImageLayout::DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+                };
+
+                let mut add = |name: String, ds_layout: vk::ImageLayout| {
+                    let render_pass = RenderPassDesc {
+                        attachments: vec![make_attachment()],
+                        subpasses: vec![Subpass {
+                            input_attachments: Vec::new(),
+                            color_attachments: Vec::new(),
+                            depth_stencil_attachment: AttachmentReference::new(0, ds_layout),
+                        }],
+                        dependencies: Vec::new(),
+                        input_aspects: Vec::new(),
+                    };
+                    let config = TestConfig::new(
+                        render_pass,
+                        render_type,
+                        TARGET_SIZE,
+                        RENDER_POS,
+                        RENDER_SIZE,
+                        false,
+                        90239,
+                        allocation_kind,
+                        render_pass_type,
+                    );
+                    load_op_group.add_child(Box::new(RenderPassTestCase { name, config }) as Box<dyn TestCase>);
+                };
+
+                add(render_type_name.to_string(), vk::ImageLayout::DEPTH_STENCIL_ATTACHMENT_OPTIMAL);
+
+                if is_stencil_attachment && is_depth_attachment && load_op != vk::AttachmentLoadOp::CLEAR {
+                    add(format!("{render_type_name}_depth_read_only"), vk::ImageLayout::DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL);
+                    add(format!("{render_type_name}_stencil_read_only"), vk::ImageLayout::DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL);
+                }
+            }
+
+            format_group.add_child(load_op_group);
+        }
+
+        group.add_child(format_group);
     }
 }
