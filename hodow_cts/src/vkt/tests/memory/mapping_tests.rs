@@ -1011,11 +1011,7 @@ fn run_memory_type(
                         } else {
                             flush.offset - (flush.offset % atom_size)
                         },
-                        size: if flush.size.is_multiple_of(atom_size) {
-                            flush.size
-                        } else {
-                            flush.size + (atom_size - (flush.size % atom_size))
-                        },
+                        size: round_size_up_to_atom(flush.size, atom_size),
                     };
 
                     ranges.push(range);
@@ -1049,11 +1045,7 @@ fn run_memory_type(
                         } else {
                             invalidate.offset - (invalidate.offset % atom_size)
                         },
-                        size: if invalidate.size.is_multiple_of(atom_size) {
-                            invalidate.size
-                        } else {
-                            invalidate.size + (atom_size - (invalidate.size % atom_size))
-                        },
+                        size: round_size_up_to_atom(invalidate.size, atom_size),
                     };
 
                     ranges.push(range);
@@ -1494,7 +1486,8 @@ impl<'a> MemoryHeap<'a> {
             let total_usage = total_mem_tracker.get_total_usage();
             let total_sys_mem = self.limits.total_system_memory;
 
-            (min_allocation_size + min_reference_size) > (total_sys_mem - total_usage) || min_allocation_size > available_in_heap
+            // See the wrapping note in the else branch.
+            (min_allocation_size + min_reference_size) > total_sys_mem.wrapping_sub(total_usage) || min_allocation_size > available_in_heap
         } else {
             let total_usage = total_mem_tracker.get_total_usage();
             let total_sys_mem = self.limits.total_system_memory;
@@ -1506,7 +1499,16 @@ impl<'a> MemoryHeap<'a> {
             };
             let used_mem_class = total_mem_tracker.get_usage(mem_class);
 
-            min_allocation_size > available_in_heap || min_allocation_size > (total_mem_class - used_mem_class) || min_reference_size > (total_sys_mem - total_usage)
+            // Upstream asserts `usedMemClass <= totalMemClass` and `totalUsage <=
+            // totalSysMem` here, but the assert is compiled out of the release build the
+            // conformance runs use, and the budget is an estimate the allocator can
+            // overshoot slightly - `suballocation.random.66` ends up 449 bytes over the
+            // system total. There the subtraction wraps to a huge number, the comparison
+            // is false, and the heap is reported as not full. Saturating instead would
+            // report it full and take a different path, so the wrap is reproduced.
+            min_allocation_size > available_in_heap
+                || min_allocation_size > total_mem_class.wrapping_sub(used_mem_class)
+                || min_reference_size > total_sys_mem.wrapping_sub(total_usage)
         }
     }
 
@@ -1541,10 +1543,10 @@ impl<'a> MemoryHeap<'a> {
                 if is_uma {
                     let total_usage = total_mem_tracker.get_total_usage();
                     let total_sys_mem = self.limits.total_system_memory;
-                    let available_bits = (total_sys_mem - total_usage) * 8;
+                    let available_bits = total_sys_mem.wrapping_sub(total_usage).wrapping_mul(8);
                     let max_allocation_size = round_down_to_multiple(((atom_size * available_bits) / (17 * atom_size + 1)).min(available_in_heap), allocation_size_granularity);
 
-                    if min_allocation_size + min_reference_size <= (total_sys_mem - total_usage) && min_allocation_size <= available_in_heap {
+                    if min_allocation_size + min_reference_size <= total_sys_mem.wrapping_sub(total_usage) && min_allocation_size <= available_in_heap {
                         memory_types.push((*ty, max_allocation_size));
                     }
                 } else {
@@ -1558,13 +1560,16 @@ impl<'a> MemoryHeap<'a> {
                     };
                     let used_mem_class = total_mem_tracker.get_usage(mem_class);
                     let max_allocation_size = round_down_to_multiple(
-                        (total_mem_class - used_mem_class)
-                            .min((atom_size * 8 * (total_sys_mem - total_usage)) / (9 * atom_size + 1))
+                        total_mem_class
+                            .wrapping_sub(used_mem_class)
+                            .min(atom_size.wrapping_mul(8).wrapping_mul(total_sys_mem.wrapping_sub(total_usage)) / (9 * atom_size + 1))
                             .min(available_in_heap),
                         allocation_size_granularity,
                     );
 
-                    if min_allocation_size <= available_in_heap && min_allocation_size <= (total_mem_class - used_mem_class) && min_reference_size <= (total_sys_mem - total_usage)
+                    if min_allocation_size <= available_in_heap
+                        && min_allocation_size <= total_mem_class.wrapping_sub(used_mem_class)
+                        && min_reference_size <= total_sys_mem.wrapping_sub(total_usage)
                     {
                         memory_types.push((*ty, max_allocation_size));
                     }
@@ -1945,6 +1950,22 @@ enum Op {
 
     Remap,
     ImplicitUnmap,
+}
+
+/// The size upstream hands to `vkFlushMappedMemoryRanges`/`vkInvalidateMappedMemoryRanges`.
+///
+/// `subMappedConfig` rewrites a range that runs past the mapping to VK_WHOLE_SIZE, and
+/// this rounding then adds to it - so in C++ the arithmetic wraps and the driver is
+/// handed 0. Reproducing the wrap rather than the intent is deliberate: the point of
+/// the port is to make the same call upstream makes, and a size of VK_WHOLE_SIZE here
+/// would be a different test. In Rust the addition has to say so explicitly, since a
+/// debug build traps on overflow instead.
+fn round_size_up_to_atom(size: vk::DeviceSize, atom_size: vk::DeviceSize) -> vk::DeviceSize {
+    if size.is_multiple_of(atom_size) {
+        size
+    } else {
+        size.wrapping_add(atom_size - (size % atom_size))
+    }
 }
 
 /// `subMappedConfig`
