@@ -16,7 +16,7 @@ hand-picked, growing subset, currently:
 
 | group | cases | not ported yet |
 |---|---|---|
-| `dEQP-VK.api.*` | 198317 of 267497 | `smoke`, `descriptor_set`, `external`, the cubic-filter and compressed-source-blit halves of `copy_and_blit`, ... |
+| `dEQP-VK.api.*` | 216774 of 267497 | `smoke`, `descriptor_set`, `external`, the compressed-source half of `copy_and_blit.blit_image`, `use_after_copy`, `resolve_image`, ... |
 | `dEQP-VK.memory.*` | 5472 of 6363 | `pipeline_barrier`, `requirements`, `external_memory_*`, `device_memory_report` |
 | `dEQP-VK.compute.*` | 4559 of 60811 | `cooperative_matrix`, the Amber-driven cases, `replicated_composites_*` |
 
@@ -207,6 +207,7 @@ count. Groups in this state on SwiftShader today, needing a run on real hardware
 
 - `blit_image.all_formats.depth_stencil` - SwiftShader advertises neither `BLIT_SRC`
   nor `BLIT_DST` for any depth or stencil format, so all 360 cases skip.
+- every `*_cubic` case of `blit_image` - SwiftShader has no `VK_EXT_filter_cubic`.
 - the `d16_unorm_s8_uint` and `d24_unorm_s8_uint` cases of the copy groups -
   SwiftShader does not support either format.
 

@@ -1860,6 +1860,12 @@ impl TestCase for BlitMipmapCase {
         if self.filter == vk::Filter::LINEAR && !features.contains(vk::FormatFeatureFlags::SAMPLED_IMAGE_FILTER_LINEAR) {
             return Err(TestError::NotSupported("Source format feature sampled image filter linear not supported".to_string()));
         }
+        if self.filter == vk::Filter::CUBIC_EXT {
+            context.require_device_functionality("VK_EXT_filter_cubic")?;
+            if !features.contains(vk::FormatFeatureFlags::SAMPLED_IMAGE_FILTER_CUBIC_EXT) {
+                return Err(TestError::NotSupported("Source format feature sampled image filter cubic not supported".to_string()));
+            }
+        }
         Ok(())
     }
 
