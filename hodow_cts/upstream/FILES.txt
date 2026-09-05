@@ -71,3 +71,4 @@ external/vulkancts/framework/vulkan/generated/vulkan/vkDeviceFeatures2.inl
 external/vulkancts/framework/vulkan/generated/vulkan/vkStructTypes.inl
 external/vulkancts/framework/vulkan/generated/vulkan/vkBasicTypes.inl
 external/vulkancts/modules/vulkan/api/vktApiObjectManagementTests.cpp
+external/vulkancts/framework/vulkan/vkAllocationCallbackUtil.cpp

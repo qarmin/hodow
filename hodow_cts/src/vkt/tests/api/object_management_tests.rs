@@ -19,13 +19,15 @@
 //
 // Not ported here: `Instance`, `Device` and `DeviceGroup`, which create their own
 // instance and device rather than using the context's; and the `private_data`,
-// `alloc_callback_fail*` and `multithreaded_*` variants.
+// `single_alloc_callbacks`, `alloc_callback_fail*` and `multithreaded_*` variants -
+// the alloc-callback ones need an instance and device created through the callbacks.
 
 use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::Handle as VkHandle;
 
 use crate::tcu::{self, TestError, TestOutcome, TestStatus};
 use crate::vk::VkResultExt;
+use crate::vk::alloc_callback_util::AllocationCallbackRecorder;
 use crate::vk::programs::{BinaryCollection, create_shader_module};
 // Re-exported so the generated shader module, which imports this one wholesale, can
 // name the type its manifest entries are declared with.
@@ -38,6 +40,9 @@ struct Environment<'a> {
     device: &'a Device,
     queue_family_index: u32,
     programs: BinaryCollection,
+    /// `Environment::allocationCallbacks` - only the memory-usage measurement behind
+    /// `getMaxConcurrent` supplies one; everything else creates with the default.
+    allocation_callbacks: Option<&'a vk::AllocationCallbacks>,
     /// Maximum number of objects using the same `Resources` concurrently. Only the
     /// descriptor-set pool sizing reads it.
     max_resource_consumers: u32,
@@ -49,7 +54,15 @@ impl<'a> Environment<'a> {
             device: context.get_device(),
             queue_family_index: context.get_universal_queue_family_index(),
             programs: crate::generated::shaders::api_object_management::OBJECT_MANAGEMENT.programs,
+            allocation_callbacks: None,
             max_resource_consumers,
+        }
+    }
+
+    fn with_callbacks(context: &'a Context<'a>, max_resource_consumers: u32, allocation_callbacks: &'a vk::AllocationCallbacks) -> Self {
+        Self {
+            allocation_callbacks: Some(allocation_callbacks),
+            ..Self::new(context, max_resource_consumers)
         }
     }
 }
@@ -556,12 +569,17 @@ const COMPONENT_MAPPING_RGBA: vk::ComponentMapping = vk::ComponentMapping {
 /// `Object::create`
 fn create_object<'a>(env: &Environment<'a>, res: &Resources<'a>, params: &ObjectParams) -> Result<Owned<'a>, TestError> {
     let device = env.device;
+    let allocator = env.allocation_callbacks;
     let queue_families = [env.queue_family_index];
 
     Ok(match params {
         ObjectParams::DeviceMemory(p) => {
             let info = vk::MemoryAllocateInfo::builder().allocation_size(p.size).memory_type_index(p.memory_type_index);
-            Owned::DeviceMemory(Unique::new(device, unsafe { device.allocate_memory(&info, None) }.vk_check("vkAllocateMemory")?))
+            Owned::DeviceMemory(Unique::with_allocator(
+                device,
+                unsafe { device.allocate_memory(&info, allocator) }.vk_check("vkAllocateMemory")?,
+                allocator,
+            ))
         }
         ObjectParams::Buffer(p) => {
             let info = vk::BufferCreateInfo::builder()
@@ -569,11 +587,19 @@ fn create_object<'a>(env: &Environment<'a>, res: &Resources<'a>, params: &Object
                 .usage(p.usage)
                 .sharing_mode(vk::SharingMode::EXCLUSIVE)
                 .queue_family_indices(&queue_families);
-            Owned::Buffer(Unique::new(device, unsafe { device.create_buffer(&info, None) }.vk_check("vkCreateBuffer")?))
+            Owned::Buffer(Unique::with_allocator(
+                device,
+                unsafe { device.create_buffer(&info, allocator) }.vk_check("vkCreateBuffer")?,
+                allocator,
+            ))
         }
         ObjectParams::BufferView(p) => {
             let info = vk::BufferViewCreateInfo::builder().buffer(res.buffer).format(p.format).offset(p.offset).range(p.range);
-            Owned::BufferView(Unique::new(device, unsafe { device.create_buffer_view(&info, None) }.vk_check("vkCreateBufferView")?))
+            Owned::BufferView(Unique::with_allocator(
+                device,
+                unsafe { device.create_buffer_view(&info, allocator) }.vk_check("vkCreateBufferView")?,
+                allocator,
+            ))
         }
         ObjectParams::Image(p) => {
             let info = vk::ImageCreateInfo::builder()
@@ -589,7 +615,11 @@ fn create_object<'a>(env: &Environment<'a>, res: &Resources<'a>, params: &Object
                 .sharing_mode(vk::SharingMode::EXCLUSIVE)
                 .queue_family_indices(&queue_families)
                 .initial_layout(p.initial_layout);
-            Owned::Image(Unique::new(device, unsafe { device.create_image(&info, None) }.vk_check("vkCreateImage")?))
+            Owned::Image(Unique::with_allocator(
+                device,
+                unsafe { device.create_image(&info, allocator) }.vk_check("vkCreateImage")?,
+                allocator,
+            ))
         }
         ObjectParams::ImageView(p) => {
             let info = vk::ImageViewCreateInfo::builder()
@@ -598,30 +628,54 @@ fn create_object<'a>(env: &Environment<'a>, res: &Resources<'a>, params: &Object
                 .format(p.format)
                 .components(COMPONENT_MAPPING_RGBA)
                 .subresource_range(p.subresource_range);
-            Owned::ImageView(Unique::new(device, unsafe { device.create_image_view(&info, None) }.vk_check("vkCreateImageView")?))
+            Owned::ImageView(Unique::with_allocator(
+                device,
+                unsafe { device.create_image_view(&info, allocator) }.vk_check("vkCreateImageView")?,
+                allocator,
+            ))
         }
         ObjectParams::Semaphore => {
             let info = vk::SemaphoreCreateInfo::builder();
-            Owned::Semaphore(Unique::new(device, unsafe { device.create_semaphore(&info, None) }.vk_check("vkCreateSemaphore")?))
+            Owned::Semaphore(Unique::with_allocator(
+                device,
+                unsafe { device.create_semaphore(&info, allocator) }.vk_check("vkCreateSemaphore")?,
+                allocator,
+            ))
         }
         ObjectParams::Fence(flags) => {
             let info = vk::FenceCreateInfo::builder().flags(*flags);
-            Owned::Fence(Unique::new(device, unsafe { device.create_fence(&info, None) }.vk_check("vkCreateFence")?))
+            Owned::Fence(Unique::with_allocator(
+                device,
+                unsafe { device.create_fence(&info, allocator) }.vk_check("vkCreateFence")?,
+                allocator,
+            ))
         }
         ObjectParams::Event => {
             let info = vk::EventCreateInfo::builder();
-            Owned::Event(Unique::new(device, unsafe { device.create_event(&info, None) }.vk_check("vkCreateEvent")?))
+            Owned::Event(Unique::with_allocator(
+                device,
+                unsafe { device.create_event(&info, allocator) }.vk_check("vkCreateEvent")?,
+                allocator,
+            ))
         }
         ObjectParams::QueryPool(p) => {
             let info = vk::QueryPoolCreateInfo::builder()
                 .query_type(p.query_type)
                 .query_count(p.entry_count)
                 .pipeline_statistics(p.pipeline_statistics);
-            Owned::QueryPool(Unique::new(device, unsafe { device.create_query_pool(&info, None) }.vk_check("vkCreateQueryPool")?))
+            Owned::QueryPool(Unique::with_allocator(
+                device,
+                unsafe { device.create_query_pool(&info, allocator) }.vk_check("vkCreateQueryPool")?,
+                allocator,
+            ))
         }
         ObjectParams::ShaderModule { .. } => {
             let info = vk::ShaderModuleCreateInfo::builder().code_size(std::mem::size_of_val(res.binary)).code(res.binary);
-            Owned::ShaderModule(Unique::new(device, unsafe { device.create_shader_module(&info, None) }.vk_check("vkCreateShaderModule")?))
+            Owned::ShaderModule(Unique::with_allocator(
+                device,
+                unsafe { device.create_shader_module(&info, allocator) }.vk_check("vkCreateShaderModule")?,
+                allocator,
+            ))
         }
         ObjectParams::PipelineCache { extern_sync } => {
             let flags = if *extern_sync {
@@ -630,7 +684,11 @@ fn create_object<'a>(env: &Environment<'a>, res: &Resources<'a>, params: &Object
                 vk::PipelineCacheCreateFlags::empty()
             };
             let info = vk::PipelineCacheCreateInfo::builder().flags(flags);
-            Owned::PipelineCache(Unique::new(device, unsafe { device.create_pipeline_cache(&info, None) }.vk_check("vkCreatePipelineCache")?))
+            Owned::PipelineCache(Unique::with_allocator(
+                device,
+                unsafe { device.create_pipeline_cache(&info, allocator) }.vk_check("vkCreatePipelineCache")?,
+                allocator,
+            ))
         }
         ObjectParams::MergedPipelineCache { dst_extern_sync, .. } => {
             // A dummy compute pipeline first, so the source cache is not empty.
@@ -642,8 +700,8 @@ fn create_object<'a>(env: &Environment<'a>, res: &Resources<'a>, params: &Object
                 vk::PipelineCacheCreateFlags::empty()
             };
             let info = vk::PipelineCacheCreateInfo::builder().flags(flags);
-            let cache = unsafe { device.create_pipeline_cache(&info, None) }.vk_check("vkCreatePipelineCache")?;
-            let cache = Unique::new(device, cache);
+            let cache = unsafe { device.create_pipeline_cache(&info, allocator) }.vk_check("vkCreatePipelineCache")?;
+            let cache = Unique::with_allocator(device, cache, allocator);
             unsafe { device.merge_pipeline_caches(cache.get(), &[res.src_pipeline_cache]) }.vk_check("vkMergePipelineCaches")?;
             Owned::PipelineCache(cache)
         }
@@ -664,7 +722,11 @@ fn create_object<'a>(env: &Environment<'a>, res: &Resources<'a>, params: &Object
                 .max_lod(1000.0)
                 .border_color(vk::BorderColor::FLOAT_TRANSPARENT_BLACK)
                 .unnormalized_coordinates(false);
-            Owned::Sampler(Unique::new(device, unsafe { device.create_sampler(&info, None) }.vk_check("vkCreateSampler")?))
+            Owned::Sampler(Unique::with_allocator(
+                device,
+                unsafe { device.create_sampler(&info, allocator) }.vk_check("vkCreateSampler")?,
+                allocator,
+            ))
         }
         ObjectParams::DescriptorSetLayout(_) => {
             let bindings: Vec<vk::DescriptorSetLayoutBinding> = res
@@ -679,26 +741,29 @@ fn create_object<'a>(env: &Environment<'a>, res: &Resources<'a>, params: &Object
                 })
                 .collect();
             let info = vk::DescriptorSetLayoutCreateInfo::builder().bindings(&bindings);
-            Owned::DescriptorSetLayout(Unique::new(
+            Owned::DescriptorSetLayout(Unique::with_allocator(
                 device,
-                unsafe { device.create_descriptor_set_layout(&info, None) }.vk_check("vkCreateDescriptorSetLayout")?,
+                unsafe { device.create_descriptor_set_layout(&info, allocator) }.vk_check("vkCreateDescriptorSetLayout")?,
+                allocator,
             ))
         }
         ObjectParams::PipelineLayout(_) => {
             let info = vk::PipelineLayoutCreateInfo::builder().set_layouts(&res.set_layouts);
-            Owned::PipelineLayout(Unique::new(
+            Owned::PipelineLayout(Unique::with_allocator(
                 device,
-                unsafe { device.create_pipeline_layout(&info, None) }.vk_check("vkCreatePipelineLayout")?,
+                unsafe { device.create_pipeline_layout(&info, allocator) }.vk_check("vkCreatePipelineLayout")?,
+                allocator,
             ))
         }
-        ObjectParams::RenderPass => Owned::RenderPass(make_object_management_render_pass(device)?),
+        ObjectParams::RenderPass => Owned::RenderPass(make_object_management_render_pass(device, allocator)?),
         ObjectParams::GraphicsPipeline => Owned::Pipeline(create_graphics_pipeline(env, res)?),
-        ObjectParams::ComputePipeline => Owned::Pipeline(create_compute_pipeline(device, res.shader_modules[0], res.pipeline_layout, res.pipeline_cache)?),
+        ObjectParams::ComputePipeline => Owned::Pipeline(create_compute_pipeline(device, res.shader_modules[0], res.pipeline_layout, res.pipeline_cache, allocator)?),
         ObjectParams::DescriptorPool(p) => {
             let info = vk::DescriptorPoolCreateInfo::builder().flags(p.flags).max_sets(p.max_sets).pool_sizes(&p.pool_sizes);
-            Owned::DescriptorPool(Unique::new(
+            Owned::DescriptorPool(Unique::with_allocator(
                 device,
-                unsafe { device.create_descriptor_pool(&info, None) }.vk_check("vkCreateDescriptorPool")?,
+                unsafe { device.create_descriptor_pool(&info, allocator) }.vk_check("vkCreateDescriptorPool")?,
+                allocator,
             ))
         }
         ObjectParams::DescriptorSet(_) => {
@@ -714,11 +779,19 @@ fn create_object<'a>(env: &Environment<'a>, res: &Resources<'a>, params: &Object
                 .width(256)
                 .height(256)
                 .layers(1);
-            Owned::Framebuffer(Unique::new(device, unsafe { device.create_framebuffer(&info, None) }.vk_check("vkCreateFramebuffer")?))
+            Owned::Framebuffer(Unique::with_allocator(
+                device,
+                unsafe { device.create_framebuffer(&info, allocator) }.vk_check("vkCreateFramebuffer")?,
+                allocator,
+            ))
         }
         ObjectParams::CommandPool(flags) => {
             let info = vk::CommandPoolCreateInfo::builder().flags(*flags).queue_family_index(env.queue_family_index);
-            Owned::CommandPool(Unique::new(device, unsafe { device.create_command_pool(&info, None) }.vk_check("vkCreateCommandPool")?))
+            Owned::CommandPool(Unique::with_allocator(
+                device,
+                unsafe { device.create_command_pool(&info, allocator) }.vk_check("vkCreateCommandPool")?,
+                allocator,
+            ))
         }
         ObjectParams::CommandBuffer(p) => {
             let info = vk::CommandBufferAllocateInfo::builder()
@@ -733,7 +806,7 @@ fn create_object<'a>(env: &Environment<'a>, res: &Resources<'a>, params: &Object
 
 /// `RenderPass::create` - `makeRenderPass` with a colour and a depth/stencil
 /// attachment, both cleared on load.
-fn make_object_management_render_pass(device: &Device) -> Result<Unique<'_, vk::RenderPass>, TestError> {
+fn make_object_management_render_pass<'a>(device: &'a Device, allocator: Option<&'a vk::AllocationCallbacks>) -> Result<Unique<'a, vk::RenderPass>, TestError> {
     let attachments = [
         vk::AttachmentDescription::builder()
             .format(vk::Format::R8G8B8A8_UNORM)
@@ -765,7 +838,11 @@ fn make_object_management_render_pass(device: &Device) -> Result<Unique<'_, vk::
         .depth_stencil_attachment(&depth_ref);
     let subpasses = [subpass];
     let info = vk::RenderPassCreateInfo::builder().attachments(&attachments).subpasses(&subpasses);
-    Ok(Unique::new(device, unsafe { device.create_render_pass(&info, None) }.vk_check("vkCreateRenderPass")?))
+    Ok(Unique::with_allocator(
+        device,
+        unsafe { device.create_render_pass(&info, allocator) }.vk_check("vkCreateRenderPass")?,
+        allocator,
+    ))
 }
 
 /// `GraphicsPipeline::createMultiple` with one pipeline.
@@ -869,12 +946,18 @@ fn create_graphics_pipeline<'a>(env: &Environment<'a>, res: &Resources<'a>) -> R
         .layout(res.pipeline_layout)
         .render_pass(res.render_pass)
         .subpass(0);
-    let pipelines = unsafe { device.create_graphics_pipelines(res.pipeline_cache, &[info], None) }.vk_check("vkCreateGraphicsPipelines")?;
-    Ok(Unique::new(device, pipelines.0[0]))
+    let pipelines = unsafe { device.create_graphics_pipelines(res.pipeline_cache, &[info], env.allocation_callbacks) }.vk_check("vkCreateGraphicsPipelines")?;
+    Ok(Unique::with_allocator(device, pipelines.0[0], env.allocation_callbacks))
 }
 
 /// `ComputePipeline::create`
-fn create_compute_pipeline(device: &Device, module: vk::ShaderModule, layout: vk::PipelineLayout, cache: vk::PipelineCache) -> Result<Unique<'_, vk::Pipeline>, TestError> {
+fn create_compute_pipeline<'a>(
+    device: &'a Device,
+    module: vk::ShaderModule,
+    layout: vk::PipelineLayout,
+    cache: vk::PipelineCache,
+    allocator: Option<&'a vk::AllocationCallbacks>,
+) -> Result<Unique<'a, vk::Pipeline>, TestError> {
     let entry = c"main";
     let stage = vk::PipelineShaderStageCreateInfo::builder()
         .stage(vk::ShaderStageFlags::COMPUTE)
@@ -882,8 +965,8 @@ fn create_compute_pipeline(device: &Device, module: vk::ShaderModule, layout: vk
         .name(entry.to_bytes_with_nul())
         .build();
     let info = vk::ComputePipelineCreateInfo::builder().stage(stage).layout(layout);
-    let pipelines = unsafe { device.create_compute_pipelines(cache, &[info], None) }.vk_check("vkCreateComputePipelines")?;
-    Ok(Unique::new(device, pipelines.0[0]))
+    let pipelines = unsafe { device.create_compute_pipelines(cache, &[info], allocator) }.vk_check("vkCreateComputePipelines")?;
+    Ok(Unique::with_allocator(device, pipelines.0[0], allocator))
 }
 
 /// The throwaway compute pipeline `MergedPipelineCache::create` builds so the source
@@ -908,17 +991,19 @@ fn create_dummy_compute_pipeline(env: &Environment<'_>) -> Result<(), TestError>
         },
     ];
     let layout_info = vk::DescriptorSetLayoutCreateInfo::builder().bindings(&bindings);
-    let set_layout = Unique::new(
+    let set_layout = Unique::with_allocator(
         device,
-        unsafe { device.create_descriptor_set_layout(&layout_info, None) }.vk_check("vkCreateDescriptorSetLayout")?,
+        unsafe { device.create_descriptor_set_layout(&layout_info, env.allocation_callbacks) }.vk_check("vkCreateDescriptorSetLayout")?,
+        env.allocation_callbacks,
     );
     let set_layouts = [set_layout.get()];
     let pipeline_layout_info = vk::PipelineLayoutCreateInfo::builder().set_layouts(&set_layouts);
-    let pipeline_layout = Unique::new(
+    let pipeline_layout = Unique::with_allocator(
         device,
-        unsafe { device.create_pipeline_layout(&pipeline_layout_info, None) }.vk_check("vkCreatePipelineLayout")?,
+        unsafe { device.create_pipeline_layout(&pipeline_layout_info, env.allocation_callbacks) }.vk_check("vkCreatePipelineLayout")?,
+        env.allocation_callbacks,
     );
-    let _pipeline = create_compute_pipeline(device, *module, pipeline_layout.get(), vk::PipelineCache::null())?;
+    let _pipeline = create_compute_pipeline(device, *module, pipeline_layout.get(), vk::PipelineCache::null(), env.allocation_callbacks)?;
     Ok(())
 }
 
@@ -935,6 +1020,8 @@ enum Variant {
     MultipleUniqueResources,
     /// `createMultipleSharedResourcesTest`
     MultipleSharedResources,
+    /// `createMaxConcurrentTest`
+    MaxConcurrent,
 }
 
 struct ObjectManagementCase {
@@ -1005,6 +1092,17 @@ impl TestInstance for ObjectManagementInstance<'_> {
                     }
                 }
             }
+            Variant::MaxConcurrent => {
+                let num_objects = get_max_concurrent(self.context, &case.params)?;
+                let env = Environment::new(self.context, num_objects);
+                let res = Resources::new(&env, &case.params)?;
+                {
+                    let mut objects = Vec::with_capacity(num_objects as usize);
+                    for _ in 0..num_objects {
+                        objects.push(create_object(&env, &res, &case.params)?);
+                    }
+                }
+            }
             Variant::MultipleSharedResources => {
                 let env = Environment::new(self.context, 4);
                 let res = Resources::new(&env, &case.params)?;
@@ -1018,6 +1116,117 @@ impl TestInstance for ObjectManagementInstance<'_> {
         }
         Ok(TestStatus::pass("Ok"))
     }
+}
+
+// ---------------------------------------------------------------------------------
+// getMaxConcurrent
+// ---------------------------------------------------------------------------------
+
+/// `tcu::PlatformMemoryLimits`, at `tcu::Platform::getMemoryLimits`' defaults - the
+/// Linux platform does not override them.
+struct PlatformMemoryLimits;
+
+impl PlatformMemoryLimits {
+    const TOTAL_SYSTEM_MEMORY: u64 = 256 * 1024 * 1024;
+    const TOTAL_DEVICE_LOCAL_MEMORY: u64 = 128 * 1024 * 1024;
+    const DEVICE_MEMORY_ALLOCATION_GRANULARITY: u64 = 64 * 1024;
+    const DEVICE_PAGE_SIZE: u64 = 4096;
+    const DEVICE_PAGE_TABLE_ENTRY_SIZE: u64 = 8;
+    const DEVICE_PAGE_TABLE_HIERARCHY_LEVELS: u32 = 3;
+}
+
+const MAX_CONCURRENT_SYNC_PRIMITIVES: u32 = 100;
+const MAX_CONCURRENT_PIPELINE_CACHES: u32 = 128;
+const MAX_CONCURRENT_QUERY_POOLS: u32 = 8192;
+const DEFAULT_MAX_CONCURRENT_OBJECTS: u32 = 16 * 1024;
+
+fn align_to_power_of_two(value: u64, align: u64) -> u64 {
+    (value + align - 1) & !(align - 1)
+}
+
+fn round_up_to_next_multiple(value: u64, multiple: u64) -> u64 {
+    if value.is_multiple_of(multiple) { value } else { value + multiple - (value % multiple) }
+}
+
+/// `getPageTableSize` - what a page table covering `allocation_size` would itself cost.
+fn get_page_table_size(allocation_size: u64) -> u64 {
+    let mut total = 0u64;
+    for level in 0..PlatformMemoryLimits::DEVICE_PAGE_TABLE_HIERARCHY_LEVELS {
+        let covered = PlatformMemoryLimits::DEVICE_PAGE_SIZE << level;
+        let pages_needed = align_to_power_of_two(allocation_size, covered) / covered;
+        total += pages_needed * PlatformMemoryLimits::DEVICE_PAGE_TABLE_ENTRY_SIZE;
+    }
+    total
+}
+
+/// `getSafeObjectCount`
+///
+/// The branch structure is upstream's; rewriting the guards as `checked_div` would
+/// lose the correspondence for no behavioural difference.
+#[expect(clippy::manual_checked_ops, reason = "kept in upstream's branch shape")]
+fn get_safe_object_count(object_system_memory_usage: u64, object_device_memory_usage: u64) -> u64 {
+    let rounded_up_device_memory = round_up_to_next_multiple(object_device_memory_usage, PlatformMemoryLimits::DEVICE_MEMORY_ALLOCATION_GRANULARITY);
+
+    if PlatformMemoryLimits::TOTAL_DEVICE_LOCAL_MEMORY > 0 && rounded_up_device_memory > 0 {
+        if object_system_memory_usage > 0 {
+            (PlatformMemoryLimits::TOTAL_SYSTEM_MEMORY / object_system_memory_usage).min(PlatformMemoryLimits::TOTAL_DEVICE_LOCAL_MEMORY / rounded_up_device_memory)
+        } else {
+            PlatformMemoryLimits::TOTAL_DEVICE_LOCAL_MEMORY / rounded_up_device_memory
+        }
+    } else if object_system_memory_usage + rounded_up_device_memory > 0 {
+        PlatformMemoryLimits::TOTAL_SYSTEM_MEMORY / (object_system_memory_usage + rounded_up_device_memory)
+    } else {
+        // The driver has not implemented allocation callbacks; only the hard limit
+        // bounds the count then, which is what upstream falls back to too.
+        u64::MAX
+    }
+}
+
+/// `computeSystemMemoryUsage` - how much host memory the driver spends on one object,
+/// measured by creating it through a recording allocator.
+fn compute_system_memory_usage(context: &Context<'_>, params: &ObjectParams) -> Result<u64, TestError> {
+    let recorder = AllocationCallbackRecorder::new();
+    let usage = {
+        let env = Environment::with_callbacks(context, 1, recorder.callbacks());
+        let res = Resources::new(&env, params)?;
+        let resource_usage = recorder.current_system_memory_usage();
+        let _object = create_object(&env, &res, params)?;
+        recorder.current_system_memory_usage().saturating_sub(resource_usage)
+    };
+    if recorder.violations() > 0 {
+        return Err(TestError::InternalError("allocation callbacks were misused by the driver".to_string()));
+    }
+    Ok(usage as u64)
+}
+
+/// `Object::getMaxConcurrent` - the per-object hard limit, cut down by what one object
+/// costs in host and device memory.
+fn get_max_concurrent(context: &Context<'_>, params: &ObjectParams) -> Result<u32, TestError> {
+    let limits = context.get_device_properties().limits;
+    let (hard_limit, device_memory_usage) = match params {
+        ObjectParams::DeviceMemory(p) => (limits.max_memory_allocation_count.min(DEFAULT_MAX_CONCURRENT_OBJECTS), p.size + get_page_table_size(p.size)),
+        ObjectParams::Buffer(_) | ObjectParams::Image(_) => {
+            // The object has to exist before its memory requirements can be asked for.
+            let env = Environment::new(context, 1);
+            let res = Resources::new(&env, params)?;
+            let object = create_object(&env, &res, params)?;
+            let requirements = match &object {
+                Owned::Buffer(buffer) => unsafe { env.device.get_buffer_memory_requirements(buffer.get()) },
+                Owned::Image(image) => unsafe { env.device.get_image_memory_requirements(image.get()) },
+                _ => unreachable!("buffer or image"),
+            };
+            (DEFAULT_MAX_CONCURRENT_OBJECTS, get_page_table_size(requirements.size))
+        }
+        ObjectParams::Semaphore | ObjectParams::Fence(_) | ObjectParams::Event => (MAX_CONCURRENT_SYNC_PRIMITIVES, 0),
+        ObjectParams::QueryPool(_) => (MAX_CONCURRENT_QUERY_POOLS, 0),
+        ObjectParams::PipelineCache { .. } | ObjectParams::MergedPipelineCache { .. } => (MAX_CONCURRENT_PIPELINE_CACHES, 0),
+        ObjectParams::Sampler => (limits.max_sampler_allocation_count.min(DEFAULT_MAX_CONCURRENT_OBJECTS), 0),
+        _ => (DEFAULT_MAX_CONCURRENT_OBJECTS, 0),
+    };
+
+    let system_memory_usage = compute_system_memory_usage(context, params)?;
+    let safe = get_safe_object_count(system_memory_usage, device_memory_usage);
+    Ok(u64::from(hard_limit).min(safe) as u32)
 }
 
 // ---------------------------------------------------------------------------------
@@ -1253,6 +1462,7 @@ pub fn create_object_management_tests() -> tcu::TestCaseGroup {
         ("single", Variant::Single),
         ("multiple_unique_resources", Variant::MultipleUniqueResources),
         ("multiple_shared_resources", Variant::MultipleSharedResources),
+        ("max_concurrent", Variant::MaxConcurrent),
     ] {
         let mut group = tcu::TestCaseGroup::new(group_name);
         for (name, params) in all_cases() {

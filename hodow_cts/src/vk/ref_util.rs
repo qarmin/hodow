@@ -25,19 +25,27 @@ pub trait DeviceObject: Copy {
     ///
     /// # Safety
     /// Must be called at most once per handle, and only while `device` is still
-    /// alive and no queue still has work referencing the object.
-    unsafe fn destroy(self, device: &Device);
+    /// alive and no queue still has work referencing the object. `allocator` must be
+    /// the one the object was created with, or `None` if it was created with none.
+    unsafe fn destroy(self, device: &Device, allocator: Option<&vk::AllocationCallbacks>);
 }
 
 /// `vk::Unique<T>` - destroys the wrapped handle when it goes out of scope.
 pub struct Unique<'a, T: DeviceObject> {
     device: &'a Device,
     handle: T,
+    /// `Deleter<T>::m_allocator` - an object created with allocation callbacks has to
+    /// be destroyed with a compatible allocator, so the pair travels together.
+    allocator: Option<&'a vk::AllocationCallbacks>,
 }
 
 impl<'a, T: DeviceObject> Unique<'a, T> {
     pub fn new(device: &'a Device, handle: T) -> Self {
-        Self { device, handle }
+        Self { device, handle, allocator: None }
+    }
+
+    pub fn with_allocator(device: &'a Device, handle: T, allocator: Option<&'a vk::AllocationCallbacks>) -> Self {
+        Self { device, handle, allocator }
     }
 
     pub fn get(&self) -> T {
@@ -55,15 +63,15 @@ impl<T: DeviceObject> Deref for Unique<'_, T> {
 
 impl<T: DeviceObject> Drop for Unique<'_, T> {
     fn drop(&mut self) {
-        unsafe { self.handle.destroy(self.device) };
+        unsafe { self.handle.destroy(self.device, self.allocator) };
     }
 }
 
 macro_rules! impl_device_object {
     ($ty:ty, $destroy:ident) => {
         impl DeviceObject for $ty {
-            unsafe fn destroy(self, device: &Device) {
-                unsafe { device.$destroy(self, None) };
+            unsafe fn destroy(self, device: &Device, allocator: Option<&vk::AllocationCallbacks>) {
+                unsafe { device.$destroy(self, allocator) };
             }
         }
     };

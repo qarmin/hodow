@@ -10,6 +10,7 @@
 // arguments. Call sites read `makeCommandPool(vk, queueFamilyIndex)` instead of
 // `makeCommandPool(vk, device, queueFamilyIndex)`.
 
+pub mod alloc_callback_util;
 pub mod builder_util;
 pub mod cmd_util;
 pub mod compressed_formats;
