@@ -1960,7 +1960,6 @@ pub fn fill_with_component_gradients_styled(access: &mut PixelBufferAccess<'_>, 
     }
 }
 
-
 // ---------------------------------------------------------------------------------
 // Texture views
 //
@@ -2260,7 +2259,14 @@ impl TextureCubeArrayView<'_> {
                 // Each face becomes its own one-slice access, so a tap that walks off
                 // an edge can be looked up in the neighbour directly.
                 let faces: [ConstPixelBufferAccess<'_>; 6] = std::array::from_fn(|slot| {
-                    let face = [CubeFace::NegativeX, CubeFace::PositiveX, CubeFace::NegativeY, CubeFace::PositiveY, CubeFace::NegativeZ, CubeFace::PositiveZ][slot];
+                    let face = [
+                        CubeFace::NegativeX,
+                        CubeFace::PositiveX,
+                        CubeFace::NegativeY,
+                        CubeFace::PositiveY,
+                        CubeFace::NegativeZ,
+                        CubeFace::PositiveZ,
+                    ][slot];
                     let depth = layer as u32 * 6 + get_cube_array_face_index(face);
                     self.level0.get_subregion(0, 0, depth, w, h, 1)
                 });
@@ -2269,7 +2275,6 @@ impl TextureCubeArrayView<'_> {
         }
     }
 }
-
 
 #[cfg(test)]
 mod write_tests {

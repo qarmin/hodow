@@ -27,6 +27,7 @@ impl MemoryRequirement {
     pub const LOCAL: Self = Self(1 << 2);
     pub const CACHED: Self = Self(1 << 3);
     pub const NON_LOCAL: Self = Self(1 << 4);
+    pub const LAZILY_ALLOCATED: Self = Self(1 << 5);
 
     pub fn contains(self, other: Self) -> bool {
         (self.0 & other.0) == other.0
@@ -36,11 +37,18 @@ impl MemoryRequirement {
     fn matches_heap(self, property_flags: vk::MemoryPropertyFlags) -> bool {
         // Host-visible and local are mutually exclusive requests in upstream's model.
         debug_assert!(!(self.contains(Self::HOST_VISIBLE) && self.contains(Self::NON_LOCAL) && self.contains(Self::LOCAL)));
+        debug_assert!(
+            !(self.contains(Self::HOST_VISIBLE) && self.contains(Self::LAZILY_ALLOCATED)),
+            "lazily allocated memory cannot be mappable"
+        );
 
         if self.contains(Self::HOST_VISIBLE) && !property_flags.contains(vk::MemoryPropertyFlags::HOST_VISIBLE) {
             return false;
         }
         if self.contains(Self::COHERENT) && !property_flags.contains(vk::MemoryPropertyFlags::HOST_COHERENT) {
+            return false;
+        }
+        if self.contains(Self::LAZILY_ALLOCATED) && !property_flags.contains(vk::MemoryPropertyFlags::LAZILY_ALLOCATED) {
             return false;
         }
         if self.contains(Self::LOCAL) && !property_flags.contains(vk::MemoryPropertyFlags::DEVICE_LOCAL) {

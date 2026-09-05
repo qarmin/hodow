@@ -34,12 +34,12 @@ use crate::tcu::texture::{ChannelOrder, TextureChannelClass, TextureFormat};
 use crate::tcu::{self, TestError, TestStatus, map_vk_format};
 use crate::vk::VkResultExt;
 use crate::vk::builder_util::{DescriptorPoolBuilder, DescriptorSetLayoutBuilder};
-use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
+use crate::vk::cmd_util::{begin_command_buffer, begin_secondary_command_buffer, end_command_buffer, submit_commands_and_wait};
 use crate::vk::image_util::{ImageWithMemory, get_depth_copy_format, get_stencil_copy_format, make_image_memory_barrier, make_image_subresource_range, make_image_view};
 use crate::vk::mem_util::{MemoryRequirement, invalidate_alloc};
 use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_descriptor_set, make_framebuffer, make_pipeline_layout};
 use crate::vk::programs::{BinaryCollection, create_shader_module};
-use crate::vk::ref_util::{Unique, UniqueDescriptorSet};
+use crate::vk::ref_util::{Unique, UniqueCommandBuffer, UniqueDescriptorSet};
 use crate::vkt::{Context, TestCase, TestInstance};
 
 // ---------------------------------------------------------------------------------
@@ -121,9 +121,53 @@ pub struct RenderPassDesc {
 pub struct RenderTypes(u32);
 
 impl RenderTypes {
+    pub const NONE: Self = Self(0);
     pub const CLEAR: Self = Self(1 << 1);
     pub const DRAW: Self = Self(1 << 2);
 
+    const fn or(self, other: Self) -> Self {
+        Self(self.0 | other.0)
+    }
+
+    fn contains(self, other: Self) -> bool {
+        self.0 & other.0 != 0
+    }
+
+    fn is_empty(self) -> bool {
+        self.0 == 0
+    }
+}
+
+/// `TestConfig::CommandBufferTypes`
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub struct CommandBufferTypes(u32);
+
+impl CommandBufferTypes {
+    pub const INLINE: Self = Self(1 << 0);
+    pub const SECONDARY: Self = Self(1 << 1);
+
+    /// The "both" combination upstream's randomised configs pick from; unused until
+    /// a group that registers it is ported.
+    #[allow(dead_code)]
+    const fn or(self, other: Self) -> Self {
+        Self(self.0 | other.0)
+    }
+
+    fn contains(self, other: Self) -> bool {
+        self.0 & other.0 != 0
+    }
+}
+
+/// `TestConfig::ImageMemory`
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub struct ImageMemory(u32);
+
+impl ImageMemory {
+    pub const STRICT: Self = Self(1 << 0);
+    pub const LAZY: Self = Self(1 << 1);
+
+    /// As `CommandBufferTypes::or`.
+    #[allow(dead_code)]
     const fn or(self, other: Self) -> Self {
         Self(self.0 | other.0)
     }
@@ -143,6 +187,8 @@ const DEPTH_VALUES: [u8; 3] = [0u8, 255u8, 128u8];
 pub struct TestConfig {
     render_pass: RenderPassDesc,
     render_types: RenderTypes,
+    command_buffer_types: CommandBufferTypes,
+    image_memory: ImageMemory,
     target_size: [u32; 2],
     render_pos: [u32; 2],
     render_size: [u32; 2],
@@ -181,6 +227,35 @@ impl TestConfig {
         allocation_kind: AllocationKind,
         render_pass_type: RenderPassType,
     ) -> Self {
+        Self::with_memory(
+            render_pass,
+            render_types,
+            CommandBufferTypes::INLINE,
+            ImageMemory::STRICT,
+            target_size,
+            render_pos,
+            render_size,
+            use_format_comp_count,
+            seed,
+            allocation_kind,
+            render_pass_type,
+        )
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    fn with_memory(
+        render_pass: RenderPassDesc,
+        render_types: RenderTypes,
+        command_buffer_types: CommandBufferTypes,
+        image_memory: ImageMemory,
+        target_size: [u32; 2],
+        render_pos: [u32; 2],
+        render_size: [u32; 2],
+        use_format_comp_count: bool,
+        seed: u32,
+        allocation_kind: AllocationKind,
+        render_pass_type: RenderPassType,
+    ) -> Self {
         let mut shuffled = DEPTH_VALUES;
         let mut rng = Random::new(seed + 1);
         rng.shuffle(&mut shuffled);
@@ -188,6 +263,8 @@ impl TestConfig {
         Self {
             render_pass,
             render_types,
+            command_buffer_types,
+            image_memory,
             target_size,
             render_pos,
             render_size,
@@ -636,13 +713,54 @@ struct SubpassRenderInfo {
     color_clears: Vec<ColorClear>,
     depth_stencil_clear: Option<DepthStencilClear>,
     render_quad: Option<RenderQuad>,
+    /// `SubpassRenderInfo::isSecondary` - whether this subpass' commands go into a
+    /// secondary command buffer the primary executes, rather than being recorded
+    /// inline. Chosen without the rng, so adding it does not move the value stream.
+    is_secondary: bool,
 }
 
-/// `initializeSubpassRenderInfo`, for one subpass with `COMMANDBUFFERTYPES_INLINE`.
+/// `initializeAttachmentIsLazy`
+///
+/// Only an attachment that is never loaded and never stored can be transient - there
+/// is nothing to put in it before the render pass and nothing to read out after. With
+/// both bits set the two alternate, so a case exercises a mix.
+fn initialize_attachment_is_lazy(attachments: &[Attachment], image_memory: ImageMemory) -> Vec<bool> {
+    let mut is_lazy = Vec::with_capacity(attachments.len());
+    let mut last_attachment_was_lazy = false;
+
+    for attachment in attachments {
+        let never_touched = attachment.load_op != vk::AttachmentLoadOp::LOAD
+            && attachment.store_op != vk::AttachmentStoreOp::STORE
+            && attachment.stencil_load_op != vk::AttachmentLoadOp::LOAD
+            && attachment.stencil_store_op != vk::AttachmentStoreOp::STORE;
+
+        if !never_touched {
+            // Upstream leaves `lastAttachmentWasLazy` alone here, so a non-transient
+            // attachment in the middle does not break the alternation around it.
+            is_lazy.push(false);
+        } else if image_memory == ImageMemory::LAZY || (image_memory.contains(ImageMemory::LAZY) && !last_attachment_was_lazy) {
+            is_lazy.push(true);
+            last_attachment_was_lazy = true;
+        } else {
+            is_lazy.push(false);
+            last_attachment_was_lazy = false;
+        }
+    }
+
+    is_lazy
+}
+
+/// `initializeSubpassRenderInfo`
 fn initialize_subpass_render_info(rng: &mut Random, render_pass: &RenderPassDesc, config: &TestConfig) -> Vec<SubpassRenderInfo> {
     let mut infos = Vec::new();
+    let command_buffer = config.command_buffer_types;
+    let alternate_secondary = command_buffer.contains(CommandBufferTypes::SECONDARY);
+    let mut last_subpass_was_secondary = false;
 
     for (subpass_ndx, subpass) in render_pass.subpasses.iter().enumerate() {
+        let is_secondary = command_buffer == CommandBufferTypes::SECONDARY || (alternate_secondary && !last_subpass_was_secondary);
+        last_subpass_was_secondary = is_secondary;
+
         let viewport_size = [config.render_size[0] * 2 / 3, config.render_size[1] * 2 / 3];
         let viewport_offset = [
             config.render_pos[0] + (subpass_ndx as u32 % 2) * (config.render_size[0] / 3),
@@ -712,6 +830,7 @@ fn initialize_subpass_render_info(rng: &mut Random, render_pass: &RenderPassDesc
             color_clears,
             depth_stencil_clear,
             render_quad,
+            is_secondary,
         });
     }
 
@@ -1066,7 +1185,9 @@ fn verify_color_attachment(reference: &[PixelValue], result: &ConstPixelBufferAc
 struct AttachmentResources<'a> {
     image: ImageWithMemory<'a>,
     view: Unique<'a, vk::ImageView>,
-    buffer: BufferWithMemory<'a>,
+    /// `None` for a transient attachment: its contents are never read back, so no
+    /// staging buffer is created and nothing about it is verified.
+    buffer: Option<BufferWithMemory<'a>>,
     /// A multisampled attachment cannot be copied to a buffer, so it is resolved into
     /// this single-sampled image first.
     resolve_image: Option<ImageWithMemory<'a>>,
@@ -1175,8 +1296,7 @@ impl TestInstance for RenderPassTestInstance<'_> {
         let render_pass_info = &config.render_pass;
         let mut rng = Random::new(config.seed);
 
-        // `initializeAttachmentIsLazy` with IMAGEMEMORY_STRICT: never lazy.
-        let attachment_is_lazy = vec![false; render_pass_info.attachments.len()];
+        let attachment_is_lazy = initialize_attachment_is_lazy(&render_pass_info.attachments, config.image_memory);
 
         // `initializeImageClearValues`
         let image_clear_values: Vec<Option<ClearValue>> = render_pass_info
@@ -1193,7 +1313,7 @@ impl TestInstance for RenderPassTestInstance<'_> {
             })
             .collect();
 
-        let attachment_image_usage = self.initialize_attachment_image_usage(&image_clear_values)?;
+        let attachment_image_usage = self.initialize_attachment_image_usage(&attachment_is_lazy, &image_clear_values)?;
 
         // `initializeRenderPassClearValues`
         let render_pass_clear_values: Vec<Option<ClearValue>> = render_pass_info
@@ -1239,6 +1359,21 @@ impl TestInstance for RenderPassTestInstance<'_> {
             renderers.push(self.create_subpass_renderer(subpass_ndx, subpass, *render_pass, &resources, &subpass_render_info[subpass_ndx])?);
         }
 
+        // `SubpassRenderer`'s own secondary buffer, for every subpass the config says
+        // is secondary. Recorded once here and executed from inside the render pass.
+        let mut secondary_command_buffers: Vec<Option<UniqueCommandBuffer<'_>>> = Vec::new();
+        for (subpass_ndx, render_info) in subpass_render_info.iter().enumerate() {
+            if !render_info.is_secondary {
+                secondary_command_buffers.push(None);
+                continue;
+            }
+            let secondary = allocate_command_buffer(device, *command_pool, vk::CommandBufferLevel::SECONDARY)?;
+            begin_secondary_command_buffer(device, *secondary, *render_pass, subpass_ndx as u32, *framebuffer)?;
+            self.push_render_commands(*secondary, subpass_ndx, &renderers, &vertex_buffers, &subpass_render_info, &resources);
+            end_command_buffer(device, *secondary)?;
+            secondary_command_buffers.push(Some(secondary));
+        }
+
         let command_buffer = allocate_command_buffer(device, *command_pool, vk::CommandBufferLevel::PRIMARY)?;
         begin_command_buffer(device, *command_buffer)?;
         self.push_image_initialization_commands(*command_buffer, &resources, &image_clear_values);
@@ -1248,6 +1383,7 @@ impl TestInstance for RenderPassTestInstance<'_> {
             *framebuffer,
             &renderers,
             &vertex_buffers,
+            &secondary_command_buffers,
             &render_pass_clear_values,
             &subpass_render_info,
             &resources,
@@ -1279,6 +1415,10 @@ impl TestInstance for RenderPassTestInstance<'_> {
             let resource = &resources[attachment_ndx];
             let reference = &reference_values[attachment_ndx];
 
+            // `logAndVerifyImages` skips a lazy attachment: its contents were never
+            // copied out, and a transient attachment need not hold anything at all.
+            let Some(resource_buffer) = resource.buffer.as_ref() else { continue };
+
             if format.order.has_depth() || format.order.has_stencil() {
                 // Depth and stencil have their own store ops, so each aspect is
                 // verified only if its own said STORE, and a combined format reads
@@ -1289,7 +1429,7 @@ impl TestInstance for RenderPassTestInstance<'_> {
                     } else {
                         format
                     };
-                    let level = read_back(&resource.buffer, depth_format)?;
+                    let level = read_back(resource_buffer, depth_format)?;
                     if let Err(detail) = verify_depth_attachment(reference, &level.get_const_access(), config.depth_values, required_depth_epsilon(attachment.format)) {
                         return Ok(TestStatus::fail(format!("Result verification failed - attachment {attachment_ndx} {detail}")));
                     }
@@ -1298,7 +1438,7 @@ impl TestInstance for RenderPassTestInstance<'_> {
                 if format.order.has_stencil() && attachment.stencil_store_op == vk::AttachmentStoreOp::STORE {
                     let (buffer, stencil_format) = match &resource.secondary_buffer {
                         Some(secondary) => (secondary, get_stencil_copy_format(attachment.format).expect("checked at creation")),
-                        None => (&resource.buffer, format),
+                        None => (resource_buffer, format),
                     };
                     let level = read_back(buffer, stencil_format)?;
                     if let Err(detail) = verify_stencil_attachment(reference, &level.get_const_access()) {
@@ -1306,7 +1446,7 @@ impl TestInstance for RenderPassTestInstance<'_> {
                     }
                 }
             } else if attachment.store_op == vk::AttachmentStoreOp::STORE {
-                let level = read_back(&resource.buffer, format)?;
+                let level = read_back(resource_buffer, format)?;
                 if let Err(detail) = verify_color_attachment(reference, &level.get_const_access()) {
                     return Ok(TestStatus::fail(format!("Result verification failed - attachment {attachment_ndx} {detail}")));
                 }
@@ -1319,7 +1459,7 @@ impl TestInstance for RenderPassTestInstance<'_> {
 
 impl RenderPassTestInstance<'_> {
     /// `initializeAttachmentImageUsage`
-    fn initialize_attachment_image_usage(&self, clear_values: &[Option<ClearValue>]) -> Result<Vec<vk::ImageUsageFlags>, TestError> {
+    fn initialize_attachment_image_usage(&self, attachment_is_lazy: &[bool], clear_values: &[Option<ClearValue>]) -> Result<Vec<vk::ImageUsageFlags>, TestError> {
         let render_pass_info = &self.config.render_pass;
         let mut usage = vec![vk::ImageUsageFlags::empty(); render_pass_info.attachments.len()];
 
@@ -1359,11 +1499,18 @@ impl RenderPassTestInstance<'_> {
             usage[attachment_ndx] |= get_image_usage_from_layout(attachment.initial_layout);
             usage[attachment_ndx] |= get_image_usage_from_layout(attachment.final_layout);
 
-            // IMAGEMEMORY_STRICT only, so no attachment is lazy.
-            if clear_values[attachment_ndx].is_some() {
-                usage[attachment_ndx] |= vk::ImageUsageFlags::TRANSFER_DST;
+            if attachment_is_lazy[attachment_ndx] {
+                // A transient attachment may only carry the attachment usages; the
+                // transfers it would otherwise need are what make it non-transient.
+                let allowed_transient_bits = vk::ImageUsageFlags::COLOR_ATTACHMENT | vk::ImageUsageFlags::DEPTH_STENCIL_ATTACHMENT | vk::ImageUsageFlags::INPUT_ATTACHMENT;
+                usage[attachment_ndx] &= allowed_transient_bits;
+                usage[attachment_ndx] |= vk::ImageUsageFlags::TRANSIENT_ATTACHMENT;
+            } else {
+                if clear_values[attachment_ndx].is_some() {
+                    usage[attachment_ndx] |= vk::ImageUsageFlags::TRANSFER_DST;
+                }
+                usage[attachment_ndx] |= vk::ImageUsageFlags::TRANSFER_SRC;
             }
-            usage[attachment_ndx] |= vk::ImageUsageFlags::TRANSFER_SRC;
         }
 
         Ok(usage)
@@ -1595,10 +1742,17 @@ impl RenderPassTestInstance<'_> {
             initial_layout: vk::ImageLayout::UNDEFINED,
         };
 
+        // `createImageMemory` - a transient attachment asks for lazily allocated
+        // memory, which a device that never materialises the attachment can leave
+        // unbacked. Most desktop drivers expose no such memory type at all, and
+        // `select_matching_memory_type` then reports the case unsupported.
+        let is_lazy = usage.contains(vk::ImageUsageFlags::TRANSIENT_ATTACHMENT);
+        let memory_requirement = if is_lazy { MemoryRequirement::LAZILY_ALLOCATED } else { MemoryRequirement::ANY };
+
         let image = if self.config.allocation_kind == AllocationKind::Dedicated {
-            ImageWithMemory::new_dedicated(device, allocator, image_info, MemoryRequirement::ANY)?
+            ImageWithMemory::new_dedicated(device, allocator, image_info, memory_requirement)?
         } else {
-            ImageWithMemory::new(device, allocator, image_info, MemoryRequirement::ANY)?
+            ImageWithMemory::new(device, allocator, image_info, memory_requirement)?
         };
 
         let view = make_image_view(
@@ -1622,12 +1776,14 @@ impl RenderPassTestInstance<'_> {
             )
         };
 
-        let (buffer, secondary_buffer) = if format.order.has_depth() && format.order.has_stencil() {
+        let (buffer, secondary_buffer) = if is_lazy {
+            (None, None)
+        } else if format.order.has_depth() && format.order.has_stencil() {
             let depth_format = get_depth_copy_format(attachment.format).ok_or_else(|| TestError::NotPorted("no depth copy format".to_string()))?;
             let stencil_format = get_stencil_copy_format(attachment.format).ok_or_else(|| TestError::NotPorted("no stencil copy format".to_string()))?;
-            (make_buffer(depth_format)?, Some(make_buffer(stencil_format)?))
+            (Some(make_buffer(depth_format)?), Some(make_buffer(stencil_format)?))
         } else {
-            (make_buffer(format)?, None)
+            (Some(make_buffer(format)?), None)
         };
 
         let (depth_input_view, stencil_input_view) = if format.order.has_depth() && format.order.has_stencil() {
@@ -1659,9 +1815,9 @@ impl RenderPassTestInstance<'_> {
                 ..image_info
             };
             Some(if self.config.allocation_kind == AllocationKind::Dedicated {
-                ImageWithMemory::new_dedicated(device, allocator, info, MemoryRequirement::ANY)?
+                ImageWithMemory::new_dedicated(device, allocator, info, memory_requirement)?
             } else {
-                ImageWithMemory::new(device, allocator, info, MemoryRequirement::ANY)?
+                ImageWithMemory::new(device, allocator, info, memory_requirement)?
             })
         };
 
@@ -1925,6 +2081,7 @@ impl RenderPassTestInstance<'_> {
     }
 
     /// `pushRenderPassCommands`, inline contents only.
+    #[allow(clippy::too_many_arguments)]
     fn push_render_pass_commands(
         &self,
         command_buffer: vk::CommandBuffer,
@@ -1932,6 +2089,7 @@ impl RenderPassTestInstance<'_> {
         framebuffer: vk::Framebuffer,
         renderers: &[SubpassRenderer<'_>],
         vertex_buffers: &[Option<BufferWithMemory<'_>>],
+        secondary_command_buffers: &[Option<UniqueCommandBuffer<'_>>],
         render_pass_clear_values: &[Option<ClearValue>],
         subpass_render_info: &[SubpassRenderInfo],
         resources: &[AttachmentResources<'_>],
@@ -1978,108 +2136,141 @@ impl RenderPassTestInstance<'_> {
             .render_area(render_area)
             .clear_values(&clear_values);
 
-        unsafe {
-            device.cmd_begin_render_pass(command_buffer, &begin_info, vk::SubpassContents::INLINE);
-        }
-
         for (subpass_ndx, render_info) in subpass_render_info.iter().enumerate() {
-            if subpass_ndx > 0 {
-                unsafe { device.cmd_next_subpass(command_buffer, vk::SubpassContents::INLINE) };
-            }
+            let contents = if render_info.is_secondary {
+                vk::SubpassContents::SECONDARY_COMMAND_BUFFERS
+            } else {
+                vk::SubpassContents::INLINE
+            };
 
-            let subpass = &render_pass_info.subpasses[subpass_ndx];
-
-            if !render_info.color_clears.is_empty() {
-                let attachments: Vec<vk::ClearAttachment> = render_info
-                    .color_clears
-                    .iter()
-                    .enumerate()
-                    .map(|(ndx, clear)| {
-                        let attachment_index = subpass.color_attachments[ndx].attachment as usize;
-                        let format = map_vk_format(render_pass_info.attachments[attachment_index].format).expect("checked in check_support");
-                        vk::ClearAttachment {
-                            aspect_mask: vk::ImageAspectFlags::COLOR,
-                            color_attachment: ndx as u32,
-                            clear_value: vk::ClearValue { color: clear.color.to_vk(format) },
-                        }
-                    })
-                    .collect();
-                let rects: Vec<vk::ClearRect> = render_info
-                    .color_clears
-                    .iter()
-                    .map(|clear| vk::ClearRect {
-                        rect: vk::Rect2D {
-                            offset: vk::Offset2D {
-                                x: clear.offset[0] as i32,
-                                y: clear.offset[1] as i32,
-                            },
-                            extent: vk::Extent2D {
-                                width: clear.size[0],
-                                height: clear.size[1],
-                            },
-                        },
-                        base_array_layer: 0,
-                        layer_count: 1,
-                    })
-                    .collect();
-                unsafe { device.cmd_clear_attachments(command_buffer, &attachments, &rects) };
-            }
-
-            if let Some(DepthStencilClear { offset, size, value: clear }) = render_info.depth_stencil_clear {
-                let attachment_index = subpass.depth_stencil_attachment.attachment as usize;
-                let format = map_vk_format(render_pass_info.attachments[attachment_index].format).expect("checked in check_support");
-                let layout = subpass.depth_stencil_attachment.layout;
-
-                let mut aspect_mask = vk::ImageAspectFlags::empty();
-                if format.order.has_depth() && layout != vk::ImageLayout::DEPTH_STENCIL_READ_ONLY_OPTIMAL && layout != vk::ImageLayout::DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL {
-                    aspect_mask |= vk::ImageAspectFlags::DEPTH;
-                }
-                if format.order.has_stencil() && layout != vk::ImageLayout::DEPTH_STENCIL_READ_ONLY_OPTIMAL && layout != vk::ImageLayout::DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL
-                {
-                    aspect_mask |= vk::ImageAspectFlags::STENCIL;
-                }
-
-                if !aspect_mask.is_empty() {
-                    let attachments = [vk::ClearAttachment {
-                        aspect_mask,
-                        color_attachment: 0,
-                        clear_value: vk::ClearValue {
-                            depth_stencil: clear.to_vk_depth_stencil(config.depth_values),
-                        },
-                    }];
-                    let rects = [vk::ClearRect {
-                        rect: vk::Rect2D {
-                            offset: vk::Offset2D {
-                                x: offset[0] as i32,
-                                y: offset[1] as i32,
-                            },
-                            extent: vk::Extent2D { width: size[0], height: size[1] },
-                        },
-                        base_array_layer: 0,
-                        layer_count: 1,
-                    }];
-                    unsafe { device.cmd_clear_attachments(command_buffer, &attachments, &rects) };
+            unsafe {
+                if subpass_ndx == 0 {
+                    device.cmd_begin_render_pass(command_buffer, &begin_info, contents);
+                } else {
+                    device.cmd_next_subpass(command_buffer, contents);
                 }
             }
 
-            self.push_self_dependency_barriers(command_buffer, subpass, resources);
+            if config.render_types.is_empty() {
+                continue;
+            }
 
-            if render_info.render_quad.is_some()
-                && let Some(vertex_buffer) = vertex_buffers[subpass_ndx].as_ref()
-            {
-                let renderer = &renderers[subpass_ndx];
-                unsafe {
-                    device.cmd_bind_pipeline(command_buffer, vk::PipelineBindPoint::GRAPHICS, *renderer.pipeline);
-                    if let Some(set) = &renderer.descriptor_set {
-                        device.cmd_bind_descriptor_sets(command_buffer, vk::PipelineBindPoint::GRAPHICS, *renderer.pipeline_layout, 0, &[**set], &[]);
-                    }
-                    device.cmd_bind_vertex_buffers(command_buffer, 0, &[vertex_buffer.get()], &[0]);
-                    device.cmd_draw(command_buffer, 6, 1, 0, 0);
-                }
+            if render_info.is_secondary {
+                let secondary = secondary_command_buffers[subpass_ndx].as_ref().expect("recorded for every secondary subpass");
+                unsafe { device.cmd_execute_commands(command_buffer, &[**secondary]) };
+            } else {
+                self.push_render_commands(command_buffer, subpass_ndx, renderers, vertex_buffers, subpass_render_info, resources);
             }
         }
 
         unsafe { device.cmd_end_render_pass(command_buffer) };
+    }
+
+    /// `SubpassRenderer::pushRenderCommands` - the clears, the self-dependency
+    /// barriers and the draw for one subpass, recorded either straight into the
+    /// primary command buffer or into that subpass' own secondary one.
+    fn push_render_commands(
+        &self,
+        command_buffer: vk::CommandBuffer,
+        subpass_ndx: usize,
+        renderers: &[SubpassRenderer<'_>],
+        vertex_buffers: &[Option<BufferWithMemory<'_>>],
+        subpass_render_info: &[SubpassRenderInfo],
+        resources: &[AttachmentResources<'_>],
+    ) {
+        let device = self.context.get_device();
+        let config = self.config;
+        let render_pass_info = &config.render_pass;
+        let render_info = &subpass_render_info[subpass_ndx];
+        let subpass = &render_pass_info.subpasses[subpass_ndx];
+
+        if !render_info.color_clears.is_empty() {
+            let attachments: Vec<vk::ClearAttachment> = render_info
+                .color_clears
+                .iter()
+                .enumerate()
+                .map(|(ndx, clear)| {
+                    let attachment_index = subpass.color_attachments[ndx].attachment as usize;
+                    let format = map_vk_format(render_pass_info.attachments[attachment_index].format).expect("checked in check_support");
+                    vk::ClearAttachment {
+                        aspect_mask: vk::ImageAspectFlags::COLOR,
+                        color_attachment: ndx as u32,
+                        clear_value: vk::ClearValue { color: clear.color.to_vk(format) },
+                    }
+                })
+                .collect();
+            let rects: Vec<vk::ClearRect> = render_info
+                .color_clears
+                .iter()
+                .map(|clear| vk::ClearRect {
+                    rect: vk::Rect2D {
+                        offset: vk::Offset2D {
+                            x: clear.offset[0] as i32,
+                            y: clear.offset[1] as i32,
+                        },
+                        extent: vk::Extent2D {
+                            width: clear.size[0],
+                            height: clear.size[1],
+                        },
+                    },
+                    base_array_layer: 0,
+                    layer_count: 1,
+                })
+                .collect();
+            unsafe { device.cmd_clear_attachments(command_buffer, &attachments, &rects) };
+        }
+
+        if let Some(DepthStencilClear { offset, size, value: clear }) = render_info.depth_stencil_clear {
+            let attachment_index = subpass.depth_stencil_attachment.attachment as usize;
+            let format = map_vk_format(render_pass_info.attachments[attachment_index].format).expect("checked in check_support");
+            let layout = subpass.depth_stencil_attachment.layout;
+
+            let mut aspect_mask = vk::ImageAspectFlags::empty();
+            if format.order.has_depth() && layout != vk::ImageLayout::DEPTH_STENCIL_READ_ONLY_OPTIMAL && layout != vk::ImageLayout::DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL {
+                aspect_mask |= vk::ImageAspectFlags::DEPTH;
+            }
+            if format.order.has_stencil() && layout != vk::ImageLayout::DEPTH_STENCIL_READ_ONLY_OPTIMAL && layout != vk::ImageLayout::DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL {
+                aspect_mask |= vk::ImageAspectFlags::STENCIL;
+            }
+
+            if !aspect_mask.is_empty() {
+                let attachments = [vk::ClearAttachment {
+                    aspect_mask,
+                    color_attachment: 0,
+                    clear_value: vk::ClearValue {
+                        depth_stencil: clear.to_vk_depth_stencil(config.depth_values),
+                    },
+                }];
+                let rects = [vk::ClearRect {
+                    rect: vk::Rect2D {
+                        offset: vk::Offset2D {
+                            x: offset[0] as i32,
+                            y: offset[1] as i32,
+                        },
+                        extent: vk::Extent2D { width: size[0], height: size[1] },
+                    },
+                    base_array_layer: 0,
+                    layer_count: 1,
+                }];
+                unsafe { device.cmd_clear_attachments(command_buffer, &attachments, &rects) };
+            }
+        }
+
+        self.push_self_dependency_barriers(command_buffer, subpass, resources);
+
+        if render_info.render_quad.is_some()
+            && let Some(vertex_buffer) = vertex_buffers[subpass_ndx].as_ref()
+        {
+            let renderer = &renderers[subpass_ndx];
+            unsafe {
+                device.cmd_bind_pipeline(command_buffer, vk::PipelineBindPoint::GRAPHICS, *renderer.pipeline);
+                if let Some(set) = &renderer.descriptor_set {
+                    device.cmd_bind_descriptor_sets(command_buffer, vk::PipelineBindPoint::GRAPHICS, *renderer.pipeline_layout, 0, &[**set], &[]);
+                }
+                device.cmd_bind_vertex_buffers(command_buffer, 0, &[vertex_buffer.get()], &[0]);
+                device.cmd_draw(command_buffer, 6, 1, 0, 0);
+            }
+        }
     }
 
     /// The barrier `pushRenderPassCommands` emits between the clears and the draw for
@@ -2167,6 +2358,7 @@ impl RenderPassTestInstance<'_> {
         let to_transfer_src: Vec<vk::ImageMemoryBarrier> = resources
             .iter()
             .enumerate()
+            .filter(|(_, resource)| resource.buffer.is_some())
             .map(|(attachment_ndx, resource)| {
                 let old_layout = render_pass_info.attachments[attachment_ndx].final_layout;
                 make_image_memory_barrier(
@@ -2180,19 +2372,23 @@ impl RenderPassTestInstance<'_> {
             })
             .collect();
 
-        unsafe {
-            device.cmd_pipeline_barrier(
-                command_buffer,
-                all_pipeline_stage_flags(),
-                all_pipeline_stage_flags(),
-                vk::DependencyFlags::empty(),
-                &[] as &[vk::MemoryBarrier],
-                &[] as &[vk::BufferMemoryBarrier],
-                &to_transfer_src,
-            );
+        if !to_transfer_src.is_empty() {
+            unsafe {
+                device.cmd_pipeline_barrier(
+                    command_buffer,
+                    all_pipeline_stage_flags(),
+                    all_pipeline_stage_flags(),
+                    vk::DependencyFlags::empty(),
+                    &[] as &[vk::MemoryBarrier],
+                    &[] as &[vk::BufferMemoryBarrier],
+                    &to_transfer_src,
+                );
+            }
         }
 
         for resource in resources {
+            // A transient attachment is never copied out; there is nothing to read.
+            let Some(resource_buffer) = resource.buffer.as_ref() else { continue };
             let source = match &resource.resolve_image {
                 Some(resolve) => {
                     let range = make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, 1);
@@ -2264,8 +2460,8 @@ impl RenderPassTestInstance<'_> {
             // A combined depth/stencil attachment is copied one aspect at a time, into
             // its own buffer; everything else is one copy of its single aspect.
             let copies: Vec<(vk::ImageAspectFlags, vk::Buffer)> = match &resource.secondary_buffer {
-                Some(secondary) => vec![(vk::ImageAspectFlags::DEPTH, resource.buffer.get()), (vk::ImageAspectFlags::STENCIL, secondary.get())],
-                None => vec![(resource.aspect, resource.buffer.get())],
+                Some(secondary) => vec![(vk::ImageAspectFlags::DEPTH, resource_buffer.get()), (vk::ImageAspectFlags::STENCIL, secondary.get())],
+                None => vec![(resource.aspect, resource_buffer.get())],
             };
 
             for (aspect_mask, buffer) in copies {
@@ -2295,7 +2491,10 @@ impl RenderPassTestInstance<'_> {
         let to_host: Vec<vk::BufferMemoryBarrier> = resources
             .iter()
             .flat_map(|resource| {
-                std::iter::once(resource.buffer.get())
+                resource
+                    .buffer
+                    .iter()
+                    .map(|b| b.get())
                     .chain(resource.secondary_buffer.as_ref().map(|b| b.get()))
                     .map(move |buffer| {
                         vk::BufferMemoryBarrier::builder()
@@ -2311,16 +2510,18 @@ impl RenderPassTestInstance<'_> {
             })
             .collect();
 
-        unsafe {
-            device.cmd_pipeline_barrier(
-                command_buffer,
-                vk::PipelineStageFlags::TRANSFER,
-                vk::PipelineStageFlags::HOST,
-                vk::DependencyFlags::empty(),
-                &[] as &[vk::MemoryBarrier],
-                &to_host,
-                &[] as &[vk::ImageMemoryBarrier],
-            );
+        if !to_host.is_empty() {
+            unsafe {
+                device.cmd_pipeline_barrier(
+                    command_buffer,
+                    vk::PipelineStageFlags::TRANSFER,
+                    vk::PipelineStageFlags::HOST,
+                    vk::DependencyFlags::empty(),
+                    &[] as &[vk::MemoryBarrier],
+                    &to_host,
+                    &[] as &[vk::ImageMemoryBarrier],
+                );
+            }
         }
     }
 }

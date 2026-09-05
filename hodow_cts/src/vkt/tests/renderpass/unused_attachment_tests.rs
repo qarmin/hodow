@@ -32,9 +32,7 @@ use crate::vk::builder_util::{DescriptorPoolBuilder, DescriptorSetLayoutBuilder}
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
 use crate::vk::image_util::{ImageWithMemory, make_image_view};
 use crate::vk::mem_util::{MemoryRequirement, flush_alloc, invalidate_alloc};
-use crate::vk::obj_util::{
-    BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_descriptor_set, make_framebuffer, make_pipeline_layout,
-};
+use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_descriptor_set, make_framebuffer, make_pipeline_layout};
 use crate::vk::programs::{BinaryCollection, create_shader_module};
 use crate::vk::ref_util::Unique;
 use crate::vkt::tests::renderpass::render_pass_tests::RenderPassType;
@@ -160,9 +158,10 @@ impl TestInstance for UnusedAttachmentTestInstance<'_> {
         let pipeline_layout_subpass0 = make_pipeline_layout(device, &[*set_layout_subpass0])?;
         let pipeline_layout_subpass1 = make_pipeline_layout(device, &[*set_layout_subpass1])?;
 
-        let descriptor_pool = DescriptorPoolBuilder::new()
-            .add_type(vk::DescriptorType::INPUT_ATTACHMENT, 1)
-            .build(device, vk::DescriptorPoolCreateFlags::FREE_DESCRIPTOR_SET, 1)?;
+        let descriptor_pool =
+            DescriptorPoolBuilder::new()
+                .add_type(vk::DescriptorType::INPUT_ATTACHMENT, 1)
+                .build(device, vk::DescriptorPoolCreateFlags::FREE_DESCRIPTOR_SET, 1)?;
         let descriptor_set = make_descriptor_set(device, *descriptor_pool, *set_layout_subpass1)?;
         {
             let image_info = [vk::DescriptorImageInfo {
@@ -430,7 +429,10 @@ impl UnusedAttachmentTestInstance<'_> {
         let color1 = [result_ref_subpass1];
         let input1 = [input_ref_subpass1];
         let subpasses = [
-            vk::SubpassDescription::builder().pipeline_bind_point(vk::PipelineBindPoint::GRAPHICS).color_attachments(&color0).build(),
+            vk::SubpassDescription::builder()
+                .pipeline_bind_point(vk::PipelineBindPoint::GRAPHICS)
+                .color_attachments(&color0)
+                .build(),
             vk::SubpassDescription::builder()
                 .pipeline_bind_point(vk::PipelineBindPoint::GRAPHICS)
                 .input_attachments(&input1)
@@ -438,7 +440,10 @@ impl UnusedAttachmentTestInstance<'_> {
                 .build(),
         ];
         let dependencies = [dependency];
-        let info = vk::RenderPassCreateInfo::builder().attachments(&attachments).subpasses(&subpasses).dependencies(&dependencies);
+        let info = vk::RenderPassCreateInfo::builder()
+            .attachments(&attachments)
+            .subpasses(&subpasses)
+            .dependencies(&dependencies);
         let handle = unsafe { device.create_render_pass(&info, None) }.vk_check("vkCreateRenderPass")?;
         Ok(Unique::new(device, handle))
     }

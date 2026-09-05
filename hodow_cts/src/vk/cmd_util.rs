@@ -21,6 +21,28 @@ pub fn begin_command_buffer(device: &Device, cmd_buffer: vk::CommandBuffer) -> R
     unsafe { device.begin_command_buffer(cmd_buffer, &info) }.vk_check("vkBeginCommandBuffer")
 }
 
+/// `vk::beginSecondaryCommandBuffer`, narrowed to a buffer that continues a render
+/// pass. The inheritance info is what makes the recorded draws legal outside a
+/// `vkCmdBeginRenderPass`, so the render pass and subpass have to match the primary's
+/// exactly; the framebuffer is only a hint and may be null.
+pub fn begin_secondary_command_buffer(
+    device: &Device,
+    cmd_buffer: vk::CommandBuffer,
+    render_pass: vk::RenderPass,
+    subpass: u32,
+    framebuffer: vk::Framebuffer,
+) -> Result<(), TestError> {
+    let inheritance = vk::CommandBufferInheritanceInfo::builder()
+        .render_pass(render_pass)
+        .subpass(subpass)
+        .framebuffer(framebuffer)
+        .occlusion_query_enable(false);
+    let info = vk::CommandBufferBeginInfo::builder()
+        .flags(vk::CommandBufferUsageFlags::ONE_TIME_SUBMIT | vk::CommandBufferUsageFlags::RENDER_PASS_CONTINUE)
+        .inheritance_info(&inheritance);
+    unsafe { device.begin_command_buffer(cmd_buffer, &info) }.vk_check("vkBeginCommandBuffer")
+}
+
 /// `vk::endCommandBuffer`
 pub fn end_command_buffer(device: &Device, cmd_buffer: vk::CommandBuffer) -> Result<(), TestError> {
     unsafe { device.end_command_buffer(cmd_buffer) }.vk_check("vkEndCommandBuffer")

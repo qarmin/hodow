@@ -150,7 +150,11 @@ pub struct UnusedClearAttachmentTest {
 impl UnusedClearAttachmentTest {
     fn program(&self) -> &'static UnusedClearProgram {
         let mask = self.params.color_used.iter().enumerate().fold(0u32, |m, (i, used)| if *used { m | (1 << i) } else { m });
-        ALL_UNUSED_CLEAR_PROGRAM.iter().copied().find(|p| p.color_mask == mask).expect("the generator covers every bit pattern")
+        ALL_UNUSED_CLEAR_PROGRAM
+            .iter()
+            .copied()
+            .find(|p| p.color_mask == mask)
+            .expect("the generator covers every bit pattern")
     }
 }
 
@@ -374,7 +378,9 @@ impl TestInstance for UnusedClearAttachmentTestInstance<'_> {
                 for x in 0..IMAGE_WIDTH {
                     let color = access.get_pixel(x, y, 0);
                     if color.iter().zip(reference).any(|(c, r)| (c - r).abs() > 0.01) {
-                        return Ok(TestStatus::fail(format!("Attachment {i} with mismatched pixel ({x}, {y}): expecting pixel value {reference:?} and found {color:?}")));
+                        return Ok(TestStatus::fail(format!(
+                            "Attachment {i} with mismatched pixel ({x}, {y}): expecting pixel value {reference:?} and found {color:?}"
+                        )));
                     }
                 }
             }
@@ -607,7 +613,9 @@ impl UnusedClearAttachmentTestInstance<'_> {
             return self.create_render_pass2(&attachments, &color_references, &depth_reference);
         }
 
-        let mut subpass = vk::SubpassDescription::builder().pipeline_bind_point(vk::PipelineBindPoint::GRAPHICS).color_attachments(&color_references);
+        let mut subpass = vk::SubpassDescription::builder()
+            .pipeline_bind_point(vk::PipelineBindPoint::GRAPHICS)
+            .color_attachments(&color_references);
         if p.depth_stencil_type.has_depth_stencil() {
             subpass = subpass.depth_stencil_attachment(&depth_reference);
         }
@@ -674,7 +682,11 @@ impl UnusedClearAttachmentTestInstance<'_> {
             color_attachment_count: color_references2.len() as u32,
             color_attachments: if color_references2.is_empty() { std::ptr::null() } else { color_references2.as_ptr() },
             resolve_attachments: std::ptr::null(),
-            depth_stencil_attachment: if p.depth_stencil_type.has_depth_stencil() { &depth_reference2 } else { std::ptr::null() },
+            depth_stencil_attachment: if p.depth_stencil_type.has_depth_stencil() {
+                &depth_reference2
+            } else {
+                std::ptr::null()
+            },
             preserve_attachment_count: 0,
             preserve_attachments: std::ptr::null(),
         };
@@ -740,7 +752,14 @@ impl UnusedClearAttachmentTestInstance<'_> {
     }
 
     /// `pipeline::readDepthAttachment` / `readStencilAttachment`.
-    fn read_depth_stencil_attachment(&self, image: vk::Image, aspect_mask: vk::ImageAspectFlags, pixel_size: usize, queue: vk::Queue, queue_index: u32) -> Result<Vec<u8>, TestError> {
+    fn read_depth_stencil_attachment(
+        &self,
+        image: vk::Image,
+        aspect_mask: vk::ImageAspectFlags,
+        pixel_size: usize,
+        queue: vk::Queue,
+        queue_index: u32,
+    ) -> Result<Vec<u8>, TestError> {
         self.read_attachment(image, aspect_mask, pixel_size, vk::ImageLayout::DEPTH_STENCIL_ATTACHMENT_OPTIMAL, queue, queue_index)
     }
 
@@ -885,7 +904,11 @@ pub fn create_unused_clear_attachment_tests(render_pass_type: RenderPassType) ->
                 let ds_case = ds_type.name(ds_format);
 
                 // No colour attachments, a single one, and the maximum guaranteed.
-                let counts: &[usize] = if ds_type.has_depth_stencil() { &[0, 1, COLOR_ATTACHMENTS_NUMBER] } else { &[1, COLOR_ATTACHMENTS_NUMBER] };
+                let counts: &[usize] = if ds_type.has_depth_stencil() {
+                    &[0, 1, COLOR_ATTACHMENTS_NUMBER]
+                } else {
+                    &[1, COLOR_ATTACHMENTS_NUMBER]
+                };
                 for &count in counts {
                     if count == 0 {
                         let name = format!("{ds_case}_{}", used_name(depth_stencil_use));

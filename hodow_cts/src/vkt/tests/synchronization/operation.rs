@@ -21,9 +21,9 @@
 
 use vulkanalia::prelude::v1_0::*;
 
+use crate::tcu::TestError;
 use crate::tcu::pixel::PixelBufferAccess;
 use crate::tcu::texture::{ChannelOrder, TextureChannelClass, map_vk_format};
-use crate::tcu::TestError;
 use crate::vk::VkResultExt;
 use crate::vk::image_util::ImageWithMemory;
 use crate::vk::mem_util::{MemoryRequirement, flush_alloc, invalidate_alloc};
@@ -82,17 +82,71 @@ pub static RESOURCES: &[ResourceDescription] = &[
     // 256 KiB
     buffer_resource(0x40000),
     image_resource([128, 0, 0], vk::ImageType::_1D, vk::Format::R32_UINT, vk::ImageAspectFlags::COLOR, vk::SampleCountFlags::_1),
-    image_resource([128, 128, 0], vk::ImageType::_2D, vk::Format::R8_UNORM, vk::ImageAspectFlags::COLOR, vk::SampleCountFlags::_1),
-    image_resource([128, 128, 0], vk::ImageType::_2D, vk::Format::R16_UINT, vk::ImageAspectFlags::COLOR, vk::SampleCountFlags::_1),
-    image_resource([128, 128, 0], vk::ImageType::_2D, vk::Format::R8G8B8A8_UNORM, vk::ImageAspectFlags::COLOR, vk::SampleCountFlags::_1),
-    image_resource([128, 128, 0], vk::ImageType::_2D, vk::Format::R16G16B16A16_UINT, vk::ImageAspectFlags::COLOR, vk::SampleCountFlags::_1),
-    image_resource([128, 128, 0], vk::ImageType::_2D, vk::Format::R32G32B32A32_SFLOAT, vk::ImageAspectFlags::COLOR, vk::SampleCountFlags::_1),
-    image_resource([64, 64, 8], vk::ImageType::_3D, vk::Format::R32_SFLOAT, vk::ImageAspectFlags::COLOR, vk::SampleCountFlags::_1),
+    image_resource(
+        [128, 128, 0],
+        vk::ImageType::_2D,
+        vk::Format::R8_UNORM,
+        vk::ImageAspectFlags::COLOR,
+        vk::SampleCountFlags::_1,
+    ),
+    image_resource(
+        [128, 128, 0],
+        vk::ImageType::_2D,
+        vk::Format::R16_UINT,
+        vk::ImageAspectFlags::COLOR,
+        vk::SampleCountFlags::_1,
+    ),
+    image_resource(
+        [128, 128, 0],
+        vk::ImageType::_2D,
+        vk::Format::R8G8B8A8_UNORM,
+        vk::ImageAspectFlags::COLOR,
+        vk::SampleCountFlags::_1,
+    ),
+    image_resource(
+        [128, 128, 0],
+        vk::ImageType::_2D,
+        vk::Format::R16G16B16A16_UINT,
+        vk::ImageAspectFlags::COLOR,
+        vk::SampleCountFlags::_1,
+    ),
+    image_resource(
+        [128, 128, 0],
+        vk::ImageType::_2D,
+        vk::Format::R32G32B32A32_SFLOAT,
+        vk::ImageAspectFlags::COLOR,
+        vk::SampleCountFlags::_1,
+    ),
+    image_resource(
+        [64, 64, 8],
+        vk::ImageType::_3D,
+        vk::Format::R32_SFLOAT,
+        vk::ImageAspectFlags::COLOR,
+        vk::SampleCountFlags::_1,
+    ),
     // Mixed depth/stencil formats add complexity in image<->buffer transfers
     // (packing), so upstream avoids them here.
-    image_resource([128, 128, 0], vk::ImageType::_2D, vk::Format::D16_UNORM, vk::ImageAspectFlags::DEPTH, vk::SampleCountFlags::_1),
-    image_resource([128, 128, 0], vk::ImageType::_2D, vk::Format::D32_SFLOAT, vk::ImageAspectFlags::DEPTH, vk::SampleCountFlags::_1),
-    image_resource([128, 128, 0], vk::ImageType::_2D, vk::Format::S8_UINT, vk::ImageAspectFlags::STENCIL, vk::SampleCountFlags::_1),
+    image_resource(
+        [128, 128, 0],
+        vk::ImageType::_2D,
+        vk::Format::D16_UNORM,
+        vk::ImageAspectFlags::DEPTH,
+        vk::SampleCountFlags::_1,
+    ),
+    image_resource(
+        [128, 128, 0],
+        vk::ImageType::_2D,
+        vk::Format::D32_SFLOAT,
+        vk::ImageAspectFlags::DEPTH,
+        vk::SampleCountFlags::_1,
+    ),
+    image_resource(
+        [128, 128, 0],
+        vk::ImageType::_2D,
+        vk::Format::S8_UINT,
+        vk::ImageAspectFlags::STENCIL,
+        vk::SampleCountFlags::_1,
+    ),
     // Special resources, for the cases that are not strictly a copy and a comparison.
     indirect_resource(ResourceType::IndirectBufferDraw, 16),
     indirect_resource(ResourceType::IndirectBufferDrawIndexed, 20),
@@ -128,7 +182,13 @@ const fn indirect_resource(kind: ResourceType, size: i32) -> ResourceDescription
     }
 }
 
-const fn image_resource(size: [i32; 3], image_type: vk::ImageType, image_format: vk::Format, image_aspect: vk::ImageAspectFlags, image_samples: vk::SampleCountFlags) -> ResourceDescription {
+const fn image_resource(
+    size: [i32; 3],
+    image_type: vk::ImageType,
+    image_format: vk::Format,
+    image_aspect: vk::ImageAspectFlags,
+    image_samples: vk::SampleCountFlags,
+) -> ResourceDescription {
     ResourceDescription {
         kind: ResourceType::Image,
         size: [size[0], size[1], size[2], 0],
@@ -264,7 +324,12 @@ impl<'a> Resource<'a> {
         }
 
         let size = desc.size[0] as vk::DeviceSize;
-        let buffer = BufferWithMemory::new(device, allocator, make_buffer_create_info(size, vk::BufferUsageFlags::from_bits_truncate(usage)), MemoryRequirement::ANY)?;
+        let buffer = BufferWithMemory::new(
+            device,
+            allocator,
+            make_buffer_create_info(size, vk::BufferUsageFlags::from_bits_truncate(usage)),
+            MemoryRequirement::ANY,
+        )?;
         Ok(Self {
             kind: desc.kind,
             buffer_info: Some(BufferInfo {
@@ -339,9 +404,7 @@ pub fn make_clear_value(format: vk::Format) -> vk::ClearValue {
         }
     } else {
         vk::ClearValue {
-            color: vk::ClearColorValue {
-                float32: [0.25, 0.49, 0.75, 1.0],
-            },
+            color: vk::ClearColorValue { float32: [0.25, 0.49, 0.75, 1.0] },
         }
     }
 }
@@ -442,7 +505,13 @@ pub fn make_image_memory_barrier2(
 /// access masks are truncated (every value these operations use has a 32-bit
 /// equivalent) and the per-barrier stage masks are ORed up into the two the old entry
 /// point takes.
-pub fn cmd_pipeline_barrier(device: &Device, sync: SyncType, cmd_buffer: vk::CommandBuffer, buffer_barriers: &[vk::BufferMemoryBarrier2], image_barriers: &[vk::ImageMemoryBarrier2]) {
+pub fn cmd_pipeline_barrier(
+    device: &Device,
+    sync: SyncType,
+    cmd_buffer: vk::CommandBuffer,
+    buffer_barriers: &[vk::BufferMemoryBarrier2],
+    image_barriers: &[vk::ImageMemoryBarrier2],
+) {
     if sync == SyncType::Synchronization2 {
         use vulkanalia::vk::KhrSynchronization2ExtensionDeviceCommands;
         let info = vk::DependencyInfo {
@@ -559,7 +628,13 @@ fn host_buffer_data(device: &Device, buffer: &BufferWithMemory<'_>, size: vk::De
     Ok(out)
 }
 
-fn make_host_buffer<'a>(device: &'a Device, allocator: &crate::vk::mem_util::SimpleAllocator, size: vk::DeviceSize, usage: vk::BufferUsageFlags, mode: AccessMode) -> Result<BufferWithMemory<'a>, TestError> {
+fn make_host_buffer<'a>(
+    device: &'a Device,
+    allocator: &crate::vk::mem_util::SimpleAllocator,
+    size: vk::DeviceSize,
+    usage: vk::BufferUsageFlags,
+    mode: AccessMode,
+) -> Result<BufferWithMemory<'a>, TestError> {
     let buffer = BufferWithMemory::new(device, allocator, make_buffer_create_info(size, usage), MemoryRequirement::HOST_VISIBLE)?;
     unsafe {
         let ptr = buffer.get_allocation().get_host_ptr();
@@ -647,7 +722,11 @@ pub struct CopyBuffer<'a> {
 impl<'a> CopyBuffer<'a> {
     pub fn new(device: &'a Device, allocator: &crate::vk::mem_util::SimpleAllocator, resource: &Resource<'_>, mode: AccessMode) -> Result<Self, TestError> {
         let buffer = resource.buffer();
-        let usage = if mode == AccessMode::Read { vk::BufferUsageFlags::TRANSFER_DST } else { vk::BufferUsageFlags::TRANSFER_SRC };
+        let usage = if mode == AccessMode::Read {
+            vk::BufferUsageFlags::TRANSFER_DST
+        } else {
+            vk::BufferUsageFlags::TRANSFER_SRC
+        };
         Ok(Self {
             host_buffer: make_host_buffer(device, allocator, buffer.size, usage, mode)?,
             buffer,
@@ -684,7 +763,11 @@ impl Operation for CopyBuffer<'_> {
     fn in_sync_info(&self, _sync: SyncType) -> SyncInfo {
         SyncInfo {
             stage_mask: vk::PipelineStageFlags2::ALL_TRANSFER,
-            access_mask: if self.mode == AccessMode::Read { vk::AccessFlags2::TRANSFER_READ } else { vk::AccessFlags2::empty() },
+            access_mask: if self.mode == AccessMode::Read {
+                vk::AccessFlags2::TRANSFER_READ
+            } else {
+                vk::AccessFlags2::empty()
+            },
             image_layout: vk::ImageLayout::UNDEFINED,
         }
     }
@@ -692,7 +775,11 @@ impl Operation for CopyBuffer<'_> {
     fn out_sync_info(&self, _sync: SyncType) -> SyncInfo {
         SyncInfo {
             stage_mask: vk::PipelineStageFlags2::ALL_TRANSFER,
-            access_mask: if self.mode == AccessMode::Write { vk::AccessFlags2::TRANSFER_WRITE } else { vk::AccessFlags2::empty() },
+            access_mask: if self.mode == AccessMode::Write {
+                vk::AccessFlags2::TRANSFER_WRITE
+            } else {
+                vk::AccessFlags2::empty()
+            },
             image_layout: vk::ImageLayout::UNDEFINED,
         }
     }
@@ -728,7 +815,13 @@ impl<'a> CopyBlitResolveImage<'a> {
     pub fn new(device: &'a Device, allocator: &crate::vk::mem_util::SimpleAllocator, resource: &Resource<'_>, kind: ImageCopyKind, mode: AccessMode) -> Result<Self, TestError> {
         let image = resource.image();
         let buffer_size = get_pixel_buffer_size(image.format, image.extent)?;
-        let host_buffer = make_host_buffer(device, allocator, buffer_size, vk::BufferUsageFlags::TRANSFER_SRC | vk::BufferUsageFlags::TRANSFER_DST, mode)?;
+        let host_buffer = make_host_buffer(
+            device,
+            allocator,
+            buffer_size,
+            vk::BufferUsageFlags::TRANSFER_SRC | vk::BufferUsageFlags::TRANSFER_DST,
+            mode,
+        )?;
 
         let info = vk::ImageCreateInfo::builder()
             .image_type(image.image_type)
@@ -790,7 +883,15 @@ impl<'a> CopyBlitResolveImage<'a> {
                         dst_subresource: self.image.subresource_layers,
                         dst_offsets: [zero, self.extent_offset()],
                     }];
-                    device.cmd_blit_image(cmd_buffer, src, vk::ImageLayout::TRANSFER_SRC_OPTIMAL, dst, vk::ImageLayout::TRANSFER_DST_OPTIMAL, &region, vk::Filter::NEAREST);
+                    device.cmd_blit_image(
+                        cmd_buffer,
+                        src,
+                        vk::ImageLayout::TRANSFER_SRC_OPTIMAL,
+                        dst,
+                        vk::ImageLayout::TRANSFER_DST_OPTIMAL,
+                        &region,
+                        vk::Filter::NEAREST,
+                    );
                 }
                 ImageCopyKind::Copy => {
                     let region = [vk::ImageCopy {
@@ -834,7 +935,11 @@ impl<'a> CopyBlitResolveImage<'a> {
         SyncInfo {
             stage_mask: vk::PipelineStageFlags2::ALL_TRANSFER,
             access_mask: if read { vk::AccessFlags2::TRANSFER_READ } else { vk::AccessFlags2::TRANSFER_WRITE },
-            image_layout: if read { vk::ImageLayout::TRANSFER_SRC_OPTIMAL } else { vk::ImageLayout::TRANSFER_DST_OPTIMAL },
+            image_layout: if read {
+                vk::ImageLayout::TRANSFER_SRC_OPTIMAL
+            } else {
+                vk::ImageLayout::TRANSFER_DST_OPTIMAL
+            },
         }
     }
 }
@@ -1014,7 +1119,12 @@ impl<'a> CopyBufferToImageRead<'a> {
 
         Ok(Self {
             image: ImageWithMemory::new(device, allocator, info, MemoryRequirement::ANY)?,
-            host_buffer: BufferWithMemory::new(device, allocator, make_buffer_create_info(buffer.size, vk::BufferUsageFlags::TRANSFER_DST), MemoryRequirement::HOST_VISIBLE)?,
+            host_buffer: BufferWithMemory::new(
+                device,
+                allocator,
+                make_buffer_create_info(buffer.size, vk::BufferUsageFlags::TRANSFER_DST),
+                MemoryRequirement::HOST_VISIBLE,
+            )?,
             buffer,
             image_extent,
             subresource_range: vk::ImageSubresourceRange {
@@ -1153,7 +1263,13 @@ impl Operation for ClearImage {
             if self.is_color {
                 device.cmd_clear_color_image(cmd_buffer, self.image.handle, vk::ImageLayout::TRANSFER_DST_OPTIMAL, &self.clear_value.color, &ranges);
             } else {
-                device.cmd_clear_depth_stencil_image(cmd_buffer, self.image.handle, vk::ImageLayout::TRANSFER_DST_OPTIMAL, &self.clear_value.depth_stencil, &ranges);
+                device.cmd_clear_depth_stencil_image(
+                    cmd_buffer,
+                    self.image.handle,
+                    vk::ImageLayout::TRANSFER_DST_OPTIMAL,
+                    &self.clear_value.depth_stencil,
+                    &ranges,
+                );
             }
         }
     }
@@ -1505,15 +1621,39 @@ pub fn build_operation<'a>(
 ) -> Result<Box<dyn Operation + 'a>, TestError> {
     if let Some(dispatch_call) = name.image_shader_kind() {
         let mode = if name.is_read() { AccessMode::Read } else { AccessMode::Write };
-        return Ok(Box::new(ImageShaderAccess::new(device, allocator, desc, resource, mode, dispatch_call, specialized_access)?));
+        return Ok(Box::new(ImageShaderAccess::new(
+            device,
+            allocator,
+            desc,
+            resource,
+            mode,
+            dispatch_call,
+            specialized_access,
+        )?));
     }
     if let Some((buffer_type, stage)) = name.buffer_graphics_kind() {
         let mode = if name.is_read() { AccessMode::Read } else { AccessMode::Write };
-        return Ok(Box::new(BufferGraphicsAccess::new(device, allocator, resource, buffer_type, mode, stage, specialized_access)?));
+        return Ok(Box::new(BufferGraphicsAccess::new(
+            device,
+            allocator,
+            resource,
+            buffer_type,
+            mode,
+            stage,
+            specialized_access,
+        )?));
     }
     if let Some((buffer_type, dispatch_call)) = name.buffer_shader_kind() {
         let mode = if name.is_read() { AccessMode::Read } else { AccessMode::Write };
-        return Ok(Box::new(BufferShaderAccess::new(device, allocator, resource, buffer_type, mode, dispatch_call, specialized_access)?));
+        return Ok(Box::new(BufferShaderAccess::new(
+            device,
+            allocator,
+            resource,
+            buffer_type,
+            mode,
+            dispatch_call,
+            specialized_access,
+        )?));
     }
     Ok(match name {
         OperationName::WriteFillBuffer => Box::new(FillUpdateBuffer::new(resource, true)),
@@ -1831,7 +1971,12 @@ impl<'a> BufferShaderAccess<'a> {
         // `ComputePipeline`
         let indirect_buffer = if dispatch_call == DispatchCall::DispatchIndirect {
             let size = std::mem::size_of::<vk::DispatchIndirectCommand>() as vk::DeviceSize;
-            let indirect = BufferWithMemory::new(device, allocator, make_buffer_create_info(size, vk::BufferUsageFlags::INDIRECT_BUFFER), MemoryRequirement::HOST_VISIBLE)?;
+            let indirect = BufferWithMemory::new(
+                device,
+                allocator,
+                make_buffer_create_info(size, vk::BufferUsageFlags::INDIRECT_BUFFER),
+                MemoryRequirement::HOST_VISIBLE,
+            )?;
             unsafe {
                 indirect
                     .get_allocation()
@@ -1940,7 +2085,11 @@ impl Operation for BufferShaderAccess<'_> {
 /// the narrow one has to order the same things as naming the broad one.
 fn buffer_access_mask(buffer_type: BufferType, mode: AccessMode, specialized_access: bool) -> vk::AccessFlags2 {
     if mode == AccessMode::Write {
-        return if specialized_access { vk::AccessFlags2::SHADER_STORAGE_WRITE } else { vk::AccessFlags2::SHADER_WRITE };
+        return if specialized_access {
+            vk::AccessFlags2::SHADER_STORAGE_WRITE
+        } else {
+            vk::AccessFlags2::SHADER_WRITE
+        };
     }
     match buffer_type {
         BufferType::Uniform => vk::AccessFlags2::UNIFORM_READ,
@@ -1985,7 +2134,16 @@ fn build_buffer_descriptors<'a>(
 
     let descriptor_type = buffer_type.descriptor_type();
     let layout = DescriptorSetLayoutBuilder::new()
-        .add_indexed_binding(if mode == AccessMode::Read { descriptor_type } else { vk::DescriptorType::STORAGE_BUFFER }, stage_flags, 0, 1)
+        .add_indexed_binding(
+            if mode == AccessMode::Read {
+                descriptor_type
+            } else {
+                vk::DescriptorType::STORAGE_BUFFER
+            },
+            stage_flags,
+            0,
+            1,
+        )
         .add_indexed_binding(vk::DescriptorType::STORAGE_BUFFER, stage_flags, 1, 1)
         .build(device)?;
     let pool = DescriptorPoolBuilder::new()
@@ -2018,7 +2176,12 @@ fn build_buffer_descriptors<'a>(
     let views = view.as_ref().map(|v| [**v]);
 
     let single = |binding: u32, ty: vk::DescriptorType, info: &[vk::DescriptorBufferInfo]| {
-        vk::WriteDescriptorSet::builder().dst_set(*set).dst_binding(binding).descriptor_type(ty).buffer_info(info).build()
+        vk::WriteDescriptorSet::builder()
+            .dst_set(*set)
+            .dst_binding(binding)
+            .descriptor_type(ty)
+            .buffer_info(info)
+            .build()
     };
 
     let mut writes = Vec::new();
@@ -2171,7 +2334,12 @@ impl<'a> ImageShaderAccess<'a> {
 
         let indirect_buffer = if dispatch_call == DispatchCall::DispatchIndirect {
             let size = std::mem::size_of::<vk::DispatchIndirectCommand>() as vk::DeviceSize;
-            let indirect = BufferWithMemory::new(device, allocator, make_buffer_create_info(size, vk::BufferUsageFlags::INDIRECT_BUFFER), MemoryRequirement::HOST_VISIBLE)?;
+            let indirect = BufferWithMemory::new(
+                device,
+                allocator,
+                make_buffer_create_info(size, vk::BufferUsageFlags::INDIRECT_BUFFER),
+                MemoryRequirement::HOST_VISIBLE,
+            )?;
             unsafe {
                 indirect
                     .get_allocation()
@@ -2323,7 +2491,11 @@ impl Operation for ImageShaderAccess<'_> {
         SyncInfo {
             stage_mask: vk::PipelineStageFlags2::COMPUTE_SHADER,
             access_mask: if self.mode == AccessMode::Read {
-                if self.specialized_access { vk::AccessFlags2::SHADER_STORAGE_READ } else { vk::AccessFlags2::SHADER_READ }
+                if self.specialized_access {
+                    vk::AccessFlags2::SHADER_STORAGE_READ
+                } else {
+                    vk::AccessFlags2::SHADER_READ
+                }
             } else {
                 vk::AccessFlags2::empty()
             },
@@ -2335,7 +2507,11 @@ impl Operation for ImageShaderAccess<'_> {
         SyncInfo {
             stage_mask: vk::PipelineStageFlags2::COMPUTE_SHADER,
             access_mask: if self.mode == AccessMode::Write {
-                if self.specialized_access { vk::AccessFlags2::SHADER_STORAGE_WRITE } else { vk::AccessFlags2::SHADER_WRITE }
+                if self.specialized_access {
+                    vk::AccessFlags2::SHADER_STORAGE_WRITE
+                } else {
+                    vk::AccessFlags2::SHADER_WRITE
+                }
             } else {
                 vk::AccessFlags2::empty()
             },
@@ -2446,7 +2622,12 @@ impl<'a> GraphicsTarget<'a> {
         let framebuffer = make_framebuffer(device, *render_pass, &[*view], GRAPHICS_TARGET_SIZE, GRAPHICS_TARGET_SIZE, 1)?;
 
         let size = std::mem::size_of_val(&GRID_VERTICES) as vk::DeviceSize;
-        let vertex_buffer = BufferWithMemory::new(device, allocator, make_buffer_create_info(size, vk::BufferUsageFlags::VERTEX_BUFFER), MemoryRequirement::HOST_VISIBLE)?;
+        let vertex_buffer = BufferWithMemory::new(
+            device,
+            allocator,
+            make_buffer_create_info(size, vk::BufferUsageFlags::VERTEX_BUFFER),
+            MemoryRequirement::HOST_VISIBLE,
+        )?;
         unsafe {
             std::ptr::copy_nonoverlapping(GRID_VERTICES.as_ptr().cast::<u8>(), vertex_buffer.get_allocation().get_host_ptr(), size as usize);
         }
@@ -2582,7 +2763,14 @@ impl Operation for BufferGraphicsAccess<'_> {
         unsafe {
             device.cmd_begin_render_pass(cmd_buffer, &begin, vk::SubpassContents::INLINE);
             device.cmd_bind_pipeline(cmd_buffer, vk::PipelineBindPoint::GRAPHICS, *self.pipeline);
-            device.cmd_bind_descriptor_sets(cmd_buffer, vk::PipelineBindPoint::GRAPHICS, *self.pipeline_layout, 0, &[*self.descriptor_set], &[] as &[u32]);
+            device.cmd_bind_descriptor_sets(
+                cmd_buffer,
+                vk::PipelineBindPoint::GRAPHICS,
+                *self.pipeline_layout,
+                0,
+                &[*self.descriptor_set],
+                &[] as &[u32],
+            );
             device.cmd_bind_vertex_buffers(cmd_buffer, 0, &[self.target.vertex_buffer.get()], &[0]);
             device.cmd_draw(cmd_buffer, GRID_VERTICES.len() as u32, 1, 0, 0);
             device.cmd_end_render_pass(cmd_buffer);

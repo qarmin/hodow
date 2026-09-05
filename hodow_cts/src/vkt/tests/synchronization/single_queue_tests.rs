@@ -141,7 +141,9 @@ impl TestInstance for SyncTestInstance<'_> {
         let allocator = self.context.get_default_allocator();
 
         let (queue, queue_index) = if p.compute_queue {
-            self.context.get_compute_queue().ok_or_else(|| TestError::NotSupported("no dedicated compute queue".into()))?
+            self.context
+                .get_compute_queue()
+                .ok_or_else(|| TestError::NotSupported("no dedicated compute queue".into()))?
         } else {
             (self.context.get_universal_queue(), self.context.get_universal_queue_family_index())
         };
@@ -399,15 +401,7 @@ impl SyncTestInstance<'_> {
 
         unsafe {
             device.cmd_set_event(cmd_buffer, event, src_stage);
-            device.cmd_wait_events(
-                cmd_buffer,
-                &[event],
-                src_stage,
-                dst_stage,
-                &[] as &[vk::MemoryBarrier],
-                &legacy_buffers,
-                &legacy_images,
-            );
+            device.cmd_wait_events(cmd_buffer, &[event], src_stage, dst_stage, &[] as &[vk::MemoryBarrier], &legacy_buffers, &legacy_images);
         }
     }
 

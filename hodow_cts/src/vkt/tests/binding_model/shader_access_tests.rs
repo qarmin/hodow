@@ -1566,7 +1566,11 @@ impl ImageAccessInstance<'_> {
         };
 
         let info = vk::ImageCreateInfo::builder()
-            .flags(if is_cube { vk::ImageCreateFlags::CUBE_COMPATIBLE } else { vk::ImageCreateFlags::empty() })
+            .flags(if is_cube {
+                vk::ImageCreateFlags::CUBE_COMPATIBLE
+            } else {
+                vk::ImageCreateFlags::empty()
+            })
             .image_type(view_type_to_image_type(p.view_type))
             .format(vk::Format::R8G8B8A8_UNORM)
             .extent(extent)
@@ -1587,7 +1591,11 @@ impl ImageAccessInstance<'_> {
         let p = self.params;
         let base_level = source[0].size();
         // A cube view counts slices in faces, so the base slice is six layers in.
-        let view_type_base_slice = if is_image_view_type_cube(p.view_type) { 6 * p.base_array_slice } else { p.base_array_slice };
+        let view_type_base_slice = if is_image_view_type_cube(p.view_type) {
+            6 * p.base_array_slice
+        } else {
+            p.base_array_slice
+        };
         let view_array_size = match p.view_type {
             vk::ImageViewType::_1D | vk::ImageViewType::_2D | vk::ImageViewType::_3D => 1,
             vk::ImageViewType::_1D_ARRAY => base_level[1] - view_type_base_slice,
@@ -2095,11 +2103,7 @@ fn get_sample_pos(view_type: vk::ImageViewType, base_mip_level: u32, base_array_
             (84 % image_size_u) as f32 + 0.5 + image_size,
             (117 % image_size_u) as f32 + 0.75,
         ],
-        [
-            image_size + 0.5,
-            (75 % image_size_u) as f32 + 0.25,
-            (83 % image_size_u) as f32 + 0.25 + image_size,
-        ],
+        [image_size + 0.5, (75 % image_size_u) as f32 + 0.25, (83 % image_size_u) as f32 + 0.25 + image_size],
     ][sample_pos_ndx];
     let slices = [0 % array_size, 4 % array_size, 9 % array_size, 2 % array_size];
 
@@ -2198,7 +2202,14 @@ impl RawUpdateRegistry {
 }
 
 /// `createTemplateBinding`
-fn create_template_binding(binding: u32, array_element: u32, descriptor_count: u32, descriptor_type: vk::DescriptorType, offset: usize, stride: usize) -> vk::DescriptorUpdateTemplateEntry {
+fn create_template_binding(
+    binding: u32,
+    array_element: u32,
+    descriptor_count: u32,
+    descriptor_type: vk::DescriptorType,
+    offset: usize,
+    stride: usize,
+) -> vk::DescriptorUpdateTemplateEntry {
     vk::DescriptorUpdateTemplateEntry {
         dst_binding: binding,
         dst_array_element: array_element,
@@ -2309,7 +2320,14 @@ impl BufferAccessInstance<'_> {
         let mut object = 0;
 
         if set_ndx == 0 {
-            entries.push(create_template_binding(binding, 0, 1, vk::DescriptorType::STORAGE_BUFFER, registry.write_object_offset(object), 0));
+            entries.push(create_template_binding(
+                binding,
+                0,
+                1,
+                vk::DescriptorType::STORAGE_BUFFER,
+                registry.write_object_offset(object),
+                0,
+            ));
             binding += 1;
             object += 1;
         }
@@ -2327,8 +2345,22 @@ impl BufferAccessInstance<'_> {
                 entries.push(create_template_binding(binding + 2, 0, 1, p.descriptor_type, registry.write_object_offset(object + 1), 0));
             }
             ShaderInputInterface::MultipleArbitraryDescriptors => {
-                entries.push(create_template_binding(arbitrary_binding_index(0), 0, 1, p.descriptor_type, registry.write_object_offset(object), 0));
-                entries.push(create_template_binding(arbitrary_binding_index(1), 0, 1, p.descriptor_type, registry.write_object_offset(object + 1), 0));
+                entries.push(create_template_binding(
+                    arbitrary_binding_index(0),
+                    0,
+                    1,
+                    p.descriptor_type,
+                    registry.write_object_offset(object),
+                    0,
+                ));
+                entries.push(create_template_binding(
+                    arbitrary_binding_index(1),
+                    0,
+                    1,
+                    p.descriptor_type,
+                    registry.write_object_offset(object + 1),
+                    0,
+                ));
             }
             // One entry covering both, which is why the two infos have to sit next to
             // each other in the blob and the stride is the info's own size.
@@ -2341,7 +2373,15 @@ impl BufferAccessInstance<'_> {
     }
 
     /// `TexelBufferComputeInstance::writeDescriptorSetWithTemplate`
-    fn write_texel_descriptor_set_with_template(&self, set: vk::DescriptorSet, layout: vk::DescriptorSetLayout, set_ndx: u32, view_a: vk::BufferView, view_b: vk::BufferView, result: vk::Buffer) -> Result<(), TestError> {
+    fn write_texel_descriptor_set_with_template(
+        &self,
+        set: vk::DescriptorSet,
+        layout: vk::DescriptorSetLayout,
+        set_ndx: u32,
+        view_a: vk::BufferView,
+        view_b: vk::BufferView,
+        result: vk::Buffer,
+    ) -> Result<(), TestError> {
         let mut registry = RawUpdateRegistry::default();
         if set_ndx == 0 {
             registry.add_write_object(vk::DescriptorBufferInfo {
@@ -2429,7 +2469,14 @@ impl ImageAccessInstance<'_> {
         let mut object = 0;
 
         if set_ndx == 0 {
-            entries.push(create_template_binding(binding, 0, 1, vk::DescriptorType::STORAGE_BUFFER, registry.write_object_offset(object), 0));
+            entries.push(create_template_binding(
+                binding,
+                0,
+                1,
+                vk::DescriptorType::STORAGE_BUFFER,
+                registry.write_object_offset(object),
+                0,
+            ));
             binding += 1;
             object += 1;
         }
@@ -2442,7 +2489,14 @@ impl ImageAccessInstance<'_> {
                 binding += 1;
                 b
             };
-            entries.push(create_template_binding(texture_binding, 0, 1, vk::DescriptorType::SAMPLED_IMAGE, registry.write_object_offset(object), 0));
+            entries.push(create_template_binding(
+                texture_binding,
+                0,
+                1,
+                vk::DescriptorType::SAMPLED_IMAGE,
+                registry.write_object_offset(object),
+                0,
+            ));
             object += 1;
         }
 
@@ -2463,8 +2517,22 @@ impl ImageAccessInstance<'_> {
                     entries.push(create_template_binding(binding + 2, 0, 1, p.descriptor_type, registry.write_object_offset(object + 1), 0));
                 }
                 ShaderInputInterface::MultipleArbitraryDescriptors => {
-                    entries.push(create_template_binding(arbitrary_binding_index(0), 0, 1, p.descriptor_type, registry.write_object_offset(object), 0));
-                    entries.push(create_template_binding(arbitrary_binding_index(1), 0, 1, p.descriptor_type, registry.write_object_offset(object + 1), 0));
+                    entries.push(create_template_binding(
+                        arbitrary_binding_index(0),
+                        0,
+                        1,
+                        p.descriptor_type,
+                        registry.write_object_offset(object),
+                        0,
+                    ));
+                    entries.push(create_template_binding(
+                        arbitrary_binding_index(1),
+                        0,
+                        1,
+                        p.descriptor_type,
+                        registry.write_object_offset(object + 1),
+                        0,
+                    ));
                 }
                 ShaderInputInterface::DescriptorArray => {
                     entries.push(create_template_binding(binding, 0, 2, p.descriptor_type, registry.write_object_offset(object), info_size));
