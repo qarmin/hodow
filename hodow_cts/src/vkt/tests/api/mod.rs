@@ -15,6 +15,7 @@
 pub mod copies_buffer_tests;
 pub mod copies_image_tests;
 pub mod copy_format_lists;
+pub mod ds_color_copy_tests;
 pub mod feature_info_tests;
 pub mod image_clearing_formats;
 pub mod image_clearing_tests;
@@ -32,6 +33,7 @@ pub fn create_tests() -> TestCaseGroup {
     let mut api_tests = TestCaseGroup::new("api");
 
     api_tests.add_child(copies_buffer_tests::create_buffer_copy_tests());
+    api_tests.add_child(ds_color_copy_tests::create_ds_color_copy_tests());
     api_tests.add_child(image_clearing_tests::create_image_clearing_tests());
 
     for group in object_tests::create_object_groups() {

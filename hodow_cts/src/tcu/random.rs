@@ -66,6 +66,22 @@ impl Random {
     }
 
     /// `de::Random::getInt(min, max)` - inclusive on both ends.
+    /// `de::Random::getUint16`
+    pub fn get_uint16(&mut self) -> u16 {
+        self.get_uint32() as u16
+    }
+
+    /// `de::Random::getUint8`
+    pub fn get_uint8(&mut self) -> u8 {
+        self.get_uint32() as u8
+    }
+
+    /// `de::Random::getFloat(min, max)`
+    pub fn get_float_range(&mut self, min: f32, max: f32) -> f32 {
+        debug_assert!(min <= max);
+        min + (max - min) * self.get_float()
+    }
+
     pub fn get_int(&mut self, min: i32, max: i32) -> i32 {
         if min == i32::MIN && max == i32::MAX {
             self.get_uint32() as i32

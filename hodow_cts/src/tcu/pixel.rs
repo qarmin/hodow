@@ -847,7 +847,7 @@ fn int_to_channel(src: i32, bits: i32) -> u32 {
 /// `tcu::Float<uint32_t, ExponentBits, MantissaBits, Bias>` built from an f32, for the
 /// unsigned small floats packed into 11F_11F_10F. Round to nearest, ties to even, with
 /// denormals - matching the read path's `float_bits_to_f32`, which is its inverse.
-fn f32_to_small_float_bits(value: f32, exp_bits: i32, mantissa_bits: i32, bias: i32) -> u32 {
+pub fn f32_to_small_float_bits(value: f32, exp_bits: i32, mantissa_bits: i32, bias: i32) -> u32 {
     // Negative and NaN both clamp to zero: these formats carry no sign bit.
     if value.is_nan() || value <= 0.0 {
         return 0;
@@ -1075,7 +1075,7 @@ fn is_writable_channel_type(type_: ChannelType) -> bool {
 }
 
 /// `deFloat32To16` - round-to-nearest-even, matching the read path's `rd_f16`.
-fn f32_to_f16_bits(value: f32) -> u16 {
+pub fn f32_to_f16_bits(value: f32) -> u16 {
     let bits = value.to_bits();
     let sign = ((bits >> 16) & 0x8000) as u16;
     let exp = ((bits >> 23) & 0xFF) as i32;
