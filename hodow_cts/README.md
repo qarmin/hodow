@@ -264,6 +264,21 @@ Measured so far (2026-09-05):
 | `binding_model.shader_access` | 1500 | 329 | yes - flat by 1200 |
 | `renderpasses.*.attachment` | 1200 | 338 | **no** - still climbing |
 
+Within `binding_model.shader_access` the picture is not uniform, which the group-level
+number hides. The buffer and texel-buffer types collapse onto 30 shaders each, because
+the shader depends only on the storage class, the descriptor set count and the shader
+interface. The image types do not: their fetch coordinates are baked into the GLSL and
+depend on the view type, the base mip level and the base array slice, so it is very
+nearly one shader per case (232 distinct across 250 sampled). They are still worth
+porting - the shaders are small and every one of the 250 sampled cases passed - but
+they buy no economy of scale, and the image resources themselves (mip pyramids, array
+slices, cube faces, seven view types, mutable and immutable samplers) are the larger
+part of the work.
+
+Two sub-axes to skip: `bind2` needs `VK_KHR_maintenance6`, so every one of its cases
+skips here, and the graphics stages need the render-target path before any of them run
+at all.
+
 `renderpasses.*.attachment` is the cautionary one. Its render passes are generated
 from a seeded `de::Random`, so the shader is a function of a random sequence of
 formats rather than of a small key, and there is one distinct shader per generated
