@@ -41,7 +41,9 @@ started=$SECONDS
 cargo run -p hodow_cts "${flags[@]}" -- "$@" 2>&1 | tee -a "$log"
 status=${PIPESTATUS[0]}
 
-echo "# exit $status after $((SECONDS - started))s" >> "$log"
+summary="# exit $status after $((SECONDS - started))s"
+echo "$summary" >> "$log"
+echo "$summary" >&2
 
 # Relative to tmp/, where the link itself lives.
 ln -sfn "cts-logs/$name" tmp/cts-last.log

@@ -97,16 +97,19 @@ fn main() -> std::process::ExitCode {
     println!("hodow_cts {} ({} cases)", env!("CARGO_PKG_VERSION"), selected.len());
     println!();
 
+    let started = std::time::Instant::now();
     let result = if args.no_isolation {
         run_in_process(&selected, &args)
     } else {
         run_supervised(&selected, &args)
     };
+    let elapsed = started.elapsed();
 
     match result {
         Ok(summary) => {
             println!();
             println!("{summary}");
+            println!("  Time:          {}", format_elapsed(elapsed));
             if summary.exit_code() == 0 {
                 std::process::ExitCode::SUCCESS
             } else {
@@ -166,6 +169,17 @@ fn print_case(result: &CaseResult) {
         other => other.as_str(),
     };
     println!("{}: {marker} ({}) [{}]", result.name, result.message, format_duration(result.duration_us));
+}
+
+/// Whole-run wall time. Minutes once it is past one, because a four-digit second
+/// count is the number nobody can read at a glance.
+fn format_elapsed(elapsed: Duration) -> String {
+    let secs = elapsed.as_secs_f64();
+    if secs < 60.0 {
+        format!("{secs:.1}s")
+    } else {
+        format!("{secs:.0}s ({}m {:02}s)", secs as u64 / 60, secs as u64 % 60)
+    }
 }
 
 /// A fixed unit throughout, so the column can be scanned for the slow case rather than
