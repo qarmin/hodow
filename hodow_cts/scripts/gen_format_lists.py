@@ -166,6 +166,17 @@ def main() -> int:
     lines.append("];")
     lines.append("")
 
+    # `formats::compressedFormatsFloats` - the format list the compressed
+    # image-to-buffer mip_copies cases loop over.
+    cf_formats = read_group(header_text, "compressedFormatsFloats")
+    print(f"compressedFormatsFloats: {len(cf_formats)} formats")
+    lines.append("/// `formats::compressedFormatsFloats`, paired with the case name.")
+    lines.append("pub static COMPRESSED_FORMATS_FLOATS: &[(vk::Format, &str)] = &[")
+    for f in cf_formats:
+        lines.append(f'    (vk::Format::{rust_name(f)}, "{case_name(f)}"),')
+    lines.append("];")
+    lines.append("")
+
     # `colorImageFormatsToTestBlit` groups formats by channel class rather than by bit
     # width, because a blit converts between formats instead of reinterpreting bytes.
     lines.append("/// One entry of a `colorImageFormatsToTestBlit` list.")

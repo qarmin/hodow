@@ -14,6 +14,7 @@
 
 pub mod blitting_tests;
 pub mod buffer_view_access_tests;
+pub mod compressed_image_to_buffer_tests;
 pub mod copies_buffer_tests;
 pub mod copies_image_tests;
 pub mod copy_format_lists;

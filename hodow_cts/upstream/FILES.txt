@@ -8,7 +8,6 @@
 # Add a line here as soon as a file is ported. A ported file that is missing from this
 # list will silently stop being tracked for re-sync, which is the one failure mode this
 # whole mechanism exists to prevent.
-
 # --- tests -----------------------------------------------------------------------
 external/vulkancts/modules/vulkan/compute/vktComputeBasicComputeShaderTests.cpp
 external/vulkancts/modules/vulkan/compute/vktComputeTests.cpp
@@ -33,7 +32,6 @@ external/vulkancts/modules/vulkan/api/vktApiImageClearingTests.cpp
 external/vulkancts/modules/vulkan/memory/vktMemoryMappingTests.cpp
 framework/common/tcuTextureUtil.cpp
 framework/common/tcuTextureUtil.hpp
-
 # --- vulkan framework (vk::) -------------------------------------------------------
 external/vulkancts/framework/vulkan/vkBuilderUtil.cpp
 external/vulkancts/framework/vulkan/vkBuilderUtil.hpp
@@ -53,10 +51,8 @@ external/vulkancts/framework/vulkan/vkImageUtil.hpp
 external/vulkancts/framework/vulkan/vkImageUtil.cpp
 external/vulkancts/framework/vulkan/generated/vulkan/vkFormatLists.inl
 external/vulkancts/framework/vulkan/vkComputePipelineConstructionUtil.hpp
-
 # --- test framework (vkt::) --------------------------------------------------------
 external/vulkancts/modules/vulkan/vktTestCase.hpp
-
 # --- common framework (tcu::, de::) ------------------------------------------------
 framework/common/tcuTestCase.hpp
 framework/common/tcuVector.hpp
@@ -70,3 +66,4 @@ external/vulkancts/framework/vulkan/vkImageUtil.cpp
 framework/delibs/debase/deRandom.c
 framework/delibs/debase/deRandom.h
 framework/delibs/decpp/deRandom.hpp
+external/vulkancts/modules/vulkan/pipeline/vktPipelineImageUtil.cpp

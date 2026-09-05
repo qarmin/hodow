@@ -2021,11 +2021,16 @@ pub fn add_image_to_buffer_groups(
     let mut group = tcu::TestCaseGroup::new(name);
     let mut images_1d = tcu::TestCaseGroup::new("1d_images");
     add_1d_image_to_buffer_tests(&mut images_1d, &gp);
+    super::compressed_image_to_buffer_tests::add_1d_compressed_mip_copies(&mut images_1d, &gp);
     group.add_child(images_1d);
     let mut images_2d = tcu::TestCaseGroup::new("2d_images");
     add_2d_image_to_buffer_tests(&mut images_2d, &gp);
+    super::compressed_image_to_buffer_tests::add_2d_compressed_mip_copies(&mut images_2d, &gp);
     group.add_child(images_2d);
-    // 3d_images is entirely compressed mip_copies upstream, so nothing is registered.
+    // 3d_images is entirely compressed mip_copies upstream.
+    let mut images_3d = tcu::TestCaseGroup::new("3d_images");
+    super::compressed_image_to_buffer_tests::add_3d_compressed_mip_copies(&mut images_3d, &gp);
+    group.add_child(images_3d);
     parent.add_child(group);
 }
 

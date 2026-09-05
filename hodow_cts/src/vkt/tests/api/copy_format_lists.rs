@@ -1123,6 +1123,42 @@ pub static SIGNED_AND_UNSIGNED_FLOAT_FORMATS: &[vk::Format] = &[
     vk::Format::R8_SFLOAT_FPENCODING_FLOAT8E5M2_ARM,
 ];
 
+/// `formats::compressedFormatsFloats`, paired with the case name.
+pub static COMPRESSED_FORMATS_FLOATS: &[(vk::Format, &str)] = &[
+    (vk::Format::BC1_RGB_UNORM_BLOCK, "bc1_rgb_unorm_block"),
+    (vk::Format::BC1_RGBA_UNORM_BLOCK, "bc1_rgba_unorm_block"),
+    (vk::Format::BC2_UNORM_BLOCK, "bc2_unorm_block"),
+    (vk::Format::BC3_UNORM_BLOCK, "bc3_unorm_block"),
+    (vk::Format::BC4_UNORM_BLOCK, "bc4_unorm_block"),
+    (vk::Format::BC4_SNORM_BLOCK, "bc4_snorm_block"),
+    (vk::Format::BC5_UNORM_BLOCK, "bc5_unorm_block"),
+    (vk::Format::BC5_SNORM_BLOCK, "bc5_snorm_block"),
+    (vk::Format::BC6H_UFLOAT_BLOCK, "bc6h_ufloat_block"),
+    (vk::Format::BC6H_SFLOAT_BLOCK, "bc6h_sfloat_block"),
+    (vk::Format::BC7_UNORM_BLOCK, "bc7_unorm_block"),
+    (vk::Format::ETC2_R8G8B8_UNORM_BLOCK, "etc2_r8g8b8_unorm_block"),
+    (vk::Format::ETC2_R8G8B8A1_UNORM_BLOCK, "etc2_r8g8b8a1_unorm_block"),
+    (vk::Format::ETC2_R8G8B8A8_UNORM_BLOCK, "etc2_r8g8b8a8_unorm_block"),
+    (vk::Format::EAC_R11_UNORM_BLOCK, "eac_r11_unorm_block"),
+    (vk::Format::EAC_R11_SNORM_BLOCK, "eac_r11_snorm_block"),
+    (vk::Format::EAC_R11G11_UNORM_BLOCK, "eac_r11g11_unorm_block"),
+    (vk::Format::EAC_R11G11_SNORM_BLOCK, "eac_r11g11_snorm_block"),
+    (vk::Format::ASTC_4X4_UNORM_BLOCK, "astc_4x4_unorm_block"),
+    (vk::Format::ASTC_5X4_UNORM_BLOCK, "astc_5x4_unorm_block"),
+    (vk::Format::ASTC_5X5_UNORM_BLOCK, "astc_5x5_unorm_block"),
+    (vk::Format::ASTC_6X5_UNORM_BLOCK, "astc_6x5_unorm_block"),
+    (vk::Format::ASTC_6X6_UNORM_BLOCK, "astc_6x6_unorm_block"),
+    (vk::Format::ASTC_8X5_UNORM_BLOCK, "astc_8x5_unorm_block"),
+    (vk::Format::ASTC_8X6_UNORM_BLOCK, "astc_8x6_unorm_block"),
+    (vk::Format::ASTC_8X8_UNORM_BLOCK, "astc_8x8_unorm_block"),
+    (vk::Format::ASTC_10X5_UNORM_BLOCK, "astc_10x5_unorm_block"),
+    (vk::Format::ASTC_10X6_UNORM_BLOCK, "astc_10x6_unorm_block"),
+    (vk::Format::ASTC_10X8_UNORM_BLOCK, "astc_10x8_unorm_block"),
+    (vk::Format::ASTC_10X10_UNORM_BLOCK, "astc_10x10_unorm_block"),
+    (vk::Format::ASTC_12X10_UNORM_BLOCK, "astc_12x10_unorm_block"),
+    (vk::Format::ASTC_12X12_UNORM_BLOCK, "astc_12x12_unorm_block"),
+];
+
 /// One entry of a `colorImageFormatsToTestBlit` list.
 pub struct BlitFormat {
     pub format: vk::Format,
