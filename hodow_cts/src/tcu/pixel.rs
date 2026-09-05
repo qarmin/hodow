@@ -1245,6 +1245,227 @@ pub fn get_effective_depth_stencil_access<'a>(base: &'a ConstPixelBufferAccess<'
     }
 }
 
+/// `tcu::Sampler::WrapMode`, narrowed to the mode the blit reference samples with.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum WrapMode {
+    ClampToEdge,
+}
+
+/// `tcu::Sampler::FilterMode`, minus the mipmapping modes no ported test reaches.
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum FilterMode {
+    Nearest,
+    Linear,
+}
+
+/// `tcu::Sampler`, narrowed to what `tcu::scale` constructs: clamp-to-edge on every
+/// axis, one filter, non-normalized coordinates.
+#[derive(Clone, Copy)]
+pub struct Sampler {
+    pub wrap_s: WrapMode,
+    pub wrap_t: WrapMode,
+    pub wrap_r: WrapMode,
+    pub filter: FilterMode,
+    pub normalized_coords: bool,
+}
+
+impl Sampler {
+    pub fn clamp_to_edge(filter: FilterMode) -> Self {
+        Self {
+            wrap_s: WrapMode::ClampToEdge,
+            wrap_t: WrapMode::ClampToEdge,
+            wrap_r: WrapMode::ClampToEdge,
+            filter,
+            normalized_coords: false,
+        }
+    }
+}
+
+/// `tcu::wrap`
+pub fn wrap(mode: WrapMode, c: i32, size: i32) -> i32 {
+    match mode {
+        WrapMode::ClampToEdge => c.clamp(0, size - 1),
+    }
+}
+
+/// `tcu::sRGBChannelToLinear`
+pub fn srgb_channel_to_linear(cs: f32) -> f32 {
+    if cs <= 0.04045 { cs / 12.92 } else { ((cs + 0.055) / 1.055).powf(2.4) }
+}
+
+/// `tcu::sRGBToLinear`
+pub fn srgb_to_linear(cs: [f32; 4]) -> [f32; 4] {
+    [srgb_channel_to_linear(cs[0]), srgb_channel_to_linear(cs[1]), srgb_channel_to_linear(cs[2]), cs[3]]
+}
+
+/// `tcu::linearToSRGBIfNeeded`
+pub fn linear_to_srgb_if_needed(format: TextureFormat, color: [f32; 4]) -> [f32; 4] {
+    if format.order.is_srgb() { linear_to_srgb(color) } else { color }
+}
+
+/// `tcu::lookup` - the float specialisation, which converts an sRGB source to linear.
+///
+/// Upstream reads an 8-bit sRGB channel out of a 256-entry table; computing it instead
+/// differs by at most 1.8e-7, checked against the table, which is orders of magnitude
+/// below any threshold these comparisons use.
+pub fn lookup(access: &ConstPixelBufferAccess<'_>, i: i32, j: i32, k: i32) -> [f32; 4] {
+    let c = access.get_pixel(i as u32, j as u32, k as u32);
+    if access.format().order.is_srgb() { srgb_to_linear(c) } else { c }
+}
+
+impl ConstPixelBufferAccess<'_> {
+    /// `sampleNearest2D` / `sampleLinear2D`, reached through `sample2DOffset`.
+    ///
+    /// Only CLAMP_TO_EDGE is ported, so the CLAMP_TO_BORDER branches upstream carries
+    /// through both functions are absent rather than dead.
+    pub fn sample_2d(&self, sampler: &Sampler, s: f32, t: f32, layer: i32) -> [f32; 4] {
+        let [w, h, _] = self.size();
+        let (u, v) = (s, t);
+        debug_assert!(!sampler.normalized_coords, "normalized coordinates are not ported");
+
+        match sampler.filter {
+            FilterMode::Nearest => {
+                let i = wrap(sampler.wrap_s, u.floor() as i32, w as i32);
+                let j = wrap(sampler.wrap_t, v.floor() as i32, h as i32);
+                lookup(self, i, j, layer)
+            }
+            FilterMode::Linear => {
+                let x0 = (u - 0.5).floor() as i32;
+                let y0 = (v - 0.5).floor() as i32;
+                let i0 = wrap(sampler.wrap_s, x0, w as i32);
+                let i1 = wrap(sampler.wrap_s, x0 + 1, w as i32);
+                let j0 = wrap(sampler.wrap_t, y0, h as i32);
+                let j1 = wrap(sampler.wrap_t, y0 + 1, h as i32);
+
+                let a = frac(u - 0.5);
+                let b = frac(v - 0.5);
+
+                let p00 = lookup(self, i0, j0, layer);
+                let p10 = lookup(self, i1, j0, layer);
+                let p01 = lookup(self, i0, j1, layer);
+                let p11 = lookup(self, i1, j1, layer);
+
+                std::array::from_fn(|c| p00[c] * (1.0 - a) * (1.0 - b) + p10[c] * a * (1.0 - b) + p01[c] * (1.0 - a) * b + p11[c] * a * b)
+            }
+        }
+    }
+
+    /// `sampleNearest3D` / `sampleLinear3D`, reached through `sample3DOffset`.
+    pub fn sample_3d(&self, sampler: &Sampler, s: f32, t: f32, r: f32) -> [f32; 4] {
+        let [w, h, d] = self.size();
+        let (u, v, ww) = (s, t, r);
+        debug_assert!(!sampler.normalized_coords, "normalized coordinates are not ported");
+
+        match sampler.filter {
+            FilterMode::Nearest => {
+                let i = wrap(sampler.wrap_s, u.floor() as i32, w as i32);
+                let j = wrap(sampler.wrap_t, v.floor() as i32, h as i32);
+                let k = wrap(sampler.wrap_r, ww.floor() as i32, d as i32);
+                lookup(self, i, j, k)
+            }
+            FilterMode::Linear => {
+                let x0 = (u - 0.5).floor() as i32;
+                let y0 = (v - 0.5).floor() as i32;
+                let z0 = (ww - 0.5).floor() as i32;
+                let i0 = wrap(sampler.wrap_s, x0, w as i32);
+                let i1 = wrap(sampler.wrap_s, x0 + 1, w as i32);
+                let j0 = wrap(sampler.wrap_t, y0, h as i32);
+                let j1 = wrap(sampler.wrap_t, y0 + 1, h as i32);
+                let k0 = wrap(sampler.wrap_r, z0, d as i32);
+                let k1 = wrap(sampler.wrap_r, z0 + 1, d as i32);
+
+                let a = frac(u - 0.5);
+                let b = frac(v - 0.5);
+                let c = frac(ww - 0.5);
+
+                let p000 = lookup(self, i0, j0, k0);
+                let p100 = lookup(self, i1, j0, k0);
+                let p010 = lookup(self, i0, j1, k0);
+                let p110 = lookup(self, i1, j1, k0);
+                let p001 = lookup(self, i0, j0, k1);
+                let p101 = lookup(self, i1, j0, k1);
+                let p011 = lookup(self, i0, j1, k1);
+                let p111 = lookup(self, i1, j1, k1);
+
+                std::array::from_fn(|n| {
+                    p000[n] * (1.0 - a) * (1.0 - b) * (1.0 - c)
+                        + p100[n] * a * (1.0 - b) * (1.0 - c)
+                        + p010[n] * (1.0 - a) * b * (1.0 - c)
+                        + p110[n] * a * b * (1.0 - c)
+                        + p001[n] * (1.0 - a) * (1.0 - b) * c
+                        + p101[n] * a * (1.0 - b) * c
+                        + p011[n] * (1.0 - a) * b * c
+                        + p111[n] * a * b * c
+                })
+            }
+        }
+    }
+
+    /// `tcu::getSubregion` - a view of a box inside this level, sharing its pitch.
+    pub fn get_subregion(&self, x: u32, y: u32, z: u32, width: u32, height: u32, depth: u32) -> ConstPixelBufferAccess<'_> {
+        let [pixel_pitch, row_pitch, slice_pitch] = self.pitch();
+        let offset = x as usize * pixel_pitch + y as usize * row_pitch + z as usize * slice_pitch;
+        ConstPixelBufferAccess::new_with_pitch(self.format(), [width, height, depth], self.pitch(), &self.raw()[offset..])
+    }
+}
+
+impl<'a> PixelBufferAccess<'a> {
+    /// `tcu::getSubregion` on a writable level.
+    pub fn get_subregion(&mut self, x: u32, y: u32, z: u32, width: u32, height: u32, depth: u32) -> PixelBufferAccess<'_> {
+        let [pixel_pitch, row_pitch, slice_pitch] = self.pitch;
+        let offset = x as usize * pixel_pitch + y as usize * row_pitch + z as usize * slice_pitch;
+        PixelBufferAccess {
+            format: self.format,
+            size: [width, height, depth],
+            pitch: self.pitch,
+            data: &mut self.data[offset..],
+        }
+    }
+
+    /// The read view of the same region, for the passes that sample what they wrote.
+    pub fn as_const(&self) -> ConstPixelBufferAccess<'_> {
+        ConstPixelBufferAccess::new_with_pitch(self.format, self.size, self.pitch, self.data)
+    }
+}
+
+/// `tcu::scale` - resample `src` to fill `dst`, at `dst`'s resolution.
+///
+/// The coordinate is the destination texel centre scaled by the size ratio, so the
+/// edges are sampled at half a destination texel in, not at 0 and 1.
+pub fn scale(dst: &mut PixelBufferAccess<'_>, src: &ConstPixelBufferAccess<'_>, filter: FilterMode) {
+    let sampler = Sampler::clamp_to_edge(filter);
+    let [sw, sh, sd] = src.size();
+    let [dw, dh, dd] = dst.size();
+
+    let s_x = sw as f32 / dw as f32;
+    let s_y = sh as f32 / dh as f32;
+    let s_z = sd as f32 / dd as f32;
+    let dst_format = dst.format();
+
+    if dd == 1 && sd == 1 {
+        for y in 0..dh {
+            for x in 0..dw {
+                let c = src.sample_2d(&sampler, (x as f32 + 0.5) * s_x, (y as f32 + 0.5) * s_y, 0);
+                dst.set_pixel(linear_to_srgb_if_needed(dst_format, c), x, y, 0);
+            }
+        }
+    } else {
+        for z in 0..dd {
+            for y in 0..dh {
+                for x in 0..dw {
+                    let c = src.sample_3d(&sampler, (x as f32 + 0.5) * s_x, (y as f32 + 0.5) * s_y, (z as f32 + 0.5) * s_z);
+                    dst.set_pixel(linear_to_srgb_if_needed(dst_format, c), x, y, z);
+                }
+            }
+        }
+    }
+}
+
+/// `deFloatFrac`
+fn frac(v: f32) -> f32 {
+    v - v.floor()
+}
+
 /// `tcu::TextureLevel` - owns tightly-packed storage for one mip level.
 pub struct TextureLevel {
     format: TextureFormat,
@@ -1896,5 +2117,97 @@ mod write_tests {
         let depth = get_effective_depth_stencil_access(&access, DepthStencilMode::Depth);
         assert_eq!(depth.format(), format);
         assert!((depth.get_pixel(1, 0, 0)[0] - 0.5).abs() < 1e-4);
+    }
+
+    /// A linear sample halfway between two texels must be their average, and one at a
+    /// texel centre must be that texel exactly. Those two pin the -0.5 offset that the
+    /// whole filter hangs on.
+    #[test]
+    fn sample_2d_linear_interpolates_between_texel_centres() {
+        let format = TextureFormat::new(ChannelOrder::R, ChannelType::FLOAT);
+        let mut level = TextureLevel::new(format, 2, 1, 1).unwrap();
+        level.get_access().set_pixel([0.0, 0.0, 0.0, 1.0], 0, 0, 0);
+        level.get_access().set_pixel([1.0, 0.0, 0.0, 1.0], 1, 0, 0);
+        let access = level.get_const_access();
+        let sampler = Sampler::clamp_to_edge(FilterMode::Linear);
+
+        assert!((access.sample_2d(&sampler, 0.5, 0.5, 0)[0] - 0.0).abs() < 1e-6);
+        assert!((access.sample_2d(&sampler, 1.5, 0.5, 0)[0] - 1.0).abs() < 1e-6);
+        assert!((access.sample_2d(&sampler, 1.0, 0.5, 0)[0] - 0.5).abs() < 1e-6);
+        // Outside the centres, clamp-to-edge holds the value flat.
+        assert!((access.sample_2d(&sampler, 0.1, 0.5, 0)[0] - 0.0).abs() < 1e-6);
+        assert!((access.sample_2d(&sampler, 1.9, 0.5, 0)[0] - 1.0).abs() < 1e-6);
+    }
+
+    /// Nearest picks the texel the coordinate falls in, with no half-texel shift.
+    #[test]
+    fn sample_2d_nearest_picks_the_containing_texel() {
+        let format = TextureFormat::new(ChannelOrder::R, ChannelType::FLOAT);
+        let mut level = TextureLevel::new(format, 2, 1, 1).unwrap();
+        level.get_access().set_pixel([0.0, 0.0, 0.0, 1.0], 0, 0, 0);
+        level.get_access().set_pixel([1.0, 0.0, 0.0, 1.0], 1, 0, 0);
+        let access = level.get_const_access();
+        let sampler = Sampler::clamp_to_edge(FilterMode::Nearest);
+
+        assert_eq!(access.sample_2d(&sampler, 0.99, 0.5, 0)[0], 0.0);
+        assert_eq!(access.sample_2d(&sampler, 1.01, 0.5, 0)[0], 1.0);
+    }
+
+    /// Scaling 4 -> 2 with a linear filter averages texel pairs; scaling 2 -> 4 repeats
+    /// the ends and interpolates the middle. Both follow from the centre-based mapping.
+    #[test]
+    fn scale_linear_halves_and_doubles() {
+        let format = TextureFormat::new(ChannelOrder::R, ChannelType::FLOAT);
+        let mut src = TextureLevel::new(format, 4, 1, 1).unwrap();
+        for x in 0..4 {
+            src.get_access().set_pixel([x as f32, 0.0, 0.0, 1.0], x, 0, 0);
+        }
+
+        let mut down = TextureLevel::new(format, 2, 1, 1).unwrap();
+        scale(&mut down.get_access(), &src.get_const_access(), FilterMode::Linear);
+        let got: Vec<f32> = (0..2).map(|x| down.get_const_access().get_pixel(x, 0, 0)[0]).collect();
+        assert!((got[0] - 0.5).abs() < 1e-5 && (got[1] - 2.5).abs() < 1e-5, "{got:?}");
+
+        let mut up = TextureLevel::new(format, 8, 1, 1).unwrap();
+        scale(&mut up.get_access(), &src.get_const_access(), FilterMode::Linear);
+        let got: Vec<f32> = (0..8).map(|x| up.get_const_access().get_pixel(x, 0, 0)[0]).collect();
+        // The first and last destination centres land outside the source centres.
+        assert!((got[0] - 0.0).abs() < 1e-5 && (got[7] - 3.0).abs() < 1e-5, "{got:?}");
+        assert!(got.windows(2).all(|w| w[1] >= w[0] - 1e-6), "not monotonic: {got:?}");
+    }
+
+    /// A subregion view addresses the same texels as the full one, offset - which is
+    /// what makes a region-at-a-time reference build possible without copying.
+    #[test]
+    fn subregion_addresses_the_parent_texels() {
+        let format = TextureFormat::new(ChannelOrder::R, ChannelType::UNORM_INT8);
+        let mut level = TextureLevel::new(format, 4, 4, 1).unwrap();
+        for y in 0..4 {
+            for x in 0..4 {
+                level.get_access().set_pixel([(x + 4 * y) as f32 / 255.0, 0.0, 0.0, 1.0], x, y, 0);
+            }
+        }
+        let access = level.get_const_access();
+        let sub = access.get_subregion(1, 2, 0, 2, 2, 1);
+        assert_eq!(sub.get_pixel_int(0, 0, 0)[0], 9);
+        assert_eq!(sub.get_pixel_int(1, 1, 0)[0], 14);
+    }
+
+    /// sRGB is decoded on the way in and re-encoded on the way out, so a scale between
+    /// two sRGB levels of the same size is a round trip.
+    #[test]
+    fn scale_round_trips_srgb() {
+        let format = TextureFormat::new(ChannelOrder::sRGBA, ChannelType::UNORM_INT8);
+        let mut src = TextureLevel::new(format, 4, 1, 1).unwrap();
+        for x in 0..4 {
+            src.get_access().set_pixel([(60 * x + 10) as f32 / 255.0, 0.0, 0.0, 1.0], x, 0, 0);
+        }
+        let mut dst = TextureLevel::new(format, 4, 1, 1).unwrap();
+        scale(&mut dst.get_access(), &src.get_const_access(), FilterMode::Linear);
+        for x in 0..4 {
+            let a = src.get_const_access().get_pixel_int(x, 0, 0)[0];
+            let b = dst.get_const_access().get_pixel_int(x, 0, 0)[0];
+            assert!((a - b).abs() <= 1, "{x}: {a} vs {b}");
+        }
     }
 }
