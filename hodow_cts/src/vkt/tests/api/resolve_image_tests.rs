@@ -20,13 +20,14 @@
 // also run a second render pass that reads the source and the copy as multisampled
 // subpass inputs and writes a per-sample verdict to an SSBO.
 //
-// Not ported: the `_no_cab`, `_compute` and `_transfer` variants, which need a second
-// copy image without COLOR_ATTACHMENT usage and a compute-only / transfer-only queue.
+// `_no_cab` routes the copy through a second intermediate created without
+// COLOR_ATTACHMENT usage; `_compute` and `_transfer` run it on a queue family that
+// supports only compute or only transfer, with the ownership transfers that needs.
 
 use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::DeviceV1_3;
 
-use super::copies_buffer_tests::{AllocationKind, CopyCommandVariant};
+use super::copies_buffer_tests::{AllocationKind, CopyCommandVariant, QueueSelection, select_queue};
 use super::copies_image_tests::{FillMode, ImageParms, generate_buffer, read_image_in_layout, upload_image};
 use crate::tcu::fuzzy_image_compare::fuzzy_compare_ok;
 use crate::tcu::pixel::TextureLevel;
@@ -62,7 +63,7 @@ const FUZZY_THRESHOLD: f32 = 0.01;
 /// `VK_REMAINING_ARRAY_LAYERS`
 const REMAINING_ARRAY_LAYERS: u32 = u32::MAX;
 
-/// `ResolveImageToImageOptions`, minus the three variants that are not ported.
+/// `ResolveImageToImageOptions`
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum ResolveOptions {
     NoOptionalOperation,
@@ -70,16 +71,32 @@ pub enum ResolveOptions {
     CopyMsImageToArrayMsImage,
     CopyMsImageLayerToMsImage,
     CopyMsImageToMsImageMultiregion,
+    CopyMsImageToMsImageNoCab,
+    CopyMsImageToMsImageCompute,
+    CopyMsImageToMsImageTransfer,
 }
 
 impl ResolveOptions {
     /// `ResolveImageToImage::shouldVerifyIntermediateResults`
     fn should_verify_intermediate_results(self) -> bool {
-        matches!(self, Self::CopyMsImageToMsImage | Self::CopyMsImageToArrayMsImage | Self::CopyMsImageLayerToMsImage)
+        matches!(
+            self,
+            Self::CopyMsImageToMsImage | Self::CopyMsImageToArrayMsImage | Self::CopyMsImageLayerToMsImage | Self::CopyMsImageToMsImageCompute | Self::CopyMsImageToMsImageTransfer
+        )
     }
 
     fn copies_before_resolving(self) -> bool {
         self != Self::NoOptionalOperation
+    }
+
+    /// `QueueSelectionOptions` - the copy runs on a queue family that supports only
+    /// compute, or only transfer, for those two options.
+    fn queue_selection(self) -> QueueSelection {
+        match self {
+            Self::CopyMsImageToMsImageCompute => QueueSelection::ComputeOnly,
+            Self::CopyMsImageToMsImageTransfer => QueueSelection::TransferOnly,
+            _ => QueueSelection::Universal,
+        }
     }
 }
 
@@ -204,6 +221,19 @@ impl TestCase for ResolveImageCase {
         if self.command_variant == CopyCommandVariant::CopyCommands2 {
             context.require_device_functionality("VK_KHR_copy_commands2")?;
         }
+
+        // Find at least one queue family that supports the copy but is not the
+        // universal one.
+        match self.options {
+            ResolveOptions::CopyMsImageToMsImageCompute if context.get_compute_queue().is_none() => {
+                return Err(TestError::NotSupported("No queue family found that only supports compute queue.".to_string()));
+            }
+            ResolveOptions::CopyMsImageToMsImageTransfer if context.get_transfer_queue().is_none() => {
+                return Err(TestError::NotSupported("No queue family found that only supports transfer queue.".to_string()));
+            }
+            _ => {}
+        }
+
         if self.needs_maintenance5 {
             context.require_device_functionality("VK_KHR_maintenance5")?;
         }
@@ -286,16 +316,28 @@ impl TestInstance for ResolveImageInstance<'_> {
 
         // `m_multisampledCopyImage` - the intermediate the copy options resolve from.
         // Its layer count follows the destination, so a one-layer source can be
-        // fanned out across an array.
+        // fanned out across an array. `_no_cab` drops COLOR_ATTACHMENT usage from it,
+        // which is the whole point of that variant.
+        let copy_info = vk::ImageCreateInfo {
+            array_layers: match p.options {
+                ResolveOptions::CopyMsImageLayerToMsImage | ResolveOptions::CopyMsImageToArrayMsImage | ResolveOptions::CopyMsImageToMsImageNoCab => p.dst.array_size(),
+                _ => p.src.array_size(),
+            },
+            usage: if p.options == ResolveOptions::CopyMsImageToMsImageNoCab {
+                vk::ImageUsageFlags::TRANSFER_SRC | vk::ImageUsageFlags::TRANSFER_DST | vk::ImageUsageFlags::INPUT_ATTACHMENT
+            } else {
+                ms_info.usage
+            },
+            ..ms_info
+        };
         let multisampled_copy = if p.options.copies_before_resolving() {
-            let info = vk::ImageCreateInfo {
-                array_layers: match p.options {
-                    ResolveOptions::CopyMsImageLayerToMsImage | ResolveOptions::CopyMsImageToArrayMsImage => p.dst.array_size(),
-                    _ => p.src.array_size(),
-                },
-                ..ms_info
-            };
-            Some(ImageWithMemory::new(device, allocator, info, MemoryRequirement::ANY)?)
+            Some(ImageWithMemory::new(device, allocator, copy_info, MemoryRequirement::ANY)?)
+        } else {
+            None
+        };
+        // `m_multisampledCopyNoCabImage` - the copy goes through this one first.
+        let multisampled_copy_no_cab = if p.options == ResolveOptions::CopyMsImageToMsImageNoCab {
+            Some(ImageWithMemory::new(device, allocator, copy_info, MemoryRequirement::ANY)?)
         } else {
             None
         };
@@ -317,7 +359,7 @@ impl TestInstance for ResolveImageInstance<'_> {
             ImageWithMemory::new(device, allocator, dst_info, MemoryRequirement::ANY)?
         };
 
-        self.render_multisampled_source(&multisampled, multisampled_copy.as_ref())?;
+        self.render_multisampled_source(&multisampled, multisampled_copy.as_ref(), multisampled_copy_no_cab.as_ref())?;
 
         let mut destination_level = TextureLevel::new(dst_format, p.dst.extent[0], p.dst.extent[1], p.dst.extent[2])?;
         generate_buffer(
@@ -367,7 +409,7 @@ impl TestInstance for ResolveImageInstance<'_> {
                 source_array_size = p.dst.array_size();
             }
             let copy_image = multisampled_copy.as_ref().expect("copy image exists for every copy option");
-            self.copy_ms_image_to_ms_image(&multisampled, copy_image, source_array_size)?;
+            self.copy_ms_image_to_ms_image(&multisampled, copy_image, multisampled_copy_no_cab.as_ref(), source_array_size)?;
             source_image = copy_image.get();
         }
 
@@ -490,7 +532,12 @@ impl TestInstance for ResolveImageInstance<'_> {
 impl ResolveImageInstance<'_> {
     /// The draw the whole test is built on: clear to blue, then one triangle over the
     /// upper-right half in green. Upstream does this in the instance constructor.
-    fn render_multisampled_source(&self, multisampled: &ImageWithMemory<'_>, multisampled_copy: Option<&ImageWithMemory<'_>>) -> Result<(), TestError> {
+    fn render_multisampled_source(
+        &self,
+        multisampled: &ImageWithMemory<'_>,
+        multisampled_copy: Option<&ImageWithMemory<'_>>,
+        multisampled_copy_no_cab: Option<&ImageWithMemory<'_>>,
+    ) -> Result<(), TestError> {
         let p = self.params;
         let device = self.context.get_device();
         let allocator = self.context.get_default_allocator();
@@ -555,6 +602,16 @@ impl ResolveImageInstance<'_> {
                 make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, p.dst.array_size()),
             ));
         }
+        if let Some(no_cab) = multisampled_copy_no_cab {
+            src_image_barriers.push(make_image_memory_barrier(
+                vk::AccessFlags::empty(),
+                vk::AccessFlags::COLOR_ATTACHMENT_WRITE,
+                vk::ImageLayout::UNDEFINED,
+                vk::ImageLayout::TRANSFER_DST_OPTIMAL,
+                no_cab.get(),
+                make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, p.dst.array_size()),
+            ));
+        }
 
         begin_command_buffer(device, *cmd_buffer)?;
         unsafe {
@@ -606,11 +663,19 @@ impl ResolveImageInstance<'_> {
     }
 
     /// `ResolveImageToImage::copyMSImageToMSImage`
-    fn copy_ms_image_to_ms_image(&self, multisampled: &ImageWithMemory<'_>, copy_image: &ImageWithMemory<'_>, copy_array_size: u32) -> Result<(), TestError> {
+    fn copy_ms_image_to_ms_image(
+        &self,
+        multisampled: &ImageWithMemory<'_>,
+        copy_image: &ImageWithMemory<'_>,
+        no_cab_image: Option<&ImageWithMemory<'_>>,
+        copy_array_size: u32,
+    ) -> Result<(), TestError> {
         let p = self.params;
         let device = self.context.get_device();
-        let queue = self.context.get_universal_queue();
-        let queue_family_index = self.context.get_universal_queue_family_index();
+        let universal_queue = self.context.get_universal_queue();
+        let universal_family_index = self.context.get_universal_queue_family_index();
+        let queue_selection = p.options.queue_selection();
+        let (queue, family_index) = select_queue(self.context, queue_selection)?;
         let extent = p.src.extent_3d();
 
         let layers = |base_array_layer: u32, layer_count: u32| vk::ImageSubresourceLayers {
@@ -690,20 +755,30 @@ impl ResolveImageInstance<'_> {
             copy_image.get(),
             subresource_range,
         );
+        // `m_multisampledCopyNoCabImageBarrier` / `betweenCopyImageBarrier` - the
+        // no-COLOR_ATTACHMENT intermediate is written, then read, in the same submit.
+        let no_cab_barrier = no_cab_image.map(|img| {
+            make_image_memory_barrier(
+                vk::AccessFlags::empty(),
+                vk::AccessFlags::TRANSFER_WRITE,
+                vk::ImageLayout::TRANSFER_DST_OPTIMAL,
+                p.dst_layout,
+                img.get(),
+                subresource_range,
+            )
+        });
+        let between_copy_image_barrier = no_cab_image.map(|img| {
+            make_image_memory_barrier(
+                vk::AccessFlags::TRANSFER_WRITE,
+                vk::AccessFlags::TRANSFER_READ,
+                p.dst_layout,
+                p.src_layout,
+                img.get(),
+                subresource_range,
+            )
+        });
 
-        let cmd_pool = make_command_pool(device, queue_family_index)?;
-        let cmd_buffer = allocate_command_buffer(device, *cmd_pool, vk::CommandBufferLevel::PRIMARY)?;
-        begin_command_buffer(device, *cmd_buffer)?;
-        unsafe {
-            device.cmd_pipeline_barrier(
-                *cmd_buffer,
-                vk::PipelineStageFlags::COLOR_ATTACHMENT_OUTPUT,
-                vk::PipelineStageFlags::TRANSFER,
-                vk::DependencyFlags::empty(),
-                &[] as &[vk::MemoryBarrier],
-                &[] as &[vk::BufferMemoryBarrier],
-                &[multisampled_barrier, copy_barrier],
-            );
+        let record_copy = |cmd_buffer: vk::CommandBuffer, src: vk::Image, dst: vk::Image| unsafe {
             if p.command_variant == CopyCommandVariant::CopyCommands2 {
                 let copies2: Vec<vk::ImageCopy2> = image_copies
                     .iter()
@@ -720,29 +795,191 @@ impl ResolveImageInstance<'_> {
                 let info = vk::CopyImageInfo2 {
                     s_type: vk::StructureType::COPY_IMAGE_INFO_2,
                     next: std::ptr::null(),
-                    src_image: multisampled.get(),
+                    src_image: src,
                     src_image_layout: p.src_layout,
-                    dst_image: copy_image.get(),
+                    dst_image: dst,
                     dst_image_layout: p.dst_layout,
                     region_count: copies2.len() as u32,
                     regions: copies2.as_ptr(),
                 };
-                device.cmd_copy_image2(*cmd_buffer, &info);
+                device.cmd_copy_image2(cmd_buffer, &info);
             } else {
-                device.cmd_copy_image(*cmd_buffer, multisampled.get(), p.src_layout, copy_image.get(), p.dst_layout, &image_copies);
+                device.cmd_copy_image(cmd_buffer, src, p.src_layout, dst, p.dst_layout, &image_copies);
             }
-            device.cmd_pipeline_barrier(
-                *cmd_buffer,
-                vk::PipelineStageFlags::TRANSFER,
-                vk::PipelineStageFlags::FRAGMENT_SHADER,
-                vk::DependencyFlags::empty(),
-                &[] as &[vk::MemoryBarrier],
-                &[] as &[vk::BufferMemoryBarrier],
-                &[copy_post_barrier],
-            );
+        };
+
+        // The compute/transfer variants run the copy on a queue family that cannot do
+        // graphics, so both images have to change ownership and come back.
+        let universal_pool = make_command_pool(device, universal_family_index)?;
+        let other_pool;
+        let active_pool = if queue_selection == QueueSelection::Universal {
+            &universal_pool
+        } else {
+            other_pool = make_command_pool(device, family_index)?;
+            &other_pool
+        };
+        let ownership = |barrier: &vk::ImageMemoryBarrier, src_family: u32, dst_family: u32, src_access, dst_access| vk::ImageMemoryBarrier {
+            src_access_mask: src_access,
+            dst_access_mask: dst_access,
+            src_queue_family_index: src_family,
+            dst_queue_family_index: dst_family,
+            ..*barrier
+        };
+        let submit_one = |pool: vk::CommandPool,
+                          submit_queue: vk::Queue,
+                          src_stage: vk::PipelineStageFlags,
+                          dst_stage: vk::PipelineStageFlags,
+                          barriers: &[vk::ImageMemoryBarrier]|
+         -> Result<(), TestError> {
+            let cb = allocate_command_buffer(device, pool, vk::CommandBufferLevel::PRIMARY)?;
+            begin_command_buffer(device, *cb)?;
+            unsafe {
+                device.cmd_pipeline_barrier(
+                    *cb,
+                    src_stage,
+                    dst_stage,
+                    vk::DependencyFlags::empty(),
+                    &[] as &[vk::MemoryBarrier],
+                    &[] as &[vk::BufferMemoryBarrier],
+                    barriers,
+                );
+            }
+            end_command_buffer(device, *cb)?;
+            submit_commands_and_wait(device, submit_queue, *cb)
+        };
+
+        if queue_selection != QueueSelection::Universal {
+            // Release ownership from the graphics queue - dstAccessMask is ignored in a
+            // release, srcAccessMask in an acquire.
+            let release = [
+                ownership(
+                    &multisampled_barrier,
+                    universal_family_index,
+                    family_index,
+                    multisampled_barrier.src_access_mask,
+                    vk::AccessFlags::empty(),
+                ),
+                ownership(&copy_barrier, universal_family_index, family_index, copy_barrier.src_access_mask, vk::AccessFlags::empty()),
+            ];
+            submit_one(
+                *universal_pool,
+                universal_queue,
+                vk::PipelineStageFlags::COLOR_ATTACHMENT_OUTPUT,
+                vk::PipelineStageFlags::BOTTOM_OF_PIPE,
+                &release,
+            )?;
+
+            let acquire = [
+                ownership(
+                    &multisampled_barrier,
+                    universal_family_index,
+                    family_index,
+                    vk::AccessFlags::empty(),
+                    multisampled_barrier.dst_access_mask,
+                ),
+                ownership(&copy_barrier, universal_family_index, family_index, vk::AccessFlags::empty(), copy_barrier.dst_access_mask),
+            ];
+            submit_one(**active_pool, queue, vk::PipelineStageFlags::TOP_OF_PIPE, vk::PipelineStageFlags::TRANSFER, &acquire)?;
+        }
+
+        let cmd_buffer = allocate_command_buffer(device, **active_pool, vk::CommandBufferLevel::PRIMARY)?;
+        begin_command_buffer(device, *cmd_buffer)?;
+        unsafe {
+            if queue_selection == QueueSelection::Universal {
+                let mut barriers = vec![multisampled_barrier, copy_barrier];
+                barriers.extend(no_cab_barrier);
+                device.cmd_pipeline_barrier(
+                    *cmd_buffer,
+                    vk::PipelineStageFlags::COLOR_ATTACHMENT_OUTPUT,
+                    vk::PipelineStageFlags::TRANSFER,
+                    vk::DependencyFlags::empty(),
+                    &[] as &[vk::MemoryBarrier],
+                    &[] as &[vk::BufferMemoryBarrier],
+                    &barriers,
+                );
+            }
+            if let (Some(no_cab), Some(between)) = (no_cab_image, between_copy_image_barrier) {
+                record_copy(*cmd_buffer, multisampled.get(), no_cab.get());
+                device.cmd_pipeline_barrier(
+                    *cmd_buffer,
+                    vk::PipelineStageFlags::TRANSFER,
+                    vk::PipelineStageFlags::TRANSFER,
+                    vk::DependencyFlags::empty(),
+                    &[] as &[vk::MemoryBarrier],
+                    &[] as &[vk::BufferMemoryBarrier],
+                    &[between],
+                );
+                record_copy(*cmd_buffer, no_cab.get(), copy_image.get());
+            } else {
+                record_copy(*cmd_buffer, multisampled.get(), copy_image.get());
+            }
+            if queue_selection == QueueSelection::Universal {
+                device.cmd_pipeline_barrier(
+                    *cmd_buffer,
+                    vk::PipelineStageFlags::TRANSFER,
+                    vk::PipelineStageFlags::FRAGMENT_SHADER,
+                    vk::DependencyFlags::empty(),
+                    &[] as &[vk::MemoryBarrier],
+                    &[] as &[vk::BufferMemoryBarrier],
+                    &[copy_post_barrier],
+                );
+            }
         }
         end_command_buffer(device, *cmd_buffer)?;
         submit_commands_and_wait(device, queue, *cmd_buffer)?;
+
+        if queue_selection != QueueSelection::Universal {
+            // `srcImageBarrier` - the source only needs to change hands, not layout.
+            let src_image_barrier = make_image_memory_barrier(
+                vk::AccessFlags::empty(),
+                vk::AccessFlags::empty(),
+                p.src_layout,
+                p.src_layout,
+                multisampled.get(),
+                multisampled_barrier.subresource_range,
+            );
+            let release = [
+                ownership(
+                    &copy_post_barrier,
+                    family_index,
+                    universal_family_index,
+                    copy_post_barrier.src_access_mask,
+                    vk::AccessFlags::empty(),
+                ),
+                ownership(
+                    &src_image_barrier,
+                    family_index,
+                    universal_family_index,
+                    vk::AccessFlags::TRANSFER_READ,
+                    vk::AccessFlags::empty(),
+                ),
+            ];
+            submit_one(**active_pool, queue, vk::PipelineStageFlags::TRANSFER, vk::PipelineStageFlags::BOTTOM_OF_PIPE, &release)?;
+
+            let acquire = [
+                ownership(
+                    &copy_post_barrier,
+                    family_index,
+                    universal_family_index,
+                    vk::AccessFlags::empty(),
+                    copy_post_barrier.dst_access_mask,
+                ),
+                ownership(
+                    &src_image_barrier,
+                    family_index,
+                    universal_family_index,
+                    vk::AccessFlags::empty(),
+                    vk::AccessFlags::MEMORY_READ,
+                ),
+            ];
+            submit_one(
+                *universal_pool,
+                universal_queue,
+                vk::PipelineStageFlags::TOP_OF_PIPE,
+                vk::PipelineStageFlags::FRAGMENT_SHADER,
+                &acquire,
+            )?;
+        }
         Ok(())
     }
 
@@ -1239,8 +1476,7 @@ fn add_resolve_group(group: &mut tcu::TestCaseGroup, allocation_kind: Allocation
     }
 }
 
-/// `addResolveImageTests`, minus `whole_copy_before_resolving_no_cab`, `_compute` and
-/// `_transfer`.
+/// `addResolveImageTests`
 pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind: AllocationKind, command_variant: CopyCommandVariant) {
     let mut group = tcu::TestCaseGroup::new("resolve_image");
 
@@ -1315,6 +1551,34 @@ pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind:
         &ResolveGroupSpec::default_with(&default_resolve, ResolveOptions::CopyMsImageToMsImage),
     );
     group.add_child(whole_copy);
+
+    // `addResolveImageWholeCopyWithoutCabBeforeResolvingTests`
+    let mut no_cab = tcu::TestCaseGroup::new("whole_copy_before_resolving_no_cab");
+    add_resolve_group(
+        &mut no_cab,
+        allocation_kind,
+        command_variant,
+        &ResolveGroupSpec::default_with(&default_resolve, ResolveOptions::CopyMsImageToMsImageNoCab),
+    );
+    group.add_child(no_cab);
+
+    // `addComputeAndTransferQueueTests` - no `_bind_offset` variant on either.
+    for (name, options) in [
+        ("whole_copy_before_resolving_compute", ResolveOptions::CopyMsImageToMsImageCompute),
+        ("whole_copy_before_resolving_transfer", ResolveOptions::CopyMsImageToMsImageTransfer),
+    ] {
+        let mut queue_group = tcu::TestCaseGroup::new(name);
+        add_resolve_group(
+            &mut queue_group,
+            allocation_kind,
+            command_variant,
+            &ResolveGroupSpec {
+                with_bind_offset: false,
+                ..ResolveGroupSpec::default_with(&default_resolve, options)
+            },
+        );
+        group.add_child(queue_group);
+    }
 
     // `addResolveImageWholeCopyDiffLayoutsBeforeResolvingTests`
     let mut diff_layouts = tcu::TestCaseGroup::new("diff_layout_copy_before_resolving");
