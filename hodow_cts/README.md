@@ -221,6 +221,17 @@ them, and neither is sufficient alone:
   by default because the layer changes driver behaviour, so a run with it on is not a
   conformance run.
 
+There is a third gap, and it has bitten once. `cts-diff` runs against whatever driver
+is to hand, and a driver that is *stricter than the spec requires* hides port bugs from
+it. All 1790 `renderpasses.*.self_dep_clear_draw` cases failed on a real GPU while
+passing on SwiftShader, because the port was missing the `vkCmdPipelineBarrier` upstream
+emits between a `vkCmdClearAttachments` and a draw that reads the same attachment back
+through a subpass self-dependency. SwiftShader serialises everything, so the missing
+barrier changed nothing there and `cts-diff` was green. The lesson is not to distrust
+`cts-diff` - it is that **a full run on real hardware is a check the software driver
+cannot substitute for**, and a whole case family failing uniformly across every format
+is a port bug until proven otherwise.
+
 Both are weakest where the driver reports a case as unsupported: the two binaries then
 agree without either having run the test. When a whole group comes back `NotSupported`
 the diff has said nothing about it, so check the verdict mix, not just the agreement
