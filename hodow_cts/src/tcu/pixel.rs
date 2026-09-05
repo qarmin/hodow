@@ -1276,6 +1276,10 @@ pub fn get_effective_depth_stencil_access<'a>(base: &'a ConstPixelBufferAccess<'
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum WrapMode {
     ClampToEdge,
+    /// `CLAMP_TO_BORDER` - reached only through `remap_cube_edge_coords`, which uses
+    /// the out-of-range values -1 and `size` it produces as its "left the face" signal.
+    ClampToBorder,
+    Repeat,
 }
 
 /// `tcu::Sampler::FilterMode`, minus the mipmapping modes no ported test reaches.
@@ -1322,7 +1326,15 @@ impl Sampler {
 pub fn wrap(mode: WrapMode, c: i32, size: i32) -> i32 {
     match mode {
         WrapMode::ClampToEdge => c.clamp(0, size - 1),
+        WrapMode::ClampToBorder => c.clamp(-1, size),
+        WrapMode::Repeat => c.rem_euclid(size),
     }
+}
+
+/// `tcu::unnormalize` - the ordinary case; the CL wrap modes that fold the coordinate
+/// here instead of in `wrap` are not ported.
+pub fn unnormalize(_mode: WrapMode, c: f32, size: u32) -> f32 {
+    size as f32 * c
 }
 
 /// `tcu::sRGBChannelToLinear`
@@ -1357,8 +1369,11 @@ impl ConstPixelBufferAccess<'_> {
     /// through both functions are absent rather than dead.
     pub fn sample_2d(&self, sampler: &Sampler, s: f32, t: f32, layer: i32) -> [f32; 4] {
         let [w, h, _] = self.size();
-        let (u, v) = (s, t);
-        debug_assert!(!sampler.normalized_coords, "normalized coordinates are not ported");
+        let (u, v) = if sampler.normalized_coords {
+            (unnormalize(sampler.wrap_s, s, w), unnormalize(sampler.wrap_t, t, h))
+        } else {
+            (s, t)
+        };
 
         match sampler.filter {
             FilterMode::Nearest => {
@@ -1412,8 +1427,11 @@ impl ConstPixelBufferAccess<'_> {
     /// `sampleNearest3D` / `sampleLinear3D`, reached through `sample3DOffset`.
     pub fn sample_3d(&self, sampler: &Sampler, s: f32, t: f32, r: f32) -> [f32; 4] {
         let [w, h, d] = self.size();
-        let (u, v, ww) = (s, t, r);
-        debug_assert!(!sampler.normalized_coords, "normalized coordinates are not ported");
+        let (u, v, ww) = if sampler.normalized_coords {
+            (unnormalize(sampler.wrap_s, s, w), unnormalize(sampler.wrap_t, t, h), unnormalize(sampler.wrap_r, r, d))
+        } else {
+            (s, t, r)
+        };
 
         match sampler.filter {
             FilterMode::Nearest => {
@@ -1929,6 +1947,317 @@ pub fn fill_with_component_gradients_styled(access: &mut PixelBufferAccess<'_>, 
     }
 }
 
+
+// ---------------------------------------------------------------------------------
+// Texture views
+//
+// `Texture1DArrayView` and friends: a sampler's-eye view of a mip pyramid, where the
+// caller has already cut the levels it wants. Only lod 0 with a non-mipmapping filter
+// is ported, which is what every case reaching this today asks for; upstream's
+// `sampleLevelArray*` chooses between min and mag filter on `lod <= lodThreshold` and
+// then indexes a level, and with one filter and lod 0 that reduces to level 0.
+// ---------------------------------------------------------------------------------
+
+impl ConstPixelBufferAccess<'_> {
+    /// `sampleNearest1D` / `sampleLinear1D`, reached through `sample1D`. `layer` is
+    /// the offset.y() upstream threads through for a 1D array.
+    pub fn sample_1d(&self, sampler: &Sampler, s: f32, layer: i32) -> [f32; 4] {
+        let w = self.size()[0];
+        let u = if sampler.normalized_coords { unnormalize(sampler.wrap_s, s, w) } else { s };
+
+        match sampler.filter {
+            FilterMode::Nearest => lookup(self, wrap(sampler.wrap_s, u.floor() as i32, w as i32), layer, 0),
+            FilterMode::Linear => {
+                let x0 = (u - 0.5).floor() as i32;
+                let i0 = wrap(sampler.wrap_s, x0, w as i32);
+                let i1 = wrap(sampler.wrap_s, x0 + 1, w as i32);
+                let a = frac(u - 0.5);
+
+                let p0 = lookup(self, i0, layer, 0);
+                let p1 = lookup(self, i1, layer, 0);
+                std::array::from_fn(|c| p0[c] * (1.0 - a) + p1[c] * a)
+            }
+            FilterMode::Cubic => unimplemented!("cubic 1D sampling"),
+        }
+    }
+}
+
+/// `tcu::CubeFace`
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum CubeFace {
+    NegativeX,
+    PositiveX,
+    NegativeY,
+    PositiveY,
+    NegativeZ,
+    PositiveZ,
+}
+
+/// `tcu::getCubeArrayFaceIndex` - where a face sits among the six layers Vulkan
+/// stores a cube in, which is a different order from `CubeFace` itself.
+pub fn get_cube_array_face_index(face: CubeFace) -> u32 {
+    match face {
+        CubeFace::PositiveX => 0,
+        CubeFace::NegativeX => 1,
+        CubeFace::PositiveY => 2,
+        CubeFace::NegativeY => 3,
+        CubeFace::PositiveZ => 4,
+        CubeFace::NegativeZ => 5,
+    }
+}
+
+/// `tcu::selectCubeFace` - the major axis wins; when two are equal the tie-break
+/// rules below decide, which is what keeps the choice deterministic on an edge.
+pub fn select_cube_face(coords: [f32; 3]) -> CubeFace {
+    let [x, y, z] = coords;
+    let (ax, ay, az) = (x.abs(), y.abs(), z.abs());
+
+    let px = if x >= 0.0 { CubeFace::PositiveX } else { CubeFace::NegativeX };
+    let py = if y >= 0.0 { CubeFace::PositiveY } else { CubeFace::NegativeY };
+    let pz = if z >= 0.0 { CubeFace::PositiveZ } else { CubeFace::NegativeZ };
+
+    if ay < ax && az < ax {
+        px
+    } else if ax < ay && az < ay {
+        py
+    } else if ax < az && ay < az {
+        pz
+    } else if ax == ay {
+        if ax < az { pz } else { px }
+    } else if ax == az {
+        if az < ay { py } else { pz }
+    } else if ay == az {
+        if ay < ax { px } else { py }
+    } else {
+        px
+    }
+}
+
+/// `tcu::projectToFace`
+pub fn project_to_face(face: CubeFace, coord: [f32; 3]) -> [f32; 2] {
+    let [rx, ry, rz] = coord;
+    let (sc, tc, ma) = match face {
+        CubeFace::NegativeX => (rz, -ry, -rx),
+        CubeFace::PositiveX => (-rz, -ry, rx),
+        CubeFace::NegativeY => (rx, -rz, -ry),
+        CubeFace::PositiveY => (rx, rz, ry),
+        CubeFace::NegativeZ => (-rx, -ry, -rz),
+        CubeFace::PositiveZ => (rx, -ry, rz),
+    };
+
+    if ma.abs() < f32::EPSILON {
+        return [0.0, 0.0];
+    }
+
+    [((sc / ma) + 1.0) / 2.0, ((tc / ma) + 1.0) / 2.0]
+}
+
+/// `tcu::getCubeFaceCoords`
+pub fn get_cube_face_coords(coords: [f32; 3]) -> (CubeFace, [f32; 2]) {
+    let face = select_cube_face(coords);
+    (face, project_to_face(face, coords))
+}
+
+/// `tcu::remapCubeEdgeCoords` - a texel that fell off one face lands on a neighbour.
+/// `None` means it fell off in both axes at once, i.e. it is a corner and no single
+/// neighbour owns it.
+pub fn remap_cube_edge_coords(face: CubeFace, s: i32, t: i32, size: i32) -> Option<(CubeFace, i32, i32)> {
+    let u_in_bounds = (0..size).contains(&s);
+    let v_in_bounds = (0..size).contains(&t);
+
+    if u_in_bounds && v_in_bounds {
+        return Some((face, s, t));
+    }
+    if !u_in_bounds && !v_in_bounds {
+        return None;
+    }
+
+    let x = wrap(WrapMode::ClampToBorder, s, size);
+    let y = wrap(WrapMode::ClampToBorder, t, size);
+
+    // Map the uv coordinates onto the cube's own axes, where "off the face" becomes a
+    // coordinate of -1 or size and so names the neighbour directly.
+    let c = match face {
+        CubeFace::NegativeX => [0, size - 1 - y, x],
+        CubeFace::PositiveX => [size - 1, size - 1 - y, size - 1 - x],
+        CubeFace::NegativeY => [x, 0, size - 1 - y],
+        CubeFace::PositiveY => [x, size - 1, y],
+        CubeFace::NegativeZ => [size - 1 - x, size - 1 - y, 0],
+        CubeFace::PositiveZ => [x, size - 1 - y, size - 1],
+    };
+
+    if c[0] == -1 {
+        return Some((CubeFace::NegativeX, c[2], size - 1 - c[1]));
+    }
+    if c[0] == size {
+        return Some((CubeFace::PositiveX, size - 1 - c[2], size - 1 - c[1]));
+    }
+    if c[1] == -1 {
+        return Some((CubeFace::NegativeY, c[0], size - 1 - c[2]));
+    }
+    if c[1] == size {
+        return Some((CubeFace::PositiveY, c[0], c[2]));
+    }
+    if c[2] == -1 {
+        return Some((CubeFace::NegativeZ, size - 1 - c[0], size - 1 - c[1]));
+    }
+    if c[2] == size {
+        return Some((CubeFace::PositiveZ, c[0], size - 1 - c[1]));
+    }
+    unreachable!("a coordinate out of bounds in exactly one axis always names a neighbour")
+}
+
+/// `sampleCubeSeamlessNearest` - a nearest tap never crosses an edge, so the only
+/// thing seamlessness changes is that the wrap mode is forced to clamp.
+fn sample_cube_seamless_nearest(face_access: &ConstPixelBufferAccess<'_>, sampler: &Sampler, s: f32, t: f32, depth: i32) -> [f32; 4] {
+    let mut clamping = *sampler;
+    clamping.wrap_s = WrapMode::ClampToEdge;
+    clamping.wrap_t = WrapMode::ClampToEdge;
+    clamping.filter = FilterMode::Nearest;
+    face_access.sample_2d(&clamping, s, t, depth)
+}
+
+/// `getCubeLinearSamples` - the four taps of a bilinear filter, each followed onto
+/// whichever face it actually landed on. A corner tap belongs to no face, so upstream
+/// gives it the average of the other three.
+fn get_cube_linear_samples(face_accesses: &[ConstPixelBufferAccess<'_>; 6], base_face: CubeFace, u: f32, v: f32, depth: i32) -> [[f32; 4]; 4] {
+    let size = face_accesses[0].size()[0] as i32;
+    let x0 = (u - 0.5).floor() as i32;
+    let y0 = (v - 0.5).floor() as i32;
+    let base = [(x0, y0), (x0 + 1, y0), (x0, y0 + 1), (x0 + 1, y0 + 1)];
+
+    let mut colors = [[0.0f32; 4]; 4];
+    let mut corner = None;
+    for (i, (x, y)) in base.into_iter().enumerate() {
+        match remap_cube_edge_coords(base_face, x, y, size) {
+            Some((face, s, t)) => colors[i] = lookup(&face_accesses[get_cube_face_slot(face)], s, t, depth),
+            None => corner = Some(i),
+        }
+    }
+
+    if let Some(i) = corner {
+        let mut sum = [0.0f32; 4];
+        for (j, color) in colors.iter().enumerate() {
+            if j != i {
+                for (c, s) in sum.iter_mut().zip(color) {
+                    *c += s;
+                }
+            }
+        }
+        colors[i] = sum.map(|c| c / 3.0);
+    }
+
+    colors
+}
+
+/// Where a face sits in a `[ConstPixelBufferAccess; 6]` indexed by `CubeFace` itself,
+/// which is the enum's own order rather than the Vulkan layer order.
+fn get_cube_face_slot(face: CubeFace) -> usize {
+    match face {
+        CubeFace::NegativeX => 0,
+        CubeFace::PositiveX => 1,
+        CubeFace::NegativeY => 2,
+        CubeFace::PositiveY => 3,
+        CubeFace::NegativeZ => 4,
+        CubeFace::PositiveZ => 5,
+    }
+}
+
+/// `sampleCubeSeamlessLinear`
+fn sample_cube_seamless_linear(face_accesses: &[ConstPixelBufferAccess<'_>; 6], base_face: CubeFace, sampler: &Sampler, s: f32, t: f32, depth: i32) -> [f32; 4] {
+    let size = face_accesses[0].size()[0];
+    let (u, v) = if sampler.normalized_coords {
+        (unnormalize(sampler.wrap_s, s, size), unnormalize(sampler.wrap_t, t, size))
+    } else {
+        (s, t)
+    };
+
+    let colors = get_cube_linear_samples(face_accesses, base_face, u, v, depth);
+    let a = frac(u - 0.5);
+    let b = frac(v - 0.5);
+
+    std::array::from_fn(|c| colors[0][c] * (1.0 - a) * (1.0 - b) + colors[1][c] * a * (1.0 - b) + colors[2][c] * (1.0 - a) * b + colors[3][c] * a * b)
+}
+
+/// `tcu::Texture1DArrayView`, at lod 0.
+pub struct Texture1DArrayView<'a> {
+    pub level0: ConstPixelBufferAccess<'a>,
+}
+
+impl Texture1DArrayView<'_> {
+    /// `selectLayer` - the array index is a coordinate, rounded rather than filtered.
+    fn select_layer(&self, t: f32) -> i32 {
+        ((t + 0.5).floor() as i32).clamp(0, self.level0.size()[1] as i32 - 1)
+    }
+
+    pub fn sample(&self, sampler: &Sampler, s: f32, t: f32) -> [f32; 4] {
+        self.level0.sample_1d(sampler, s, self.select_layer(t))
+    }
+}
+
+/// `tcu::Texture2DArrayView`, at lod 0.
+pub struct Texture2DArrayView<'a> {
+    pub level0: ConstPixelBufferAccess<'a>,
+}
+
+impl Texture2DArrayView<'_> {
+    fn select_layer(&self, r: f32) -> i32 {
+        ((r + 0.5).floor() as i32).clamp(0, self.level0.size()[2] as i32 - 1)
+    }
+
+    pub fn sample(&self, sampler: &Sampler, s: f32, t: f32, r: f32) -> [f32; 4] {
+        self.level0.sample_2d(sampler, s, t, self.select_layer(r))
+    }
+}
+
+/// `tcu::Texture3DView`, at lod 0.
+pub struct Texture3DView<'a> {
+    pub level0: ConstPixelBufferAccess<'a>,
+}
+
+impl Texture3DView<'_> {
+    pub fn sample(&self, sampler: &Sampler, s: f32, t: f32, r: f32) -> [f32; 4] {
+        self.level0.sample_3d(sampler, s, t, r)
+    }
+}
+
+/// `tcu::TextureCubeArrayView`, at lod 0 and always seamless - the only sampler these
+/// tests build sets `seamlessCubeMap`.
+pub struct TextureCubeArrayView<'a> {
+    pub level0: ConstPixelBufferAccess<'a>,
+}
+
+impl TextureCubeArrayView<'_> {
+    fn select_layer(&self, q: f32) -> i32 {
+        ((q + 0.5).floor() as i32).clamp(0, (self.level0.size()[2] / 6) as i32 - 1)
+    }
+
+    /// `TextureCubeArrayView::sample` -> `sampleCubeArraySeamless`
+    pub fn sample(&self, sampler: &Sampler, s: f32, t: f32, r: f32, q: f32) -> [f32; 4] {
+        let (face, coords) = get_cube_face_coords([s, t, r]);
+        let layer = self.select_layer(q);
+        let [w, h, _] = self.level0.size();
+
+        match sampler.filter {
+            FilterMode::Nearest => {
+                let face_depth = layer * 6 + get_cube_array_face_index(face) as i32;
+                sample_cube_seamless_nearest(&self.level0, sampler, coords[0], coords[1], face_depth)
+            }
+            _ => {
+                // Each face becomes its own one-slice access, so a tap that walks off
+                // an edge can be looked up in the neighbour directly.
+                let faces: [ConstPixelBufferAccess<'_>; 6] = std::array::from_fn(|slot| {
+                    let face = [CubeFace::NegativeX, CubeFace::PositiveX, CubeFace::NegativeY, CubeFace::PositiveY, CubeFace::NegativeZ, CubeFace::PositiveZ][slot];
+                    let depth = layer as u32 * 6 + get_cube_array_face_index(face);
+                    self.level0.get_subregion(0, 0, depth, w, h, 1)
+                });
+                sample_cube_seamless_linear(&faces, face, sampler, coords[0], coords[1], 0)
+            }
+        }
+    }
+}
+
+
 #[cfg(test)]
 mod write_tests {
     use super::*;
@@ -2373,5 +2702,49 @@ mod write_tests {
         // on a straight line, so cubic agrees with linear here.
         let mid = access.sample_2d(&sampler, 4.0, 0.5, 0)[0];
         assert!((mid - 3.5).abs() < 1e-4, "{mid}");
+    }
+
+    /// The centre of every face maps back to the middle of that face, which is the
+    /// one point where `selectCubeFace` and `projectToFace` have to agree exactly.
+    #[test]
+    fn cube_face_centres_project_to_the_face_middle() {
+        use super::CubeFace::*;
+        for (dir, face) in [
+            ([1.0f32, 0.0, 0.0], PositiveX),
+            ([-1.0, 0.0, 0.0], NegativeX),
+            ([0.0, 1.0, 0.0], PositiveY),
+            ([0.0, -1.0, 0.0], NegativeY),
+            ([0.0, 0.0, 1.0], PositiveZ),
+            ([0.0, 0.0, -1.0], NegativeZ),
+        ] {
+            let (selected, coords) = super::get_cube_face_coords(dir);
+            assert_eq!(selected, face, "direction {dir:?}");
+            assert!((coords[0] - 0.5).abs() < 1e-6 && (coords[1] - 0.5).abs() < 1e-6, "{dir:?} -> {coords:?}");
+        }
+    }
+
+    /// A texel one step off the edge of +Z belongs to the neighbour that shares that
+    /// edge, and stepping off in both axes at once names no face at all.
+    #[test]
+    fn cube_edge_coords_remap_to_the_neighbouring_face() {
+        use super::CubeFace::*;
+        let size = 8;
+        assert_eq!(super::remap_cube_edge_coords(PositiveZ, 3, 4, size), Some((PositiveZ, 3, 4)));
+        assert_eq!(super::remap_cube_edge_coords(PositiveZ, -1, 4, size), Some((NegativeX, 7, 4)));
+        assert_eq!(super::remap_cube_edge_coords(PositiveZ, size, 4, size), Some((PositiveX, 0, 4)));
+        assert_eq!(super::remap_cube_edge_coords(PositiveZ, 3, -1, size), Some((PositiveY, 3, 7)));
+        assert_eq!(super::remap_cube_edge_coords(PositiveZ, -1, -1, size), None);
+    }
+
+    /// `wrap` for the two modes the sampling tests use.
+    #[test]
+    fn wrap_modes_fold_out_of_range_coordinates() {
+        use super::WrapMode::*;
+        assert_eq!(super::wrap(ClampToEdge, -3, 8), 0);
+        assert_eq!(super::wrap(ClampToEdge, 11, 8), 7);
+        assert_eq!(super::wrap(Repeat, -3, 8), 5);
+        assert_eq!(super::wrap(Repeat, 11, 8), 3);
+        assert_eq!(super::wrap(ClampToBorder, -3, 8), -1);
+        assert_eq!(super::wrap(ClampToBorder, 11, 8), 8);
     }
 }

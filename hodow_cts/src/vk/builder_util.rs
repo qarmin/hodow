@@ -20,6 +20,9 @@ use crate::vk::ref_util::Unique;
 #[derive(Default)]
 pub struct DescriptorSetLayoutBuilder {
     bindings: Vec<vk::DescriptorSetLayoutBinding>,
+    /// Immutable samplers are referenced by pointer from the bindings, so the builder
+    /// has to own them until `build`. Upstream keeps the same list for the same reason.
+    immutable_samplers: Vec<Vec<vk::Sampler>>,
 }
 
 impl DescriptorSetLayoutBuilder {
@@ -49,6 +52,22 @@ impl DescriptorSetLayoutBuilder {
             descriptor_count,
             stage_flags,
             immutable_samplers: std::ptr::null(),
+        });
+        self
+    }
+
+    /// `DescriptorSetLayoutBuilder::addSingleIndexedSamplerBinding` /
+    /// `addArraySamplerBinding` - the immutable-sampler forms, where the sampler is
+    /// baked into the layout rather than written into the descriptor.
+    pub fn add_indexed_sampler_binding(mut self, descriptor_type: vk::DescriptorType, stage_flags: vk::ShaderStageFlags, binding: u32, samplers: &[vk::Sampler]) -> Self {
+        self.immutable_samplers.push(samplers.to_vec());
+        let owned = self.immutable_samplers.last().expect("just pushed");
+        self.bindings.push(vk::DescriptorSetLayoutBinding {
+            binding,
+            descriptor_type,
+            descriptor_count: owned.len() as u32,
+            stage_flags,
+            immutable_samplers: owned.as_ptr(),
         });
         self
     }

@@ -49,6 +49,10 @@ pub struct BufferAccessProgram {
 /// into the GLSL, so there is one program per case and `view_name` identifies it.
 pub struct ImageAccessProgram {
     pub name: &'static str,
+    /// Which of `storage_image` / `sampler` / `combined_image_sampler` the shader
+    /// declares. The mutable and immutable sampler cases share a shader: immutability
+    /// is a property of the layout, not of the GLSL.
+    pub descriptor_type: &'static str,
     pub view_name: &'static str,
     pub set_count: &'static str,
     pub shader_interface: &'static str,
@@ -712,7 +716,12 @@ pub fn create_shader_access_tests() -> tcu::TestCaseGroup {
     let mut primary = tcu::TestCaseGroup::new("primary_cmd_buf");
     let mut bind = tcu::TestCaseGroup::new("bind");
 
-    bind.add_child(create_storage_image_group());
+    // Upstream's descriptor type order, which puts the image types before the buffers.
+    bind.add_child(create_image_group("sampler_mutable", vk::DescriptorType::SAMPLER, false));
+    bind.add_child(create_image_group("sampler_immutable", vk::DescriptorType::SAMPLER, true));
+    bind.add_child(create_image_group("combined_image_sampler_mutable", vk::DescriptorType::COMBINED_IMAGE_SAMPLER, false));
+    bind.add_child(create_image_group("combined_image_sampler_immutable", vk::DescriptorType::COMBINED_IMAGE_SAMPLER, true));
+    bind.add_child(create_image_group("storage_image", vk::DescriptorType::STORAGE_IMAGE, false));
 
     let descriptor_types = [
         ("uniform_buffer", vk::DescriptorType::UNIFORM_BUFFER, ResourceKind::Buffer),
@@ -795,11 +804,10 @@ pub fn create_shader_access_tests() -> tcu::TestCaseGroup {
     group
 }
 
-/// `createShaderAccessImageTests` for `VK_DESCRIPTOR_TYPE_STORAGE_IMAGE`, compute
-/// stage. The view type is the innermost level of the tree here, where the buffer
-/// types put their offset variants.
-fn create_storage_image_group() -> tcu::TestCaseGroup {
-    let mut type_group = tcu::TestCaseGroup::new("storage_image");
+/// `createShaderAccessImageTests`, compute stage. The view type is the innermost
+/// level of the tree here, where the buffer types put their offset variants.
+fn create_image_group(group_name: &str, descriptor_type: vk::DescriptorType, is_immutable_sampler: bool) -> tcu::TestCaseGroup {
+    let mut type_group = tcu::TestCaseGroup::new(group_name);
     let mut stage_group = tcu::TestCaseGroup::new("compute");
 
     for (set_group_name, descriptor_set_count) in SET_COUNTS {
@@ -814,12 +822,13 @@ fn create_storage_image_group() -> tcu::TestCaseGroup {
                 }
                 interface_group.add_child(Box::new(ImageAccessCase {
                     name,
-                    descriptor_type: vk::DescriptorType::STORAGE_IMAGE,
+                    descriptor_type,
                     descriptor_set_count,
                     shader_interface,
                     view_type,
                     base_mip_level,
                     base_array_slice,
+                    is_immutable_sampler,
                 }) as Box<dyn TestCase>);
             }
 
@@ -1017,6 +1026,16 @@ fn view_type_to_image_type(t: vk::ImageViewType) -> vk::ImageType {
     }
 }
 
+/// The read usage `createImage` and `checkSupport` both derive from the descriptor
+/// type: a storage image is loaded from, everything else is sampled.
+fn read_usage(t: vk::DescriptorType) -> vk::ImageUsageFlags {
+    if t == vk::DescriptorType::STORAGE_IMAGE {
+        vk::ImageUsageFlags::STORAGE
+    } else {
+        vk::ImageUsageFlags::SAMPLED
+    }
+}
+
 /// `getImageLayoutForDescriptorType`
 fn image_layout_for_descriptor_type(t: vk::DescriptorType) -> vk::ImageLayout {
     if t == vk::DescriptorType::STORAGE_IMAGE {
@@ -1144,15 +1163,48 @@ pub struct ImageAccessCase {
     base_mip_level: u32,
     /// `FLAG_BASE_SLICE` - and/or one array slice in.
     base_array_slice: u32,
+    /// `RESOURCE_FLAG_IMMUTABLE_SAMPLER` - the sampler is baked into the descriptor
+    /// set layout instead of being written into the descriptor.
+    is_immutable_sampler: bool,
 }
 
 impl ImageAccessCase {
+    fn manifest_descriptor_type(&self) -> &'static str {
+        match self.descriptor_type {
+            vk::DescriptorType::STORAGE_IMAGE => "storage_image",
+            vk::DescriptorType::SAMPLER => "sampler",
+            _ => "combined_image_sampler",
+        }
+    }
+
     fn program(&self) -> &'static ImageAccessProgram {
+        let descriptor_type = self.manifest_descriptor_type();
         ALL_IMAGE_ACCESS_PROGRAM
             .iter()
             .copied()
-            .find(|p| p.view_name == self.name && p.set_count == self.descriptor_set_count.manifest_name() && p.shader_interface == self.shader_interface.manifest_name())
+            .find(|p| {
+                p.descriptor_type == descriptor_type
+                    && p.view_name == self.name
+                    && p.set_count == self.descriptor_set_count.manifest_name()
+                    && p.shader_interface == self.shader_interface.manifest_name()
+            })
             .expect("the generator covers every combination")
+    }
+
+    /// `ImageSampleInstanceImages::getNumImages` and, for the fetch path, the plain
+    /// one-image-per-descriptor count. A separate sampler shares one texture across
+    /// the set, since what is being varied there is the sampler.
+    fn num_images(&self) -> u32 {
+        let sets = self.descriptor_set_count.count();
+        if self.descriptor_type == vk::DescriptorType::SAMPLER {
+            sets
+        } else {
+            sets * self.shader_interface.num_resources()
+        }
+    }
+
+    fn is_sampling_case(&self) -> bool {
+        self.descriptor_type != vk::DescriptorType::STORAGE_IMAGE
     }
 }
 
@@ -1184,7 +1236,7 @@ impl TestCase for ImageAccessCase {
                     vk::Format::R8G8B8A8_UNORM,
                     view_type_to_image_type(self.view_type),
                     vk::ImageTiling::OPTIMAL,
-                    vk::ImageUsageFlags::STORAGE | vk::ImageUsageFlags::TRANSFER_DST,
+                    read_usage(self.descriptor_type) | vk::ImageUsageFlags::TRANSFER_DST,
                     vk::ImageCreateFlags::empty(),
                 )
             };
@@ -1225,7 +1277,7 @@ impl TestInstance for ImageAccessInstance<'_> {
         let num_levels = p.base_mip_level + 1;
         let num_sets = p.descriptor_set_count.count();
         let num_resources = p.shader_interface.num_resources();
-        let num_images = num_sets * num_resources;
+        let num_images = p.num_images();
 
         let mut source_images = Vec::with_capacity(num_images as usize);
         let mut images = Vec::with_capacity(num_images as usize);
@@ -1241,6 +1293,19 @@ impl TestInstance for ImageAccessInstance<'_> {
             images.push(image);
             image_views.push(view);
         }
+
+        // `ImageSampleInstanceImages::getRefSamplers` / `getSamplers` - one pair per
+        // set, alternating linear-wrapping with nearest-clamping.
+        let mut ref_samplers = Vec::new();
+        let mut samplers = Vec::new();
+        if p.is_sampling_case() {
+            for sampler_ndx in 0..(num_sets * num_resources) {
+                let reference = create_ref_sampler(sampler_ndx);
+                samplers.push(create_sampler(device, &reference)?);
+                ref_samplers.push(reference);
+            }
+        }
+        let sampler_handles: Vec<vk::Sampler> = samplers.iter().map(|s| **s).collect();
 
         // `ComputeInstanceResultBuffer` - cleared to -1 so "never written" is
         // distinguishable from "written with the wrong value".
@@ -1264,12 +1329,13 @@ impl TestInstance for ImageAccessInstance<'_> {
         let mut sets = Vec::new();
 
         for set_ndx in 0..num_sets {
-            let layout = self.create_descriptor_set_layout(set_ndx)?;
+            let layout = self.create_descriptor_set_layout(set_ndx, &sampler_handles)?;
             let set = make_descriptor_set(device, *pool, *layout)?;
 
-            let ndx0 = (set_ndx * num_resources) as usize % image_views.len();
-            let ndx1 = (set_ndx * num_resources + 1) as usize % image_views.len();
-            self.write_descriptor_set(*set, set_ndx, *image_views[ndx0], *image_views[ndx1], result_buffer.get());
+            let stride = if p.descriptor_type == vk::DescriptorType::SAMPLER { 1 } else { num_resources };
+            let ndx0 = (set_ndx * stride) as usize % image_views.len();
+            let ndx1 = (set_ndx * stride + 1) as usize % image_views.len();
+            self.write_descriptor_set(*set, set_ndx, *image_views[ndx0], *image_views[ndx1], &sampler_handles, result_buffer.get());
 
             layout_handles.push(*layout);
             set_layouts.push(layout);
@@ -1352,26 +1418,42 @@ impl TestInstance for ImageAccessInstance<'_> {
         let mut references = [[0.0f32; 4]; 4];
         for (quadrant, reference) in references.iter_mut().enumerate() {
             for set_ndx in 0..num_sets {
-                let value = fetch_image_value(&source_images, p.shader_interface, p.view_type, p.base_mip_level, p.base_array_slice, quadrant, set_ndx);
+                let value = if p.is_sampling_case() {
+                    fetch_sample_value(
+                        &source_images,
+                        &ref_samplers,
+                        p.descriptor_type,
+                        p.shader_interface,
+                        p.view_type,
+                        p.base_mip_level,
+                        p.base_array_slice,
+                        quadrant,
+                        set_ndx,
+                    )
+                } else {
+                    fetch_image_value(&source_images, p.shader_interface, p.view_type, p.base_mip_level, p.base_array_slice, quadrant, set_ndx)
+                };
                 for (r, v) in reference.iter_mut().zip(value) {
                     *r += v;
                 }
             }
-            if num_sets > 1 {
+            if p.is_sampling_case() || num_sets > 1 {
                 for r in reference.iter_mut() {
                     *r /= num_sets as f32;
                 }
             }
         }
 
-        // The value went through a UNORM8 conversion in the driver, so upstream allows
-        // a whole quantisation step rather than comparing exactly.
-        const CONVERSION_THRESHOLD: f32 = 1.0 / 255.0;
+        // A fetched value only went through a UNORM8 conversion, so a whole
+        // quantisation step is enough slack. A sampled one went through a filter over
+        // a deliberately high-frequency source, and upstream allows correspondingly
+        // more for the sampling error that implies.
+        let threshold = if p.is_sampling_case() { 8.0 / 255.0 } else { 1.0 / 255.0 };
         let any_result_set = results.iter().any(|q| *q != [-1.0f32; 4]);
         let all_ok = results
             .iter()
             .zip(&references)
-            .all(|(result, reference)| result.iter().zip(reference).all(|(r, e)| (r - e).abs() <= CONVERSION_THRESHOLD));
+            .all(|(result, reference)| result.iter().zip(reference).all(|(r, e)| (r - e).abs() <= threshold));
 
         if all_ok {
             Ok(TestStatus::pass("Pass"))
@@ -1386,6 +1468,7 @@ impl TestInstance for ImageAccessInstance<'_> {
 impl ImageAccessInstance<'_> {
     /// `ImageInstanceImages::createImage`
     fn create_image(&self, source: &[TextureLevel]) -> Result<ImageWithMemory<'_>, TestError> {
+        let read_usage = read_usage(self.params.descriptor_type);
         let p = self.params;
         let base_level = source[0].size();
         let is_cube = is_image_view_type_cube(p.view_type);
@@ -1413,7 +1496,7 @@ impl ImageAccessInstance<'_> {
             .array_layers(array_size)
             .samples(vk::SampleCountFlags::_1)
             .tiling(vk::ImageTiling::OPTIMAL)
-            .usage(vk::ImageUsageFlags::STORAGE | vk::ImageUsageFlags::TRANSFER_DST)
+            .usage(read_usage | vk::ImageUsageFlags::TRANSFER_DST)
             .sharing_mode(vk::SharingMode::EXCLUSIVE)
             .initial_layout(vk::ImageLayout::UNDEFINED)
             .build();
@@ -1571,8 +1654,13 @@ impl ImageAccessInstance<'_> {
         submit_commands_and_wait(device, queue, *command_buffer)
     }
 
-    /// `ImageFetchComputeInstance::createDescriptorSetLayout`
-    fn create_descriptor_set_layout(&self, set_ndx: u32) -> Result<Unique<'_, vk::DescriptorSetLayout>, TestError> {
+    /// `ImageFetchComputeInstance::createDescriptorSetLayout` and
+    /// `ImageSampleComputeInstance::createDescriptorSetLayout`.
+    ///
+    /// The separate-sampler type needs an extra binding for the texture the samplers
+    /// are applied to, and the immutable variant bakes the sampler into the layout
+    /// here instead of writing it into the descriptor later.
+    fn create_descriptor_set_layout(&self, set_ndx: u32, samplers: &[vk::Sampler]) -> Result<Unique<'_, vk::DescriptorSetLayout>, TestError> {
         let p = self.params;
         let mut builder = DescriptorSetLayoutBuilder::new();
         let mut binding = 0;
@@ -1582,60 +1670,134 @@ impl ImageAccessInstance<'_> {
             binding += 1;
         }
 
+        let is_separate_sampler = p.descriptor_type == vk::DescriptorType::SAMPLER;
+        // The storage image case has no samplers at all; the array is still built so
+        // the immutable path below can index it uniformly.
+        let set_samplers: [vk::Sampler; 2] = std::array::from_fn(|ndx| match samplers.len() {
+            0 => vk::Sampler::null(),
+            n => samplers[(set_ndx * p.shader_interface.num_resources() + ndx as u32) as usize % n],
+        });
+        let immutable = |ndx: usize| -> Option<&[vk::Sampler]> { p.is_immutable_sampler.then(|| &set_samplers[ndx..ndx + 1]) };
+
+        let add = |builder: DescriptorSetLayoutBuilder, b: u32, samplers: Option<&[vk::Sampler]>, count: u32| match samplers {
+            Some(s) => builder.add_indexed_sampler_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, b, s),
+            None => builder.add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, b, count),
+        };
+
         builder = match p.shader_interface {
-            ShaderInputInterface::SingleDescriptor => builder.add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, binding, 1),
-            ShaderInputInterface::MultipleContiguousDescriptors => builder
-                .add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, binding, 1)
-                .add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, binding + 1, 1),
-            ShaderInputInterface::MultipleDiscontiguousDescriptors => builder
-                .add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, binding, 1)
-                .add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, binding + 2, 1),
-            ShaderInputInterface::MultipleArbitraryDescriptors => builder
-                .add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, arbitrary_binding_index(0), 1)
-                .add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, arbitrary_binding_index(1), 1),
-            ShaderInputInterface::DescriptorArray => builder.add_indexed_binding(p.descriptor_type, vk::ShaderStageFlags::COMPUTE, binding, 2),
+            ShaderInputInterface::SingleDescriptor => {
+                if is_separate_sampler {
+                    builder = builder.add_indexed_binding(vk::DescriptorType::SAMPLED_IMAGE, vk::ShaderStageFlags::COMPUTE, binding, 1);
+                    binding += 1;
+                }
+                add(builder, binding, immutable(0), 1)
+            }
+            ShaderInputInterface::MultipleContiguousDescriptors => {
+                if is_separate_sampler {
+                    builder = builder.add_indexed_binding(vk::DescriptorType::SAMPLED_IMAGE, vk::ShaderStageFlags::COMPUTE, binding, 1);
+                    binding += 1;
+                }
+                let builder = add(builder, binding, immutable(0), 1);
+                add(builder, binding + 1, immutable(1), 1)
+            }
+            ShaderInputInterface::MultipleDiscontiguousDescriptors => {
+                // The texture sits between the two samplers here rather than before
+                // them, which is the whole point of the arrangement.
+                let mut builder = add(builder, binding, immutable(0), 1);
+                if is_separate_sampler {
+                    builder = builder.add_indexed_binding(vk::DescriptorType::SAMPLED_IMAGE, vk::ShaderStageFlags::COMPUTE, binding + 1, 1);
+                }
+                add(builder, binding + 2, immutable(1), 1)
+            }
+            ShaderInputInterface::MultipleArbitraryDescriptors => {
+                if is_separate_sampler {
+                    builder = builder.add_indexed_binding(vk::DescriptorType::SAMPLED_IMAGE, vk::ShaderStageFlags::COMPUTE, binding, 1);
+                }
+                let builder = add(builder, arbitrary_binding_index(0), immutable(0), 1);
+                add(builder, arbitrary_binding_index(1), immutable(1), 1)
+            }
+            ShaderInputInterface::DescriptorArray => {
+                if is_separate_sampler {
+                    builder = builder.add_indexed_binding(vk::DescriptorType::SAMPLED_IMAGE, vk::ShaderStageFlags::COMPUTE, binding, 1);
+                    binding += 1;
+                }
+                add(builder, binding, p.is_immutable_sampler.then_some(&set_samplers[..]), 2)
+            }
         };
 
         builder.build(self.context.get_device())
     }
 
-    /// `ImageFetchComputeInstance::createDescriptorPool`
+    /// `ImageFetchComputeInstance::createDescriptorPool` /
+    /// `ImageSampleComputeInstance::createDescriptorPool`
     fn create_descriptor_pool(&self) -> Result<Unique<'_, vk::DescriptorPool>, TestError> {
         let p = self.params;
         let num = p.descriptor_set_count.count() * p.shader_interface.num_resources();
-        DescriptorPoolBuilder::new()
+        let mut builder = DescriptorPoolBuilder::new()
             .add_type(vk::DescriptorType::STORAGE_BUFFER, 1)
-            .add_type(p.descriptor_type, num)
-            .build(
-                self.context.get_device(),
-                vk::DescriptorPoolCreateFlags::FREE_DESCRIPTOR_SET,
-                p.descriptor_set_count.count(),
-            )
+            .add_type(p.descriptor_type, num);
+
+        if p.descriptor_type == vk::DescriptorType::SAMPLER {
+            builder = builder.add_type(vk::DescriptorType::SAMPLED_IMAGE, p.descriptor_set_count.count());
+        }
+
+        builder.build(
+            self.context.get_device(),
+            vk::DescriptorPoolCreateFlags::FREE_DESCRIPTOR_SET,
+            p.descriptor_set_count.count(),
+        )
     }
 
-    /// `ImageFetchComputeInstance::writeDescriptorSet`
-    fn write_descriptor_set(&self, set: vk::DescriptorSet, set_ndx: u32, view_a: vk::ImageView, view_b: vk::ImageView, result: vk::Buffer) {
+    /// `ImageFetchComputeInstance::writeDescriptorSet`,
+    /// `ImageSampleComputeInstance::writeSamplerDescriptorSet` and
+    /// `writeImageSamplerDescriptorSet`.
+    fn write_descriptor_set(&self, set: vk::DescriptorSet, set_ndx: u32, view_a: vk::ImageView, view_b: vk::ImageView, samplers: &[vk::Sampler], result: vk::Buffer) {
         let p = self.params;
         let device = self.context.get_device();
         let layout = image_layout_for_descriptor_type(p.descriptor_type);
+        let is_separate_sampler = p.descriptor_type == vk::DescriptorType::SAMPLER;
 
         let result_info = [vk::DescriptorBufferInfo {
             buffer: result,
             offset: 0,
             range: RESULT_DATA_SIZE,
         }];
+
+        // A combined descriptor carries its own sampler; an immutable one has it from
+        // the layout instead and leaves the handle null.
+        let combined_sampler = |ndx: u32| -> vk::Sampler {
+            if p.is_immutable_sampler || samplers.is_empty() {
+                vk::Sampler::null()
+            } else {
+                samplers[(set_ndx * p.shader_interface.num_resources() + ndx) as usize % samplers.len()]
+            }
+        };
         let image_infos = [
             vk::DescriptorImageInfo {
-                sampler: vk::Sampler::null(),
+                sampler: combined_sampler(0),
                 image_view: view_a,
                 image_layout: layout,
             },
             vk::DescriptorImageInfo {
-                sampler: vk::Sampler::null(),
+                sampler: combined_sampler(1),
                 image_view: view_b,
                 image_layout: layout,
             },
         ];
+        let sampler_infos: [vk::DescriptorImageInfo; 2] = std::array::from_fn(|ndx| vk::DescriptorImageInfo {
+            sampler: if samplers.is_empty() {
+                vk::Sampler::null()
+            } else {
+                samplers[(set_ndx * p.shader_interface.num_resources() + ndx as u32) as usize % samplers.len()]
+            },
+            image_view: vk::ImageView::null(),
+            image_layout: vk::ImageLayout::UNDEFINED,
+        });
+        let texture_info = [vk::DescriptorImageInfo {
+            sampler: vk::Sampler::null(),
+            image_view: view_a,
+            image_layout: vk::ImageLayout::SHADER_READ_ONLY_OPTIMAL,
+        }];
 
         let mut writes = Vec::new();
         let mut binding = 0;
@@ -1652,30 +1814,54 @@ impl ImageAccessInstance<'_> {
             binding += 1;
         }
 
-        let single = |dst_binding: u32, info: &[vk::DescriptorImageInfo]| {
-            vk::WriteDescriptorSet::builder()
-                .dst_set(set)
-                .dst_binding(dst_binding)
-                .descriptor_type(p.descriptor_type)
-                .image_info(info)
-                .build()
-        };
+        // The stand-alone texture, for the separate-sampler type only.
+        if is_separate_sampler {
+            let texture_binding = if p.shader_interface == ShaderInputInterface::MultipleDiscontiguousDescriptors {
+                binding + 1
+            } else {
+                let b = binding;
+                binding += 1;
+                b
+            };
+            writes.push(
+                vk::WriteDescriptorSet::builder()
+                    .dst_set(set)
+                    .dst_binding(texture_binding)
+                    .descriptor_type(vk::DescriptorType::SAMPLED_IMAGE)
+                    .image_info(&texture_info)
+                    .build(),
+            );
+        }
 
-        match p.shader_interface {
-            ShaderInputInterface::SingleDescriptor => writes.push(single(binding, &image_infos[0..1])),
-            ShaderInputInterface::MultipleContiguousDescriptors => {
-                writes.push(single(binding, &image_infos[0..1]));
-                writes.push(single(binding + 1, &image_infos[1..2]));
+        // An immutable separate sampler has nothing left to write.
+        let write_resource = !(is_separate_sampler && p.is_immutable_sampler);
+        if write_resource {
+            let infos: &[vk::DescriptorImageInfo; 2] = if is_separate_sampler { &sampler_infos } else { &image_infos };
+            let single = |dst_binding: u32, info: &[vk::DescriptorImageInfo]| {
+                vk::WriteDescriptorSet::builder()
+                    .dst_set(set)
+                    .dst_binding(dst_binding)
+                    .descriptor_type(p.descriptor_type)
+                    .image_info(info)
+                    .build()
+            };
+
+            match p.shader_interface {
+                ShaderInputInterface::SingleDescriptor => writes.push(single(binding, &infos[0..1])),
+                ShaderInputInterface::MultipleContiguousDescriptors => {
+                    writes.push(single(binding, &infos[0..1]));
+                    writes.push(single(binding + 1, &infos[1..2]));
+                }
+                ShaderInputInterface::MultipleDiscontiguousDescriptors => {
+                    writes.push(single(binding, &infos[0..1]));
+                    writes.push(single(binding + 2, &infos[1..2]));
+                }
+                ShaderInputInterface::MultipleArbitraryDescriptors => {
+                    writes.push(single(arbitrary_binding_index(0), &infos[0..1]));
+                    writes.push(single(arbitrary_binding_index(1), &infos[1..2]));
+                }
+                ShaderInputInterface::DescriptorArray => writes.push(single(binding, infos)),
             }
-            ShaderInputInterface::MultipleDiscontiguousDescriptors => {
-                writes.push(single(binding, &image_infos[0..1]));
-                writes.push(single(binding + 2, &image_infos[1..2]));
-            }
-            ShaderInputInterface::MultipleArbitraryDescriptors => {
-                writes.push(single(arbitrary_binding_index(0), &image_infos[0..1]));
-                writes.push(single(arbitrary_binding_index(1), &image_infos[1..2]));
-            }
-            ShaderInputInterface::DescriptorArray => writes.push(single(binding, &image_infos)),
         }
 
         unsafe { device.update_descriptor_sets(&writes, &[] as &[vk::CopyDescriptorSet]) };
@@ -1731,4 +1917,175 @@ fn image_case_exists(view_type: vk::ImageViewType, descriptor_set_count: Descrip
             shader_interface,
             ShaderInputInterface::MultipleDiscontiguousDescriptors | ShaderInputInterface::MultipleArbitraryDescriptors
         ) && descriptor_set_count != DescriptorSetCount::MultipleDiscontiguous)
+}
+
+/// `ImageSampleInstanceImages::createRefSampler` - the two the group alternates
+/// between. They differ in both filter and wrap mode, so a descriptor that resolved to
+/// the wrong sampler reads a visibly different colour.
+fn create_ref_sampler(ndx: u32) -> tcu::pixel::Sampler {
+    if ndx.is_multiple_of(2) {
+        // linear, wrapping
+        tcu::pixel::Sampler {
+            wrap_s: tcu::pixel::WrapMode::Repeat,
+            wrap_t: tcu::pixel::WrapMode::Repeat,
+            wrap_r: tcu::pixel::WrapMode::Repeat,
+            filter: tcu::pixel::FilterMode::Linear,
+            normalized_coords: true,
+        }
+    } else {
+        // nearest, clamping
+        tcu::pixel::Sampler {
+            wrap_s: tcu::pixel::WrapMode::ClampToEdge,
+            wrap_t: tcu::pixel::WrapMode::ClampToEdge,
+            wrap_r: tcu::pixel::WrapMode::ClampToEdge,
+            filter: tcu::pixel::FilterMode::Nearest,
+            normalized_coords: true,
+        }
+    }
+}
+
+/// `vk::mapWrapMode`
+fn map_wrap_mode(mode: tcu::pixel::WrapMode) -> vk::SamplerAddressMode {
+    match mode {
+        tcu::pixel::WrapMode::ClampToEdge => vk::SamplerAddressMode::CLAMP_TO_EDGE,
+        tcu::pixel::WrapMode::ClampToBorder => vk::SamplerAddressMode::CLAMP_TO_BORDER,
+        tcu::pixel::WrapMode::Repeat => vk::SamplerAddressMode::REPEAT,
+    }
+}
+
+/// `vk::mapSampler`, for the non-mipmapping, non-comparing samplers this group builds.
+/// `maxLod` is 0.25 rather than 0 because upstream passes the whole pyramid and lets
+/// the filter mode decide; with no mipmap mode selected the level is 0 either way.
+fn create_sampler<'a>(device: &'a Device, sampler: &tcu::pixel::Sampler) -> Result<Unique<'a, vk::Sampler>, TestError> {
+    let filter = match sampler.filter {
+        tcu::pixel::FilterMode::Nearest => vk::Filter::NEAREST,
+        _ => vk::Filter::LINEAR,
+    };
+    let info = vk::SamplerCreateInfo::builder()
+        .mag_filter(filter)
+        .min_filter(filter)
+        .mipmap_mode(vk::SamplerMipmapMode::NEAREST)
+        .address_mode_u(map_wrap_mode(sampler.wrap_s))
+        .address_mode_v(map_wrap_mode(sampler.wrap_t))
+        .address_mode_w(map_wrap_mode(sampler.wrap_r))
+        .mip_lod_bias(0.0)
+        .anisotropy_enable(false)
+        .max_anisotropy(1.0)
+        .compare_enable(false)
+        .compare_op(vk::CompareOp::ALWAYS)
+        .min_lod(0.0)
+        .max_lod(0.25)
+        .border_color(vk::BorderColor::FLOAT_TRANSPARENT_BLACK)
+        .unnormalized_coordinates(!sampler.normalized_coords);
+    let handle = unsafe { device.create_sampler(&info, None) }.vk_check("vkCreateSampler")?;
+    Ok(Unique::new(device, handle))
+}
+
+/// `ImageSampleInstanceImages::getSamplePos` - arbitrary values chosen so that NEAREST
+/// filtering does not land on a texel boundary.
+fn get_sample_pos(view_type: vk::ImageViewType, base_mip_level: u32, base_array_slice: u32, sample_pos_ndx: usize) -> [f32; 4] {
+    let image_size = (IMAGE_SIZE >> base_mip_level) as f32;
+    let image_size_u = IMAGE_SIZE >> base_mip_level;
+    let array_size = if is_image_view_type_array(view_type) { ARRAY_SIZE - base_array_slice } else { 1 };
+
+    if is_image_view_type_cube(view_type) {
+        // These are in [0, texSize]^3 for convenience and get mapped to [-1, 1]^3.
+        let coords = [
+            [0.75, 0.5, image_size],
+            [(13 % image_size_u) as f32 + 0.25, 0.0, (16 % image_size_u) as f32 + 0.5],
+            [0.0, (84 % image_size_u) as f32 + 0.5, (10 % image_size_u) as f32 + 0.75],
+            [image_size, (75 % image_size_u) as f32 + 0.25, (83 % image_size_u) as f32 + 0.75],
+        ][sample_pos_ndx];
+        let slices = [1 % array_size, 2 % array_size, 9 % array_size, 5 % array_size];
+        return [
+            coords[0] / image_size * 2.0 - 1.0,
+            coords[1] / image_size * 2.0 - 1.0,
+            coords[2] / image_size * 2.0 - 1.0,
+            slices[sample_pos_ndx] as f32,
+        ];
+    }
+
+    let coords = [
+        [0.75, 0.5, (12 % image_size_u) as f32 + 0.25],
+        [
+            (23 % image_size_u) as f32 + 0.25,
+            (73 % image_size_u) as f32 + 0.5,
+            (16 % image_size_u) as f32 + 0.5 + image_size,
+        ],
+        [
+            -((43 % image_size_u) as f32) + 0.25,
+            (84 % image_size_u) as f32 + 0.5 + image_size,
+            (117 % image_size_u) as f32 + 0.75,
+        ],
+        [
+            image_size + 0.5,
+            (75 % image_size_u) as f32 + 0.25,
+            (83 % image_size_u) as f32 + 0.25 + image_size,
+        ],
+    ][sample_pos_ndx];
+    let slices = [0 % array_size, 4 % array_size, 9 % array_size, 2 % array_size];
+
+    if is_image_view_type_1d(view_type) {
+        [coords[0] / image_size, slices[sample_pos_ndx] as f32, 0.0, 0.0]
+    } else if is_image_view_type_2d(view_type) {
+        [coords[0] / image_size, coords[1] / image_size, slices[sample_pos_ndx] as f32, 0.0]
+    } else {
+        [coords[0] / image_size, coords[1] / image_size, coords[2] / image_size, 0.0]
+    }
+}
+
+/// `ImageSampleInstanceImages::fetchSampleValue` - the reference the shader's
+/// `textureLod` should have produced, taken through the same tcu sampler the VkSampler
+/// was built from and the same texels the image was filled with.
+#[allow(clippy::too_many_arguments)]
+fn fetch_sample_value(
+    source_images: &[Vec<TextureLevel>],
+    ref_samplers: &[tcu::pixel::Sampler],
+    descriptor_type: vk::DescriptorType,
+    shader_interface: ShaderInputInterface,
+    view_type: vk::ImageViewType,
+    base_mip_level: u32,
+    base_array_slice: u32,
+    sample_pos_ndx: usize,
+    set_ndx: u32,
+) -> [f32; 4] {
+    let num_resources = shader_interface.num_resources();
+    // Texture order is ABAB; a separate sampler has only the one texture.
+    let is_sampler_case = descriptor_type == vk::DescriptorType::SAMPLER;
+    let num_images = if is_sampler_case { 1 } else { num_resources };
+    let src_a = (set_ndx * num_images) as usize % source_images.len();
+    let src_b = if shader_interface == ShaderInputInterface::SingleDescriptor {
+        src_a
+    } else {
+        (set_ndx * num_images + 1) as usize % source_images.len()
+    };
+    let src = if is_sampler_case || sample_pos_ndx.is_multiple_of(2) { src_a } else { src_b };
+
+    // Sampler order is ABAB too, and independent of the texture order.
+    let sampler_a = (set_ndx * num_resources) as usize % ref_samplers.len();
+    let sampler_b = if shader_interface == ShaderInputInterface::SingleDescriptor {
+        sampler_a
+    } else {
+        (set_ndx * num_resources + 1) as usize % ref_samplers.len()
+    };
+    let sampler = &ref_samplers[if sample_pos_ndx.is_multiple_of(2) { sampler_a } else { sampler_b }];
+
+    let pos = get_sample_pos(view_type, base_mip_level, base_array_slice, sample_pos_ndx);
+    // The pyramid is cut at the base mip level and the array at the base slice, so the
+    // view the reference samples is the one the descriptor actually exposes.
+    let whole = source_images[src][base_mip_level as usize].get_const_access();
+    let [w, h, d] = whole.size();
+
+    if is_image_view_type_1d(view_type) {
+        let level0 = whole.get_subregion(0, base_array_slice, 0, w, h - base_array_slice, d);
+        tcu::pixel::Texture1DArrayView { level0 }.sample(sampler, pos[0], pos[1])
+    } else if is_image_view_type_2d(view_type) {
+        let level0 = whole.get_subregion(0, 0, base_array_slice, w, h, d - base_array_slice);
+        tcu::pixel::Texture2DArrayView { level0 }.sample(sampler, pos[0], pos[1], pos[2])
+    } else if is_image_view_type_cube(view_type) {
+        let level0 = whole.get_subregion(0, 0, base_array_slice * 6, w, h, d - base_array_slice * 6);
+        tcu::pixel::TextureCubeArrayView { level0 }.sample(sampler, pos[0], pos[1], pos[2], pos[3])
+    } else {
+        tcu::pixel::Texture3DView { level0: whole }.sample(sampler, pos[0], pos[1], pos[2])
+    }
 }

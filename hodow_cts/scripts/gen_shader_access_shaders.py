@@ -351,10 +351,174 @@ def image_compute_shader(view_type: str, base_mip_level: int, base_array_slice: 
     )
 
 
+def sample_pos(view_type: str, base_mip_level: int, base_array_slice: int, sample_pos_ndx: int) -> tuple[float, float, float, float]:
+    """`ImageSampleInstanceImages::getSamplePos` - arbitrary values chosen so that
+    NEAREST filtering does not land on a texel boundary."""
+    image_size = IMAGE_SIZE >> base_mip_level
+    array_size = ARRAY_SIZE - base_array_slice if view_type in ARRAY_VIEW_TYPES else 1
+
+    if view_type in ("cube", "cube_array"):
+        coords = [
+            (0.75, 0.5, float(image_size)),
+            (float(13 % image_size) + 0.25, 0.0, float(16 % image_size) + 0.5),
+            (0.0, float(84 % image_size) + 0.5, float(10 % image_size) + 0.75),
+            (float(image_size), float(75 % image_size) + 0.25, float(83 % image_size) + 0.75),
+        ]
+        slices = [1 % array_size, 2 % array_size, 9 % array_size, 5 % array_size]
+        x, y, z = coords[sample_pos_ndx]
+        # map to [-1, 1]^3
+        return (x / image_size * 2.0 - 1.0, y / image_size * 2.0 - 1.0, z / image_size * 2.0 - 1.0, float(slices[sample_pos_ndx]))
+
+    coords = [
+        (0.75, 0.5, float(12 % image_size) + 0.25),
+        (float(23 % image_size) + 0.25, float(73 % image_size) + 0.5, float(16 % image_size) + 0.5 + image_size),
+        (-float(43 % image_size) + 0.25, float(84 % image_size) + 0.5 + image_size, float(117 % image_size) + 0.75),
+        (float(image_size) + 0.5, float(75 % image_size) + 0.25, float(83 % image_size) + 0.25 + image_size),
+    ]
+    slices = [0 % array_size, 4 % array_size, 9 % array_size, 2 % array_size]
+    x, y, z = coords[sample_pos_ndx]
+
+    if view_type in ("1d", "1d_array"):
+        return (x / image_size, float(slices[sample_pos_ndx]), 0.0, 0.0)
+    if view_type in ("2d", "2d_array"):
+        return (x / image_size, y / image_size, float(slices[sample_pos_ndx]), 0.0)
+    return (x / image_size, y / image_size, z / image_size, 0.0)
+
+
+def sample_coord_str(view_type: str, base_mip_level: int, base_array_slice: int, sample_pos_ndx: int) -> str:
+    """`ImageDescriptorCase::genSampleCoordStr`. The `%g` matches what C++ streams a
+    float as by default, so the generated GLSL is byte-identical to upstream's."""
+    x, y, z, w = sample_pos(view_type, base_mip_level, base_array_slice, sample_pos_ndx)
+    f = lambda v: "%g" % v  # noqa: E731
+    if view_type == "1d":
+        return f"float({f(x)})"
+    if view_type in ("1d_array", "2d"):
+        return f"vec2(float({f(x)}), float({f(y)}))"
+    if view_type == "cube_array":
+        return f"vec4(float({f(x)}), float({f(y)}), float({f(z)}), float({f(w)}))"
+    return f"vec3(float({f(x)}), float({f(y)}), float({f(z)}))"
+
+
+def sampler_declarations(descriptor_type: str, view_type: str, set_count: str, interface: str) -> str:
+    """`ImageDescriptorCase::genResourceDeclarations` for VK_DESCRIPTOR_TYPE_SAMPLER
+    and VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER."""
+    out = []
+    sets = SET_NDX[set_count]
+    dimension = image_dimension(view_type)
+
+    for set_ndx, descriptor_set in enumerate(sets):
+        desc_binding = 1 - (0 if set_ndx == 0 else 1)
+        postfix = "" if len(sets) == 1 else str(set_ndx)
+
+        def texture(binding: int, name: str) -> None:
+            out.append(f"layout(set = {descriptor_set}, binding = {binding}) uniform highp texture{dimension} u_separateTexture{name};")
+
+        def sampler(binding: int, name: str, array: str = "") -> None:
+            out.append(f"layout(set = {descriptor_set}, binding = {binding}) uniform highp sampler u_separateSampler{name}{array};")
+
+        def combined(binding: int, name: str, array: str = "") -> None:
+            out.append(f"layout(set = {descriptor_set}, binding = {binding}) uniform highp sampler{dimension} u_combinedTextureSampler{name}{array};")
+
+        if descriptor_type == "sampler":
+            if interface == "single_descriptor":
+                texture(desc_binding, postfix)
+                sampler(desc_binding + 1, postfix)
+            elif interface in ("multiple_contiguous", "multiple_discontiguous"):
+                # The discontiguous arrangement puts the texture between the two
+                # samplers rather than before them.
+                if interface == "multiple_contiguous":
+                    texture(desc_binding, postfix)
+                    sampler(desc_binding + 1, f"{postfix}A")
+                    sampler(desc_binding + 2, f"{postfix}B")
+                else:
+                    sampler(desc_binding, f"{postfix}A")
+                    texture(desc_binding + 1, postfix)
+                    sampler(desc_binding + 2, f"{postfix}B")
+            elif interface == "multiple_arbitrary":
+                texture(desc_binding, postfix)
+                sampler(ARBITRARY_BINDINGS[0], f"{postfix}A")
+                sampler(ARBITRARY_BINDINGS[1], f"{postfix}B")
+            else:
+                texture(desc_binding, postfix)
+                sampler(desc_binding + 1, postfix, "[2]")
+        else:
+            if interface == "single_descriptor":
+                combined(desc_binding, postfix)
+            elif interface == "multiple_contiguous":
+                combined(desc_binding, f"{postfix}A")
+                combined(desc_binding + 1, f"{postfix}B")
+            elif interface == "multiple_discontiguous":
+                combined(desc_binding, f"{postfix}A")
+                combined(desc_binding + 2, f"{postfix}B")
+            elif interface == "multiple_arbitrary":
+                combined(ARBITRARY_BINDINGS[0], f"{postfix}A")
+                combined(ARBITRARY_BINDINGS[1], f"{postfix}B")
+            else:
+                combined(desc_binding, postfix, "[2]")
+
+    return "\n".join(out) + "\n"
+
+
+def sampler_access(descriptor_type: str, view_type: str, base_mip_level: int, base_array_slice: int, set_count: str, interface: str) -> str:
+    """`ImageDescriptorCase::genResourceAccessSource` for the two sampler types."""
+    postfix_a = {"single_descriptor": "", "descriptor_array": "[0]"}.get(interface, "A")
+    postfix_b = {"single_descriptor": "", "descriptor_array": "[1]"}.get(interface, "B")
+    coords = [sample_coord_str(view_type, base_mip_level, base_array_slice, ndx) for ndx in range(4)]
+    dimension = image_dimension(view_type)
+
+    out = ["    result_color = vec4(0.0);"]
+    sets = SET_NDX[set_count]
+
+    for set_ndx in range(len(sets)):
+        p = "" if len(sets) == 1 else str(set_ndx)
+        for quadrant in range(4):
+            cond = "    if (quadrant_id == 0)" if quadrant == 0 else ("    else" if quadrant == 3 else f"    else if (quadrant_id == {quadrant})")
+            out.append(cond)
+            postfix = postfix_a if quadrant % 2 == 0 else postfix_b
+            if descriptor_type == "sampler":
+                target = f"sampler{dimension}(u_separateTexture{p}, u_separateSampler{p}{postfix})"
+            else:
+                target = f"u_combinedTextureSampler{p}{postfix}"
+            out.append(f"        result_color += textureLod({target}, {coords[quadrant]}, 0.0);")
+
+    if len(sets) > 1:
+        out.append(f"    result_color /= vec4({len(sets)}.0);")
+
+    return "\n".join(out) + "\n"
+
+
+def sampler_compute_shader(descriptor_type: str, view_type: str, base_mip_level: int, base_array_slice: int, set_count: str, interface: str) -> str:
+    version = "#version 440\n" if view_type in ("1d", "1d_array") else "#version 310 es\n"
+    extension = "#extension GL_OES_texture_cube_map_array : require\n" if view_type == "cube_array" else ""
+    return (
+        version
+        + extension
+        + "layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;\n"
+        + sampler_declarations(descriptor_type, view_type, set_count, interface)
+        + "layout(set = 0, binding = 0, std140) writeonly buffer OutBuf\n"
+        "{\n"
+        "    highp vec4 read_colors[4];\n"
+        "} b_out;\n"
+        "void main (void)\n"
+        "{\n"
+        "    highp int quadrant_id = int(gl_WorkGroupID.x);\n"
+        "    highp vec4 result_color;\n"
+        + sampler_access(descriptor_type, view_type, base_mip_level, base_array_slice, set_count, interface)
+        + "    b_out.read_colors[gl_WorkGroupID.x] = result_color;\n"
+        "}\n"
+    )
+
+
 def image_case_exists(view_type: str, set_count: str, interface: str) -> bool:
     """`createShaderAccessImageTests`' "skip some image view variations to avoid
     unnecessary bloating". Only the plain 2D view gets the arrangements that already
-    multiply out, so the group does not become the product of every axis."""
+    multiply out, so the group does not become the product of every axis.
+
+    Upstream keeps the discontiguous arrangement on every view for the separate
+    sampler type - there it is about where the sampler sits relative to the texture,
+    not about the view - but a second rule takes it away again in a compute shader,
+    and the compute stage is all that is ported. So the rule is uniform here.
+    """
     if view_type == "2d":
         return True
     return interface not in ("multiple_discontiguous", "multiple_arbitrary") and set_count != "multiple_discontiguous"
@@ -423,7 +587,7 @@ def main() -> int:
             for interface in INTERFACES:
                 if not image_case_exists(view_type, set_count, interface):
                     continue
-                name = f"image_{view_name}_{set_count}_{interface}"
+                name = f"storage_image_{view_name}_{set_count}_{interface}"
                 (SRC_DIR / f"{name}.comp").write_text(image_compute_shader(view_type, base_mip_level, base_array_slice, set_count, interface))
                 lines += [
                     "[[case]]",
@@ -432,12 +596,36 @@ def main() -> int:
                     'rust_type = "ImageAccessProgram"',
                     f'programs = [{{ name = "compute", template = "binding_model/generated/{name}.comp", stage = "comp" }}]',
                     "[case.params]",
+                    'descriptor_type = { type = "str", value = "storage_image" }',
                     f'view_name = {{ type = "str", value = "{view_name}" }}',
                     f'set_count = {{ type = "str", value = "{set_count}" }}',
                     f'shader_interface = {{ type = "str", value = "{interface}" }}',
                     "",
                 ]
                 count += 1
+
+    for descriptor_type in ("sampler", "combined_image_sampler"):
+        for view_name, view_type, base_mip_level, base_array_slice in IMAGE_TYPES:
+            for set_count in SET_NDX:
+                for interface in INTERFACES:
+                    if not image_case_exists(view_type, set_count, interface):
+                        continue
+                    name = f"{descriptor_type}_{view_name}_{set_count}_{interface}"
+                    (SRC_DIR / f"{name}.comp").write_text(sampler_compute_shader(descriptor_type, view_type, base_mip_level, base_array_slice, set_count, interface))
+                    lines += [
+                        "[[case]]",
+                        f'name = "{name}"',
+                        f'rust_const = "{name.upper()}"',
+                        'rust_type = "ImageAccessProgram"',
+                        f'programs = [{{ name = "compute", template = "binding_model/generated/{name}.comp", stage = "comp" }}]',
+                        "[case.params]",
+                        f'descriptor_type = {{ type = "str", value = "{descriptor_type}" }}',
+                        f'view_name = {{ type = "str", value = "{view_name}" }}',
+                        f'set_count = {{ type = "str", value = "{set_count}" }}',
+                        f'shader_interface = {{ type = "str", value = "{interface}" }}',
+                        "",
+                    ]
+                    count += 1
 
     MANIFEST.write_text("\n".join(lines))
     print(f"wrote {MANIFEST.relative_to(REPO_DIR)} and {count} shaders in {SRC_DIR.relative_to(REPO_DIR)}")

@@ -1,0 +1,36 @@
+#version 440
+layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+layout(set = 0, binding = 1) uniform highp texture1DArray u_separateTexture0;
+layout(set = 0, binding = 2) uniform highp sampler u_separateSampler0A;
+layout(set = 0, binding = 3) uniform highp sampler u_separateSampler0B;
+layout(set = 1, binding = 0) uniform highp texture1DArray u_separateTexture1;
+layout(set = 1, binding = 1) uniform highp sampler u_separateSampler1A;
+layout(set = 1, binding = 2) uniform highp sampler u_separateSampler1B;
+layout(set = 0, binding = 0, std140) writeonly buffer OutBuf
+{
+    highp vec4 read_colors[4];
+} b_out;
+void main (void)
+{
+    highp int quadrant_id = int(gl_WorkGroupID.x);
+    highp vec4 result_color;
+    result_color = vec4(0.0);
+    if (quadrant_id == 0)
+        result_color += textureLod(sampler1DArray(u_separateTexture0, u_separateSampler0A), vec2(float(0.0234375), float(0)), 0.0);
+    else if (quadrant_id == 1)
+        result_color += textureLod(sampler1DArray(u_separateTexture0, u_separateSampler0B), vec2(float(0.726562), float(0)), 0.0);
+    else if (quadrant_id == 2)
+        result_color += textureLod(sampler1DArray(u_separateTexture0, u_separateSampler0A), vec2(float(-0.335938), float(1)), 0.0);
+    else
+        result_color += textureLod(sampler1DArray(u_separateTexture0, u_separateSampler0B), vec2(float(1.01562), float(0)), 0.0);
+    if (quadrant_id == 0)
+        result_color += textureLod(sampler1DArray(u_separateTexture1, u_separateSampler1A), vec2(float(0.0234375), float(0)), 0.0);
+    else if (quadrant_id == 1)
+        result_color += textureLod(sampler1DArray(u_separateTexture1, u_separateSampler1B), vec2(float(0.726562), float(0)), 0.0);
+    else if (quadrant_id == 2)
+        result_color += textureLod(sampler1DArray(u_separateTexture1, u_separateSampler1A), vec2(float(-0.335938), float(1)), 0.0);
+    else
+        result_color += textureLod(sampler1DArray(u_separateTexture1, u_separateSampler1B), vec2(float(1.01562), float(0)), 0.0);
+    result_color /= vec4(2.0);
+    b_out.read_colors[gl_WorkGroupID.x] = result_color;
+}
