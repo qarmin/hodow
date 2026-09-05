@@ -73,6 +73,36 @@ static ALL_BUFFER_ACCESS_PROGRAMS: &[&BufferAccessProgram] = &[
     &crate::generated::shaders::binding_model_shader_access::BUFFER_BUFFER_MULTIPLE_DISCONTIGUOUS_MULTIPLE_DISCONTIGUOUS,
     &crate::generated::shaders::binding_model_shader_access::BUFFER_BUFFER_MULTIPLE_DISCONTIGUOUS_MULTIPLE_ARBITRARY,
     &crate::generated::shaders::binding_model_shader_access::BUFFER_BUFFER_MULTIPLE_DISCONTIGUOUS_DESCRIPTOR_ARRAY,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_SINGLE_SINGLE_DESCRIPTOR,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_SINGLE_MULTIPLE_CONTIGUOUS,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_SINGLE_MULTIPLE_DISCONTIGUOUS,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_SINGLE_MULTIPLE_ARBITRARY,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_SINGLE_DESCRIPTOR_ARRAY,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_MULTIPLE_SINGLE_DESCRIPTOR,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_MULTIPLE_MULTIPLE_CONTIGUOUS,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_MULTIPLE_MULTIPLE_DISCONTIGUOUS,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_MULTIPLE_MULTIPLE_ARBITRARY,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_MULTIPLE_DESCRIPTOR_ARRAY,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_MULTIPLE_DISCONTIGUOUS_SINGLE_DESCRIPTOR,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_MULTIPLE_DISCONTIGUOUS_MULTIPLE_CONTIGUOUS,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_MULTIPLE_DISCONTIGUOUS_MULTIPLE_DISCONTIGUOUS,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_MULTIPLE_DISCONTIGUOUS_MULTIPLE_ARBITRARY,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_UNIFORM_MULTIPLE_DISCONTIGUOUS_DESCRIPTOR_ARRAY,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_SINGLE_SINGLE_DESCRIPTOR,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_SINGLE_MULTIPLE_CONTIGUOUS,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_SINGLE_MULTIPLE_DISCONTIGUOUS,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_SINGLE_MULTIPLE_ARBITRARY,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_SINGLE_DESCRIPTOR_ARRAY,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_MULTIPLE_SINGLE_DESCRIPTOR,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_MULTIPLE_MULTIPLE_CONTIGUOUS,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_MULTIPLE_MULTIPLE_DISCONTIGUOUS,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_MULTIPLE_MULTIPLE_ARBITRARY,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_MULTIPLE_DESCRIPTOR_ARRAY,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_MULTIPLE_DISCONTIGUOUS_SINGLE_DESCRIPTOR,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_MULTIPLE_DISCONTIGUOUS_MULTIPLE_CONTIGUOUS,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_MULTIPLE_DISCONTIGUOUS_MULTIPLE_DISCONTIGUOUS,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_MULTIPLE_DISCONTIGUOUS_MULTIPLE_ARBITRARY,
+    &crate::generated::shaders::binding_model_shader_access::TEXEL_BUFFER_MULTIPLE_DISCONTIGUOUS_DESCRIPTOR_ARRAY,
 ];
 
 /// `DescriptorSetCount`
@@ -154,7 +184,10 @@ fn arbitrary_binding_index(ndx: u32) -> u32 {
 }
 
 fn is_uniform_descriptor_type(t: vk::DescriptorType) -> bool {
-    matches!(t, vk::DescriptorType::UNIFORM_BUFFER | vk::DescriptorType::UNIFORM_BUFFER_DYNAMIC)
+    matches!(
+        t,
+        vk::DescriptorType::UNIFORM_BUFFER | vk::DescriptorType::UNIFORM_BUFFER_DYNAMIC | vk::DescriptorType::UNIFORM_TEXEL_BUFFER
+    )
 }
 
 fn is_dynamic_descriptor_type(t: vk::DescriptorType) -> bool {
@@ -179,8 +212,20 @@ const COLORS: [[f32; 4]; 4] = [
     [1.0, 0.0, 0.0, 1.0], // red
 ];
 
+/// Which resource the descriptors point at. Both go through the same instance: the
+/// descriptor arrangement, the dispatch and the verification are identical, and only
+/// what a descriptor refers to and how the reference value is computed differ.
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum ResourceKind {
+    /// A buffer holding two colours.
+    Buffer,
+    /// A buffer view over a generated texel pattern.
+    TexelBuffer,
+}
+
 pub struct BufferAccessCase {
     name: String,
+    resource_kind: ResourceKind,
     descriptor_type: vk::DescriptorType,
     descriptor_set_count: DescriptorSetCount,
     shader_interface: ShaderInputInterface,
@@ -195,9 +240,14 @@ pub struct BufferAccessCase {
 impl BufferAccessCase {
     fn program(&self) -> &'static BufferAccessProgram {
         let storage_type = if is_uniform_descriptor_type(self.descriptor_type) { "uniform" } else { "buffer" };
+        let prefix = match self.resource_kind {
+            ResourceKind::Buffer => "buffer_",
+            ResourceKind::TexelBuffer => "texel_",
+        };
         ALL_BUFFER_ACCESS_PROGRAMS
             .iter()
             .copied()
+            .filter(|p| p.name.starts_with(prefix))
             .find(|p| p.storage_type == storage_type && p.set_count == self.descriptor_set_count.manifest_name() && p.shader_interface == self.shader_interface.manifest_name())
             .expect("the generator covers every combination")
     }
@@ -249,12 +299,44 @@ impl TestInstance for BufferAccessInstance<'_> {
         let num_resources = p.shader_interface.num_resources();
         let num_src_buffers = num_sets * num_resources;
 
-        // One source buffer per descriptor, each holding two colours at `data_offset`.
+        // One source buffer per descriptor. A texel buffer's is a generated pattern
+        // read through a `VkBufferView`; a plain buffer's is two colours at an offset.
         let mut bind_time_offsets = Vec::new();
         let mut view_offsets = Vec::new();
         let mut buffers = Vec::new();
+        let mut buffer_views = Vec::new();
+        let mut texel_sources = Vec::new();
+        let mut texel_view_offset_texels = 0u32;
 
-        for buffer_ndx in 0..num_src_buffers {
+        if p.resource_kind == ResourceKind::TexelBuffer {
+            let view_offset = self.texel_view_offset()?;
+            texel_view_offset_texels = view_offset / 4;
+
+            for buffer_ndx in 0..num_src_buffers {
+                let source = populate_texel_source(buffer_ndx);
+                let usage = if is_uniform_descriptor_type(p.descriptor_type) {
+                    vk::BufferUsageFlags::UNIFORM_TEXEL_BUFFER
+                } else {
+                    vk::BufferUsageFlags::STORAGE_TEXEL_BUFFER
+                };
+                let buffer = BufferWithMemory::new(device, allocator, make_buffer_create_info(TEXEL_BUFFER_SIZE as u64, usage), MemoryRequirement::HOST_VISIBLE)?;
+                unsafe { std::ptr::copy_nonoverlapping(source.as_ptr(), buffer.get_allocation().get_host_ptr(), source.len()) };
+                flush_alloc(device, buffer.get_allocation())?;
+
+                let info = vk::BufferViewCreateInfo::builder()
+                    .buffer(buffer.get())
+                    .format(vk::Format::R8G8B8A8_UNORM)
+                    .offset(u64::from(view_offset))
+                    .range(u64::from(TEXEL_VIEW_DATA_SIZE));
+                let view = unsafe { device.create_buffer_view(&info, None) }.vk_check("vkCreateBufferView")?;
+
+                buffer_views.push(Unique::new(device, view));
+                buffers.push(buffer);
+                texel_sources.push(source);
+            }
+        }
+
+        for buffer_ndx in 0..(if p.resource_kind == ResourceKind::Buffer { num_src_buffers } else { 0 }) {
             let parity = (buffer_ndx % 2) as usize;
             let bind_time_offset = if p.dynamic_offset_non_zero {
                 [DYNAMIC_OFFSET_VALUE_A, DYNAMIC_OFFSET_VALUE_B][parity]
@@ -304,15 +386,18 @@ impl TestInstance for BufferAccessInstance<'_> {
 
             let ndx0 = (set_ndx * num_resources) % num_src_buffers;
             let ndx1 = (set_ndx * num_resources + 1) % num_src_buffers;
-            self.write_descriptor_set(
-                *set,
-                set_ndx,
-                buffers[ndx0 as usize].get(),
-                view_offsets[ndx0 as usize],
-                buffers[ndx1 as usize].get(),
-                view_offsets[ndx1 as usize],
-                result_buffer.get(),
-            );
+            match p.resource_kind {
+                ResourceKind::Buffer => self.write_descriptor_set(
+                    *set,
+                    set_ndx,
+                    buffers[ndx0 as usize].get(),
+                    view_offsets[ndx0 as usize],
+                    buffers[ndx1 as usize].get(),
+                    view_offsets[ndx1 as usize],
+                    result_buffer.get(),
+                ),
+                ResourceKind::TexelBuffer => self.write_texel_descriptor_set(*set, set_ndx, *buffer_views[ndx0 as usize], *buffer_views[ndx1 as usize], result_buffer.get()),
+            }
 
             layout_handles.push(*layout);
             set_layouts.push(layout);
@@ -430,6 +515,42 @@ impl TestInstance for BufferAccessInstance<'_> {
                     *value = ptr.add(i * 4 + c).read();
                 }
             }
+        }
+
+        if p.resource_kind == ResourceKind::TexelBuffer {
+            // Each quadrant fetches its own sample point, alternating between the two
+            // descriptors, so all four references differ.
+            let mut references = [[0.0f32; 4]; 4];
+            for (quadrant, reference) in references.iter_mut().enumerate() {
+                for set_ndx in 0..num_sets {
+                    let value = fetch_texel_value(&texel_sources, num_resources, texel_view_offset_texels, quadrant, set_ndx);
+                    for (r, v) in reference.iter_mut().zip(value) {
+                        *r += v;
+                    }
+                }
+                for r in reference.iter_mut() {
+                    *r /= num_sets as f32;
+                }
+            }
+
+            // Unlike the plain buffer case, the comparison is not exact: the value
+            // went through a UNORM8 conversion in the driver, and a driver that
+            // multiplies by 1/255 rather than dividing by 255 lands one ulp away.
+            // Upstream allows a whole quantisation step.
+            const CONVERSION_THRESHOLD: f32 = 1.0 / 255.0;
+            let any_result_set = results.iter().any(|q| *q != [-1.0f32; 4]);
+            let all_ok = results
+                .iter()
+                .zip(&references)
+                .all(|(result, reference)| result.iter().zip(reference).all(|(r, e)| (r - e).abs() <= CONVERSION_THRESHOLD));
+
+            if !any_result_set {
+                return Ok(TestStatus::fail("Result buffer was not written to"));
+            }
+            if all_ok {
+                return Ok(TestStatus::pass("Pass"));
+            }
+            return Ok(TestStatus::fail("Invalid result values"));
         }
 
         // Quadrants 1 and 2 read colorA, 0 and 3 read colorB; with two sets the shader
@@ -626,10 +747,12 @@ pub fn create_shader_access_tests() -> tcu::TestCaseGroup {
     let mut bind = tcu::TestCaseGroup::new("bind");
 
     let descriptor_types = [
-        ("uniform_buffer", vk::DescriptorType::UNIFORM_BUFFER),
-        ("storage_buffer", vk::DescriptorType::STORAGE_BUFFER),
-        ("uniform_buffer_dynamic", vk::DescriptorType::UNIFORM_BUFFER_DYNAMIC),
-        ("storage_buffer_dynamic", vk::DescriptorType::STORAGE_BUFFER_DYNAMIC),
+        ("uniform_buffer", vk::DescriptorType::UNIFORM_BUFFER, ResourceKind::Buffer),
+        ("storage_buffer", vk::DescriptorType::STORAGE_BUFFER, ResourceKind::Buffer),
+        ("uniform_texel_buffer", vk::DescriptorType::UNIFORM_TEXEL_BUFFER, ResourceKind::TexelBuffer),
+        ("storage_texel_buffer", vk::DescriptorType::STORAGE_TEXEL_BUFFER, ResourceKind::TexelBuffer),
+        ("uniform_buffer_dynamic", vk::DescriptorType::UNIFORM_BUFFER_DYNAMIC, ResourceKind::Buffer),
+        ("storage_buffer_dynamic", vk::DescriptorType::STORAGE_BUFFER_DYNAMIC, ResourceKind::Buffer),
     ];
     let set_counts = [
         ("", DescriptorSetCount::Single),
@@ -644,7 +767,7 @@ pub fn create_shader_access_tests() -> tcu::TestCaseGroup {
         ShaderInputInterface::DescriptorArray,
     ];
 
-    for (type_name, descriptor_type) in descriptor_types {
+    for (type_name, descriptor_type, resource_kind) in descriptor_types {
         let is_dynamic = is_dynamic_descriptor_type(descriptor_type);
         let mut type_group = tcu::TestCaseGroup::new(type_name);
         let mut stage_group = tcu::TestCaseGroup::new("compute");
@@ -658,13 +781,21 @@ pub fn create_shader_access_tests() -> tcu::TestCaseGroup {
                 let mut interface_group = tcu::TestCaseGroup::new(shader_interface.case_name());
 
                 for set_view_offset in [false, true] {
-                    let offset_name = if set_view_offset { "offset_view_nonzero" } else { "offset_view_zero" };
+                    // The texel buffer cases drop the "view" from the name: their
+                    // offset is on the buffer view rather than on the descriptor.
+                    let offset_name = match (resource_kind, set_view_offset) {
+                        (ResourceKind::TexelBuffer, false) => "offset_zero",
+                        (ResourceKind::TexelBuffer, true) => "offset_nonzero",
+                        (ResourceKind::Buffer, false) => "offset_view_zero",
+                        (ResourceKind::Buffer, true) => "offset_view_nonzero",
+                    };
 
                     if is_dynamic {
                         for dynamic_offset_non_zero in [false, true] {
                             let dynamic_name = if dynamic_offset_non_zero { "dynamic_nonzero" } else { "dynamic_zero" };
                             interface_group.add_child(Box::new(BufferAccessCase {
                                 name: format!("{offset_name}_{dynamic_name}"),
+                                resource_kind,
                                 descriptor_type,
                                 descriptor_set_count,
                                 shader_interface,
@@ -676,6 +807,7 @@ pub fn create_shader_access_tests() -> tcu::TestCaseGroup {
                     } else {
                         interface_group.add_child(Box::new(BufferAccessCase {
                             name: offset_name.to_string(),
+                            resource_kind,
                             descriptor_type,
                             descriptor_set_count,
                             shader_interface,
@@ -724,4 +856,126 @@ fn create_unused_layout(device: &Device, hash: u32) -> Result<Unique<'_, vk::Des
     }
 
     builder.build(device)
+}
+
+// ---------------------------------------------------------------------------------
+// Texel buffers
+// ---------------------------------------------------------------------------------
+
+/// `TexelBufferInstanceBuffers` constants.
+const TEXEL_BUFFER_SIZE: usize = 512;
+/// `SAMPLE_POINT_0..3` - arbitrary fetch positions, one per quadrant.
+const SAMPLE_POINTS: [u32; 4] = [6, 51, 42, 25];
+
+/// `populateSourceBuffer` - a gradient, a three-level pattern and a triangle wave, so
+/// a fetch that lands at the wrong offset reads a visibly different texel whether the
+/// error is large or small. Each buffer inverts a different channel.
+fn populate_texel_source(buffer_ndx: u32) -> Vec<u8> {
+    let format_size = 4;
+    let width = TEXEL_BUFFER_SIZE / format_size;
+    let mut data = vec![0u8; TEXEL_BUFFER_SIZE];
+
+    for x in 0..width {
+        let mut red = 255 * x / width;
+        let mut green = if x % 2 == 0 { 127 } else { 0 } + if x % 4 < 3 { 128 } else { 0 };
+        let mut blue = 16 * (x % 16);
+
+        if buffer_ndx.is_multiple_of(2) {
+            red = 255 - red;
+        }
+        if buffer_ndx.is_multiple_of(3) {
+            green = 255 - green;
+        }
+        if buffer_ndx.is_multiple_of(4) {
+            blue = 255 - blue;
+        }
+
+        data[x * 4] = red as u8;
+        data[x * 4 + 1] = green as u8;
+        data[x * 4 + 2] = blue as u8;
+        data[x * 4 + 3] = 255;
+    }
+
+    data
+}
+
+/// The value the shader should read at `fetch_pos_ndx` for set `set_ndx`, taken from
+/// the same source bytes the buffer was filled with. `view_offset` is in texels.
+fn fetch_texel_value(sources: &[Vec<u8>], num_resources: u32, view_offset_texels: u32, fetch_pos_ndx: usize, set_ndx: u32) -> [f32; 4] {
+    // The two descriptors alternate ABAB across the quadrants.
+    let ndx = (set_ndx * num_resources + u32::from(!fetch_pos_ndx.is_multiple_of(2))) as usize % sources.len();
+    let at = ((view_offset_texels + SAMPLE_POINTS[fetch_pos_ndx]) * 4) as usize;
+    std::array::from_fn(|c| f32::from(sources[ndx][at + c]) / 255.0)
+}
+
+/// `VIEW_DATA_SIZE`
+const TEXEL_VIEW_DATA_SIZE: u32 = 256;
+
+impl BufferAccessInstance<'_> {
+    /// `TexelBufferInstanceBuffers::getViewOffset`. Without
+    /// `VK_EXT_texel_buffer_alignment` the offset is just the device's
+    /// `minTexelBufferOffsetAlignment`.
+    fn texel_view_offset(&self) -> Result<u32, TestError> {
+        if !self.params.set_view_offset {
+            return Ok(0);
+        }
+        Ok(self.context.get_device_properties().limits.min_texel_buffer_offset_alignment as u32)
+    }
+
+    /// `writeDescriptorSet` for the texel buffer types, which bind a `VkBufferView`
+    /// rather than a buffer range.
+    fn write_texel_descriptor_set(&self, set: vk::DescriptorSet, set_ndx: u32, view_a: vk::BufferView, view_b: vk::BufferView, result: vk::Buffer) {
+        let p = self.params;
+        let device = self.context.get_device();
+
+        let result_info = [vk::DescriptorBufferInfo {
+            buffer: result,
+            offset: 0,
+            range: RESULT_DATA_SIZE,
+        }];
+        let views = [view_a, view_b];
+
+        let mut writes = Vec::new();
+        let mut binding = 0;
+
+        if set_ndx == 0 {
+            writes.push(
+                vk::WriteDescriptorSet::builder()
+                    .dst_set(set)
+                    .dst_binding(binding)
+                    .descriptor_type(vk::DescriptorType::STORAGE_BUFFER)
+                    .buffer_info(&result_info)
+                    .build(),
+            );
+            binding += 1;
+        }
+
+        let single = |dst_binding: u32, v: &[vk::BufferView]| {
+            vk::WriteDescriptorSet::builder()
+                .dst_set(set)
+                .dst_binding(dst_binding)
+                .descriptor_type(p.descriptor_type)
+                .texel_buffer_view(v)
+                .build()
+        };
+
+        match p.shader_interface {
+            ShaderInputInterface::SingleDescriptor => writes.push(single(binding, &views[0..1])),
+            ShaderInputInterface::MultipleContiguousDescriptors => {
+                writes.push(single(binding, &views[0..1]));
+                writes.push(single(binding + 1, &views[1..2]));
+            }
+            ShaderInputInterface::MultipleDiscontiguousDescriptors => {
+                writes.push(single(binding, &views[0..1]));
+                writes.push(single(binding + 2, &views[1..2]));
+            }
+            ShaderInputInterface::MultipleArbitraryDescriptors => {
+                writes.push(single(arbitrary_binding_index(0), &views[0..1]));
+                writes.push(single(arbitrary_binding_index(1), &views[1..2]));
+            }
+            ShaderInputInterface::DescriptorArray => writes.push(single(binding, &views)),
+        }
+
+        unsafe { device.update_descriptor_sets(&writes, &[] as &[vk::CopyDescriptorSet]) };
+    }
 }

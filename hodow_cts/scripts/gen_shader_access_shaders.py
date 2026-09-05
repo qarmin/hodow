@@ -119,6 +119,88 @@ def compute_shader(storage_type: str, set_count: str, interface: str) -> str:
     )
 
 
+# `TexelBufferInstanceBuffers::getFetchPos` - arbitrary points, one per quadrant.
+SAMPLE_POINTS = [6, 51, 42, 25]
+
+
+def texel_declarations(storage_type: str, set_count: str, interface: str) -> str:
+    """`TexelBufferDescriptorCase::genResourceDeclarations`, compute stage."""
+    out = []
+    sets = SET_NDX[set_count]
+    fmt = "" if storage_type == "uniform" else ", rgba8"
+    decl = "textureBuffer " if storage_type == "uniform" else "readonly imageBuffer "
+
+    for set_ndx, descriptor_set in enumerate(sets):
+        desc_binding = 1 - (0 if set_ndx == 0 else 1)
+        postfix = "" if len(sets) == 1 else str(set_ndx)
+
+        def one(binding: int, name: str, array: str = "") -> None:
+            out.append(f"layout(set = {descriptor_set}, binding = {binding}{fmt}) uniform highp {decl}u_texelBuffer{name}{array};")
+
+        if interface == "single_descriptor":
+            one(desc_binding, postfix)
+        elif interface == "multiple_contiguous":
+            one(desc_binding, f"{postfix}A")
+            one(desc_binding + 1, f"{postfix}B")
+        elif interface == "multiple_discontiguous":
+            one(desc_binding, f"{postfix}A")
+            one(desc_binding + 2, f"{postfix}B")
+        elif interface == "multiple_arbitrary":
+            one(ARBITRARY_BINDINGS[0], f"{postfix}A")
+            one(ARBITRARY_BINDINGS[1], f"{postfix}B")
+        else:
+            one(desc_binding, postfix, "[2]")
+
+    return "\n".join(out) + "\n"
+
+
+def texel_access(storage_type: str, set_count: str, interface: str) -> str:
+    """`TexelBufferDescriptorCase::genResourceAccessSource`.
+
+    The four quadrants alternate between the two descriptors, so a swapped binding
+    shows up as the wrong texel rather than as no output at all.
+    """
+    postfix_a = {"single_descriptor": "", "descriptor_array": "[0]"}.get(interface, "A")
+    postfix_b = {"single_descriptor": "", "descriptor_array": "[1]"}.get(interface, "B")
+    fetch = "texelFetch" if storage_type == "uniform" else "imageLoad"
+
+    out = ["    result_color = vec4(0.0);"]
+    sets = SET_NDX[set_count]
+
+    for set_ndx in range(len(sets)):
+        p = "" if len(sets) == 1 else str(set_ndx)
+        for quadrant in range(4):
+            cond = "    if (quadrant_id == 0)" if quadrant == 0 else ("    else" if quadrant == 3 else f"    else if (quadrant_id == {quadrant})")
+            out.append(cond)
+            postfix = postfix_a if quadrant % 2 == 0 else postfix_b
+            out.append(f"        result_color += {fetch}(u_texelBuffer{p}{postfix}, {SAMPLE_POINTS[quadrant]});")
+
+    if len(sets) > 1:
+        out.append(f"    result_color /= vec4({len(sets)}.0);")
+
+    return "\n".join(out) + "\n"
+
+
+def texel_compute_shader(storage_type: str, set_count: str, interface: str) -> str:
+    return (
+        "#version 310 es\n"
+        "#extension GL_EXT_texture_buffer : require\n"
+        "layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;\n"
+        + texel_declarations(storage_type, set_count, interface)
+        + "layout(set = 0, binding = 0, std140) writeonly buffer OutBuf\n"
+        "{\n"
+        "    highp vec4 read_colors[4];\n"
+        "} b_out;\n"
+        "void main (void)\n"
+        "{\n"
+        "    highp int quadrant_id = int(gl_WorkGroupID.x);\n"
+        "    highp vec4 result_color;\n"
+        + texel_access(storage_type, set_count, interface)
+        + "    b_out.read_colors[gl_WorkGroupID.x] = result_color;\n"
+        "}\n"
+    )
+
+
 def main() -> int:
     SRC_DIR.mkdir(parents=True, exist_ok=True)
     for existing in SRC_DIR.glob("*.comp"):
@@ -144,6 +226,25 @@ def main() -> int:
             for interface in INTERFACES:
                 name = f"buffer_{storage_type}_{set_count}_{interface}"
                 (SRC_DIR / f"{name}.comp").write_text(compute_shader(storage_type, set_count, interface))
+                lines += [
+                    "[[case]]",
+                    f'name = "{name}"',
+                    f'rust_const = "{name.upper()}"',
+                    'rust_type = "BufferAccessProgram"',
+                    f'programs = [{{ name = "compute", template = "binding_model/generated/{name}.comp", stage = "comp" }}]',
+                    "[case.params]",
+                    f'storage_type = {{ type = "str", value = "{storage_type}" }}',
+                    f'set_count = {{ type = "str", value = "{set_count}" }}',
+                    f'shader_interface = {{ type = "str", value = "{interface}" }}',
+                    "",
+                ]
+                count += 1
+
+    for storage_type in ("uniform", "buffer"):
+        for set_count in SET_NDX:
+            for interface in INTERFACES:
+                name = f"texel_{storage_type}_{set_count}_{interface}"
+                (SRC_DIR / f"{name}.comp").write_text(texel_compute_shader(storage_type, set_count, interface))
                 lines += [
                     "[[case]]",
                     f'name = "{name}"',
