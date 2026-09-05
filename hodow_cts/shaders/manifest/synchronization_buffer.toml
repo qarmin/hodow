@@ -66,3 +66,59 @@ programs = [{ name = "comp", template = "synchronization/generated/read_ubo_texe
 buffer_type = { type = "str", value = "ubo_texel" }
 mode = { type = "str", value = "read" }
 buffer_size = { type = "u32", value = 16384 }
+
+[[case]]
+name = "image_image_128_r32_uint"
+rust_const = "IMAGE_IMAGE_128_R32_UINT"
+rust_type = "ImageAccessShader"
+programs = [{ name = "comp", template = "synchronization/generated/image_image_128_r32_uint.comp", stage = "comp" }]
+[case.params]
+resource_name = { type = "str", value = "image_128_r32_uint" }
+
+[[case]]
+name = "image_image_128x128_r8_unorm"
+rust_const = "IMAGE_IMAGE_128X128_R8_UNORM"
+rust_type = "ImageAccessShader"
+programs = [{ name = "comp", template = "synchronization/generated/image_image_128x128_r8_unorm.comp", stage = "comp" }]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r8_unorm" }
+
+[[case]]
+name = "image_image_128x128_r16_uint"
+rust_const = "IMAGE_IMAGE_128X128_R16_UINT"
+rust_type = "ImageAccessShader"
+programs = [{ name = "comp", template = "synchronization/generated/image_image_128x128_r16_uint.comp", stage = "comp" }]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r16_uint" }
+
+[[case]]
+name = "image_image_128x128_r8g8b8a8_unorm"
+rust_const = "IMAGE_IMAGE_128X128_R8G8B8A8_UNORM"
+rust_type = "ImageAccessShader"
+programs = [{ name = "comp", template = "synchronization/generated/image_image_128x128_r8g8b8a8_unorm.comp", stage = "comp" }]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r8g8b8a8_unorm" }
+
+[[case]]
+name = "image_image_128x128_r16g16b16a16_uint"
+rust_const = "IMAGE_IMAGE_128X128_R16G16B16A16_UINT"
+rust_type = "ImageAccessShader"
+programs = [{ name = "comp", template = "synchronization/generated/image_image_128x128_r16g16b16a16_uint.comp", stage = "comp" }]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r16g16b16a16_uint" }
+
+[[case]]
+name = "image_image_128x128_r32g32b32a32_sfloat"
+rust_const = "IMAGE_IMAGE_128X128_R32G32B32A32_SFLOAT"
+rust_type = "ImageAccessShader"
+programs = [{ name = "comp", template = "synchronization/generated/image_image_128x128_r32g32b32a32_sfloat.comp", stage = "comp" }]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r32g32b32a32_sfloat" }
+
+[[case]]
+name = "image_image_64x64x8_r32_sfloat"
+rust_const = "IMAGE_IMAGE_64X64X8_R32_SFLOAT"
+rust_type = "ImageAccessShader"
+programs = [{ name = "comp", template = "synchronization/generated/image_image_64x64x8_r32_sfloat.comp", stage = "comp" }]
+[case.params]
+resource_name = { type = "str", value = "image_64x64x8_r32_sfloat" }

@@ -1,0 +1,12 @@
+#version 440
+
+layout(local_size_x = 1) in;
+
+layout(set = 0, binding = 0, r32ui) readonly  uniform uimage1D srcImg;
+layout(set = 0, binding = 1, r32ui) writeonly uniform uimage1D dstImg;
+
+void main (void)
+{
+    for (int x = 0; x < 128; ++x)
+        imageStore(dstImg, x, imageLoad(srcImg, x));
+}

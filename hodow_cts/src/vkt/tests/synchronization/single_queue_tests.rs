@@ -150,8 +150,8 @@ impl TestInstance for SyncTestInstance<'_> {
         // op will produce and the read op will consume.
         let usage = p.write_op.out_resource_usage() | p.read_op.in_resource_usage();
         let resource = Resource::new(device, allocator, &p.resource, usage)?;
-        let write_op = build_operation(device, allocator, p.write_op, &resource, p.specialized_access)?;
-        let read_op = build_operation(device, allocator, p.read_op, &resource, p.specialized_access)?;
+        let write_op = build_operation(device, allocator, p.write_op, &p.resource, &resource, p.specialized_access)?;
+        let read_op = build_operation(device, allocator, p.read_op, &p.resource, &resource, p.specialized_access)?;
 
         let write_sync = write_op.out_sync_info(p.sync_type);
         let read_sync = read_op.in_sync_info(p.sync_type);
