@@ -63,6 +63,9 @@ pub enum FillMode {
     White,
     Red,
     RandomGray,
+    BlueRedX,
+    BlueRedY,
+    BlueRedZ,
 }
 
 /// `ImageParms`
@@ -212,13 +215,41 @@ pub fn generate_buffer(access: &mut PixelBufferAccess<'_>, width: u32, height: u
                 }
             }
         }
-        FillMode::White | FillMode::Red => {
-            let color = if mode == FillMode::White { max_value } else { [max_value[0], 0.0, 0.0, max_value[3]] };
+        FillMode::White | FillMode::Red | FillMode::BlueRedX | FillMode::BlueRedY | FillMode::BlueRedZ => {
+            let red_color = [max_value[0], 0.0, 0.0, max_value[3]];
+            let blue_color = [0.0, 0.0, max_value[2], max_value[3]];
             let combined = is_combined_depth_stencil_type(format.type_);
             let has_stencil = has_stencil_component(format.order);
             for z in 0..depth {
                 for y in 0..height {
                     for x in 0..width {
+                        let color = match mode {
+                            FillMode::White => max_value,
+                            FillMode::Red => red_color,
+                            // Every other texel along one axis, which is what makes the
+                            // stripes cases sensitive to a filter sampling the wrong one.
+                            FillMode::BlueRedX => {
+                                if x & 1 != 0 {
+                                    blue_color
+                                } else {
+                                    red_color
+                                }
+                            }
+                            FillMode::BlueRedY => {
+                                if y & 1 != 0 {
+                                    blue_color
+                                } else {
+                                    red_color
+                                }
+                            }
+                            _ => {
+                                if z & 1 != 0 {
+                                    blue_color
+                                } else {
+                                    red_color
+                                }
+                            }
+                        };
                         if combined {
                             access.set_pix_depth(color[0], x, y, z);
                             if has_stencil {

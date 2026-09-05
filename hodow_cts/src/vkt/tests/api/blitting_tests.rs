@@ -15,11 +15,11 @@
 // for VK_FILTER_NEAREST asks, for every destination pixel, whether *some* texel the
 // coordinate could legally have landed on explains the result - `tcu::tex_verifier`.
 //
-// Ported so far: the VK_FILTER_NEAREST cases of simple_tests (2D and 3D) and of
-// all_formats.color (2D and 1D). LINEAR and CUBIC need two reference images built with
-// a scaled filter (`checkNonNearestFilteredResult`), which is not ported; the
-// array-to-3D groups, the compressed source formats and all_formats.depth_stencil are
-// not registered either.
+// Ported so far: every VK_FILTER_NEAREST case of simple_tests and of
+// all_formats.color that has an uncompressed source format. LINEAR and CUBIC need two
+// reference images built with a scaled filter (`checkNonNearestFilteredResult`), which
+// is not ported; the array-to-3D groups, the compressed source formats and
+// all_formats.depth_stencil are not registered either.
 
 use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::DeviceV1_3;
@@ -44,6 +44,8 @@ const DEFAULT_SIZE: i32 = 64;
 const DEFAULT_HALF_SIZE: i32 = DEFAULT_SIZE / 2;
 /// `defaultQuarterSize`
 const DEFAULT_QUARTER_SIZE: i32 = DEFAULT_SIZE / 4;
+/// `defaultSixteenthSize`
+const DEFAULT_SIXTEENTH_SIZE: i32 = DEFAULT_SIZE / 16;
 
 /// `CopyRegion::imageBlit`, narrowed to the single-layer colour blits the ported
 /// subgroups use - every one of them passes `defaultSourceLayer` on both sides.
@@ -902,31 +904,42 @@ fn add_blitting_image_all_formats_color_src_format_dst_format_tests(group: &mut 
                         blit_image_tiling_layout_case_name(src_tiling, src_layout),
                         blit_image_tiling_layout_case_name(dst_tiling, dst_layout)
                     );
-                    group.add_child(Box::new(BlitImageCase {
-                        name: format!("{test_name}_nearest"),
-                        src: ImageParms {
-                            image_type: p.image_type,
-                            format: p.src.format,
-                            extent: p.extent,
-                            tiling: src_tiling,
-                            fill_mode: FillMode::Gradient,
-                            create_flags: None,
-                        },
-                        dst: ImageParms {
-                            image_type: p.image_type,
-                            format: dst_format,
-                            extent: p.extent,
-                            tiling: dst_tiling,
-                            fill_mode: FillMode::White,
-                            create_flags: None,
-                        },
-                        src_operation_layout: src_layout,
-                        dst_operation_layout: dst_layout,
-                        regions: p.regions.to_vec(),
-                        filter: vk::Filter::NEAREST,
-                        allocation_kind: gp.allocation_kind,
-                        command_variant: gp.command_variant,
-                    }) as Box<dyn TestCase>);
+                    let make = |name: String, src_fill: FillMode| {
+                        Box::new(BlitImageCase {
+                            name,
+                            src: ImageParms {
+                                image_type: p.image_type,
+                                format: p.src.format,
+                                extent: p.extent,
+                                tiling: src_tiling,
+                                fill_mode: src_fill,
+                                create_flags: None,
+                            },
+                            dst: ImageParms {
+                                image_type: p.image_type,
+                                format: dst_format,
+                                extent: p.extent,
+                                tiling: dst_tiling,
+                                fill_mode: FillMode::White,
+                                create_flags: None,
+                            },
+                            src_operation_layout: src_layout,
+                            dst_operation_layout: dst_layout,
+                            regions: p.regions.to_vec(),
+                            filter: vk::Filter::NEAREST,
+                            allocation_kind: gp.allocation_kind,
+                            command_variant: gp.command_variant,
+                        }) as Box<dyn TestCase>
+                    };
+                    group.add_child(make(format!("{test_name}_nearest"), FillMode::Gradient));
+
+                    // A 3D source also gets the stripe fills, one per axis - a gradient
+                    // varies too slowly to notice a filter reaching for the wrong slice.
+                    if p.image_type == vk::ImageType::_3D {
+                        for (mode, name) in [(FillMode::BlueRedX, "x"), (FillMode::BlueRedY, "y"), (FillMode::BlueRedZ, "z")] {
+                            group.add_child(make(format!("{test_name}_nearest_stripes_{name}"), mode));
+                        }
+                    }
                 }
             }
         }
@@ -971,9 +984,6 @@ fn color_image_formats_to_test_blit() -> [(&'static [BlitFormat], &'static [Blit
 }
 
 /// `addBlittingImageAllFormatsColorTests`
-///
-/// The 3D subgroup is not registered: its source formats also get `_stripes_*` cases,
-/// which use fill modes `generateBuffer` does not have here yet.
 fn add_blitting_image_all_formats_color_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
     // 2D tests.
     {
@@ -1019,4 +1029,57 @@ fn add_blitting_image_all_formats_color_tests(group: &mut tcu::TestCaseGroup, gp
         }
         group.add_child(sub_group);
     }
+
+    // 3D tests. Note we use smaller dimensions here for performance reasons.
+    {
+        let mut sub_group = tcu::TestCaseGroup::new("3d");
+        let regions = create_3d_all_formats_regions();
+
+        for (source_formats, _) in color_image_formats_to_test_blit() {
+            for src in source_formats {
+                if !is_supported_by_framework(src.format) {
+                    continue;
+                }
+                let p = BlitColorTestParams {
+                    image_type: vk::ImageType::_3D,
+                    // `default3dExtent`
+                    extent: [DEFAULT_QUARTER_SIZE as u32; 3],
+                    regions: &regions,
+                    src,
+                };
+                let mut src_group = tcu::TestCaseGroup::new(src.name);
+                add_blitting_image_all_formats_color_src_format_tests(&mut src_group, gp, &p, None);
+                sub_group.add_child(src_group);
+            }
+        }
+        group.add_child(sub_group);
+    }
+}
+
+/// The 3D region list `addBlittingImageAllFormatsColorTests` builds inline.
+fn create_3d_all_formats_regions() -> Vec<ImageBlit> {
+    let q = DEFAULT_QUARTER_SIZE;
+    let s = DEFAULT_SIXTEENTH_SIZE;
+    let mut regions = Vec::new();
+
+    let (mut i, mut j) = (0, 1);
+    while (i + s / j < q) && (s > j) {
+        regions.push(ImageBlit {
+            src_offsets: [[0, 0, 0], [q, q, q]],
+            dst_offsets: [[i, 0, i], [i + s / j, s / j, i + s / j]],
+        });
+        i += s / j;
+        j += 1;
+    }
+
+    let mut i = 0;
+    while i < q {
+        regions.push(ImageBlit {
+            src_offsets: [[i, i, i], [i + s, i + s, i + s]],
+            dst_offsets: [[i, q / 2, i], [i + s, q / 2 + s, i + s]],
+        });
+        i += s;
+    }
+
+    regions
 }
