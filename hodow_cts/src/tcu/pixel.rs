@@ -1633,6 +1633,19 @@ pub struct PixelBufferAccess<'a> {
     data: &'a mut [u8],
 }
 
+impl<'a> PixelBufferAccess<'a> {
+    /// `tcu::PixelBufferAccess(format, width, height, depth, data)` - a tightly packed
+    /// view over storage the caller owns.
+    pub fn new(format: TextureFormat, size: [u32; 3], data: &'a mut [u8]) -> Self {
+        Self {
+            format,
+            size,
+            pitch: tight_pitch(format, size),
+            data,
+        }
+    }
+}
+
 impl PixelBufferAccess<'_> {
     pub fn format(&self) -> TextureFormat {
         self.format

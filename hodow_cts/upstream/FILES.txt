@@ -60,6 +60,13 @@ external/vulkancts/modules/vulkan/pipeline/vktPipelineImageUtil.cpp
 external/vulkancts/modules/vulkan/renderpass/vktRenderPassTests.cpp
 external/vulkancts/modules/vulkan/renderpass/vktRenderPassUnusedAttachmentTests.cpp
 external/vulkancts/modules/vulkan/renderpass/vktRenderPassUnusedClearAttachmentTests.cpp
+external/vulkancts/modules/vulkan/synchronization/vktSynchronizationOperation.cpp
+external/vulkancts/modules/vulkan/synchronization/vktSynchronizationOperation.hpp
+external/vulkancts/modules/vulkan/synchronization/vktSynchronizationOperationResources.hpp
+external/vulkancts/modules/vulkan/synchronization/vktSynchronizationOperationSingleQueueTests.cpp
+external/vulkancts/modules/vulkan/synchronization/vktSynchronizationOperationTestData.hpp
+external/vulkancts/modules/vulkan/synchronization/vktSynchronizationUtil.cpp
+external/vulkancts/modules/vulkan/synchronization/vktSynchronizationUtil.hpp
 external/vulkancts/modules/vulkan/vktTestCase.hpp
 framework/common/tcuAstcUtil.cpp
 framework/common/tcuCompressedTexture.cpp

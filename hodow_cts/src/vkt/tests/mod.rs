@@ -8,3 +8,4 @@ pub mod binding_model;
 pub mod compute;
 pub mod memory;
 pub mod renderpass;
+pub mod synchronization;
