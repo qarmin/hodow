@@ -12,6 +12,7 @@
 
 pub mod builder_util;
 pub mod cmd_util;
+pub mod compressed_formats;
 pub mod compute_pipeline;
 pub mod image_util;
 pub mod mem_util;

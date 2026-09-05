@@ -30,6 +30,7 @@ use crate::tcu::texture::TextureChannelClass;
 use crate::tcu::{self, TestError, TestOutcome, TestStatus, map_vk_format};
 use crate::vk::VkResultExt;
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
+use crate::vk::compressed_formats::{get_block_depth, get_block_height, get_block_size_in_bytes, get_block_width, is_astc_3d_format, is_astc_hdr_format, is_compressed_format};
 use crate::vk::image_util::{ImageWithMemory, get_depth_copy_format, get_stencil_copy_format, make_image_memory_barrier, make_image_subresource_range};
 use crate::vk::mem_util::{MemoryRequirement, flush_alloc, invalidate_alloc};
 use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool};
@@ -94,12 +95,25 @@ impl ImageParms {
         self.extent_3d_at(0)
     }
 
-    /// `getExtent3D(parms, mipLevel)`, uncompressed formats only.
+    /// `getExtent3D(parms, mipLevel)`
+    ///
+    /// A compressed format's `extent` counts blocks, so the image is that many blocks
+    /// across - the texel extent it is created with is the block dimensions times over.
     pub fn extent_3d_at(&self, mip_level: u32) -> vk::Extent3D {
+        let (bw, bh, bd) = self.texel_block_dimensions();
         vk::Extent3D {
-            width: self.extent[0] >> mip_level,
-            height: if self.image_type != vk::ImageType::_1D { self.extent[1] >> mip_level } else { 1 },
-            depth: if self.image_type == vk::ImageType::_3D { self.extent[2] >> mip_level } else { 1 },
+            width: (self.extent[0] >> mip_level) * bw,
+            height: if self.image_type != vk::ImageType::_1D { (self.extent[1] >> mip_level) * bh } else { 1 },
+            depth: if self.image_type == vk::ImageType::_3D { (self.extent[2] >> mip_level) * bd } else { 1 },
+        }
+    }
+
+    /// `ImageParms::texelBlockDimensions`, widened to three axes.
+    pub fn texel_block_dimensions(&self) -> (u32, u32, u32) {
+        if is_compressed_format(self.format) {
+            (get_block_width(self.format), get_block_height(self.format), get_block_depth(self.format))
+        } else {
+            (1, 1, 1)
         }
     }
 
@@ -114,6 +128,23 @@ impl ImageParms {
         } else {
             vk::ImageCreateFlags::empty()
         }
+    }
+}
+
+/// `vkt::api::getSizeCompatibleTcuTextureFormat`
+///
+/// A copy moves blocks, not texels, so a compressed image is viewed on the host as an
+/// uncompressed one whose texel is the size of a block. Nothing is decompressed.
+pub fn get_size_compatible_tcu_texture_format(format: vk::Format) -> Option<tcu::TextureFormat> {
+    if is_compressed_format(format) {
+        let block = if get_block_size_in_bytes(format) == 8 {
+            vk::Format::R16G16B16A16_UINT
+        } else {
+            vk::Format::R32G32B32A32_UINT
+        };
+        map_vk_format(block)
+    } else {
+        map_vk_format(format)
     }
 }
 
@@ -317,7 +348,9 @@ fn staging_buffer_create_info(size: u64, usage: vk::BufferUsageFlags, families: 
 /// buffer-to-image copy per aspect, each in that aspect's own copy format rather than
 /// the combined texel layout.
 fn staging_aspects(format: vk::Format) -> Vec<(vk::ImageAspectFlags, tcu::TextureFormat)> {
-    let Some(tcu_format) = map_vk_format(format) else { return Vec::new() };
+    let Some(tcu_format) = get_size_compatible_tcu_texture_format(format) else {
+        return Vec::new();
+    };
     if !is_combined_depth_stencil_type(tcu_format.type_) {
         return vec![(get_aspect_flags(format), tcu_format)];
     }
@@ -466,6 +499,7 @@ pub fn upload_image_mip_levels(
                     &[pre],
                 );
             }
+            let (block_width, block_height, _) = parms.texel_block_dimensions();
             let regions: Vec<vk::BufferImageCopy> = (0..mip_levels)
                 .map(|level| {
                     let copy_extent = vk::Extent3D {
@@ -475,8 +509,8 @@ pub fn upload_image_mip_levels(
                     };
                     vk::BufferImageCopy {
                         buffer_offset: 0,
-                        buffer_row_length: copy_extent.width,
-                        buffer_image_height: copy_extent.height,
+                        buffer_row_length: copy_extent.width.div_ceil(block_width) * block_width,
+                        buffer_image_height: copy_extent.height.div_ceil(block_height) * block_height,
                         image_subresource: vk::ImageSubresourceLayers {
                             aspect_mask: *aspect,
                             mip_level: level,
@@ -570,11 +604,12 @@ pub fn read_image_mip_level(
             &[pre],
         );
 
+        let (block_width, block_height, _) = parms.texel_block_dimensions();
         for (aspect, _, staging) in &staged {
             let region = vk::BufferImageCopy {
                 buffer_offset: 0,
-                buffer_row_length: extent.width,
-                buffer_image_height: extent.height,
+                buffer_row_length: extent.width.div_ceil(block_width) * block_width,
+                buffer_image_height: extent.height.div_ceil(block_height) * block_height,
                 image_subresource: vk::ImageSubresourceLayers {
                     aspect_mask: *aspect,
                     mip_level,
@@ -2014,6 +2049,44 @@ impl ImageCopy {
     }
 }
 
+/// The block scaling `CopyImageToImage::iterate` applies to a region before submitting
+/// it: a compressed side states its offsets and extents in blocks on the host, and the
+/// command wants texels.
+trait ScaledForBlocks {
+    fn scaled_for_blocks(self, src: &ImageParms, dst: &ImageParms) -> Self;
+}
+
+impl ScaledForBlocks for vk::ImageCopy {
+    fn scaled_for_blocks(mut self, src: &ImageParms, dst: &ImageParms) -> Self {
+        if is_compressed_format(src.format) {
+            let (bw, bh, bd) = src.texel_block_dimensions();
+            self.src_offset.x *= bw as i32;
+            self.extent.width *= bw;
+            // VUID-vkCmdCopyImage-srcImage-00146
+            if src.image_type != vk::ImageType::_1D {
+                self.src_offset.y *= bh as i32;
+                self.extent.height *= bh;
+            }
+            if src.image_type == vk::ImageType::_3D {
+                self.src_offset.z *= bd as i32;
+                self.extent.depth *= bd;
+            }
+        }
+        if is_compressed_format(dst.format) {
+            let (bw, bh, bd) = dst.texel_block_dimensions();
+            self.dst_offset.x *= bw as i32;
+            // VUID-vkCmdCopyImage-dstImage-00152
+            if dst.image_type != vk::ImageType::_1D {
+                self.dst_offset.y *= bh as i32;
+            }
+            if dst.image_type == vk::ImageType::_3D {
+                self.dst_offset.z *= bd as i32;
+            }
+        }
+        self
+    }
+}
+
 /// `CopyImageToImageTestCase`
 pub struct CopyImageToImageCase {
     name: String,
@@ -2158,8 +2231,8 @@ impl TestInstance for CopyImageToImageInstance<'_> {
             families.push(queue_family_index);
         }
 
-        let src_format = map_vk_format(p.src.format).ok_or_else(|| TestError::NotSupported("format has no tcu mapping".to_string()))?;
-        let dst_format = map_vk_format(p.dst.format).ok_or_else(|| TestError::NotSupported("format has no tcu mapping".to_string()))?;
+        let src_format = get_size_compatible_tcu_texture_format(p.src.format).ok_or_else(|| TestError::NotSupported("format has no tcu mapping".to_string()))?;
+        let dst_format = get_size_compatible_tcu_texture_format(p.dst.format).ok_or_else(|| TestError::NotSupported("format has no tcu mapping".to_string()))?;
 
         // `de::contains(signedAndUnsignedFloatFormats, ...)` over both sides.
         let float_byte_pattern = SIGNED_AND_UNSIGNED_FLOAT_FORMATS.contains(&p.src.format) || SIGNED_AND_UNSIGNED_FLOAT_FORMATS.contains(&p.dst.format);
@@ -2292,7 +2365,9 @@ impl TestInstance for CopyImageToImageInstance<'_> {
                 );
             }
 
-            let copies: Vec<vk::ImageCopy> = p.regions.iter().map(|r| r.to_vk()).collect();
+            // When copying between compressed and uncompressed formats the extent
+            // members represent the texel dimensions of the source image.
+            let copies: Vec<vk::ImageCopy> = p.regions.iter().map(|r| r.to_vk().scaled_for_blocks(&p.src, &p.dst)).collect();
             if p.command_variant == CopyCommandVariant::CopyCommands2 {
                 let copies2: Vec<vk::ImageCopy2> = copies
                     .iter()
@@ -3162,9 +3237,12 @@ fn add_image_to_image_all_formats_block(group: &mut tcu::TestCaseGroup, gp: &Gro
 
     for compatible in COLOR_IMAGE_FORMATS_TO_TEST {
         for entry in *compatible {
-            // The compressed formats need a block model in tcu that is not ported, so
-            // they are absent rather than answered with a verdict.
-            if entry.compressed || !is_supported_by_framework(entry.format) {
+            if !is_supported_by_framework(entry.format) && !entry.compressed {
+                continue;
+            }
+            // The 3D ASTC formats only make sense between two 3D images, and the HDR
+            // ones upstream skips outright.
+            if is_astc_hdr_format(entry.format) || (is_astc_3d_format(entry.format) && (block.src_type != vk::ImageType::_3D || block.dst_type != vk::ImageType::_3D)) {
                 continue;
             }
             // The dedicated filter is deliberately not applied to the source alone:
@@ -3181,7 +3259,16 @@ fn add_image_to_image_all_formats_block(group: &mut tcu::TestCaseGroup, gp: &Gro
             let destinations: Vec<&CopyFormat> = if block.cross_format {
                 compatible
                     .iter()
-                    .filter(|d| !d.compressed && is_supported_by_framework(d.format) && allowed(entry.format, d.format))
+                    .filter(|d| {
+                        (is_supported_by_framework(d.format) || d.compressed)
+                            && !is_astc_hdr_format(d.format)
+                            && !(is_astc_3d_format(d.format) && (block.src_type != vk::ImageType::_3D || block.dst_type != vk::ImageType::_3D))
+                            && allowed(entry.format, d.format)
+                            // Two compressed formats must agree on their block size.
+                            && !(is_compressed_format(entry.format)
+                                && is_compressed_format(d.format)
+                                && (get_block_width(entry.format) != get_block_width(d.format) || get_block_height(entry.format) != get_block_height(d.format)))
+                    })
                     .collect()
             } else {
                 if !allowed(entry.format, entry.format) {

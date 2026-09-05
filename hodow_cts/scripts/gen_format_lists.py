@@ -76,7 +76,12 @@ def rust_name(enum_name: str) -> str:
 
 
 def case_name(enum_name: str) -> str:
-    """`getFormatCaseName` - the enum name lowercased, vendor suffix dropped."""
+    """`getFormatCaseName` - the enum name lowercased, vendor suffix dropped.
+
+    Except for the 3D ASTC formats: upstream's own name for them still carries `_EXT`,
+    because they were never promoted, so the case name does too."""
+    if ASTC_3D.match(enum_name):
+        return enum_name.lower()
     return re.sub(r"_(khr|ext)$", "", enum_name.lower())
 
 

@@ -1016,12 +1016,12 @@ pub static COLOR_IMAGE_FORMATS_TO_TEST: &[&[CopyFormat]] = &[
     &[
         CopyFormat {
             format: vk::Format::ASTC_3X3X3_UNORM_BLOCK_EXT,
-            name: "astc_3x3x3_unorm_block",
+            name: "astc_3x3x3_unorm_block_ext",
             compressed: true,
         },
         CopyFormat {
             format: vk::Format::ASTC_5X5X5_UNORM_BLOCK_EXT,
-            name: "astc_5x5x5_unorm_block",
+            name: "astc_5x5x5_unorm_block_ext",
             compressed: true,
         },
     ],
