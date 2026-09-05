@@ -421,6 +421,8 @@ fn channel_to_float(value: &[u8], type_: ChannelType) -> f32 {
         UNSIGNED_INT64 => rd_u64(value) as f32,
         HALF_FLOAT => rd_f16(value),
         FLOAT => rd_f32(value),
+        UNORM_SHORT_10 => (rd_u16(value) >> 6) as f32 / 1023.0,
+        UNORM_SHORT_12 => (rd_u16(value) >> 4) as f32 / 4095.0,
         USCALED_INT8 => rd_u8(value) as f32,
         USCALED_INT16 => rd_u16(value) as f32,
         SSCALED_INT8 => rd_i8(value) as f32,
@@ -1121,6 +1123,9 @@ fn float_to_channel(dst: &mut [u8], src: f32, type_: ChannelType) {
         HALF_FLOAT => dst[..2].copy_from_slice(&f32_to_f16_bits(src).to_le_bytes()),
         FLOAT => dst[..4].copy_from_slice(&src.to_le_bytes()),
         FLOAT64 => dst[..8].copy_from_slice(&f64::from(src).to_le_bytes()),
+        // The value lives in the high bits; the low ones stay zero.
+        UNORM_SHORT_10 => dst[..2].copy_from_slice(&((sat(1023.0, 0, 1023) as u16) << 6).to_le_bytes()),
+        UNORM_SHORT_12 => dst[..2].copy_from_slice(&((sat(4095.0, 0, 4095) as u16) << 4).to_le_bytes()),
         other => unreachable!("float_to_channel reached the packed type {other:?}; TextureLevel::new should have refused it"),
     }
 }
@@ -1158,6 +1163,8 @@ fn is_writable_channel_type(type_: ChannelType) -> bool {
             | HALF_FLOAT
             | FLOAT
             | FLOAT64
+            | UNORM_SHORT_10
+            | UNORM_SHORT_12
             | USCALED_INT8
             | USCALED_INT16
             | SSCALED_INT8
@@ -1993,14 +2000,19 @@ mod write_tests {
         }
     }
 
-    /// A packed type with no ported write path is refused at construction, which is
-    /// what keeps a silent approximation out of a comparison.
+    /// The R10X6/R12X4 formats keep their value in the high bits of a 16-bit word, so
+    /// a roundtrip is only exact at the values the narrower type can represent.
     #[test]
-    fn unported_packed_formats_are_refused_up_front() {
-        // No ported test writes these two, so they have no encoder.
-        for t in [ChannelType::UNORM_SHORT_10, ChannelType::UNORM_SHORT_12] {
+    fn unorm_short_10_and_12_roundtrip_through_the_read_path() {
+        for (t, max) in [(ChannelType::UNORM_SHORT_10, 1023.0f32), (ChannelType::UNORM_SHORT_12, 4095.0)] {
             let f = TextureFormat::new(ChannelOrder::R, t);
-            assert!(matches!(TextureLevel::new(f, 1, 1, 1), Err(TestError::NotPorted(_))), "{t:?}");
+            for step in [0.0f32, 1.0, 7.0, max] {
+                let v = step / max;
+                assert_eq!(roundtrip(f, [v, 0.0, 0.0, 0.0])[0], v, "{t:?} at {step}");
+            }
+            // Out of range saturates rather than wrapping.
+            assert_eq!(roundtrip(f, [2.0, 0.0, 0.0, 0.0])[0], 1.0, "{t:?} above 1");
+            assert_eq!(roundtrip(f, [-1.0, 0.0, 0.0, 0.0])[0], 0.0, "{t:?} below 0");
         }
     }
 

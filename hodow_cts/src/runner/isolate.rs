@@ -11,9 +11,12 @@
 // written; whatever case has no line when the child dies is the one that killed it.
 //
 // This costs one device creation per batch rather than per case, which is why batches
-// exist at all - `--isolate-per-test` sets the batch size to 1 for triage.
+// exist at all - `--isolate-per-test` sets the batch size to 1 for triage. Batches
+// want to be large: a worker rebuilds the whole case tree before it runs anything, so
+// that cost is paid once per batch no matter how few cases the batch holds. Nothing
+// about attribution depends on the size - the culprit is always `batch[results.len()]`.
 
-use std::io::BufRead;
+use std::io::{BufRead, Write};
 use std::path::Path;
 use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};
@@ -114,14 +117,24 @@ pub fn run_isolated(case_names: &[String], options: &IsolateOptions, mut on_resu
 fn run_one_batch(exe: &Path, batch: &[String], options: &IsolateOptions) -> std::io::Result<BatchOutcome> {
     let mut child = Command::new(exe)
         .env(WORKER_ENV, "1")
-        .arg("--worker-cases")
-        .arg(batch.join(","))
         .arg("--device-id")
         .arg(options.device_id.to_string())
         .args(if options.validation { vec!["--validation"] } else { vec![] })
+        .stdin(Stdio::piped())
         .stdout(Stdio::piped())
         .stderr(Stdio::inherit())
         .spawn()?;
+
+    // The batch goes over stdin rather than argv: `MAX_ARG_STRLEN` caps a single
+    // argument at 128 KiB, which a batch of a thousand case names comfortably exceeds.
+    // The worker drains stdin to EOF before it writes anything, so filling the pipe
+    // here cannot deadlock against the reader below.
+    {
+        let mut stdin = child.stdin.take().expect("piped");
+        for name in batch {
+            writeln!(stdin, "{name}")?;
+        }
+    }
 
     let stdout = child.stdout.take().expect("piped");
     let reader = std::io::BufReader::new(stdout);

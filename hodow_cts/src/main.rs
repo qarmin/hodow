@@ -56,7 +56,10 @@ struct Args {
     isolate_per_test: bool,
 
     /// Cases per worker process.
-    #[arg(long, default_value_t = 64)]
+    ///
+    /// A worker rebuilds the whole case tree before running anything, so a small batch
+    /// pays that cost over and over; crash attribution is per-case regardless of size.
+    #[arg(long, default_value_t = 1000)]
     batch_size: usize,
 
     /// Kill a worker that reports no progress for this many seconds.
@@ -66,10 +69,6 @@ struct Args {
     /// Run in this process without a supervisor. A crash then takes the run with it.
     #[arg(long)]
     no_isolation: bool,
-
-    /// Internal: the case list this process should run as a worker.
-    #[arg(long, hide = true)]
-    worker_cases: Option<String>,
 }
 
 fn main() -> std::process::ExitCode {
@@ -206,17 +205,16 @@ fn run_supervised(selected: &[&FlatCase], args: &Args) -> Result<Summary, Box<dy
 }
 
 fn run_as_worker(args: &Args) -> std::process::ExitCode {
-    let wanted: Vec<String> = args
-        .worker_cases
-        .as_deref()
-        .unwrap_or_default()
-        .split(',')
-        .filter(|s| !s.is_empty())
-        .map(str::to_string)
-        .collect();
+    // The parent sends the batch on stdin, one case name per line, and closes it.
+    let mut batch = String::new();
+    if let Err(e) = std::io::Read::read_to_string(&mut std::io::stdin(), &mut batch) {
+        eprintln!("worker error: cannot read the case list from stdin: {e}");
+        return std::process::ExitCode::FAILURE;
+    }
 
     let all = hodow_cts::all_cases();
-    let selected: Vec<&FlatCase> = wanted.iter().filter_map(|n| all.iter().find(|c| &c.full_name == n)).collect();
+    let by_name: std::collections::HashMap<&str, &FlatCase> = all.iter().map(|c| (c.full_name.as_str(), c)).collect();
+    let selected: Vec<&FlatCase> = batch.lines().map(str::trim).filter(|n| !n.is_empty()).filter_map(|n| by_name.get(n).copied()).collect();
 
     // The worker's stdout IS the result channel the parent parses, so nothing else may
     // be written to it.

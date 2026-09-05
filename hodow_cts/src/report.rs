@@ -135,6 +135,9 @@ impl std::fmt::Display for Summary {
         writeln!(f, "  Failed:        {}/{} ({:.1}%)", self.failed, self.total(), pct(self.failed))?;
         writeln!(f, "  Not supported: {}/{} ({:.1}%)", self.not_supported, self.total(), pct(self.not_supported))?;
         writeln!(f, "  Warnings:      {}/{} ({:.1}%)", self.warnings, self.total(), pct(self.warnings))?;
-        write!(f, "  Crashed:       {}/{} ({:.1}%)", self.crashed, self.total(), pct(self.crashed))
+        writeln!(f, "  Crashed:       {}/{} ({:.1}%)", self.crashed, self.total(), pct(self.crashed))?;
+        // Without this line the buckets do not add up to the total and the non-zero
+        // exit code has no visible cause.
+        write!(f, "  Other:         {}/{} ({:.1}%)", self.other, self.total(), pct(self.other))
     }
 }
