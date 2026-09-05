@@ -95,6 +95,26 @@ impl DescriptorSetCount {
     }
 }
 
+/// `DescriptorUpdateMethod`, restricted to the two that need no extra extension on a
+/// 1.1 driver. `WITH_PUSH`/`WITH_PUSH_TEMPLATE` need VK_KHR_push_descriptor and are
+/// absent rather than present-and-skipped.
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum DescriptorUpdateMethod {
+    Normal,
+    WithTemplate,
+}
+
+impl DescriptorUpdateMethod {
+    /// The group upstream puts the method under. The normal method has none: its
+    /// descriptor types sit directly under the bind command.
+    fn group_name(self) -> Option<&'static str> {
+        match self {
+            Self::Normal => None,
+            Self::WithTemplate => Some("with_template"),
+        }
+    }
+}
+
 /// `ShaderInputInterface`
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum ShaderInputInterface {
@@ -135,6 +155,14 @@ impl ShaderInputInterface {
 /// `getArbitraryBindingIndex` - the largest binding values glslang accepts.
 fn arbitrary_binding_index(ndx: u32) -> u32 {
     [0x7FFE, 0xFFFE][ndx as usize]
+}
+
+/// `verifyDriverSupport`'s update-method half.
+fn verify_update_method_support(context: &Context, method: DescriptorUpdateMethod) -> Result<(), TestError> {
+    match method {
+        DescriptorUpdateMethod::Normal => Ok(()),
+        DescriptorUpdateMethod::WithTemplate => context.require_device_functionality("VK_KHR_descriptor_update_template"),
+    }
 }
 
 fn is_uniform_descriptor_type(t: vk::DescriptorType) -> bool {
@@ -179,6 +207,7 @@ pub enum ResourceKind {
 
 pub struct BufferAccessCase {
     name: String,
+    update_method: DescriptorUpdateMethod,
     resource_kind: ResourceKind,
     descriptor_type: vk::DescriptorType,
     descriptor_set_count: DescriptorSetCount,
@@ -213,6 +242,8 @@ impl TestCase for BufferAccessCase {
     }
 
     fn check_support(&self, context: &Context) -> Result<(), TestError> {
+        verify_update_method_support(context, self.update_method)?;
+
         // Two sets plus the gap the discontiguous variant leaves.
         let required_sets = match self.descriptor_set_count {
             DescriptorSetCount::Single => 1,
@@ -340,8 +371,8 @@ impl TestInstance for BufferAccessInstance<'_> {
 
             let ndx0 = (set_ndx * num_resources) % num_src_buffers;
             let ndx1 = (set_ndx * num_resources + 1) % num_src_buffers;
-            match p.resource_kind {
-                ResourceKind::Buffer => self.write_descriptor_set(
+            match (p.resource_kind, p.update_method) {
+                (ResourceKind::Buffer, DescriptorUpdateMethod::Normal) => self.write_descriptor_set(
                     *set,
                     set_ndx,
                     buffers[ndx0 as usize].get(),
@@ -350,7 +381,22 @@ impl TestInstance for BufferAccessInstance<'_> {
                     view_offsets[ndx1 as usize],
                     result_buffer.get(),
                 ),
-                ResourceKind::TexelBuffer => self.write_texel_descriptor_set(*set, set_ndx, *buffer_views[ndx0 as usize], *buffer_views[ndx1 as usize], result_buffer.get()),
+                (ResourceKind::Buffer, DescriptorUpdateMethod::WithTemplate) => self.write_descriptor_set_with_template(
+                    *set,
+                    *layout,
+                    set_ndx,
+                    buffers[ndx0 as usize].get(),
+                    view_offsets[ndx0 as usize],
+                    buffers[ndx1 as usize].get(),
+                    view_offsets[ndx1 as usize],
+                    result_buffer.get(),
+                )?,
+                (ResourceKind::TexelBuffer, DescriptorUpdateMethod::Normal) => {
+                    self.write_texel_descriptor_set(*set, set_ndx, *buffer_views[ndx0 as usize], *buffer_views[ndx1 as usize], result_buffer.get())
+                }
+                (ResourceKind::TexelBuffer, DescriptorUpdateMethod::WithTemplate) => {
+                    self.write_texel_descriptor_set_with_template(*set, *layout, set_ndx, *buffer_views[ndx0 as usize], *buffer_views[ndx1 as usize], result_buffer.get())?
+                }
             }
 
             layout_handles.push(*layout);
@@ -705,23 +751,46 @@ const INTERFACES: [ShaderInputInterface; 5] = [
     ShaderInputInterface::DescriptorArray,
 ];
 
-/// `createShaderAccessTests`, restricted to the compute half of the buffer types.
+/// `createShaderAccessTests`, restricted to the compute stage.
 ///
-/// The group tree upstream builds is
-/// `<cmd buffer>.<update method>.<descriptor type>.<stage>.<descriptor arrangement>`;
-/// only `primary_cmd_buf.bind.*.compute.*` is registered here, and the rest of the
-/// tree is absent rather than present-and-skipped.
+/// The group tree upstream builds is `<cmd buffer>.<bind command>.[<update method>.]
+/// <descriptor type>.<stage>.<descriptor arrangement>`; only
+/// `primary_cmd_buf.bind.*.compute.*` and its `with_template` twin are registered
+/// here, and the rest of the tree is absent rather than present-and-skipped.
 pub fn create_shader_access_tests() -> tcu::TestCaseGroup {
     let mut group = tcu::TestCaseGroup::new("shader_access");
     let mut primary = tcu::TestCaseGroup::new("primary_cmd_buf");
     let mut bind = tcu::TestCaseGroup::new("bind");
 
-    // Upstream's descriptor type order, which puts the image types before the buffers.
-    bind.add_child(create_image_group("sampler_mutable", vk::DescriptorType::SAMPLER, false));
-    bind.add_child(create_image_group("sampler_immutable", vk::DescriptorType::SAMPLER, true));
-    bind.add_child(create_image_group("combined_image_sampler_mutable", vk::DescriptorType::COMBINED_IMAGE_SAMPLER, false));
-    bind.add_child(create_image_group("combined_image_sampler_immutable", vk::DescriptorType::COMBINED_IMAGE_SAMPLER, true));
-    bind.add_child(create_image_group("storage_image", vk::DescriptorType::STORAGE_IMAGE, false));
+    for update_method in [DescriptorUpdateMethod::Normal, DescriptorUpdateMethod::WithTemplate] {
+        let mut method_group = update_method.group_name().map(tcu::TestCaseGroup::new);
+        for type_group in create_descriptor_type_groups(update_method) {
+            if let Some(g) = method_group.as_mut() {
+                g.add_child(type_group);
+            } else {
+                bind.add_child(type_group);
+            }
+        }
+        if let Some(g) = method_group {
+            bind.add_child(g);
+        }
+    }
+
+    primary.add_child(bind);
+    group.add_child(primary);
+    group
+}
+
+/// One group per descriptor type, in upstream's order - which puts the image types
+/// before the buffer ones.
+fn create_descriptor_type_groups(update_method: DescriptorUpdateMethod) -> Vec<tcu::TestCaseGroup> {
+    let mut groups = vec![
+        create_image_group(update_method, "sampler_mutable", vk::DescriptorType::SAMPLER, false),
+        create_image_group(update_method, "sampler_immutable", vk::DescriptorType::SAMPLER, true),
+        create_image_group(update_method, "combined_image_sampler_mutable", vk::DescriptorType::COMBINED_IMAGE_SAMPLER, false),
+        create_image_group(update_method, "combined_image_sampler_immutable", vk::DescriptorType::COMBINED_IMAGE_SAMPLER, true),
+        create_image_group(update_method, "storage_image", vk::DescriptorType::STORAGE_IMAGE, false),
+    ];
 
     let descriptor_types = [
         ("uniform_buffer", vk::DescriptorType::UNIFORM_BUFFER, ResourceKind::Buffer),
@@ -760,6 +829,7 @@ pub fn create_shader_access_tests() -> tcu::TestCaseGroup {
                             let dynamic_name = if dynamic_offset_non_zero { "dynamic_nonzero" } else { "dynamic_zero" };
                             interface_group.add_child(Box::new(BufferAccessCase {
                                 name: format!("{offset_name}_{dynamic_name}"),
+                                update_method,
                                 resource_kind,
                                 descriptor_type,
                                 descriptor_set_count,
@@ -772,6 +842,7 @@ pub fn create_shader_access_tests() -> tcu::TestCaseGroup {
                     } else {
                         interface_group.add_child(Box::new(BufferAccessCase {
                             name: offset_name.to_string(),
+                            update_method,
                             resource_kind,
                             descriptor_type,
                             descriptor_set_count,
@@ -796,17 +867,15 @@ pub fn create_shader_access_tests() -> tcu::TestCaseGroup {
         }
 
         type_group.add_child(stage_group);
-        bind.add_child(type_group);
+        groups.push(type_group);
     }
 
-    primary.add_child(bind);
-    group.add_child(primary);
-    group
+    groups
 }
 
 /// `createShaderAccessImageTests`, compute stage. The view type is the innermost
 /// level of the tree here, where the buffer types put their offset variants.
-fn create_image_group(group_name: &str, descriptor_type: vk::DescriptorType, is_immutable_sampler: bool) -> tcu::TestCaseGroup {
+fn create_image_group(update_method: DescriptorUpdateMethod, group_name: &str, descriptor_type: vk::DescriptorType, is_immutable_sampler: bool) -> tcu::TestCaseGroup {
     let mut type_group = tcu::TestCaseGroup::new(group_name);
     let mut stage_group = tcu::TestCaseGroup::new("compute");
 
@@ -822,6 +891,7 @@ fn create_image_group(group_name: &str, descriptor_type: vk::DescriptorType, is_
                 }
                 interface_group.add_child(Box::new(ImageAccessCase {
                     name,
+                    update_method,
                     descriptor_type,
                     descriptor_set_count,
                     shader_interface,
@@ -1155,6 +1225,7 @@ fn fetch_image_value(
 
 pub struct ImageAccessCase {
     name: &'static str,
+    update_method: DescriptorUpdateMethod,
     descriptor_type: vk::DescriptorType,
     descriptor_set_count: DescriptorSetCount,
     shader_interface: ShaderInputInterface,
@@ -1214,6 +1285,8 @@ impl TestCase for ImageAccessCase {
     }
 
     fn check_support(&self, context: &Context) -> Result<(), TestError> {
+        verify_update_method_support(context, self.update_method)?;
+
         // `verifyDriverSupport`, restricted to what the compute stage can reach.
         if self.view_type == vk::ImageViewType::CUBE_ARRAY && context.get_device_features().image_cube_array == vk::FALSE {
             return Err(TestError::NotSupported("imageCubeArray feature not supported".into()));
@@ -1335,7 +1408,12 @@ impl TestInstance for ImageAccessInstance<'_> {
             let stride = if p.descriptor_type == vk::DescriptorType::SAMPLER { 1 } else { num_resources };
             let ndx0 = (set_ndx * stride) as usize % image_views.len();
             let ndx1 = (set_ndx * stride + 1) as usize % image_views.len();
-            self.write_descriptor_set(*set, set_ndx, *image_views[ndx0], *image_views[ndx1], &sampler_handles, result_buffer.get());
+            match p.update_method {
+                DescriptorUpdateMethod::Normal => self.write_descriptor_set(*set, set_ndx, *image_views[ndx0], *image_views[ndx1], &sampler_handles, result_buffer.get()),
+                DescriptorUpdateMethod::WithTemplate => {
+                    self.write_descriptor_set_with_template(*set, *layout, set_ndx, *image_views[ndx0], *image_views[ndx1], &sampler_handles, result_buffer.get())?
+                }
+            }
 
             layout_handles.push(*layout);
             set_layouts.push(layout);
@@ -2087,5 +2165,313 @@ fn fetch_sample_value(
         tcu::pixel::TextureCubeArrayView { level0 }.sample(sampler, pos[0], pos[1], pos[2], pos[3])
     } else {
         tcu::pixel::Texture3DView { level0: whole }.sample(sampler, pos[0], pos[1], pos[2])
+    }
+}
+
+// ---------------------------------------------------------------------------------
+// Descriptor update templates
+// ---------------------------------------------------------------------------------
+
+/// `RawUpdateRegistry` - the blob a descriptor update template reads from. Entries
+/// point into it by byte offset, so the objects have to be laid down in the order the
+/// entries are built and kept alive until the update has happened.
+#[derive(Default)]
+struct RawUpdateRegistry {
+    data: Vec<u8>,
+    offsets: Vec<usize>,
+}
+
+impl RawUpdateRegistry {
+    fn add_write_object<T: Copy>(&mut self, object: T) {
+        self.offsets.push(self.data.len());
+        let bytes = unsafe { std::slice::from_raw_parts(std::ptr::from_ref(&object).cast::<u8>(), std::mem::size_of::<T>()) };
+        self.data.extend_from_slice(bytes);
+    }
+
+    fn write_object_offset(&self, object_id: usize) -> usize {
+        self.offsets[object_id]
+    }
+
+    fn raw_pointer(&self) -> *const std::ffi::c_void {
+        self.data.as_ptr().cast()
+    }
+}
+
+/// `createTemplateBinding`
+fn create_template_binding(binding: u32, array_element: u32, descriptor_count: u32, descriptor_type: vk::DescriptorType, offset: usize, stride: usize) -> vk::DescriptorUpdateTemplateEntry {
+    vk::DescriptorUpdateTemplateEntry {
+        dst_binding: binding,
+        dst_array_element: array_element,
+        descriptor_count,
+        descriptor_type,
+        offset,
+        stride,
+    }
+}
+
+/// `vk::createDescriptorUpdateTemplate` and the update that follows it.
+///
+/// The entry point is picked by whether the device still advertises the extension: a
+/// 1.0 driver only has the KHR name loaded, a 1.1+ driver that dropped the string only
+/// has the core one. `require_device_functionality` accepts both, so this has to too.
+fn update_descriptor_set_with_template(
+    context: &Context,
+    entries: &[vk::DescriptorUpdateTemplateEntry],
+    layout: vk::DescriptorSetLayout,
+    set: vk::DescriptorSet,
+    registry: &RawUpdateRegistry,
+) -> Result<(), TestError> {
+    use vulkanalia::vk::{DeviceV1_1, KhrDescriptorUpdateTemplateExtensionDeviceCommands};
+
+    let device = context.get_device();
+    let info = vk::DescriptorUpdateTemplateCreateInfo::builder()
+        .descriptor_update_entries(entries)
+        .template_type(vk::DescriptorUpdateTemplateType::DESCRIPTOR_SET)
+        .descriptor_set_layout(layout)
+        .pipeline_bind_point(vk::PipelineBindPoint::COMPUTE);
+
+    let use_khr = context.get_device_extensions().iter().any(|e| e == "VK_KHR_descriptor_update_template");
+    let handle = unsafe {
+        if use_khr {
+            device.create_descriptor_update_template_khr(&info, None)
+        } else {
+            device.create_descriptor_update_template(&info, None)
+        }
+    }
+    .vk_check("vkCreateDescriptorUpdateTemplate")?;
+
+    // The template is consumed by the update and nothing refers to it afterwards, so
+    // it is destroyed here rather than being tied to the instance's lifetime.
+    unsafe {
+        if use_khr {
+            device.update_descriptor_set_with_template_khr(set, handle, registry.raw_pointer());
+            device.destroy_descriptor_update_template_khr(handle, None);
+        } else {
+            device.update_descriptor_set_with_template(set, handle, registry.raw_pointer());
+            device.destroy_descriptor_update_template(handle, None);
+        }
+    }
+    Ok(())
+}
+
+impl BufferAccessInstance<'_> {
+    /// `BufferComputeInstance::writeDescriptorSetWithTemplate`. The entries mirror
+    /// `write_descriptor_set`'s bindings exactly; only the way the driver is handed
+    /// the contents differs.
+    #[allow(clippy::too_many_arguments)]
+    fn write_descriptor_set_with_template(
+        &self,
+        set: vk::DescriptorSet,
+        layout: vk::DescriptorSetLayout,
+        set_ndx: u32,
+        view_a: vk::Buffer,
+        offset_a: u32,
+        view_b: vk::Buffer,
+        offset_b: u32,
+        result: vk::Buffer,
+    ) -> Result<(), TestError> {
+        let range = std::mem::size_of::<[f32; 8]>() as u64;
+        let buffer_infos = [
+            vk::DescriptorBufferInfo {
+                buffer: view_a,
+                offset: u64::from(offset_a),
+                range,
+            },
+            vk::DescriptorBufferInfo {
+                buffer: view_b,
+                offset: u64::from(offset_b),
+                range,
+            },
+        ];
+
+        let mut registry = RawUpdateRegistry::default();
+        if set_ndx == 0 {
+            registry.add_write_object(vk::DescriptorBufferInfo {
+                buffer: result,
+                offset: 0,
+                range: RESULT_DATA_SIZE,
+            });
+        }
+        registry.add_write_object(buffer_infos[0]);
+        registry.add_write_object(buffer_infos[1]);
+
+        let entries = self.template_entries(set_ndx, &registry, std::mem::size_of::<vk::DescriptorBufferInfo>());
+        update_descriptor_set_with_template(self.context, &entries, layout, set, &registry)
+    }
+
+    /// `writeDescriptorSetWithTemplate`'s switch, which is the same for the plain and
+    /// the texel buffer types and differs from `write_descriptor_set` only in that the
+    /// binding is described rather than written.
+    fn template_entries(&self, set_ndx: u32, registry: &RawUpdateRegistry, info_size: usize) -> Vec<vk::DescriptorUpdateTemplateEntry> {
+        let p = self.params;
+        let mut entries = Vec::new();
+        let mut binding = 0;
+        let mut object = 0;
+
+        if set_ndx == 0 {
+            entries.push(create_template_binding(binding, 0, 1, vk::DescriptorType::STORAGE_BUFFER, registry.write_object_offset(object), 0));
+            binding += 1;
+            object += 1;
+        }
+
+        match p.shader_interface {
+            ShaderInputInterface::SingleDescriptor => {
+                entries.push(create_template_binding(binding, 0, 1, p.descriptor_type, registry.write_object_offset(object), 0));
+            }
+            ShaderInputInterface::MultipleContiguousDescriptors => {
+                entries.push(create_template_binding(binding, 0, 1, p.descriptor_type, registry.write_object_offset(object), 0));
+                entries.push(create_template_binding(binding + 1, 0, 1, p.descriptor_type, registry.write_object_offset(object + 1), 0));
+            }
+            ShaderInputInterface::MultipleDiscontiguousDescriptors => {
+                entries.push(create_template_binding(binding, 0, 1, p.descriptor_type, registry.write_object_offset(object), 0));
+                entries.push(create_template_binding(binding + 2, 0, 1, p.descriptor_type, registry.write_object_offset(object + 1), 0));
+            }
+            ShaderInputInterface::MultipleArbitraryDescriptors => {
+                entries.push(create_template_binding(arbitrary_binding_index(0), 0, 1, p.descriptor_type, registry.write_object_offset(object), 0));
+                entries.push(create_template_binding(arbitrary_binding_index(1), 0, 1, p.descriptor_type, registry.write_object_offset(object + 1), 0));
+            }
+            // One entry covering both, which is why the two infos have to sit next to
+            // each other in the blob and the stride is the info's own size.
+            ShaderInputInterface::DescriptorArray => {
+                entries.push(create_template_binding(binding, 0, 2, p.descriptor_type, registry.write_object_offset(object), info_size));
+            }
+        }
+
+        entries
+    }
+
+    /// `TexelBufferComputeInstance::writeDescriptorSetWithTemplate`
+    fn write_texel_descriptor_set_with_template(&self, set: vk::DescriptorSet, layout: vk::DescriptorSetLayout, set_ndx: u32, view_a: vk::BufferView, view_b: vk::BufferView, result: vk::Buffer) -> Result<(), TestError> {
+        let mut registry = RawUpdateRegistry::default();
+        if set_ndx == 0 {
+            registry.add_write_object(vk::DescriptorBufferInfo {
+                buffer: result,
+                offset: 0,
+                range: RESULT_DATA_SIZE,
+            });
+        }
+        registry.add_write_object(view_a);
+        registry.add_write_object(view_b);
+
+        let entries = self.template_entries(set_ndx, &registry, std::mem::size_of::<vk::BufferView>());
+        update_descriptor_set_with_template(self.context, &entries, layout, set, &registry)
+    }
+}
+
+impl ImageAccessInstance<'_> {
+    /// `ImageFetchComputeInstance::writeDescriptorSetWithTemplate`,
+    /// `ImageSampleComputeInstance::writeSamplerDescriptorSetWithTemplate` and
+    /// `writeImageSamplerDescriptorSetWithTemplate`, which describe exactly the
+    /// bindings `write_descriptor_set` writes.
+    #[allow(clippy::too_many_arguments)]
+    fn write_descriptor_set_with_template(
+        &self,
+        set: vk::DescriptorSet,
+        layout: vk::DescriptorSetLayout,
+        set_ndx: u32,
+        view_a: vk::ImageView,
+        view_b: vk::ImageView,
+        samplers: &[vk::Sampler],
+        result: vk::Buffer,
+    ) -> Result<(), TestError> {
+        let p = self.params;
+        let image_layout = image_layout_for_descriptor_type(p.descriptor_type);
+        let is_separate_sampler = p.descriptor_type == vk::DescriptorType::SAMPLER;
+
+        let combined_sampler = |ndx: u32| -> vk::Sampler {
+            if p.is_immutable_sampler || samplers.is_empty() {
+                vk::Sampler::null()
+            } else {
+                samplers[(set_ndx * p.shader_interface.num_resources() + ndx) as usize % samplers.len()]
+            }
+        };
+        let resource_infos = [
+            vk::DescriptorImageInfo {
+                sampler: if is_separate_sampler {
+                    samplers[(set_ndx * p.shader_interface.num_resources()) as usize % samplers.len()]
+                } else {
+                    combined_sampler(0)
+                },
+                image_view: if is_separate_sampler { vk::ImageView::null() } else { view_a },
+                image_layout: if is_separate_sampler { vk::ImageLayout::UNDEFINED } else { image_layout },
+            },
+            vk::DescriptorImageInfo {
+                sampler: if is_separate_sampler {
+                    samplers[(set_ndx * p.shader_interface.num_resources() + 1) as usize % samplers.len()]
+                } else {
+                    combined_sampler(1)
+                },
+                image_view: if is_separate_sampler { vk::ImageView::null() } else { view_b },
+                image_layout: if is_separate_sampler { vk::ImageLayout::UNDEFINED } else { image_layout },
+            },
+        ];
+
+        let mut registry = RawUpdateRegistry::default();
+        if set_ndx == 0 {
+            registry.add_write_object(vk::DescriptorBufferInfo {
+                buffer: result,
+                offset: 0,
+                range: RESULT_DATA_SIZE,
+            });
+        }
+        if is_separate_sampler {
+            registry.add_write_object(vk::DescriptorImageInfo {
+                sampler: vk::Sampler::null(),
+                image_view: view_a,
+                image_layout: vk::ImageLayout::SHADER_READ_ONLY_OPTIMAL,
+            });
+        }
+        registry.add_write_object(resource_infos[0]);
+        registry.add_write_object(resource_infos[1]);
+
+        let mut entries = Vec::new();
+        let mut binding = 0;
+        let mut object = 0;
+
+        if set_ndx == 0 {
+            entries.push(create_template_binding(binding, 0, 1, vk::DescriptorType::STORAGE_BUFFER, registry.write_object_offset(object), 0));
+            binding += 1;
+            object += 1;
+        }
+
+        if is_separate_sampler {
+            let texture_binding = if p.shader_interface == ShaderInputInterface::MultipleDiscontiguousDescriptors {
+                binding + 1
+            } else {
+                let b = binding;
+                binding += 1;
+                b
+            };
+            entries.push(create_template_binding(texture_binding, 0, 1, vk::DescriptorType::SAMPLED_IMAGE, registry.write_object_offset(object), 0));
+            object += 1;
+        }
+
+        // An immutable separate sampler is already in the layout; there is nothing to
+        // describe, and the objects sitting unused in the blob cost nothing.
+        if !(is_separate_sampler && p.is_immutable_sampler) {
+            let info_size = std::mem::size_of::<vk::DescriptorImageInfo>();
+            match p.shader_interface {
+                ShaderInputInterface::SingleDescriptor => {
+                    entries.push(create_template_binding(binding, 0, 1, p.descriptor_type, registry.write_object_offset(object), 0));
+                }
+                ShaderInputInterface::MultipleContiguousDescriptors => {
+                    entries.push(create_template_binding(binding, 0, 1, p.descriptor_type, registry.write_object_offset(object), 0));
+                    entries.push(create_template_binding(binding + 1, 0, 1, p.descriptor_type, registry.write_object_offset(object + 1), 0));
+                }
+                ShaderInputInterface::MultipleDiscontiguousDescriptors => {
+                    entries.push(create_template_binding(binding, 0, 1, p.descriptor_type, registry.write_object_offset(object), 0));
+                    entries.push(create_template_binding(binding + 2, 0, 1, p.descriptor_type, registry.write_object_offset(object + 1), 0));
+                }
+                ShaderInputInterface::MultipleArbitraryDescriptors => {
+                    entries.push(create_template_binding(arbitrary_binding_index(0), 0, 1, p.descriptor_type, registry.write_object_offset(object), 0));
+                    entries.push(create_template_binding(arbitrary_binding_index(1), 0, 1, p.descriptor_type, registry.write_object_offset(object + 1), 0));
+                }
+                ShaderInputInterface::DescriptorArray => {
+                    entries.push(create_template_binding(binding, 0, 2, p.descriptor_type, registry.write_object_offset(object), info_size));
+                }
+            }
+        }
+
+        update_descriptor_set_with_template(self.context, &entries, layout, set, &registry)
     }
 }
