@@ -695,8 +695,8 @@ pub fn create_buffer_copy_tests() -> tcu::TestCaseGroup {
         }
 
         super::blitting_tests::add_blitting_image_groups(&mut kind_group, "blit_image", allocation_kind, command_variant);
-        super::resolve_image_tests::add_resolve_image_tests(&mut kind_group, allocation_kind);
-        super::depth_stencil_msaa_copy_tests::add_depth_stencil_msaa_tests(&mut kind_group, allocation_kind);
+        super::resolve_image_tests::add_resolve_image_tests(&mut kind_group, allocation_kind, command_variant);
+        super::depth_stencil_msaa_copy_tests::add_depth_stencil_msaa_tests(&mut kind_group, allocation_kind, command_variant);
 
         // buffer_to_buffer_with_offset exists only under `core` upstream.
         if kind_name == "core" {

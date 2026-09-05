@@ -16,8 +16,9 @@
 // sample of both to a pair of SSBOs, which the host then compares region by region.
 
 use vulkanalia::prelude::v1_0::*;
+use vulkanalia::vk::DeviceV1_3;
 
-use super::copies_buffer_tests::AllocationKind;
+use super::copies_buffer_tests::{AllocationKind, CopyCommandVariant};
 use super::copies_image_tests::get_aspect_flags;
 use crate::tcu::pixel::{has_depth_component, has_stencil_component};
 use crate::tcu::{self, TestError, TestOutcome, TestStatus, map_vk_format};
@@ -110,6 +111,7 @@ pub struct DepthStencilMsaaCase {
     copy_aspect: vk::ImageAspectFlags,
     image_offset: bool,
     allocation_kind: AllocationKind,
+    command_variant: CopyCommandVariant,
 }
 
 impl DepthStencilMsaaCase {
@@ -177,6 +179,9 @@ impl TestCase for DepthStencilMsaaCase {
     fn check_support(&self, context: &Context<'_>) -> Result<(), TestError> {
         if self.allocation_kind == AllocationKind::Dedicated {
             context.require_device_functionality("VK_KHR_dedicated_allocation")?;
+        }
+        if self.command_variant == CopyCommandVariant::CopyCommands2 {
+            context.require_device_functionality("VK_KHR_copy_commands2")?;
         }
         if context.get_device_features().fragment_stores_and_atomics == 0 {
             return Err(TestError::NotSupported("fragmentStoresAndAtomics not supported".to_string()));
@@ -401,7 +406,33 @@ impl TestInstance for DepthStencilMsaaInstance<'_> {
             );
 
             let copies: Vec<vk::ImageCopy> = p.regions().iter().map(|r| r.to_vk()).collect();
-            device.cmd_copy_image(*cmd_buffer, src_image.get(), p.src_image_layout, dst_image.get(), p.dst_image_layout, &copies);
+            if p.command_variant == CopyCommandVariant::CopyCommands2 {
+                let copies2: Vec<vk::ImageCopy2> = copies
+                    .iter()
+                    .map(|c| vk::ImageCopy2 {
+                        s_type: vk::StructureType::IMAGE_COPY_2,
+                        next: std::ptr::null(),
+                        src_subresource: c.src_subresource,
+                        src_offset: c.src_offset,
+                        dst_subresource: c.dst_subresource,
+                        dst_offset: c.dst_offset,
+                        extent: c.extent,
+                    })
+                    .collect();
+                let info = vk::CopyImageInfo2 {
+                    s_type: vk::StructureType::COPY_IMAGE_INFO_2,
+                    next: std::ptr::null(),
+                    src_image: src_image.get(),
+                    src_image_layout: p.src_image_layout,
+                    dst_image: dst_image.get(),
+                    dst_image_layout: p.dst_image_layout,
+                    region_count: copies2.len() as u32,
+                    regions: copies2.as_ptr(),
+                };
+                device.cmd_copy_image2(*cmd_buffer, &info);
+            } else {
+                device.cmd_copy_image(*cmd_buffer, src_image.get(), p.src_image_layout, dst_image.get(), p.dst_image_layout, &copies);
+            }
         }
         end_command_buffer(device, *cmd_buffer)?;
         submit_commands_and_wait(device, queue, *cmd_buffer)?;
@@ -801,7 +832,7 @@ fn image_layout_case_name(layout: vk::ImageLayout) -> &'static str {
 }
 
 /// `addDepthStencilCopyMSAATest`
-fn add_depth_stencil_copy_msaa_test(group: &mut tcu::TestCaseGroup, allocation_kind: AllocationKind, copy_options: CopyOptions) {
+fn add_depth_stencil_copy_msaa_test(group: &mut tcu::TestCaseGroup, allocation_kind: AllocationKind, command_variant: CopyCommandVariant, copy_options: CopyOptions) {
     const DS_FORMATS: [(&str, vk::Format); 4] = [
         ("d32_sfloat", vk::Format::D32_SFLOAT),
         ("s8_uint", vk::Format::S8_UINT),
@@ -838,6 +869,7 @@ fn add_depth_stencil_copy_msaa_test(group: &mut tcu::TestCaseGroup, allocation_k
                             copy_aspect: aspect,
                             image_offset,
                             allocation_kind,
+                            command_variant,
                         };
                         let stem = format!("{base}{suffix}_{}", sample_count_case_name(samples));
                         group.add_child(Box::new(DepthStencilMsaaCase {
@@ -865,7 +897,7 @@ fn add_depth_stencil_copy_msaa_test(group: &mut tcu::TestCaseGroup, allocation_k
 }
 
 /// `addCopyDepthStencilMSAATests`
-pub fn add_depth_stencil_msaa_tests(parent: &mut tcu::TestCaseGroup, allocation_kind: AllocationKind) {
+pub fn add_depth_stencil_msaa_tests(parent: &mut tcu::TestCaseGroup, allocation_kind: AllocationKind, command_variant: CopyCommandVariant) {
     let mut group = tcu::TestCaseGroup::new("depth_stencil_msaa_copy");
     for (name, options) in [
         ("whole", CopyOptions::WholeImage),
@@ -873,7 +905,7 @@ pub fn add_depth_stencil_msaa_tests(parent: &mut tcu::TestCaseGroup, allocation_
         ("partial", CopyOptions::Partial),
     ] {
         let mut sub = tcu::TestCaseGroup::new(name);
-        add_depth_stencil_copy_msaa_test(&mut sub, allocation_kind, options);
+        add_depth_stencil_copy_msaa_test(&mut sub, allocation_kind, command_variant, options);
         group.add_child(sub);
     }
     parent.add_child(group);

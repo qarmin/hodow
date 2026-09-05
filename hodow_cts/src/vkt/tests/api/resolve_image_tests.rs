@@ -24,8 +24,9 @@
 // copy image without COLOR_ATTACHMENT usage and a compute-only / transfer-only queue.
 
 use vulkanalia::prelude::v1_0::*;
+use vulkanalia::vk::DeviceV1_3;
 
-use super::copies_buffer_tests::AllocationKind;
+use super::copies_buffer_tests::{AllocationKind, CopyCommandVariant};
 use super::copies_image_tests::{FillMode, ImageParms, generate_buffer, read_image_in_layout, upload_image};
 use crate::tcu::fuzzy_image_compare::fuzzy_compare_ok;
 use crate::tcu::pixel::TextureLevel;
@@ -164,6 +165,7 @@ pub struct ResolveImageCase {
     /// `VK_REMAINING_ARRAY_LAYERS` legal in a resolve subresource.
     needs_maintenance5: bool,
     allocation_kind: AllocationKind,
+    command_variant: CopyCommandVariant,
 }
 
 impl TestCase for ResolveImageCase {
@@ -199,6 +201,9 @@ impl TestCase for ResolveImageCase {
             .map_err(|_| TestError::NotSupported("Format not supported".to_string()))?;
         }
 
+        if self.command_variant == CopyCommandVariant::CopyCommands2 {
+            context.require_device_functionality("VK_KHR_copy_commands2")?;
+        }
         if self.needs_maintenance5 {
             context.require_device_functionality("VK_KHR_maintenance5")?;
         }
@@ -416,7 +421,33 @@ impl TestInstance for ResolveImageInstance<'_> {
                 &image_barriers,
             );
 
-            device.cmd_resolve_image(*cmd_buffer, source_image, p.src_layout, destination.get(), p.dst_layout, &resolves);
+            if p.command_variant == CopyCommandVariant::CopyCommands2 {
+                let resolves2: Vec<vk::ImageResolve2> = resolves
+                    .iter()
+                    .map(|r| vk::ImageResolve2 {
+                        s_type: vk::StructureType::IMAGE_RESOLVE_2,
+                        next: std::ptr::null(),
+                        src_subresource: r.src_subresource,
+                        src_offset: r.src_offset,
+                        dst_subresource: r.dst_subresource,
+                        dst_offset: r.dst_offset,
+                        extent: r.extent,
+                    })
+                    .collect();
+                let info = vk::ResolveImageInfo2 {
+                    s_type: vk::StructureType::RESOLVE_IMAGE_INFO_2,
+                    next: std::ptr::null(),
+                    src_image: source_image,
+                    src_image_layout: p.src_layout,
+                    dst_image: destination.get(),
+                    dst_image_layout: p.dst_layout,
+                    region_count: resolves2.len() as u32,
+                    regions: resolves2.as_ptr(),
+                };
+                device.cmd_resolve_image2(*cmd_buffer, &info);
+            } else {
+                device.cmd_resolve_image(*cmd_buffer, source_image, p.src_layout, destination.get(), p.dst_layout, &resolves);
+            }
 
             let post = make_image_memory_barrier(
                 vk::AccessFlags::TRANSFER_WRITE,
@@ -673,7 +704,33 @@ impl ResolveImageInstance<'_> {
                 &[] as &[vk::BufferMemoryBarrier],
                 &[multisampled_barrier, copy_barrier],
             );
-            device.cmd_copy_image(*cmd_buffer, multisampled.get(), p.src_layout, copy_image.get(), p.dst_layout, &image_copies);
+            if p.command_variant == CopyCommandVariant::CopyCommands2 {
+                let copies2: Vec<vk::ImageCopy2> = image_copies
+                    .iter()
+                    .map(|c| vk::ImageCopy2 {
+                        s_type: vk::StructureType::IMAGE_COPY_2,
+                        next: std::ptr::null(),
+                        src_subresource: c.src_subresource,
+                        src_offset: c.src_offset,
+                        dst_subresource: c.dst_subresource,
+                        dst_offset: c.dst_offset,
+                        extent: c.extent,
+                    })
+                    .collect();
+                let info = vk::CopyImageInfo2 {
+                    s_type: vk::StructureType::COPY_IMAGE_INFO_2,
+                    next: std::ptr::null(),
+                    src_image: multisampled.get(),
+                    src_image_layout: p.src_layout,
+                    dst_image: copy_image.get(),
+                    dst_image_layout: p.dst_layout,
+                    region_count: copies2.len() as u32,
+                    regions: copies2.as_ptr(),
+                };
+                device.cmd_copy_image2(*cmd_buffer, &info);
+            } else {
+                device.cmd_copy_image(*cmd_buffer, multisampled.get(), p.src_layout, copy_image.get(), p.dst_layout, &image_copies);
+            }
             device.cmd_pipeline_barrier(
                 *cmd_buffer,
                 vk::PipelineStageFlags::TRANSFER,
@@ -1158,7 +1215,7 @@ impl ResolveGroupSpec<'_> {
     }
 }
 
-fn add_resolve_group(group: &mut tcu::TestCaseGroup, allocation_kind: AllocationKind, spec: &ResolveGroupSpec<'_>) {
+fn add_resolve_group(group: &mut tcu::TestCaseGroup, allocation_kind: AllocationKind, command_variant: CopyCommandVariant, spec: &ResolveGroupSpec<'_>) {
     for samples in SAMPLES {
         let make = |name: String, image_offset: bool| ResolveImageCase {
             name,
@@ -1172,6 +1229,7 @@ fn add_resolve_group(group: &mut tcu::TestCaseGroup, allocation_kind: Allocation
             image_offset,
             needs_maintenance5: spec.needs_maintenance5,
             allocation_kind,
+            command_variant,
         };
         let base = format!("{}{}{}", spec.name_prefix, sample_count_case_name(samples), spec.name_suffix);
         group.add_child(Box::new(make(base.clone(), false)) as Box<dyn TestCase>);
@@ -1183,7 +1241,7 @@ fn add_resolve_group(group: &mut tcu::TestCaseGroup, allocation_kind: Allocation
 
 /// `addResolveImageTests`, minus `whole_copy_before_resolving_no_cab`, `_compute` and
 /// `_transfer`.
-pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind: AllocationKind) {
+pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind: AllocationKind, command_variant: CopyCommandVariant) {
     let mut group = tcu::TestCaseGroup::new("resolve_image");
 
     // `addResolveImageWholeTests`
@@ -1192,6 +1250,7 @@ pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind:
     add_resolve_group(
         &mut whole,
         allocation_kind,
+        command_variant,
         &ResolveGroupSpec {
             src_extent: RESOLVE_EXTENT,
             dst_extent: RESOLVE_EXTENT,
@@ -1212,6 +1271,7 @@ pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind:
     add_resolve_group(
         &mut partial,
         allocation_kind,
+        command_variant,
         &ResolveGroupSpec {
             src_extent: RESOLVE_EXTENT,
             dst_extent: RESOLVE_EXTENT,
@@ -1235,6 +1295,7 @@ pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind:
     add_resolve_group(
         &mut with_regions,
         allocation_kind,
+        command_variant,
         &ResolveGroupSpec {
             src_extent: RESOLVE_EXTENT,
             dst_extent: RESOLVE_EXTENT,
@@ -1250,6 +1311,7 @@ pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind:
     add_resolve_group(
         &mut whole_copy,
         allocation_kind,
+        command_variant,
         &ResolveGroupSpec::default_with(&default_resolve, ResolveOptions::CopyMsImageToMsImage),
     );
     group.add_child(whole_copy);
@@ -1269,6 +1331,7 @@ pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind:
             add_resolve_group(
                 &mut diff_layouts,
                 allocation_kind,
+                command_variant,
                 &ResolveGroupSpec {
                     src_layout,
                     dst_layout,
@@ -1293,6 +1356,7 @@ pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind:
     add_resolve_group(
         &mut layer_copy,
         allocation_kind,
+        command_variant,
         &ResolveGroupSpec {
             src_extent: five_layer_extent,
             dst_extent: five_layer_extent,
@@ -1326,6 +1390,7 @@ pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind:
     add_resolve_group(
         &mut copy_with_regions,
         allocation_kind,
+        command_variant,
         &ResolveGroupSpec {
             src_extent: RESOLVE_EXTENT,
             dst_extent: RESOLVE_EXTENT,
@@ -1340,6 +1405,7 @@ pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind:
     add_resolve_group(
         &mut whole_array,
         allocation_kind,
+        command_variant,
         &ResolveGroupSpec {
             dst_extent: array_extent,
             ..ResolveGroupSpec::default_with(&layer_regions, ResolveOptions::CopyMsImageToArrayMsImage)
@@ -1363,6 +1429,7 @@ pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind:
         add_resolve_group(
             &mut one_region,
             allocation_kind,
+            command_variant,
             &ResolveGroupSpec {
                 dst_extent: array_extent,
                 name_suffix: suffix,
@@ -1388,6 +1455,7 @@ pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind:
             add_resolve_group(
                 &mut diff_size,
                 allocation_kind,
+                command_variant,
                 &ResolveGroupSpec {
                     src_extent,
                     dst_extent,
