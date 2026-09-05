@@ -2957,7 +2957,7 @@ fn add_image_to_image_all_formats_block(group: &mut tcu::TestCaseGroup, gp: &Gro
                                 format: entry.format,
                                 extent: block.src_extent,
                                 tiling: vk::ImageTiling::OPTIMAL,
-                                fill_mode: FillMode::White,
+                                fill_mode: block.src_fill,
                                 create_flags: None,
                             },
                             dst: ImageParms {
