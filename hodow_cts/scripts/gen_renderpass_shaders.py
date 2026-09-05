@@ -250,8 +250,11 @@ def main() -> int:
     print(f"{len(formats)} formats -> {len(combos)} class/count combos -> {len(variants)} shader variants")
 
     SRC_DIR.mkdir(parents=True, exist_ok=True)
-    for existing in SRC_DIR.glob("*.frag"):
-        existing.unlink()
+    # Only this script's own output: gen_unused_clear_shaders.py writes into the same
+    # directory, and a bare *.frag sweep here silently deletes its shaders.
+    for pattern in ("input_*.frag", "ds_*.frag", "self_dep_*.frag"):
+        for existing in SRC_DIR.glob(pattern):
+            existing.unlink()
 
     lines = [
         "# Shader manifest for the input-attachment half of",
@@ -297,7 +300,7 @@ def main() -> int:
     # values are whichever pair `TestConfig`'s shuffle of DEPTH_VALUES landed on, so a
     # variant is generated for every ordered pair and the host picks by value rather
     # than by reproducing the shuffle here.
-    depth_values = [0, 255, 128]
+    depth_values = [0, 255, 1]  # upstream's DEPTH_VALUES
     ds_variants = [{"name": "ds_no_write", "write_depth": False, "d_true": 0, "d_false": 0}]
     for d_true in depth_values:
         for d_false in depth_values:

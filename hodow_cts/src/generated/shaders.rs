@@ -308543,7 +308543,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_WRITE_0_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_WRITE_0_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -308566,10 +308566,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_WRITE_0_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_write_0_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_WRITE_0_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_write_0_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_WRITE_0_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_WRITE_0_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -308585,7 +308585,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -308598,27 +308598,27 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_WRITE_0_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_write_0_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_WRITE_0_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_write_0_1.0-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_WRITE_0_128: [ProgramBinary; 2] = [
+    static PROGRAMS_RENDER_PASS_DS_WRITE_0_1: [ProgramBinary; 2] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_WRITE_0_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_WRITE_0_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_WRITE_0_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_WRITE_0_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_WRITE_0_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_WRITE_0_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_WRITE_0_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_WRITE_0_1_0_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_WRITE_0_128: DepthProgram = DepthProgram {
-        name: "ds_write_0_128",
+    pub static RENDER_PASS_DS_WRITE_0_1: DepthProgram = DepthProgram {
+        name: "ds_write_0_1",
         write_depth: true,
         depth_true: 0u32,
-        depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_WRITE_0_128),
+        depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_WRITE_0_1),
     };
 
     #[rustfmt::skip]
@@ -308701,7 +308701,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_WRITE_255_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_WRITE_255_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -308724,10 +308724,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_WRITE_255_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_write_255_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_WRITE_255_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_write_255_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_WRITE_255_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_WRITE_255_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -308743,7 +308743,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -308756,31 +308756,31 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_WRITE_255_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_write_255_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_WRITE_255_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_write_255_1.0-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_WRITE_255_128: [ProgramBinary; 2] = [
+    static PROGRAMS_RENDER_PASS_DS_WRITE_255_1: [ProgramBinary; 2] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_WRITE_255_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_WRITE_255_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_WRITE_255_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_WRITE_255_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_WRITE_255_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_WRITE_255_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_WRITE_255_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_WRITE_255_1_0_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_WRITE_255_128: DepthProgram = DepthProgram {
-        name: "ds_write_255_128",
+    pub static RENDER_PASS_DS_WRITE_255_1: DepthProgram = DepthProgram {
+        name: "ds_write_255_1",
         write_depth: true,
         depth_true: 255u32,
-        depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_WRITE_255_128),
+        depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_WRITE_255_1),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_WRITE_128_0_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_WRITE_1_0_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -308803,10 +308803,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_WRITE_128_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_write_128_0.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_WRITE_1_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_write_1_0.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_WRITE_128_0_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_WRITE_1_0_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -308822,7 +308822,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -308835,31 +308835,31 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_WRITE_128_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_write_128_0.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_WRITE_1_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_write_1_0.0-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_WRITE_128_0: [ProgramBinary; 2] = [
+    static PROGRAMS_RENDER_PASS_DS_WRITE_1_0: [ProgramBinary; 2] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_WRITE_128_0_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_WRITE_128_0_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_WRITE_1_0_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_WRITE_1_0_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_WRITE_128_0_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_WRITE_128_0_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_WRITE_1_0_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_WRITE_1_0_0_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_WRITE_128_0: DepthProgram = DepthProgram {
-        name: "ds_write_128_0",
+    pub static RENDER_PASS_DS_WRITE_1_0: DepthProgram = DepthProgram {
+        name: "ds_write_1_0",
         write_depth: true,
-        depth_true: 128u32,
+        depth_true: 1u32,
         depth_false: 0u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_WRITE_128_0),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_WRITE_1_0),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_WRITE_128_255_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_WRITE_1_255_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -308882,10 +308882,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_WRITE_128_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_write_128_255.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_WRITE_1_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_write_1_255.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_WRITE_128_255_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_WRITE_1_255_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -308901,7 +308901,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -308914,27 +308914,27 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_WRITE_128_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_write_128_255.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_WRITE_1_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_write_1_255.0-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_WRITE_128_255: [ProgramBinary; 2] = [
+    static PROGRAMS_RENDER_PASS_DS_WRITE_1_255: [ProgramBinary; 2] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_WRITE_128_255_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_WRITE_128_255_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_WRITE_1_255_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_WRITE_1_255_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_WRITE_128_255_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_WRITE_128_255_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_WRITE_1_255_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_WRITE_1_255_0_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_WRITE_128_255: DepthProgram = DepthProgram {
-        name: "ds_write_128_255",
+    pub static RENDER_PASS_DS_WRITE_1_255: DepthProgram = DepthProgram {
+        name: "ds_write_1_255",
         write_depth: true,
-        depth_true: 128u32,
+        depth_true: 1u32,
         depth_false: 255u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_WRITE_128_255),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_WRITE_1_255),
     };
 
     #[rustfmt::skip]
@@ -309160,7 +309160,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_0_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_0_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -309183,10 +309183,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_0_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_0_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_0_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_0_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_0_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_0_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -309202,7 +309202,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -309215,10 +309215,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_0_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_0_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_0_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_0_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_0_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_0_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -309241,10 +309241,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_0_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_0_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_0_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_0_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_0_128_1_FRAG: [u32; 787] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_0_1_1_FRAG: [u32; 787] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000091, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000034,
@@ -309345,40 +309345,40 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000013, 0x0000000c, 0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013,
     0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_0_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_0_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_0_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_0_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_0_COLOR_0_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_0_COLOR_0_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_0_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_0_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_0_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_0_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_0_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_0_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_0_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_0_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_0_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_0_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_0_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_0_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_0_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_0_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_0_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_0_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_0_COLOR_0_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_0_color_0_128",
+    pub static RENDER_PASS_DS_IN_10_0_COLOR_0_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_0_color_0_1",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 0u32,
         ds_output: "color",
         ds_depth_true: 0u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_0_COLOR_0_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_0_COLOR_0_1),
     };
 
     #[rustfmt::skip]
@@ -309604,7 +309604,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_255_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_255_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -309627,10 +309627,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_255_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_255_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_255_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_255_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_255_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_255_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -309646,7 +309646,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -309659,10 +309659,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_255_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_255_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_255_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_255_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_255_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_255_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -309685,10 +309685,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_255_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_255_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_255_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_255_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_255_128_1_FRAG: [u32; 787] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_255_1_1_FRAG: [u32; 787] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000091, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000035,
@@ -309789,44 +309789,44 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000013, 0x0000000c, 0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013,
     0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_255_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_255_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_255_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_255_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_0_COLOR_255_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_0_COLOR_255_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_255_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_255_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_255_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_255_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_255_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_255_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_255_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_255_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_255_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_255_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_255_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_255_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_255_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_255_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_255_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_255_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_0_COLOR_255_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_0_color_255_128",
+    pub static RENDER_PASS_DS_IN_10_0_COLOR_255_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_0_color_255_1",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 0u32,
         ds_output: "color",
         ds_depth_true: 255u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_0_COLOR_255_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_0_COLOR_255_1),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_128_0_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_1_0_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -309849,10 +309849,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_128_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_128_0.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_1_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_1_0.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_128_0_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_1_0_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -309868,7 +309868,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -309881,10 +309881,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_128_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_128_0.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_1_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_1_0.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_128_0_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_1_0_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -309907,10 +309907,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_128_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_128_0.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_1_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_1_0.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_128_0_1_FRAG: [u32; 791] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_1_0_1_FRAG: [u32; 791] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000092, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000035,
@@ -309930,7 +309930,7 @@ pub mod renderpass_render_pass_input {
     0x00000007, 0x00040015, 0x00000017, 0x00000020, 0x00000000, 0x0004002b, 0x00000017, 0x00000018,
     0x00000001, 0x0004001c, 0x00000019, 0x00000008, 0x00000018, 0x00040020, 0x0000001a, 0x00000007,
     0x00000019, 0x00040015, 0x0000001c, 0x00000020, 0x00000001, 0x0004002b, 0x0000001c, 0x0000001d,
-    0x00000000, 0x0004002b, 0x00000006, 0x0000001e, 0x3f008081, 0x00090019, 0x0000001f, 0x00000006,
+    0x00000000, 0x0004002b, 0x00000006, 0x0000001e, 0x3b808081, 0x00090019, 0x0000001f, 0x00000006,
     0x00000006, 0x00000000, 0x00000000, 0x00000000, 0x00000002, 0x00000000, 0x00040020, 0x00000020,
     0x00000000, 0x0000001f, 0x0004003b, 0x00000020, 0x00000021, 0x00000000, 0x00040017, 0x00000023,
     0x0000001c, 0x00000002, 0x0005002c, 0x00000023, 0x00000024, 0x0000001d, 0x0000001d, 0x00040017,
@@ -310011,44 +310011,44 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c, 0x000500bc,
     0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_128_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_128_0.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_1_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_1_0.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_0_COLOR_128_0: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_0_COLOR_1_0: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_128_0_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_128_0_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_1_0_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_1_0_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_128_0_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_128_0_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_1_0_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_1_0_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_128_0_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_128_0_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_1_0_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_1_0_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_128_0_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_128_0_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_1_0_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_1_0_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_0_COLOR_128_0: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_0_color_128_0",
+    pub static RENDER_PASS_DS_IN_10_0_COLOR_1_0: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_0_color_1_0",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 0u32,
         ds_output: "color",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 0u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_0_COLOR_128_0),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_0_COLOR_1_0),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_128_255_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_1_255_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -310071,10 +310071,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_128_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_128_255.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_1_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_1_255.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_128_255_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_1_255_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -310090,7 +310090,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -310103,10 +310103,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_128_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_128_255.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_1_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_1_255.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_128_255_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_1_255_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -310129,10 +310129,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_128_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_128_255.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_1_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_1_255.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_128_255_1_FRAG: [u32; 791] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_COLOR_1_255_1_FRAG: [u32; 791] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000092, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000035,
@@ -310152,7 +310152,7 @@ pub mod renderpass_render_pass_input {
     0x00000007, 0x00040015, 0x00000017, 0x00000020, 0x00000000, 0x0004002b, 0x00000017, 0x00000018,
     0x00000001, 0x0004001c, 0x00000019, 0x00000008, 0x00000018, 0x00040020, 0x0000001a, 0x00000007,
     0x00000019, 0x00040015, 0x0000001c, 0x00000020, 0x00000001, 0x0004002b, 0x0000001c, 0x0000001d,
-    0x00000000, 0x0004002b, 0x00000006, 0x0000001e, 0x3f008081, 0x00090019, 0x0000001f, 0x00000006,
+    0x00000000, 0x0004002b, 0x00000006, 0x0000001e, 0x3b808081, 0x00090019, 0x0000001f, 0x00000006,
     0x00000006, 0x00000000, 0x00000000, 0x00000000, 0x00000002, 0x00000000, 0x00040020, 0x00000020,
     0x00000000, 0x0000001f, 0x0004003b, 0x00000020, 0x00000021, 0x00000000, 0x00040017, 0x00000023,
     0x0000001c, 0x00000002, 0x0005002c, 0x00000023, 0x00000024, 0x0000001d, 0x0000001d, 0x00040017,
@@ -310233,40 +310233,40 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c, 0x000500bc,
     0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_128_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_128_255.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_0_COLOR_1_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_color_1_255.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_0_COLOR_128_255: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_0_COLOR_1_255: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_128_255_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_128_255_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_1_255_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_1_255_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_128_255_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_128_255_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_1_255_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_1_255_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_128_255_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_128_255_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_1_255_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_1_255_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_128_255_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_128_255_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_COLOR_1_255_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_COLOR_1_255_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_0_COLOR_128_255: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_0_color_128_255",
+    pub static RENDER_PASS_DS_IN_10_0_COLOR_1_255: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_0_color_1_255",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 0u32,
         ds_output: "color",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 255u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_0_COLOR_128_255),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_0_COLOR_1_255),
     };
 
     #[rustfmt::skip]
@@ -310452,7 +310452,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_0_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_0_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -310475,10 +310475,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_0_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_0_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_0_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_0_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_0_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_0_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -310494,7 +310494,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -310507,10 +310507,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_0_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_0_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_0_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_0_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_0_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_0_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -310533,10 +310533,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_0_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_0_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_0_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_0_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_0_128_1_FRAG: [u32; 468] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_0_1_1_FRAG: [u32; 468] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000004f, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000031,
@@ -310565,7 +310565,7 @@ pub mod renderpass_render_pass_input {
     0x00000030, 0x00000001, 0x00000025, 0x0004003b, 0x00000030, 0x00000031, 0x00000001, 0x00040020,
     0x00000032, 0x00000001, 0x00000006, 0x0004002b, 0x0000001c, 0x00000036, 0x00000002, 0x0004002b,
     0x0000001c, 0x00000038, 0x00000001, 0x00040020, 0x00000049, 0x00000003, 0x00000006, 0x0004003b,
-    0x00000049, 0x0000004a, 0x00000003, 0x0004002b, 0x00000006, 0x0000004d, 0x3f008081, 0x00050036,
+    0x00000049, 0x0000004a, 0x00000003, 0x0004002b, 0x00000006, 0x0000004d, 0x3b808081, 0x00050036,
     0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x0004003b, 0x0000001a,
     0x0000001b, 0x00000007, 0x0004003b, 0x00000007, 0x00000029, 0x00000007, 0x0004003b, 0x00000007,
     0x0000002a, 0x00000007, 0x0004003b, 0x00000007, 0x0000002b, 0x00000007, 0x0004003b, 0x0000001a,
@@ -310597,40 +310597,40 @@ pub mod renderpass_render_pass_input {
     0x0004003d, 0x00000006, 0x00000013, 0x0000000c, 0x000500bc, 0x00000008, 0x00000014, 0x00000012,
     0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_0_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_0_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_0_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_0_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_0_DEPTH_0_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_0_DEPTH_0_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_0_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_0_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_0_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_0_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_0_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_0_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_0_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_0_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_0_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_0_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_0_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_0_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_0_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_0_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_0_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_0_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_0_DEPTH_0_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_0_depth_0_128",
+    pub static RENDER_PASS_DS_IN_10_0_DEPTH_0_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_0_depth_0_1",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 0u32,
         ds_output: "depth",
         ds_depth_true: 0u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_0_DEPTH_0_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_0_DEPTH_0_1),
     };
 
     #[rustfmt::skip]
@@ -310816,7 +310816,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_255_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_255_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -310839,10 +310839,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_255_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_255_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_255_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_255_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_255_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_255_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -310858,7 +310858,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -310871,10 +310871,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_255_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_255_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_255_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_255_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_255_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_255_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -310897,10 +310897,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_255_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_255_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_255_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_255_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_255_128_1_FRAG: [u32; 472] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_255_1_1_FRAG: [u32; 472] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000050, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000032,
@@ -310930,7 +310930,7 @@ pub mod renderpass_render_pass_input {
     0x00000031, 0x00000032, 0x00000001, 0x00040020, 0x00000033, 0x00000001, 0x00000006, 0x0004002b,
     0x0000001c, 0x00000037, 0x00000002, 0x0004002b, 0x0000001c, 0x00000039, 0x00000001, 0x00040020,
     0x0000004a, 0x00000003, 0x00000006, 0x0004003b, 0x0000004a, 0x0000004b, 0x00000003, 0x0004002b,
-    0x00000006, 0x0000004e, 0x3f008081, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003,
+    0x00000006, 0x0000004e, 0x3b808081, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003,
     0x000200f8, 0x00000005, 0x0004003b, 0x0000001a, 0x0000001b, 0x00000007, 0x0004003b, 0x00000007,
     0x0000002a, 0x00000007, 0x0004003b, 0x00000007, 0x0000002b, 0x00000007, 0x0004003b, 0x00000007,
     0x0000002c, 0x00000007, 0x0004003b, 0x0000001a, 0x00000030, 0x00000007, 0x0004003d, 0x0000001f,
@@ -310961,44 +310961,44 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_255_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_255_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_255_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_255_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_0_DEPTH_255_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_0_DEPTH_255_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_255_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_255_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_255_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_255_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_255_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_255_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_255_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_255_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_255_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_255_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_255_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_255_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_255_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_255_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_255_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_255_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_0_DEPTH_255_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_0_depth_255_128",
+    pub static RENDER_PASS_DS_IN_10_0_DEPTH_255_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_0_depth_255_1",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 0u32,
         ds_output: "depth",
         ds_depth_true: 255u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_0_DEPTH_255_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_0_DEPTH_255_1),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_128_0_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_1_0_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -311021,10 +311021,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_128_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_128_0.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_1_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_1_0.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_128_0_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_1_0_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -311040,7 +311040,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -311053,10 +311053,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_128_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_128_0.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_1_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_1_0.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_128_0_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_1_0_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -311079,10 +311079,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_128_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_128_0.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_1_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_1_0.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_128_0_1_FRAG: [u32; 468] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_1_0_1_FRAG: [u32; 468] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000004f, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000032,
@@ -311103,7 +311103,7 @@ pub mod renderpass_render_pass_input {
     0x00000000, 0x0004002b, 0x00000017, 0x00000018, 0x00000001, 0x0004001c, 0x00000019, 0x00000008,
     0x00000018, 0x00040020, 0x0000001a, 0x00000007, 0x00000019, 0x00040015, 0x0000001c, 0x00000020,
     0x00000001, 0x0004002b, 0x0000001c, 0x0000001d, 0x00000000, 0x0004002b, 0x00000006, 0x0000001e,
-    0x3f008081, 0x00090019, 0x0000001f, 0x00000006, 0x00000006, 0x00000000, 0x00000000, 0x00000000,
+    0x3b808081, 0x00090019, 0x0000001f, 0x00000006, 0x00000006, 0x00000000, 0x00000000, 0x00000000,
     0x00000002, 0x00000000, 0x00040020, 0x00000020, 0x00000000, 0x0000001f, 0x0004003b, 0x00000020,
     0x00000021, 0x00000000, 0x00040017, 0x00000023, 0x0000001c, 0x00000002, 0x0005002c, 0x00000023,
     0x00000024, 0x0000001d, 0x0000001d, 0x00040017, 0x00000025, 0x00000006, 0x00000004, 0x0004002b,
@@ -311143,44 +311143,44 @@ pub mod renderpass_render_pass_input {
     0x0004003d, 0x00000006, 0x00000013, 0x0000000c, 0x000500bc, 0x00000008, 0x00000014, 0x00000012,
     0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_128_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_128_0.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_1_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_1_0.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_0_DEPTH_128_0: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_0_DEPTH_1_0: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_128_0_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_128_0_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_1_0_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_1_0_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_128_0_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_128_0_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_1_0_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_1_0_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_128_0_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_128_0_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_1_0_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_1_0_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_128_0_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_128_0_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_1_0_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_1_0_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_0_DEPTH_128_0: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_0_depth_128_0",
+    pub static RENDER_PASS_DS_IN_10_0_DEPTH_1_0: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_0_depth_1_0",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 0u32,
         ds_output: "depth",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 0u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_0_DEPTH_128_0),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_0_DEPTH_1_0),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_128_255_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_1_255_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -311203,10 +311203,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_128_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_128_255.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_1_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_1_255.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_128_255_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_1_255_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -311222,7 +311222,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -311235,10 +311235,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_128_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_128_255.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_1_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_1_255.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_128_255_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_1_255_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -311261,10 +311261,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_128_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_128_255.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_1_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_1_255.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_128_255_1_FRAG: [u32; 472] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_DEPTH_1_255_1_FRAG: [u32; 472] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000050, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000032,
@@ -311285,7 +311285,7 @@ pub mod renderpass_render_pass_input {
     0x00000000, 0x0004002b, 0x00000017, 0x00000018, 0x00000001, 0x0004001c, 0x00000019, 0x00000008,
     0x00000018, 0x00040020, 0x0000001a, 0x00000007, 0x00000019, 0x00040015, 0x0000001c, 0x00000020,
     0x00000001, 0x0004002b, 0x0000001c, 0x0000001d, 0x00000000, 0x0004002b, 0x00000006, 0x0000001e,
-    0x3f008081, 0x00090019, 0x0000001f, 0x00000006, 0x00000006, 0x00000000, 0x00000000, 0x00000000,
+    0x3b808081, 0x00090019, 0x0000001f, 0x00000006, 0x00000006, 0x00000000, 0x00000000, 0x00000000,
     0x00000002, 0x00000000, 0x00040020, 0x00000020, 0x00000000, 0x0000001f, 0x0004003b, 0x00000020,
     0x00000021, 0x00000000, 0x00040017, 0x00000023, 0x0000001c, 0x00000002, 0x0005002c, 0x00000023,
     0x00000024, 0x0000001d, 0x0000001d, 0x00040017, 0x00000025, 0x00000006, 0x00000004, 0x0004002b,
@@ -311325,40 +311325,40 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_128_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_128_255.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_1_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_depth_1_255.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_0_DEPTH_128_255: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_0_DEPTH_1_255: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_128_255_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_128_255_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_1_255_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_1_255_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_128_255_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_128_255_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_1_255_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_1_255_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_128_255_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_128_255_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_1_255_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_1_255_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_128_255_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_128_255_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_DEPTH_1_255_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_DEPTH_1_255_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_0_DEPTH_128_255: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_0_depth_128_255",
+    pub static RENDER_PASS_DS_IN_10_0_DEPTH_1_255: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_0_depth_1_255",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 0u32,
         ds_output: "depth",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 255u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_0_DEPTH_128_255),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_0_DEPTH_1_255),
     };
 
     #[rustfmt::skip]
@@ -311496,7 +311496,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_NONE_0_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_NONE_0_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -311519,10 +311519,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_0_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_0_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_0_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_0_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_NONE_0_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_NONE_0_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -311538,7 +311538,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -311551,10 +311551,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_0_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_0_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_0_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_0_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_NONE_0_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_NONE_0_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -311577,10 +311577,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_0_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_0_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_0_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_0_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_NONE_0_128_1_FRAG: [u32; 84] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_NONE_0_1_1_FRAG: [u32; 84] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000a, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -311593,40 +311593,40 @@ pub mod renderpass_render_pass_input {
     0x00000008, 0x00000009, 0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003,
     0x000200f8, 0x00000005, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_0_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_0_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_0_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_0_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_0_NONE_0_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_0_NONE_0_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_0_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_0_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_0_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_0_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_0_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_0_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_0_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_0_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_0_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_0_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_0_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_0_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_0_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_0_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_0_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_0_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_0_NONE_0_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_0_none_0_128",
+    pub static RENDER_PASS_DS_IN_10_0_NONE_0_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_0_none_0_1",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 0u32,
         ds_output: "none",
         ds_depth_true: 0u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_0_NONE_0_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_0_NONE_0_1),
     };
 
     #[rustfmt::skip]
@@ -311764,7 +311764,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_NONE_255_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_NONE_255_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -311787,10 +311787,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_255_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_255_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_255_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_255_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_NONE_255_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_NONE_255_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -311806,7 +311806,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -311819,10 +311819,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_255_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_255_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_255_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_255_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_NONE_255_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_NONE_255_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -311845,10 +311845,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_255_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_255_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_255_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_255_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_NONE_255_128_1_FRAG: [u32; 84] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_NONE_255_1_1_FRAG: [u32; 84] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000a, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -311861,44 +311861,44 @@ pub mod renderpass_render_pass_input {
     0x00000008, 0x00000009, 0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003,
     0x000200f8, 0x00000005, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_255_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_255_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_255_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_255_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_0_NONE_255_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_0_NONE_255_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_255_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_255_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_255_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_255_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_255_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_255_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_255_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_255_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_255_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_255_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_255_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_255_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_255_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_255_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_255_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_255_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_0_NONE_255_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_0_none_255_128",
+    pub static RENDER_PASS_DS_IN_10_0_NONE_255_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_0_none_255_1",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 0u32,
         ds_output: "none",
         ds_depth_true: 255u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_0_NONE_255_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_0_NONE_255_1),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_NONE_128_0_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_NONE_1_0_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -311921,10 +311921,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_128_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_128_0.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_1_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_1_0.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_NONE_128_0_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_NONE_1_0_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -311940,7 +311940,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -311953,10 +311953,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_128_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_128_0.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_1_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_1_0.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_NONE_128_0_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_NONE_1_0_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -311979,10 +311979,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_128_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_128_0.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_1_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_1_0.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_NONE_128_0_1_FRAG: [u32; 84] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_NONE_1_0_1_FRAG: [u32; 84] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000a, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -311995,44 +311995,44 @@ pub mod renderpass_render_pass_input {
     0x00000008, 0x00000009, 0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003,
     0x000200f8, 0x00000005, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_128_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_128_0.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_1_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_1_0.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_0_NONE_128_0: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_0_NONE_1_0: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_128_0_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_128_0_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_1_0_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_1_0_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_128_0_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_128_0_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_1_0_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_1_0_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_128_0_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_128_0_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_1_0_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_1_0_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_128_0_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_128_0_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_1_0_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_1_0_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_0_NONE_128_0: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_0_none_128_0",
+    pub static RENDER_PASS_DS_IN_10_0_NONE_1_0: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_0_none_1_0",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 0u32,
         ds_output: "none",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 0u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_0_NONE_128_0),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_0_NONE_1_0),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_NONE_128_255_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_NONE_1_255_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -312055,10 +312055,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_128_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_128_255.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_1_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_1_255.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_NONE_128_255_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_NONE_1_255_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -312074,7 +312074,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -312087,10 +312087,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_128_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_128_255.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_1_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_1_255.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_NONE_128_255_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_NONE_1_255_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -312113,10 +312113,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_128_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_128_255.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_1_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_1_255.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_0_NONE_128_255_1_FRAG: [u32; 84] = [
+    static SPV_RENDER_PASS_DS_IN_10_0_NONE_1_255_1_FRAG: [u32; 84] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000a, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -312129,40 +312129,40 @@ pub mod renderpass_render_pass_input {
     0x00000008, 0x00000009, 0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003,
     0x000200f8, 0x00000005, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_128_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_128_255.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_0_NONE_1_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_0_none_1_255.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_0_NONE_128_255: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_0_NONE_1_255: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_128_255_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_128_255_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_1_255_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_1_255_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_128_255_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_128_255_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_1_255_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_1_255_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_128_255_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_128_255_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_1_255_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_1_255_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_128_255_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_128_255_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_0_NONE_1_255_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_0_NONE_1_255_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_0_NONE_128_255: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_0_none_128_255",
+    pub static RENDER_PASS_DS_IN_10_0_NONE_1_255: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_0_none_1_255",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 0u32,
         ds_output: "none",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 255u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_0_NONE_128_255),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_0_NONE_1_255),
     };
 
     #[rustfmt::skip]
@@ -312388,7 +312388,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_0_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_0_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -312411,10 +312411,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_0_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_0_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_0_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_0_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_0_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_0_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -312430,7 +312430,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -312443,10 +312443,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_0_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_0_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_0_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_0_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_0_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_0_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -312469,10 +312469,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_0_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_0_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_0_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_0_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_0_128_1_FRAG: [u32; 791] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_0_1_1_FRAG: [u32; 791] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000092, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000035,
@@ -312573,40 +312573,40 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c, 0x000500bc,
     0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_0_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_0_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_0_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_0_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_16_COLOR_0_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_16_COLOR_0_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_0_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_0_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_0_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_0_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_0_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_0_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_0_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_0_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_0_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_0_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_0_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_0_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_0_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_0_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_0_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_0_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_16_COLOR_0_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_16_color_0_128",
+    pub static RENDER_PASS_DS_IN_10_16_COLOR_0_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_16_color_0_1",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 16u32,
         ds_output: "color",
         ds_depth_true: 0u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_16_COLOR_0_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_16_COLOR_0_1),
     };
 
     #[rustfmt::skip]
@@ -312832,7 +312832,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_255_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_255_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -312855,10 +312855,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_255_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_255_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_255_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_255_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_255_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_255_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -312874,7 +312874,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -312887,10 +312887,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_255_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_255_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_255_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_255_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_255_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_255_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -312913,10 +312913,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_255_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_255_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_255_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_255_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_255_128_1_FRAG: [u32; 791] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_255_1_1_FRAG: [u32; 791] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000092, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000035,
@@ -313017,44 +313017,44 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c, 0x000500bc,
     0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_255_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_255_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_255_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_255_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_16_COLOR_255_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_16_COLOR_255_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_255_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_255_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_255_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_255_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_255_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_255_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_255_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_255_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_255_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_255_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_255_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_255_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_255_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_255_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_255_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_255_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_16_COLOR_255_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_16_color_255_128",
+    pub static RENDER_PASS_DS_IN_10_16_COLOR_255_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_16_color_255_1",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 16u32,
         ds_output: "color",
         ds_depth_true: 255u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_16_COLOR_255_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_16_COLOR_255_1),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_128_0_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_1_0_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -313077,10 +313077,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_128_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_128_0.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_1_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_1_0.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_128_0_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_1_0_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -313096,7 +313096,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -313109,10 +313109,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_128_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_128_0.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_1_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_1_0.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_128_0_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_1_0_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -313135,10 +313135,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_128_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_128_0.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_1_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_1_0.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_128_0_1_FRAG: [u32; 795] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_1_0_1_FRAG: [u32; 795] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000093, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000035,
@@ -313158,7 +313158,7 @@ pub mod renderpass_render_pass_input {
     0x00000007, 0x00040015, 0x00000017, 0x00000020, 0x00000000, 0x0004002b, 0x00000017, 0x00000018,
     0x00000001, 0x0004001c, 0x00000019, 0x00000008, 0x00000018, 0x00040020, 0x0000001a, 0x00000007,
     0x00000019, 0x00040015, 0x0000001c, 0x00000020, 0x00000001, 0x0004002b, 0x0000001c, 0x0000001d,
-    0x00000000, 0x0004002b, 0x00000006, 0x0000001e, 0x3f008081, 0x00090019, 0x0000001f, 0x00000006,
+    0x00000000, 0x0004002b, 0x00000006, 0x0000001e, 0x3b808081, 0x00090019, 0x0000001f, 0x00000006,
     0x00000006, 0x00000000, 0x00000000, 0x00000000, 0x00000002, 0x00000000, 0x00040020, 0x00000020,
     0x00000000, 0x0000001f, 0x0004003b, 0x00000020, 0x00000021, 0x00000000, 0x00040017, 0x00000023,
     0x0000001c, 0x00000002, 0x0005002c, 0x00000023, 0x00000024, 0x0000001d, 0x0000001d, 0x00040017,
@@ -313240,44 +313240,44 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000013, 0x0000000c, 0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013,
     0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_128_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_128_0.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_1_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_1_0.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_16_COLOR_128_0: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_16_COLOR_1_0: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_128_0_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_128_0_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_1_0_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_1_0_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_128_0_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_128_0_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_1_0_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_1_0_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_128_0_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_128_0_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_1_0_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_1_0_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_128_0_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_128_0_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_1_0_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_1_0_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_16_COLOR_128_0: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_16_color_128_0",
+    pub static RENDER_PASS_DS_IN_10_16_COLOR_1_0: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_16_color_1_0",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 16u32,
         ds_output: "color",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 0u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_16_COLOR_128_0),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_16_COLOR_1_0),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_128_255_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_1_255_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -313300,10 +313300,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_128_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_128_255.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_1_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_1_255.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_128_255_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_1_255_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -313319,7 +313319,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -313332,10 +313332,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_128_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_128_255.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_1_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_1_255.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_128_255_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_1_255_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -313358,10 +313358,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_128_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_128_255.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_1_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_1_255.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_128_255_1_FRAG: [u32; 795] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_COLOR_1_255_1_FRAG: [u32; 795] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000093, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000035,
@@ -313381,7 +313381,7 @@ pub mod renderpass_render_pass_input {
     0x00000007, 0x00040015, 0x00000017, 0x00000020, 0x00000000, 0x0004002b, 0x00000017, 0x00000018,
     0x00000001, 0x0004001c, 0x00000019, 0x00000008, 0x00000018, 0x00040020, 0x0000001a, 0x00000007,
     0x00000019, 0x00040015, 0x0000001c, 0x00000020, 0x00000001, 0x0004002b, 0x0000001c, 0x0000001d,
-    0x00000000, 0x0004002b, 0x00000006, 0x0000001e, 0x3f008081, 0x00090019, 0x0000001f, 0x00000006,
+    0x00000000, 0x0004002b, 0x00000006, 0x0000001e, 0x3b808081, 0x00090019, 0x0000001f, 0x00000006,
     0x00000006, 0x00000000, 0x00000000, 0x00000000, 0x00000002, 0x00000000, 0x00040020, 0x00000020,
     0x00000000, 0x0000001f, 0x0004003b, 0x00000020, 0x00000021, 0x00000000, 0x00040017, 0x00000023,
     0x0000001c, 0x00000002, 0x0005002c, 0x00000023, 0x00000024, 0x0000001d, 0x0000001d, 0x00040017,
@@ -313463,40 +313463,40 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000013, 0x0000000c, 0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013,
     0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_128_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_128_255.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_16_COLOR_1_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_color_1_255.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_16_COLOR_128_255: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_16_COLOR_1_255: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_128_255_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_128_255_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_1_255_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_1_255_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_128_255_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_128_255_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_1_255_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_1_255_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_128_255_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_128_255_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_1_255_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_1_255_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_128_255_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_128_255_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_COLOR_1_255_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_COLOR_1_255_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_16_COLOR_128_255: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_16_color_128_255",
+    pub static RENDER_PASS_DS_IN_10_16_COLOR_1_255: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_16_color_1_255",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 16u32,
         ds_output: "color",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 255u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_16_COLOR_128_255),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_16_COLOR_1_255),
     };
 
     #[rustfmt::skip]
@@ -313682,7 +313682,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_0_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_0_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -313705,10 +313705,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_0_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_0_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_0_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_0_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_0_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_0_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -313724,7 +313724,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -313737,10 +313737,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_0_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_0_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_0_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_0_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_0_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_0_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -313763,10 +313763,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_0_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_0_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_0_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_0_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_0_128_1_FRAG: [u32; 472] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_0_1_1_FRAG: [u32; 472] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000050, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000032,
@@ -313796,7 +313796,7 @@ pub mod renderpass_render_pass_input {
     0x00000031, 0x00000032, 0x00000001, 0x00040020, 0x00000033, 0x00000001, 0x00000006, 0x0004002b,
     0x0000001c, 0x00000037, 0x00000002, 0x0004002b, 0x0000001c, 0x00000039, 0x00000001, 0x00040020,
     0x0000004a, 0x00000003, 0x00000006, 0x0004003b, 0x0000004a, 0x0000004b, 0x00000003, 0x0004002b,
-    0x00000006, 0x0000004e, 0x3f008081, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003,
+    0x00000006, 0x0000004e, 0x3b808081, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003,
     0x000200f8, 0x00000005, 0x0004003b, 0x0000001a, 0x0000001b, 0x00000007, 0x0004003b, 0x00000007,
     0x0000002a, 0x00000007, 0x0004003b, 0x00000007, 0x0000002b, 0x00000007, 0x0004003b, 0x00000007,
     0x0000002c, 0x00000007, 0x0004003b, 0x0000001a, 0x00000030, 0x00000007, 0x0004003d, 0x0000001f,
@@ -313827,40 +313827,40 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_0_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_0_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_0_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_0_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_16_DEPTH_0_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_16_DEPTH_0_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_0_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_0_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_0_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_0_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_0_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_0_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_0_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_0_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_0_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_0_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_0_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_0_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_0_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_0_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_0_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_0_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_16_DEPTH_0_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_16_depth_0_128",
+    pub static RENDER_PASS_DS_IN_10_16_DEPTH_0_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_16_depth_0_1",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 16u32,
         ds_output: "depth",
         ds_depth_true: 0u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_16_DEPTH_0_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_16_DEPTH_0_1),
     };
 
     #[rustfmt::skip]
@@ -314046,7 +314046,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_255_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_255_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -314069,10 +314069,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_255_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_255_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_255_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_255_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_255_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_255_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -314088,7 +314088,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -314101,10 +314101,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_255_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_255_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_255_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_255_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_255_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_255_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -314127,10 +314127,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_255_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_255_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_255_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_255_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_255_128_1_FRAG: [u32; 472] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_255_1_1_FRAG: [u32; 472] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000050, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000032,
@@ -314160,7 +314160,7 @@ pub mod renderpass_render_pass_input {
     0x00000031, 0x00000032, 0x00000001, 0x00040020, 0x00000033, 0x00000001, 0x00000006, 0x0004002b,
     0x0000001c, 0x00000037, 0x00000002, 0x0004002b, 0x0000001c, 0x00000039, 0x00000001, 0x00040020,
     0x0000004a, 0x00000003, 0x00000006, 0x0004003b, 0x0000004a, 0x0000004b, 0x00000003, 0x0004002b,
-    0x00000006, 0x0000004e, 0x3f008081, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003,
+    0x00000006, 0x0000004e, 0x3b808081, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003,
     0x000200f8, 0x00000005, 0x0004003b, 0x0000001a, 0x0000001b, 0x00000007, 0x0004003b, 0x00000007,
     0x0000002a, 0x00000007, 0x0004003b, 0x00000007, 0x0000002b, 0x00000007, 0x0004003b, 0x00000007,
     0x0000002c, 0x00000007, 0x0004003b, 0x0000001a, 0x00000030, 0x00000007, 0x0004003d, 0x0000001f,
@@ -314191,44 +314191,44 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_255_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_255_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_255_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_255_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_16_DEPTH_255_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_16_DEPTH_255_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_255_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_255_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_255_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_255_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_255_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_255_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_255_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_255_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_255_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_255_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_255_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_255_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_255_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_255_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_255_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_255_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_16_DEPTH_255_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_16_depth_255_128",
+    pub static RENDER_PASS_DS_IN_10_16_DEPTH_255_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_16_depth_255_1",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 16u32,
         ds_output: "depth",
         ds_depth_true: 255u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_16_DEPTH_255_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_16_DEPTH_255_1),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_128_0_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_1_0_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -314251,10 +314251,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_128_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_128_0.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_1_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_1_0.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_128_0_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_1_0_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -314270,7 +314270,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -314283,10 +314283,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_128_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_128_0.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_1_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_1_0.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_128_0_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_1_0_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -314309,10 +314309,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_128_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_128_0.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_1_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_1_0.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_128_0_1_FRAG: [u32; 472] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_1_0_1_FRAG: [u32; 472] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000050, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000032,
@@ -314333,7 +314333,7 @@ pub mod renderpass_render_pass_input {
     0x00000000, 0x0004002b, 0x00000017, 0x00000018, 0x00000001, 0x0004001c, 0x00000019, 0x00000008,
     0x00000018, 0x00040020, 0x0000001a, 0x00000007, 0x00000019, 0x00040015, 0x0000001c, 0x00000020,
     0x00000001, 0x0004002b, 0x0000001c, 0x0000001d, 0x00000000, 0x0004002b, 0x00000006, 0x0000001e,
-    0x3f008081, 0x00090019, 0x0000001f, 0x00000006, 0x00000006, 0x00000000, 0x00000000, 0x00000000,
+    0x3b808081, 0x00090019, 0x0000001f, 0x00000006, 0x00000006, 0x00000000, 0x00000000, 0x00000000,
     0x00000002, 0x00000000, 0x00040020, 0x00000020, 0x00000000, 0x0000001f, 0x0004003b, 0x00000020,
     0x00000021, 0x00000000, 0x00040017, 0x00000023, 0x0000001c, 0x00000002, 0x0005002c, 0x00000023,
     0x00000024, 0x0000001d, 0x0000001d, 0x00040017, 0x00000025, 0x00000006, 0x00000004, 0x0004002b,
@@ -314373,44 +314373,44 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_128_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_128_0.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_1_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_1_0.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_16_DEPTH_128_0: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_16_DEPTH_1_0: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_128_0_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_128_0_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_1_0_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_1_0_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_128_0_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_128_0_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_1_0_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_1_0_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_128_0_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_128_0_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_1_0_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_1_0_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_128_0_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_128_0_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_1_0_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_1_0_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_16_DEPTH_128_0: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_16_depth_128_0",
+    pub static RENDER_PASS_DS_IN_10_16_DEPTH_1_0: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_16_depth_1_0",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 16u32,
         ds_output: "depth",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 0u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_16_DEPTH_128_0),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_16_DEPTH_1_0),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_128_255_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_1_255_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -314433,10 +314433,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_128_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_128_255.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_1_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_1_255.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_128_255_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_1_255_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -314452,7 +314452,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -314465,10 +314465,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_128_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_128_255.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_1_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_1_255.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_128_255_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_1_255_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -314491,10 +314491,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_128_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_128_255.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_1_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_1_255.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_128_255_1_FRAG: [u32; 472] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_DEPTH_1_255_1_FRAG: [u32; 472] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000050, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000032,
@@ -314515,7 +314515,7 @@ pub mod renderpass_render_pass_input {
     0x00000000, 0x0004002b, 0x00000017, 0x00000018, 0x00000001, 0x0004001c, 0x00000019, 0x00000008,
     0x00000018, 0x00040020, 0x0000001a, 0x00000007, 0x00000019, 0x00040015, 0x0000001c, 0x00000020,
     0x00000001, 0x0004002b, 0x0000001c, 0x0000001d, 0x00000000, 0x0004002b, 0x00000006, 0x0000001e,
-    0x3f008081, 0x00090019, 0x0000001f, 0x00000006, 0x00000006, 0x00000000, 0x00000000, 0x00000000,
+    0x3b808081, 0x00090019, 0x0000001f, 0x00000006, 0x00000006, 0x00000000, 0x00000000, 0x00000000,
     0x00000002, 0x00000000, 0x00040020, 0x00000020, 0x00000000, 0x0000001f, 0x0004003b, 0x00000020,
     0x00000021, 0x00000000, 0x00040017, 0x00000023, 0x0000001c, 0x00000002, 0x0005002c, 0x00000023,
     0x00000024, 0x0000001d, 0x0000001d, 0x00040017, 0x00000025, 0x00000006, 0x00000004, 0x0004002b,
@@ -314555,40 +314555,40 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_128_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_128_255.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_1_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_depth_1_255.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_16_DEPTH_128_255: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_16_DEPTH_1_255: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_128_255_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_128_255_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_1_255_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_1_255_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_128_255_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_128_255_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_1_255_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_1_255_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_128_255_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_128_255_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_1_255_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_1_255_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_128_255_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_128_255_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_DEPTH_1_255_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_DEPTH_1_255_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_16_DEPTH_128_255: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_16_depth_128_255",
+    pub static RENDER_PASS_DS_IN_10_16_DEPTH_1_255: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_16_depth_1_255",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 16u32,
         ds_output: "depth",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 255u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_16_DEPTH_128_255),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_16_DEPTH_1_255),
     };
 
     #[rustfmt::skip]
@@ -314726,7 +314726,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_NONE_0_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_NONE_0_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -314749,10 +314749,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_0_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_0_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_0_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_0_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_NONE_0_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_NONE_0_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -314768,7 +314768,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -314781,10 +314781,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_0_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_0_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_0_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_0_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_NONE_0_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_NONE_0_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -314807,10 +314807,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_0_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_0_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_0_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_0_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_NONE_0_128_1_FRAG: [u32; 84] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_NONE_0_1_1_FRAG: [u32; 84] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000a, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -314823,40 +314823,40 @@ pub mod renderpass_render_pass_input {
     0x00000008, 0x00000009, 0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003,
     0x000200f8, 0x00000005, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_0_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_0_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_0_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_0_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_16_NONE_0_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_16_NONE_0_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_0_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_0_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_0_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_0_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_0_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_0_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_0_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_0_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_0_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_0_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_0_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_0_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_0_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_0_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_0_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_0_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_16_NONE_0_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_16_none_0_128",
+    pub static RENDER_PASS_DS_IN_10_16_NONE_0_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_16_none_0_1",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 16u32,
         ds_output: "none",
         ds_depth_true: 0u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_16_NONE_0_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_16_NONE_0_1),
     };
 
     #[rustfmt::skip]
@@ -314994,7 +314994,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_NONE_255_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_NONE_255_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -315017,10 +315017,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_255_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_255_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_255_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_255_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_NONE_255_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_NONE_255_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -315036,7 +315036,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -315049,10 +315049,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_255_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_255_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_255_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_255_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_NONE_255_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_NONE_255_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -315075,10 +315075,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_255_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_255_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_255_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_255_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_NONE_255_128_1_FRAG: [u32; 84] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_NONE_255_1_1_FRAG: [u32; 84] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000a, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -315091,44 +315091,44 @@ pub mod renderpass_render_pass_input {
     0x00000008, 0x00000009, 0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003,
     0x000200f8, 0x00000005, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_255_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_255_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_255_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_255_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_16_NONE_255_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_16_NONE_255_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_255_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_255_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_255_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_255_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_255_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_255_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_255_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_255_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_255_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_255_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_255_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_255_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_255_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_255_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_255_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_255_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_16_NONE_255_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_16_none_255_128",
+    pub static RENDER_PASS_DS_IN_10_16_NONE_255_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_16_none_255_1",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 16u32,
         ds_output: "none",
         ds_depth_true: 255u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_16_NONE_255_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_16_NONE_255_1),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_NONE_128_0_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_NONE_1_0_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -315151,10 +315151,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_128_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_128_0.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_1_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_1_0.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_NONE_128_0_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_NONE_1_0_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -315170,7 +315170,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -315183,10 +315183,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_128_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_128_0.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_1_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_1_0.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_NONE_128_0_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_NONE_1_0_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -315209,10 +315209,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_128_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_128_0.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_1_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_1_0.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_NONE_128_0_1_FRAG: [u32; 84] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_NONE_1_0_1_FRAG: [u32; 84] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000a, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -315225,44 +315225,44 @@ pub mod renderpass_render_pass_input {
     0x00000008, 0x00000009, 0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003,
     0x000200f8, 0x00000005, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_128_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_128_0.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_1_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_1_0.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_16_NONE_128_0: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_16_NONE_1_0: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_128_0_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_128_0_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_1_0_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_1_0_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_128_0_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_128_0_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_1_0_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_1_0_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_128_0_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_128_0_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_1_0_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_1_0_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_128_0_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_128_0_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_1_0_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_1_0_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_16_NONE_128_0: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_16_none_128_0",
+    pub static RENDER_PASS_DS_IN_10_16_NONE_1_0: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_16_none_1_0",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 16u32,
         ds_output: "none",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 0u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_16_NONE_128_0),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_16_NONE_1_0),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_NONE_128_255_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_NONE_1_255_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -315285,10 +315285,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_128_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_128_255.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_1_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_1_255.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_NONE_128_255_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_NONE_1_255_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -315304,7 +315304,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -315317,10 +315317,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_128_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_128_255.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_1_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_1_255.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_NONE_128_255_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_NONE_1_255_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -315343,10 +315343,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_128_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_128_255.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_1_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_1_255.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_16_NONE_128_255_1_FRAG: [u32; 84] = [
+    static SPV_RENDER_PASS_DS_IN_10_16_NONE_1_255_1_FRAG: [u32; 84] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000a, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -315359,40 +315359,40 @@ pub mod renderpass_render_pass_input {
     0x00000008, 0x00000009, 0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003,
     0x000200f8, 0x00000005, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_128_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_128_255.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_16_NONE_1_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_16_none_1_255.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_16_NONE_128_255: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_16_NONE_1_255: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_128_255_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_128_255_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_1_255_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_1_255_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_128_255_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_128_255_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_1_255_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_1_255_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_128_255_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_128_255_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_1_255_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_1_255_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_128_255_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_128_255_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_16_NONE_1_255_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_16_NONE_1_255_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_16_NONE_128_255: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_16_none_128_255",
+    pub static RENDER_PASS_DS_IN_10_16_NONE_1_255: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_16_none_1_255",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 16u32,
         ds_output: "none",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 255u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_16_NONE_128_255),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_16_NONE_1_255),
     };
 
     #[rustfmt::skip]
@@ -315618,7 +315618,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_0_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_0_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -315641,10 +315641,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_0_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_0_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_0_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_0_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_0_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_0_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -315660,7 +315660,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -315673,10 +315673,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_0_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_0_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_0_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_0_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_0_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_0_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -315699,10 +315699,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_0_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_0_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_0_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_0_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_0_128_1_FRAG: [u32; 791] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_0_1_1_FRAG: [u32; 791] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000092, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000035,
@@ -315803,40 +315803,40 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c, 0x000500bc,
     0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_0_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_0_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_0_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_0_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_24_COLOR_0_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_24_COLOR_0_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_0_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_0_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_0_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_0_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_0_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_0_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_0_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_0_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_0_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_0_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_0_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_0_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_0_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_0_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_0_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_0_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_24_COLOR_0_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_24_color_0_128",
+    pub static RENDER_PASS_DS_IN_10_24_COLOR_0_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_24_color_0_1",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 24u32,
         ds_output: "color",
         ds_depth_true: 0u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_24_COLOR_0_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_24_COLOR_0_1),
     };
 
     #[rustfmt::skip]
@@ -316062,7 +316062,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_255_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_255_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -316085,10 +316085,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_255_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_255_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_255_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_255_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_255_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_255_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -316104,7 +316104,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -316117,10 +316117,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_255_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_255_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_255_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_255_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_255_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_255_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -316143,10 +316143,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_255_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_255_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_255_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_255_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_255_128_1_FRAG: [u32; 791] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_255_1_1_FRAG: [u32; 791] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000092, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000035,
@@ -316247,44 +316247,44 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c, 0x000500bc,
     0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_255_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_255_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_255_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_255_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_24_COLOR_255_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_24_COLOR_255_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_255_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_255_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_255_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_255_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_255_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_255_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_255_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_255_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_255_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_255_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_255_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_255_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_255_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_255_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_255_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_255_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_24_COLOR_255_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_24_color_255_128",
+    pub static RENDER_PASS_DS_IN_10_24_COLOR_255_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_24_color_255_1",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 24u32,
         ds_output: "color",
         ds_depth_true: 255u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_24_COLOR_255_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_24_COLOR_255_1),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_128_0_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_1_0_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -316307,10 +316307,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_128_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_128_0.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_1_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_1_0.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_128_0_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_1_0_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -316326,7 +316326,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -316339,10 +316339,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_128_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_128_0.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_1_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_1_0.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_128_0_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_1_0_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -316365,10 +316365,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_128_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_128_0.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_1_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_1_0.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_128_0_1_FRAG: [u32; 795] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_1_0_1_FRAG: [u32; 795] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000093, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000035,
@@ -316388,7 +316388,7 @@ pub mod renderpass_render_pass_input {
     0x00000007, 0x00040015, 0x00000017, 0x00000020, 0x00000000, 0x0004002b, 0x00000017, 0x00000018,
     0x00000001, 0x0004001c, 0x00000019, 0x00000008, 0x00000018, 0x00040020, 0x0000001a, 0x00000007,
     0x00000019, 0x00040015, 0x0000001c, 0x00000020, 0x00000001, 0x0004002b, 0x0000001c, 0x0000001d,
-    0x00000000, 0x0004002b, 0x00000006, 0x0000001e, 0x3f008081, 0x00090019, 0x0000001f, 0x00000006,
+    0x00000000, 0x0004002b, 0x00000006, 0x0000001e, 0x3b808081, 0x00090019, 0x0000001f, 0x00000006,
     0x00000006, 0x00000000, 0x00000000, 0x00000000, 0x00000002, 0x00000000, 0x00040020, 0x00000020,
     0x00000000, 0x0000001f, 0x0004003b, 0x00000020, 0x00000021, 0x00000000, 0x00040017, 0x00000023,
     0x0000001c, 0x00000002, 0x0005002c, 0x00000023, 0x00000024, 0x0000001d, 0x0000001d, 0x00040017,
@@ -316470,44 +316470,44 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000013, 0x0000000c, 0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013,
     0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_128_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_128_0.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_1_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_1_0.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_24_COLOR_128_0: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_24_COLOR_1_0: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_128_0_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_128_0_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_1_0_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_1_0_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_128_0_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_128_0_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_1_0_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_1_0_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_128_0_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_128_0_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_1_0_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_1_0_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_128_0_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_128_0_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_1_0_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_1_0_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_24_COLOR_128_0: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_24_color_128_0",
+    pub static RENDER_PASS_DS_IN_10_24_COLOR_1_0: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_24_color_1_0",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 24u32,
         ds_output: "color",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 0u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_24_COLOR_128_0),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_24_COLOR_1_0),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_128_255_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_1_255_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -316530,10 +316530,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_128_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_128_255.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_1_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_1_255.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_128_255_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_1_255_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -316549,7 +316549,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -316562,10 +316562,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_128_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_128_255.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_1_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_1_255.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_128_255_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_1_255_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -316588,10 +316588,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_128_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_128_255.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_1_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_1_255.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_128_255_1_FRAG: [u32; 795] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_COLOR_1_255_1_FRAG: [u32; 795] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000093, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000035,
@@ -316611,7 +316611,7 @@ pub mod renderpass_render_pass_input {
     0x00000007, 0x00040015, 0x00000017, 0x00000020, 0x00000000, 0x0004002b, 0x00000017, 0x00000018,
     0x00000001, 0x0004001c, 0x00000019, 0x00000008, 0x00000018, 0x00040020, 0x0000001a, 0x00000007,
     0x00000019, 0x00040015, 0x0000001c, 0x00000020, 0x00000001, 0x0004002b, 0x0000001c, 0x0000001d,
-    0x00000000, 0x0004002b, 0x00000006, 0x0000001e, 0x3f008081, 0x00090019, 0x0000001f, 0x00000006,
+    0x00000000, 0x0004002b, 0x00000006, 0x0000001e, 0x3b808081, 0x00090019, 0x0000001f, 0x00000006,
     0x00000006, 0x00000000, 0x00000000, 0x00000000, 0x00000002, 0x00000000, 0x00040020, 0x00000020,
     0x00000000, 0x0000001f, 0x0004003b, 0x00000020, 0x00000021, 0x00000000, 0x00040017, 0x00000023,
     0x0000001c, 0x00000002, 0x0005002c, 0x00000023, 0x00000024, 0x0000001d, 0x0000001d, 0x00040017,
@@ -316693,40 +316693,40 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000013, 0x0000000c, 0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013,
     0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_128_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_128_255.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_24_COLOR_1_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_color_1_255.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_24_COLOR_128_255: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_24_COLOR_1_255: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_128_255_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_128_255_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_1_255_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_1_255_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_128_255_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_128_255_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_1_255_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_1_255_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_128_255_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_128_255_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_1_255_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_1_255_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_128_255_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_128_255_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_COLOR_1_255_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_COLOR_1_255_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_24_COLOR_128_255: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_24_color_128_255",
+    pub static RENDER_PASS_DS_IN_10_24_COLOR_1_255: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_24_color_1_255",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 24u32,
         ds_output: "color",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 255u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_24_COLOR_128_255),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_24_COLOR_1_255),
     };
 
     #[rustfmt::skip]
@@ -316912,7 +316912,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_0_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_0_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -316935,10 +316935,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_0_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_0_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_0_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_0_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_0_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_0_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -316954,7 +316954,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -316967,10 +316967,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_0_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_0_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_0_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_0_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_0_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_0_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -316993,10 +316993,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_0_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_0_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_0_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_0_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_0_128_1_FRAG: [u32; 472] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_0_1_1_FRAG: [u32; 472] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000050, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000032,
@@ -317026,7 +317026,7 @@ pub mod renderpass_render_pass_input {
     0x00000031, 0x00000032, 0x00000001, 0x00040020, 0x00000033, 0x00000001, 0x00000006, 0x0004002b,
     0x0000001c, 0x00000037, 0x00000002, 0x0004002b, 0x0000001c, 0x00000039, 0x00000001, 0x00040020,
     0x0000004a, 0x00000003, 0x00000006, 0x0004003b, 0x0000004a, 0x0000004b, 0x00000003, 0x0004002b,
-    0x00000006, 0x0000004e, 0x3f008081, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003,
+    0x00000006, 0x0000004e, 0x3b808081, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003,
     0x000200f8, 0x00000005, 0x0004003b, 0x0000001a, 0x0000001b, 0x00000007, 0x0004003b, 0x00000007,
     0x0000002a, 0x00000007, 0x0004003b, 0x00000007, 0x0000002b, 0x00000007, 0x0004003b, 0x00000007,
     0x0000002c, 0x00000007, 0x0004003b, 0x0000001a, 0x00000030, 0x00000007, 0x0004003d, 0x0000001f,
@@ -317057,40 +317057,40 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_0_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_0_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_0_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_0_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_24_DEPTH_0_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_24_DEPTH_0_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_0_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_0_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_0_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_0_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_0_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_0_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_0_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_0_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_0_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_0_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_0_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_0_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_0_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_0_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_0_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_0_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_24_DEPTH_0_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_24_depth_0_128",
+    pub static RENDER_PASS_DS_IN_10_24_DEPTH_0_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_24_depth_0_1",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 24u32,
         ds_output: "depth",
         ds_depth_true: 0u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_24_DEPTH_0_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_24_DEPTH_0_1),
     };
 
     #[rustfmt::skip]
@@ -317276,7 +317276,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_255_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_255_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -317299,10 +317299,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_255_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_255_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_255_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_255_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_255_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_255_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -317318,7 +317318,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -317331,10 +317331,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_255_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_255_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_255_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_255_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_255_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_255_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -317357,10 +317357,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_255_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_255_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_255_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_255_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_255_128_1_FRAG: [u32; 472] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_255_1_1_FRAG: [u32; 472] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000050, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000032,
@@ -317390,7 +317390,7 @@ pub mod renderpass_render_pass_input {
     0x00000031, 0x00000032, 0x00000001, 0x00040020, 0x00000033, 0x00000001, 0x00000006, 0x0004002b,
     0x0000001c, 0x00000037, 0x00000002, 0x0004002b, 0x0000001c, 0x00000039, 0x00000001, 0x00040020,
     0x0000004a, 0x00000003, 0x00000006, 0x0004003b, 0x0000004a, 0x0000004b, 0x00000003, 0x0004002b,
-    0x00000006, 0x0000004e, 0x3f008081, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003,
+    0x00000006, 0x0000004e, 0x3b808081, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003,
     0x000200f8, 0x00000005, 0x0004003b, 0x0000001a, 0x0000001b, 0x00000007, 0x0004003b, 0x00000007,
     0x0000002a, 0x00000007, 0x0004003b, 0x00000007, 0x0000002b, 0x00000007, 0x0004003b, 0x00000007,
     0x0000002c, 0x00000007, 0x0004003b, 0x0000001a, 0x00000030, 0x00000007, 0x0004003d, 0x0000001f,
@@ -317421,44 +317421,44 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_255_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_255_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_255_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_255_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_24_DEPTH_255_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_24_DEPTH_255_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_255_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_255_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_255_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_255_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_255_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_255_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_255_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_255_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_255_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_255_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_255_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_255_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_255_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_255_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_255_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_255_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_24_DEPTH_255_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_24_depth_255_128",
+    pub static RENDER_PASS_DS_IN_10_24_DEPTH_255_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_24_depth_255_1",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 24u32,
         ds_output: "depth",
         ds_depth_true: 255u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_24_DEPTH_255_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_24_DEPTH_255_1),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_128_0_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_1_0_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -317481,10 +317481,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_128_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_128_0.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_1_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_1_0.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_128_0_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_1_0_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -317500,7 +317500,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -317513,10 +317513,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_128_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_128_0.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_1_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_1_0.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_128_0_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_1_0_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -317539,10 +317539,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_128_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_128_0.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_1_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_1_0.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_128_0_1_FRAG: [u32; 472] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_1_0_1_FRAG: [u32; 472] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000050, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000032,
@@ -317563,7 +317563,7 @@ pub mod renderpass_render_pass_input {
     0x00000000, 0x0004002b, 0x00000017, 0x00000018, 0x00000001, 0x0004001c, 0x00000019, 0x00000008,
     0x00000018, 0x00040020, 0x0000001a, 0x00000007, 0x00000019, 0x00040015, 0x0000001c, 0x00000020,
     0x00000001, 0x0004002b, 0x0000001c, 0x0000001d, 0x00000000, 0x0004002b, 0x00000006, 0x0000001e,
-    0x3f008081, 0x00090019, 0x0000001f, 0x00000006, 0x00000006, 0x00000000, 0x00000000, 0x00000000,
+    0x3b808081, 0x00090019, 0x0000001f, 0x00000006, 0x00000006, 0x00000000, 0x00000000, 0x00000000,
     0x00000002, 0x00000000, 0x00040020, 0x00000020, 0x00000000, 0x0000001f, 0x0004003b, 0x00000020,
     0x00000021, 0x00000000, 0x00040017, 0x00000023, 0x0000001c, 0x00000002, 0x0005002c, 0x00000023,
     0x00000024, 0x0000001d, 0x0000001d, 0x00040017, 0x00000025, 0x00000006, 0x00000004, 0x0004002b,
@@ -317603,44 +317603,44 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_128_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_128_0.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_1_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_1_0.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_24_DEPTH_128_0: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_24_DEPTH_1_0: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_128_0_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_128_0_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_1_0_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_1_0_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_128_0_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_128_0_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_1_0_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_1_0_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_128_0_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_128_0_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_1_0_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_1_0_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_128_0_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_128_0_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_1_0_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_1_0_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_24_DEPTH_128_0: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_24_depth_128_0",
+    pub static RENDER_PASS_DS_IN_10_24_DEPTH_1_0: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_24_depth_1_0",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 24u32,
         ds_output: "depth",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 0u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_24_DEPTH_128_0),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_24_DEPTH_1_0),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_128_255_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_1_255_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -317663,10 +317663,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_128_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_128_255.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_1_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_1_255.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_128_255_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_1_255_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -317682,7 +317682,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -317695,10 +317695,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_128_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_128_255.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_1_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_1_255.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_128_255_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_1_255_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -317721,10 +317721,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_128_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_128_255.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_1_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_1_255.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_128_255_1_FRAG: [u32; 472] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_DEPTH_1_255_1_FRAG: [u32; 472] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000050, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000032,
@@ -317745,7 +317745,7 @@ pub mod renderpass_render_pass_input {
     0x00000000, 0x0004002b, 0x00000017, 0x00000018, 0x00000001, 0x0004001c, 0x00000019, 0x00000008,
     0x00000018, 0x00040020, 0x0000001a, 0x00000007, 0x00000019, 0x00040015, 0x0000001c, 0x00000020,
     0x00000001, 0x0004002b, 0x0000001c, 0x0000001d, 0x00000000, 0x0004002b, 0x00000006, 0x0000001e,
-    0x3f008081, 0x00090019, 0x0000001f, 0x00000006, 0x00000006, 0x00000000, 0x00000000, 0x00000000,
+    0x3b808081, 0x00090019, 0x0000001f, 0x00000006, 0x00000006, 0x00000000, 0x00000000, 0x00000000,
     0x00000002, 0x00000000, 0x00040020, 0x00000020, 0x00000000, 0x0000001f, 0x0004003b, 0x00000020,
     0x00000021, 0x00000000, 0x00040017, 0x00000023, 0x0000001c, 0x00000002, 0x0005002c, 0x00000023,
     0x00000024, 0x0000001d, 0x0000001d, 0x00040017, 0x00000025, 0x00000006, 0x00000004, 0x0004002b,
@@ -317785,40 +317785,40 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_128_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_128_255.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_1_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_depth_1_255.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_24_DEPTH_128_255: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_24_DEPTH_1_255: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_128_255_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_128_255_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_1_255_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_1_255_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_128_255_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_128_255_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_1_255_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_1_255_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_128_255_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_128_255_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_1_255_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_1_255_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_128_255_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_128_255_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_DEPTH_1_255_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_DEPTH_1_255_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_24_DEPTH_128_255: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_24_depth_128_255",
+    pub static RENDER_PASS_DS_IN_10_24_DEPTH_1_255: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_24_depth_1_255",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 24u32,
         ds_output: "depth",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 255u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_24_DEPTH_128_255),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_24_DEPTH_1_255),
     };
 
     #[rustfmt::skip]
@@ -317956,7 +317956,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_NONE_0_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_NONE_0_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -317979,10 +317979,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_0_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_0_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_0_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_0_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_NONE_0_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_NONE_0_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -317998,7 +317998,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -318011,10 +318011,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_0_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_0_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_0_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_0_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_NONE_0_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_NONE_0_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -318037,10 +318037,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_0_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_0_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_0_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_0_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_NONE_0_128_1_FRAG: [u32; 84] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_NONE_0_1_1_FRAG: [u32; 84] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000a, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -318053,40 +318053,40 @@ pub mod renderpass_render_pass_input {
     0x00000008, 0x00000009, 0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003,
     0x000200f8, 0x00000005, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_0_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_0_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_0_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_0_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_24_NONE_0_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_24_NONE_0_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_0_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_0_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_0_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_0_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_0_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_0_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_0_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_0_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_0_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_0_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_0_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_0_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_0_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_0_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_0_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_0_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_24_NONE_0_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_24_none_0_128",
+    pub static RENDER_PASS_DS_IN_10_24_NONE_0_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_24_none_0_1",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 24u32,
         ds_output: "none",
         ds_depth_true: 0u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_24_NONE_0_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_24_NONE_0_1),
     };
 
     #[rustfmt::skip]
@@ -318224,7 +318224,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_NONE_255_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_NONE_255_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -318247,10 +318247,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_255_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_255_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_255_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_255_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_NONE_255_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_NONE_255_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -318266,7 +318266,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -318279,10 +318279,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_255_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_255_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_255_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_255_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_NONE_255_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_NONE_255_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -318305,10 +318305,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_255_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_255_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_255_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_255_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_NONE_255_128_1_FRAG: [u32; 84] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_NONE_255_1_1_FRAG: [u32; 84] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000a, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -318321,44 +318321,44 @@ pub mod renderpass_render_pass_input {
     0x00000008, 0x00000009, 0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003,
     0x000200f8, 0x00000005, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_255_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_255_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_255_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_255_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_24_NONE_255_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_24_NONE_255_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_255_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_255_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_255_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_255_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_255_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_255_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_255_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_255_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_255_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_255_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_255_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_255_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_255_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_255_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_255_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_255_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_24_NONE_255_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_24_none_255_128",
+    pub static RENDER_PASS_DS_IN_10_24_NONE_255_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_24_none_255_1",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 24u32,
         ds_output: "none",
         ds_depth_true: 255u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_24_NONE_255_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_24_NONE_255_1),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_NONE_128_0_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_NONE_1_0_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -318381,10 +318381,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_128_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_128_0.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_1_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_1_0.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_NONE_128_0_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_NONE_1_0_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -318400,7 +318400,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -318413,10 +318413,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_128_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_128_0.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_1_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_1_0.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_NONE_128_0_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_NONE_1_0_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -318439,10 +318439,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_128_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_128_0.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_1_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_1_0.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_NONE_128_0_1_FRAG: [u32; 84] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_NONE_1_0_1_FRAG: [u32; 84] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000a, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -318455,44 +318455,44 @@ pub mod renderpass_render_pass_input {
     0x00000008, 0x00000009, 0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003,
     0x000200f8, 0x00000005, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_128_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_128_0.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_1_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_1_0.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_24_NONE_128_0: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_24_NONE_1_0: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_128_0_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_128_0_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_1_0_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_1_0_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_128_0_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_128_0_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_1_0_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_1_0_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_128_0_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_128_0_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_1_0_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_1_0_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_128_0_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_128_0_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_1_0_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_1_0_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_24_NONE_128_0: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_24_none_128_0",
+    pub static RENDER_PASS_DS_IN_10_24_NONE_1_0: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_24_none_1_0",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 24u32,
         ds_output: "none",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 0u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_24_NONE_128_0),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_24_NONE_1_0),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_NONE_128_255_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_NONE_1_255_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -318515,10 +318515,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_128_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_128_255.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_1_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_1_255.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_NONE_128_255_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_NONE_1_255_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -318534,7 +318534,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -318547,10 +318547,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_128_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_128_255.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_1_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_1_255.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_NONE_128_255_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_NONE_1_255_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -318573,10 +318573,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_128_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_128_255.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_1_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_1_255.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_10_24_NONE_128_255_1_FRAG: [u32; 84] = [
+    static SPV_RENDER_PASS_DS_IN_10_24_NONE_1_255_1_FRAG: [u32; 84] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000a, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -318589,40 +318589,40 @@ pub mod renderpass_render_pass_input {
     0x00000008, 0x00000009, 0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003,
     0x000200f8, 0x00000005, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_128_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_128_255.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_10_24_NONE_1_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_10_24_none_1_255.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_10_24_NONE_128_255: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_10_24_NONE_1_255: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_128_255_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_128_255_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_1_255_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_1_255_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_128_255_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_128_255_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_1_255_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_1_255_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_128_255_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_128_255_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_1_255_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_1_255_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_128_255_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_128_255_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_10_24_NONE_1_255_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_10_24_NONE_1_255_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_10_24_NONE_128_255: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_10_24_none_128_255",
+    pub static RENDER_PASS_DS_IN_10_24_NONE_1_255: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_10_24_none_1_255",
         depth_input: true,
         stencil_input: false,
         epsilon_bits: 24u32,
         ds_output: "none",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 255u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_24_NONE_128_255),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_10_24_NONE_1_255),
     };
 
     #[rustfmt::skip]
@@ -318835,7 +318835,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_0_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_0_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -318858,10 +318858,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_0_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_0_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_0_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_0_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_0_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_0_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -318877,7 +318877,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -318890,10 +318890,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_0_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_0_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_0_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_0_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_0_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_0_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -318916,10 +318916,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_0_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_0_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_0_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_0_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_0_128_1_FRAG: [u32; 685] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_0_1_1_FRAG: [u32; 685] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000081, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000023,
@@ -319007,40 +319007,40 @@ pub mod renderpass_render_pass_input {
     0x00000074, 0x00070050, 0x00000021, 0x00000080, 0x00000076, 0x00000079, 0x0000007c, 0x0000007f,
     0x0003003e, 0x00000071, 0x00000080, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_0_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_0_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_0_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_0_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_01_0_COLOR_0_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_01_0_COLOR_0_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_0_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_0_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_0_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_0_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_0_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_0_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_0_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_0_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_0_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_0_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_0_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_0_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_0_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_0_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_0_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_0_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_01_0_COLOR_0_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_01_0_color_0_128",
+    pub static RENDER_PASS_DS_IN_01_0_COLOR_0_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_01_0_color_0_1",
         depth_input: false,
         stencil_input: true,
         epsilon_bits: 0u32,
         ds_output: "color",
         ds_depth_true: 0u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_01_0_COLOR_0_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_01_0_COLOR_0_1),
     };
 
     #[rustfmt::skip]
@@ -319253,7 +319253,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_255_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_255_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -319276,10 +319276,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_255_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_255_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_255_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_255_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_255_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_255_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -319295,7 +319295,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -319308,10 +319308,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_255_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_255_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_255_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_255_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_255_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_255_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -319334,10 +319334,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_255_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_255_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_255_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_255_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_255_128_1_FRAG: [u32; 685] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_255_1_1_FRAG: [u32; 685] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000081, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000023,
@@ -319425,44 +319425,44 @@ pub mod renderpass_render_pass_input {
     0x00000074, 0x00070050, 0x00000021, 0x00000080, 0x00000076, 0x00000079, 0x0000007c, 0x0000007f,
     0x0003003e, 0x00000071, 0x00000080, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_255_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_255_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_255_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_255_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_01_0_COLOR_255_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_01_0_COLOR_255_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_255_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_255_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_255_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_255_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_255_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_255_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_255_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_255_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_255_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_255_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_255_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_255_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_255_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_255_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_255_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_255_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_01_0_COLOR_255_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_01_0_color_255_128",
+    pub static RENDER_PASS_DS_IN_01_0_COLOR_255_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_01_0_color_255_1",
         depth_input: false,
         stencil_input: true,
         epsilon_bits: 0u32,
         ds_output: "color",
         ds_depth_true: 255u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_01_0_COLOR_255_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_01_0_COLOR_255_1),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_128_0_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_1_0_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -319485,10 +319485,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_128_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_128_0.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_1_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_1_0.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_128_0_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_1_0_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -319504,7 +319504,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -319517,10 +319517,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_128_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_128_0.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_1_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_1_0.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_128_0_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_1_0_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -319543,10 +319543,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_128_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_128_0.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_1_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_1_0.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_128_0_1_FRAG: [u32; 685] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_1_0_1_FRAG: [u32; 685] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000081, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000023,
@@ -319634,44 +319634,44 @@ pub mod renderpass_render_pass_input {
     0x00000074, 0x00070050, 0x00000021, 0x00000080, 0x00000076, 0x00000079, 0x0000007c, 0x0000007f,
     0x0003003e, 0x00000071, 0x00000080, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_128_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_128_0.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_1_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_1_0.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_01_0_COLOR_128_0: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_01_0_COLOR_1_0: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_128_0_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_128_0_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_1_0_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_1_0_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_128_0_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_128_0_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_1_0_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_1_0_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_128_0_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_128_0_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_1_0_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_1_0_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_128_0_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_128_0_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_1_0_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_1_0_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_01_0_COLOR_128_0: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_01_0_color_128_0",
+    pub static RENDER_PASS_DS_IN_01_0_COLOR_1_0: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_01_0_color_1_0",
         depth_input: false,
         stencil_input: true,
         epsilon_bits: 0u32,
         ds_output: "color",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 0u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_01_0_COLOR_128_0),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_01_0_COLOR_1_0),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_128_255_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_1_255_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -319694,10 +319694,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_128_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_128_255.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_1_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_1_255.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_128_255_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_1_255_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -319713,7 +319713,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -319726,10 +319726,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_128_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_128_255.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_1_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_1_255.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_128_255_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_1_255_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -319752,10 +319752,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_128_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_128_255.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_1_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_1_255.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_128_255_1_FRAG: [u32; 685] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_COLOR_1_255_1_FRAG: [u32; 685] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000081, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000023,
@@ -319843,40 +319843,40 @@ pub mod renderpass_render_pass_input {
     0x00000074, 0x00070050, 0x00000021, 0x00000080, 0x00000076, 0x00000079, 0x0000007c, 0x0000007f,
     0x0003003e, 0x00000071, 0x00000080, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_128_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_128_255.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_01_0_COLOR_1_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_color_1_255.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_01_0_COLOR_128_255: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_01_0_COLOR_1_255: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_128_255_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_128_255_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_1_255_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_1_255_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_128_255_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_128_255_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_1_255_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_1_255_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_128_255_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_128_255_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_1_255_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_1_255_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_128_255_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_128_255_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_COLOR_1_255_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_COLOR_1_255_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_01_0_COLOR_128_255: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_01_0_color_128_255",
+    pub static RENDER_PASS_DS_IN_01_0_COLOR_1_255: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_01_0_color_1_255",
         depth_input: false,
         stencil_input: true,
         epsilon_bits: 0u32,
         ds_output: "color",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 255u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_01_0_COLOR_128_255),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_01_0_COLOR_1_255),
     };
 
     #[rustfmt::skip]
@@ -320049,7 +320049,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_0_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_0_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -320072,10 +320072,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_0_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_0_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_0_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_0_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_0_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_0_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -320091,7 +320091,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -320104,10 +320104,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_0_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_0_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_0_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_0_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_0_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_0_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -320130,10 +320130,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_0_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_0_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_0_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_0_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_0_128_1_FRAG: [u32; 366] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_0_1_1_FRAG: [u32; 366] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000003f, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000020,
@@ -320158,7 +320158,7 @@ pub mod renderpass_render_pass_input {
     0x0000001f, 0x00000020, 0x00000001, 0x00040020, 0x00000021, 0x00000001, 0x0000001d, 0x0004002b,
     0x0000000c, 0x00000025, 0x00000002, 0x0004002b, 0x0000000c, 0x00000027, 0x00000001, 0x00040020,
     0x00000038, 0x00000003, 0x0000001d, 0x0004003b, 0x00000038, 0x00000039, 0x00000003, 0x0004002b,
-    0x0000001d, 0x0000003c, 0x00000000, 0x0004002b, 0x0000001d, 0x0000003d, 0x3f008081, 0x00050036,
+    0x0000001d, 0x0000003c, 0x00000000, 0x0004002b, 0x0000001d, 0x0000003d, 0x3b808081, 0x00050036,
     0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x0004003b, 0x0000000a,
     0x0000000b, 0x00000007, 0x0004003b, 0x0000000a, 0x0000001c, 0x00000007, 0x0004003d, 0x0000000f,
     0x00000012, 0x00000011, 0x00050062, 0x00000015, 0x00000016, 0x00000012, 0x00000014, 0x00050051,
@@ -320181,40 +320181,40 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x0000003b, 0x0000003a, 0x000600a9, 0x0000001d, 0x0000003e, 0x0000003b, 0x0000003c,
     0x0000003d, 0x0003003e, 0x00000039, 0x0000003e, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_0_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_0_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_0_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_0_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_01_0_DEPTH_0_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_01_0_DEPTH_0_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_0_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_0_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_0_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_0_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_0_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_0_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_0_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_0_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_0_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_0_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_0_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_0_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_0_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_0_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_0_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_0_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_01_0_DEPTH_0_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_01_0_depth_0_128",
+    pub static RENDER_PASS_DS_IN_01_0_DEPTH_0_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_01_0_depth_0_1",
         depth_input: false,
         stencil_input: true,
         epsilon_bits: 0u32,
         ds_output: "depth",
         ds_depth_true: 0u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_01_0_DEPTH_0_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_01_0_DEPTH_0_1),
     };
 
     #[rustfmt::skip]
@@ -320387,7 +320387,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_255_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_255_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -320410,10 +320410,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_255_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_255_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_255_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_255_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_255_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_255_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -320429,7 +320429,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -320442,10 +320442,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_255_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_255_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_255_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_255_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_255_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_255_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -320468,10 +320468,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_255_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_255_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_255_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_255_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_255_128_1_FRAG: [u32; 366] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_255_1_1_FRAG: [u32; 366] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000003f, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000020,
@@ -320496,7 +320496,7 @@ pub mod renderpass_render_pass_input {
     0x0000001f, 0x00000020, 0x00000001, 0x00040020, 0x00000021, 0x00000001, 0x0000001d, 0x0004002b,
     0x0000000c, 0x00000025, 0x00000002, 0x0004002b, 0x0000000c, 0x00000027, 0x00000001, 0x00040020,
     0x00000038, 0x00000003, 0x0000001d, 0x0004003b, 0x00000038, 0x00000039, 0x00000003, 0x0004002b,
-    0x0000001d, 0x0000003c, 0x3f800000, 0x0004002b, 0x0000001d, 0x0000003d, 0x3f008081, 0x00050036,
+    0x0000001d, 0x0000003c, 0x3f800000, 0x0004002b, 0x0000001d, 0x0000003d, 0x3b808081, 0x00050036,
     0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x0004003b, 0x0000000a,
     0x0000000b, 0x00000007, 0x0004003b, 0x0000000a, 0x0000001c, 0x00000007, 0x0004003d, 0x0000000f,
     0x00000012, 0x00000011, 0x00050062, 0x00000015, 0x00000016, 0x00000012, 0x00000014, 0x00050051,
@@ -320519,44 +320519,44 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x0000003b, 0x0000003a, 0x000600a9, 0x0000001d, 0x0000003e, 0x0000003b, 0x0000003c,
     0x0000003d, 0x0003003e, 0x00000039, 0x0000003e, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_255_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_255_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_255_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_255_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_01_0_DEPTH_255_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_01_0_DEPTH_255_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_255_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_255_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_255_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_255_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_255_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_255_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_255_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_255_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_255_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_255_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_255_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_255_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_255_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_255_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_255_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_255_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_01_0_DEPTH_255_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_01_0_depth_255_128",
+    pub static RENDER_PASS_DS_IN_01_0_DEPTH_255_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_01_0_depth_255_1",
         depth_input: false,
         stencil_input: true,
         epsilon_bits: 0u32,
         ds_output: "depth",
         ds_depth_true: 255u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_01_0_DEPTH_255_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_01_0_DEPTH_255_1),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_128_0_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_1_0_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -320579,10 +320579,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_128_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_128_0.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_1_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_1_0.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_128_0_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_1_0_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -320598,7 +320598,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -320611,10 +320611,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_128_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_128_0.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_1_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_1_0.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_128_0_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_1_0_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -320637,10 +320637,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_128_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_128_0.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_1_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_1_0.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_128_0_1_FRAG: [u32; 366] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_1_0_1_FRAG: [u32; 366] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000003f, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000020,
@@ -320665,7 +320665,7 @@ pub mod renderpass_render_pass_input {
     0x0000001f, 0x00000020, 0x00000001, 0x00040020, 0x00000021, 0x00000001, 0x0000001d, 0x0004002b,
     0x0000000c, 0x00000025, 0x00000002, 0x0004002b, 0x0000000c, 0x00000027, 0x00000001, 0x00040020,
     0x00000038, 0x00000003, 0x0000001d, 0x0004003b, 0x00000038, 0x00000039, 0x00000003, 0x0004002b,
-    0x0000001d, 0x0000003c, 0x3f008081, 0x0004002b, 0x0000001d, 0x0000003d, 0x00000000, 0x00050036,
+    0x0000001d, 0x0000003c, 0x3b808081, 0x0004002b, 0x0000001d, 0x0000003d, 0x00000000, 0x00050036,
     0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x0004003b, 0x0000000a,
     0x0000000b, 0x00000007, 0x0004003b, 0x0000000a, 0x0000001c, 0x00000007, 0x0004003d, 0x0000000f,
     0x00000012, 0x00000011, 0x00050062, 0x00000015, 0x00000016, 0x00000012, 0x00000014, 0x00050051,
@@ -320688,44 +320688,44 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x0000003b, 0x0000003a, 0x000600a9, 0x0000001d, 0x0000003e, 0x0000003b, 0x0000003c,
     0x0000003d, 0x0003003e, 0x00000039, 0x0000003e, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_128_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_128_0.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_1_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_1_0.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_01_0_DEPTH_128_0: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_01_0_DEPTH_1_0: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_128_0_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_128_0_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_1_0_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_1_0_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_128_0_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_128_0_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_1_0_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_1_0_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_128_0_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_128_0_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_1_0_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_1_0_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_128_0_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_128_0_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_1_0_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_1_0_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_01_0_DEPTH_128_0: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_01_0_depth_128_0",
+    pub static RENDER_PASS_DS_IN_01_0_DEPTH_1_0: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_01_0_depth_1_0",
         depth_input: false,
         stencil_input: true,
         epsilon_bits: 0u32,
         ds_output: "depth",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 0u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_01_0_DEPTH_128_0),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_01_0_DEPTH_1_0),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_128_255_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_1_255_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -320748,10 +320748,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_128_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_128_255.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_1_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_1_255.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_128_255_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_1_255_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -320767,7 +320767,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -320780,10 +320780,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_128_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_128_255.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_1_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_1_255.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_128_255_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_1_255_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -320806,10 +320806,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_128_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_128_255.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_1_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_1_255.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_128_255_1_FRAG: [u32; 366] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_DEPTH_1_255_1_FRAG: [u32; 366] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000003f, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000020,
@@ -320834,7 +320834,7 @@ pub mod renderpass_render_pass_input {
     0x0000001f, 0x00000020, 0x00000001, 0x00040020, 0x00000021, 0x00000001, 0x0000001d, 0x0004002b,
     0x0000000c, 0x00000025, 0x00000002, 0x0004002b, 0x0000000c, 0x00000027, 0x00000001, 0x00040020,
     0x00000038, 0x00000003, 0x0000001d, 0x0004003b, 0x00000038, 0x00000039, 0x00000003, 0x0004002b,
-    0x0000001d, 0x0000003c, 0x3f008081, 0x0004002b, 0x0000001d, 0x0000003d, 0x3f800000, 0x00050036,
+    0x0000001d, 0x0000003c, 0x3b808081, 0x0004002b, 0x0000001d, 0x0000003d, 0x3f800000, 0x00050036,
     0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x0004003b, 0x0000000a,
     0x0000000b, 0x00000007, 0x0004003b, 0x0000000a, 0x0000001c, 0x00000007, 0x0004003d, 0x0000000f,
     0x00000012, 0x00000011, 0x00050062, 0x00000015, 0x00000016, 0x00000012, 0x00000014, 0x00050051,
@@ -320857,40 +320857,40 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x0000003b, 0x0000003a, 0x000600a9, 0x0000001d, 0x0000003e, 0x0000003b, 0x0000003c,
     0x0000003d, 0x0003003e, 0x00000039, 0x0000003e, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_128_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_128_255.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_1_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_depth_1_255.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_01_0_DEPTH_128_255: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_01_0_DEPTH_1_255: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_128_255_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_128_255_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_1_255_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_1_255_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_128_255_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_128_255_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_1_255_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_1_255_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_128_255_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_128_255_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_1_255_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_1_255_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_128_255_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_128_255_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_DEPTH_1_255_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_DEPTH_1_255_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_01_0_DEPTH_128_255: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_01_0_depth_128_255",
+    pub static RENDER_PASS_DS_IN_01_0_DEPTH_1_255: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_01_0_depth_1_255",
         depth_input: false,
         stencil_input: true,
         epsilon_bits: 0u32,
         ds_output: "depth",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 255u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_01_0_DEPTH_128_255),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_01_0_DEPTH_1_255),
     };
 
     #[rustfmt::skip]
@@ -321028,7 +321028,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_NONE_0_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_NONE_0_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -321051,10 +321051,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_0_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_0_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_0_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_0_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_NONE_0_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_NONE_0_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -321070,7 +321070,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -321083,10 +321083,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_0_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_0_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_0_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_0_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_NONE_0_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_NONE_0_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -321109,10 +321109,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_0_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_0_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_0_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_0_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_NONE_0_128_1_FRAG: [u32; 85] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_NONE_0_1_1_FRAG: [u32; 85] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000a, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -321125,40 +321125,40 @@ pub mod renderpass_render_pass_input {
     0x0004003b, 0x00000008, 0x00000009, 0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000,
     0x00000003, 0x000200f8, 0x00000005, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_0_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_0_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_0_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_0_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_01_0_NONE_0_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_01_0_NONE_0_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_0_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_0_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_0_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_0_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_0_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_0_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_0_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_0_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_0_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_0_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_0_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_0_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_0_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_0_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_0_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_0_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_01_0_NONE_0_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_01_0_none_0_128",
+    pub static RENDER_PASS_DS_IN_01_0_NONE_0_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_01_0_none_0_1",
         depth_input: false,
         stencil_input: true,
         epsilon_bits: 0u32,
         ds_output: "none",
         ds_depth_true: 0u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_01_0_NONE_0_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_01_0_NONE_0_1),
     };
 
     #[rustfmt::skip]
@@ -321296,7 +321296,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_NONE_255_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_NONE_255_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -321319,10 +321319,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_255_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_255_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_255_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_255_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_NONE_255_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_NONE_255_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -321338,7 +321338,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -321351,10 +321351,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_255_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_255_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_255_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_255_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_NONE_255_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_NONE_255_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -321377,10 +321377,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_255_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_255_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_255_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_255_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_NONE_255_128_1_FRAG: [u32; 85] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_NONE_255_1_1_FRAG: [u32; 85] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000a, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -321393,44 +321393,44 @@ pub mod renderpass_render_pass_input {
     0x0004003b, 0x00000008, 0x00000009, 0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000,
     0x00000003, 0x000200f8, 0x00000005, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_255_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_255_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_255_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_255_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_01_0_NONE_255_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_01_0_NONE_255_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_255_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_255_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_255_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_255_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_255_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_255_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_255_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_255_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_255_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_255_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_255_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_255_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_255_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_255_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_255_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_255_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_01_0_NONE_255_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_01_0_none_255_128",
+    pub static RENDER_PASS_DS_IN_01_0_NONE_255_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_01_0_none_255_1",
         depth_input: false,
         stencil_input: true,
         epsilon_bits: 0u32,
         ds_output: "none",
         ds_depth_true: 255u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_01_0_NONE_255_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_01_0_NONE_255_1),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_NONE_128_0_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_NONE_1_0_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -321453,10 +321453,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_128_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_128_0.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_1_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_1_0.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_NONE_128_0_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_NONE_1_0_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -321472,7 +321472,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -321485,10 +321485,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_128_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_128_0.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_1_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_1_0.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_NONE_128_0_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_NONE_1_0_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -321511,10 +321511,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_128_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_128_0.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_1_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_1_0.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_NONE_128_0_1_FRAG: [u32; 85] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_NONE_1_0_1_FRAG: [u32; 85] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000a, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -321527,44 +321527,44 @@ pub mod renderpass_render_pass_input {
     0x0004003b, 0x00000008, 0x00000009, 0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000,
     0x00000003, 0x000200f8, 0x00000005, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_128_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_128_0.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_1_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_1_0.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_01_0_NONE_128_0: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_01_0_NONE_1_0: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_128_0_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_128_0_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_1_0_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_1_0_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_128_0_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_128_0_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_1_0_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_1_0_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_128_0_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_128_0_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_1_0_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_1_0_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_128_0_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_128_0_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_1_0_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_1_0_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_01_0_NONE_128_0: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_01_0_none_128_0",
+    pub static RENDER_PASS_DS_IN_01_0_NONE_1_0: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_01_0_none_1_0",
         depth_input: false,
         stencil_input: true,
         epsilon_bits: 0u32,
         ds_output: "none",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 0u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_01_0_NONE_128_0),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_01_0_NONE_1_0),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_NONE_128_255_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_NONE_1_255_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -321587,10 +321587,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_128_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_128_255.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_1_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_1_255.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_NONE_128_255_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_NONE_1_255_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -321606,7 +321606,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -321619,10 +321619,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_128_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_128_255.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_1_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_1_255.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_NONE_128_255_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_NONE_1_255_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -321645,10 +321645,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_128_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_128_255.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_1_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_1_255.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_01_0_NONE_128_255_1_FRAG: [u32; 85] = [
+    static SPV_RENDER_PASS_DS_IN_01_0_NONE_1_255_1_FRAG: [u32; 85] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000a, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -321661,40 +321661,40 @@ pub mod renderpass_render_pass_input {
     0x0004003b, 0x00000008, 0x00000009, 0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000,
     0x00000003, 0x000200f8, 0x00000005, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_128_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_128_255.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_01_0_NONE_1_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_01_0_none_1_255.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_01_0_NONE_128_255: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_01_0_NONE_1_255: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_128_255_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_128_255_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_1_255_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_1_255_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_128_255_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_128_255_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_1_255_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_1_255_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_128_255_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_128_255_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_1_255_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_1_255_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_128_255_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_128_255_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_01_0_NONE_1_255_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_01_0_NONE_1_255_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_01_0_NONE_128_255: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_01_0_none_128_255",
+    pub static RENDER_PASS_DS_IN_01_0_NONE_1_255: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_01_0_none_1_255",
         depth_input: false,
         stencil_input: true,
         epsilon_bits: 0u32,
         ds_output: "none",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 255u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_01_0_NONE_128_255),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_01_0_NONE_1_255),
     };
 
     #[rustfmt::skip]
@@ -321929,7 +321929,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_0_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_0_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -321952,10 +321952,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_0_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_0_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_0_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_0_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_0_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_0_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -321971,7 +321971,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -321984,10 +321984,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_0_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_0_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_0_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_0_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_0_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_0_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -322010,10 +322010,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_0_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_0_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_0_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_0_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_0_128_1_FRAG: [u32; 860] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_0_1_1_FRAG: [u32; 860] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000009c, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x0000003f,
@@ -322123,40 +322123,40 @@ pub mod renderpass_render_pass_input {
     0x0004003d, 0x00000006, 0x00000013, 0x0000000c, 0x000500bc, 0x00000008, 0x00000014, 0x00000012,
     0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_0_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_0_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_0_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_0_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_0_COLOR_0_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_0_COLOR_0_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_0_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_0_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_0_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_0_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_0_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_0_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_0_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_0_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_0_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_0_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_0_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_0_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_0_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_0_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_0_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_0_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_0_COLOR_0_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_0_color_0_128",
+    pub static RENDER_PASS_DS_IN_11_0_COLOR_0_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_0_color_0_1",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 0u32,
         ds_output: "color",
         ds_depth_true: 0u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_0_COLOR_0_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_0_COLOR_0_1),
     };
 
     #[rustfmt::skip]
@@ -322391,7 +322391,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_255_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_255_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -322414,10 +322414,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_255_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_255_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_255_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_255_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_255_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_255_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -322433,7 +322433,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -322446,10 +322446,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_255_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_255_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_255_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_255_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_255_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_255_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -322472,10 +322472,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_255_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_255_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_255_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_255_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_255_128_1_FRAG: [u32; 860] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_255_1_1_FRAG: [u32; 860] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000009c, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000040,
@@ -322585,44 +322585,44 @@ pub mod renderpass_render_pass_input {
     0x0004003d, 0x00000006, 0x00000013, 0x0000000c, 0x000500bc, 0x00000008, 0x00000014, 0x00000012,
     0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_255_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_255_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_255_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_255_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_0_COLOR_255_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_0_COLOR_255_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_255_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_255_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_255_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_255_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_255_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_255_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_255_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_255_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_255_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_255_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_255_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_255_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_255_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_255_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_255_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_255_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_0_COLOR_255_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_0_color_255_128",
+    pub static RENDER_PASS_DS_IN_11_0_COLOR_255_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_0_color_255_1",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 0u32,
         ds_output: "color",
         ds_depth_true: 255u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_0_COLOR_255_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_0_COLOR_255_1),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_128_0_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_1_0_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -322645,10 +322645,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_128_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_128_0.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_1_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_1_0.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_128_0_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_1_0_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -322664,7 +322664,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -322677,10 +322677,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_128_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_128_0.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_1_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_1_0.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_128_0_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_1_0_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -322703,10 +322703,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_128_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_128_0.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_1_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_1_0.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_128_0_1_FRAG: [u32; 864] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_1_0_1_FRAG: [u32; 864] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000009d, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000040,
@@ -322728,7 +322728,7 @@ pub mod renderpass_render_pass_input {
     0x00000007, 0x00000007, 0x00040015, 0x00000017, 0x00000020, 0x00000000, 0x0004002b, 0x00000017,
     0x00000018, 0x00000002, 0x0004001c, 0x00000019, 0x00000008, 0x00000018, 0x00040020, 0x0000001a,
     0x00000007, 0x00000019, 0x00040015, 0x0000001c, 0x00000020, 0x00000001, 0x0004002b, 0x0000001c,
-    0x0000001d, 0x00000000, 0x0004002b, 0x00000006, 0x0000001e, 0x3f008081, 0x00090019, 0x0000001f,
+    0x0000001d, 0x00000000, 0x0004002b, 0x00000006, 0x0000001e, 0x3b808081, 0x00090019, 0x0000001f,
     0x00000006, 0x00000006, 0x00000000, 0x00000000, 0x00000000, 0x00000002, 0x00000000, 0x00040020,
     0x00000020, 0x00000000, 0x0000001f, 0x0004003b, 0x00000020, 0x00000021, 0x00000000, 0x00040017,
     0x00000023, 0x0000001c, 0x00000002, 0x0005002c, 0x00000023, 0x00000024, 0x0000001d, 0x0000001d,
@@ -322816,44 +322816,44 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_128_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_128_0.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_1_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_1_0.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_0_COLOR_128_0: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_0_COLOR_1_0: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_128_0_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_128_0_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_1_0_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_1_0_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_128_0_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_128_0_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_1_0_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_1_0_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_128_0_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_128_0_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_1_0_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_1_0_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_128_0_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_128_0_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_1_0_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_1_0_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_0_COLOR_128_0: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_0_color_128_0",
+    pub static RENDER_PASS_DS_IN_11_0_COLOR_1_0: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_0_color_1_0",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 0u32,
         ds_output: "color",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 0u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_0_COLOR_128_0),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_0_COLOR_1_0),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_128_255_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_1_255_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -322876,10 +322876,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_128_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_128_255.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_1_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_1_255.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_128_255_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_1_255_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -322895,7 +322895,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -322908,10 +322908,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_128_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_128_255.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_1_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_1_255.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_128_255_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_1_255_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -322934,10 +322934,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_128_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_128_255.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_1_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_1_255.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_128_255_1_FRAG: [u32; 864] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_COLOR_1_255_1_FRAG: [u32; 864] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000009d, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000040,
@@ -322959,7 +322959,7 @@ pub mod renderpass_render_pass_input {
     0x00000007, 0x00000007, 0x00040015, 0x00000017, 0x00000020, 0x00000000, 0x0004002b, 0x00000017,
     0x00000018, 0x00000002, 0x0004001c, 0x00000019, 0x00000008, 0x00000018, 0x00040020, 0x0000001a,
     0x00000007, 0x00000019, 0x00040015, 0x0000001c, 0x00000020, 0x00000001, 0x0004002b, 0x0000001c,
-    0x0000001d, 0x00000000, 0x0004002b, 0x00000006, 0x0000001e, 0x3f008081, 0x00090019, 0x0000001f,
+    0x0000001d, 0x00000000, 0x0004002b, 0x00000006, 0x0000001e, 0x3b808081, 0x00090019, 0x0000001f,
     0x00000006, 0x00000006, 0x00000000, 0x00000000, 0x00000000, 0x00000002, 0x00000000, 0x00040020,
     0x00000020, 0x00000000, 0x0000001f, 0x0004003b, 0x00000020, 0x00000021, 0x00000000, 0x00040017,
     0x00000023, 0x0000001c, 0x00000002, 0x0005002c, 0x00000023, 0x00000024, 0x0000001d, 0x0000001d,
@@ -323047,40 +323047,40 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_128_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_128_255.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_0_COLOR_1_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_color_1_255.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_0_COLOR_128_255: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_0_COLOR_1_255: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_128_255_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_128_255_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_1_255_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_1_255_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_128_255_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_128_255_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_1_255_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_1_255_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_128_255_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_128_255_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_1_255_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_1_255_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_128_255_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_128_255_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_COLOR_1_255_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_COLOR_1_255_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_0_COLOR_128_255: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_0_color_128_255",
+    pub static RENDER_PASS_DS_IN_11_0_COLOR_1_255: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_0_color_1_255",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 0u32,
         ds_output: "color",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 255u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_0_COLOR_128_255),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_0_COLOR_1_255),
     };
 
     #[rustfmt::skip]
@@ -323280,7 +323280,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_0_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_0_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -323303,10 +323303,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_0_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_0_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_0_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_0_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_0_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_0_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -323322,7 +323322,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -323335,10 +323335,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_0_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_0_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_0_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_0_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_0_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_0_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -323361,10 +323361,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_0_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_0_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_0_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_0_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_0_128_1_FRAG: [u32; 580] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_0_1_1_FRAG: [u32; 580] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000062, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x0000003f,
@@ -323400,7 +323400,7 @@ pub mod renderpass_render_pass_input {
     0x0000003b, 0x00040020, 0x0000003e, 0x00000001, 0x00000025, 0x0004003b, 0x0000003e, 0x0000003f,
     0x00000001, 0x00040020, 0x00000040, 0x00000001, 0x00000006, 0x0004002b, 0x0000001c, 0x00000044,
     0x00000002, 0x00040020, 0x0000005c, 0x00000003, 0x00000006, 0x0004003b, 0x0000005c, 0x0000005d,
-    0x00000003, 0x0004002b, 0x00000006, 0x00000060, 0x3f008081, 0x00050036, 0x00000002, 0x00000004,
+    0x00000003, 0x0004002b, 0x00000006, 0x00000060, 0x3b808081, 0x00050036, 0x00000002, 0x00000004,
     0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x0004003b, 0x0000001a, 0x0000001b, 0x00000007,
     0x0004003b, 0x00000007, 0x00000029, 0x00000007, 0x0004003b, 0x00000007, 0x0000002a, 0x00000007,
     0x0004003b, 0x00000007, 0x0000002b, 0x00000007, 0x0004003b, 0x0000003c, 0x0000003d, 0x00000007,
@@ -323439,40 +323439,40 @@ pub mod renderpass_render_pass_input {
     0x0004003d, 0x00000006, 0x00000013, 0x0000000c, 0x000500bc, 0x00000008, 0x00000014, 0x00000012,
     0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_0_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_0_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_0_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_0_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_0_DEPTH_0_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_0_DEPTH_0_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_0_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_0_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_0_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_0_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_0_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_0_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_0_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_0_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_0_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_0_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_0_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_0_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_0_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_0_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_0_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_0_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_0_DEPTH_0_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_0_depth_0_128",
+    pub static RENDER_PASS_DS_IN_11_0_DEPTH_0_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_0_depth_0_1",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 0u32,
         ds_output: "depth",
         ds_depth_true: 0u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_0_DEPTH_0_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_0_DEPTH_0_1),
     };
 
     #[rustfmt::skip]
@@ -323672,7 +323672,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_255_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_255_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -323695,10 +323695,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_255_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_255_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_255_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_255_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_255_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_255_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -323714,7 +323714,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -323727,10 +323727,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_255_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_255_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_255_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_255_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_255_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_255_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -323753,10 +323753,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_255_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_255_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_255_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_255_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_255_128_1_FRAG: [u32; 584] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_255_1_1_FRAG: [u32; 584] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000063, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000040,
@@ -323793,7 +323793,7 @@ pub mod renderpass_render_pass_input {
     0x00000025, 0x0004003b, 0x0000003f, 0x00000040, 0x00000001, 0x00040020, 0x00000041, 0x00000001,
     0x00000006, 0x0004002b, 0x0000001c, 0x00000045, 0x00000002, 0x00040020, 0x0000005d, 0x00000003,
     0x00000006, 0x0004003b, 0x0000005d, 0x0000005e, 0x00000003, 0x0004002b, 0x00000006, 0x00000061,
-    0x3f008081, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005,
+    0x3b808081, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005,
     0x0004003b, 0x0000001a, 0x0000001b, 0x00000007, 0x0004003b, 0x00000007, 0x0000002a, 0x00000007,
     0x0004003b, 0x00000007, 0x0000002b, 0x00000007, 0x0004003b, 0x00000007, 0x0000002c, 0x00000007,
     0x0004003b, 0x0000003d, 0x0000003e, 0x00000007, 0x0004003d, 0x0000001f, 0x00000022, 0x00000021,
@@ -323831,44 +323831,44 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_255_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_255_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_255_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_255_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_0_DEPTH_255_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_0_DEPTH_255_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_255_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_255_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_255_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_255_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_255_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_255_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_255_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_255_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_255_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_255_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_255_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_255_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_255_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_255_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_255_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_255_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_0_DEPTH_255_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_0_depth_255_128",
+    pub static RENDER_PASS_DS_IN_11_0_DEPTH_255_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_0_depth_255_1",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 0u32,
         ds_output: "depth",
         ds_depth_true: 255u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_0_DEPTH_255_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_0_DEPTH_255_1),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_128_0_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_1_0_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -323891,10 +323891,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_128_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_128_0.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_1_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_1_0.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_128_0_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_1_0_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -323910,7 +323910,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -323923,10 +323923,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_128_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_128_0.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_1_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_1_0.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_128_0_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_1_0_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -323949,10 +323949,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_128_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_128_0.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_1_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_1_0.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_128_0_1_FRAG: [u32; 580] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_1_0_1_FRAG: [u32; 580] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000062, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000040,
@@ -323975,7 +323975,7 @@ pub mod renderpass_render_pass_input {
     0x00000020, 0x00000000, 0x0004002b, 0x00000017, 0x00000018, 0x00000002, 0x0004001c, 0x00000019,
     0x00000008, 0x00000018, 0x00040020, 0x0000001a, 0x00000007, 0x00000019, 0x00040015, 0x0000001c,
     0x00000020, 0x00000001, 0x0004002b, 0x0000001c, 0x0000001d, 0x00000000, 0x0004002b, 0x00000006,
-    0x0000001e, 0x3f008081, 0x00090019, 0x0000001f, 0x00000006, 0x00000006, 0x00000000, 0x00000000,
+    0x0000001e, 0x3b808081, 0x00090019, 0x0000001f, 0x00000006, 0x00000006, 0x00000000, 0x00000000,
     0x00000000, 0x00000002, 0x00000000, 0x00040020, 0x00000020, 0x00000000, 0x0000001f, 0x0004003b,
     0x00000020, 0x00000021, 0x00000000, 0x00040017, 0x00000023, 0x0000001c, 0x00000002, 0x0005002c,
     0x00000023, 0x00000024, 0x0000001d, 0x0000001d, 0x00040017, 0x00000025, 0x00000006, 0x00000004,
@@ -324027,44 +324027,44 @@ pub mod renderpass_render_pass_input {
     0x0004003d, 0x00000006, 0x00000013, 0x0000000c, 0x000500bc, 0x00000008, 0x00000014, 0x00000012,
     0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_128_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_128_0.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_1_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_1_0.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_0_DEPTH_128_0: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_0_DEPTH_1_0: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_128_0_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_128_0_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_1_0_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_1_0_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_128_0_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_128_0_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_1_0_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_1_0_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_128_0_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_128_0_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_1_0_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_1_0_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_128_0_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_128_0_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_1_0_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_1_0_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_0_DEPTH_128_0: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_0_depth_128_0",
+    pub static RENDER_PASS_DS_IN_11_0_DEPTH_1_0: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_0_depth_1_0",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 0u32,
         ds_output: "depth",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 0u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_0_DEPTH_128_0),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_0_DEPTH_1_0),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_128_255_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_1_255_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -324087,10 +324087,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_128_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_128_255.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_1_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_1_255.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_128_255_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_1_255_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -324106,7 +324106,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -324119,10 +324119,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_128_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_128_255.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_1_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_1_255.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_128_255_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_1_255_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -324145,10 +324145,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_128_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_128_255.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_1_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_1_255.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_128_255_1_FRAG: [u32; 584] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_DEPTH_1_255_1_FRAG: [u32; 584] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000063, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000040,
@@ -324171,7 +324171,7 @@ pub mod renderpass_render_pass_input {
     0x00000020, 0x00000000, 0x0004002b, 0x00000017, 0x00000018, 0x00000002, 0x0004001c, 0x00000019,
     0x00000008, 0x00000018, 0x00040020, 0x0000001a, 0x00000007, 0x00000019, 0x00040015, 0x0000001c,
     0x00000020, 0x00000001, 0x0004002b, 0x0000001c, 0x0000001d, 0x00000000, 0x0004002b, 0x00000006,
-    0x0000001e, 0x3f008081, 0x00090019, 0x0000001f, 0x00000006, 0x00000006, 0x00000000, 0x00000000,
+    0x0000001e, 0x3b808081, 0x00090019, 0x0000001f, 0x00000006, 0x00000006, 0x00000000, 0x00000000,
     0x00000000, 0x00000002, 0x00000000, 0x00040020, 0x00000020, 0x00000000, 0x0000001f, 0x0004003b,
     0x00000020, 0x00000021, 0x00000000, 0x00040017, 0x00000023, 0x0000001c, 0x00000002, 0x0005002c,
     0x00000023, 0x00000024, 0x0000001d, 0x0000001d, 0x00040017, 0x00000025, 0x00000006, 0x00000004,
@@ -324223,40 +324223,40 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_128_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_128_255.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_1_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_depth_1_255.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_0_DEPTH_128_255: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_0_DEPTH_1_255: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_128_255_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_128_255_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_1_255_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_1_255_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_128_255_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_128_255_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_1_255_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_1_255_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_128_255_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_128_255_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_1_255_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_1_255_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_128_255_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_128_255_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_DEPTH_1_255_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_DEPTH_1_255_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_0_DEPTH_128_255: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_0_depth_128_255",
+    pub static RENDER_PASS_DS_IN_11_0_DEPTH_1_255: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_0_depth_1_255",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 0u32,
         ds_output: "depth",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 255u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_0_DEPTH_128_255),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_0_DEPTH_1_255),
     };
 
     #[rustfmt::skip]
@@ -324399,7 +324399,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_NONE_0_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_NONE_0_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -324422,10 +324422,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_0_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_0_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_0_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_0_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_NONE_0_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_NONE_0_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -324441,7 +324441,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -324454,10 +324454,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_0_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_0_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_0_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_0_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_NONE_0_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_NONE_0_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -324480,10 +324480,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_0_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_0_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_0_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_0_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_NONE_0_128_1_FRAG: [u32; 122] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_NONE_0_1_1_FRAG: [u32; 122] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000e, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -324501,40 +324501,40 @@ pub mod renderpass_render_pass_input {
     0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_0_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_0_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_0_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_0_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_0_NONE_0_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_0_NONE_0_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_0_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_0_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_0_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_0_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_0_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_0_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_0_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_0_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_0_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_0_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_0_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_0_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_0_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_0_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_0_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_0_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_0_NONE_0_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_0_none_0_128",
+    pub static RENDER_PASS_DS_IN_11_0_NONE_0_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_0_none_0_1",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 0u32,
         ds_output: "none",
         ds_depth_true: 0u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_0_NONE_0_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_0_NONE_0_1),
     };
 
     #[rustfmt::skip]
@@ -324677,7 +324677,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_NONE_255_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_NONE_255_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -324700,10 +324700,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_255_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_255_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_255_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_255_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_NONE_255_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_NONE_255_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -324719,7 +324719,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -324732,10 +324732,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_255_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_255_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_255_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_255_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_NONE_255_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_NONE_255_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -324758,10 +324758,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_255_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_255_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_255_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_255_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_NONE_255_128_1_FRAG: [u32; 122] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_NONE_255_1_1_FRAG: [u32; 122] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000e, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -324779,44 +324779,44 @@ pub mod renderpass_render_pass_input {
     0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_255_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_255_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_255_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_255_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_0_NONE_255_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_0_NONE_255_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_255_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_255_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_255_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_255_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_255_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_255_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_255_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_255_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_255_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_255_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_255_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_255_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_255_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_255_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_255_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_255_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_0_NONE_255_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_0_none_255_128",
+    pub static RENDER_PASS_DS_IN_11_0_NONE_255_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_0_none_255_1",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 0u32,
         ds_output: "none",
         ds_depth_true: 255u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_0_NONE_255_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_0_NONE_255_1),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_NONE_128_0_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_NONE_1_0_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -324839,10 +324839,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_128_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_128_0.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_1_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_1_0.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_NONE_128_0_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_NONE_1_0_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -324858,7 +324858,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -324871,10 +324871,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_128_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_128_0.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_1_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_1_0.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_NONE_128_0_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_NONE_1_0_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -324897,10 +324897,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_128_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_128_0.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_1_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_1_0.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_NONE_128_0_1_FRAG: [u32; 122] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_NONE_1_0_1_FRAG: [u32; 122] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000e, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -324918,44 +324918,44 @@ pub mod renderpass_render_pass_input {
     0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_128_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_128_0.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_1_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_1_0.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_0_NONE_128_0: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_0_NONE_1_0: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_128_0_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_128_0_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_1_0_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_1_0_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_128_0_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_128_0_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_1_0_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_1_0_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_128_0_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_128_0_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_1_0_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_1_0_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_128_0_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_128_0_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_1_0_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_1_0_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_0_NONE_128_0: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_0_none_128_0",
+    pub static RENDER_PASS_DS_IN_11_0_NONE_1_0: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_0_none_1_0",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 0u32,
         ds_output: "none",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 0u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_0_NONE_128_0),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_0_NONE_1_0),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_NONE_128_255_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_NONE_1_255_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -324978,10 +324978,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_128_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_128_255.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_1_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_1_255.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_NONE_128_255_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_NONE_1_255_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -324997,7 +324997,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -325010,10 +325010,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_128_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_128_255.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_1_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_1_255.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_NONE_128_255_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_NONE_1_255_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -325036,10 +325036,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_128_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_128_255.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_1_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_1_255.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_0_NONE_128_255_1_FRAG: [u32; 122] = [
+    static SPV_RENDER_PASS_DS_IN_11_0_NONE_1_255_1_FRAG: [u32; 122] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000e, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -325057,40 +325057,40 @@ pub mod renderpass_render_pass_input {
     0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_128_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_128_255.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_0_NONE_1_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_0_none_1_255.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_0_NONE_128_255: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_0_NONE_1_255: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_128_255_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_128_255_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_1_255_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_1_255_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_128_255_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_128_255_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_1_255_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_1_255_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_128_255_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_128_255_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_1_255_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_1_255_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_128_255_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_128_255_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_0_NONE_1_255_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_0_NONE_1_255_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_0_NONE_128_255: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_0_none_128_255",
+    pub static RENDER_PASS_DS_IN_11_0_NONE_1_255: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_0_none_1_255",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 0u32,
         ds_output: "none",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 255u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_0_NONE_128_255),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_0_NONE_1_255),
     };
 
     #[rustfmt::skip]
@@ -325325,7 +325325,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_0_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_0_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -325348,10 +325348,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_0_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_0_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_0_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_0_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_0_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_0_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -325367,7 +325367,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -325380,10 +325380,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_0_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_0_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_0_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_0_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_0_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_0_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -325406,10 +325406,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_0_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_0_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_0_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_0_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_0_128_1_FRAG: [u32; 864] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_0_1_1_FRAG: [u32; 864] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000009d, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000040,
@@ -325519,40 +325519,40 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_0_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_0_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_0_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_0_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_16_COLOR_0_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_16_COLOR_0_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_0_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_0_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_0_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_0_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_0_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_0_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_0_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_0_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_0_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_0_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_0_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_0_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_0_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_0_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_0_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_0_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_16_COLOR_0_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_16_color_0_128",
+    pub static RENDER_PASS_DS_IN_11_16_COLOR_0_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_16_color_0_1",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 16u32,
         ds_output: "color",
         ds_depth_true: 0u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_16_COLOR_0_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_16_COLOR_0_1),
     };
 
     #[rustfmt::skip]
@@ -325787,7 +325787,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_255_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_255_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -325810,10 +325810,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_255_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_255_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_255_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_255_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_255_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_255_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -325829,7 +325829,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -325842,10 +325842,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_255_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_255_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_255_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_255_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_255_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_255_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -325868,10 +325868,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_255_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_255_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_255_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_255_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_255_128_1_FRAG: [u32; 864] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_255_1_1_FRAG: [u32; 864] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000009d, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000040,
@@ -325981,44 +325981,44 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_255_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_255_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_255_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_255_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_16_COLOR_255_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_16_COLOR_255_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_255_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_255_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_255_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_255_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_255_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_255_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_255_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_255_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_255_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_255_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_255_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_255_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_255_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_255_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_255_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_255_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_16_COLOR_255_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_16_color_255_128",
+    pub static RENDER_PASS_DS_IN_11_16_COLOR_255_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_16_color_255_1",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 16u32,
         ds_output: "color",
         ds_depth_true: 255u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_16_COLOR_255_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_16_COLOR_255_1),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_128_0_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_1_0_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -326041,10 +326041,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_128_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_128_0.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_1_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_1_0.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_128_0_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_1_0_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -326060,7 +326060,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -326073,10 +326073,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_128_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_128_0.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_1_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_1_0.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_128_0_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_1_0_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -326099,10 +326099,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_128_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_128_0.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_1_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_1_0.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_128_0_1_FRAG: [u32; 868] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_1_0_1_FRAG: [u32; 868] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000009e, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000040,
@@ -326124,7 +326124,7 @@ pub mod renderpass_render_pass_input {
     0x00000007, 0x00000007, 0x00040015, 0x00000017, 0x00000020, 0x00000000, 0x0004002b, 0x00000017,
     0x00000018, 0x00000002, 0x0004001c, 0x00000019, 0x00000008, 0x00000018, 0x00040020, 0x0000001a,
     0x00000007, 0x00000019, 0x00040015, 0x0000001c, 0x00000020, 0x00000001, 0x0004002b, 0x0000001c,
-    0x0000001d, 0x00000000, 0x0004002b, 0x00000006, 0x0000001e, 0x3f008081, 0x00090019, 0x0000001f,
+    0x0000001d, 0x00000000, 0x0004002b, 0x00000006, 0x0000001e, 0x3b808081, 0x00090019, 0x0000001f,
     0x00000006, 0x00000006, 0x00000000, 0x00000000, 0x00000000, 0x00000002, 0x00000000, 0x00040020,
     0x00000020, 0x00000000, 0x0000001f, 0x0004003b, 0x00000020, 0x00000021, 0x00000000, 0x00040017,
     0x00000023, 0x0000001c, 0x00000002, 0x0005002c, 0x00000023, 0x00000024, 0x0000001d, 0x0000001d,
@@ -326213,44 +326213,44 @@ pub mod renderpass_render_pass_input {
     0x0004003d, 0x00000006, 0x00000013, 0x0000000c, 0x000500bc, 0x00000008, 0x00000014, 0x00000012,
     0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_128_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_128_0.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_1_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_1_0.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_16_COLOR_128_0: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_16_COLOR_1_0: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_128_0_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_128_0_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_1_0_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_1_0_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_128_0_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_128_0_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_1_0_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_1_0_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_128_0_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_128_0_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_1_0_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_1_0_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_128_0_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_128_0_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_1_0_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_1_0_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_16_COLOR_128_0: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_16_color_128_0",
+    pub static RENDER_PASS_DS_IN_11_16_COLOR_1_0: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_16_color_1_0",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 16u32,
         ds_output: "color",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 0u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_16_COLOR_128_0),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_16_COLOR_1_0),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_128_255_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_1_255_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -326273,10 +326273,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_128_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_128_255.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_1_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_1_255.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_128_255_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_1_255_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -326292,7 +326292,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -326305,10 +326305,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_128_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_128_255.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_1_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_1_255.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_128_255_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_1_255_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -326331,10 +326331,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_128_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_128_255.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_1_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_1_255.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_128_255_1_FRAG: [u32; 868] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_COLOR_1_255_1_FRAG: [u32; 868] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000009e, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000040,
@@ -326356,7 +326356,7 @@ pub mod renderpass_render_pass_input {
     0x00000007, 0x00000007, 0x00040015, 0x00000017, 0x00000020, 0x00000000, 0x0004002b, 0x00000017,
     0x00000018, 0x00000002, 0x0004001c, 0x00000019, 0x00000008, 0x00000018, 0x00040020, 0x0000001a,
     0x00000007, 0x00000019, 0x00040015, 0x0000001c, 0x00000020, 0x00000001, 0x0004002b, 0x0000001c,
-    0x0000001d, 0x00000000, 0x0004002b, 0x00000006, 0x0000001e, 0x3f008081, 0x00090019, 0x0000001f,
+    0x0000001d, 0x00000000, 0x0004002b, 0x00000006, 0x0000001e, 0x3b808081, 0x00090019, 0x0000001f,
     0x00000006, 0x00000006, 0x00000000, 0x00000000, 0x00000000, 0x00000002, 0x00000000, 0x00040020,
     0x00000020, 0x00000000, 0x0000001f, 0x0004003b, 0x00000020, 0x00000021, 0x00000000, 0x00040017,
     0x00000023, 0x0000001c, 0x00000002, 0x0005002c, 0x00000023, 0x00000024, 0x0000001d, 0x0000001d,
@@ -326445,40 +326445,40 @@ pub mod renderpass_render_pass_input {
     0x0004003d, 0x00000006, 0x00000013, 0x0000000c, 0x000500bc, 0x00000008, 0x00000014, 0x00000012,
     0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_128_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_128_255.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_16_COLOR_1_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_color_1_255.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_16_COLOR_128_255: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_16_COLOR_1_255: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_128_255_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_128_255_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_1_255_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_1_255_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_128_255_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_128_255_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_1_255_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_1_255_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_128_255_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_128_255_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_1_255_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_1_255_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_128_255_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_128_255_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_COLOR_1_255_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_COLOR_1_255_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_16_COLOR_128_255: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_16_color_128_255",
+    pub static RENDER_PASS_DS_IN_11_16_COLOR_1_255: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_16_color_1_255",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 16u32,
         ds_output: "color",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 255u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_16_COLOR_128_255),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_16_COLOR_1_255),
     };
 
     #[rustfmt::skip]
@@ -326678,7 +326678,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_0_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_0_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -326701,10 +326701,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_0_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_0_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_0_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_0_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_0_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_0_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -326720,7 +326720,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -326733,10 +326733,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_0_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_0_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_0_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_0_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_0_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_0_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -326759,10 +326759,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_0_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_0_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_0_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_0_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_0_128_1_FRAG: [u32; 584] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_0_1_1_FRAG: [u32; 584] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000063, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000040,
@@ -326799,7 +326799,7 @@ pub mod renderpass_render_pass_input {
     0x00000025, 0x0004003b, 0x0000003f, 0x00000040, 0x00000001, 0x00040020, 0x00000041, 0x00000001,
     0x00000006, 0x0004002b, 0x0000001c, 0x00000045, 0x00000002, 0x00040020, 0x0000005d, 0x00000003,
     0x00000006, 0x0004003b, 0x0000005d, 0x0000005e, 0x00000003, 0x0004002b, 0x00000006, 0x00000061,
-    0x3f008081, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005,
+    0x3b808081, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005,
     0x0004003b, 0x0000001a, 0x0000001b, 0x00000007, 0x0004003b, 0x00000007, 0x0000002a, 0x00000007,
     0x0004003b, 0x00000007, 0x0000002b, 0x00000007, 0x0004003b, 0x00000007, 0x0000002c, 0x00000007,
     0x0004003b, 0x0000003d, 0x0000003e, 0x00000007, 0x0004003d, 0x0000001f, 0x00000022, 0x00000021,
@@ -326837,40 +326837,40 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_0_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_0_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_0_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_0_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_16_DEPTH_0_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_16_DEPTH_0_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_0_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_0_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_0_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_0_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_0_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_0_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_0_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_0_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_0_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_0_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_0_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_0_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_0_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_0_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_0_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_0_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_16_DEPTH_0_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_16_depth_0_128",
+    pub static RENDER_PASS_DS_IN_11_16_DEPTH_0_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_16_depth_0_1",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 16u32,
         ds_output: "depth",
         ds_depth_true: 0u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_16_DEPTH_0_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_16_DEPTH_0_1),
     };
 
     #[rustfmt::skip]
@@ -327070,7 +327070,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_255_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_255_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -327093,10 +327093,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_255_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_255_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_255_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_255_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_255_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_255_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -327112,7 +327112,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -327125,10 +327125,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_255_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_255_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_255_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_255_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_255_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_255_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -327151,10 +327151,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_255_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_255_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_255_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_255_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_255_128_1_FRAG: [u32; 584] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_255_1_1_FRAG: [u32; 584] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000063, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000040,
@@ -327191,7 +327191,7 @@ pub mod renderpass_render_pass_input {
     0x00000025, 0x0004003b, 0x0000003f, 0x00000040, 0x00000001, 0x00040020, 0x00000041, 0x00000001,
     0x00000006, 0x0004002b, 0x0000001c, 0x00000045, 0x00000002, 0x00040020, 0x0000005d, 0x00000003,
     0x00000006, 0x0004003b, 0x0000005d, 0x0000005e, 0x00000003, 0x0004002b, 0x00000006, 0x00000061,
-    0x3f008081, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005,
+    0x3b808081, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005,
     0x0004003b, 0x0000001a, 0x0000001b, 0x00000007, 0x0004003b, 0x00000007, 0x0000002a, 0x00000007,
     0x0004003b, 0x00000007, 0x0000002b, 0x00000007, 0x0004003b, 0x00000007, 0x0000002c, 0x00000007,
     0x0004003b, 0x0000003d, 0x0000003e, 0x00000007, 0x0004003d, 0x0000001f, 0x00000022, 0x00000021,
@@ -327229,44 +327229,44 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_255_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_255_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_255_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_255_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_16_DEPTH_255_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_16_DEPTH_255_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_255_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_255_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_255_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_255_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_255_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_255_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_255_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_255_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_255_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_255_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_255_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_255_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_255_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_255_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_255_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_255_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_16_DEPTH_255_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_16_depth_255_128",
+    pub static RENDER_PASS_DS_IN_11_16_DEPTH_255_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_16_depth_255_1",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 16u32,
         ds_output: "depth",
         ds_depth_true: 255u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_16_DEPTH_255_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_16_DEPTH_255_1),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_128_0_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_1_0_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -327289,10 +327289,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_128_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_128_0.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_1_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_1_0.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_128_0_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_1_0_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -327308,7 +327308,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -327321,10 +327321,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_128_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_128_0.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_1_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_1_0.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_128_0_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_1_0_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -327347,10 +327347,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_128_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_128_0.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_1_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_1_0.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_128_0_1_FRAG: [u32; 584] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_1_0_1_FRAG: [u32; 584] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000063, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000040,
@@ -327373,7 +327373,7 @@ pub mod renderpass_render_pass_input {
     0x00000020, 0x00000000, 0x0004002b, 0x00000017, 0x00000018, 0x00000002, 0x0004001c, 0x00000019,
     0x00000008, 0x00000018, 0x00040020, 0x0000001a, 0x00000007, 0x00000019, 0x00040015, 0x0000001c,
     0x00000020, 0x00000001, 0x0004002b, 0x0000001c, 0x0000001d, 0x00000000, 0x0004002b, 0x00000006,
-    0x0000001e, 0x3f008081, 0x00090019, 0x0000001f, 0x00000006, 0x00000006, 0x00000000, 0x00000000,
+    0x0000001e, 0x3b808081, 0x00090019, 0x0000001f, 0x00000006, 0x00000006, 0x00000000, 0x00000000,
     0x00000000, 0x00000002, 0x00000000, 0x00040020, 0x00000020, 0x00000000, 0x0000001f, 0x0004003b,
     0x00000020, 0x00000021, 0x00000000, 0x00040017, 0x00000023, 0x0000001c, 0x00000002, 0x0005002c,
     0x00000023, 0x00000024, 0x0000001d, 0x0000001d, 0x00040017, 0x00000025, 0x00000006, 0x00000004,
@@ -327425,44 +327425,44 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_128_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_128_0.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_1_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_1_0.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_16_DEPTH_128_0: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_16_DEPTH_1_0: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_128_0_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_128_0_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_1_0_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_1_0_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_128_0_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_128_0_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_1_0_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_1_0_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_128_0_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_128_0_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_1_0_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_1_0_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_128_0_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_128_0_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_1_0_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_1_0_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_16_DEPTH_128_0: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_16_depth_128_0",
+    pub static RENDER_PASS_DS_IN_11_16_DEPTH_1_0: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_16_depth_1_0",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 16u32,
         ds_output: "depth",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 0u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_16_DEPTH_128_0),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_16_DEPTH_1_0),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_128_255_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_1_255_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -327485,10 +327485,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_128_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_128_255.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_1_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_1_255.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_128_255_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_1_255_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -327504,7 +327504,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -327517,10 +327517,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_128_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_128_255.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_1_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_1_255.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_128_255_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_1_255_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -327543,10 +327543,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_128_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_128_255.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_1_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_1_255.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_128_255_1_FRAG: [u32; 584] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_DEPTH_1_255_1_FRAG: [u32; 584] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000063, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000040,
@@ -327569,7 +327569,7 @@ pub mod renderpass_render_pass_input {
     0x00000020, 0x00000000, 0x0004002b, 0x00000017, 0x00000018, 0x00000002, 0x0004001c, 0x00000019,
     0x00000008, 0x00000018, 0x00040020, 0x0000001a, 0x00000007, 0x00000019, 0x00040015, 0x0000001c,
     0x00000020, 0x00000001, 0x0004002b, 0x0000001c, 0x0000001d, 0x00000000, 0x0004002b, 0x00000006,
-    0x0000001e, 0x3f008081, 0x00090019, 0x0000001f, 0x00000006, 0x00000006, 0x00000000, 0x00000000,
+    0x0000001e, 0x3b808081, 0x00090019, 0x0000001f, 0x00000006, 0x00000006, 0x00000000, 0x00000000,
     0x00000000, 0x00000002, 0x00000000, 0x00040020, 0x00000020, 0x00000000, 0x0000001f, 0x0004003b,
     0x00000020, 0x00000021, 0x00000000, 0x00040017, 0x00000023, 0x0000001c, 0x00000002, 0x0005002c,
     0x00000023, 0x00000024, 0x0000001d, 0x0000001d, 0x00040017, 0x00000025, 0x00000006, 0x00000004,
@@ -327621,40 +327621,40 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_128_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_128_255.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_1_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_depth_1_255.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_16_DEPTH_128_255: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_16_DEPTH_1_255: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_128_255_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_128_255_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_1_255_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_1_255_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_128_255_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_128_255_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_1_255_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_1_255_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_128_255_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_128_255_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_1_255_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_1_255_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_128_255_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_128_255_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_DEPTH_1_255_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_DEPTH_1_255_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_16_DEPTH_128_255: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_16_depth_128_255",
+    pub static RENDER_PASS_DS_IN_11_16_DEPTH_1_255: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_16_depth_1_255",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 16u32,
         ds_output: "depth",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 255u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_16_DEPTH_128_255),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_16_DEPTH_1_255),
     };
 
     #[rustfmt::skip]
@@ -327797,7 +327797,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_NONE_0_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_NONE_0_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -327820,10 +327820,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_0_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_0_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_0_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_0_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_NONE_0_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_NONE_0_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -327839,7 +327839,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -327852,10 +327852,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_0_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_0_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_0_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_0_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_NONE_0_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_NONE_0_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -327878,10 +327878,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_0_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_0_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_0_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_0_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_NONE_0_128_1_FRAG: [u32; 122] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_NONE_0_1_1_FRAG: [u32; 122] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000e, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -327899,40 +327899,40 @@ pub mod renderpass_render_pass_input {
     0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_0_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_0_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_0_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_0_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_16_NONE_0_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_16_NONE_0_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_0_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_0_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_0_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_0_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_0_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_0_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_0_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_0_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_0_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_0_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_0_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_0_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_0_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_0_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_0_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_0_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_16_NONE_0_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_16_none_0_128",
+    pub static RENDER_PASS_DS_IN_11_16_NONE_0_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_16_none_0_1",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 16u32,
         ds_output: "none",
         ds_depth_true: 0u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_16_NONE_0_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_16_NONE_0_1),
     };
 
     #[rustfmt::skip]
@@ -328075,7 +328075,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_NONE_255_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_NONE_255_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -328098,10 +328098,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_255_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_255_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_255_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_255_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_NONE_255_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_NONE_255_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -328117,7 +328117,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -328130,10 +328130,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_255_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_255_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_255_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_255_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_NONE_255_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_NONE_255_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -328156,10 +328156,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_255_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_255_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_255_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_255_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_NONE_255_128_1_FRAG: [u32; 122] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_NONE_255_1_1_FRAG: [u32; 122] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000e, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -328177,44 +328177,44 @@ pub mod renderpass_render_pass_input {
     0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_255_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_255_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_255_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_255_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_16_NONE_255_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_16_NONE_255_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_255_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_255_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_255_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_255_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_255_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_255_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_255_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_255_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_255_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_255_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_255_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_255_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_255_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_255_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_255_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_255_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_16_NONE_255_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_16_none_255_128",
+    pub static RENDER_PASS_DS_IN_11_16_NONE_255_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_16_none_255_1",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 16u32,
         ds_output: "none",
         ds_depth_true: 255u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_16_NONE_255_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_16_NONE_255_1),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_NONE_128_0_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_NONE_1_0_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -328237,10 +328237,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_128_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_128_0.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_1_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_1_0.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_NONE_128_0_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_NONE_1_0_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -328256,7 +328256,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -328269,10 +328269,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_128_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_128_0.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_1_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_1_0.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_NONE_128_0_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_NONE_1_0_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -328295,10 +328295,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_128_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_128_0.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_1_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_1_0.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_NONE_128_0_1_FRAG: [u32; 122] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_NONE_1_0_1_FRAG: [u32; 122] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000e, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -328316,44 +328316,44 @@ pub mod renderpass_render_pass_input {
     0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_128_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_128_0.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_1_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_1_0.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_16_NONE_128_0: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_16_NONE_1_0: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_128_0_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_128_0_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_1_0_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_1_0_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_128_0_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_128_0_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_1_0_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_1_0_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_128_0_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_128_0_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_1_0_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_1_0_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_128_0_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_128_0_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_1_0_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_1_0_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_16_NONE_128_0: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_16_none_128_0",
+    pub static RENDER_PASS_DS_IN_11_16_NONE_1_0: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_16_none_1_0",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 16u32,
         ds_output: "none",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 0u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_16_NONE_128_0),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_16_NONE_1_0),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_NONE_128_255_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_NONE_1_255_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -328376,10 +328376,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_128_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_128_255.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_1_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_1_255.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_NONE_128_255_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_NONE_1_255_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -328395,7 +328395,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -328408,10 +328408,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_128_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_128_255.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_1_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_1_255.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_NONE_128_255_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_NONE_1_255_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -328434,10 +328434,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_128_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_128_255.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_1_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_1_255.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_16_NONE_128_255_1_FRAG: [u32; 122] = [
+    static SPV_RENDER_PASS_DS_IN_11_16_NONE_1_255_1_FRAG: [u32; 122] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000e, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -328455,40 +328455,40 @@ pub mod renderpass_render_pass_input {
     0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_128_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_128_255.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_16_NONE_1_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_16_none_1_255.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_16_NONE_128_255: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_16_NONE_1_255: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_128_255_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_128_255_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_1_255_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_1_255_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_128_255_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_128_255_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_1_255_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_1_255_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_128_255_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_128_255_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_1_255_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_1_255_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_128_255_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_128_255_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_16_NONE_1_255_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_16_NONE_1_255_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_16_NONE_128_255: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_16_none_128_255",
+    pub static RENDER_PASS_DS_IN_11_16_NONE_1_255: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_16_none_1_255",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 16u32,
         ds_output: "none",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 255u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_16_NONE_128_255),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_16_NONE_1_255),
     };
 
     #[rustfmt::skip]
@@ -328723,7 +328723,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_0_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_0_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -328746,10 +328746,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_0_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_0_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_0_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_0_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_0_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_0_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -328765,7 +328765,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -328778,10 +328778,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_0_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_0_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_0_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_0_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_0_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_0_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -328804,10 +328804,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_0_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_0_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_0_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_0_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_0_128_1_FRAG: [u32; 864] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_0_1_1_FRAG: [u32; 864] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000009d, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000040,
@@ -328917,40 +328917,40 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_0_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_0_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_0_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_0_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_24_COLOR_0_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_24_COLOR_0_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_0_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_0_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_0_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_0_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_0_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_0_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_0_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_0_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_0_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_0_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_0_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_0_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_0_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_0_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_0_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_0_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_24_COLOR_0_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_24_color_0_128",
+    pub static RENDER_PASS_DS_IN_11_24_COLOR_0_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_24_color_0_1",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 24u32,
         ds_output: "color",
         ds_depth_true: 0u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_24_COLOR_0_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_24_COLOR_0_1),
     };
 
     #[rustfmt::skip]
@@ -329185,7 +329185,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_255_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_255_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -329208,10 +329208,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_255_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_255_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_255_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_255_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_255_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_255_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -329227,7 +329227,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -329240,10 +329240,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_255_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_255_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_255_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_255_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_255_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_255_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -329266,10 +329266,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_255_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_255_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_255_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_255_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_255_128_1_FRAG: [u32; 864] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_255_1_1_FRAG: [u32; 864] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000009d, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000040,
@@ -329379,44 +329379,44 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_255_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_255_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_255_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_255_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_24_COLOR_255_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_24_COLOR_255_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_255_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_255_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_255_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_255_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_255_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_255_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_255_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_255_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_255_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_255_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_255_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_255_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_255_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_255_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_255_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_255_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_24_COLOR_255_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_24_color_255_128",
+    pub static RENDER_PASS_DS_IN_11_24_COLOR_255_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_24_color_255_1",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 24u32,
         ds_output: "color",
         ds_depth_true: 255u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_24_COLOR_255_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_24_COLOR_255_1),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_128_0_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_1_0_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -329439,10 +329439,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_128_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_128_0.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_1_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_1_0.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_128_0_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_1_0_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -329458,7 +329458,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -329471,10 +329471,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_128_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_128_0.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_1_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_1_0.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_128_0_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_1_0_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -329497,10 +329497,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_128_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_128_0.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_1_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_1_0.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_128_0_1_FRAG: [u32; 868] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_1_0_1_FRAG: [u32; 868] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000009e, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000040,
@@ -329522,7 +329522,7 @@ pub mod renderpass_render_pass_input {
     0x00000007, 0x00000007, 0x00040015, 0x00000017, 0x00000020, 0x00000000, 0x0004002b, 0x00000017,
     0x00000018, 0x00000002, 0x0004001c, 0x00000019, 0x00000008, 0x00000018, 0x00040020, 0x0000001a,
     0x00000007, 0x00000019, 0x00040015, 0x0000001c, 0x00000020, 0x00000001, 0x0004002b, 0x0000001c,
-    0x0000001d, 0x00000000, 0x0004002b, 0x00000006, 0x0000001e, 0x3f008081, 0x00090019, 0x0000001f,
+    0x0000001d, 0x00000000, 0x0004002b, 0x00000006, 0x0000001e, 0x3b808081, 0x00090019, 0x0000001f,
     0x00000006, 0x00000006, 0x00000000, 0x00000000, 0x00000000, 0x00000002, 0x00000000, 0x00040020,
     0x00000020, 0x00000000, 0x0000001f, 0x0004003b, 0x00000020, 0x00000021, 0x00000000, 0x00040017,
     0x00000023, 0x0000001c, 0x00000002, 0x0005002c, 0x00000023, 0x00000024, 0x0000001d, 0x0000001d,
@@ -329611,44 +329611,44 @@ pub mod renderpass_render_pass_input {
     0x0004003d, 0x00000006, 0x00000013, 0x0000000c, 0x000500bc, 0x00000008, 0x00000014, 0x00000012,
     0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_128_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_128_0.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_1_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_1_0.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_24_COLOR_128_0: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_24_COLOR_1_0: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_128_0_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_128_0_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_1_0_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_1_0_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_128_0_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_128_0_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_1_0_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_1_0_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_128_0_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_128_0_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_1_0_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_1_0_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_128_0_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_128_0_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_1_0_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_1_0_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_24_COLOR_128_0: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_24_color_128_0",
+    pub static RENDER_PASS_DS_IN_11_24_COLOR_1_0: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_24_color_1_0",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 24u32,
         ds_output: "color",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 0u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_24_COLOR_128_0),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_24_COLOR_1_0),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_128_255_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_1_255_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -329671,10 +329671,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_128_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_128_255.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_1_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_1_255.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_128_255_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_1_255_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -329690,7 +329690,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -329703,10 +329703,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_128_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_128_255.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_1_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_1_255.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_128_255_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_1_255_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -329729,10 +329729,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_128_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_128_255.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_1_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_1_255.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_128_255_1_FRAG: [u32; 868] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_COLOR_1_255_1_FRAG: [u32; 868] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000009e, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000040,
@@ -329754,7 +329754,7 @@ pub mod renderpass_render_pass_input {
     0x00000007, 0x00000007, 0x00040015, 0x00000017, 0x00000020, 0x00000000, 0x0004002b, 0x00000017,
     0x00000018, 0x00000002, 0x0004001c, 0x00000019, 0x00000008, 0x00000018, 0x00040020, 0x0000001a,
     0x00000007, 0x00000019, 0x00040015, 0x0000001c, 0x00000020, 0x00000001, 0x0004002b, 0x0000001c,
-    0x0000001d, 0x00000000, 0x0004002b, 0x00000006, 0x0000001e, 0x3f008081, 0x00090019, 0x0000001f,
+    0x0000001d, 0x00000000, 0x0004002b, 0x00000006, 0x0000001e, 0x3b808081, 0x00090019, 0x0000001f,
     0x00000006, 0x00000006, 0x00000000, 0x00000000, 0x00000000, 0x00000002, 0x00000000, 0x00040020,
     0x00000020, 0x00000000, 0x0000001f, 0x0004003b, 0x00000020, 0x00000021, 0x00000000, 0x00040017,
     0x00000023, 0x0000001c, 0x00000002, 0x0005002c, 0x00000023, 0x00000024, 0x0000001d, 0x0000001d,
@@ -329843,40 +329843,40 @@ pub mod renderpass_render_pass_input {
     0x0004003d, 0x00000006, 0x00000013, 0x0000000c, 0x000500bc, 0x00000008, 0x00000014, 0x00000012,
     0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_128_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_128_255.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_24_COLOR_1_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_color_1_255.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_24_COLOR_128_255: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_24_COLOR_1_255: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_128_255_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_128_255_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_1_255_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_1_255_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_128_255_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_128_255_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_1_255_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_1_255_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_128_255_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_128_255_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_1_255_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_1_255_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_128_255_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_128_255_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_COLOR_1_255_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_COLOR_1_255_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_24_COLOR_128_255: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_24_color_128_255",
+    pub static RENDER_PASS_DS_IN_11_24_COLOR_1_255: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_24_color_1_255",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 24u32,
         ds_output: "color",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 255u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_24_COLOR_128_255),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_24_COLOR_1_255),
     };
 
     #[rustfmt::skip]
@@ -330076,7 +330076,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_0_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_0_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -330099,10 +330099,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_0_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_0_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_0_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_0_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_0_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_0_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -330118,7 +330118,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -330131,10 +330131,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_0_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_0_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_0_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_0_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_0_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_0_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -330157,10 +330157,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_0_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_0_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_0_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_0_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_0_128_1_FRAG: [u32; 584] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_0_1_1_FRAG: [u32; 584] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000063, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000040,
@@ -330197,7 +330197,7 @@ pub mod renderpass_render_pass_input {
     0x00000025, 0x0004003b, 0x0000003f, 0x00000040, 0x00000001, 0x00040020, 0x00000041, 0x00000001,
     0x00000006, 0x0004002b, 0x0000001c, 0x00000045, 0x00000002, 0x00040020, 0x0000005d, 0x00000003,
     0x00000006, 0x0004003b, 0x0000005d, 0x0000005e, 0x00000003, 0x0004002b, 0x00000006, 0x00000061,
-    0x3f008081, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005,
+    0x3b808081, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005,
     0x0004003b, 0x0000001a, 0x0000001b, 0x00000007, 0x0004003b, 0x00000007, 0x0000002a, 0x00000007,
     0x0004003b, 0x00000007, 0x0000002b, 0x00000007, 0x0004003b, 0x00000007, 0x0000002c, 0x00000007,
     0x0004003b, 0x0000003d, 0x0000003e, 0x00000007, 0x0004003d, 0x0000001f, 0x00000022, 0x00000021,
@@ -330235,40 +330235,40 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_0_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_0_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_0_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_0_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_24_DEPTH_0_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_24_DEPTH_0_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_0_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_0_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_0_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_0_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_0_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_0_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_0_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_0_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_0_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_0_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_0_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_0_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_0_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_0_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_0_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_0_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_24_DEPTH_0_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_24_depth_0_128",
+    pub static RENDER_PASS_DS_IN_11_24_DEPTH_0_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_24_depth_0_1",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 24u32,
         ds_output: "depth",
         ds_depth_true: 0u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_24_DEPTH_0_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_24_DEPTH_0_1),
     };
 
     #[rustfmt::skip]
@@ -330468,7 +330468,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_255_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_255_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -330491,10 +330491,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_255_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_255_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_255_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_255_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_255_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_255_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -330510,7 +330510,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -330523,10 +330523,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_255_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_255_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_255_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_255_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_255_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_255_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -330549,10 +330549,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_255_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_255_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_255_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_255_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_255_128_1_FRAG: [u32; 584] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_255_1_1_FRAG: [u32; 584] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000063, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000040,
@@ -330589,7 +330589,7 @@ pub mod renderpass_render_pass_input {
     0x00000025, 0x0004003b, 0x0000003f, 0x00000040, 0x00000001, 0x00040020, 0x00000041, 0x00000001,
     0x00000006, 0x0004002b, 0x0000001c, 0x00000045, 0x00000002, 0x00040020, 0x0000005d, 0x00000003,
     0x00000006, 0x0004003b, 0x0000005d, 0x0000005e, 0x00000003, 0x0004002b, 0x00000006, 0x00000061,
-    0x3f008081, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005,
+    0x3b808081, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005,
     0x0004003b, 0x0000001a, 0x0000001b, 0x00000007, 0x0004003b, 0x00000007, 0x0000002a, 0x00000007,
     0x0004003b, 0x00000007, 0x0000002b, 0x00000007, 0x0004003b, 0x00000007, 0x0000002c, 0x00000007,
     0x0004003b, 0x0000003d, 0x0000003e, 0x00000007, 0x0004003d, 0x0000001f, 0x00000022, 0x00000021,
@@ -330627,44 +330627,44 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_255_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_255_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_255_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_255_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_24_DEPTH_255_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_24_DEPTH_255_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_255_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_255_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_255_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_255_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_255_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_255_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_255_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_255_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_255_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_255_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_255_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_255_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_255_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_255_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_255_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_255_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_24_DEPTH_255_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_24_depth_255_128",
+    pub static RENDER_PASS_DS_IN_11_24_DEPTH_255_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_24_depth_255_1",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 24u32,
         ds_output: "depth",
         ds_depth_true: 255u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_24_DEPTH_255_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_24_DEPTH_255_1),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_128_0_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_1_0_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -330687,10 +330687,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_128_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_128_0.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_1_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_1_0.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_128_0_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_1_0_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -330706,7 +330706,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -330719,10 +330719,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_128_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_128_0.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_1_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_1_0.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_128_0_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_1_0_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -330745,10 +330745,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_128_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_128_0.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_1_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_1_0.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_128_0_1_FRAG: [u32; 584] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_1_0_1_FRAG: [u32; 584] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000063, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000040,
@@ -330771,7 +330771,7 @@ pub mod renderpass_render_pass_input {
     0x00000020, 0x00000000, 0x0004002b, 0x00000017, 0x00000018, 0x00000002, 0x0004001c, 0x00000019,
     0x00000008, 0x00000018, 0x00040020, 0x0000001a, 0x00000007, 0x00000019, 0x00040015, 0x0000001c,
     0x00000020, 0x00000001, 0x0004002b, 0x0000001c, 0x0000001d, 0x00000000, 0x0004002b, 0x00000006,
-    0x0000001e, 0x3f008081, 0x00090019, 0x0000001f, 0x00000006, 0x00000006, 0x00000000, 0x00000000,
+    0x0000001e, 0x3b808081, 0x00090019, 0x0000001f, 0x00000006, 0x00000006, 0x00000000, 0x00000000,
     0x00000000, 0x00000002, 0x00000000, 0x00040020, 0x00000020, 0x00000000, 0x0000001f, 0x0004003b,
     0x00000020, 0x00000021, 0x00000000, 0x00040017, 0x00000023, 0x0000001c, 0x00000002, 0x0005002c,
     0x00000023, 0x00000024, 0x0000001d, 0x0000001d, 0x00040017, 0x00000025, 0x00000006, 0x00000004,
@@ -330823,44 +330823,44 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_128_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_128_0.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_1_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_1_0.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_24_DEPTH_128_0: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_24_DEPTH_1_0: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_128_0_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_128_0_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_1_0_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_1_0_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_128_0_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_128_0_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_1_0_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_1_0_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_128_0_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_128_0_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_1_0_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_1_0_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_128_0_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_128_0_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_1_0_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_1_0_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_24_DEPTH_128_0: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_24_depth_128_0",
+    pub static RENDER_PASS_DS_IN_11_24_DEPTH_1_0: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_24_depth_1_0",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 24u32,
         ds_output: "depth",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 0u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_24_DEPTH_128_0),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_24_DEPTH_1_0),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_128_255_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_1_255_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -330883,10 +330883,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_128_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_128_255.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_1_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_1_255.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_128_255_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_1_255_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -330902,7 +330902,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -330915,10 +330915,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_128_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_128_255.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_1_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_1_255.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_128_255_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_1_255_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -330941,10 +330941,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_128_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_128_255.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_1_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_1_255.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_128_255_1_FRAG: [u32; 584] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_DEPTH_1_255_1_FRAG: [u32; 584] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000063, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000040,
@@ -330967,7 +330967,7 @@ pub mod renderpass_render_pass_input {
     0x00000020, 0x00000000, 0x0004002b, 0x00000017, 0x00000018, 0x00000002, 0x0004001c, 0x00000019,
     0x00000008, 0x00000018, 0x00040020, 0x0000001a, 0x00000007, 0x00000019, 0x00040015, 0x0000001c,
     0x00000020, 0x00000001, 0x0004002b, 0x0000001c, 0x0000001d, 0x00000000, 0x0004002b, 0x00000006,
-    0x0000001e, 0x3f008081, 0x00090019, 0x0000001f, 0x00000006, 0x00000006, 0x00000000, 0x00000000,
+    0x0000001e, 0x3b808081, 0x00090019, 0x0000001f, 0x00000006, 0x00000006, 0x00000000, 0x00000000,
     0x00000000, 0x00000002, 0x00000000, 0x00040020, 0x00000020, 0x00000000, 0x0000001f, 0x0004003b,
     0x00000020, 0x00000021, 0x00000000, 0x00040017, 0x00000023, 0x0000001c, 0x00000002, 0x0005002c,
     0x00000023, 0x00000024, 0x0000001d, 0x0000001d, 0x00040017, 0x00000025, 0x00000006, 0x00000004,
@@ -331019,40 +331019,40 @@ pub mod renderpass_render_pass_input {
     0x00000012, 0x00000001, 0x00000004, 0x00000011, 0x0004003d, 0x00000006, 0x00000013, 0x0000000c,
     0x000500bc, 0x00000008, 0x00000014, 0x00000012, 0x00000013, 0x000200fe, 0x00000014, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_128_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_128_255.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_1_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_depth_1_255.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_24_DEPTH_128_255: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_24_DEPTH_1_255: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_128_255_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_128_255_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_1_255_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_1_255_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_128_255_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_128_255_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_1_255_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_1_255_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_128_255_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_128_255_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_1_255_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_1_255_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_128_255_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_128_255_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_DEPTH_1_255_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_DEPTH_1_255_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_24_DEPTH_128_255: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_24_depth_128_255",
+    pub static RENDER_PASS_DS_IN_11_24_DEPTH_1_255: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_24_depth_1_255",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 24u32,
         ds_output: "depth",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 255u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_24_DEPTH_128_255),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_24_DEPTH_1_255),
     };
 
     #[rustfmt::skip]
@@ -331195,7 +331195,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_NONE_0_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_NONE_0_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -331218,10 +331218,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_0_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_0_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_0_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_0_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_NONE_0_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_NONE_0_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -331237,7 +331237,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x00000000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -331250,10 +331250,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_0_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_0_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_0_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_0_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_NONE_0_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_NONE_0_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -331276,10 +331276,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_0_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_0_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_0_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_0_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_NONE_0_128_1_FRAG: [u32; 122] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_NONE_0_1_1_FRAG: [u32; 122] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000e, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -331297,40 +331297,40 @@ pub mod renderpass_render_pass_input {
     0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_0_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_0_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_0_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_0_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_24_NONE_0_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_24_NONE_0_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_0_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_0_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_0_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_0_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_0_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_0_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_0_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_0_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_0_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_0_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_0_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_0_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_0_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_0_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_0_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_0_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_24_NONE_0_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_24_none_0_128",
+    pub static RENDER_PASS_DS_IN_11_24_NONE_0_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_24_none_0_1",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 24u32,
         ds_output: "none",
         ds_depth_true: 0u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_24_NONE_0_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_24_NONE_0_1),
     };
 
     #[rustfmt::skip]
@@ -331473,7 +331473,7 @@ pub mod renderpass_render_pass_input {
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_NONE_255_128_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_NONE_255_1_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -331496,10 +331496,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_255_128_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_255_128.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_255_1_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_255_1.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_NONE_255_128_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_NONE_255_1_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -331515,7 +331515,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3f008081, 0x00050036, 0x00000002,
+    0x00000022, 0x3f800000, 0x0004002b, 0x00000006, 0x00000023, 0x3b808081, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -331528,10 +331528,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_255_128_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_255_128.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_255_1_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_255_1.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_NONE_255_128_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_NONE_255_1_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -331554,10 +331554,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_255_128_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_255_128.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_255_1_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_255_1.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_NONE_255_128_1_FRAG: [u32; 122] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_NONE_255_1_1_FRAG: [u32; 122] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000e, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -331575,44 +331575,44 @@ pub mod renderpass_render_pass_input {
     0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_255_128_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_255_128.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_255_1_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_255_1.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_24_NONE_255_128: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_24_NONE_255_1: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_255_128_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_255_128_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_255_1_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_255_1_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_255_128_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_255_128_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_255_1_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_255_1_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_255_128_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_255_128_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_255_1_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_255_1_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_255_128_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_255_128_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_255_1_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_255_1_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_24_NONE_255_128: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_24_none_255_128",
+    pub static RENDER_PASS_DS_IN_11_24_NONE_255_1: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_24_none_255_1",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 24u32,
         ds_output: "none",
         ds_depth_true: 255u32,
-        ds_depth_false: 128u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_24_NONE_255_128),
+        ds_depth_false: 1u32,
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_24_NONE_255_1),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_NONE_128_0_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_NONE_1_0_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -331635,10 +331635,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_128_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_128_0.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_1_0_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_1_0.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_NONE_128_0_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_NONE_1_0_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -331654,7 +331654,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x00000000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -331667,10 +331667,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_128_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_128_0.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_1_0_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_1_0.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_NONE_128_0_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_NONE_1_0_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -331693,10 +331693,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_128_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_128_0.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_1_0_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_1_0.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_NONE_128_0_1_FRAG: [u32; 122] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_NONE_1_0_1_FRAG: [u32; 122] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000e, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -331714,44 +331714,44 @@ pub mod renderpass_render_pass_input {
     0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_128_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_128_0.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_1_0_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_1_0.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_24_NONE_128_0: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_24_NONE_1_0: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_128_0_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_128_0_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_1_0_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_1_0_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_128_0_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_128_0_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_1_0_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_1_0_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_128_0_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_128_0_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_1_0_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_1_0_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_128_0_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_128_0_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_1_0_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_1_0_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_24_NONE_128_0: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_24_none_128_0",
+    pub static RENDER_PASS_DS_IN_11_24_NONE_1_0: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_24_none_1_0",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 24u32,
         ds_output: "none",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 0u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_24_NONE_128_0),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_24_NONE_1_0),
     };
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_NONE_128_255_0_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_NONE_1_255_0_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -331774,10 +331774,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_128_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_128_255.0-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_1_255_0_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_1_255.0-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_NONE_128_255_0_FRAG: [u32; 210] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_NONE_1_255_0_FRAG: [u32; 210] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000025, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00000008, 0x0000000c, 0x00030010,
@@ -331793,7 +331793,7 @@ pub mod renderpass_render_pass_input {
     0x00000001, 0x00000006, 0x00040015, 0x00000012, 0x00000020, 0x00000001, 0x0004002b, 0x00000012,
     0x00000014, 0x00000002, 0x0004002b, 0x00000012, 0x00000016, 0x00000001, 0x0004002b, 0x0000000d,
     0x0000001a, 0x00000001, 0x0004002b, 0x00000012, 0x0000001f, 0x00000000, 0x0004002b, 0x00000006,
-    0x00000022, 0x3f008081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
+    0x00000022, 0x3b808081, 0x0004002b, 0x00000006, 0x00000023, 0x3f800000, 0x00050036, 0x00000002,
     0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005, 0x00050041, 0x0000000f, 0x00000010,
     0x0000000c, 0x0000000e, 0x0004003d, 0x00000006, 0x00000011, 0x00000010, 0x0004006e, 0x00000012,
     0x00000013, 0x00000011, 0x0005008b, 0x00000012, 0x00000015, 0x00000013, 0x00000014, 0x000500aa,
@@ -331806,10 +331806,10 @@ pub mod renderpass_render_pass_input {
     0x00000006, 0x00000024, 0x00000021, 0x00000022, 0x00000023, 0x0003003e, 0x00000008, 0x00000024,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_128_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_128_255.0-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_1_255_0_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_1_255.0-frag.frag");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_NONE_128_255_1_VERT: [u32; 164] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_NONE_1_255_1_VERT: [u32; 164] = [
     0x07230203, 0x00010300, 0x0008000b, 0x00000017, 0x00000000, 0x00020011, 0x00000001, 0x0006000b,
     0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e, 0x00000000, 0x00000001,
     0x0007000f, 0x00000000, 0x00000004, 0x6e69616d, 0x00000000, 0x0000000a, 0x0000000f, 0x00030003,
@@ -331832,10 +331832,10 @@ pub mod renderpass_render_pass_input {
     0x00000011, 0x00000011, 0x00050041, 0x00000015, 0x00000016, 0x0000000a, 0x0000000c, 0x0003003e,
     0x00000016, 0x00000014, 0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_128_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_128_255.1-vert.vert");
+    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_1_255_1_VERT: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_1_255.1-vert.vert");
 
     #[rustfmt::skip]
-    static SPV_RENDER_PASS_DS_IN_11_24_NONE_128_255_1_FRAG: [u32; 122] = [
+    static SPV_RENDER_PASS_DS_IN_11_24_NONE_1_255_1_FRAG: [u32; 122] = [
     0x07230203, 0x00010300, 0x0008000b, 0x0000000e, 0x00000000, 0x00020011, 0x00000001, 0x00020011,
     0x00000028, 0x0006000b, 0x00000001, 0x4c534c47, 0x6474732e, 0x3035342e, 0x00000000, 0x0003000e,
     0x00000000, 0x00000001, 0x0005000f, 0x00000004, 0x00000004, 0x6e69616d, 0x00000000, 0x00030010,
@@ -331853,40 +331853,40 @@ pub mod renderpass_render_pass_input {
     0x00000000, 0x00050036, 0x00000002, 0x00000004, 0x00000000, 0x00000003, 0x000200f8, 0x00000005,
     0x000100fd, 0x00010038,
     ];
-    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_128_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_128_255.1-frag.frag");
+    static GLSL_RENDER_PASS_DS_IN_11_24_NONE_1_255_1_FRAG: &str = include_str!("../../shaders/expanded/renderpass/render_pass_tests/ds_in_11_24_none_1_255.1-frag.frag");
 
-    static PROGRAMS_RENDER_PASS_DS_IN_11_24_NONE_128_255: [ProgramBinary; 4] = [
+    static PROGRAMS_RENDER_PASS_DS_IN_11_24_NONE_1_255: [ProgramBinary; 4] = [
         ProgramBinary {
             name: "0-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_128_255_0_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_128_255_0_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_1_255_0_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_1_255_0_VERT,
         },
         ProgramBinary {
             name: "0-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_128_255_0_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_128_255_0_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_1_255_0_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_1_255_0_FRAG,
         },
         ProgramBinary {
             name: "1-vert",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_128_255_1_VERT,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_128_255_1_VERT,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_1_255_1_VERT,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_1_255_1_VERT,
         },
         ProgramBinary {
             name: "1-frag",
-            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_128_255_1_FRAG,
-            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_128_255_1_FRAG,
+            spirv: &SPV_RENDER_PASS_DS_IN_11_24_NONE_1_255_1_FRAG,
+            glsl: GLSL_RENDER_PASS_DS_IN_11_24_NONE_1_255_1_FRAG,
         },
     ];
 
-    pub static RENDER_PASS_DS_IN_11_24_NONE_128_255: DepthInputProgram = DepthInputProgram {
-        name: "ds_in_11_24_none_128_255",
+    pub static RENDER_PASS_DS_IN_11_24_NONE_1_255: DepthInputProgram = DepthInputProgram {
+        name: "ds_in_11_24_none_1_255",
         depth_input: true,
         stencil_input: true,
         epsilon_bits: 24u32,
         ds_output: "none",
-        ds_depth_true: 128u32,
+        ds_depth_true: 1u32,
         ds_depth_false: 255u32,
-        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_24_NONE_128_255),
+        programs: BinaryCollection::new(&PROGRAMS_RENDER_PASS_DS_IN_11_24_NONE_1_255),
     };
 
     pub static ALL_INPUT_PROGRAM: [&InputProgram; 30] = [
@@ -331925,140 +331925,140 @@ pub mod renderpass_render_pass_input {
     pub static ALL_DEPTH_PROGRAM: [&DepthProgram; 7] = [
         &RENDER_PASS_DS_NO_WRITE,
         &RENDER_PASS_DS_WRITE_0_255,
-        &RENDER_PASS_DS_WRITE_0_128,
+        &RENDER_PASS_DS_WRITE_0_1,
         &RENDER_PASS_DS_WRITE_255_0,
-        &RENDER_PASS_DS_WRITE_255_128,
-        &RENDER_PASS_DS_WRITE_128_0,
-        &RENDER_PASS_DS_WRITE_128_255,
+        &RENDER_PASS_DS_WRITE_255_1,
+        &RENDER_PASS_DS_WRITE_1_0,
+        &RENDER_PASS_DS_WRITE_1_255,
     ];
 
     pub static ALL_DEPTH_INPUT_PROGRAM: [&DepthInputProgram; 126] = [
         &RENDER_PASS_DS_IN_10_0_COLOR_0_255,
-        &RENDER_PASS_DS_IN_10_0_COLOR_0_128,
+        &RENDER_PASS_DS_IN_10_0_COLOR_0_1,
         &RENDER_PASS_DS_IN_10_0_COLOR_255_0,
-        &RENDER_PASS_DS_IN_10_0_COLOR_255_128,
-        &RENDER_PASS_DS_IN_10_0_COLOR_128_0,
-        &RENDER_PASS_DS_IN_10_0_COLOR_128_255,
+        &RENDER_PASS_DS_IN_10_0_COLOR_255_1,
+        &RENDER_PASS_DS_IN_10_0_COLOR_1_0,
+        &RENDER_PASS_DS_IN_10_0_COLOR_1_255,
         &RENDER_PASS_DS_IN_10_0_DEPTH_0_255,
-        &RENDER_PASS_DS_IN_10_0_DEPTH_0_128,
+        &RENDER_PASS_DS_IN_10_0_DEPTH_0_1,
         &RENDER_PASS_DS_IN_10_0_DEPTH_255_0,
-        &RENDER_PASS_DS_IN_10_0_DEPTH_255_128,
-        &RENDER_PASS_DS_IN_10_0_DEPTH_128_0,
-        &RENDER_PASS_DS_IN_10_0_DEPTH_128_255,
+        &RENDER_PASS_DS_IN_10_0_DEPTH_255_1,
+        &RENDER_PASS_DS_IN_10_0_DEPTH_1_0,
+        &RENDER_PASS_DS_IN_10_0_DEPTH_1_255,
         &RENDER_PASS_DS_IN_10_0_NONE_0_255,
-        &RENDER_PASS_DS_IN_10_0_NONE_0_128,
+        &RENDER_PASS_DS_IN_10_0_NONE_0_1,
         &RENDER_PASS_DS_IN_10_0_NONE_255_0,
-        &RENDER_PASS_DS_IN_10_0_NONE_255_128,
-        &RENDER_PASS_DS_IN_10_0_NONE_128_0,
-        &RENDER_PASS_DS_IN_10_0_NONE_128_255,
+        &RENDER_PASS_DS_IN_10_0_NONE_255_1,
+        &RENDER_PASS_DS_IN_10_0_NONE_1_0,
+        &RENDER_PASS_DS_IN_10_0_NONE_1_255,
         &RENDER_PASS_DS_IN_10_16_COLOR_0_255,
-        &RENDER_PASS_DS_IN_10_16_COLOR_0_128,
+        &RENDER_PASS_DS_IN_10_16_COLOR_0_1,
         &RENDER_PASS_DS_IN_10_16_COLOR_255_0,
-        &RENDER_PASS_DS_IN_10_16_COLOR_255_128,
-        &RENDER_PASS_DS_IN_10_16_COLOR_128_0,
-        &RENDER_PASS_DS_IN_10_16_COLOR_128_255,
+        &RENDER_PASS_DS_IN_10_16_COLOR_255_1,
+        &RENDER_PASS_DS_IN_10_16_COLOR_1_0,
+        &RENDER_PASS_DS_IN_10_16_COLOR_1_255,
         &RENDER_PASS_DS_IN_10_16_DEPTH_0_255,
-        &RENDER_PASS_DS_IN_10_16_DEPTH_0_128,
+        &RENDER_PASS_DS_IN_10_16_DEPTH_0_1,
         &RENDER_PASS_DS_IN_10_16_DEPTH_255_0,
-        &RENDER_PASS_DS_IN_10_16_DEPTH_255_128,
-        &RENDER_PASS_DS_IN_10_16_DEPTH_128_0,
-        &RENDER_PASS_DS_IN_10_16_DEPTH_128_255,
+        &RENDER_PASS_DS_IN_10_16_DEPTH_255_1,
+        &RENDER_PASS_DS_IN_10_16_DEPTH_1_0,
+        &RENDER_PASS_DS_IN_10_16_DEPTH_1_255,
         &RENDER_PASS_DS_IN_10_16_NONE_0_255,
-        &RENDER_PASS_DS_IN_10_16_NONE_0_128,
+        &RENDER_PASS_DS_IN_10_16_NONE_0_1,
         &RENDER_PASS_DS_IN_10_16_NONE_255_0,
-        &RENDER_PASS_DS_IN_10_16_NONE_255_128,
-        &RENDER_PASS_DS_IN_10_16_NONE_128_0,
-        &RENDER_PASS_DS_IN_10_16_NONE_128_255,
+        &RENDER_PASS_DS_IN_10_16_NONE_255_1,
+        &RENDER_PASS_DS_IN_10_16_NONE_1_0,
+        &RENDER_PASS_DS_IN_10_16_NONE_1_255,
         &RENDER_PASS_DS_IN_10_24_COLOR_0_255,
-        &RENDER_PASS_DS_IN_10_24_COLOR_0_128,
+        &RENDER_PASS_DS_IN_10_24_COLOR_0_1,
         &RENDER_PASS_DS_IN_10_24_COLOR_255_0,
-        &RENDER_PASS_DS_IN_10_24_COLOR_255_128,
-        &RENDER_PASS_DS_IN_10_24_COLOR_128_0,
-        &RENDER_PASS_DS_IN_10_24_COLOR_128_255,
+        &RENDER_PASS_DS_IN_10_24_COLOR_255_1,
+        &RENDER_PASS_DS_IN_10_24_COLOR_1_0,
+        &RENDER_PASS_DS_IN_10_24_COLOR_1_255,
         &RENDER_PASS_DS_IN_10_24_DEPTH_0_255,
-        &RENDER_PASS_DS_IN_10_24_DEPTH_0_128,
+        &RENDER_PASS_DS_IN_10_24_DEPTH_0_1,
         &RENDER_PASS_DS_IN_10_24_DEPTH_255_0,
-        &RENDER_PASS_DS_IN_10_24_DEPTH_255_128,
-        &RENDER_PASS_DS_IN_10_24_DEPTH_128_0,
-        &RENDER_PASS_DS_IN_10_24_DEPTH_128_255,
+        &RENDER_PASS_DS_IN_10_24_DEPTH_255_1,
+        &RENDER_PASS_DS_IN_10_24_DEPTH_1_0,
+        &RENDER_PASS_DS_IN_10_24_DEPTH_1_255,
         &RENDER_PASS_DS_IN_10_24_NONE_0_255,
-        &RENDER_PASS_DS_IN_10_24_NONE_0_128,
+        &RENDER_PASS_DS_IN_10_24_NONE_0_1,
         &RENDER_PASS_DS_IN_10_24_NONE_255_0,
-        &RENDER_PASS_DS_IN_10_24_NONE_255_128,
-        &RENDER_PASS_DS_IN_10_24_NONE_128_0,
-        &RENDER_PASS_DS_IN_10_24_NONE_128_255,
+        &RENDER_PASS_DS_IN_10_24_NONE_255_1,
+        &RENDER_PASS_DS_IN_10_24_NONE_1_0,
+        &RENDER_PASS_DS_IN_10_24_NONE_1_255,
         &RENDER_PASS_DS_IN_01_0_COLOR_0_255,
-        &RENDER_PASS_DS_IN_01_0_COLOR_0_128,
+        &RENDER_PASS_DS_IN_01_0_COLOR_0_1,
         &RENDER_PASS_DS_IN_01_0_COLOR_255_0,
-        &RENDER_PASS_DS_IN_01_0_COLOR_255_128,
-        &RENDER_PASS_DS_IN_01_0_COLOR_128_0,
-        &RENDER_PASS_DS_IN_01_0_COLOR_128_255,
+        &RENDER_PASS_DS_IN_01_0_COLOR_255_1,
+        &RENDER_PASS_DS_IN_01_0_COLOR_1_0,
+        &RENDER_PASS_DS_IN_01_0_COLOR_1_255,
         &RENDER_PASS_DS_IN_01_0_DEPTH_0_255,
-        &RENDER_PASS_DS_IN_01_0_DEPTH_0_128,
+        &RENDER_PASS_DS_IN_01_0_DEPTH_0_1,
         &RENDER_PASS_DS_IN_01_0_DEPTH_255_0,
-        &RENDER_PASS_DS_IN_01_0_DEPTH_255_128,
-        &RENDER_PASS_DS_IN_01_0_DEPTH_128_0,
-        &RENDER_PASS_DS_IN_01_0_DEPTH_128_255,
+        &RENDER_PASS_DS_IN_01_0_DEPTH_255_1,
+        &RENDER_PASS_DS_IN_01_0_DEPTH_1_0,
+        &RENDER_PASS_DS_IN_01_0_DEPTH_1_255,
         &RENDER_PASS_DS_IN_01_0_NONE_0_255,
-        &RENDER_PASS_DS_IN_01_0_NONE_0_128,
+        &RENDER_PASS_DS_IN_01_0_NONE_0_1,
         &RENDER_PASS_DS_IN_01_0_NONE_255_0,
-        &RENDER_PASS_DS_IN_01_0_NONE_255_128,
-        &RENDER_PASS_DS_IN_01_0_NONE_128_0,
-        &RENDER_PASS_DS_IN_01_0_NONE_128_255,
+        &RENDER_PASS_DS_IN_01_0_NONE_255_1,
+        &RENDER_PASS_DS_IN_01_0_NONE_1_0,
+        &RENDER_PASS_DS_IN_01_0_NONE_1_255,
         &RENDER_PASS_DS_IN_11_0_COLOR_0_255,
-        &RENDER_PASS_DS_IN_11_0_COLOR_0_128,
+        &RENDER_PASS_DS_IN_11_0_COLOR_0_1,
         &RENDER_PASS_DS_IN_11_0_COLOR_255_0,
-        &RENDER_PASS_DS_IN_11_0_COLOR_255_128,
-        &RENDER_PASS_DS_IN_11_0_COLOR_128_0,
-        &RENDER_PASS_DS_IN_11_0_COLOR_128_255,
+        &RENDER_PASS_DS_IN_11_0_COLOR_255_1,
+        &RENDER_PASS_DS_IN_11_0_COLOR_1_0,
+        &RENDER_PASS_DS_IN_11_0_COLOR_1_255,
         &RENDER_PASS_DS_IN_11_0_DEPTH_0_255,
-        &RENDER_PASS_DS_IN_11_0_DEPTH_0_128,
+        &RENDER_PASS_DS_IN_11_0_DEPTH_0_1,
         &RENDER_PASS_DS_IN_11_0_DEPTH_255_0,
-        &RENDER_PASS_DS_IN_11_0_DEPTH_255_128,
-        &RENDER_PASS_DS_IN_11_0_DEPTH_128_0,
-        &RENDER_PASS_DS_IN_11_0_DEPTH_128_255,
+        &RENDER_PASS_DS_IN_11_0_DEPTH_255_1,
+        &RENDER_PASS_DS_IN_11_0_DEPTH_1_0,
+        &RENDER_PASS_DS_IN_11_0_DEPTH_1_255,
         &RENDER_PASS_DS_IN_11_0_NONE_0_255,
-        &RENDER_PASS_DS_IN_11_0_NONE_0_128,
+        &RENDER_PASS_DS_IN_11_0_NONE_0_1,
         &RENDER_PASS_DS_IN_11_0_NONE_255_0,
-        &RENDER_PASS_DS_IN_11_0_NONE_255_128,
-        &RENDER_PASS_DS_IN_11_0_NONE_128_0,
-        &RENDER_PASS_DS_IN_11_0_NONE_128_255,
+        &RENDER_PASS_DS_IN_11_0_NONE_255_1,
+        &RENDER_PASS_DS_IN_11_0_NONE_1_0,
+        &RENDER_PASS_DS_IN_11_0_NONE_1_255,
         &RENDER_PASS_DS_IN_11_16_COLOR_0_255,
-        &RENDER_PASS_DS_IN_11_16_COLOR_0_128,
+        &RENDER_PASS_DS_IN_11_16_COLOR_0_1,
         &RENDER_PASS_DS_IN_11_16_COLOR_255_0,
-        &RENDER_PASS_DS_IN_11_16_COLOR_255_128,
-        &RENDER_PASS_DS_IN_11_16_COLOR_128_0,
-        &RENDER_PASS_DS_IN_11_16_COLOR_128_255,
+        &RENDER_PASS_DS_IN_11_16_COLOR_255_1,
+        &RENDER_PASS_DS_IN_11_16_COLOR_1_0,
+        &RENDER_PASS_DS_IN_11_16_COLOR_1_255,
         &RENDER_PASS_DS_IN_11_16_DEPTH_0_255,
-        &RENDER_PASS_DS_IN_11_16_DEPTH_0_128,
+        &RENDER_PASS_DS_IN_11_16_DEPTH_0_1,
         &RENDER_PASS_DS_IN_11_16_DEPTH_255_0,
-        &RENDER_PASS_DS_IN_11_16_DEPTH_255_128,
-        &RENDER_PASS_DS_IN_11_16_DEPTH_128_0,
-        &RENDER_PASS_DS_IN_11_16_DEPTH_128_255,
+        &RENDER_PASS_DS_IN_11_16_DEPTH_255_1,
+        &RENDER_PASS_DS_IN_11_16_DEPTH_1_0,
+        &RENDER_PASS_DS_IN_11_16_DEPTH_1_255,
         &RENDER_PASS_DS_IN_11_16_NONE_0_255,
-        &RENDER_PASS_DS_IN_11_16_NONE_0_128,
+        &RENDER_PASS_DS_IN_11_16_NONE_0_1,
         &RENDER_PASS_DS_IN_11_16_NONE_255_0,
-        &RENDER_PASS_DS_IN_11_16_NONE_255_128,
-        &RENDER_PASS_DS_IN_11_16_NONE_128_0,
-        &RENDER_PASS_DS_IN_11_16_NONE_128_255,
+        &RENDER_PASS_DS_IN_11_16_NONE_255_1,
+        &RENDER_PASS_DS_IN_11_16_NONE_1_0,
+        &RENDER_PASS_DS_IN_11_16_NONE_1_255,
         &RENDER_PASS_DS_IN_11_24_COLOR_0_255,
-        &RENDER_PASS_DS_IN_11_24_COLOR_0_128,
+        &RENDER_PASS_DS_IN_11_24_COLOR_0_1,
         &RENDER_PASS_DS_IN_11_24_COLOR_255_0,
-        &RENDER_PASS_DS_IN_11_24_COLOR_255_128,
-        &RENDER_PASS_DS_IN_11_24_COLOR_128_0,
-        &RENDER_PASS_DS_IN_11_24_COLOR_128_255,
+        &RENDER_PASS_DS_IN_11_24_COLOR_255_1,
+        &RENDER_PASS_DS_IN_11_24_COLOR_1_0,
+        &RENDER_PASS_DS_IN_11_24_COLOR_1_255,
         &RENDER_PASS_DS_IN_11_24_DEPTH_0_255,
-        &RENDER_PASS_DS_IN_11_24_DEPTH_0_128,
+        &RENDER_PASS_DS_IN_11_24_DEPTH_0_1,
         &RENDER_PASS_DS_IN_11_24_DEPTH_255_0,
-        &RENDER_PASS_DS_IN_11_24_DEPTH_255_128,
-        &RENDER_PASS_DS_IN_11_24_DEPTH_128_0,
-        &RENDER_PASS_DS_IN_11_24_DEPTH_128_255,
+        &RENDER_PASS_DS_IN_11_24_DEPTH_255_1,
+        &RENDER_PASS_DS_IN_11_24_DEPTH_1_0,
+        &RENDER_PASS_DS_IN_11_24_DEPTH_1_255,
         &RENDER_PASS_DS_IN_11_24_NONE_0_255,
-        &RENDER_PASS_DS_IN_11_24_NONE_0_128,
+        &RENDER_PASS_DS_IN_11_24_NONE_0_1,
         &RENDER_PASS_DS_IN_11_24_NONE_255_0,
-        &RENDER_PASS_DS_IN_11_24_NONE_255_128,
-        &RENDER_PASS_DS_IN_11_24_NONE_128_0,
-        &RENDER_PASS_DS_IN_11_24_NONE_128_255,
+        &RENDER_PASS_DS_IN_11_24_NONE_255_1,
+        &RENDER_PASS_DS_IN_11_24_NONE_1_0,
+        &RENDER_PASS_DS_IN_11_24_NONE_1_255,
     ];
 }
 
