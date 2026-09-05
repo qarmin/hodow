@@ -3206,3 +3206,64 @@ pub fn first_difference(expected: &[u8], actual: &[u8]) -> Option<usize> {
     }
     expected.iter().zip(actual).position(|(a, b)| a != b)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Every operation the catalogue registers has to agree with `is_read` about
+    /// which side it is on.
+    ///
+    /// This is the guard for a failure that is invisible at run time: an operation
+    /// classified as a write when it is a read builds the write implementation, which
+    /// fills the resource from its own pattern. Paired with another such operation the
+    /// test then compares one pattern against the identical other and passes without
+    /// having synchronized anything.
+    #[test]
+    fn write_ops_are_writes_and_read_ops_are_reads() {
+        for op in WRITE_OPS {
+            assert!(!op.is_read(), "{} is in WRITE_OPS but is_read() says read", op.as_str());
+            assert!(op.as_str().starts_with("write_"), "{} is in WRITE_OPS but is not named write_*", op.as_str());
+        }
+        for op in READ_OPS {
+            assert!(op.is_read(), "{} is in READ_OPS but is_read() says write", op.as_str());
+            assert!(op.as_str().starts_with("read_"), "{} is in READ_OPS but is not named read_*", op.as_str());
+        }
+    }
+
+    /// An operation that touches the resource through a storage image has to say so,
+    /// or the resource is created without `VK_IMAGE_USAGE_STORAGE_BIT` and the
+    /// descriptor it binds is invalid. That was the second half of the same bug.
+    #[test]
+    fn shader_image_operations_ask_for_storage_usage() {
+        let storage = vk::ImageUsageFlags::STORAGE.bits();
+        for op in WRITE_OPS.iter().chain(READ_OPS) {
+            if op.image_shader_kind().is_none() && op.image_graphics_kind().is_none() {
+                continue;
+            }
+            assert_eq!(op.in_resource_usage(), storage, "{} in_resource_usage", op.as_str());
+            assert_eq!(op.out_resource_usage(), storage, "{} out_resource_usage", op.as_str());
+        }
+    }
+
+    /// A graphics-stage operation cannot run on a compute-only queue, and the
+    /// compute-queue variants of the event cases are registered from this.
+    #[test]
+    fn graphics_stage_operations_need_a_graphics_queue() {
+        let image = ResourceDescription {
+            kind: ResourceType::Image,
+            size: [128, 128, 0, 0],
+            image_type: vk::ImageType::_2D,
+            image_format: vk::Format::R8G8B8A8_UNORM,
+            image_aspect: vk::ImageAspectFlags::COLOR,
+            image_samples: vk::SampleCountFlags::_1,
+        };
+        for op in WRITE_OPS.iter().chain(READ_OPS) {
+            if op.image_graphics_kind().is_none() && op.buffer_graphics_kind().is_none() {
+                continue;
+            }
+            assert_eq!(op.queue_flags(&image), vk::QueueFlags::GRAPHICS, "{}", op.as_str());
+            assert!(!op.can_run_on_compute(), "{} must not have a compute-queue variant", op.as_str());
+        }
+    }
+}
