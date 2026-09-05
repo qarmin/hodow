@@ -16,7 +16,7 @@ hand-picked, growing subset, currently:
 
 | group | cases | not ported yet |
 |---|---|---|
-| `dEQP-VK.api.*` | 218098 of 267497 | `smoke`, `descriptor_set`, `external`, the compressed-source half of `copy_and_blit.blit_image`, `use_after_copy`, ... |
+| `dEQP-VK.api.*` | 218362 of 267497 | `smoke`, `descriptor_set`, `external`, the compressed-source half of `copy_and_blit.blit_image`, `use_after_copy`, ... |
 | `dEQP-VK.memory.*` | 5472 of 6363 | `pipeline_barrier`, `requirements`, `external_memory_*`, `device_memory_report` |
 | `dEQP-VK.compute.*` | 4559 of 60811 | `cooperative_matrix`, the Amber-driven cases, `replicated_composites_*` |
 
@@ -210,6 +210,9 @@ count. Groups in this state on SwiftShader today, needing a run on real hardware
 - every `*_cubic` case of `blit_image` - SwiftShader has no `VK_EXT_filter_cubic`.
 - the `d16_unorm_s8_uint` and `d24_unorm_s8_uint` cases of the copy groups -
   SwiftShader does not support either format.
+- every sample count of `resolve_image` except `4_bit` - SwiftShader's
+  `framebufferColorSampleCounts` has only 1 and 4, so five of the six sample counts
+  skip in every one of its sub-groups.
 
 ### Adding a test
 

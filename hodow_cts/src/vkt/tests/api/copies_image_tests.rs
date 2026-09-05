@@ -579,10 +579,6 @@ pub fn read_image_mip_level(
     families: &[u32],
     mip_level: u32,
 ) -> Result<(), TestError> {
-    let vk_device = context.get_device();
-    let queue = context.get_universal_queue();
-    let queue_family_index = context.get_universal_queue_family_index();
-
     let src_layout = if general_layout {
         vk::ImageLayout::GENERAL
     } else {
@@ -593,6 +589,37 @@ pub fn read_image_mip_level(
     } else {
         vk::ImageLayout::TRANSFER_DST_OPTIMAL
     };
+    read_image_impl(context, image, parms, dst, old_layout, src_layout, families, mip_level)
+}
+
+/// `readImage` where the image is left in an `operationLayout` the plain
+/// `general_layout` flag cannot express - the resolve tests vary it per case.
+pub fn read_image_in_layout(
+    context: &Context<'_>,
+    image: vk::Image,
+    parms: &ImageParms,
+    dst: &mut TextureLevel,
+    old_layout: vk::ImageLayout,
+    families: &[u32],
+) -> Result<(), TestError> {
+    read_image_impl(context, image, parms, dst, old_layout, vk::ImageLayout::TRANSFER_SRC_OPTIMAL, families, 0)
+}
+
+#[allow(clippy::too_many_arguments)]
+fn read_image_impl(
+    context: &Context<'_>,
+    image: vk::Image,
+    parms: &ImageParms,
+    dst: &mut TextureLevel,
+    old_layout: vk::ImageLayout,
+    src_layout: vk::ImageLayout,
+    families: &[u32],
+    mip_level: u32,
+) -> Result<(), TestError> {
+    let vk_device = context.get_device();
+    let queue = context.get_universal_queue();
+    let queue_family_index = context.get_universal_queue_family_index();
+
     let extent = parms.extent_3d_at(mip_level);
     let full_aspect = get_aspect_flags(parms.format);
     let range = make_image_subresource_range(full_aspect, mip_level, 1, 0, parms.array_size());
