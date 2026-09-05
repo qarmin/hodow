@@ -301,8 +301,12 @@ fn run_isolated_parallel(
         }
         drop(tx);
 
-        // Drain as the workers produce, so progress is visible while they run.
+        // Drain as the workers produce, so progress is visible while they run. The
+        // report goes out here rather than in the worker threads: `on_result` is the
+        // caller's printer and is not `Sync`, and interleaving it across threads would
+        // tear lines anyway.
         for message in rx {
+            on_result(&message);
             all.push(message);
         }
 
