@@ -1122,3 +1122,449 @@ pub static SIGNED_AND_UNSIGNED_FLOAT_FORMATS: &[vk::Format] = &[
     vk::Format::R8_SFLOAT_FPENCODING_FLOAT8E4M3_ARM,
     vk::Format::R8_SFLOAT_FPENCODING_FLOAT8E5M2_ARM,
 ];
+
+/// One entry of a `colorImageFormatsToTestBlit` list.
+pub struct BlitFormat {
+    pub format: vk::Format,
+    pub name: &'static str,
+}
+
+/// `formats::compatibleFormatsUInts`
+pub static COMPATIBLE_FORMATS_U_INTS: &[BlitFormat] = &[
+    BlitFormat {
+        format: vk::Format::R8_UINT,
+        name: "r8_uint",
+    },
+    BlitFormat {
+        format: vk::Format::R8G8_UINT,
+        name: "r8g8_uint",
+    },
+    BlitFormat {
+        format: vk::Format::R8G8B8_UINT,
+        name: "r8g8b8_uint",
+    },
+    BlitFormat {
+        format: vk::Format::B8G8R8_UINT,
+        name: "b8g8r8_uint",
+    },
+    BlitFormat {
+        format: vk::Format::R8G8B8A8_UINT,
+        name: "r8g8b8a8_uint",
+    },
+    BlitFormat {
+        format: vk::Format::B8G8R8A8_UINT,
+        name: "b8g8r8a8_uint",
+    },
+    BlitFormat {
+        format: vk::Format::A8B8G8R8_UINT_PACK32,
+        name: "a8b8g8r8_uint_pack32",
+    },
+    BlitFormat {
+        format: vk::Format::A2R10G10B10_UINT_PACK32,
+        name: "a2r10g10b10_uint_pack32",
+    },
+    BlitFormat {
+        format: vk::Format::A2B10G10R10_UINT_PACK32,
+        name: "a2b10g10r10_uint_pack32",
+    },
+    BlitFormat {
+        format: vk::Format::R16_UINT,
+        name: "r16_uint",
+    },
+    BlitFormat {
+        format: vk::Format::R16G16_UINT,
+        name: "r16g16_uint",
+    },
+    BlitFormat {
+        format: vk::Format::R16G16B16_UINT,
+        name: "r16g16b16_uint",
+    },
+    BlitFormat {
+        format: vk::Format::R16G16B16A16_UINT,
+        name: "r16g16b16a16_uint",
+    },
+    BlitFormat {
+        format: vk::Format::R32_UINT,
+        name: "r32_uint",
+    },
+    BlitFormat {
+        format: vk::Format::R32G32_UINT,
+        name: "r32g32_uint",
+    },
+    BlitFormat {
+        format: vk::Format::R32G32B32_UINT,
+        name: "r32g32b32_uint",
+    },
+    BlitFormat {
+        format: vk::Format::R32G32B32A32_UINT,
+        name: "r32g32b32a32_uint",
+    },
+    BlitFormat {
+        format: vk::Format::R64_UINT,
+        name: "r64_uint",
+    },
+    BlitFormat {
+        format: vk::Format::R64G64_UINT,
+        name: "r64g64_uint",
+    },
+    BlitFormat {
+        format: vk::Format::R64G64B64_UINT,
+        name: "r64g64b64_uint",
+    },
+    BlitFormat {
+        format: vk::Format::R64G64B64A64_UINT,
+        name: "r64g64b64a64_uint",
+    },
+];
+
+/// `formats::compatibleFormatsSInts`
+pub static COMPATIBLE_FORMATS_S_INTS: &[BlitFormat] = &[
+    BlitFormat {
+        format: vk::Format::R8_SINT,
+        name: "r8_sint",
+    },
+    BlitFormat {
+        format: vk::Format::R8G8_SINT,
+        name: "r8g8_sint",
+    },
+    BlitFormat {
+        format: vk::Format::R8G8B8_SINT,
+        name: "r8g8b8_sint",
+    },
+    BlitFormat {
+        format: vk::Format::B8G8R8_SINT,
+        name: "b8g8r8_sint",
+    },
+    BlitFormat {
+        format: vk::Format::R8G8B8A8_SINT,
+        name: "r8g8b8a8_sint",
+    },
+    BlitFormat {
+        format: vk::Format::B8G8R8A8_SINT,
+        name: "b8g8r8a8_sint",
+    },
+    BlitFormat {
+        format: vk::Format::A8B8G8R8_SINT_PACK32,
+        name: "a8b8g8r8_sint_pack32",
+    },
+    BlitFormat {
+        format: vk::Format::A2R10G10B10_SINT_PACK32,
+        name: "a2r10g10b10_sint_pack32",
+    },
+    BlitFormat {
+        format: vk::Format::A2B10G10R10_SINT_PACK32,
+        name: "a2b10g10r10_sint_pack32",
+    },
+    BlitFormat {
+        format: vk::Format::R16_SINT,
+        name: "r16_sint",
+    },
+    BlitFormat {
+        format: vk::Format::R16G16_SINT,
+        name: "r16g16_sint",
+    },
+    BlitFormat {
+        format: vk::Format::R16G16B16_SINT,
+        name: "r16g16b16_sint",
+    },
+    BlitFormat {
+        format: vk::Format::R16G16B16A16_SINT,
+        name: "r16g16b16a16_sint",
+    },
+    BlitFormat {
+        format: vk::Format::R32_SINT,
+        name: "r32_sint",
+    },
+    BlitFormat {
+        format: vk::Format::R32G32_SINT,
+        name: "r32g32_sint",
+    },
+    BlitFormat {
+        format: vk::Format::R32G32B32_SINT,
+        name: "r32g32b32_sint",
+    },
+    BlitFormat {
+        format: vk::Format::R32G32B32A32_SINT,
+        name: "r32g32b32a32_sint",
+    },
+    BlitFormat {
+        format: vk::Format::R64_SINT,
+        name: "r64_sint",
+    },
+    BlitFormat {
+        format: vk::Format::R64G64_SINT,
+        name: "r64g64_sint",
+    },
+    BlitFormat {
+        format: vk::Format::R64G64B64_SINT,
+        name: "r64g64b64_sint",
+    },
+    BlitFormat {
+        format: vk::Format::R64G64B64A64_SINT,
+        name: "r64g64b64a64_sint",
+    },
+];
+
+/// `formats::compatibleFormatsFloats`
+pub static COMPATIBLE_FORMATS_FLOATS: &[BlitFormat] = &[
+    BlitFormat {
+        format: vk::Format::R4G4_UNORM_PACK8,
+        name: "r4g4_unorm_pack8",
+    },
+    BlitFormat {
+        format: vk::Format::R4G4B4A4_UNORM_PACK16,
+        name: "r4g4b4a4_unorm_pack16",
+    },
+    BlitFormat {
+        format: vk::Format::B4G4R4A4_UNORM_PACK16,
+        name: "b4g4r4a4_unorm_pack16",
+    },
+    BlitFormat {
+        format: vk::Format::R5G6B5_UNORM_PACK16,
+        name: "r5g6b5_unorm_pack16",
+    },
+    BlitFormat {
+        format: vk::Format::B5G6R5_UNORM_PACK16,
+        name: "b5g6r5_unorm_pack16",
+    },
+    BlitFormat {
+        format: vk::Format::R5G5B5A1_UNORM_PACK16,
+        name: "r5g5b5a1_unorm_pack16",
+    },
+    BlitFormat {
+        format: vk::Format::B5G5R5A1_UNORM_PACK16,
+        name: "b5g5r5a1_unorm_pack16",
+    },
+    BlitFormat {
+        format: vk::Format::A1R5G5B5_UNORM_PACK16,
+        name: "a1r5g5b5_unorm_pack16",
+    },
+    BlitFormat {
+        format: vk::Format::A1B5G5R5_UNORM_PACK16,
+        name: "a1b5g5r5_unorm_pack16",
+    },
+    BlitFormat {
+        format: vk::Format::A8_UNORM,
+        name: "a8_unorm",
+    },
+    BlitFormat {
+        format: vk::Format::R8_UNORM,
+        name: "r8_unorm",
+    },
+    BlitFormat {
+        format: vk::Format::R8_SNORM,
+        name: "r8_snorm",
+    },
+    BlitFormat {
+        format: vk::Format::R8G8_UNORM,
+        name: "r8g8_unorm",
+    },
+    BlitFormat {
+        format: vk::Format::R8G8_SNORM,
+        name: "r8g8_snorm",
+    },
+    BlitFormat {
+        format: vk::Format::R8G8B8_UNORM,
+        name: "r8g8b8_unorm",
+    },
+    BlitFormat {
+        format: vk::Format::R8G8B8_SNORM,
+        name: "r8g8b8_snorm",
+    },
+    BlitFormat {
+        format: vk::Format::B8G8R8_UNORM,
+        name: "b8g8r8_unorm",
+    },
+    BlitFormat {
+        format: vk::Format::B8G8R8_SNORM,
+        name: "b8g8r8_snorm",
+    },
+    BlitFormat {
+        format: vk::Format::R8G8B8A8_UNORM,
+        name: "r8g8b8a8_unorm",
+    },
+    BlitFormat {
+        format: vk::Format::R8G8B8A8_SNORM,
+        name: "r8g8b8a8_snorm",
+    },
+    BlitFormat {
+        format: vk::Format::B8G8R8A8_UNORM,
+        name: "b8g8r8a8_unorm",
+    },
+    BlitFormat {
+        format: vk::Format::B8G8R8A8_SNORM,
+        name: "b8g8r8a8_snorm",
+    },
+    BlitFormat {
+        format: vk::Format::A8B8G8R8_UNORM_PACK32,
+        name: "a8b8g8r8_unorm_pack32",
+    },
+    BlitFormat {
+        format: vk::Format::A8B8G8R8_SNORM_PACK32,
+        name: "a8b8g8r8_snorm_pack32",
+    },
+    BlitFormat {
+        format: vk::Format::A2R10G10B10_UNORM_PACK32,
+        name: "a2r10g10b10_unorm_pack32",
+    },
+    BlitFormat {
+        format: vk::Format::A2R10G10B10_SNORM_PACK32,
+        name: "a2r10g10b10_snorm_pack32",
+    },
+    BlitFormat {
+        format: vk::Format::A2B10G10R10_UNORM_PACK32,
+        name: "a2b10g10r10_unorm_pack32",
+    },
+    BlitFormat {
+        format: vk::Format::A2B10G10R10_SNORM_PACK32,
+        name: "a2b10g10r10_snorm_pack32",
+    },
+    BlitFormat {
+        format: vk::Format::R16_UNORM,
+        name: "r16_unorm",
+    },
+    BlitFormat {
+        format: vk::Format::R16_SNORM,
+        name: "r16_snorm",
+    },
+    BlitFormat {
+        format: vk::Format::R16_SFLOAT,
+        name: "r16_sfloat",
+    },
+    BlitFormat {
+        format: vk::Format::R16G16_UNORM,
+        name: "r16g16_unorm",
+    },
+    BlitFormat {
+        format: vk::Format::R16G16_SNORM,
+        name: "r16g16_snorm",
+    },
+    BlitFormat {
+        format: vk::Format::R16G16_SFLOAT,
+        name: "r16g16_sfloat",
+    },
+    BlitFormat {
+        format: vk::Format::R16G16B16_UNORM,
+        name: "r16g16b16_unorm",
+    },
+    BlitFormat {
+        format: vk::Format::R16G16B16_SNORM,
+        name: "r16g16b16_snorm",
+    },
+    BlitFormat {
+        format: vk::Format::R16G16B16_SFLOAT,
+        name: "r16g16b16_sfloat",
+    },
+    BlitFormat {
+        format: vk::Format::R16G16B16A16_UNORM,
+        name: "r16g16b16a16_unorm",
+    },
+    BlitFormat {
+        format: vk::Format::R16G16B16A16_SNORM,
+        name: "r16g16b16a16_snorm",
+    },
+    BlitFormat {
+        format: vk::Format::R16G16B16A16_SFLOAT,
+        name: "r16g16b16a16_sfloat",
+    },
+    BlitFormat {
+        format: vk::Format::R32_SFLOAT,
+        name: "r32_sfloat",
+    },
+    BlitFormat {
+        format: vk::Format::R32G32_SFLOAT,
+        name: "r32g32_sfloat",
+    },
+    BlitFormat {
+        format: vk::Format::R32G32B32_SFLOAT,
+        name: "r32g32b32_sfloat",
+    },
+    BlitFormat {
+        format: vk::Format::R32G32B32A32_SFLOAT,
+        name: "r32g32b32a32_sfloat",
+    },
+    BlitFormat {
+        format: vk::Format::R64_SFLOAT,
+        name: "r64_sfloat",
+    },
+    BlitFormat {
+        format: vk::Format::R64G64_SFLOAT,
+        name: "r64g64_sfloat",
+    },
+    BlitFormat {
+        format: vk::Format::R64G64B64_SFLOAT,
+        name: "r64g64b64_sfloat",
+    },
+    BlitFormat {
+        format: vk::Format::R64G64B64A64_SFLOAT,
+        name: "r64g64b64a64_sfloat",
+    },
+    BlitFormat {
+        format: vk::Format::B10G11R11_UFLOAT_PACK32,
+        name: "b10g11r11_ufloat_pack32",
+    },
+    BlitFormat {
+        format: vk::Format::E5B9G9R9_UFLOAT_PACK32,
+        name: "e5b9g9r9_ufloat_pack32",
+    },
+    BlitFormat {
+        format: vk::Format::R10X6_UNORM_PACK16,
+        name: "r10x6_unorm_pack16",
+    },
+    BlitFormat {
+        format: vk::Format::R10X6G10X6_UNORM_2PACK16,
+        name: "r10x6g10x6_unorm_2pack16",
+    },
+    BlitFormat {
+        format: vk::Format::R10X6G10X6B10X6A10X6_UNORM_4PACK16,
+        name: "r10x6g10x6b10x6a10x6_unorm_4pack16",
+    },
+    BlitFormat {
+        format: vk::Format::R12X4_UNORM_PACK16,
+        name: "r12x4_unorm_pack16",
+    },
+    BlitFormat {
+        format: vk::Format::R12X4G12X4_UNORM_2PACK16,
+        name: "r12x4g12x4_unorm_2pack16",
+    },
+    BlitFormat {
+        format: vk::Format::A4R4G4B4_UNORM_PACK16,
+        name: "a4r4g4b4_unorm_pack16",
+    },
+    BlitFormat {
+        format: vk::Format::A4B4G4R4_UNORM_PACK16,
+        name: "a4b4g4r4_unorm_pack16",
+    },
+];
+
+/// `formats::compatibleFormatsSrgb`
+pub static COMPATIBLE_FORMATS_SRGB: &[BlitFormat] = &[
+    BlitFormat {
+        format: vk::Format::R8_SRGB,
+        name: "r8_srgb",
+    },
+    BlitFormat {
+        format: vk::Format::R8G8_SRGB,
+        name: "r8g8_srgb",
+    },
+    BlitFormat {
+        format: vk::Format::R8G8B8_SRGB,
+        name: "r8g8b8_srgb",
+    },
+    BlitFormat {
+        format: vk::Format::B8G8R8_SRGB,
+        name: "b8g8r8_srgb",
+    },
+    BlitFormat {
+        format: vk::Format::R8G8B8A8_SRGB,
+        name: "r8g8b8a8_srgb",
+    },
+    BlitFormat {
+        format: vk::Format::B8G8R8A8_SRGB,
+        name: "b8g8r8a8_srgb",
+    },
+    BlitFormat {
+        format: vk::Format::A8B8G8R8_SRGB_PACK32,
+        name: "a8b8g8r8_srgb_pack32",
+    },
+];

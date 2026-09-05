@@ -15,18 +15,20 @@
 // for VK_FILTER_NEAREST asks, for every destination pixel, whether *some* texel the
 // coordinate could legally have landed on explains the result - `tcu::tex_verifier`.
 //
-// Ported so far: the VK_FILTER_NEAREST cases of the 2D and 3D simple_tests subgroups.
-// LINEAR and CUBIC need two reference images built with a scaled filter
-// (`checkNonNearestFilteredResult`), which is not ported; the array-to-3D groups and
-// all_formats are not registered yet either.
+// Ported so far: the VK_FILTER_NEAREST cases of simple_tests (2D and 3D) and of
+// all_formats.color (2D and 1D). LINEAR and CUBIC need two reference images built with
+// a scaled filter (`checkNonNearestFilteredResult`), which is not ported; the
+// array-to-3D groups, the compressed source formats and all_formats.depth_stencil are
+// not registered either.
 
 use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::DeviceV1_3;
 
 use super::copies_buffer_tests::{AllocationKind, CopyCommandVariant};
-use super::copies_image_tests::{FillMode, GroupParams, ImageParms, generate_buffer, get_aspect_flags, read_image, upload_image};
+use super::copies_image_tests::{FillMode, GroupParams, ImageParms, generate_buffer, get_aspect_flags, is_supported_by_framework, read_image, upload_image};
+use super::copy_format_lists::{BlitFormat, COMPATIBLE_FORMATS_FLOATS, COMPATIBLE_FORMATS_S_INTS, COMPATIBLE_FORMATS_SRGB, COMPATIBLE_FORMATS_U_INTS};
 use crate::tcu::pixel::{ConstPixelBufferAccess, TextureLevel, get_texture_format_bit_depth, get_texture_format_mantissa_bit_depth};
-use crate::tcu::tex_verifier::{LookupPrecision, is_nearest_sample_result_valid_float, srgb_to_linear};
+use crate::tcu::tex_verifier::{LookupPrecision, is_nearest_sample_result_valid_float, is_nearest_sample_result_valid_int, srgb_to_linear};
 use crate::tcu::texture::{ChannelOrder, ChannelType, TextureChannelClass, TextureFormat};
 use crate::tcu::{self, TestError, TestOutcome, TestStatus, map_vk_format};
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
@@ -208,6 +210,41 @@ fn float_nearest_blit_compare(
     })
 }
 
+/// `intNearestBlitCompare`
+fn int_nearest_blit_compare(source: &ConstPixelBufferAccess<'_>, result: &ConstPixelBufferAccess<'_>, params: &BlitImageCase) -> Result<bool, TestError> {
+    let src_bit_depth = get_texture_format_bit_depth(source.format());
+    let dst_bit_depth = get_texture_format_bit_depth(result.format());
+    let precision = LookupPrecision {
+        color_mask: std::array::from_fn(|c| dst_bit_depth[c] != 0),
+        ..LookupPrecision::default()
+    };
+    let color_threshold: [u32; 4] = std::array::from_fn(|c| (src_bit_depth[c] / 8).max(dst_bit_depth[c] / 8).max(1) as u32);
+
+    // Prepare a source image with a matching (converted) pixel format. Ideally, we would've used a wrapper that
+    // does the conversion on the fly without wasting memory, but this approach is more straightforward.
+    let [w, h, d] = source.size();
+    let mut converted_source_texture = TextureLevel::new(result.format(), w, h, d)?;
+    {
+        let mut converted_source = converted_source_texture.get_access();
+        for z in 0..d {
+            for y in 0..h {
+                for x in 0..w {
+                    // will be clamped to max. representable value
+                    if !converted_source.set_pixel_int(source.get_pixel_int(x, y, z), x, y, z) {
+                        return Err(TestError::NotPorted(format!("integer write path for {:?}", result.format())));
+                    }
+                }
+            }
+        }
+    }
+    let converted_source = converted_source_texture.get_const_access();
+
+    Ok(for_each_pixel_in_each_region(params, w as i32, h as i32, d as i32, |x, y, z, src_norm_coord| {
+        let dst_color = result.get_pixel_int(x as u32, y as u32, z as u32);
+        is_nearest_sample_result_valid_int(&converted_source, &precision, color_threshold, src_norm_coord, dst_color)
+    }))
+}
+
 /// `BlitImageTestCase`
 pub struct BlitImageCase {
     name: String,
@@ -324,12 +361,8 @@ impl BlittingImages<'_> {
         }
 
         if is_int_class(dst_channel_class) {
-            // `intNearestBlitCompare` converts the source into the destination format
-            // first, which needs a `setPixelInt` write path tcu does not have here yet.
-            // No registered case reaches this - only all_formats has integer formats.
-            return Err(TestError::NotPorted("integer nearest blit comparison".to_string()));
-        }
-        {
+            int_nearest_blit_compare(source, result, self.params)
+        } else {
             let src_max_diff = get_float_or_fixed_point_format_threshold(source.format());
             let dst_max_diff = get_float_or_fixed_point_format_threshold(result.format());
             Ok(float_nearest_blit_compare(source, result, src_max_diff, dst_max_diff, self.params))
@@ -696,6 +729,294 @@ pub fn add_blitting_image_groups(parent: &mut tcu::TestCaseGroup, name: &str, al
     let mut simple = tcu::TestCaseGroup::new("simple_tests");
     add_blitting_image_simple_tests_group(&mut simple, &gp);
     group.add_child(simple);
-    // all_formats and mipmap are not ported: both need the non-nearest reference path.
+
+    let mut all_formats = tcu::TestCaseGroup::new("all_formats");
+    let mut color = tcu::TestCaseGroup::new("color");
+    add_blitting_image_all_formats_color_tests(&mut color, &gp);
+    all_formats.add_child(color);
+    // all_formats.depth_stencil and the mipmap group need the non-nearest reference path.
+    group.add_child(all_formats);
     parent.add_child(group);
+}
+
+// ---------------------------------------------------------------------------------
+
+/// `linearOtherImageFormatsToTest` - the only formats the other side of a LINEAR-tiled
+/// blit is tried against, two per compatible-format group.
+static LINEAR_OTHER_IMAGE_FORMATS_TO_TEST: &[vk::Format] = &[
+    // From compatibleFormats8Bit
+    vk::Format::R4G4_UNORM_PACK8,
+    vk::Format::R8_SRGB,
+    // From compatibleFormats16Bit
+    vk::Format::R4G4B4A4_UNORM_PACK16,
+    vk::Format::R16_SFLOAT,
+    // From compatibleFormats24Bit
+    vk::Format::R8G8B8_UNORM,
+    vk::Format::B8G8R8_SRGB,
+    // From compatibleFormats32Bit
+    vk::Format::R8G8B8A8_UNORM,
+    vk::Format::R32_SFLOAT,
+    // From compatibleFormats48Bit
+    vk::Format::R16G16B16_UNORM,
+    vk::Format::R16G16B16_SFLOAT,
+    // From compatibleFormats64Bit
+    vk::Format::R16G16B16A16_UNORM,
+    vk::Format::R64_SFLOAT,
+    // From compatibleFormats96Bit
+    vk::Format::R32G32B32_UINT,
+    vk::Format::R32G32B32_SFLOAT,
+    // From compatibleFormats128Bit
+    vk::Format::R32G32B32A32_UINT,
+    vk::Format::R64G64_SFLOAT,
+    // From compatibleFormats192Bit
+    vk::Format::R64G64B64_UINT,
+    vk::Format::R64G64B64_SFLOAT,
+    // From compatibleFormats256Bit
+    vk::Format::R64G64B64A64_UINT,
+    vk::Format::R64G64B64A64_SFLOAT,
+];
+
+/// `dedicatedAllocationBlittingFormatsToTest` - under dedicated allocation only a pair
+/// touching one of these is registered at all, which is what keeps that variant from
+/// being the full cross product a third time over.
+static DEDICATED_ALLOCATION_BLITTING_FORMATS_TO_TEST: &[vk::Format] = &[
+    // compatibleFormatsUInts
+    vk::Format::R8_UINT,
+    vk::Format::R64G64B64A64_UINT,
+    // compatibleFormatsSInts
+    vk::Format::R8_SINT,
+    vk::Format::R64G64B64A64_SINT,
+    // compatibleFormatsFloats
+    vk::Format::R4G4_UNORM_PACK8,
+    vk::Format::E5B9G9R9_UFLOAT_PACK32,
+    // compatibleFormatsSrgb
+    vk::Format::R8_SRGB,
+    vk::Format::A8B8G8R8_SRGB_PACK32,
+];
+
+/// `getBlitImageTilingLayoutCaseName`
+fn blit_image_tiling_layout_case_name(tiling: vk::ImageTiling, layout: vk::ImageLayout) -> &'static str {
+    match tiling {
+        vk::ImageTiling::LINEAR => "linear",
+        // `getImageLayoutCaseName`
+        _ if layout == vk::ImageLayout::GENERAL => "general",
+        _ => "optimal",
+    }
+}
+
+/// `create2DCopyRegions`
+fn create_2d_copy_regions(src_width: i32, src_height: i32, dst_width: i32, dst_height: i32) -> Vec<ImageBlit> {
+    let mut regions = Vec::new();
+
+    let fourth_of_src_width = src_width / 4;
+    let fourth_of_src_height = src_height / 4;
+    let fourth_of_dst_width = dst_width / 4;
+    let fourth_of_dst_height = dst_height / 4;
+
+    // to the top of resulting image copy whole source image but with increasingly smaller sizes
+    let (mut i, mut j) = (0, 1);
+    while (i + fourth_of_dst_width / j < dst_width) && (fourth_of_dst_width > j) {
+        regions.push(ImageBlit {
+            src_offsets: [[0, 0, 0], [src_width, src_height, 1]],
+            dst_offsets: [[i, 0, 0], [i + fourth_of_dst_width / j, fourth_of_dst_height / j, 1]],
+        });
+        i += fourth_of_dst_width / j;
+        j += 1;
+    }
+
+    // to the bottom of resulting image copy parts of source image;
+    for i in 0..4 {
+        let src_x = i * fourth_of_src_width;
+        let src_y = i * fourth_of_src_height;
+        let dst_x = i * fourth_of_dst_width;
+
+        regions.push(ImageBlit {
+            src_offsets: [[src_x, src_y, 0], [src_x + fourth_of_src_width, src_y + fourth_of_src_height, 1]],
+            dst_offsets: [[dst_x, 2 * fourth_of_dst_height, 0], [dst_x + fourth_of_dst_width, 3 * fourth_of_dst_height, 1]],
+        });
+    }
+
+    regions
+}
+
+/// The 1D region list `addBlittingImageAllFormatsColorTests` builds inline.
+fn create_1d_copy_regions() -> Vec<ImageBlit> {
+    let mut regions = Vec::new();
+    let mut i = 0;
+    while i < DEFAULT_SIZE {
+        regions.push(ImageBlit {
+            src_offsets: [[0, 0, 0], [DEFAULT_SIZE, 1, 1]],
+            dst_offsets: [[i, 0, 0], [i + DEFAULT_QUARTER_SIZE, 1, 1]],
+        });
+        i += DEFAULT_SIZE / 2;
+    }
+    regions.push(ImageBlit {
+        src_offsets: [[0, 0, 0], [DEFAULT_QUARTER_SIZE, 1, 1]],
+        dst_offsets: [[DEFAULT_QUARTER_SIZE, 0, 0], [2 * DEFAULT_QUARTER_SIZE, 1, 1]],
+    });
+    regions
+}
+
+/// What `BlitColorTestParams` carries into the two registration levels below it.
+struct BlitColorTestParams<'a> {
+    image_type: vk::ImageType,
+    extent: [u32; 3],
+    regions: &'a [ImageBlit],
+    src: &'a BlitFormat,
+}
+
+/// `addBlittingImageAllFormatsColorSrcFormatDstFormatTests`
+///
+/// Only the VK_FILTER_NEAREST case of each tiling/layout combination. The `_linear`,
+/// `_cubic` and 3D `_stripes_*` cases all need a reference image.
+fn add_blitting_image_all_formats_color_src_format_dst_format_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams, p: &BlitColorTestParams<'_>, dst_format: vk::Format) {
+    let blit_src_tilings = [vk::ImageTiling::OPTIMAL, vk::ImageTiling::LINEAR];
+    let blit_src_layouts = [vk::ImageLayout::TRANSFER_SRC_OPTIMAL, vk::ImageLayout::GENERAL];
+    let blit_dst_tilings = [vk::ImageTiling::OPTIMAL, vk::ImageTiling::LINEAR];
+    let blit_dst_layouts = [vk::ImageLayout::TRANSFER_DST_OPTIMAL, vk::ImageLayout::GENERAL];
+
+    for src_tiling in blit_src_tilings {
+        for src_layout in blit_src_layouts {
+            // Don't bother testing VK_IMAGE_TILING_LINEAR + VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL as it's likely to be the same as VK_IMAGE_LAYOUT_GENERAL
+            if src_tiling == vk::ImageTiling::LINEAR && src_layout == vk::ImageLayout::TRANSFER_SRC_OPTIMAL {
+                continue;
+            }
+
+            for dst_tiling in blit_dst_tilings {
+                for dst_layout in blit_dst_layouts {
+                    // Don't bother testing VK_IMAGE_TILING_LINEAR + VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL as it's likely to be the same as VK_IMAGE_LAYOUT_GENERAL
+                    if dst_tiling == vk::ImageTiling::LINEAR && dst_layout == vk::ImageLayout::TRANSFER_DST_OPTIMAL {
+                        continue;
+                    }
+
+                    // A linear-tiled side is only tried against the short list of
+                    // formats on the *other* side, not against all of them.
+                    if (dst_tiling == vk::ImageTiling::LINEAR && !LINEAR_OTHER_IMAGE_FORMATS_TO_TEST.contains(&p.src.format))
+                        || (src_tiling == vk::ImageTiling::LINEAR && !LINEAR_OTHER_IMAGE_FORMATS_TO_TEST.contains(&dst_format))
+                    {
+                        continue;
+                    }
+
+                    let test_name = format!(
+                        "{}_{}",
+                        blit_image_tiling_layout_case_name(src_tiling, src_layout),
+                        blit_image_tiling_layout_case_name(dst_tiling, dst_layout)
+                    );
+                    group.add_child(Box::new(BlitImageCase {
+                        name: format!("{test_name}_nearest"),
+                        src: ImageParms {
+                            image_type: p.image_type,
+                            format: p.src.format,
+                            extent: p.extent,
+                            tiling: src_tiling,
+                            fill_mode: FillMode::Gradient,
+                            create_flags: None,
+                        },
+                        dst: ImageParms {
+                            image_type: p.image_type,
+                            format: dst_format,
+                            extent: p.extent,
+                            tiling: dst_tiling,
+                            fill_mode: FillMode::White,
+                            create_flags: None,
+                        },
+                        src_operation_layout: src_layout,
+                        dst_operation_layout: dst_layout,
+                        regions: p.regions.to_vec(),
+                        filter: vk::Filter::NEAREST,
+                        allocation_kind: gp.allocation_kind,
+                        command_variant: gp.command_variant,
+                    }) as Box<dyn TestCase>);
+                }
+            }
+        }
+    }
+}
+
+/// `addBlittingImageAllFormatsColorSrcFormatTests`
+fn add_blitting_image_all_formats_color_src_format_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams, p: &BlitColorTestParams<'_>, compatible_formats: Option<&[BlitFormat]>) {
+    if let Some(formats) = compatible_formats {
+        for dst in formats {
+            if !is_supported_by_framework(dst.format) {
+                continue;
+            }
+            // `isAllowedBlittingAllFormatsColorSrcFormatTests` - an OR over the pair,
+            // not a test of one side.
+            if gp.allocation_kind == AllocationKind::Dedicated
+                && !(DEDICATED_ALLOCATION_BLITTING_FORMATS_TO_TEST.contains(&dst.format) || DEDICATED_ALLOCATION_BLITTING_FORMATS_TO_TEST.contains(&p.src.format))
+            {
+                continue;
+            }
+            let mut dst_group = tcu::TestCaseGroup::new(dst.name);
+            add_blitting_image_all_formats_color_src_format_dst_format_tests(&mut dst_group, gp, p, dst.format);
+            group.add_child(dst_group);
+        }
+    } else {
+        // With no compatible-format list the destination format is copied from the
+        // source, which is how the 1D and 3D groups get a single destination each.
+        let mut dst_group = tcu::TestCaseGroup::new(p.src.name);
+        add_blitting_image_all_formats_color_src_format_dst_format_tests(&mut dst_group, gp, p, p.src.format);
+        group.add_child(dst_group);
+    }
+}
+
+/// `colorImageFormatsToTestBlit`, minus the two compressed source lists.
+fn color_image_formats_to_test_blit() -> [(&'static [BlitFormat], &'static [BlitFormat]); 4] {
+    [
+        (COMPATIBLE_FORMATS_U_INTS, COMPATIBLE_FORMATS_U_INTS),
+        (COMPATIBLE_FORMATS_S_INTS, COMPATIBLE_FORMATS_S_INTS),
+        (COMPATIBLE_FORMATS_FLOATS, COMPATIBLE_FORMATS_FLOATS),
+        (COMPATIBLE_FORMATS_SRGB, COMPATIBLE_FORMATS_SRGB),
+    ]
+}
+
+/// `addBlittingImageAllFormatsColorTests`
+///
+/// The 3D subgroup is not registered: its source formats also get `_stripes_*` cases,
+/// which use fill modes `generateBuffer` does not have here yet.
+fn add_blitting_image_all_formats_color_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+    // 2D tests.
+    {
+        let mut sub_group = tcu::TestCaseGroup::new("2d");
+        let regions = create_2d_copy_regions(DEFAULT_SIZE, DEFAULT_SIZE, DEFAULT_SIZE, DEFAULT_SIZE);
+
+        for (source_formats, destination_formats) in color_image_formats_to_test_blit() {
+            for src in source_formats {
+                let p = BlitColorTestParams {
+                    image_type: vk::ImageType::_2D,
+                    extent: [DEFAULT_SIZE as u32, DEFAULT_SIZE as u32, 1],
+                    regions: &regions,
+                    src,
+                };
+                let mut src_group = tcu::TestCaseGroup::new(src.name);
+                add_blitting_image_all_formats_color_src_format_tests(&mut src_group, gp, &p, Some(destination_formats));
+                sub_group.add_child(src_group);
+            }
+        }
+        group.add_child(sub_group);
+    }
+
+    // 1D tests.
+    {
+        let mut sub_group = tcu::TestCaseGroup::new("1d");
+        let regions = create_1d_copy_regions();
+
+        for (source_formats, _) in color_image_formats_to_test_blit() {
+            for src in source_formats {
+                if !is_supported_by_framework(src.format) {
+                    continue;
+                }
+                let p = BlitColorTestParams {
+                    image_type: vk::ImageType::_1D,
+                    extent: [DEFAULT_SIZE as u32, 1, 1],
+                    regions: &regions,
+                    src,
+                };
+                let mut src_group = tcu::TestCaseGroup::new(src.name);
+                add_blitting_image_all_formats_color_src_format_tests(&mut src_group, gp, &p, None);
+                sub_group.add_child(src_group);
+            }
+        }
+        group.add_child(sub_group);
+    }
 }

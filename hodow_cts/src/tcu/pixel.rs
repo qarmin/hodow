@@ -586,6 +586,15 @@ impl ConstPixelBufferAccess<'_> {
         result
     }
 
+    /// `ConstPixelBufferAccess::getPixelInt`
+    ///
+    /// The 32-bit view. Upstream's two getters differ only for the 64-bit channel
+    /// types, where this one narrows - a C++ implicit truncation, kept because the
+    /// blit comparison is written against it and applies it to both sides.
+    pub fn get_pixel_int(&self, x: u32, y: u32, z: u32) -> [i32; 4] {
+        self.get_pixel_int64(x, y, z).map(|v| v as i32)
+    }
+
     /// `ConstPixelBufferAccess::getPixelInt64`
     pub fn get_pixel_int64(&self, x: u32, y: u32, z: u32) -> [i64; 4] {
         use ChannelType::*;
@@ -999,6 +1008,83 @@ fn is_packed_writable(type_: ChannelType) -> bool {
 /// The packed types are written through a separate switch in upstream's `setPixel`;
 /// no ported test writes one yet, and `TextureLevel::new` refuses such a format up
 /// front rather than letting a silent approximation reach a comparison.
+///
+/// The packed half of `PixelBufferAccess::setPixel(const IVec4&)`.
+fn set_packed_pixel_int(dst: &mut [u8], color: [i32; 4], format: TextureFormat) {
+    use ChannelType::*;
+    let sw = swizzle_ge(color, ChannelOrder::RGBA, format.order);
+    let pu = |v: i32, offs: u32, bits: i32| uint_to_channel(v as u32, bits) << offs;
+    let pi = |v: i32, offs: u32, bits: i32| int_to_channel(v, bits) << offs;
+
+    let write16 = |dst: &mut [u8], v: u32| dst[..2].copy_from_slice(&(v as u16).to_le_bytes());
+    let write32 = |dst: &mut [u8], v: u32| dst[..4].copy_from_slice(&v.to_le_bytes());
+
+    // Every case here uses PU/PI - the integer setter stores the raw channel value, so
+    // a UNORM packed type is written with the same unsigned packing as its UNSIGNED
+    // sibling, unlike the float setter which normalises.
+    match format.type_ {
+        UNORM_BYTE_44 | UNSIGNED_BYTE_44 => dst[0] = (pu(color[0], 4, 4) | pu(color[1], 0, 4)) as u8,
+        UNORM_INT_101010 => write32(dst, pu(color[0], 22, 10) | pu(color[1], 12, 10) | pu(color[2], 2, 10)),
+        UNORM_SHORT_565 | UNSIGNED_SHORT_565 => write16(dst, pu(sw[0], 11, 5) | pu(sw[1], 5, 6) | pu(sw[2], 0, 5)),
+        UNORM_SHORT_555 => write16(dst, pu(sw[0], 10, 5) | pu(sw[1], 5, 5) | pu(sw[2], 0, 5)),
+        UNORM_SHORT_4444 | UNSIGNED_SHORT_4444 => write16(dst, pu(sw[0], 12, 4) | pu(sw[1], 8, 4) | pu(sw[2], 4, 4) | pu(sw[3], 0, 4)),
+        UNORM_SHORT_5551 | UNSIGNED_SHORT_5551 => write16(dst, pu(sw[0], 11, 5) | pu(sw[1], 6, 5) | pu(sw[2], 1, 5) | pu(sw[3], 0, 1)),
+        UNORM_SHORT_1555 => write16(dst, pu(sw[0], 15, 1) | pu(sw[1], 10, 5) | pu(sw[2], 5, 5) | pu(sw[3], 0, 5)),
+        UNORM_INT_1010102_REV | UNSIGNED_INT_1010102_REV | USCALED_INT_1010102_REV => {
+            write32(dst, pu(sw[0], 0, 10) | pu(sw[1], 10, 10) | pu(sw[2], 20, 10) | pu(sw[3], 30, 2));
+        }
+        SNORM_INT_1010102_REV | SIGNED_INT_1010102_REV | SSCALED_INT_1010102_REV => {
+            write32(dst, pi(sw[0], 0, 10) | pi(sw[1], 10, 10) | pi(sw[2], 20, 10) | pi(sw[3], 30, 2));
+        }
+        other => unreachable!("set_packed_pixel_int reached {other:?}; is_packed_int_writable should have refused it"),
+    }
+}
+
+/// The packed types `set_packed_pixel_int` can store. Upstream's integer setter has no
+/// case for the two float-packed types, so they fall to its generic path and assert
+/// there; refusing them here keeps that loud rather than writing nonsense.
+fn is_packed_int_writable(type_: ChannelType) -> bool {
+    use ChannelType::*;
+    is_packed_writable(type_) && !matches!(type_, UNSIGNED_INT_11F_11F_10F_REV | UNSIGNED_INT_999_E5_REV)
+}
+
+/// `tcu::intToChannel`, the byte-writing overload.
+///
+/// Saturating, not wrapping: an out-of-range value clamps to the destination's limits,
+/// which is what makes `intNearestBlitCompare`'s format conversion well defined.
+fn int_to_channel_bytes(dst: &mut [u8], src: i32, type_: ChannelType) -> bool {
+    use ChannelType::*;
+    let s = src as i64;
+    let sat_i = |lo: i64, hi: i64| s.clamp(lo, hi);
+    // The unsigned conversions read the value as uint32_t first, so a negative source
+    // becomes a very large unsigned one and saturates to the maximum, not to zero.
+    let u = src as u32 as u64;
+    let sat_u = |hi: u64| u.min(hi);
+
+    match type_ {
+        SNORM_INT8 | SIGNED_INT8 | SSCALED_INT8 => dst[..1].copy_from_slice(&(sat_i(-128, 127) as i8).to_le_bytes()),
+        SNORM_INT16 | SIGNED_INT16 | SSCALED_INT16 => dst[..2].copy_from_slice(&(sat_i(-32768, 32767) as i16).to_le_bytes()),
+        SIGNED_INT32 => dst[..4].copy_from_slice(&src.to_le_bytes()),
+        SIGNED_INT64 => dst[..8].copy_from_slice(&s.to_le_bytes()),
+        UNORM_INT8 | UNSIGNED_INT8 | USCALED_INT8 => dst[..1].copy_from_slice(&(sat_u(255) as u8).to_le_bytes()),
+        UNORM_INT16 | UNSIGNED_INT16 | USCALED_INT16 => dst[..2].copy_from_slice(&(sat_u(65535) as u16).to_le_bytes()),
+        UNORM_INT24 | UNSIGNED_INT24 => {
+            let v = sat_u(0x00FF_FFFF) as u32;
+            dst[..3].copy_from_slice(&v.to_le_bytes()[..3]);
+        }
+        UNSIGNED_INT32 => dst[..4].copy_from_slice(&(src as u32).to_le_bytes()),
+        UNSIGNED_INT64 => dst[..8].copy_from_slice(&u.to_le_bytes()),
+        HALF_FLOAT => dst[..2].copy_from_slice(&f32_to_f16_bits(src as f32).to_le_bytes()),
+        FLOAT => dst[..4].copy_from_slice(&(src as f32).to_le_bytes()),
+        FLOAT64 => dst[..8].copy_from_slice(&(src as f64).to_le_bytes()),
+        UNORM_SHORT_10 => dst[..2].copy_from_slice(&((sat_u(1023) as u16) << 6).to_le_bytes()),
+        UNORM_SHORT_12 => dst[..2].copy_from_slice(&((sat_u(4095) as u16) << 4).to_le_bytes()),
+        // SNORM_INT32 and UNORM_INT32 have no case upstream - the switch asserts.
+        _ => return false,
+    }
+    true
+}
+
 fn float_to_channel(dst: &mut [u8], src: f32, type_: ChannelType) {
     use ChannelType::*;
     let sat = |scale: f32, lo: i64, hi: i64| convert_sat_rte(src * scale, lo, hi);
@@ -1192,6 +1278,61 @@ impl PixelBufferAccess<'_> {
     fn pixel_offset(&self, x: u32, y: u32, z: u32) -> usize {
         let [w, h, _] = self.size;
         (((z as usize * h as usize) + y as usize) * w as usize + x as usize) * self.pixel_size()
+    }
+
+    /// `tcu::PixelBufferAccess::setPixel(const IVec4&)`
+    ///
+    /// Returns false for a channel type upstream's switch asserts on, rather than
+    /// writing an approximation a comparison could not tell from a driver bug.
+    #[must_use]
+    pub fn set_pixel_int(&mut self, color: [i32; 4], x: u32, y: u32, z: u32) -> bool {
+        // `writeRGBA8888Int` / `writeRGB888Int`. Not just an optimisation: these clamp
+        // the *signed* value, so a negative channel becomes 0 here, where the generic
+        // path below reads it as uint32_t first and saturates it to the maximum. Both
+        // R8G8B8A8_UNORM and B8G8R8A8_UNORM are blit formats, so the two behaviours
+        // are reachable side by side and cannot be unified.
+        if self.format.type_ == ChannelType::UNORM_INT8 {
+            let n = match self.format.order {
+                ChannelOrder::RGBA | ChannelOrder::sRGBA => 4,
+                ChannelOrder::RGB | ChannelOrder::sRGB => 3,
+                _ => 0,
+            };
+            if n > 0 {
+                let base = self.pixel_offset(x, y, z);
+                for (dst, &c) in self.data[base..base + n].iter_mut().zip(color.iter()) {
+                    *dst = c.clamp(0, 255) as u8;
+                }
+                return true;
+            }
+        }
+
+        if is_packed_int_writable(self.format.type_) {
+            let base = self.pixel_offset(x, y, z);
+            let size = self.pixel_size();
+            let format = self.format;
+            set_packed_pixel_int(&mut self.data[base..base + size], color, format);
+            return true;
+        }
+        if is_packed_writable(self.format.type_) {
+            return false;
+        }
+
+        let num_channels = self.format.order.num_used_channels() as usize;
+        let map = get_channel_write_swizzle(self.format.order);
+        let Some(channel_size) = self.format.type_.channel_size().map(|s| s as usize) else {
+            return false;
+        };
+        let base = self.pixel_offset(x, y, z);
+        let type_ = self.format.type_;
+
+        for (c, swz) in map.iter().take(num_channels).enumerate() {
+            let src = swz.index().expect("write swizzle names a real component below num_used_channels");
+            let off = base + channel_size * c;
+            if !int_to_channel_bytes(&mut self.data[off..off + channel_size], color[src], type_) {
+                return false;
+            }
+        }
+        true
     }
 
     /// `tcu::PixelBufferAccess::setPixel`, generic path only.
@@ -1606,5 +1747,58 @@ mod write_tests {
         // s = (x + 0.5) / 8, so x=0 -> 0.0625 and x=7 -> 0.9375.
         assert!((first - 0.0625).abs() < 0.01, "{first}");
         assert!((last - 0.9375).abs() < 0.01, "{last}");
+    }
+
+    /// The integer setter stores the raw channel value and saturates it, where the
+    /// float setter normalises - the two must not be confused for a UNORM format.
+    #[test]
+    fn set_pixel_int_saturates_instead_of_normalising() {
+        let format = TextureFormat::new(ChannelOrder::RGBA, ChannelType::UNORM_INT8);
+        let mut level = TextureLevel::new(format, 1, 1, 1).unwrap();
+        assert!(level.get_access().set_pixel_int([200, 0, 300, 1], 0, 0, 0));
+        assert_eq!(&level.data()[..4], &[200, 0, 255, 1]);
+        assert_eq!(level.get_const_access().get_pixel_int(0, 0, 0), [200, 0, 255, 1]);
+    }
+
+    /// The direction a negative channel saturates in depends on which write path the
+    /// format takes: RGBA UNORM_INT8 has an optimised writer that clamps the signed
+    /// value to 0, while every other order reads it as uint32_t first and saturates it
+    /// to the maximum. Both formats are blit formats, so both behaviours are live.
+    #[test]
+    fn set_pixel_int_negative_saturates_by_write_path() {
+        let rgba = TextureFormat::new(ChannelOrder::RGBA, ChannelType::UNORM_INT8);
+        let mut level = TextureLevel::new(rgba, 1, 1, 1).unwrap();
+        assert!(level.get_access().set_pixel_int([-5, 0, 0, 0], 0, 0, 0));
+        assert_eq!(level.get_const_access().get_pixel_int(0, 0, 0)[0], 0);
+
+        let bgra = TextureFormat::new(ChannelOrder::BGRA, ChannelType::UNORM_INT8);
+        let mut level = TextureLevel::new(bgra, 1, 1, 1).unwrap();
+        assert!(level.get_access().set_pixel_int([-5, 0, 0, 0], 0, 0, 0));
+        assert_eq!(level.get_const_access().get_pixel_int(0, 0, 0)[0], 255);
+
+        let r16 = TextureFormat::new(ChannelOrder::R, ChannelType::UNSIGNED_INT16);
+        let mut level = TextureLevel::new(r16, 1, 1, 1).unwrap();
+        assert!(level.get_access().set_pixel_int([-1, 0, 0, 0], 0, 0, 0));
+        assert_eq!(level.get_const_access().get_pixel_int(0, 0, 0)[0], 65535);
+    }
+
+    /// The packed integer path stores the channel value unscaled, and the BGRA-style
+    /// orders still have to reach the right bit positions.
+    #[test]
+    fn set_pixel_int_packed_round_trips() {
+        for order in [ChannelOrder::RGBA, ChannelOrder::BGRA] {
+            let format = TextureFormat::new(order, ChannelType::UNSIGNED_INT_1010102_REV);
+            let mut level = TextureLevel::new(format, 1, 1, 1).unwrap();
+            assert!(level.get_access().set_pixel_int([1000, 3, 512, 2], 0, 0, 0));
+            assert_eq!(level.get_const_access().get_pixel_int(0, 0, 0), [1000, 3, 512, 2], "{order:?}");
+        }
+    }
+
+    /// A type upstream's switch asserts on is refused rather than approximated.
+    #[test]
+    fn set_pixel_int_refuses_unwritable_types() {
+        let format = TextureFormat::new(ChannelOrder::RGB, ChannelType::UNSIGNED_INT_11F_11F_10F_REV);
+        let mut level = TextureLevel::new(format, 1, 1, 1).unwrap();
+        assert!(!level.get_access().set_pixel_int([1, 2, 3, 4], 0, 0, 0));
     }
 }

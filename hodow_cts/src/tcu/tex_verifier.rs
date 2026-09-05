@@ -146,7 +146,7 @@ pub fn is_nearest_sample_result_valid_float(level: &ConstPixelBufferAccess<'_>, 
 }
 
 /// `tcu::isNearestSampleResultValid` for a 3D level, integer colours.
-pub fn is_nearest_sample_result_valid_int(level: &ConstPixelBufferAccess<'_>, prec: &LookupPrecision, threshold: [u32; 4], coord: [f32; 3], result: [i64; 4]) -> bool {
+pub fn is_nearest_sample_result_valid_int(level: &ConstPixelBufferAccess<'_>, prec: &LookupPrecision, threshold: [u32; 4], coord: [f32; 3], result: [i32; 4]) -> bool {
     let [w, h, d] = level.size();
     let (min_i, max_i) = candidate_range(true, w as i32, coord[0], prec.coord_bits[0], prec.uvw_bits[0]);
     let (min_j, max_j) = candidate_range(true, h as i32, coord[1], prec.coord_bits[1], prec.uvw_bits[1]);
@@ -158,8 +158,8 @@ pub fn is_nearest_sample_result_valid_int(level: &ConstPixelBufferAccess<'_>, pr
                 let x = wrap(WrapMode::ClampToEdge, i, w as i32);
                 let y = wrap(WrapMode::ClampToEdge, j, h as i32);
                 let z = wrap(WrapMode::ClampToEdge, k, d as i32);
-                let color = level.get_pixel_int64(x as u32, y as u32, z as u32);
-                if (0..4).all(|c| !prec.color_mask[c] || color[c].abs_diff(result[c]) <= u64::from(threshold[c])) {
+                let color = level.get_pixel_int(x as u32, y as u32, z as u32);
+                if (0..4).all(|c| !prec.color_mask[c] || color[c].abs_diff(result[c]) <= threshold[c]) {
                     return true;
                 }
             }

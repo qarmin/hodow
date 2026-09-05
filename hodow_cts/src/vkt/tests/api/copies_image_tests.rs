@@ -2709,7 +2709,7 @@ const LAST_CORE_FORMAT: i32 = 184;
 /// Two rules, both needed: anything past the core format range is out (which is how the
 /// ycbcr-adjacent r10x6/r12x4 packings and the a4r4g4b4 pair fall away), and the
 /// 64-bit-per-channel formats are rejected by name even though they sit inside it.
-fn is_supported_by_framework(format: vk::Format) -> bool {
+pub fn is_supported_by_framework(format: vk::Format) -> bool {
     if matches!(format, vk::Format::A8_UNORM | vk::Format::A1B5G5R5_UNORM_PACK16) {
         return true;
     }

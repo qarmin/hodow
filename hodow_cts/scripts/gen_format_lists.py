@@ -27,6 +27,15 @@ OUT = CRATE_DIR / "src" / "vkt" / "tests" / "api" / "copy_format_lists.rs"
 
 # The order `colorImageFormatsToTest` lists them in. The two *A/Astc entries are local
 # to the test file; the rest come from the generated header.
+# The uncompressed `colorImageFormatsToTestBlit` lists. The compressed ones need a
+# compressed-format model in tcu and are not generated.
+BLIT_GROUPS = [
+    "compatibleFormatsUInts",
+    "compatibleFormatsSInts",
+    "compatibleFormatsFloats",
+    "compatibleFormatsSrgb",
+]
+
 GROUP_ORDER = [
     ("compatibleFormats8BitA", "local"),
     ("compatibleFormats8Bit", "header"),
@@ -151,6 +160,24 @@ def main() -> int:
         lines.append(f"    vk::Format::{rust_name(f)},")
     lines.append("];")
     lines.append("")
+
+    # `colorImageFormatsToTestBlit` groups formats by channel class rather than by bit
+    # width, because a blit converts between formats instead of reinterpreting bytes.
+    lines.append("/// One entry of a `colorImageFormatsToTestBlit` list.")
+    lines.append("pub struct BlitFormat {")
+    lines.append("    pub format: vk::Format,")
+    lines.append("    pub name: &'static str,")
+    lines.append("}")
+    lines.append("")
+    for group in BLIT_GROUPS:
+        fmts = read_group(header_text, group)
+        print(f"{group}: {len(fmts)} formats")
+        lines.append(f"/// `formats::{group}`")
+        lines.append(f"pub static {re.sub(r'(?<!^)(?=[A-Z])', '_', group).upper()}: &[BlitFormat] = &[")
+        for f in fmts:
+            lines.append(f'    BlitFormat {{ format: vk::Format::{rust_name(f)}, name: "{case_name(f)}" }},')
+        lines.append("];")
+        lines.append("")
 
     OUT.write_text("\n".join(lines))
     subprocess.run(["rustfmt", "--edition", "2024", str(OUT)], cwd=CRATE_DIR, check=False)
