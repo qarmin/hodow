@@ -28,10 +28,15 @@ use crate::vk::VkResultExt;
 use crate::vk::builder_util::{DescriptorPoolBuilder, DescriptorSetLayoutBuilder, DescriptorSetUpdateBuilder, Location};
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
 use crate::vk::compute_pipeline::{ComputePipelineConstructionType, ComputePipelineWrapper};
-use crate::vk::image_util::{get_shader_image_format_qualifier, is_supported_image_load_store};
+use crate::vk::image_util::{
+    ImageWithMemory, get_shader_image_format_qualifier, is_supported_image_load_store, make_image_memory_barrier, make_image_subresource_range, make_image_view,
+};
 use crate::vk::mem_util::{MemoryRequirement, flush_alloc, invalidate_alloc};
-use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_descriptor_buffer_info, make_descriptor_set};
-use crate::vk::programs::BinaryCollection;
+use crate::vk::obj_util::{
+    BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_descriptor_buffer_info, make_descriptor_set, make_framebuffer,
+    make_graphics_pipeline, make_pipeline_layout, make_render_pass,
+};
+use crate::vk::programs::{BinaryCollection, create_shader_module};
 use crate::vk::ref_util::Unique;
 use crate::vkt::{Context, TestCase, TestInstance};
 
@@ -49,6 +54,12 @@ pub struct BufferViewAccessProgram {
     pub op_name: &'static str,
     pub in_format: &'static str,
     pub out_format: &'static str,
+    pub programs: BinaryCollection,
+}
+
+/// The `rust_type` of a manifest entry that carries only its programs.
+pub struct SharedProgram {
+    pub name: &'static str,
     pub programs: BinaryCollection,
 }
 
@@ -377,4 +388,518 @@ fn add_formats(group: &mut tcu::TestCaseGroup, create_usage: vk::BufferUsageFlag
             bind_kind,
         }) as Box<dyn TestCase>);
     }
+}
+
+// ---------------------------------------------------------------------------------
+// BufferViewTestCase / BufferViewTestInstance - the memory tests.
+// ---------------------------------------------------------------------------------
+
+/// `BufferViewCaseParams` for the memory tests.
+pub struct BufferViewMemoryCase {
+    name: String,
+    /// How many uint32 values the buffer holds.
+    buffer_size: u32,
+    /// How many of them the view covers, and the side of the rendered square.
+    buffer_view_size: u32,
+    /// Where the view starts, in elements.
+    element_offset: u32,
+    /// `useComputePipeline` - the same read done by a dispatch instead of a draw.
+    use_compute_pipeline: bool,
+    buffer_dedicated: bool,
+    image_dedicated: bool,
+}
+
+impl TestCase for BufferViewMemoryCase {
+    fn name(&self) -> &str {
+        &self.name
+    }
+
+    fn check_support(&self, context: &Context<'_>) -> Result<(), TestError> {
+        if self.buffer_dedicated || self.image_dedicated {
+            context.require_device_functionality("VK_KHR_dedicated_allocation")?;
+        }
+        Ok(())
+    }
+
+    fn programs(&self) -> BinaryCollection {
+        use crate::generated::shaders::api_buffer_view_access as sh;
+        if self.use_compute_pipeline {
+            sh::BV_MEMORY_COMPUTE.programs
+        } else {
+            sh::BV_MEMORY_GRAPHICS.programs
+        }
+    }
+
+    fn create_instance<'a>(&'a self, context: &'a Context<'a>) -> Box<dyn TestInstance + 'a> {
+        Box::new(BufferViewMemoryInstance { context, params: self })
+    }
+}
+
+struct BufferViewMemoryInstance<'a> {
+    context: &'a Context<'a>,
+    params: &'a BufferViewMemoryCase,
+}
+
+/// `generateBuffer` - the view reads back `factor * i`, so a wrong offset shows up as a
+/// wrong multiple rather than as noise.
+fn generate_uniform_data(buffer_size: u32, factor: u32) -> Vec<u32> {
+    (0..buffer_size).map(|i| factor.wrapping_mul(i)).collect()
+}
+
+impl BufferViewMemoryInstance<'_> {
+    /// `MultiQueueRunnerTestInstance` - the queues the case runs on, one pass each.
+    fn queues(&self) -> Vec<(vk::Queue, u32)> {
+        let mut out = vec![(self.context.get_universal_queue(), self.context.get_universal_queue_family_index())];
+        if self.params.use_compute_pipeline
+            && let Some(q) = self.context.get_compute_queue()
+        {
+            out.push(q);
+        }
+        out
+    }
+}
+
+impl TestInstance for BufferViewMemoryInstance<'_> {
+    fn iterate(&mut self) -> TestOutcome {
+        let p = self.params;
+        let device = self.context.get_device();
+        let allocator = self.context.get_default_allocator();
+
+        const COLOR_FORMAT: vk::Format = vk::Format::R32_UINT;
+        let render_size = p.buffer_view_size;
+        let pixel_data_size = u64::from(render_size) * u64::from(render_size) * 4;
+
+        // Colour attachment (or storage image, in the compute path) and its view.
+        let image_info = vk::ImageCreateInfo {
+            s_type: vk::StructureType::IMAGE_CREATE_INFO,
+            next: std::ptr::null(),
+            flags: vk::ImageCreateFlags::empty(),
+            image_type: vk::ImageType::_2D,
+            format: COLOR_FORMAT,
+            extent: vk::Extent3D {
+                width: render_size,
+                height: render_size,
+                depth: 1,
+            },
+            mip_levels: 1,
+            array_layers: 1,
+            samples: vk::SampleCountFlags::_1,
+            tiling: vk::ImageTiling::OPTIMAL,
+            usage: if p.use_compute_pipeline {
+                vk::ImageUsageFlags::STORAGE | vk::ImageUsageFlags::TRANSFER_SRC | vk::ImageUsageFlags::TRANSFER_DST
+            } else {
+                vk::ImageUsageFlags::COLOR_ATTACHMENT | vk::ImageUsageFlags::TRANSFER_SRC
+            },
+            sharing_mode: vk::SharingMode::EXCLUSIVE,
+            queue_family_index_count: 0,
+            queue_family_indices: std::ptr::null(),
+            initial_layout: vk::ImageLayout::UNDEFINED,
+        };
+        let color_image = if p.image_dedicated {
+            ImageWithMemory::new_dedicated(device, allocator, image_info, MemoryRequirement::ANY)?
+        } else {
+            ImageWithMemory::new(device, allocator, image_info, MemoryRequirement::ANY)?
+        };
+        let color_view = make_image_view(
+            device,
+            color_image.get(),
+            vk::ImageViewType::_2D,
+            COLOR_FORMAT,
+            make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, 1),
+        )?;
+
+        // The texel buffer and its view.
+        let uniform_size = u64::from(p.buffer_size) * 4;
+        let uniform_buffer = if p.buffer_dedicated {
+            BufferWithMemory::new_dedicated(
+                device,
+                allocator,
+                make_buffer_create_info(uniform_size, vk::BufferUsageFlags::UNIFORM_TEXEL_BUFFER),
+                MemoryRequirement::HOST_VISIBLE,
+            )?
+        } else {
+            BufferWithMemory::new(
+                device,
+                allocator,
+                make_buffer_create_info(uniform_size, vk::BufferUsageFlags::UNIFORM_TEXEL_BUFFER),
+                MemoryRequirement::HOST_VISIBLE,
+            )?
+        };
+        let view_info = vk::BufferViewCreateInfo {
+            s_type: vk::StructureType::BUFFER_VIEW_CREATE_INFO,
+            next: std::ptr::null(),
+            flags: vk::BufferViewCreateFlags::empty(),
+            buffer: uniform_buffer.get(),
+            format: COLOR_FORMAT,
+            offset: u64::from(p.element_offset) * 4,
+            range: vk::WHOLE_SIZE,
+        };
+        let buffer_view = Unique::new(device, unsafe { device.create_buffer_view(&view_info, None) }.vk_check("vkCreateBufferView")?);
+
+        let result_buffer = BufferWithMemory::new(
+            device,
+            allocator,
+            make_buffer_create_info(pixel_data_size, vk::BufferUsageFlags::TRANSFER_DST),
+            MemoryRequirement::HOST_VISIBLE,
+        )?;
+
+        let mut layout_builder = DescriptorSetLayoutBuilder::new().add_single_binding(vk::DescriptorType::UNIFORM_TEXEL_BUFFER, vk::ShaderStageFlags::ALL);
+        let mut pool_builder = DescriptorPoolBuilder::new().add_type(vk::DescriptorType::UNIFORM_TEXEL_BUFFER, 1);
+        if p.use_compute_pipeline {
+            layout_builder = layout_builder.add_single_binding(vk::DescriptorType::STORAGE_IMAGE, vk::ShaderStageFlags::ALL);
+            pool_builder = pool_builder.add_type(vk::DescriptorType::STORAGE_IMAGE, 1);
+        }
+        let set_layout = layout_builder.build(device)?;
+        let descriptor_pool = pool_builder.build(device, vk::DescriptorPoolCreateFlags::FREE_DESCRIPTOR_SET, 1)?;
+        let descriptor_set = make_descriptor_set(device, *descriptor_pool, *set_layout)?;
+
+        unsafe {
+            let view = *buffer_view;
+            let mut writes = vec![vk::WriteDescriptorSet {
+                s_type: vk::StructureType::WRITE_DESCRIPTOR_SET,
+                next: std::ptr::null(),
+                dst_set: *descriptor_set,
+                dst_binding: 0,
+                dst_array_element: 0,
+                descriptor_count: 1,
+                descriptor_type: vk::DescriptorType::UNIFORM_TEXEL_BUFFER,
+                image_info: std::ptr::null(),
+                buffer_info: std::ptr::null(),
+                texel_buffer_view: std::ptr::addr_of!(view),
+            }];
+            let image_info = vk::DescriptorImageInfo {
+                sampler: vk::Sampler::null(),
+                image_view: *color_view,
+                image_layout: vk::ImageLayout::GENERAL,
+            };
+            if p.use_compute_pipeline {
+                writes.push(vk::WriteDescriptorSet {
+                    s_type: vk::StructureType::WRITE_DESCRIPTOR_SET,
+                    next: std::ptr::null(),
+                    dst_set: *descriptor_set,
+                    dst_binding: 1,
+                    dst_array_element: 0,
+                    descriptor_count: 1,
+                    descriptor_type: vk::DescriptorType::STORAGE_IMAGE,
+                    image_info: std::ptr::addr_of!(image_info),
+                    buffer_info: std::ptr::null(),
+                    texel_buffer_view: std::ptr::null(),
+                });
+            }
+            device.update_descriptor_sets(&writes, &[] as &[vk::CopyDescriptorSet]);
+        }
+
+        let programs = self.params.programs();
+        let pipeline_layout = make_pipeline_layout(device, &[*set_layout])?;
+
+        // The graphics path needs a render pass, a framebuffer, a quad and a pipeline;
+        // the compute path needs only the pipeline.
+        let graphics = if p.use_compute_pipeline {
+            None
+        } else {
+            let render_pass = make_render_pass(device, COLOR_FORMAT)?;
+            let framebuffer = make_framebuffer(device, *render_pass, &[*color_view], render_size, render_size, 1)?;
+            let vert = create_shader_module(device, programs.get("vert")?)?;
+            let frag = create_shader_module(device, programs.get("frag")?)?;
+            let pipeline = make_graphics_pipeline(
+                device,
+                *pipeline_layout,
+                *vert,
+                *frag,
+                *render_pass,
+                (render_size, render_size),
+                vk::PrimitiveTopology::TRIANGLE_LIST,
+            )?;
+            // `createQuad` - two triangles covering the whole target.
+            let a = [-1.0f32, -1.0, 0.0, 1.0];
+            let b = [1.0f32, -1.0, 0.0, 1.0];
+            let c = [1.0f32, 1.0, 0.0, 1.0];
+            let d = [-1.0f32, 1.0, 0.0, 1.0];
+            let vertices = [a, c, b, c, a, d];
+            let vertex_data_size = std::mem::size_of_val(&vertices) as u64;
+            let vertex_buffer = BufferWithMemory::new(
+                device,
+                allocator,
+                make_buffer_create_info(vertex_data_size, vk::BufferUsageFlags::VERTEX_BUFFER),
+                MemoryRequirement::HOST_VISIBLE,
+            )?;
+            unsafe {
+                std::ptr::copy_nonoverlapping(vertices.as_ptr().cast::<u8>(), vertex_buffer.get_allocation().get_host_ptr(), vertex_data_size as usize);
+            }
+            flush_alloc(device, vertex_buffer.get_allocation())?;
+            Some((render_pass, framebuffer, vert, frag, pipeline, vertex_buffer, vertices.len() as u32))
+        };
+
+        let compute = if p.use_compute_pipeline {
+            let comp = create_shader_module(device, programs.get("comp")?)?;
+            let stage = vk::PipelineShaderStageCreateInfo::builder()
+                .stage(vk::ShaderStageFlags::COMPUTE)
+                .module(*comp)
+                .name(c"main".to_bytes_with_nul());
+            let info = vk::ComputePipelineCreateInfo::builder().stage(stage).layout(*pipeline_layout);
+            let pipelines = unsafe { device.create_compute_pipelines(vk::PipelineCache::null(), &[info], None) }.vk_check("vkCreateComputePipelines")?;
+            Some((comp, Unique::new(device, pipelines.0[0])))
+        } else {
+            None
+        };
+
+        for (queue, family_index) in self.queues() {
+            let cmd_pool = make_command_pool(device, family_index)?;
+            let cmd_buffer = allocate_command_buffer(device, *cmd_pool, vk::CommandBufferLevel::PRIMARY)?;
+            self.record(
+                *cmd_buffer,
+                &graphics,
+                &compute,
+                *pipeline_layout,
+                *descriptor_set,
+                color_image.get(),
+                result_buffer.get(),
+                render_size,
+            )?;
+
+            // `queuePass` runs the same command buffer twice, refilling the buffer in
+            // between, so the second pass proves the view still reads live memory.
+            for factor in [1u32, 2] {
+                let data = generate_uniform_data(p.buffer_size, factor);
+                unsafe {
+                    std::ptr::copy_nonoverlapping(data.as_ptr().cast::<u8>(), uniform_buffer.get_allocation().get_host_ptr(), std::mem::size_of_val(&data[..]));
+                }
+                flush_alloc(device, uniform_buffer.get_allocation())?;
+                submit_commands_and_wait(device, queue, *cmd_buffer)?;
+
+                invalidate_alloc(device, result_buffer.get_allocation())?;
+                let mut pixels = vec![0u32; (render_size * render_size) as usize];
+                unsafe {
+                    std::ptr::copy_nonoverlapping(result_buffer.get_allocation().get_host_ptr().cast_const().cast::<u32>(), pixels.as_mut_ptr(), pixels.len());
+                }
+                // `checkResult` - the diagonal, which is where both paths write.
+                for i in 0..render_size {
+                    let actual = pixels[(i * render_size + i) as usize];
+                    let expected = factor.wrapping_mul(p.element_offset + i);
+                    if actual != expected {
+                        return Ok(TestStatus::fail("BufferView test failed"));
+                    }
+                }
+            }
+        }
+
+        Ok(TestStatus::pass("BufferView test"))
+    }
+}
+
+type GraphicsParts<'a> = (
+    Unique<'a, vk::RenderPass>,
+    Unique<'a, vk::Framebuffer>,
+    Unique<'a, vk::ShaderModule>,
+    Unique<'a, vk::ShaderModule>,
+    Unique<'a, vk::Pipeline>,
+    BufferWithMemory<'a>,
+    u32,
+);
+
+impl BufferViewMemoryInstance<'_> {
+    /// `recordCommandBuffer`
+    #[allow(clippy::too_many_arguments)]
+    fn record(
+        &self,
+        cmd_buffer: vk::CommandBuffer,
+        graphics: &Option<GraphicsParts<'_>>,
+        compute: &Option<(Unique<'_, vk::ShaderModule>, Unique<'_, vk::Pipeline>)>,
+        pipeline_layout: vk::PipelineLayout,
+        descriptor_set: vk::DescriptorSet,
+        color_image: vk::Image,
+        result_buffer: vk::Buffer,
+        render_size: u32,
+    ) -> Result<(), TestError> {
+        let device = self.context.get_device();
+        let range = make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, 1);
+        let copy_region = vk::BufferImageCopy {
+            buffer_offset: 0,
+            buffer_row_length: 0,
+            buffer_image_height: 0,
+            image_subresource: vk::ImageSubresourceLayers {
+                aspect_mask: vk::ImageAspectFlags::COLOR,
+                mip_level: 0,
+                base_array_layer: 0,
+                layer_count: 1,
+            },
+            image_offset: vk::Offset3D { x: 0, y: 0, z: 0 },
+            image_extent: vk::Extent3D {
+                width: render_size,
+                height: render_size,
+                depth: 1,
+            },
+        };
+
+        begin_command_buffer(device, cmd_buffer)?;
+        unsafe {
+            if let Some((render_pass, framebuffer, _, _, pipeline, vertex_buffer, vertex_count)) = graphics {
+                let initial = make_image_memory_barrier(
+                    vk::AccessFlags::empty(),
+                    vk::AccessFlags::COLOR_ATTACHMENT_WRITE,
+                    vk::ImageLayout::UNDEFINED,
+                    vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL,
+                    color_image,
+                    range,
+                );
+                device.cmd_pipeline_barrier(
+                    cmd_buffer,
+                    vk::PipelineStageFlags::COLOR_ATTACHMENT_OUTPUT,
+                    vk::PipelineStageFlags::COLOR_ATTACHMENT_OUTPUT,
+                    vk::DependencyFlags::empty(),
+                    &[] as &[vk::MemoryBarrier],
+                    &[] as &[vk::BufferMemoryBarrier],
+                    &[initial],
+                );
+
+                let clear = vk::ClearValue {
+                    color: vk::ClearColorValue { uint32: [0, 0, 0, 0] },
+                };
+                let begin_info = vk::RenderPassBeginInfo::builder()
+                    .render_pass(**render_pass)
+                    .framebuffer(**framebuffer)
+                    .render_area(vk::Rect2D {
+                        offset: vk::Offset2D { x: 0, y: 0 },
+                        extent: vk::Extent2D {
+                            width: render_size,
+                            height: render_size,
+                        },
+                    })
+                    .clear_values(std::slice::from_ref(&clear));
+                device.cmd_begin_render_pass(cmd_buffer, &begin_info, vk::SubpassContents::INLINE);
+                device.cmd_bind_pipeline(cmd_buffer, vk::PipelineBindPoint::GRAPHICS, **pipeline);
+                device.cmd_bind_descriptor_sets(cmd_buffer, vk::PipelineBindPoint::GRAPHICS, pipeline_layout, 0, &[descriptor_set], &[]);
+                device.cmd_bind_vertex_buffers(cmd_buffer, 0, &[vertex_buffer.get()], &[0]);
+                device.cmd_draw(cmd_buffer, *vertex_count, 1, 0, 0);
+                device.cmd_end_render_pass(cmd_buffer);
+
+                let to_src = make_image_memory_barrier(
+                    vk::AccessFlags::COLOR_ATTACHMENT_WRITE,
+                    vk::AccessFlags::TRANSFER_READ,
+                    vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL,
+                    vk::ImageLayout::TRANSFER_SRC_OPTIMAL,
+                    color_image,
+                    range,
+                );
+                device.cmd_pipeline_barrier(
+                    cmd_buffer,
+                    vk::PipelineStageFlags::COLOR_ATTACHMENT_OUTPUT,
+                    vk::PipelineStageFlags::TRANSFER,
+                    vk::DependencyFlags::empty(),
+                    &[] as &[vk::MemoryBarrier],
+                    &[] as &[vk::BufferMemoryBarrier],
+                    &[to_src],
+                );
+                device.cmd_copy_image_to_buffer(cmd_buffer, color_image, vk::ImageLayout::TRANSFER_SRC_OPTIMAL, result_buffer, &[copy_region]);
+            } else if let Some((_, pipeline)) = compute {
+                let initial = make_image_memory_barrier(
+                    vk::AccessFlags::empty(),
+                    vk::AccessFlags::TRANSFER_WRITE,
+                    vk::ImageLayout::UNDEFINED,
+                    vk::ImageLayout::TRANSFER_DST_OPTIMAL,
+                    color_image,
+                    range,
+                );
+                device.cmd_pipeline_barrier(
+                    cmd_buffer,
+                    vk::PipelineStageFlags::TRANSFER,
+                    vk::PipelineStageFlags::TRANSFER,
+                    vk::DependencyFlags::empty(),
+                    &[] as &[vk::MemoryBarrier],
+                    &[] as &[vk::BufferMemoryBarrier],
+                    &[initial],
+                );
+
+                device.cmd_bind_pipeline(cmd_buffer, vk::PipelineBindPoint::COMPUTE, **pipeline);
+                device.cmd_bind_descriptor_sets(cmd_buffer, vk::PipelineBindPoint::COMPUTE, pipeline_layout, 0, &[descriptor_set], &[]);
+
+                let clear = vk::ClearColorValue { uint32: [0, 0, 0, 0] };
+                device.cmd_clear_color_image(cmd_buffer, color_image, vk::ImageLayout::TRANSFER_DST_OPTIMAL, &clear, &[range]);
+
+                let to_general = make_image_memory_barrier(
+                    vk::AccessFlags::TRANSFER_WRITE,
+                    vk::AccessFlags::SHADER_WRITE,
+                    vk::ImageLayout::TRANSFER_DST_OPTIMAL,
+                    vk::ImageLayout::GENERAL,
+                    color_image,
+                    range,
+                );
+                device.cmd_pipeline_barrier(
+                    cmd_buffer,
+                    vk::PipelineStageFlags::TRANSFER,
+                    vk::PipelineStageFlags::COMPUTE_SHADER,
+                    vk::DependencyFlags::empty(),
+                    &[] as &[vk::MemoryBarrier],
+                    &[] as &[vk::BufferMemoryBarrier],
+                    &[to_general],
+                );
+
+                device.cmd_dispatch(cmd_buffer, render_size, 1, 1);
+
+                let to_src = make_image_memory_barrier(
+                    vk::AccessFlags::SHADER_WRITE,
+                    vk::AccessFlags::TRANSFER_READ,
+                    vk::ImageLayout::GENERAL,
+                    vk::ImageLayout::TRANSFER_SRC_OPTIMAL,
+                    color_image,
+                    range,
+                );
+                device.cmd_pipeline_barrier(
+                    cmd_buffer,
+                    vk::PipelineStageFlags::COMPUTE_SHADER,
+                    vk::PipelineStageFlags::TRANSFER,
+                    vk::DependencyFlags::empty(),
+                    &[] as &[vk::MemoryBarrier],
+                    &[] as &[vk::BufferMemoryBarrier],
+                    &[to_src],
+                );
+                device.cmd_copy_image_to_buffer(cmd_buffer, color_image, vk::ImageLayout::TRANSFER_SRC_OPTIMAL, result_buffer, &[copy_region]);
+            }
+        }
+        end_command_buffer(device, cmd_buffer)
+    }
+}
+
+/// `createBufferViewAccessTests`' memory-test half.
+pub fn add_buffer_view_memory_tests(parent: &mut tcu::TestCaseGroup) {
+    let buffer_texts = ["buffer_suballocated", "buffer_dedicated_alloc"];
+    let image_texts = ["image_suballocated", "image_dedicated_alloc"];
+    let queue_texts = ["graphics", "compute"];
+
+    let mut suballocation = tcu::TestCaseGroup::new("suballocation");
+    let mut dedicated = tcu::TestCaseGroup::new("dedicated_alloc");
+
+    for buffer_dedicated in [false, true] {
+        for image_dedicated in [false, true] {
+            for use_compute in [false, true] {
+                let is_suballocated = !buffer_dedicated && !image_dedicated;
+                let group = if is_suballocated { &mut suballocation } else { &mut dedicated };
+                let suffix = if is_suballocated {
+                    String::new()
+                } else {
+                    format!("_with_{}_{}", buffer_texts[usize::from(buffer_dedicated)], image_texts[usize::from(image_dedicated)])
+                };
+                let queue = queue_texts[usize::from(use_compute)];
+
+                for (stem, buffer_size, buffer_view_size, element_offset) in [
+                    ("buffer_view_memory_test_complete", 512, 512, 0),
+                    ("buffer_view_memory_test_partial_offset0", 4096, 512, 0),
+                    ("buffer_view_memory_test_partial_offset1", 4096, 512, 128),
+                ] {
+                    group.add_child(Box::new(BufferViewMemoryCase {
+                        name: format!("{stem}{suffix}_{queue}"),
+                        buffer_size,
+                        buffer_view_size,
+                        element_offset,
+                        use_compute_pipeline: use_compute,
+                        buffer_dedicated,
+                        image_dedicated,
+                    }) as Box<dyn TestCase>);
+                }
+            }
+        }
+    }
+
+    parent.add_child(suballocation);
+    parent.add_child(dedicated);
 }

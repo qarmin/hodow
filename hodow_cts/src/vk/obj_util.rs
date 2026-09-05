@@ -112,6 +112,170 @@ pub fn make_framebuffer<'a>(
     Ok(Unique::new(device, framebuffer))
 }
 
+/// `vk::makeRenderPass`, single colour attachment.
+///
+/// The attachment is cleared on load and stored, and the subpass leaves it in
+/// COLOR_ATTACHMENT_OPTIMAL - the shape every ported graphics test needs so far.
+pub fn make_render_pass(device: &Device, color_format: vk::Format) -> Result<Unique<'_, vk::RenderPass>, TestError> {
+    let attachment = vk::AttachmentDescription::builder()
+        .format(color_format)
+        .samples(vk::SampleCountFlags::_1)
+        .load_op(vk::AttachmentLoadOp::CLEAR)
+        .store_op(vk::AttachmentStoreOp::STORE)
+        .stencil_load_op(vk::AttachmentLoadOp::DONT_CARE)
+        .stencil_store_op(vk::AttachmentStoreOp::DONT_CARE)
+        .initial_layout(vk::ImageLayout::UNDEFINED)
+        .final_layout(vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL);
+    let attachments = [attachment];
+
+    let color_ref = vk::AttachmentReference::builder().attachment(0).layout(vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL);
+    let color_refs = [color_ref];
+    let subpass = vk::SubpassDescription::builder()
+        .pipeline_bind_point(vk::PipelineBindPoint::GRAPHICS)
+        .color_attachments(&color_refs);
+    let subpasses = [subpass];
+
+    let info = vk::RenderPassCreateInfo::builder().attachments(&attachments).subpasses(&subpasses);
+    let render_pass = unsafe { device.create_render_pass(&info, None) }.vk_check("vkCreateRenderPass")?;
+    Ok(Unique::new(device, render_pass))
+}
+
+/// `vk::makePipelineLayout`
+pub fn make_pipeline_layout<'a>(device: &'a Device, set_layouts: &[vk::DescriptorSetLayout]) -> Result<Unique<'a, vk::PipelineLayout>, TestError> {
+    let info = vk::PipelineLayoutCreateInfo::builder().set_layouts(set_layouts);
+    let layout = unsafe { device.create_pipeline_layout(&info, None) }.vk_check("vkCreatePipelineLayout")?;
+    Ok(Unique::new(device, layout))
+}
+
+/// `vk::makeGraphicsPipeline`, with upstream's defaults for every state the ported
+/// tests do not override.
+///
+/// Upstream's signature takes five shader modules and a dozen optional state pointers;
+/// this takes the two stages and the one state that has ever differed. Widening it is
+/// a matter of adding a parameter when a test needs one, rather than carrying twelve
+/// `None`s at every call site.
+pub fn make_graphics_pipeline<'a>(
+    device: &'a Device,
+    pipeline_layout: vk::PipelineLayout,
+    vertex_shader_module: vk::ShaderModule,
+    fragment_shader_module: vk::ShaderModule,
+    render_pass: vk::RenderPass,
+    render_size: (u32, u32),
+    topology: vk::PrimitiveTopology,
+) -> Result<Unique<'a, vk::Pipeline>, TestError> {
+    let entry = c"main";
+    let stages = [
+        vk::PipelineShaderStageCreateInfo::builder()
+            .stage(vk::ShaderStageFlags::VERTEX)
+            .module(vertex_shader_module)
+            .name(entry.to_bytes_with_nul())
+            .build(),
+        vk::PipelineShaderStageCreateInfo::builder()
+            .stage(vk::ShaderStageFlags::FRAGMENT)
+            .module(fragment_shader_module)
+            .name(entry.to_bytes_with_nul())
+            .build(),
+    ];
+
+    // The default vertex input: one binding of a tcu::Vec4 per vertex at location 0.
+    let bindings = [vk::VertexInputBindingDescription::builder()
+        .binding(0)
+        .stride(std::mem::size_of::<[f32; 4]>() as u32)
+        .input_rate(vk::VertexInputRate::VERTEX)
+        .build()];
+    let attributes = [vk::VertexInputAttributeDescription::builder()
+        .location(0)
+        .binding(0)
+        .format(vk::Format::R32G32B32A32_SFLOAT)
+        .offset(0)
+        .build()];
+    let vertex_input = vk::PipelineVertexInputStateCreateInfo::builder()
+        .vertex_binding_descriptions(&bindings)
+        .vertex_attribute_descriptions(&attributes);
+
+    let input_assembly = vk::PipelineInputAssemblyStateCreateInfo::builder().topology(topology).primitive_restart_enable(false);
+
+    let viewports = [vk::Viewport {
+        x: 0.0,
+        y: 0.0,
+        width: render_size.0 as f32,
+        height: render_size.1 as f32,
+        min_depth: 0.0,
+        max_depth: 1.0,
+    }];
+    let scissors = [vk::Rect2D {
+        offset: vk::Offset2D { x: 0, y: 0 },
+        extent: vk::Extent2D {
+            width: render_size.0,
+            height: render_size.1,
+        },
+    }];
+    let viewport_state = vk::PipelineViewportStateCreateInfo::builder().viewports(&viewports).scissors(&scissors);
+
+    let rasterization = vk::PipelineRasterizationStateCreateInfo::builder()
+        .depth_clamp_enable(false)
+        .rasterizer_discard_enable(false)
+        .polygon_mode(vk::PolygonMode::FILL)
+        .cull_mode(vk::CullModeFlags::NONE)
+        .front_face(vk::FrontFace::COUNTER_CLOCKWISE)
+        .depth_bias_enable(false)
+        .line_width(1.0);
+
+    let multisample = vk::PipelineMultisampleStateCreateInfo::builder()
+        .rasterization_samples(vk::SampleCountFlags::_1)
+        .sample_shading_enable(false)
+        .min_sample_shading(1.0);
+
+    let stencil_op = vk::StencilOpState::builder()
+        .fail_op(vk::StencilOp::KEEP)
+        .pass_op(vk::StencilOp::KEEP)
+        .depth_fail_op(vk::StencilOp::KEEP)
+        .compare_op(vk::CompareOp::NEVER)
+        .build();
+    let depth_stencil = vk::PipelineDepthStencilStateCreateInfo::builder()
+        .depth_test_enable(false)
+        .depth_write_enable(false)
+        .depth_compare_op(vk::CompareOp::LESS_OR_EQUAL)
+        .depth_bounds_test_enable(false)
+        .stencil_test_enable(false)
+        .front(stencil_op)
+        .back(stencil_op)
+        .min_depth_bounds(0.0)
+        .max_depth_bounds(1.0);
+
+    let blend_attachments = [vk::PipelineColorBlendAttachmentState::builder()
+        .blend_enable(false)
+        .src_color_blend_factor(vk::BlendFactor::ZERO)
+        .dst_color_blend_factor(vk::BlendFactor::ZERO)
+        .color_blend_op(vk::BlendOp::ADD)
+        .src_alpha_blend_factor(vk::BlendFactor::ZERO)
+        .dst_alpha_blend_factor(vk::BlendFactor::ZERO)
+        .alpha_blend_op(vk::BlendOp::ADD)
+        .color_write_mask(vk::ColorComponentFlags::R | vk::ColorComponentFlags::G | vk::ColorComponentFlags::B | vk::ColorComponentFlags::A)
+        .build()];
+    let color_blend = vk::PipelineColorBlendStateCreateInfo::builder()
+        .logic_op_enable(false)
+        .logic_op(vk::LogicOp::CLEAR)
+        .attachments(&blend_attachments)
+        .blend_constants([0.0; 4]);
+
+    let info = vk::GraphicsPipelineCreateInfo::builder()
+        .stages(&stages)
+        .vertex_input_state(&vertex_input)
+        .input_assembly_state(&input_assembly)
+        .viewport_state(&viewport_state)
+        .rasterization_state(&rasterization)
+        .multisample_state(&multisample)
+        .depth_stencil_state(&depth_stencil)
+        .color_blend_state(&color_blend)
+        .layout(pipeline_layout)
+        .render_pass(render_pass)
+        .subpass(0);
+
+    let pipelines = unsafe { device.create_graphics_pipelines(vk::PipelineCache::null(), &[info], None) }.vk_check("vkCreateGraphicsPipelines")?;
+    Ok(Unique::new(device, pipelines.0[0]))
+}
+
 /// `vk::BufferWithMemory` - a buffer plus the allocation backing it, bound together.
 pub struct BufferWithMemory<'a> {
     buffer: Unique<'a, vk::Buffer>,
@@ -125,6 +289,20 @@ impl<'a> BufferWithMemory<'a> {
 
         let req = unsafe { device.get_buffer_memory_requirements(*buffer) };
         let allocation = allocator.allocate(device, req, requirement)?;
+
+        unsafe { device.bind_buffer_memory(*buffer, allocation.get_memory(), allocation.get_offset()) }.vk_check("vkBindBufferMemory")?;
+
+        Ok(Self { buffer, allocation })
+    }
+
+    /// The same, through `VK_KHR_dedicated_allocation`. Upstream expresses the choice
+    /// as an `AllocationKind` on the test parameters rather than as a second type.
+    pub fn new_dedicated(device: &'a Device, allocator: &SimpleAllocator, buffer_create_info: vk::BufferCreateInfo, requirement: MemoryRequirement) -> Result<Self, TestError> {
+        let buffer = unsafe { device.create_buffer(&buffer_create_info, None) }.vk_check("vkCreateBuffer")?;
+        let buffer = Unique::new(device, buffer);
+
+        let req = unsafe { device.get_buffer_memory_requirements(*buffer) };
+        let allocation = allocator.allocate_dedicated_buffer(device, req, requirement, *buffer)?;
 
         unsafe { device.bind_buffer_memory(*buffer, allocation.get_memory(), allocation.get_offset()) }.vk_check("vkBindBufferMemory")?;
 

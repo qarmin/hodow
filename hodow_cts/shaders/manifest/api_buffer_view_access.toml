@@ -223,3 +223,22 @@ fmt_layout = { type = "str", value = ", rgba8ui" }
 op_name = { type = "str", value = "imageLoad" }
 in_format = { type = "str", value = "u" }
 out_format = { type = "str", value = "u" }
+
+# --- BufferViewTestInstance: the memory tests, which read the view from a real draw --
+# One shader set, no variants: the view is always R32_UINT here, and what the cases
+# vary is the allocation kind and the buffer offset, not the format.
+
+[[case]]
+name = "memory_graphics"
+rust_const = "BV_MEMORY_GRAPHICS"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "api/buffer_view_memory.vert", stage = "vert" },
+    { name = "frag", template = "api/buffer_view_memory.frag", stage = "frag" },
+]
+
+[[case]]
+name = "memory_compute"
+rust_const = "BV_MEMORY_COMPUTE"
+rust_type = "SharedProgram"
+programs = [{ name = "comp", template = "api/buffer_view_memory.comp", stage = "comp" }]
