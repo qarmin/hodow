@@ -608,6 +608,7 @@ pub fn create_tests() -> Vec<tcu::TestCaseGroup> {
             let mut group = tcu::TestCaseGroup::new(name);
             let mut op = tcu::TestCaseGroup::new("op");
             op.add_child(create_single_queue_tests(sync_type));
+            op.add_child(super::multi_queue_tests::create_multi_queue_tests(sync_type));
             group.add_child(op);
             group
         })

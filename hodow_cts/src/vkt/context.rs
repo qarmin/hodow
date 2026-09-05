@@ -12,7 +12,9 @@
 // resource interface, the pipeline compiler and the VulkanSC machinery; none of that
 // is ported, so this is the default-device slice of it.
 
+use std::cell::RefCell;
 use std::ffi::{CStr, CString};
+use std::rc::Rc;
 
 use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::InstanceV1_1;
@@ -41,6 +43,10 @@ pub struct Context<'a> {
     device_features: vk::PhysicalDeviceFeatures,
     device_extensions: Vec<String>,
     binary_collection: BinaryCollection,
+    /// `MultiQueues`' device, built on first use and shared by every case that asks
+    /// for it. Upstream caches it in a static for the same reason: creating a device
+    /// per case is the dominant cost of a group with thousands of them.
+    multi_queue_device: RefCell<Option<Rc<MultiQueueDevice>>>,
 }
 
 impl<'a> Context<'a> {
@@ -88,52 +94,7 @@ impl<'a> Context<'a> {
 
         let device_features = unsafe { instance.get_physical_device_features(physical_device) };
 
-        // Enable every extension the physical device advertises, which is what
-        // upstream's DefaultDevice does. Tests declare what they need through
-        // `require_device_functionality`; enabling the union here means a test does not
-        // have to also arrange for its extension to be turned on, and it keeps one
-        // device for the whole batch instead of one per extension set.
-        let available_extensions: Vec<String> = unsafe { instance.enumerate_device_extension_properties(physical_device, None) }
-            .vk_check("vkEnumerateDeviceExtensionProperties")?
-            .iter()
-            .map(|e| unsafe { CStr::from_ptr(e.extension_name.as_ptr()) }.to_string_lossy().into_owned())
-            .collect();
-
-        let extension_names: Vec<CString> = available_extensions.iter().filter_map(|n| CString::new(n.as_str()).ok()).collect();
-        let extension_ptrs: Vec<*const i8> = extension_names.iter().map(|n| n.as_ptr()).collect();
-
-        // Enable the extension feature structs too, not just the core features.
-        //
-        // `checkSupport` queries the *physical device*, so without this a case whose
-        // extension is advertised would be let through and then run against a device
-        // where the corresponding feature bit was never turned on - the shader's
-        // capability is unenabled, and the verdict becomes meaningless. Upstream's
-        // DefaultDevice enables everything the device reports; this does the same for
-        // the feature structs the ported groups need, by querying the chain and
-        // handing the very same chain back to vkCreateDevice.
-        let mut vulkan_11_features = vk::PhysicalDeviceVulkan11Features::default();
-        let mut vulkan_12_features = vk::PhysicalDeviceVulkan12Features::default();
-        let mut float16_int8_features = vk::PhysicalDeviceShaderFloat16Int8Features::default();
-        let mut zero_init_features = vk::PhysicalDeviceZeroInitializeWorkgroupMemoryFeatures::default();
-        let mut wmel_features = vk::PhysicalDeviceWorkgroupMemoryExplicitLayoutFeaturesKHR::default();
-
-        let mut features2 = vk::PhysicalDeviceFeatures2::builder()
-            .push_next(&mut vulkan_11_features)
-            .push_next(&mut vulkan_12_features)
-            .push_next(&mut float16_int8_features)
-            .push_next(&mut zero_init_features)
-            .push_next(&mut wmel_features);
-
-        unsafe { instance.get_physical_device_features2(physical_device, &mut features2) };
-
-        // `enabled_features` must stay unset: the core features travel inside the
-        // features2 chain instead, and Vulkan forbids providing both.
-        let info = vk::DeviceCreateInfo::builder()
-            .queue_create_infos(&queue_infos)
-            .enabled_extension_names(&extension_ptrs)
-            .push_next(&mut features2);
-
-        let device = unsafe { instance.create_device(physical_device, &info, None) }.vk_check("vkCreateDevice")?;
+        let (device, available_extensions) = create_device_with_everything(instance, physical_device, &queue_infos)?;
 
         let universal_queue = unsafe { device.get_device_queue(universal_queue_family_index, 0) };
         let compute_queue = compute_queue_family_index.map(|i| (unsafe { device.get_device_queue(i, 0) }, i));
@@ -154,7 +115,28 @@ impl<'a> Context<'a> {
             device_features,
             device_extensions: available_extensions,
             binary_collection,
+            multi_queue_device: RefCell::new(None),
         })
+    }
+
+    /// `MultiQueues` - a second device created with up to two queues from *every*
+    /// queue family, for the tests that need to synchronise across queues.
+    ///
+    /// The default device only requests the universal, compute-only and transfer-only
+    /// families with one queue each, and `vkGetDeviceQueue` on a family the device was
+    /// not created with is undefined behaviour, so those tests cannot use it.
+    ///
+    /// Upstream keys its cache on the synchronization type, timeline-semaphore and
+    /// maintenance8 flags because it only enables the extensions a case asks for. This
+    /// device enables everything the physical device advertises, exactly as
+    /// `Context::new` does, so one device covers every key.
+    pub fn multi_queue_device(&self) -> Result<Rc<MultiQueueDevice>, TestError> {
+        if let Some(existing) = self.multi_queue_device.borrow().as_ref() {
+            return Ok(Rc::clone(existing));
+        }
+        let created = Rc::new(MultiQueueDevice::new(self.platform, self.physical_device)?);
+        *self.multi_queue_device.borrow_mut() = Some(Rc::clone(&created));
+        Ok(created)
     }
 
     /// `Context::getDeviceInterface` and `Context::getDevice` collapsed into one,
@@ -308,4 +290,129 @@ pub fn select_physical_device(platform: &Platform, device_id: usize) -> Result<v
         .get(device_id.saturating_sub(1))
         .copied()
         .ok_or_else(|| PlatformError::InitError(format!("device id {device_id} out of range (found {})", devices.len())))
+}
+
+/// Creates a device with every extension the physical device advertises and the
+/// feature structs the ported groups need, which is what upstream's `DefaultDevice`
+/// does.
+///
+/// `checkSupport` queries the *physical device*, so without enabling the feature
+/// structs a case whose extension is advertised would be let through and then run
+/// against a device where the corresponding feature bit was never turned on - the
+/// shader's capability is unenabled, and the verdict becomes meaningless. The chain is
+/// queried and then handed straight back to `vkCreateDevice`.
+///
+/// Returns the device and the extension names it was created with.
+fn create_device_with_everything(instance: &Instance, physical_device: vk::PhysicalDevice, queue_infos: &[vk::DeviceQueueCreateInfo]) -> Result<(Device, Vec<String>), TestError> {
+    let available_extensions: Vec<String> = unsafe { instance.enumerate_device_extension_properties(physical_device, None) }
+        .vk_check("vkEnumerateDeviceExtensionProperties")?
+        .iter()
+        .map(|e| unsafe { CStr::from_ptr(e.extension_name.as_ptr()) }.to_string_lossy().into_owned())
+        .collect();
+
+    let extension_names: Vec<CString> = available_extensions.iter().filter_map(|n| CString::new(n.as_str()).ok()).collect();
+    let extension_ptrs: Vec<*const i8> = extension_names.iter().map(|n| n.as_ptr()).collect();
+
+    let mut vulkan_11_features = vk::PhysicalDeviceVulkan11Features::default();
+    let mut vulkan_12_features = vk::PhysicalDeviceVulkan12Features::default();
+    let mut float16_int8_features = vk::PhysicalDeviceShaderFloat16Int8Features::default();
+    let mut zero_init_features = vk::PhysicalDeviceZeroInitializeWorkgroupMemoryFeatures::default();
+    let mut wmel_features = vk::PhysicalDeviceWorkgroupMemoryExplicitLayoutFeaturesKHR::default();
+
+    let mut features2 = vk::PhysicalDeviceFeatures2::builder()
+        .push_next(&mut vulkan_11_features)
+        .push_next(&mut vulkan_12_features)
+        .push_next(&mut float16_int8_features)
+        .push_next(&mut zero_init_features)
+        .push_next(&mut wmel_features);
+
+    unsafe { instance.get_physical_device_features2(physical_device, &mut features2) };
+
+    // `enabled_features` must stay unset: the core features travel inside the features2
+    // chain instead, and Vulkan forbids providing both.
+    let info = vk::DeviceCreateInfo::builder()
+        .queue_create_infos(queue_infos)
+        .enabled_extension_names(&extension_ptrs)
+        .push_next(&mut features2);
+
+    let device = unsafe { instance.create_device(physical_device, &info, None) }.vk_check("vkCreateDevice")?;
+    Ok((device, available_extensions))
+}
+
+/// `MultiQueues::QueueData` plus the family index it belongs to.
+pub struct QueueFamilyQueues {
+    pub family_index: u32,
+    pub flags: vk::QueueFlags,
+    pub queues: Vec<vk::Queue>,
+}
+
+/// `MultiQueues`' logical device: every queue family, up to two queues from each.
+pub struct MultiQueueDevice {
+    device: Device,
+    allocator: SimpleAllocator,
+    families: Vec<QueueFamilyQueues>,
+}
+
+impl MultiQueueDevice {
+    fn new(platform: &Platform, physical_device: vk::PhysicalDevice) -> Result<Self, TestError> {
+        let instance = &platform.instance;
+        let queue_families = unsafe { instance.get_physical_device_queue_family_properties(physical_device) };
+
+        // `std::min(2u, queueCount)` per family, so a family with two queues can be
+        // paired with itself.
+        let counts: Vec<u32> = queue_families.iter().map(|f| f.queue_count.min(2)).collect();
+        let priorities = [1.0f32, 1.0f32];
+        let queue_infos: Vec<vk::DeviceQueueCreateInfo> = counts
+            .iter()
+            .enumerate()
+            .map(|(family, &count)| {
+                vk::DeviceQueueCreateInfo::builder()
+                    .queue_family_index(family as u32)
+                    .queue_priorities(&priorities[..count as usize])
+                    .build()
+            })
+            .collect();
+
+        let (device, _extensions) = create_device_with_everything(instance, physical_device, &queue_infos)?;
+
+        let families = counts
+            .iter()
+            .enumerate()
+            .map(|(family, &count)| QueueFamilyQueues {
+                family_index: family as u32,
+                flags: queue_families[family].queue_flags,
+                queues: (0..count).map(|i| unsafe { device.get_device_queue(family as u32, i) }).collect(),
+            })
+            .collect();
+
+        let memory_properties = unsafe { instance.get_physical_device_memory_properties(physical_device) };
+
+        Ok(Self {
+            device,
+            allocator: SimpleAllocator::new(memory_properties),
+            families,
+        })
+    }
+
+    pub fn device(&self) -> &Device {
+        &self.device
+    }
+
+    pub fn allocator(&self) -> &SimpleAllocator {
+        &self.allocator
+    }
+
+    /// `MultiQueues::familyCount` and the per-family data behind it.
+    pub fn families(&self) -> &[QueueFamilyQueues] {
+        &self.families
+    }
+}
+
+impl Drop for MultiQueueDevice {
+    fn drop(&mut self) {
+        unsafe {
+            let _ = self.device.device_wait_idle();
+            self.device.destroy_device(None);
+        }
+    }
 }

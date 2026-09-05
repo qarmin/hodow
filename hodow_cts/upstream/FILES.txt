@@ -62,6 +62,7 @@ external/vulkancts/modules/vulkan/renderpass/vktRenderPassUnusedAttachmentTests.
 external/vulkancts/modules/vulkan/renderpass/vktRenderPassUnusedClearAttachmentTests.cpp
 external/vulkancts/modules/vulkan/synchronization/vktSynchronizationOperation.cpp
 external/vulkancts/modules/vulkan/synchronization/vktSynchronizationOperation.hpp
+external/vulkancts/modules/vulkan/synchronization/vktSynchronizationOperationMultiQueueTests.cpp
 external/vulkancts/modules/vulkan/synchronization/vktSynchronizationOperationResources.hpp
 external/vulkancts/modules/vulkan/synchronization/vktSynchronizationOperationSingleQueueTests.cpp
 external/vulkancts/modules/vulkan/synchronization/vktSynchronizationOperationTestData.hpp

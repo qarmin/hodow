@@ -9,5 +9,6 @@
 //
 // Modifications: rewritten in Rust for hodow_cts.
 
+pub mod multi_queue_tests;
 pub mod operation;
 pub mod single_queue_tests;

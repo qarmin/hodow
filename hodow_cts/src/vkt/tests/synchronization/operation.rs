@@ -1595,8 +1595,39 @@ impl OperationName {
         matches!(self, Self::WriteBlitImage | Self::ReadBlitImage)
     }
 
-    /// `OperationSupport::getQueueFlags` - what the operation needs of the queue.
-    /// Only the event cases ask, when deciding whether a compute-queue variant exists.
+    /// `OperationSupport::getQueueFlags` - the queue capabilities the operation needs.
+    ///
+    /// A transfer of a depth or stencil aspect may need a format conversion, which the
+    /// spec only requires of a queue that also supports graphics; every other pure
+    /// transfer is happy on a transfer-only queue.
+    pub fn queue_flags(self, resource: &ResourceDescription) -> vk::QueueFlags {
+        match self {
+            // `FillUpdateBuffer`: without VK_KHR_maintenance1 `vkCmdFillBuffer` is not
+            // allowed on a transfer-only queue. maintenance1 is core in 1.1, so this is
+            // the 1.0 branch; the check is kept because the queue pairs a case runs on
+            // depend on it.
+            Self::WriteFillBuffer | Self::WriteUpdateBuffer => vk::QueueFlags::TRANSFER,
+            Self::WriteClearColorImage => vk::QueueFlags::GRAPHICS | vk::QueueFlags::COMPUTE,
+            Self::WriteClearDepthStencilImage => vk::QueueFlags::GRAPHICS,
+            _ => {
+                if let Some((_, stage)) = self.buffer_graphics_kind() {
+                    let _ = stage;
+                    return vk::QueueFlags::GRAPHICS;
+                }
+                if self.buffer_shader_kind().is_some() || self.image_shader_kind().is_some() {
+                    return vk::QueueFlags::COMPUTE;
+                }
+                if self.needs_graphics_queue(resource) {
+                    vk::QueueFlags::GRAPHICS
+                } else {
+                    vk::QueueFlags::TRANSFER
+                }
+            }
+        }
+    }
+
+    /// The graphics-only half of `getQueueFlags`, kept separate because the event
+    /// cases ask it directly when deciding whether a compute-queue variant exists.
     pub fn needs_graphics_queue(self, resource: &ResourceDescription) -> bool {
         match self {
             Self::WriteBlitImage | Self::ReadBlitImage | Self::ReadResolveImage => true,
