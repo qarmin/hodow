@@ -2576,32 +2576,110 @@ static DEDICATED_ALLOCATION_FORMATS: &[vk::Format] = &[
     vk::Format::R32G32B32A32_UINT,
 ];
 
-/// `addImageToImageAllFormatsColorTests`' 1D-to-1D block.
-///
-/// The destination format is the source format here: upstream passes a null compatible
-/// list, which it reads as "copy the destination format from the source". The
-/// cross-format pairs only appear in the 2D blocks.
-fn add_image_to_image_all_formats_color_1d(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
-    const SRC_LAYOUTS: [vk::ImageLayout; 2] = [vk::ImageLayout::TRANSFER_SRC_OPTIMAL, vk::ImageLayout::GENERAL];
-    const DST_LAYOUTS: [vk::ImageLayout; 2] = [vk::ImageLayout::TRANSFER_DST_OPTIMAL, vk::ImageLayout::GENERAL];
+/// `defaultRootSize` - the square root of `defaultSize`, so a 1D run of 64 texels maps
+/// onto an 8x8 image.
+const DEFAULT_ROOT_SIZE: u32 = 8;
+/// `defaultSixteenthSize`
+const DEFAULT_SIXTEENTH_SIZE: u32 = DEFAULT_SIZE / 16;
 
-    // `for (i = defaultQuarterSize; i < defaultSize; i += defaultSize / 2)` - two
-    // quarter-width regions landing at a quarter and three quarters across.
-    let mut regions = Vec::new();
+fn color_copy(src_offset: [i32; 3], dst_offset: [i32; 3], extent: [u32; 3]) -> ImageCopy {
+    ImageCopy {
+        src_offset,
+        dst_offset,
+        extent,
+        aspect_mask: vk::ImageAspectFlags::COLOR,
+        src_base_layer: 0,
+        src_layer_count: 1,
+        dst_base_layer: 0,
+        dst_layer_count: 1,
+    }
+}
+
+/// The three blocks whose destination format follows the source.
+fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
+    // 1d_to_1d: two quarter-width regions landing a quarter and three quarters across.
+    let mut regions_1d = Vec::new();
     let mut i = DEFAULT_QUARTER_SIZE;
     while i < DEFAULT_SIZE {
-        regions.push(ImageCopy {
-            src_offset: [0, 0, 0],
-            dst_offset: [i as i32, 0, 0],
-            extent: [DEFAULT_QUARTER_SIZE, 1, 1],
-            aspect_mask: vk::ImageAspectFlags::COLOR,
-            src_base_layer: 0,
-            src_layer_count: 1,
-            dst_base_layer: 0,
-            dst_layer_count: 1,
-        });
+        regions_1d.push(color_copy([0, 0, 0], [i as i32, 0, 0], [DEFAULT_QUARTER_SIZE, 1, 1]));
         i += DEFAULT_SIZE / 2;
     }
+
+    // 1d_to_2d: the 1D run is dealt out one row at a time.
+    let regions_1d_2d: Vec<ImageCopy> = (0..DEFAULT_ROOT_SIZE)
+        .map(|i| color_copy([(DEFAULT_ROOT_SIZE * i) as i32, 0, 0], [0, i as i32, 0], [DEFAULT_ROOT_SIZE, 1, 1]))
+        .collect();
+
+    // 1d_to_3d: one row per (slice, row) pair of a small cube.
+    let mut regions_1d_3d = Vec::new();
+    for i in 0..DEFAULT_SIXTEENTH_SIZE {
+        for j in 0..DEFAULT_SIXTEENTH_SIZE {
+            regions_1d_3d.push(color_copy(
+                [(i * DEFAULT_QUARTER_SIZE + j * DEFAULT_SIXTEENTH_SIZE) as i32, 0, 0],
+                [0, j as i32, (i % DEFAULT_SIXTEENTH_SIZE) as i32],
+                [DEFAULT_SIXTEENTH_SIZE, 1, 1],
+            ));
+        }
+    }
+
+    let root_extent = [DEFAULT_ROOT_SIZE, DEFAULT_ROOT_SIZE, 1];
+    let small_3d = [DEFAULT_SIXTEENTH_SIZE, DEFAULT_SIXTEENTH_SIZE, DEFAULT_SIXTEENTH_SIZE];
+
+    vec![
+        (
+            "1d_to_1d",
+            AllFormatsBlock {
+                src_type: vk::ImageType::_1D,
+                dst_type: vk::ImageType::_1D,
+                src_extent: DEFAULT_1D_EXTENT,
+                dst_extent: DEFAULT_1D_EXTENT,
+                regions: regions_1d,
+                needs_maintenance5: false,
+            },
+        ),
+        (
+            "1d_to_2d",
+            AllFormatsBlock {
+                src_type: vk::ImageType::_1D,
+                dst_type: vk::ImageType::_2D,
+                src_extent: DEFAULT_1D_EXTENT,
+                dst_extent: root_extent,
+                regions: regions_1d_2d,
+                needs_maintenance5: true,
+            },
+        ),
+        (
+            "1d_to_3d",
+            AllFormatsBlock {
+                src_type: vk::ImageType::_1D,
+                dst_type: vk::ImageType::_3D,
+                src_extent: DEFAULT_1D_EXTENT,
+                dst_extent: small_3d,
+                regions: regions_1d_3d,
+                needs_maintenance5: true,
+            },
+        ),
+    ]
+}
+
+/// One `<src>_to_<dst>` block of `addImageToImageAllFormatsColorTests`.
+struct AllFormatsBlock {
+    src_type: vk::ImageType,
+    dst_type: vk::ImageType,
+    src_extent: [u32; 3],
+    dst_extent: [u32; 3],
+    regions: Vec<ImageCopy>,
+    /// Copying between different image types only became legal with
+    /// VK_KHR_maintenance5, so the mixed blocks carry the requirement.
+    needs_maintenance5: bool,
+}
+
+/// The blocks where the destination format is the source format - upstream passes a
+/// null compatible list, which it reads as "copy the destination from the source". The
+/// cross-format pairs only appear in the 2D and 3D blocks.
+fn add_image_to_image_all_formats_same_format(group: &mut tcu::TestCaseGroup, gp: &GroupParams, block: &AllFormatsBlock) {
+    const SRC_LAYOUTS: [vk::ImageLayout; 2] = [vk::ImageLayout::TRANSFER_SRC_OPTIMAL, vk::ImageLayout::GENERAL];
+    const DST_LAYOUTS: [vk::ImageLayout; 2] = [vk::ImageLayout::TRANSFER_DST_OPTIMAL, vk::ImageLayout::GENERAL];
 
     for compatible in COLOR_IMAGE_FORMATS_TO_TEST {
         for entry in *compatible {
@@ -2621,24 +2699,24 @@ fn add_image_to_image_all_formats_color_1d(group: &mut tcu::TestCaseGroup, gp: &
                     dst_group.add_child(Box::new(CopyImageToImageCase {
                         name: format!("{}_{}", image_layout_case_name(src_layout), image_layout_case_name(dst_layout)),
                         src: ImageParms {
-                            image_type: vk::ImageType::_1D,
+                            image_type: block.src_type,
                             format: entry.format,
-                            extent: DEFAULT_1D_EXTENT,
+                            extent: block.src_extent,
                             tiling: vk::ImageTiling::OPTIMAL,
                             fill_mode: FillMode::White,
                             create_flags: None,
                         },
                         dst: ImageParms {
-                            image_type: vk::ImageType::_1D,
+                            image_type: block.dst_type,
                             format: entry.format,
-                            extent: DEFAULT_1D_EXTENT,
+                            extent: block.dst_extent,
                             tiling: vk::ImageTiling::OPTIMAL,
                             fill_mode: FillMode::Gradient,
                             create_flags: None,
                         },
-                        regions: regions.clone(),
+                        regions: block.regions.clone(),
                         clear_destination_with_red: false,
-                        needs_maintenance5: false,
+                        needs_maintenance5: block.needs_maintenance5,
                         src_operation_layout: Some(src_layout),
                         dst_operation_layout: Some(dst_layout),
                         allocation_kind: gp.allocation_kind,
@@ -2683,9 +2761,11 @@ pub fn add_image_to_image_groups(
 
         let mut all_formats = tcu::TestCaseGroup::new("all_formats");
         let mut color = tcu::TestCaseGroup::new("color");
-        let mut d1_to_1d = tcu::TestCaseGroup::new("1d_to_1d");
-        add_image_to_image_all_formats_color_1d(&mut d1_to_1d, &gp);
-        color.add_child(d1_to_1d);
+        for (name, block) in all_formats_same_format_blocks() {
+            let mut sub = tcu::TestCaseGroup::new(name);
+            add_image_to_image_all_formats_same_format(&mut sub, &gp, &block);
+            color.add_child(sub);
+        }
         all_formats.add_child(color);
         group.add_child(all_formats);
 
