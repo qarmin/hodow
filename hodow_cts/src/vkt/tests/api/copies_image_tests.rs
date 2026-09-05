@@ -1776,6 +1776,8 @@ pub struct CopyImageToImageCase {
     queue_selection: QueueSelection,
     general_layout: bool,
     needs_maintenance5: bool,
+    /// Copying a 3D image into a 2D one needs VK_KHR_maintenance1.
+    needs_maintenance1: bool,
     /// `ImageParms::operationLayout` per side. The all_formats and dimensions groups
     /// vary these independently, which is the whole of their `<src>_<dst>` name suffix;
     /// `None` means the default for that side, or GENERAL when the group asks for it.
@@ -1797,6 +1799,9 @@ impl TestCase for CopyImageToImageCase {
         }
         if self.needs_maintenance5 {
             context.require_device_functionality("VK_KHR_maintenance5")?;
+        }
+        if self.needs_maintenance1 {
+            context.require_device_functionality("VK_KHR_maintenance1")?;
         }
         select_queue(context, self.queue_selection)?;
 
@@ -2063,6 +2068,7 @@ fn add_image_to_image_simple_tests(group: &mut tcu::TestCaseGroup, gp: &GroupPar
             regions,
             clear_destination_with_red: clear,
             needs_maintenance5: false,
+            needs_maintenance1: false,
             src_operation_layout: None,
             dst_operation_layout: None,
             allocation_kind: gp.allocation_kind,
@@ -2207,6 +2213,7 @@ fn add_image_to_image_3d_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams)
             regions,
             clear_destination_with_red: false,
             needs_maintenance5: false,
+            needs_maintenance1: false,
             src_operation_layout: None,
             dst_operation_layout: None,
             allocation_kind: gp.allocation_kind,
@@ -2322,6 +2329,7 @@ fn add_image_to_image_array_tests(group: &mut tcu::TestCaseGroup, gp: &GroupPara
             regions,
             clear_destination_with_red: false,
             needs_maintenance5,
+            needs_maintenance1: false,
             src_operation_layout: None,
             dst_operation_layout: None,
             allocation_kind: gp.allocation_kind,
@@ -2391,6 +2399,7 @@ fn add_image_to_image_cube_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParam
             regions,
             clear_destination_with_red: false,
             needs_maintenance5: false,
+            needs_maintenance1: false,
             src_operation_layout: None,
             dst_operation_layout: None,
             allocation_kind: gp.allocation_kind,
@@ -2505,6 +2514,7 @@ fn add_image_to_image_dimensions_tests(group: &mut tcu::TestCaseGroup, gp: &Grou
                                 }],
                                 clear_destination_with_red: false,
                                 needs_maintenance5: false,
+                                needs_maintenance1: false,
                                 src_operation_layout: Some(src_layout),
                                 dst_operation_layout: Some(dst_layout),
                                 allocation_kind: gp.allocation_kind,
@@ -2622,6 +2632,44 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
         }
     }
 
+    // 3d_to_1d: one row per (slice, row) pair, dealt out along the 1D run.
+    let mut regions_3d_1d = Vec::new();
+    for i in 0..DEFAULT_SIXTEENTH_SIZE {
+        for j in 0..DEFAULT_SIXTEENTH_SIZE {
+            regions_3d_1d.push(color_copy(
+                [0, (j % DEFAULT_SIXTEENTH_SIZE) as i32, (i % DEFAULT_SIXTEENTH_SIZE) as i32],
+                [(j * DEFAULT_SIXTEENTH_SIZE + i * DEFAULT_QUARTER_SIZE) as i32, 0, 0],
+                [DEFAULT_SIXTEENTH_SIZE, 1, 1],
+            ));
+        }
+    }
+
+    // 3d_to_2d: each slice of the cube becomes one tile of a 4x4 grid.
+    let mut regions_3d_2d = Vec::new();
+    for i in 0..DEFAULT_SIXTEENTH_SIZE {
+        for j in 0..DEFAULT_SIXTEENTH_SIZE {
+            regions_3d_2d.push(color_copy(
+                [0, 0, (i * DEFAULT_SIXTEENTH_SIZE + j) as i32],
+                [(j * DEFAULT_QUARTER_SIZE) as i32, (i * DEFAULT_QUARTER_SIZE) as i32, 0],
+                [DEFAULT_QUARTER_SIZE, DEFAULT_QUARTER_SIZE, 1],
+            ));
+        }
+    }
+
+    // 3d_to_3d: small cubes stepping along a diagonal, with y running backwards.
+    let mut regions_3d_3d = Vec::new();
+    let mut i = 0u32;
+    while i < DEFAULT_QUARTER_SIZE {
+        regions_3d_3d.push(color_copy(
+            [0, 0, 0],
+            [i as i32, (DEFAULT_QUARTER_SIZE - i - DEFAULT_SIXTEENTH_SIZE) as i32, i as i32],
+            [DEFAULT_SIXTEENTH_SIZE, DEFAULT_SIXTEENTH_SIZE, DEFAULT_SIXTEENTH_SIZE],
+        ));
+        i += DEFAULT_SIXTEENTH_SIZE;
+    }
+
+    let extent_3d = [DEFAULT_QUARTER_SIZE, DEFAULT_QUARTER_SIZE, DEFAULT_QUARTER_SIZE];
+
     let root_extent = [DEFAULT_ROOT_SIZE, DEFAULT_ROOT_SIZE, 1];
     let small_3d = [DEFAULT_SIXTEENTH_SIZE, DEFAULT_SIXTEENTH_SIZE, DEFAULT_SIXTEENTH_SIZE];
 
@@ -2635,6 +2683,7 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 dst_extent: DEFAULT_1D_EXTENT,
                 regions: regions_1d,
                 needs_maintenance5: false,
+                needs_maintenance1: false,
             },
         ),
         (
@@ -2646,6 +2695,7 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 dst_extent: root_extent,
                 regions: regions_1d_2d,
                 needs_maintenance5: true,
+                needs_maintenance1: false,
             },
         ),
         (
@@ -2657,6 +2707,43 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 dst_extent: small_3d,
                 regions: regions_1d_3d,
                 needs_maintenance5: true,
+                needs_maintenance1: false,
+            },
+        ),
+        (
+            "3d_to_1d",
+            AllFormatsBlock {
+                src_type: vk::ImageType::_3D,
+                dst_type: vk::ImageType::_1D,
+                src_extent: small_3d,
+                dst_extent: DEFAULT_1D_EXTENT,
+                regions: regions_3d_1d,
+                needs_maintenance5: true,
+                needs_maintenance1: false,
+            },
+        ),
+        (
+            "3d_to_2d",
+            AllFormatsBlock {
+                src_type: vk::ImageType::_3D,
+                dst_type: vk::ImageType::_2D,
+                src_extent: extent_3d,
+                dst_extent: DEFAULT_EXTENT,
+                regions: regions_3d_2d,
+                needs_maintenance5: false,
+                needs_maintenance1: true,
+            },
+        ),
+        (
+            "3d_to_3d",
+            AllFormatsBlock {
+                src_type: vk::ImageType::_3D,
+                dst_type: vk::ImageType::_3D,
+                src_extent: extent_3d,
+                dst_extent: extent_3d,
+                regions: regions_3d_3d,
+                needs_maintenance5: false,
+                needs_maintenance1: false,
             },
         ),
     ]
@@ -2672,6 +2759,8 @@ struct AllFormatsBlock {
     /// Copying between different image types only became legal with
     /// VK_KHR_maintenance5, so the mixed blocks carry the requirement.
     needs_maintenance5: bool,
+    /// 3D-to-2D is the one pairing that predates it, under VK_KHR_maintenance1.
+    needs_maintenance1: bool,
 }
 
 /// The blocks where the destination format is the source format - upstream passes a
@@ -2717,6 +2806,7 @@ fn add_image_to_image_all_formats_same_format(group: &mut tcu::TestCaseGroup, gp
                         regions: block.regions.clone(),
                         clear_destination_with_red: false,
                         needs_maintenance5: block.needs_maintenance5,
+                        needs_maintenance1: block.needs_maintenance1,
                         src_operation_layout: Some(src_layout),
                         dst_operation_layout: Some(dst_layout),
                         allocation_kind: gp.allocation_kind,
