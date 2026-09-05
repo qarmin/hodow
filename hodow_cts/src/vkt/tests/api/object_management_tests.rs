@@ -18,9 +18,10 @@
 // line-by-line transcription and stay in upstream's order.
 //
 // Not ported here: `Instance`, `Device` and `DeviceGroup`, which create their own
-// instance and device rather than using the context's; and the `private_data`,
-// `single_alloc_callbacks`, `alloc_callback_fail*` and `multithreaded_*` variants -
-// the alloc-callback ones need an instance and device created through the callbacks.
+// instance and device rather than using the context's; and with them the
+// `multithreaded_per_thread_device`, `private_data`, `single_alloc_callbacks` and
+// `alloc_callback_fail*` variants, each of which needs a second device - the
+// alloc-callback ones want it created through the callbacks.
 
 use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::Handle as VkHandle;
@@ -66,6 +67,14 @@ impl<'a> Environment<'a> {
         }
     }
 }
+
+// SAFETY: both are built before the worker threads start, read only while they run and
+// dropped after they join. The Vulkan handles they carry may be used from several
+// threads at once - creating objects on one device concurrently is what the
+// `multithreaded_*` cases are for - and the only member that is not `Sync` by
+// derivation is the allocation-callbacks pointer, which those cases never set.
+unsafe impl Sync for Environment<'_> {}
+unsafe impl Sync for Resources<'_> {}
 
 // ---------------------------------------------------------------------------------
 // Parameters
@@ -1022,6 +1031,10 @@ enum Variant {
     MultipleSharedResources,
     /// `createMaxConcurrentTest`
     MaxConcurrent,
+    /// `multithreadedCreateSharedResourcesTest`
+    MultithreadedSharedResources,
+    /// `multithreadedCreatePerThreadResourcesTest`
+    MultithreadedPerThreadResources,
 }
 
 struct ObjectManagementCase {
@@ -1103,6 +1116,21 @@ impl TestInstance for ObjectManagementInstance<'_> {
                     }
                 }
             }
+            Variant::MultithreadedSharedResources => {
+                let num_threads = default_test_thread_count();
+                let env = Environment::new(self.context, num_threads);
+                let res = Resources::new(&env, &case.params)?;
+                run_create_threads(num_threads, &env, std::iter::repeat_n(&res, num_threads as usize), &case.params)?;
+            }
+            Variant::MultithreadedPerThreadResources => {
+                let num_threads = default_test_thread_count();
+                let env = Environment::new(self.context, 1);
+                let mut resources = Vec::with_capacity(num_threads as usize);
+                for _ in 0..num_threads {
+                    resources.push(Resources::new(&env, &case.params)?);
+                }
+                run_create_threads(num_threads, &env, resources.iter(), &case.params)?;
+            }
             Variant::MultipleSharedResources => {
                 let env = Environment::new(self.context, 4);
                 let res = Resources::new(&env, &case.params)?;
@@ -1116,6 +1144,46 @@ impl TestInstance for ObjectManagementInstance<'_> {
         }
         Ok(TestStatus::pass("Ok"))
     }
+}
+
+/// `getDefaultTestThreadCount`
+fn default_test_thread_count() -> u32 {
+    std::thread::available_parallelism().map_or(2, |n| n.get() as u32).clamp(2, 8)
+}
+
+/// `getCreateCount` - how many objects each thread creates and destroys.
+const CREATE_COUNT: u32 = 100;
+
+/// `ThreadGroup::run` over one `CreateThread` per resource set.
+///
+/// Each thread creates and immediately destroys `CREATE_COUNT` objects, syncing every
+/// fifth of the way so the threads are inside the driver at the same time.
+fn run_create_threads<'a>(num_threads: u32, env: &Environment<'a>, resources: impl Iterator<Item = &'a Resources<'a>>, params: &ObjectParams) -> Result<(), TestError> {
+    let barrier = std::sync::Barrier::new(num_threads as usize);
+    let iters_between_syncs = CREATE_COUNT / 5;
+    let resources: Vec<&Resources<'a>> = resources.collect();
+
+    std::thread::scope(|scope| {
+        let handles: Vec<_> = resources
+            .iter()
+            .map(|res| {
+                let barrier = &barrier;
+                scope.spawn(move || -> Result<(), TestError> {
+                    for iter_ndx in 0..CREATE_COUNT {
+                        if iter_ndx.is_multiple_of(iters_between_syncs) {
+                            barrier.wait();
+                        }
+                        let _object = create_object(env, res, params)?;
+                    }
+                    Ok(())
+                })
+            })
+            .collect();
+        for handle in handles {
+            handle.join().map_err(|_| TestError::InternalError("a creating thread panicked".to_string()))??;
+        }
+        Ok(())
+    })
 }
 
 // ---------------------------------------------------------------------------------
@@ -1463,9 +1531,17 @@ pub fn create_object_management_tests() -> tcu::TestCaseGroup {
         ("multiple_unique_resources", Variant::MultipleUniqueResources),
         ("multiple_shared_resources", Variant::MultipleSharedResources),
         ("max_concurrent", Variant::MaxConcurrent),
+        ("multithreaded_shared_resources", Variant::MultithreadedSharedResources),
+        ("multithreaded_per_thread_resources", Variant::MultithreadedPerThreadResources),
     ] {
         let mut group = tcu::TestCaseGroup::new(group_name);
         for (name, params) in all_cases() {
+            // A command pool and a descriptor pool are externally synchronised, so
+            // upstream leaves out the object kinds that would allocate from a shared
+            // one on several threads at once.
+            if variant == Variant::MultithreadedSharedResources && matches!(params, ObjectParams::CommandBuffer(_) | ObjectParams::DescriptorSet(_)) {
+                continue;
+            }
             group.add_child(Box::new(ObjectManagementCase { name, params, variant }) as Box<dyn TestCase>);
         }
         tests.add_child(group);
