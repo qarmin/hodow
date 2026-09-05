@@ -1471,6 +1471,9 @@ pub static CORE_COLOR_FORMATS: &[(vk::Format, &str)] = &[
     (vk::Format::R32G32B32A32_UINT, "r32g32b32a32_uint"),
     (vk::Format::R32G32B32A32_SINT, "r32g32b32a32_sint"),
     (vk::Format::R32G32B32A32_SFLOAT, "r32g32b32a32_sfloat"),
+    // `colorFormatsToTest.push_back(VK_FORMAT_A8_UNORM_KHR)` - appended to the core
+    // list rather than part of it, and absent under VulkanSC.
+    (vk::Format::A8_UNORM, "a8_unorm"),
 ];
 
 /// `addFormatTests`, colour formats only - the `input` branch needs input attachments
