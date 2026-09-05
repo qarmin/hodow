@@ -1250,6 +1250,7 @@ impl TestInstance for RenderPassTestInstance<'_> {
             &vertex_buffers,
             &render_pass_clear_values,
             &subpass_render_info,
+            &resources,
         );
         self.push_read_images_to_buffers(*command_buffer, &resources, queue_index);
         end_command_buffer(device, *command_buffer)?;
@@ -1933,6 +1934,7 @@ impl RenderPassTestInstance<'_> {
         vertex_buffers: &[Option<BufferWithMemory<'_>>],
         render_pass_clear_values: &[Option<ClearValue>],
         subpass_render_info: &[SubpassRenderInfo],
+        resources: &[AttachmentResources<'_>],
     ) {
         let device = self.context.get_device();
         let config = self.config;
@@ -2060,6 +2062,8 @@ impl RenderPassTestInstance<'_> {
                 }
             }
 
+            self.push_self_dependency_barriers(command_buffer, subpass, resources);
+
             if render_info.render_quad.is_some()
                 && let Some(vertex_buffer) = vertex_buffers[subpass_ndx].as_ref()
             {
@@ -2076,6 +2080,78 @@ impl RenderPassTestInstance<'_> {
         }
 
         unsafe { device.cmd_end_render_pass(command_buffer) };
+    }
+
+    /// The barrier `pushRenderPassCommands` emits between the clears and the draw for
+    /// every attachment a subpass both writes and reads back through itself.
+    ///
+    /// A subpass self-dependency declared in the render pass does not by itself order
+    /// a `vkCmdClearAttachments` against a later `subpassLoad` of the same attachment;
+    /// the dependency has to be *executed*, which is what this is. Without it a driver
+    /// is free to let the draw read what was there before the clear - which is exactly
+    /// what the `self_dep_clear_draw` cases exist to catch, and what a driver that
+    /// happens to serialise everything will hide.
+    fn push_self_dependency_barriers(&self, command_buffer: vk::CommandBuffer, subpass: &Subpass, resources: &[AttachmentResources<'_>]) {
+        let device = self.context.get_device();
+        let render_pass_info = &self.config.render_pass;
+        let mut barriers = Vec::new();
+        let mut src_stages = vk::PipelineStageFlags::empty();
+        let mut dst_stages = vk::PipelineStageFlags::empty();
+
+        for input in &subpass.input_attachments {
+            for color in &subpass.color_attachments {
+                if input.attachment != color.attachment || color.attachment == ATTACHMENT_UNUSED {
+                    continue;
+                }
+                barriers.push(make_image_memory_barrier(
+                    vk::AccessFlags::COLOR_ATTACHMENT_WRITE,
+                    vk::AccessFlags::INPUT_ATTACHMENT_READ,
+                    vk::ImageLayout::GENERAL,
+                    vk::ImageLayout::GENERAL,
+                    resources[color.attachment as usize].image.get(),
+                    make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, 1),
+                ));
+                src_stages |= vk::PipelineStageFlags::COLOR_ATTACHMENT_OUTPUT;
+                dst_stages |= vk::PipelineStageFlags::FRAGMENT_SHADER;
+            }
+
+            let ds = subpass.depth_stencil_attachment;
+            if ds.attachment != ATTACHMENT_UNUSED && input.attachment == ds.attachment {
+                let format = map_vk_format(render_pass_info.attachments[ds.attachment as usize].format).expect("checked in check_support");
+                let mut aspect_mask = vk::ImageAspectFlags::empty();
+                if format.order.has_depth() {
+                    aspect_mask |= vk::ImageAspectFlags::DEPTH;
+                }
+                if format.order.has_stencil() {
+                    aspect_mask |= vk::ImageAspectFlags::STENCIL;
+                }
+                barriers.push(make_image_memory_barrier(
+                    vk::AccessFlags::DEPTH_STENCIL_ATTACHMENT_WRITE,
+                    vk::AccessFlags::INPUT_ATTACHMENT_READ,
+                    input.layout,
+                    input.layout,
+                    resources[ds.attachment as usize].image.get(),
+                    make_image_subresource_range(aspect_mask, 0, 1, 0, 1),
+                ));
+                src_stages |= vk::PipelineStageFlags::LATE_FRAGMENT_TESTS | vk::PipelineStageFlags::EARLY_FRAGMENT_TESTS;
+                dst_stages |= vk::PipelineStageFlags::FRAGMENT_SHADER;
+            }
+        }
+
+        if barriers.is_empty() {
+            return;
+        }
+        unsafe {
+            device.cmd_pipeline_barrier(
+                command_buffer,
+                src_stages,
+                dst_stages,
+                vk::DependencyFlags::BY_REGION,
+                &[] as &[vk::MemoryBarrier],
+                &[] as &[vk::BufferMemoryBarrier],
+                &barriers,
+            );
+        }
     }
 
     /// `pushReadImagesToBuffers`
