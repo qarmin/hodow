@@ -107,6 +107,76 @@ def depth_fragment_shader(write_depth: bool, depth_true: int, depth_false: int) 
     return "\n".join(out) + "\n"
 
 
+def ds_input_fragment_shader(depth_input: bool, stencil_input: bool, epsilon: float, depth_true: int, depth_false: int, output: str) -> str:
+    """`createSubpassShaders` for a subpass reading a depth/stencil attachment.
+
+    Depth and stencil are separate input attachments in the shader even though the
+    render pass declares one reference: `i_depth0` is a float subpassInput and
+    `i_stencil0` a uint one, bound to views of the two aspects. A read-only layout
+    removes the aspect it makes read-only from *both* the inputs and the outputs.
+
+    `output` is what the subpass writes: "color" for the two-subpass form, whose
+    second attachment is always R8G8B8A8_UNORM, "depth" for the self-dependency form,
+    or "none" where the layout leaves nothing writable.
+    """
+    input_component_count = int(depth_input) + int(stencil_input)
+    output_component_count = {"color": 4, "depth": 1, "none": 0}[output]
+
+    out = ["#version 450"]
+    binding = 0
+    if depth_input:
+        out.append(f"layout(input_attachment_index = 0, set=0, binding={binding}) uniform highp subpassInput i_depth0;")
+        binding += 1
+    if stencil_input:
+        out.append(f"layout(input_attachment_index = 0, set=0, binding={binding}) uniform highp usubpassInput i_stencil0;")
+        binding += 1
+    if output == "color":
+        out.append("layout(location = 0) out highp vec4 o_color0;")
+    if depth_input:
+        out.append("")
+        out.append("bool depthsEqual(float a, float b, float epsilon) {")
+        out.append("\treturn abs(a - b) <= epsilon;")
+        out.append("}")
+        out.append("")
+    out.append("void main (void) {")
+
+    if output_component_count > 0:
+        inputs_per_output = (
+            (input_component_count // output_component_count) + (1 if input_component_count % output_component_count else 0)
+            if input_component_count >= output_component_count
+            else 1
+        )
+
+        out.append(f"\tbool inputs[{input_component_count}];")
+        out.append(f"\tbool outputs[{output_component_count}];")
+
+        ndx = 0
+        if depth_input:
+            out.append(f"\tinputs[{ndx}] = depthsEqual({depth_true}.0f/255.0f, float(subpassLoad(i_depth0).x), {epsilon:.12f});")
+            ndx += 1
+        if stencil_input:
+            out.append(f"\tinputs[{ndx}] = 255u == subpassLoad(i_stencil0).x;")
+            ndx += 1
+
+        # `index` is subpassNdx + attachmentIndex + outputValueNdx, and outputValueNdx
+        # is zero for the first (only) output attachment. The colour form writes
+        # attachment 1, the depth form attachment 0.
+        index = 1 + (1 if output == "color" else 0)
+        for comp_ndx in range(output_component_count):
+            out.append(f"\toutputs[{comp_ndx}] = (int(gl_FragCoord.x) % 2 == {index % 2}) {bool_op(index)} (int(gl_FragCoord.y) % 2 == {(index // 2) % 2});")
+            for i in range(inputs_per_output):
+                src = (comp_ndx * inputs_per_output + i) % input_component_count
+                out.append(f"\toutputs[{comp_ndx}] = outputs[{comp_ndx}] == inputs[{src}];")
+
+        if output == "color":
+            out.append("\to_color0 = vec4(" + ", ".join(f"outputs[{i}]" for i in range(4)) + ");")
+        else:
+            out.append(f"\tgl_FragDepth = outputs[0] ? {depth_true}.0f/255.0f : {depth_false}.0f/255.0f;")
+
+    out.append("}")
+    return "\n".join(out) + "\n"
+
+
 def read_core_color_formats() -> list[str]:
     """The `CORE_COLOR_FORMATS` case names, so the variant set is driven by the same
     list the Rust side registers from."""
@@ -254,6 +324,56 @@ def main() -> int:
             f'depth_false = {{ type = "u32", value = {v["d_false"]} }}',
             "",
         ]
+
+    # The depth/stencil `input` branch. The epsilon the shader compares depths with is
+    # `requiredDepthEpsilon`, which depends only on how many unorm bits the format has.
+    epsilons = {0: 0.0, 16: 1.0 / ((1 << 16) - 1), 24: 1.0 / ((1 << 24) - 1)}
+    ds_input_variants = []
+    for depth_input, stencil_input in ((True, False), (False, True), (True, True)):
+        for bits in sorted(epsilons) if depth_input else [0]:
+            for output in ("color", "depth", "none"):
+                # Every variant varies over the depth pair, because subpass 0 always
+                # writes depth and its shader bakes the pair in even where subpass 1
+                # reads only stencil.
+                for depth_true, depth_false in [(dt, df) for dt in depth_values for df in depth_values if dt != df]:
+                    ds_input_variants.append(
+                        {
+                            "name": f"ds_in_{int(depth_input)}{int(stencil_input)}_{bits}_{output}_{depth_true}_{depth_false}",
+                            "depth_input": depth_input,
+                            "stencil_input": stencil_input,
+                            "bits": bits,
+                            "output": output,
+                            "depth_true": depth_true,
+                            "depth_false": depth_false,
+                        }
+                    )
+
+    for v in ds_input_variants:
+        frag = SRC_DIR / f"{v['name']}.frag"
+        frag.write_text(ds_input_fragment_shader(v["depth_input"], v["stencil_input"], epsilons[v["bits"]], v["depth_true"], v["depth_false"], v["output"]))
+
+        lines += [
+            "[[case]]",
+            f'name = "{v["name"]}"',
+            f'rust_const = "RENDER_PASS_{v["name"].upper()}"',
+            'rust_type = "DepthInputProgram"',
+            "programs = [",
+            '    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },',
+            f'    {{ name = "0-frag", template = "renderpass/generated/ds_write_{v["depth_true"]}_{v["depth_false"]}.frag", stage = "frag" }},',
+            '    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },',
+            f'    {{ name = "1-frag", template = "renderpass/generated/{v["name"]}.frag", stage = "frag" }},',
+            "]",
+            "[case.params]",
+            f'depth_input = {{ type = "bool", value = {"true" if v["depth_input"] else "false"} }}',
+            f'stencil_input = {{ type = "bool", value = {"true" if v["stencil_input"] else "false"} }}',
+            f'epsilon_bits = {{ type = "u32", value = {v["bits"]} }}',
+            f'ds_output = {{ type = "str", value = "{v["output"]}" }}',
+            f'ds_depth_true = {{ type = "u32", value = {v["depth_true"]} }}',
+            f'ds_depth_false = {{ type = "u32", value = {v["depth_false"]} }}',
+            "",
+        ]
+
+    print(f"{len(ds_input_variants)} depth/stencil input shader variants")
 
     MANIFEST.write_text("\n".join(lines))
     print(f"wrote {MANIFEST.relative_to(REPO_DIR)} and {len(variants)} shaders in {SRC_DIR.relative_to(REPO_DIR)}")

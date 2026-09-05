@@ -639,3 +639,2271 @@ programs = [
 write_depth = { type = "bool", value = true }
 depth_true = { type = "u32", value = 128 }
 depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_10_0_color_0_255"
+rust_const = "RENDER_PASS_DS_IN_10_0_COLOR_0_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_0_color_0_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_10_0_color_0_128"
+rust_const = "RENDER_PASS_DS_IN_10_0_COLOR_0_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_0_color_0_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_10_0_color_255_0"
+rust_const = "RENDER_PASS_DS_IN_10_0_COLOR_255_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_0_color_255_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_10_0_color_255_128"
+rust_const = "RENDER_PASS_DS_IN_10_0_COLOR_255_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_0_color_255_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_10_0_color_128_0"
+rust_const = "RENDER_PASS_DS_IN_10_0_COLOR_128_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_0_color_128_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_10_0_color_128_255"
+rust_const = "RENDER_PASS_DS_IN_10_0_COLOR_128_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_0_color_128_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_10_0_depth_0_255"
+rust_const = "RENDER_PASS_DS_IN_10_0_DEPTH_0_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_0_depth_0_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_10_0_depth_0_128"
+rust_const = "RENDER_PASS_DS_IN_10_0_DEPTH_0_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_0_depth_0_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_10_0_depth_255_0"
+rust_const = "RENDER_PASS_DS_IN_10_0_DEPTH_255_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_0_depth_255_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_10_0_depth_255_128"
+rust_const = "RENDER_PASS_DS_IN_10_0_DEPTH_255_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_0_depth_255_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_10_0_depth_128_0"
+rust_const = "RENDER_PASS_DS_IN_10_0_DEPTH_128_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_0_depth_128_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_10_0_depth_128_255"
+rust_const = "RENDER_PASS_DS_IN_10_0_DEPTH_128_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_0_depth_128_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_10_0_none_0_255"
+rust_const = "RENDER_PASS_DS_IN_10_0_NONE_0_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_0_none_0_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_10_0_none_0_128"
+rust_const = "RENDER_PASS_DS_IN_10_0_NONE_0_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_0_none_0_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_10_0_none_255_0"
+rust_const = "RENDER_PASS_DS_IN_10_0_NONE_255_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_0_none_255_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_10_0_none_255_128"
+rust_const = "RENDER_PASS_DS_IN_10_0_NONE_255_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_0_none_255_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_10_0_none_128_0"
+rust_const = "RENDER_PASS_DS_IN_10_0_NONE_128_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_0_none_128_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_10_0_none_128_255"
+rust_const = "RENDER_PASS_DS_IN_10_0_NONE_128_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_0_none_128_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_10_16_color_0_255"
+rust_const = "RENDER_PASS_DS_IN_10_16_COLOR_0_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_16_color_0_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_10_16_color_0_128"
+rust_const = "RENDER_PASS_DS_IN_10_16_COLOR_0_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_16_color_0_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_10_16_color_255_0"
+rust_const = "RENDER_PASS_DS_IN_10_16_COLOR_255_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_16_color_255_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_10_16_color_255_128"
+rust_const = "RENDER_PASS_DS_IN_10_16_COLOR_255_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_16_color_255_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_10_16_color_128_0"
+rust_const = "RENDER_PASS_DS_IN_10_16_COLOR_128_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_16_color_128_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_10_16_color_128_255"
+rust_const = "RENDER_PASS_DS_IN_10_16_COLOR_128_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_16_color_128_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_10_16_depth_0_255"
+rust_const = "RENDER_PASS_DS_IN_10_16_DEPTH_0_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_16_depth_0_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_10_16_depth_0_128"
+rust_const = "RENDER_PASS_DS_IN_10_16_DEPTH_0_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_16_depth_0_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_10_16_depth_255_0"
+rust_const = "RENDER_PASS_DS_IN_10_16_DEPTH_255_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_16_depth_255_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_10_16_depth_255_128"
+rust_const = "RENDER_PASS_DS_IN_10_16_DEPTH_255_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_16_depth_255_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_10_16_depth_128_0"
+rust_const = "RENDER_PASS_DS_IN_10_16_DEPTH_128_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_16_depth_128_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_10_16_depth_128_255"
+rust_const = "RENDER_PASS_DS_IN_10_16_DEPTH_128_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_16_depth_128_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_10_16_none_0_255"
+rust_const = "RENDER_PASS_DS_IN_10_16_NONE_0_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_16_none_0_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_10_16_none_0_128"
+rust_const = "RENDER_PASS_DS_IN_10_16_NONE_0_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_16_none_0_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_10_16_none_255_0"
+rust_const = "RENDER_PASS_DS_IN_10_16_NONE_255_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_16_none_255_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_10_16_none_255_128"
+rust_const = "RENDER_PASS_DS_IN_10_16_NONE_255_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_16_none_255_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_10_16_none_128_0"
+rust_const = "RENDER_PASS_DS_IN_10_16_NONE_128_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_16_none_128_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_10_16_none_128_255"
+rust_const = "RENDER_PASS_DS_IN_10_16_NONE_128_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_16_none_128_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_10_24_color_0_255"
+rust_const = "RENDER_PASS_DS_IN_10_24_COLOR_0_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_24_color_0_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_10_24_color_0_128"
+rust_const = "RENDER_PASS_DS_IN_10_24_COLOR_0_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_24_color_0_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_10_24_color_255_0"
+rust_const = "RENDER_PASS_DS_IN_10_24_COLOR_255_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_24_color_255_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_10_24_color_255_128"
+rust_const = "RENDER_PASS_DS_IN_10_24_COLOR_255_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_24_color_255_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_10_24_color_128_0"
+rust_const = "RENDER_PASS_DS_IN_10_24_COLOR_128_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_24_color_128_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_10_24_color_128_255"
+rust_const = "RENDER_PASS_DS_IN_10_24_COLOR_128_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_24_color_128_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_10_24_depth_0_255"
+rust_const = "RENDER_PASS_DS_IN_10_24_DEPTH_0_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_24_depth_0_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_10_24_depth_0_128"
+rust_const = "RENDER_PASS_DS_IN_10_24_DEPTH_0_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_24_depth_0_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_10_24_depth_255_0"
+rust_const = "RENDER_PASS_DS_IN_10_24_DEPTH_255_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_24_depth_255_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_10_24_depth_255_128"
+rust_const = "RENDER_PASS_DS_IN_10_24_DEPTH_255_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_24_depth_255_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_10_24_depth_128_0"
+rust_const = "RENDER_PASS_DS_IN_10_24_DEPTH_128_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_24_depth_128_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_10_24_depth_128_255"
+rust_const = "RENDER_PASS_DS_IN_10_24_DEPTH_128_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_24_depth_128_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_10_24_none_0_255"
+rust_const = "RENDER_PASS_DS_IN_10_24_NONE_0_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_24_none_0_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_10_24_none_0_128"
+rust_const = "RENDER_PASS_DS_IN_10_24_NONE_0_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_24_none_0_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_10_24_none_255_0"
+rust_const = "RENDER_PASS_DS_IN_10_24_NONE_255_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_24_none_255_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_10_24_none_255_128"
+rust_const = "RENDER_PASS_DS_IN_10_24_NONE_255_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_24_none_255_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_10_24_none_128_0"
+rust_const = "RENDER_PASS_DS_IN_10_24_NONE_128_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_24_none_128_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_10_24_none_128_255"
+rust_const = "RENDER_PASS_DS_IN_10_24_NONE_128_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_10_24_none_128_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = false }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_01_0_color_0_255"
+rust_const = "RENDER_PASS_DS_IN_01_0_COLOR_0_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_01_0_color_0_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = false }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_01_0_color_0_128"
+rust_const = "RENDER_PASS_DS_IN_01_0_COLOR_0_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_01_0_color_0_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = false }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_01_0_color_255_0"
+rust_const = "RENDER_PASS_DS_IN_01_0_COLOR_255_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_01_0_color_255_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = false }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_01_0_color_255_128"
+rust_const = "RENDER_PASS_DS_IN_01_0_COLOR_255_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_01_0_color_255_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = false }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_01_0_color_128_0"
+rust_const = "RENDER_PASS_DS_IN_01_0_COLOR_128_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_01_0_color_128_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = false }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_01_0_color_128_255"
+rust_const = "RENDER_PASS_DS_IN_01_0_COLOR_128_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_01_0_color_128_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = false }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_01_0_depth_0_255"
+rust_const = "RENDER_PASS_DS_IN_01_0_DEPTH_0_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_01_0_depth_0_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = false }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_01_0_depth_0_128"
+rust_const = "RENDER_PASS_DS_IN_01_0_DEPTH_0_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_01_0_depth_0_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = false }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_01_0_depth_255_0"
+rust_const = "RENDER_PASS_DS_IN_01_0_DEPTH_255_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_01_0_depth_255_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = false }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_01_0_depth_255_128"
+rust_const = "RENDER_PASS_DS_IN_01_0_DEPTH_255_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_01_0_depth_255_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = false }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_01_0_depth_128_0"
+rust_const = "RENDER_PASS_DS_IN_01_0_DEPTH_128_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_01_0_depth_128_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = false }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_01_0_depth_128_255"
+rust_const = "RENDER_PASS_DS_IN_01_0_DEPTH_128_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_01_0_depth_128_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = false }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_01_0_none_0_255"
+rust_const = "RENDER_PASS_DS_IN_01_0_NONE_0_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_01_0_none_0_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = false }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_01_0_none_0_128"
+rust_const = "RENDER_PASS_DS_IN_01_0_NONE_0_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_01_0_none_0_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = false }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_01_0_none_255_0"
+rust_const = "RENDER_PASS_DS_IN_01_0_NONE_255_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_01_0_none_255_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = false }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_01_0_none_255_128"
+rust_const = "RENDER_PASS_DS_IN_01_0_NONE_255_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_01_0_none_255_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = false }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_01_0_none_128_0"
+rust_const = "RENDER_PASS_DS_IN_01_0_NONE_128_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_01_0_none_128_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = false }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_01_0_none_128_255"
+rust_const = "RENDER_PASS_DS_IN_01_0_NONE_128_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_01_0_none_128_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = false }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_11_0_color_0_255"
+rust_const = "RENDER_PASS_DS_IN_11_0_COLOR_0_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_0_color_0_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_11_0_color_0_128"
+rust_const = "RENDER_PASS_DS_IN_11_0_COLOR_0_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_0_color_0_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_11_0_color_255_0"
+rust_const = "RENDER_PASS_DS_IN_11_0_COLOR_255_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_0_color_255_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_11_0_color_255_128"
+rust_const = "RENDER_PASS_DS_IN_11_0_COLOR_255_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_0_color_255_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_11_0_color_128_0"
+rust_const = "RENDER_PASS_DS_IN_11_0_COLOR_128_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_0_color_128_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_11_0_color_128_255"
+rust_const = "RENDER_PASS_DS_IN_11_0_COLOR_128_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_0_color_128_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_11_0_depth_0_255"
+rust_const = "RENDER_PASS_DS_IN_11_0_DEPTH_0_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_0_depth_0_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_11_0_depth_0_128"
+rust_const = "RENDER_PASS_DS_IN_11_0_DEPTH_0_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_0_depth_0_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_11_0_depth_255_0"
+rust_const = "RENDER_PASS_DS_IN_11_0_DEPTH_255_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_0_depth_255_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_11_0_depth_255_128"
+rust_const = "RENDER_PASS_DS_IN_11_0_DEPTH_255_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_0_depth_255_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_11_0_depth_128_0"
+rust_const = "RENDER_PASS_DS_IN_11_0_DEPTH_128_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_0_depth_128_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_11_0_depth_128_255"
+rust_const = "RENDER_PASS_DS_IN_11_0_DEPTH_128_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_0_depth_128_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_11_0_none_0_255"
+rust_const = "RENDER_PASS_DS_IN_11_0_NONE_0_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_0_none_0_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_11_0_none_0_128"
+rust_const = "RENDER_PASS_DS_IN_11_0_NONE_0_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_0_none_0_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_11_0_none_255_0"
+rust_const = "RENDER_PASS_DS_IN_11_0_NONE_255_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_0_none_255_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_11_0_none_255_128"
+rust_const = "RENDER_PASS_DS_IN_11_0_NONE_255_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_0_none_255_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_11_0_none_128_0"
+rust_const = "RENDER_PASS_DS_IN_11_0_NONE_128_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_0_none_128_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_11_0_none_128_255"
+rust_const = "RENDER_PASS_DS_IN_11_0_NONE_128_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_0_none_128_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 0 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_11_16_color_0_255"
+rust_const = "RENDER_PASS_DS_IN_11_16_COLOR_0_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_16_color_0_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_11_16_color_0_128"
+rust_const = "RENDER_PASS_DS_IN_11_16_COLOR_0_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_16_color_0_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_11_16_color_255_0"
+rust_const = "RENDER_PASS_DS_IN_11_16_COLOR_255_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_16_color_255_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_11_16_color_255_128"
+rust_const = "RENDER_PASS_DS_IN_11_16_COLOR_255_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_16_color_255_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_11_16_color_128_0"
+rust_const = "RENDER_PASS_DS_IN_11_16_COLOR_128_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_16_color_128_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_11_16_color_128_255"
+rust_const = "RENDER_PASS_DS_IN_11_16_COLOR_128_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_16_color_128_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_11_16_depth_0_255"
+rust_const = "RENDER_PASS_DS_IN_11_16_DEPTH_0_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_16_depth_0_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_11_16_depth_0_128"
+rust_const = "RENDER_PASS_DS_IN_11_16_DEPTH_0_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_16_depth_0_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_11_16_depth_255_0"
+rust_const = "RENDER_PASS_DS_IN_11_16_DEPTH_255_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_16_depth_255_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_11_16_depth_255_128"
+rust_const = "RENDER_PASS_DS_IN_11_16_DEPTH_255_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_16_depth_255_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_11_16_depth_128_0"
+rust_const = "RENDER_PASS_DS_IN_11_16_DEPTH_128_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_16_depth_128_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_11_16_depth_128_255"
+rust_const = "RENDER_PASS_DS_IN_11_16_DEPTH_128_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_16_depth_128_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_11_16_none_0_255"
+rust_const = "RENDER_PASS_DS_IN_11_16_NONE_0_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_16_none_0_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_11_16_none_0_128"
+rust_const = "RENDER_PASS_DS_IN_11_16_NONE_0_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_16_none_0_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_11_16_none_255_0"
+rust_const = "RENDER_PASS_DS_IN_11_16_NONE_255_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_16_none_255_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_11_16_none_255_128"
+rust_const = "RENDER_PASS_DS_IN_11_16_NONE_255_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_16_none_255_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_11_16_none_128_0"
+rust_const = "RENDER_PASS_DS_IN_11_16_NONE_128_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_16_none_128_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_11_16_none_128_255"
+rust_const = "RENDER_PASS_DS_IN_11_16_NONE_128_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_16_none_128_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 16 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_11_24_color_0_255"
+rust_const = "RENDER_PASS_DS_IN_11_24_COLOR_0_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_24_color_0_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_11_24_color_0_128"
+rust_const = "RENDER_PASS_DS_IN_11_24_COLOR_0_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_24_color_0_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_11_24_color_255_0"
+rust_const = "RENDER_PASS_DS_IN_11_24_COLOR_255_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_24_color_255_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_11_24_color_255_128"
+rust_const = "RENDER_PASS_DS_IN_11_24_COLOR_255_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_24_color_255_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_11_24_color_128_0"
+rust_const = "RENDER_PASS_DS_IN_11_24_COLOR_128_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_24_color_128_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_11_24_color_128_255"
+rust_const = "RENDER_PASS_DS_IN_11_24_COLOR_128_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_24_color_128_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "color" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_11_24_depth_0_255"
+rust_const = "RENDER_PASS_DS_IN_11_24_DEPTH_0_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_24_depth_0_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_11_24_depth_0_128"
+rust_const = "RENDER_PASS_DS_IN_11_24_DEPTH_0_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_24_depth_0_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_11_24_depth_255_0"
+rust_const = "RENDER_PASS_DS_IN_11_24_DEPTH_255_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_24_depth_255_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_11_24_depth_255_128"
+rust_const = "RENDER_PASS_DS_IN_11_24_DEPTH_255_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_24_depth_255_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_11_24_depth_128_0"
+rust_const = "RENDER_PASS_DS_IN_11_24_DEPTH_128_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_24_depth_128_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_11_24_depth_128_255"
+rust_const = "RENDER_PASS_DS_IN_11_24_DEPTH_128_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_24_depth_128_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "depth" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_11_24_none_0_255"
+rust_const = "RENDER_PASS_DS_IN_11_24_NONE_0_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_24_none_0_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 255 }
+
+[[case]]
+name = "ds_in_11_24_none_0_128"
+rust_const = "RENDER_PASS_DS_IN_11_24_NONE_0_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_0_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_24_none_0_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 0 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_11_24_none_255_0"
+rust_const = "RENDER_PASS_DS_IN_11_24_NONE_255_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_24_none_255_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_11_24_none_255_128"
+rust_const = "RENDER_PASS_DS_IN_11_24_NONE_255_128"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_255_128.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_24_none_255_128.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 255 }
+ds_depth_false = { type = "u32", value = 128 }
+
+[[case]]
+name = "ds_in_11_24_none_128_0"
+rust_const = "RENDER_PASS_DS_IN_11_24_NONE_128_0"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_0.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_24_none_128_0.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 0 }
+
+[[case]]
+name = "ds_in_11_24_none_128_255"
+rust_const = "RENDER_PASS_DS_IN_11_24_NONE_128_255"
+rust_type = "DepthInputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/generated/ds_write_128_255.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/ds_in_11_24_none_128_255.frag", stage = "frag" },
+]
+[case.params]
+depth_input = { type = "bool", value = true }
+stencil_input = { type = "bool", value = true }
+epsilon_bits = { type = "u32", value = 24 }
+ds_output = { type = "str", value = "none" }
+ds_depth_true = { type = "u32", value = 128 }
+ds_depth_false = { type = "u32", value = 255 }

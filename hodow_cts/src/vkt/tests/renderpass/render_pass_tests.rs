@@ -248,6 +248,136 @@ static ALL_INPUT_PROGRAMS: &[&InputProgram] = &[
     &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_SELF_DEP_UINT4_MS,
 ];
 
+/// Every depth/stencil `input` entry the generator emitted.
+static ALL_DEPTH_INPUT_PROGRAMS: &[&DepthInputProgram] = &[
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_0_COLOR_0_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_0_COLOR_0_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_0_COLOR_255_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_0_COLOR_255_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_0_COLOR_128_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_0_COLOR_128_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_0_DEPTH_0_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_0_DEPTH_0_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_0_DEPTH_255_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_0_DEPTH_255_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_0_DEPTH_128_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_0_DEPTH_128_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_0_NONE_0_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_0_NONE_0_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_0_NONE_255_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_0_NONE_255_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_0_NONE_128_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_0_NONE_128_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_16_COLOR_0_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_16_COLOR_0_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_16_COLOR_255_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_16_COLOR_255_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_16_COLOR_128_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_16_COLOR_128_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_16_DEPTH_0_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_16_DEPTH_0_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_16_DEPTH_255_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_16_DEPTH_255_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_16_DEPTH_128_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_16_DEPTH_128_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_16_NONE_0_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_16_NONE_0_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_16_NONE_255_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_16_NONE_255_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_16_NONE_128_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_16_NONE_128_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_24_COLOR_0_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_24_COLOR_0_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_24_COLOR_255_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_24_COLOR_255_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_24_COLOR_128_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_24_COLOR_128_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_24_DEPTH_0_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_24_DEPTH_0_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_24_DEPTH_255_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_24_DEPTH_255_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_24_DEPTH_128_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_24_DEPTH_128_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_24_NONE_0_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_24_NONE_0_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_24_NONE_255_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_24_NONE_255_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_24_NONE_128_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_10_24_NONE_128_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_01_0_COLOR_0_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_01_0_COLOR_0_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_01_0_COLOR_255_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_01_0_COLOR_255_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_01_0_COLOR_128_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_01_0_COLOR_128_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_01_0_DEPTH_0_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_01_0_DEPTH_0_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_01_0_DEPTH_255_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_01_0_DEPTH_255_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_01_0_DEPTH_128_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_01_0_DEPTH_128_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_01_0_NONE_0_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_01_0_NONE_0_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_01_0_NONE_255_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_01_0_NONE_255_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_01_0_NONE_128_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_01_0_NONE_128_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_0_COLOR_0_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_0_COLOR_0_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_0_COLOR_255_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_0_COLOR_255_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_0_COLOR_128_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_0_COLOR_128_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_0_DEPTH_0_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_0_DEPTH_0_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_0_DEPTH_255_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_0_DEPTH_255_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_0_DEPTH_128_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_0_DEPTH_128_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_0_NONE_0_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_0_NONE_0_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_0_NONE_255_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_0_NONE_255_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_0_NONE_128_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_0_NONE_128_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_16_COLOR_0_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_16_COLOR_0_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_16_COLOR_255_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_16_COLOR_255_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_16_COLOR_128_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_16_COLOR_128_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_16_DEPTH_0_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_16_DEPTH_0_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_16_DEPTH_255_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_16_DEPTH_255_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_16_DEPTH_128_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_16_DEPTH_128_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_16_NONE_0_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_16_NONE_0_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_16_NONE_255_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_16_NONE_255_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_16_NONE_128_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_16_NONE_128_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_24_COLOR_0_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_24_COLOR_0_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_24_COLOR_255_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_24_COLOR_255_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_24_COLOR_128_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_24_COLOR_128_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_24_DEPTH_0_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_24_DEPTH_0_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_24_DEPTH_255_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_24_DEPTH_255_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_24_DEPTH_128_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_24_DEPTH_128_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_24_NONE_0_255,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_24_NONE_0_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_24_NONE_255_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_24_NONE_255_128,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_24_NONE_128_0,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_IN_11_24_NONE_128_255,
+];
+
 /// Every depth/stencil entry the generator emitted.
 static ALL_DEPTH_PROGRAMS: &[&DepthProgram] = &[
     &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_NO_WRITE,
@@ -258,6 +388,20 @@ static ALL_DEPTH_PROGRAMS: &[&DepthProgram] = &[
     &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_WRITE_128_0,
     &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_DS_WRITE_128_255,
 ];
+
+/// The manifest declares the depth/stencil `input` cases with this. `ds_output` is
+/// what the reading subpass writes: "color" for the two-subpass form, "depth" for the
+/// self-dependency one, or "none" where the layout leaves nothing writable.
+pub struct DepthInputProgram {
+    pub name: &'static str,
+    pub depth_input: bool,
+    pub stencil_input: bool,
+    pub epsilon_bits: u32,
+    pub ds_output: &'static str,
+    pub ds_depth_true: u32,
+    pub ds_depth_false: u32,
+    pub programs: BinaryCollection,
+}
 
 /// The manifest declares the depth/stencil cases with this. `write_depth` is false
 /// for the `_depth_read_only` layouts, where the subpass may not write depth at all.
@@ -756,7 +900,7 @@ fn render_reference_values(
                 // With input attachments each output channel is the grid value
                 // compared against one input channel, so an undefined input makes the
                 // output undefined rather than wrong.
-                let output_component_count: usize = subpass
+                let mut output_component_count: usize = subpass
                     .color_attachments
                     .iter()
                     .map(|r| {
@@ -764,6 +908,17 @@ fn render_reference_values(
                         get_shader_num_channels(format.order)
                     })
                     .sum();
+
+                // A writable depth aspect is one more output; stencil is not, because
+                // it does not come from the shader.
+                let ds_ref = subpass.depth_stencil_attachment;
+                let writes_depth = ds_ref.attachment != ATTACHMENT_UNUSED
+                    && ds_ref.layout != vk::ImageLayout::DEPTH_STENCIL_READ_ONLY_OPTIMAL
+                    && ds_ref.layout != vk::ImageLayout::DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL
+                    && map_vk_format(render_pass.attachments[ds_ref.attachment as usize].format).is_some_and(|f| f.order.has_depth());
+                if writes_depth {
+                    output_component_count += 1;
+                }
 
                 if output_component_count > 0 {
                     for y in pos_a[1]..pos_b[1] {
@@ -774,9 +929,21 @@ fn render_reference_values(
                             for input_ref in &subpass.input_attachments {
                                 let attachment_index = input_ref.attachment as usize;
                                 let format = map_vk_format(render_pass.attachments[attachment_index].format).expect("an input attachment format maps");
-                                let component_count = get_shader_num_channels(format.order);
-                                for comp_ndx in 0..component_count {
-                                    inputs.push(reference_attachments[attachment_index][at].get_value(comp_ndx));
+
+                                if format.order.has_depth() || format.order.has_stencil() {
+                                    // Depth is channel 0 and stencil channel 1, and a
+                                    // read-only layout drops its aspect from the list.
+                                    let (depth, stencil) = readable_aspects(format, input_ref.layout);
+                                    if depth {
+                                        inputs.push(reference_attachments[attachment_index][at].get_value(0));
+                                    }
+                                    if stencil {
+                                        inputs.push(reference_attachments[attachment_index][at].get_value(1));
+                                    }
+                                } else {
+                                    for comp_ndx in 0..get_shader_num_channels(format.order) {
+                                        inputs.push(reference_attachments[attachment_index][at].get_value(comp_ndx));
+                                    }
                                 }
                             }
 
@@ -816,6 +983,47 @@ fn render_reference_values(
 
                                 output_value_ndx += component_count;
                             }
+
+                            if writes_depth {
+                                let attachment_index = ds_ref.attachment as usize;
+                                let index = subpass_ndx + attachment_index;
+                                let op = bool_op_from_index(index);
+                                let bool_x = x % 2 == (index % 2) as i32;
+                                let bool_y = y % 2 == ((index / 2) % 2) as i32;
+                                let mut output = Some(perform_bool_op(op, bool_x, bool_y));
+
+                                for i in 0..inputs_per_output {
+                                    let Some(current) = output else { break };
+                                    match inputs[(output_value_ndx * inputs_per_output + i) % inputs.len()] {
+                                        Some(input) => output = Some(current == input),
+                                        None => output = None,
+                                    }
+                                }
+
+                                let reference = &mut reference_attachments[attachment_index];
+                                match output {
+                                    Some(value) => reference[at].set_value(0, value),
+                                    None => reference[at].set_undefined(0),
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Stencil is written by the pipeline, not the shader, so it does not
+                // take part in the input/output pairing above.
+                let ds_ref = subpass.depth_stencil_attachment;
+                if ds_ref.attachment != ATTACHMENT_UNUSED
+                    && ds_ref.layout != vk::ImageLayout::DEPTH_STENCIL_READ_ONLY_OPTIMAL
+                    && ds_ref.layout != vk::ImageLayout::DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL
+                    && map_vk_format(render_pass.attachments[ds_ref.attachment as usize].format).is_some_and(|f| f.order.has_stencil())
+                {
+                    let attachment_index = ds_ref.attachment as usize;
+                    let reference = &mut reference_attachments[attachment_index];
+                    for y in pos_a[1]..pos_b[1] {
+                        for x in pos_a[0]..pos_b[0] {
+                            let at = (x + y * target_size[0] as i32) as usize;
+                            reference[at].set_value(1, subpass_ndx % 2 == 0);
                         }
                     }
                 }
@@ -866,6 +1074,11 @@ struct AttachmentResources<'a> {
     /// stencil aspect gets a buffer of its own.
     secondary_buffer: Option<BufferWithMemory<'a>>,
     aspect: vk::ImageAspectFlags,
+    /// `getInputAttachmentViews` - a subpassInput can only read one aspect, so a
+    /// combined attachment is bound through two single-aspect views. For everything
+    /// else the attachment's own view is the input view.
+    depth_input_view: Option<Unique<'a, vk::ImageView>>,
+    stencil_input_view: Option<Unique<'a, vk::ImageView>>,
 }
 
 /// `RenderPassTestCase`
@@ -942,10 +1155,7 @@ impl TestCase for RenderPassTestCase {
     }
 
     fn programs(&self) -> BinaryCollection {
-        match depth_programs_for(&self.config) {
-            Some(program) => program.programs,
-            None => programs_for_config(&self.config).programs,
-        }
+        collection_for(&self.config)
     }
 
     fn create_instance<'a>(&'a self, context: &'a Context<'a>) -> Box<dyn TestInstance + 'a> {
@@ -1024,10 +1234,9 @@ impl TestInstance for RenderPassTestInstance<'_> {
 
         // `SubpassRenderer`, one per subpass: its own shaders, descriptor set for any
         // input attachments, pipeline layout and pipeline.
-        let programs = self.programs_for_case();
         let mut renderers = Vec::new();
         for (subpass_ndx, subpass) in render_pass_info.subpasses.iter().enumerate() {
-            renderers.push(self.create_subpass_renderer(subpass_ndx, subpass, programs, *render_pass, &resources, &subpass_render_info[subpass_ndx])?);
+            renderers.push(self.create_subpass_renderer(subpass_ndx, subpass, *render_pass, &resources, &subpass_render_info[subpass_ndx])?);
         }
 
         let command_buffer = allocate_command_buffer(device, *command_pool, vk::CommandBufferLevel::PRIMARY)?;
@@ -1420,6 +1629,27 @@ impl RenderPassTestInstance<'_> {
             (make_buffer(format)?, None)
         };
 
+        let (depth_input_view, stencil_input_view) = if format.order.has_depth() && format.order.has_stencil() {
+            (
+                Some(make_image_view(
+                    device,
+                    image.get(),
+                    vk::ImageViewType::_2D,
+                    attachment.format,
+                    make_image_subresource_range(vk::ImageAspectFlags::DEPTH, 0, 1, 0, 1),
+                )?),
+                Some(make_image_view(
+                    device,
+                    image.get(),
+                    vk::ImageViewType::_2D,
+                    attachment.format,
+                    make_image_subresource_range(vk::ImageAspectFlags::STENCIL, 0, 1, 0, 1),
+                )?),
+            )
+        } else {
+            (None, None)
+        };
+
         let resolve_image = if attachment.samples == vk::SampleCountFlags::_1 {
             None
         } else {
@@ -1441,6 +1671,8 @@ impl RenderPassTestInstance<'_> {
             resolve_image,
             secondary_buffer,
             aspect,
+            depth_input_view,
+            stencil_input_view,
         })
     }
 
@@ -2319,17 +2551,6 @@ struct SubpassRenderer<'a> {
     _fragment_module: Unique<'a, vk::ShaderModule>,
 }
 
-impl<'a> RenderPassTestInstance<'a> {
-    /// The manifest entry this case's shaders come from.
-    ///
-    /// A subpass that reads an input attachment needs the pair built for that
-    /// attachment's channel class and count; one that does not needs only the grid
-    /// shader, which the input entries also carry, so a single entry covers both.
-    fn programs_for_case(&self) -> &'static InputProgram {
-        programs_for_config(self.config)
-    }
-}
-
 /// The depth/stencil family, for a subpass whose only attachment is depth/stencil.
 /// `None` when the case has a colour attachment and therefore uses the other family.
 fn depth_programs_for(config: &TestConfig) -> Option<&'static DepthProgram> {
@@ -2407,7 +2628,6 @@ impl<'a> RenderPassTestInstance<'a> {
         &'a self,
         subpass_ndx: usize,
         subpass: &Subpass,
-        programs: &'static InputProgram,
         render_pass: vk::RenderPass,
         resources: &[AttachmentResources<'_>],
         render_info: &SubpassRenderInfo,
@@ -2416,35 +2636,51 @@ impl<'a> RenderPassTestInstance<'a> {
 
         // A depth/stencil-only subpass takes its shaders from the other family: no
         // colour output, and gl_FragDepth instead.
-        let collection = match depth_programs_for(self.config) {
-            Some(program) => program.programs,
-            None => programs.programs,
-        };
+        let collection = collection_for(self.config);
         let vertex_module = create_shader_module(device, collection.get(&format!("{subpass_ndx}-vert"))?)?;
         let fragment_module = create_shader_module(device, collection.get(&format!("{subpass_ndx}-frag"))?)?;
 
         let (descriptor_set_layout, descriptor_pool, descriptor_set) = if subpass.input_attachments.is_empty() {
             (None, None, None)
         } else {
+            // A depth/stencil attachment can contribute two bindings - one per aspect
+            // the layout leaves readable - where a colour attachment contributes one.
+            let image_infos: Vec<vk::DescriptorImageInfo> = subpass
+                .input_attachments
+                .iter()
+                .flat_map(|r| {
+                    let resource = &resources[r.attachment as usize];
+                    let format = map_vk_format(self.config.render_pass.attachments[r.attachment as usize].format).expect("checked in check_support");
+                    let mut views = Vec::new();
+
+                    if format.order.has_depth() || format.order.has_stencil() {
+                        if format.order.has_depth() && r.layout != vk::ImageLayout::DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL {
+                            views.push(resource.depth_input_view.as_ref().map_or(*resource.view, |v| **v));
+                        }
+                        if format.order.has_stencil() && r.layout != vk::ImageLayout::DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL {
+                            views.push(resource.stencil_input_view.as_ref().map_or(*resource.view, |v| **v));
+                        }
+                    } else {
+                        views.push(*resource.view);
+                    }
+
+                    views.into_iter().map(move |image_view| vk::DescriptorImageInfo {
+                        sampler: vk::Sampler::null(),
+                        image_view,
+                        image_layout: r.layout,
+                    })
+                })
+                .collect();
+
             let mut builder = DescriptorSetLayoutBuilder::new();
-            for _ in &subpass.input_attachments {
+            for _ in &image_infos {
                 builder = builder.add_single_binding(vk::DescriptorType::INPUT_ATTACHMENT, vk::ShaderStageFlags::FRAGMENT);
             }
             let layout = builder.build(device)?;
             let pool = DescriptorPoolBuilder::new()
-                .add_type(vk::DescriptorType::INPUT_ATTACHMENT, subpass.input_attachments.len() as u32)
+                .add_type(vk::DescriptorType::INPUT_ATTACHMENT, image_infos.len() as u32)
                 .build(device, vk::DescriptorPoolCreateFlags::FREE_DESCRIPTOR_SET, 1)?;
             let set = make_descriptor_set(device, *pool, *layout)?;
-
-            let image_infos: Vec<vk::DescriptorImageInfo> = subpass
-                .input_attachments
-                .iter()
-                .map(|r| vk::DescriptorImageInfo {
-                    sampler: vk::Sampler::null(),
-                    image_view: *resources[r.attachment as usize].view,
-                    image_layout: r.layout,
-                })
-                .collect();
             let writes: Vec<vk::WriteDescriptorSet> = image_infos
                 .iter()
                 .enumerate()
@@ -2754,6 +2990,296 @@ fn add_depth_stencil_format_tests(group: &mut tcu::TestCaseGroup, allocation_kin
             format_group.add_child(load_op_group);
         }
 
+        add_depth_stencil_input_tests(&mut format_group, vk_format, format, allocation_kind, render_pass_type);
+
         group.add_child(format_group);
     }
+}
+
+/// Which aspects of a depth/stencil input attachment the layout leaves readable.
+///
+/// A read-only layout removes its aspect from *both* the shader's inputs and the
+/// subpass's outputs, so the same two flags drive the shader, the descriptor bindings
+/// and the reference.
+fn readable_aspects(format: TextureFormat, layout: vk::ImageLayout) -> (bool, bool) {
+    (
+        format.order.has_depth() && layout != vk::ImageLayout::DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL,
+        format.order.has_stencil() && layout != vk::ImageLayout::DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL,
+    )
+}
+
+/// `requiredDepthEpsilon`'s only input: how many unorm bits the depth aspect has, or
+/// zero for a float format, which is exact.
+fn depth_epsilon_bits(format: vk::Format) -> u32 {
+    match format {
+        vk::Format::D16_UNORM | vk::Format::D16_UNORM_S8_UINT => 16,
+        vk::Format::X8_D24_UNORM_PACK32 | vk::Format::D24_UNORM_S8_UINT => 24,
+        _ => 0,
+    }
+}
+
+/// The depth/stencil `input` family: a subpass that reads a depth/stencil attachment.
+/// `None` when the case is not of that shape.
+fn depth_input_programs_for(config: &TestConfig) -> Option<&'static DepthInputProgram> {
+    let render_pass_info = &config.render_pass;
+    let subpass = render_pass_info.subpasses.iter().find(|s| !s.input_attachments.is_empty())?;
+
+    let input_ref = subpass.input_attachments[0];
+    let input_format = map_vk_format(render_pass_info.attachments[input_ref.attachment as usize].format)?;
+    if !input_format.order.has_depth() && !input_format.order.has_stencil() {
+        return None;
+    }
+
+    let (depth_input, stencil_input) = readable_aspects(input_format, input_ref.layout);
+    let epsilon_bits = if depth_input {
+        depth_epsilon_bits(render_pass_info.attachments[input_ref.attachment as usize].format)
+    } else {
+        0
+    };
+
+    // What the reading subpass writes.
+    let ds_output = if !subpass.color_attachments.is_empty() {
+        "color"
+    } else if subpass.depth_stencil_attachment.attachment != ATTACHMENT_UNUSED {
+        let ds_format = map_vk_format(render_pass_info.attachments[subpass.depth_stencil_attachment.attachment as usize].format)?;
+        let layout = subpass.depth_stencil_attachment.layout;
+        if ds_format.order.has_depth() && layout != vk::ImageLayout::DEPTH_STENCIL_READ_ONLY_OPTIMAL && layout != vk::ImageLayout::DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL {
+            "depth"
+        } else {
+            "none"
+        }
+    } else {
+        "none"
+    };
+
+    ALL_DEPTH_INPUT_PROGRAMS.iter().copied().find(|p| {
+        p.depth_input == depth_input
+            && p.stencil_input == stencil_input
+            && p.epsilon_bits == epsilon_bits
+            && p.ds_output == ds_output
+            && p.ds_depth_true == u32::from(config.depth_values[1])
+            && p.ds_depth_false == u32::from(config.depth_values[0])
+    })
+}
+
+/// The shaders a case uses. Three families, in the order that decides which applies:
+/// a subpass reading a depth/stencil attachment, a depth/stencil-only subpass, and
+/// everything with a colour attachment.
+fn collection_for(config: &TestConfig) -> BinaryCollection {
+    if let Some(program) = depth_input_programs_for(config) {
+        return program.programs;
+    }
+    if let Some(program) = depth_programs_for(config) {
+        return program.programs;
+    }
+    programs_for_config(config).programs
+}
+
+/// The `input` branch of the depth/stencil half of `addFormatTests`.
+///
+/// Subpass 0 writes the depth/stencil attachment; subpass 1 reads it back. Two shapes,
+/// each optionally restricted to one aspect: the two-subpass form writes what it found
+/// into a second R8G8B8A8_UNORM attachment, and the self-dependency form writes it
+/// back into the depth aspect it just read.
+fn add_depth_stencil_input_tests(
+    format_group: &mut tcu::TestCaseGroup,
+    vk_format: vk::Format,
+    format: TextureFormat,
+    allocation_kind: AllocationKind,
+    render_pass_type: RenderPassType,
+) {
+    const TARGET_SIZE: [u32; 2] = [64, 64];
+    const RENDER_POS: [u32; 2] = [0, 0];
+    const RENDER_SIZE: [u32; 2] = [64, 64];
+
+    let is_depth = format.order.has_depth();
+    let is_stencil = format.order.has_stencil();
+    let format_aspect_flags = attachment_aspect(format);
+
+    let load_ops = [
+        ("clear", vk::AttachmentLoadOp::CLEAR),
+        ("load", vk::AttachmentLoadOp::LOAD),
+        ("dont_care", vk::AttachmentLoadOp::DONT_CARE),
+    ];
+    let store_ops = [("store", vk::AttachmentStoreOp::STORE), ("dont_care", vk::AttachmentStoreOp::DONT_CARE)];
+    let render_types = [
+        ("clear", RenderTypes::CLEAR),
+        ("draw", RenderTypes::DRAW),
+        ("clear_draw", RenderTypes::CLEAR.or(RenderTypes::DRAW)),
+    ];
+
+    let input_attachment_aspect_mask = if render_pass_type == RenderPassType::RenderPass2 {
+        format_aspect_flags
+    } else {
+        vk::ImageAspectFlags::empty()
+    };
+
+    // The read-only layouts only exist where there are two aspects to split.
+    let mut read_only_layouts: Vec<(&str, vk::ImageLayout, vk::ImageLayout)> = Vec::new();
+    if is_depth && is_stencil {
+        read_only_layouts.push((
+            "_depth_read_only",
+            vk::ImageLayout::DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL,
+            vk::ImageLayout::DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL,
+        ));
+        read_only_layouts.push((
+            "_stencil_read_only",
+            vk::ImageLayout::DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL,
+            vk::ImageLayout::DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL,
+        ));
+    }
+
+    let mut input_group = tcu::TestCaseGroup::new("input");
+
+    for (load_op_name, load_op) in load_ops {
+        let mut load_op_group = tcu::TestCaseGroup::new(load_op_name);
+
+        for (store_op_name, store_op) in store_ops {
+            let mut store_op_group = tcu::TestCaseGroup::new(store_op_name);
+
+            for use_input_aspect in [false, true] {
+                if render_pass_type != RenderPassType::Legacy && use_input_aspect {
+                    continue;
+                }
+
+                let input_aspects = || {
+                    if use_input_aspect {
+                        vec![vk::InputAttachmentAspectReference {
+                            subpass: 1,
+                            input_attachment_index: 0,
+                            aspect_mask: format_aspect_flags,
+                        }]
+                    } else {
+                        Vec::new()
+                    }
+                };
+                let aspect_suffix = if use_input_aspect { "_use_input_aspect" } else { "" };
+
+                let ds_attachment = |depth_op: (vk::AttachmentLoadOp, vk::AttachmentStoreOp), stencil_op: (vk::AttachmentLoadOp, vk::AttachmentStoreOp)| Attachment {
+                    format: vk_format,
+                    samples: vk::SampleCountFlags::_1,
+                    load_op: depth_op.0,
+                    store_op: depth_op.1,
+                    stencil_load_op: stencil_op.0,
+                    stencil_store_op: stencil_op.1,
+                    initial_layout: vk::ImageLayout::DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+                    final_layout: vk::ImageLayout::DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+                };
+                let color_attachment = Attachment {
+                    format: vk::Format::R8G8B8A8_UNORM,
+                    samples: vk::SampleCountFlags::_1,
+                    load_op: vk::AttachmentLoadOp::DONT_CARE,
+                    store_op: vk::AttachmentStoreOp::STORE,
+                    stencil_load_op: vk::AttachmentLoadOp::DONT_CARE,
+                    stencil_store_op: vk::AttachmentStoreOp::DONT_CARE,
+                    initial_layout: vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL,
+                    final_layout: vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL,
+                };
+
+                let ds_dependency = |src_pass, dst_pass, flags| SubpassDependency {
+                    src_pass,
+                    dst_pass,
+                    src_stage_mask: vk::PipelineStageFlags::EARLY_FRAGMENT_TESTS | vk::PipelineStageFlags::LATE_FRAGMENT_TESTS,
+                    dst_stage_mask: vk::PipelineStageFlags::FRAGMENT_SHADER,
+                    src_access_mask: vk::AccessFlags::DEPTH_STENCIL_ATTACHMENT_WRITE,
+                    dst_access_mask: vk::AccessFlags::INPUT_ATTACHMENT_READ,
+                    flags,
+                };
+
+                for (render_type_name, render_type) in render_types {
+                    // Two subpasses, reading into a colour attachment. The
+                    // full-aspect case first, then one per read-only layout.
+                    let mut two_subpass_layouts: Vec<(&str, vk::ImageLayout)> = vec![("", vk::ImageLayout::SHADER_READ_ONLY_OPTIMAL)];
+                    two_subpass_layouts.extend(read_only_layouts.iter().map(|&(name, input_layout, _)| (name, input_layout)));
+
+                    for (layout_suffix, input_layout) in two_subpass_layouts {
+                        let render_pass = RenderPassDesc {
+                            attachments: vec![ds_attachment((load_op, store_op), (load_op, store_op)), color_attachment],
+                            subpasses: vec![
+                                Subpass {
+                                    input_attachments: Vec::new(),
+                                    color_attachments: Vec::new(),
+                                    depth_stencil_attachment: AttachmentReference::new(0, vk::ImageLayout::DEPTH_STENCIL_ATTACHMENT_OPTIMAL),
+                                },
+                                Subpass {
+                                    input_attachments: vec![AttachmentReference::with_aspect(0, input_layout, input_attachment_aspect_mask)],
+                                    color_attachments: vec![AttachmentReference::new(1, vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL)],
+                                    depth_stencil_attachment: AttachmentReference::new(ATTACHMENT_UNUSED, vk::ImageLayout::GENERAL),
+                                },
+                            ],
+                            dependencies: vec![ds_dependency(0, 1, vk::DependencyFlags::empty())],
+                            input_aspects: input_aspects(),
+                        };
+                        let config = TestConfig::new(
+                            render_pass,
+                            render_type,
+                            TARGET_SIZE,
+                            RENDER_POS,
+                            RENDER_SIZE,
+                            false,
+                            89246,
+                            allocation_kind,
+                            render_pass_type,
+                        );
+                        store_op_group.add_child(Box::new(RenderPassTestCase {
+                            name: format!("{render_type_name}{aspect_suffix}{layout_suffix}"),
+                            config,
+                        }) as Box<dyn TestCase>);
+                    }
+
+                    // One subpass reading and writing the same attachment. Its
+                    // stencil ops are DONT_CARE in the full-aspect case, because the
+                    // subpass writes only depth.
+                    let mut self_dep_layouts: Vec<(&str, vk::ImageLayout)> = vec![("", vk::ImageLayout::GENERAL)];
+                    self_dep_layouts.extend(read_only_layouts.iter().map(|&(name, _, ds_layout)| (name, ds_layout)));
+
+                    for (layout_suffix, ds_layout) in self_dep_layouts {
+                        let stencil_op = if layout_suffix.is_empty() {
+                            (vk::AttachmentLoadOp::DONT_CARE, vk::AttachmentStoreOp::DONT_CARE)
+                        } else {
+                            (load_op, store_op)
+                        };
+                        let render_pass = RenderPassDesc {
+                            attachments: vec![ds_attachment((load_op, store_op), stencil_op)],
+                            subpasses: vec![
+                                Subpass {
+                                    input_attachments: Vec::new(),
+                                    color_attachments: Vec::new(),
+                                    depth_stencil_attachment: AttachmentReference::new(0, vk::ImageLayout::DEPTH_STENCIL_ATTACHMENT_OPTIMAL),
+                                },
+                                Subpass {
+                                    input_attachments: vec![AttachmentReference::with_aspect(0, ds_layout, input_attachment_aspect_mask)],
+                                    color_attachments: Vec::new(),
+                                    depth_stencil_attachment: AttachmentReference::new(0, ds_layout),
+                                },
+                            ],
+                            dependencies: vec![ds_dependency(0, 1, vk::DependencyFlags::BY_REGION), ds_dependency(1, 1, vk::DependencyFlags::BY_REGION)],
+                            input_aspects: input_aspects(),
+                        };
+                        let config = TestConfig::new(
+                            render_pass,
+                            render_type,
+                            TARGET_SIZE,
+                            RENDER_POS,
+                            RENDER_SIZE,
+                            false,
+                            89246,
+                            allocation_kind,
+                            render_pass_type,
+                        );
+                        store_op_group.add_child(Box::new(RenderPassTestCase {
+                            name: format!("self_dep_{render_type_name}{aspect_suffix}{layout_suffix}"),
+                            config,
+                        }) as Box<dyn TestCase>);
+                    }
+                }
+            }
+
+            load_op_group.add_child(store_op_group);
+        }
+
+        input_group.add_child(load_op_group);
+    }
+
+    format_group.add_child(input_group);
 }
