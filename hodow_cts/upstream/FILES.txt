@@ -73,3 +73,4 @@ external/vulkancts/framework/vulkan/generated/vulkan/vkBasicTypes.inl
 external/vulkancts/modules/vulkan/api/vktApiObjectManagementTests.cpp
 external/vulkancts/framework/vulkan/vkAllocationCallbackUtil.cpp
 framework/common/tcuCompressedTexture.cpp
+framework/common/tcuAstcUtil.cpp

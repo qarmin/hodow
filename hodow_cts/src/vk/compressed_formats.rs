@@ -741,6 +741,116 @@ pub fn get_block_depth(format: vk::Format) -> u32 {
     get_compressed_format(format).map_or(1, |p| p.block_depth)
 }
 
+/// `tcu::isAstcFormat`
+pub fn is_astc_format(format: vk::Format) -> bool {
+    matches!(
+        format,
+        vk::Format::ASTC_4X4_UNORM_BLOCK
+            | vk::Format::ASTC_4X4_SRGB_BLOCK
+            | vk::Format::ASTC_5X4_UNORM_BLOCK
+            | vk::Format::ASTC_5X4_SRGB_BLOCK
+            | vk::Format::ASTC_5X5_UNORM_BLOCK
+            | vk::Format::ASTC_5X5_SRGB_BLOCK
+            | vk::Format::ASTC_6X5_UNORM_BLOCK
+            | vk::Format::ASTC_6X5_SRGB_BLOCK
+            | vk::Format::ASTC_6X6_UNORM_BLOCK
+            | vk::Format::ASTC_6X6_SRGB_BLOCK
+            | vk::Format::ASTC_8X5_UNORM_BLOCK
+            | vk::Format::ASTC_8X5_SRGB_BLOCK
+            | vk::Format::ASTC_8X6_UNORM_BLOCK
+            | vk::Format::ASTC_8X6_SRGB_BLOCK
+            | vk::Format::ASTC_8X8_UNORM_BLOCK
+            | vk::Format::ASTC_8X8_SRGB_BLOCK
+            | vk::Format::ASTC_10X5_UNORM_BLOCK
+            | vk::Format::ASTC_10X5_SRGB_BLOCK
+            | vk::Format::ASTC_10X6_UNORM_BLOCK
+            | vk::Format::ASTC_10X6_SRGB_BLOCK
+            | vk::Format::ASTC_10X8_UNORM_BLOCK
+            | vk::Format::ASTC_10X8_SRGB_BLOCK
+            | vk::Format::ASTC_10X10_UNORM_BLOCK
+            | vk::Format::ASTC_10X10_SRGB_BLOCK
+            | vk::Format::ASTC_12X10_UNORM_BLOCK
+            | vk::Format::ASTC_12X10_SRGB_BLOCK
+            | vk::Format::ASTC_12X12_UNORM_BLOCK
+            | vk::Format::ASTC_12X12_SRGB_BLOCK
+            | vk::Format::ASTC_4X4_SFLOAT_BLOCK
+            | vk::Format::ASTC_5X4_SFLOAT_BLOCK
+            | vk::Format::ASTC_5X5_SFLOAT_BLOCK
+            | vk::Format::ASTC_6X5_SFLOAT_BLOCK
+            | vk::Format::ASTC_6X6_SFLOAT_BLOCK
+            | vk::Format::ASTC_8X5_SFLOAT_BLOCK
+            | vk::Format::ASTC_8X6_SFLOAT_BLOCK
+            | vk::Format::ASTC_8X8_SFLOAT_BLOCK
+            | vk::Format::ASTC_10X5_SFLOAT_BLOCK
+            | vk::Format::ASTC_10X6_SFLOAT_BLOCK
+            | vk::Format::ASTC_10X8_SFLOAT_BLOCK
+            | vk::Format::ASTC_10X10_SFLOAT_BLOCK
+            | vk::Format::ASTC_12X10_SFLOAT_BLOCK
+            | vk::Format::ASTC_12X12_SFLOAT_BLOCK
+            | vk::Format::ASTC_3X3X3_UNORM_BLOCK_EXT
+            | vk::Format::ASTC_3X3X3_SRGB_BLOCK_EXT
+            | vk::Format::ASTC_3X3X3_SFLOAT_BLOCK_EXT
+            | vk::Format::ASTC_4X3X3_UNORM_BLOCK_EXT
+            | vk::Format::ASTC_4X3X3_SRGB_BLOCK_EXT
+            | vk::Format::ASTC_4X3X3_SFLOAT_BLOCK_EXT
+            | vk::Format::ASTC_4X4X3_UNORM_BLOCK_EXT
+            | vk::Format::ASTC_4X4X3_SRGB_BLOCK_EXT
+            | vk::Format::ASTC_4X4X3_SFLOAT_BLOCK_EXT
+            | vk::Format::ASTC_4X4X4_UNORM_BLOCK_EXT
+            | vk::Format::ASTC_4X4X4_SRGB_BLOCK_EXT
+            | vk::Format::ASTC_4X4X4_SFLOAT_BLOCK_EXT
+            | vk::Format::ASTC_5X4X4_UNORM_BLOCK_EXT
+            | vk::Format::ASTC_5X4X4_SRGB_BLOCK_EXT
+            | vk::Format::ASTC_5X4X4_SFLOAT_BLOCK_EXT
+            | vk::Format::ASTC_5X5X4_UNORM_BLOCK_EXT
+            | vk::Format::ASTC_5X5X4_SRGB_BLOCK_EXT
+            | vk::Format::ASTC_5X5X4_SFLOAT_BLOCK_EXT
+            | vk::Format::ASTC_5X5X5_UNORM_BLOCK_EXT
+            | vk::Format::ASTC_5X5X5_SRGB_BLOCK_EXT
+            | vk::Format::ASTC_5X5X5_SFLOAT_BLOCK_EXT
+            | vk::Format::ASTC_6X5X5_UNORM_BLOCK_EXT
+            | vk::Format::ASTC_6X5X5_SRGB_BLOCK_EXT
+            | vk::Format::ASTC_6X5X5_SFLOAT_BLOCK_EXT
+            | vk::Format::ASTC_6X6X5_UNORM_BLOCK_EXT
+            | vk::Format::ASTC_6X6X5_SRGB_BLOCK_EXT
+            | vk::Format::ASTC_6X6X5_SFLOAT_BLOCK_EXT
+            | vk::Format::ASTC_6X6X6_UNORM_BLOCK_EXT
+            | vk::Format::ASTC_6X6X6_SRGB_BLOCK_EXT
+            | vk::Format::ASTC_6X6X6_SFLOAT_BLOCK_EXT
+    )
+}
+
+/// `tcu::isAstcSRGBFormat`
+pub fn is_astc_srgb_format(format: vk::Format) -> bool {
+    matches!(
+        format,
+        vk::Format::ASTC_4X4_SRGB_BLOCK
+            | vk::Format::ASTC_5X4_SRGB_BLOCK
+            | vk::Format::ASTC_5X5_SRGB_BLOCK
+            | vk::Format::ASTC_6X5_SRGB_BLOCK
+            | vk::Format::ASTC_6X6_SRGB_BLOCK
+            | vk::Format::ASTC_8X5_SRGB_BLOCK
+            | vk::Format::ASTC_8X6_SRGB_BLOCK
+            | vk::Format::ASTC_8X8_SRGB_BLOCK
+            | vk::Format::ASTC_10X5_SRGB_BLOCK
+            | vk::Format::ASTC_10X6_SRGB_BLOCK
+            | vk::Format::ASTC_10X8_SRGB_BLOCK
+            | vk::Format::ASTC_10X10_SRGB_BLOCK
+            | vk::Format::ASTC_12X10_SRGB_BLOCK
+            | vk::Format::ASTC_12X12_SRGB_BLOCK
+            | vk::Format::ASTC_3X3X3_SRGB_BLOCK_EXT
+            | vk::Format::ASTC_4X3X3_SRGB_BLOCK_EXT
+            | vk::Format::ASTC_4X4X3_SRGB_BLOCK_EXT
+            | vk::Format::ASTC_4X4X4_SRGB_BLOCK_EXT
+            | vk::Format::ASTC_5X4X4_SRGB_BLOCK_EXT
+            | vk::Format::ASTC_5X5X4_SRGB_BLOCK_EXT
+            | vk::Format::ASTC_5X5X5_SRGB_BLOCK_EXT
+            | vk::Format::ASTC_6X5X5_SRGB_BLOCK_EXT
+            | vk::Format::ASTC_6X6X5_SRGB_BLOCK_EXT
+            | vk::Format::ASTC_6X6X6_SRGB_BLOCK_EXT
+    )
+}
+
 /// `vk::isAstcHdrFormat`
 pub fn is_astc_hdr_format(format: vk::Format) -> bool {
     matches!(

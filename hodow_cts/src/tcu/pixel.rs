@@ -310,7 +310,12 @@ fn rd_f32(p: &[u8]) -> f32 {
     f32::from_bits(rd_u32(p))
 }
 fn rd_f16(p: &[u8]) -> f32 {
-    float_bits_to_f32(rd_u16(p) as u32, 5, 10, 15, true)
+    f16_bits_to_f32(rd_u16(p))
+}
+
+/// `deFloat16To32`
+pub fn f16_bits_to_f32(bits: u16) -> f32 {
+    float_bits_to_f32(u32::from(bits), 5, 10, 15, true)
 }
 
 /// `tcu::readUint24`

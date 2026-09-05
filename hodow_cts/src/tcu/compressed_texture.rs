@@ -21,8 +21,9 @@
 
 use vulkanalia::vk;
 
-use crate::tcu::pixel::{ConstPixelBufferAccess, PixelBufferAccess};
+use crate::tcu::pixel::{ConstPixelBufferAccess, PixelBufferAccess, TextureLevel};
 use crate::tcu::texture::{ChannelOrder, ChannelType, TextureFormat};
+use crate::vk::compressed_formats::{is_astc_format, is_astc_srgb_format};
 
 /// `BC_BLOCK_WIDTH` / `BC_BLOCK_HEIGHT`
 const BC_BLOCK_WIDTH: usize = 4;
@@ -41,6 +42,13 @@ pub fn get_uncompressed_format(format: vk::Format) -> Option<TextureFormat> {
         vk::Format::ETC2_R8G8B8_SRGB_BLOCK => TextureFormat::new(sRGB, UNORM_INT8),
         vk::Format::ETC2_R8G8B8A1_UNORM_BLOCK | vk::Format::ETC2_R8G8B8A8_UNORM_BLOCK => TextureFormat::new(RGBA, UNORM_INT8),
         vk::Format::ETC2_R8G8B8A1_SRGB_BLOCK | vk::Format::ETC2_R8G8B8A8_SRGB_BLOCK => TextureFormat::new(sRGBA, UNORM_INT8),
+        _ if is_astc_format(format) => {
+            if is_astc_srgb_format(format) {
+                TextureFormat::new(sRGBA, UNORM_INT8)
+            } else {
+                TextureFormat::new(RGBA, HALF_FLOAT)
+            }
+        }
         vk::Format::BC6H_UFLOAT_BLOCK | vk::Format::BC6H_SFLOAT_BLOCK => TextureFormat::new(RGB, HALF_FLOAT),
         vk::Format::BC7_SRGB_BLOCK => TextureFormat::new(sRGBA, UNORM_INT8),
         vk::Format::BC7_UNORM_BLOCK => TextureFormat::new(RGBA, UNORM_INT8),
@@ -1556,40 +1564,63 @@ pub fn decompress(dst: &mut PixelBufferAccess<'_>, format: vk::Format, src: &[u8
         return false;
     };
     debug_assert_eq!(dst.format(), uncompressed);
-    let pixel_size = uncompressed.pixel_size().expect("BC formats decode to a sized format") as usize;
+    let pixel_size = uncompressed.pixel_size().expect("a compressed format decodes to a sized format") as usize;
     let block_size = crate::vk::compressed_formats::get_block_size_in_bytes(format) as usize;
+    let block_width = crate::vk::compressed_formats::get_block_width(format) as usize;
+    let block_height = crate::vk::compressed_formats::get_block_height(format) as usize;
     let [width, height, depth] = dst.size();
 
-    let block_count_x = (width as usize).div_ceil(BC_BLOCK_WIDTH);
-    let block_count_y = (height as usize).div_ceil(BC_BLOCK_HEIGHT);
+    let block_count_x = (width as usize).div_ceil(block_width);
+    let block_count_y = (height as usize).div_ceil(block_height);
 
-    let row_pitch = pixel_size * BC_BLOCK_WIDTH;
-    let mut scratch = vec![0u8; row_pitch * BC_BLOCK_HEIGHT];
+    let row_pitch = pixel_size * block_width;
+    let mut scratch = vec![0u8; row_pitch * block_height];
+    // ASTC decodes through a format-aware access rather than raw bytes, so it needs a
+    // real level to write into.
+    let astc = is_astc_format(format);
+    let mut astc_level = astc.then(|| TextureLevel::new(uncompressed, block_width as u32, block_height as u32, 1).expect("the decoded format is writable"));
 
     for block_z in 0..depth as usize {
         for block_y in 0..block_count_y {
             for block_x in 0..block_count_x {
                 let at = (block_z * block_count_y * block_count_x + block_y * block_count_x + block_x) * block_size;
-                {
+                let block = &src[at..at + block_size];
+
+                if let Some(level) = astc_level.as_mut() {
+                    // sRGB implies LDR; nothing ported reaches the HDR-only formats.
+                    let is_srgb = is_astc_srgb_format(format);
+                    crate::tcu::astc::decompress_block_to(&mut level.get_access(), block, is_srgb, true);
+                } else {
                     let mut out = BlockOut {
                         data: &mut scratch,
                         row_pitch,
                         pixel_size,
                     };
-                    decompress_block(&mut out, format, &src[at..at + block_size]);
+                    decompress_block(&mut out, format, block);
                 }
-                let copy_width = BC_BLOCK_WIDTH.min(width as usize - block_x * BC_BLOCK_WIDTH);
-                let copy_height = BC_BLOCK_HEIGHT.min(height as usize - block_y * BC_BLOCK_HEIGHT);
-                let block_access = ConstPixelBufferAccess::new_with_pitch(
-                    uncompressed,
-                    [BC_BLOCK_WIDTH as u32, BC_BLOCK_HEIGHT as u32, 1],
-                    [pixel_size, row_pitch, row_pitch * BC_BLOCK_HEIGHT],
-                    &scratch,
-                );
+
+                let copy_width = block_width.min(width as usize - block_x * block_width);
+                let copy_height = block_height.min(height as usize - block_y * block_height);
+                let owned_access;
+                let block_access = match astc_level.as_ref() {
+                    Some(level) => {
+                        owned_access = level.get_const_access();
+                        &owned_access
+                    }
+                    None => {
+                        owned_access = ConstPixelBufferAccess::new_with_pitch(
+                            uncompressed,
+                            [block_width as u32, block_height as u32, 1],
+                            [pixel_size, row_pitch, row_pitch * block_height],
+                            &scratch,
+                        );
+                        &owned_access
+                    }
+                };
                 dst.copy_region_from(
-                    &block_access,
+                    block_access,
                     (0, 0, 0),
-                    ((block_x * BC_BLOCK_WIDTH) as u32, (block_y * BC_BLOCK_HEIGHT) as u32, block_z as u32),
+                    ((block_x * block_width) as u32, (block_y * block_height) as u32, block_z as u32),
                     (copy_width as u32, copy_height as u32, 1),
                 );
             }

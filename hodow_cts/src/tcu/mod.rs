@@ -6,6 +6,7 @@
 // raises `TestError::NotPorted` instead of silently approximating - an approximation
 // would produce a verdict indistinguishable from a real driver bug.
 
+pub mod astc;
 pub mod compressed_texture;
 pub mod defs;
 pub mod fuzzy_image_compare;

@@ -46,9 +46,11 @@ use crate::tcu::pixel::{
 use crate::tcu::random::Random;
 use crate::tcu::tex_verifier::{LookupPrecision, is_nearest_sample_result_valid_float, is_nearest_sample_result_valid_int, srgb_to_linear};
 use crate::tcu::texture::{ChannelOrder, ChannelType, TextureChannelClass, TextureFormat};
-use crate::tcu::{self, TestError, TestOutcome, TestStatus, map_vk_format};
+use crate::tcu::{self, TestError, TestOutcome, TestStatus, astc, map_vk_format};
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
-use crate::vk::compressed_formats::{get_block_depth, get_block_height, get_block_size_in_bytes, get_block_width, is_astc_hdr_format, is_compressed_format};
+use crate::vk::compressed_formats::{
+    get_block_depth, get_block_height, get_block_size_in_bytes, get_block_width, is_astc_format, is_astc_hdr_format, is_astc_srgb_format, is_compressed_format,
+};
 use crate::vk::image_util::{ImageWithMemory, make_image_memory_barrier, make_image_subresource_range};
 use crate::vk::mem_util::{MemoryRequirement, flush_alloc};
 use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool};
@@ -83,6 +85,8 @@ fn get_compressed_format_threshold(format: vk::Format) -> [f32; 4] {
         vk::Format::ETC2_R8G8B8A1_UNORM_BLOCK | vk::Format::ETC2_R8G8B8A1_SRGB_BLOCK => ([8, 8, 8, 1], false),
         vk::Format::ETC2_R8G8B8A8_UNORM_BLOCK | vk::Format::ETC2_R8G8B8A8_SRGB_BLOCK => ([8, 8, 8, 8], false),
         vk::Format::BC7_UNORM_BLOCK | vk::Format::BC7_SRGB_BLOCK => ([5, 5, 5, 1], false),
+        // Every LDR ASTC format shares the ETC2_EAC_RGBA8 entry upstream.
+        _ if is_astc_format(format) => ([8, 8, 8, 8], false),
         // BC6H is a float format; its threshold is a flat tolerance rather than a
         // per-channel bit depth.
         vk::Format::BC6H_SFLOAT_BLOCK => return [0.01; 4],
@@ -177,7 +181,21 @@ fn make_compressed_source(format: vk::Format, width: u32, height: u32, depth: u3
     let mut data = vec![0u8; (blocks * get_block_size_in_bytes(format)) as usize];
     let mut random = Random::new(123);
 
-    if matches!(format, vk::Format::BC6H_UFLOAT_BLOCK | vk::Format::BC6H_SFLOAT_BLOCK) {
+    if is_astc_format(format) {
+        // The comparison has no meaning for a block the decoder rejects, so only
+        // blocks that decode cleanly go in.
+        let is_srgb = is_astc_srgb_format(format);
+        astc::generate_random_valid_blocks(
+            &mut data,
+            blocks as usize,
+            get_block_width(format),
+            get_block_height(format),
+            is_srgb,
+            // sRGB implies LDR; the SFLOAT formats are never registered here.
+            true,
+            random.get_uint32(),
+        );
+    } else if matches!(format, vk::Format::BC6H_UFLOAT_BLOCK | vk::Format::BC6H_SFLOAT_BLOCK) {
         // A compressed floating-point image cannot hold both big and small values at
         // once, so the source is built out of a set of predefined blocks that are
         // known to decode into the range the comparison expects.

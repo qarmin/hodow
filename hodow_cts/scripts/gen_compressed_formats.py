@@ -136,6 +136,20 @@ def main() -> int:
         "",
     ]
 
+    # `tcu::isAstcFormat` / `tcu::isAstcSRGBFormat` are switches over every ASTC
+    # CompressedTexFormat; the enum name is what distinguishes them, so derive both
+    # from the names already collected above rather than parsing a second table.
+    for pred, fn_name, doc in [
+        (lambda f: "_ASTC_" in f, "is_astc_format", "tcu::isAstcFormat"),
+        (lambda f: "_ASTC_" in f and "_SRGB_" in f, "is_astc_srgb_format", "tcu::isAstcSRGBFormat"),
+    ]:
+        fmts = [f for f, *_ in entries if pred(f)]
+        print(f"{fn_name}: {len(fmts)} formats")
+        lines += [f"/// `{doc}`", f"pub fn {fn_name}(format: vk::Format) -> bool {{", "    matches!("]
+        lines.append("        format,")
+        lines.append("        " + "\n            | ".join(f"vk::Format::{rust_name(f)}" for f in fmts))
+        lines += ["    )", "}", ""]
+
     header = (args.cts_dir / "external/vulkancts/framework/vulkan/generated/vulkan/vkFormatLists.inl").read_text()
     for list_name, fn_name, doc in [
         ("astcHDRFormats", "is_astc_hdr_format", "vk::isAstcHdrFormat"),
