@@ -67,6 +67,7 @@ pub enum FillMode {
     BlueRedX,
     BlueRedY,
     BlueRedZ,
+    Multisample,
 }
 
 /// `ImageParms`
@@ -247,6 +248,28 @@ pub fn generate_buffer(access: &mut PixelBufferAccess<'_>, width: u32, height: u
                             let v = rng.get_float();
                             access.set_pixel([v, v, v, max_value[3]], x, y, z);
                         }
+                    }
+                }
+            }
+        }
+        // `FILL_MODE_MULTISAMPLE` - the diagonal split the resolve tests draw, with the
+        // exact diagonal taking a third colour.
+        FillMode::Multisample => {
+            let green = [0.0, max_value[1], 0.0, max_value[3]];
+            let blue = [0.0, 0.0, max_value[2], max_value[3]];
+            for z in 0..depth {
+                for y in 0..height {
+                    for x in 0..width {
+                        let x_scaled = x as f32 / width as f32;
+                        let y_scaled = y as f32 / height as f32;
+                        let color = if x_scaled == y_scaled {
+                            [0.0, 0.5, 0.5, 1.0]
+                        } else if x_scaled > y_scaled {
+                            green
+                        } else {
+                            blue
+                        };
+                        access.set_pixel(color, x, y, z);
                     }
                 }
             }

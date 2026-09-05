@@ -58,6 +58,13 @@ impl BinaryCollection {
 }
 
 /// `vk::createShaderModule`
+/// The `rust_type` of a manifest entry that carries only its programs - the shape for
+/// a shader several test cases share unchanged.
+pub struct SharedProgram {
+    pub name: &'static str,
+    pub programs: BinaryCollection,
+}
+
 pub fn create_shader_module(device: &Device, binary: ProgramBinary) -> Result<Unique<'_, vk::ShaderModule>, TestError> {
     let info = vk::ShaderModuleCreateInfo {
         s_type: vk::StructureType::SHADER_MODULE_CREATE_INFO,

@@ -117,9 +117,14 @@ pub fn make_framebuffer<'a>(
 /// The attachment is cleared on load and stored, and the subpass leaves it in
 /// COLOR_ATTACHMENT_OPTIMAL - the shape every ported graphics test needs so far.
 pub fn make_render_pass(device: &Device, color_format: vk::Format) -> Result<Unique<'_, vk::RenderPass>, TestError> {
+    make_render_pass_with_samples(device, color_format, vk::SampleCountFlags::_1)
+}
+
+/// The same with a chosen sample count.
+pub fn make_render_pass_with_samples(device: &Device, color_format: vk::Format, samples: vk::SampleCountFlags) -> Result<Unique<'_, vk::RenderPass>, TestError> {
     let attachment = vk::AttachmentDescription::builder()
         .format(color_format)
-        .samples(vk::SampleCountFlags::_1)
+        .samples(samples)
         .load_op(vk::AttachmentLoadOp::CLEAR)
         .store_op(vk::AttachmentStoreOp::STORE)
         .stencil_load_op(vk::AttachmentLoadOp::DONT_CARE)
@@ -162,6 +167,30 @@ pub fn make_graphics_pipeline<'a>(
     render_pass: vk::RenderPass,
     render_size: (u32, u32),
     topology: vk::PrimitiveTopology,
+) -> Result<Unique<'a, vk::Pipeline>, TestError> {
+    make_graphics_pipeline_with_samples(
+        device,
+        pipeline_layout,
+        vertex_shader_module,
+        fragment_shader_module,
+        render_pass,
+        render_size,
+        topology,
+        vk::SampleCountFlags::_1,
+    )
+}
+
+/// The same with a chosen rasterisation sample count, which the resolve tests need.
+#[allow(clippy::too_many_arguments)]
+pub fn make_graphics_pipeline_with_samples<'a>(
+    device: &'a Device,
+    pipeline_layout: vk::PipelineLayout,
+    vertex_shader_module: vk::ShaderModule,
+    fragment_shader_module: vk::ShaderModule,
+    render_pass: vk::RenderPass,
+    render_size: (u32, u32),
+    topology: vk::PrimitiveTopology,
+    samples: vk::SampleCountFlags,
 ) -> Result<Unique<'a, vk::Pipeline>, TestError> {
     let entry = c"main";
     let stages = [
@@ -222,7 +251,7 @@ pub fn make_graphics_pipeline<'a>(
         .line_width(1.0);
 
     let multisample = vk::PipelineMultisampleStateCreateInfo::builder()
-        .rasterization_samples(vk::SampleCountFlags::_1)
+        .rasterization_samples(samples)
         .sample_shading_enable(false)
         .min_sample_shading(1.0);
 

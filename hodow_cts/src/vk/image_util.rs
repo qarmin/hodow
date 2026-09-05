@@ -165,6 +165,22 @@ impl<'a> ImageWithMemory<'a> {
         Ok(Self { image, allocation })
     }
 
+    /// `imageOffset` - bind the image one alignment into an allocation big enough for
+    /// both, which the resolve tests use to check that a non-zero bind offset works.
+    pub fn new_at_alignment_offset(device: &'a Device, allocator: &SimpleAllocator, info: vk::ImageCreateInfo, requirement: MemoryRequirement) -> Result<Self, TestError> {
+        let image = unsafe { device.create_image(&info, None) }.vk_check("vkCreateImage")?;
+        let image = Unique::new(device, image);
+
+        let mut req = unsafe { device.get_image_memory_requirements(*image) };
+        let offset = req.alignment;
+        req.size += offset;
+        let allocation = allocator.allocate(device, req, requirement)?;
+
+        unsafe { device.bind_image_memory(*image, allocation.get_memory(), allocation.get_offset() + offset) }.vk_check("vkBindImageMemory")?;
+
+        Ok(Self { image, allocation })
+    }
+
     pub fn get(&self) -> vk::Image {
         *self.image
     }

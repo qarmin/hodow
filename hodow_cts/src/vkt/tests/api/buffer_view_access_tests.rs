@@ -37,6 +37,9 @@ use crate::vk::obj_util::{
     make_graphics_pipeline, make_pipeline_layout, make_render_pass,
 };
 use crate::vk::programs::{BinaryCollection, create_shader_module};
+// Re-exported so the generated shader module, which imports this module wholesale,
+// can name the type its manifest entries are declared with.
+pub use crate::vk::programs::SharedProgram;
 use crate::vk::ref_util::Unique;
 use crate::vkt::{Context, TestCase, TestInstance};
 
@@ -54,12 +57,6 @@ pub struct BufferViewAccessProgram {
     pub op_name: &'static str,
     pub in_format: &'static str,
     pub out_format: &'static str,
-    pub programs: BinaryCollection,
-}
-
-/// The `rust_type` of a manifest entry that carries only its programs.
-pub struct SharedProgram {
-    pub name: &'static str,
     pub programs: BinaryCollection,
 }
 

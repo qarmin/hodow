@@ -1,0 +1,18 @@
+# Shader manifest for dEQP-VK.api.copy_and_blit.*.resolve_image.*
+#
+# The multisampled source is produced by a draw rather than an upload: a single
+# triangle covering the upper-right half, cleared to blue. That is exactly what
+# FILL_MODE_MULTISAMPLE builds on the host, so the reference is analytical and no
+# software rasteriser is needed - only tcu::fuzzyCompare's tolerance for the edge.
+
+upstream_source = "external/vulkancts/modules/vulkan/api/vktApiResolveTests.cpp"
+rust_module = "api/resolve_image_tests"
+
+[[case]]
+name = "resolve"
+rust_const = "RESOLVE_IMAGE"
+rust_type = "SharedProgram"
+programs = [
+    { name = "vert", template = "api/resolve_image.vert", stage = "vert" },
+    { name = "frag", template = "api/resolve_image.frag", stage = "frag" },
+]
