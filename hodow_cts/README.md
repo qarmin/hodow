@@ -259,7 +259,8 @@ on SwiftShader (200-500 random cases each, 2026-09-05):
 
 | group | cases | pass rate | runnable | shaders |
 | --- | --- | --- | --- | --- |
-| `synchronization2.op.single_queue` | 15090 | 50% | ~7500 | 42 distinct |
+| `synchronization2.op.single_queue` | 15090 | 50% | ~7500 | 42 distinct - **in progress, 4918 done** |
+| `synchronization{,2}.implicit` | 1024 | **100%** | 1024 | 2 distinct |
 | `renderpasses.renderpass{1,2}` formats/attachment/simple | 25096 | 74% | ~18600 | ~500-1000 distinct |
 | `binding_model.shader_access` | 86412 | 18% | ~15100 | templated by descriptor type x stage |
 | `renderpasses.renderpass1` (whole) | 19750 | 53% | ~10500 | |
@@ -327,11 +328,27 @@ descriptor type, 1950 cases. What is left is bounded by three things:
 
 `bind2` needs `VK_KHR_maintenance6` and skips here for the same reason.
 
-`synchronization2.op.single_queue` is now the best remaining target by a wide margin:
-15090 cases, half of them runnable here, and only 42 distinct shaders across a
-600-case sample - and its transfer-only corner (1388 cases across both sync groups,
-964 runnable) needs no shaders at all, so the operation framework can be built and
-verified before any shader work starts.
+`synchronization2.op.single_queue` was the best remaining target and is now the one
+being worked: 4918 cases across both sync groups, built up in four passes - the
+transfer operations first (no shaders at all, so the framework could be verified
+before any shader work), then buffer compute, then image compute, then the vertex and
+fragment stages.
+
+What bounds the rest of it, measured rather than assumed:
+
+- **`op.multi_queue`** (23760) is 3% runnable here: SwiftShader has one queue family.
+- **`op.single_queue.timeline_semaphore`** (772 of the ported operation set) is 2.5%
+  runnable, because the timeline case chains the resource through *every* copy
+  operation the resource supports - including the tessellation and geometry ones, which
+  are unsupported here, so the whole case skips.
+- **The tessellation and geometry stage operations** are the same story from the other
+  end: both binaries report NotSupported, so cts-diff would say nothing about whether
+  they were ported right. They are absent rather than present-and-skipped.
+- **`synchronization{,2}.implicit`** (1024, 100% runnable, 2 shaders) is the best
+  remaining ratio in the group and reuses operations already ported. Its cost is that
+  the submit shapes come from a seeded `de::Random` draw order that has to be
+  reproduced exactly, and getting it wrong would change the test without changing a
+  verdict - the divergence cts-diff cannot see.
 
 `renderpasses.*.attachment` is the cautionary one. Its render passes are generated
 from a seeded `de::Random`, so the shader is a function of a random sequence of
