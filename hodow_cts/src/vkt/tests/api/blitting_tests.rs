@@ -1749,6 +1749,18 @@ fn color_image_formats_to_test_blit() -> Vec<(Vec<BlitFormat>, &'static [BlitFor
     ]
 }
 
+/// `colorImageFormatsToTestBlit`, the copy local to the mipmap groups. It is the
+/// uncompressed half of the list above: a mipmap chain is blitted into itself, and a
+/// compressed destination cannot be a blit target.
+fn mipmap_color_image_formats_to_test_blit() -> [(&'static [BlitFormat], bool); 4] {
+    [
+        (COMPATIBLE_FORMATS_U_INTS, true),
+        (COMPATIBLE_FORMATS_S_INTS, true),
+        (COMPATIBLE_FORMATS_FLOATS, false),
+        (COMPATIBLE_FORMATS_SRGB, false),
+    ]
+}
+
 /// `addBlittingImageAllFormatsColorTests`
 fn add_blitting_image_all_formats_color_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
     // 2D tests.
@@ -2627,8 +2639,8 @@ fn add_blitting_image_all_formats_mipmap_level_tests(group: &mut tcu::TestCaseGr
         let mut layer_group = tcu::TestCaseGroup::new(format!("layercount_{layer_count}"));
         let regions = mipmap_regions(from_base_level, mip_levels, layer_count);
 
-        for (source_formats, _, only_nearest) in color_image_formats_to_test_blit() {
-            for src in &source_formats {
+        for (source_formats, only_nearest) in mipmap_color_image_formats_to_test_blit() {
+            for src in source_formats {
                 if !is_supported_by_framework(src.format) {
                     continue;
                 }
