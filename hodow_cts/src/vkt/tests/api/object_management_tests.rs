@@ -17,10 +17,10 @@
 // `create_object`, both dispatching on it. The per-object bodies are otherwise a
 // line-by-line transcription and stay in upstream's order.
 //
-// Not ported here: the `multithreaded_per_thread_device`, `private_data`,
-// `single_alloc_callbacks` and `alloc_callback_fail*` variants. Each needs upstream's
-// `EnvClone` - a whole second environment whose instance and device are themselves
-// built by the case, rather than the context's.
+// Not ported here: the `private_data` and `alloc_callback_fail*` variants. The former
+// needs a device built with a chosen private-data slot count, the latter an allocator
+// that fails the Nth call and a `create` that reports VK_ERROR_OUT_OF_HOST_MEMORY as
+// something other than a test failure.
 
 use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::{Handle as VkHandle, InstanceV1_1};
@@ -1230,6 +1230,10 @@ enum Variant {
     MultithreadedSharedResources,
     /// `multithreadedCreatePerThreadResourcesTest`
     MultithreadedPerThreadResources,
+    /// `multithreadedCreatePerThreadDeviceTest`
+    MultithreadedPerThreadDevice,
+    /// `createSingleAllocCallbacksTest`
+    SingleAllocCallbacks,
 }
 
 struct ObjectManagementCase {
@@ -1323,7 +1327,7 @@ impl TestInstance for ObjectManagementInstance<'_> {
                 let num_threads = default_test_thread_count();
                 let env = Environment::new(self.context, num_threads);
                 let res = Resources::new(&env, &case.params)?;
-                run_create_threads(num_threads, &env, std::iter::repeat_n(&res, num_threads as usize), &case.params)?;
+                run_create_threads(num_threads, std::iter::repeat_n((&env, &res), num_threads as usize), &case.params)?;
             }
             Variant::MultithreadedPerThreadResources => {
                 let num_threads = default_test_thread_count();
@@ -1332,8 +1336,25 @@ impl TestInstance for ObjectManagementInstance<'_> {
                 for _ in 0..num_threads {
                     resources.push(Resources::new(&env, &case.params)?);
                 }
-                run_create_threads(num_threads, &env, resources.iter(), &case.params)?;
+                run_create_threads(num_threads, resources.iter().map(|res| (&env, res)), &case.params)?;
             }
+            Variant::MultithreadedPerThreadDevice => {
+                let num_threads = default_test_thread_count();
+                let shared_env = Environment::new(self.context, num_threads);
+                let mut per_thread_env = Vec::with_capacity(num_threads as usize);
+                for _ in 0..num_threads {
+                    per_thread_env.push(EnvClone::new(&shared_env, DEFAULT_DEVICE_PARAMS, 1)?);
+                }
+                let envs: Vec<Environment<'_>> = per_thread_env.iter().map(EnvClone::env).collect();
+                let mut resources = Vec::with_capacity(num_threads as usize);
+                for env in &envs {
+                    resources.push(Resources::new(env, &case.params)?);
+                }
+                run_create_threads(num_threads, envs.iter().zip(resources.iter()), &case.params)?;
+                // The objects have to go before the devices they were made on.
+                drop(resources);
+            }
+            Variant::SingleAllocCallbacks => return self.single_alloc_callbacks(),
             Variant::MultipleSharedResources => {
                 let env = Environment::new(self.context, 4);
                 let res = Resources::new(&env, &case.params)?;
@@ -1346,6 +1367,64 @@ impl TestInstance for ObjectManagementInstance<'_> {
             }
         }
         Ok(TestStatus::pass("Ok"))
+    }
+}
+
+/// `getDefaulDeviceParameters` - the first device, on a queue family that does both
+/// graphics and compute.
+const DEFAULT_DEVICE_PARAMS: DeviceParams = DeviceParams {
+    device_group_index: 0,
+    device_index: 0,
+    queue_flags: vk::QueueFlags::from_bits_truncate(vk::QueueFlags::GRAPHICS.bits() | vk::QueueFlags::COMPUTE.bits()),
+};
+
+/// `EnvClone` - a second environment whose device, and the instance under it, the case
+/// creates for itself.
+struct EnvClone<'a> {
+    // Declaration order is destruction order in Rust, and the device has to go before
+    // the instance its resources hold.
+    device: Box<UniqueDevice<'a>>,
+    /// Held only to be dropped after the device: it owns the instance the device
+    /// was made on.
+    #[expect(dead_code, reason = "the value is the RAII guard, not something to read")]
+    device_resources: Resources<'a>,
+    queue_family_index: u32,
+    entry: &'a vulkanalia::Entry,
+    api_version: u32,
+    programs: BinaryCollection,
+    allocation_callbacks: Option<&'a vk::AllocationCallbacks>,
+    max_resource_consumers: u32,
+}
+
+impl<'a> EnvClone<'a> {
+    fn new(parent: &Environment<'a>, params: DeviceParams, max_resource_consumers: u32) -> Result<Self, TestError> {
+        let object_params = ObjectParams::Device(params);
+        let device_resources = Resources::new(parent, &object_params)?;
+        let Owned::Device(device) = create_object(parent, &device_resources, &object_params)? else {
+            unreachable!("device object")
+        };
+        Ok(Self {
+            device,
+            queue_family_index: device_resources.device_queue_family_index,
+            device_resources,
+            entry: parent.entry,
+            api_version: parent.api_version,
+            programs: parent.programs,
+            allocation_callbacks: parent.allocation_callbacks,
+            max_resource_consumers,
+        })
+    }
+
+    fn env(&self) -> Environment<'_> {
+        Environment {
+            entry: self.entry,
+            api_version: self.api_version,
+            device: &self.device.device,
+            queue_family_index: self.queue_family_index,
+            programs: self.programs,
+            allocation_callbacks: self.allocation_callbacks,
+            max_resource_consumers: self.max_resource_consumers,
+        }
     }
 }
 
@@ -1367,16 +1446,20 @@ fn create_count(params: &ObjectParams) -> u32 {
 ///
 /// Each thread creates and immediately destroys `CREATE_COUNT` objects, syncing every
 /// fifth of the way so the threads are inside the driver at the same time.
-fn run_create_threads<'a>(num_threads: u32, env: &Environment<'a>, resources: impl Iterator<Item = &'a Resources<'a>>, params: &ObjectParams) -> Result<(), TestError> {
+fn run_create_threads<'a, 'e>(num_threads: u32, work: impl Iterator<Item = (&'e Environment<'a>, &'e Resources<'a>)>, params: &ObjectParams) -> Result<(), TestError>
+where
+    'a: 'e,
+{
     let barrier = std::sync::Barrier::new(num_threads as usize);
     let create_count = create_count(params);
     let iters_between_syncs = create_count / 5;
-    let resources: Vec<&Resources<'a>> = resources.collect();
+    let work: Vec<(&Environment<'a>, &Resources<'a>)> = work.collect();
 
     std::thread::scope(|scope| {
-        let handles: Vec<_> = resources
+        let handles: Vec<_> = work
             .iter()
-            .map(|res| {
+            .map(|(env, res)| {
+                let (env, res) = (*env, *res);
                 let barrier = &barrier;
                 scope.spawn(move || -> Result<(), TestError> {
                     for iter_ndx in 0..create_count {
@@ -1394,6 +1477,49 @@ fn run_create_threads<'a>(num_threads: u32, env: &Environment<'a>, resources: im
         }
         Ok(())
     })
+}
+
+impl ObjectManagementInstance<'_> {
+    /// `createSingleAllocCallbacksTest` - the resources and the object under test get
+    /// a recorder each, and the object's must come back empty once it is destroyed.
+    fn single_alloc_callbacks(&self) -> TestOutcome {
+        let case = self.params;
+        // Everything but a command-scope allocation may still be live while the object
+        // exists; a command-scope one must not outlive the call that made it.
+        let no_cmd_scope = (1u32 << vk::SystemAllocationScope::INSTANCE.as_raw())
+            | (1u32 << vk::SystemAllocationScope::DEVICE.as_raw())
+            | (1u32 << vk::SystemAllocationScope::CACHE.as_raw())
+            | (1u32 << vk::SystemAllocationScope::OBJECT.as_raw());
+
+        let res_callbacks = AllocationCallbackRecorder::new();
+        // The root environment still uses the default instance and device; only what
+        // the case builds itself goes through the callbacks.
+        let root_env = Environment::with_callbacks(self.context, 1, res_callbacks.callbacks());
+        {
+            let res_env = EnvClone::new(&root_env, DEFAULT_DEVICE_PARAMS, 1)?;
+            let env = res_env.env();
+            let res = Resources::new(&env, &case.params)?;
+
+            let obj_callbacks = AllocationCallbackRecorder::new();
+            let obj_env = Environment {
+                allocation_callbacks: Some(obj_callbacks.callbacks()),
+                ..env
+            };
+            {
+                let _object = create_object(&obj_env, &res, &case.params)?;
+                if !obj_callbacks.validate(no_cmd_scope) {
+                    return Ok(TestStatus::fail("Invalid allocation callback"));
+                }
+            }
+            if !obj_callbacks.validate(0) {
+                return Ok(TestStatus::fail("Invalid allocation callback"));
+            }
+        }
+        if !res_callbacks.validate(0) {
+            return Ok(TestStatus::fail("Invalid allocation callback"));
+        }
+        Ok(TestStatus::pass("Ok"))
+    }
 }
 
 // ---------------------------------------------------------------------------------
@@ -1762,6 +1888,8 @@ pub fn create_object_management_tests() -> tcu::TestCaseGroup {
         ("max_concurrent", Variant::MaxConcurrent),
         ("multithreaded_shared_resources", Variant::MultithreadedSharedResources),
         ("multithreaded_per_thread_resources", Variant::MultithreadedPerThreadResources),
+        ("multithreaded_per_thread_device", Variant::MultithreadedPerThreadDevice),
+        ("single_alloc_callbacks", Variant::SingleAllocCallbacks),
     ] {
         let mut group = tcu::TestCaseGroup::new(group_name);
         for (name, params) in all_cases() {
@@ -1774,6 +1902,11 @@ pub fn create_object_management_tests() -> tcu::TestCaseGroup {
             // An instance has no resources to share, so the two shared-resource
             // variants have nothing to say about it and upstream leaves it out.
             if matches!(variant, Variant::MultipleSharedResources | Variant::MultithreadedSharedResources) && matches!(params, ObjectParams::Instance) {
+                continue;
+            }
+            // The per-thread-device variant already makes an instance and a device per
+            // thread, so those three object kinds have nothing left to test there.
+            if variant == Variant::MultithreadedPerThreadDevice && matches!(params, ObjectParams::Instance | ObjectParams::Device(_) | ObjectParams::DeviceGroup(_)) {
                 continue;
             }
             group.add_child(Box::new(ObjectManagementCase { name, params, variant }) as Box<dyn TestCase>);

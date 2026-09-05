@@ -26,8 +26,9 @@ use vulkanalia::vk;
 /// The bookkeeping the callbacks write into. Boxed so its address is stable for as
 /// long as the driver holds the `VkAllocationCallbacks`.
 struct Ledger {
-    /// Pointer to the layout it was allocated with; `dealloc` needs both back.
-    live: Mutex<HashMap<usize, Layout>>,
+    /// Pointer to the layout it was allocated with and the scope it was asked for;
+    /// `dealloc` needs the layout back, and `validate` needs the scope.
+    live: Mutex<HashMap<usize, (Layout, vk::SystemAllocationScope)>>,
     /// A free or realloc of a pointer this ledger never handed out.
     violations: Mutex<u32>,
 }
@@ -79,7 +80,7 @@ impl AllocationCallbackRecorder {
     /// would have spent on headers.
     pub fn current_system_memory_usage(&self) -> usize {
         let live = self.ledger.live.lock().expect("allocation ledger poisoned");
-        live.values().map(|layout| layout.size()).sum::<usize>() + SYSTEM_ALLOCATION_OVERHEAD * live.len()
+        live.values().map(|(layout, _)| layout.size()).sum::<usize>() + SYSTEM_ALLOCATION_OVERHEAD * live.len()
     }
 
     /// How many allocations are still outstanding. Zero is what
@@ -91,6 +92,17 @@ impl AllocationCallbackRecorder {
     /// Frees or reallocations of pointers this recorder never handed out.
     pub fn violations(&self) -> u32 {
         *self.ledger.violations.lock().expect("allocation ledger poisoned")
+    }
+
+    /// `validateAllocationCallbacks` narrowed to what the ported tests ask: nothing
+    /// was misused, and every allocation still live is in one of `allowed_scopes`
+    /// (a bitmask over `VkSystemAllocationScope`).
+    pub fn validate(&self, allowed_scopes: u32) -> bool {
+        if self.violations() > 0 {
+            return false;
+        }
+        let live = self.ledger.live.lock().expect("allocation ledger poisoned");
+        live.values().all(|(_, scope)| allowed_scopes & (1u32 << scope.as_raw()) != 0)
     }
 }
 
@@ -108,7 +120,7 @@ fn layout_for(size: usize, alignment: usize) -> Option<Layout> {
     Layout::from_size_align(size, alignment.max(1)).ok()
 }
 
-unsafe extern "system" fn allocation_callback(user_data: *mut c_void, size: usize, alignment: usize, _scope: vk::SystemAllocationScope) -> *mut c_void {
+unsafe extern "system" fn allocation_callback(user_data: *mut c_void, size: usize, alignment: usize, scope: vk::SystemAllocationScope) -> *mut c_void {
     let ledger = unsafe { &*user_data.cast::<Ledger>() };
     let Some(layout) = layout_for(size, alignment) else {
         return std::ptr::null_mut();
@@ -117,7 +129,7 @@ unsafe extern "system" fn allocation_callback(user_data: *mut c_void, size: usiz
     if pointer.is_null() {
         return std::ptr::null_mut();
     }
-    ledger.live.lock().expect("allocation ledger poisoned").insert(pointer as usize, layout);
+    ledger.live.lock().expect("allocation ledger poisoned").insert(pointer as usize, (layout, scope));
     pointer.cast::<c_void>()
 }
 
@@ -132,7 +144,7 @@ unsafe extern "system" fn reallocation_callback(user_data: *mut c_void, original
 
     let ledger = unsafe { &*user_data.cast::<Ledger>() };
     let mut live = ledger.live.lock().expect("allocation ledger poisoned");
-    let Some(old_layout) = live.remove(&(original as usize)) else {
+    let Some((old_layout, old_scope)) = live.remove(&(original as usize)) else {
         drop(live);
         *ledger.violations.lock().expect("allocation ledger poisoned") += 1;
         return std::ptr::null_mut();
@@ -143,18 +155,18 @@ unsafe extern "system" fn reallocation_callback(user_data: *mut c_void, original
     let pointer = if new_alignment == old_layout.align() {
         let pointer = unsafe { realloc(original.cast::<u8>(), old_layout, size) };
         if pointer.is_null() {
-            live.insert(original as usize, old_layout);
+            live.insert(original as usize, (old_layout, old_scope));
             return std::ptr::null_mut();
         }
         pointer
     } else {
         let Some(new_layout) = layout_for(size, new_alignment) else {
-            live.insert(original as usize, old_layout);
+            live.insert(original as usize, (old_layout, old_scope));
             return std::ptr::null_mut();
         };
         let pointer = unsafe { alloc(new_layout) };
         if pointer.is_null() {
-            live.insert(original as usize, old_layout);
+            live.insert(original as usize, (old_layout, old_scope));
             return std::ptr::null_mut();
         }
         unsafe { std::ptr::copy_nonoverlapping(original.cast::<u8>(), pointer, old_layout.size().min(size)) };
@@ -162,7 +174,7 @@ unsafe extern "system" fn reallocation_callback(user_data: *mut c_void, original
         pointer
     };
     let new_layout = Layout::from_size_align(size, new_alignment).expect("checked above");
-    live.insert(pointer as usize, new_layout);
+    live.insert(pointer as usize, (new_layout, scope));
     pointer.cast::<c_void>()
 }
 
@@ -173,7 +185,7 @@ unsafe extern "system" fn free_callback(user_data: *mut c_void, memory: *mut c_v
     let ledger = unsafe { &*user_data.cast::<Ledger>() };
     let layout = ledger.live.lock().expect("allocation ledger poisoned").remove(&(memory as usize));
     match layout {
-        Some(layout) => unsafe { dealloc(memory.cast::<u8>(), layout) },
+        Some((layout, _)) => unsafe { dealloc(memory.cast::<u8>(), layout) },
         None => *ledger.violations.lock().expect("allocation ledger poisoned") += 1,
     }
 }
@@ -216,6 +228,24 @@ mod tests {
         assert_eq!(recorder.live_allocation_count(), 0);
         assert_eq!(recorder.current_system_memory_usage(), 0);
         assert_eq!(recorder.violations(), 0);
+        assert!(recorder.validate(0));
+    }
+
+    #[test]
+    fn validate_rejects_a_live_allocation_outside_the_allowed_scopes() {
+        let recorder = AllocationCallbackRecorder::new();
+        let callbacks = recorder.callbacks();
+        let allocate = callbacks.allocation.expect("set");
+        let free = callbacks.free.expect("set");
+
+        let pointer = unsafe { allocate(callbacks.user_data, 32, 8, vk::SystemAllocationScope::COMMAND) };
+        let command_only = 1u32 << vk::SystemAllocationScope::COMMAND.as_raw();
+        assert!(recorder.validate(command_only));
+        assert!(!recorder.validate(1u32 << vk::SystemAllocationScope::OBJECT.as_raw()));
+        assert!(!recorder.validate(0));
+
+        unsafe { free(callbacks.user_data, pointer) };
+        assert!(recorder.validate(0));
     }
 
     #[test]
