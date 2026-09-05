@@ -50,17 +50,16 @@ def read_group(text: str, name: str) -> list[str]:
     return re.findall(r"VK_FORMAT_(\w+)", m.group(1))
 
 
-# vulkanalia names a format without its vendor suffix once it is promoted to core, and
-# keeps the suffix otherwise. Only three entries in this table carry one, so the split
-# is listed rather than guessed: A8_UNORM came in with maintenance5, the two 3D ASTC
-# formats never moved.
-NOT_PROMOTED = {"ASTC_3x3x3_UNORM_BLOCK_EXT", "ASTC_5x5x5_UNORM_BLOCK_EXT"}
+# vulkanalia names a format without its vendor suffix once it is promoted to core and
+# keeps the suffix otherwise. The 3D ASTC formats - the ones with three block
+# dimensions - are the only family here that never moved; the 2D ASTC HDR ones did.
+ASTC_3D = re.compile(r"^ASTC_\d+x\d+x\d+_")
 
 
 def rust_name(enum_name: str) -> str:
     """The vulkanalia identifier: block dimensions uppercased (ASTC_4x4 -> ASTC_4X4),
     a leading digit prefixed, and the vendor suffix dropped only where it was promoted."""
-    name = enum_name if enum_name in NOT_PROMOTED else re.sub(r"_(KHR|EXT)$", "", enum_name)
+    name = enum_name if ASTC_3D.match(enum_name) else re.sub(r"_(KHR|EXT)$", "", enum_name)
     name = re.sub(r"(?<=\d)x(?=\d)", "X", name)
     if name[0].isdigit():
         name = "_" + name
@@ -130,6 +129,17 @@ def main() -> int:
                 f'name: "{case_name(f)}", compressed: {compressed} }},'
             )
         lines.append("    ],")
+    lines.append("];")
+    lines.append("")
+
+    # FILL_MODE_RANDOM_GRAY takes a different branch for these, to keep it from
+    # generating byte patterns that read back as NaN in a float format.
+    float_formats = read_group(header_text, "signedAndUnsignedFloatFormats")
+    print(f"signedAndUnsignedFloatFormats: {len(float_formats)} formats")
+    lines.append("/// `formats::signedAndUnsignedFloatFormats`")
+    lines.append("pub static SIGNED_AND_UNSIGNED_FLOAT_FORMATS: &[vk::Format] = &[")
+    for f in float_formats:
+        lines.append(f"    vk::Format::{rust_name(f)},")
     lines.append("];")
     lines.append("")
 

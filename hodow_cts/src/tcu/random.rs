@@ -125,3 +125,29 @@ mod tests {
         }
     }
 }
+
+/// `deInt32Hash` - Thomas Wang's 32-bit integer hash, which upstream uses to turn a
+/// small enum value into a usable seed.
+pub fn de_int32_hash(a: i32) -> u32 {
+    let mut key = a as u32;
+    key = (key ^ 61) ^ (key >> 16);
+    key = key.wrapping_add(key << 3);
+    key ^= key >> 4;
+    key = key.wrapping_mul(0x27d4_eb2d);
+    key ^= key >> 15;
+    key
+}
+
+#[cfg(test)]
+mod hash_tests {
+    use super::de_int32_hash;
+
+    /// Captured by compiling upstream's deInt32.h and running it, not derived by hand.
+    #[test]
+    fn matches_upstream() {
+        assert_eq!(de_int32_hash(0), 0xC0A9_496A);
+        assert_eq!(de_int32_hash(1), 0x2792_2C9D);
+        assert_eq!(de_int32_hash(2), 0xC679_3575);
+        assert_eq!(de_int32_hash(3), 0x87D0_6FBE);
+    }
+}

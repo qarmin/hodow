@@ -20,11 +20,12 @@ use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::DeviceV1_3;
 
 use super::copies_buffer_tests::{AllocationKind, CopyCommandVariant, QueueSelection, bind_buffer_memory, select_queue};
-use super::copy_format_lists::{COLOR_IMAGE_FORMATS_TO_TEST, CopyFormat};
+use super::copy_format_lists::{COLOR_IMAGE_FORMATS_TO_TEST, CopyFormat, SIGNED_AND_UNSIGNED_FLOAT_FORMATS};
 use crate::tcu::pixel::{
     ConstPixelBufferAccess, PixelBufferAccess, TextureLevel, fill_with_component_gradients2, fill_with_component_gradients3, get_texture_format_bit_depth, has_depth_component,
     has_stencil_component,
 };
+use crate::tcu::random::de_int32_hash;
 use crate::tcu::texture::TextureChannelClass;
 use crate::tcu::{self, TestError, TestOutcome, TestStatus, map_vk_format};
 use crate::vk::VkResultExt;
@@ -61,6 +62,7 @@ pub enum FillMode {
     Pyramid,
     White,
     Red,
+    RandomGray,
 }
 
 /// `ImageParms`
@@ -161,7 +163,10 @@ impl BufferImageCopy {
 }
 
 /// `CopiesAndBlittingTestInstance::generateBuffer`
-fn generate_buffer(access: &mut PixelBufferAccess<'_>, width: u32, height: u32, depth: u32, mode: FillMode) {
+///
+/// `float_byte_pattern` is the `signedAndUnsignedFloatFormats` test upstream makes on
+/// the *test parameters* rather than on this buffer's format, so it is passed in.
+fn generate_buffer(access: &mut PixelBufferAccess<'_>, width: u32, height: u32, depth: u32, mode: FillMode, float_byte_pattern: bool) {
     let format = access.format();
     let channel_class = format.channel_class();
     let mut max_value = [1.0f32; 4];
@@ -181,6 +186,30 @@ fn generate_buffer(access: &mut PixelBufferAccess<'_>, width: u32, height: u32, 
     match mode {
         FillMode::Gradient => fill_with_component_gradients2(access, [0.0; 4], max_value),
         FillMode::Pyramid => fill_with_component_gradients3(access, [0.0; 4], max_value),
+        FillMode::RandomGray => {
+            let mut rng = tcu::Random::new(de_int32_hash(format.type_ as i32));
+            let pixel_size = access.format().pixel_size().expect("checked in TextureLevel::new") as usize;
+            for z in 0..depth {
+                for y in 0..height {
+                    for x in 0..width {
+                        if float_byte_pattern {
+                            // A free-running byte pattern can land on a bit pattern that
+                            // reads back as NaN in a float format, so upstream picks from
+                            // two known-good bytes instead.
+                            const VALID_BYTES: [u8; 2] = [0b1000_1000, 0b1010_1010];
+                            let selected = (rng.get_uint32() % (2 * VALID_BYTES.len() as u32)) as usize;
+                            let mut color = VALID_BYTES[selected % VALID_BYTES.len()];
+                            let alpha = VALID_BYTES[selected / VALID_BYTES.len()];
+                            color >>= rng.get_uint32() % 7;
+                            access.fill_pixel_bytes(x, y, z, color, alpha, pixel_size);
+                        } else {
+                            let v = rng.get_float();
+                            access.set_pixel([v, v, v, max_value[3]], x, y, z);
+                        }
+                    }
+                }
+            }
+        }
         FillMode::White | FillMode::Red => {
             let color = if mode == FillMode::White { max_value } else { [max_value[0], 0.0, 0.0, max_value[3]] };
             for z in 0..depth {
@@ -472,10 +501,17 @@ impl TestInstance for CopyBufferToImageInstance<'_> {
 
         // Host-side source data, expected result, and the image's starting contents.
         let mut source_level = TextureLevel::new(texture_format, p.src_buffer_size, 1, 1)?;
-        generate_buffer(&mut source_level.get_access(), p.src_buffer_size, 1, 1, p.src_fill_mode);
+        generate_buffer(&mut source_level.get_access(), p.src_buffer_size, 1, 1, p.src_fill_mode, false);
 
         let mut destination_level = TextureLevel::new(texture_format, p.dst.extent[0], p.dst.extent[1], p.dst.extent[2])?;
-        generate_buffer(&mut destination_level.get_access(), p.dst.extent[0], p.dst.extent[1], p.dst.extent[2], p.dst.fill_mode);
+        generate_buffer(
+            &mut destination_level.get_access(),
+            p.dst.extent[0],
+            p.dst.extent[1],
+            p.dst.extent[2],
+            p.dst.fill_mode,
+            false,
+        );
 
         // `generateExpectedResult` - start from the destination contents, then replay
         // each region on the host.
@@ -1152,10 +1188,10 @@ impl TestInstance for CopyImageToBufferInstance<'_> {
         let texel_size = texture_format.pixel_size().ok_or_else(|| TestError::NotSupported("format has no pixel size".to_string()))? as usize;
 
         let mut source_level = TextureLevel::new(texture_format, p.src.extent[0], p.src.extent[1], p.src.extent[2])?;
-        generate_buffer(&mut source_level.get_access(), p.src.extent[0], p.src.extent[1], p.src.extent[2], p.src.fill_mode);
+        generate_buffer(&mut source_level.get_access(), p.src.extent[0], p.src.extent[1], p.src.extent[2], p.src.fill_mode, false);
 
         let mut destination_level = TextureLevel::new(texture_format, p.dst_buffer_size, 1, 1)?;
-        generate_buffer(&mut destination_level.get_access(), p.dst_buffer_size, 1, 1, p.dst_fill_mode);
+        generate_buffer(&mut destination_level.get_access(), p.dst_buffer_size, 1, 1, p.dst_fill_mode, false);
 
         let mut expected_level = TextureLevel::new(texture_format, p.dst_buffer_size, 1, 1)?;
         expected_level.data_mut().copy_from_slice(destination_level.data());
@@ -1903,12 +1939,29 @@ impl TestInstance for CopyImageToImageInstance<'_> {
         let src_format = map_vk_format(p.src.format).ok_or_else(|| TestError::NotSupported("format has no tcu mapping".to_string()))?;
         let dst_format = map_vk_format(p.dst.format).ok_or_else(|| TestError::NotSupported("format has no tcu mapping".to_string()))?;
 
+        // `de::contains(signedAndUnsignedFloatFormats, ...)` over both sides.
+        let float_byte_pattern = SIGNED_AND_UNSIGNED_FLOAT_FORMATS.contains(&p.src.format) || SIGNED_AND_UNSIGNED_FLOAT_FORMATS.contains(&p.dst.format);
+
         let mut source_level = TextureLevel::new(src_format, p.src.extent[0], p.src.extent[1], p.src.extent[2])?;
-        generate_buffer(&mut source_level.get_access(), p.src.extent[0], p.src.extent[1], p.src.extent[2], p.src.fill_mode);
+        generate_buffer(
+            &mut source_level.get_access(),
+            p.src.extent[0],
+            p.src.extent[1],
+            p.src.extent[2],
+            p.src.fill_mode,
+            float_byte_pattern,
+        );
 
         let dst_fill = if p.clear_destination_with_red { FillMode::Red } else { p.dst.fill_mode };
         let mut destination_level = TextureLevel::new(dst_format, p.dst.extent[0], p.dst.extent[1], p.dst.extent[2])?;
-        generate_buffer(&mut destination_level.get_access(), p.dst.extent[0], p.dst.extent[1], p.dst.extent[2], dst_fill);
+        generate_buffer(
+            &mut destination_level.get_access(),
+            p.dst.extent[0],
+            p.dst.extent[1],
+            p.dst.extent[2],
+            dst_fill,
+            float_byte_pattern,
+        );
 
         // `generateExpectedResult`. The copy is a memcpy even across formats, so the
         // expected level is viewed in the *source* format while the region lands.
@@ -2668,6 +2721,29 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
         i += DEFAULT_SIXTEENTH_SIZE;
     }
 
+    // 2d_to_2d: quarter-size tiles stepping across, with y running backwards.
+    let mut regions_2d_2d = Vec::new();
+    let mut i = 0u32;
+    while i < DEFAULT_SIZE {
+        regions_2d_2d.push(color_copy(
+            [0, 0, 0],
+            [i as i32, (DEFAULT_SIZE - i - DEFAULT_QUARTER_SIZE) as i32, 0],
+            [DEFAULT_QUARTER_SIZE, DEFAULT_QUARTER_SIZE, 1],
+        ));
+        i += DEFAULT_QUARTER_SIZE;
+    }
+
+    // 2d_to_3d: one small tile per slice, walking diagonally across the source.
+    let regions_2d_3d: Vec<ImageCopy> = (0..DEFAULT_SIXTEENTH_SIZE)
+        .map(|i| {
+            color_copy(
+                [(i * DEFAULT_SIXTEENTH_SIZE) as i32, (i % DEFAULT_SIXTEENTH_SIZE) as i32, 0],
+                [0, 0, i as i32],
+                [DEFAULT_SIXTEENTH_SIZE, DEFAULT_SIXTEENTH_SIZE, 1],
+            )
+        })
+        .collect();
+
     // 2d_to_1d: each row of a quarter-size square is laid end to end along the 1D run.
     let regions_2d_1d: Vec<ImageCopy> = (0..DEFAULT_QUARTER_SIZE)
         .map(|i| color_copy([0, i as i32, 0], [(i * DEFAULT_QUARTER_SIZE) as i32, 0, 0], [DEFAULT_QUARTER_SIZE, 1, 1]))
@@ -2691,6 +2767,7 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 regions: regions_1d,
                 needs_maintenance5: false,
                 needs_maintenance1: false,
+                src_fill: FillMode::White,
                 cross_format: false,
             },
         ),
@@ -2704,6 +2781,7 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 regions: regions_1d_2d,
                 needs_maintenance5: true,
                 needs_maintenance1: false,
+                src_fill: FillMode::White,
                 cross_format: false,
             },
         ),
@@ -2717,6 +2795,7 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 regions: regions_1d_3d,
                 needs_maintenance5: true,
                 needs_maintenance1: false,
+                src_fill: FillMode::White,
                 cross_format: false,
             },
         ),
@@ -2730,6 +2809,35 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 regions: regions_2d_1d,
                 needs_maintenance5: true,
                 needs_maintenance1: false,
+                src_fill: FillMode::White,
+                cross_format: true,
+            },
+        ),
+        (
+            "2d_to_2d",
+            AllFormatsBlock {
+                src_type: vk::ImageType::_2D,
+                dst_type: vk::ImageType::_2D,
+                src_extent: DEFAULT_EXTENT,
+                dst_extent: DEFAULT_EXTENT,
+                regions: regions_2d_2d,
+                needs_maintenance5: false,
+                needs_maintenance1: false,
+                src_fill: FillMode::RandomGray,
+                cross_format: true,
+            },
+        ),
+        (
+            "2d_to_3d",
+            AllFormatsBlock {
+                src_type: vk::ImageType::_2D,
+                dst_type: vk::ImageType::_3D,
+                src_extent: DEFAULT_EXTENT,
+                dst_extent: small_3d,
+                regions: regions_2d_3d,
+                needs_maintenance5: false,
+                needs_maintenance1: true,
+                src_fill: FillMode::RandomGray,
                 cross_format: true,
             },
         ),
@@ -2743,6 +2851,7 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 regions: regions_3d_1d,
                 needs_maintenance5: true,
                 needs_maintenance1: false,
+                src_fill: FillMode::White,
                 cross_format: false,
             },
         ),
@@ -2756,6 +2865,7 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 regions: regions_3d_2d,
                 needs_maintenance5: false,
                 needs_maintenance1: true,
+                src_fill: FillMode::White,
                 cross_format: false,
             },
         ),
@@ -2769,6 +2879,7 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 regions: regions_3d_3d,
                 needs_maintenance5: false,
                 needs_maintenance1: false,
+                src_fill: FillMode::White,
                 cross_format: false,
             },
         ),
@@ -2787,6 +2898,9 @@ struct AllFormatsBlock {
     needs_maintenance5: bool,
     /// 3D-to-2D is the one pairing that predates it, under VK_KHR_maintenance1.
     needs_maintenance1: bool,
+    /// `src.image.fillMode` - most blocks use white, the two 2D-source ones use the
+    /// random-grey fill.
+    src_fill: FillMode,
     /// When set, the destination iterates over the whole compatible-format group
     /// instead of following the source. Upstream expresses this by passing the group
     /// rather than a null list.

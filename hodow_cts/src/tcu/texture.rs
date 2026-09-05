@@ -46,8 +46,13 @@ pub enum ChannelOrder {
 }
 
 /// `tcu::TextureFormat::ChannelType`
+///
+/// The declaration order is upstream's and is load-bearing: `generateBuffer` seeds its
+/// random fill with `deInt32Hash(format.type)`, so a reordering silently changes the
+/// test data rather than failing to build.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[allow(non_camel_case_types)]
+#[repr(u32)]
 pub enum ChannelType {
     SNORM_INT8,
     SNORM_INT16,

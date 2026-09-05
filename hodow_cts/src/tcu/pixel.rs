@@ -1225,6 +1225,15 @@ impl PixelBufferAccess<'_> {
         self.data[dst_off..dst_off + bytes].copy_from_slice(&src.raw()[src_off..src_off + bytes]);
     }
 
+    /// Fills a texel with a repeated byte, the last one replaced. `FILL_MODE_RANDOM_GRAY`
+    /// writes the raw bytes rather than a colour for the float formats, so this bypasses
+    /// the channel encoders entirely.
+    pub fn fill_pixel_bytes(&mut self, x: u32, y: u32, z: u32, value: u8, last: u8, pixel_size: usize) {
+        let base = self.pixel_offset(x, y, z);
+        self.data[base..base + pixel_size - 1].fill(value);
+        self.data[base + pixel_size - 1] = last;
+    }
+
     /// A 3D region copied verbatim, byte for byte.
     ///
     /// `vkCmdCopyImage` acts like a memcpy even between different formats, as long as
