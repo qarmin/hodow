@@ -48,7 +48,7 @@ use crate::tcu::tex_verifier::{LookupPrecision, is_nearest_sample_result_valid_f
 use crate::tcu::texture::{ChannelOrder, ChannelType, TextureChannelClass, TextureFormat};
 use crate::tcu::{self, TestError, TestOutcome, TestStatus, map_vk_format};
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
-use crate::vk::compressed_formats::{get_block_depth, get_block_height, get_block_size_in_bytes, get_block_width, is_compressed_format};
+use crate::vk::compressed_formats::{get_block_depth, get_block_height, get_block_size_in_bytes, get_block_width, is_astc_hdr_format, is_compressed_format};
 use crate::vk::image_util::{ImageWithMemory, make_image_memory_barrier, make_image_subresource_range};
 use crate::vk::mem_util::{MemoryRequirement, flush_alloc};
 use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool};
@@ -1820,12 +1820,21 @@ fn add_blitting_image_all_formats_color_src_format_tests(group: &mut tcu::TestCa
             add_blitting_image_all_formats_color_src_format_dst_format_tests(&mut dst_group, gp, p, dst.format);
             group.add_child(dst_group);
         }
-    } else {
+    }
+
+    // Skip astc hdr variants, they would be added as a consequence of changes in
+    // isCompressedFormat; if a combination with those formats is desired then this
+    // check should be removed.
+    if !is_astc_hdr_format(p.src.format) {
         // With no compatible-format list the destination format is copied from the
         // source, which is how the 1D and 3D groups get a single destination each.
-        let mut dst_group = tcu::TestCaseGroup::new(p.src.name);
-        add_blitting_image_all_formats_color_src_format_dst_format_tests(&mut dst_group, gp, p, p.src.format);
-        group.add_child(dst_group);
+        // A compressed source gets that pairing too even when there is a list,
+        // because a compressed format is never on one.
+        if compatible_formats.is_none() || is_compressed_format(p.src.format) {
+            let mut dst_group = tcu::TestCaseGroup::new(p.src.name);
+            add_blitting_image_all_formats_color_src_format_dst_format_tests(&mut dst_group, gp, p, p.src.format);
+            group.add_child(dst_group);
+        }
     }
 }
 
