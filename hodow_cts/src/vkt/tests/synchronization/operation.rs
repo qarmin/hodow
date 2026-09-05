@@ -1311,6 +1311,10 @@ pub enum OperationName {
     WriteSsboFragment,
     WriteImageVertex,
     WriteImageFragment,
+    WriteDraw,
+    WriteDrawIndexed,
+    WriteDrawIndirect,
+    WriteDrawIndexedIndirect,
     ReadCopyBuffer,
     ReadCopyBufferToImage,
     ReadCopyImageToBuffer,
@@ -1356,6 +1360,10 @@ impl OperationName {
             Self::WriteSsboFragment => "write_ssbo_fragment",
             Self::WriteImageVertex => "write_image_vertex",
             Self::WriteImageFragment => "write_image_fragment",
+            Self::WriteDraw => "write_draw",
+            Self::WriteDrawIndexed => "write_draw_indexed",
+            Self::WriteDrawIndirect => "write_draw_indirect",
+            Self::WriteDrawIndexedIndirect => "write_draw_indexed_indirect",
             Self::ReadCopyBuffer => "read_copy_buffer",
             Self::ReadCopyBufferToImage => "read_copy_buffer_to_image",
             Self::ReadCopyImageToBuffer => "read_copy_image_to_buffer",
@@ -1405,6 +1413,17 @@ impl OperationName {
             Self::ReadUboComputeIndirect => Some((BufferType::Uniform, DispatchCall::DispatchIndirect)),
             Self::ReadUboTexelCompute => Some((BufferType::UniformTexel, DispatchCall::Dispatch)),
             Self::ReadUboTexelComputeIndirect => Some((BufferType::UniformTexel, DispatchCall::DispatchIndirect)),
+            _ => None,
+        }
+    }
+
+    /// `Draw::DrawCall` for the four draw write operations, or `None` otherwise.
+    fn draw_call(self) -> Option<DrawCall> {
+        match self {
+            Self::WriteDraw => Some(DrawCall::Draw),
+            Self::WriteDrawIndexed => Some(DrawCall::DrawIndexed),
+            Self::WriteDrawIndirect => Some(DrawCall::DrawIndirect),
+            Self::WriteDrawIndexedIndirect => Some(DrawCall::DrawIndexedIndirect),
             _ => None,
         }
     }
@@ -1508,6 +1527,11 @@ impl OperationName {
             | Self::WriteImageFragment
             | Self::ReadImageVertex
             | Self::ReadImageFragment => single_sampled_color_image,
+            // `Draw::Support` asserts a 2D colour image; a 1D or 3D resource cannot
+            // be a colour attachment here.
+            Self::WriteDraw | Self::WriteDrawIndexed | Self::WriteDrawIndirect | Self::WriteDrawIndexedIndirect => {
+                single_sampled_color_image && resource.image_type == vk::ImageType::_2D
+            }
             Self::WriteClearDepthStencilImage => {
                 resource.kind == ResourceType::Image
                     && resource.image_aspect.intersects(vk::ImageAspectFlags::DEPTH | vk::ImageAspectFlags::STENCIL)
@@ -1557,6 +1581,10 @@ impl OperationName {
         if self.image_shader_kind().is_some() || self.image_graphics_kind().is_some() {
             return vk::ImageUsageFlags::STORAGE.bits();
         }
+        // A draw writes the resource as a colour attachment and reads nothing.
+        if self.draw_call().is_some() {
+            return 0;
+        }
         match self.buffer_shader_kind().map(|(t, _)| t).or(self.buffer_graphics_kind().map(|(t, _)| t)).map(|t| (t, ())) {
             Some((buffer_type, _)) if self.is_read() => match buffer_type {
                 BufferType::Uniform => vk::BufferUsageFlags::UNIFORM_BUFFER.bits(),
@@ -1572,6 +1600,9 @@ impl OperationName {
     pub fn out_resource_usage(self) -> u32 {
         if self.image_shader_kind().is_some() || self.image_graphics_kind().is_some() {
             return vk::ImageUsageFlags::STORAGE.bits();
+        }
+        if self.draw_call().is_some() {
+            return vk::ImageUsageFlags::COLOR_ATTACHMENT.bits();
         }
         match self.buffer_shader_kind().map(|(t, _)| t).or(self.buffer_graphics_kind().map(|(t, _)| t)).map(|t| (t, ())) {
             // Upstream asks for the texel usage on the *read* side here, not the
@@ -1623,7 +1654,7 @@ impl OperationName {
                     let _ = stage;
                     return vk::QueueFlags::GRAPHICS;
                 }
-                if self.image_graphics_kind().is_some() {
+                if self.image_graphics_kind().is_some() || self.draw_call().is_some() {
                     return vk::QueueFlags::GRAPHICS;
                 }
                 if self.buffer_shader_kind().is_some() || self.image_shader_kind().is_some() {
@@ -1662,6 +1693,9 @@ pub fn build_operation<'a>(
     resource: &Resource<'_>,
     specialized_access: bool,
 ) -> Result<Box<dyn Operation + 'a>, TestError> {
+    if let Some(draw_call) = name.draw_call() {
+        return Ok(Box::new(DrawOperation::new(device, allocator, resource, draw_call)?));
+    }
     if let Some(stage) = name.image_graphics_kind() {
         let mode = if name.is_read() { AccessMode::Read } else { AccessMode::Write };
         return Ok(Box::new(ImageGraphicsAccess::new(device, allocator, desc, resource, mode, stage, specialized_access)?));
@@ -1740,6 +1774,10 @@ pub static WRITE_OPS: &[OperationName] = &[
     OperationName::WriteImageVertex,
     OperationName::WriteImageFragment,
     OperationName::WriteClearColorImage,
+    OperationName::WriteDraw,
+    OperationName::WriteDrawIndexed,
+    OperationName::WriteDrawIndirect,
+    OperationName::WriteDrawIndexedIndirect,
     OperationName::WriteClearDepthStencilImage,
 ];
 
@@ -3259,11 +3297,260 @@ mod tests {
             image_samples: vk::SampleCountFlags::_1,
         };
         for op in WRITE_OPS.iter().chain(READ_OPS) {
-            if op.image_graphics_kind().is_none() && op.buffer_graphics_kind().is_none() {
+            if op.image_graphics_kind().is_none() && op.buffer_graphics_kind().is_none() && op.draw_call().is_none() {
                 continue;
             }
             assert_eq!(op.queue_flags(&image), vk::QueueFlags::GRAPHICS, "{}", op.as_str());
             assert!(!op.can_run_on_compute(), "{} must not have a compute-queue variant", op.as_str());
         }
+    }
+}
+
+/// The manifest declares the draw shaders with this. Only two exist: the fragment
+/// shader writes `makeClearValue`'s colour, which depends only on whether the format
+/// is integral.
+pub struct DrawShader {
+    pub name: &'static str,
+    pub integer: bool,
+    pub programs: crate::vk::programs::BinaryCollection,
+}
+
+use crate::generated::shaders::synchronization_buffer::ALL_DRAW_SHADER;
+
+/// `Draw::DrawCall`
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum DrawCall {
+    Draw,
+    DrawIndexed,
+    DrawIndirect,
+    DrawIndexedIndirect,
+}
+
+/// `Draw::Implementation` - a write operation whose result is a draw into the resource
+/// image as a colour attachment.
+///
+/// The fragment shader writes the same colour a clear would, so the expected data is
+/// the host-side clear pattern; what the operation is really for is to give the
+/// synchronization primitive a `COLOR_ATTACHMENT_OUTPUT` write to order.
+pub struct DrawOperation<'a> {
+    image: ImageInfo,
+    expected_data: Vec<u8>,
+    draw_call: DrawCall,
+    vertex_buffer: BufferWithMemory<'a>,
+    index_buffer: BufferWithMemory<'a>,
+    indirect_buffer: Option<BufferWithMemory<'a>>,
+    _view: crate::vk::ref_util::Unique<'a, vk::ImageView>,
+    render_pass: crate::vk::ref_util::Unique<'a, vk::RenderPass>,
+    framebuffer: crate::vk::ref_util::Unique<'a, vk::Framebuffer>,
+    _pipeline_layout: crate::vk::ref_util::Unique<'a, vk::PipelineLayout>,
+    pipeline: crate::vk::ref_util::Unique<'a, vk::Pipeline>,
+}
+
+impl<'a> DrawOperation<'a> {
+    pub fn new(device: &'a Device, allocator: &crate::vk::mem_util::SimpleAllocator, resource: &Resource<'_>, draw_call: DrawCall) -> Result<Self, TestError> {
+        use crate::vk::image_util::make_image_view;
+        use crate::vk::obj_util::{make_framebuffer, make_graphics_pipeline_full, make_pipeline_layout, make_render_pass};
+        use crate::vk::programs::create_shader_module;
+
+        let image = resource.image();
+
+        // `VertexGrid` - the same six vertices the shader-access grid uses, plus the
+        // identity index buffer the indexed draws walk.
+        let vertex_size = std::mem::size_of_val(&GRID_VERTICES) as vk::DeviceSize;
+        let vertex_buffer = BufferWithMemory::new(
+            device,
+            allocator,
+            make_buffer_create_info(vertex_size, vk::BufferUsageFlags::VERTEX_BUFFER),
+            MemoryRequirement::HOST_VISIBLE,
+        )?;
+        unsafe {
+            std::ptr::copy_nonoverlapping(GRID_VERTICES.as_ptr().cast::<u8>(), vertex_buffer.get_allocation().get_host_ptr(), vertex_size as usize);
+        }
+        flush_alloc(device, vertex_buffer.get_allocation())?;
+
+        let num_vertices = GRID_VERTICES.len() as u32;
+        let index_size = (std::mem::size_of::<u32>() * GRID_VERTICES.len()) as vk::DeviceSize;
+        let index_buffer = BufferWithMemory::new(
+            device,
+            allocator,
+            make_buffer_create_info(index_size, vk::BufferUsageFlags::INDEX_BUFFER),
+            MemoryRequirement::HOST_VISIBLE,
+        )?;
+        unsafe {
+            let ptr = index_buffer.get_allocation().get_host_ptr().cast::<u32>();
+            for i in 0..num_vertices {
+                ptr.add(i as usize).write(i);
+            }
+        }
+        flush_alloc(device, index_buffer.get_allocation())?;
+
+        let indirect_buffer = match draw_call {
+            DrawCall::DrawIndirect => {
+                let size = std::mem::size_of::<vk::DrawIndirectCommand>() as vk::DeviceSize;
+                let buffer = BufferWithMemory::new(
+                    device,
+                    allocator,
+                    make_buffer_create_info(size, vk::BufferUsageFlags::INDIRECT_BUFFER),
+                    MemoryRequirement::HOST_VISIBLE,
+                )?;
+                unsafe {
+                    buffer.get_allocation().get_host_ptr().cast::<vk::DrawIndirectCommand>().write(vk::DrawIndirectCommand {
+                        vertex_count: num_vertices,
+                        instance_count: 1,
+                        first_vertex: 0,
+                        first_instance: 0,
+                    });
+                }
+                flush_alloc(device, buffer.get_allocation())?;
+                Some(buffer)
+            }
+            DrawCall::DrawIndexedIndirect => {
+                let size = std::mem::size_of::<vk::DrawIndexedIndirectCommand>() as vk::DeviceSize;
+                let buffer = BufferWithMemory::new(
+                    device,
+                    allocator,
+                    make_buffer_create_info(size, vk::BufferUsageFlags::INDIRECT_BUFFER),
+                    MemoryRequirement::HOST_VISIBLE,
+                )?;
+                unsafe {
+                    buffer
+                        .get_allocation()
+                        .get_host_ptr()
+                        .cast::<vk::DrawIndexedIndirectCommand>()
+                        .write(vk::DrawIndexedIndirectCommand {
+                            index_count: num_vertices,
+                            instance_count: 1,
+                            first_index: 0,
+                            vertex_offset: 0,
+                            first_instance: 0,
+                        });
+                }
+                flush_alloc(device, buffer.get_allocation())?;
+                Some(buffer)
+            }
+            _ => None,
+        };
+
+        // The resource image is the colour attachment.
+        let view = make_image_view(device, image.handle, vk::ImageViewType::_2D, image.format, image.subresource_range)?;
+        let render_pass = make_render_pass(device, image.format)?;
+        let framebuffer = make_framebuffer(device, *render_pass, &[*view], image.extent.width, image.extent.height, 1)?;
+        let pipeline_layout = make_pipeline_layout(device, &[])?;
+
+        let tcu_format = map_vk_format(image.format).ok_or_else(|| TestError::NotPorted(format!("{:?}", image.format)))?;
+        let integer = matches!(tcu_format.channel_class(), TextureChannelClass::SignedInteger | TextureChannelClass::UnsignedInteger);
+        let shader = ALL_DRAW_SHADER
+            .iter()
+            .copied()
+            .find(|s| s.integer == integer)
+            .expect("the generator emits both the float and the integer fragment shader");
+        let vert = create_shader_module(device, shader.programs.get("draw_vert")?)?;
+        let frag = create_shader_module(device, shader.programs.get("draw_frag")?)?;
+
+        let pipeline = make_graphics_pipeline_full(
+            device,
+            *pipeline_layout,
+            *vert,
+            *frag,
+            *render_pass,
+            (image.extent.width, image.extent.height),
+            vk::PrimitiveTopology::TRIANGLE_LIST,
+            vk::SampleCountFlags::_1,
+            None,
+            1,
+        )?;
+
+        // The draw covers the whole attachment with the clear colour, so the expected
+        // contents are exactly what a clear of the same value would leave.
+        let size = get_pixel_buffer_size(image.format, image.extent)?;
+        let mut expected_data = vec![0u8; size as usize];
+        {
+            let mut pixels = PixelBufferAccess::new(tcu_format, [image.extent.width, image.extent.height, image.extent.depth], &mut expected_data);
+            clear_pixel_buffer(&mut pixels, &make_clear_value(image.format));
+        }
+
+        Ok(Self {
+            image,
+            expected_data,
+            draw_call,
+            vertex_buffer,
+            index_buffer,
+            indirect_buffer,
+            _view: view,
+            render_pass,
+            framebuffer,
+            _pipeline_layout: pipeline_layout,
+            pipeline,
+        })
+    }
+}
+
+impl Operation for DrawOperation<'_> {
+    fn record_commands(&self, device: &Device, sync: SyncType, cmd_buffer: vk::CommandBuffer) {
+        let to_attachment = make_image_memory_barrier2(
+            vk::PipelineStageFlags2::TOP_OF_PIPE,
+            vk::AccessFlags2::empty(),
+            vk::PipelineStageFlags2::COLOR_ATTACHMENT_OUTPUT,
+            vk::AccessFlags2::COLOR_ATTACHMENT_WRITE,
+            vk::ImageLayout::UNDEFINED,
+            vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL,
+            self.image.handle,
+            self.image.subresource_range,
+        );
+        cmd_pipeline_barrier(device, sync, cmd_buffer, &[], &[to_attachment]);
+
+        let clear = [vk::ClearValue {
+            color: vk::ClearColorValue { float32: [0.0, 0.0, 0.0, 1.0] },
+        }];
+        let begin = vk::RenderPassBeginInfo::builder()
+            .render_pass(*self.render_pass)
+            .framebuffer(*self.framebuffer)
+            .render_area(vk::Rect2D {
+                offset: vk::Offset2D { x: 0, y: 0 },
+                extent: vk::Extent2D {
+                    width: self.image.extent.width,
+                    height: self.image.extent.height,
+                },
+            })
+            .clear_values(&clear);
+
+        let num_vertices = GRID_VERTICES.len() as u32;
+        unsafe {
+            device.cmd_begin_render_pass(cmd_buffer, &begin, vk::SubpassContents::INLINE);
+            device.cmd_bind_pipeline(cmd_buffer, vk::PipelineBindPoint::GRAPHICS, *self.pipeline);
+            device.cmd_bind_vertex_buffers(cmd_buffer, 0, &[self.vertex_buffer.get()], &[0]);
+
+            if matches!(self.draw_call, DrawCall::DrawIndexed | DrawCall::DrawIndexedIndirect) {
+                device.cmd_bind_index_buffer(cmd_buffer, self.index_buffer.get(), 0, vk::IndexType::UINT32);
+            }
+
+            match self.draw_call {
+                DrawCall::Draw => device.cmd_draw(cmd_buffer, num_vertices, 1, 0, 0),
+                DrawCall::DrawIndexed => device.cmd_draw_indexed(cmd_buffer, num_vertices, 1, 0, 0, 0),
+                DrawCall::DrawIndirect => {
+                    device.cmd_draw_indirect(cmd_buffer, self.indirect_buffer.as_ref().expect("built for this draw call").get(), 0, 1, 0);
+                }
+                DrawCall::DrawIndexedIndirect => {
+                    device.cmd_draw_indexed_indirect(cmd_buffer, self.indirect_buffer.as_ref().expect("built for this draw call").get(), 0, 1, 0);
+                }
+            }
+            device.cmd_end_render_pass(cmd_buffer);
+        }
+    }
+
+    fn in_sync_info(&self, _sync: SyncType) -> SyncInfo {
+        EMPTY_SYNC_INFO
+    }
+
+    fn out_sync_info(&self, _sync: SyncType) -> SyncInfo {
+        SyncInfo {
+            stage_mask: vk::PipelineStageFlags2::COLOR_ATTACHMENT_OUTPUT,
+            access_mask: vk::AccessFlags2::COLOR_ATTACHMENT_WRITE,
+            image_layout: vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL,
+        }
+    }
+
+    fn data(&self, _device: &Device) -> Result<Vec<u8>, TestError> {
+        Ok(self.expected_data.clone())
     }
 }

@@ -289,6 +289,51 @@ def main() -> int:
             ]
             count += 1
 
+    # `Draw::Support::initPrograms` - a passthrough vertex shader and a fragment
+    # shader that writes `makeClearValue`'s colour. The value depends only on whether
+    # the format is integral, so two fragment shaders cover every resource.
+    draw_vert = (
+        "#version 440\n"
+        "\n"
+        "layout(location = 0) in vec4 v_in_position;\n"
+        "\n"
+        f"{PER_VERTEX_BLOCK};\n"
+        "\n"
+        "void main (void)\n"
+        "{\n"
+        "    gl_Position = v_in_position;\n"
+        "}\n"
+    )
+    (SRC_DIR / "draw.vert").write_text(draw_vert)
+
+    for kind, color_type, value in (("float", "vec4", "0.25, 0.49, 0.75, 1"), ("integer", "uvec4", "8, 16, 24, 32")):
+        frag = (
+            "#version 440\n"
+            "\n"
+            f"layout(location = 0) out {color_type} o_color;\n"
+            "\n"
+            "void main (void)\n"
+            "{\n"
+            f"    o_color = {color_type}({value});\n"
+            "}\n"
+        )
+        name = f"draw_{kind}"
+        (SRC_DIR / f"{name}.frag").write_text(frag)
+        lines += [
+            "[[case]]",
+            f'name = "{name}"',
+            f'rust_const = "{name.upper()}"',
+            'rust_type = "DrawShader"',
+            "programs = [",
+            '    { name = "draw_vert", template = "synchronization/generated/draw.vert", stage = "vert" },',
+            f'    {{ name = "draw_frag", template = "synchronization/generated/{name}.frag", stage = "frag" }},',
+            "]",
+            "[case.params]",
+            f'integer = {{ type = "bool", value = {"true" if kind == "integer" else "false"} }}',
+            "",
+        ]
+        count += 1
+
     MANIFEST.write_text("\n".join(lines))
     print(f"wrote {MANIFEST.relative_to(REPO_DIR)} and {count} shaders in {SRC_DIR.relative_to(REPO_DIR)}")
     return 0

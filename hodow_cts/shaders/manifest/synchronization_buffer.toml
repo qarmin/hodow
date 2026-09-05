@@ -458,3 +458,25 @@ programs = [
 [case.params]
 resource_name = { type = "str", value = "image_64x64x8_r32_sfloat" }
 stage = { type = "str", value = "fragment" }
+
+[[case]]
+name = "draw_float"
+rust_const = "DRAW_FLOAT"
+rust_type = "DrawShader"
+programs = [
+    { name = "draw_vert", template = "synchronization/generated/draw.vert", stage = "vert" },
+    { name = "draw_frag", template = "synchronization/generated/draw_float.frag", stage = "frag" },
+]
+[case.params]
+integer = { type = "bool", value = false }
+
+[[case]]
+name = "draw_integer"
+rust_const = "DRAW_INTEGER"
+rust_type = "DrawShader"
+programs = [
+    { name = "draw_vert", template = "synchronization/generated/draw.vert", stage = "vert" },
+    { name = "draw_frag", template = "synchronization/generated/draw_integer.frag", stage = "frag" },
+]
+[case.params]
+integer = { type = "bool", value = true }
