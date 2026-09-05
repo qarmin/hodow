@@ -177,9 +177,21 @@ def main() -> int:
     lines.append("];")
     lines.append("")
 
+    # `formats::compressedFormatsSrgb` - the sRGB half of the same, which the blit
+    # tests pair with the sRGB destination list.
+    cs_formats = read_group(header_text, "compressedFormatsSrgb")
+    print(f"compressedFormatsSrgb: {len(cs_formats)} formats")
+    lines.append("/// `formats::compressedFormatsSrgb`, paired with the case name.")
+    lines.append("pub static COMPRESSED_FORMATS_SRGB: &[(vk::Format, &str)] = &[")
+    for f in cs_formats:
+        lines.append(f'    (vk::Format::{rust_name(f)}, "{case_name(f)}"),')
+    lines.append("];")
+    lines.append("")
+
     # `colorImageFormatsToTestBlit` groups formats by channel class rather than by bit
     # width, because a blit converts between formats instead of reinterpreting bytes.
     lines.append("/// One entry of a `colorImageFormatsToTestBlit` list.")
+    lines.append("#[derive(Clone, Copy)]")
     lines.append("pub struct BlitFormat {")
     lines.append("    pub format: vk::Format,")
     lines.append("    pub name: &'static str,")

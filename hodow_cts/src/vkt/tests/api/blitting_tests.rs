@@ -18,8 +18,13 @@
 // Ported so far: every VK_FILTER_NEAREST case of simple_tests and of
 // all_formats.color that has an uncompressed source format. LINEAR and CUBIC need two
 // reference images built with a scaled filter (`checkNonNearestFilteredResult`), which
-// is not ported; the array-to-3D groups, the compressed source formats and
-// all_formats.depth_stencil are not registered either.
+// is not ported; the array-to-3D groups and all_formats.depth_stencil are not
+// registered either.
+//
+// A BC1-BC5 source is registered: the reference is what its blocks decode to, so it
+// needs `tcu::compressed_texture`. ETC, ASTC, BC6H and BC7 sources have no decoder
+// here yet, and neither does the compressed *destination* half of the 2D group -
+// upstream also pairs each compressed source with itself.
 
 use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::DeviceV1_3;
@@ -28,19 +33,25 @@ use super::copies_buffer_tests::{AllocationKind, CopyCommandVariant};
 use super::copies_image_tests::{
     FillMode, GroupParams, ImageParms, generate_buffer, get_aspect_flags, is_supported_by_framework, read_image, read_image_mip_level, upload_image, upload_image_mip_levels,
 };
-use super::copy_format_lists::{BlitFormat, COMPATIBLE_FORMATS_FLOATS, COMPATIBLE_FORMATS_S_INTS, COMPATIBLE_FORMATS_SRGB, COMPATIBLE_FORMATS_U_INTS, DEPTH_AND_STENCIL_FORMATS};
+use super::copy_format_lists::{
+    BlitFormat, COMPATIBLE_FORMATS_FLOATS, COMPATIBLE_FORMATS_S_INTS, COMPATIBLE_FORMATS_SRGB, COMPATIBLE_FORMATS_U_INTS, COMPRESSED_FORMATS_FLOATS, COMPRESSED_FORMATS_SRGB,
+    DEPTH_AND_STENCIL_FORMATS,
+};
+use crate::tcu::compressed_texture::{decompress, get_uncompressed_format, is_decompressible};
 use crate::tcu::pixel::{
     ConstPixelBufferAccess, DepthStencilMode, FilterMode, PixelBufferAccess, Sampler, TextureLevel, get_effective_depth_stencil_access, get_effective_depth_stencil_access_mut,
     get_effective_depth_stencil_texture_format, get_texture_format_bit_depth, get_texture_format_mantissa_bit_depth, has_depth_component, has_stencil_component,
     is_combined_depth_stencil_type, linear_to_srgb_if_needed,
 };
+use crate::tcu::random::Random;
 use crate::tcu::tex_verifier::{LookupPrecision, is_nearest_sample_result_valid_float, is_nearest_sample_result_valid_int, srgb_to_linear};
 use crate::tcu::texture::{ChannelOrder, ChannelType, TextureChannelClass, TextureFormat};
 use crate::tcu::{self, TestError, TestOutcome, TestStatus, map_vk_format};
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
+use crate::vk::compressed_formats::{get_block_depth, get_block_height, get_block_size_in_bytes, get_block_width, is_compressed_format};
 use crate::vk::image_util::{ImageWithMemory, make_image_memory_barrier, make_image_subresource_range};
-use crate::vk::mem_util::MemoryRequirement;
-use crate::vk::obj_util::{allocate_command_buffer, make_command_pool};
+use crate::vk::mem_util::{MemoryRequirement, flush_alloc};
+use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool};
 use crate::vk::programs::BinaryCollection;
 use crate::vkt::{Context, TestCase, TestInstance};
 
@@ -52,6 +63,171 @@ const DEFAULT_HALF_SIZE: i32 = DEFAULT_SIZE / 2;
 const DEFAULT_QUARTER_SIZE: i32 = DEFAULT_SIZE / 4;
 /// `defaultSixteenthSize`
 const DEFAULT_SIXTEENTH_SIZE: i32 = DEFAULT_SIZE / 16;
+
+/// `getCompressedFormatThreshold` - how far apart two samples of the same compressed
+/// texel may be, from the endpoint precision the format encodes them at.
+fn get_compressed_format_threshold(format: vk::Format) -> [f32; 4] {
+    let (bit_depth, is_signed): ([i32; 4], bool) = match format {
+        vk::Format::BC1_RGB_UNORM_BLOCK
+        | vk::Format::BC1_RGB_SRGB_BLOCK
+        | vk::Format::BC2_UNORM_BLOCK
+        | vk::Format::BC2_SRGB_BLOCK
+        | vk::Format::BC3_UNORM_BLOCK
+        | vk::Format::BC3_SRGB_BLOCK => ([5, 6, 5, 0], false),
+        vk::Format::BC1_RGBA_UNORM_BLOCK | vk::Format::BC1_RGBA_SRGB_BLOCK => ([5, 5, 5, 1], false),
+        vk::Format::BC4_SNORM_BLOCK => ([7, 0, 0, 0], true),
+        vk::Format::BC4_UNORM_BLOCK => ([8, 0, 0, 0], false),
+        vk::Format::BC5_SNORM_BLOCK => ([7, 7, 0, 0], true),
+        vk::Format::BC5_UNORM_BLOCK => ([8, 8, 0, 0], false),
+        other => unreachable!("no compressed threshold for {other:?}"),
+    };
+    let range = if is_signed { 2.0 } else { 1.0 };
+    std::array::from_fn(|i| if bit_depth[i] == 0 { 1.0 } else { range / ((1i32 << bit_depth[i]) - 1) as f32 })
+}
+
+/// Whether the decoded source has to be clamped before it can be the reference: a
+/// signed block format blitted into an unsigned destination is clamped on the device,
+/// and the software sampler does not do that on its own.
+fn needs_source_clamp(compressed_format: vk::Format, result_format: TextureFormat) -> bool {
+    let signed_block = matches!(compressed_format, vk::Format::BC4_SNORM_BLOCK | vk::Format::BC5_SNORM_BLOCK);
+    let unsigned_result = matches!(
+        result_format.type_,
+        ChannelType::UNORM_INT8
+            | ChannelType::UNORM_INT16
+            | ChannelType::UNORM_INT24
+            | ChannelType::UNORM_INT32
+            | ChannelType::UNORM_BYTE_44
+            | ChannelType::UNORM_SHORT_565
+            | ChannelType::UNORM_SHORT_555
+            | ChannelType::UNORM_SHORT_4444
+            | ChannelType::UNORM_SHORT_5551
+            | ChannelType::UNORM_SHORT_1555
+            | ChannelType::UNORM_INT_101010
+            | ChannelType::UNORM_INT_1010102_REV
+            | ChannelType::UNSIGNED_INT_11F_11F_10F_REV
+            | ChannelType::UNSIGNED_INT_999_E5_REV
+    );
+    signed_block && unsigned_result
+}
+
+/// A copy of `source` with every channel clamped into `[min, max]`.
+fn clamp_source(source: &ConstPixelBufferAccess<'_>, min: f32, max: f32) -> TextureLevel {
+    let [width, height, depth] = source.size();
+    let mut level = TextureLevel::new(source.format(), width, height, depth).expect("the source format is already a texture level");
+    {
+        let mut access = level.get_access();
+        for z in 0..depth {
+            for y in 0..height {
+                for x in 0..width {
+                    let texel = source.get_pixel(x, y, z);
+                    access.set_pixel(texel.map(|c| c.clamp(min, max)), x, y, z);
+                }
+            }
+        }
+    }
+    level
+}
+
+/// `CompressedTextureForBlit` - random compressed data and the texels it decodes to.
+///
+/// The bytes are random rather than encoded from an image: the test only needs the
+/// driver and the host to agree on what the blocks mean, and a random block is a
+/// harder case than an encoder's output. BC6H and ASTC need a curated set instead,
+/// which is why those formats are not registered here.
+fn make_compressed_source(format: vk::Format, width: u32, height: u32, depth: u32) -> Result<(Vec<u8>, TextureLevel), TestError> {
+    let blocks = width.div_ceil(get_block_width(format)) * height.div_ceil(get_block_height(format)) * depth.div_ceil(get_block_depth(format));
+    let mut data = vec![0u8; (blocks * get_block_size_in_bytes(format)) as usize];
+    let mut random = Random::new(123);
+    for byte in data.iter_mut() {
+        *byte = (random.get_uint32() & 0xFF) as u8;
+    }
+
+    let uncompressed = get_uncompressed_format(format).ok_or_else(|| TestError::NotSupported(format!("no decoder for {format:?}")))?;
+    let mut level = TextureLevel::new(uncompressed, width, height, depth)?;
+    if !decompress(&mut level.get_access(), format, &data) {
+        return Err(TestError::NotSupported(format!("no decoder for {format:?}")));
+    }
+    Ok((data, level))
+}
+
+/// `BlittingImages::uploadCompressedImage`
+fn upload_compressed_image(context: &Context<'_>, data: &[u8], image: vk::Image, parms: &ImageParms) -> Result<(), TestError> {
+    let device = context.get_device();
+    let queue = context.get_universal_queue();
+    let queue_family_index = context.get_universal_queue_family_index();
+
+    let buffer = BufferWithMemory::new(
+        device,
+        context.get_default_allocator(),
+        make_buffer_create_info(data.len() as u64, vk::BufferUsageFlags::TRANSFER_SRC),
+        MemoryRequirement::HOST_VISIBLE,
+    )?;
+    unsafe { std::ptr::copy_nonoverlapping(data.as_ptr(), buffer.get_allocation().get_host_ptr(), data.len()) };
+    flush_alloc(device, buffer.get_allocation())?;
+
+    let extent = vk::Extent3D {
+        width: parms.extent[0],
+        height: if parms.image_type == vk::ImageType::_1D { 1 } else { parms.extent[1] },
+        depth: if parms.image_type == vk::ImageType::_3D { parms.extent[2] } else { 1 },
+    };
+    let range = make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, parms.array_size());
+
+    let cmd_pool = make_command_pool(device, queue_family_index)?;
+    let cmd_buffer = allocate_command_buffer(device, *cmd_pool, vk::CommandBufferLevel::PRIMARY)?;
+    begin_command_buffer(device, *cmd_buffer)?;
+    unsafe {
+        let pre = make_image_memory_barrier(
+            vk::AccessFlags::empty(),
+            vk::AccessFlags::TRANSFER_WRITE,
+            vk::ImageLayout::UNDEFINED,
+            vk::ImageLayout::TRANSFER_DST_OPTIMAL,
+            image,
+            range,
+        );
+        device.cmd_pipeline_barrier(
+            *cmd_buffer,
+            vk::PipelineStageFlags::HOST,
+            vk::PipelineStageFlags::TRANSFER,
+            vk::DependencyFlags::empty(),
+            &[] as &[vk::MemoryBarrier],
+            &[] as &[vk::BufferMemoryBarrier],
+            &[pre],
+        );
+        let region = vk::BufferImageCopy {
+            buffer_offset: 0,
+            buffer_row_length: extent.width,
+            buffer_image_height: extent.height,
+            image_subresource: vk::ImageSubresourceLayers {
+                aspect_mask: vk::ImageAspectFlags::COLOR,
+                mip_level: 0,
+                base_array_layer: 0,
+                layer_count: parms.array_size(),
+            },
+            image_offset: vk::Offset3D { x: 0, y: 0, z: 0 },
+            image_extent: extent,
+        };
+        device.cmd_copy_buffer_to_image(*cmd_buffer, buffer.get(), image, vk::ImageLayout::TRANSFER_DST_OPTIMAL, &[region]);
+        let post = make_image_memory_barrier(
+            vk::AccessFlags::TRANSFER_WRITE,
+            vk::AccessFlags::TRANSFER_WRITE,
+            vk::ImageLayout::TRANSFER_DST_OPTIMAL,
+            vk::ImageLayout::TRANSFER_DST_OPTIMAL,
+            image,
+            range,
+        );
+        device.cmd_pipeline_barrier(
+            *cmd_buffer,
+            vk::PipelineStageFlags::TRANSFER,
+            vk::PipelineStageFlags::TRANSFER,
+            vk::DependencyFlags::empty(),
+            &[] as &[vk::MemoryBarrier],
+            &[] as &[vk::BufferMemoryBarrier],
+            &[post],
+        );
+    }
+    end_command_buffer(device, *cmd_buffer)?;
+    submit_commands_and_wait(device, queue, *cmd_buffer)
+}
 
 /// `CopyRegion::imageBlit`, narrowed to the single-layer blits the ported subgroups
 /// use - every one of them passes the same subresource layers on both sides, differing
@@ -771,9 +947,65 @@ impl BlittingImages<'_> {
         }
     }
 
+    /// `BlittingImages::checkCompressedNearestFilteredResult`
+    ///
+    /// The same comparison as the uncompressed nearest check, with the source's
+    /// threshold taken from the block format's endpoint precision rather than from
+    /// the decoded texel format, and a small extra tolerance for the one or two
+    /// pixels that land slightly outside it.
+    fn check_compressed_nearest_filtered_result(&self, result: &ConstPixelBufferAccess<'_>, source: &ConstPixelBufferAccess<'_>, format: vk::Format) -> bool {
+        const ACCEPTED_ERROR: f32 = 0.04;
+        let compressed_threshold = get_compressed_format_threshold(format);
+        let result_threshold = get_float_or_fixed_point_format_threshold(result.format());
+        let src_max_diff: [f32; 4] = std::array::from_fn(|i| ACCEPTED_ERROR + compressed_threshold[i]);
+        let dst_max_diff: [f32; 4] = std::array::from_fn(|i| ACCEPTED_ERROR + result_threshold[i]);
+
+        // A signed block format blitted into an unsigned one is clamped on the host
+        // too, since that is what the device does on the way in.
+        let clamped = needs_source_clamp(format, result.format()).then(|| clamp_source(source, 0.0, 1.0));
+        let clamped_access = clamped.as_ref().map(TextureLevel::get_const_access);
+        let source = clamped_access.as_ref().unwrap_or(source);
+
+        let (st, dt) = (self.params.src.image_type, self.params.dst.image_type);
+        float_nearest_blit_compare(source, result, src_max_diff, dst_max_diff, &self.params.regions, st, dt)
+    }
+
+    /// `BlittingImages::checkCompressedNonNearestFilteredResult`
+    fn check_compressed_non_nearest_filtered_result(
+        &self,
+        result: &ConstPixelBufferAccess<'_>,
+        clamped_expected: &ConstPixelBufferAccess<'_>,
+        unclamped_expected: &ConstPixelBufferAccess<'_>,
+        format: vk::Format,
+    ) -> bool {
+        const ACCEPTED_ERROR: f32 = 0.06;
+        let src_max_diff = get_compressed_format_threshold(format);
+        let dst_max_diff = get_format_threshold(result.format());
+        let scale = if self.params.filter == vk::Filter::CUBIC_EXT { 1.5 } else { 1.0 };
+        let threshold: [f32; 4] = std::array::from_fn(|i| (src_max_diff[i] + dst_max_diff[i]) * scale + ACCEPTED_ERROR);
+
+        float_threshold_compare(clamped_expected, result, threshold) || float_threshold_compare(unclamped_expected, result, threshold)
+    }
+
     /// `BlittingImages::checkTestResult`
-    fn check_test_result(&self, result: &ConstPixelBufferAccess<'_>, source: &ConstPixelBufferAccess<'_>, expected: Option<&ExpectedLevels>) -> Result<TestStatus, TestError> {
+    fn check_test_result(
+        &self,
+        result: &ConstPixelBufferAccess<'_>,
+        source: &ConstPixelBufferAccess<'_>,
+        expected: Option<&ExpectedLevels>,
+        compressed_source_format: Option<vk::Format>,
+    ) -> Result<TestStatus, TestError> {
         const FAIL_MESSAGE: &str = "Result image is incorrect";
+
+        if let Some(compressed) = compressed_source_format {
+            let ok = match expected {
+                Some(expected) => {
+                    self.check_compressed_non_nearest_filtered_result(result, &expected.clamped.get_const_access(), &expected.unclamped.get_const_access(), compressed)
+                }
+                None => self.check_compressed_nearest_filtered_result(result, source, compressed),
+            };
+            return Ok(if ok { TestStatus::pass("Pass") } else { TestStatus::fail(FAIL_MESSAGE) });
+        }
 
         if let Some(expected) = expected {
             let src_format = source.format();
@@ -843,18 +1075,30 @@ impl TestInstance for BlittingImages<'_> {
         let destination = self.make_image(dst_image_params)?;
 
         // generate source image
-        let src_tcu_format = map_vk_format(src_image_params.format).ok_or_else(|| TestError::NotSupported("format has no tcu mapping".to_string()))?;
-        let mut source_texture_level = TextureLevel::new(src_tcu_format, src_width, src_height, src_depth)?;
-        generate_buffer(&mut source_texture_level.get_access(), src_width, src_height, src_depth, src_image_params.fill_mode, false);
-        upload_image(
-            self.context,
-            &source_texture_level.get_const_access(),
-            source.get(),
-            src_image_params,
-            false,
-            &families,
-            p.separate_depth_stencil_layouts,
-        )?;
+        //
+        // A compressed source is uploaded as blocks and the reference is what those
+        // blocks decode to; everything downstream then works on the decoded texels,
+        // which is exactly what the driver samples.
+        let compressed_source_format = is_compressed_format(src_image_params.format).then_some(src_image_params.format);
+        let source_texture_level = if let Some(format) = compressed_source_format {
+            let (data, level) = make_compressed_source(format, src_width, src_height, src_depth)?;
+            upload_compressed_image(self.context, &data, source.get(), src_image_params)?;
+            level
+        } else {
+            let src_tcu_format = map_vk_format(src_image_params.format).ok_or_else(|| TestError::NotSupported("format has no tcu mapping".to_string()))?;
+            let mut level = TextureLevel::new(src_tcu_format, src_width, src_height, src_depth)?;
+            generate_buffer(&mut level.get_access(), src_width, src_height, src_depth, src_image_params.fill_mode, false);
+            upload_image(
+                self.context,
+                &level.get_const_access(),
+                source.get(),
+                src_image_params,
+                false,
+                &families,
+                p.separate_depth_stencil_layouts,
+            )?;
+            level
+        };
 
         // generate destination image
         let dst_tcu_format = map_vk_format(dst_image_params.format).ok_or_else(|| TestError::NotSupported("format has no tcu mapping".to_string()))?;
@@ -984,7 +1228,12 @@ impl TestInstance for BlittingImages<'_> {
         let mut result_level = TextureLevel::new(dst_tcu_format, dst_width, dst_height, dst_depth)?;
         read_image(self.context, destination.get(), dst_image_params, &mut result_level, false, &families)?;
 
-        self.check_test_result(&result_level.get_const_access(), &source_texture_level.get_const_access(), expected.as_ref())
+        self.check_test_result(
+            &result_level.get_const_access(),
+            &source_texture_level.get_const_access(),
+            expected.as_ref(),
+            compressed_source_format,
+        )
     }
 }
 
@@ -1471,13 +1720,26 @@ fn add_blitting_image_all_formats_color_src_format_tests(group: &mut tcu::TestCa
     }
 }
 
-/// `colorImageFormatsToTestBlit`, minus the two compressed source lists.
-fn color_image_formats_to_test_blit() -> [(&'static [BlitFormat], &'static [BlitFormat], bool); 4] {
-    [
-        (COMPATIBLE_FORMATS_U_INTS, COMPATIBLE_FORMATS_U_INTS, true),
-        (COMPATIBLE_FORMATS_S_INTS, COMPATIBLE_FORMATS_S_INTS, true),
-        (COMPATIBLE_FORMATS_FLOATS, COMPATIBLE_FORMATS_FLOATS, false),
-        (COMPATIBLE_FORMATS_SRGB, COMPATIBLE_FORMATS_SRGB, false),
+/// The compressed halves of `colorImageFormatsToTestBlit`, narrowed to the block
+/// formats this port can decode - the reference for a blit out of a compressed image
+/// is what its blocks decode to, so a format with no decoder has no reference.
+fn decodable_compressed_formats(list: &'static [(vk::Format, &'static str)]) -> Vec<BlitFormat> {
+    list.iter()
+        .filter(|(format, _)| is_decompressible(*format))
+        .map(|(format, name)| BlitFormat { format: *format, name })
+        .collect()
+}
+
+/// `colorImageFormatsToTestBlit`
+fn color_image_formats_to_test_blit() -> Vec<(Vec<BlitFormat>, &'static [BlitFormat], bool)> {
+    let owned = |list: &'static [BlitFormat]| list.to_vec();
+    vec![
+        (owned(COMPATIBLE_FORMATS_U_INTS), COMPATIBLE_FORMATS_U_INTS, true),
+        (owned(COMPATIBLE_FORMATS_S_INTS), COMPATIBLE_FORMATS_S_INTS, true),
+        (owned(COMPATIBLE_FORMATS_FLOATS), COMPATIBLE_FORMATS_FLOATS, false),
+        (decodable_compressed_formats(COMPRESSED_FORMATS_FLOATS), COMPATIBLE_FORMATS_FLOATS, false),
+        (owned(COMPATIBLE_FORMATS_SRGB), COMPATIBLE_FORMATS_SRGB, false),
+        (decodable_compressed_formats(COMPRESSED_FORMATS_SRGB), COMPATIBLE_FORMATS_SRGB, false),
     ]
 }
 
@@ -1489,7 +1751,7 @@ fn add_blitting_image_all_formats_color_tests(group: &mut tcu::TestCaseGroup, gp
         let regions = create_2d_copy_regions(DEFAULT_SIZE, DEFAULT_SIZE, DEFAULT_SIZE, DEFAULT_SIZE);
 
         for (source_formats, destination_formats, only_nearest) in color_image_formats_to_test_blit() {
-            for src in source_formats {
+            for src in &source_formats {
                 let p = BlitColorTestParams {
                     image_type: vk::ImageType::_2D,
                     extent: [DEFAULT_SIZE as u32, DEFAULT_SIZE as u32, 1],
@@ -1512,7 +1774,7 @@ fn add_blitting_image_all_formats_color_tests(group: &mut tcu::TestCaseGroup, gp
         let regions = create_1d_copy_regions();
 
         for (source_formats, _, only_nearest) in color_image_formats_to_test_blit() {
-            for src in source_formats {
+            for src in &source_formats {
                 if !is_supported_by_framework(src.format) {
                     continue;
                 }
@@ -1539,7 +1801,7 @@ fn add_blitting_image_all_formats_color_tests(group: &mut tcu::TestCaseGroup, gp
         let regions = create_3d_all_formats_regions();
 
         for (source_formats, _, only_nearest) in color_image_formats_to_test_blit() {
-            for src in source_formats {
+            for src in &source_formats {
                 if !is_supported_by_framework(src.format) {
                     continue;
                 }
@@ -2360,7 +2622,7 @@ fn add_blitting_image_all_formats_mipmap_level_tests(group: &mut tcu::TestCaseGr
         let regions = mipmap_regions(from_base_level, mip_levels, layer_count);
 
         for (source_formats, _, only_nearest) in color_image_formats_to_test_blit() {
-            for src in source_formats {
+            for src in &source_formats {
                 if !is_supported_by_framework(src.format) {
                     continue;
                 }

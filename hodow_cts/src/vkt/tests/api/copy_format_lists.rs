@@ -1159,7 +1159,34 @@ pub static COMPRESSED_FORMATS_FLOATS: &[(vk::Format, &str)] = &[
     (vk::Format::ASTC_12X12_UNORM_BLOCK, "astc_12x12_unorm_block"),
 ];
 
+/// `formats::compressedFormatsSrgb`, paired with the case name.
+pub static COMPRESSED_FORMATS_SRGB: &[(vk::Format, &str)] = &[
+    (vk::Format::BC1_RGB_SRGB_BLOCK, "bc1_rgb_srgb_block"),
+    (vk::Format::BC1_RGBA_SRGB_BLOCK, "bc1_rgba_srgb_block"),
+    (vk::Format::BC2_SRGB_BLOCK, "bc2_srgb_block"),
+    (vk::Format::BC3_SRGB_BLOCK, "bc3_srgb_block"),
+    (vk::Format::BC7_SRGB_BLOCK, "bc7_srgb_block"),
+    (vk::Format::ETC2_R8G8B8_SRGB_BLOCK, "etc2_r8g8b8_srgb_block"),
+    (vk::Format::ETC2_R8G8B8A1_SRGB_BLOCK, "etc2_r8g8b8a1_srgb_block"),
+    (vk::Format::ETC2_R8G8B8A8_SRGB_BLOCK, "etc2_r8g8b8a8_srgb_block"),
+    (vk::Format::ASTC_4X4_SRGB_BLOCK, "astc_4x4_srgb_block"),
+    (vk::Format::ASTC_5X4_SRGB_BLOCK, "astc_5x4_srgb_block"),
+    (vk::Format::ASTC_5X5_SRGB_BLOCK, "astc_5x5_srgb_block"),
+    (vk::Format::ASTC_6X5_SRGB_BLOCK, "astc_6x5_srgb_block"),
+    (vk::Format::ASTC_6X6_SRGB_BLOCK, "astc_6x6_srgb_block"),
+    (vk::Format::ASTC_8X5_SRGB_BLOCK, "astc_8x5_srgb_block"),
+    (vk::Format::ASTC_8X6_SRGB_BLOCK, "astc_8x6_srgb_block"),
+    (vk::Format::ASTC_8X8_SRGB_BLOCK, "astc_8x8_srgb_block"),
+    (vk::Format::ASTC_10X5_SRGB_BLOCK, "astc_10x5_srgb_block"),
+    (vk::Format::ASTC_10X6_SRGB_BLOCK, "astc_10x6_srgb_block"),
+    (vk::Format::ASTC_10X8_SRGB_BLOCK, "astc_10x8_srgb_block"),
+    (vk::Format::ASTC_10X10_SRGB_BLOCK, "astc_10x10_srgb_block"),
+    (vk::Format::ASTC_12X10_SRGB_BLOCK, "astc_12x10_srgb_block"),
+    (vk::Format::ASTC_12X12_SRGB_BLOCK, "astc_12x12_srgb_block"),
+];
+
 /// One entry of a `colorImageFormatsToTestBlit` list.
+#[derive(Clone, Copy)]
 pub struct BlitFormat {
     pub format: vk::Format,
     pub name: &'static str,

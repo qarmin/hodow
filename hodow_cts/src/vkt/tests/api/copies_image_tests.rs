@@ -3015,6 +3015,25 @@ pub fn is_supported_by_framework(format: vk::Format) -> bool {
             | vk::Format::R64G64B64A64_UINT
             | vk::Format::R64G64B64A64_SINT
             | vk::Format::R64G64B64A64_SFLOAT
+            // The BC family too: the framework has no uncompressed model for a
+            // block-compressed image, so a caller that asks this question is asking
+            // whether it can build one, and the answer is no.
+            | vk::Format::BC1_RGB_UNORM_BLOCK
+            | vk::Format::BC1_RGB_SRGB_BLOCK
+            | vk::Format::BC1_RGBA_UNORM_BLOCK
+            | vk::Format::BC1_RGBA_SRGB_BLOCK
+            | vk::Format::BC2_UNORM_BLOCK
+            | vk::Format::BC2_SRGB_BLOCK
+            | vk::Format::BC3_UNORM_BLOCK
+            | vk::Format::BC3_SRGB_BLOCK
+            | vk::Format::BC4_UNORM_BLOCK
+            | vk::Format::BC4_SNORM_BLOCK
+            | vk::Format::BC5_UNORM_BLOCK
+            | vk::Format::BC5_SNORM_BLOCK
+            | vk::Format::BC6H_UFLOAT_BLOCK
+            | vk::Format::BC6H_SFLOAT_BLOCK
+            | vk::Format::BC7_UNORM_BLOCK
+            | vk::Format::BC7_SRGB_BLOCK
     )
 }
 
