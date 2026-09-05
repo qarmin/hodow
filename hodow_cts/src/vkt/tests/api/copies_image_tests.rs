@@ -91,10 +91,15 @@ impl ImageParms {
 
     /// `getExtent3D`
     pub fn extent_3d(&self) -> vk::Extent3D {
+        self.extent_3d_at(0)
+    }
+
+    /// `getExtent3D(parms, mipLevel)`, uncompressed formats only.
+    pub fn extent_3d_at(&self, mip_level: u32) -> vk::Extent3D {
         vk::Extent3D {
-            width: self.extent[0],
-            height: if self.image_type != vk::ImageType::_1D { self.extent[1] } else { 1 },
-            depth: if self.image_type == vk::ImageType::_3D { self.extent[2] } else { 1 },
+            width: self.extent[0] >> mip_level,
+            height: if self.image_type != vk::ImageType::_1D { self.extent[1] >> mip_level } else { 1 },
+            depth: if self.image_type == vk::ImageType::_3D { self.extent[2] >> mip_level } else { 1 },
         }
     }
 
@@ -363,6 +368,25 @@ pub fn upload_image(
     families: &[u32],
     separate_depth_stencil_layouts: bool,
 ) -> Result<(), TestError> {
+    upload_image_mip_levels(context, src, image, parms, general_layout, families, separate_depth_stencil_layouts, 1)
+}
+
+/// `uploadImage` filling `mip_levels` levels from the same source data.
+///
+/// Every level reads the staging buffer from offset zero, so a level is the top-left
+/// corner of the source rather than a downscale of it - which is what upstream does,
+/// and what the mipmap tests expect as a starting state.
+#[allow(clippy::too_many_arguments)]
+pub fn upload_image_mip_levels(
+    context: &Context<'_>,
+    src: &ConstPixelBufferAccess<'_>,
+    image: vk::Image,
+    parms: &ImageParms,
+    general_layout: bool,
+    families: &[u32],
+    separate_depth_stencil_layouts: bool,
+    mip_levels: u32,
+) -> Result<(), TestError> {
     let vk_device = context.get_device();
     let queue = context.get_universal_queue();
     let queue_family_index = context.get_universal_queue_family_index();
@@ -374,7 +398,7 @@ pub fn upload_image(
     };
     let extent = parms.extent_3d();
     let full_aspect = get_aspect_flags(parms.format);
-    let range = make_image_subresource_range(full_aspect, 0, 1, 0, parms.array_size());
+    let range = make_image_subresource_range(full_aspect, 0, mip_levels, 0, parms.array_size());
 
     // One staging buffer per aspect, each holding that aspect's own texel layout.
     let mut staged: Vec<(vk::ImageAspectFlags, BufferWithMemory)> = Vec::new();
@@ -423,7 +447,7 @@ pub fn upload_image(
 
         for (aspect, staging) in &staged {
             if separate_depth_stencil_layouts {
-                let aspect_range = make_image_subresource_range(*aspect, 0, 1, 0, parms.array_size());
+                let aspect_range = make_image_subresource_range(*aspect, 0, mip_levels, 0, parms.array_size());
                 let pre = make_image_memory_barrier(
                     vk::AccessFlags::empty(),
                     vk::AccessFlags::TRANSFER_WRITE,
@@ -442,20 +466,29 @@ pub fn upload_image(
                     &[pre],
                 );
             }
-            let region = vk::BufferImageCopy {
-                buffer_offset: 0,
-                buffer_row_length: extent.width,
-                buffer_image_height: extent.height,
-                image_subresource: vk::ImageSubresourceLayers {
-                    aspect_mask: *aspect,
-                    mip_level: 0,
-                    base_array_layer: 0,
-                    layer_count: parms.array_size(),
-                },
-                image_offset: vk::Offset3D { x: 0, y: 0, z: 0 },
-                image_extent: extent,
-            };
-            vk_device.cmd_copy_buffer_to_image(*cmd_buffer, staging.get(), image, layout, &[region]);
+            let regions: Vec<vk::BufferImageCopy> = (0..mip_levels)
+                .map(|level| {
+                    let copy_extent = vk::Extent3D {
+                        width: extent.width >> level,
+                        height: extent.height >> level,
+                        depth: extent.depth,
+                    };
+                    vk::BufferImageCopy {
+                        buffer_offset: 0,
+                        buffer_row_length: copy_extent.width,
+                        buffer_image_height: copy_extent.height,
+                        image_subresource: vk::ImageSubresourceLayers {
+                            aspect_mask: *aspect,
+                            mip_level: level,
+                            base_array_layer: 0,
+                            layer_count: parms.array_size(),
+                        },
+                        image_offset: vk::Offset3D { x: 0, y: 0, z: 0 },
+                        image_extent: copy_extent,
+                    }
+                })
+                .collect();
+            vk_device.cmd_copy_buffer_to_image(*cmd_buffer, staging.get(), image, layout, &regions);
         }
 
         let post = make_image_memory_barrier(vk::AccessFlags::TRANSFER_WRITE, vk::AccessFlags::TRANSFER_WRITE, layout, layout, image, range);
@@ -475,6 +508,20 @@ pub fn upload_image(
 
 /// `CopiesAndBlittingTestInstance::readImage`, colour aspect and one mip level.
 pub fn read_image(context: &Context<'_>, image: vk::Image, parms: &ImageParms, dst: &mut TextureLevel, general_layout: bool, families: &[u32]) -> Result<(), TestError> {
+    read_image_mip_level(context, image, parms, dst, general_layout, families, 0)
+}
+
+/// `CopiesAndBlittingTestInstance::readImage` at a chosen mip level.
+#[allow(clippy::too_many_arguments)]
+pub fn read_image_mip_level(
+    context: &Context<'_>,
+    image: vk::Image,
+    parms: &ImageParms,
+    dst: &mut TextureLevel,
+    general_layout: bool,
+    families: &[u32],
+    mip_level: u32,
+) -> Result<(), TestError> {
     let vk_device = context.get_device();
     let queue = context.get_universal_queue();
     let queue_family_index = context.get_universal_queue_family_index();
@@ -489,9 +536,9 @@ pub fn read_image(context: &Context<'_>, image: vk::Image, parms: &ImageParms, d
     } else {
         vk::ImageLayout::TRANSFER_DST_OPTIMAL
     };
-    let extent = parms.extent_3d();
+    let extent = parms.extent_3d_at(mip_level);
     let full_aspect = get_aspect_flags(parms.format);
-    let range = make_image_subresource_range(full_aspect, 0, 1, 0, parms.array_size());
+    let range = make_image_subresource_range(full_aspect, mip_level, 1, 0, parms.array_size());
     let [w, h, d] = dst.size();
 
     let aspects = staging_aspects(parms.format);
@@ -530,7 +577,7 @@ pub fn read_image(context: &Context<'_>, image: vk::Image, parms: &ImageParms, d
                 buffer_image_height: extent.height,
                 image_subresource: vk::ImageSubresourceLayers {
                     aspect_mask: *aspect,
-                    mip_level: 0,
+                    mip_level,
                     base_array_layer: 0,
                     layer_count: parms.array_size(),
                 },

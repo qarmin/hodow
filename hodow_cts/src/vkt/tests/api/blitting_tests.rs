@@ -25,7 +25,9 @@ use vulkanalia::prelude::v1_0::*;
 use vulkanalia::vk::DeviceV1_3;
 
 use super::copies_buffer_tests::{AllocationKind, CopyCommandVariant};
-use super::copies_image_tests::{FillMode, GroupParams, ImageParms, generate_buffer, get_aspect_flags, is_supported_by_framework, read_image, upload_image};
+use super::copies_image_tests::{
+    FillMode, GroupParams, ImageParms, generate_buffer, get_aspect_flags, is_supported_by_framework, read_image, read_image_mip_level, upload_image, upload_image_mip_levels,
+};
 use super::copy_format_lists::{BlitFormat, COMPATIBLE_FORMATS_FLOATS, COMPATIBLE_FORMATS_S_INTS, COMPATIBLE_FORMATS_SRGB, COMPATIBLE_FORMATS_U_INTS, DEPTH_AND_STENCIL_FORMATS};
 use crate::tcu::pixel::{
     ConstPixelBufferAccess, DepthStencilMode, FilterMode, PixelBufferAccess, Sampler, TextureLevel, get_effective_depth_stencil_access, get_effective_depth_stencil_access_mut,
@@ -160,7 +162,9 @@ fn get_float_or_fixed_point_format_threshold(format: TextureFormat) -> [f32; 4] 
 
 /// `CompareEachPixelInEachRegion::forEach`
 fn for_each_pixel_in_each_region(
-    params: &BlitImageCase,
+    regions: &[ImageBlit],
+    src_image_type: vk::ImageType,
+    dst_image_type: vk::ImageType,
     source_width: i32,
     source_height: i32,
     source_depth: i32,
@@ -168,9 +172,9 @@ fn for_each_pixel_in_each_region(
 ) -> bool {
     let mut compare_ok = true;
 
-    for blit in &params.regions {
-        let src_z = ImageBlit::used_z_range(blit.src_offsets, params.src.image_type);
-        let dst_z = ImageBlit::used_z_range(blit.dst_offsets, params.dst.image_type);
+    for blit in regions {
+        let src_z = ImageBlit::used_z_range(blit.src_offsets, src_image_type);
+        let dst_z = ImageBlit::used_z_range(blit.dst_offsets, dst_image_type);
 
         let x_start = blit.dst_offsets[0][0].min(blit.dst_offsets[1][0]);
         let y_start = blit.dst_offsets[0][1].min(blit.dst_offsets[1][1]);
@@ -213,7 +217,9 @@ fn float_nearest_blit_compare(
     result: &ConstPixelBufferAccess<'_>,
     source_threshold: [f32; 4],
     result_threshold: [f32; 4],
-    params: &BlitImageCase,
+    regions: &[ImageBlit],
+    src_image_type: vk::ImageType,
+    dst_image_type: vk::ImageType,
 ) -> bool {
     let dst_bit_depth = get_texture_format_bit_depth(result.format());
     let precision = LookupPrecision {
@@ -224,7 +230,7 @@ fn float_nearest_blit_compare(
     let is_srgb = result.format().order.is_srgb();
 
     let [w, h, d] = source.size();
-    for_each_pixel_in_each_region(params, w as i32, h as i32, d as i32, |x, y, z, src_norm_coord| {
+    for_each_pixel_in_each_region(regions, src_image_type, dst_image_type, w as i32, h as i32, d as i32, |x, y, z, src_norm_coord| {
         let mut dst_color = result.get_pixel(x as u32, y as u32, z as u32);
 
         // TexLookupVerifier performs a conversion to linear space, so we have to as well
@@ -237,7 +243,13 @@ fn float_nearest_blit_compare(
 }
 
 /// `intNearestBlitCompare`
-fn int_nearest_blit_compare(source: &ConstPixelBufferAccess<'_>, result: &ConstPixelBufferAccess<'_>, params: &BlitImageCase) -> Result<bool, TestError> {
+fn int_nearest_blit_compare(
+    source: &ConstPixelBufferAccess<'_>,
+    result: &ConstPixelBufferAccess<'_>,
+    regions: &[ImageBlit],
+    src_image_type: vk::ImageType,
+    dst_image_type: vk::ImageType,
+) -> Result<bool, TestError> {
     let src_bit_depth = get_texture_format_bit_depth(source.format());
     let dst_bit_depth = get_texture_format_bit_depth(result.format());
     let precision = LookupPrecision {
@@ -265,16 +277,68 @@ fn int_nearest_blit_compare(source: &ConstPixelBufferAccess<'_>, result: &ConstP
     }
     let converted_source = converted_source_texture.get_const_access();
 
-    Ok(for_each_pixel_in_each_region(params, w as i32, h as i32, d as i32, |x, y, z, src_norm_coord| {
-        let dst_color = result.get_pixel_int(x as u32, y as u32, z as u32);
-        is_nearest_sample_result_valid_int(&converted_source, &precision, color_threshold, src_norm_coord, dst_color)
-    }))
+    Ok(for_each_pixel_in_each_region(
+        regions,
+        src_image_type,
+        dst_image_type,
+        w as i32,
+        h as i32,
+        d as i32,
+        |x, y, z, src_norm_coord| {
+            let dst_color = result.get_pixel_int(x as u32, y as u32, z as u32);
+            is_nearest_sample_result_valid_int(&converted_source, &precision, color_threshold, src_norm_coord, dst_color)
+        },
+    ))
 }
 
 /// The two reference images a non-nearest blit is checked against.
 struct ExpectedLevels {
     clamped: TextureLevel,
     unclamped: TextureLevel,
+}
+
+/// `vkCmdBlitImage` or its copy_commands2 form, whichever the group asked for.
+#[allow(clippy::too_many_arguments)]
+unsafe fn blit_image_cmd(
+    vk_device: &vulkanalia::Device,
+    cmd_buffer: vk::CommandBuffer,
+    command_variant: CopyCommandVariant,
+    src_image: vk::Image,
+    src_layout: vk::ImageLayout,
+    dst_image: vk::Image,
+    dst_layout: vk::ImageLayout,
+    regions: &[vk::ImageBlit],
+    filter: vk::Filter,
+) {
+    unsafe {
+        if command_variant == CopyCommandVariant::CopyCommands2 {
+            let regions2: Vec<vk::ImageBlit2> = regions
+                .iter()
+                .map(|r| vk::ImageBlit2 {
+                    s_type: vk::StructureType::IMAGE_BLIT_2,
+                    next: std::ptr::null(),
+                    src_subresource: r.src_subresource,
+                    src_offsets: r.src_offsets,
+                    dst_subresource: r.dst_subresource,
+                    dst_offsets: r.dst_offsets,
+                })
+                .collect();
+            let info = vk::BlitImageInfo2 {
+                s_type: vk::StructureType::BLIT_IMAGE_INFO_2,
+                next: std::ptr::null(),
+                src_image,
+                src_image_layout: src_layout,
+                dst_image,
+                dst_image_layout: dst_layout,
+                region_count: regions2.len() as u32,
+                regions: regions2.as_ptr(),
+                filter,
+            };
+            vk_device.cmd_blit_image2(cmd_buffer, &info);
+        } else {
+            vk_device.cmd_blit_image(cmd_buffer, src_image, src_layout, dst_image, dst_layout, regions, filter);
+        }
+    }
 }
 
 /// `MirrorModeBits`
@@ -647,12 +711,13 @@ impl BlittingImages<'_> {
             return Ok(false);
         }
 
+        let (st, dt) = (self.params.src.image_type, self.params.dst.image_type);
         if is_int_class(dst_channel_class) {
-            int_nearest_blit_compare(source, result, self.params)
+            int_nearest_blit_compare(source, result, &self.params.regions, st, dt)
         } else {
             let src_max_diff = get_float_or_fixed_point_format_threshold(source.format());
             let dst_max_diff = get_float_or_fixed_point_format_threshold(result.format());
-            Ok(float_nearest_blit_compare(source, result, src_max_diff, dst_max_diff, self.params))
+            Ok(float_nearest_blit_compare(source, result, src_max_diff, dst_max_diff, &self.params.regions, st, dt))
         }
     }
 
@@ -1134,7 +1199,9 @@ pub fn add_blitting_image_groups(parent: &mut tcu::TestCaseGroup, name: &str, al
     let mut depth_stencil = tcu::TestCaseGroup::new("depth_stencil");
     add_blitting_image_all_formats_depth_stencil_tests(&mut depth_stencil, &gp);
     all_formats.add_child(depth_stencil);
-    // The generate_mipmaps group needs the non-nearest reference path.
+    let mut mipmap = tcu::TestCaseGroup::new("generate_mipmaps");
+    add_blitting_image_all_formats_mipmap_tests(&mut mipmap, &gp);
+    all_formats.add_child(mipmap);
     group.add_child(all_formats);
     parent.add_child(group);
 }
@@ -1656,4 +1723,651 @@ fn create_3d_all_formats_regions() -> Vec<ImageBlit> {
     }
 
     regions
+}
+
+// ---------------------------------------------------------------------------------
+
+/// `BlitMipmapTestCase`
+pub struct BlitMipmapCase {
+    name: String,
+    parms: ImageParms,
+    src_operation_layout: vk::ImageLayout,
+    dst_operation_layout: vk::ImageLayout,
+    regions: Vec<MipBlit>,
+    filter: vk::Filter,
+    mip_levels: u32,
+    /// `TestParams::singleCommand` - one vkCmdBlitImage carrying every level, versus
+    /// one command per level with the previous level as its source.
+    single_command: bool,
+    /// `TestParams::barrierCount` - how many barriers the multi-command path splits
+    /// the pre-blit transition into.
+    barrier_count: u32,
+    allocation_kind: AllocationKind,
+    command_variant: CopyCommandVariant,
+}
+
+/// One region of a mipmap blit: the same offsets on both sides, plus the levels.
+#[derive(Clone, Copy)]
+pub struct MipBlit {
+    src_offsets: [[i32; 3]; 2],
+    dst_offsets: [[i32; 3]; 2],
+    src_mip_level: u32,
+    dst_mip_level: u32,
+    layer_count: u32,
+}
+
+impl MipBlit {
+    fn to_vk(self) -> vk::ImageBlit {
+        let off = |o: [i32; 3]| vk::Offset3D { x: o[0], y: o[1], z: o[2] };
+        vk::ImageBlit {
+            src_subresource: vk::ImageSubresourceLayers {
+                aspect_mask: vk::ImageAspectFlags::COLOR,
+                mip_level: self.src_mip_level,
+                base_array_layer: 0,
+                layer_count: self.layer_count,
+            },
+            src_offsets: [off(self.src_offsets[0]), off(self.src_offsets[1])],
+            dst_subresource: vk::ImageSubresourceLayers {
+                aspect_mask: vk::ImageAspectFlags::COLOR,
+                mip_level: self.dst_mip_level,
+                base_array_layer: 0,
+                layer_count: self.layer_count,
+            },
+            dst_offsets: [off(self.dst_offsets[0]), off(self.dst_offsets[1])],
+        }
+    }
+}
+
+impl TestCase for BlitMipmapCase {
+    fn name(&self) -> &str {
+        &self.name
+    }
+
+    fn check_support(&self, context: &Context<'_>) -> Result<(), TestError> {
+        let instance = context.get_instance();
+        let phys_device = context.get_physical_device();
+
+        let props = unsafe {
+            instance.get_physical_device_image_format_properties(
+                phys_device,
+                self.parms.format,
+                self.parms.image_type,
+                self.parms.tiling,
+                vk::ImageUsageFlags::TRANSFER_SRC | vk::ImageUsageFlags::TRANSFER_DST,
+                vk::ImageCreateFlags::empty(),
+            )
+        }
+        .map_err(|_| TestError::NotSupported("Format not supported".to_string()))?;
+
+        if props.max_array_layers < self.parms.array_size() {
+            return Err(TestError::NotSupported("Number of layers not supported".to_string()));
+        }
+        if props.max_mip_levels < self.mip_levels {
+            return Err(TestError::NotSupported("Number of mip levels not supported".to_string()));
+        }
+
+        if self.command_variant == CopyCommandVariant::CopyCommands2 {
+            context.require_device_functionality("VK_KHR_copy_commands2")?;
+        }
+        if self.allocation_kind == AllocationKind::Dedicated {
+            context.require_device_functionality("VK_KHR_dedicated_allocation")?;
+        }
+
+        let format_props = unsafe { instance.get_physical_device_format_properties(phys_device, self.parms.format) };
+        let features = if self.parms.tiling == vk::ImageTiling::LINEAR {
+            format_props.linear_tiling_features
+        } else {
+            format_props.optimal_tiling_features
+        };
+        if !features.contains(vk::FormatFeatureFlags::BLIT_SRC) {
+            return Err(TestError::NotSupported("Format feature blit source not supported".to_string()));
+        }
+        if !features.contains(vk::FormatFeatureFlags::BLIT_DST) {
+            return Err(TestError::NotSupported("Format feature blit destination not supported".to_string()));
+        }
+        if self.filter == vk::Filter::LINEAR && !features.contains(vk::FormatFeatureFlags::SAMPLED_IMAGE_FILTER_LINEAR) {
+            return Err(TestError::NotSupported("Source format feature sampled image filter linear not supported".to_string()));
+        }
+        Ok(())
+    }
+
+    fn programs(&self) -> BinaryCollection {
+        BinaryCollection::new(&[])
+    }
+
+    fn create_instance<'a>(&'a self, context: &'a Context<'a>) -> Box<dyn TestInstance + 'a> {
+        Box::new(BlittingMipmaps { context, params: self })
+    }
+}
+
+/// `BlittingMipmaps`
+struct BlittingMipmaps<'a> {
+    context: &'a Context<'a>,
+    params: &'a BlitMipmapCase,
+}
+
+impl BlittingMipmaps<'_> {
+    /// `BlittingMipmaps::copyRegionToTextureLevel`
+    ///
+    /// Colour only: the mipmap group registers no depth/stencil formats, so the
+    /// combined-aspect branch upstream carries here would be dead.
+    fn copy_region_to_texture_level(
+        &self,
+        src: &ConstPixelBufferAccess<'_>,
+        dst: &mut PixelBufferAccess<'_>,
+        unclamped: Option<&mut PixelBufferAccess<'_>>,
+        region: MipBlit,
+        filter: FilterMode,
+    ) {
+        let mirror_mode = get_mirror_mode(region.src_offsets[0], region.src_offsets[1], region.dst_offsets[0], region.dst_offsets[1]);
+        let src_offset = region.src_offsets[0];
+        let src_extent: [i32; 3] = std::array::from_fn(|c| region.src_offsets[1][c] - src_offset[c]);
+        let dst_offset = region.dst_offsets[0];
+        let dst_extent: [i32; 3] = std::array::from_fn(|c| region.dst_offsets[1][c] - dst_offset[c]);
+
+        let (sw, sh) = (src_extent[0] as u32, src_extent[1] as u32);
+        let (dw, dh) = (dst_extent[0] as u32, dst_extent[1] as u32);
+        let (sx, sy) = (src_offset[0] as u32, src_offset[1] as u32);
+        let (dx, dy) = (dst_offset[0] as u32, dst_offset[1] as u32);
+
+        let mut unclamped = unclamped;
+        for layer in 0..src.size()[2] {
+            let src_sub = src.get_subregion(sx, sy, layer, sw, sh, 1);
+            {
+                let mut dst_sub = dst.get_subregion(dx, dy, layer, dw, dh, 1);
+                blit_reference(&mut dst_sub, &src_sub, filter, mirror_mode);
+            }
+            if let Some(unclamped) = unclamped.as_deref_mut() {
+                let mut u_sub = unclamped.get_subregion(dx, dy, layer, dw, dh, 1);
+                scale_from_whole_src_buffer(&mut u_sub, &src_sub, src_offset, src_extent, filter, 0);
+            }
+        }
+    }
+}
+
+/// `BlittingMipmaps::checkNearestFilteredResult`, one level.
+fn nearest_mip_level_ok(source: &ConstPixelBufferAccess<'_>, result: &ConstPixelBufferAccess<'_>, regions: &[ImageBlit]) -> Result<bool, TestError> {
+    let dst_channel_class = result.format().channel_class();
+    let t = vk::ImageType::_2D;
+    if matches!(dst_channel_class, TextureChannelClass::SignedInteger | TextureChannelClass::UnsignedInteger) {
+        int_nearest_blit_compare(source, result, regions, t, t)
+    } else {
+        let src_max_diff = get_float_or_fixed_point_format_threshold(source.format());
+        let dst_max_diff = get_float_or_fixed_point_format_threshold(result.format());
+        Ok(float_nearest_blit_compare(source, result, src_max_diff, dst_max_diff, regions, t, t))
+    }
+}
+
+impl BlittingMipmaps<'_> {
+    /// `BlittingMipmaps::checkNonNearestFilteredResult`, one level.
+    ///
+    /// The threshold is the same as the plain blit's, except that the source format is
+    /// the image's own throughout - every level is produced from the one before it in
+    /// the same format.
+    fn check_mip_non_nearest(
+        &self,
+        result: &ConstPixelBufferAccess<'_>,
+        clamped: &ConstPixelBufferAccess<'_>,
+        unclamped: &ConstPixelBufferAccess<'_>,
+        src_format: TextureFormat,
+    ) -> bool {
+        let dst_format = result.format();
+        if is_float_format(dst_format) {
+            let src_is_srgb = src_format.order.is_srgb();
+            let src_max_diff = get_format_threshold(src_format).map(|v| v * if src_is_srgb { 2.0 } else { 1.0 });
+            let dst_max_diff = get_format_threshold(dst_format);
+            let threshold: [f32; 4] = std::array::from_fn(|c| src_max_diff[c] + dst_max_diff[c]);
+            float_threshold_compare(clamped, result, threshold) || float_threshold_compare(unclamped, result, threshold)
+        } else {
+            let dst_bit_depth = get_texture_format_bit_depth(dst_format);
+            let src_bit_depth = get_texture_format_bit_depth(src_format);
+            let threshold: [u32; 4] = std::array::from_fn(|i| {
+                let max_of = |bits: i32| if bits >= 64 { u64::MAX } else { (1u64 << bits) - 1 };
+                let threshold64 = 1 + (max_of(dst_bit_depth[i]) / max_of(src_bit_depth[i]).clamp(1, 256)).max(1);
+                threshold64.min(u64::from(u32::MAX)) as u32
+            });
+            int_threshold_compare(clamped, result, threshold) || int_threshold_compare(unclamped, result, threshold)
+        }
+    }
+}
+
+impl TestInstance for BlittingMipmaps<'_> {
+    fn iterate(&mut self) -> TestOutcome {
+        let p = self.params;
+        let vk_device = self.context.get_device();
+        let allocator = self.context.get_default_allocator();
+        let queue = self.context.get_universal_queue();
+        let queue_family_index = self.context.get_universal_queue_family_index();
+        let families = [queue_family_index];
+
+        let tcu_format = map_vk_format(p.parms.format).ok_or_else(|| TestError::NotSupported("format has no tcu mapping".to_string()))?;
+        let [w, h, layers] = p.parms.extent;
+
+        let info = vk::ImageCreateInfo {
+            s_type: vk::StructureType::IMAGE_CREATE_INFO,
+            next: std::ptr::null(),
+            flags: vk::ImageCreateFlags::empty(),
+            image_type: p.parms.image_type,
+            format: p.parms.format,
+            extent: p.parms.extent_3d(),
+            mip_levels: p.mip_levels,
+            array_layers: p.parms.array_size(),
+            samples: vk::SampleCountFlags::_1,
+            tiling: p.parms.tiling,
+            usage: vk::ImageUsageFlags::TRANSFER_SRC | vk::ImageUsageFlags::TRANSFER_DST,
+            sharing_mode: vk::SharingMode::EXCLUSIVE,
+            queue_family_index_count: 0,
+            queue_family_indices: std::ptr::null(),
+            initial_layout: vk::ImageLayout::UNDEFINED,
+        };
+        let make = |i: vk::ImageCreateInfo| {
+            if p.allocation_kind == AllocationKind::Dedicated {
+                ImageWithMemory::new_dedicated(vk_device, allocator, i, MemoryRequirement::ANY)
+            } else {
+                ImageWithMemory::new(vk_device, allocator, i, MemoryRequirement::ANY)
+            }
+        };
+        let source = make(vk::ImageCreateInfo { mip_levels: 1, ..info })?;
+        let destination = make(info)?;
+
+        let mut source_texture_level = TextureLevel::new(tcu_format, w, h, layers)?;
+        generate_buffer(&mut source_texture_level.get_access(), w, h, layers, FillMode::Gradient, false);
+        let mut destination_texture_level = TextureLevel::new(tcu_format, w, h, layers)?;
+        generate_buffer(&mut destination_texture_level.get_access(), w, h, layers, FillMode::White, false);
+
+        let filter = match p.filter {
+            vk::Filter::NEAREST => FilterMode::Nearest,
+            vk::Filter::LINEAR => FilterMode::Linear,
+            other => return Err(TestError::NotPorted(format!("blit filter {other:?}"))),
+        };
+
+        // `generateExpectedResult`, one level per mip level. Level 0 starts as the
+        // source; every later level is produced from the level its region names, so an
+        // error in level n-1 is carried into level n exactly as the driver would.
+        let mut expected: Vec<TextureLevel> = Vec::new();
+        let mut unclamped: Vec<TextureLevel> = Vec::new();
+        for level in 0..p.mip_levels {
+            expected.push(TextureLevel::new(tcu_format, w >> level, h >> level, layers)?);
+            if filter != FilterMode::Nearest {
+                unclamped.push(TextureLevel::new(tcu_format, w >> level, h >> level, layers)?);
+            }
+        }
+        expected[0].data_mut().copy_from_slice(source_texture_level.data());
+        if filter != FilterMode::Nearest {
+            unclamped[0].data_mut().copy_from_slice(source_texture_level.data());
+        }
+        for region in &p.regions {
+            let (s, d) = (region.src_mip_level as usize, region.dst_mip_level as usize);
+            // The source level is snapshotted rather than borrowed: `from_base_level`
+            // blits level 0 onto itself, so source and destination are the same level.
+            let mut src_level = TextureLevel::new(tcu_format, w >> s, h >> s, layers)?;
+            src_level.data_mut().copy_from_slice(expected[s].data());
+            let src_access = src_level.get_const_access();
+            let mut dst_access = expected[d].get_access();
+            if filter == FilterMode::Nearest {
+                self.copy_region_to_texture_level(&src_access, &mut dst_access, None, *region, filter);
+            } else {
+                let mut u_access = unclamped[d].get_access();
+                self.copy_region_to_texture_level(&src_access, &mut dst_access, Some(&mut u_access), *region, filter);
+            }
+        }
+
+        upload_image(self.context, &source_texture_level.get_const_access(), source.get(), &p.parms, false, &families, false)?;
+        upload_image_mip_levels(
+            self.context,
+            &destination_texture_level.get_const_access(),
+            destination.get(),
+            &p.parms,
+            false,
+            &families,
+            false,
+            p.mip_levels,
+        )?;
+
+        // Copy source image to mip level 0 when generating mipmaps with multiple blit commands
+        if !p.single_command {
+            upload_image(self.context, &source_texture_level.get_const_access(), destination.get(), &p.parms, false, &families, false)?;
+        }
+
+        let cmd_pool = make_command_pool(vk_device, queue_family_index)?;
+        let cmd_buffer = allocate_command_buffer(vk_device, *cmd_pool, vk::CommandBufferLevel::PRIMARY)?;
+        let regions: Vec<vk::ImageBlit> = p.regions.iter().map(|r| r.to_vk()).collect();
+
+        begin_command_buffer(vk_device, *cmd_buffer)?;
+        unsafe {
+            if p.single_command {
+                let barriers = [
+                    make_image_memory_barrier(
+                        vk::AccessFlags::TRANSFER_WRITE,
+                        vk::AccessFlags::TRANSFER_READ,
+                        vk::ImageLayout::TRANSFER_DST_OPTIMAL,
+                        p.src_operation_layout,
+                        source.get(),
+                        make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, p.parms.array_size()),
+                    ),
+                    make_image_memory_barrier(
+                        vk::AccessFlags::TRANSFER_WRITE,
+                        vk::AccessFlags::TRANSFER_WRITE,
+                        vk::ImageLayout::TRANSFER_DST_OPTIMAL,
+                        p.dst_operation_layout,
+                        destination.get(),
+                        make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, p.mip_levels, 0, p.parms.array_size()),
+                    ),
+                ];
+                vk_device.cmd_pipeline_barrier(
+                    *cmd_buffer,
+                    vk::PipelineStageFlags::TRANSFER,
+                    vk::PipelineStageFlags::TRANSFER,
+                    vk::DependencyFlags::empty(),
+                    &[] as &[vk::MemoryBarrier],
+                    &[] as &[vk::BufferMemoryBarrier],
+                    &barriers,
+                );
+                blit_image_cmd(
+                    vk_device,
+                    *cmd_buffer,
+                    p.command_variant,
+                    source.get(),
+                    p.src_operation_layout,
+                    destination.get(),
+                    p.dst_operation_layout,
+                    &regions,
+                    p.filter,
+                );
+            } else {
+                // The multi-command path transitions the whole destination up front,
+                // split across `barrier_count` barriers, then blits level by level.
+                for barrier_no in 0..p.barrier_count {
+                    let range = if p.parms.array_size() == 1 {
+                        make_image_subresource_range(
+                            vk::ImageAspectFlags::COLOR,
+                            barrier_no,
+                            if barrier_no + 1 < p.barrier_count { 1 } else { vk::REMAINING_MIP_LEVELS },
+                            0,
+                            p.parms.array_size(),
+                        )
+                    } else {
+                        make_image_subresource_range(
+                            vk::ImageAspectFlags::COLOR,
+                            0,
+                            vk::REMAINING_MIP_LEVELS,
+                            barrier_no,
+                            if barrier_no + 1 < p.barrier_count { 1 } else { vk::REMAINING_ARRAY_LAYERS },
+                        )
+                    };
+                    let barrier = make_image_memory_barrier(
+                        vk::AccessFlags::TRANSFER_WRITE,
+                        vk::AccessFlags::TRANSFER_READ,
+                        vk::ImageLayout::TRANSFER_DST_OPTIMAL,
+                        p.src_operation_layout,
+                        destination.get(),
+                        range,
+                    );
+                    vk_device.cmd_pipeline_barrier(
+                        *cmd_buffer,
+                        vk::PipelineStageFlags::TRANSFER,
+                        vk::PipelineStageFlags::TRANSFER,
+                        vk::DependencyFlags::empty(),
+                        &[] as &[vk::MemoryBarrier],
+                        &[] as &[vk::BufferMemoryBarrier],
+                        &[barrier],
+                    );
+                }
+
+                for (region_ndx, region) in regions.iter().enumerate() {
+                    let mip_level = p.regions[region_ndx].dst_mip_level;
+                    let pre = make_image_memory_barrier(
+                        vk::AccessFlags::TRANSFER_WRITE,
+                        vk::AccessFlags::TRANSFER_WRITE,
+                        p.src_operation_layout,
+                        p.dst_operation_layout,
+                        destination.get(),
+                        make_image_subresource_range(vk::ImageAspectFlags::COLOR, mip_level, 1, 0, p.parms.array_size()),
+                    );
+                    vk_device.cmd_pipeline_barrier(
+                        *cmd_buffer,
+                        vk::PipelineStageFlags::TRANSFER,
+                        vk::PipelineStageFlags::TRANSFER,
+                        vk::DependencyFlags::empty(),
+                        &[] as &[vk::MemoryBarrier],
+                        &[] as &[vk::BufferMemoryBarrier],
+                        &[pre],
+                    );
+
+                    blit_image_cmd(
+                        vk_device,
+                        *cmd_buffer,
+                        p.command_variant,
+                        destination.get(),
+                        p.src_operation_layout,
+                        destination.get(),
+                        p.dst_operation_layout,
+                        std::slice::from_ref(region),
+                        p.filter,
+                    );
+
+                    let post = make_image_memory_barrier(
+                        vk::AccessFlags::TRANSFER_WRITE,
+                        vk::AccessFlags::TRANSFER_READ,
+                        p.dst_operation_layout,
+                        p.src_operation_layout,
+                        destination.get(),
+                        make_image_subresource_range(vk::ImageAspectFlags::COLOR, mip_level, 1, 0, p.parms.array_size()),
+                    );
+                    vk_device.cmd_pipeline_barrier(
+                        *cmd_buffer,
+                        vk::PipelineStageFlags::TRANSFER,
+                        vk::PipelineStageFlags::TRANSFER,
+                        vk::DependencyFlags::empty(),
+                        &[] as &[vk::MemoryBarrier],
+                        &[] as &[vk::BufferMemoryBarrier],
+                        &[post],
+                    );
+                }
+
+                let post = make_image_memory_barrier(
+                    vk::AccessFlags::TRANSFER_WRITE,
+                    vk::AccessFlags::TRANSFER_WRITE,
+                    p.src_operation_layout,
+                    p.dst_operation_layout,
+                    destination.get(),
+                    make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, vk::REMAINING_MIP_LEVELS, 0, p.parms.array_size()),
+                );
+                vk_device.cmd_pipeline_barrier(
+                    *cmd_buffer,
+                    vk::PipelineStageFlags::TRANSFER,
+                    vk::PipelineStageFlags::TRANSFER,
+                    vk::DependencyFlags::empty(),
+                    &[] as &[vk::MemoryBarrier],
+                    &[] as &[vk::BufferMemoryBarrier],
+                    &[post],
+                );
+            }
+        }
+        end_command_buffer(vk_device, *cmd_buffer)?;
+        submit_commands_and_wait(vk_device, queue, *cmd_buffer)?;
+
+        // `checkTestResult`, level by level.
+        for level in 0..p.mip_levels {
+            let mut result_level = TextureLevel::new(tcu_format, w >> level, h >> level, layers)?;
+            read_image_mip_level(self.context, destination.get(), &p.parms, &mut result_level, false, &families, level)?;
+            let result = result_level.get_const_access();
+
+            let level_regions: Vec<ImageBlit> = p
+                .regions
+                .iter()
+                .filter(|r| r.dst_mip_level == level)
+                .map(|r| ImageBlit::color(r.src_offsets, r.dst_offsets))
+                .collect();
+
+            let ok = if filter == FilterMode::Nearest {
+                // `checkNearestFilteredResult` compares against the image the level was
+                // blitted from, not against a reference of its own.
+                let source = if p.single_command || level == 0 {
+                    source_texture_level.get_const_access()
+                } else {
+                    expected[level as usize - 1].get_const_access()
+                };
+                nearest_mip_level_ok(&source, &result, &level_regions)?
+            } else {
+                let clamped = expected[level as usize].get_const_access();
+                let unclamped_level = unclamped[level as usize].get_const_access();
+                self.check_mip_non_nearest(&result, &clamped, &unclamped_level, tcu_format)
+            };
+
+            if !ok {
+                return Ok(TestStatus::fail("Result image is incorrect"));
+            }
+        }
+
+        Ok(TestStatus::pass("Pass"))
+    }
+}
+
+/// `addBlittingImageAllFormatsMipmapFormatTests`
+///
+/// CUBIC is not registered: sampleCubic is not ported.
+#[allow(clippy::too_many_arguments)]
+fn add_blitting_image_all_formats_mipmap_format_tests(
+    group: &mut tcu::TestCaseGroup,
+    gp: &GroupParams,
+    format: vk::Format,
+    layer_count: u32,
+    regions: &[MipBlit],
+    mip_levels: u32,
+    single_command: bool,
+    barrier_count: u32,
+    test_linear: bool,
+) {
+    for src_layout in [vk::ImageLayout::TRANSFER_SRC_OPTIMAL, vk::ImageLayout::GENERAL] {
+        for dst_layout in [vk::ImageLayout::TRANSFER_DST_OPTIMAL, vk::ImageLayout::GENERAL] {
+            let test_name = format!("{}_{}", image_layout_case_name(src_layout), image_layout_case_name(dst_layout));
+            let mut filters = vec![(vk::Filter::NEAREST, "nearest")];
+            if test_linear {
+                filters.push((vk::Filter::LINEAR, "linear"));
+            }
+            for (filter, suffix) in filters {
+                group.add_child(Box::new(BlitMipmapCase {
+                    name: format!("{test_name}_{suffix}"),
+                    parms: ImageParms {
+                        image_type: vk::ImageType::_2D,
+                        format,
+                        extent: [DEFAULT_SIZE as u32, DEFAULT_SIZE as u32, layer_count],
+                        tiling: vk::ImageTiling::OPTIMAL,
+                        fill_mode: FillMode::Gradient,
+                        create_flags: None,
+                    },
+                    src_operation_layout: src_layout,
+                    dst_operation_layout: dst_layout,
+                    regions: regions.to_vec(),
+                    filter,
+                    mip_levels,
+                    single_command,
+                    barrier_count,
+                    allocation_kind: gp.allocation_kind,
+                    command_variant: gp.command_variant,
+                }) as Box<dyn TestCase>);
+            }
+        }
+    }
+}
+
+/// `deLog2Floor32(deMaxu32(width, height)) + 1`
+fn mipmap_level_count() -> u32 {
+    (DEFAULT_SIZE as u32).max(DEFAULT_SIZE as u32).ilog2() + 1
+}
+
+/// The region list of `addBlittingImageAllFormatsBaseLevelMipmapTests` (every level
+/// blitted from level 0) or of its previous-level sibling (each level from the one
+/// above it).
+fn mipmap_regions(from_base_level: bool, mip_levels: u32, layer_count: u32) -> Vec<MipBlit> {
+    let s = DEFAULT_SIZE;
+    let mut regions = Vec::new();
+    if from_base_level {
+        for level in 0..mip_levels {
+            regions.push(MipBlit {
+                src_offsets: [[0, 0, 0], [s, s, 1]],
+                dst_offsets: [[0, 0, 0], [s >> level, s >> level, 1]],
+                src_mip_level: 0,
+                dst_mip_level: level,
+                layer_count,
+            });
+        }
+    } else {
+        for level in 1..mip_levels {
+            regions.push(MipBlit {
+                src_offsets: [[0, 0, 0], [s >> (level - 1), s >> (level - 1), 1]],
+                dst_offsets: [[0, 0, 0], [s >> level, s >> level, 1]],
+                src_mip_level: level - 1,
+                dst_mip_level: level,
+                layer_count,
+            });
+        }
+    }
+    regions
+}
+
+/// `addBlittingImageAllFormatsBaseLevelMipmapTests` /
+/// `addBlittingImageAllFormatsPreviousLevelMipmapTests`
+fn add_blitting_image_all_formats_mipmap_level_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams, from_base_level: bool) {
+    let mip_levels = mipmap_level_count();
+
+    for layer_count in [1u32, 6] {
+        let mut layer_group = tcu::TestCaseGroup::new(format!("layercount_{layer_count}"));
+        let regions = mipmap_regions(from_base_level, mip_levels, layer_count);
+
+        for (source_formats, _, only_nearest) in color_image_formats_to_test_blit() {
+            for src in source_formats {
+                if !is_supported_by_framework(src.format) {
+                    continue;
+                }
+                // No dedicated-allocation format filter here: upstream builds the set
+                // but only `addBlittingImageAllFormatsColorSrcFormatTests` consults it,
+                // and the mipmap path does not go through that.
+                let mut format_group = tcu::TestCaseGroup::new(src.name);
+                add_blitting_image_all_formats_mipmap_format_tests(&mut format_group, gp, src.format, layer_count, &regions, mip_levels, from_base_level, 1, !only_nearest);
+                layer_group.add_child(format_group);
+            }
+        }
+        group.add_child(layer_group);
+    }
+
+    // The barrier-count variants exist only under from_previous_level, where there is
+    // more than one command for a barrier to sit between.
+    if from_base_level {
+        return;
+    }
+    for multi_layer in [false, true] {
+        let layer_count = if multi_layer { 6 } else { 1 };
+        for barrier_count in 1..4u32 {
+            if layer_count == 1 && barrier_count == 1 {
+                continue;
+            }
+            let prefix = if multi_layer { "layerbarriercount" } else { "mipbarriercount" };
+            let mut barrier_group = tcu::TestCaseGroup::new(format!("{prefix}_{barrier_count}"));
+            let regions = mipmap_regions(false, mip_levels, layer_count);
+
+            // Only go through a few common formats
+            for src in &COMPATIBLE_FORMATS_U_INTS[2..6] {
+                if !is_supported_by_framework(src.format) {
+                    continue;
+                }
+                let mut format_group = tcu::TestCaseGroup::new(src.name);
+                add_blitting_image_all_formats_mipmap_format_tests(&mut format_group, gp, src.format, layer_count, &regions, mip_levels, false, barrier_count, false);
+                barrier_group.add_child(format_group);
+            }
+            group.add_child(barrier_group);
+        }
+    }
+}
+
+/// `addBlittingImageAllFormatsMipmapTests`
+fn add_blitting_image_all_formats_mipmap_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+    let mut from_base = tcu::TestCaseGroup::new("from_base_level");
+    add_blitting_image_all_formats_mipmap_level_tests(&mut from_base, gp, true);
+    group.add_child(from_base);
+
+    let mut from_previous = tcu::TestCaseGroup::new("from_previous_level");
+    add_blitting_image_all_formats_mipmap_level_tests(&mut from_previous, gp, false);
+    group.add_child(from_previous);
 }
