@@ -32,6 +32,13 @@ use crate::vk::compute_pipeline::ComputePipelineConstructionType;
 /// groups are absent rather than present-and-skipped, so a comparison against
 /// `deqp-vk` shows them as missing instead of as passing.
 ///
+/// Registering the other two would mean the same case bodies under a different
+/// `ComputePipelineWrapper`, which is a small piece of framework. What blocks it is
+/// the shape of the cases: they are the statics the shader manifest generates, so a
+/// per-case pipeline-construction field would have to be written into every manifest
+/// entry. Upstream passes it to a constructor instead. Doing it here needs the case
+/// registration reworked, not just the wrapper extended.
+///
 /// Several upstream groups are split across more than one module here, because they
 /// were ported in parallel. The tree they build is merged back into upstream's shape
 /// below: the case names are what has to match, not the file layout.
