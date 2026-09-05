@@ -89,40 +89,49 @@ IMAGE_RESOURCES = [
 ]
 
 
-def image_compute_shader(image_format: str, image_type: str, size: tuple[int, int, int]) -> str:
-    """`ImageSupport::initPrograms` through `initPassthroughPrograms`, compute stage.
+def image_declarations(image_format: str, image_type: str) -> str:
+    """`ImageSupport::initPrograms`' declSrc.
 
     Read and write use the same GLSL - which of the two images is the resource and
     which is the staging copy is decided by how they are bound, not by the shader.
     """
+    return (
+        f"layout(set = 0, binding = 0, {image_format}) readonly  uniform {image_type} srcImg;\n"
+        f"layout(set = 0, binding = 1, {image_format}) writeonly uniform {image_type} dstImg;\n"
+    )
+
+
+def image_copy_source(image_type: str, size: tuple[int, int, int]) -> str:
+    """`ImageSupport::initPrograms`' mainSrc - the loop over the whole extent."""
     x, y, z = size
     if image_type.endswith("1D"):
-        main = f"    for (int x = 0; x < {x}; ++x)\n        imageStore(dstImg, x, imageLoad(srcImg, x));\n"
-    elif image_type.endswith("3D"):
-        main = (
+        return f"    for (int x = 0; x < {x}; ++x)\n        imageStore(dstImg, x, imageLoad(srcImg, x));\n"
+    if image_type.endswith("3D"):
+        return (
             f"    for (int z = 0; z < {z}; ++z)\n"
             f"    for (int y = 0; y < {y}; ++y)\n"
             f"    for (int x = 0; x < {x}; ++x)\n"
             "        imageStore(dstImg, ivec3(x, y, z), imageLoad(srcImg, ivec3(x, y, z)));\n"
         )
-    else:
-        main = (
-            f"    for (int y = 0; y < {y}; ++y)\n"
-            f"    for (int x = 0; x < {x}; ++x)\n"
-            "        imageStore(dstImg, ivec2(x, y), imageLoad(srcImg, ivec2(x, y)));\n"
-        )
+    return (
+        f"    for (int y = 0; y < {y}; ++y)\n"
+        f"    for (int x = 0; x < {x}; ++x)\n"
+        "        imageStore(dstImg, ivec2(x, y), imageLoad(srcImg, ivec2(x, y)));\n"
+    )
 
+
+def image_compute_shader(image_format: str, image_type: str, size: tuple[int, int, int]) -> str:
+    """`ImageSupport::initPrograms` through `initPassthroughPrograms`, compute stage."""
     return (
         "#version 440\n"
         "\n"
         "layout(local_size_x = 1) in;\n"
         "\n"
-        f"layout(set = 0, binding = 0, {image_format}) readonly  uniform {image_type} srcImg;\n"
-        f"layout(set = 0, binding = 1, {image_format}) writeonly uniform {image_type} dstImg;\n"
-        "\n"
+        + image_declarations(image_format, image_type)
+        + "\n"
         "void main (void)\n"
         "{\n"
-        + main
+        + image_copy_source(image_type, size)
         + "}\n"
     )
 
@@ -252,6 +261,33 @@ def main() -> int:
             "",
         ]
         count += 1
+
+    # The same image copy driven from a graphics stage instead. As with the buffer
+    # graphics shaders, tessellation and geometry are left out: both sides report
+    # NotSupported for them here, so a differential run says nothing about them.
+    for resource_name, image_format, image_type, size in IMAGE_RESOURCES:
+        decl = image_declarations(image_format, image_type)
+        copy = image_copy_source(image_type, size)
+        for stage in ("vertex", "fragment"):
+            vert, frag = graphics_shaders(decl, copy, stage)
+            name = f"image_{resource_name}_{stage}"
+            (SRC_DIR / f"{name}.vert").write_text(vert)
+            (SRC_DIR / f"{name}.frag").write_text(frag)
+            lines += [
+                "[[case]]",
+                f'name = "{name}"',
+                f'rust_const = "{name.upper()}"',
+                'rust_type = "ImageGraphicsShader"',
+                "programs = [",
+                f'    {{ name = "vert", template = "synchronization/generated/{name}.vert", stage = "vert" }},',
+                f'    {{ name = "frag", template = "synchronization/generated/{name}.frag", stage = "frag" }},',
+                "]",
+                "[case.params]",
+                f'resource_name = {{ type = "str", value = "{resource_name}" }}',
+                f'stage = {{ type = "str", value = "{stage}" }}',
+                "",
+            ]
+            count += 1
 
     MANIFEST.write_text("\n".join(lines))
     print(f"wrote {MANIFEST.relative_to(REPO_DIR)} and {count} shaders in {SRC_DIR.relative_to(REPO_DIR)}")

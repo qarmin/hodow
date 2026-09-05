@@ -19,7 +19,7 @@ use vulkanalia::prelude::v1_0::*;
 
 use super::operation::{
     Operation, OperationName, READ_OPS, RESOURCES, Resource, ResourceDescription, ResourceType, SyncInfo, SyncType, WRITE_OPS, build_operation, cmd_pipeline_barrier,
-    get_resource_name, make_buffer_memory_barrier2, make_image_memory_barrier2,
+    first_difference, get_resource_name, make_buffer_memory_barrier2, make_image_memory_barrier2,
 };
 use crate::tcu::{self, TestError, TestStatus};
 use crate::vk::VkResultExt;
@@ -177,8 +177,13 @@ impl TestInstance for SyncTestInstance<'_> {
             if actual_value < expected_value {
                 return Ok(TestStatus::fail("Counter value is smaller than expected"));
             }
-        } else if expected != actual {
-            return Ok(TestStatus::fail("Memory contents don't match"));
+        } else if let Some(at) = first_difference(&expected, &actual) {
+            return Ok(TestStatus::fail(format!(
+                "Memory contents don't match: first difference at byte {at} of {}, expected {:#04x} got {:#04x}",
+                expected.len(),
+                expected[at],
+                actual[at],
+            )));
         }
 
         Ok(TestStatus::pass("OK"))

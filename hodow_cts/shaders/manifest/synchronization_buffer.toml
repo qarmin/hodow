@@ -290,3 +290,171 @@ rust_type = "ImageAccessShader"
 programs = [{ name = "comp", template = "synchronization/generated/image_image_64x64x8_r32_sfloat.comp", stage = "comp" }]
 [case.params]
 resource_name = { type = "str", value = "image_64x64x8_r32_sfloat" }
+
+[[case]]
+name = "image_image_128_r32_uint_vertex"
+rust_const = "IMAGE_IMAGE_128_R32_UINT_VERTEX"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128_r32_uint_vertex.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/image_image_128_r32_uint_vertex.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128_r32_uint" }
+stage = { type = "str", value = "vertex" }
+
+[[case]]
+name = "image_image_128_r32_uint_fragment"
+rust_const = "IMAGE_IMAGE_128_R32_UINT_FRAGMENT"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128_r32_uint_fragment.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/image_image_128_r32_uint_fragment.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128_r32_uint" }
+stage = { type = "str", value = "fragment" }
+
+[[case]]
+name = "image_image_128x128_r8_unorm_vertex"
+rust_const = "IMAGE_IMAGE_128X128_R8_UNORM_VERTEX"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r8_unorm_vertex.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r8_unorm_vertex.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r8_unorm" }
+stage = { type = "str", value = "vertex" }
+
+[[case]]
+name = "image_image_128x128_r8_unorm_fragment"
+rust_const = "IMAGE_IMAGE_128X128_R8_UNORM_FRAGMENT"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r8_unorm_fragment.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r8_unorm_fragment.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r8_unorm" }
+stage = { type = "str", value = "fragment" }
+
+[[case]]
+name = "image_image_128x128_r16_uint_vertex"
+rust_const = "IMAGE_IMAGE_128X128_R16_UINT_VERTEX"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r16_uint_vertex.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r16_uint_vertex.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r16_uint" }
+stage = { type = "str", value = "vertex" }
+
+[[case]]
+name = "image_image_128x128_r16_uint_fragment"
+rust_const = "IMAGE_IMAGE_128X128_R16_UINT_FRAGMENT"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r16_uint_fragment.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r16_uint_fragment.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r16_uint" }
+stage = { type = "str", value = "fragment" }
+
+[[case]]
+name = "image_image_128x128_r8g8b8a8_unorm_vertex"
+rust_const = "IMAGE_IMAGE_128X128_R8G8B8A8_UNORM_VERTEX"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r8g8b8a8_unorm_vertex.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r8g8b8a8_unorm_vertex.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r8g8b8a8_unorm" }
+stage = { type = "str", value = "vertex" }
+
+[[case]]
+name = "image_image_128x128_r8g8b8a8_unorm_fragment"
+rust_const = "IMAGE_IMAGE_128X128_R8G8B8A8_UNORM_FRAGMENT"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r8g8b8a8_unorm_fragment.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r8g8b8a8_unorm_fragment.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r8g8b8a8_unorm" }
+stage = { type = "str", value = "fragment" }
+
+[[case]]
+name = "image_image_128x128_r16g16b16a16_uint_vertex"
+rust_const = "IMAGE_IMAGE_128X128_R16G16B16A16_UINT_VERTEX"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r16g16b16a16_uint_vertex.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r16g16b16a16_uint_vertex.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r16g16b16a16_uint" }
+stage = { type = "str", value = "vertex" }
+
+[[case]]
+name = "image_image_128x128_r16g16b16a16_uint_fragment"
+rust_const = "IMAGE_IMAGE_128X128_R16G16B16A16_UINT_FRAGMENT"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r16g16b16a16_uint_fragment.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r16g16b16a16_uint_fragment.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r16g16b16a16_uint" }
+stage = { type = "str", value = "fragment" }
+
+[[case]]
+name = "image_image_128x128_r32g32b32a32_sfloat_vertex"
+rust_const = "IMAGE_IMAGE_128X128_R32G32B32A32_SFLOAT_VERTEX"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r32g32b32a32_sfloat_vertex.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r32g32b32a32_sfloat_vertex.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r32g32b32a32_sfloat" }
+stage = { type = "str", value = "vertex" }
+
+[[case]]
+name = "image_image_128x128_r32g32b32a32_sfloat_fragment"
+rust_const = "IMAGE_IMAGE_128X128_R32G32B32A32_SFLOAT_FRAGMENT"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_128x128_r32g32b32a32_sfloat_fragment.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/image_image_128x128_r32g32b32a32_sfloat_fragment.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_128x128_r32g32b32a32_sfloat" }
+stage = { type = "str", value = "fragment" }
+
+[[case]]
+name = "image_image_64x64x8_r32_sfloat_vertex"
+rust_const = "IMAGE_IMAGE_64X64X8_R32_SFLOAT_VERTEX"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_64x64x8_r32_sfloat_vertex.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/image_image_64x64x8_r32_sfloat_vertex.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_64x64x8_r32_sfloat" }
+stage = { type = "str", value = "vertex" }
+
+[[case]]
+name = "image_image_64x64x8_r32_sfloat_fragment"
+rust_const = "IMAGE_IMAGE_64X64X8_R32_SFLOAT_FRAGMENT"
+rust_type = "ImageGraphicsShader"
+programs = [
+    { name = "vert", template = "synchronization/generated/image_image_64x64x8_r32_sfloat_fragment.vert", stage = "vert" },
+    { name = "frag", template = "synchronization/generated/image_image_64x64x8_r32_sfloat_fragment.frag", stage = "frag" },
+]
+[case.params]
+resource_name = { type = "str", value = "image_64x64x8_r32_sfloat" }
+stage = { type = "str", value = "fragment" }
