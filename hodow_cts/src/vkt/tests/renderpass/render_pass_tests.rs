@@ -2160,17 +2160,22 @@ impl RenderPassTestInstance<'_> {
         let render_pass_info = &self.config.render_pass;
         let target_size = self.config.target_size;
 
+        // The aspect has to be the attachment's own. A barrier that names COLOR on a
+        // depth/stencil image is invalid, and a driver that stores the two aspects in
+        // separate planes may then transition neither - which reads back as stale data
+        // rather than as an error.
         let to_transfer_src: Vec<vk::ImageMemoryBarrier> = resources
             .iter()
             .enumerate()
             .map(|(attachment_ndx, resource)| {
+                let old_layout = render_pass_info.attachments[attachment_ndx].final_layout;
                 make_image_memory_barrier(
-                    vk::AccessFlags::COLOR_ATTACHMENT_WRITE,
-                    vk::AccessFlags::TRANSFER_READ,
-                    render_pass_info.attachments[attachment_ndx].final_layout,
+                    all_memory_write_flags() | memory_flags_for_layout(old_layout),
+                    all_memory_read_flags(),
+                    old_layout,
                     vk::ImageLayout::TRANSFER_SRC_OPTIMAL,
                     resource.image.get(),
-                    make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, 1),
+                    make_image_subresource_range(resource.aspect, 0, 1, 0, 1),
                 )
             })
             .collect();
@@ -2178,8 +2183,8 @@ impl RenderPassTestInstance<'_> {
         unsafe {
             device.cmd_pipeline_barrier(
                 command_buffer,
-                vk::PipelineStageFlags::COLOR_ATTACHMENT_OUTPUT,
-                vk::PipelineStageFlags::TRANSFER,
+                all_pipeline_stage_flags(),
+                all_pipeline_stage_flags(),
                 vk::DependencyFlags::empty(),
                 &[] as &[vk::MemoryBarrier],
                 &[] as &[vk::BufferMemoryBarrier],
@@ -2318,6 +2323,61 @@ impl RenderPassTestInstance<'_> {
             );
         }
     }
+}
+
+/// `getAllMemoryReadFlags`
+fn all_memory_read_flags() -> vk::AccessFlags {
+    vk::AccessFlags::TRANSFER_READ
+        | vk::AccessFlags::UNIFORM_READ
+        | vk::AccessFlags::HOST_READ
+        | vk::AccessFlags::INDEX_READ
+        | vk::AccessFlags::SHADER_READ
+        | vk::AccessFlags::VERTEX_ATTRIBUTE_READ
+        | vk::AccessFlags::INDIRECT_COMMAND_READ
+        | vk::AccessFlags::COLOR_ATTACHMENT_READ
+        | vk::AccessFlags::INPUT_ATTACHMENT_READ
+        | vk::AccessFlags::DEPTH_STENCIL_ATTACHMENT_READ
+}
+
+/// `getAllMemoryWriteFlags`
+fn all_memory_write_flags() -> vk::AccessFlags {
+    vk::AccessFlags::TRANSFER_WRITE
+        | vk::AccessFlags::HOST_WRITE
+        | vk::AccessFlags::SHADER_WRITE
+        | vk::AccessFlags::DEPTH_STENCIL_ATTACHMENT_WRITE
+        | vk::AccessFlags::COLOR_ATTACHMENT_WRITE
+}
+
+/// `getMemoryFlagsForLayout`
+fn memory_flags_for_layout(layout: vk::ImageLayout) -> vk::AccessFlags {
+    match layout {
+        vk::ImageLayout::GENERAL => all_memory_read_flags() | all_memory_write_flags(),
+        vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL => vk::AccessFlags::COLOR_ATTACHMENT_READ | vk::AccessFlags::COLOR_ATTACHMENT_WRITE,
+        vk::ImageLayout::DEPTH_STENCIL_ATTACHMENT_OPTIMAL => vk::AccessFlags::DEPTH_STENCIL_ATTACHMENT_READ | vk::AccessFlags::DEPTH_STENCIL_ATTACHMENT_WRITE,
+        vk::ImageLayout::DEPTH_STENCIL_READ_ONLY_OPTIMAL => vk::AccessFlags::DEPTH_STENCIL_ATTACHMENT_READ,
+        vk::ImageLayout::SHADER_READ_ONLY_OPTIMAL => vk::AccessFlags::SHADER_READ,
+        vk::ImageLayout::TRANSFER_SRC_OPTIMAL => vk::AccessFlags::TRANSFER_READ,
+        vk::ImageLayout::TRANSFER_DST_OPTIMAL => vk::AccessFlags::TRANSFER_WRITE,
+        _ => vk::AccessFlags::empty(),
+    }
+}
+
+/// `getAllPipelineStageFlags` - everything a VS+PS pipeline can touch. Upstream uses
+/// this rather than the precise stage on both sides of its readback barrier, so the
+/// barrier can never be the reason a case fails.
+fn all_pipeline_stage_flags() -> vk::PipelineStageFlags {
+    vk::PipelineStageFlags::TRANSFER
+        | vk::PipelineStageFlags::TOP_OF_PIPE
+        | vk::PipelineStageFlags::DRAW_INDIRECT
+        | vk::PipelineStageFlags::VERTEX_INPUT
+        | vk::PipelineStageFlags::VERTEX_SHADER
+        | vk::PipelineStageFlags::FRAGMENT_SHADER
+        | vk::PipelineStageFlags::EARLY_FRAGMENT_TESTS
+        | vk::PipelineStageFlags::LATE_FRAGMENT_TESTS
+        | vk::PipelineStageFlags::COLOR_ATTACHMENT_OUTPUT
+        | vk::PipelineStageFlags::COMPUTE_SHADER
+        | vk::PipelineStageFlags::HOST
+        | vk::PipelineStageFlags::BOTTOM_OF_PIPE
 }
 
 /// `s_coreColorFormats`, paired with `formatToName`.
