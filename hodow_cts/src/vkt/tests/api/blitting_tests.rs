@@ -558,6 +558,12 @@ impl TestCase for BlitImageCase {
         if self.filter == vk::Filter::LINEAR && !src_format_features.contains(vk::FormatFeatureFlags::SAMPLED_IMAGE_FILTER_LINEAR) {
             return Err(TestError::NotSupported("Source format feature sampled image filter linear not supported".to_string()));
         }
+        if self.filter == vk::Filter::CUBIC_EXT {
+            context.require_device_functionality("VK_EXT_filter_cubic")?;
+            if !src_format_features.contains(vk::FormatFeatureFlags::SAMPLED_IMAGE_FILTER_CUBIC_EXT) {
+                return Err(TestError::NotSupported("Source format feature sampled image filter cubic not supported".to_string()));
+            }
+        }
         Ok(())
     }
 
@@ -744,7 +750,9 @@ impl BlittingImages<'_> {
             let src_is_srgb = src_format.order.is_srgb();
             let src_max_diff = get_format_threshold(src_format).map(|v| v * if src_is_srgb { 2.0 } else { 1.0 });
             let dst_max_diff = get_format_threshold(dst_format);
-            let threshold: [f32; 4] = std::array::from_fn(|c| src_max_diff[c] + dst_max_diff[c]);
+            // Cubic overshoots, so its threshold is half again as wide.
+            let scale = if self.params.filter == vk::Filter::CUBIC_EXT { 1.5 } else { 1.0 };
+            let threshold: [f32; 4] = std::array::from_fn(|c| (src_max_diff[c] + dst_max_diff[c]) * scale);
 
             float_threshold_compare(clamped_expected, result, threshold) || float_threshold_compare(unclamped_expected, result, threshold)
         } else {
@@ -876,6 +884,7 @@ impl TestInstance for BlittingImages<'_> {
         } else {
             let filter = match p.filter {
                 vk::Filter::LINEAR => FilterMode::Linear,
+                vk::Filter::CUBIC_EXT => FilterMode::Cubic,
                 other => return Err(TestError::NotPorted(format!("blit filter {other:?}"))),
             };
             let mut levels = ExpectedLevels {
@@ -1020,8 +1029,12 @@ fn add_blitting_image_simple_tests(group: &mut tcu::TestCaseGroup, gp: &GroupPar
     };
 
     // `getFormatCaseName` - the enum name lowercased, minus the VK_FORMAT_ prefix.
-    // CUBIC is not registered: it needs sampleCubic, which is not ported.
-    for (filter, suffix) in [(vk::Filter::NEAREST, "nearest"), (vk::Filter::LINEAR, "linear")] {
+    // Cubic filtering can only be used with 2D images.
+    let mut filters = vec![(vk::Filter::NEAREST, "nearest"), (vk::Filter::LINEAR, "linear")];
+    if image_type == vk::ImageType::_2D {
+        filters.push((vk::Filter::CUBIC_EXT, "cubic"));
+    }
+    for (filter, suffix) in filters {
         group.add_child(Box::new(make(vk::Format::R8G8B8A8_UNORM, suffix.to_string(), filter)) as Box<dyn TestCase>);
         for (format, case_name) in [(vk::Format::R32_SFLOAT, "r32_sfloat"), (vk::Format::B8G8R8A8_UNORM, "b8g8r8a8_unorm")] {
             group.add_child(Box::new(make(format, format!("{case_name}_{suffix}"), filter)) as Box<dyn TestCase>);
@@ -1261,6 +1274,14 @@ static DEDICATED_ALLOCATION_BLITTING_FORMATS_TO_TEST: &[vk::Format] = &[
     vk::Format::A8B8G8R8_SRGB_PACK32,
 ];
 
+/// `onlyNearestAndLinearFormatsToTest` - cubic filtering is skipped for these.
+static ONLY_NEAREST_AND_LINEAR_FORMATS_TO_TEST: &[vk::Format] = &[
+    vk::Format::A8B8G8R8_USCALED_PACK32,
+    vk::Format::A8B8G8R8_SSCALED_PACK32,
+    vk::Format::A8B8G8R8_UINT_PACK32,
+    vk::Format::A8B8G8R8_SINT_PACK32,
+];
+
 /// `getBlitImageTilingLayoutCaseName`
 fn blit_image_tiling_layout_case_name(tiling: vk::ImageTiling, layout: vk::ImageLayout) -> &'static str {
     match tiling {
@@ -1330,6 +1351,9 @@ struct BlitColorTestParams<'a> {
     /// `makeFilterMask`'s LINEAR bit. The integer format lists are nearest-only:
     /// a linear filter has nothing to interpolate between integer texels.
     test_linear: bool,
+    /// `makeFilterMask`'s CUBIC bit - LINEAR, minus the formats upstream excludes and
+    /// minus everything but 2D, since cubic filtering only works on a 2D image.
+    test_cubic: bool,
 }
 
 /// `addBlittingImageAllFormatsColorSrcFormatDstFormatTests`
@@ -1401,6 +1425,9 @@ fn add_blitting_image_all_formats_color_src_format_dst_format_tests(group: &mut 
                     if p.test_linear {
                         group.add_child(make(format!("{test_name}_linear"), FillMode::Gradient, vk::Filter::LINEAR));
                     }
+                    if p.test_cubic {
+                        group.add_child(make(format!("{test_name}_cubic"), FillMode::Gradient, vk::Filter::CUBIC_EXT));
+                    }
 
                     // A 3D source also gets the stripe fills, one per axis - a gradient
                     // varies too slowly to notice a filter reaching for the wrong slice.
@@ -1469,6 +1496,7 @@ fn add_blitting_image_all_formats_color_tests(group: &mut tcu::TestCaseGroup, gp
                     regions: &regions,
                     src,
                     test_linear: !only_nearest,
+                    test_cubic: !only_nearest && !ONLY_NEAREST_AND_LINEAR_FORMATS_TO_TEST.contains(&src.format),
                 };
                 let mut src_group = tcu::TestCaseGroup::new(src.name);
                 add_blitting_image_all_formats_color_src_format_tests(&mut src_group, gp, &p, Some(destination_formats));
@@ -1494,6 +1522,8 @@ fn add_blitting_image_all_formats_color_tests(group: &mut tcu::TestCaseGroup, gp
                     regions: &regions,
                     src,
                     test_linear: !only_nearest,
+                    // Cubic filtering can only be used with 2D images.
+                    test_cubic: false,
                 };
                 let mut src_group = tcu::TestCaseGroup::new(src.name);
                 add_blitting_image_all_formats_color_src_format_tests(&mut src_group, gp, &p, None);
@@ -1520,6 +1550,8 @@ fn add_blitting_image_all_formats_color_tests(group: &mut tcu::TestCaseGroup, gp
                     regions: &regions,
                     src,
                     test_linear: !only_nearest,
+                    // Cubic filtering can only be used with 2D images.
+                    test_cubic: false,
                 };
                 let mut src_group = tcu::TestCaseGroup::new(src.name);
                 add_blitting_image_all_formats_color_src_format_tests(&mut src_group, gp, &p, None);
@@ -1978,6 +2010,7 @@ impl TestInstance for BlittingMipmaps<'_> {
         let filter = match p.filter {
             vk::Filter::NEAREST => FilterMode::Nearest,
             vk::Filter::LINEAR => FilterMode::Linear,
+            vk::Filter::CUBIC_EXT => FilterMode::Cubic,
             other => return Err(TestError::NotPorted(format!("blit filter {other:?}"))),
         };
 
@@ -2238,6 +2271,7 @@ fn add_blitting_image_all_formats_mipmap_format_tests(
     single_command: bool,
     barrier_count: u32,
     test_linear: bool,
+    test_cubic: bool,
 ) {
     for src_layout in [vk::ImageLayout::TRANSFER_SRC_OPTIMAL, vk::ImageLayout::GENERAL] {
         for dst_layout in [vk::ImageLayout::TRANSFER_DST_OPTIMAL, vk::ImageLayout::GENERAL] {
@@ -2245,6 +2279,9 @@ fn add_blitting_image_all_formats_mipmap_format_tests(
             let mut filters = vec![(vk::Filter::NEAREST, "nearest")];
             if test_linear {
                 filters.push((vk::Filter::LINEAR, "linear"));
+            }
+            if test_cubic {
+                filters.push((vk::Filter::CUBIC_EXT, "cubic"));
             }
             for (filter, suffix) in filters {
                 group.add_child(Box::new(BlitMipmapCase {
@@ -2325,7 +2362,18 @@ fn add_blitting_image_all_formats_mipmap_level_tests(group: &mut tcu::TestCaseGr
                 // but only `addBlittingImageAllFormatsColorSrcFormatTests` consults it,
                 // and the mipmap path does not go through that.
                 let mut format_group = tcu::TestCaseGroup::new(src.name);
-                add_blitting_image_all_formats_mipmap_format_tests(&mut format_group, gp, src.format, layer_count, &regions, mip_levels, from_base_level, 1, !only_nearest);
+                add_blitting_image_all_formats_mipmap_format_tests(
+                    &mut format_group,
+                    gp,
+                    src.format,
+                    layer_count,
+                    &regions,
+                    mip_levels,
+                    from_base_level,
+                    1,
+                    !only_nearest,
+                    !only_nearest && !ONLY_NEAREST_AND_LINEAR_FORMATS_TO_TEST.contains(&src.format),
+                );
                 layer_group.add_child(format_group);
             }
         }
@@ -2353,7 +2401,7 @@ fn add_blitting_image_all_formats_mipmap_level_tests(group: &mut tcu::TestCaseGr
                     continue;
                 }
                 let mut format_group = tcu::TestCaseGroup::new(src.name);
-                add_blitting_image_all_formats_mipmap_format_tests(&mut format_group, gp, src.format, layer_count, &regions, mip_levels, false, barrier_count, false);
+                add_blitting_image_all_formats_mipmap_format_tests(&mut format_group, gp, src.format, layer_count, &regions, mip_levels, false, barrier_count, false, false);
                 barrier_group.add_child(format_group);
             }
             group.add_child(barrier_group);

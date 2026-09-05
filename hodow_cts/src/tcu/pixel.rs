@@ -1271,6 +1271,16 @@ pub enum WrapMode {
 pub enum FilterMode {
     Nearest,
     Linear,
+    Cubic,
+}
+
+/// The Catmull-Rom weights `sampleCubic*` computes as `alpha * crBasis`.
+///
+/// Upstream builds the row-major basis matrix and multiplies; written out, the four
+/// weights are the standard Catmull-Rom polynomials in the fractional coordinate.
+fn cubic_weights(a: f32) -> [f32; 4] {
+    let (a2, a3) = (a * a, a * a * a);
+    [-0.5 * a + a2 - 0.5 * a3, 1.0 - 2.5 * a2 + 1.5 * a3, 0.5 * a + 2.0 * a2 - 1.5 * a3, -0.5 * a2 + 0.5 * a3]
 }
 
 /// `tcu::Sampler`, narrowed to what `tcu::scale` constructs: clamp-to-edge on every
@@ -1362,6 +1372,28 @@ impl ConstPixelBufferAccess<'_> {
 
                 std::array::from_fn(|c| p00[c] * (1.0 - a) * (1.0 - b) + p10[c] * a * (1.0 - b) + p01[c] * (1.0 - a) * b + p11[c] * a * b)
             }
+            // `sampleCubic2D` - a 4x4 tap centred one texel earlier than the linear
+            // pair, weighted by the Catmull-Rom basis.
+            FilterMode::Cubic => {
+                let x0 = (u - 1.5).floor() as i32;
+                let y0 = (v - 1.5).floor() as i32;
+                let i: [i32; 4] = std::array::from_fn(|m| wrap(sampler.wrap_s, x0 + m as i32, w as i32));
+                let j: [i32; 4] = std::array::from_fn(|n| wrap(sampler.wrap_t, y0 + n as i32, h as i32));
+
+                let wi = cubic_weights(frac(u - 0.5));
+                let wj = cubic_weights(frac(v - 0.5));
+
+                let mut result = [0.0f32; 4];
+                for n in 0..4 {
+                    for m in 0..4 {
+                        let p = lookup(self, i[m], j[n], layer);
+                        for (c, r) in result.iter_mut().enumerate() {
+                            *r += wi[m] * wj[n] * p[c];
+                        }
+                    }
+                }
+                result
+            }
         }
     }
 
@@ -1412,6 +1444,32 @@ impl ConstPixelBufferAccess<'_> {
                         + p011[n] * (1.0 - a) * b * c
                         + p111[n] * a * b * c
                 })
+            }
+            // `sampleCubic3D` - the same basis on all three axes, 64 taps.
+            FilterMode::Cubic => {
+                let x0 = (u - 1.5).floor() as i32;
+                let y0 = (v - 1.5).floor() as i32;
+                let z0 = (ww - 1.5).floor() as i32;
+                let i: [i32; 4] = std::array::from_fn(|m| wrap(sampler.wrap_s, x0 + m as i32, w as i32));
+                let j: [i32; 4] = std::array::from_fn(|n| wrap(sampler.wrap_t, y0 + n as i32, h as i32));
+                let k: [i32; 4] = std::array::from_fn(|o| wrap(sampler.wrap_r, z0 + o as i32, d as i32));
+
+                let wi = cubic_weights(frac(u - 0.5));
+                let wj = cubic_weights(frac(v - 0.5));
+                let wk = cubic_weights(frac(ww - 0.5));
+
+                let mut result = [0.0f32; 4];
+                for o in 0..4 {
+                    for n in 0..4 {
+                        for m in 0..4 {
+                            let p = lookup(self, i[m], j[n], k[o]);
+                            for (c, r) in result.iter_mut().enumerate() {
+                                *r += wi[m] * wj[n] * wk[o] * p[c];
+                            }
+                        }
+                    }
+                }
+                result
             }
         }
     }
@@ -2255,5 +2313,48 @@ mod write_tests {
                 assert_eq!(top5, 31, "{order:?}: red must sit in the high bits of an RGB 565");
             }
         }
+    }
+
+    /// The Catmull-Rom basis: it sums to one everywhere, reduces to picking the
+    /// second tap when the coordinate lands on a texel centre, and is symmetric about
+    /// the half-way point. Those three pin the weights without needing a driver.
+    #[test]
+    fn cubic_weights_are_a_catmull_rom_basis() {
+        for step in 0..=10 {
+            let a = step as f32 / 10.0;
+            let w = cubic_weights(a);
+            let sum: f32 = w.iter().sum();
+            assert!((sum - 1.0).abs() < 1e-5, "a={a}: {w:?} sums to {sum}");
+        }
+        assert_eq!(cubic_weights(0.0), [0.0, 1.0, 0.0, 0.0]);
+
+        let lo = cubic_weights(0.25);
+        let hi = cubic_weights(0.75);
+        for c in 0..4 {
+            assert!((lo[c] - hi[3 - c]).abs() < 1e-6, "{lo:?} vs reversed {hi:?}");
+        }
+    }
+
+    /// A cubic sample at a texel centre is that texel, and over a linear ramp it
+    /// reproduces the ramp exactly - Catmull-Rom passes through its control points and
+    /// has no overshoot on a straight line.
+    #[test]
+    fn sample_2d_cubic_interpolates_a_ramp() {
+        let format = TextureFormat::new(ChannelOrder::R, ChannelType::FLOAT);
+        let mut level = TextureLevel::new(format, 8, 1, 1).unwrap();
+        for x in 0..8 {
+            level.get_access().set_pixel([x as f32, 0.0, 0.0, 1.0], x, 0, 0);
+        }
+        let access = level.get_const_access();
+        let sampler = Sampler::clamp_to_edge(FilterMode::Cubic);
+
+        for x in 0..8 {
+            let got = access.sample_2d(&sampler, x as f32 + 0.5, 0.5, 0)[0];
+            assert!((got - x as f32).abs() < 1e-4, "at {x}: {got}");
+        }
+        // Halfway between texels 3 and 4 the ramp says 3.5. The two outer taps cancel
+        // on a straight line, so cubic agrees with linear here.
+        let mid = access.sample_2d(&sampler, 4.0, 0.5, 0)[0];
+        assert!((mid - 3.5).abs() < 1e-4, "{mid}");
     }
 }
