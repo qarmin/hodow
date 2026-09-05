@@ -602,9 +602,9 @@ fn add_copy_buffer_to_buffer_offset_tests(group: &mut tcu::TestCaseGroup) {
 
 /// The buffer-to-buffer slice of `createCopiesAndBlittingTests`.
 ///
-/// Only the sub-groups that are actually ported are registered; image_to_image,
-/// blit_image and the rest are absent rather than present-and-skipped, so a comparison
-/// against `deqp-vk` reports them as missing instead of as passing.
+/// Only the sub-groups that are actually ported are registered; the rest are absent
+/// rather than present-and-skipped, so a comparison against `deqp-vk` reports them as
+/// missing instead of as passing.
 pub fn create_buffer_copy_tests() -> tcu::TestCaseGroup {
     let mut tests = tcu::TestCaseGroup::new("copy_and_blit");
 
@@ -693,6 +693,8 @@ pub fn create_buffer_copy_tests() -> tcu::TestCaseGroup {
                 );
             }
         }
+
+        super::blitting_tests::add_blitting_image_groups(&mut kind_group, "blit_image", allocation_kind, command_variant);
 
         // buffer_to_buffer_with_offset exists only under `core` upstream.
         if kind_name == "core" {

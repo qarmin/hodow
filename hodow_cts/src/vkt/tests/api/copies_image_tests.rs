@@ -82,12 +82,12 @@ pub struct ImageParms {
 
 impl ImageParms {
     /// `getArraySize`
-    fn array_size(&self) -> u32 {
+    pub fn array_size(&self) -> u32 {
         if self.image_type != vk::ImageType::_3D { self.extent[2] } else { 1 }
     }
 
     /// `getExtent3D`
-    fn extent_3d(&self) -> vk::Extent3D {
+    pub fn extent_3d(&self) -> vk::Extent3D {
         vk::Extent3D {
             width: self.extent[0],
             height: if self.image_type != vk::ImageType::_1D { self.extent[1] } else { 1 },
@@ -97,7 +97,7 @@ impl ImageParms {
 
     /// `getCreateFlags` - a 2D image whose layer count is a multiple of six is made
     /// cube-compatible, which upstream relies on for the cube array cases.
-    fn create_flags(&self) -> vk::ImageCreateFlags {
+    pub fn create_flags(&self) -> vk::ImageCreateFlags {
         if let Some(flags) = self.create_flags {
             return flags;
         }
@@ -110,7 +110,7 @@ impl ImageParms {
 }
 
 /// `vk::getAspectFlags`
-fn get_aspect_flags(format: vk::Format) -> vk::ImageAspectFlags {
+pub fn get_aspect_flags(format: vk::Format) -> vk::ImageAspectFlags {
     let Some(f) = map_vk_format(format) else {
         return vk::ImageAspectFlags::COLOR;
     };
@@ -168,7 +168,7 @@ impl BufferImageCopy {
 ///
 /// `float_byte_pattern` is the `signedAndUnsignedFloatFormats` test upstream makes on
 /// the *test parameters* rather than on this buffer's format, so it is passed in.
-fn generate_buffer(access: &mut PixelBufferAccess<'_>, width: u32, height: u32, depth: u32, mode: FillMode, float_byte_pattern: bool) {
+pub fn generate_buffer(access: &mut PixelBufferAccess<'_>, width: u32, height: u32, depth: u32, mode: FillMode, float_byte_pattern: bool) {
     let format = access.format();
     let channel_class = format.channel_class();
     let mut max_value = [1.0f32; 4];
@@ -323,7 +323,14 @@ fn transfer_aspect(combined: &mut TextureLevel, aspect: vk::ImageAspectFlags, si
 
 /// `CopiesAndBlittingTestInstance::uploadImage`, one mip level.
 #[allow(clippy::too_many_arguments)]
-fn upload_image(context: &Context<'_>, src: &ConstPixelBufferAccess<'_>, image: vk::Image, parms: &ImageParms, general_layout: bool, families: &[u32]) -> Result<(), TestError> {
+pub fn upload_image(
+    context: &Context<'_>,
+    src: &ConstPixelBufferAccess<'_>,
+    image: vk::Image,
+    parms: &ImageParms,
+    general_layout: bool,
+    families: &[u32],
+) -> Result<(), TestError> {
     let vk_device = context.get_device();
     let queue = context.get_universal_queue();
     let queue_family_index = context.get_universal_queue_family_index();
@@ -410,7 +417,7 @@ fn upload_image(context: &Context<'_>, src: &ConstPixelBufferAccess<'_>, image: 
 }
 
 /// `CopiesAndBlittingTestInstance::readImage`, colour aspect and one mip level.
-fn read_image(context: &Context<'_>, image: vk::Image, parms: &ImageParms, dst: &mut TextureLevel, general_layout: bool, families: &[u32]) -> Result<(), TestError> {
+pub fn read_image(context: &Context<'_>, image: vk::Image, parms: &ImageParms, dst: &mut TextureLevel, general_layout: bool, families: &[u32]) -> Result<(), TestError> {
     let vk_device = context.get_device();
     let queue = context.get_universal_queue();
     let queue_family_index = context.get_universal_queue_family_index();
@@ -730,11 +737,11 @@ static RESTRICTED_FORMAT_LIST: &[(vk::Format, vk::ImageTiling, &str)] = &[
 /// `VK_REMAINING_ARRAY_LAYERS`
 const REMAINING_ARRAY_LAYERS: u32 = u32::MAX;
 
-struct GroupParams {
-    allocation_kind: AllocationKind,
-    command_variant: CopyCommandVariant,
-    queue_selection: QueueSelection,
-    general_layout: bool,
+pub struct GroupParams {
+    pub allocation_kind: AllocationKind,
+    pub command_variant: CopyCommandVariant,
+    pub queue_selection: QueueSelection,
+    pub general_layout: bool,
 }
 
 /// `add1dBufferToImageTests`
@@ -3257,8 +3264,7 @@ pub fn add_image_to_image_groups(
         add_image_to_image_array_tests(&mut array, &gp);
         group.add_child(array);
     }
-    // all_formats needs a compressed-format model in tcu; dimensions, array and cube
-    // are not ported yet either.
+    // all_formats still needs a compressed-format model in tcu for the compressed cases.
     parent.add_child(group);
 }
 

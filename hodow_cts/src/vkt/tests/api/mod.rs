@@ -12,6 +12,7 @@
 // None of the ported groups here uses a shader, so every case hands back an empty
 // `BinaryCollection` and nothing in this subtree has a manifest entry.
 
+pub mod blitting_tests;
 pub mod copies_buffer_tests;
 pub mod copies_image_tests;
 pub mod copy_format_lists;

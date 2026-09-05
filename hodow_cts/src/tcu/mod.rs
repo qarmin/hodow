@@ -10,6 +10,7 @@ pub mod defs;
 pub mod pixel;
 pub mod random;
 pub mod test_case;
+pub mod tex_verifier;
 pub mod texture;
 pub mod vector;
 
