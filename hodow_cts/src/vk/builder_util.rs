@@ -39,6 +39,20 @@ impl DescriptorSetLayoutBuilder {
         self
     }
 
+    /// `DescriptorSetLayoutBuilder::addSingleIndexedBinding` / `addArrayBinding` -
+    /// the binding number is given rather than taken from the position, which is what
+    /// a layout with gaps or with an arbitrary binding index needs.
+    pub fn add_indexed_binding(mut self, descriptor_type: vk::DescriptorType, stage_flags: vk::ShaderStageFlags, binding: u32, descriptor_count: u32) -> Self {
+        self.bindings.push(vk::DescriptorSetLayoutBinding {
+            binding,
+            descriptor_type,
+            descriptor_count,
+            stage_flags,
+            immutable_samplers: std::ptr::null(),
+        });
+        self
+    }
+
     pub fn build(self, device: &Device) -> Result<Unique<'_, vk::DescriptorSetLayout>, TestError> {
         let info = vk::DescriptorSetLayoutCreateInfo::builder().bindings(&self.bindings);
         let layout = unsafe { device.create_descriptor_set_layout(&info, None) }.vk_check("vkCreateDescriptorSetLayout")?;

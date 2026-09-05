@@ -4,6 +4,7 @@
 // external/vulkancts/modules/vulkan/<group>/ upstream.
 
 pub mod api;
+pub mod binding_model;
 pub mod compute;
 pub mod memory;
 pub mod renderpass;
