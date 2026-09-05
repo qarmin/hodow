@@ -262,6 +262,8 @@ Measured so far (2026-09-05):
 | `renderpasses.*.multisample_resolve` | 400 | 18 | yes |
 | `renderpasses.*.unused_clear_attachments` | 400 | 17 | yes |
 | `binding_model.shader_access` | 1500 | 329 | yes - flat by 1200 |
+| `binding_model.shader_access` image types, compute | 250 | 232 | **no** - one per case |
+| `binding_model.shader_access` graphics stages | 250 | 130 | **no** - one per case |
 | `renderpasses.*.attachment` | 1200 | 338 | **no** - still climbing |
 
 Within `binding_model.shader_access` the picture is not uniform, which the group-level
@@ -269,15 +271,28 @@ number hides. The buffer and texel-buffer types collapse onto 30 shaders each, b
 the shader depends only on the storage class, the descriptor set count and the shader
 interface. The image types do not: their fetch coordinates are baked into the GLSL and
 depend on the view type, the base mip level and the base array slice, so it is very
-nearly one shader per case (232 distinct across 250 sampled). They are still worth
-porting - the shaders are small and every one of the 250 sampled cases passed - but
-they buy no economy of scale, and the image resources themselves (mip pyramids, array
-slices, cube faces, seven view types, mutable and immutable samplers) are the larger
-part of the work.
+nearly one shader per case. They were still worth porting - the shaders are small and
+every sampled case passed - but they bought no economy of scale, and the image
+resources themselves (mip pyramids, array slices, cube faces, seven view types,
+mutable and immutable samplers) were the larger part of the work.
 
-Two sub-axes to skip: `bind2` needs `VK_KHR_maintenance6`, so every one of its cases
-skips here, and the graphics stages need the render-target path before any of them run
-at all.
+The compute lane of the group is now complete: `bind` and `with_template`, every
+descriptor type, 1950 cases. What is left is bounded by three things:
+
+- **The graphics stages** are where the volume is (10499 cases in
+  `primary_cmd_buf.bind` alone), but they cost about one shader per case *and* each
+  case needs two or more of them, so porting all four SwiftShader can run would mean
+  committing several thousand more SPIR-V blobs - more than the whole rest of the
+  crate put together. They also need the render-target path first.
+- **Three of the seven stage groups cannot be verified here at all**: SwiftShader has
+  neither geometry nor tessellation shaders, so `geometry`, `tess_ctrl` and `tess_eval`
+  are `NotSupported` on both sides and `cts-diff` would prove nothing about them.
+- **`with_push` and `with_push_template`** (740 cases in the compute lane) need
+  `VK_KHR_push_descriptor`, which SwiftShader does not have. They are cheap - no new
+  shaders, a small delta on the template path - but there is no way to exercise them
+  on this machine, so they are deliberately left until there is a driver that can.
+
+`bind2` needs `VK_KHR_maintenance6` and skips here for the same reason.
 
 `renderpasses.*.attachment` is the cautionary one. Its render passes are generated
 from a seeded `de::Random`, so the shader is a function of a random sequence of
