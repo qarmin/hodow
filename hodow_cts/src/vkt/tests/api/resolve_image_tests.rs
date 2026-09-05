@@ -471,5 +471,42 @@ pub fn add_resolve_image_tests(parent: &mut tcu::TestCaseGroup, allocation_kind:
     add_resolve_group(&mut with_regions, allocation_kind, &regions, false);
     group.add_child(with_regions);
 
+    // `addResolveImageDiffImageSizeTests` - the region stays the full resolveExtent
+    // while one side's image is made larger in one axis.
+    let mut diff_size = tcu::TestCaseGroup::new("diff_image_size");
+    let whole = [ImageResolve {
+        src_offset: [0, 0, 0],
+        dst_offset: [0, 0, 0],
+        extent: RESOLVE_EXTENT,
+    }];
+    let image_extents = [
+        [RESOLVE_EXTENT[0] + 10, RESOLVE_EXTENT[1], RESOLVE_EXTENT[2]],
+        [RESOLVE_EXTENT[0], RESOLVE_EXTENT[1] * 2, RESOLVE_EXTENT[2]],
+        [RESOLVE_EXTENT[0], RESOLVE_EXTENT[1], RESOLVE_EXTENT[2] + 10],
+    ];
+    // Only the destination half gets the bind-offset variant upstream.
+    for (prefix, vary_src, with_bind_offset) in [("src", true, false), ("dst", false, true)] {
+        for extent in image_extents {
+            let (src_extent, dst_extent) = if vary_src { (extent, RESOLVE_EXTENT) } else { (RESOLVE_EXTENT, extent) };
+            for samples in SAMPLES {
+                let make = |name: String, image_offset: bool| ResolveImageCase {
+                    name,
+                    src: resolve_parms(vk::Format::R8G8B8A8_UNORM, src_extent),
+                    dst: resolve_parms(vk::Format::R8G8B8A8_UNORM, dst_extent),
+                    regions: whole.to_vec(),
+                    samples,
+                    image_offset,
+                    allocation_kind,
+                };
+                let base = format!("{prefix}_{}_{}_{}_{}", extent[0], extent[1], extent[2], sample_count_case_name(samples));
+                diff_size.add_child(Box::new(make(base.clone(), false)) as Box<dyn TestCase>);
+                if with_bind_offset && allocation_kind != AllocationKind::Dedicated {
+                    diff_size.add_child(Box::new(make(format!("{base}_bind_offset"), true)) as Box<dyn TestCase>);
+                }
+            }
+        }
+    }
+    group.add_child(diff_size);
+
     parent.add_child(group);
 }
