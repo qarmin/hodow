@@ -1035,9 +1035,8 @@ fn render_reference_values(
 }
 
 /// `verifyColorAttachment`, for `useFormatCompCount == false`.
-fn verify_color_attachment(reference: &[PixelValue], result: &ConstPixelBufferAccess<'_>) -> bool {
+fn verify_color_attachment(reference: &[PixelValue], result: &ConstPixelBufferAccess<'_>) -> Result<(), String> {
     let [width, height, _] = result.size();
-    let mut ok = true;
 
     for y in 0..height {
         for x in 0..width {
@@ -1048,13 +1047,14 @@ fn verify_color_attachment(reference: &[PixelValue], result: &ConstPixelBufferAc
                 if let Some(value) = reference_value.get_value(comp_ndx)
                     && ((value && result_color[comp_ndx] != 1.0) || (!value && result_color[comp_ndx] != 0.0))
                 {
-                    ok = false;
+                    let expected = if value { 1.0 } else { 0.0 };
+                    return Err(format!("colour at ({x}, {y}) component {comp_ndx}: expected {expected}, got {}", result_color[comp_ndx]));
                 }
             }
         }
     }
 
-    ok
+    Ok(())
 }
 
 // ---------------------------------------------------------------------------------
@@ -1290,8 +1290,8 @@ impl TestInstance for RenderPassTestInstance<'_> {
                         format
                     };
                     let level = read_back(&resource.buffer, depth_format)?;
-                    if !verify_depth_attachment(reference, &level.get_const_access(), config.depth_values, required_depth_epsilon(attachment.format)) {
-                        return Ok(TestStatus::fail("Result verification failed"));
+                    if let Err(detail) = verify_depth_attachment(reference, &level.get_const_access(), config.depth_values, required_depth_epsilon(attachment.format)) {
+                        return Ok(TestStatus::fail(format!("Result verification failed - attachment {attachment_ndx} {detail}")));
                     }
                 }
 
@@ -1301,14 +1301,14 @@ impl TestInstance for RenderPassTestInstance<'_> {
                         None => (&resource.buffer, format),
                     };
                     let level = read_back(buffer, stencil_format)?;
-                    if !verify_stencil_attachment(reference, &level.get_const_access()) {
-                        return Ok(TestStatus::fail("Result verification failed"));
+                    if let Err(detail) = verify_stencil_attachment(reference, &level.get_const_access()) {
+                        return Ok(TestStatus::fail(format!("Result verification failed - attachment {attachment_ndx} {detail}")));
                     }
                 }
             } else if attachment.store_op == vk::AttachmentStoreOp::STORE {
                 let level = read_back(&resource.buffer, format)?;
-                if !verify_color_attachment(reference, &level.get_const_access()) {
-                    return Ok(TestStatus::fail("Result verification failed"));
+                if let Err(detail) = verify_color_attachment(reference, &level.get_const_access()) {
+                    return Ok(TestStatus::fail(format!("Result verification failed - attachment {attachment_ndx} {detail}")));
                 }
             }
         }
@@ -2938,9 +2938,11 @@ fn depths_equal(a: f32, b: f32, epsilon: f32) -> bool {
 }
 
 /// `verifyDepthAttachment`
-fn verify_depth_attachment(reference: &[PixelValue], result: &ConstPixelBufferAccess<'_>, depth_values: [u8; 2], epsilon: f32) -> bool {
+/// Returns the first mismatch, so a failure says which pixel and by how much rather
+/// than only that verification failed. Upstream logs an error image for the same
+/// reason; one line is the terse equivalent for a terminal.
+fn verify_depth_attachment(reference: &[PixelValue], result: &ConstPixelBufferAccess<'_>, depth_values: [u8; 2], epsilon: f32) -> Result<(), String> {
     let [width, height, _] = result.size();
-    let mut ok = true;
 
     for y in 0..height {
         for x in 0..width {
@@ -2948,19 +2950,18 @@ fn verify_depth_attachment(reference: &[PixelValue], result: &ConstPixelBufferAc
             if let Some(value) = reference[(x + y * width) as usize].get_value(0) {
                 let expected = f32::from(depth_values[usize::from(value)]) / 255.0;
                 if !depths_equal(result_depth, expected, epsilon) {
-                    ok = false;
+                    return Err(format!("depth at ({x}, {y}): expected {expected}, got {result_depth} (epsilon {epsilon})"));
                 }
             }
         }
     }
 
-    ok
+    Ok(())
 }
 
 /// `verifyStencilAttachment`
-fn verify_stencil_attachment(reference: &[PixelValue], result: &ConstPixelBufferAccess<'_>) -> bool {
+fn verify_stencil_attachment(reference: &[PixelValue], result: &ConstPixelBufferAccess<'_>) -> Result<(), String> {
     let [width, height, _] = result.size();
-    let mut ok = true;
 
     for y in 0..height {
         for x in 0..width {
@@ -2968,12 +2969,13 @@ fn verify_stencil_attachment(reference: &[PixelValue], result: &ConstPixelBuffer
             if let Some(value) = reference[(x + y * width) as usize].get_value(1)
                 && ((value && result_stencil != 0xFF) || (!value && result_stencil != 0x0))
             {
-                ok = false;
+                let expected = if value { 0xFF } else { 0x0 };
+                return Err(format!("stencil at ({x}, {y}): expected {expected}, got {result_stencil}"));
             }
         }
     }
 
-    ok
+    Ok(())
 }
 
 /// `s_coreDepthStencilFormats`, paired with `formatToName`.
