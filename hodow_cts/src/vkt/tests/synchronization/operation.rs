@@ -24,6 +24,7 @@ use vulkanalia::prelude::v1_0::*;
 use crate::tcu::pixel::PixelBufferAccess;
 use crate::tcu::texture::{ChannelOrder, TextureChannelClass, map_vk_format};
 use crate::tcu::TestError;
+use crate::vk::VkResultExt;
 use crate::vk::image_util::ImageWithMemory;
 use crate::vk::mem_util::{MemoryRequirement, flush_alloc, invalidate_alloc};
 use crate::vk::obj_util::{BufferWithMemory, make_buffer_create_info};
@@ -39,6 +40,8 @@ pub enum SyncType {
 
 /// `MAX_UPDATE_BUFFER_SIZE` - the spec's cap on `vkCmdUpdateBuffer`.
 pub const MAX_UPDATE_BUFFER_SIZE: i32 = 65536;
+/// `MAX_UBO_RANGE` - the guaranteed minimum `maxUniformBufferRange`.
+pub const MAX_UBO_RANGE: i32 = 0x4000;
 /// `MAX_IMAGE_DIMENSION_2D`
 const MAX_IMAGE_DIMENSION_2D: u32 = 0x1000;
 
@@ -1184,12 +1187,20 @@ pub enum OperationName {
     WriteBlitImage,
     WriteClearColorImage,
     WriteClearDepthStencilImage,
+    WriteSsboCompute,
+    WriteSsboComputeIndirect,
     ReadCopyBuffer,
     ReadCopyBufferToImage,
     ReadCopyImageToBuffer,
     ReadCopyImage,
     ReadBlitImage,
     ReadResolveImage,
+    ReadUboCompute,
+    ReadUboComputeIndirect,
+    ReadUboTexelCompute,
+    ReadUboTexelComputeIndirect,
+    ReadSsboCompute,
+    ReadSsboComputeIndirect,
 }
 
 impl OperationName {
@@ -1205,13 +1216,51 @@ impl OperationName {
             Self::WriteBlitImage => "write_blit_image",
             Self::WriteClearColorImage => "write_clear_color_image",
             Self::WriteClearDepthStencilImage => "write_clear_depth_stencil_image",
+            Self::WriteSsboCompute => "write_ssbo_compute",
+            Self::WriteSsboComputeIndirect => "write_ssbo_compute_indirect",
             Self::ReadCopyBuffer => "read_copy_buffer",
             Self::ReadCopyBufferToImage => "read_copy_buffer_to_image",
             Self::ReadCopyImageToBuffer => "read_copy_image_to_buffer",
             Self::ReadCopyImage => "read_copy_image",
             Self::ReadBlitImage => "read_blit_image",
             Self::ReadResolveImage => "read_resolve_image",
+            Self::ReadUboCompute => "read_ubo_compute",
+            Self::ReadUboComputeIndirect => "read_ubo_compute_indirect",
+            Self::ReadUboTexelCompute => "read_ubo_texel_compute",
+            Self::ReadUboTexelComputeIndirect => "read_ubo_texel_compute_indirect",
+            Self::ReadSsboCompute => "read_ssbo_compute",
+            Self::ReadSsboComputeIndirect => "read_ssbo_compute_indirect",
         }
+    }
+
+    /// The buffer kind and dispatch call a shader-based buffer operation uses, or
+    /// `None` if this operation is not one.
+    fn buffer_shader_kind(self) -> Option<(BufferType, DispatchCall)> {
+        match self {
+            Self::WriteSsboCompute | Self::ReadSsboCompute => Some((BufferType::Storage, DispatchCall::Dispatch)),
+            Self::WriteSsboComputeIndirect | Self::ReadSsboComputeIndirect => Some((BufferType::Storage, DispatchCall::DispatchIndirect)),
+            Self::ReadUboCompute => Some((BufferType::Uniform, DispatchCall::Dispatch)),
+            Self::ReadUboComputeIndirect => Some((BufferType::Uniform, DispatchCall::DispatchIndirect)),
+            Self::ReadUboTexelCompute => Some((BufferType::UniformTexel, DispatchCall::Dispatch)),
+            Self::ReadUboTexelComputeIndirect => Some((BufferType::UniformTexel, DispatchCall::DispatchIndirect)),
+            _ => None,
+        }
+    }
+
+    /// `isSpecializedAccessFlagSupported` - which operations have a
+    /// `_specialized_access_flag` variant under synchronization2.
+    pub fn has_specialized_access_flag(self) -> bool {
+        matches!(
+            self,
+            Self::WriteSsboCompute
+                | Self::WriteSsboComputeIndirect
+                | Self::ReadUboCompute
+                | Self::ReadUboComputeIndirect
+                | Self::ReadUboTexelCompute
+                | Self::ReadUboTexelComputeIndirect
+                | Self::ReadSsboCompute
+                | Self::ReadSsboComputeIndirect
+        )
     }
 
     /// `isResourceSupported` - which resources this operation can act on at all.
@@ -1220,8 +1269,19 @@ impl OperationName {
             resource.kind == ResourceType::Image && resource.image_aspect == vk::ImageAspectFlags::COLOR && resource.image_samples == vk::SampleCountFlags::_1;
 
         match self {
-            Self::WriteFillBuffer | Self::WriteCopyBuffer | Self::WriteCopyImageToBuffer | Self::ReadCopyBuffer | Self::ReadCopyBufferToImage => {
-                resource.kind == ResourceType::Buffer
+            Self::WriteFillBuffer
+            | Self::WriteCopyBuffer
+            | Self::WriteCopyImageToBuffer
+            | Self::ReadCopyBuffer
+            | Self::ReadCopyBufferToImage
+            | Self::WriteSsboCompute
+            | Self::WriteSsboComputeIndirect
+            | Self::ReadSsboCompute
+            | Self::ReadSsboComputeIndirect => resource.kind == ResourceType::Buffer,
+            // The uniform kinds, texel included, are capped by the guaranteed
+            // maxUniformBufferRange.
+            Self::ReadUboCompute | Self::ReadUboComputeIndirect | Self::ReadUboTexelCompute | Self::ReadUboTexelComputeIndirect => {
+                resource.kind == ResourceType::Buffer && resource.size[0] <= MAX_UBO_RANGE
             }
             Self::WriteUpdateBuffer => resource.kind == ResourceType::Buffer && resource.size[0] <= MAX_UPDATE_BUFFER_SIZE,
             Self::WriteCopyImage | Self::WriteCopyBufferToImage | Self::ReadCopyImage | Self::ReadCopyImageToBuffer => {
@@ -1250,17 +1310,50 @@ impl OperationName {
     /// the same bit, which is why upstream carries the usage as a bare uint32 and
     /// does not have to know whether the resource is a buffer or an image here.
     pub fn in_resource_usage(self) -> u32 {
-        if self.is_read() { vk::BufferUsageFlags::TRANSFER_SRC.bits() } else { 0 }
+        match self.buffer_shader_kind() {
+            Some((buffer_type, _)) if self.is_read() => match buffer_type {
+                BufferType::Uniform => vk::BufferUsageFlags::UNIFORM_BUFFER.bits(),
+                BufferType::UniformTexel => vk::BufferUsageFlags::UNIFORM_TEXEL_BUFFER.bits(),
+                BufferType::Storage => vk::BufferUsageFlags::STORAGE_BUFFER.bits(),
+            },
+            Some(_) => 0,
+            None if self.is_read() => vk::BufferUsageFlags::TRANSFER_SRC.bits(),
+            None => 0,
+        }
     }
 
     pub fn out_resource_usage(self) -> u32 {
-        if self.is_read() { 0 } else { vk::BufferUsageFlags::TRANSFER_DST.bits() }
+        match self.buffer_shader_kind() {
+            // Upstream asks for the texel usage on the *read* side here, not the
+            // write side, unlike the other two. Kept as it is: the flag is harmless
+            // and a resource created without it would differ from upstream's.
+            Some((BufferType::UniformTexel, _)) => vk::BufferUsageFlags::UNIFORM_TEXEL_BUFFER.bits(),
+            Some((buffer_type, _)) if !self.is_read() => match buffer_type {
+                BufferType::Uniform => vk::BufferUsageFlags::UNIFORM_BUFFER.bits(),
+                BufferType::UniformTexel => unreachable!("handled above"),
+                BufferType::Storage => vk::BufferUsageFlags::STORAGE_BUFFER.bits(),
+            },
+            Some(_) => 0,
+            None if self.is_read() => 0,
+            None => vk::BufferUsageFlags::TRANSFER_DST.bits(),
+        }
     }
 
-    fn is_read(self) -> bool {
+    pub fn is_read(self) -> bool {
         matches!(
             self,
-            Self::ReadCopyBuffer | Self::ReadCopyBufferToImage | Self::ReadCopyImageToBuffer | Self::ReadCopyImage | Self::ReadBlitImage | Self::ReadResolveImage
+            Self::ReadCopyBuffer
+                | Self::ReadCopyBufferToImage
+                | Self::ReadCopyImageToBuffer
+                | Self::ReadCopyImage
+                | Self::ReadBlitImage
+                | Self::ReadResolveImage
+                | Self::ReadUboCompute
+                | Self::ReadUboComputeIndirect
+                | Self::ReadUboTexelCompute
+                | Self::ReadUboTexelComputeIndirect
+                | Self::ReadSsboCompute
+                | Self::ReadSsboComputeIndirect
         )
     }
 
@@ -1291,7 +1384,12 @@ pub fn build_operation<'a>(
     allocator: &crate::vk::mem_util::SimpleAllocator,
     name: OperationName,
     resource: &Resource<'_>,
+    specialized_access: bool,
 ) -> Result<Box<dyn Operation + 'a>, TestError> {
+    if let Some((buffer_type, dispatch_call)) = name.buffer_shader_kind() {
+        let mode = if name.is_read() { AccessMode::Read } else { AccessMode::Write };
+        return Ok(Box::new(BufferShaderAccess::new(device, allocator, resource, buffer_type, mode, dispatch_call, specialized_access)?));
+    }
     Ok(match name {
         OperationName::WriteFillBuffer => Box::new(FillUpdateBuffer::new(resource, true)),
         OperationName::WriteUpdateBuffer => Box::new(FillUpdateBuffer::new(resource, false)),
@@ -1308,6 +1406,7 @@ pub fn build_operation<'a>(
         OperationName::ReadResolveImage => Box::new(CopyBlitResolveImage::new(device, allocator, resource, ImageCopyKind::Resolve, AccessMode::Read)?),
         OperationName::WriteClearColorImage => Box::new(ClearImage::new(resource, true)?),
         OperationName::WriteClearDepthStencilImage => Box::new(ClearImage::new(resource, false)?),
+        _ => unreachable!("every shader-based operation is handled above"),
     })
 }
 
@@ -1320,6 +1419,8 @@ pub static WRITE_OPS: &[OperationName] = &[
     OperationName::WriteCopyImageToBuffer,
     OperationName::WriteCopyImage,
     OperationName::WriteBlitImage,
+    OperationName::WriteSsboCompute,
+    OperationName::WriteSsboComputeIndirect,
     OperationName::WriteClearColorImage,
     OperationName::WriteClearDepthStencilImage,
 ];
@@ -1332,6 +1433,12 @@ pub static READ_OPS: &[OperationName] = &[
     OperationName::ReadCopyImage,
     OperationName::ReadBlitImage,
     OperationName::ReadResolveImage,
+    OperationName::ReadUboCompute,
+    OperationName::ReadUboComputeIndirect,
+    OperationName::ReadUboTexelCompute,
+    OperationName::ReadUboTexelComputeIndirect,
+    OperationName::ReadSsboCompute,
+    OperationName::ReadSsboComputeIndirect,
 ];
 
 /// `CopyImageToBuffer::WriteImplementation` - the resource is a buffer, written by
@@ -1490,5 +1597,314 @@ fn color_subresource_layers() -> vk::ImageSubresourceLayers {
         mip_level: 0,
         base_array_layer: 0,
         layer_count: 1,
+    }
+}
+
+// ---------------------------------------------------------------------------------
+// Shader-based buffer access
+// ---------------------------------------------------------------------------------
+
+/// The manifest declares its shaders with this: the compute program plus what it was
+/// generated for, so the host can assert it picked the right one.
+pub struct BufferAccessShader {
+    pub name: &'static str,
+    pub buffer_type: &'static str,
+    pub mode: &'static str,
+    pub buffer_size: u32,
+    pub programs: crate::vk::programs::BinaryCollection,
+}
+
+use crate::generated::shaders::synchronization_buffer::ALL_BUFFER_ACCESS_SHADER;
+
+/// `BufferType`
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum BufferType {
+    Uniform,
+    UniformTexel,
+    Storage,
+}
+
+impl BufferType {
+    fn manifest_name(self) -> &'static str {
+        match self {
+            Self::Uniform => "ubo",
+            Self::UniformTexel => "ubo_texel",
+            Self::Storage => "ssbo",
+        }
+    }
+
+    fn descriptor_type(self) -> vk::DescriptorType {
+        match self {
+            Self::Uniform => vk::DescriptorType::UNIFORM_BUFFER,
+            Self::UniformTexel => vk::DescriptorType::UNIFORM_TEXEL_BUFFER,
+            Self::Storage => vk::DescriptorType::STORAGE_BUFFER,
+        }
+    }
+}
+
+/// `DispatchCall`
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum DispatchCall {
+    Dispatch,
+    DispatchIndirect,
+}
+
+/// `BufferImplementation` on a compute pipeline.
+///
+/// The shader is a passthrough: it copies the whole resource into a host-visible
+/// buffer, or the whole host buffer into the resource. Everything interesting is in
+/// the sync info it reports, which is what the primitive under test has to honour.
+pub struct BufferShaderAccess<'a> {
+    buffer: BufferInfo,
+    host_buffer: BufferWithMemory<'a>,
+    // Held only so the descriptor keeps pointing at a live object.
+    _buffer_view: Option<crate::vk::ref_util::Unique<'a, vk::BufferView>>,
+    _descriptor_set_layout: crate::vk::ref_util::Unique<'a, vk::DescriptorSetLayout>,
+    // Declared before the pool it came from: struct fields drop in declaration order,
+    // and freeing a set back into an already-destroyed pool is a use-after-free.
+    descriptor_set: crate::vk::ref_util::UniqueDescriptorSet<'a>,
+    _descriptor_pool: crate::vk::ref_util::Unique<'a, vk::DescriptorPool>,
+    pipeline_layout: crate::vk::ref_util::Unique<'a, vk::PipelineLayout>,
+    pipeline: crate::vk::ref_util::Unique<'a, vk::Pipeline>,
+    indirect_buffer: Option<BufferWithMemory<'a>>,
+    buffer_type: BufferType,
+    mode: AccessMode,
+    specialized_access: bool,
+}
+
+impl<'a> BufferShaderAccess<'a> {
+    pub fn new(
+        device: &'a Device,
+        allocator: &crate::vk::mem_util::SimpleAllocator,
+        resource: &Resource<'_>,
+        buffer_type: BufferType,
+        mode: AccessMode,
+        dispatch_call: DispatchCall,
+        specialized_access: bool,
+    ) -> Result<Self, TestError> {
+        use crate::vk::builder_util::{DescriptorPoolBuilder, DescriptorSetLayoutBuilder};
+        use crate::vk::obj_util::{make_descriptor_set, make_pipeline_layout};
+        use crate::vk::programs::create_shader_module;
+        use crate::vk::ref_util::Unique;
+
+        let buffer = resource.buffer();
+        let host_buffer = make_host_buffer(device, allocator, buffer.size, vk::BufferUsageFlags::STORAGE_BUFFER, mode)?;
+
+        let descriptor_type = buffer_type.descriptor_type();
+        let descriptor_set_layout = DescriptorSetLayoutBuilder::new()
+            .add_indexed_binding(if mode == AccessMode::Read { descriptor_type } else { vk::DescriptorType::STORAGE_BUFFER }, vk::ShaderStageFlags::COMPUTE, 0, 1)
+            .add_indexed_binding(vk::DescriptorType::STORAGE_BUFFER, vk::ShaderStageFlags::COMPUTE, 1, 1)
+            .build(device)?;
+        let descriptor_pool = DescriptorPoolBuilder::new()
+            .add_type(descriptor_type, 1)
+            .add_type(vk::DescriptorType::STORAGE_BUFFER, 2)
+            .build(device, vk::DescriptorPoolCreateFlags::FREE_DESCRIPTOR_SET, 1)?;
+        let descriptor_set = make_descriptor_set(device, *descriptor_pool, *descriptor_set_layout)?;
+
+        // A read binds the resource at 0 and the host buffer at 1; a write binds them
+        // the other way round, which is how one shader serves both directions.
+        let mut buffer_view = None;
+        let host_info = [vk::DescriptorBufferInfo {
+            buffer: host_buffer.get(),
+            offset: 0,
+            range: buffer.size,
+        }];
+        let resource_info = [vk::DescriptorBufferInfo {
+            buffer: buffer.handle,
+            offset: buffer.offset,
+            range: buffer.size,
+        }];
+
+        let mut writes = Vec::new();
+        if mode == AccessMode::Read && buffer_type == BufferType::UniformTexel {
+            let info = vk::BufferViewCreateInfo::builder()
+                .buffer(buffer.handle)
+                .format(vk::Format::R32G32B32A32_UINT)
+                .offset(buffer.offset)
+                .range(buffer.size);
+            let view = unsafe { device.create_buffer_view(&info, None) }.vk_check("vkCreateBufferView")?;
+            buffer_view = Some(Unique::new(device, view));
+        }
+        let views = buffer_view.as_ref().map(|v| [**v]);
+
+        if mode == AccessMode::Read {
+            match &views {
+                Some(v) => writes.push(
+                    vk::WriteDescriptorSet::builder()
+                        .dst_set(*descriptor_set)
+                        .dst_binding(0)
+                        .descriptor_type(descriptor_type)
+                        .texel_buffer_view(v)
+                        .build(),
+                ),
+                None => writes.push(
+                    vk::WriteDescriptorSet::builder()
+                        .dst_set(*descriptor_set)
+                        .dst_binding(0)
+                        .descriptor_type(descriptor_type)
+                        .buffer_info(&resource_info)
+                        .build(),
+                ),
+            }
+            writes.push(
+                vk::WriteDescriptorSet::builder()
+                    .dst_set(*descriptor_set)
+                    .dst_binding(1)
+                    .descriptor_type(vk::DescriptorType::STORAGE_BUFFER)
+                    .buffer_info(&host_info)
+                    .build(),
+            );
+        } else {
+            writes.push(
+                vk::WriteDescriptorSet::builder()
+                    .dst_set(*descriptor_set)
+                    .dst_binding(0)
+                    .descriptor_type(vk::DescriptorType::STORAGE_BUFFER)
+                    .buffer_info(&host_info)
+                    .build(),
+            );
+            writes.push(
+                vk::WriteDescriptorSet::builder()
+                    .dst_set(*descriptor_set)
+                    .dst_binding(1)
+                    .descriptor_type(vk::DescriptorType::STORAGE_BUFFER)
+                    .buffer_info(&resource_info)
+                    .build(),
+            );
+        }
+        unsafe { device.update_descriptor_sets(&writes, &[] as &[vk::CopyDescriptorSet]) };
+
+        // `ComputePipeline`
+        let indirect_buffer = if dispatch_call == DispatchCall::DispatchIndirect {
+            let size = std::mem::size_of::<vk::DispatchIndirectCommand>() as vk::DeviceSize;
+            let indirect = BufferWithMemory::new(device, allocator, make_buffer_create_info(size, vk::BufferUsageFlags::INDIRECT_BUFFER), MemoryRequirement::HOST_VISIBLE)?;
+            unsafe {
+                indirect
+                    .get_allocation()
+                    .get_host_ptr()
+                    .cast::<vk::DispatchIndirectCommand>()
+                    .write(vk::DispatchIndirectCommand { x: 1, y: 1, z: 1 });
+            }
+            flush_alloc(device, indirect.get_allocation())?;
+            Some(indirect)
+        } else {
+            None
+        };
+
+        let shader = find_buffer_shader(buffer_type, mode, buffer.size as u32);
+        let module = create_shader_module(device, shader.programs.get("comp")?)?;
+        let pipeline_layout = make_pipeline_layout(device, &[*descriptor_set_layout])?;
+        let stage = vk::PipelineShaderStageCreateInfo::builder()
+            .stage(vk::ShaderStageFlags::COMPUTE)
+            .module(*module)
+            .name(c"main".to_bytes_with_nul())
+            .build();
+        let info = vk::ComputePipelineCreateInfo::builder().stage(stage).layout(*pipeline_layout);
+        let handle = unsafe { device.create_compute_pipelines(vk::PipelineCache::null(), &[info], None) }
+            .vk_check("vkCreateComputePipelines")?
+            .0[0];
+
+        Ok(Self {
+            buffer,
+            host_buffer,
+            _buffer_view: buffer_view,
+            _descriptor_set_layout: descriptor_set_layout,
+            descriptor_set,
+            _descriptor_pool: descriptor_pool,
+            pipeline_layout,
+            pipeline: Unique::new(device, handle),
+            indirect_buffer,
+            buffer_type,
+            mode,
+            specialized_access,
+        })
+    }
+}
+
+/// Looks the compute program up by what it was generated for, rather than by a name
+/// assembled twice.
+fn find_buffer_shader(buffer_type: BufferType, mode: AccessMode, size: u32) -> &'static BufferAccessShader {
+    let mode_name = if mode == AccessMode::Read { "read" } else { "write" };
+    ALL_BUFFER_ACCESS_SHADER
+        .iter()
+        .copied()
+        .find(|s| s.buffer_type == buffer_type.manifest_name() && s.mode == mode_name && s.buffer_size == size)
+        .expect("the generator covers every combination the resource table produces")
+}
+
+impl Operation for BufferShaderAccess<'_> {
+    fn record_commands(&self, device: &Device, sync: SyncType, cmd_buffer: vk::CommandBuffer) {
+        unsafe {
+            device.cmd_bind_pipeline(cmd_buffer, vk::PipelineBindPoint::COMPUTE, *self.pipeline);
+            device.cmd_bind_descriptor_sets(cmd_buffer, vk::PipelineBindPoint::COMPUTE, *self.pipeline_layout, 0, &[*self.descriptor_set], &[] as &[u32]);
+            match &self.indirect_buffer {
+                Some(indirect) => device.cmd_dispatch_indirect(cmd_buffer, indirect.get(), 0),
+                None => device.cmd_dispatch(cmd_buffer, 1, 1, 1),
+            }
+        }
+
+        if self.mode == AccessMode::Read {
+            // Make what the shader wrote available to the host.
+            let barrier = make_buffer_memory_barrier2(
+                vk::PipelineStageFlags2::COMPUTE_SHADER,
+                vk::AccessFlags2::SHADER_WRITE,
+                vk::PipelineStageFlags2::HOST,
+                vk::AccessFlags2::HOST_READ,
+                self.host_buffer.get(),
+                0,
+                self.buffer.size,
+            );
+            cmd_pipeline_barrier(device, sync, cmd_buffer, &[barrier], &[]);
+        }
+    }
+
+    fn in_sync_info(&self, _sync: SyncType) -> SyncInfo {
+        SyncInfo {
+            stage_mask: vk::PipelineStageFlags2::COMPUTE_SHADER,
+            access_mask: self.access_mask(),
+            image_layout: vk::ImageLayout::UNDEFINED,
+        }
+    }
+
+    fn out_sync_info(&self, _sync: SyncType) -> SyncInfo {
+        SyncInfo {
+            stage_mask: vk::PipelineStageFlags2::COMPUTE_SHADER,
+            access_mask: self.access_mask(),
+            image_layout: vk::ImageLayout::UNDEFINED,
+        }
+    }
+
+    fn data(&self, device: &Device) -> Result<Vec<u8>, TestError> {
+        host_buffer_data(device, &self.host_buffer, self.buffer.size)
+    }
+}
+
+impl BufferShaderAccess<'_> {
+    /// `getInSyncInfo`/`getOutSyncInfo`' access mask.
+    ///
+    /// The `_specialized_access_flag` variants are the point of the distinction:
+    /// synchronization2 splits SHADER_READ/WRITE into per-resource-kind flags, and
+    /// naming the narrow one has to work as well as naming the broad one.
+    fn access_mask(&self) -> vk::AccessFlags2 {
+        if self.mode == AccessMode::Write {
+            return if self.specialized_access { vk::AccessFlags2::SHADER_STORAGE_WRITE } else { vk::AccessFlags2::SHADER_WRITE };
+        }
+        match self.buffer_type {
+            BufferType::Uniform => vk::AccessFlags2::UNIFORM_READ,
+            BufferType::UniformTexel => {
+                if self.specialized_access {
+                    vk::AccessFlags2::SHADER_SAMPLED_READ
+                } else {
+                    vk::AccessFlags2::SHADER_READ
+                }
+            }
+            BufferType::Storage => {
+                if self.specialized_access {
+                    vk::AccessFlags2::SHADER_STORAGE_READ
+                } else {
+                    vk::AccessFlags2::SHADER_READ
+                }
+            }
+        }
     }
 }

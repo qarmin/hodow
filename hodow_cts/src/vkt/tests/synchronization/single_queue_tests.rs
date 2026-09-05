@@ -56,6 +56,9 @@ pub struct SyncTestCase {
     resource: ResourceDescription,
     write_op: OperationName,
     read_op: OperationName,
+    /// `specializedAccess` - the sync2 variant that names the narrow per-resource
+    /// access flags rather than the broad SHADER_READ/SHADER_WRITE.
+    specialized_access: bool,
     /// `maintenance9` - the sync2 event variant that asks for `VK_KHR_maintenance9`.
     maintenance9: bool,
     /// `computeQueue` - the `_cq` variant, which runs the whole thing on a dedicated
@@ -147,8 +150,8 @@ impl TestInstance for SyncTestInstance<'_> {
         // op will produce and the read op will consume.
         let usage = p.write_op.out_resource_usage() | p.read_op.in_resource_usage();
         let resource = Resource::new(device, allocator, &p.resource, usage)?;
-        let write_op = build_operation(device, allocator, p.write_op, &resource)?;
-        let read_op = build_operation(device, allocator, p.read_op, &resource)?;
+        let write_op = build_operation(device, allocator, p.write_op, &resource, p.specialized_access)?;
+        let read_op = build_operation(device, allocator, p.read_op, &resource, p.specialized_access)?;
 
         let write_sync = write_op.out_sync_info(p.sync_type);
         let read_sync = read_op.in_sync_info(p.sync_type);
@@ -523,6 +526,23 @@ pub fn create_single_queue_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
                     }
                     let name = get_resource_name(resource);
 
+                    // Under synchronization2, an operation that has a narrow access
+                    // flag of its own gets a variant that names it instead of the
+                    // broad SHADER_READ/SHADER_WRITE.
+                    if sync_type == SyncType::Synchronization2 && (write_op.has_specialized_access_flag() || read_op.has_specialized_access_flag()) {
+                        op_group.add_child(Box::new(SyncTestCase {
+                            name: format!("{name}_specialized_access_flag"),
+                            sync_type,
+                            primitive,
+                            resource: *resource,
+                            write_op,
+                            read_op,
+                            specialized_access: true,
+                            maintenance9: false,
+                            compute_queue: false,
+                        }) as Box<dyn TestCase>);
+                    }
+
                     // Under synchronization2 an event also gets a maintenance9 variant.
                     if sync_type == SyncType::Synchronization2 && primitive == SyncPrimitive::Event {
                         op_group.add_child(Box::new(SyncTestCase {
@@ -532,6 +552,7 @@ pub fn create_single_queue_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
                             resource: *resource,
                             write_op,
                             read_op,
+                            specialized_access: false,
                             maintenance9: true,
                             compute_queue: false,
                         }) as Box<dyn TestCase>);
@@ -547,6 +568,7 @@ pub fn create_single_queue_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
                             resource: *resource,
                             write_op,
                             read_op,
+                            specialized_access: false,
                             maintenance9: false,
                             compute_queue: true,
                         }) as Box<dyn TestCase>);
@@ -559,6 +581,7 @@ pub fn create_single_queue_tests(sync_type: SyncType) -> tcu::TestCaseGroup {
                         resource: *resource,
                         write_op,
                         read_op,
+                        specialized_access: false,
                         maintenance9: false,
                         compute_queue: false,
                     }) as Box<dyn TestCase>);
