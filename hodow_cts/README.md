@@ -219,6 +219,41 @@ count. Groups in this state on SwiftShader today, needing a run on real hardware
   `framebufferColorSampleCounts` has only 1 and 4, so five of the six sample counts
   skip in every one of its sub-groups.
 
+### Where the remaining coverage is
+
+A group the driver reports `NotSupported` cannot be verified, so the number that
+matters when choosing what to port next is not the group's size but its size times
+its pass rate. Measured by sampling each second-level group with upstream `deqp-vk`
+on SwiftShader (200-500 random cases each, 2026-09-05):
+
+| group | cases | pass rate | runnable | shaders |
+| --- | --- | --- | --- | --- |
+| `renderpasses.renderpass{1,2}` formats/attachment/simple | 25096 | 74% | ~18600 | ~500-1000 distinct |
+| `binding_model.shader_access` | 86412 | 18% | ~15100 | templated by descriptor type x stage |
+| `renderpasses.renderpass1` (whole) | 19750 | 53% | ~10500 | |
+| `synchronization2.op` | 38850 | 15% | ~5600 | |
+| `ssbo.layout`, `ssbo.phys` | 5275 each | 72% | ~7600 | one per case |
+| `synchronization.op` | 20131 | 22% | ~4300 | |
+| `spirv_assembly.instruction` | 43318 | 10% | ~4300 | one per case |
+| `glsl.operator` | 3630 | **100%** | 3630 | one per case |
+| `ubo.single_basic_type` | 3384 | 66% | ~2200 | one per case |
+| `texture.filtering` | 7510 | 39% | ~2900 | |
+
+Groups that are effectively unreachable on SwiftShader, whatever their size:
+`transform_feedback` (107866, 0%), `robustness.robustness2` (82600, 0%),
+`fragment_shading_rate.*` (110443, 0%), `mesh_shader.ext`, `ray_query.*`,
+`cooperative_vector.*`, `compute.shader_object_*`, `query_pool.statistics_query`
+(all 0/200). `spirv_assembly` and `renderpasses.dynamic_rendering` also crash
+`deqp-vk` itself here, so neither side can be trusted on them.
+
+The pattern behind the numbers: `dEQP-VK.api` was the shader-light corner of the
+suite, which is why it reached 95% first. Everything large that remains generates
+its shaders from the test parameters, so porting it means generating the same
+shaders ahead of time and committing the SPIR-V. That is affordable where the
+distinct-shader count saturates - the renderpass group logs 247 distinct shaders
+across 2500 random cases and is still nearly flat at that point - and not where it
+is one per case.
+
 ### Adding a test
 
 1. Add the upstream `.cpp` to `upstream/FILES.txt` and run `vendor_upstream.py --sync`.
