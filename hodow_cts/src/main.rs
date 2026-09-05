@@ -41,6 +41,12 @@ struct Args {
     #[arg(long)]
     no_color: bool,
 
+    /// Run this many worker processes at once. `dEQP-VK.memory.*` always keeps the
+    /// device to itself, whatever this says, because those cases claim most of a heap
+    /// and would fail each other rather than the driver.
+    #[arg(short = 'j', long, default_value_t = 1)]
+    jobs: usize,
+
     /// Write machine-readable results here (JSON Lines, one record per case).
     #[arg(short, long, value_name = "FILE")]
     output: Option<PathBuf>,
@@ -252,6 +258,7 @@ fn run_supervised(selected: &[&FlatCase], args: &Args) -> Result<Summary, Box<dy
         case_timeout: Duration::from_secs(args.timeout_secs),
         device_id: args.device_id,
         validation: args.validation,
+        jobs: args.jobs.max(1),
     };
 
     let (results, summary) = run_isolated(&names, &options, print_case)?;

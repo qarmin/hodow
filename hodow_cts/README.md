@@ -65,7 +65,19 @@ hodow_cts --device-id 2                   # second GPU, in enumeration order
 hodow_cts --isolate-per-test              # one process per case, to pin down a crash
 hodow_cts --validation                    # see "Telling a port bug from a driver bug"
 hodow_cts --no-color                      # or set NO_COLOR; --list is plain either way
+hodow_cts -j 8                            # eight worker processes at once
 ```
+
+`-j` is worth knowing about. Without it the run is strictly sequential - one worker
+process at a time - and on a full suite that costs real time: eight jobs takes
+`api.copy_and_blit.core.image_to_image` (52687 cases) from 21.1 s to 8.0 s here, with
+byte-identical results.
+
+`dEQP-VK.memory.*` is exempt and always keeps the device to itself, whatever `-j`
+says. Those cases deliberately allocate and map a large fraction of a heap; two at once
+would run the second out of memory and it would report that as a driver failure. They
+are also about half the wall time of a full run, so the exemption is most of what `-j`
+cannot help with - a run that is nearly all `memory.*` will not get faster.
 
 Verdicts and log lines are coloured, and every log line a test emits is prefixed with
 the case it came from - upstream puts those into a per-case `.qpa` section, and a bare

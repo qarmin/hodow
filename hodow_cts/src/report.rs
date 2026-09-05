@@ -105,6 +105,16 @@ pub struct Summary {
 }
 
 impl Summary {
+    /// Folds another summary in, for the parallel runner's per-worker totals.
+    pub fn merge(&mut self, other: &Self) {
+        self.passed += other.passed;
+        self.failed += other.failed;
+        self.not_supported += other.not_supported;
+        self.warnings += other.warnings;
+        self.crashed += other.crashed;
+        self.other += other.other;
+    }
+
     pub fn record(&mut self, status: TestResult) {
         match status {
             TestResult::Pass => self.passed += 1,

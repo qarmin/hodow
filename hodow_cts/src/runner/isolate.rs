@@ -39,6 +39,20 @@ pub struct IsolateOptions {
     pub case_timeout: Duration,
     pub device_id: usize,
     pub validation: bool,
+    /// How many worker processes may run at once. One means the old behaviour.
+    pub jobs: usize,
+}
+
+/// Cases that must not share the device with anything else.
+///
+/// `dEQP-VK.memory.allocation.*` deliberately allocates a large fraction of a heap and
+/// checks that the allocation succeeds; `memory.mapping.*` maps most of one. Two of
+/// those at once would run the second out of memory, and it would report that as a
+/// failure of the driver rather than of the scheduling. They are also, between them,
+/// half the wall time of a full run - so this is not a small carve-out, it is the
+/// reason the carve-out has to exist.
+fn needs_exclusive_device(case_name: &str) -> bool {
+    case_name.starts_with("dEQP-VK.memory.")
 }
 
 /// Outcome of supervising one child process.
@@ -69,7 +83,19 @@ impl std::fmt::Display for VulkanUnavailable {
 impl std::error::Error for VulkanUnavailable {}
 
 /// Runs `case_names` through child processes, `batch_size` at a time.
+///
+/// With `jobs > 1` the cases that tolerate company are split across that many worker
+/// processes; the rest keep the device to themselves. Results arrive interleaved, which
+/// is why the summary is accumulated from what comes back rather than from the order
+/// the cases were asked for.
 pub fn run_isolated(case_names: &[String], options: &IsolateOptions, mut on_result: impl FnMut(&CaseResult)) -> Result<(Vec<CaseResult>, Summary), Box<dyn std::error::Error>> {
+    if options.jobs > 1 {
+        return run_isolated_parallel(case_names, options, &mut on_result);
+    }
+    run_isolated_serial(case_names, options, on_result)
+}
+
+fn run_isolated_serial(case_names: &[String], options: &IsolateOptions, mut on_result: impl FnMut(&CaseResult)) -> Result<(Vec<CaseResult>, Summary), Box<dyn std::error::Error>> {
     let exe = std::env::current_exe()?;
     let mut all = Vec::with_capacity(case_names.len());
     let mut summary = Summary::default();
@@ -227,4 +253,86 @@ fn wait_with_timeout(child: &mut std::process::Child, timeout: Duration) -> std:
         }
         std::thread::sleep(Duration::from_millis(10));
     }
+}
+
+/// The `--jobs N` path: the exclusive cases first, alone, then everything else spread
+/// across `N` worker processes.
+///
+/// Splitting by chunk rather than round-robin keeps each worker's case list contiguous,
+/// which matters because a worker rebuilds the whole case tree before it runs anything
+/// and a contiguous slice keeps the batching inside it as coarse as the serial path.
+fn run_isolated_parallel(
+    case_names: &[String],
+    options: &IsolateOptions,
+    on_result: &mut impl FnMut(&CaseResult),
+) -> Result<(Vec<CaseResult>, Summary), Box<dyn std::error::Error>> {
+    let (exclusive, shared): (Vec<String>, Vec<String>) = case_names.iter().cloned().partition(|n| needs_exclusive_device(n));
+
+    let mut all = Vec::with_capacity(case_names.len());
+    let mut summary = Summary::default();
+
+    // The exclusive ones go first and alone, so the parallel phase cannot be starved
+    // of memory by them or they by it.
+    if !exclusive.is_empty() {
+        let (results, sub) = run_isolated_serial(&exclusive, options, |r| on_result(r))?;
+        summary.merge(&sub);
+        all.extend(results);
+    }
+
+    if shared.is_empty() {
+        return Ok((all, summary));
+    }
+
+    let jobs = options.jobs.min(shared.len()).max(1);
+    let chunk = shared.len().div_ceil(jobs);
+    let (tx, rx) = std::sync::mpsc::channel::<CaseResult>();
+
+    let outcome = std::thread::scope(|scope| -> Result<Summary, Box<dyn std::error::Error + Send + Sync>> {
+        let mut handles = Vec::new();
+        for slice in shared.chunks(chunk) {
+            let tx = tx.clone();
+            handles.push(scope.spawn(move || -> Result<Summary, String> {
+                let (_results, summary) = run_isolated_serial(slice, options, |r| {
+                    let _ = tx.send(r.clone());
+                })
+                .map_err(|e| e.to_string())?;
+                Ok(summary)
+            }));
+        }
+        drop(tx);
+
+        // Drain as the workers produce, so progress is visible while they run.
+        for message in rx {
+            all.push(message);
+        }
+
+        let mut merged = Summary::default();
+        for handle in handles {
+            match handle.join() {
+                Ok(Ok(sub)) => merged.merge(&sub),
+                Ok(Err(e)) => return Err(e.into()),
+                Err(_) => return Err("a worker supervisor thread panicked".into()),
+            }
+        }
+        Ok(merged)
+    });
+
+    match outcome {
+        Ok(sub) => summary.merge(&sub),
+        Err(e) => {
+            // A worker that could not bring Vulkan up is the same condition the serial
+            // path reports, and has to stay distinguishable from a test failure.
+            if e.to_string().contains("Vulkan is not usable here") {
+                return Err(Box::new(VulkanUnavailable));
+            }
+            return Err(e.to_string().into());
+        }
+    }
+
+    // The results were printed as they arrived; reporting them in the order they were
+    // asked for keeps the JSONL comparable between a serial and a parallel run.
+    let order: std::collections::HashMap<&str, usize> = case_names.iter().enumerate().map(|(i, n)| (n.as_str(), i)).collect();
+    all.sort_by_key(|r| order.get(r.name.as_str()).copied().unwrap_or(usize::MAX));
+
+    Ok((all, summary))
 }
