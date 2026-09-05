@@ -641,6 +641,17 @@ pub fn create_buffer_copy_tests() -> tcu::TestCaseGroup {
                 queue_selection,
                 general_layout,
             );
+            // No general_layout variant of this one upstream.
+            if !general_layout {
+                super::copies_image_tests::add_buffer_to_depth_stencil_groups(
+                    &mut kind_group,
+                    &format!("buffer_to_depthstencil{suffix}"),
+                    allocation_kind,
+                    command_variant,
+                    queue_selection,
+                    general_layout,
+                );
+            }
             super::copies_image_tests::add_image_to_buffer_groups(
                 &mut kind_group,
                 &format!("image_to_buffer{suffix}"),

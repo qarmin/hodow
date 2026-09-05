@@ -23,6 +23,7 @@ external/vulkancts/modules/vulkan/api/vktApiCopiesAndBlittingUtil.cpp
 external/vulkancts/modules/vulkan/api/vktApiCopyBufferToImageTests.cpp
 external/vulkancts/modules/vulkan/api/vktApiCopyImageToBufferTests.cpp
 external/vulkancts/modules/vulkan/api/vktApiCopyImageToImageTests.cpp
+external/vulkancts/modules/vulkan/api/vktApiCopyBufferToDepthStencilTests.cpp
 external/vulkancts/modules/vulkan/api/vktApiCopiesAndBlittingUtil.hpp
 external/vulkancts/modules/vulkan/api/vktApiFeatureInfo.cpp
 external/vulkancts/modules/vulkan/api/vktApiImageClearingTests.cpp
@@ -47,6 +48,7 @@ external/vulkancts/framework/vulkan/vkBufferWithMemory.hpp
 external/vulkancts/framework/vulkan/vkImageWithMemory.hpp
 external/vulkancts/framework/vulkan/vkImageUtil.hpp
 external/vulkancts/framework/vulkan/vkImageUtil.cpp
+external/vulkancts/framework/vulkan/generated/vulkan/vkFormatLists.inl
 external/vulkancts/framework/vulkan/vkComputePipelineConstructionUtil.hpp
 
 # --- test framework (vkt::) --------------------------------------------------------
