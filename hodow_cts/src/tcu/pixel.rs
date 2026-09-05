@@ -114,7 +114,7 @@ fn get_channel_write_swizzle(order: ChannelOrder) -> [Swz; 4] {
 }
 
 /// `tcu::isCombinedDepthStencilType`
-fn is_combined_depth_stencil_type(type_: ChannelType) -> bool {
+pub fn is_combined_depth_stencil_type(type_: ChannelType) -> bool {
     use ChannelType::*;
     matches!(type_, UNSIGNED_INT_16_8_8 | UNSIGNED_INT_24_8_REV | FLOAT_UNSIGNED_INT_24_8_REV)
 }
@@ -1040,6 +1040,12 @@ fn is_writable_channel_type(type_: ChannelType) -> bool {
     if is_packed_writable(type_) {
         return true;
     }
+    // A combined depth/stencil type has no `set_pixel` path - upstream asserts there
+    // too - but `set_pix_depth`/`set_pix_stencil` can write it, which is all its
+    // callers use.
+    if is_combined_depth_stencil_type(type_) {
+        return true;
+    }
     matches!(
         type_,
         SNORM_INT8
@@ -1504,9 +1510,24 @@ mod write_tests {
     /// what keeps a silent approximation out of a comparison.
     #[test]
     fn unported_packed_formats_are_refused_up_front() {
-        // A combined depth/stencil type has no generic write path here.
+        // No ported test writes these two, so they have no encoder.
+        for t in [ChannelType::UNORM_SHORT_10, ChannelType::UNORM_SHORT_12] {
+            let f = TextureFormat::new(ChannelOrder::R, t);
+            assert!(matches!(TextureLevel::new(f, 1, 1, 1), Err(TestError::NotPorted(_))), "{t:?}");
+        }
+    }
+
+    /// A combined depth/stencil type has no `set_pixel` path, but its two aspects can be
+    /// written, which is all its callers need.
+    #[test]
+    fn combined_depth_stencil_roundtrips_per_aspect() {
         let f = TextureFormat::new(ChannelOrder::DS, ChannelType::UNSIGNED_INT_24_8_REV);
-        assert!(matches!(TextureLevel::new(f, 1, 1, 1), Err(TestError::NotPorted(_))));
+        let mut level = TextureLevel::new(f, 1, 1, 1).expect("writable through the aspect setters");
+        level.get_access().set_pix_depth(0.5, 0, 0, 0);
+        level.get_access().set_pix_stencil(0x42, 0, 0, 0);
+        let acc = level.get_const_access();
+        assert!((acc.get_pix_depth(0, 0, 0) - 0.5).abs() < 1e-6, "{}", acc.get_pix_depth(0, 0, 0));
+        assert_eq!(acc.get_pix_stencil(0, 0, 0), 0x42);
     }
 
     /// The two float packings, each checked against the read path that decodes them.

@@ -28,7 +28,10 @@ use crate::tcu::texture::TextureChannelClass;
 use crate::tcu::{self, TestError, TestOutcome, TestStatus, map_vk_format};
 use crate::vk::VkResultExt;
 use crate::vk::cmd_util::{begin_command_buffer, begin_render_pass, end_command_buffer, end_render_pass, make_rect_2d, submit_commands_and_wait};
-use crate::vk::image_util::{ImageWithMemory, make_buffer_image_copy, make_image_memory_barrier, make_image_subresource_layers, make_image_subresource_range, make_image_view};
+use crate::vk::image_util::{
+    ImageWithMemory, get_depth_copy_format, get_stencil_copy_format, make_buffer_image_copy, make_image_memory_barrier, make_image_subresource_layers,
+    make_image_subresource_range, make_image_view,
+};
 use crate::vk::mem_util::{MemoryRequirement, invalidate_alloc};
 use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool, make_framebuffer};
 use crate::vk::programs::BinaryCollection;
@@ -250,25 +253,6 @@ fn get_image_usage_flags(format: vk::Format, is_attachment_format: bool) -> vk::
         return common_flags | vk::ImageUsageFlags::COLOR_ATTACHMENT;
     }
     common_flags
-}
-
-/// `getDepthCopyFormat`
-fn get_depth_copy_format(combined_format: vk::Format) -> Option<tcu::TextureFormat> {
-    match combined_format {
-        vk::Format::D16_UNORM | vk::Format::X8_D24_UNORM_PACK32 | vk::Format::D32_SFLOAT => map_vk_format(combined_format),
-        vk::Format::D16_UNORM_S8_UINT => map_vk_format(vk::Format::D16_UNORM),
-        vk::Format::D24_UNORM_S8_UINT => map_vk_format(vk::Format::X8_D24_UNORM_PACK32),
-        vk::Format::D32_SFLOAT_S8_UINT => map_vk_format(vk::Format::D32_SFLOAT),
-        _ => None,
-    }
-}
-
-/// `getStencilCopyFormat`
-fn get_stencil_copy_format(combined_format: vk::Format) -> Option<tcu::TextureFormat> {
-    match combined_format {
-        vk::Format::S8_UINT | vk::Format::D16_UNORM_S8_UINT | vk::Format::D24_UNORM_S8_UINT | vk::Format::D32_SFLOAT_S8_UINT => map_vk_format(vk::Format::S8_UINT),
-        _ => None,
-    }
 }
 
 /// The clear-value union, carried as upstream's VkClearColorValue does.

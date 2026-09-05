@@ -23,14 +23,14 @@ use super::copies_buffer_tests::{AllocationKind, CopyCommandVariant, QueueSelect
 use super::copy_format_lists::{COLOR_IMAGE_FORMATS_TO_TEST, CopyFormat, DEPTH_AND_STENCIL_FORMATS, SIGNED_AND_UNSIGNED_FLOAT_FORMATS};
 use crate::tcu::pixel::{
     ConstPixelBufferAccess, PixelBufferAccess, TextureLevel, fill_with_component_gradients2, fill_with_component_gradients3, get_texture_format_bit_depth, has_depth_component,
-    has_stencil_component,
+    has_stencil_component, is_combined_depth_stencil_type,
 };
 use crate::tcu::random::de_int32_hash;
 use crate::tcu::texture::TextureChannelClass;
 use crate::tcu::{self, TestError, TestOutcome, TestStatus, map_vk_format};
 use crate::vk::VkResultExt;
 use crate::vk::cmd_util::{begin_command_buffer, end_command_buffer, submit_commands_and_wait};
-use crate::vk::image_util::{ImageWithMemory, make_image_memory_barrier, make_image_subresource_range};
+use crate::vk::image_util::{ImageWithMemory, get_depth_copy_format, get_stencil_copy_format, make_image_memory_barrier, make_image_subresource_range};
 use crate::vk::mem_util::{MemoryRequirement, flush_alloc, invalidate_alloc};
 use crate::vk::obj_util::{BufferWithMemory, allocate_command_buffer, make_buffer_create_info, make_command_pool};
 use crate::vk::programs::BinaryCollection;
@@ -212,10 +212,19 @@ fn generate_buffer(access: &mut PixelBufferAccess<'_>, width: u32, height: u32, 
         }
         FillMode::White | FillMode::Red => {
             let color = if mode == FillMode::White { max_value } else { [max_value[0], 0.0, 0.0, max_value[3]] };
+            let combined = is_combined_depth_stencil_type(format.type_);
+            let has_stencil = has_stencil_component(format.order);
             for z in 0..depth {
                 for y in 0..height {
                     for x in 0..width {
-                        access.set_pixel(color, x, y, z);
+                        if combined {
+                            access.set_pix_depth(color[0], x, y, z);
+                            if has_stencil {
+                                access.set_pix_stencil(color[3] as u32, x, y, z);
+                            }
+                        } else {
+                            access.set_pixel(color, x, y, z);
+                        }
                     }
                 }
             }
@@ -263,22 +272,59 @@ fn staging_buffer_create_info(size: u64, usage: vk::BufferUsageFlags, families: 
     info
 }
 
-/// `CopiesAndBlittingTestInstance::uploadImage`, colour aspect and one mip level.
+/// The aspects a format has to be staged through, with the tightly-packed format each
+/// one travels in.
+///
+/// A copy region names exactly one aspect, so a combined depth/stencil image needs one
+/// buffer-to-image copy per aspect, each in that aspect's own copy format rather than
+/// the combined texel layout.
+fn staging_aspects(format: vk::Format) -> Vec<(vk::ImageAspectFlags, tcu::TextureFormat)> {
+    let Some(tcu_format) = map_vk_format(format) else { return Vec::new() };
+    if !is_combined_depth_stencil_type(tcu_format.type_) {
+        return vec![(get_aspect_flags(format), tcu_format)];
+    }
+    let mut out = Vec::new();
+    if let Some(f) = get_depth_copy_format(format) {
+        out.push((vk::ImageAspectFlags::DEPTH, f));
+    }
+    if let Some(f) = get_stencil_copy_format(format) {
+        out.push((vk::ImageAspectFlags::STENCIL, f));
+    }
+    out
+}
+
+/// Splits a combined depth/stencil level into a single-aspect one, or merges it back.
+fn transfer_aspect(combined: &mut TextureLevel, aspect: vk::ImageAspectFlags, single: &mut TextureLevel, into_single: bool) {
+    let [w, h, d] = combined.size();
+    for z in 0..d {
+        for y in 0..h {
+            for x in 0..w {
+                if aspect == vk::ImageAspectFlags::DEPTH {
+                    if into_single {
+                        let v = combined.get_const_access().get_pix_depth(x, y, z);
+                        single.get_access().set_pix_depth(v, x, y, z);
+                    } else {
+                        let v = single.get_const_access().get_pix_depth(x, y, z);
+                        combined.get_access().set_pix_depth(v, x, y, z);
+                    }
+                } else if into_single {
+                    let v = combined.get_const_access().get_pix_stencil(x, y, z);
+                    single.get_access().set_pix_stencil(v, x, y, z);
+                } else {
+                    let v = single.get_const_access().get_pix_stencil(x, y, z);
+                    combined.get_access().set_pix_stencil(v, x, y, z);
+                }
+            }
+        }
+    }
+}
+
+/// `CopiesAndBlittingTestInstance::uploadImage`, one mip level.
 #[allow(clippy::too_many_arguments)]
 fn upload_image(context: &Context<'_>, src: &ConstPixelBufferAccess<'_>, image: vk::Image, parms: &ImageParms, general_layout: bool, families: &[u32]) -> Result<(), TestError> {
     let vk_device = context.get_device();
     let queue = context.get_universal_queue();
     let queue_family_index = context.get_universal_queue_family_index();
-
-    let bytes = src.raw().len() as u64;
-    let staging = BufferWithMemory::new(
-        vk_device,
-        context.get_default_allocator(),
-        staging_buffer_create_info(bytes, vk::BufferUsageFlags::TRANSFER_SRC, families),
-        MemoryRequirement::HOST_VISIBLE,
-    )?;
-    unsafe { std::ptr::copy_nonoverlapping(src.raw().as_ptr(), staging.get_allocation().get_host_ptr(), bytes as usize) };
-    flush_alloc(vk_device, staging.get_allocation())?;
 
     let layout = if general_layout {
         vk::ImageLayout::GENERAL
@@ -286,8 +332,33 @@ fn upload_image(context: &Context<'_>, src: &ConstPixelBufferAccess<'_>, image: 
         vk::ImageLayout::TRANSFER_DST_OPTIMAL
     };
     let extent = parms.extent_3d();
-    let aspect = get_aspect_flags(parms.format);
-    let range = make_image_subresource_range(aspect, 0, 1, 0, parms.array_size());
+    let full_aspect = get_aspect_flags(parms.format);
+    let range = make_image_subresource_range(full_aspect, 0, 1, 0, parms.array_size());
+
+    // One staging buffer per aspect, each holding that aspect's own texel layout.
+    let mut staged: Vec<(vk::ImageAspectFlags, BufferWithMemory)> = Vec::new();
+    let mut combined = TextureLevel::new(src.format(), src.size()[0], src.size()[1], src.size()[2])?;
+    combined.data_mut().copy_from_slice(src.raw());
+
+    for (aspect, aspect_format) in staging_aspects(parms.format) {
+        let bytes = if aspect_format == src.format() {
+            src.raw().to_vec()
+        } else {
+            let [w, h, d] = src.size();
+            let mut level = TextureLevel::new(aspect_format, w, h, d)?;
+            transfer_aspect(&mut combined, aspect, &mut level, true);
+            level.data().to_vec()
+        };
+        let staging = BufferWithMemory::new(
+            vk_device,
+            context.get_default_allocator(),
+            staging_buffer_create_info(bytes.len() as u64, vk::BufferUsageFlags::TRANSFER_SRC, families),
+            MemoryRequirement::HOST_VISIBLE,
+        )?;
+        unsafe { std::ptr::copy_nonoverlapping(bytes.as_ptr(), staging.get_allocation().get_host_ptr(), bytes.len()) };
+        flush_alloc(vk_device, staging.get_allocation())?;
+        staged.push((aspect, staging));
+    }
 
     let cmd_pool = make_command_pool(vk_device, queue_family_index)?;
     let cmd_buffer = allocate_command_buffer(vk_device, *cmd_pool, vk::CommandBufferLevel::PRIMARY)?;
@@ -304,20 +375,22 @@ fn upload_image(context: &Context<'_>, src: &ConstPixelBufferAccess<'_>, image: 
             &[pre],
         );
 
-        let region = vk::BufferImageCopy {
-            buffer_offset: 0,
-            buffer_row_length: extent.width,
-            buffer_image_height: extent.height,
-            image_subresource: vk::ImageSubresourceLayers {
-                aspect_mask: aspect,
-                mip_level: 0,
-                base_array_layer: 0,
-                layer_count: parms.array_size(),
-            },
-            image_offset: vk::Offset3D { x: 0, y: 0, z: 0 },
-            image_extent: extent,
-        };
-        vk_device.cmd_copy_buffer_to_image(*cmd_buffer, staging.get(), image, layout, &[region]);
+        for (aspect, staging) in &staged {
+            let region = vk::BufferImageCopy {
+                buffer_offset: 0,
+                buffer_row_length: extent.width,
+                buffer_image_height: extent.height,
+                image_subresource: vk::ImageSubresourceLayers {
+                    aspect_mask: *aspect,
+                    mip_level: 0,
+                    base_array_layer: 0,
+                    layer_count: parms.array_size(),
+                },
+                image_offset: vk::Offset3D { x: 0, y: 0, z: 0 },
+                image_extent: extent,
+            };
+            vk_device.cmd_copy_buffer_to_image(*cmd_buffer, staging.get(), image, layout, &[region]);
+        }
 
         let post = make_image_memory_barrier(vk::AccessFlags::TRANSFER_WRITE, vk::AccessFlags::TRANSFER_WRITE, layout, layout, image, range);
         vk_device.cmd_pipeline_barrier(
@@ -340,14 +413,6 @@ fn read_image(context: &Context<'_>, image: vk::Image, parms: &ImageParms, dst: 
     let queue = context.get_universal_queue();
     let queue_family_index = context.get_universal_queue_family_index();
 
-    let bytes = dst.data().len() as u64;
-    let staging = BufferWithMemory::new(
-        vk_device,
-        context.get_default_allocator(),
-        staging_buffer_create_info(bytes, vk::BufferUsageFlags::TRANSFER_DST, families),
-        MemoryRequirement::HOST_VISIBLE,
-    )?;
-
     let src_layout = if general_layout {
         vk::ImageLayout::GENERAL
     } else {
@@ -359,8 +424,23 @@ fn read_image(context: &Context<'_>, image: vk::Image, parms: &ImageParms, dst: 
         vk::ImageLayout::TRANSFER_DST_OPTIMAL
     };
     let extent = parms.extent_3d();
-    let aspect = get_aspect_flags(parms.format);
-    let range = make_image_subresource_range(aspect, 0, 1, 0, parms.array_size());
+    let full_aspect = get_aspect_flags(parms.format);
+    let range = make_image_subresource_range(full_aspect, 0, 1, 0, parms.array_size());
+    let [w, h, d] = dst.size();
+
+    let aspects = staging_aspects(parms.format);
+    let mut staged: Vec<(vk::ImageAspectFlags, tcu::TextureFormat, BufferWithMemory)> = Vec::new();
+    for (aspect, aspect_format) in &aspects {
+        let pixel_size = aspect_format.pixel_size().ok_or_else(|| TestError::NotSupported("format has no pixel size".to_string()))? as u64;
+        let bytes = u64::from(w) * u64::from(h) * u64::from(d) * pixel_size;
+        let staging = BufferWithMemory::new(
+            vk_device,
+            context.get_default_allocator(),
+            staging_buffer_create_info(bytes, vk::BufferUsageFlags::TRANSFER_DST, families),
+            MemoryRequirement::HOST_VISIBLE,
+        )?;
+        staged.push((*aspect, *aspect_format, staging));
+    }
 
     let cmd_pool = make_command_pool(vk_device, queue_family_index)?;
     let cmd_buffer = allocate_command_buffer(vk_device, *cmd_pool, vk::CommandBufferLevel::PRIMARY)?;
@@ -377,26 +457,38 @@ fn read_image(context: &Context<'_>, image: vk::Image, parms: &ImageParms, dst: 
             &[pre],
         );
 
-        let region = vk::BufferImageCopy {
-            buffer_offset: 0,
-            buffer_row_length: extent.width,
-            buffer_image_height: extent.height,
-            image_subresource: vk::ImageSubresourceLayers {
-                aspect_mask: aspect,
-                mip_level: 0,
-                base_array_layer: 0,
-                layer_count: parms.array_size(),
-            },
-            image_offset: vk::Offset3D { x: 0, y: 0, z: 0 },
-            image_extent: extent,
-        };
-        vk_device.cmd_copy_image_to_buffer(*cmd_buffer, image, src_layout, staging.get(), &[region]);
+        for (aspect, _, staging) in &staged {
+            let region = vk::BufferImageCopy {
+                buffer_offset: 0,
+                buffer_row_length: extent.width,
+                buffer_image_height: extent.height,
+                image_subresource: vk::ImageSubresourceLayers {
+                    aspect_mask: *aspect,
+                    mip_level: 0,
+                    base_array_layer: 0,
+                    layer_count: parms.array_size(),
+                },
+                image_offset: vk::Offset3D { x: 0, y: 0, z: 0 },
+                image_extent: extent,
+            };
+            vk_device.cmd_copy_image_to_buffer(*cmd_buffer, image, src_layout, staging.get(), &[region]);
+        }
     }
     end_command_buffer(vk_device, *cmd_buffer)?;
     submit_commands_and_wait(vk_device, queue, *cmd_buffer)?;
 
-    invalidate_alloc(vk_device, staging.get_allocation())?;
-    unsafe { std::ptr::copy_nonoverlapping(staging.get_allocation().get_host_ptr().cast_const(), dst.data_mut().as_mut_ptr(), bytes as usize) };
+    for (aspect, aspect_format, staging) in &staged {
+        invalidate_alloc(vk_device, staging.get_allocation())?;
+        if *aspect_format == dst.format() {
+            let len = dst.data().len();
+            unsafe { std::ptr::copy_nonoverlapping(staging.get_allocation().get_host_ptr().cast_const(), dst.data_mut().as_mut_ptr(), len) };
+        } else {
+            let mut level = TextureLevel::new(*aspect_format, w, h, d)?;
+            let len = level.data().len();
+            unsafe { std::ptr::copy_nonoverlapping(staging.get_allocation().get_host_ptr().cast_const(), level.data_mut().as_mut_ptr(), len) };
+            transfer_aspect(dst, *aspect, &mut level, false);
+        }
+    }
     Ok(())
 }
 
@@ -1814,6 +1906,8 @@ pub struct CopyImageToImageCase {
     needs_maintenance5: bool,
     /// Copying a 3D image into a 2D one needs VK_KHR_maintenance1.
     needs_maintenance1: bool,
+    /// The `_separate_layouts` variants transition the two aspects independently.
+    needs_separate_depth_stencil_layouts: bool,
     /// `ImageParms::operationLayout` per side. The all_formats and dimensions groups
     /// vary these independently, which is the whole of their `<src>_<dst>` name suffix;
     /// `None` means the default for that side, or GENERAL when the group asks for it.
@@ -1838,6 +1932,9 @@ impl TestCase for CopyImageToImageCase {
         }
         if self.needs_maintenance1 {
             context.require_device_functionality("VK_KHR_maintenance1")?;
+        }
+        if self.needs_separate_depth_stencil_layouts {
+            context.require_device_functionality("VK_KHR_separate_depth_stencil_layouts")?;
         }
         select_queue(context, self.queue_selection)?;
 
@@ -2122,6 +2219,7 @@ fn add_image_to_image_simple_tests(group: &mut tcu::TestCaseGroup, gp: &GroupPar
             clear_destination_with_red: clear,
             needs_maintenance5: false,
             needs_maintenance1: false,
+            needs_separate_depth_stencil_layouts: false,
             src_operation_layout: None,
             dst_operation_layout: None,
             allocation_kind: gp.allocation_kind,
@@ -2267,6 +2365,7 @@ fn add_image_to_image_3d_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams)
             clear_destination_with_red: false,
             needs_maintenance5: false,
             needs_maintenance1: false,
+            needs_separate_depth_stencil_layouts: false,
             src_operation_layout: None,
             dst_operation_layout: None,
             allocation_kind: gp.allocation_kind,
@@ -2383,6 +2482,7 @@ fn add_image_to_image_array_tests(group: &mut tcu::TestCaseGroup, gp: &GroupPara
             clear_destination_with_red: false,
             needs_maintenance5,
             needs_maintenance1: false,
+            needs_separate_depth_stencil_layouts: false,
             src_operation_layout: None,
             dst_operation_layout: None,
             allocation_kind: gp.allocation_kind,
@@ -2453,6 +2553,7 @@ fn add_image_to_image_cube_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParam
             clear_destination_with_red: false,
             needs_maintenance5: false,
             needs_maintenance1: false,
+            needs_separate_depth_stencil_layouts: false,
             src_operation_layout: None,
             dst_operation_layout: None,
             allocation_kind: gp.allocation_kind,
@@ -2568,6 +2669,7 @@ fn add_image_to_image_dimensions_tests(group: &mut tcu::TestCaseGroup, gp: &Grou
                                 clear_destination_with_red: false,
                                 needs_maintenance5: false,
                                 needs_maintenance1: false,
+                                needs_separate_depth_stencil_layouts: false,
                                 src_operation_layout: Some(src_layout),
                                 dst_operation_layout: Some(dst_layout),
                                 allocation_kind: gp.allocation_kind,
@@ -2768,6 +2870,7 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 needs_maintenance5: false,
                 needs_maintenance1: false,
                 src_fill: FillMode::White,
+                has_ds_aspects_variant: false,
                 cross_format: false,
             },
         ),
@@ -2782,6 +2885,7 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 needs_maintenance5: true,
                 needs_maintenance1: false,
                 src_fill: FillMode::White,
+                has_ds_aspects_variant: false,
                 cross_format: false,
             },
         ),
@@ -2796,6 +2900,7 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 needs_maintenance5: true,
                 needs_maintenance1: false,
                 src_fill: FillMode::White,
+                has_ds_aspects_variant: false,
                 cross_format: false,
             },
         ),
@@ -2810,6 +2915,7 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 needs_maintenance5: true,
                 needs_maintenance1: false,
                 src_fill: FillMode::White,
+                has_ds_aspects_variant: true,
                 cross_format: true,
             },
         ),
@@ -2824,6 +2930,7 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 needs_maintenance5: false,
                 needs_maintenance1: false,
                 src_fill: FillMode::RandomGray,
+                has_ds_aspects_variant: true,
                 cross_format: true,
             },
         ),
@@ -2838,6 +2945,7 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 needs_maintenance5: false,
                 needs_maintenance1: true,
                 src_fill: FillMode::RandomGray,
+                has_ds_aspects_variant: true,
                 cross_format: true,
             },
         ),
@@ -2852,6 +2960,7 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 needs_maintenance5: true,
                 needs_maintenance1: false,
                 src_fill: FillMode::White,
+                has_ds_aspects_variant: false,
                 cross_format: false,
             },
         ),
@@ -2866,6 +2975,7 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 needs_maintenance5: false,
                 needs_maintenance1: true,
                 src_fill: FillMode::White,
+                has_ds_aspects_variant: false,
                 cross_format: false,
             },
         ),
@@ -2880,6 +2990,7 @@ fn all_formats_same_format_blocks() -> Vec<(&'static str, AllFormatsBlock)> {
                 needs_maintenance5: false,
                 needs_maintenance1: false,
                 src_fill: FillMode::White,
+                has_ds_aspects_variant: false,
                 cross_format: false,
             },
         ),
@@ -2901,6 +3012,10 @@ struct AllFormatsBlock {
     /// `src.image.fillMode` - most blocks use white, the two 2D-source ones use the
     /// random-grey fill.
     src_fill: FillMode,
+    /// The 2D-source blocks add a third depth/stencil variant that copies both aspects
+    /// in one region instead of one region per aspect - legal for vkCmdCopyImage, which
+    /// is what makes it worth testing separately.
+    has_ds_aspects_variant: bool,
     /// When set, the destination iterates over the whole compatible-format group
     /// instead of following the source. Upstream expresses this by passing the group
     /// rather than a null list.
@@ -2972,6 +3087,7 @@ fn add_image_to_image_all_formats_block(group: &mut tcu::TestCaseGroup, gp: &Gro
                             clear_destination_with_red: false,
                             needs_maintenance5: block.needs_maintenance5,
                             needs_maintenance1: block.needs_maintenance1,
+                            needs_separate_depth_stencil_layouts: false,
                             src_operation_layout: Some(src_layout),
                             dst_operation_layout: Some(dst_layout),
                             allocation_kind: gp.allocation_kind,
@@ -2988,12 +3104,11 @@ fn add_image_to_image_all_formats_block(group: &mut tcu::TestCaseGroup, gp: &Gro
     }
 }
 
-/// `addImageToImageAllFormatsDepthStencilTests`, single-aspect formats only.
+/// `addImageToImageAllFormatsDepthStencilTests`
 ///
-/// A combined depth/stencil image cannot be staged with one buffer-to-image copy - a
-/// copy region names exactly one aspect - so the three combined formats and their
-/// `_separate_layouts` siblings need a per-aspect upload path that is not ported yet
-/// and are absent rather than answered.
+/// A combined format copies one region per aspect, and gets a `_separate_layouts`
+/// sibling on top - the layout pair is the same, but the aspects are transitioned
+/// independently, which needs VK_KHR_separate_depth_stencil_layouts.
 fn add_image_to_image_all_formats_depth_stencil(group: &mut tcu::TestCaseGroup, gp: &GroupParams, block: &AllFormatsBlock) {
     const SRC_LAYOUTS: [vk::ImageLayout; 2] = [vk::ImageLayout::TRANSFER_SRC_OPTIMAL, vk::ImageLayout::GENERAL];
     const DST_LAYOUTS: [vk::ImageLayout; 2] = [vk::ImageLayout::TRANSFER_DST_OPTIMAL, vk::ImageLayout::GENERAL];
@@ -3002,49 +3117,80 @@ fn add_image_to_image_all_formats_depth_stencil(group: &mut tcu::TestCaseGroup, 
         let aspects = get_aspect_flags(format);
         let has_depth = aspects.contains(vk::ImageAspectFlags::DEPTH);
         let has_stencil = aspects.contains(vk::ImageAspectFlags::STENCIL);
-        if has_depth && has_stencil {
-            continue;
-        }
 
         // One region per aspect present, for each of the block's geometries.
-        let aspect = if has_depth { vk::ImageAspectFlags::DEPTH } else { vk::ImageAspectFlags::STENCIL };
-        let regions: Vec<ImageCopy> = block.regions.iter().map(|r| ImageCopy { aspect_mask: aspect, ..*r }).collect();
-
-        let mut format_group = tcu::TestCaseGroup::new(format!("{name}_{name}"));
-        for src_layout in SRC_LAYOUTS {
-            for dst_layout in DST_LAYOUTS {
-                format_group.add_child(Box::new(CopyImageToImageCase {
-                    name: format!("{}_{}", image_layout_case_name(src_layout), image_layout_case_name(dst_layout)),
-                    src: ImageParms {
-                        image_type: block.src_type,
-                        format,
-                        extent: block.src_extent,
-                        tiling: vk::ImageTiling::OPTIMAL,
-                        fill_mode: FillMode::Gradient,
-                        create_flags: None,
-                    },
-                    dst: ImageParms {
-                        image_type: block.dst_type,
-                        format,
-                        extent: block.dst_extent,
-                        tiling: vk::ImageTiling::OPTIMAL,
-                        fill_mode: FillMode::Gradient,
-                        create_flags: None,
-                    },
-                    regions: regions.clone(),
-                    clear_destination_with_red: false,
-                    needs_maintenance5: block.needs_maintenance5,
-                    needs_maintenance1: block.needs_maintenance1,
-                    src_operation_layout: Some(src_layout),
-                    dst_operation_layout: Some(dst_layout),
-                    allocation_kind: gp.allocation_kind,
-                    command_variant: gp.command_variant,
-                    queue_selection: gp.queue_selection,
-                    general_layout: gp.general_layout,
-                }) as Box<dyn TestCase>);
+        let mut regions = Vec::new();
+        for r in &block.regions {
+            if has_depth {
+                regions.push(ImageCopy {
+                    aspect_mask: vk::ImageAspectFlags::DEPTH,
+                    ..*r
+                });
+            }
+            if has_stencil {
+                regions.push(ImageCopy {
+                    aspect_mask: vk::ImageAspectFlags::STENCIL,
+                    ..*r
+                });
             }
         }
-        group.add_child(format_group);
+
+        // Both aspects in one region, which is what the third variant exists to cover.
+        let combined_regions: Vec<ImageCopy> = block
+            .regions
+            .iter()
+            .map(|r| ImageCopy {
+                aspect_mask: vk::ImageAspectFlags::DEPTH | vk::ImageAspectFlags::STENCIL,
+                ..*r
+            })
+            .collect();
+
+        let mut variants: Vec<(&str, bool, &Vec<ImageCopy>)> = vec![("", false, &regions)];
+        if has_depth && has_stencil {
+            variants.push(("_separate_layouts", true, &regions));
+            if block.has_ds_aspects_variant {
+                variants.push(("_depth_stencil_aspects", false, &combined_regions));
+            }
+        }
+
+        for &(suffix, separate_layouts, variant_regions) in &variants {
+            let mut format_group = tcu::TestCaseGroup::new(format!("{name}_{name}{suffix}"));
+            for src_layout in SRC_LAYOUTS {
+                for dst_layout in DST_LAYOUTS {
+                    format_group.add_child(Box::new(CopyImageToImageCase {
+                        name: format!("{}_{}", image_layout_case_name(src_layout), image_layout_case_name(dst_layout)),
+                        src: ImageParms {
+                            image_type: block.src_type,
+                            format,
+                            extent: block.src_extent,
+                            tiling: vk::ImageTiling::OPTIMAL,
+                            fill_mode: FillMode::Gradient,
+                            create_flags: None,
+                        },
+                        dst: ImageParms {
+                            image_type: block.dst_type,
+                            format,
+                            extent: block.dst_extent,
+                            tiling: vk::ImageTiling::OPTIMAL,
+                            fill_mode: FillMode::Gradient,
+                            create_flags: None,
+                        },
+                        regions: variant_regions.clone(),
+                        clear_destination_with_red: false,
+                        needs_maintenance5: block.needs_maintenance5,
+                        needs_maintenance1: block.needs_maintenance1,
+                        needs_separate_depth_stencil_layouts: separate_layouts,
+                        src_operation_layout: Some(src_layout),
+                        dst_operation_layout: Some(dst_layout),
+                        allocation_kind: gp.allocation_kind,
+                        command_variant: gp.command_variant,
+                        queue_selection: gp.queue_selection,
+                        general_layout: gp.general_layout,
+                    }) as Box<dyn TestCase>);
+                }
+            }
+            group.add_child(format_group);
+        }
     }
 }
 

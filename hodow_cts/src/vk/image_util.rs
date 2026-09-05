@@ -181,3 +181,22 @@ impl std::ops::Deref for ImageWithMemory<'_> {
         &self.image
     }
 }
+
+/// `getDepthCopyFormat`
+pub fn get_depth_copy_format(combined_format: vk::Format) -> Option<crate::tcu::TextureFormat> {
+    match combined_format {
+        vk::Format::D16_UNORM | vk::Format::X8_D24_UNORM_PACK32 | vk::Format::D32_SFLOAT => crate::tcu::map_vk_format(combined_format),
+        vk::Format::D16_UNORM_S8_UINT => crate::tcu::map_vk_format(vk::Format::D16_UNORM),
+        vk::Format::D24_UNORM_S8_UINT => crate::tcu::map_vk_format(vk::Format::X8_D24_UNORM_PACK32),
+        vk::Format::D32_SFLOAT_S8_UINT => crate::tcu::map_vk_format(vk::Format::D32_SFLOAT),
+        _ => None,
+    }
+}
+
+/// `getStencilCopyFormat`
+pub fn get_stencil_copy_format(combined_format: vk::Format) -> Option<crate::tcu::TextureFormat> {
+    match combined_format {
+        vk::Format::S8_UINT | vk::Format::D16_UNORM_S8_UINT | vk::Format::D24_UNORM_S8_UINT | vk::Format::D32_SFLOAT_S8_UINT => crate::tcu::map_vk_format(vk::Format::S8_UINT),
+        _ => None,
+    }
+}
