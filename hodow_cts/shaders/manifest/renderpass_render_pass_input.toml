@@ -23,6 +23,9 @@ programs = [
 attachment_type = { type = "str", value = "vec4" }
 input_channel_class = { type = "str", value = "float" }
 input_component_count = { type = "u32", value = 1 }
+output_component_count = { type = "u32", value = 4 }
+output_attachment_index = { type = "u32", value = 1 }
+multisample = { type = "bool", value = false }
 
 [[case]]
 name = "input_float2"
@@ -38,6 +41,9 @@ programs = [
 attachment_type = { type = "str", value = "vec4" }
 input_channel_class = { type = "str", value = "float" }
 input_component_count = { type = "u32", value = 2 }
+output_component_count = { type = "u32", value = 4 }
+output_attachment_index = { type = "u32", value = 1 }
+multisample = { type = "bool", value = false }
 
 [[case]]
 name = "input_float3"
@@ -53,6 +59,9 @@ programs = [
 attachment_type = { type = "str", value = "vec4" }
 input_channel_class = { type = "str", value = "float" }
 input_component_count = { type = "u32", value = 3 }
+output_component_count = { type = "u32", value = 4 }
+output_attachment_index = { type = "u32", value = 1 }
+multisample = { type = "bool", value = false }
 
 [[case]]
 name = "input_float4"
@@ -68,6 +77,9 @@ programs = [
 attachment_type = { type = "str", value = "vec4" }
 input_channel_class = { type = "str", value = "float" }
 input_component_count = { type = "u32", value = 4 }
+output_component_count = { type = "u32", value = 4 }
+output_attachment_index = { type = "u32", value = 1 }
+multisample = { type = "bool", value = false }
 
 [[case]]
 name = "input_sint1"
@@ -83,6 +95,9 @@ programs = [
 attachment_type = { type = "str", value = "ivec4" }
 input_channel_class = { type = "str", value = "sint" }
 input_component_count = { type = "u32", value = 1 }
+output_component_count = { type = "u32", value = 4 }
+output_attachment_index = { type = "u32", value = 1 }
+multisample = { type = "bool", value = false }
 
 [[case]]
 name = "input_sint2"
@@ -98,6 +113,9 @@ programs = [
 attachment_type = { type = "str", value = "ivec4" }
 input_channel_class = { type = "str", value = "sint" }
 input_component_count = { type = "u32", value = 2 }
+output_component_count = { type = "u32", value = 4 }
+output_attachment_index = { type = "u32", value = 1 }
+multisample = { type = "bool", value = false }
 
 [[case]]
 name = "input_sint4"
@@ -113,6 +131,9 @@ programs = [
 attachment_type = { type = "str", value = "ivec4" }
 input_channel_class = { type = "str", value = "sint" }
 input_component_count = { type = "u32", value = 4 }
+output_component_count = { type = "u32", value = 4 }
+output_attachment_index = { type = "u32", value = 1 }
+multisample = { type = "bool", value = false }
 
 [[case]]
 name = "input_uint1"
@@ -128,6 +149,9 @@ programs = [
 attachment_type = { type = "str", value = "uvec4" }
 input_channel_class = { type = "str", value = "uint" }
 input_component_count = { type = "u32", value = 1 }
+output_component_count = { type = "u32", value = 4 }
+output_attachment_index = { type = "u32", value = 1 }
+multisample = { type = "bool", value = false }
 
 [[case]]
 name = "input_uint2"
@@ -143,6 +167,9 @@ programs = [
 attachment_type = { type = "str", value = "uvec4" }
 input_channel_class = { type = "str", value = "uint" }
 input_component_count = { type = "u32", value = 2 }
+output_component_count = { type = "u32", value = 4 }
+output_attachment_index = { type = "u32", value = 1 }
+multisample = { type = "bool", value = false }
 
 [[case]]
 name = "input_uint4"
@@ -158,3 +185,366 @@ programs = [
 attachment_type = { type = "str", value = "uvec4" }
 input_channel_class = { type = "str", value = "uint" }
 input_component_count = { type = "u32", value = 4 }
+output_component_count = { type = "u32", value = 4 }
+output_attachment_index = { type = "u32", value = 1 }
+multisample = { type = "bool", value = false }
+
+[[case]]
+name = "self_dep_float1"
+rust_const = "RENDER_PASS_SELF_DEP_FLOAT1"
+rust_type = "InputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/render_pass_grid.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/self_dep_float1.frag", stage = "frag" },
+]
+[case.params]
+attachment_type = { type = "str", value = "vec4" }
+input_channel_class = { type = "str", value = "float" }
+input_component_count = { type = "u32", value = 1 }
+output_component_count = { type = "u32", value = 1 }
+output_attachment_index = { type = "u32", value = 0 }
+multisample = { type = "bool", value = false }
+
+[[case]]
+name = "self_dep_float1_ms"
+rust_const = "RENDER_PASS_SELF_DEP_FLOAT1_MS"
+rust_type = "InputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/render_pass_grid.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/self_dep_float1_ms.frag", stage = "frag" },
+]
+[case.params]
+attachment_type = { type = "str", value = "vec4" }
+input_channel_class = { type = "str", value = "float" }
+input_component_count = { type = "u32", value = 1 }
+output_component_count = { type = "u32", value = 1 }
+output_attachment_index = { type = "u32", value = 0 }
+multisample = { type = "bool", value = true }
+
+[[case]]
+name = "self_dep_float2"
+rust_const = "RENDER_PASS_SELF_DEP_FLOAT2"
+rust_type = "InputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/render_pass_grid.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/self_dep_float2.frag", stage = "frag" },
+]
+[case.params]
+attachment_type = { type = "str", value = "vec4" }
+input_channel_class = { type = "str", value = "float" }
+input_component_count = { type = "u32", value = 2 }
+output_component_count = { type = "u32", value = 2 }
+output_attachment_index = { type = "u32", value = 0 }
+multisample = { type = "bool", value = false }
+
+[[case]]
+name = "self_dep_float2_ms"
+rust_const = "RENDER_PASS_SELF_DEP_FLOAT2_MS"
+rust_type = "InputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/render_pass_grid.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/self_dep_float2_ms.frag", stage = "frag" },
+]
+[case.params]
+attachment_type = { type = "str", value = "vec4" }
+input_channel_class = { type = "str", value = "float" }
+input_component_count = { type = "u32", value = 2 }
+output_component_count = { type = "u32", value = 2 }
+output_attachment_index = { type = "u32", value = 0 }
+multisample = { type = "bool", value = true }
+
+[[case]]
+name = "self_dep_float3"
+rust_const = "RENDER_PASS_SELF_DEP_FLOAT3"
+rust_type = "InputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/render_pass_grid.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/self_dep_float3.frag", stage = "frag" },
+]
+[case.params]
+attachment_type = { type = "str", value = "vec4" }
+input_channel_class = { type = "str", value = "float" }
+input_component_count = { type = "u32", value = 3 }
+output_component_count = { type = "u32", value = 3 }
+output_attachment_index = { type = "u32", value = 0 }
+multisample = { type = "bool", value = false }
+
+[[case]]
+name = "self_dep_float3_ms"
+rust_const = "RENDER_PASS_SELF_DEP_FLOAT3_MS"
+rust_type = "InputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/render_pass_grid.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/self_dep_float3_ms.frag", stage = "frag" },
+]
+[case.params]
+attachment_type = { type = "str", value = "vec4" }
+input_channel_class = { type = "str", value = "float" }
+input_component_count = { type = "u32", value = 3 }
+output_component_count = { type = "u32", value = 3 }
+output_attachment_index = { type = "u32", value = 0 }
+multisample = { type = "bool", value = true }
+
+[[case]]
+name = "self_dep_float4"
+rust_const = "RENDER_PASS_SELF_DEP_FLOAT4"
+rust_type = "InputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/render_pass_grid.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/self_dep_float4.frag", stage = "frag" },
+]
+[case.params]
+attachment_type = { type = "str", value = "vec4" }
+input_channel_class = { type = "str", value = "float" }
+input_component_count = { type = "u32", value = 4 }
+output_component_count = { type = "u32", value = 4 }
+output_attachment_index = { type = "u32", value = 0 }
+multisample = { type = "bool", value = false }
+
+[[case]]
+name = "self_dep_float4_ms"
+rust_const = "RENDER_PASS_SELF_DEP_FLOAT4_MS"
+rust_type = "InputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/render_pass_grid.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/self_dep_float4_ms.frag", stage = "frag" },
+]
+[case.params]
+attachment_type = { type = "str", value = "vec4" }
+input_channel_class = { type = "str", value = "float" }
+input_component_count = { type = "u32", value = 4 }
+output_component_count = { type = "u32", value = 4 }
+output_attachment_index = { type = "u32", value = 0 }
+multisample = { type = "bool", value = true }
+
+[[case]]
+name = "self_dep_sint1"
+rust_const = "RENDER_PASS_SELF_DEP_SINT1"
+rust_type = "InputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/render_pass_grid.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/self_dep_sint1.frag", stage = "frag" },
+]
+[case.params]
+attachment_type = { type = "str", value = "ivec4" }
+input_channel_class = { type = "str", value = "sint" }
+input_component_count = { type = "u32", value = 1 }
+output_component_count = { type = "u32", value = 1 }
+output_attachment_index = { type = "u32", value = 0 }
+multisample = { type = "bool", value = false }
+
+[[case]]
+name = "self_dep_sint1_ms"
+rust_const = "RENDER_PASS_SELF_DEP_SINT1_MS"
+rust_type = "InputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/render_pass_grid.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/self_dep_sint1_ms.frag", stage = "frag" },
+]
+[case.params]
+attachment_type = { type = "str", value = "ivec4" }
+input_channel_class = { type = "str", value = "sint" }
+input_component_count = { type = "u32", value = 1 }
+output_component_count = { type = "u32", value = 1 }
+output_attachment_index = { type = "u32", value = 0 }
+multisample = { type = "bool", value = true }
+
+[[case]]
+name = "self_dep_sint2"
+rust_const = "RENDER_PASS_SELF_DEP_SINT2"
+rust_type = "InputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/render_pass_grid.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/self_dep_sint2.frag", stage = "frag" },
+]
+[case.params]
+attachment_type = { type = "str", value = "ivec4" }
+input_channel_class = { type = "str", value = "sint" }
+input_component_count = { type = "u32", value = 2 }
+output_component_count = { type = "u32", value = 2 }
+output_attachment_index = { type = "u32", value = 0 }
+multisample = { type = "bool", value = false }
+
+[[case]]
+name = "self_dep_sint2_ms"
+rust_const = "RENDER_PASS_SELF_DEP_SINT2_MS"
+rust_type = "InputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/render_pass_grid.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/self_dep_sint2_ms.frag", stage = "frag" },
+]
+[case.params]
+attachment_type = { type = "str", value = "ivec4" }
+input_channel_class = { type = "str", value = "sint" }
+input_component_count = { type = "u32", value = 2 }
+output_component_count = { type = "u32", value = 2 }
+output_attachment_index = { type = "u32", value = 0 }
+multisample = { type = "bool", value = true }
+
+[[case]]
+name = "self_dep_sint4"
+rust_const = "RENDER_PASS_SELF_DEP_SINT4"
+rust_type = "InputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/render_pass_grid.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/self_dep_sint4.frag", stage = "frag" },
+]
+[case.params]
+attachment_type = { type = "str", value = "ivec4" }
+input_channel_class = { type = "str", value = "sint" }
+input_component_count = { type = "u32", value = 4 }
+output_component_count = { type = "u32", value = 4 }
+output_attachment_index = { type = "u32", value = 0 }
+multisample = { type = "bool", value = false }
+
+[[case]]
+name = "self_dep_sint4_ms"
+rust_const = "RENDER_PASS_SELF_DEP_SINT4_MS"
+rust_type = "InputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/render_pass_grid.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/self_dep_sint4_ms.frag", stage = "frag" },
+]
+[case.params]
+attachment_type = { type = "str", value = "ivec4" }
+input_channel_class = { type = "str", value = "sint" }
+input_component_count = { type = "u32", value = 4 }
+output_component_count = { type = "u32", value = 4 }
+output_attachment_index = { type = "u32", value = 0 }
+multisample = { type = "bool", value = true }
+
+[[case]]
+name = "self_dep_uint1"
+rust_const = "RENDER_PASS_SELF_DEP_UINT1"
+rust_type = "InputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/render_pass_grid.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/self_dep_uint1.frag", stage = "frag" },
+]
+[case.params]
+attachment_type = { type = "str", value = "uvec4" }
+input_channel_class = { type = "str", value = "uint" }
+input_component_count = { type = "u32", value = 1 }
+output_component_count = { type = "u32", value = 1 }
+output_attachment_index = { type = "u32", value = 0 }
+multisample = { type = "bool", value = false }
+
+[[case]]
+name = "self_dep_uint1_ms"
+rust_const = "RENDER_PASS_SELF_DEP_UINT1_MS"
+rust_type = "InputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/render_pass_grid.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/self_dep_uint1_ms.frag", stage = "frag" },
+]
+[case.params]
+attachment_type = { type = "str", value = "uvec4" }
+input_channel_class = { type = "str", value = "uint" }
+input_component_count = { type = "u32", value = 1 }
+output_component_count = { type = "u32", value = 1 }
+output_attachment_index = { type = "u32", value = 0 }
+multisample = { type = "bool", value = true }
+
+[[case]]
+name = "self_dep_uint2"
+rust_const = "RENDER_PASS_SELF_DEP_UINT2"
+rust_type = "InputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/render_pass_grid.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/self_dep_uint2.frag", stage = "frag" },
+]
+[case.params]
+attachment_type = { type = "str", value = "uvec4" }
+input_channel_class = { type = "str", value = "uint" }
+input_component_count = { type = "u32", value = 2 }
+output_component_count = { type = "u32", value = 2 }
+output_attachment_index = { type = "u32", value = 0 }
+multisample = { type = "bool", value = false }
+
+[[case]]
+name = "self_dep_uint2_ms"
+rust_const = "RENDER_PASS_SELF_DEP_UINT2_MS"
+rust_type = "InputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/render_pass_grid.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/self_dep_uint2_ms.frag", stage = "frag" },
+]
+[case.params]
+attachment_type = { type = "str", value = "uvec4" }
+input_channel_class = { type = "str", value = "uint" }
+input_component_count = { type = "u32", value = 2 }
+output_component_count = { type = "u32", value = 2 }
+output_attachment_index = { type = "u32", value = 0 }
+multisample = { type = "bool", value = true }
+
+[[case]]
+name = "self_dep_uint4"
+rust_const = "RENDER_PASS_SELF_DEP_UINT4"
+rust_type = "InputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/render_pass_grid.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/self_dep_uint4.frag", stage = "frag" },
+]
+[case.params]
+attachment_type = { type = "str", value = "uvec4" }
+input_channel_class = { type = "str", value = "uint" }
+input_component_count = { type = "u32", value = 4 }
+output_component_count = { type = "u32", value = 4 }
+output_attachment_index = { type = "u32", value = 0 }
+multisample = { type = "bool", value = false }
+
+[[case]]
+name = "self_dep_uint4_ms"
+rust_const = "RENDER_PASS_SELF_DEP_UINT4_MS"
+rust_type = "InputProgram"
+programs = [
+    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "0-frag", template = "renderpass/render_pass_grid.frag", stage = "frag" },
+    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },
+    { name = "1-frag", template = "renderpass/generated/self_dep_uint4_ms.frag", stage = "frag" },
+]
+[case.params]
+attachment_type = { type = "str", value = "uvec4" }
+input_channel_class = { type = "str", value = "uint" }
+input_component_count = { type = "u32", value = 4 }
+output_component_count = { type = "u32", value = 4 }
+output_attachment_index = { type = "u32", value = 0 }
+multisample = { type = "bool", value = true }

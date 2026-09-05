@@ -213,6 +213,41 @@ pub struct GridProgram {
     pub programs: BinaryCollection,
 }
 
+/// Every entry the shader generator emitted, so the lookup is a search over what
+/// exists rather than a second list that has to be kept in step with it.
+static ALL_INPUT_PROGRAMS: &[&InputProgram] = &[
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_INPUT_FLOAT1,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_INPUT_FLOAT2,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_INPUT_FLOAT3,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_INPUT_FLOAT4,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_INPUT_SINT1,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_INPUT_SINT2,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_INPUT_SINT4,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_INPUT_UINT1,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_INPUT_UINT2,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_INPUT_UINT4,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_SELF_DEP_FLOAT1,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_SELF_DEP_FLOAT1_MS,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_SELF_DEP_FLOAT2,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_SELF_DEP_FLOAT2_MS,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_SELF_DEP_FLOAT3,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_SELF_DEP_FLOAT3_MS,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_SELF_DEP_FLOAT4,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_SELF_DEP_FLOAT4_MS,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_SELF_DEP_SINT1,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_SELF_DEP_SINT1_MS,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_SELF_DEP_SINT2,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_SELF_DEP_SINT2_MS,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_SELF_DEP_SINT4,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_SELF_DEP_SINT4_MS,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_SELF_DEP_UINT1,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_SELF_DEP_UINT1_MS,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_SELF_DEP_UINT2,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_SELF_DEP_UINT2_MS,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_SELF_DEP_UINT4,
+    &crate::generated::shaders::renderpass_render_pass_input::RENDER_PASS_SELF_DEP_UINT4_MS,
+];
+
 /// The manifest declares the input-attachment cases with this: the subpass-0 and
 /// subpass-1 shaders together, plus what the generator built them for.
 pub struct InputProgram {
@@ -220,6 +255,12 @@ pub struct InputProgram {
     pub attachment_type: &'static str,
     pub input_channel_class: &'static str,
     pub input_component_count: u32,
+    pub output_component_count: u32,
+    /// Which attachment the reading subpass writes. It is part of the key because it
+    /// feeds `index`, and a self-dependency case can otherwise be indistinguishable
+    /// from a two-subpass one on every other field.
+    pub output_attachment_index: u32,
+    pub multisample: bool,
     pub programs: BinaryCollection,
 }
 
@@ -672,6 +713,9 @@ struct AttachmentResources<'a> {
     image: ImageWithMemory<'a>,
     view: Unique<'a, vk::ImageView>,
     buffer: BufferWithMemory<'a>,
+    /// A multisampled attachment cannot be copied to a buffer, so it is resolved into
+    /// this single-sampled image first.
+    resolve_image: Option<ImageWithMemory<'a>>,
 }
 
 /// `RenderPassTestCase`
@@ -686,14 +730,50 @@ impl TestCase for RenderPassTestCase {
     }
 
     fn check_support(&self, context: &Context) -> Result<(), TestError> {
+        let render_pass_info = &self.config.render_pass;
+
+        if render_pass_info.attachments.iter().any(|a| a.format == vk::Format::A8_UNORM) {
+            context.require_device_functionality("VK_KHR_maintenance5")?;
+        }
+
         if self.config.render_pass_type == RenderPassType::RenderPass2 {
             context.require_device_functionality("VK_KHR_create_renderpass2")?;
         }
 
+        if self.config.allocation_kind == AllocationKind::Dedicated {
+            context.require_device_functionality("VK_KHR_dedicated_allocation")?;
+        }
+
+        // `VkRenderPassInputAttachmentAspectCreateInfo` is a maintenance2 structure.
+        if !render_pass_info.input_aspects.is_empty() {
+            context.require_device_functionality("VK_KHR_maintenance2")?;
+        }
+
+        // A multisampled attachment is only usable if the format supports the count.
+        let instance = context.get_instance();
+        for attachment in &render_pass_info.attachments {
+            if attachment.samples == vk::SampleCountFlags::_1 {
+                continue;
+            }
+            let properties = unsafe {
+                instance.get_physical_device_image_format_properties(
+                    context.get_physical_device(),
+                    attachment.format,
+                    vk::ImageType::_2D,
+                    vk::ImageTiling::OPTIMAL,
+                    vk::ImageUsageFlags::COLOR_ATTACHMENT,
+                    vk::ImageCreateFlags::empty(),
+                )
+            };
+            match properties {
+                Ok(props) if props.sample_counts.contains(attachment.samples) => {}
+                _ => return Err(TestError::NotSupported("MSAA sample count not supported for format".to_string())),
+            }
+        }
+
         // `RenderPassTestCase::checkTextureFormatSupport` - every attachment has to be
         // usable as the kind of attachment the subpasses reference it as.
-        let instance = context.get_instance();
-        for attachment in &self.config.render_pass.attachments {
+        for attachment in &render_pass_info.attachments {
             let properties = unsafe { instance.get_physical_device_format_properties(context.get_physical_device(), attachment.format) };
             let format = map_vk_format(attachment.format).ok_or_else(|| TestError::NotPorted(format!("no tcu format for {:?}", attachment.format)))?;
 
@@ -1153,7 +1233,26 @@ impl RenderPassTestInstance<'_> {
             MemoryRequirement::HOST_VISIBLE,
         )?;
 
-        Ok(AttachmentResources { image, view, buffer })
+        let resolve_image = if attachment.samples == vk::SampleCountFlags::_1 {
+            None
+        } else {
+            let info = vk::ImageCreateInfo {
+                samples: vk::SampleCountFlags::_1,
+                ..image_info
+            };
+            Some(if self.config.allocation_kind == AllocationKind::Dedicated {
+                ImageWithMemory::new_dedicated(device, allocator, info, MemoryRequirement::ANY)?
+            } else {
+                ImageWithMemory::new(device, allocator, info, MemoryRequirement::ANY)?
+            })
+        };
+
+        Ok(AttachmentResources {
+            image,
+            view,
+            buffer,
+            resolve_image,
+        })
     }
 
     fn create_vertex_buffer(&self, quad: RenderQuad) -> Result<BufferWithMemory<'_>, TestError> {
@@ -1515,6 +1614,74 @@ impl RenderPassTestInstance<'_> {
         }
 
         for resource in resources {
+            let source = match &resource.resolve_image {
+                Some(resolve) => {
+                    let range = make_image_subresource_range(vk::ImageAspectFlags::COLOR, 0, 1, 0, 1);
+                    let pre = make_image_memory_barrier(
+                        vk::AccessFlags::empty(),
+                        vk::AccessFlags::TRANSFER_WRITE,
+                        vk::ImageLayout::UNDEFINED,
+                        vk::ImageLayout::TRANSFER_DST_OPTIMAL,
+                        resolve.get(),
+                        range,
+                    );
+                    let layers = vk::ImageSubresourceLayers {
+                        aspect_mask: vk::ImageAspectFlags::COLOR,
+                        mip_level: 0,
+                        base_array_layer: 0,
+                        layer_count: 1,
+                    };
+                    let resolve_region = vk::ImageResolve {
+                        src_subresource: layers,
+                        src_offset: vk::Offset3D { x: 0, y: 0, z: 0 },
+                        dst_subresource: layers,
+                        dst_offset: vk::Offset3D { x: 0, y: 0, z: 0 },
+                        extent: vk::Extent3D {
+                            width: target_size[0],
+                            height: target_size[1],
+                            depth: 1,
+                        },
+                    };
+                    let post = make_image_memory_barrier(
+                        vk::AccessFlags::TRANSFER_WRITE,
+                        vk::AccessFlags::TRANSFER_READ,
+                        vk::ImageLayout::TRANSFER_DST_OPTIMAL,
+                        vk::ImageLayout::TRANSFER_SRC_OPTIMAL,
+                        resolve.get(),
+                        range,
+                    );
+                    unsafe {
+                        device.cmd_pipeline_barrier(
+                            command_buffer,
+                            vk::PipelineStageFlags::TRANSFER,
+                            vk::PipelineStageFlags::TRANSFER,
+                            vk::DependencyFlags::empty(),
+                            &[] as &[vk::MemoryBarrier],
+                            &[] as &[vk::BufferMemoryBarrier],
+                            &[pre],
+                        );
+                        device.cmd_resolve_image(
+                            command_buffer,
+                            resource.image.get(),
+                            vk::ImageLayout::TRANSFER_SRC_OPTIMAL,
+                            resolve.get(),
+                            vk::ImageLayout::TRANSFER_DST_OPTIMAL,
+                            &[resolve_region],
+                        );
+                        device.cmd_pipeline_barrier(
+                            command_buffer,
+                            vk::PipelineStageFlags::TRANSFER,
+                            vk::PipelineStageFlags::TRANSFER,
+                            vk::DependencyFlags::empty(),
+                            &[] as &[vk::MemoryBarrier],
+                            &[] as &[vk::BufferMemoryBarrier],
+                            &[post],
+                        );
+                    }
+                    resolve.get()
+                }
+                None => resource.image.get(),
+            };
             let region = vk::BufferImageCopy {
                 buffer_offset: 0,
                 buffer_row_length: 0,
@@ -1533,13 +1700,7 @@ impl RenderPassTestInstance<'_> {
                 },
             };
             unsafe {
-                device.cmd_copy_image_to_buffer(
-                    command_buffer,
-                    resource.image.get(),
-                    vk::ImageLayout::TRANSFER_SRC_OPTIMAL,
-                    resource.buffer.get(),
-                    &[region],
-                );
+                device.cmd_copy_image_to_buffer(command_buffer, source, vk::ImageLayout::TRANSFER_SRC_OPTIMAL, resource.buffer.get(), &[region]);
             }
         }
 
@@ -1741,6 +1902,19 @@ fn add_format_input_tests(format_group: &mut tcu::TestCaseGroup, format: vk::For
                 }
 
                 for (render_type_name, render_type) in render_types {
+                    add_self_dep_cases(
+                        &mut store_op_group,
+                        format,
+                        load_op,
+                        store_op,
+                        render_type,
+                        render_type_name,
+                        use_input_aspect,
+                        input_attachment_aspect_mask,
+                        allocation_kind,
+                        render_pass_type,
+                    );
+
                     let attachments = vec![
                         Attachment {
                             format,
@@ -1872,31 +2046,44 @@ impl<'a> RenderPassTestInstance<'a> {
     /// attachment's channel class and count; one that does not needs only the grid
     /// shader, which the input entries also carry, so a single entry covers both.
     fn programs_for_case(&self) -> &'static InputProgram {
-        use crate::generated::shaders::renderpass_render_pass_input as p;
-
-        let format = map_vk_format(self.config.render_pass.attachments[0].format).expect("checked in check_support");
+        let render_pass_info = &self.config.render_pass;
+        let format = map_vk_format(render_pass_info.attachments[0].format).expect("checked in check_support");
         let class = match format.channel_class() {
             TextureChannelClass::SignedInteger => "sint",
             TextureChannelClass::UnsignedInteger => "uint",
             _ => "float",
         };
-        let count = get_shader_num_channels(format.order) as u32;
+        let input_count = get_shader_num_channels(format.order) as u32;
 
-        let program = [
-            &p::RENDER_PASS_INPUT_FLOAT1,
-            &p::RENDER_PASS_INPUT_FLOAT2,
-            &p::RENDER_PASS_INPUT_FLOAT3,
-            &p::RENDER_PASS_INPUT_FLOAT4,
-            &p::RENDER_PASS_INPUT_SINT1,
-            &p::RENDER_PASS_INPUT_SINT2,
-            &p::RENDER_PASS_INPUT_SINT4,
-            &p::RENDER_PASS_INPUT_UINT1,
-            &p::RENDER_PASS_INPUT_UINT2,
-            &p::RENDER_PASS_INPUT_UINT4,
-        ]
-        .into_iter()
-        .find(|p| p.input_channel_class == class && p.input_component_count == count)
-        .expect("the generator covers every format in CORE_COLOR_FORMATS");
+        // A self-dependency subpass writes the attachment it reads, so its output is
+        // the source format; the two-subpass form always writes R8G8B8A8_UNORM.
+        let reading_subpass = render_pass_info.subpasses.iter().find(|s| !s.input_attachments.is_empty());
+        let (output_count, output_attachment_index, multisample) = match reading_subpass {
+            Some(subpass) => {
+                let output_index = subpass.color_attachments[0].attachment;
+                let output_format = map_vk_format(render_pass_info.attachments[output_index as usize].format).expect("checked in check_support");
+                let input_index = subpass.input_attachments[0].attachment as usize;
+                (
+                    get_shader_num_channels(output_format.order) as u32,
+                    output_index,
+                    render_pass_info.attachments[input_index].samples != vk::SampleCountFlags::_1,
+                )
+            }
+            // No subpass reads anything; any entry carries the grid shader this needs.
+            None => (4, 1, false),
+        };
+
+        let program = ALL_INPUT_PROGRAMS
+            .iter()
+            .copied()
+            .find(|p| {
+                p.input_channel_class == class
+                    && p.input_component_count == input_count
+                    && p.output_component_count == output_count
+                    && p.output_attachment_index == output_attachment_index
+                    && p.multisample == multisample
+            })
+            .expect("the generator covers every format in CORE_COLOR_FORMATS");
 
         debug_assert_eq!(program.attachment_type, attachment_type_name(format));
         program
@@ -1968,5 +2155,98 @@ impl<'a> RenderPassTestInstance<'a> {
             _vertex_module: vertex_module,
             _fragment_module: fragment_module,
         })
+    }
+}
+
+/// The `self_dep_*` half of the `input` branch: one attachment, read and written by
+/// the same subpass through a self-dependency, in both sample counts.
+#[allow(clippy::too_many_arguments)]
+fn add_self_dep_cases(
+    store_op_group: &mut tcu::TestCaseGroup,
+    format: vk::Format,
+    load_op: vk::AttachmentLoadOp,
+    store_op: vk::AttachmentStoreOp,
+    render_type: RenderTypes,
+    render_type_name: &str,
+    use_input_aspect: bool,
+    input_attachment_aspect_mask: vk::ImageAspectFlags,
+    allocation_kind: AllocationKind,
+    render_pass_type: RenderPassType,
+) {
+    const TARGET_SIZE: [u32; 2] = [64, 64];
+    const RENDER_POS: [u32; 2] = [0, 0];
+    const RENDER_SIZE: [u32; 2] = [64, 64];
+
+    let sample_counts = [("", vk::SampleCountFlags::_1), ("_ms", vk::SampleCountFlags::_4)];
+
+    for (sample_suffix, sample_count) in sample_counts {
+        let attachments = vec![Attachment {
+            format,
+            samples: sample_count,
+            load_op,
+            store_op,
+            stencil_load_op: vk::AttachmentLoadOp::DONT_CARE,
+            stencil_store_op: vk::AttachmentStoreOp::DONT_CARE,
+            initial_layout: vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL,
+            final_layout: vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL,
+        }];
+
+        let subpasses = vec![
+            Subpass {
+                input_attachments: Vec::new(),
+                color_attachments: vec![AttachmentReference::new(0, vk::ImageLayout::COLOR_ATTACHMENT_OPTIMAL)],
+                depth_stencil_attachment: AttachmentReference::new(ATTACHMENT_UNUSED, vk::ImageLayout::GENERAL),
+            },
+            // Reads and writes the same attachment, which is why both references are
+            // GENERAL and why the dependency below is 1 -> 1.
+            Subpass {
+                input_attachments: vec![AttachmentReference::with_aspect(0, vk::ImageLayout::GENERAL, input_attachment_aspect_mask)],
+                color_attachments: vec![AttachmentReference::new(0, vk::ImageLayout::GENERAL)],
+                depth_stencil_attachment: AttachmentReference::new(ATTACHMENT_UNUSED, vk::ImageLayout::GENERAL),
+            },
+        ];
+
+        let dependency = |src_pass, dst_pass| SubpassDependency {
+            src_pass,
+            dst_pass,
+            src_stage_mask: vk::PipelineStageFlags::COLOR_ATTACHMENT_OUTPUT,
+            dst_stage_mask: vk::PipelineStageFlags::FRAGMENT_SHADER,
+            src_access_mask: vk::AccessFlags::COLOR_ATTACHMENT_WRITE,
+            dst_access_mask: vk::AccessFlags::INPUT_ATTACHMENT_READ,
+            flags: vk::DependencyFlags::BY_REGION,
+        };
+        let dependencies = vec![dependency(0, 1), dependency(1, 1)];
+
+        let input_aspects = if use_input_aspect {
+            vec![vk::InputAttachmentAspectReference {
+                subpass: 1,
+                input_attachment_index: 0,
+                aspect_mask: vk::ImageAspectFlags::COLOR,
+            }]
+        } else {
+            Vec::new()
+        };
+
+        let render_pass = RenderPassDesc {
+            attachments,
+            subpasses,
+            dependencies,
+            input_aspects,
+        };
+
+        let config = TestConfig::new(
+            render_pass,
+            render_type,
+            TARGET_SIZE,
+            RENDER_POS,
+            RENDER_SIZE,
+            false,
+            89246,
+            allocation_kind,
+            render_pass_type,
+        );
+
+        let name = format!("self_dep_{render_type_name}{}{sample_suffix}", if use_input_aspect { "_use_input_aspect" } else { "" });
+        store_op_group.add_child(Box::new(RenderPassTestCase { name, config }) as Box<dyn TestCase>);
     }
 }

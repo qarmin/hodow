@@ -40,45 +40,50 @@ def bool_op(index: int) -> str:
     return BOOL_OPS[index % 4]
 
 
-def input_attachment_type(channel_class: str) -> str:
-    """`getInputAttachmentType`, single-sampled."""
-    return {"sint": "isubpassInput", "uint": "usubpassInput"}.get(channel_class, "subpassInput")
+def input_attachment_type(channel_class: str, multisample: bool) -> str:
+    """`getInputAttachmentType`"""
+    base = {"sint": "isubpassInput", "uint": "usubpassInput"}.get(channel_class, "subpassInput")
+    return base + "MS" if multisample else base
 
 
-def fragment_shader(channel_class: str, input_component_count: int) -> str:
-    """`createSubpassShaders` for subpass 1 of the `input` branch.
+def fragment_shader(channel_class: str, input_component_count: int, output_component_count: int, output_type: str, attachment_index: int, multisample: bool) -> str:
+    """`createSubpassShaders` for the input-reading subpass, which is always subpass 1.
 
-    subpassNdx is 1 and the colour attachment is index 1, so `index` is 2 for every
-    component - upstream computes it as `subpassNdx + attachmentIndex + outputValueNdx`
-    and only advances outputValueNdx once per attachment, not per component.
+    `index` is `subpassNdx + attachmentIndex + outputValueNdx` and outputValueNdx only
+    advances once per attachment, so every component of one attachment shares it - that
+    is not the same rule the no-input branch uses, which adds compNdx as well.
     """
-    output_component_count = 4  # R8G8B8A8_UNORM
-    # `inputsPerOutput`, which is 1 for every colour case here: no format in the list
-    # has more channels than the destination.
+    # `inputsPerOutput`
     inputs_per_output = (
         (input_component_count // output_component_count) + (1 if input_component_count % output_component_count else 0)
         if input_component_count >= output_component_count
         else 1
     )
 
+    input_type = input_attachment_type(channel_class, multisample)
+    load = "subpassLoad(i_color0, gl_SampleID)" if multisample else "subpassLoad(i_color0)"
+
     out = ["#version 450"]
-    out.append(f"layout(input_attachment_index = 0, set=0, binding=0) uniform highp {input_attachment_type(channel_class)} i_color0;")
-    out.append("layout(location = 0) out highp vec4 o_color0;")
+    out.append(f"layout(input_attachment_index = 0, set=0, binding=0) uniform highp {input_type} i_color0;")
+    out.append(f"layout(location = 0) out highp {output_type} o_color0;")
     out.append("void main (void) {")
     out.append(f"\tbool inputs[{input_component_count}];")
     out.append(f"\tbool outputs[{output_component_count}];")
 
     for comp_ndx in range(input_component_count):
-        out.append(f"\tinputs[{comp_ndx}] = 1.0 == float(subpassLoad(i_color0).{COMPONENTS[comp_ndx]});")
+        out.append(f"\tinputs[{comp_ndx}] = 1.0 == float({load}.{COMPONENTS[comp_ndx]});")
 
-    index = 1 + 1 + 0  # subpassNdx + attachmentIndex + outputValueNdx
+    index = 1 + attachment_index  # subpassNdx + attachmentIndex + outputValueNdx(0)
     for comp_ndx in range(output_component_count):
         out.append(f"\toutputs[{comp_ndx}] = (int(gl_FragCoord.x) % 2 == {index % 2}) {bool_op(index)} (int(gl_FragCoord.y) % 2 == {(index // 2) % 2});")
         for i in range(inputs_per_output):
             src = (comp_ndx * inputs_per_output + i) % input_component_count
             out.append(f"\toutputs[{comp_ndx}] = outputs[{comp_ndx}] == inputs[{src}];")
 
-    out.append("\to_color0 = vec4(" + ", ".join(f"outputs[{i}]" for i in range(output_component_count)) + ");")
+    # `useFormatCompCount` is false, so the write is always four components wide and
+    # the ones the attachment does not have are written as 0.
+    values = [f"outputs[{i}]" if i < output_component_count else "0" for i in range(4)]
+    out.append(f"\to_color0 = {output_type}(" + ", ".join(values) + ");")
     out.append("}")
     return "\n".join(out) + "\n"
 
@@ -120,8 +125,40 @@ def main() -> int:
         print("error: no formats found in CORE_COLOR_FORMATS", file=sys.stderr)
         return 2
 
-    variants = sorted({classify(f) for f in formats})
-    print(f"{len(formats)} formats -> {len(variants)} shader variants: {variants}")
+    combos = sorted({classify(f) for f in formats})
+
+    # Two families. The `input` cases read attachment 0 and write attachment 1, which
+    # is always R8G8B8A8_UNORM; the `self_dep` cases read and write attachment 0
+    # itself, so the output type and channel count follow the source format, and they
+    # come in a multisampled flavour as well.
+    variants = []
+    for channel_class, count in combos:
+        variants.append(
+            {
+                "name": f"input_{channel_class}{count}",
+                "channel_class": channel_class,
+                "input_count": count,
+                "output_count": 4,
+                "output_type": "vec4",
+                "attachment_index": 1,
+                "multisample": False,
+            }
+        )
+    for channel_class, count in combos:
+        for multisample in (False, True):
+            variants.append(
+                {
+                    "name": f"self_dep_{channel_class}{count}" + ("_ms" if multisample else ""),
+                    "channel_class": channel_class,
+                    "input_count": count,
+                    "output_count": count,
+                    "output_type": grid_type(channel_class),
+                    "attachment_index": 0,
+                    "multisample": multisample,
+                }
+            )
+
+    print(f"{len(formats)} formats -> {len(combos)} class/count combos -> {len(variants)} shader variants")
 
     SRC_DIR.mkdir(parents=True, exist_ok=True)
     for existing in SRC_DIR.glob("*.frag"):
@@ -141,26 +178,28 @@ def main() -> int:
         "",
     ]
 
-    for channel_class, count in variants:
-        name = f"input_{channel_class}{count}"
-        frag = SRC_DIR / f"{name}.frag"
-        frag.write_text(fragment_shader(channel_class, count))
+    for v in variants:
+        frag = SRC_DIR / f"{v['name']}.frag"
+        frag.write_text(fragment_shader(v["channel_class"], v["input_count"], v["output_count"], v["output_type"], v["attachment_index"], v["multisample"]))
 
         lines += [
             "[[case]]",
-            f'name = "{name}"',
-            f'rust_const = "RENDER_PASS_{name.upper()}"',
+            f'name = "{v["name"]}"',
+            f'rust_const = "RENDER_PASS_{v["name"].upper()}"',
             'rust_type = "InputProgram"',
             "programs = [",
             '    { name = "0-vert", template = "renderpass/render_pass.vert", stage = "vert" },',
             '    { name = "0-frag", template = "renderpass/render_pass_grid.frag", stage = "frag" },',
             '    { name = "1-vert", template = "renderpass/render_pass.vert", stage = "vert" },',
-            f'    {{ name = "1-frag", template = "renderpass/generated/{name}.frag", stage = "frag" }},',
+            f'    {{ name = "1-frag", template = "renderpass/generated/{v["name"]}.frag", stage = "frag" }},',
             "]",
             "[case.params]",
-            f'attachment_type = {{ type = "str", value = "{grid_type(channel_class)}" }}',
-            f'input_channel_class = {{ type = "str", value = "{channel_class}" }}',
-            f'input_component_count = {{ type = "u32", value = {count} }}',
+            f'attachment_type = {{ type = "str", value = "{grid_type(v["channel_class"])}" }}',
+            f'input_channel_class = {{ type = "str", value = "{v["channel_class"]}" }}',
+            f'input_component_count = {{ type = "u32", value = {v["input_count"]} }}',
+            f'output_component_count = {{ type = "u32", value = {v["output_count"]} }}',
+            f'output_attachment_index = {{ type = "u32", value = {v["attachment_index"]} }}',
+            f'multisample = {{ type = "bool", value = {"true" if v["multisample"] else "false"} }}',
             "",
         ]
 
