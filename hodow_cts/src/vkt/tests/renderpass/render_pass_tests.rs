@@ -2534,6 +2534,7 @@ pub fn create_render_pass_groups() -> Vec<tcu::TestCaseGroup> {
                 // Upstream registers this once per rendering type, under the
                 // suballocation group; it does not vary with the allocation kind.
                 if allocation_kind == AllocationKind::Suballocated {
+                    kind_group.add_child(super::unused_attachment_tests::create_unused_attachment_tests(render_pass_type));
                     kind_group.add_child(super::unused_clear_attachment_tests::create_unused_clear_attachment_tests(render_pass_type));
                 }
                 group.add_child(kind_group);

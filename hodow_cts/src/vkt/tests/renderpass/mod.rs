@@ -10,6 +10,7 @@
 // Modifications: rewritten in Rust for hodow_cts.
 
 pub mod render_pass_tests;
+pub mod unused_attachment_tests;
 pub mod unused_clear_attachment_tests;
 
 use crate::tcu::TestCaseGroup;
