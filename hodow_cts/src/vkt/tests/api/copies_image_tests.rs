@@ -3641,3 +3641,414 @@ pub fn add_buffer_to_depth_stencil_groups(
     );
     parent.add_child(group);
 }
+
+// ---------------------------------------------------------------------------------
+// CopyDepthStencilToBuffer - the mirror of the above.
+// ---------------------------------------------------------------------------------
+
+/// `CopyDepthStencilToBufferTestCase`
+pub struct CopyDepthStencilToBufferCase {
+    name: String,
+    src: ImageParms,
+    dst_buffer_size: u32,
+    regions: Vec<BufferImageCopy>,
+    single_command: bool,
+    allocation_kind: AllocationKind,
+    command_variant: CopyCommandVariant,
+    queue_selection: QueueSelection,
+    general_layout: bool,
+}
+
+impl TestCase for CopyDepthStencilToBufferCase {
+    fn name(&self) -> &str {
+        &self.name
+    }
+
+    fn check_support(&self, context: &Context<'_>) -> Result<(), TestError> {
+        if self.command_variant == CopyCommandVariant::CopyCommands2 {
+            context.require_device_functionality("VK_KHR_copy_commands2")?;
+        }
+        if self.allocation_kind == AllocationKind::Dedicated {
+            context.require_device_functionality("VK_KHR_dedicated_allocation")?;
+        }
+        select_queue(context, self.queue_selection)?;
+
+        let usage = vk::ImageUsageFlags::TRANSFER_SRC | vk::ImageUsageFlags::TRANSFER_DST;
+        unsafe {
+            context.get_instance().get_physical_device_image_format_properties(
+                context.get_physical_device(),
+                self.src.format,
+                self.src.image_type,
+                self.src.tiling,
+                usage,
+                vk::ImageCreateFlags::empty(),
+            )
+        }
+        .map_err(|_| TestError::NotSupported("Format not supported".to_string()))?;
+        Ok(())
+    }
+
+    fn programs(&self) -> BinaryCollection {
+        BinaryCollection::new(&[])
+    }
+
+    fn create_instance<'a>(&'a self, context: &'a Context<'a>) -> Box<dyn TestInstance + 'a> {
+        Box::new(CopyDepthStencilToBufferInstance { context, params: self })
+    }
+}
+
+struct CopyDepthStencilToBufferInstance<'a> {
+    context: &'a Context<'a>,
+    params: &'a CopyDepthStencilToBufferCase,
+}
+
+/// `CopyDepthStencilToBuffer::copyRegionToTextureLevel` - one aspect of the image into
+/// the matching aspect of a flat destination run.
+fn copy_ds_region_to_buffer_level(src: &ConstPixelBufferAccess<'_>, dst: &mut TextureLevel, region: BufferImageCopy, divisor: usize) {
+    let row_length = if region.buffer_row_length == 0 {
+        region.image_extent[0]
+    } else {
+        region.buffer_row_length
+    };
+    let image_height = if region.buffer_image_height == 0 {
+        region.image_extent[1]
+    } else {
+        region.buffer_image_height
+    };
+    let texel_offset = (region.buffer_offset / divisor as u64) as u32;
+    let depth = region.aspect_mask == vk::ImageAspectFlags::DEPTH;
+
+    for z in 0..region.image_extent[2] {
+        for y in 0..region.image_extent[1] {
+            let texel_index = texel_offset + (z * image_height + y) * row_length;
+            for x in 0..region.image_extent[0] {
+                let sx = region.image_offset[0] as u32 + x;
+                let sy = region.image_offset[1] as u32 + y;
+                let sz = region.image_offset[2] as u32 + z;
+                if depth {
+                    let v = src.get_pix_depth(sx, sy, sz);
+                    dst.get_access().set_pix_depth(v, texel_index + x, 0, 0);
+                } else {
+                    let v = src.get_pix_stencil(sx, sy, sz);
+                    dst.get_access().set_pix_stencil(v, texel_index + x, 0, 0);
+                }
+            }
+        }
+    }
+}
+
+/// `tcu::clearDepth` / `tcu::clearStencil` over a whole level.
+fn clear_aspect(level: &mut TextureLevel, depth: bool) {
+    let [w, h, d] = level.size();
+    for z in 0..d {
+        for y in 0..h {
+            for x in 0..w {
+                if depth {
+                    level.get_access().set_pix_depth(0.0, x, y, z);
+                } else {
+                    level.get_access().set_pix_stencil(0, x, y, z);
+                }
+            }
+        }
+    }
+}
+
+impl TestInstance for CopyDepthStencilToBufferInstance<'_> {
+    fn iterate(&mut self) -> TestOutcome {
+        let p = self.params;
+        let vk_device = self.context.get_device();
+        let allocator = self.context.get_default_allocator();
+
+        let (queue, queue_family_index) = select_queue(self.context, p.queue_selection)?;
+        let mut families = vec![self.context.get_universal_queue_family_index()];
+        if queue_family_index != families[0] {
+            families.push(queue_family_index);
+        }
+
+        let texture_format = map_vk_format(p.src.format).ok_or_else(|| TestError::NotSupported("format has no tcu mapping".to_string()))?;
+        let texels = p.dst_buffer_size;
+
+        let mut source_level = TextureLevel::new(texture_format, p.src.extent[0], p.src.extent[1], p.src.extent[2])?;
+        generate_buffer(&mut source_level.get_access(), p.src.extent[0], p.src.extent[1], p.src.extent[2], FillMode::Gradient, false);
+
+        let mut destination_level = TextureLevel::new(texture_format, texels, 1, 1)?;
+        generate_buffer(&mut destination_level.get_access(), texels, 1, 1, FillMode::Gradient, false);
+
+        let depth_format = map_combined_to_depth_transfer_format(texture_format);
+        let stencil_format = get_stencil_copy_format(p.src.format);
+        let depth_texel = depth_format.and_then(|f| f.pixel_size()).unwrap_or(1) as usize;
+        let stencil_texel = stencil_format.and_then(|f| f.pixel_size()).unwrap_or(1) as usize;
+
+        // The destination is packed single-aspect runs, so a region's offset counts in
+        // that aspect's texels, not the combined ones.
+        let mut expected_level = TextureLevel::new(texture_format, texels, 1, 1)?;
+        expected_level.data_mut().copy_from_slice(destination_level.data());
+        for region in &p.regions {
+            let divisor = if region.aspect_mask == vk::ImageAspectFlags::DEPTH {
+                depth_texel
+            } else {
+                stencil_texel
+            };
+            copy_ds_region_to_buffer_level(&source_level.get_const_access(), &mut expected_level, *region, divisor);
+        }
+
+        // The buffer starts out holding the packed initial data, laid out in region
+        // order, and the copy overwrites part of it.
+        let mut packed: Vec<u8> = Vec::new();
+        let mut device_regions: Vec<BufferImageCopy> = Vec::new();
+        let (mut depth_offset, mut stencil_offset) = (None::<u64>, None::<u64>);
+        for region in &p.regions {
+            let mut r = *region;
+            if r.aspect_mask == vk::ImageAspectFlags::DEPTH {
+                if depth_offset.is_none() {
+                    let mut level = TextureLevel::new(depth_format.ok_or_else(|| TestError::NotSupported("no depth transfer format".to_string()))?, texels, 1, 1)?;
+                    transfer_aspect(&mut destination_level, vk::ImageAspectFlags::DEPTH, &mut level, true);
+                    depth_offset = Some(packed.len() as u64);
+                    packed.extend_from_slice(level.data());
+                }
+                r.buffer_offset += depth_offset.expect("just set");
+            } else {
+                if stencil_offset.is_none() {
+                    let mut level = TextureLevel::new(
+                        stencil_format.ok_or_else(|| TestError::NotSupported("no stencil transfer format".to_string()))?,
+                        texels,
+                        1,
+                        1,
+                    )?;
+                    transfer_aspect(&mut destination_level, vk::ImageAspectFlags::STENCIL, &mut level, true);
+                    stencil_offset = Some(packed.len() as u64);
+                    packed.extend_from_slice(level.data());
+                }
+                r.buffer_offset += stencil_offset.expect("just set");
+            }
+            device_regions.push(r);
+        }
+
+        let dst_info = staging_buffer_create_info(packed.len() as u64, vk::BufferUsageFlags::TRANSFER_DST | vk::BufferUsageFlags::TRANSFER_SRC, &families);
+        let destination = unsafe { vk_device.create_buffer(&dst_info, None) }.vk_check("vkCreateBuffer")?;
+        let destination = Unique::new(vk_device, destination);
+        let destination_alloc = bind_buffer_memory(self.context, *destination, p.allocation_kind)?;
+        unsafe { std::ptr::copy_nonoverlapping(packed.as_ptr(), destination_alloc.get_host_ptr(), packed.len()) };
+        flush_alloc(vk_device, &destination_alloc)?;
+
+        let image_info = vk::ImageCreateInfo {
+            s_type: vk::StructureType::IMAGE_CREATE_INFO,
+            next: std::ptr::null(),
+            flags: vk::ImageCreateFlags::empty(),
+            image_type: p.src.image_type,
+            format: p.src.format,
+            extent: p.src.extent_3d(),
+            mip_levels: 1,
+            array_layers: p.src.array_size(),
+            samples: vk::SampleCountFlags::_1,
+            tiling: p.src.tiling,
+            usage: vk::ImageUsageFlags::TRANSFER_SRC | vk::ImageUsageFlags::TRANSFER_DST,
+            sharing_mode: vk::SharingMode::EXCLUSIVE,
+            queue_family_index_count: 0,
+            queue_family_indices: std::ptr::null(),
+            initial_layout: vk::ImageLayout::UNDEFINED,
+        };
+        let source = if p.allocation_kind == AllocationKind::Dedicated {
+            ImageWithMemory::new_dedicated(vk_device, allocator, image_info, MemoryRequirement::ANY)?
+        } else {
+            ImageWithMemory::new(vk_device, allocator, image_info, MemoryRequirement::ANY)?
+        };
+
+        upload_image(self.context, &source_level.get_const_access(), source.get(), &p.src, p.general_layout, &families)?;
+
+        let cmd_pool = make_command_pool(vk_device, queue_family_index)?;
+        let cmd_buffer = allocate_command_buffer(vk_device, *cmd_pool, vk::CommandBufferLevel::PRIMARY)?;
+        let layout = if p.general_layout {
+            vk::ImageLayout::GENERAL
+        } else {
+            vk::ImageLayout::TRANSFER_SRC_OPTIMAL
+        };
+        let old_layout = if p.general_layout {
+            vk::ImageLayout::GENERAL
+        } else {
+            vk::ImageLayout::TRANSFER_DST_OPTIMAL
+        };
+        let range = make_image_subresource_range(get_aspect_flags(p.src.format), 0, 1, 0, p.src.array_size());
+
+        begin_command_buffer(vk_device, *cmd_buffer)?;
+        unsafe {
+            let barrier = make_image_memory_barrier(vk::AccessFlags::TRANSFER_WRITE, vk::AccessFlags::TRANSFER_READ, old_layout, layout, source.get(), range);
+            vk_device.cmd_pipeline_barrier(
+                *cmd_buffer,
+                vk::PipelineStageFlags::TRANSFER,
+                vk::PipelineStageFlags::TRANSFER,
+                vk::DependencyFlags::empty(),
+                &[] as &[vk::MemoryBarrier],
+                &[] as &[vk::BufferMemoryBarrier],
+                &[barrier],
+            );
+
+            let copies: Vec<vk::BufferImageCopy> = device_regions.iter().map(|r| r.to_vk()).collect();
+            let batches: Vec<&[vk::BufferImageCopy]> = if p.single_command { vec![&copies] } else { copies.chunks(1).collect() };
+            for batch in batches {
+                if p.command_variant == CopyCommandVariant::CopyCommands2 {
+                    let copies2: Vec<vk::BufferImageCopy2> = batch
+                        .iter()
+                        .map(|c| vk::BufferImageCopy2 {
+                            s_type: vk::StructureType::BUFFER_IMAGE_COPY_2,
+                            next: std::ptr::null(),
+                            buffer_offset: c.buffer_offset,
+                            buffer_row_length: c.buffer_row_length,
+                            buffer_image_height: c.buffer_image_height,
+                            image_subresource: c.image_subresource,
+                            image_offset: c.image_offset,
+                            image_extent: c.image_extent,
+                        })
+                        .collect();
+                    let info = vk::CopyImageToBufferInfo2 {
+                        s_type: vk::StructureType::COPY_IMAGE_TO_BUFFER_INFO_2,
+                        next: std::ptr::null(),
+                        src_image: source.get(),
+                        src_image_layout: layout,
+                        dst_buffer: *destination,
+                        region_count: copies2.len() as u32,
+                        regions: copies2.as_ptr(),
+                    };
+                    vk_device.cmd_copy_image_to_buffer2(*cmd_buffer, &info);
+                } else {
+                    vk_device.cmd_copy_image_to_buffer(*cmd_buffer, source.get(), layout, *destination, batch);
+                }
+            }
+        }
+        end_command_buffer(vk_device, *cmd_buffer)?;
+        submit_commands_and_wait(vk_device, queue, *cmd_buffer)?;
+
+        invalidate_alloc(vk_device, &destination_alloc)?;
+        let raw = unsafe { std::slice::from_raw_parts(destination_alloc.get_host_ptr().cast_const(), packed.len()) }.to_vec();
+
+        // Reassemble the packed runs back into a combined level so the two sides can be
+        // compared in the same layout.
+        let mut result_level = TextureLevel::new(texture_format, texels, 1, 1)?;
+        for (aspect, base, format) in [
+            (vk::ImageAspectFlags::DEPTH, depth_offset, depth_format),
+            (vk::ImageAspectFlags::STENCIL, stencil_offset, stencil_format),
+        ] {
+            let (Some(base), Some(format)) = (base, format) else { continue };
+            let mut level = TextureLevel::new(format, texels, 1, 1)?;
+            let len = level.data().len();
+            level.data_mut().copy_from_slice(&raw[base as usize..base as usize + len]);
+            transfer_aspect(&mut result_level, aspect, &mut level, false);
+        }
+
+        // A combined format has both aspects compared even when only one was copied, so
+        // the untouched one is cleared on both sides rather than left to differ.
+        let aspects = get_aspect_flags(p.src.format);
+        if aspects.contains(vk::ImageAspectFlags::DEPTH) && depth_offset.is_none() {
+            clear_aspect(&mut expected_level, true);
+            clear_aspect(&mut result_level, true);
+        }
+        if aspects.contains(vk::ImageAspectFlags::STENCIL) && stencil_offset.is_none() {
+            clear_aspect(&mut expected_level, false);
+            clear_aspect(&mut result_level, false);
+        }
+
+        Ok(check_test_result(&expected_level.get_const_access(), &result_level.get_const_access()))
+    }
+}
+
+/// `addCopyDepthStencilToBufferTests`
+fn add_copy_depth_stencil_to_buffer_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+    // Same seven formats, listed in this group's own order.
+    static FORMATS: &[(vk::Format, &str)] = &[
+        (vk::Format::S8_UINT, "s8_uint"),
+        (vk::Format::D16_UNORM, "d16_unorm"),
+        (vk::Format::X8_D24_UNORM_PACK32, "x8_d24_unorm_pack32"),
+        (vk::Format::D32_SFLOAT, "d32_sfloat"),
+        (vk::Format::D16_UNORM_S8_UINT, "d16_unorm_s8_uint"),
+        (vk::Format::D24_UNORM_S8_UINT, "d24_unorm_s8_uint"),
+        (vk::Format::D32_SFLOAT_S8_UINT, "d32_sfloat_s8_uint"),
+    ];
+
+    let region = |aspect: vk::ImageAspectFlags, offset: bool| BufferImageCopy {
+        aspect_mask: aspect,
+        buffer_offset: if offset { 32 } else { 0 },
+        buffer_row_length: if offset { DEFAULT_HALF_SIZE + DEFAULT_QUARTER_SIZE } else { 0 },
+        buffer_image_height: if offset { DEFAULT_HALF_SIZE + DEFAULT_QUARTER_SIZE } else { 0 },
+        base_array_layer: 0,
+        layer_count: 1,
+        image_offset: if offset {
+            [DEFAULT_QUARTER_SIZE as i32, DEFAULT_QUARTER_SIZE as i32, 0]
+        } else {
+            [0, 0, 0]
+        },
+        image_extent: if offset { DEFAULT_HALF_EXTENT } else { DEFAULT_EXTENT },
+    };
+
+    for &(format, format_name) in FORMATS {
+        for offset in [false, true] {
+            let aspects = get_aspect_flags(format);
+            let has_depth = aspects.contains(vk::ImageAspectFlags::DEPTH);
+            let has_stencil = aspects.contains(vk::ImageAspectFlags::STENCIL);
+
+            let dst_buffer_size = if offset {
+                (DEFAULT_HALF_SIZE - 1) * DEFAULT_SIZE + DEFAULT_HALF_SIZE + DEFAULT_QUARTER_SIZE
+            } else {
+                DEFAULT_SIZE * DEFAULT_SIZE
+            };
+            let prefix = if offset { "buffer_offset_" } else { "" };
+            let depth = region(vk::ImageAspectFlags::DEPTH, offset);
+            let stencil = region(vk::ImageAspectFlags::STENCIL, offset);
+
+            let mut make = |suffix: &str, regions: Vec<BufferImageCopy>, single_command: bool| {
+                group.add_child(Box::new(CopyDepthStencilToBufferCase {
+                    name: format!("{prefix}{format_name}{suffix}"),
+                    src: ImageParms {
+                        image_type: vk::ImageType::_2D,
+                        format,
+                        extent: DEFAULT_EXTENT,
+                        tiling: vk::ImageTiling::OPTIMAL,
+                        fill_mode: FillMode::Gradient,
+                        create_flags: None,
+                    },
+                    dst_buffer_size,
+                    regions,
+                    single_command,
+                    allocation_kind: gp.allocation_kind,
+                    command_variant: gp.command_variant,
+                    queue_selection: gp.queue_selection,
+                    general_layout: gp.general_layout,
+                }) as Box<dyn TestCase>);
+            };
+
+            if has_depth && has_stencil {
+                make("_DS", vec![depth, stencil], true);
+                make("_D_S", vec![depth, stencil], false);
+                make("_SD", vec![stencil, depth], false);
+                make("_SD_combined", vec![stencil, depth], true);
+            }
+            if has_depth {
+                make("_D", vec![depth], false);
+            }
+            if has_stencil {
+                make("_S", vec![stencil], false);
+            }
+        }
+    }
+}
+
+/// The `depthstencil_to_buffer*` groups.
+pub fn add_depth_stencil_to_buffer_groups(
+    parent: &mut tcu::TestCaseGroup,
+    name: &str,
+    allocation_kind: AllocationKind,
+    command_variant: CopyCommandVariant,
+    queue_selection: QueueSelection,
+    general_layout: bool,
+) {
+    let mut group = tcu::TestCaseGroup::new(name);
+    add_copy_depth_stencil_to_buffer_tests(
+        &mut group,
+        &GroupParams {
+            allocation_kind,
+            command_variant,
+            queue_selection,
+            general_layout,
+        },
+    );
+    parent.add_child(group);
+}

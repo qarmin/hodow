@@ -24,6 +24,7 @@ external/vulkancts/modules/vulkan/api/vktApiCopyBufferToImageTests.cpp
 external/vulkancts/modules/vulkan/api/vktApiCopyImageToBufferTests.cpp
 external/vulkancts/modules/vulkan/api/vktApiCopyImageToImageTests.cpp
 external/vulkancts/modules/vulkan/api/vktApiCopyBufferToDepthStencilTests.cpp
+external/vulkancts/modules/vulkan/api/vktApiCopyDepthStencilToBufferTests.cpp
 external/vulkancts/modules/vulkan/api/vktApiCopiesAndBlittingUtil.hpp
 external/vulkancts/modules/vulkan/api/vktApiFeatureInfo.cpp
 external/vulkancts/modules/vulkan/api/vktApiImageClearingTests.cpp
