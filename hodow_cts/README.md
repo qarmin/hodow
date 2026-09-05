@@ -228,6 +228,7 @@ on SwiftShader (200-500 random cases each, 2026-09-05):
 
 | group | cases | pass rate | runnable | shaders |
 | --- | --- | --- | --- | --- |
+| `synchronization2.op.single_queue` | 15090 | 50% | ~7500 | 42 distinct |
 | `renderpasses.renderpass{1,2}` formats/attachment/simple | 25096 | 74% | ~18600 | ~500-1000 distinct |
 | `binding_model.shader_access` | 86412 | 18% | ~15100 | templated by descriptor type x stage |
 | `renderpasses.renderpass1` (whole) | 19750 | 53% | ~10500 | |
@@ -261,6 +262,7 @@ Measured so far (2026-09-05):
 | `renderpasses.*.formats` | 2500 | 247 | yes - flat by 1500 |
 | `renderpasses.*.multisample_resolve` | 400 | 18 | yes |
 | `renderpasses.*.unused_clear_attachments` | 400 | 17 | yes |
+| `synchronization2.op.single_queue` | 600 | 42 | yes - flat by 300 |
 | `binding_model.shader_access` | 1500 | 329 | yes - flat by 1200 |
 | `binding_model.shader_access` image types, compute | 250 | 232 | **no** - one per case |
 | `binding_model.shader_access` graphics stages | 250 | 130 | **no** - one per case |
@@ -293,6 +295,12 @@ descriptor type, 1950 cases. What is left is bounded by three things:
   on this machine, so they are deliberately left until there is a driver that can.
 
 `bind2` needs `VK_KHR_maintenance6` and skips here for the same reason.
+
+`synchronization2.op.single_queue` is now the best remaining target by a wide margin:
+15090 cases, half of them runnable here, and only 42 distinct shaders across a
+600-case sample - and its transfer-only corner (1388 cases across both sync groups,
+964 runnable) needs no shaders at all, so the operation framework can be built and
+verified before any shader work starts.
 
 `renderpasses.*.attachment` is the cautionary one. Its render passes are generated
 from a seeded `de::Random`, so the shader is a function of a random sequence of
