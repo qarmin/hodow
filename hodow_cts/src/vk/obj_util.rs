@@ -192,6 +192,35 @@ pub fn make_graphics_pipeline_with_samples<'a>(
     topology: vk::PrimitiveTopology,
     samples: vk::SampleCountFlags,
 ) -> Result<Unique<'a, vk::Pipeline>, TestError> {
+    make_graphics_pipeline_full(
+        device,
+        pipeline_layout,
+        vertex_shader_module,
+        fragment_shader_module,
+        render_pass,
+        render_size,
+        topology,
+        samples,
+        None,
+        1,
+    )
+}
+
+/// The full form: a depth/stencil state may be supplied, and the colour-attachment
+/// count may be zero for a pass that only writes buffers.
+#[allow(clippy::too_many_arguments)]
+pub fn make_graphics_pipeline_full<'a>(
+    device: &'a Device,
+    pipeline_layout: vk::PipelineLayout,
+    vertex_shader_module: vk::ShaderModule,
+    fragment_shader_module: vk::ShaderModule,
+    render_pass: vk::RenderPass,
+    render_size: (u32, u32),
+    topology: vk::PrimitiveTopology,
+    samples: vk::SampleCountFlags,
+    depth_stencil_state: Option<&vk::PipelineDepthStencilStateCreateInfoBuilder>,
+    color_attachment_count: usize,
+) -> Result<Unique<'a, vk::Pipeline>, TestError> {
     let entry = c"main";
     let stages = [
         vk::PipelineShaderStageCreateInfo::builder()
@@ -285,7 +314,7 @@ pub fn make_graphics_pipeline_with_samples<'a>(
     let color_blend = vk::PipelineColorBlendStateCreateInfo::builder()
         .logic_op_enable(false)
         .logic_op(vk::LogicOp::CLEAR)
-        .attachments(&blend_attachments)
+        .attachments(&blend_attachments[..color_attachment_count])
         .blend_constants([0.0; 4]);
 
     let info = vk::GraphicsPipelineCreateInfo::builder()
@@ -295,7 +324,7 @@ pub fn make_graphics_pipeline_with_samples<'a>(
         .viewport_state(&viewport_state)
         .rasterization_state(&rasterization)
         .multisample_state(&multisample)
-        .depth_stencil_state(&depth_stencil)
+        .depth_stencil_state(depth_stencil_state.unwrap_or(&depth_stencil))
         .color_blend_state(&color_blend)
         .layout(pipeline_layout)
         .render_pass(render_pass)

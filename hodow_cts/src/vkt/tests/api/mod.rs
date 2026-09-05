@@ -17,6 +17,7 @@ pub mod buffer_view_access_tests;
 pub mod copies_buffer_tests;
 pub mod copies_image_tests;
 pub mod copy_format_lists;
+pub mod depth_stencil_msaa_copy_tests;
 pub mod ds_color_copy_tests;
 pub mod feature_info_tests;
 pub mod image_clearing_formats;
