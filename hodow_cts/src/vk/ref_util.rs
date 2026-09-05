@@ -97,6 +97,15 @@ impl_device_object!(vk::Semaphore, destroy_semaphore);
 impl_device_object!(vk::ShaderModule, destroy_shader_module);
 impl_device_object!(vk::Event, destroy_event);
 
+/// The private-data slot's destroy entry point comes from `VK_EXT_private_data` (or
+/// core 1.3), so it needs the extension trait in scope rather than the blanket macro.
+impl DeviceObject for vk::PrivateDataSlot {
+    unsafe fn destroy(self, device: &Device, allocator: Option<&vk::AllocationCallbacks>) {
+        use vulkanalia::vk::ExtPrivateDataExtensionDeviceCommands;
+        unsafe { device.destroy_private_data_slot_ext(self, allocator) };
+    }
+}
+
 /// A descriptor set needs its pool to be freed, so it cannot use the blanket
 /// `DeviceObject` impl. Upstream wraps it in `Unique<VkDescriptorSet>` with a
 /// deleter that carries the pool; this carries it in the struct instead.

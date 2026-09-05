@@ -17,12 +17,11 @@
 // `create_object`, both dispatching on it. The per-object bodies are otherwise a
 // line-by-line transcription and stay in upstream's order.
 //
-// Not ported here: the `private_data` variant, which needs a device built with a
-// chosen private-data slot count, and `alloc_callback_fail_multiple`, which allocates
-// several pooled objects at once and checks which handles come back null.
+// Not ported here: `alloc_callback_fail_multiple`, the one variant that allocates
+// several pooled objects in a single call and checks which handles come back null.
 
 use vulkanalia::prelude::v1_0::*;
-use vulkanalia::vk::{Handle as VkHandle, InstanceV1_1};
+use vulkanalia::vk::{ExtPrivateDataExtensionDeviceCommands, Handle as VkHandle, InstanceV1_1};
 
 use crate::tcu::{self, TestError, TestOutcome, TestStatus};
 use crate::vk::VkResultExt;
@@ -272,10 +271,6 @@ impl Drop for UniqueDevice<'_> {
 
 /// A created object, owning its handle. Upstream's `Dependency<Case>` holds one of
 /// these per dependency and destroys them in reverse declaration order.
-///
-/// Several arms are only ever the object under test, never a dependency, so their
-/// handle is never read back out - the value is here to be dropped.
-#[expect(dead_code, reason = "the wrapped handle is the RAII guard, not a value to read")]
 enum Owned<'a> {
     // Boxed: vulkanalia's instance and device carry their whole dispatch table, so
     // an unboxed arm would make every `Owned` kilobytes wide, and `max_concurrent`
@@ -330,6 +325,36 @@ enum Handle {
 }
 
 impl Owned<'_> {
+    /// `getObjectType<T>()` and `HandleToInt` - what the private-data calls name the
+    /// object by. vulkanalia's `Handle` trait already carries both.
+    fn object_type_and_raw_handle(&self) -> (vk::ObjectType, u64) {
+        use vulkanalia::vk::Handle as _;
+        match self {
+            Owned::Buffer(h) => (vk::Buffer::TYPE, h.get().as_raw()),
+            Owned::BufferView(h) => (vk::BufferView::TYPE, h.get().as_raw()),
+            Owned::CommandBuffer(h) => (vk::CommandBuffer::TYPE, h.get().as_raw() as u64),
+            Owned::CommandPool(h) => (vk::CommandPool::TYPE, h.get().as_raw()),
+            Owned::DescriptorPool(h) => (vk::DescriptorPool::TYPE, h.get().as_raw()),
+            Owned::DescriptorSet(h) => (vk::DescriptorSet::TYPE, h.get().as_raw()),
+            Owned::DescriptorSetLayout(h) => (vk::DescriptorSetLayout::TYPE, h.get().as_raw()),
+            Owned::DeviceMemory(h) => (vk::DeviceMemory::TYPE, h.get().as_raw()),
+            Owned::Event(h) => (vk::Event::TYPE, h.get().as_raw()),
+            Owned::Fence(h) => (vk::Fence::TYPE, h.get().as_raw()),
+            Owned::Framebuffer(h) => (vk::Framebuffer::TYPE, h.get().as_raw()),
+            Owned::Image(h) => (vk::Image::TYPE, h.get().as_raw()),
+            Owned::ImageView(h) => (vk::ImageView::TYPE, h.get().as_raw()),
+            Owned::Pipeline(h) => (vk::Pipeline::TYPE, h.get().as_raw()),
+            Owned::PipelineCache(h) => (vk::PipelineCache::TYPE, h.get().as_raw()),
+            Owned::PipelineLayout(h) => (vk::PipelineLayout::TYPE, h.get().as_raw()),
+            Owned::QueryPool(h) => (vk::QueryPool::TYPE, h.get().as_raw()),
+            Owned::RenderPass(h) => (vk::RenderPass::TYPE, h.get().as_raw()),
+            Owned::Sampler(h) => (vk::Sampler::TYPE, h.get().as_raw()),
+            Owned::Semaphore(h) => (vk::Semaphore::TYPE, h.get().as_raw()),
+            Owned::ShaderModule(h) => (vk::ShaderModule::TYPE, h.get().as_raw()),
+            Owned::Instance(_) | Owned::Device(_) => unreachable!("private_data does not cover instance or device"),
+        }
+    }
+
     fn handle(&self) -> Handle {
         match self {
             Owned::Instance(h) => Handle::Instance(Box::new(h.instance.clone())),
@@ -1235,6 +1260,8 @@ enum Variant {
     SingleAllocCallbacks,
     /// `allocCallbackFailTest`
     AllocCallbackFail,
+    /// `createPrivateDataTest`
+    PrivateData,
 }
 
 struct ObjectManagementCase {
@@ -1249,6 +1276,20 @@ impl TestCase for ObjectManagementCase {
     }
 
     fn check_support(&self, context: &Context<'_>) -> Result<(), TestError> {
+        // `checkPrivateDataSupport`
+        if self.variant == Variant::PrivateData {
+            let mut private_data = vk::PhysicalDevicePrivateDataFeatures::default();
+            let mut features2 = vk::PhysicalDeviceFeatures2 {
+                s_type: vk::StructureType::PHYSICAL_DEVICE_FEATURES_2,
+                next: (&raw mut private_data).cast(),
+                features: vk::PhysicalDeviceFeatures::default(),
+            };
+            unsafe { context.get_instance().get_physical_device_features2(context.get_physical_device(), &mut features2) };
+            if private_data.private_data == 0 {
+                return Err(TestError::NotSupported("privateData not supported".to_string()));
+            }
+        }
+
         match &self.params {
             // `checkImageCubeArraySupport`
             ObjectParams::ImageView(p) if p.view_type == vk::ImageViewType::CUBE_ARRAY => {
@@ -1357,6 +1398,7 @@ impl TestInstance for ObjectManagementInstance<'_> {
             }
             Variant::SingleAllocCallbacks => return self.single_alloc_callbacks(),
             Variant::AllocCallbackFail => return self.alloc_callback_fail(),
+            Variant::PrivateData => return self.private_data(),
             Variant::MultipleSharedResources => {
                 let env = Environment::new(self.context, 4);
                 let res = Resources::new(&env, &case.params)?;
@@ -1591,6 +1633,212 @@ impl ObjectManagementInstance<'_> {
         }
         Ok(TestStatus::pass("Ok"))
     }
+
+    /// `createPrivateDataTest` - on each of five devices asked for a different number
+    /// of private-data slots up front, write and read back a distinct value in every
+    /// (object, slot) pair, three times over with the slots reallocated in between.
+    fn private_data(&self) -> TestOutcome {
+        let case = self.params;
+        const NUM_SLOTS: usize = 100;
+        let root_env = Environment::new(self.context, 4);
+
+        for requested_slots in PRIVATE_DATA_REQUESTED_SLOTS {
+            let owner = create_private_data_device(&root_env, requested_slots)?;
+            let device = &owner.device.device;
+            let env = Environment {
+                device,
+                max_resource_consumers: 4,
+                ..root_env
+            };
+            let res = Resources::new(&env, &case.params)?;
+
+            let create_slot = || -> Result<Unique<'_, vk::PrivateDataSlot>, TestError> {
+                let info = vk::PrivateDataSlotCreateInfo::builder();
+                let slot = unsafe { device.create_private_data_slot_ext(&info, None) }.vk_check("vkCreatePrivateDataSlotEXT")?;
+                Ok(Unique::new(device, slot))
+            };
+
+            // Interleave allocating objects and slots, as upstream does.
+            let mut slots = Vec::with_capacity(NUM_SLOTS);
+            for _ in 0..NUM_SLOTS / 2 {
+                slots.push(create_slot()?);
+            }
+            let mut objects = Vec::with_capacity(4);
+            objects.push(create_object(&env, &res, &case.params)?);
+            objects.push(create_object(&env, &res, &case.params)?);
+            for _ in NUM_SLOTS / 2..NUM_SLOTS {
+                slots.push(create_slot()?);
+            }
+            objects.push(create_object(&env, &res, &case.params)?);
+            objects.push(create_object(&env, &res, &case.params)?);
+
+            for round in 0..3u64 {
+                // Each (object, slot) pair gets a value no other pair has, so a slot
+                // that aliases another shows up as the wrong read-back.
+                // `expected` is the per-object part of the value that was written,
+                // or `None` before anything has been written to that slot.
+                let check = |object_type: vk::ObjectType, handle: u64, expected: Option<u64>| -> Option<&'static str> {
+                    for (slot_ndx, slot) in slots.iter().enumerate() {
+                        let data = unsafe { device.get_private_data_ext(object_type, handle, slot.get()) };
+                        let want = expected.map_or(0, |base| (slot_ndx as u64).pow(3) + base + 1);
+                        if data != want {
+                            return Some(if expected.is_some() {
+                                "Didn't read back set value"
+                            } else {
+                                "Expected initial value of zero"
+                            });
+                        }
+                    }
+                    None
+                };
+
+                for object in &objects {
+                    let (object_type, handle) = object.object_type_and_raw_handle();
+                    if let Some(message) = check(object_type, handle, None) {
+                        return Ok(TestStatus::fail(message));
+                    }
+                }
+                for (object_ndx, object) in objects.iter().enumerate() {
+                    let (object_type, handle) = object.object_type_and_raw_handle();
+                    for (slot_ndx, slot) in slots.iter().enumerate() {
+                        let value = (slot_ndx as u64).pow(3) + (object_ndx as u64).pow(2) + 1;
+                        unsafe { device.set_private_data_ext(object_type, handle, slot.get(), value) }.vk_check("vkSetPrivateDataEXT")?;
+                    }
+                }
+                for (object_ndx, object) in objects.iter().enumerate() {
+                    let (object_type, handle) = object.object_type_and_raw_handle();
+                    if let Some(message) = check(object_type, handle, Some((object_ndx as u64).pow(2))) {
+                        return Ok(TestStatus::fail(message));
+                    }
+                }
+
+                // The private-data slots are objects with private data of their own.
+                for object in &slots {
+                    let handle = object.get().as_raw();
+                    if let Some(message) = check(vk::ObjectType::PRIVATE_DATA_SLOT, handle, None) {
+                        return Ok(TestStatus::fail(message));
+                    }
+                }
+                for (object_ndx, object) in slots.iter().enumerate() {
+                    let handle = object.get().as_raw();
+                    for (slot_ndx, slot) in slots.iter().enumerate() {
+                        let value = (slot_ndx as u64).pow(3) + (object_ndx as u64).pow(2) + 1;
+                        unsafe { device.set_private_data_ext(vk::ObjectType::PRIVATE_DATA_SLOT, handle, slot.get(), value) }.vk_check("vkSetPrivateDataEXT")?;
+                    }
+                }
+                for (object_ndx, object) in slots.iter().enumerate() {
+                    let handle = object.get().as_raw();
+                    if let Some(message) = check(vk::ObjectType::PRIVATE_DATA_SLOT, handle, Some((object_ndx as u64).pow(2))) {
+                        return Ok(TestStatus::fail(message));
+                    }
+                }
+
+                // And so is the device.
+                let device_handle = device.handle().as_raw() as u64;
+                if check(vk::ObjectType::DEVICE, device_handle, None).is_some() {
+                    return Ok(TestStatus::fail("Expected initial value of zero for device"));
+                }
+                for (slot_ndx, slot) in slots.iter().enumerate() {
+                    let value = (slot_ndx as u64).pow(3) + round.pow(2) + 1;
+                    unsafe { device.set_private_data_ext(vk::ObjectType::DEVICE, device_handle, slot.get(), value) }.vk_check("vkSetPrivateDataEXT")?;
+                }
+                if check(vk::ObjectType::DEVICE, device_handle, Some(round.pow(2))).is_some() {
+                    return Ok(TestStatus::fail("Didn't read back set value from device"));
+                }
+
+                // Destroy and reallocate the slots for the next round.
+                slots.clear();
+                for _ in 0..NUM_SLOTS {
+                    slots.push(create_slot()?);
+                }
+            }
+
+            // The objects and their resources have to go before the device.
+            drop(objects);
+            drop(slots);
+            drop(res);
+        }
+        Ok(TestStatus::pass("Ok"))
+    }
+}
+
+/// `SingletonDevice::requestedSlots` - the private-data slot counts the five devices
+/// are asked for, as one or two chained `VkDevicePrivateDataCreateInfo`.
+const PRIVATE_DATA_REQUESTED_SLOTS: [[u32; 2]; 5] = [[0, 0], [1, 0], [1, 1], [4, 4], [1, 100]];
+
+/// `SingletonDevice` - an instance and a device asked for a particular number of
+/// private-data slots up front. Upstream caches these across cases; this builds one
+/// per configuration per case, which costs a device creation and nothing else.
+struct PrivateDataDevice<'a> {
+    // The device goes before the instance it was made on.
+    device: Box<UniqueDevice<'a>>,
+    #[expect(dead_code, reason = "the value is the RAII guard, not something to read")]
+    instance: Box<UniqueInstance<'a>>,
+}
+
+/// `SingletonDevice::createPrivateDataDevice`
+fn create_private_data_device<'a>(env: &Environment<'a>, requested_slots: [u32; 2]) -> Result<PrivateDataDevice<'a>, TestError> {
+    let instance_resources = Resources::new(env, &ObjectParams::Instance)?;
+    let Owned::Instance(instance) = create_object(env, &instance_resources, &ObjectParams::Instance)? else {
+        unreachable!("instance object")
+    };
+    let physical_devices = unsafe { instance.instance.enumerate_physical_devices() }.vk_check("vkEnumeratePhysicalDevices")?;
+    let physical_device = physical_devices[0];
+
+    let queue_priority = [1.0f32];
+    let queues = [vk::DeviceQueueCreateInfo::builder()
+        .queue_family_index(env.queue_family_index)
+        .queue_priorities(&queue_priority)
+        .build()];
+
+    // The chain is built by hand: the two slot-request structs are optional and the
+    // second only appears when the first does.
+    let pdci1 = vk::DevicePrivateDataCreateInfo {
+        s_type: vk::StructureType::DEVICE_PRIVATE_DATA_CREATE_INFO,
+        next: std::ptr::null(),
+        private_data_slot_request_count: requested_slots[1],
+    };
+    let mut pdci0 = vk::DevicePrivateDataCreateInfo {
+        s_type: vk::StructureType::DEVICE_PRIVATE_DATA_CREATE_INFO,
+        next: std::ptr::null(),
+        private_data_slot_request_count: requested_slots[0],
+    };
+    let mut next: *const std::ffi::c_void = std::ptr::null();
+    if requested_slots[0] != 0 {
+        if requested_slots[1] != 0 {
+            pdci0.next = (&raw const pdci1).cast();
+        }
+        next = (&raw const pdci0).cast();
+    }
+    let private_data_features = vk::PhysicalDevicePrivateDataFeatures {
+        s_type: vk::StructureType::PHYSICAL_DEVICE_PRIVATE_DATA_FEATURES,
+        next: next.cast_mut(),
+        private_data: vk::TRUE,
+    };
+
+    let enabled_features = unsafe { instance.instance.get_physical_device_features(physical_device) };
+    let extension_name = c"VK_EXT_private_data";
+    let extensions = [extension_name.as_ptr()];
+    let info = vk::DeviceCreateInfo {
+        s_type: vk::StructureType::DEVICE_CREATE_INFO,
+        next: (&raw const private_data_features).cast(),
+        flags: vk::DeviceCreateFlags::empty(),
+        queue_create_info_count: queues.len() as u32,
+        queue_create_infos: queues.as_ptr(),
+        enabled_layer_count: 0,
+        enabled_layer_names: std::ptr::null(),
+        enabled_extension_count: extensions.len() as u32,
+        enabled_extension_names: extensions.as_ptr(),
+        enabled_features: &raw const enabled_features,
+    };
+    let device = unsafe { instance.instance.create_device(physical_device, &info, None) }.vk_check("vkCreateDevice")?;
+    // `pdci0`/`pdci1` are read by vkCreateDevice and never again; naming them here
+    // keeps the borrow checker from dropping them before the call.
+    let _ = (&pdci0, &pdci1);
+    Ok(PrivateDataDevice {
+        device: Box::new(UniqueDevice { device, allocator: None }),
+        instance,
+    })
 }
 
 /// `getOomIterLimit` - how many allocation budgets to walk before giving up on the
@@ -1972,6 +2220,7 @@ pub fn create_object_management_tests() -> tcu::TestCaseGroup {
         ("multithreaded_per_thread_device", Variant::MultithreadedPerThreadDevice),
         ("single_alloc_callbacks", Variant::SingleAllocCallbacks),
         ("alloc_callback_fail", Variant::AllocCallbackFail),
+        ("private_data", Variant::PrivateData),
     ] {
         let mut group = tcu::TestCaseGroup::new(group_name);
         for (name, params) in all_cases() {
@@ -1984,6 +2233,17 @@ pub fn create_object_management_tests() -> tcu::TestCaseGroup {
             // An instance has no resources to share, so the two shared-resource
             // variants have nothing to say about it and upstream leaves it out.
             if matches!(variant, Variant::MultipleSharedResources | Variant::MultithreadedSharedResources) && matches!(params, ObjectParams::Instance) {
+                continue;
+            }
+            // The private-data variant has nothing to say about an instance or a
+            // device - it builds its own - and upstream also leaves out the merged
+            // pipeline caches.
+            if variant == Variant::PrivateData
+                && matches!(
+                    params,
+                    ObjectParams::Instance | ObjectParams::Device(_) | ObjectParams::DeviceGroup(_) | ObjectParams::MergedPipelineCache { .. }
+                )
+            {
                 continue;
             }
             // A pooled object is allocated, not created, and a failed allocation there
