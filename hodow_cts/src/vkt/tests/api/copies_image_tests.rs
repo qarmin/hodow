@@ -361,6 +361,7 @@ pub fn upload_image(
     parms: &ImageParms,
     general_layout: bool,
     families: &[u32],
+    separate_depth_stencil_layouts: bool,
 ) -> Result<(), TestError> {
     let vk_device = context.get_device();
     let queue = context.get_universal_queue();
@@ -404,18 +405,43 @@ pub fn upload_image(
     let cmd_buffer = allocate_command_buffer(vk_device, *cmd_pool, vk::CommandBufferLevel::PRIMARY)?;
     begin_command_buffer(vk_device, *cmd_buffer)?;
     unsafe {
-        let pre = make_image_memory_barrier(vk::AccessFlags::empty(), vk::AccessFlags::TRANSFER_WRITE, vk::ImageLayout::UNDEFINED, layout, image, range);
-        vk_device.cmd_pipeline_barrier(
-            *cmd_buffer,
-            vk::PipelineStageFlags::HOST,
-            vk::PipelineStageFlags::TRANSFER,
-            vk::DependencyFlags::empty(),
-            &[] as &[vk::MemoryBarrier],
-            &[] as &[vk::BufferMemoryBarrier],
-            &[pre],
-        );
+        // `formatAspect`. With SEPARATE_DEPTH_STENCIL_LAYOUT each aspect is transitioned
+        // on its own, before its own copy; without it one barrier covers both and the
+        // second copy needs none (upstream's `skipPreImageBarrier`).
+        if !separate_depth_stencil_layouts {
+            let pre = make_image_memory_barrier(vk::AccessFlags::empty(), vk::AccessFlags::TRANSFER_WRITE, vk::ImageLayout::UNDEFINED, layout, image, range);
+            vk_device.cmd_pipeline_barrier(
+                *cmd_buffer,
+                vk::PipelineStageFlags::HOST,
+                vk::PipelineStageFlags::TRANSFER,
+                vk::DependencyFlags::empty(),
+                &[] as &[vk::MemoryBarrier],
+                &[] as &[vk::BufferMemoryBarrier],
+                &[pre],
+            );
+        }
 
         for (aspect, staging) in &staged {
+            if separate_depth_stencil_layouts {
+                let aspect_range = make_image_subresource_range(*aspect, 0, 1, 0, parms.array_size());
+                let pre = make_image_memory_barrier(
+                    vk::AccessFlags::empty(),
+                    vk::AccessFlags::TRANSFER_WRITE,
+                    vk::ImageLayout::UNDEFINED,
+                    layout,
+                    image,
+                    aspect_range,
+                );
+                vk_device.cmd_pipeline_barrier(
+                    *cmd_buffer,
+                    vk::PipelineStageFlags::HOST,
+                    vk::PipelineStageFlags::TRANSFER,
+                    vk::DependencyFlags::empty(),
+                    &[] as &[vk::MemoryBarrier],
+                    &[] as &[vk::BufferMemoryBarrier],
+                    &[pre],
+                );
+            }
             let region = vk::BufferImageCopy {
                 buffer_offset: 0,
                 buffer_row_length: extent.width,
@@ -690,7 +716,15 @@ impl TestInstance for CopyBufferToImageInstance<'_> {
             ImageWithMemory::new(vk_device, allocator, image_info, MemoryRequirement::ANY)?
         };
 
-        upload_image(self.context, &destination_level.get_const_access(), destination.get(), &p.dst, p.general_layout, &families)?;
+        upload_image(
+            self.context,
+            &destination_level.get_const_access(),
+            destination.get(),
+            &p.dst,
+            p.general_layout,
+            &families,
+            false,
+        )?;
 
         // The copy under test.
         let cmd_pool = make_command_pool(vk_device, queue_family_index)?;
@@ -1370,7 +1404,7 @@ impl TestInstance for CopyImageToBufferInstance<'_> {
         unsafe { std::ptr::copy_nonoverlapping(destination_level.data().as_ptr(), destination_alloc.get_host_ptr(), destination_level.data().len()) };
         flush_alloc(vk_device, &destination_alloc)?;
 
-        upload_image(self.context, &source_level.get_const_access(), source.get(), &p.src, p.general_layout, &families)?;
+        upload_image(self.context, &source_level.get_const_access(), source.get(), &p.src, p.general_layout, &families, false)?;
 
         let cmd_pool = make_command_pool(vk_device, queue_family_index)?;
         let cmd_buffer = allocate_command_buffer(vk_device, *cmd_pool, vk::CommandBufferLevel::PRIMARY)?;
@@ -2125,8 +2159,16 @@ impl TestInstance for CopyImageToImageInstance<'_> {
         let source = self.make_image(&p.src)?;
         let destination = self.make_image(&p.dst)?;
 
-        upload_image(self.context, &source_level.get_const_access(), source.get(), &p.src, p.general_layout, &families)?;
-        upload_image(self.context, &destination_level.get_const_access(), destination.get(), &p.dst, p.general_layout, &families)?;
+        upload_image(self.context, &source_level.get_const_access(), source.get(), &p.src, p.general_layout, &families, false)?;
+        upload_image(
+            self.context,
+            &destination_level.get_const_access(),
+            destination.get(),
+            &p.dst,
+            p.general_layout,
+            &families,
+            false,
+        )?;
 
         let cmd_pool = make_command_pool(vk_device, queue_family_index)?;
         let cmd_buffer = allocate_command_buffer(vk_device, *cmd_pool, vk::CommandBufferLevel::PRIMARY)?;
@@ -3520,7 +3562,15 @@ impl TestInstance for CopyBufferToDepthStencilInstance<'_> {
             ImageWithMemory::new(vk_device, allocator, image_info, MemoryRequirement::ANY)?
         };
 
-        upload_image(self.context, &destination_level.get_const_access(), destination.get(), &p.dst, p.general_layout, &families)?;
+        upload_image(
+            self.context,
+            &destination_level.get_const_access(),
+            destination.get(),
+            &p.dst,
+            p.general_layout,
+            &families,
+            false,
+        )?;
 
         let cmd_pool = make_command_pool(vk_device, queue_family_index)?;
         let cmd_buffer = allocate_command_buffer(vk_device, *cmd_pool, vk::CommandBufferLevel::PRIMARY)?;
@@ -3891,7 +3941,7 @@ impl TestInstance for CopyDepthStencilToBufferInstance<'_> {
             ImageWithMemory::new(vk_device, allocator, image_info, MemoryRequirement::ANY)?
         };
 
-        upload_image(self.context, &source_level.get_const_access(), source.get(), &p.src, p.general_layout, &families)?;
+        upload_image(self.context, &source_level.get_const_access(), source.get(), &p.src, p.general_layout, &families, false)?;
 
         let cmd_pool = make_command_pool(vk_device, queue_family_index)?;
         let cmd_buffer = allocate_command_buffer(vk_device, *cmd_pool, vk::CommandBufferLevel::PRIMARY)?;

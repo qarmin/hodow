@@ -116,7 +116,7 @@ fn get_channel_write_swizzle(order: ChannelOrder) -> [Swz; 4] {
 /// `tcu::isCombinedDepthStencilType`
 pub fn is_combined_depth_stencil_type(type_: ChannelType) -> bool {
     use ChannelType::*;
-    matches!(type_, UNSIGNED_INT_16_8_8 | UNSIGNED_INT_24_8_REV | FLOAT_UNSIGNED_INT_24_8_REV)
+    matches!(type_, UNSIGNED_INT_16_8_8 | UNSIGNED_INT_24_8 | UNSIGNED_INT_24_8_REV | FLOAT_UNSIGNED_INT_24_8_REV)
 }
 
 /// `tcu::getChannelBitDepth` - the full 48-type table, extracted from upstream.
@@ -275,28 +275,8 @@ pub fn has_stencil_component(order: ChannelOrder) -> bool {
 
 /// `tcu::getEffectiveDepthStencilTextureFormat`
 ///
-/// Only the format half of upstream's `toSamplerAccess` - the pointer/pitch fixup it
-/// also does is unnecessary here, because `get_pix_depth`/`get_pix_stencil` already
-/// decode the combined types in place. What is needed is the format the *threshold*
-/// is computed from: a combined type has no channel class of its own (it reports
-/// `Last`), so comparing against it would fall off the end of the switch.
-pub fn get_effective_depth_stencil_texture_format(base: TextureFormat, mode: DepthStencilMode) -> TextureFormat {
-    if base.order != ChannelOrder::DS && !matches!(base.type_, ChannelType::UNSIGNED_INT_24_8_REV) {
-        return base;
-    }
-    match (base.type_, mode) {
-        (ChannelType::UNSIGNED_INT_16_8_8, DepthStencilMode::Depth) => TextureFormat::new(ChannelOrder::D, ChannelType::UNORM_INT16),
-        (ChannelType::UNSIGNED_INT_24_8, DepthStencilMode::Depth) | (ChannelType::UNSIGNED_INT_24_8_REV, DepthStencilMode::Depth) => {
-            TextureFormat::new(ChannelOrder::D, ChannelType::UNORM_INT24)
-        }
-        (ChannelType::FLOAT_UNSIGNED_INT_24_8_REV, DepthStencilMode::Depth) => TextureFormat::new(ChannelOrder::D, ChannelType::FLOAT),
-        (_, DepthStencilMode::Stencil) => TextureFormat::new(ChannelOrder::S, ChannelType::UNSIGNED_INT8),
-        _ => base,
-    }
-}
-
 /// `tcu::Sampler::DepthStencilMode`
-#[derive(Clone, Copy, PartialEq, Eq)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum DepthStencilMode {
     Depth,
     Stencil,
@@ -476,18 +456,45 @@ fn channel_to_int64(value: &[u8], type_: ChannelType) -> i64 {
     }
 }
 
-/// `tcu::ConstPixelBufferAccess`, narrowed to the tightly-packed, non-YCbCr case that
-/// `readImage` produces (so the pitch is derived rather than carried).
+/// The strides a tightly-packed level of this format and size has.
+fn tight_pitch(format: TextureFormat, size: [u32; 3]) -> [usize; 3] {
+    let pixel_size = pixel_size_of(format);
+    let row_pitch = pixel_size * size[0] as usize;
+    [pixel_size, row_pitch, row_pitch * size[1] as usize]
+}
+
+/// `tcu::ConstPixelBufferAccess`, narrowed to the non-YCbCr case.
+///
+/// The pitch is carried rather than derived because an effective depth/stencil view
+/// keeps the combined format's strides while presenting one aspect's format - see
+/// `get_effective_depth_stencil_access`.
 pub struct ConstPixelBufferAccess<'a> {
     format: TextureFormat,
     size: [u32; 3],
+    /// `m_pitch` - pixel, row and slice pitch, in bytes.
+    pitch: [usize; 3],
     data: &'a [u8],
 }
 
 impl<'a> ConstPixelBufferAccess<'a> {
     /// Wraps tightly-packed texel data of `size` in `format`.
     pub fn new(format: TextureFormat, size: [u32; 3], data: &'a [u8]) -> Self {
-        Self { format, size, data }
+        Self {
+            format,
+            size,
+            pitch: tight_pitch(format, size),
+            data,
+        }
+    }
+
+    /// Wraps texel data whose strides are not the ones `format` implies.
+    pub fn new_with_pitch(format: TextureFormat, size: [u32; 3], pitch: [usize; 3], data: &'a [u8]) -> Self {
+        Self { format, size, pitch, data }
+    }
+
+    /// `getPitch`
+    pub fn pitch(&self) -> [usize; 3] {
+        self.pitch
     }
 
     /// `getFormat`
@@ -512,10 +519,8 @@ impl ConstPixelBufferAccess<'_> {
 
     /// `ConstPixelBufferAccess::getPixelPtr`
     pub fn pixel(&self, x: u32, y: u32, z: u32) -> &[u8] {
-        let pixel_size = pixel_size_of(self.format);
-        let row_pitch = pixel_size * self.size[0] as usize;
-        let slice_pitch = row_pitch * self.size[1] as usize;
-        let offset = x as usize * pixel_size + y as usize * row_pitch + z as usize * slice_pitch;
+        let [pixel_pitch, row_pitch, slice_pitch] = self.pitch;
+        let offset = x as usize * pixel_pitch + y as usize * row_pitch + z as usize * slice_pitch;
         &self.data[offset..]
     }
 
@@ -689,11 +694,7 @@ impl TextureLevelPyramid {
     }
 
     fn get_level(&self, level: usize) -> ConstPixelBufferAccess<'_> {
-        ConstPixelBufferAccess {
-            format: self.format,
-            size: self.levels[level].0,
-            data: &self.levels[level].1,
-        }
+        ConstPixelBufferAccess::new(self.format, self.levels[level].0, &self.levels[level].1)
     }
 }
 
@@ -722,7 +723,7 @@ mod tests {
     use super::*;
 
     fn access(format: TextureFormat, data: &[u8]) -> ConstPixelBufferAccess<'_> {
-        ConstPixelBufferAccess { format, size: [1, 1, 1], data }
+        ConstPixelBufferAccess::new(format, [1, 1, 1], data)
     }
 
     /// Decoding a stored texel is the step where a mistake looks exactly like a driver
@@ -1201,6 +1202,49 @@ pub fn f32_to_f16_bits(value: f32) -> u16 {
     sign | half as u16
 }
 
+/// `tcu::getEffectiveDepthStencilTextureFormat`
+pub fn get_effective_depth_stencil_texture_format(base: TextureFormat, mode: DepthStencilMode) -> TextureFormat {
+    effective_depth_stencil_view(base, mode).map_or(base, |(format, _)| format)
+}
+
+/// `toSamplerAccess` reduced to what it decides: the single-aspect format, and how far
+/// into the combined texel that aspect starts.
+///
+/// `None` for a format that is not combined - there the access is returned unchanged.
+/// Little-endian only, which is what the byte offsets below assume.
+fn effective_depth_stencil_view(base: TextureFormat, mode: DepthStencilMode) -> Option<(TextureFormat, usize)> {
+    use ChannelType::*;
+    use DepthStencilMode::*;
+    if !is_combined_depth_stencil_type(base.type_) {
+        return None;
+    }
+    let stencil = (TextureFormat::new(ChannelOrder::S, UNSIGNED_INT8), 0);
+    Some(match (base.type_, mode) {
+        (FLOAT_UNSIGNED_INT_24_8_REV, Depth) => (TextureFormat::new(ChannelOrder::D, FLOAT), 0),
+        // The stencil byte of a d32_sfloat_s8 texel lives in the second word.
+        (FLOAT_UNSIGNED_INT_24_8_REV, Stencil) => (stencil.0, 4),
+        (UNSIGNED_INT_16_8_8, Depth) => (TextureFormat::new(ChannelOrder::D, UNORM_INT16), 2),
+        (UNSIGNED_INT_16_8_8, Stencil) => stencil,
+        (UNSIGNED_INT_24_8, Depth) => (TextureFormat::new(ChannelOrder::D, UNORM_INT24), 1),
+        (UNSIGNED_INT_24_8, Stencil) => stencil,
+        (UNSIGNED_INT_24_8_REV, Depth) => (TextureFormat::new(ChannelOrder::D, UNORM_INT24), 0),
+        (UNSIGNED_INT_24_8_REV, Stencil) => (stencil.0, 3),
+        (other, _) => unreachable!("unknown combined format {other:?}"),
+    })
+}
+
+/// `tcu::getEffectiveDepthStencilAccess`
+///
+/// A view of one aspect of a combined depth/stencil level. It keeps the combined
+/// format's pitch and only narrows the format and offsets the base, which is what lets
+/// the single-aspect texel reads work over interleaved storage.
+pub fn get_effective_depth_stencil_access<'a>(base: &'a ConstPixelBufferAccess<'a>, mode: DepthStencilMode) -> ConstPixelBufferAccess<'a> {
+    match effective_depth_stencil_view(base.format(), mode) {
+        None => ConstPixelBufferAccess::new_with_pitch(base.format(), base.size(), base.pitch(), base.raw()),
+        Some((format, offset)) => ConstPixelBufferAccess::new_with_pitch(format, base.size(), base.pitch(), &base.raw()[offset..]),
+    }
+}
+
 /// `tcu::TextureLevel` - owns tightly-packed storage for one mip level.
 pub struct TextureLevel {
     format: TextureFormat,
@@ -1229,6 +1273,7 @@ impl TextureLevel {
         PixelBufferAccess {
             format: self.format,
             size: self.size,
+            pitch: tight_pitch(self.format, self.size),
             data: &mut self.data,
         }
     }
@@ -1259,6 +1304,8 @@ impl TextureLevel {
 pub struct PixelBufferAccess<'a> {
     format: TextureFormat,
     size: [u32; 3],
+    /// `m_pitch` - see `ConstPixelBufferAccess`.
+    pitch: [usize; 3],
     data: &'a mut [u8],
 }
 
@@ -1276,8 +1323,8 @@ impl PixelBufferAccess<'_> {
     }
 
     fn pixel_offset(&self, x: u32, y: u32, z: u32) -> usize {
-        let [w, h, _] = self.size;
-        (((z as usize * h as usize) + y as usize) * w as usize + x as usize) * self.pixel_size()
+        let [pixel_pitch, row_pitch, slice_pitch] = self.pitch;
+        x as usize * pixel_pitch + y as usize * row_pitch + z as usize * slice_pitch
     }
 
     /// `tcu::PixelBufferAccess::setPixel(const IVec4&)`
@@ -1800,5 +1847,54 @@ mod write_tests {
         let format = TextureFormat::new(ChannelOrder::RGB, ChannelType::UNSIGNED_INT_11F_11F_10F_REV);
         let mut level = TextureLevel::new(format, 1, 1, 1).unwrap();
         assert!(!level.get_access().set_pixel_int([1, 2, 3, 4], 0, 0, 0));
+    }
+
+    /// The effective single-aspect view must decode a combined texel to the same values
+    /// the in-place `get_pix_depth`/`get_pix_stencil` path already does. The two are
+    /// independent implementations of the same layout, so agreement is real evidence
+    /// about the byte offsets rather than a tautology.
+    #[test]
+    fn effective_depth_stencil_view_matches_in_place_reads() {
+        for type_ in [
+            ChannelType::UNSIGNED_INT_16_8_8,
+            ChannelType::UNSIGNED_INT_24_8_REV,
+            ChannelType::FLOAT_UNSIGNED_INT_24_8_REV,
+        ] {
+            let format = TextureFormat::new(ChannelOrder::DS, type_);
+            let mut level = TextureLevel::new(format, 3, 2, 1).unwrap();
+            {
+                let mut access = level.get_access();
+                for y in 0..2 {
+                    for x in 0..3 {
+                        access.set_pix_depth(0.125 * (x + 3 * y) as f32, x, y, 0);
+                        access.set_pix_stencil(17 * (x + 3 * y) + 1, x, y, 0);
+                    }
+                }
+            }
+            let access = level.get_const_access();
+            let depth = get_effective_depth_stencil_access(&access, DepthStencilMode::Depth);
+            let stencil = get_effective_depth_stencil_access(&access, DepthStencilMode::Stencil);
+
+            for y in 0..2 {
+                for x in 0..3 {
+                    let expected_depth = access.get_pix_depth(x, y, 0);
+                    let got_depth = depth.get_pixel(x, y, 0)[0];
+                    assert!((got_depth - expected_depth).abs() < 1e-6, "{type_:?} depth at ({x},{y}): {got_depth} vs {expected_depth}");
+                    assert_eq!(stencil.get_pixel_int(x, y, 0)[0] as u32, access.get_pix_stencil(x, y, 0), "{type_:?} stencil at ({x},{y})");
+                }
+            }
+        }
+    }
+
+    /// A format that is not combined comes back unchanged.
+    #[test]
+    fn effective_depth_stencil_view_passes_through_single_aspect() {
+        let format = TextureFormat::new(ChannelOrder::D, ChannelType::UNORM_INT16);
+        let mut level = TextureLevel::new(format, 2, 1, 1).unwrap();
+        level.get_access().set_pix_depth(0.5, 1, 0, 0);
+        let access = level.get_const_access();
+        let depth = get_effective_depth_stencil_access(&access, DepthStencilMode::Depth);
+        assert_eq!(depth.format(), format);
+        assert!((depth.get_pixel(1, 0, 0)[0] - 0.5).abs() < 1e-4);
     }
 }

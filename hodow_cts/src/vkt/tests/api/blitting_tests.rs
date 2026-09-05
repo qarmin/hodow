@@ -26,8 +26,11 @@ use vulkanalia::vk::DeviceV1_3;
 
 use super::copies_buffer_tests::{AllocationKind, CopyCommandVariant};
 use super::copies_image_tests::{FillMode, GroupParams, ImageParms, generate_buffer, get_aspect_flags, is_supported_by_framework, read_image, upload_image};
-use super::copy_format_lists::{BlitFormat, COMPATIBLE_FORMATS_FLOATS, COMPATIBLE_FORMATS_S_INTS, COMPATIBLE_FORMATS_SRGB, COMPATIBLE_FORMATS_U_INTS};
-use crate::tcu::pixel::{ConstPixelBufferAccess, TextureLevel, get_texture_format_bit_depth, get_texture_format_mantissa_bit_depth};
+use super::copy_format_lists::{BlitFormat, COMPATIBLE_FORMATS_FLOATS, COMPATIBLE_FORMATS_S_INTS, COMPATIBLE_FORMATS_SRGB, COMPATIBLE_FORMATS_U_INTS, DEPTH_AND_STENCIL_FORMATS};
+use crate::tcu::pixel::{
+    ConstPixelBufferAccess, DepthStencilMode, TextureLevel, get_effective_depth_stencil_access, get_texture_format_bit_depth, get_texture_format_mantissa_bit_depth,
+    has_depth_component, has_stencil_component, is_combined_depth_stencil_type,
+};
 use crate::tcu::tex_verifier::{LookupPrecision, is_nearest_sample_result_valid_float, is_nearest_sample_result_valid_int, srgb_to_linear};
 use crate::tcu::texture::{ChannelOrder, ChannelType, TextureChannelClass, TextureFormat};
 use crate::tcu::{self, TestError, TestOutcome, TestStatus, map_vk_format};
@@ -47,18 +50,30 @@ const DEFAULT_QUARTER_SIZE: i32 = DEFAULT_SIZE / 4;
 /// `defaultSixteenthSize`
 const DEFAULT_SIXTEENTH_SIZE: i32 = DEFAULT_SIZE / 16;
 
-/// `CopyRegion::imageBlit`, narrowed to the single-layer colour blits the ported
-/// subgroups use - every one of them passes `defaultSourceLayer` on both sides.
+/// `CopyRegion::imageBlit`, narrowed to the single-layer blits the ported subgroups
+/// use - every one of them passes the same subresource layers on both sides, differing
+/// only in the aspect.
 #[derive(Clone, Copy)]
 pub struct ImageBlit {
     pub src_offsets: [[i32; 3]; 2],
     pub dst_offsets: [[i32; 3]; 2],
+    /// `defaultSourceLayer`'s aspect, or the depth/stencil one the depth_stencil group
+    /// names per region.
+    pub aspect_mask: vk::ImageAspectFlags,
 }
 
 impl ImageBlit {
+    fn color(src_offsets: [[i32; 3]; 2], dst_offsets: [[i32; 3]; 2]) -> Self {
+        Self {
+            src_offsets,
+            dst_offsets,
+            aspect_mask: vk::ImageAspectFlags::COLOR,
+        }
+    }
+
     fn to_vk(self) -> vk::ImageBlit {
         let layers = vk::ImageSubresourceLayers {
-            aspect_mask: vk::ImageAspectFlags::COLOR,
+            aspect_mask: self.aspect_mask,
             mip_level: 0,
             base_array_layer: 0,
             layer_count: 1,
@@ -258,6 +273,9 @@ pub struct BlitImageCase {
     filter: vk::Filter,
     allocation_kind: AllocationKind,
     command_variant: CopyCommandVariant,
+    /// `SEPARATE_DEPTH_STENCIL_LAYOUT` - the two aspects are transitioned one at a
+    /// time on upload instead of together.
+    separate_depth_stencil_layouts: bool,
 }
 
 impl TestCase for BlitImageCase {
@@ -279,6 +297,9 @@ impl TestCase for BlitImageCase {
 
         if self.command_variant == CopyCommandVariant::CopyCommands2 {
             context.require_device_functionality("VK_KHR_copy_commands2")?;
+        }
+        if self.separate_depth_stencil_layouts {
+            context.require_device_functionality("VK_KHR_separate_depth_stencil_layouts")?;
         }
         if self.allocation_kind == AllocationKind::Dedicated {
             context.require_device_functionality("VK_KHR_dedicated_allocation")?;
@@ -374,7 +395,25 @@ impl BlittingImages<'_> {
     /// `BlittingImages::checkTestResult`, NEAREST branch only.
     fn check_test_result(&self, result: &ConstPixelBufferAccess<'_>, source: &ConstPixelBufferAccess<'_>) -> Result<TestStatus, TestError> {
         const FAIL_MESSAGE: &str = "Result image is incorrect";
-        if !self.check_nearest_filtered_result(result, source)? {
+
+        // A combined depth/stencil result is checked one aspect at a time: the two have
+        // different channel classes, so there is no single comparison covering both.
+        if is_combined_depth_stencil_type(result.format().type_) {
+            if has_depth_component(result.format().order) {
+                let depth_result = get_effective_depth_stencil_access(result, DepthStencilMode::Depth);
+                let depth_source = get_effective_depth_stencil_access(source, DepthStencilMode::Depth);
+                if !self.check_nearest_filtered_result(&depth_result, &depth_source)? {
+                    return Ok(TestStatus::fail(FAIL_MESSAGE));
+                }
+            }
+            if has_stencil_component(result.format().order) {
+                let stencil_result = get_effective_depth_stencil_access(result, DepthStencilMode::Stencil);
+                let stencil_source = get_effective_depth_stencil_access(source, DepthStencilMode::Stencil);
+                if !self.check_nearest_filtered_result(&stencil_result, &stencil_source)? {
+                    return Ok(TestStatus::fail(FAIL_MESSAGE));
+                }
+            }
+        } else if !self.check_nearest_filtered_result(result, source)? {
             return Ok(TestStatus::fail(FAIL_MESSAGE));
         }
         Ok(TestStatus::pass("Pass"))
@@ -401,7 +440,15 @@ impl TestInstance for BlittingImages<'_> {
         let src_tcu_format = map_vk_format(src_image_params.format).ok_or_else(|| TestError::NotSupported("format has no tcu mapping".to_string()))?;
         let mut source_texture_level = TextureLevel::new(src_tcu_format, src_width, src_height, src_depth)?;
         generate_buffer(&mut source_texture_level.get_access(), src_width, src_height, src_depth, src_image_params.fill_mode, false);
-        upload_image(self.context, &source_texture_level.get_const_access(), source.get(), src_image_params, false, &families)?;
+        upload_image(
+            self.context,
+            &source_texture_level.get_const_access(),
+            source.get(),
+            src_image_params,
+            false,
+            &families,
+            p.separate_depth_stencil_layouts,
+        )?;
 
         // generate destination image
         let dst_tcu_format = map_vk_format(dst_image_params.format).ok_or_else(|| TestError::NotSupported("format has no tcu mapping".to_string()))?;
@@ -421,6 +468,7 @@ impl TestInstance for BlittingImages<'_> {
             dst_image_params,
             false,
             &families,
+            p.separate_depth_stencil_layouts,
         )?;
 
         let cmd_pool = make_command_pool(vk_device, queue_family_index)?;
@@ -542,6 +590,7 @@ fn add_blitting_image_simple_tests(group: &mut tcu::TestCaseGroup, gp: &GroupPar
         filter: vk::Filter::NEAREST,
         allocation_kind: gp.allocation_kind,
         command_variant: gp.command_variant,
+        separate_depth_stencil_layouts: false,
     };
 
     group.add_child(Box::new(make(vk::Format::R8G8B8A8_UNORM, "nearest".to_string())) as Box<dyn TestCase>);
@@ -572,10 +621,7 @@ fn simple_whole_like(image_type: vk::ImageType, dst_offsets: [[i32; 3]; 2]) -> S
     SimpleBlitParams {
         src_extent,
         dst_extent,
-        regions: vec![ImageBlit {
-            src_offsets: [[0, 0, 0], [DEFAULT_SIZE, DEFAULT_SIZE, image_depth]],
-            dst_offsets,
-        }],
+        regions: vec![ImageBlit::color([[0, 0, 0], [DEFAULT_SIZE, DEFAULT_SIZE, image_depth]], dst_offsets)],
     }
 }
 
@@ -589,25 +635,13 @@ fn simple_mirror_subregions(image_type: vk::ImageType) -> SimpleBlitParams {
         dst_extent,
         regions: vec![
             // No mirroring.
-            ImageBlit {
-                src_offsets: [[0, 0, 0], [h, h, d]],
-                dst_offsets: [[0, 0, 0], [h, h, d]],
-            },
+            ImageBlit::color([[0, 0, 0], [h, h, d]], [[0, 0, 0], [h, h, d]]),
             // Flipping y coordinates.
-            ImageBlit {
-                src_offsets: [[h, 0, 0], [s, h, d]],
-                dst_offsets: [[h, h, 0], [s, 0, d]],
-            },
+            ImageBlit::color([[h, 0, 0], [s, h, d]], [[h, h, 0], [s, 0, d]]),
             // Flipping x coordinates.
-            ImageBlit {
-                src_offsets: [[0, h, 0], [h, s, d]],
-                dst_offsets: [[h, h, 0], [0, s, d]],
-            },
+            ImageBlit::color([[0, h, 0], [h, s, d]], [[h, h, 0], [0, s, d]]),
             // Flipping x and y coordinates.
-            ImageBlit {
-                src_offsets: [[h, h, 0], [s, s, d]],
-                dst_offsets: [[s, s, 0], [h, h, d]],
-            },
+            ImageBlit::color([[h, h, 0], [s, s, d]], [[s, s, 0], [h, h, d]]),
         ],
     }
 }
@@ -623,10 +657,7 @@ fn simple_scaling_whole(image_type: vk::ImageType, src_is_half: bool) -> SimpleB
     SimpleBlitParams {
         src_extent,
         dst_extent,
-        regions: vec![ImageBlit {
-            src_offsets: if src_is_half { half } else { full },
-            dst_offsets: if src_is_half { full } else { half },
-        }],
+        regions: vec![ImageBlit::color(if src_is_half { half } else { full }, if src_is_half { full } else { half })],
     }
 }
 
@@ -640,13 +671,13 @@ fn simple_scaling_and_offset(image_type: vk::ImageType) -> SimpleBlitParams {
     SimpleBlitParams {
         src_extent,
         dst_extent,
-        regions: vec![ImageBlit {
-            src_offsets: [
+        regions: vec![ImageBlit::color(
+            [
                 [DEFAULT_QUARTER_SIZE, DEFAULT_QUARTER_SIZE, src_depth_offset],
                 [DEFAULT_QUARTER_SIZE * 3, DEFAULT_QUARTER_SIZE * 3, src_depth_size],
             ],
-            dst_offsets: [[0, 0, 0], [DEFAULT_SIZE, DEFAULT_SIZE, image_depth]],
-        }],
+            [[0, 0, 0], [DEFAULT_SIZE, DEFAULT_SIZE, image_depth]],
+        )],
     }
 }
 
@@ -657,8 +688,8 @@ fn simple_without_scaling_partial(image_type: vk::ImageType) -> SimpleBlitParams
     let mut regions = Vec::new();
     let mut i = 0;
     while i < DEFAULT_SIZE {
-        regions.push(ImageBlit {
-            src_offsets: [
+        regions.push(ImageBlit::color(
+            [
                 [
                     DEFAULT_SIZE - DEFAULT_QUARTER_SIZE - i,
                     DEFAULT_SIZE - DEFAULT_QUARTER_SIZE - i,
@@ -666,11 +697,11 @@ fn simple_without_scaling_partial(image_type: vk::ImageType) -> SimpleBlitParams
                 ],
                 [DEFAULT_SIZE - i, DEFAULT_SIZE - i, if is_3d_blit { DEFAULT_SIZE - i } else { 1 }],
             ],
-            dst_offsets: [
+            [
                 [i, i, if is_3d_blit { i } else { 0 }],
                 [i + DEFAULT_QUARTER_SIZE, i + DEFAULT_QUARTER_SIZE, if is_3d_blit { i + DEFAULT_QUARTER_SIZE } else { 1 }],
             ],
-        });
+        ));
         i += DEFAULT_QUARTER_SIZE;
     }
     SimpleBlitParams { src_extent, dst_extent, regions }
@@ -736,7 +767,10 @@ pub fn add_blitting_image_groups(parent: &mut tcu::TestCaseGroup, name: &str, al
     let mut color = tcu::TestCaseGroup::new("color");
     add_blitting_image_all_formats_color_tests(&mut color, &gp);
     all_formats.add_child(color);
-    // all_formats.depth_stencil and the mipmap group need the non-nearest reference path.
+    let mut depth_stencil = tcu::TestCaseGroup::new("depth_stencil");
+    add_blitting_image_all_formats_depth_stencil_tests(&mut depth_stencil, &gp);
+    all_formats.add_child(depth_stencil);
+    // The generate_mipmaps group needs the non-nearest reference path.
     group.add_child(all_formats);
     parent.add_child(group);
 }
@@ -818,10 +852,10 @@ fn create_2d_copy_regions(src_width: i32, src_height: i32, dst_width: i32, dst_h
     // to the top of resulting image copy whole source image but with increasingly smaller sizes
     let (mut i, mut j) = (0, 1);
     while (i + fourth_of_dst_width / j < dst_width) && (fourth_of_dst_width > j) {
-        regions.push(ImageBlit {
-            src_offsets: [[0, 0, 0], [src_width, src_height, 1]],
-            dst_offsets: [[i, 0, 0], [i + fourth_of_dst_width / j, fourth_of_dst_height / j, 1]],
-        });
+        regions.push(ImageBlit::color(
+            [[0, 0, 0], [src_width, src_height, 1]],
+            [[i, 0, 0], [i + fourth_of_dst_width / j, fourth_of_dst_height / j, 1]],
+        ));
         i += fourth_of_dst_width / j;
         j += 1;
     }
@@ -832,10 +866,10 @@ fn create_2d_copy_regions(src_width: i32, src_height: i32, dst_width: i32, dst_h
         let src_y = i * fourth_of_src_height;
         let dst_x = i * fourth_of_dst_width;
 
-        regions.push(ImageBlit {
-            src_offsets: [[src_x, src_y, 0], [src_x + fourth_of_src_width, src_y + fourth_of_src_height, 1]],
-            dst_offsets: [[dst_x, 2 * fourth_of_dst_height, 0], [dst_x + fourth_of_dst_width, 3 * fourth_of_dst_height, 1]],
-        });
+        regions.push(ImageBlit::color(
+            [[src_x, src_y, 0], [src_x + fourth_of_src_width, src_y + fourth_of_src_height, 1]],
+            [[dst_x, 2 * fourth_of_dst_height, 0], [dst_x + fourth_of_dst_width, 3 * fourth_of_dst_height, 1]],
+        ));
     }
 
     regions
@@ -846,16 +880,13 @@ fn create_1d_copy_regions() -> Vec<ImageBlit> {
     let mut regions = Vec::new();
     let mut i = 0;
     while i < DEFAULT_SIZE {
-        regions.push(ImageBlit {
-            src_offsets: [[0, 0, 0], [DEFAULT_SIZE, 1, 1]],
-            dst_offsets: [[i, 0, 0], [i + DEFAULT_QUARTER_SIZE, 1, 1]],
-        });
+        regions.push(ImageBlit::color([[0, 0, 0], [DEFAULT_SIZE, 1, 1]], [[i, 0, 0], [i + DEFAULT_QUARTER_SIZE, 1, 1]]));
         i += DEFAULT_SIZE / 2;
     }
-    regions.push(ImageBlit {
-        src_offsets: [[0, 0, 0], [DEFAULT_QUARTER_SIZE, 1, 1]],
-        dst_offsets: [[DEFAULT_QUARTER_SIZE, 0, 0], [2 * DEFAULT_QUARTER_SIZE, 1, 1]],
-    });
+    regions.push(ImageBlit::color(
+        [[0, 0, 0], [DEFAULT_QUARTER_SIZE, 1, 1]],
+        [[DEFAULT_QUARTER_SIZE, 0, 0], [2 * DEFAULT_QUARTER_SIZE, 1, 1]],
+    ));
     regions
 }
 
@@ -929,6 +960,7 @@ fn add_blitting_image_all_formats_color_src_format_dst_format_tests(group: &mut 
                             filter: vk::Filter::NEAREST,
                             allocation_kind: gp.allocation_kind,
                             command_variant: gp.command_variant,
+                            separate_depth_stencil_layouts: false,
                         }) as Box<dyn TestCase>
                     };
                     group.add_child(make(format!("{test_name}_nearest"), FillMode::Gradient));
@@ -1056,6 +1088,179 @@ fn add_blitting_image_all_formats_color_tests(group: &mut tcu::TestCaseGroup, gp
     }
 }
 
+/// `addBlittingImageAllFormatsDepthStencilFormatsTests`
+///
+/// Only the VK_FILTER_NEAREST case - upstream registers nothing else here.
+fn add_blitting_image_all_formats_depth_stencil_formats_tests(
+    group: &mut tcu::TestCaseGroup,
+    gp: &GroupParams,
+    image_type: vk::ImageType,
+    extent: [u32; 3],
+    format: vk::Format,
+    regions: &[ImageBlit],
+    separate_layouts: bool,
+) {
+    let blit_src_layouts = [vk::ImageLayout::TRANSFER_SRC_OPTIMAL, vk::ImageLayout::GENERAL];
+    let blit_dst_layouts = [vk::ImageLayout::TRANSFER_DST_OPTIMAL, vk::ImageLayout::GENERAL];
+
+    for src_layout in blit_src_layouts {
+        for dst_layout in blit_dst_layouts {
+            let parms = |tiling| ImageParms {
+                image_type,
+                format,
+                extent,
+                tiling,
+                fill_mode: FillMode::Gradient,
+                create_flags: None,
+            };
+            group.add_child(Box::new(BlitImageCase {
+                name: format!("{}_{}_nearest", image_layout_case_name(src_layout), image_layout_case_name(dst_layout)),
+                src: parms(vk::ImageTiling::OPTIMAL),
+                dst: ImageParms {
+                    fill_mode: FillMode::White,
+                    ..parms(vk::ImageTiling::OPTIMAL)
+                },
+                src_operation_layout: src_layout,
+                dst_operation_layout: dst_layout,
+                regions: regions.to_vec(),
+                filter: vk::Filter::NEAREST,
+                allocation_kind: gp.allocation_kind,
+                command_variant: gp.command_variant,
+                separate_depth_stencil_layouts: separate_layouts,
+            }) as Box<dyn TestCase>);
+        }
+    }
+}
+
+/// `getImageLayoutCaseName`
+fn image_layout_case_name(layout: vk::ImageLayout) -> &'static str {
+    if layout == vk::ImageLayout::GENERAL { "general" } else { "optimal" }
+}
+
+/// One depth/stencil region: upstream emits the same offsets once per aspect the
+/// format has, so the aspect is the only thing that varies.
+fn ds_regions(has_depth: bool, has_stencil: bool, src: [[i32; 3]; 2], dst: [[i32; 3]; 2]) -> Vec<ImageBlit> {
+    let mut out = Vec::new();
+    if has_depth {
+        out.push(ImageBlit {
+            src_offsets: src,
+            dst_offsets: dst,
+            aspect_mask: vk::ImageAspectFlags::DEPTH,
+        });
+    }
+    if has_stencil {
+        out.push(ImageBlit {
+            src_offsets: src,
+            dst_offsets: dst,
+            aspect_mask: vk::ImageAspectFlags::STENCIL,
+        });
+    }
+    out
+}
+
+/// The region lists `addBlittingImageAllFormatsDepthStencilTests` builds inline, per
+/// image type.
+fn create_depth_stencil_regions(image_type: vk::ImageType, has_depth: bool, has_stencil: bool) -> Vec<ImageBlit> {
+    let (s, q, sixteenth) = (DEFAULT_SIZE, DEFAULT_QUARTER_SIZE, DEFAULT_SIXTEENTH_SIZE);
+    let mut regions = Vec::new();
+    let both = has_depth && has_stencil;
+
+    match image_type {
+        vk::ImageType::_2D => {
+            let (mut i, mut j) = (0, 1);
+            while (i + q / j < s) && (q > j) {
+                regions.extend(ds_regions(has_depth, has_stencil, [[0, 0, 0], [s, s, 1]], [[i, 0, 0], [i + q / j, q / j, 1]]));
+                i += q / j;
+                j += 1;
+            }
+            let mut i = 0;
+            while i < s {
+                let src = [[i, i, 0], [i + q, i + q, 1]];
+                regions.extend(ds_regions(has_depth, has_stencil, src, [[i, s / 2, 0], [i + q, s / 2 + q, 1]]));
+                if both {
+                    regions.push(ImageBlit {
+                        src_offsets: src,
+                        dst_offsets: [[i, 3 * q, 0], [i + q, s, 1]],
+                        aspect_mask: vk::ImageAspectFlags::DEPTH | vk::ImageAspectFlags::STENCIL,
+                    });
+                }
+                i += q;
+            }
+        }
+        vk::ImageType::_1D => {
+            let mut i = 0;
+            while i < s {
+                regions.extend(ds_regions(has_depth, has_stencil, [[0, 0, 0], [s, 1, 1]], [[i, 0, 0], [i + q, 1, 1]]));
+                i += s / 2;
+            }
+            let src = [[0, 0, 0], [q, 1, 1]];
+            regions.extend(ds_regions(has_depth, has_stencil, src, [[q, 0, 0], [2 * q, 1, 1]]));
+            if both {
+                regions.push(ImageBlit {
+                    src_offsets: src,
+                    dst_offsets: [[3 * q, 0, 0], [3 * q + q / 2, 1, 1]],
+                    aspect_mask: vk::ImageAspectFlags::DEPTH | vk::ImageAspectFlags::STENCIL,
+                });
+            }
+        }
+        _ => {
+            let (mut i, mut j) = (0, 1);
+            while (i + sixteenth / j < q) && (sixteenth > j) {
+                regions.extend(ds_regions(
+                    has_depth,
+                    has_stencil,
+                    [[0, 0, 0], [q, q, q]],
+                    [[i, 0, i], [i + sixteenth / j, sixteenth / j, i + sixteenth / j]],
+                ));
+                i += sixteenth / j;
+                j += 1;
+            }
+            let mut i = 0;
+            while i < q {
+                let src = [[i, i, i], [i + sixteenth, i + sixteenth, i + sixteenth]];
+                regions.extend(ds_regions(has_depth, has_stencil, src, [[i, q / 2, i], [i + sixteenth, q / 2 + sixteenth, i + sixteenth]]));
+                if both {
+                    regions.push(ImageBlit {
+                        src_offsets: src,
+                        dst_offsets: [[i, 3 * sixteenth, i], [i + sixteenth, q, i + sixteenth]],
+                        aspect_mask: vk::ImageAspectFlags::DEPTH | vk::ImageAspectFlags::STENCIL,
+                    });
+                }
+                i += sixteenth;
+            }
+        }
+    }
+    regions
+}
+
+/// `addBlittingImageAllFormatsDepthStencilTests`
+fn add_blitting_image_all_formats_depth_stencil_tests(group: &mut tcu::TestCaseGroup, gp: &GroupParams) {
+    for (sub_name, image_type, extent) in [
+        ("2d", vk::ImageType::_2D, [DEFAULT_SIZE as u32, DEFAULT_SIZE as u32, 1]),
+        ("1d", vk::ImageType::_1D, [DEFAULT_SIZE as u32, 1, 1]),
+        ("3d", vk::ImageType::_3D, [DEFAULT_QUARTER_SIZE as u32; 3]),
+    ] {
+        let mut sub_group = tcu::TestCaseGroup::new(sub_name);
+        for (format, name) in DEPTH_AND_STENCIL_FORMATS {
+            let Some(tcu_format) = map_vk_format(*format) else { continue };
+            let has_depth = has_depth_component(tcu_format.order);
+            let has_stencil = has_stencil_component(tcu_format.order);
+            let regions = create_depth_stencil_regions(image_type, has_depth, has_stencil);
+
+            let mut format_group = tcu::TestCaseGroup::new(format!("{name}_{name}"));
+            add_blitting_image_all_formats_depth_stencil_formats_tests(&mut format_group, gp, image_type, extent, *format, &regions, false);
+            sub_group.add_child(format_group);
+
+            if has_depth && has_stencil {
+                let mut separate = tcu::TestCaseGroup::new(format!("{name}_{name}_separate_layouts"));
+                add_blitting_image_all_formats_depth_stencil_formats_tests(&mut separate, gp, image_type, extent, *format, &regions, true);
+                sub_group.add_child(separate);
+            }
+        }
+        group.add_child(sub_group);
+    }
+}
+
 /// The 3D region list `addBlittingImageAllFormatsColorTests` builds inline.
 fn create_3d_all_formats_regions() -> Vec<ImageBlit> {
     let q = DEFAULT_QUARTER_SIZE;
@@ -1064,20 +1269,14 @@ fn create_3d_all_formats_regions() -> Vec<ImageBlit> {
 
     let (mut i, mut j) = (0, 1);
     while (i + s / j < q) && (s > j) {
-        regions.push(ImageBlit {
-            src_offsets: [[0, 0, 0], [q, q, q]],
-            dst_offsets: [[i, 0, i], [i + s / j, s / j, i + s / j]],
-        });
+        regions.push(ImageBlit::color([[0, 0, 0], [q, q, q]], [[i, 0, i], [i + s / j, s / j, i + s / j]]));
         i += s / j;
         j += 1;
     }
 
     let mut i = 0;
     while i < q {
-        regions.push(ImageBlit {
-            src_offsets: [[i, i, i], [i + s, i + s, i + s]],
-            dst_offsets: [[i, q / 2, i], [i + s, q / 2 + s, i + s]],
-        });
+        regions.push(ImageBlit::color([[i, i, i], [i + s, i + s, i + s]], [[i, q / 2, i], [i + s, q / 2 + s, i + s]]));
         i += s;
     }
 

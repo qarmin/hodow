@@ -16,13 +16,14 @@ hand-picked, growing subset, currently:
 
 | group | cases | not ported yet |
 |---|---|---|
-| `dEQP-VK.api.*` | 15080 of 267497 | `copy_and_blit`, `image_clearing`, `smoke`, `descriptor_set`, `external`, ... |
+| `dEQP-VK.api.*` | 153440 of 267497 | `smoke`, `descriptor_set`, `external`, the compressed-format and non-nearest halves of `copy_and_blit`, ... |
 | `dEQP-VK.memory.*` | 5472 of 6363 | `pipeline_barrier`, `requirements`, `external_memory_*`, `device_memory_report` |
 | `dEQP-VK.compute.*` | 4559 of 60811 | `cooperative_matrix`, the Amber-driven cases, `replicated_composites_*` |
 
-Complete groups: `compute.pipeline.zero_initialize_workgroup_memory`, `.builtin_var`,
-`.device_group`, `.64b_indexing`, and every `memory.mapping` / `memory.binding` /
-`memory.allocation` sub-group.
+Complete groups: `api.image_clearing`, `api.ds_color_copy`,
+`compute.pipeline.zero_initialize_workgroup_memory`, `.builtin_var`, `.device_group`,
+`.64b_indexing`, and every `memory.mapping` / `memory.binding` / `memory.allocation`
+sub-group.
 
 Run `hodow_cts --list` for the exact set, or `just cts-coverage` for the numbers above
 computed from the binary itself. Every implemented case is verified to give the same
@@ -198,6 +199,16 @@ them, and neither is sufficient alone:
   API misuse in the port that happens to produce plausible-looking results. It is off
   by default because the layer changes driver behaviour, so a run with it on is not a
   conformance run.
+
+Both are weakest where the driver reports a case as unsupported: the two binaries then
+agree without either having run the test. When a whole group comes back `NotSupported`
+the diff has said nothing about it, so check the verdict mix, not just the agreement
+count. Groups in this state on SwiftShader today, needing a run on real hardware:
+
+- `blit_image.all_formats.depth_stencil` - SwiftShader advertises neither `BLIT_SRC`
+  nor `BLIT_DST` for any depth or stencil format, so all 360 cases skip.
+- the `d16_unorm_s8_uint` and `d24_unorm_s8_uint` cases of the copy groups -
+  SwiftShader does not support either format.
 
 ### Adding a test
 
